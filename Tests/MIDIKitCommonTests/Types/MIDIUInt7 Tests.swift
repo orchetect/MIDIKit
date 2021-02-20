@@ -1,6 +1,6 @@
 //
 //  MIDIUInt7 Tests.swift
-//  MIDIKitCommonTests
+//  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-01-24.
 //
