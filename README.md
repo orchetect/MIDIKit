@@ -46,6 +46,8 @@ import MIDIKitIO
 import MIDIKitEvents
 ```
 
+For documentation on how each module works, see individual module README files.
+
 ## Roadmap
 
 - [ ] Possible MIDI 2.0 support in future
