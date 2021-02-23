@@ -121,7 +121,10 @@ let package = Package(
 		// test common
 		.target(
 			name: "MIDIKitTestsCommon",
-			dependencies: []),
+			dependencies: [
+				.product(name: "OTCore-Testing-XCTest", package: "OTCore")
+			]
+		),
 		
 		// ---------------------------------------------
 		// UNIT TESTS
@@ -143,7 +146,6 @@ let package = Package(
 			dependencies: [
 				.target(name: "MIDIKitTestsCommon"),
 				.target(name: "MIDIKitCommon"),
-				.product(name: "OTCore-Testing-XCTest", package: "OTCore")
 			]
 		),
 		
