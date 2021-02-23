@@ -8,16 +8,16 @@
 import Foundation
 import CoreMIDI
 
-public typealias MIDIEndpointUniqueID = Int32
-
 extension MIDIIO.Manager {
 	
 	public func addConnectedSource(
-		named: String,
+		toDestinationNamed: String,
 		tag: String
-	) throws {
+	) throws -> MIDIEndpointUniqueID {
 		
-		let newCS = MIDIIO.ConnectedSource(named: named)
+		let newCS = MIDIIO.ConnectedSource(
+			toDestinationNamed: toDestinationNamed
+		)
 		
 		// store the connection object in the manager,
 		// even if subsequent connection fails
@@ -25,16 +25,24 @@ extension MIDIIO.Manager {
 		
 		try newCS.connect(context: self)
 		
+		guard let uniqueID = newCS.sourcePortRef?.getUniqueID() else {
+			throw MIDIIO.GeneralError.connectionError("Could not read MIDI source endpoint unique ID.")
+		}
+		
+		return uniqueID
+		
 	}
 	
 	public func addConnectedDestination(
-		named: String,
+		toSourceNamed: String,
 		tag: String,
-		receiveHandler: @escaping MIDIReadBlock
+		receiveHandler: MIDIIO.ReceiveHandler
 	) throws {
 		
+		#warning("> add withUniqueID param; match ID when connecting")
+		
 		let newCD = MIDIIO.ConnectedDestination(
-			named: named,
+			toSourceNamed: toSourceNamed,
 			receiveHandler: receiveHandler
 		)
 		
@@ -95,7 +103,7 @@ extension MIDIIO.Manager {
 		name: String,
 		tag: String,
 		uniqueID: MIDIEndpointUniqueID? = nil,
-		receiveHandler: @escaping MIDIReadBlock
+		receiveHandler: MIDIIO.ReceiveHandler
 	) throws -> MIDIEndpointUniqueID {
 		
 		let newVD = MIDIIO.VirtualDestination(

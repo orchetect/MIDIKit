@@ -19,14 +19,14 @@ extension MIDIIO {
 		
 		public private(set) var destinationPortRef: MIDIPortRef? = nil
 		
-		internal var receiveHandler: MIDIReadBlock
+		internal var receiveHandler: ReceiveHandler
 		
 		public private(set) var isConnected: Bool = false
 		
-		internal init(named: String,
-					  receiveHandler: @escaping MIDIReadBlock) {
+		internal init(toSourceNamed: String,
+					  receiveHandler: ReceiveHandler) {
 			
-			self.sourceEndpointName = named
+			self.sourceEndpointName = toSourceNamed
 			self.receiveHandler = receiveHandler
 			
 		}
@@ -48,7 +48,7 @@ extension MIDIIO.ConnectedDestination {
 	/// Connect to a MIDI Source
 	/// - parameter context: MIDI manager instance by reference
 	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`
-	public func connect(context: MIDIIO.Manager) throws {
+	internal func connect(context: MIDIIO.Manager) throws {
 		
 		if isConnected { return }
 		
@@ -79,7 +79,7 @@ extension MIDIIO.ConnectedDestination {
 			context.clientRef,
 			UUID().uuidString as CFString,
 			&newConnection,
-			receiveHandler
+			receiveHandler.midiReadBlock
 		)
 		
 		guard result == noErr else {
@@ -105,7 +105,7 @@ extension MIDIIO.ConnectedDestination {
 	/// Disconnects the connection if it's currently connected.
 	/// 
 	/// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-	public func disconnect() throws {
+	internal func disconnect() throws {
 		
 		isConnected = false
 		

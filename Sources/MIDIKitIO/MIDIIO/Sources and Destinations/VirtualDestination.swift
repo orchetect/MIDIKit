@@ -21,11 +21,11 @@ extension MIDIIO {
 		
 		public private(set) var destinationPortRef: MIDIPortRef? = nil
 		
-		internal var receiveHandler: MIDIReadBlock
+		internal var receiveHandler: ReceiveHandler
 		
 		internal init(name: String,
 					  uniqueID: MIDIEndpointUniqueID? = nil,
-					  receiveHandler: @escaping MIDIReadBlock) {
+					  receiveHandler: ReceiveHandler) {
 			
 			self.endpointName = name
 			self.uniqueID = uniqueID
@@ -63,7 +63,7 @@ extension MIDIIO.VirtualDestination {
 
 extension MIDIIO.VirtualDestination {
 	
-	public func create(context: MIDIIO.Manager) throws {
+	internal func create(context: MIDIIO.Manager) throws {
 		
 		guard !existsInSystem else { return }
 		
@@ -75,7 +75,7 @@ extension MIDIIO.VirtualDestination {
 			context.clientRef,
 			endpointName as CFString,
 			&newDestinationPortRef,
-			receiveHandler
+			receiveHandler.midiReadBlock
 		)
 		
 		guard result == noErr else {
@@ -109,7 +109,7 @@ extension MIDIIO.VirtualDestination {
 	/// Disposes of the the virtual port if it's already been created in the system via the `create()` method.
 	///
 	/// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-	public func dispose() throws {
+	internal func dispose() throws {
 		
 		guard let destinationPortRef = self.destinationPortRef else { return }
 		
