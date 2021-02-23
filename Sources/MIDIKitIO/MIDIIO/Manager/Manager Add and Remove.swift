@@ -1,5 +1,5 @@
 //
-//  MIDIIOManager Endpoints.swift
+//  Manager Add and Remove.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-21.
@@ -10,14 +10,14 @@ import CoreMIDI
 
 public typealias MIDIEndpointUniqueID = Int32
 
-extension MIDIIOManager {
+extension MIDIIO.Manager {
 	
-	public func addConnectedDestination(
+	public func addConnectedSource(
 		named: String,
 		tag: String
 	) throws {
 		
-		let newCS = ConnectedSource(named: named)
+		let newCS = MIDIIO.ConnectedSource(named: named)
 		
 		// store the connection object in the manager,
 		// even if subsequent connection fails
@@ -27,14 +27,16 @@ extension MIDIIOManager {
 		
 	}
 	
-	public func addConnectedSource(
+	public func addConnectedDestination(
 		named: String,
 		tag: String,
 		receiveHandler: @escaping MIDIReadBlock
 	) throws {
 		
-		let newCD = ConnectedDestination(named: named,
-										 receiveHandler: receiveHandler)
+		let newCD = MIDIIO.ConnectedDestination(
+			named: named,
+			receiveHandler: receiveHandler
+		)
 		
 		// store the connection object in the manager,
 		// even if subsequent connection fails
@@ -55,7 +57,7 @@ extension MIDIIOManager {
 	///
 	/// - parameter sources: maximum of 8 `MIDIEndpointRef` references
 	/// - parameter destinations: maximum of 8 `MIDIEndpointRef` references
-	/// - parameter tag: Unique `String` key to refer to the new `MIDIIOConnectedThru` object that gets added to `connectedThrus` collection dictionary
+	/// - parameter tag: Unique `String` key to refer to the new object that gets added to `connectedThrus` collection dictionary
 	/// - parameter persistent: If `false`, thru connection will expire when the app terminates. If `true`, the connection persists in the system forever (but not sure if it survives after macOS account logout / Mac reboot?).
 	public func addThruConnection(
 		sources: [MIDIEndpointRef],
@@ -65,10 +67,12 @@ extension MIDIIOManager {
 		persistent: Bool = false
 	) throws {
 		
-		let newCT = ConnectedThru(sources: sources,
-								  destinations: destinations,
-								  persistentOwnerID: persistent ? persistentDomain : nil,
-								  params: params)
+		let newCT = MIDIIO.ConnectedThru(
+			sources: sources,
+			destinations: destinations,
+			persistentOwnerID: persistent ? persistentDomain : nil,
+			params: params
+		)
 		
 		// if non-persistent, add to managed array
 		if !persistent {
@@ -94,14 +98,18 @@ extension MIDIIOManager {
 		receiveHandler: @escaping MIDIReadBlock
 	) throws -> MIDIEndpointUniqueID {
 		
-		let newVD = VirtualDestination(name: name,
-									   uniqueID: uniqueID,
-									   receiveHandler: receiveHandler)
+		let newVD = MIDIIO.VirtualDestination(
+			name: name,
+			uniqueID: uniqueID,
+			receiveHandler: receiveHandler
+		)
 		
 		virtualDestinations[tag] = newVD
 		
+		try newVD.create(context: self)
+		
 		guard let uniqueID = newVD.uniqueID else {
-			throw GeneralError.connectionError("Could not read virtual MIDI endpoint unique ID.")
+			throw MIDIIO.GeneralError.connectionError("Could not read virtual MIDI endpoint unique ID.")
 		}
 		
 		return uniqueID
@@ -114,13 +122,17 @@ extension MIDIIOManager {
 		uniqueID: MIDIEndpointUniqueID? = nil
 	) throws -> MIDIEndpointUniqueID {
 		
-		let newVS = VirtualSource(name: name,
-								  uniqueID: uniqueID)
+		let newVS = MIDIIO.VirtualSource(
+			name: name,
+			uniqueID: uniqueID
+		)
 		
 		virtualSources[tag] = newVS
 		
+		try newVS.create(context: self)
+		
 		guard let uniqueID = newVS.uniqueID else {
-			throw GeneralError.connectionError("Could not read virtual MIDI endpoint unique ID.")
+			throw MIDIIO.GeneralError.connectionError("Could not read virtual MIDI endpoint unique ID.")
 		}
 		
 		return uniqueID
@@ -129,4 +141,36 @@ extension MIDIIOManager {
 	
 }
 
-#warning("> add removeXXX counterpoint functions for each addXXX function?")
+extension MIDIIO.Manager {
+	
+	public func removeConnectedDestination(tag: String) {
+		
+		connectedDestinations[tag] = nil
+		
+	}
+	
+	public func removeConnectedSource(tag: String) {
+		
+		connectedSources[tag] = nil
+		
+	}
+	
+	public func removeNonPersistentThruConnection(tag: String) {
+		
+		connectedThrusNonPersistent[tag] = nil
+		
+	}
+	
+	public func removeVirtualDestination(tag: String) {
+		
+		virtualDestinations[tag] = nil
+		
+	}
+	
+	public func removeVirtualSource(tag: String) {
+		
+		virtualSources[tag] = nil
+		
+	}
+	
+}

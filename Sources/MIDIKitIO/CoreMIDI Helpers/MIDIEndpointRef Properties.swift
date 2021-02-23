@@ -20,11 +20,11 @@ extension MIDIEndpointRef {
 		let status = MIDIObjectGetStringProperty(self, forProperty, &val)
 		
 		guard status == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: status)
+			throw MIDIIO.OSStatusResult(rawValue: status)
 		}
 		
 		guard let strongVal = val else {
-			throw MIDIIOManager.GeneralError.readError(
+			throw MIDIIO.GeneralError.readError(
 				"Got nil while reading MIDIEndpointRef property value \((forProperty as String).quoted)"
 			)
 		}

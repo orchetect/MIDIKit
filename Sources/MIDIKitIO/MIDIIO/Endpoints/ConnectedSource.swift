@@ -9,7 +9,7 @@ import Foundation
 import CoreMIDI
 @_implementationOnly import OTCore
 
-extension MIDIIOManager {
+extension MIDIIO {
 	
 	public class ConnectedSource {
 		
@@ -37,14 +37,14 @@ extension MIDIIOManager {
 	
 }
 
-extension MIDIIOManager.ConnectedSource {
+extension MIDIIO.ConnectedSource {
 	
 	#warning("> should rework this to make it obvious it's connection to the first endpoint that matches the name; also create a 2nd connect method that connects by MIDIEndpointRef")
 	
 	/// Connect to a MIDI Destination
 	/// - parameter context: MIDI manager instance by reference
-	/// - Throws: `MIDIIOManager.GeneralError` or `MIDIIOManager.OSStatusResult`
-	public func connect(context: MIDIIOManager) throws {
+	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`
+	public func connect(context: MIDIIO.Manager) throws {
 		
 		if isConnected { return }
 		
@@ -52,14 +52,13 @@ extension MIDIIOManager.ConnectedSource {
 		_ = try? disconnect()
 		
 		guard let destinationEndpoint =
-				CoreMIDIHelpers
-				.destinationEndpoints(matching: destinationEndpointName)
+				MIDIIO.systemDestinationEndpoints(matching: destinationEndpointName)
 				.first
 		else {
 			
 			isConnected = false
 			
-			throw MIDIIOManager.GeneralError.connectionError(
+			throw MIDIIO.GeneralError.connectionError(
 				"MIDI Destination \(destinationEndpointName.quoted) not found while trying to create destination connection."
 			)
 		}
@@ -68,7 +67,7 @@ extension MIDIIOManager.ConnectedSource {
 		
 		var newConnection = MIDIPortRef()
 		
-		// connection name must be unique, otherwise process might hang
+		// connection name must be unique, otherwise process might hang (?)
 		let result = MIDIOutputPortCreate(
 			context.clientRef,
 			UUID().uuidString as CFString,
@@ -76,7 +75,7 @@ extension MIDIIOManager.ConnectedSource {
 		)
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 		#warning("> shouldn't there be a call to MIDIPortConnectSource here, like in the ConnectedDestination class?")
@@ -103,21 +102,22 @@ extension MIDIIOManager.ConnectedSource {
 		self.destinationEndpointRef = nil
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 	}
 	
 }
 
-extension MIDIIOManager.ConnectedSource {
+extension MIDIIO.ConnectedSource {
 	
-	internal func refreshConnection(_ context: MIDIIOManager) throws {
+	internal func refreshConnection(_ context: MIDIIO.Manager) throws {
 		
 		let destinationEndpointName = self.destinationEndpointName
 		
-		guard CoreMIDIHelpers.destinationEndpointsNames
-				.contains(destinationEndpointName) else {
+		guard MIDIIO.systemDestinationEndpointsNames
+				.contains(destinationEndpointName)
+		else {
 			
 			isConnected = false
 			return
@@ -130,7 +130,7 @@ extension MIDIIOManager.ConnectedSource {
 	
 }
 
-extension MIDIIOManager.ConnectedSource: CustomStringConvertible {
+extension MIDIIO.ConnectedSource: CustomStringConvertible {
 	
 	public var description: String {
 		
@@ -139,6 +139,34 @@ extension MIDIIOManager.ConnectedSource: CustomStringConvertible {
 		let sourcePortRef = "\(self.sourcePortRef, ifNil: "nil")"
 		
 		return "ConnectedSource(destinationEndpointName: \(destinationEndpointName.quoted), destinationEndpointRef: \(destinationEndpointRef), sourcePortRef: \(sourcePortRef), isConnected: \(isConnected))"
+		
+	}
+	
+}
+
+extension MIDIIO.ConnectedSource: MIDIIOSendsMIDIMessages {
+	
+	public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
+		
+		guard let sourcePortRef = self.sourcePortRef else {
+			throw MIDIIO.PacketError.internalInconsistency(
+				"Source port reference is nil."
+			)
+		}
+		
+		guard let destinationEndpointRef = self.destinationEndpointRef else {
+			throw MIDIIO.PacketError.internalInconsistency(
+				"Destination port reference is nil."
+			)
+		}
+		
+		let result = MIDISend(sourcePortRef,
+							   destinationEndpointRef,
+							   packetList)
+		
+		guard result == noErr else {
+			throw MIDIIO.OSStatusResult(rawValue: result)
+		}
 		
 	}
 	

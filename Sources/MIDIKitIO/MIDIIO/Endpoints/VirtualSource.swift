@@ -9,7 +9,7 @@ import Foundation
 import CoreMIDI
 @_implementationOnly import OTCore
 
-extension MIDIIOManager {
+extension MIDIIO {
 	
 	public class VirtualSource {
 		
@@ -39,16 +39,16 @@ extension MIDIIOManager {
 	
 }
 
-extension MIDIIOManager.VirtualSource {
+extension MIDIIO.VirtualSource {
 	
 	/// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
-	public var exists: Bool {
+	public var existsInSystem: Bool {
 		
 		guard let uniqueID = self.uniqueID else {
 			return false
 		}
 		
-		guard let matchingIDRef = CoreMIDIHelpers.sourceEndpoint(matching: uniqueID)
+		guard let matchingIDRef = MIDIIO.systemSourceEndpoint(matching: uniqueID)
 		else { return false }
 		
 		return (try? matchingIDRef.getName()) == endpointName
@@ -57,11 +57,11 @@ extension MIDIIOManager.VirtualSource {
 	
 }
 
-extension MIDIIOManager.VirtualSource {
+extension MIDIIO.VirtualSource {
 	
-	public func create(context: MIDIIOManager) throws {
+	public func create(context: MIDIIO.Manager) throws {
 		
-		guard !exists else { return }
+		guard !existsInSystem else { return }
 		
 		var newSourcePortRef = MIDIPortRef()
 		
@@ -76,7 +76,7 @@ extension MIDIIOManager.VirtualSource {
 		sourcePortRef = newSourcePortRef
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 		// cache unique ID if cache is nil
@@ -97,7 +97,7 @@ extension MIDIIOManager.VirtualSource {
 		)
 		
 		guard result == noErr else {
-			throw MIDIIOManager.GeneralError.connectionError(
+			throw MIDIIO.GeneralError.connectionError(
 				"MIDI: Error setting unique ID to \(uniqueID) on virtual source: \(endpointName.quoted). Current ID is \(newSourcePortRef.getUniqueID())."
 			)
 		}
@@ -116,20 +116,40 @@ extension MIDIIOManager.VirtualSource {
 		self.sourcePortRef = nil
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 	}
 	
 }
 
-extension MIDIIOManager.VirtualSource: CustomStringConvertible {
+extension MIDIIO.VirtualSource: CustomStringConvertible {
 	
 	public var description: String {
 		
 		let uniqueID = "\(self.uniqueID, ifNil: "nil")"
 		
 		return "VirtualSource(name: \(endpointName.quoted), uniqueID: \(uniqueID))"
+		
+	}
+	
+}
+
+extension MIDIIO.VirtualSource: MIDIIOSendsMIDIMessages {
+	
+	public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
+		
+		guard let sourcePortRef = self.sourcePortRef else {
+			throw MIDIIO.PacketError.internalInconsistency(
+				"Port reference is nil."
+			)
+		}
+		
+		let result = MIDIReceived(sourcePortRef, packetList)
+		
+		guard result == noErr else {
+			throw MIDIIO.OSStatusResult(rawValue: result)
+		}
 		
 	}
 	

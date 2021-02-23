@@ -5,7 +5,7 @@
 //  Created by Steffan Andrews on 2021-02-21.
 //
 
-extension MIDIIOManager {
+extension MIDIIO {
 	
 	public enum GeneralError: Error {
 		

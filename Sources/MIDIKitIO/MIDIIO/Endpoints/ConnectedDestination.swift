@@ -9,7 +9,7 @@ import Foundation
 import CoreMIDI
 @_implementationOnly import OTCore
 
-extension MIDIIOManager {
+extension MIDIIO {
 	
 	public class ConnectedDestination {
 		
@@ -41,14 +41,14 @@ extension MIDIIOManager {
 	
 }
 
-extension MIDIIOManager.ConnectedDestination {
+extension MIDIIO.ConnectedDestination {
 	
 	#warning("> should rework this to make it obvious it's connection to the first endpoint that matches the name; also create a 2nd connect method that connects by MIDIEndpointRef")
 	
 	/// Connect to a MIDI Source
 	/// - parameter context: MIDI manager instance by reference
-	/// - Throws: `MIDIIOManager.GeneralError` or `MIDIIOManager.OSStatusResult`
-	public func connect(context: MIDIIOManager) throws {
+	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`
+	public func connect(context: MIDIIO.Manager) throws {
 		
 		if isConnected { return }
 		
@@ -56,14 +56,13 @@ extension MIDIIOManager.ConnectedDestination {
 		_ = try? disconnect()
 		
 		guard let sourceEndpoint =
-				CoreMIDIHelpers
-				.sourceEndpoints(matching: sourceEndpointName)
+				MIDIIO.systemSourceEndpoints(matching: sourceEndpointName)
 				.first
 		else {
 			
 			isConnected = false
 			
-			throw MIDIIOManager.GeneralError.connectionError(
+			throw MIDIIO.GeneralError.connectionError(
 				"MIDI: Source \(sourceEndpointName.quoted) not found while trying to connect to it."
 			)
 			
@@ -75,7 +74,7 @@ extension MIDIIOManager.ConnectedDestination {
 		
 		var result = noErr
 		
-		// connection name must be unique, otherwise process might hang
+		// connection name must be unique, otherwise process might hang (?)
 		result = MIDIInputPortCreateWithBlock(
 			context.clientRef,
 			UUID().uuidString as CFString,
@@ -84,15 +83,17 @@ extension MIDIIOManager.ConnectedDestination {
 		)
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
-		result = MIDIPortConnectSource(newConnection,
-									   sourceEndpoint,
-									   nil)
+		result = MIDIPortConnectSource(
+			newConnection,
+			sourceEndpoint,
+			nil
+		)
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 		destinationPortRef = newConnection
@@ -117,21 +118,22 @@ extension MIDIIOManager.ConnectedDestination {
 		self.sourceEndpointRef = nil
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 	}
 	
 }
 
-extension MIDIIOManager.ConnectedDestination {
+extension MIDIIO.ConnectedDestination {
 	
-	internal func refreshConnection(_ context: MIDIIOManager) throws {
+	internal func refreshConnection(_ context: MIDIIO.Manager) throws {
 		
 		let sourceEndpointName = self.sourceEndpointName
 		
-		guard CoreMIDIHelpers.sourceEndpointsNames
-				.contains(sourceEndpointName) else {
+		guard MIDIIO.systemSourceEndpointsNames
+				.contains(sourceEndpointName)
+		else {
 			
 			isConnected = false
 			return
@@ -144,7 +146,7 @@ extension MIDIIOManager.ConnectedDestination {
 	
 }
 
-extension MIDIIOManager.ConnectedDestination: CustomStringConvertible {
+extension MIDIIO.ConnectedDestination: CustomStringConvertible {
 	
 	public var description: String {
 		

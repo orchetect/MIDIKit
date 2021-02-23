@@ -9,7 +9,7 @@ import Foundation
 import CoreMIDI
 @_implementationOnly import OTCore
 
-extension MIDIIOManager {
+extension MIDIIO {
 	
 	public class VirtualDestination {
 		
@@ -43,16 +43,16 @@ extension MIDIIOManager {
 	
 }
 
-extension MIDIIOManager.VirtualDestination {
+extension MIDIIO.VirtualDestination {
 	
 	/// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
-	public var exists: Bool {
+	public var existsInSystem: Bool {
 		
 		guard let uniqueID = self.uniqueID else {
 			return false
 		}
 		
-		guard let matchingIDRef = CoreMIDIHelpers.destinationEndpoint(matching: uniqueID)
+		guard let matchingIDRef = MIDIIO.systemDestinationEndpoint(matching: uniqueID)
 		else { return false }
 		
 		return (try? matchingIDRef.getName()) == endpointName
@@ -61,11 +61,11 @@ extension MIDIIOManager.VirtualDestination {
 	
 }
 
-extension MIDIIOManager.VirtualDestination {
+extension MIDIIO.VirtualDestination {
 	
-	public func create(context: MIDIIOManager) throws {
+	public func create(context: MIDIIO.Manager) throws {
 		
-		guard !exists else { return }
+		guard !existsInSystem else { return }
 		
 		var newDestinationPortRef = MIDIPortRef()
 		
@@ -79,7 +79,7 @@ extension MIDIIOManager.VirtualDestination {
 		)
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 		// cache unique ID if cache is nil
@@ -99,7 +99,7 @@ extension MIDIIOManager.VirtualDestination {
 		)
 		
 		guard result == noErr else {
-			throw MIDIIOManager.GeneralError.connectionError(
+			throw MIDIIO.GeneralError.connectionError(
 				"MIDI: Error setting unique ID to \(uniqueID) on virtual destination: \(endpointName.quoted). Current ID is \(newDestinationPortRef.getUniqueID())."
 			)
 		}
@@ -118,14 +118,14 @@ extension MIDIIOManager.VirtualDestination {
 		self.destinationPortRef = nil
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 	}
 	
 }
 
-extension MIDIIOManager.VirtualDestination: CustomStringConvertible {
+extension MIDIIO.VirtualDestination: CustomStringConvertible {
 	
 	public var description: String {
 		

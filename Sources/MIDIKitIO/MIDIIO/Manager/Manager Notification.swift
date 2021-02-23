@@ -1,5 +1,5 @@
 //
-//  MIDIIOManager Notifications.swift
+//  Manager Notification.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-21.
@@ -7,9 +7,9 @@
 
 import CoreMIDI
 
-extension MIDIIOManager {
+extension MIDIIO.Manager {
 	
-	enum Notification {
+	internal enum Notification {
 		
 		case setupChanged
 		
@@ -26,7 +26,7 @@ extension MIDIIOManager {
 		
 		case serialPortOwnerChanged
 		
-		case ioError(device: MIDIDeviceRef, error: OSStatusResult)
+		case ioError(device: MIDIDeviceRef, error: MIDIIO.OSStatusResult)
 		
 		/// Typically will never happen unless Apple adds additional cases to CoreMIDI's `MIDINotificationMessageID` enum.
 		case other(messageIDrawValue: Int32)
@@ -35,9 +35,9 @@ extension MIDIIOManager {
 	
 }
 
-extension MIDIIOManager.Notification {
+extension MIDIIO.Manager.Notification {
 	
-	init(_ message: UnsafePointer<MIDINotification>) {
+	internal init(_ message: UnsafePointer<MIDINotification>) {
 		
 		let messageID = message.pointee.messageID
 		

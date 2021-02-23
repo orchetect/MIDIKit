@@ -5,21 +5,20 @@
 //  Created by Steffan Andrews on 2021-02-21.
 //
 
-import Foundation
 import CoreMIDI
 @_implementationOnly import OTCore
 
-internal enum CoreMIDIHelpers {
+extension MIDIIO {
 	
 	// MARK: sources
 	
 	/// (Computed property) Array of source names
-	internal static var sourceEndpointsNames: [String] {
-		Array(sourceEndpoints.values)
+	internal static var systemSourceEndpointsNames: [String] {
+		Array(systemSourceEndpoints.values)
 	}
 	
 	/// (Computed property) Dictionary of source names & endpoint unique IDs
-	internal static dynamic var sourceEndpoints: [Int32 : String] {
+	internal static dynamic var systemSourceEndpoints: [Int32 : String] {
 		
 		let srcCount = MIDIGetNumberOfSources()
 		
@@ -38,14 +37,14 @@ internal enum CoreMIDIHelpers {
 	// MARK: destinations
 	
 	/// (Computed property) Array of destination names
-	internal static var destinationEndpointsNames: [String] {
+	internal static var systemDestinationEndpointsNames: [String] {
 		
-		Array(destinationEndpoints.values)
+		Array(systemDestinationEndpoints.values)
 		
 	}
 	
 	/// (Computed property) Dictionary of destination names & endpoint unique IDs
-	internal static dynamic var destinationEndpoints: [Int32 : String] {
+	internal static dynamic var systemDestinationEndpoints: [Int32 : String] {
 		
 		let destCount = MIDIGetNumberOfDestinations()
 		
@@ -63,11 +62,11 @@ internal enum CoreMIDIHelpers {
 	
 }
 
-extension CoreMIDIHelpers {
+extension MIDIIO {
 	
 	/// Returns all source `MIDIEndpointRef`s in the system that have a name matching `name`.
 	/// - parameter name: MIDI port name to search for.
-	internal static func sourceEndpoints(matching name: String) -> [MIDIEndpointRef] {
+	internal static func systemSourceEndpoints(matching name: String) -> [MIDIEndpointRef] {
 		
 		var refs: [MIDIEndpointRef] = []
 		
@@ -82,7 +81,7 @@ extension CoreMIDIHelpers {
 	
 	/// Returns the first source `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`. If not found, returns `nil`.
 	/// - parameter uniqueID: MIDI port unique ID to search for.
-	internal static func sourceEndpoint(matching uniqueID: MIDIUniqueID) -> MIDIEndpointRef? {
+	internal static func systemSourceEndpoint(matching uniqueID: MIDIUniqueID) -> MIDIEndpointRef? {
 		
 		for i in 0..<MIDIGetNumberOfSources() {
 			let source = MIDIGetSource(i)
@@ -95,11 +94,11 @@ extension CoreMIDIHelpers {
 	
 }
 
-extension CoreMIDIHelpers {
+extension MIDIIO {
 	
 	/// Returns all destination `MIDIEndpointRef`s in the system that have a name matching `name`.
 	/// - parameter name: MIDI port name to search for.
-	internal static func destinationEndpoints(matching name: String) -> [MIDIEndpointRef] {
+	internal static func systemDestinationEndpoints(matching name: String) -> [MIDIEndpointRef] {
 		
 		var refs: [MIDIEndpointRef] = []
 		
@@ -114,7 +113,7 @@ extension CoreMIDIHelpers {
 	
 	/// Returns the first destination `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`. If not found, returns `nil`.
 	/// - parameter uniqueID: MIDI port unique ID to search for.
-	internal static func destinationEndpoint(matching uniqueID: MIDIUniqueID) -> MIDIEndpointRef? {
+	internal static func systemDestinationEndpoint(matching uniqueID: MIDIUniqueID) -> MIDIEndpointRef? {
 		
 		for i in 0..<MIDIGetNumberOfDestinations() {
 			let source = MIDIGetDestination(i)
@@ -127,15 +126,15 @@ extension CoreMIDIHelpers {
 	
 }
 
-extension CoreMIDIHelpers {
+extension MIDIIO {
 	
 	/// Queries CoreMIDI for existing persistent play-through connections stored in the system matching the specified persistent owner ID.
 	///
 	/// To delete them all, see sister function `connectedThrusPersistentEntriesDeleteAll`.
 	///
 	/// - parameter byPersistentOwnerID: owner ID string that was set when the connection was first made
-	internal static func connectedThrusPersistentEntries(
-		byPersistentOwnerID: String
+	internal static func systemConnectedThrusPersistentEntries(
+		matching persistentOwnerID: String
 	) throws -> [MIDIThruConnectionRef] {
 		
 		#warning("> this code needs verification")
@@ -144,10 +143,13 @@ extension CoreMIDIHelpers {
 		var getConnectionList: Unmanaged<CFData> = Unmanaged.passUnretained(Data([]) as CFData)
 		
 		// get CFData containing list of matching 4-byte UInt32 ID numbers
-		let result = MIDIThruConnectionFind(byPersistentOwnerID as CFString, &getConnectionList)
+		let result = MIDIThruConnectionFind(persistentOwnerID as CFString, &getConnectionList)
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			// memory safety: release unmanaged pointer we created
+			getConnectionList.release()
+			
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 		// cast to NSData so we can use .getBytes(...)
@@ -160,16 +162,11 @@ extension CoreMIDIHelpers {
 		let itemCount = byteCount / MemoryLayout<MIDIThruConnectionRef>.size
 		
 		// init array with size
-		var thruConnnectionArray = [MIDIThruConnectionRef](repeating: 0, count: itemCount)
+		var thruConnnectionArray = [MIDIThruConnectionRef](repeating: 0x00, count: itemCount)
 		
 		if itemCount > 0 {
 			// fill array with constructed values from the data
 			outConnectionList.getBytes(&thruConnnectionArray, length: byteCount as Int)
-		}
-		
-		defer {
-			// memory safety: release unmanaged pointer we created
-			getConnectionList.release()
 		}
 		
 		return thruConnnectionArray
@@ -179,21 +176,21 @@ extension CoreMIDIHelpers {
 	/// Deletes all system-held MIDI thru connections matching an owner ID.
 	///
 	/// - Returns: Number of deleted matching connections.
-	internal static func connectedThrusPersistentEntriesDeleteAll(
-		byPersistentOwnerID: String
+	internal static func systemConnectedThrusPersistentEntriesDeleteAll(
+		matching persistentOwnerID: String
 	) throws -> Int {
 		
-		let getList = try connectedThrusPersistentEntries(byPersistentOwnerID: byPersistentOwnerID)
+		let getList = try systemConnectedThrusPersistentEntries(matching: persistentOwnerID)
 		
-		var err = noErr
+		var result = noErr
 		
 		// iterate through persistent connection list
 		for thruConnection in getList {
 			
-			err = MIDIThruConnectionDispose(thruConnection)
+			result = MIDIThruConnectionDispose(thruConnection)
 			
-			if err != noErr {
-				Log.debug("MIDI: Persistent connections: deletion of connection matching ID \"\(byPersistentOwnerID)\" with number \(thruConnection) failed.")
+			if result != noErr {
+				Log.debug("MIDI: Persistent connections: deletion of connection matching ID \"\(persistentOwnerID)\" with number \(thruConnection) failed.")
 			}
 			
 		}

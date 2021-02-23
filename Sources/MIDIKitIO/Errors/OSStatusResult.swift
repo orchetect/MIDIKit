@@ -1,14 +1,14 @@
 //
-//  OSStatus.swift
+//  OSStatusResult.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-21.
 //
 
-extension MIDIIOManager {
+extension MIDIIO {
 	
 	/// An enumeration representing `CoreMIDI.MIDIServices` `OSStatus` error codes, with verbose descriptions.
-	public enum OSStatusResult: Error {
+	public enum OSStatusResult: Error, Equatable {
 		
 		/// `CoreMIDI.kMIDIInvalidClient`:
 		/// An invalid `MIDIClientRef` was passed.
@@ -74,6 +74,18 @@ extension MIDIIOManager {
 		/// Internal error; unable to perform the requested operation.
 		case unknownError
 		
+		/// `kMIDIMsgIOError`:
+		/// IO Error
+		case ioError
+		
+		/// Error -50:
+		/// Various underlying issues could produce this error.
+		/// Possibly caused by:
+		/// not starting the MIDI client (MIDIIO.Manager.start()),
+		/// an uninitialized variable being passed,
+		/// or if the MIDI server has an issue getting a process ID back internally.
+		case internalError
+		
 		/// Other `OSStatus`
 		case other(Int32)
 		
@@ -81,7 +93,7 @@ extension MIDIIOManager {
 	
 }
 
-extension MIDIIOManager.OSStatusResult {
+extension MIDIIO.OSStatusResult {
 	
 	public var rawValue: Int32 {
 		
@@ -102,6 +114,8 @@ extension MIDIIOManager.OSStatusResult {
 		case .iDNotUnique: return -10843
 		case .notPermitted: return -10844
 		case .unknownError: return -10845
+		case .ioError: return 7
+		case .internalError: return -50
 		case .other(let val): return val
 		}
 		
@@ -126,6 +140,8 @@ extension MIDIIOManager.OSStatusResult {
 		case -10843: self = .iDNotUnique
 		case -10844: self = .notPermitted
 		case -10845: self = .unknownError
+		case 7: self = .ioError
+		case -50: self = .internalError
 		default: self = .other(rawValue)
 		}
 		
@@ -133,45 +149,68 @@ extension MIDIIOManager.OSStatusResult {
 	
 }
 
-extension MIDIIOManager.OSStatusResult: CustomStringConvertible {
+extension MIDIIO.OSStatusResult: CustomStringConvertible {
 	
 	public var description: String {
 		
 		switch self {
 		case .invalidClient:
-			return "An invalid MIDIClientRef was passed. kMIDIInvalidClient)"
+			return "An invalid MIDIClientRef was passed. (kMIDIInvalidClient)"
+			
 		case .invalidPort:
 			return "An invalid MIDIPortRef was passed. (kMIDIInvalidPort)"
+			
 		case .wrongEndpointType:
 			return "A source endpoint was passed to a function expecting a destination, or vice versa. (kMIDIWrongEndpointType)"
+			
 		case .noConnection:
 			return "Attempt to close a non-existent connection. (kMIDINoConnection)"
+			
 		case .unknownEndpoint:
 			return "An invalid MIDIEndpointRef was passed. (kMIDIUnknownEndpoint)"
+			
 		case .unknownProperty:
 			return "Attempt to query a property not set on the object. (kMIDIUnknownProperty)"
+			
 		case .wrongPropertyType:
 			return "Attempt to set a property with a value not of the correct type. (kMIDIWrongPropertyType)"
+			
 		case .noCurrentSetup:
 			return "Internal error; there is no current MIDI setup object. (kMIDINoCurrentSetup)"
+			
 		case .messageSendErr:
 			return "Communication with MIDIServer failed. (kMIDIMessageSendErr)"
+			
 		case .serverStartErr:
 			return "Unable to start MIDIServer. (kMIDIServerStartErr)"
+			
 		case .setupFormatErr:
 			return "Unable to read the saved state. (kMIDISetupFormatErr)"
+			
 		case .wrongThread:
 			return "A driver is calling a non-I/O function in the server from a thread other than the server's main thread. (kMIDIWrongThread)"
+			
 		case .objectNotFound:
 			return "The requested object does not exist. (kMIDIObjectNotFound)"
+			
 		case .iDNotUnique:
 			return "Attempt to set a non-unique kMIDIPropertyUniqueID on an object. (kMIDIIDNotUnique)"
+			
 		case .notPermitted:
 			return "The process does not have privileges for the requested operation. (kMIDINotPermitted)"
+			
 		case .unknownError:
 			return "Internal error; unable to perform the requested operation. (kMIDIUnknownError)"
+			
+		case .ioError:
+			return "I/O Error. (kMIDIMsgIOError)"
+			
+		case .internalError:
+			return "Internal error. Various underlying issues could produce this error. Possibly caused by: not starting the MIDI client (MIDIIO.Manager.start()), an uninitialized variable being passed, or if the MIDI server has an issue getting a process ID back internally."
+			
 		case .other(let osStatus):
 			return "Unknown OSStatus error: \(osStatus)"
+			
 		}
 		
 	}

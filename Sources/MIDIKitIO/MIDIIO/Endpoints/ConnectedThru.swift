@@ -16,7 +16,7 @@ import Foundation
 import CoreMIDI
 @_implementationOnly import OTCore
 
-extension MIDIIOManager {
+extension MIDIIO {
 	
 	/// CoreMIDI play-through connection.
 	///
@@ -64,9 +64,9 @@ extension MIDIIOManager {
 	
 }
 
-extension MIDIIOManager.ConnectedThru {
+extension MIDIIO.ConnectedThru {
 	
-	public func create(context: MIDIIOManager) throws {
+	public func create(context: MIDIIO.Manager) throws {
 		
 		var result = noErr
 		
@@ -164,7 +164,7 @@ extension MIDIIOManager.ConnectedThru {
 		)
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 		thruConnectionRef = newConnection
@@ -188,7 +188,7 @@ extension MIDIIOManager.ConnectedThru {
 		let result = MIDIThruConnectionDispose(thruConnectionRef)
 		
 		guard result == noErr else {
-			throw MIDIIOManager.OSStatusResult(rawValue: result)
+			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
 		self.thruConnectionRef = nil
@@ -197,7 +197,7 @@ extension MIDIIOManager.ConnectedThru {
 	
 }
 
-extension MIDIIOManager.ConnectedThru: CustomStringConvertible {
+extension MIDIIO.ConnectedThru: CustomStringConvertible {
 	
 	public var description: String {
 		
