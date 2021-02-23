@@ -1,5 +1,5 @@
 //
-//  CoreMIDI Endpoints.swift
+//  Endpoints.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-21.
@@ -7,6 +7,12 @@
 
 import CoreMIDI
 @_implementationOnly import OTCore
+
+// MARK: - MIDIEndpointUniqueID
+
+public typealias MIDIEndpointUniqueID = Int32
+
+// MARK: - System endpoints
 
 extension MIDIIO {
 	
@@ -18,7 +24,7 @@ extension MIDIIO {
 	}
 	
 	/// (Computed property) Dictionary of source names & endpoint unique IDs
-	internal static dynamic var systemSourceEndpoints: [Int32 : String] {
+	public static dynamic var systemSourceEndpoints: [Int32 : String] {
 		
 		let srcCount = MIDIGetNumberOfSources()
 		
@@ -27,7 +33,7 @@ extension MIDIIO {
 		
 		for i in 0..<srcCount {
 			let destination = MIDIGetSource(i)
-			endpointDict[destination.getUniqueID()] = try? destination.getName()
+			endpointDict[destination.getUniqueID()] = (try? destination.getName()) ?? ""
 		}
 		
 		return endpointDict
@@ -44,7 +50,7 @@ extension MIDIIO {
 	}
 	
 	/// (Computed property) Dictionary of destination names & endpoint unique IDs
-	internal static dynamic var systemDestinationEndpoints: [Int32 : String] {
+	public static dynamic var systemDestinationEndpoints: [Int32 : String] {
 		
 		let destCount = MIDIGetNumberOfDestinations()
 		
@@ -53,7 +59,7 @@ extension MIDIIO {
 		
 		for i in 0..<destCount {
 			let destination = MIDIGetDestination(i)
-			endpointDict[destination.getUniqueID()] = try? destination.getName()
+			endpointDict[destination.getUniqueID()] = (try? destination.getName()) ?? ""
 		}
 		
 		return endpointDict
@@ -66,7 +72,7 @@ extension MIDIIO {
 	
 	/// Returns all source `MIDIEndpointRef`s in the system that have a name matching `name`.
 	/// - parameter name: MIDI port name to search for.
-	internal static func systemSourceEndpoints(matching name: String) -> [MIDIEndpointRef] {
+	public static func systemSourceEndpoints(matching name: String) -> [MIDIEndpointRef] {
 		
 		var refs: [MIDIEndpointRef] = []
 		
@@ -81,7 +87,7 @@ extension MIDIIO {
 	
 	/// Returns the first source `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`. If not found, returns `nil`.
 	/// - parameter uniqueID: MIDI port unique ID to search for.
-	internal static func systemSourceEndpoint(matching uniqueID: MIDIUniqueID) -> MIDIEndpointRef? {
+	public static func systemSourceEndpoint(matching uniqueID: MIDIUniqueID) -> MIDIEndpointRef? {
 		
 		for i in 0..<MIDIGetNumberOfSources() {
 			let source = MIDIGetSource(i)
@@ -98,7 +104,7 @@ extension MIDIIO {
 	
 	/// Returns all destination `MIDIEndpointRef`s in the system that have a name matching `name`.
 	/// - parameter name: MIDI port name to search for.
-	internal static func systemDestinationEndpoints(matching name: String) -> [MIDIEndpointRef] {
+	public static func systemDestinationEndpoints(matching name: String) -> [MIDIEndpointRef] {
 		
 		var refs: [MIDIEndpointRef] = []
 		
@@ -113,7 +119,7 @@ extension MIDIIO {
 	
 	/// Returns the first destination `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`. If not found, returns `nil`.
 	/// - parameter uniqueID: MIDI port unique ID to search for.
-	internal static func systemDestinationEndpoint(matching uniqueID: MIDIUniqueID) -> MIDIEndpointRef? {
+	public static func systemDestinationEndpoint(matching uniqueID: MIDIUniqueID) -> MIDIEndpointRef? {
 		
 		for i in 0..<MIDIGetNumberOfDestinations() {
 			let source = MIDIGetDestination(i)
