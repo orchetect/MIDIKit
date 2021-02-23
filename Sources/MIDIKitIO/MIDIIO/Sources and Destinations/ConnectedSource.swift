@@ -21,9 +21,9 @@ extension MIDIIO {
 		
 		public private(set) var isConnected = false
 		
-		internal init(named: String) {
+		internal init(toDestinationNamed: String) {
 			
-			self.destinationEndpointName = named
+			self.destinationEndpointName = toDestinationNamed
 			
 		}
 		
@@ -44,7 +44,7 @@ extension MIDIIO.ConnectedSource {
 	/// Connect to a MIDI Destination
 	/// - parameter context: MIDI manager instance by reference
 	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`
-	public func connect(context: MIDIIO.Manager) throws {
+	internal func connect(context: MIDIIO.Manager) throws {
 		
 		if isConnected { return }
 		
@@ -89,7 +89,7 @@ extension MIDIIO.ConnectedSource {
 	/// Disconnects the connection if it's currently connected.
 	/// 
 	/// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-	public func disconnect() throws {
+	internal func disconnect() throws {
 		
 		isConnected = false
 		

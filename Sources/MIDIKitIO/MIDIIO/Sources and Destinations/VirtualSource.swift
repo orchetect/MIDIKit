@@ -59,7 +59,7 @@ extension MIDIIO.VirtualSource {
 
 extension MIDIIO.VirtualSource {
 	
-	public func create(context: MIDIIO.Manager) throws {
+	internal func create(context: MIDIIO.Manager) throws {
 		
 		guard !existsInSystem else { return }
 		
@@ -107,7 +107,7 @@ extension MIDIIO.VirtualSource {
 	/// Disposes of the the virtual port if it's already been created in the system via the `create()` method.
 	///
 	/// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-	public func dispose() throws {
+	internal func dispose() throws {
 		
 		guard let sourcePortRef = self.sourcePortRef else { return }
 		

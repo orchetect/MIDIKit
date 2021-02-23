@@ -66,7 +66,7 @@ extension MIDIIO {
 
 extension MIDIIO.ConnectedThru {
 	
-	public func create(context: MIDIIO.Manager) throws {
+	internal func create(context: MIDIIO.Manager) throws {
 		
 		var result = noErr
 		
@@ -181,7 +181,7 @@ extension MIDIIO.ConnectedThru {
 	/// Disposes of the the thru connection if it's already been created in the system via the `create()` method.
 	///
 	/// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-	public func dispose() throws {
+	internal func dispose() throws {
 		
 		guard let thruConnectionRef = self.thruConnectionRef else { return }
 		
