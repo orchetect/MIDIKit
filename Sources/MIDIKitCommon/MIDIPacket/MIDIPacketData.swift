@@ -40,6 +40,12 @@ public struct MIDIPacketData: Sequence {
 		
 	}
 	
+	public init(_ midiPacket: MIDIPacket) {
+		
+		self.init(midiPacket.data, length: midiPacket.length)
+		
+	}
+	
 	/// Custom iterator for `MIDIPacket`
 	public func makeIterator() -> AnyIterator<Byte> {
 		
@@ -56,3 +62,13 @@ public struct MIDIPacketData: Sequence {
 	
 }
 
+extension MIDIPacket {
+	
+	/// Converts an instance of `MIDIPacket` to `MIDIPacketData`
+	public var packetData: MIDIPacketData {
+		
+		MIDIPacketData(self)
+		
+	}
+	
+}
