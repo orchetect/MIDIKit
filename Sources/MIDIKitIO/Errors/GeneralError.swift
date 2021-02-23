@@ -9,6 +9,8 @@ extension MIDIIOManager {
 	
 	public enum GeneralError: Error {
 		
+		case connectionError(_ verboseError: String)
+		
 		case readError(_ verboseError: String)
 		
 	}
