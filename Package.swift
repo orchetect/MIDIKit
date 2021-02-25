@@ -7,7 +7,7 @@ let package = Package(
 	name: "MIDIKit",
 	
 	platforms: [
-		.macOS(.v10_12), .iOS(.v8)
+		.macOS(.v10_12), .iOS(.v10)
 	],
 	
 	products: [
