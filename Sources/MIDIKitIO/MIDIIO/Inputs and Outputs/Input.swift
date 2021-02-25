@@ -1,5 +1,5 @@
 //
-//  VirtualDestination.swift
+//  Input.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-21.
@@ -11,20 +11,20 @@ import CoreMIDI
 
 extension MIDIIO {
 	
-	public class VirtualDestination {
+	public class Input {
 		
 		/// The port name as displayed in the system.
 		public private(set) var endpointName: String = ""
 		
-		/// The port's unique ID.
-		public private(set) var uniqueID: MIDIEndpointUniqueID? = nil
+		/// The port's unique ID in the system.
+		public private(set) var uniqueID: MIDIIO.Endpoint.UniqueID? = nil
 		
 		public private(set) var destinationPortRef: MIDIPortRef? = nil
 		
 		internal var receiveHandler: ReceiveHandler
 		
 		internal init(name: String,
-					  uniqueID: MIDIEndpointUniqueID? = nil,
+					  uniqueID: MIDIIO.Endpoint.UniqueID? = nil,
 					  receiveHandler: ReceiveHandler) {
 			
 			self.endpointName = name
@@ -43,29 +43,34 @@ extension MIDIIO {
 	
 }
 
-extension MIDIIO.VirtualDestination {
+extension MIDIIO.Input {
 	
 	/// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
-	public var existsInSystem: Bool {
+	public var uniqueIDExistsInSystem: MIDIEndpointRef? {
 		
 		guard let uniqueID = self.uniqueID else {
-			return false
+			return nil
 		}
 		
-		guard let matchingIDRef = MIDIIO.systemDestinationEndpoint(matching: uniqueID)
-		else { return false }
+		if let endpoint = MIDIIO.systemDestinationEndpoint(matching: uniqueID) {
+			return endpoint
+		}
 		
-		return (try? matchingIDRef.getName()) == endpointName
+		return nil
 		
 	}
 	
 }
 
-extension MIDIIO.VirtualDestination {
+extension MIDIIO.Input {
 	
 	internal func create(context: MIDIIO.Manager) throws {
 		
-		guard !existsInSystem else { return }
+		if uniqueIDExistsInSystem != nil {
+			// if uniqueID is already in use, set it to nil
+			// so MIDIDestinationCreateWithBlock can find a new unused ID
+			uniqueID = nil
+		}
 		
 		var newDestinationPortRef = MIDIPortRef()
 		
@@ -125,11 +130,11 @@ extension MIDIIO.VirtualDestination {
 	
 }
 
-extension MIDIIO.VirtualDestination: CustomStringConvertible {
+extension MIDIIO.Input: CustomStringConvertible {
 	
 	public var description: String {
 		
-		"VirtualDestination(name: \(endpointName.quoted), uniqueID: \(uniqueID, ifNil: "nil"))"
+		"Input(name: \(endpointName.quoted), uniqueID: \(uniqueID, ifNil: "nil"))"
 		
 	}
 	

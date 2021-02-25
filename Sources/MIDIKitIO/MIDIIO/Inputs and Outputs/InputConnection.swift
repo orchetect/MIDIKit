@@ -1,5 +1,5 @@
 //
-//  ConnectedDestination.swift
+//  InputConnection.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-21.
@@ -11,22 +11,22 @@ import CoreMIDI
 
 extension MIDIIO {
 	
-	public class ConnectedDestination {
+	public class InputConnection {
 		
-		public var sourceEndpointName: String
+		public private(set) var sourceCriteria: MIDIIO.Endpoint.IDCriteria
 		
-		public private(set) var sourceEndpointRef: MIDIEndpointRef? = nil
+		internal private(set) var sourceEndpointRef: MIDIEndpointRef? = nil
 		
-		public private(set) var destinationPortRef: MIDIPortRef? = nil
+		internal private(set) var destinationPortRef: MIDIPortRef? = nil
 		
 		internal var receiveHandler: ReceiveHandler
 		
 		public private(set) var isConnected: Bool = false
 		
-		internal init(toSourceNamed: String,
+		internal init(toSource: MIDIIO.Endpoint.IDCriteria,
 					  receiveHandler: ReceiveHandler) {
 			
-			self.sourceEndpointName = toSourceNamed
+			self.sourceCriteria = toSource
 			self.receiveHandler = receiveHandler
 			
 		}
@@ -41,9 +41,7 @@ extension MIDIIO {
 	
 }
 
-extension MIDIIO.ConnectedDestination {
-	
-	#warning("> should rework this to make it obvious it's connection to the first endpoint that matches the name; also create a 2nd connect method that connects by MIDIEndpointRef")
+extension MIDIIO.InputConnection {
 	
 	/// Connect to a MIDI Source
 	/// - parameter context: MIDI manager instance by reference
@@ -55,20 +53,20 @@ extension MIDIIO.ConnectedDestination {
 		// if previously connected, clean the old connection
 		_ = try? disconnect()
 		
-		guard let sourceEndpoint =
-				MIDIIO.systemSourceEndpoints(matching: sourceEndpointName)
-				.first
+		guard let getSourceEndpointRef = sourceCriteria
+				.locate(in: context.endpoints.sources)?
+				.ref
 		else {
 			
 			isConnected = false
 			
 			throw MIDIIO.GeneralError.connectionError(
-				"MIDI: Source \(sourceEndpointName.quoted) not found while trying to connect to it."
+				"MIDI: Source with criteria \(sourceCriteria) not found while attempting to form connection."
 			)
 			
 		}
 		
-		sourceEndpointRef = sourceEndpoint
+		self.sourceEndpointRef = getSourceEndpointRef
 		
 		var newConnection = MIDIPortRef()
 		
@@ -88,7 +86,7 @@ extension MIDIIO.ConnectedDestination {
 		
 		result = MIDIPortConnectSource(
 			newConnection,
-			sourceEndpoint,
+			getSourceEndpointRef,
 			nil
 		)
 		
@@ -115,7 +113,6 @@ extension MIDIIO.ConnectedDestination {
 		let result = MIDIPortDisconnectSource(destinationPortRef, sourceEndpointRef)
 		
 		self.destinationPortRef = nil
-		self.sourceEndpointRef = nil
 		
 		guard result == noErr else {
 			throw MIDIIO.OSStatusResult(rawValue: result)
@@ -125,19 +122,15 @@ extension MIDIIO.ConnectedDestination {
 	
 }
 
-extension MIDIIO.ConnectedDestination {
+extension MIDIIO.InputConnection {
 	
 	internal func refreshConnection(_ context: MIDIIO.Manager) throws {
 		
-		let sourceEndpointName = self.sourceEndpointName
-		
-		guard MIDIIO.systemSourceEndpointsNames
-				.contains(sourceEndpointName)
+		guard sourceCriteria
+				.locate(in: context.endpoints.sources) != nil
 		else {
-			
 			isConnected = false
 			return
-			
 		}
 		
 		try connect(context: context)
@@ -146,15 +139,17 @@ extension MIDIIO.ConnectedDestination {
 	
 }
 
-extension MIDIIO.ConnectedDestination: CustomStringConvertible {
+extension MIDIIO.InputConnection: CustomStringConvertible {
 	
 	public var description: String {
+		
+		let sourceEndpointName = "\(try? sourceEndpointRef?.getName().quoted, ifNil: "nil")".quoted
 		
 		let sourceEndpointRef = "\(self.sourceEndpointRef, ifNil: "nil")"
 		
 		let destinationPortRef = "\(self.destinationPortRef, ifNil: "nil")"
 		
-		return "ConnectedDestination(sourceEndpointName: \(sourceEndpointName.quoted), sourceEndpointRef: \(sourceEndpointRef), destinationPortRef: \(destinationPortRef), isConnected: \(isConnected))"
+		return "InputConnection(criteria: \(sourceCriteria), sourceEndpointRef: \(sourceEndpointRef), destinationPortRef: \(destinationPortRef), isConnected: \(isConnected))"
 		
 	}
 	

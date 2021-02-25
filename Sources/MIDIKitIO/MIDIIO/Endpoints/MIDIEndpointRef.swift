@@ -49,16 +49,40 @@ extension MIDIEndpointRef {
 	
 	// MARK: - Property Getters
 	
-	/// Convenience: get user-visible endpoint name.
-	/// (`kMIDIPropertyName`)
-	public func getName() throws -> String {
-		try getString(forProperty: kMIDIPropertyName)
+	/// Convenience: get device ID. The entity's system-exclusive ID, in user-visible form.
+	/// (`kMIDIPropertyDeviceID`)
+	public func getDeviceID() -> Int32 {
+		getInteger(forProperty: kMIDIPropertyDeviceID)
 	}
 	
 	/// Convenience: get display name - Apple-recommended user-visible name; combines device & endpoint names.
 	/// (`kMIDIPropertyDisplayName`)
 	public func getDisplayName() throws -> String {
 		try getString(forProperty: kMIDIPropertyDisplayName)
+	}
+	
+	/// Convenience: get name of the driver that owns a device. Set by the owning driver, on the device; should not be touched by other clients. Property is inherited from the device by its entities and endpoints.
+	/// (`kMIDIPropertyDriverOwner`)
+	public func getDriverOwner() throws -> String {
+		try getString(forProperty: kMIDIPropertyDriverOwner)
+	}
+	
+	/// Convenience: `False` if there are external MIDI connectors, `True` if not.
+	/// (`kMIDIPropertyIsEmbeddedEntity`)
+	public func getIsEmbeddedEntity() -> Bool {
+		getInteger(forProperty: kMIDIPropertyIsEmbeddedEntity)  == 1
+	}
+	
+	/// Convenience: `True` if offline (temporarily absent) or `False` if present.
+	/// (`kMIDIPropertyOffline`)
+	public func getIsOffline() -> Bool {
+		getInteger(forProperty: kMIDIPropertyOffline) == 1
+	}
+	
+	/// Convenience: `True` if endpoint is private, hidden from other clients.
+	/// (`kMIDIPropertyPrivate`)
+	public func getIsPrivate() -> Bool {
+		getInteger(forProperty: kMIDIPropertyPrivate) == 1
 	}
 	
 	/// Convenience: get manufacturer name.
@@ -73,40 +97,16 @@ extension MIDIEndpointRef {
 		try getString(forProperty: kMIDIPropertyModel)
 	}
 	
-	/// Convenience: get name of the driver that owns a device. Set by the owning driver, on the device; should not be touched by other clients. Property is inherited from the device by its entities and endpoints.
-	/// (`kMIDIPropertyDriverOwner`)
-	public func getDriverOwner() throws -> String {
-		try getString(forProperty: kMIDIPropertyDriverOwner)
+	/// Convenience: get user-visible endpoint name.
+	/// (`kMIDIPropertyName`)
+	public func getName() throws -> String {
+		try getString(forProperty: kMIDIPropertyName)
 	}
 	
 	/// Convenience: get unique ID. The system assigns unique ID's to all objects.  Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
 	/// (`kMIDIPropertyUniqueID`)
-	public func getUniqueID() -> MIDIEndpointUniqueID {
+	public func getUniqueID() -> MIDIIO.Endpoint.UniqueID {
 		getInteger(forProperty: kMIDIPropertyUniqueID)
-	}
-	
-	/// Convenience: get device ID. The entity's system-exclusive ID, in user-visible form.
-	/// (`kMIDIPropertyDeviceID`)
-	public func getDeviceID() -> Int32 {
-		getInteger(forProperty: kMIDIPropertyDeviceID)
-	}
-	
-	/// Convenience: True if offline (temporarily absent) or false if present.
-	/// (`kMIDIPropertyOffline`)
-	public func getIsOffline() -> Bool {
-		getInteger(forProperty: kMIDIPropertyOffline) == 1
-	}
-	
-	/// Convenience: False if there are external MIDI connectors, True if not.
-	/// (`kMIDIPropertyIsEmbeddedEntity`)
-	public func getIsEmbeddedEntity() -> Bool {
-		getInteger(forProperty: kMIDIPropertyIsEmbeddedEntity)  == 1
-	}
-	
-	/// Convenience: True if endpoint is private, hidden from other clients.
-	/// (`kMIDIPropertyPrivate`)
-	public func getIsPrivate() -> Bool {
-		getInteger(forProperty: kMIDIPropertyPrivate) == 1
 	}
 	
 	
@@ -116,19 +116,28 @@ extension MIDIEndpointRef {
 	//   kMIDIPropertyAdvanceScheduleTimeMuSec, int
 	//   kMIDIPropertyCanRoute, int 0/1
 	//   kMIDIPropertyConnectionUniqueID, int or CFDataRef
+	// * kMIDIPropertyDeviceID, int **
+	// * kMIDIPropertyDisplayName, string (Apple-recommended user-visible name; combines device & endpoint names)
 	//   kMIDIPropertyDriverDeviceEditorApp, string (path to app that can configure the device)
+	// * kMIDIPropertyDriverOwner, string
 	//   kMIDIPropertyDriverVersion, int
 	//   kMIDIPropertyImage, CFStringRef (POSIX path to icon in any common graphics file format)
 	//   kMIDIPropertyIsBroadcast, int 0/1
 	//   kMIDIPropertyIsDrumMachine, int 0/1
 	//   kMIDIPropertyIsEffectUnit, int 0/1
+	// * kMIDIPropertyIsEmbeddedEntity, int 0/1 **
 	//   kMIDIPropertyIsMixer, int 0/1
 	//   kMIDIPropertyIsSampler, int 0/1
+	// * kMIDIPropertyManufacturer, string **
 	//   kMIDIPropertyMaxReceiveChannels, int 0-16
 	//   kMIDIPropertyMaxSysExSpeed, int
 	//   kMIDIPropertyMaxTransmitChannels, int 0/1
+	// * kMIDIPropertyModel, string **
+	// * kMIDIPropertyName, string **
 	//   kMIDIPropertyNameConfiguration, CFDictionary
+	// * kMIDIPropertyOffline, int 0/1 **
 	//   kMIDIPropertyPanDisruptsStereo, int 0/1
+	// * kMIDIPropertyPrivate, int 0/1
 	//   kMIDIPropertyProtocolID, ProtocolID (macOS 11.0 only)
 	//   kMIDIPropertyReceiveChannels, int (bitmap)
 	//   kMIDIPropertyReceivesBankSelectMSB / kMIDIPropertyReceivesBankSelectLSB, int 0/1
@@ -146,15 +155,17 @@ extension MIDIEndpointRef {
 	//   kMIDIPropertyTransmitsMTC, int 0/1
 	//   kMIDIPropertyTransmitsNotes, int 0/1
 	//   kMIDIPropertyTransmitsProgramChanges, int 0/1
-	// * kMIDIPropertyDeviceID, int **
-	// * kMIDIPropertyDisplayName, string (Apple-recommended user-visible name; combines device & endpoint names)
-	// * kMIDIPropertyDriverOwner, string
-	// * kMIDIPropertyIsEmbeddedEntity, int 0/1 **
-	// * kMIDIPropertyManufacturer, string **
-	// * kMIDIPropertyModel, string **
-	// * kMIDIPropertyName, string **
-	// * kMIDIPropertyOffline, int 0/1 **
-	// * kMIDIPropertyPrivate, int 0/1
 	// * kMIDIPropertyUniqueID, int **
+	
+}
+
+extension MIDIEndpointRef {
+	
+	/// Returns a `MIDIIO.Endpoint` instance wrapping the `MIDIEndpointRef`.
+	public var asEndpoint: MIDIIO.Endpoint {
+		
+		.init(self)
+		
+	}
 	
 }

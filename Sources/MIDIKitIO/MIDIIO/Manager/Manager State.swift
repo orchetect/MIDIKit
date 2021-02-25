@@ -28,23 +28,39 @@ extension MIDIIO.Manager {
 			throw MIDIIO.OSStatusResult(rawValue: status)
 		}
 		
+		// initial cache of endpoints
+		
+		updateSystemEndpointsCache()
+		
 	}
 	
 	internal func notificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
 		
-		let notification = Notification(pointer)
+		let notification = InternalNotification(pointer)
 		
 		switch notification {
-		case .added, .removed:
+		case .setupChanged,
+			 .added,
+			 .removed,
+			 .propertyChanged:
+			
+			updateSystemEndpointsCache()
+			
+		default:
+			break
+		}
+		
+		switch notification {
+		case .setupChanged, .added, .removed:
 			
 			// refresh internal states of all sources and destinations
 			// and reconnect any disconnected connections if an endpoint has reappeared
 			
-			for source in connectedSources.values {
+			for source in managedOutputConnections.values {
 				_ = try? source.refreshConnection(self)
 			}
 			
-			for destination in connectedDestinations.values {
+			for destination in managedInputConnections.values {
 				_ = try? destination.refreshConnection(self)
 			}
 			

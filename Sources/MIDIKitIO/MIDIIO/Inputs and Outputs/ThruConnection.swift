@@ -1,5 +1,5 @@
 //
-//  ConnectedThru.swift
+//  ThruConnection.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-21.
@@ -23,25 +23,25 @@ extension MIDIIO {
 	/// CoreMIDI MIDI thru connections can have transforms applied to them.
 	///
 	/// They can be client-owned (auto-destroyed when app quits) or persistent (continues even after app quits).
-	public class ConnectedThru {
+	public class ThruConnection {
 		
 		public private(set) var thruConnectionRef: MIDIThruConnectionRef? = nil
 		
-		public private(set) var sources: [MIDIEndpointRef] = []
+		public private(set) var sources: EndpointArray
 		
-		public private(set) var destinations: [MIDIEndpointRef] = []
+		public private(set) var destinations: EndpointArray
 		
-		public private(set) var persistentOwnerID: String? = nil
+		public private(set) var lifecycle: Lifecycle
 		
 		public private(set) var params: MIDIThruConnectionParams? = nil
 		
 		/// - Parameters:
 		///   - sources: One or more source endpoints. Maximum 8 endpoints.
 		///   - destinations: One or more source endpoints. Maximum 8 endpoints.
-		///   - persistentOwnerID: Reverse-DNS domain string; usually the application's bundle ID. If this is `nil`, the connection will be created as non-persistent.
-		internal init(sources: [MIDIEndpointRef],
-					  destinations: [MIDIEndpointRef],
-					  persistentOwnerID: String? = nil,
+		///   - lifecycle: Non-persistent or persistent.
+		internal init(sources: EndpointArray,
+					  destinations: EndpointArray,
+					  _ lifecycle: Lifecycle = .nonPersistent,
 					  params: MIDIThruConnectionParams? = nil) {
 			
 			// truncate arrays to 8 members or less;
@@ -49,7 +49,7 @@ extension MIDIIO {
 			
 			self.sources = Array(sources.prefix(8))
 			self.destinations = Array(destinations.prefix(8))
-			self.persistentOwnerID = persistentOwnerID
+			self.lifecycle = lifecycle
 			self.params = params
 			
 		}
@@ -64,15 +64,13 @@ extension MIDIIO {
 	
 }
 
-extension MIDIIO.ConnectedThru {
+extension MIDIIO.ThruConnection {
 	
 	internal func create(context: MIDIIO.Manager) throws {
 		
 		var result = noErr
 		
 		var newConnection = MIDIThruConnectionRef()
-		
-		let cfPersistentOwnerID: CFString? = persistentOwnerID as CFString?
 		
 		var params = self.params ?? {
 			// set up default parameters if params were not supplied
@@ -112,14 +110,14 @@ extension MIDIIO.ConnectedThru {
 		
 		for srcEP in 0..<sources.count {
 			switch srcEP {
-			case 0: params.sources.0.endpointRef = sources[0]
-			case 1: params.sources.1.endpointRef = sources[1]
-			case 2: params.sources.2.endpointRef = sources[2]
-			case 3: params.sources.3.endpointRef = sources[3]
-			case 4: params.sources.4.endpointRef = sources[4]
-			case 5: params.sources.5.endpointRef = sources[5]
-			case 6: params.sources.6.endpointRef = sources[6]
-			case 7: params.sources.7.endpointRef = sources[7]
+			case 0: params.sources.0.endpointRef = sources[0].ref
+			case 1: params.sources.1.endpointRef = sources[1].ref
+			case 2: params.sources.2.endpointRef = sources[2].ref
+			case 3: params.sources.3.endpointRef = sources[3].ref
+			case 4: params.sources.4.endpointRef = sources[4].ref
+			case 5: params.sources.5.endpointRef = sources[5].ref
+			case 6: params.sources.6.endpointRef = sources[6].ref
+			case 7: params.sources.7.endpointRef = sources[7].ref
 			default: break // ignores more than 8 endpoints
 			}
 		}
@@ -128,14 +126,14 @@ extension MIDIIO.ConnectedThru {
 		
 		for destEP in 0..<destinations.count {
 			switch destEP {
-			case 0: params.destinations.0.endpointRef = destinations[0]
-			case 1: params.destinations.1.endpointRef = destinations[1]
-			case 2: params.destinations.2.endpointRef = destinations[2]
-			case 3: params.destinations.3.endpointRef = destinations[3]
-			case 4: params.destinations.4.endpointRef = destinations[4]
-			case 5: params.destinations.5.endpointRef = destinations[5]
-			case 6: params.destinations.6.endpointRef = destinations[6]
-			case 7: params.destinations.7.endpointRef = destinations[7]
+			case 0: params.destinations.0.endpointRef = destinations[0].ref
+			case 1: params.destinations.1.endpointRef = destinations[1].ref
+			case 2: params.destinations.2.endpointRef = destinations[2].ref
+			case 3: params.destinations.3.endpointRef = destinations[3].ref
+			case 4: params.destinations.4.endpointRef = destinations[4].ref
+			case 5: params.destinations.5.endpointRef = destinations[5].ref
+			case 6: params.destinations.6.endpointRef = destinations[6].ref
+			case 7: params.destinations.7.endpointRef = destinations[7].ref
 			default: break // ignores more than 8 endpoints
 			}
 		}
@@ -147,6 +145,13 @@ extension MIDIIO.ConnectedThru {
 		
 		let paramsData = withUnsafePointer(to: &params) { ptr in
 			NSData(bytes: ptr, length: pLen)
+		}
+		
+		// non-persistent/persistent
+		var cfPersistentOwnerID: CFString? = nil
+		
+		if case .persistent(ownerID: let ownerID) = lifecycle {
+			cfPersistentOwnerID = ownerID as CFString
 		}
 		
 		// MIDIThruConnectionCreate parameters:
@@ -169,11 +174,11 @@ extension MIDIIO.ConnectedThru {
 		
 		thruConnectionRef = newConnection
 		
-		switch persistentOwnerID {
-		case .none:
+		switch lifecycle {
+		case .nonPersistent:
 			Log.debug("MIDI: Thru Connection: Successfully formed non-persistent connection.")
-		case .some(let persOwnerID):
-			Log.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID \(persOwnerID.quoted).")
+		case .persistent(let ownerID):
+			Log.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID \(ownerID.quoted).")
 		}
 		
 	}
@@ -197,17 +202,47 @@ extension MIDIIO.ConnectedThru {
 	
 }
 
-extension MIDIIO.ConnectedThru: CustomStringConvertible {
+extension MIDIIO.ThruConnection: CustomStringConvertible {
 	
 	public var description: String {
 		
 		let thruConnectionRef = "\(self.thruConnectionRef, ifNil: "nil")"
 		
-		let persistence = persistentOwnerID != nil
-			? "persistentOwnerID: \(persistentOwnerID, ifNil: "nil")"
-			: "persistent: false"
+		return "ThruConnection(thruConnectionRef: \(thruConnectionRef), sources: \(sources), destinations: \(destinations), \(lifecycle)"
 		
-		return "ConnectedThru(thruConnectionRef: \(thruConnectionRef), sources: \(sources), destinations: \(destinations), \(persistence)"
+	}
+	
+}
+
+// MARK: - Lifecycle
+
+extension MIDIIO.ThruConnection {
+	
+	public enum Lifecycle: Hashable {
+		
+		/// The play-through connection exists as long as the `Manager` exists.
+		case nonPersistent
+		
+		/// The play-through connection is stored in the system and persists after `Manager` is disposed, and even after the application has quit. (It may even persist after reboot (?))
+		///
+		/// - `ownerID`: Reverse-DNS domain string; usually the application's bundle ID.
+		case persistent(ownerID: String)
+		
+	}
+	
+}
+
+extension MIDIIO.ThruConnection.Lifecycle: CustomStringConvertible {
+	
+	public var description: String {
+		
+		switch self {
+		case .nonPersistent:
+			return "nonPersistent"
+			
+		case .persistent(let ownerID):
+			return "persistent(\(ownerID)"
+		}
 		
 	}
 	

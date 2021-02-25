@@ -1,5 +1,5 @@
 //
-//  ConnectedSource.swift
+//  OutputConnection.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-21.
@@ -11,9 +11,9 @@ import CoreMIDI
 
 extension MIDIIO {
 	
-	public class ConnectedSource {
+	public class OutputConnection {
 		
-		public var destinationEndpointName: String
+		public var destinationCriteria: MIDIIO.Endpoint.IDCriteria
 		
 		public private(set) var destinationEndpointRef: MIDIEndpointRef? = nil
 		
@@ -21,9 +21,9 @@ extension MIDIIO {
 		
 		public private(set) var isConnected = false
 		
-		internal init(toDestinationNamed: String) {
+		internal init(toDestination: MIDIIO.Endpoint.IDCriteria) {
 			
-			self.destinationEndpointName = toDestinationNamed
+			self.destinationCriteria = toDestination
 			
 		}
 		
@@ -37,9 +37,7 @@ extension MIDIIO {
 	
 }
 
-extension MIDIIO.ConnectedSource {
-	
-	#warning("> should rework this to make it obvious it's connection to the first endpoint that matches the name; also create a 2nd connect method that connects by MIDIEndpointRef")
+extension MIDIIO.OutputConnection {
 	
 	/// Connect to a MIDI Destination
 	/// - parameter context: MIDI manager instance by reference
@@ -51,19 +49,20 @@ extension MIDIIO.ConnectedSource {
 		// if previously connected, clean the old connection
 		_ = try? disconnect()
 		
-		guard let destinationEndpoint =
-				MIDIIO.systemDestinationEndpoints(matching: destinationEndpointName)
-				.first
+		guard let getDestinationEndpointRef = destinationCriteria
+				.locate(in: context.endpoints.sources)?
+				.ref
+
 		else {
 			
 			isConnected = false
 			
 			throw MIDIIO.GeneralError.connectionError(
-				"MIDI Destination \(destinationEndpointName.quoted) not found while trying to create destination connection."
+				"MIDI Destination with criteria \(destinationCriteria) not found while trying to form connection."
 			)
 		}
 		
-		destinationEndpointRef = destinationEndpoint
+		destinationEndpointRef = getDestinationEndpointRef
 		
 		var newConnection = MIDIPortRef()
 		
@@ -78,7 +77,7 @@ extension MIDIIO.ConnectedSource {
 			throw MIDIIO.OSStatusResult(rawValue: result)
 		}
 		
-		#warning("> shouldn't there be a call to MIDIPortConnectSource here, like in the ConnectedDestination class?")
+		#warning("> shouldn't there be a call to MIDIPortConnectSource here, like in the InputConnection class?")
 		
 		sourcePortRef = newConnection
 		
@@ -109,19 +108,16 @@ extension MIDIIO.ConnectedSource {
 	
 }
 
-extension MIDIIO.ConnectedSource {
+extension MIDIIO.OutputConnection {
 	
 	internal func refreshConnection(_ context: MIDIIO.Manager) throws {
 		
-		let destinationEndpointName = self.destinationEndpointName
+		guard destinationCriteria
+				.locate(in: context.endpoints.destinations) != nil
 		
-		guard MIDIIO.systemDestinationEndpointsNames
-				.contains(destinationEndpointName)
 		else {
-			
 			isConnected = false
 			return
-			
 		}
 		
 		try connect(context: context)
@@ -130,21 +126,23 @@ extension MIDIIO.ConnectedSource {
 	
 }
 
-extension MIDIIO.ConnectedSource: CustomStringConvertible {
+extension MIDIIO.OutputConnection: CustomStringConvertible {
 	
 	public var description: String {
+		
+		let destinationEndpointName = "\(try? destinationEndpointRef?.getName().quoted, ifNil: "nil")".quoted
 		
 		let destinationEndpointRef = "\(self.destinationEndpointRef, ifNil: "nil")"
 		
 		let sourcePortRef = "\(self.sourcePortRef, ifNil: "nil")"
 		
-		return "ConnectedSource(destinationEndpointName: \(destinationEndpointName.quoted), destinationEndpointRef: \(destinationEndpointRef), sourcePortRef: \(sourcePortRef), isConnected: \(isConnected))"
+		return "OutputConnection(criteria: \(destinationCriteria), destinationEndpointRef: \(destinationEndpointRef), sourcePortRef: \(sourcePortRef), isConnected: \(isConnected))"
 		
 	}
 	
 }
 
-extension MIDIIO.ConnectedSource: MIDIIOSendsMIDIMessages {
+extension MIDIIO.OutputConnection: MIDIIOSendsMIDIMessages {
 	
 	public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
 		

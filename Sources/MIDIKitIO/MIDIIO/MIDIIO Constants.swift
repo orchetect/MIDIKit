@@ -9,8 +9,10 @@ import CoreMIDI
 
 extension MIDIIO {
 	
+	/// Size of `MIDIPacketList` struct memory.
 	internal static let sizeOfMIDIPacketList = MemoryLayout<MIDIPacketList>.size
 	
+	/// Size of `MIDIPacket` struct memory.
 	internal static let sizeOfMIDIPacket = MemoryLayout<MIDIPacket>.size
 	
 	/// Size of `MIDIPacketList` header.
@@ -31,6 +33,7 @@ extension MIDIIO {
 	/// To determine the size of the header portion of this struct, we can add the size of the `timestamp` and `length` fields, or subtract the size of the 256 `Byte`s from the size of the whole packet. We will opt for the former.
 	internal static let sizeOfMIDIPacketHeader = MemoryLayout<MIDITimeStamp>.size + MemoryLayout<UInt16>.size
 	
+	/// Size of both `MIDIPacketList` header and `MIDIPacket` header
 	internal static let sizeOfMIDICombinedHeaders = sizeOfMIDIPacketListHeader + sizeOfMIDIPacketHeader
 	
 }

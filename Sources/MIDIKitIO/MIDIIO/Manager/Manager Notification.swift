@@ -9,7 +9,7 @@ import CoreMIDI
 
 extension MIDIIO.Manager {
 	
-	internal enum Notification {
+	internal enum InternalNotification {
 		
 		case setupChanged
 		
@@ -35,7 +35,7 @@ extension MIDIIO.Manager {
 	
 }
 
-extension MIDIIO.Manager.Notification {
+extension MIDIIO.Manager.InternalNotification {
 	
 	internal init(_ message: UnsafePointer<MIDINotification>) {
 		
@@ -112,6 +112,16 @@ extension MIDIIO.Manager.Notification {
 			self = .other(messageIDrawValue: messageID.rawValue)
 			
 		}
+		
+	}
+	
+}
+
+extension MIDIIO {
+	
+	public enum Notification {
+		
+		case systemEndpointsChanged
 		
 	}
 	
