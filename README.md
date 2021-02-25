@@ -13,8 +13,8 @@
 <a href="https://github.com/orchetect/MIDIKit/blob/main/LICENSE">
 <img src="http://img.shields.io/badge/license-MIT-green.svg?style=flat"
      alt="License: MIT" /></a>
-A modular Swift CoreMIDI wrapper with type-safe abstraction for MIDI events, MTC, MMC, HUI, and SMF (Standard MIDI Files).
 
+A modular Swift CoreMIDI wrapper with type-safe abstraction for MIDI events, MTC, MMC, HUI, and SMF (Standard MIDI Files).
 
 ### Available Modules
 
@@ -28,10 +28,10 @@ A modular Swift CoreMIDI wrapper with type-safe abstraction for MIDI events, MTC
 
 | Module            | Description                         | Completion     | Docs | Tests |
 | ----------------- | ----------------------------------- | :------------: | :--: | :---: |
-| `MIDIKitEvents`  | MIDI events encoding/decoding      | ![Progress](https://progress-bar.dev/50/?title=Postponed&color=555555&width=80) |  ⚪️   |   ⚪️   |
+| `MIDIKitEvents`   | MIDI events encoding/decoding       | ![Progress](https://progress-bar.dev/50/?title=Postponed&color=555555&width=80) |  ⚪️   |   ⚪️   |
 | `MIDIKitHUI`      | HUI protocol abstraction            | ![Progress](https://progress-bar.dev/40/?title=Future&color=555555&width=98) |  ⚪️   |   ⚪️   |
 | `MIDIKitSMF`      | Standard MIDI File read/write       | ![Progress](https://progress-bar.dev/80/?title=Future&color=555555&width=98) |  ⚪️   |   🟠   |
-| `MIDIKitSync`     |                                    |               |      |       |
+| `MIDIKitSync`     |                                     |               |      |       |
 | ─ `MTC.Generator` | MIDI Timecode Generator abstraction | ![Progress](https://progress-bar.dev/0/?title=Future&color=555555&width=98) |  🟢   |   ⚪️   |
 | ─ `MMC`           | MIDI Machine Control abstraction    | ![Progress](https://progress-bar.dev/0/?title=Future&color=555555&width=98) |  ⚪️   |   ⚪️   |
 
