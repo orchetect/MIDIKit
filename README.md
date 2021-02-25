@@ -69,4 +69,17 @@ Licensed under the MIT license. See [LICENSE](https://github.com/orchetect/MIDIK
 
 ## Contributions
 
-Contributions are welcome.
+Contributions are welcome. Discussion on bug fixes or new features is encouraged before creating pull requests.
+
+Individual commits should have commit messages prefixed with the module they are concerned with, as follows:
+
+| Commits with changes within   | Commit message prefix                              |
+| ----------------------------- | -------------------------------------------------- |
+| `/`                           | "Common: "                                         |
+| `/Sources/MIDIKit`            | "Common: "                                         |
+| `/Sources/MIDIKitCommon`      | "Common: "                                         |
+| `/Sources/MIDIKitEvents`      | "Events: "                                         |
+| `/Sources/MIDIKitIO`          | "IO: "                                             |
+| `/Sources/MIDIKitSync`        | "Sync: "                                           |
+| `/Sources/MIDIKitTestsCommon` | "Common: "                                         |
+| `/Tests/<subfolder>`          | use corresponding <subfolder> prefix as seen above |
