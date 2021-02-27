@@ -45,11 +45,11 @@ let package = Package(
 	dependencies: [
 		
 		// Boilerplate
-		.package(url: "https://github.com/orchetect/OTCore", from: "1.1.5"),
+		.package(url: "https://github.com/orchetect/OTCore", from: "1.1.6"),
 		.package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.0"),
 		
 		// Timecode
-		.package(url: "https://github.com/orchetect/TimecodeKit", from: "1.0.9")
+		.package(url: "https://github.com/orchetect/TimecodeKit", from: "1.0.10")
 		
 	],
 	
