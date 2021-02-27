@@ -53,16 +53,18 @@ extension MIDIIO.Manager {
 		switch notification {
 		case .setupChanged, .added, .removed:
 			
-			// refresh internal states of all sources and destinations
+			// refresh internal states of all outputs and inputs
 			// and reconnect any disconnected connections if an endpoint has reappeared
 			
 			for source in managedOutputConnections.values {
-				_ = try? source.refreshConnection(self)
+				_ = try? source.refreshConnection(in: self)
 			}
 			
 			for destination in managedInputConnections.values {
-				_ = try? destination.refreshConnection(self)
+				_ = try? destination.refreshConnection(in: self)
 			}
+			
+			// thru connections
 			
 		default:
 			break

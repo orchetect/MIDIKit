@@ -40,8 +40,8 @@ final class MIDIKitIO_MIDIIO_SourcesAndDestinations_ThruConnection_Tests: XCTest
 		
 		do {
 			try manager.addThru(
-				sources: [],
-				destinations: [],
+				outputs: [],
+				inputs: [],
 				tag: tag1,
 				.nonPersistent,
 				params: nil

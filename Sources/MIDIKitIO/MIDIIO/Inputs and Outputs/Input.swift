@@ -64,7 +64,7 @@ extension MIDIIO.Input {
 
 extension MIDIIO.Input {
 	
-	internal func create(context: MIDIIO.Manager) throws {
+	internal func create(in context: MIDIIO.Manager) throws {
 		
 		if uniqueIDExistsInSystem != nil {
 			// if uniqueID is already in use, set it to nil
@@ -89,7 +89,7 @@ extension MIDIIO.Input {
 		
 		// cache unique ID if cache is nil
 		if uniqueID == nil {
-			uniqueID = newDestinationPortRef.getUniqueID()
+			uniqueID = MIDIIO.getUniqueID(of: newDestinationPortRef)
 		}
 		
 		// reuse unique ID if it's non-nil
@@ -105,7 +105,7 @@ extension MIDIIO.Input {
 		
 		guard result == noErr else {
 			throw MIDIIO.GeneralError.connectionError(
-				"MIDI: Error setting unique ID to \(uniqueID) on virtual destination: \(endpointName.quoted). Current ID is \(newDestinationPortRef.getUniqueID())."
+				"MIDI: Error setting unique ID to \(uniqueID) on virtual destination: \(endpointName.quoted). Current ID is \(MIDIIO.getUniqueID(of: newDestinationPortRef))."
 			)
 		}
 		

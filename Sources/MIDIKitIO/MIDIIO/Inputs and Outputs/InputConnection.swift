@@ -46,7 +46,7 @@ extension MIDIIO.InputConnection {
 	/// Connect to a MIDI Source
 	/// - parameter context: MIDI manager instance by reference
 	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`
-	internal func connect(context: MIDIIO.Manager) throws {
+	internal func connect(in context: MIDIIO.Manager) throws {
 		
 		if isConnected { return }
 		
@@ -54,7 +54,7 @@ extension MIDIIO.InputConnection {
 		_ = try? disconnect()
 		
 		guard let getSourceEndpointRef = sourceCriteria
-				.locate(in: context.endpoints.sources)?
+				.locate(in: context.endpoints.outputs)?
 				.ref
 		else {
 			
@@ -124,16 +124,16 @@ extension MIDIIO.InputConnection {
 
 extension MIDIIO.InputConnection {
 	
-	internal func refreshConnection(_ context: MIDIIO.Manager) throws {
+	internal func refreshConnection(in context: MIDIIO.Manager) throws {
 		
 		guard sourceCriteria
-				.locate(in: context.endpoints.sources) != nil
+				.locate(in: context.endpoints.outputs) != nil
 		else {
 			isConnected = false
 			return
 		}
 		
-		try connect(context: context)
+		try connect(in: context)
 		
 	}
 	
@@ -143,13 +143,18 @@ extension MIDIIO.InputConnection: CustomStringConvertible {
 	
 	public var description: String {
 		
-		let sourceEndpointName = "\(try? sourceEndpointRef?.getName().quoted, ifNil: "nil")".quoted
+		let sourceEndpointName = (
+			sourceEndpointRef?
+				.transformed { try? MIDIIO.getName(of: $0) }?
+				.transformed({ " " + $0 })
+				.quoted
+		) ?? ""
 		
 		let sourceEndpointRef = "\(self.sourceEndpointRef, ifNil: "nil")"
 		
 		let destinationPortRef = "\(self.destinationPortRef, ifNil: "nil")"
 		
-		return "InputConnection(criteria: \(sourceCriteria), sourceEndpointRef: \(sourceEndpointRef), destinationPortRef: \(destinationPortRef), isConnected: \(isConnected))"
+		return "InputConnection(criteria: \(sourceCriteria), sourceEndpointRef: \(sourceEndpointRef)\(sourceEndpointName), destinationPortRef: \(destinationPortRef), isConnected: \(isConnected))"
 		
 	}
 	

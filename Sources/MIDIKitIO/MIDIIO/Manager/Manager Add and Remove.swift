@@ -24,8 +24,6 @@ extension MIDIIO.Manager {
 		receiveHandler: MIDIIO.ReceiveHandler
 	) throws {
 		
-		#warning("> add withUniqueID param; match ID when connecting")
-		
 		let newCD = MIDIIO.InputConnection(
 			toSource: toSource,
 			receiveHandler: receiveHandler
@@ -35,7 +33,7 @@ extension MIDIIO.Manager {
 		// even if subsequent connection fails
 		managedInputConnections[tag] = newCD
 		
-		try newCD.connect(context: self)
+		try newCD.connect(in: self)
 		
 	}
 	
@@ -59,7 +57,7 @@ extension MIDIIO.Manager {
 		// even if subsequent connection fails
 		managedOutputConnections[tag] = newCS
 		
-		try newCS.connect(context: self)
+		try newCS.connect(in: self)
 		
 	}
 	
@@ -71,23 +69,23 @@ extension MIDIIO.Manager {
 	///
 	/// To analyze or delete a persistent connection, access the `unmanagedPersistentThrus` property.
 	///
-	/// - Note: Max 8 sources and max 8 destinations are allowed when forming a thru connection.
+	/// - Note: Max 8 outputs and max 8 inputs are allowed when forming a thru connection.
 	///
-	/// - parameter sources: Maximum of 8 `Endpoint`s.
-	/// - parameter destinations: Maximum of 8 `Endpoint`s.
+	/// - parameter outputs: Maximum of 8 `Endpoint`s.
+	/// - parameter inputs: Maximum of 8 `Endpoint`s.
 	/// - parameter tag: Unique `String` key to refer to the new object that gets added to `managedThruConnections` collection dictionary.
 	/// - parameter persistent: If `false`, thru connection will expire when the app terminates. If `true`, the connection persists in the system forever (but not sure if it survives after macOS account logout / Mac reboot?).
 	public func addThru(
-		sources: MIDIIO.EndpointArray,
-		destinations: MIDIIO.EndpointArray,
+		outputs: MIDIIO.EndpointArray,
+		inputs: MIDIIO.EndpointArray,
 		tag: String,
 		_ lifecycle: MIDIIO.ThruConnection.Lifecycle = .nonPersistent,
 		params: MIDIThruConnectionParams? = nil
 	) throws {
 		
 		let newCT = MIDIIO.ThruConnection(
-			sources: sources,
-			destinations: destinations,
+			outputs: outputs,
+			inputs: inputs,
 			lifecycle,
 			params: params
 		)
@@ -104,7 +102,7 @@ extension MIDIIO.Manager {
 		// to analyze or delete a persistent connection,
 		// access the `unmanagedPersistentThrus` method.
 		
-		try newCT.create(context: self)
+		try newCT.create(in: self)
 		
 	}
 	
@@ -143,7 +141,7 @@ extension MIDIIO.Manager {
 		
 		managedInputs[tag] = newVD
 		
-		try newVD.create(context: self)
+		try newVD.create(in: self)
 		
 		guard let uniqueID = newVD.uniqueID else {
 			throw MIDIIO.GeneralError.connectionError("Could not read virtual MIDI endpoint unique ID.")
@@ -185,7 +183,7 @@ extension MIDIIO.Manager {
 		
 		managedOutputs[tag] = newVS
 		
-		try newVS.create(context: self)
+		try newVS.create(in: self)
 		
 		guard let uniqueID = newVS.uniqueID else {
 			throw MIDIIO.GeneralError.connectionError("Could not read virtual MIDI endpoint unique ID.")

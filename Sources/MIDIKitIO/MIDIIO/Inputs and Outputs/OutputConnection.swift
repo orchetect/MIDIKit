@@ -42,7 +42,7 @@ extension MIDIIO.OutputConnection {
 	/// Connect to a MIDI Destination
 	/// - parameter context: MIDI manager instance by reference
 	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`
-	internal func connect(context: MIDIIO.Manager) throws {
+	internal func connect(in context: MIDIIO.Manager) throws {
 		
 		if isConnected { return }
 		
@@ -50,7 +50,7 @@ extension MIDIIO.OutputConnection {
 		_ = try? disconnect()
 		
 		guard let getDestinationEndpointRef = destinationCriteria
-				.locate(in: context.endpoints.sources)?
+				.locate(in: context.endpoints.outputs)?
 				.ref
 
 		else {
@@ -110,17 +110,16 @@ extension MIDIIO.OutputConnection {
 
 extension MIDIIO.OutputConnection {
 	
-	internal func refreshConnection(_ context: MIDIIO.Manager) throws {
+	internal func refreshConnection(in context: MIDIIO.Manager) throws {
 		
 		guard destinationCriteria
-				.locate(in: context.endpoints.destinations) != nil
-		
+				.locate(in: context.endpoints.inputs) != nil
 		else {
 			isConnected = false
 			return
 		}
 		
-		try connect(context: context)
+		try connect(in: context)
 		
 	}
 	
@@ -130,13 +129,18 @@ extension MIDIIO.OutputConnection: CustomStringConvertible {
 	
 	public var description: String {
 		
-		let destinationEndpointName = "\(try? destinationEndpointRef?.getName().quoted, ifNil: "nil")".quoted
+		let destinationEndpointName = (
+			destinationEndpointRef?
+				.transformed { try? MIDIIO.getName(of: $0) }?
+				.transformed({ " " + $0 })
+				.quoted
+		) ?? ""
 		
 		let destinationEndpointRef = "\(self.destinationEndpointRef, ifNil: "nil")"
 		
 		let sourcePortRef = "\(self.sourcePortRef, ifNil: "nil")"
 		
-		return "OutputConnection(criteria: \(destinationCriteria), destinationEndpointRef: \(destinationEndpointRef), sourcePortRef: \(sourcePortRef), isConnected: \(isConnected))"
+		return "OutputConnection(criteria: \(destinationCriteria), destinationEndpointRef: \(destinationEndpointRef)\(destinationEndpointName), sourcePortRef: \(sourcePortRef), isConnected: \(isConnected))"
 		
 	}
 	
