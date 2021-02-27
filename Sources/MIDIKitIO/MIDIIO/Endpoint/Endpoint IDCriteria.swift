@@ -21,7 +21,7 @@ extension MIDIIO.Endpoint {
 		case endpointName(String)
 		
 		/// Endpoint matching the unique ID.
-		case uniqueID(MIDIIO.Endpoint.UniqueID)
+		case uniqueID(UniqueID)
 		
 	}
 	

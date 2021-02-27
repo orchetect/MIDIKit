@@ -9,8 +9,8 @@ import Foundation
 
 public protocol MIDIIOEndpointsProtocol {
 	
-	var sources: MIDIIO.EndpointArray { get }
-	var destinations: MIDIIO.EndpointArray { get }
+	var outputs: MIDIIO.EndpointArray { get }
+	var inputs: MIDIIO.EndpointArray { get }
 	func update(context: MIDIIO.Manager)
 	
 }
@@ -20,9 +20,9 @@ extension MIDIIO {
 	/// Manages system endpoints information cache.
 	public class Endpoints: NSObject, MIDIIOEndpointsProtocol {
 		
-		public internal(set) dynamic var sources: EndpointArray = []
+		public internal(set) dynamic var outputs: EndpointArray = []
 		
-		public internal(set) dynamic var destinations: EndpointArray = []
+		public internal(set) dynamic var inputs: EndpointArray = []
 		
 		internal override init() {
 			super.init()
@@ -31,8 +31,8 @@ extension MIDIIO {
 		/// Manually update the locally cached contents from the system.
 		public func update(context: MIDIIO.Manager) {
 			
-			sources = MIDIIO.getSystemSourceEndpoints
-			destinations = MIDIIO.getSystemDestinationEndpoints
+			outputs = MIDIIO.getSystemSourceEndpoints
+			inputs = MIDIIO.getSystemDestinationEndpoints
 			
 		}
 		
@@ -69,9 +69,9 @@ extension MIDIIO {
 //	@available(macOS 10.15, macCatalyst 13, iOS 13, *)
 //	public class EndpointsPublished: ObservableObject, MIDIIOEndpointsProtocol {
 //
-//		@Published public internal(set) var sources: Endpoints = []
+//		@Published public internal(set) var outputs: Endpoints = []
 //
-//		@Published public internal(set) var destinations: Endpoints = []
+//		@Published public internal(set) var inputs: Endpoints = []
 //
 //		public func update() {
 //			sources = MIDIIO.getSystemSourceEndpoints

@@ -95,7 +95,7 @@ extension MIDIIO {
 		
 		for i in 0..<MIDIGetNumberOfSources() {
 			let source = MIDIGetSource(i)
-			if (try? source.getName()) == name { refs.append(source) }
+			if (try? MIDIIO.getName(of: source)) == name { refs.append(source) }
 		}
 		
 		return refs
@@ -108,7 +108,7 @@ extension MIDIIO {
 		
 		for i in 0..<MIDIGetNumberOfSources() {
 			let source = MIDIGetSource(i)
-			if source.getUniqueID() == uniqueID { return source }
+			if MIDIIO.getUniqueID(of: source) == uniqueID { return source }
 		}
 		
 		return nil
@@ -127,7 +127,7 @@ extension MIDIIO {
 		
 		for i in 0..<MIDIGetNumberOfDestinations() {
 			let source = MIDIGetDestination(i)
-			if (try? source.getName()) == name { refs.append(source) }
+			if (try? MIDIIO.getName(of: source)) == name { refs.append(source) }
 		}
 		
 		return refs
@@ -140,7 +140,7 @@ extension MIDIIO {
 		
 		for i in 0..<MIDIGetNumberOfDestinations() {
 			let source = MIDIGetDestination(i)
-			if source.getUniqueID() == uniqueID { return source }
+			if MIDIIO.getUniqueID(of: source) == uniqueID { return source }
 		}
 		
 		return nil

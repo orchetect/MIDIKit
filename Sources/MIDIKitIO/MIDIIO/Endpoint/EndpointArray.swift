@@ -50,10 +50,12 @@ extension MIDIIO.EndpointArray {
 	public func filterBy(endpointName: String,
 						 deviceID: Int32) -> Self {
 		
-		filter {
-			$0.name == endpointName
-				&& $0.propertyDeviceID == deviceID
-		}
+		#warning("> change this - deviceID isn't relevant")
+		fatalError("not coded yet")
+//		filter {
+//			$0.name == endpointName
+//				&& $0.getDeviceID == deviceID
+//		}
 		
 	}
 	
