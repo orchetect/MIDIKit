@@ -18,19 +18,16 @@ extension MIDIIO.Manager {
 		// if start() was already called, return
 		guard clientRef == MIDIClientRef() else { return }
 		
-		let status = MIDIClientCreateWithBlock(clientName as CFString, &clientRef)
+		try MIDIClientCreateWithBlock(clientName as CFString, &clientRef)
 		{ [weak self] notificationPtr in
 			guard let self = self else { return }
 			self.notificationHandler(notificationPtr)
 		}
-		
-		guard status == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: status)
-		}
+		.throwIfOSStatusErr()
 		
 		// initial cache of endpoints
 		
-		updateSystemEndpointsCache()
+		updateObjectsCache()
 		
 	}
 	
@@ -44,7 +41,7 @@ extension MIDIIO.Manager {
 			 .removed,
 			 .propertyChanged:
 			
-			updateSystemEndpointsCache()
+			updateObjectsCache()
 			
 		default:
 			break
@@ -56,12 +53,12 @@ extension MIDIIO.Manager {
 			// refresh internal states of all outputs and inputs
 			// and reconnect any disconnected connections if an endpoint has reappeared
 			
-			for source in managedOutputConnections.values {
-				_ = try? source.refreshConnection(in: self)
+			for outputConnection in managedOutputConnections.values {
+				_ = try? outputConnection.refreshConnection(in: self)
 			}
 			
-			for destination in managedInputConnections.values {
-				_ = try? destination.refreshConnection(in: self)
+			for inputConnection in managedInputConnections.values {
+				_ = try? inputConnection.refreshConnection(in: self)
 			}
 			
 			// thru connections

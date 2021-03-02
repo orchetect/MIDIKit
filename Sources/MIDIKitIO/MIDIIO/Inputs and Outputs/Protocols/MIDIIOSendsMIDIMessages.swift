@@ -9,7 +9,7 @@ import CoreMIDI
 
 public protocol MIDIIOSendsMIDIMessages {
 	
-	var sourcePortRef: MIDIPortRef? { get }
+	var portRef: MIDIPortRef? { get }
 	
 	func send(rawMessage: [Byte]) throws
 	func send(rawMessages: [[Byte]]) throws
@@ -22,7 +22,7 @@ extension MIDIIOSendsMIDIMessages {
 	/// Send a MIDI Message, automatically assembling it into a `MIDIPacketList`.
 	///
 	/// - parameter rawMessage: MIDI message
-	public func send(rawMessage: [Byte]) throws {
+	@inlinable public func send(rawMessage: [Byte]) throws {
 		
 		let packetListPointer = try MIDIIO.assemblePacket(data: rawMessage)
 		
@@ -36,7 +36,7 @@ extension MIDIIOSendsMIDIMessages {
 	/// Send one or more MIDI message(s), automatically assembling it into a `MIDIPacketList`.
 	///
 	/// - parameter rawMessages: Array of MIDI messages
-	public func send(rawMessages: [[Byte]]) throws {
+	@inlinable public func send(rawMessages: [[Byte]]) throws {
 		
 		let packetListPointer = try MIDIIO.assemblePackets(data: rawMessages)
 		

@@ -23,7 +23,7 @@ extension MIDIPacketList {
 		
 		/// Initialize the packet list generator with a packet list
 		/// - parameter packetList: MIDI Packet List
-		init(_ packetList: MIDIPacketList) {
+		@inline(__always) init(_ packetList: MIDIPacketList) {
 			
 			self.packet = packetList.packet
 			self.count = packetList.numPackets
@@ -31,7 +31,7 @@ extension MIDIPacketList {
 		}
 		
 		/// Provide the next element (packet)
-		public mutating func next() -> Element? {
+		@inline(__always) public mutating func next() -> Element? {
 			
 			// On Intel and PowerPC, MIDIPacket is unaligned.
 			// On ARM, MIDIPacket must be 4-byte aligned; MIDIPacketNext(...) takes care of this.

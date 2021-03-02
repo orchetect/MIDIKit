@@ -23,73 +23,111 @@ extension MIDIIO {
 		/// MIDI Client Reference.
 		public internal(set) var clientRef = MIDIClientRef()
 		
-		/// Dictionary of MIDI destination connections managed by this instance.
+		/// MIDI Model: The name of your software, which will be visible to the end-user in ports created by the manager.
+		public internal(set) var model: String = ""
+		
+		/// MIDI Manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
+		public internal(set) var manufacturer: String = ""
+		
+		/// Dictionary of MIDI input connections managed by this instance.
 		public internal(set) var managedInputConnections: [String : InputConnection] = [:]
 		
-		/// Dictionary of MIDI source connections managed by this instance.
+		/// Dictionary of MIDI output connections managed by this instance.
 		public internal(set) var managedOutputConnections: [String : OutputConnection] = [:]
 		
-		/// Dictionary of Virtual MIDI destinations managed by this instance.
+		/// Dictionary of virtual MIDI inputs managed by this instance.
 		public internal(set) var managedInputs: [String : Input] = [:]
 		
-		/// Dictionary of Virtual MIDI sources managed by this instance.
+		/// Dictionary of virtual MIDI outputs managed by this instance.
 		public internal(set) var managedOutputs: [String : Output] = [:]
 		
 		/// Dictionary of non-persistent MIDI thru connections managed by this instance.
 		public internal(set) var managedThruConnections: [String : ThruConnection] = [:]
 		
-		/// Array of persistent MIDI thru connections
-		/// (which survive forever, even after system reboots (?)).
+		/// Array of persistent MIDI thru connections which persist indefinitely (even after system reboots) until explicitly removed.
 		///
-		/// For every persistent thru connection your app creates,
-		/// they should be assigned the same persistent ID (domain).
+		/// For every persistent thru connection your app creates, they should be assigned the same persistent ID (domain) so they can be managed or removed in future.
+		///
+		/// - Warning: Be careful when creating persistent thru connections, as they can become stale and orphaned if the endpoints used to create them cease to be relevant at any point in time.
 		///
 		/// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
-		/// - Throws: MIDIIO.OSStatusResult
+		/// - throws: MIDIIO.MIDIError
 		public func unmanagedPersistentThrus(ownerID: String) throws -> [MIDIThruConnectionRef] {
 			
-			try MIDIIO.systemThruConnectionsPersistentEntries(matching: ownerID)
+			try MIDIIO.getSystemThruConnectionsPersistentEntries(matching: ownerID)
 			
 		}
 		
-		/// Source and destination endpoints in the system.
-		public internal(set) var endpoints: MIDIIOEndpointsProtocol = Endpoints()
+		/// MIDI devices in the system.
+		public internal(set) var devices: MIDIIODevices = Devices()
+		
+		/// MIDI input and output endpoints in the system.
+		public internal(set) var endpoints: MIDIIOEndpoints = Endpoints()
 		
 		/// Handler that is called when state has changed in the manager.
 		public var notificationHandler: ((_ notification: Notification,
 										  _ context: Manager) -> Void)? = nil
 		
-		
 		// MARK: - Init
 		
 		/// Initialize the MIDI manager (and CoreMIDI client).
 		/// - Parameters:
-		///   - name: Name identifying this instance, used as CoreMIDI client ID
-		///   - domain: A reverse-DNS domain ID (com.yourcompany.yourapp) used for persistent thru connections. If `nil`, the application's bundle ID will be used.
+		///   - clientName: Name identifying this instance, used as CoreMIDI client ID. This is internal and not visible to the end-user.
+		///   - model: The name of your software, which will be visible to the end-user in ports created by the manager.
+		///   - manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
+		///   - notificationHandler: Optionally supply a callback handler for MIDI system notifications.
 		public init(
-			name: String,
-			domain: String? = nil,
+			clientName: String,
+			model: String,
+			manufacturer: String,
 			notificationHandler: ((_ notification: Notification,
 								   _ context: Manager) -> Void)? = nil
 		) {
 			
-			self.clientName = name
+			self.clientName = clientName
+			self.model = model
+			self.manufacturer = manufacturer
 			self.notificationHandler = notificationHandler
 			
 		}
 		
 		deinit {
 			
-			let status = MIDIClientDispose(clientRef)
+			let result = MIDIClientDispose(clientRef)
 			
-			if status != noErr {
-				let osStatusMessage = OSStatusResult(rawValue: status).description
-				
+			if result != noErr {
+				let osStatusMessage = MIDIOSStatus(rawValue: result).description
 				Log.debug("Error disposing of MIDI client: \(osStatusMessage)")
 			}
+			
+		}
+		
+		// MARK: - Helper methods
+		
+		/// Internal: calls update() on all objects caches
+		internal dynamic func updateObjectsCache() {
+			
+			if #available(macOS 10.15, macCatalyst 13, iOS 13, *) {
+				// calling this means we don't need to use @Published on local variables in order for Combine/SwiftUI to be notified that ObservableObject class property values have changed
+				objectWillChange.send()
+			}
+			
+			devices.update()
+			endpoints.update()
+			notificationHandler?(.systemEndpointsChanged, self)
 			
 		}
 		
 	}
 	
 }
+
+#if canImport(Combine)
+import Combine
+
+@available(macOS 10.15, macCatalyst 13, iOS 13, *)
+extension MIDIIO.Manager: ObservableObject {
+	
+}
+
+#endif

@@ -10,22 +10,28 @@ import CoreMIDI
 @_implementationOnly import OTCore
 @_implementationOnly import SwiftRadix
 
+// MARK: - MIDIIOReceiveHandler
+
 public protocol MIDIIOReceiveHandler {
 	
-	func midiReadBlock(
+	@inline(__always) func midiReadBlock(
 		_ packetListPtr: UnsafePointer<MIDIPacketList>,
 		_ srcConnRefCon: UnsafeMutableRawPointer?
 	)
 	
 }
 
+// MARK: - ReceiveHandler
+
 extension MIDIIO {
 	
-	public struct ReceiveHandler {
+	public struct ReceiveHandler: MIDIIOReceiveHandler {
 		
-		public var handler: MIDIIOReceiveHandler
+		public typealias Handler = (_ packets: [MIDIPacketData]) -> Void
 		
-		public func midiReadBlock(
+		@inline(__always) public var handler: MIDIIOReceiveHandler
+		
+		@inline(__always) public func midiReadBlock(
 			_ packetListPtr: UnsafePointer<MIDIPacketList>,
 			_ srcConnRefCon: UnsafeMutableRawPointer?
 		) {
@@ -44,23 +50,65 @@ extension MIDIIO {
 	
 }
 
+// MARK: - Inline initializers
+
 extension MIDIIO.ReceiveHandler {
 	
-	public static func basic(
-		_ handler: @escaping Basic.Handler
+	/// Returns a new `SeriesGroup` receive handler instance.
+	public static func seriesGroup(
+		_ handlers: [MIDIIO.ReceiveHandler]
 	) -> Self {
 		
-		Self(Basic(handler))
+		Self(SeriesGroup(handlers))
 		
 	}
 	
+	/// Returns a new `RawData` receive handler instance.
+	public static func rawData(
+		_ handler: @escaping RawData.Handler
+	) -> Self {
+		
+		Self(RawData(handler))
+		
+	}
+	
+	/// Returns a new `RawDataLogging` receive handler instance.
 	public static func rawDataLogging(
-		filterActiveSensing: Bool = false,
+		filterActiveSensingAndClock: Bool = false,
 		_ handler: RawDataLogging.Handler? = nil
 	) -> Self {
 		
-		Self(RawDataLogging(filterActiveSensing: filterActiveSensing,
+		Self(RawDataLogging(filterActiveSensingAndClock: filterActiveSensingAndClock,
 							handler))
+		
+	}
+	
+}
+
+// MARK: - Pre-fab ReceiveHandlers
+
+extension MIDIIO.ReceiveHandler {
+	
+	/// Receive handler group.
+	/// Can contain one or more `ReceiveHandler`s in series.
+	public struct SeriesGroup: MIDIIOReceiveHandler {
+		
+		public var handlers: [MIDIIO.ReceiveHandler] = []
+		
+		@inline(__always) public func midiReadBlock(
+			_ packetListPtr: UnsafePointer<MIDIPacketList>,
+			_ srcConnRefCon: UnsafeMutableRawPointer?
+		) {
+			
+			handlers.forEach { $0.midiReadBlock(packetListPtr, srcConnRefCon) }
+			
+		}
+		
+		public init(_ handlers: [MIDIIO.ReceiveHandler]) {
+			
+			self.handlers = handlers
+			
+		}
 		
 	}
 	
@@ -68,21 +116,20 @@ extension MIDIIO.ReceiveHandler {
 
 extension MIDIIO.ReceiveHandler {
 	
-	public struct Basic: MIDIIOReceiveHandler {
+	/// Basic raw packet data receive handler.
+	public struct RawData: MIDIIOReceiveHandler {
 		
-		public typealias Handler = (_ packets: [MIDIPacketData]) -> Void
+		public typealias Handler = (_ packet: MIDIPacketData) -> Void
 		
-		public var handler: Handler
+		@inline(__always) public var handler: Handler
 		
-		public func midiReadBlock(
+		@inline(__always) public func midiReadBlock(
 			_ packetListPtr: UnsafePointer<MIDIPacketList>,
 			_ srcConnRefCon: UnsafeMutableRawPointer?
 		) {
 			
-			let packets = packetListPtr.pointee
-				.map { $0.packetData }
-			
-			handler(packets)
+			packetListPtr.pointee
+				.forEach { handler($0.packetData) }
 			
 		}
 		
@@ -96,15 +143,18 @@ extension MIDIIO.ReceiveHandler {
 		
 	}
 	
+	/// Raw data logging handler (hex byte strings).
+	/// If `handler` is nil, all raw packet data is logged to the console (but only in DEBUG builds, not in RELEASE builds).
+	/// If `handler` is provided, the hex byte string is supplied as a parameter and not automatically logged.
 	public struct RawDataLogging: MIDIIOReceiveHandler {
 		
-		public typealias Handler = (_ eventDescription: String) -> Void
+		public typealias Handler = (_ packetBytesString: String) -> Void
 		
-		public var handler: Handler
+		@inline(__always) public var handler: Handler
 		
-		public var filterActiveSensing = false
+		@inline(__always) public var filterActiveSensingAndClock = false
 		
-		public func midiReadBlock(
+		@inline(__always) public func midiReadBlock(
 			_ packetListPtr: UnsafePointer<MIDIPacketList>,
 			_ srcConnRefCon: UnsafeMutableRawPointer?
 		) {
@@ -113,7 +163,7 @@ extension MIDIIO.ReceiveHandler {
 				
 				let bytes = packet.packetData.array
 				
-				if filterActiveSensing {
+				if filterActiveSensingAndClock {
 					guard bytes.first != 0xF8, // midi clock pulse
 						  bytes.first != 0xFE  // active sensing
 					else { continue }
@@ -131,14 +181,14 @@ extension MIDIIO.ReceiveHandler {
 		}
 		
 		public init(
-			filterActiveSensing: Bool = false,
+			filterActiveSensingAndClock: Bool = false,
 			_ handler: Handler? = nil
 		) {
 			
-			self.filterActiveSensing = filterActiveSensing
+			self.filterActiveSensingAndClock = filterActiveSensingAndClock
 			
-			self.handler = handler ?? { eventDescription in
-				Log.debug(eventDescription)
+			self.handler = handler ?? { packetBytesString in
+				Log.debug(packetBytesString)
 			}
 			
 		}

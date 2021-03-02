@@ -11,19 +11,21 @@ import CoreMIDI
 
 extension MIDIIO {
 	
+	/// A managed MIDI output connection created in the system by the `Manager`.
+	/// This connects to an external input in the system and outputs MIDI events to it.
 	public class OutputConnection {
 		
-		public var destinationCriteria: MIDIIO.Endpoint.IDCriteria
+		public var inputCriteria: MIDIIO.EndpointIDCriteria
 		
-		public private(set) var destinationEndpointRef: MIDIEndpointRef? = nil
+		public private(set) var inputEndpointRef: MIDIEndpointRef? = nil
 		
-		public private(set) var sourcePortRef: MIDIPortRef? = nil
+		public private(set) var portRef: MIDIPortRef? = nil
 		
 		public private(set) var isConnected = false
 		
-		internal init(toDestination: MIDIIO.Endpoint.IDCriteria) {
+		internal init(toInput: MIDIIO.EndpointIDCriteria) {
 			
-			self.destinationCriteria = toDestination
+			self.inputCriteria = toInput
 			
 		}
 		
@@ -39,9 +41,9 @@ extension MIDIIO {
 
 extension MIDIIO.OutputConnection {
 	
-	/// Connect to a MIDI Destination
+	/// Connect to a MIDI Input
 	/// - parameter context: MIDI manager instance by reference
-	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`
+	/// - throws: `MIDIIO.MIDIError`
 	internal func connect(in context: MIDIIO.Manager) throws {
 		
 		if isConnected { return }
@@ -49,37 +51,32 @@ extension MIDIIO.OutputConnection {
 		// if previously connected, clean the old connection
 		_ = try? disconnect()
 		
-		guard let getDestinationEndpointRef = destinationCriteria
-				.locate(in: context.endpoints.outputs)?
+		guard let getInputEndpointRef = inputCriteria
+				.locate(in: context.endpoints.inputs)?
 				.ref
 
 		else {
 			
 			isConnected = false
 			
-			throw MIDIIO.GeneralError.connectionError(
-				"MIDI Destination with criteria \(destinationCriteria) not found while trying to form connection."
+			throw MIDIIO.MIDIError.connectionError(
+				"MIDI input with criteria \(inputCriteria) not found while trying to form connection."
 			)
 		}
 		
-		destinationEndpointRef = getDestinationEndpointRef
+		inputEndpointRef = getInputEndpointRef
 		
 		var newConnection = MIDIPortRef()
 		
 		// connection name must be unique, otherwise process might hang (?)
-		let result = MIDIOutputPortCreate(
+		try MIDIOutputPortCreate(
 			context.clientRef,
 			UUID().uuidString as CFString,
 			&newConnection
 		)
+		.throwIfOSStatusErr()
 		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
-		
-		#warning("> shouldn't there be a call to MIDIPortConnectSource here, like in the InputConnection class?")
-		
-		sourcePortRef = newConnection
+		portRef = newConnection
 		
 		isConnected = true
 		
@@ -92,17 +89,16 @@ extension MIDIIO.OutputConnection {
 		
 		isConnected = false
 		
-		guard let sourcePortRef = self.sourcePortRef,
-			  let destinationEndpointRef = self.destinationEndpointRef else { return }
+		guard let outputPortRef = self.portRef,
+			  let inputEndpointRef = self.inputEndpointRef else { return }
 		
-		let result = MIDIPortDisconnectSource(sourcePortRef, destinationEndpointRef)
-		
-		self.sourcePortRef = nil
-		self.destinationEndpointRef = nil
-		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
+		defer {
+			self.portRef = nil
+			self.inputEndpointRef = nil
 		}
+		
+		try MIDIPortDisconnectSource(outputPortRef, inputEndpointRef)
+			.throwIfOSStatusErr()
 		
 	}
 	
@@ -110,9 +106,11 @@ extension MIDIIO.OutputConnection {
 
 extension MIDIIO.OutputConnection {
 	
+	/// Refresh the connection.
+	/// This is typically called after receiving a CoreMIDI notification that system port configuration has changed or endpoints were added/removed.
 	internal func refreshConnection(in context: MIDIIO.Manager) throws {
 		
-		guard destinationCriteria
+		guard inputCriteria
 				.locate(in: context.endpoints.inputs) != nil
 		else {
 			isConnected = false
@@ -129,18 +127,18 @@ extension MIDIIO.OutputConnection: CustomStringConvertible {
 	
 	public var description: String {
 		
-		let destinationEndpointName = (
-			destinationEndpointRef?
+		let inputEndpointName = (
+			inputEndpointRef?
 				.transformed { try? MIDIIO.getName(of: $0) }?
 				.transformed({ " " + $0 })
 				.quoted
 		) ?? ""
 		
-		let destinationEndpointRef = "\(self.destinationEndpointRef, ifNil: "nil")"
+		let inputEndpointRef = "\(self.inputEndpointRef, ifNil: "nil")"
 		
-		let sourcePortRef = "\(self.sourcePortRef, ifNil: "nil")"
+		let outputPortRef = "\(self.portRef, ifNil: "nil")"
 		
-		return "OutputConnection(criteria: \(destinationCriteria), destinationEndpointRef: \(destinationEndpointRef)\(destinationEndpointName), sourcePortRef: \(sourcePortRef), isConnected: \(isConnected))"
+		return "OutputConnection(criteria: \(inputCriteria), inputEndpointRef: \(inputEndpointRef)\(inputEndpointName), outputPortRef: \(outputPortRef), isConnected: \(isConnected))"
 		
 	}
 	
@@ -148,27 +146,25 @@ extension MIDIIO.OutputConnection: CustomStringConvertible {
 
 extension MIDIIO.OutputConnection: MIDIIOSendsMIDIMessages {
 	
+	/// Sends a MIDI packet list to the connected input.
 	public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
 		
-		guard let sourcePortRef = self.sourcePortRef else {
-			throw MIDIIO.PacketError.internalInconsistency(
-				"Source port reference is nil."
+		guard let outputPortRef = self.portRef else {
+			throw MIDIIO.MIDIError.internalInconsistency(
+				"Output port reference is nil."
 			)
 		}
 		
-		guard let destinationEndpointRef = self.destinationEndpointRef else {
-			throw MIDIIO.PacketError.internalInconsistency(
-				"Destination port reference is nil."
+		guard let inputEndpointRef = self.inputEndpointRef else {
+			throw MIDIIO.MIDIError.internalInconsistency(
+				"Input port reference is nil."
 			)
 		}
 		
-		let result = MIDISend(sourcePortRef,
-							   destinationEndpointRef,
-							   packetList)
-		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
+		try MIDISend(outputPortRef,
+					 inputEndpointRef,
+					 packetList)
+			.throwIfOSStatusErr()
 		
 	}
 	

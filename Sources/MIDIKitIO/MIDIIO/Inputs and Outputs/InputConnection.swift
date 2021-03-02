@@ -11,22 +11,24 @@ import CoreMIDI
 
 extension MIDIIO {
 	
+	/// A managed MIDI input connection created in the system by the `Manager`.
+	/// This connects to an external output in the system and subscribes to its MIDI events.
 	public class InputConnection {
 		
-		public private(set) var sourceCriteria: MIDIIO.Endpoint.IDCriteria
+		public private(set) var outputCriteria: MIDIIO.EndpointIDCriteria
 		
-		internal private(set) var sourceEndpointRef: MIDIEndpointRef? = nil
+		internal private(set) var outputEndpointRef: MIDIEndpointRef? = nil
 		
-		internal private(set) var destinationPortRef: MIDIPortRef? = nil
+		internal private(set) var inputPortRef: MIDIPortRef? = nil
 		
 		internal var receiveHandler: ReceiveHandler
 		
 		public private(set) var isConnected: Bool = false
 		
-		internal init(toSource: MIDIIO.Endpoint.IDCriteria,
+		internal init(toOutput: MIDIIO.EndpointIDCriteria,
 					  receiveHandler: ReceiveHandler) {
 			
-			self.sourceCriteria = toSource
+			self.outputCriteria = toOutput
 			self.receiveHandler = receiveHandler
 			
 		}
@@ -43,9 +45,9 @@ extension MIDIIO {
 
 extension MIDIIO.InputConnection {
 	
-	/// Connect to a MIDI Source
+	/// Connect to a MIDI Output
 	/// - parameter context: MIDI manager instance by reference
-	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`
+	/// - throws: `MIDIIO.MIDIError`
 	internal func connect(in context: MIDIIO.Manager) throws {
 		
 		if isConnected { return }
@@ -53,48 +55,40 @@ extension MIDIIO.InputConnection {
 		// if previously connected, clean the old connection
 		_ = try? disconnect()
 		
-		guard let getSourceEndpointRef = sourceCriteria
+		guard let getOutputEndpointRef = outputCriteria
 				.locate(in: context.endpoints.outputs)?
 				.ref
 		else {
 			
 			isConnected = false
 			
-			throw MIDIIO.GeneralError.connectionError(
-				"MIDI: Source with criteria \(sourceCriteria) not found while attempting to form connection."
+			throw MIDIIO.MIDIError.connectionError(
+				"MIDI output with criteria \(outputCriteria) not found while attempting to form connection."
 			)
 			
 		}
 		
-		self.sourceEndpointRef = getSourceEndpointRef
+		self.outputEndpointRef = getOutputEndpointRef
 		
 		var newConnection = MIDIPortRef()
 		
-		var result = noErr
-		
 		// connection name must be unique, otherwise process might hang (?)
-		result = MIDIInputPortCreateWithBlock(
+		try MIDIInputPortCreateWithBlock(
 			context.clientRef,
 			UUID().uuidString as CFString,
 			&newConnection,
 			receiveHandler.midiReadBlock
 		)
+		.throwIfOSStatusErr()
 		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
-		
-		result = MIDIPortConnectSource(
+		try MIDIPortConnectSource(
 			newConnection,
-			getSourceEndpointRef,
+			getOutputEndpointRef,
 			nil
 		)
+		.throwIfOSStatusErr()
 		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
-		
-		destinationPortRef = newConnection
+		inputPortRef = newConnection
 		
 		isConnected = true
 		
@@ -107,16 +101,13 @@ extension MIDIIO.InputConnection {
 		
 		isConnected = false
 		
-		guard let destinationPortRef = self.destinationPortRef,
-			  let sourceEndpointRef = self.sourceEndpointRef else { return }
+		guard let inputPortRef = self.inputPortRef,
+			  let outputEndpointRef = self.outputEndpointRef else { return }
 		
-		let result = MIDIPortDisconnectSource(destinationPortRef, sourceEndpointRef)
+		defer { self.inputPortRef = nil }
 		
-		self.destinationPortRef = nil
-		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
+		try MIDIPortDisconnectSource(inputPortRef, outputEndpointRef)
+			.throwIfOSStatusErr()
 		
 	}
 	
@@ -124,9 +115,11 @@ extension MIDIIO.InputConnection {
 
 extension MIDIIO.InputConnection {
 	
+	/// Refresh the connection.
+	/// This is typically called after receiving a CoreMIDI notification that system port configuration has changed or endpoints were added/removed.
 	internal func refreshConnection(in context: MIDIIO.Manager) throws {
 		
-		guard sourceCriteria
+		guard outputCriteria
 				.locate(in: context.endpoints.outputs) != nil
 		else {
 			isConnected = false
@@ -143,18 +136,18 @@ extension MIDIIO.InputConnection: CustomStringConvertible {
 	
 	public var description: String {
 		
-		let sourceEndpointName = (
-			sourceEndpointRef?
+		let outputEndpointName = (
+			outputEndpointRef?
 				.transformed { try? MIDIIO.getName(of: $0) }?
 				.transformed({ " " + $0 })
 				.quoted
 		) ?? ""
 		
-		let sourceEndpointRef = "\(self.sourceEndpointRef, ifNil: "nil")"
+		let outputEndpointRef = "\(self.outputEndpointRef, ifNil: "nil")"
 		
-		let destinationPortRef = "\(self.destinationPortRef, ifNil: "nil")"
+		let inputPortRef = "\(self.inputPortRef, ifNil: "nil")"
 		
-		return "InputConnection(criteria: \(sourceCriteria), sourceEndpointRef: \(sourceEndpointRef)\(sourceEndpointName), destinationPortRef: \(destinationPortRef), isConnected: \(isConnected))"
+		return "InputConnection(criteria: \(outputCriteria), outputEndpointRef: \(outputEndpointRef)\(outputEndpointName), inputPortRef: \(inputPortRef), isConnected: \(isConnected))"
 		
 	}
 	

@@ -1,5 +1,5 @@
 //
-//  MIDIObjectRef.swift
+//  CoreMIDI Properties Get.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-26.
@@ -14,7 +14,7 @@ extension MIDIIO {
 	/// Retrieves the entire properties dictionary as the CoreMIDI-native `CFPropertyList`.
 	///
 	/// - parameter deep: Returns nested results for all children if `True`.
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	internal static func getProperties(of ref: MIDIObjectRef,
 									   deep: Bool = false) throws -> CFPropertyList {
 		
@@ -23,12 +23,12 @@ extension MIDIIO {
 		
 		guard result == noErr else {
 			props?.release()
-			throw MIDIIO.OSStatusResult(rawValue: result)
+			throw MIDIIO.MIDIError.osStatus(result)
 		}
 		
 		guard let unwrappedProps = props?.takeRetainedValue() else {
 			props?.release()
-			throw MIDIIO.GeneralError.readError(
+			throw MIDIIO.MIDIError.readError(
 				"Got nil while reading MIDIEndpointRef property list."
 			)
 		}
@@ -49,12 +49,12 @@ extension MIDIIO {
 		
 		guard result == noErr else {
 			dict?.release()
-			throw MIDIIO.OSStatusResult(rawValue: result)
+			throw MIDIIO.MIDIError.osStatus(result)
 		}
 		
 		guard let unwrappedDict = dict?.takeRetainedValue() else {
 			dict?.release()
-			throw MIDIIO.GeneralError.readError(
+			throw MIDIIO.MIDIError.readError(
 				"Got nil while reading MIDIEndpointRef property list."
 			)
 		}
@@ -70,7 +70,7 @@ extension MIDIIO {
 	/// Get a string value from a `MIDIObjectRef` property key.
 	///
 	/// - parameter forProperty: a `CoreMIDI.kMIDIProperty*` property constant
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	internal static func getString(forProperty: CFString,
 								   of ref: MIDIObjectRef) throws -> String {
 		
@@ -79,12 +79,12 @@ extension MIDIIO {
 		
 		guard result == noErr else {
 			val?.release()
-			throw MIDIIO.OSStatusResult(rawValue: result)
+			throw MIDIIO.MIDIError.osStatus(result)
 		}
 		
 		guard let unwrappedVal = val?.takeRetainedValue() else {
 			val?.release()
-			throw MIDIIO.GeneralError.readError(
+			throw MIDIIO.MIDIError.readError(
 				"Got nil while reading MIDIEndpointRef property value \((forProperty as String).quoted)"
 			)
 		}
@@ -111,9 +111,9 @@ extension MIDIIO {
 	
 }
 
+// MARK: - Property Getters
+
 extension MIDIIO {
-	
-	// MARK: - Property Getters
 	
 	// MARK: Identification
 	
@@ -124,7 +124,7 @@ extension MIDIIO {
 	///
 	/// A studio setup editor may allow the user to set the names of both driver-owned and external devices.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	internal static func getName(of ref: MIDIObjectRef) throws -> String {
 		try getString(forProperty: kMIDIPropertyName, of: ref)
 	}
@@ -137,7 +137,7 @@ extension MIDIIO {
 	/// - Studio setup editors may allow the user to set this property on external devices.
 	/// - Creators of virtual endpoints may set this property on their endpoints.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	internal static func getModel(of ref: MIDIObjectRef) throws -> String {
 		try getString(forProperty: kMIDIPropertyModel, of: ref)
 	}
@@ -150,7 +150,7 @@ extension MIDIIO {
 	/// - Studio setup editors may allow the user to set this property on external devices.
 	/// - Creators of virtual endpoints may set this property on their endpoints.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	internal static func getManufacturer(of ref: MIDIObjectRef) throws -> String {
 		try getString(forProperty: kMIDIPropertyManufacturer, of: ref)
 	}
@@ -159,7 +159,7 @@ extension MIDIIO {
 	/// (`kMIDIPropertyUniqueID`)
 	///
 	/// The system assigns unique IDs to all objects.  Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
-	internal static func getUniqueID(of ref: MIDIObjectRef) -> MIDIIOObject.UniqueID {
+	internal static func getUniqueID(of ref: MIDIObjectRef) -> ObjectRef.UniqueID {
 		getInteger(forProperty: kMIDIPropertyUniqueID, of: ref)
 	}
 	
@@ -215,7 +215,7 @@ extension MIDIIO {
 	///
 	/// Only drivers may set this property on their owned devices.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	internal static func getDriverDeviceEditorApp(of ref: MIDIObjectRef) throws -> URL {
 		let posixPath = try getString(forProperty: kMIDIPropertyDriverDeviceEditorApp, of: ref)
 		return URL(fileURLWithPath: posixPath)
@@ -230,8 +230,8 @@ extension MIDIIO {
 	///
 	/// A studio setup editor should allow the user to choose icons for external devices.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
-	internal static func getPropertyImage(of ref: MIDIObjectRef) throws -> URL {
+	/// - throws: `MIDIIO.MIDIError`
+	internal static func getImage(of ref: MIDIObjectRef) throws -> URL {
 		let posixPath = try getString(forProperty: kMIDIPropertyImage, of: ref)
 		return URL(fileURLWithPath: posixPath)
 	}
@@ -242,7 +242,7 @@ extension MIDIIO {
 	///
 	/// For objects other than endpoints, the display name is the same as its `kMIDIPropertyName` value.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	internal static func getDisplayName(of ref: MIDIObjectRef) throws -> String {
 		try getString(forProperty: kMIDIPropertyDisplayName, of: ref)
 	}
@@ -305,7 +305,7 @@ extension MIDIIO {
 	///
 	/// You can also set this property on any virtual destinations you create. When clients send messages to a virtual destination with an advance schedule time of 0, the destination receives the messages at the scheduled delivery time. If a virtual destination has a nonzero advance schedule time, it receives timestamped messages as soon as they’re sent, and must do its own internal scheduling of events it receives.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	internal static func getAdvanceScheduleTimeMuSec(of ref: MIDIObjectRef) throws -> String {
 		try getString(forProperty: kMIDIPropertyAdvanceScheduleTimeMuSec, of: ref)
 	}
@@ -364,7 +364,7 @@ extension MIDIIO {
 	///
 	/// Set by the owning driver, on the device; should not be touched by other clients. Property is inherited from the device by its entities and endpoints.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	internal static func getDriverOwner(of ref: MIDIObjectRef) throws -> String {
 		try getString(forProperty: kMIDIPropertyDriverOwner, of: ref)
 	}

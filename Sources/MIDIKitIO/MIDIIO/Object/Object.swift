@@ -1,66 +1,68 @@
 //
-//  Entity.swift
+//  Object.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-26.
 //
 
+import Foundation
 import CoreMIDI
+
+#if canImport(AppKit)
+import AppKit
+#endif
+
+#if canImport(UIKit)
+import UIKit
+#endif
+
+// MARK: - MIDIIOObjectRef (aka MIDIIO.ObjectRef)
+
+public protocol MIDIIOObjectRefProtocol {
+	
+	/// Enum describing the abstracted object type.
+	static var objectType: MIDIIO.ObjectType { get }
+	
+	/// The CoreMIDI object reference (integer)
+	var ref: MIDIObjectRef { get }
+	
+	/// Name of the object
+	var name: String { get }
+	
+	/// The unique ID for the CoreMIDI object
+	var uniqueID: UniqueID { get }
+	
+}
 
 extension MIDIIO {
 	
-	// MARK: - Entity
+	public typealias ObjectRef = MIDIIOObjectRefProtocol
 	
-	/// A MIDI device, wrapping `MIDIEntityRef`.
-	///
-	/// Although this is a value-type struct, do not store or cache it as it will not remain updated.
-	///
-	/// Instead, read `Entity` arrays and individual `Entity` properties from `MIDIIO.Manager.entities` ad-hoc when they are needed.
-	public struct Entity: MIDIIOObject {
-		
-		public static var objectType: MIDIIO.ObjectType = .entity
-		
-		// MARK: CoreMIDI ref
-		
-		internal let ref: MIDIEntityRef
-		
-		// MARK: Identifiable
-		
-		public var id = UUID()
-		
-		// MARK: Init
-		
-		internal init(_ ref: MIDIEntityRef) {
+}
 
-			self.ref = ref
-			update()
+// MARK: - MIDIIOObject (aka MIDIIO.Object)
 
-		}
-		
-		// MARK: - Properties (Cached)
-		
-		/// User-visible endpoint name.
-		/// (`kMIDIPropertyName`)
-		public internal(set) var name: String = ""
-		
-		/// System-global Unique ID.
-		/// (`kMIDIPropertyUniqueID`)
-		public internal(set) var uniqueID: UniqueID = 0
-		
-		/// Update the cached properties
-		internal mutating func update() {
-			
-			self.name = (try? MIDIIO.getName(of: ref)) ?? ""
-			self.uniqueID = MIDIIO.getUniqueID(of: ref)
-			
-		}
-		
-	}
+public protocol MIDIIOObjectProtocol: Hashable {
+	
+}
+
+extension MIDIIO {
+	
+	public typealias Object = MIDIIOObjectProtocol
+	
+}
+
+// MARK: - UniqueID
+
+extension MIDIIO.ObjectRef {
+	
+	public typealias UniqueID = Int32
+	
 }
 
 // MARK: - Equatable
 
-extension MIDIIO.Entity: Equatable {
+extension MIDIIO.Object where Self : MIDIIO.ObjectRef {
 	
 	static public func == (lhs: Self, rhs: Self) -> Bool {
 		lhs.ref == rhs.ref
@@ -70,7 +72,7 @@ extension MIDIIO.Entity: Equatable {
 
 // MARK: - Hashable
 
-extension MIDIIO.Entity: Hashable {
+extension MIDIIO.Object where Self : MIDIIO.ObjectRef {
 	
 	public func hash(into hasher: inout Hasher) {
 		hasher.combine(ref)
@@ -78,9 +80,51 @@ extension MIDIIO.Entity: Hashable {
 	
 }
 
+// MARK: - Collection methods
+
+extension Collection where Element : MIDIIO.ObjectRef {
+	
+	/// Returns the array sorted alphabetically by name.
+	public func sortedByName() -> [Element] {
+		
+		self
+			.sorted(by: {
+				$0.name
+					.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+			})
+		
+	}
+	
+}
+
+extension Collection where Element : MIDIIO.ObjectRef {
+	
+	/// Returns the element where uniqueID matches if found.
+	public func filterBy(uniqueID: Element.UniqueID) -> Element? {
+		
+		first(where: { $0.uniqueID == uniqueID })
+		
+	}
+	
+	/// Returns all elements matching the given name.
+	public func filterBy(name: String) -> [Element] {
+		
+		filter { $0.name == name }
+		
+	}
+	
+	/// Returns all elements matching all supplied parameters.
+	public func filterBy(displayName: String) -> [Element] {
+		
+		filter { $0.getDisplayName == displayName }
+		
+	}
+	
+}
+
 // MARK: - Properties (Computed)
 
-extension MIDIIO.Entity {
+extension MIDIIO.ObjectRef {
 	
 	// MARK: Identification
 	
@@ -91,7 +135,7 @@ extension MIDIIO.Entity {
 	///
 	/// A studio setup editor may allow the user to set the names of both driver-owned and external devices.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	public var getName: String? {
 		try? MIDIIO.getName(of: ref)
 	}
@@ -104,7 +148,7 @@ extension MIDIIO.Entity {
 	/// - Studio setup editors may allow the user to set this property on external devices.
 	/// - Creators of virtual endpoints may set this property on their endpoints.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	public var getModel: String? {
 		try? MIDIIO.getModel(of: ref)
 	}
@@ -117,7 +161,7 @@ extension MIDIIO.Entity {
 	/// - Studio setup editors may allow the user to set this property on external devices.
 	/// - Creators of virtual endpoints may set this property on their endpoints.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	public var getManufacturer: String? {
 		try? MIDIIO.getManufacturer(of: ref)
 	}
@@ -126,7 +170,7 @@ extension MIDIIO.Entity {
 	/// (`kMIDIPropertyUniqueID`)
 	///
 	/// The system assigns unique IDs to all objects.  Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
-	public var getUniqueID: MIDIIOObject.UniqueID {
+	public var getUniqueID: UniqueID {
 		MIDIIO.getUniqueID(of: ref)
 	}
 	
@@ -182,7 +226,7 @@ extension MIDIIO.Entity {
 	///
 	/// Only drivers may set this property on their owned devices.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	public var getDriverDeviceEditorApp: URL? {
 		try? MIDIIO.getDriverDeviceEditorApp(of: ref)
 	}
@@ -196,10 +240,27 @@ extension MIDIIO.Entity {
 	///
 	/// A studio setup editor should allow the user to choose icons for external devices.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
-	public var getPropertyImage: URL? {
-		try? MIDIIO.getPropertyImage(of: ref)
+	/// - throws: `MIDIIO.MIDIError`
+	public var getImageFileURL: URL? {
+		try? MIDIIO.getImage(of: ref)
 	}
+	
+	#if canImport(AppKit) && os(macOS)
+	/// Calls `getImageFileURL` and attempts to initialize a new `NSImage`.
+	public var getImageAsNSImage: NSImage? {
+		guard let url = getImageFileURL else { return nil }
+		return NSImage(contentsOf: url)
+	}
+	#endif
+	
+	#if canImport(UIKit)
+	/// Calls `getImageFileURL` and attempts to initialize a new `UIImage`.
+	public var getImageAsUIImage: UIImage? {
+		guard let url = getImageFileURL,
+			  let data = try? Data(contentsOf: url) else { return nil }
+		return UIImage(data: data)
+	}
+	#endif
 	
 	/// Get The user-visible name for an endpoint that combines the device and endpoint names.
 	/// (Apple-recommended user-visible name)
@@ -207,7 +268,7 @@ extension MIDIIO.Entity {
 	///
 	/// For objects other than endpoints, the display name is the same as its `kMIDIPropertyName` value.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	public var getDisplayName: String? {
 		try? MIDIIO.getDisplayName(of: ref)
 	}
@@ -270,7 +331,7 @@ extension MIDIIO.Entity {
 	///
 	/// You can also set this property on any virtual destinations you create. When clients send messages to a virtual destination with an advance schedule time of 0, the destination receives the messages at the scheduled delivery time. If a virtual destination has a nonzero advance schedule time, it receives timestamped messages as soon as they’re sent, and must do its own internal scheduling of events it receives.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	public var getAdvanceScheduleTimeMuSec: String? {
 		try? MIDIIO.getAdvanceScheduleTimeMuSec(of: ref)
 	}
@@ -329,7 +390,7 @@ extension MIDIIO.Entity {
 	///
 	/// Set by the owning driver, on the device; should not be touched by other clients. Property is inherited from the device by its entities and endpoints.
 	///
-	/// - Throws: `MIDIIO.OSStatusResult` or `MIDIIO.GeneralError`
+	/// - throws: `MIDIIO.MIDIError`
 	public var getDriverOwner: String? {
 		try? MIDIIO.getDriverOwner(of: ref)
 	}
@@ -470,7 +531,7 @@ extension MIDIIO.Entity {
 	
 }
 
-extension MIDIIO.Entity {
+extension MIDIIO.ObjectRef {
 	
 	/// Get all properties as a key/value pair array, formatted as human-readable strings.
 	/// Useful for displaying in a user interface or outputting to console for debugging.
@@ -489,7 +550,7 @@ extension MIDIIO.Entity {
 	
 }
 
-extension MIDIIO.Entity {
+extension MIDIIO.ObjectRef {
 	
 	internal func getPropertyKeyValuePairAsStrings(of property: MIDIIO.kMIDIProperty) -> (key: String, value: String) {
 		
@@ -554,7 +615,7 @@ extension MIDIIO.Entity {
 		// MARK: Presentation
 		case .propertyImage:
 			return (key: "Property Image",
-					value: getPropertyImage?.absoluteString ?? "-")
+					value: getImageFileURL?.absoluteString ?? "-")
 
 		case .displayName:
 			return (key: "Display Name",
@@ -664,12 +725,18 @@ extension MIDIIO.Entity {
 
 		// MARK: Channels
 		case .receiveChannels:
+			let valueString = getReceiveChannels.binary
+				.stringValue(padToEvery: 8, splitEvery: 8, prefix: true)
+			
 			return (key: "Receive Channels",
-					value: "\(getReceiveChannels)")
+					value: "\(valueString)")
 
 		case .transmitChannels:
+			let valueString = getTransmitChannels.binary
+				.stringValue(padToEvery: 8, splitEvery: 8, prefix: true)
+			
 			return (key: "Transmit Channels",
-					value: "\(getTransmitChannels)")
+					value: "\(valueString)")
 
 		case .maxReceiveChannels:
 			return (key: "Max Receive Channels",
@@ -723,3 +790,4 @@ extension MIDIIO.Entity {
 	}
 	
 }
+

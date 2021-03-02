@@ -14,12 +14,14 @@ import OTCoreTestingXCTest
 import MIDIKitTestsCommon
 import CoreMIDI
 
-final class MIDIKitIO_MIDIIO_SourcesAndDestinations_InputConnection_Tests: XCTestCase {
+final class MIDIKitIO_MIDIIO_InputsAndOutputs_InputConnection_Tests: XCTestCase {
 	
 	var manager: MIDIIO.Manager! = nil
 	
 	override func setUp() {
-		manager = .init(name: "MIDIKitIO_MIDIIO_SourcesAndDestinations_InputConnection_Tests")
+		manager = .init(clientName: "MIDIKitIO_MIDIIO_InputsAndOutputs_InputConnection_Tests",
+						model: "",
+						manufacturer: "")
 	}
 	
 	override func tearDown() {
@@ -42,20 +44,18 @@ final class MIDIKitIO_MIDIIO_SourcesAndDestinations_InputConnection_Tests: XCTes
 		
 		do {
 			try manager.addInputConnection(
-				toSource: .endpointName(UUID().uuidString),
+				toOutput: .name(UUID().uuidString),
 				tag: tag1,
 				receiveHandler: .rawDataLogging()
 			)
-		} catch let err as MIDIIO.OSStatusResult {
-			XCTFail("\(err)") ; return
-		} catch let err as MIDIIO.GeneralError {
+		} catch let err as MIDIIO.MIDIError {
 			// log error - expect: endpoint not found
 			caughtErr = err
 		} catch {
 			XCTFail(error.localizedDescription) ; return
 		}
 		
-		if let caughtErr = caughtErr as? MIDIIO.GeneralError,
+		if let caughtErr = caughtErr as? MIDIIO.MIDIError,
 		   case .connectionError = caughtErr {
 			// correct - expect error to be present
 		}

@@ -26,10 +26,10 @@ extension MIDIIO.Manager {
 		
 		case serialPortOwnerChanged
 		
-		case ioError(device: MIDIDeviceRef, error: MIDIIO.OSStatusResult)
+		case ioError(device: MIDIDeviceRef, error: MIDIIO.MIDIError)
 		
 		/// Typically will never happen unless Apple adds additional cases to CoreMIDI's `MIDINotificationMessageID` enum.
-		case other(messageIDrawValue: Int32)
+		case other(messageIDRawValue: Int32)
 		
 	}
 	
@@ -102,14 +102,14 @@ extension MIDIIO.Manager.InternalNotification {
 				
 				return .ioError(
 					device: m.driverDevice,
-					error: .init(rawValue: m.errorCode)
+					error: .osStatus(m.errorCode)
 				)
 				
 			}
 			
 		@unknown default:
 			
-			self = .other(messageIDrawValue: messageID.rawValue)
+			self = .other(messageIDRawValue: messageID.rawValue)
 			
 		}
 		

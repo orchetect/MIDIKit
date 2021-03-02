@@ -17,13 +17,13 @@ public struct MIDIPacketData: Sequence {
 	public var length: Int
 	
 	/// Returns a [Byte] UInt8 Array of `rawData`, sized to `length`.
-	public var array: [Byte] { Array(makeIterator()) }
+	@inline(__always) public var array: [Byte] { Array(makeIterator()) }
 	
 	/// Max byte length of `MIDIPacket` data.
-	public static let maxLength = MIDIPacket.rawDataTupleLength
+	@inline(__always) public static let maxLength = MIDIPacket.rawDataTupleLength
 	
 	/// If `length` is nil, length will default to 256 bytes.
-	public init(_ tuple: MIDIPacketRawData, length: Int? = nil) {
+	@inline(__always) public init(_ tuple: MIDIPacketRawData, length: Int? = nil) {
 		
 		rawData = tuple
 		
@@ -34,20 +34,20 @@ public struct MIDIPacketData: Sequence {
 	}
 	
 	/// If `length` is nil, length will default to 256 bytes.
-	public init(_ tuple: MIDIPacketRawData, length: UInt16? = nil) {
+	@inline(__always) public init(_ tuple: MIDIPacketRawData, length: UInt16? = nil) {
 		
 		self.init(tuple, length: length?.int)
 		
 	}
 	
-	public init(_ midiPacket: MIDIPacket) {
+	@inline(__always) public init(_ midiPacket: MIDIPacket) {
 		
 		self.init(midiPacket.data, length: midiPacket.length)
 		
 	}
 	
 	/// Custom iterator for `MIDIPacket`
-	public func makeIterator() -> AnyIterator<Byte> {
+	@inline(__always) public func makeIterator() -> AnyIterator<Byte> {
 		
 		AnyIterator<Byte>(
 			Mirror(reflecting: rawData)
@@ -65,7 +65,7 @@ public struct MIDIPacketData: Sequence {
 extension MIDIPacket {
 	
 	/// Converts an instance of `MIDIPacket` to `MIDIPacketData`
-	public var packetData: MIDIPacketData {
+	@inline(__always) public var packetData: MIDIPacketData {
 		
 		MIDIPacketData(self)
 		

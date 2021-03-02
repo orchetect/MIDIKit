@@ -8,39 +8,40 @@
 import CoreMIDI
 @_implementationOnly import OTCore
 
-extension MIDIIO.Endpoint {
+extension MIDIIO {
 	
 	/// Enum describing the criteria with which to identify endpoints.
-	public enum IDCriteria: Hashable {
-		
-		/// Utilizes first endpoint matching the endpoint name and device ID.
-		case endpointNameAndDeviceID(name: String, deviceID: Int32)
+	public enum EndpointIDCriteria: Hashable {
 		
 		/// Utilizes first endpoint matching the endpoint name.
 		/// Use of this is discouraged outside of debugging, since multiple endpoints can potentially share the same name in the system.
-		case endpointName(String)
+		case name(String)
+		
+		/// Utilizes first endpoint matching the display name.
+		/// Use of this is discouraged outside of debugging, since multiple endpoints can potentially share the same name in the system.
+		case displayName(String)
 		
 		/// Endpoint matching the unique ID.
-		case uniqueID(UniqueID)
+		case uniqueID(Endpoint.UniqueID)
 		
 	}
 	
 }
 
-extension MIDIIO.Endpoint.IDCriteria {
+extension MIDIIO.EndpointIDCriteria {
 	
 	/// Uses the criteria to find the first match and returns it if found.
-	internal func locate(in endpoints: MIDIIO.EndpointArray) -> MIDIIO.Endpoint? {
+	internal func locate<T: MIDIIO.Endpoint>(in endpoints: [T]) -> T? {
 		
 		switch self {
-		case .endpointNameAndDeviceID(let endpointName, let deviceID):
+		case .name(let endpointName):
 			return endpoints
-				.filterBy(endpointName: endpointName, deviceID: deviceID)
+				.filterBy(name: endpointName)
 				.first
-			
-		case .endpointName(let endpointName):
+		
+		case .displayName(let endpointName):
 			return endpoints
-				.filterBy(endpointName: endpointName)
+				.filterBy(displayName: endpointName)
 				.first
 			
 		case .uniqueID(let uID):
@@ -53,16 +54,16 @@ extension MIDIIO.Endpoint.IDCriteria {
 	
 }
 
-extension MIDIIO.Endpoint.IDCriteria: CustomStringConvertible {
+extension MIDIIO.EndpointIDCriteria: CustomStringConvertible {
 	
 	public var description: String {
 		
 		switch self {
-		case .endpointNameAndDeviceID(let endpointName, let deviceID):
-			return "EndpointName:\(endpointName.quoted)+DeviceID:\(deviceID)"
-			
-		case .endpointName(let endpointName):
+		case .name(let endpointName):
 			return "EndpointName:\(endpointName.quoted)"
+		
+		case .displayName(let displayName):
+			return "EndpointDisplayName:\(displayName.quoted))"
 			
 		case .uniqueID(let uID):
 			return "UniqueID:\(uID)"

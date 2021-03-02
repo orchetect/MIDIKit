@@ -106,13 +106,13 @@ extension MIDIIO.kMIDIProperty {
 		case .deviceID: return [.device, .entity]
 			
 		// MARK: Capabilities
-		case .supportsMMC: return [.device, .entity]
-		case .supportsGeneralMIDI: return [.device, .entity]
-		case .supportsShowControl: return [.device]
+		case .supportsMMC: return [.device, .entity, .endpoint]
+		case .supportsGeneralMIDI: return [.device, .entity, .endpoint]
+		case .supportsShowControl: return [.device, .entity, .endpoint]
 			
 		// MARK: Configuration
 		case .nameConfigurationDictionary: return [.device]
-		case .maxSysExSpeed: return [.device] // + .entity? .endpoint?
+		case .maxSysExSpeed: return [.device, .entity, .endpoint]
 		case .driverDeviceEditorApp: return [.device]
 			
 		// MARK: Presentation
@@ -126,10 +126,10 @@ extension MIDIIO.kMIDIProperty {
 		case .protocolID: return [.endpoint]
 			
 		// MARK: Timing
-		case .transmitsMTC: return [.device, .entity]
-		case .receivesMTC: return [.device, .entity]
-		case .transmitsClock: return [.device, .entity]
-		case .receivesClock: return [.device, .entity]
+		case .transmitsMTC: return [.device, .entity, .endpoint]
+		case .receivesMTC: return [.device, .entity, .endpoint]
+		case .transmitsClock: return [.device, .entity, .endpoint]
+		case .receivesClock: return [.device, .entity, .endpoint]
 		case .advanceScheduleTimeMuSec: return [.device, .entity] // + .endpoint?
 			
 		// MARK: Roles

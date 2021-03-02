@@ -10,22 +10,22 @@ import CoreMIDI
 
 extension MIDIIO.Manager {
 	
-	/// Adds a managed connected destination to the `managedInputConnections` dictionary of the `Manager`.
+	/// Adds a managed connected input to the `managedInputConnections` dictionary of the `Manager`.
 	///
 	/// - Parameters:
-	///   - toSource: Unique ID of existing MIDI endpoint in the system to connect to.
+	///   - toOutput: Criteria for identifying a MIDI endpoint in the system to connect to.
 	///   - tag: Internal unique tag to reference the managed item in the `Manager`.
 	///   - receiveHandler: Event handler for received MIDI packets.
 	///
-	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`
+	/// - throws: `MIDIIO.MIDIError`
 	public func addInputConnection(
-		toSource: MIDIIO.Endpoint.IDCriteria,
+		toOutput: MIDIIO.EndpointIDCriteria,
 		tag: String,
 		receiveHandler: MIDIIO.ReceiveHandler
 	) throws {
 		
 		let newCD = MIDIIO.InputConnection(
-			toSource: toSource,
+			toOutput: toOutput,
 			receiveHandler: receiveHandler
 		)
 		
@@ -37,20 +37,20 @@ extension MIDIIO.Manager {
 		
 	}
 	
-	/// Adds a managed connected source to the `managedOutputConnections` dictionary of the `Manager`.
+	/// Adds a managed connected output to the `managedOutputConnections` dictionary of the `Manager`.
 	///
 	/// - Parameters:
-	///   - toDestination: Unique ID of existing MIDI endpoint in the system to connect to.
+	///   - toInput: Criteria for identifying a MIDI endpoint in the system to connect to.
 	///   - tag: Internal unique tag to reference the managed item in the `Manager`.
 	///
-	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`
+	/// - throws: `MIDIIO.MIDIError`
 	public func addOutputConnection(
-		toDestination: MIDIIO.Endpoint.IDCriteria,
+		toInput: MIDIIO.EndpointIDCriteria,
 		tag: String
 	) throws {
 		
 		let newCS = MIDIIO.OutputConnection(
-			toDestination: toDestination
+			toInput: toInput
 		)
 		
 		// store the connection object in the manager,
@@ -63,50 +63,55 @@ extension MIDIIO.Manager {
 	
 	/// Creates a MIDI play-through (thru) connection.
 	///
-	/// If connection is non-persistent, a managed thru connection will be added to the `managedThruConnections` dictionary of the `Manager` and its lifecycle will be that of the `Manager` or until removeThruConnection is called for the connection.
+	/// If the connection is non-persistent, a managed thru connection will be added to the `managedThruConnections` dictionary of the `Manager` and its lifecycle will be that of the `Manager` or until removeThruConnection is called for the connection.
 	///
-	/// If the connection is persistent, it is instead stored persistently by the system and references will not be directly stored in the `Manager`.
+	/// If the connection is persistent, it is instead stored persistently by the system and references will not be directly held in the `Manager`. To access persistent connections, the `unmanagedPersistentThrus` property will retrieve a list of connections from the system, if any match the owner ID passed as argument.
 	///
-	/// To analyze or delete a persistent connection, access the `unmanagedPersistentThrus` property.
+	/// For every persistent thru connection your app creates, they should be assigned the same persistent ID (domain) so they can be managed or removed in future.
+	///
+	/// - Warning: Be careful when creating persistent thru connections, as they can become stale and orphaned if the endpoints used to create them cease to be relevant at any point in time.
 	///
 	/// - Note: Max 8 outputs and max 8 inputs are allowed when forming a thru connection.
 	///
 	/// - parameter outputs: Maximum of 8 `Endpoint`s.
 	/// - parameter inputs: Maximum of 8 `Endpoint`s.
 	/// - parameter tag: Unique `String` key to refer to the new object that gets added to `managedThruConnections` collection dictionary.
-	/// - parameter persistent: If `false`, thru connection will expire when the app terminates. If `true`, the connection persists in the system forever (but not sure if it survives after macOS account logout / Mac reboot?).
-	public func addThru(
-		outputs: MIDIIO.EndpointArray,
-		inputs: MIDIIO.EndpointArray,
+	/// - parameter lifecycle: If `false`, thru connection will expire when the app terminates. If `true`, the connection persists in the system indefinitely (even after system reboots) until explicitly removed.
+	@available(swift, deprecated: 0.1, message: "Not yet available due to a CoreMIDI bug. May become available in future releases of MIDIKit.")
+	public func addThruConnection(
+		outputs: [MIDIIO.OutputEndpoint],
+		inputs: [MIDIIO.InputEndpoint],
 		tag: String,
 		_ lifecycle: MIDIIO.ThruConnection.Lifecycle = .nonPersistent,
 		params: MIDIThruConnectionParams? = nil
 	) throws {
 		
-		let newCT = MIDIIO.ThruConnection(
-			outputs: outputs,
-			inputs: inputs,
-			lifecycle,
-			params: params
-		)
+		fatalError("Feature is not implemented at this time due to a CoreMIDI bug. It may be available in future versions of MIDIKit if a workaround is found.")
 		
-		// if non-persistent, add to managed array
-		if lifecycle == .nonPersistent {
-			// store the connection object in the manager,
-			// even if subsequent connection fails
-			managedThruConnections[tag] = newCT
-		}
-		
-		// otherwise, we won't store a reference to a persistent thru connection
-		// persistent connections are stored by the system
-		// to analyze or delete a persistent connection,
-		// access the `unmanagedPersistentThrus` method.
-		
-		try newCT.create(in: self)
+//		let newCT = MIDIIO.ThruConnection(
+//			outputs: outputs,
+//			inputs: inputs,
+//			lifecycle,
+//			params: params
+//		)
+//		
+//		// if non-persistent, add to managed array
+//		if lifecycle == .nonPersistent {
+//			// store the connection object in the manager,
+//			// even if subsequent connection fails
+//			managedThruConnections[tag] = newCT
+//		}
+//		
+//		// otherwise, we won't store a reference to a persistent thru connection
+//		// persistent connections are stored by the system
+//		// to analyze or delete a persistent connection,
+//		// access the `unmanagedPersistentThrus(ownerID:)` method.
+//		
+//		try newCT.create(in: self)
 		
 	}
 	
-	/// Adds a managed virtual destination to the `managedInputs` dictionary of the `Manager` and creates the MIDI port in the system.
+	/// Adds a managed virtual input to the `managedInputs` dictionary of the `Manager` and creates the MIDI port in the system.
 	///
 	/// The lifecycle of the MIDI port exists for as long as the `Manager` instance exists, or until `.remove(::)` is called.
 	///
@@ -124,7 +129,7 @@ extension MIDIIO.Manager {
 	///
 	/// Do not generate the number yourself. Rather, if no ID is yet stored, pass `nil` for `uniqueID` and allow the method to generate the new ID for you, then store it. Next time the same port is added, fetch that ID and supply it as the `uniqueID`, remembering to re-store the returned `uniqueID` once more in the event that there was a collision and a new ID has been returned.
 	///
-	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`.
+	/// - throws: `MIDIIO.MIDIError`
 	/// - Returns: The port's effective `uniqueID`.
 	public func addInput(
 		name: String,
@@ -144,14 +149,14 @@ extension MIDIIO.Manager {
 		try newVD.create(in: self)
 		
 		guard let uniqueID = newVD.uniqueID else {
-			throw MIDIIO.GeneralError.connectionError("Could not read virtual MIDI endpoint unique ID.")
+			throw MIDIIO.MIDIError.connectionError("Could not read virtual MIDI endpoint unique ID.")
 		}
 		
 		return uniqueID
 		
 	}
 	
-	/// Adds a managed virtual source to the `managedOutputs` dictionary of the `Manager`.
+	/// Adds a managed virtual output to the `managedOutputs` dictionary of the `Manager`.
 	///
 	/// The lifecycle of the MIDI port exists for as long as the `Manager` instance exists, or until `.remove(::)` is called.
 	///
@@ -168,7 +173,7 @@ extension MIDIIO.Manager {
 	///
 	/// Do not generate the number yourself. Rather, if no ID is yet stored, pass `nil` for `uniqueID` and allow the method to generate the new ID for you, then store it. Next time the same port is added, fetch that ID and supply it as the `uniqueID`, remembering to re-store the returned `uniqueID` once more in the event that there was a collision and a new ID has been returned.
 	///
-	/// - Throws: `MIDIIO.GeneralError` or `MIDIIO.OSStatusResult`.
+	/// - throws: `MIDIIO.MIDIError`
 	/// - Returns: The port's effective `uniqueID`.
 	public func addOutput(
 		name: String,
@@ -186,7 +191,7 @@ extension MIDIIO.Manager {
 		try newVS.create(in: self)
 		
 		guard let uniqueID = newVS.uniqueID else {
-			throw MIDIIO.GeneralError.connectionError("Could not read virtual MIDI endpoint unique ID.")
+			throw MIDIIO.MIDIError.connectionError("Could not read virtual MIDI endpoint unique ID.")
 		}
 		
 		return uniqueID
@@ -200,7 +205,7 @@ extension MIDIIO.Manager {
 	public enum ManagedType: CaseIterable, Hashable {
 		case inputConnection
 		case outputConnection
-		case thru
+		case thruConnection
 		case input
 		case output
 	}
@@ -233,7 +238,7 @@ extension MIDIIO.Manager {
 				managedOutputConnections[tag] = nil
 			}
 			
-		case .thru:
+		case .thruConnection:
 			switch tagSelection {
 			case .all:
 				managedThruConnections.removeAll()
@@ -263,8 +268,12 @@ extension MIDIIO.Manager {
 	
 	/// Remove all managed MIDI endpoints and connections.
 	///
-	/// - Persistent thru connections stored in the system are unaffected.
-	/// - Notification handler is unaffected.
+	/// What is unaffected, and not reset:
+	/// - Persistent thru connections stored in the system.
+	/// - Notification handler attached to the `Manager`.
+	/// - `clientName` property
+	/// - `model` property
+	/// - `manufacturer` property
 	public func reset() {
 		
 		ManagedType.allCases.forEach {

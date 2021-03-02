@@ -14,12 +14,14 @@ import OTCoreTestingXCTest
 import MIDIKitTestsCommon
 import CoreMIDI
 
-final class MIDIKitIO_MIDIIO_SourcesAndDestinations_Input_Tests: XCTestCase {
+final class MIDIKitIO_MIDIIO_InputsAndOutputs_Input_Tests: XCTestCase {
 	
 	var manager: MIDIIO.Manager! = nil
 	
 	override func setUp() {
-		manager = .init(name: "MIDIKitIO_MIDIIO_SourcesAndDestinations_Input_Tests")
+		manager = .init(clientName: "MIDIKitIO_MIDIIO_InputsAndOutputs_Input_Tests",
+						model: "",
+						manufacturer: "")
 	}
 	
 	override func tearDown() {
@@ -44,13 +46,11 @@ final class MIDIKitIO_MIDIIO_SourcesAndDestinations_Input_Tests: XCTestCase {
 			id1 = try manager.addInput(
 				name: "MIDIKitIOTests Destination 1",
 				tag: tag1,
-				receiveHandler: .basic({ packets in
+				receiveHandler: .rawData({ packets in
 					_ = packets
 				})
 			)
-		} catch let err as MIDIIO.OSStatusResult {
-			XCTFail(err.description) ; return
-		} catch let err as MIDIIO.GeneralError {
+		} catch let err as MIDIIO.MIDIError {
 			XCTFail(err.localizedDescription) ; return
 		} catch {
 			XCTFail(error.localizedDescription) ; return
@@ -70,13 +70,11 @@ final class MIDIKitIO_MIDIIO_SourcesAndDestinations_Input_Tests: XCTestCase {
 				name: "MIDIKitIOTests Destination 2",
 				tag: tag2,
 				uniqueID: id1!, // try to use existing ID
-				receiveHandler: .basic({ packets in
-					_ = packets
+				receiveHandler: .rawData({ packet in
+					_ = packet
 				})
 			)
-		} catch let err as MIDIIO.OSStatusResult {
-			XCTFail("\(err)") ; return
-		} catch let err as MIDIIO.GeneralError {
+		} catch let err as MIDIIO.MIDIError {
 			XCTFail("\(err)") ; return
 		} catch {
 			XCTFail(error.localizedDescription) ; return

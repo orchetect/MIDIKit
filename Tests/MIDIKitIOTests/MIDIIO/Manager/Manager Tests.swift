@@ -19,7 +19,9 @@ final class MIDIKitIO_MIDIIO_Manager_Tests: XCTestCase {
 	var manager: MIDIIO.Manager! = nil
 	
 	override func setUp() {
-		manager = .init(name: "MIDIKitIO_MIDIIO_Manager_Tests")
+		manager = .init(clientName: "MIDIKitIO_MIDIIO_Manager_Tests",
+						model: "",
+						manufacturer: "")
 	}
 	
 	override func tearDown() {

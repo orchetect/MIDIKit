@@ -11,6 +11,7 @@ import CoreMIDI
 
 extension MIDIIO {
 	
+	/// A managed virtual MIDI input endpoint created in the system by the `Manager`.
 	public class Input {
 		
 		/// The port name as displayed in the system.
@@ -19,7 +20,7 @@ extension MIDIIO {
 		/// The port's unique ID in the system.
 		public private(set) var uniqueID: MIDIIO.Endpoint.UniqueID? = nil
 		
-		public private(set) var destinationPortRef: MIDIPortRef? = nil
+		public private(set) var portRef: MIDIPortRef? = nil
 		
 		internal var receiveHandler: ReceiveHandler
 		
@@ -46,13 +47,13 @@ extension MIDIIO {
 extension MIDIIO.Input {
 	
 	/// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
-	public var uniqueIDExistsInSystem: MIDIEndpointRef? {
+	internal var uniqueIDExistsInSystem: MIDIEndpointRef? {
 		
 		guard let uniqueID = self.uniqueID else {
 			return nil
 		}
 		
-		if let endpoint = MIDIIO.systemDestinationEndpoint(matching: uniqueID) {
+		if let endpoint = MIDIIO.getSystemDestinationEndpoint(matching: uniqueID) {
 			return endpoint
 		}
 		
@@ -67,46 +68,36 @@ extension MIDIIO.Input {
 	internal func create(in context: MIDIIO.Manager) throws {
 		
 		if uniqueIDExistsInSystem != nil {
-			// if uniqueID is already in use, set it to nil
-			// so MIDIDestinationCreateWithBlock can find a new unused ID
+			// if uniqueID is already in use, set it to nil here
+			// so MIDIDestinationCreateWithBlock can return a new unused ID;
+			// this should prevent errors thrown due to ID collisions in the system
 			uniqueID = nil
 		}
 		
-		var newDestinationPortRef = MIDIPortRef()
+		var newPortRef = MIDIPortRef()
 		
-		var result = noErr
-		
-		result = MIDIDestinationCreateWithBlock(
+		try MIDIDestinationCreateWithBlock(
 			context.clientRef,
 			endpointName as CFString,
-			&newDestinationPortRef,
+			&newPortRef,
 			receiveHandler.midiReadBlock
 		)
+		.throwIfOSStatusErr()
 		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
+		portRef = newPortRef
 		
-		// cache unique ID if cache is nil
-		if uniqueID == nil {
-			uniqueID = MIDIIO.getUniqueID(of: newDestinationPortRef)
-		}
+		// set meta data properties; ignore errors in case of failure
+		try? MIDIIO.setModel(of: newPortRef, to: context.model)
+		try? MIDIIO.setManufacturer(of: newPortRef, to: context.manufacturer)
 		
-		// reuse unique ID if it's non-nil
-		guard let uniqueID = self.uniqueID else {
-			return
-		}
-		
-		result = MIDIObjectSetIntegerProperty(
-			newDestinationPortRef,
-			kMIDIPropertyUniqueID,
-			uniqueID
-		)
-		
-		guard result == noErr else {
-			throw MIDIIO.GeneralError.connectionError(
-				"MIDI: Error setting unique ID to \(uniqueID) on virtual destination: \(endpointName.quoted). Current ID is \(MIDIIO.getUniqueID(of: newDestinationPortRef))."
-			)
+		if let uniqueID = self.uniqueID {
+			// inject previously-stored unique ID into port
+			try MIDIIO.setUniqueID(of: newPortRef,
+								   to: uniqueID)
+		} else {
+			// if managed ID is nil, either it was not supplied or it was already in use
+			// so fetch the new ID from the port we just created
+			uniqueID = MIDIIO.getUniqueID(of: newPortRef)
 		}
 		
 	}
@@ -116,15 +107,12 @@ extension MIDIIO.Input {
 	/// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
 	internal func dispose() throws {
 		
-		guard let destinationPortRef = self.destinationPortRef else { return }
+		guard let portRef = self.portRef else { return }
 		
-		let result = MIDIEndpointDispose(destinationPortRef)
+		defer { self.portRef = nil }
 		
-		self.destinationPortRef = nil
-		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
+		try MIDIEndpointDispose(portRef)
+			.throwIfOSStatusErr()
 		
 	}
 	
@@ -134,7 +122,9 @@ extension MIDIIO.Input: CustomStringConvertible {
 	
 	public var description: String {
 		
-		"Input(name: \(endpointName.quoted), uniqueID: \(uniqueID, ifNil: "nil"))"
+		let uniqueID = "\(self.uniqueID, ifNil: "nil")"
+		
+		return "Input(name: \(endpointName.quoted), uniqueID: \(uniqueID))"
 		
 	}
 	

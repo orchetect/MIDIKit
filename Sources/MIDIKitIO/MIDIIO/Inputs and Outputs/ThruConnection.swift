@@ -18,29 +18,28 @@ import CoreMIDI
 
 extension MIDIIO {
 	
-	/// CoreMIDI play-through connection.
+	/// A managed MIDI thru connection created in the system by the `Manager`.
 	///
-	/// CoreMIDI MIDI thru connections can have transforms applied to them.
-	///
-	/// They can be client-owned (auto-destroyed when app quits) or persistent (continues even after app quits).
+	/// CoreMIDI MIDI play-through connections can be non-persistent (client-owned, auto-disposed when `Manager` deinits) or persistent (maintained even after system reboots).
 	public class ThruConnection {
 		
 		public private(set) var thruConnectionRef: MIDIThruConnectionRef? = nil
 		
-		public private(set) var outputs: EndpointArray
+		public private(set) var outputs: [OutputEndpoint]
 		
-		public private(set) var inputs: EndpointArray
+		public private(set) var inputs: [InputEndpoint]
 		
 		public private(set) var lifecycle: Lifecycle
 		
 		public private(set) var params: MIDIThruConnectionParams? = nil
 		
 		/// - Parameters:
-		///   - outputs: One or more source endpoints. Maximum 8 endpoints.
-		///   - inputs: One or more source endpoints. Maximum 8 endpoints.
+		///   - outputs: One or more output endpoints, maximum of 8.
+		///   - inputs: One or more input endpoints, maximum of 8.
 		///   - lifecycle: Non-persistent or persistent.
-		internal init(outputs: EndpointArray,
-					  inputs: EndpointArray,
+		///   - params: Optionally supply custom parameters for the connection. `nil` employs default parameters.
+		internal init(outputs: [OutputEndpoint],
+					  inputs: [InputEndpoint],
 					  _ lifecycle: Lifecycle = .nonPersistent,
 					  params: MIDIThruConnectionParams? = nil) {
 			
@@ -67,8 +66,6 @@ extension MIDIIO {
 extension MIDIIO.ThruConnection {
 	
 	internal func create(in context: MIDIIO.Manager) throws {
-		
-		var result = noErr
 		
 		var newConnection = MIDIThruConnectionRef()
 		
@@ -162,15 +159,12 @@ extension MIDIIO.ThruConnection {
 		// - outConnection: UnsafeMutablePointer<MIDIThruConnectionRef>
 		//   On successful return, a reference to the newly-created connection.
 		
-		result = MIDIThruConnectionCreate(
+		try MIDIThruConnectionCreate(
 			cfPersistentOwnerID,
 			paramsData,
 			&newConnection
 		)
-		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
+		.throwIfOSStatusErr()
 		
 		thruConnectionRef = newConnection
 		
@@ -191,13 +185,12 @@ extension MIDIIO.ThruConnection {
 		
 		guard let thruConnectionRef = self.thruConnectionRef else { return }
 		
-		let result = MIDIThruConnectionDispose(thruConnectionRef)
-		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
+		defer {
+			self.thruConnectionRef = nil
 		}
 		
-		self.thruConnectionRef = nil
+		try MIDIThruConnectionDispose(thruConnectionRef)
+			.throwIfOSStatusErr()
 		
 	}
 	
@@ -209,7 +202,7 @@ extension MIDIIO.ThruConnection: CustomStringConvertible {
 		
 		let thruConnectionRef = "\(self.thruConnectionRef, ifNil: "nil")"
 		
-		return "ThruConnection(thruConnectionRef: \(thruConnectionRef), sources: \(outputs), destinations: \(inputs), \(lifecycle)"
+		return "ThruConnection(ref: \(thruConnectionRef), outputs: \(outputs), inputs: \(inputs), \(lifecycle)"
 		
 	}
 	
@@ -219,12 +212,13 @@ extension MIDIIO.ThruConnection: CustomStringConvertible {
 
 extension MIDIIO.ThruConnection {
 	
+	/// ThruConnection lifecycle type.
 	public enum Lifecycle: Hashable {
 		
 		/// The play-through connection exists as long as the `Manager` exists.
 		case nonPersistent
 		
-		/// The play-through connection is stored in the system and persists after `Manager` is disposed, and even after the application has quit. (It may even persist after reboot (?))
+		/// The play-through connection is stored in the system and persists indefinitely (even after system reboots) until explicitly removed.
 		///
 		/// - `ownerID`: Reverse-DNS domain string; usually the application's bundle ID.
 		case persistent(ownerID: String)

@@ -10,7 +10,7 @@ import CoreMIDI
 extension MIDIPacket {
 	
 	/// `MIDIPacket.data` raw size in number of bytes
-	public static let rawDataTupleLength = 256
+	@inline(__always) public static let rawDataTupleLength = 256
 	
 }
 

@@ -1,14 +1,16 @@
 //
-//  OSStatusResult.swift
+//  MIDIOSStatus.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-21.
 //
 
+import CoreMIDI
+
 extension MIDIIO {
 	
 	/// An enumeration representing `CoreMIDI.MIDIServices` `OSStatus` error codes, with verbose descriptions.
-	public enum OSStatusResult: Error, Equatable {
+	public enum MIDIOSStatus: Hashable {
 		
 		/// `CoreMIDI.kMIDIInvalidClient`:
 		/// An invalid `MIDIClientRef` was passed.
@@ -80,10 +82,11 @@ extension MIDIIO {
 		
 		/// Error -50:
 		/// Various underlying issues could produce this error.
+		///
 		/// Possibly caused by:
-		/// not starting the MIDI client (MIDIIO.Manager.start()),
-		/// an uninitialized variable being passed,
-		/// or if the MIDI server has an issue getting a process ID back internally.
+		/// - not starting the MIDI client after instancing it (`MIDIIO.Manager .start()`),
+		/// - an uninitialized variable being passed,
+		/// - or if the MIDI server has an issue getting a process ID back internally.
 		case internalError
 		
 		/// Other `OSStatus`
@@ -93,7 +96,7 @@ extension MIDIIO {
 	
 }
 
-extension MIDIIO.OSStatusResult {
+extension MIDIIO.MIDIOSStatus {
 	
 	public var rawValue: Int32 {
 		
@@ -149,7 +152,13 @@ extension MIDIIO.OSStatusResult {
 	
 }
 
-extension MIDIIO.OSStatusResult: CustomStringConvertible {
+extension MIDIIO.MIDIOSStatus: CustomStringConvertible {
+	
+	public var localizedDescription: String {
+		
+		description
+		
+	}
 	
 	public var description: String {
 		
@@ -206,11 +215,39 @@ extension MIDIIO.OSStatusResult: CustomStringConvertible {
 			return "I/O Error. (kMIDIMsgIOError)"
 			
 		case .internalError:
-			return "Internal error. Various underlying issues could produce this error. Possibly caused by: not starting the MIDI client (MIDIIO.Manager.start()), an uninitialized variable being passed, or if the MIDI server has an issue getting a process ID back internally."
+			return "Internal OSStatus error -50."
 			
 		case .other(let osStatus):
 			return "Unknown OSStatus error: \(osStatus)"
 			
+		}
+		
+	}
+	
+}
+
+extension MIDIIO {
+	
+	/// Throws an error of type `MIDIIO.MIDIError` if `OSStatus` return value is != `noErr`
+	internal static func throwIfErr(_ closure: () -> OSStatus) throws {
+		
+		let result = closure()
+		
+		guard result == noErr else {
+			throw MIDIError.osStatus(result)
+		}
+		
+	}
+	
+}
+
+extension OSStatus {
+	
+	/// Throws an error of type `MIDIIO.MIDIError` if self as `OSStatus` is != `noErr`
+	internal func throwIfOSStatusErr() throws {
+		
+		guard self == noErr else {
+			throw MIDIIO.MIDIError.osStatus(self)
 		}
 		
 	}

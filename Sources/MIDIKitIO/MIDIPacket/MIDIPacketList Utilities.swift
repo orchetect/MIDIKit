@@ -11,7 +11,7 @@ extension MIDIIO {
 	
 	/// Internal use.
 	/// Assembles a single `MIDIPacket` from a MIDI message byte array and wraps it in a `MIDIPacketList`
-	internal static func assemblePacket(data: [Byte]) throws -> UnsafeMutablePointer<MIDIPacketList> {
+	@inlinable internal static func assemblePacket(data: [Byte]) throws -> UnsafeMutablePointer<MIDIPacketList> {
 		
 		// Create a buffer that is big enough to hold the data to be sent and
 		// all the necessary headers.
@@ -41,7 +41,7 @@ extension MIDIIO {
 										  data)
 		
 		guard currentPacket != nil else {
-			throw MIDIIO.PacketError.malformed(
+			throw MIDIError.malformed(
 				"Failed to add packet to packet list."
 			)
 		}
@@ -52,7 +52,7 @@ extension MIDIIO {
 	
 	/// Experimental.
 	/// Assembles an array of Byte arrays into `MIDIPacket`s and wraps them in a `MIDIPacketList`
-	internal static func assemblePackets(data: [[Byte]]) throws -> UnsafeMutablePointer<MIDIPacketList> {
+	@inlinable internal static func assemblePackets(data: [[Byte]]) throws -> UnsafeMutablePointer<MIDIPacketList> {
 		
 		// Create a buffer that is big enough to hold the data to be sent and
 		// all the necessary headers.
@@ -62,7 +62,7 @@ extension MIDIIO {
 		
 		// MIDIPacketListAdd's discussion section states that "The maximum size of a packet list is 65536 bytes."
 		guard bufferSize <= 65536 else {
-			throw MIDIIO.PacketError.malformed(
+			throw MIDIError.malformed(
 				"Data array is too large (\(bufferSize) bytes). Requires a buffer larger than 65536"
 			)
 		}
@@ -86,7 +86,7 @@ extension MIDIIO {
 											  data[dataBlock])
 			
 			guard currentPacket != nil else {
-				throw MIDIIO.PacketError.malformed(
+				throw MIDIError.malformed(
 					"Failed to add packet index \(dataBlock) of \(data.count-1) to packet list."
 				)
 			}

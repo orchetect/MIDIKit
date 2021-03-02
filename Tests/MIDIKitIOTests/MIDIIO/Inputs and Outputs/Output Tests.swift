@@ -14,12 +14,14 @@ import OTCoreTestingXCTest
 import MIDIKitTestsCommon
 import CoreMIDI
 
-final class MIDIKitIO_MIDIIO_SourcesAndDestinations_Output_Tests: XCTestCase {
+final class MIDIKitIO_MIDIIO_InputsAndOutputs_Output_Tests: XCTestCase {
 	
 	var manager: MIDIIO.Manager! = nil
 	
 	override func setUp() {
-		manager = .init(name: "MIDIKitIO_MIDIIO_SourcesAndDestinations_Output_Tests")
+		manager = .init(clientName: "MIDIKitIO_MIDIIO_InputsAndOutputs_Output_Tests",
+						model: "",
+						manufacturer: "")
 	}
 	
 	override func tearDown() {
@@ -42,9 +44,7 @@ final class MIDIKitIO_MIDIIO_SourcesAndDestinations_Output_Tests: XCTestCase {
 		
 		do {
 			id1 = try manager.addOutput(name: "MIDIKitIOTests Source 1", tag: tag1)
-		} catch let err as MIDIIO.OSStatusResult {
-			XCTFail(err.description) ; return
-		} catch let err as MIDIIO.GeneralError {
+		} catch let err as MIDIIO.MIDIError {
 			XCTFail(err.localizedDescription) ; return
 		} catch {
 			XCTFail(error.localizedDescription) ; return
@@ -67,9 +67,7 @@ final class MIDIKitIO_MIDIIO_SourcesAndDestinations_Output_Tests: XCTestCase {
 		
 		do {
 			id2 = try manager.addOutput(name: "MIDIKitIOTests Source 2", tag: tag2)
-		} catch let err as MIDIIO.OSStatusResult {
-			XCTFail("\(err)") ; return
-		} catch let err as MIDIIO.GeneralError {
+		} catch let err as MIDIIO.MIDIError {
 			XCTFail("\(err)") ; return
 		} catch {
 			XCTFail(error.localizedDescription) ; return

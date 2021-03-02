@@ -12,7 +12,7 @@ extension MIDIPacketList: Sequence {
 	public typealias Iterator = PacketListIterator
 
 	/// Create a generator from the packet list
-	public func makeIterator() -> Iterator {
+	@inline(__always) public func makeIterator() -> Iterator {
 		
 		Iterator(self)
 		

@@ -11,6 +11,7 @@ import CoreMIDI
 
 extension MIDIIO {
 	
+	/// A managed virtual MIDI output endpoint created in the system by the `Manager`.
 	public class Output {
 		
 		/// The port name as displayed in the system.
@@ -19,7 +20,7 @@ extension MIDIIO {
 		/// The port's unique ID in the system.
 		public private(set) var uniqueID: MIDIIO.Endpoint.UniqueID? = nil
 		
-		public private(set) var sourcePortRef: MIDIPortRef? = nil
+		public private(set) var portRef: MIDIPortRef? = nil
 		
 		internal init(name: String,
 					  uniqueID: MIDIIO.Endpoint.UniqueID? = nil) {
@@ -48,7 +49,7 @@ extension MIDIIO.Output {
 			return nil
 		}
 		
-		if let endpoint = MIDIIO.systemSourceEndpoint(matching: uniqueID) {
+		if let endpoint = MIDIIO.getSystemSourceEndpoint(matching: uniqueID) {
 			return endpoint
 		}
 		
@@ -63,48 +64,35 @@ extension MIDIIO.Output {
 	internal func create(in context: MIDIIO.Manager) throws {
 		
 		if uniqueIDExistsInSystem != nil {
-			// if uniqueID is already in use, set it to nil
-			// so MIDIDestinationCreateWithBlock can find a new unused ID
+			// if uniqueID is already in use, set it to nil here
+			// so MIDISourceCreate can return a new unused ID;
+			// this should prevent errors thrown due to ID collisions in the system
 			uniqueID = nil
 		}
 		
-		var newSourcePortRef = MIDIPortRef()
+		var newPortRef = MIDIPortRef()
 		
-		var result = noErr
-		
-		result = MIDISourceCreate(
+		try MIDISourceCreate(
 			context.clientRef,
 			endpointName as CFString,
-			&newSourcePortRef
+			&newPortRef
 		)
+		.throwIfOSStatusErr()
 		
-		sourcePortRef = newSourcePortRef
+		portRef = newPortRef
 		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
+		// set meta data properties; ignore errors in case of failure
+		try? MIDIIO.setModel(of: newPortRef, to: context.model)
+		try? MIDIIO.setManufacturer(of: newPortRef, to: context.manufacturer)
 		
-		// cache unique ID if cache is nil
-		if uniqueID == nil {
-			uniqueID = MIDIIO.getUniqueID(of: newSourcePortRef)
-		}
-		
-		// reuse unique ID if it's non-nil
-		guard let uniqueID = self.uniqueID else {
-			return
-		}
-		
-		// inject unique ID into port
-		result = MIDIObjectSetIntegerProperty(
-			newSourcePortRef,
-			kMIDIPropertyUniqueID,
-			uniqueID
-		)
-		
-		guard result == noErr else {
-			throw MIDIIO.GeneralError.connectionError(
-				"MIDI: Error setting unique ID to \(uniqueID) on virtual source: \(endpointName.quoted). Current ID is \(MIDIIO.getUniqueID(of: newSourcePortRef))."
-			)
+		if let uniqueID = self.uniqueID {
+			// inject previously-stored unique ID into port
+			try MIDIIO.setUniqueID(of: newPortRef,
+								   to: uniqueID)
+		} else {
+			// if managed ID is nil, either it was not supplied or it was already in use
+			// so fetch the new ID from the port we just created
+			uniqueID = MIDIIO.getUniqueID(of: newPortRef)
 		}
 		
 	}
@@ -114,15 +102,12 @@ extension MIDIIO.Output {
 	/// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
 	internal func dispose() throws {
 		
-		guard let sourcePortRef = self.sourcePortRef else { return }
+		guard let portRef = self.portRef else { return }
 		
-		let result = MIDIEndpointDispose(sourcePortRef)
+		defer { self.portRef = nil }
 		
-		self.sourcePortRef = nil
-		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
+		try MIDIEndpointDispose(portRef)
+			.throwIfOSStatusErr()
 		
 	}
 	
@@ -144,17 +129,14 @@ extension MIDIIO.Output: MIDIIOSendsMIDIMessages {
 	
 	public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
 		
-		guard let sourcePortRef = self.sourcePortRef else {
-			throw MIDIIO.PacketError.internalInconsistency(
+		guard let portRef = self.portRef else {
+			throw MIDIIO.MIDIError.internalInconsistency(
 				"Port reference is nil."
 			)
 		}
 		
-		let result = MIDIReceived(sourcePortRef, packetList)
-		
-		guard result == noErr else {
-			throw MIDIIO.OSStatusResult(rawValue: result)
-		}
+		try MIDIReceived(portRef, packetList)
+			.throwIfOSStatusErr()
 		
 	}
 	

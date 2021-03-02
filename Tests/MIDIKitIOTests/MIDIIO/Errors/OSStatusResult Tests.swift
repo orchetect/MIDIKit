@@ -1,5 +1,5 @@
 //
-//  OSStatusResult Tests.swift
+//  MIDIOSStatus Tests.swift
 //  MIDIKit
 //
 //  Created by Steffan Andrews on 2021-02-22.
@@ -11,31 +11,31 @@ import XCTest
 @testable import MIDIKitIO
 import MIDIKitTestsCommon
 
-final class MIDIKitIO_Errors_OSStatusResult_Tests: XCTestCase {
+final class MIDIKitIO_Errors_MIDIOSStatus_Tests: XCTestCase {
 	
 	func testRawValue() {
 		
 		// spot check: known constant
 		
 		XCTAssertEqual(
-			MIDIIO.OSStatusResult(rawValue: -10830),
+			MIDIIO.MIDIOSStatus(rawValue: -10830),
 			.invalidClient
 		)
 		
 		XCTAssertEqual(
-			MIDIIO.OSStatusResult.invalidClient.rawValue,
+			MIDIIO.MIDIOSStatus.invalidClient.rawValue,
 			-10830
 		)
 		
 		// other
 		
 		XCTAssertEqual(
-			MIDIIO.OSStatusResult(rawValue: 7777),
+			MIDIIO.MIDIOSStatus(rawValue: 7777),
 			.other(7777)
 		)
 		
 		XCTAssertEqual(
-			MIDIIO.OSStatusResult.other(7777).rawValue,
+			MIDIIO.MIDIOSStatus.other(7777).rawValue,
 			7777
 		)
 		
@@ -46,7 +46,7 @@ final class MIDIKitIO_Errors_OSStatusResult_Tests: XCTestCase {
 		// spot check: known constant
 		
 		XCTAssert(
-			"\(MIDIIO.OSStatusResult.invalidClient)".contains("kMIDIInvalidClient")
+			"\(MIDIIO.MIDIOSStatus.invalidClient)".contains("kMIDIInvalidClient")
 		)
 		
 	}
