@@ -13,6 +13,7 @@ extension MIDIIO.Manager {
 	/// Starts the manager and registers itself with the CoreMIDI subsystem.
 	/// Call this method once after initializing a new instance.
 	/// Subsequent calls will not have any effect.
+	/// - Throws: `MIDIIO.MIDIError.osStatus`
 	public func start() throws {
 		
 		// if start() was already called, return
