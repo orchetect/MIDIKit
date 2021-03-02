@@ -2,6 +2,8 @@
 //  MIDIKitTests.swift
 //  MIDIKit
 //
+//  Created by Steffan Andrews on 2021-02-21.
+//
 
 #if !os(watchOS)
 
@@ -12,7 +14,7 @@ import CoreMIDI
 
 final class MIDIKitTests: XCTestCase {
 	
-    // no tests in this file, this is the root test class
+    // no tests in this file
 	
 	func testNamespace() {
 		
@@ -25,8 +27,8 @@ final class MIDIKitTests: XCTestCase {
 //		_ = AnyMIDIEventKind.self
 //		_ = MIDIKit.AnyMIDIEventKind.self
 //
-//		_ = MIDIIOManager.self
-//		_ = MIDIKitIO.MIDIIOManager.self
+//		_ = MIDIIO.Manager.self
+//		_ = MIDIKitIO.MIDIIO.Manager.self
 //
 //		_ = MIDIEvent.self
 //		_ = MIDIKitEvents.MIDIEvent.self

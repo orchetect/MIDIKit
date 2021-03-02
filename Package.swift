@@ -7,7 +7,7 @@ let package = Package(
 	name: "MIDIKit",
 	
 	platforms: [
-		.macOS(.v10_12), .iOS(.v8)
+		.macOS(.v10_12), .iOS(.v10)
 	],
 	
 	products: [
@@ -45,11 +45,11 @@ let package = Package(
 	dependencies: [
 		
 		// Boilerplate
-		.package(url: "https://github.com/orchetect/OTCore", from: "1.1.5"),
+		.package(url: "https://github.com/orchetect/OTCore", from: "1.1.6"),
 		.package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.0"),
 		
 		// Timecode
-		.package(url: "https://github.com/orchetect/TimecodeKit", from: "1.0.9")
+		.package(url: "https://github.com/orchetect/TimecodeKit", from: "1.0.10")
 		
 	],
 	
@@ -121,7 +121,10 @@ let package = Package(
 		// test common
 		.target(
 			name: "MIDIKitTestsCommon",
-			dependencies: []),
+			dependencies: [
+				.product(name: "OTCore-Testing-XCTest", package: "OTCore")
+			]
+		),
 		
 		// ---------------------------------------------
 		// UNIT TESTS
@@ -143,7 +146,6 @@ let package = Package(
 			dependencies: [
 				.target(name: "MIDIKitTestsCommon"),
 				.target(name: "MIDIKitCommon"),
-				.product(name: "OTCore-Testing-XCTest", package: "OTCore")
 			]
 		),
 		
