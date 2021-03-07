@@ -78,12 +78,12 @@ extension MTC {
 		// MARK: - Init
 		
 		/// Construct based on the corresponding real timecode frame rate
-		init(_ timecodeFrameRate: Timecode.FrameRate) {
+		@inline(__always) init(_ timecodeFrameRate: Timecode.FrameRate) {
 			self = timecodeFrameRate.mtcFrameRate
 		}
 		
 		/// Construct from MTC bits
-		init?(_ bitValue: UInt8) {
+		@inline(__always) init?(_ bitValue: UInt8) {
 			switch bitValue {
 			case 0b00:	self = .mtc24
 			case 0b01:	self = .mtc25
@@ -97,7 +97,7 @@ extension MTC {
 		// MARK: - Public properties
 		
 		/// Raw bit value transmitted in MTC messages
-		public var bitValue: UInt8 {
+		@inline(__always) public var bitValue: UInt8 {
 			switch self {
 			case .mtc24:	return 0b00
 			case .mtc25:	return 0b01
@@ -107,7 +107,7 @@ extension MTC {
 		}
 		
 		/// Human-readable descriptive string
-		public var stringValue: String {
+		@inlinable public var stringValue: String {
 			switch self {
 			case .mtc24:	return "MTC-24"
 			case .mtc25:	return "MTC-25"
@@ -117,7 +117,7 @@ extension MTC {
 		}
 		
 		/// Returns true if the rate is drop-frame
-		public var isDrop: Bool {
+		@inline(__always) public var isDrop: Bool {
 			switch self {
 			case .mtc24:	return false
 			case .mtc25:	return false
@@ -129,7 +129,7 @@ extension MTC {
 		// MARK: - Internal properties
 		
 		/// FPS Value for scaling MTC frame rate
-		internal var fpsValueForScaling: Int {
+		@inline(__always) internal var fpsValueForScaling: Int {
 			switch self {
 			case .mtc24:	return 24
 			case .mtc25:	return 25
