@@ -49,7 +49,7 @@ let package = Package(
 		.package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.0"),
 		
 		// Timecode
-		.package(url: "https://github.com/orchetect/TimecodeKit", from: "1.0.10")
+		.package(url: "https://github.com/orchetect/TimecodeKit", from: "1.0.11")
 		
 	],
 	

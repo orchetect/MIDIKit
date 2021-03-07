@@ -11,7 +11,7 @@ import TimecodeKit
 extension MTC.Receiver {
 	
 	/// Options defining behavior of the receiver
-	public struct SyncPolicy: Equatable {
+	public struct SyncPolicy: Equatable, Codable {
 		
 		// MARK: - Public properties
 		
@@ -25,8 +25,10 @@ extension MTC.Receiver {
 		// MARK: - Init
 		
 		public init(lockFrames: Int = 16, dropOutFrames: Int = 10) {
+			
 			setLockFrames(lockFrames)
 			setDropOutFramesFrames(dropOutFrames)
+			
 		}
 		
 		
@@ -47,7 +49,6 @@ extension MTC.Receiver {
 		public func lockDuration(at rate: Timecode.FrameRate) -> Double {
 			
 			let tc = Timecode(wrapping: TCC(f: lockFrames), at: rate)
-			
 			return tc.realTimeValue.seconds
 			
 		}
@@ -56,7 +57,6 @@ extension MTC.Receiver {
 		public func dropOutDuration(at rate: Timecode.FrameRate) -> Double {
 			
 			let tc = Timecode(wrapping: TCC(f: dropOutFrames), at: rate)
-			
 			return tc.realTimeValue.seconds
 			
 		}

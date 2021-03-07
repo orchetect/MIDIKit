@@ -9,7 +9,7 @@
 
 import XCTest
 @testable import MIDIKitSync
-
+import OTCore
 import TimecodeKit
 
 extension MIDIKitSyncTests {
@@ -38,7 +38,7 @@ extension MIDIKitSyncTests {
 	func testMTC_Receiver_Init_Arguments() {
 		
 		let mtcRec = MTC.Receiver(name: "test",
-								  localFrameRate: ._48,
+								  initialLocalFrameRate: ._48,
 								  syncPolicy: .init(lockFrames: 20,
 													dropOutFrames: 22))
 		
@@ -87,7 +87,7 @@ extension MIDIKitSyncTests {
 		// (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
 		
 		// init with local frame rate
-		let mtcRec = MTC.Receiver(name: "test", localFrameRate: ._24)
+		let mtcRec = MTC.Receiver(name: "test", initialLocalFrameRate: ._24)
 		
 		// 01:02:03:04 @ MTC 24fps
 		mtcRec.midiIn(data: kRawMIDI.MTC_FullFrame._01_02_03_04_at_24fps)
@@ -105,7 +105,7 @@ extension MIDIKitSyncTests {
 		mtcRec.midiIn(data: kRawMIDI.MTC_FullFrame._02_11_17_20_at_25fps)
 		XCTWait(sec: 0.050)
 		XCTAssertEqual(mtcRec.timecode,
-					   TCC(h: 2, m: 11, s: 17, f: 19).toTimecode(at: ._24)!) // local real rate still 24fps
+					   TCC(h: 2, m: 11, s: 17, f: 20).toTimecode(at: ._25)!) // local real rate still 24fps
 		
 		mtcRec.localFrameRate = ._25 // sync
 		
@@ -119,23 +119,24 @@ extension MIDIKitSyncTests {
 	
 	func testMTC_Receiver_InternalState_FullFrameMessage_IncompatibleFrameRate() {
 		
-		// test state becoming incompatibleFrameRate when localFrameRate is present but not compatible with the MTC frame rate being received by the receiver
+		// test state does not become .incompatibleFrameRate when localFrameRate is present but not compatible with the MTC frame rate being received by the receiver
 		
 		// (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
 		
 		// init with local frame rate
-		let mtcRec = MTC.Receiver(name: "test", localFrameRate: ._29_97)
+		let mtcRec = MTC.Receiver(name: "test", initialLocalFrameRate: ._29_97)
 		
 		// 01:02:03:04 @ MTC 24fps
 		mtcRec.midiIn(data: kRawMIDI.MTC_FullFrame._01_02_03_04_at_24fps)
 		XCTWait(sec: 0.050)
 		
-		// state changes
-		XCTAssertEqual(mtcRec.state, .incompatibleFrameRate)
+		// state should not change to .incompatibleFrameRate for full frame messages, only quarter frames
+		XCTAssertEqual(mtcRec.state, .idle)
 		
-		// timecode remains unchaged
+		// timecode remains unchanged
+		XCTAssertEqual(mtcRec.timecode.frameRate, ._29_97)
 		XCTAssertEqual(mtcRec.timecode,
-					   TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(at: ._30)!) // default MTC-30fps
+					   TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(at: ._29_97)!) // default MTC-30fps
 		
 	}
 	
@@ -146,7 +147,7 @@ extension MIDIKitSyncTests {
 		// (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
 		
 		// init with local frame rate
-		let mtcRec = MTC.Receiver(name: "test", localFrameRate: ._24)
+		let mtcRec = MTC.Receiver(name: "test", initialLocalFrameRate: ._24)
 		
 		XCTAssertEqual(mtcRec.state, .idle)
 		
@@ -170,20 +171,33 @@ extension MIDIKitSyncTests {
 		XCTWait(sec: 0.0103) // approx time between QFs @ 24fps
 		mtcRec.midiIn(data: [0xF1, 0b0000_1000]) // QF 0
 		
-		XCTWait(sec: 0.050)
+		let waitTime = 0.005
+		XCTWait(sec: waitTime)
 		
 		XCTAssertEqual(mtcRec.timecode,
 					   TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!)
 		
-		#warning("> this needs updating once code is implemented")
+		let preSyncFrames = Timecode(wrapping: TCC(f: mtcRec.syncPolicy.lockFrames),
+									 at: ._24)
+		let prerollDuration = Int(preSyncFrames.realTimeValue.ms * 1_000) // microseconds
 		
-		let futureTime: UInt64 = 1 // ***** change this
+		let now = DispatchTime.now() // same as DispatchTime(rawValue: mach_absolute_time())
+		let durationUntilLock = DispatchTimeInterval.microseconds(prerollDuration)
+		let futureTime = now + durationUntilLock
 		
-		let futureTC = TCC(h: 2, m: 3, s: 4, f: 6).toTimecode(at: ._24)!
-			.adding(wrapping: TCC(f: mtcRec.syncPolicy.lockFrames))
+		let lockTimecode = TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!
+			.advanced(by: mtcRec.syncPolicy.lockFrames)
 		
-//		XCTAssertEqual(mtcRec.state, .preroll(predictedLockTime: futureTime,
-//											  lockTimecode: futureTC))
+		guard case .preSync(predictedLockTime: let preSyncLockTime,
+							lockTimecode: let preSyncTimecode) = mtcRec.state else {
+			XCTFail("Expected receiver state is preSync, but is a different state.")
+			return
+		}
+		
+		XCTAssertEqual((preSyncLockTime.rawValue.double/10e8) + waitTime,
+					   futureTime.rawValue.double/10e8, accuracy: 0.0002)
+		
+		XCTAssertEqual(preSyncTimecode, lockTimecode)
 		
 	}
 	
@@ -203,7 +217,7 @@ extension MIDIKitSyncTests {
 		var _state: MTC.Receiver.State?
 		
 		// init with local frame rate
-		let mtcRec = MTC.Receiver(name: "test", localFrameRate: ._24)
+		let mtcRec = MTC.Receiver(name: "test", initialLocalFrameRate: ._24)
 		{ timecode, messageType, direction, displayNeedsUpdate in
 			_timecode = timecode
 			_mType = messageType
@@ -252,7 +266,7 @@ extension MIDIKitSyncTests {
 		var _state: MTC.Receiver.State?
 		
 		// init with local frame rate
-		let mtcRec = MTC.Receiver(name: "test", localFrameRate: ._24)
+		let mtcRec = MTC.Receiver(name: "test", initialLocalFrameRate: ._24)
 		{ timecode, messageType, direction, displayNeedsUpdate in
 			_timecode = timecode
 			_mType = messageType

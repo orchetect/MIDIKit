@@ -28,7 +28,7 @@ extension MTC.MTCFrameRate {
 	/// Useful for internal calculations.
 	///
 	/// To get all timecode frame rates that are compatible, use `derivedFrameRates` instead.
-	public var directEquivalentFrameRate: Timecode.FrameRate {
+	@inline(__always) public var directEquivalentFrameRate: Timecode.FrameRate {
 		
 		switch self {
 		case .mtc24:	return ._24
@@ -44,7 +44,7 @@ extension MTC.MTCFrameRate {
 extension Timecode.FrameRate {
 	
 	/// Returns the base MTC frame rate that DAWs use to transmit timecode (scaling frame number if necessary)
-	public var mtcFrameRate: MTC.MTCFrameRate {
+	@inline(__always) public var mtcFrameRate: MTC.MTCFrameRate {
 		
 		switch self {
 		case ._23_976:		return .mtc24
@@ -72,9 +72,9 @@ extension Timecode.FrameRate {
 	}
 	
 	/// Returns true if the timecode frame rate is derived from the MTC frame rate.
-	public func transmitsMTC(using MTCFrameRate: MTC.MTCFrameRate) -> Bool {
+	@inlinable public func transmitsMTC(using mtcFrameRate: MTC.MTCFrameRate) -> Bool {
 		
-		mtcFrameRate == MTCFrameRate
+		self.mtcFrameRate == mtcFrameRate
 		
 	}
 	
@@ -85,9 +85,13 @@ extension Timecode.FrameRate {
 
 extension MTC.MTCFrameRate {
 	
-	/// Scales MTC frames at `self` MTC base rate to actual frames at real timecode frame rate. A `Double` is returned with the integer part representing frame number and the fractional part representing the fraction of the frame derived from quarter-frames.
+	/// Scales MTC frames at `self` MTC base rate to actual frames at real timecode frame rate.
 	///
-	/// - note: This is a specialized calculation, and is intended to act upon raw MTC frames as decoded from quarter-frame messages; not intended to be a generalized scale function.
+	/// A `Double` is returned with the integer part representing frame number and the fractional part representing the fraction of the frame derived from quarter-frames.
+	///
+	/// - Note: This is a specialized calculation, and is intended to act upon raw MTC frames as decoded from quarter-frame messages; not intended to be a generalized scale function.
+	///
+	/// This is a double-duty function which first checks frame rate compatibility (and returns `nil` if rates are not H:MM:SS stable), then returns the scaled frames value if they are compatible.
 	///
 	/// - Parameters:
 	///   - fromRawMTCFrames: raw MTC frame number, as decoded from quarter-frame messages
@@ -98,9 +102,8 @@ extension MTC.MTCFrameRate {
 							   quarterFrames: UInt8,
 							   to timecodeRate: Timecode.FrameRate) -> Double? {
 		
-		// baseline check
-		// if frame rates are not compatible, frame value scaling is not possible
-		guard self.directEquivalentFrameRate.isCompatible(with: timecodeRate) else {
+		// if real timecode frame rates are not compatible (H:MM:SS stable), frame value scaling is not possible
+		guard self.derivedFrameRates.contains(timecodeRate) else {
 			return nil
 		}
 		
@@ -110,7 +113,9 @@ extension MTC.MTCFrameRate {
 		
 		// baseline check: if MTC frame rate is exactly equivalent to resultant timecode frame rate, skip the scale math
 		if self.directEquivalentFrameRate == timecodeRate {
-			return Double(rawMTCFrames) + (Double(quarterFrames) * 0.25)
+			return quarterFrames == 0
+				? Double(rawMTCFrames)
+				: Double(rawMTCFrames) + (Double(quarterFrames) * 0.25)
 		}
 		
 		// denominators

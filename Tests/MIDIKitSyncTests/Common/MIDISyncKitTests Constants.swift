@@ -69,7 +69,7 @@ extension MIDIKitSyncTests.kRawMIDI {
 		static var _02_11_17_20_at_25fps: [Byte] {
 			var msg: [Byte]
 			
-			let hh: Byte = 0b00100010 // 25fps, 1 hours
+			let hh: Byte = 0b00100010 // 25fps, 2 hours
 			let mm: Byte = 11
 			let ss: Byte = 17
 			let ff: Byte = 20

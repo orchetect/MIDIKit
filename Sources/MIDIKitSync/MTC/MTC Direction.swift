@@ -29,7 +29,7 @@ extension MTC.Direction {
 	/// - Parameters:
 	///   - previousQF: the last quarter-frame received
 	///   - newQF: the current quarter-frame received
-	public init?(previousQF: UInt8, newQF: UInt8) {
+	@inline(__always) public init?(previousQF: UInt8, newQF: UInt8) {
 		
 		// sanity check: bounds
 		if previousQF > 0b111 || newQF > 0b111 {
