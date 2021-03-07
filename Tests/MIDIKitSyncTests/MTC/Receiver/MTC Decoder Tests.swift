@@ -35,7 +35,7 @@ extension MIDIKitSyncTests {
 	
 	func testMTC_Decoder_Init_Arguments() {
 		
-		let mtcDec = MTC.Decoder(localFrameRate: ._29_97)
+		let mtcDec = MTC.Decoder(initialLocalFrameRate: ._29_97)
 		
 		XCTAssertEqual(mtcDec.localFrameRate, ._29_97)
 		
