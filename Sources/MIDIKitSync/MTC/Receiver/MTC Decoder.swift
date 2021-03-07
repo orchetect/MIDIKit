@@ -137,16 +137,18 @@ extension MTC {
 		
 		// MARK: - init
 		
-		public init(localFrameRate: Timecode.FrameRate? = nil,
-					timecodeChanged: ((_ timecode: Timecode,
-									   _ event: MessageType,
-									   _ direction: Direction,
-									   _ displayNeedsUpdate: Bool) -> Void)? = nil,
-					mtcFrameRateChanged: ((_ rate: MTCFrameRate) -> Void)? = nil) {
+		public init(
+			initialLocalFrameRate: Timecode.FrameRate? = nil,
+			timecodeChanged: ((_ timecode: Timecode,
+							   _ event: MessageType,
+							   _ direction: Direction,
+							   _ displayNeedsUpdate: Bool) -> Void)? = nil,
+			mtcFrameRateChanged: ((_ rate: MTCFrameRate) -> Void)? = nil
+		) {
 			
 			// assign properties
 			
-			self.localFrameRate = localFrameRate
+			localFrameRate = initialLocalFrameRate
 			
 			// handlers
 			

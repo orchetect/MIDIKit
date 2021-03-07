@@ -5,7 +5,7 @@
 //  Created by Steffan Andrews on 2020-11-25.
 //
 
-import Dispatch
+import Foundation
 @_implementationOnly import OTCore
 import TimecodeKit
 
@@ -15,14 +15,14 @@ extension MTC {
 	
 	/// MTC sync receiver wrapper for `MTC.Decoder`.
 	///
-	/// - note: Note the following:
+	/// - Note: Note the following:
 	/// - A running MTC data stream (during playback) only updates the frame number every 2 frames, so this data stream should not be relied on for deriving exact frame position, but rather as a mechanism for displaying running timecode to the user on screen or synchronizing playback to the incoming MTC data stream.
 	/// - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate timecodes when scrubbing or locating to different times.
 	public class Receiver {
 		
 		// MARK: - Public properties
 		
-		public private(set) var name: String = "default"
+		public private(set) var name: String
 		
 		@Atomic public private(set) var state: State = .idle {
 			didSet {
@@ -47,6 +47,13 @@ extension MTC {
 			set {
 				decoder.localFrameRate = newValue
 			}
+		}
+		
+		/// The SMPTE frame rate (24, 25, 29.97d, or 30) that was last received by the receiver.
+		/// 
+		/// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the `localFrameRate` property is used for automatic validation and scaling of incoming timecode.
+		public var mtcFrameRate: MTC.MTCFrameRate {
+			decoder.mtcFrameRate
 		}
 		
 		/// Status of the direction of MTC quarter-frames received
@@ -94,14 +101,15 @@ extension MTC {
 		// MARK: - Init
 		
 		/// Initialize a new MTC Receiver instance.
+		///
 		/// - Parameters:
-		///   - name: simple, unique alphanumeric name for the instance
-		///   - localFrameRate: set an initial local frame rate
+		///   - name: optionally supply a simple, unique alphanumeric name for the instance, used internally to identify the dispatch thread; random UUID will be used if `nil`
+		///   - initialLocalFrameRate: set an initial local frame rate
 		///   - syncPolicy: set the MTC sync policy
-		///   - timecodeChanged: handle timecode change callbacks
-		///   - stateChanged: handle receiver state change callbacks
-		public init(name: String,
-					localFrameRate: Timecode.FrameRate? = nil,
+		///   - timecodeChanged: handle timecode change callbacks, pass `nil` if not needed
+		///   - stateChanged: handle receiver state change callbacks, pass `nil` if not needed
+		public init(name: String? = nil,
+					initialLocalFrameRate: Timecode.FrameRate? = nil,
 					syncPolicy: SyncPolicy? = nil,
 					timecodeChanged: ((_ timecode: Timecode,
 									   _ event: MTC.MessageType,
@@ -111,9 +119,11 @@ extension MTC {
 			
 			// handle init arguments
 			
+			let name = name ?? UUID().uuidString
+			
 			self.name = name
 			
-			timecode = Timecode(at: localFrameRate ?? ._30)
+			timecode = Timecode(at: initialLocalFrameRate ?? ._30)
 			
 			if let syncPolicy = syncPolicy {
 				self.syncPolicy = syncPolicy
@@ -145,7 +155,7 @@ extension MTC {
 			
 			// decoder setup
 			
-			decoder = Decoder(localFrameRate: localFrameRate)
+			decoder = Decoder(initialLocalFrameRate: initialLocalFrameRate)
 			
 			decoder.setTimecodeChangedHandler { timecode,
 												messageType,
@@ -159,7 +169,8 @@ extension MTC {
 				
 			}
 			
-			self.localFrameRate = localFrameRate // updates decoder's localFrameRate
+			// updates decoder's localFrameRate if not already updated
+			localFrameRate = initialLocalFrameRate
 			
 			// store handler closures
 			
@@ -264,25 +275,34 @@ extension MTC.Receiver {
 									direction: MTC.Direction,
 									displayNeedsUpdate: Bool) {
 		
-		// assess if MTC frame rate and local frame rate are compatible with each other
-		if let localFrameRate = localFrameRate,
-			  !incomingTC.frameRate.isCompatible(with: localFrameRate) {
-			
-		 	state = .incompatibleFrameRate
-		 	return
-			
-		 }
+		// determine frame rate compatibility
+		var frameRateIsCompatible = true
 		
-		// MTC full frames are not related to sync; ignore here
+		if let localFrameRate = localFrameRate,
+		   !incomingTC.frameRate.isCompatible(with: localFrameRate) {
+			frameRateIsCompatible = false
+		}
+		
+		if event == .fullFrame,
+		   !frameRateIsCompatible {
+			return
+		}
 		
 		if event == .quarterFrame {
+			
+			// assess if MTC frame rate and local frame rate are compatible with each other
+			if !frameRateIsCompatible {
+				state = .incompatibleFrameRate
+			} else if state == .incompatibleFrameRate {
+				state = .freewheeling
+			}
 			
 			// log quarter-frame timestamp
 			let timeNow = clock_gettime_monotonic_raw()
 			timeLastQuarterFrameReceived = timeNow
 			
 			// update state
-			if state == .idle || state == .incompatibleFrameRate {
+			if state == .idle {
 				state = .freewheeling
 			}
 			
