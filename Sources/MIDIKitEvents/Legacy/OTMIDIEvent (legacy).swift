@@ -2,6 +2,8 @@
 //  OTMIDIEvent (legacy).swift
 //  MIDIKit (legacy)
 //
+//  Created by Steffan Andrews on 2016-08-22.
+//
 
 import Foundation
 import CoreMIDI
