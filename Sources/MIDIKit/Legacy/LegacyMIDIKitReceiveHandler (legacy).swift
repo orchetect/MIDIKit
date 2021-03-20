@@ -10,6 +10,7 @@ import CoreMIDI
 // MARK: - LegacyMIDIKitReceiveHandler
 
 /// MIDI packet data receive handler that stores an `MIDIListener` class.
+/// **(⚠️ Legacy: will be replaced in a future version of MIDIKit.)**
 public struct LegacyMIDIKitReceiveHandler: MIDIIOReceiveHandler {
 	
 	public var midiListener: MIDIListener
