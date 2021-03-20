@@ -31,11 +31,11 @@ public protocol MIDIListener {
 	
 }
 
-// Default implementation
+// MARK: - Default implementation
 
 extension MIDIListener {
 	
-	func receivedRawData(_ data: MIDIPacketData) {
+	public func receivedRawData(_ data: MIDIPacketData) {
 		
 		for event in data.makeEventIterator() {
 			switch event.status {
@@ -59,7 +59,7 @@ extension MIDIListener {
 				}
 				
 			case .systemCommand:
-				receivedMIDISystemCommand(data: event.rawData)
+				receivedMIDISystemCommand(data: event.rawBytes)
 			
 			default: break
 			}
@@ -67,9 +67,20 @@ extension MIDIListener {
 		
 	}
 	
-	func receivedMIDINoteOn(note: Int, velocity: Int, channel: Int) { }
-	func receivedMIDINoteOff(note: Int, velocity: Int, channel: Int) { }
-	func receivedMIDIController(controller: Int, value: Int, channel: Int) { }
-	func receivedMIDISystemCommand(data: [Byte]) { }
+	public func receivedMIDINoteOn(note: Int, velocity: Int, channel: Int) {
+		// default: do nothing
+	}
+	
+	public func receivedMIDINoteOff(note: Int, velocity: Int, channel: Int) {
+		// default: do nothing
+	}
+	
+	public func receivedMIDIController(controller: Int, value: Int, channel: Int) {
+		// default: do nothing
+	}
+	
+	public func receivedMIDISystemCommand(data: [Byte]) {
+		// default: do nothing
+	}
 	
 }

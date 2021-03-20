@@ -34,10 +34,12 @@ public enum OTMIDIStatus: UInt8 {
 	
 	/// Returns whether the status type implicitly has a channel number associated with the status byte.
 	public var hasAssociatedChannel: Bool {
+		
 		switch self {
 		case .systemCommand: return false
 		default: return true
 		}
+		
 	}
 	
 }

@@ -17,44 +17,44 @@ public struct OTMIDIEvent {
 	// MARK: - Properties
 	
 	/// Raw MIDI event data bytes
-	public var rawData = [UInt8]()
+	public var rawBytes: [UInt8] = []
 	
 	/// Status nibble
 	public var status: OTMIDIStatus? {
-		guard rawData.count > 0 else { return nil }
+		guard rawBytes.count > 0 else { return nil }
 		
-		let statusNibble = rawData[0] >> 4
+		let statusNibble = rawBytes[0] >> 4
 		return OTMIDIStatus(rawValue: statusNibble)
 	}
 	
 	/// Returns System Command message type if it matches a valid command message, otherwise returns nil
 	public var command: OTMIDISystemCommand? {
-		guard rawData.count > 0 else { return nil }
+		guard rawBytes.count > 0 else { return nil }
 		
-		return OTMIDISystemCommand(rawValue: rawData[0])
+		return OTMIDISystemCommand(rawValue: rawBytes[0])
 	}
 	
 	/// Returns MIDI Channel of `rawData`
 	public var channel: UInt8? {
-		guard rawData.count > 0 else { return nil }
+		guard rawBytes.count > 0 else { return nil }
 		
 		// return nil if message type does not contain channel information
 		if let getStatus = status {
 			if !getStatus.hasAssociatedChannel { return nil }
 		}
-		return rawData[0] & 0x0F
+		return rawBytes[0] & 0x0F
 	}
 	
 	/// Returns data1 byte from `rawData`
 	public var data1: UInt8? {
-		guard rawData.count > 1 else { return nil }
-		return rawData[1]
+		guard rawBytes.count > 1 else { return nil }
+		return rawBytes[1]
 	}
 	
 	/// Returns data2 byte from `rawData`
 	public var data2: UInt8? {
-		guard rawData.count > 2 else { return nil }
-		return rawData[2]
+		guard rawBytes.count > 2 else { return nil }
+		return rawBytes[2]
 	}
 	
 	/// Computes 14-bit value of data1 and data2 bytes from `rawData`
@@ -67,8 +67,8 @@ public struct OTMIDIEvent {
 	}
 	
 	/// Returns `rawData` as Data
-	var rawDataBytes: Data {
-		Data(rawData)
+	public var rawData: Data {
+		Data(rawBytes)
 	}
 	
 	static private let statusBitMask:	UInt8 = 0b10000000
@@ -104,7 +104,7 @@ public struct OTMIDIEvent {
 			
 			// first check if it's sysex
 			if isSysEx(data: data) {
-				rawData = [] // empty internalData because we're going to start filling it
+				rawBytes = [] // empty internalData because we're going to start filling it
 				//voodoo
 				let mirrorData = Mirror(reflecting: data) // packet.data ???
 				for (_, value) in mirrorData.children {
@@ -113,7 +113,7 @@ public struct OTMIDIEvent {
 						Log.error("OTMIDI: OTMIDIEvent init error: Could not cast value packet data '\(value)' to UInt8. Aborting init.")
 						return nil
 					}
-					rawData.append(val)
+					rawBytes.append(val)
 					if val == OTMIDISystemCommand.sysExEnd.rawValue {
 						break // we're done - end of sysex block
 					}
@@ -143,7 +143,7 @@ public struct OTMIDIEvent {
 	/// Initialize the MIDI Event with internalData populated by the raw contents of a MIDIPacket
 	/// - parameter rawPacket: MIDIPacket
 	init(rawData: [UInt8]) {
-		self.rawData = rawData
+		self.rawBytes = rawData
 	}
 	
 	/// Initialize the MIDI Event from a status message
@@ -157,10 +157,10 @@ public struct OTMIDIEvent {
 	
 	/// Internal use.
 	private mutating func fillWithStatus(status: OTMIDIStatus, channel: UInt8, byte1: UInt8? = nil, byte2: UInt8? = nil) {
-		rawData.removeAll()
-		rawData.append(UInt8(status.rawValue << 4) | UInt8((channel) & 0xf))
-		if let getByte1 = byte1 { rawData.append(getByte1 & 0x7F) }
-		if let getByte2 = byte2 { rawData.append(getByte2 & 0x7F) }
+		rawBytes.removeAll()
+		rawBytes.append(UInt8(status.rawValue << 4) | UInt8((channel) & 0xf))
+		if let getByte1 = byte1 { rawBytes.append(getByte1 & 0x7F) }
+		if let getByte2 = byte2 { rawBytes.append(getByte2 & 0x7F) }
 	}
 	
 	/// Initialize the MIDI Event from a system command message
@@ -173,10 +173,10 @@ public struct OTMIDIEvent {
 	
 	/// Internal use.
 	private mutating func fillWithCommand(command: OTMIDISystemCommand, byte1: UInt8? = nil, byte2: UInt8? = nil) {
-		rawData.removeAll()
-		rawData.append(command.rawValue)
-		if let getByte1 = byte1 { rawData.append(getByte1 & 0x7F) }
-		if let getByte2 = byte2 { rawData.append(getByte2 & 0x7F) }
+		rawBytes.removeAll()
+		rawBytes.append(command.rawValue)
+		if let getByte1 = byte1 { rawBytes.append(getByte1 & 0x7F) }
+		if let getByte2 = byte2 { rawBytes.append(getByte2 & 0x7F) }
 	}
 	
 	// MARK: - ancillary functions

@@ -15,7 +15,8 @@ public struct LegacyMIDIKitReceiveHandler: MIDIIOReceiveHandler {
 	
 	public var midiListener: MIDIListener
 	
-	@inline(__always) public func midiReadBlock(
+	@inline(__always)
+	public func midiReadBlock(
 		_ packetListPtr: UnsafePointer<MIDIPacketList>,
 		_ srcConnRefCon: UnsafeMutableRawPointer?
 	) {

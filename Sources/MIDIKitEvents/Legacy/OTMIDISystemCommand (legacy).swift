@@ -46,9 +46,9 @@ public enum OTMIDISystemCommand: UInt8 {
 	
 }
 
-extension OTMIDISystemCommand {
+extension OTMIDISystemCommand: CustomStringConvertible {
 	
-	var descriptionString: String {
+	public var description: String {
 		
 		switch self {
 		case .sysExStart:			return "SysEx Start"

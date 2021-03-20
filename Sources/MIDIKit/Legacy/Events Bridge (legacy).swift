@@ -12,7 +12,7 @@ extension MIDIIOSendsMIDIMessages {
 	
 	/// Send a note-on event.
 	/// **(⚠️ Legacy: will be replaced in a future version of MIDIKit.)**
-	func send(noteOn: Int,
+	public func send(noteOn: Int,
 			  velocity: Int,
 			  channel: Int) {
 		
@@ -21,7 +21,7 @@ extension MIDIIOSendsMIDIMessages {
 				note: noteOn.clamped(to: 0...127).uint8,
 				velocity: velocity.clamped(to: 0...127).uint8,
 				channel: channel.clamped(to: 0...15).uint8)
-			.rawData
+			.rawBytes
 		
 		_ = try? send(rawMessage: bytes)
 		
@@ -29,7 +29,7 @@ extension MIDIIOSendsMIDIMessages {
 	
 	/// Send a note-off event.
 	/// **(⚠️ Legacy: will be replaced in a future version of MIDIKit.)**
-	func send(noteOff: Int,
+	public func send(noteOff: Int,
 			  velocity: Int,
 			  channel: Int,
 			  useNoteOnZero: Bool = true) {
@@ -40,7 +40,7 @@ extension MIDIIOSendsMIDIMessages {
 					note: noteOff.clamped(to: 0...127).uint8,
 					velocity: 0,
 					channel: channel.clamped(to: 0...15).uint8)
-				.rawData
+				.rawBytes
 			
 			_ = try? send(rawMessage: bytes)
 		} else {
@@ -49,7 +49,7 @@ extension MIDIIOSendsMIDIMessages {
 					note: noteOff.clamped(to: 0...127).uint8,
 					velocity: velocity.clamped(to: 0...127).uint8,
 					channel: channel.clamped(to: 0...15).uint8)
-				.rawData
+				.rawBytes
 			
 			_ = try? send(rawMessage: bytes)
 		}
@@ -58,7 +58,7 @@ extension MIDIIOSendsMIDIMessages {
 	
 	/// Send a controller change (CC) event.
 	/// **(⚠️ Legacy: will be replaced in a future version of MIDIKit.)**
-	func send(controllerChange: Int,
+	public func send(controllerChange: Int,
 			  value: Int,
 			  channel: Int) {
 		
@@ -68,7 +68,7 @@ extension MIDIIOSendsMIDIMessages {
 				value: value.clamped(to: 0...127).uint8,
 				channel: channel.clamped(to: 0...15).uint8
 			)
-			.rawData
+			.rawBytes
 		
 		_ = try? send(rawMessage: bytes)
 		
@@ -76,14 +76,14 @@ extension MIDIIOSendsMIDIMessages {
 	
 	/// Send a program change event.
 	/// **(⚠️ Legacy: will be replaced in a future version of MIDIKit.)**
-	func send(programChange: Int,
+	public func send(programChange: Int,
 			  channel: Int) {
 		
 		let bytes =
 			OTMIDIEvent.eventWithProgramChange(
 				program: programChange.clamped(to: 0...127).uint8,
 				channel: channel.clamped(to: 0...15).uint8)
-			.rawData
+			.rawBytes
 		
 		_ = try? send(rawMessage: bytes)
 		
@@ -91,14 +91,14 @@ extension MIDIIOSendsMIDIMessages {
 	
 	/// Send a channel pressure event.
 	/// **(⚠️ Legacy: will be replaced in a future version of MIDIKit.)**
-	func send(channelPressure: Int,
+	public func send(channelPressure: Int,
 			  channel: Int) {
 		
 		let bytes =
 			OTMIDIEvent.eventWithPressure(
 				pressure: channelPressure.clamped(to: 0...127).uint8,
 				channel: channel.clamped(to: 0...15).uint8)
-			.rawData
+			.rawBytes
 		
 		_ = try? send(rawMessage: bytes)
 		
