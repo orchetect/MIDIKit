@@ -41,7 +41,7 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 		
 		/// Initialize the packet list generator with a packet list
 		/// - parameter packetList: MIDI Packet List
-		@inline(__always) init(_ packetListPtr: UnsafePointer<MIDIPacketList>) {
+		@inline(__always) public init(_ packetListPtr: UnsafePointer<MIDIPacketList>) {
 			
 			CPacketListIterate(packetListPtr) {
 				guard let unwrappedPtr = $0 else { return }
