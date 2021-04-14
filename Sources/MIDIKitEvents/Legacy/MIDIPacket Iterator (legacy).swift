@@ -6,22 +6,22 @@
 import CoreMIDI
 @_implementationOnly import OTCore
 
-extension MIDIPacket: Sequence {
+extension MIDIPacketData: Sequence {
 	
 	/// **(⚠️ Legacy: will be replaced in a future version of MIDIKit.)**
 	public func makeIterator() -> AnyIterator<OTMIDIEvent> {
 		
-		let generator = MIDIPacketData(self).makeIterator()
+		var generator = data.makeIterator()
 		var index: UInt16 = 0
 		
 		return AnyIterator {
 			
-			if index >= self.length {
+			if index >= data.count {
 				return nil
 			}
 			
 			func pop() -> UInt8 {
-				assert(index < self.length)
+				assert(index < data.count)
 				index += 1
 				if let ret = generator.next() { return ret }
 				return 0 // this isn't right, but can help avoid a crash
@@ -61,9 +61,9 @@ extension MIDIPacket: Sequence {
 			} else if status == OTMIDISystemCommand.sysExStart.rawValue {
 				
 				// SysEx: CoreMIDI guarantees them to be the only event in the packet
-				index = self.length
+				index = data.count.uint16
 				
-				return OTMIDIEvent(packet: self)
+				return OTMIDIEvent(data: data)
 				
 			} else {
 				

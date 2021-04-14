@@ -78,26 +78,29 @@ public struct OTMIDIEvent {
 	
 	// MARK: - Initialization
 	
-	/// Initialize the MIDI Event from a `MIDIPacket`
-	/// - parameter packet: MIDIPacket
-	init?(packet: MIDIPacket) {
-		self.init(data: packet.data)
-	}
-	
-	/// Initialize the MIDI Event from `MIDIPacketRawData` (aka `MIDIPacket.data`)
-	/// - parameter data: MIDIPacket.data
-	init?(data: MIDIPacketRawData) {
+	/// Initialize the MIDI Event from raw `Data`
+	/// - parameter data: MIDI event raw data bytes
+	init?(data: Data) {
+		
+		guard data.count > 0 else { return nil }
+		
+		let data0 = data[0]
+		
 		// not a system command; system commands require a status nibble
-		if data.0 <= 0xF {
+		if data0 <= 0xF {
 			// fail if status is not valid
-			guard let status = OTMIDIStatus(rawValue: data.0 >> 4) else {
-				Log.error("OTMIDI: OTMIDIEvent init error: Could not look up OTMIDIStatus rawValue from packet byte 0: \(data.0.hex.stringValue). Aborting init.")
+			guard let status = OTMIDIStatus(rawValue: data0 >> 4) else {
+				Log.error("OTMIDI: OTMIDIEvent init error: Could not look up OTMIDIStatus rawValue from packet byte 0: \(data0.hex.stringValue). Aborting init.")
 				return nil
 				// ***** provide default packet contents here?
 			}
-			let channel = UInt8(data.0 & 0xF)
-			fillWithStatus(status: status, channel: channel, byte1: data.1, byte2: data.2)
+			let channel = UInt8(data0 & 0xF)
 			
+			guard data.count >= 3 else { return nil }
+			let data1 = data[1]
+			let data2 = data[2]
+			
+			fillWithStatus(status: status, channel: channel, byte1: data1, byte2: data2)
 			
 		} else {
 			// probably a system command
@@ -121,15 +124,19 @@ public struct OTMIDIEvent {
 				
 			// otherwise, probably another system command
 			} else {
-				guard let cmd = OTMIDISystemCommand(rawValue: data.0) else {
-					Log.error("OTMIDI: OTMIDIEvent init error: Could not look up OTMIDISystemCommand rawValue from packet byte 0: \(data.0.hex.stringValue). Aborting init.")
+				guard let cmd = OTMIDISystemCommand(rawValue: data0) else {
+					Log.error("OTMIDI: OTMIDIEvent init error: Could not look up OTMIDISystemCommand rawValue from packet byte 0: \(data0.hex.stringValue). Aborting init.")
 					return nil
 				}
 				
+				guard data.count >= 3 else { return nil }
+				let data1 = data[1]
+				let data2 = data[2]
+				
 				fillWithCommand(
 					command: cmd,
-					byte1: data.1,
-					byte2: data.2)
+					byte1: data1,
+					byte2: data2)
 			}
 		}
 	}
@@ -137,7 +144,7 @@ public struct OTMIDIEvent {
 	/// Initialize the MIDI Event from `MIDIPacketData`
 	/// - parameter data: MIDIPacketData
 	init?(data: MIDIPacketData) {
-		self.init(data: data.rawData)
+		self.init(data: data.data)
 	}
 	
 	/// Initialize the MIDI Event with internalData populated by the raw contents of a MIDIPacket
@@ -205,13 +212,8 @@ public struct OTMIDIEvent {
 	}
 	
 	/// Returns true if first byte is a SysEx start byte
-	private func isSysEx(packet: MIDIPacket) -> Bool {
-		isSysEx(data: packet.data)
-	}
-	
-	/// Returns true if first byte is a SysEx start byte
-	private func isSysEx(data: MIDIPacketRawData) -> Bool {
-		data.0 == OTMIDISystemCommand.sysExStart.rawValue
+	private func isSysEx(data: Data) -> Bool {
+		data.first == OTMIDISystemCommand.sysExStart.rawValue
 	}
 	
 }

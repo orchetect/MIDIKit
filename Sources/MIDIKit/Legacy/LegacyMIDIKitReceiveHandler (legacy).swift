@@ -21,10 +21,9 @@ public struct LegacyMIDIKitReceiveHandler: MIDIIOReceiveHandler {
 		_ srcConnRefCon: UnsafeMutableRawPointer?
 	) {
 		
-		packetListPtr.pointee
-			.forEach {
-				midiListener.receivedRawData($0.packetData)
-			}
+		packetListPtr.forEach {
+			midiListener.receivedRawData($0)
+		}
 		
 	}
 	
