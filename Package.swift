@@ -64,6 +64,7 @@ let package = Package(
 			name: "MIDIKit",
 			dependencies: [
 				.target(name: "MIDIKitCommon"),
+				.target(name: "MIDIKitC"),
 				.target(name: "MIDIKitIO"),
 				.target(name: "MIDIKitEvents"),
 				.target(name: "MIDIKitSync"),
@@ -79,6 +80,7 @@ let package = Package(
 			name: "MIDIKitIO",
 			dependencies: [
 				.target(name: "MIDIKitCommon"),
+				.target(name: "MIDIKitC"),
 				.product(name: "OTCore", package: "OTCore"),
 				.product(name: "SwiftRadix", package: "SwiftRadix")
 			]
@@ -115,6 +117,18 @@ let package = Package(
 			dependencies: [
 				.product(name: "OTCore", package: "OTCore"),
 				.product(name: "OTCore-Testing", package: "OTCore")
+			]
+		),
+		
+		// MIDIKit common
+		.target(
+			name: "MIDIKitC",
+			dependencies: [
+				// none
+			],
+			publicHeadersPath: ".",
+			cxxSettings: [
+				.headerSearchPath(".")
 			]
 		),
 		

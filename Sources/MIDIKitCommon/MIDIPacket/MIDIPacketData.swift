@@ -7,67 +7,25 @@
 
 import CoreMIDI
 
-/// Type that can iterate on raw `MIDIPacket.data` (aka `MIDIPacketRawData`)
-public struct MIDIPacketData: Sequence {
+/// Clean data encapsulation of a `MIDIPacket`.
+public struct MIDIPacketData {
 	
-	public typealias Element = Byte
+	/// Raw data
+	@inline(__always) public var data: Data
 	
-	public var rawData: MIDIPacketRawData
+	@inline(__always) public var timeStamp: MIDITimeStamp
 	
-	public var length: Int
+	/// Returns `[Byte]` representation `.data`.
+	/// - Note: accessing `.data` property is more performant.
+	@inline(__always) public var bytes: [Byte] { [Byte](data) }
 	
-	/// Returns a [Byte] UInt8 Array of `rawData`, sized to `length`.
-	@inline(__always) public var array: [Byte] { Array(makeIterator()) }
+	@available(swift, obsoleted: 1, renamed: "bytes")
+	public var array: [Byte] { bytes }
 	
-	/// Max byte length of `MIDIPacket` data.
-	@inline(__always) public static let maxLength = MIDIPacket.rawDataTupleLength
-	
-	/// If `length` is nil, length will default to 256 bytes.
-	@inline(__always) public init(_ tuple: MIDIPacketRawData, length: Int? = nil) {
+	@inline(__always) public init(data: Data, timeStamp: MIDITimeStamp) {
 		
-		rawData = tuple
-		
-		self.length = length?
-			.clamped(to: 0...Self.maxLength)
-			?? Self.maxLength
-		
-	}
-	
-	/// If `length` is nil, length will default to 256 bytes.
-	@inline(__always) public init(_ tuple: MIDIPacketRawData, length: UInt16? = nil) {
-		
-		self.init(tuple, length: length?.int)
-		
-	}
-	
-	@inline(__always) public init(_ midiPacket: MIDIPacket) {
-		
-		self.init(midiPacket.data, length: midiPacket.length)
-		
-	}
-	
-	/// Custom iterator for `MIDIPacket`
-	@inline(__always) public func makeIterator() -> AnyIterator<Byte> {
-		
-		AnyIterator<Byte>(
-			Mirror(reflecting: rawData)
-				.children
-				.lazy
-				.prefix(length)
-				.map { $0.value as! Byte }
-				.makeIterator()
-		)
-		
-	}
-	
-}
-
-extension MIDIPacket {
-	
-	/// Converts an instance of `MIDIPacket` to `MIDIPacketData`
-	@inline(__always) public var packetData: MIDIPacketData {
-		
-		MIDIPacketData(self)
+		self.data = data
+		self.timeStamp = timeStamp
 		
 	}
 	

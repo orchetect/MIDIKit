@@ -6,45 +6,90 @@
 //
 
 import CoreMIDI
+import MIDIKitC
 
-extension MIDIPacketList {
+/// aka `UnsafePointer<MIDIPacketList>`
+/// allows iteration on the pointer directly, ie:
+///
+///     func parse(_ ptr: UnsafePointer<MIDIPacketList>) {
+///         for packet in ptr {
+///             // ...
+///         }
+///     }
+///
+extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
+	
+	public typealias Element = MIDIPacketData
+	
+	public typealias Iterator = PacketListIterator
+	
+	/// Create a generator from the packet list
+	@inline(__always) public func makeIterator() -> Iterator {
+		
+		Iterator(self)
+		
+	}
 	
 	/// Custom iterator to iterate `MIDIPacket`s within a `MIDIPacketList`.
 	public struct PacketListIterator: IteratorProtocol {
 		
-		public typealias Element = MIDIPacket
+		public typealias Element = MIDIPacketData
 		
-		var count: UInt32
-		var index: Int = 0
-		var packet: MIDIPacket
+		var index = 0
+		
+		var packets: [Element] = []
 		
 		/// Initialize the packet list generator with a packet list
 		/// - parameter packetList: MIDI Packet List
-		init(_ packetList: MIDIPacketList) {
+		@inline(__always) init(_ packetListPtr: UnsafePointer<MIDIPacketList>) {
 			
-			self.packet = packetList.packet
-			self.count = packetList.numPackets
-			
-		}
-		
-		@_optimize(none)
-		public mutating func next() -> Element? {
-			
-			// On Intel and PowerPC, MIDIPacket is unaligned.
-			// On ARM, MIDIPacket must be 4-byte aligned
-			// MIDIPacketNext(...) takes care of this.
-			
-			guard index < count else { return nil }
-			
-			if index > 0 {
-				packet = MIDIPacketNext(&packet).pointee
+			CPacketListIterate(packetListPtr) {
+				guard let unwrappedPtr = $0 else { return }
+				packets.append(stupidWorkaround(unwrappedPtr))
 			}
-			index += 1
-			
-			return packet
 			
 		}
 		
+		@inline(__always) public mutating func next() -> Element? {
+			
+			guard !packets.isEmpty else { return nil }
+			
+			guard index < packets.count else { return nil }
+			
+			defer { index += 1 }
+			
+			return packets[index]
+			
+		}
+		
+	}
+	
+	@inline(__always) fileprivate
+	static let MIDIPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
+	
+	@inline(__always) fileprivate
+	static func stupidWorkaround(_ packetPtr: UnsafePointer<MIDIPacket>) -> MIDIPacketData {
+
+		let packetDataCount = Int(packetPtr.pointee.length)
+
+		guard packetDataCount > 0 else {
+			return MIDIPacketData(
+				data: .init(),
+				timeStamp: packetPtr.pointee.timeStamp
+			)
+		}
+
+		// This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or uncommon MIDI packet lists / packets arrive
+		let rawMIDIPacketDataPtr = UnsafeRawBufferPointer(
+			start: UnsafeRawPointer(packetPtr) + MIDIPacketDataOffset,
+			count: packetDataCount
+		)
+
+		return MIDIPacketData(
+			data: Data(rawMIDIPacketDataPtr),
+			timeStamp: packetPtr.pointee.timeStamp
+		)
+
 	}
 	
 }

@@ -128,8 +128,7 @@ extension MIDIIO.ReceiveHandler {
 			_ srcConnRefCon: UnsafeMutableRawPointer?
 		) {
 			
-			packetListPtr.pointee
-				.forEach { handler($0.packetData) }
+			packetListPtr.forEach { handler($0) }
 			
 		}
 		
@@ -159,9 +158,9 @@ extension MIDIIO.ReceiveHandler {
 			_ srcConnRefCon: UnsafeMutableRawPointer?
 		) {
 			
-			for packet in packetListPtr.pointee {
+			for packet in packetListPtr {
 				
-				let bytes = packet.packetData.array
+				let bytes = packet.data
 				
 				if filterActiveSensingAndClock {
 					guard bytes.first != 0xF8, // midi clock pulse
