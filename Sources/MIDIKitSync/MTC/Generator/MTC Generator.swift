@@ -6,6 +6,7 @@
 //
 
 import Dispatch
+import MIDIKitInternals
 import TimecodeKit
 
 // NOTE!!

@@ -10,7 +10,7 @@ import Darwin
 // Derived from: https://stackoverflow.com/a/60814063/2805570
 
 /// Defines a basic signature to which all locks will conform. Provides the basis for atomic access to stuff.
-private protocol ThreadLock {
+fileprivate protocol ThreadLock {
 	
 	init()
 	
@@ -25,7 +25,7 @@ private protocol ThreadLock {
 	
 }
 
-private final class RWThreadLock: ThreadLock {
+fileprivate final class RWThreadLock: ThreadLock {
 	
 	private var lock = pthread_rwlock_t()
 	
@@ -55,9 +55,9 @@ private final class RWThreadLock: ThreadLock {
 
 /// A property wrapper that ensures atomic access to a value, meaning thread-safe with implicit serial read/write access.
 /// Multiple read accesses can potentially read at the same time, just not during a write.
-/// By using `pthread` to do the locking, this safer then using a `DispatchQueue/barrier` as there isn't a chance of priority inversion.
+/// By using `pthread` to do the locking, this safer than using a `DispatchQueue/barrier` as there isn't a chance of priority inversion.
 @propertyWrapper
-public final class Atomic<T> {
+public final class AtomicAccess<T> {
 	
 	private var value: T
 	private let lock: ThreadLock = RWThreadLock()

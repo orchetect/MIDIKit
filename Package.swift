@@ -64,6 +64,7 @@ let package = Package(
 			name: "MIDIKit",
 			dependencies: [
 				.target(name: "MIDIKitCommon"),
+				.target(name: "MIDIKitInternals"),
 				.target(name: "MIDIKitC"),
 				.target(name: "MIDIKitIO"),
 				.target(name: "MIDIKitEvents"),
@@ -80,6 +81,7 @@ let package = Package(
 			name: "MIDIKitIO",
 			dependencies: [
 				.target(name: "MIDIKitCommon"),
+				.target(name: "MIDIKitInternals"),
 				.target(name: "MIDIKitC"),
 				.product(name: "OTCore", package: "OTCore"),
 				.product(name: "SwiftRadix", package: "SwiftRadix")
@@ -91,6 +93,7 @@ let package = Package(
 			name: "MIDIKitEvents",
 			dependencies: [
 				.target(name: "MIDIKitCommon"),
+				.target(name: "MIDIKitInternals"),
 				.product(name: "OTCore", package: "OTCore"),
 				.product(name: "SwiftRadix", package: "SwiftRadix")
 			]
@@ -101,6 +104,7 @@ let package = Package(
 			name: "MIDIKitSync",
 			dependencies: [
 				.target(name: "MIDIKitCommon"),
+				.target(name: "MIDIKitInternals"),
 				.product(name: "OTCore", package: "OTCore"),
 				.product(name: "SwiftRadix", package: "SwiftRadix"),
 				.product(name: "TimecodeKit", package: "TimecodeKit")
@@ -117,6 +121,14 @@ let package = Package(
 			dependencies: [
 				.product(name: "OTCore", package: "OTCore"),
 				.product(name: "OTCore-Testing", package: "OTCore")
+			]
+		),
+		
+		// MIDIKit internals
+		.target(
+			name: "MIDIKitInternals",
+			dependencies: [
+				// none
 			]
 		),
 		
