@@ -46,7 +46,7 @@ let package = Package(
 		
 		// Boilerplate
 		.package(url: "https://github.com/orchetect/OTCore", from: "1.1.6"),
-		.package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.0"),
+		.package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.1"),
 		
 		// Timecode
 		.package(url: "https://github.com/orchetect/TimecodeKit", from: "1.0.11")
@@ -120,7 +120,7 @@ let package = Package(
 			]
 		),
 		
-		// MIDIKit common
+		// MIDIKit C functions
 		.target(
 			name: "MIDIKitC",
 			dependencies: [
