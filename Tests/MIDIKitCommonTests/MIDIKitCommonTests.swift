@@ -6,7 +6,7 @@
 #if !os(watchOS)
 
 import XCTest
-@testable import MIDIKitEvents
+@testable import MIDIKitCommon
 import MIDIKitTestsCommon
 
 final class MIDIKitCommonTests: XCTestCase {
