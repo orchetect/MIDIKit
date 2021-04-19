@@ -124,6 +124,7 @@ let package = Package(
 			]
 		),
 		
+
 		// MIDIKit internals
 		.target(
 			name: "MIDIKitInternals",
