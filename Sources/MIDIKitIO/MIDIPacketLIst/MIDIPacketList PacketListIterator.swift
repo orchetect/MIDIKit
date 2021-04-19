@@ -17,6 +17,8 @@ import MIDIKitC
 ///         }
 ///     }
 ///
+/// This must be performed on the `UnsafePointer` returned by CoreMIDI and not on `.pointee` (concrete `MIDIPacketList`) to avoid CoreMIDI-related crashes.
+/// See the workaround `safePacketUnwrapper` method for more details.
 extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 	
 	public typealias Element = MIDIPacketData
@@ -41,11 +43,14 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 		
 		/// Initialize the packet list generator with a packet list
 		/// - parameter packetList: MIDI Packet List
-		@inline(__always) init(_ packetListPtr: UnsafePointer<MIDIPacketList>) {
+		@inline(__always) public init(_ packetListPtr: UnsafePointer<MIDIPacketList>) {
+			
+			// Call custom C method wrapping MIDIPacketNext
+			// This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
 			
 			CPacketListIterate(packetListPtr) {
 				guard let unwrappedPtr = $0 else { return }
-				packets.append(stupidWorkaround(unwrappedPtr))
+				packets.append(safePacketUnwrapper(unwrappedPtr))
 			}
 			
 		}
@@ -65,10 +70,10 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 	}
 	
 	@inline(__always) fileprivate
-	static let MIDIPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
+	static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
 	
 	@inline(__always) fileprivate
-	static func stupidWorkaround(_ packetPtr: UnsafePointer<MIDIPacket>) -> MIDIPacketData {
+	static func safePacketUnwrapper(_ packetPtr: UnsafePointer<MIDIPacket>) -> MIDIPacketData {
 
 		let packetDataCount = Int(packetPtr.pointee.length)
 
@@ -78,10 +83,11 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 				timeStamp: packetPtr.pointee.timeStamp
 			)
 		}
-
-		// This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or uncommon MIDI packet lists / packets arrive
+		
+		// Access the raw memory instead of using the .pointee
+		// This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
 		let rawMIDIPacketDataPtr = UnsafeRawBufferPointer(
-			start: UnsafeRawPointer(packetPtr) + MIDIPacketDataOffset,
+			start: UnsafeRawPointer(packetPtr) + midiPacketDataOffset,
 			count: packetDataCount
 		)
 

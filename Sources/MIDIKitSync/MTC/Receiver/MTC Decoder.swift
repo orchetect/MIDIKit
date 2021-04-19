@@ -27,6 +27,7 @@ Logic Pro
 
 @_implementationOnly import OTCore
 @_implementationOnly import SwiftRadix
+import MIDIKitInternals
 import TimecodeKit
 
 extension MTC {
@@ -61,7 +62,7 @@ extension MTC {
 		/// When set, MTC frame numbers will be scaled to real frame rate frame numbers, but only when the incoming MTC frame rate and the `localFrameRate` are compatible.
 		///
 		/// Remember to also set this any time the local frame rate changes so the receiver can interpret the incoming MTC accordingly.
-		@Atomic public var localFrameRate: Timecode.FrameRate? = nil
+		@AtomicAccess public var localFrameRate: Timecode.FrameRate? = nil
 		
 		/// Status of the direction of MTC quarter-frames received
 		public internal(set) var direction: MTC.Direction = .forwards

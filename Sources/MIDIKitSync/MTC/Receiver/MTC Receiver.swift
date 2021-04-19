@@ -7,6 +7,7 @@
 
 import Foundation
 @_implementationOnly import OTCore
+import MIDIKitInternals
 import TimecodeKit
 
 // MARK: - Receiver
@@ -24,7 +25,7 @@ extension MTC {
 		
 		public private(set) var name: String
 		
-		@Atomic public private(set) var state: State = .idle {
+		@AtomicAccess public private(set) var state: State = .idle {
 			didSet {
 				if state != oldValue {
 					let stt = state
@@ -62,7 +63,7 @@ extension MTC {
 		}
 		
 		/// Behavior governing how locking occurs prior to chase
-		@Atomic public var syncPolicy: SyncPolicy = SyncPolicy()
+		@AtomicAccess public var syncPolicy: SyncPolicy = SyncPolicy()
 		
 		
 		// MARK: - Stored closures
