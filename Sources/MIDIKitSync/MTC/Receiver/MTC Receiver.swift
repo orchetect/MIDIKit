@@ -227,7 +227,7 @@ extension MTC {
 			let dropOutFramesDuration =
 				Timecode(wrapping: TCC(f: syncPolicy.dropOutFrames),
 						 at: localFrameRate ?? ._30)
-				.realTimeValue.seconds
+				.realTimeValue
 			
 			let freewheelTimeout = timespec(seconds: dropOutFramesDuration)
 			
@@ -351,7 +351,7 @@ extension MTC.Receiver {
 				
 				let preSyncFrames = Timecode(wrapping: TCC(f: syncPolicy.lockFrames),
 											 at: localFrameRate ?? incomingTC.frameRate)
-				let prerollDuration = Int(preSyncFrames.realTimeValue.ms * 1_000) // microseconds
+				let prerollDuration = Int(preSyncFrames.realTimeValue * 1_000_000) // microseconds
 				
 				let now = DispatchTime.now() // same as DispatchTime(rawValue: mach_absolute_time())
 				let durationUntilLock = DispatchTimeInterval.microseconds(prerollDuration)

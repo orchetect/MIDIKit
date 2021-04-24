@@ -49,7 +49,7 @@ extension MTC.Receiver {
 		public func lockDuration(at rate: Timecode.FrameRate) -> Double {
 			
 			let tc = Timecode(wrapping: TCC(f: lockFrames), at: rate)
-			return tc.realTimeValue.seconds
+			return tc.realTimeValue
 			
 		}
 		
@@ -57,7 +57,7 @@ extension MTC.Receiver {
 		public func dropOutDuration(at rate: Timecode.FrameRate) -> Double {
 			
 			let tc = Timecode(wrapping: TCC(f: dropOutFrames), at: rate)
-			return tc.realTimeValue.seconds
+			return tc.realTimeValue
 			
 		}
 		

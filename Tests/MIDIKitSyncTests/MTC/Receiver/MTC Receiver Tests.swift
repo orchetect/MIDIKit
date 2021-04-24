@@ -179,7 +179,7 @@ extension MIDIKitSyncTests {
 		
 		let preSyncFrames = Timecode(wrapping: TCC(f: mtcRec.syncPolicy.lockFrames),
 									 at: ._24)
-		let prerollDuration = Int(preSyncFrames.realTimeValue.ms * 1_000) // microseconds
+		let prerollDuration = Int(preSyncFrames.realTimeValue * 1_000_000) // microseconds
 		
 		let now = DispatchTime.now() // same as DispatchTime(rawValue: mach_absolute_time())
 		let durationUntilLock = DispatchTimeInterval.microseconds(prerollDuration)
