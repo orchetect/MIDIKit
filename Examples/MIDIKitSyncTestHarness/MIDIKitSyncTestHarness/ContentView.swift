@@ -170,7 +170,7 @@ struct ContentView: View {
 					tag: midiSources.MTCRec.tag,
 					uniqueID: uID,
 					receiveHandler: .rawData({ midiPacketData in
-						mtcRec.midiIn(data: midiPacketData.array)
+						mtcRec.midiIn(data: midiPacketData.bytes)
 					})
 				)
 				

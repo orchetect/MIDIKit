@@ -384,8 +384,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/AudioKit/AudioKit.git";
 			requirement = {
-				branch = "v5-main";
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
 			};
 		};
 		E2E635B725EE4CE10039B8CF /* XCRemoteSwiftPackageReference "OTCore" */ = {
