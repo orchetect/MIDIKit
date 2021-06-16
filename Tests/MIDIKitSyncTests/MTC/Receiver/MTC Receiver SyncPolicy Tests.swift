@@ -12,7 +12,7 @@ import XCTest
 
 import TimecodeKit
 
-extension MIDIKitSyncTests {
+final class MTC_Receiver_SyncPolicy_Tests: XCTestCase {
 	
 	func testMTC_Receiver_SyncPolicy_init() {
 		

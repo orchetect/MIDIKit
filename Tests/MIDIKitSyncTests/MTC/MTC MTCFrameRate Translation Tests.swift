@@ -12,7 +12,7 @@ import XCTest
 
 import TimecodeKit
 
-extension MIDIKitSyncTests {
+final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
 	
 	func testMTC_MTCFrameRate_derivedFrameRates() {
 		
