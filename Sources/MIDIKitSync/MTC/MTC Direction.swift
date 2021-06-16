@@ -7,14 +7,17 @@
 
 extension MTC {
 	
-	/// Describes the timeline direction of MTC events
+	/// Describes the timeline direction of MTC events.
 	public enum Direction {
 		
-		/// Normal playback with timecode incrementing
+		/// Normal playback with timecode incrementing.
 		case forwards
 		
-		/// Backwards playback with timecode decrementing
+		/// Backwards playback with timecode decrementing.
 		case backwards
+		
+		/// Direction is unknown/ambiguous.
+		case ambiguous
 		
 	}
 	
@@ -29,20 +32,23 @@ extension MTC.Direction {
 	/// - Parameters:
 	///   - previousQF: the last quarter-frame received
 	///   - newQF: the current quarter-frame received
-	@inline(__always) public init?(previousQF: UInt8, newQF: UInt8) {
+	@inline(__always) public init(previousQF: UInt8, newQF: UInt8) {
 		
 		// sanity check: bounds
-		if previousQF > 0b111 || newQF > 0b111 {
-			return nil
+		guard !(previousQF > 0b111 || newQF > 0b111) else {
+			self = .ambiguous
+			return
 		}
 		
 		// check if identical first
-		if newQF == previousQF {
+		guard newQF != previousQF else {
 			// can't be inferred
-			return nil
+			self = .ambiguous
+			return
 		}
+		
 		// next check min/max wrapping (0b111 -> 0b000 is forwards, 0b000 to 0b111 is backwards
-		else if newQF == 0b000 && previousQF == 0b111 {
+		if newQF == 0b000 && previousQF == 0b111 {
 			self = .forwards
 		}
 		else if newQF == 0b111 && previousQF == 0b000 {
@@ -59,7 +65,7 @@ extension MTC.Direction {
 		// default (ie: when a jump happens and quarter-frames are not neighbouring):
 		else {
 			// can't be inferred
-			return nil
+			self = .ambiguous
 		}
 		
 	}
