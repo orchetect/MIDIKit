@@ -79,7 +79,7 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 
 		guard packetDataCount > 0 else {
 			return MIDIPacketData(
-				data: .init(),
+				data: [],
 				timeStamp: packetPtr.pointee.timeStamp
 			)
 		}
