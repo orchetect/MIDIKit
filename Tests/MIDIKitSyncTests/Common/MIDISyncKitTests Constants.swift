@@ -11,16 +11,13 @@ import Foundation
 import MIDIKitCommon
 import MIDIKitTestsCommon
 
-extension MIDIKitSyncTests {
-	
-	/// Tests Constants: Raw MIDI messages
-	enum kRawMIDI {
-		
-	}
+/// Sync Tests Constants: Raw MIDI messages
+enum kRawMIDI {
 	
 }
 
-extension MIDIKitSyncTests.kRawMIDI {
+
+extension kRawMIDI {
 	
 	enum MTC_FullFrame {
 		

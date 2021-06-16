@@ -14,7 +14,7 @@ import OTCoreTestingXCTest
 import MIDIKitTestsCommon
 import CoreMIDI
 
-final class MIDIKitIO_MIDIIO_InputsAndOutputs_Input_Tests: XCTestCase {
+final class MIDIIO_InputsAndOutputs_Input_Tests: XCTestCase {
 	
 	var manager: MIDIIO.Manager! = nil
 	

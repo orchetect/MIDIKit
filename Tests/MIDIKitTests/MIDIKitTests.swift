@@ -14,7 +14,7 @@ import CoreMIDI
 
 final class MIDIKitTests: XCTestCase {
 	
-    // no tests in this file
+	// no tests in this file, this is the module root test file
 	
 	func testNamespace() {
 		
