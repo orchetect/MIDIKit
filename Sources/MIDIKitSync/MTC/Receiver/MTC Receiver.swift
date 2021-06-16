@@ -28,15 +28,15 @@ extension MTC {
 		@AtomicAccess public private(set) var state: State = .idle {
 			didSet {
 				if state != oldValue {
-					let stt = state
+					let newState = state
 					DispatchQueue.main.async {
-						self.stateChangedHandler?(stt)
+						self.stateChangedHandler?(newState)
 					}
 				}
 			}
 		}
 		
-		/// Property updated whenever incoming MTC timecode changes
+		/// Property updated whenever incoming MTC timecode changes.
 		public private(set) var timecode: Timecode
 		
 		/// The frame rate the local system is using.
@@ -109,14 +109,16 @@ extension MTC {
 		///   - syncPolicy: set the MTC sync policy
 		///   - timecodeChanged: handle timecode change callbacks, pass `nil` if not needed
 		///   - stateChanged: handle receiver state change callbacks, pass `nil` if not needed
-		public init(name: String? = nil,
-					initialLocalFrameRate: Timecode.FrameRate? = nil,
-					syncPolicy: SyncPolicy? = nil,
-					timecodeChanged: ((_ timecode: Timecode,
-									   _ event: MTC.MessageType,
-									   _ direction: MTC.Direction,
-									   _ displayNeedsUpdate: Bool) -> Void)? = nil,
-					stateChanged: ((_ state: MTC.Receiver.State) -> Void)? = nil) {
+		public init(
+			name: String? = nil,
+			initialLocalFrameRate: Timecode.FrameRate? = nil,
+			syncPolicy: SyncPolicy? = nil,
+			timecodeChanged: ((_ timecode: Timecode,
+							   _ event: MTC.MessageType,
+							   _ direction: MTC.Direction,
+							   _ displayNeedsUpdate: Bool) -> Void)? = nil,
+			stateChanged: ((_ state: MTC.Receiver.State) -> Void)? = nil
+		) {
 			
 			// handle init arguments
 			

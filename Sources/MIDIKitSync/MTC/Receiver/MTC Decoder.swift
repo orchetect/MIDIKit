@@ -32,7 +32,7 @@ import TimecodeKit
 
 extension MTC {
 	
-	/// MTC (MIDI Timecode) decoder object
+	/// MTC (MIDI Timecode) stream decoder object.
 	///
 	/// Takes a stream of MIDI events and produces timecode values.
 	///
@@ -81,10 +81,12 @@ extension MTC {
 		/// Sets the closure called when a meaningful change to the timecode has occurred which would require its display to be updated.
 		///
 		/// Implement this closure for when you only want to display timecode and do not need to sync to MTC.
-		public func setTimecodeChangedHandler(_ handler: ((_ timecode: Timecode,
-														   _ event: MessageType,
-														   _ direction: Direction,
-														   _ displayNeedsUpdate: Bool) -> Void)?) {
+		public func setTimecodeChangedHandler(
+			_ handler: ((_ timecode: Timecode,
+						 _ event: MessageType,
+						 _ direction: Direction,
+						 _ displayNeedsUpdate: Bool) -> Void)?
+		) {
 			timecodeChangedHandler = handler
 		}
 		
@@ -96,7 +98,9 @@ extension MTC {
 		/// Sets the closure called only when the incoming MTC stream changes its frame rate classification.
 		///
 		/// This can usually be ignored, as the `MTC.Decoder` can handle scaling and validation of the frame rate information from the stream transparently.
-		public func setMTCFrameRateChangedHandler(_ handler: ((_ rate: MTCFrameRate) -> Void)?) {
+		public func setMTCFrameRateChangedHandler(
+			_ handler: ((_ rate: MTCFrameRate) -> Void)?
+		) {
 			mtcFrameRateChangedHandler = handler
 		}
 		
@@ -123,7 +127,7 @@ extension MTC {
 		internal var TC_F_lsb_received = false
 		internal var TC_F_msb_received = false
 		
-		internal var qfBufferComplete = false
+		internal var quarterFrameBufferIsComplete = false
 		internal var lastQuarterFrameReceived: UInt8 = 0b000
 		internal var receivedSyncQFSinceQFBufferComplete = false
 		
@@ -133,8 +137,9 @@ extension MTC {
 		internal var rawFrames = 0
 		
 		internal var lastCapturedWholeTimecode = TCC(h: 0, m: 0, s: 0, f: 0)
+		internal var lastCapturedWholeTimecodeDirection: Direction = .ambiguous
+		internal var lastCapturedWholeTimecodeDeltaQFs: Int? = nil
 		internal var lastTimecodeSentToHandler = TCC(h: 0, m: 0, s: 0, f: 0)
-		
 		
 		// MARK: - init
 		
@@ -164,7 +169,8 @@ extension MTC {
 		/// Incoming MIDI messages
 		public func midiIn(data: [Byte]) {
 			
-			// Full Timecode message
+			// MTC Full Timecode message
+			// (1-frame resolution, does not carry subframe information)
 			// ---------------------
 			// F0 7F 7F 01 01 hh mm ss ff F7
 			if data.count == 10 &&
@@ -176,12 +182,11 @@ extension MTC {
 				data[9] == 0xF7 {
 				
 				// hour byte includes base framerate info
-				/*	0rrhhhhh: Rate (0–3) and hour (0–23).
-				rr == 00: 24 frames/s
-				rr == 01: 25 frames/s
-				rr == 10: 29.97d frames/s (SMPTE drop-frame timecode)
-				rr == 11: 30 frames/s
-				*/
+				// 0rrhhhhh: Rate (0–3) and hour (0–23).
+				// rr == 00: 24 frames/s
+				// rr == 01: 25 frames/s
+				// rr == 10: 29.97d frames/s (SMPTE drop-frame timecode)
+				// rr == 11: 30 frames/s
 				
 				// fps component
 				setMTCFrameRate(rateBits: (data[5] & 0b01100000) >> 5)
@@ -273,56 +278,101 @@ extension MTC {
 				6		0110 hhhh	Hours lsbits
 				7		0111 0rrh	Rate and hours msbit
 				*/
-								
+				
 				// update internal registers
 				
 				let quarterFrameReceived = (data[1] & 0b01110000) >> 4
 				
+				// quarter-frame direction
+				direction = Direction(previousQF: lastQuarterFrameReceived,
+									  newQF: quarterFrameReceived)
+				
+				// only update delta QFs if we can be assured we've already received a QF 0 capture
+				if receivedSyncQFSinceQFBufferComplete {
+					if lastCapturedWholeTimecodeDeltaQFs == nil { lastCapturedWholeTimecodeDeltaQFs = 0 }
+					
+					switch direction {
+					case .forwards: lastCapturedWholeTimecodeDeltaQFs! += 1
+					case .backwards: lastCapturedWholeTimecodeDeltaQFs! -= 1
+					default: break
+					}
+				}
+				
 				switch quarterFrameReceived {
 				case 0b000: // Frames number lsbits -- sync: frame 1 of 2
 					TC_F_lsb = data[1] & 0b00001111
+					if direction == .backwards {
+						rawFrames = Int(TC_F_lsb) + Int(TC_F_msb << 4)
+					}
+					
 					TC_F_lsb_received = true
 					
-					// capture full timecode if all 8 QFs have already been received
-					if QFBufferComplete() {
+					// capture full timecode if all 8 QFs have already been received in sequence
+					if qfBufferComplete() {
 						receivedSyncQFSinceQFBufferComplete = true
 						
-						lastCapturedWholeTimecode = TCC(h: rawHours,
-														m: rawMinutes,
-														s: rawSeconds,
-														f: rawFrames)
+						if lastCapturedWholeTimecodeDeltaQFs == nil ||
+							lastCapturedWholeTimecodeDeltaQFs == 8 ||
+							lastCapturedWholeTimecodeDeltaQFs == -8
+						{
+							lastCapturedWholeTimecode = TCC(h: rawHours,
+															m: rawMinutes,
+															s: rawSeconds,
+															f: rawFrames)
+							
+							lastCapturedWholeTimecodeDirection = direction
+						}
+						
+						lastCapturedWholeTimecodeDeltaQFs = 0
 					}
 					
 				case 0b001: // Frames number msbit
 					TC_F_msb = data[1] & 0b00000001
-					rawFrames = Int(TC_F_lsb) + Int(TC_F_msb << 4)
+					if direction == .forwards {
+						rawFrames = Int(TC_F_lsb) + Int(TC_F_msb << 4)
+					}
 					TC_F_msb_received = true
 					
 				case 0b010: // Seconds lsbits
 					TC_S_lsb = data[1] & 0b00001111
+					if direction == .backwards {
+						rawSeconds = Int(TC_S_lsb) + Int(TC_S_msb << 4)
+					}
 					TC_S_lsb_received = true
 					
 				case 0b011: // Seconds msbits
 					TC_S_msb = data[1] & 0b00000011
-					rawSeconds = Int(TC_S_lsb) + Int(TC_S_msb << 4)
+					if direction == .forwards {
+						rawSeconds = Int(TC_S_lsb) + Int(TC_S_msb << 4)
+					}
 					TC_S_msb_received = true
 					
 				case 0b100: // Minutes lsbits -- sync: frame 2 of 2
 					TC_M_lsb = data[1] & 0b00001111
+					if direction == .backwards {
+						rawMinutes = Int(TC_M_lsb) + Int(TC_M_msb << 4)
+					}
 					TC_M_lsb_received = true
 					
 				case 0b101: // Minutes msbits
 					TC_M_msb = data[1] & 0b00000011
-					rawMinutes = Int(TC_M_lsb) + Int(TC_M_msb << 4)
+					if direction == .forwards {
+						rawMinutes = Int(TC_M_lsb) + Int(TC_M_msb << 4)
+					}
 					TC_M_msb_received = true
 					
 				case 0b110: // Hours lsbits
 					TC_H_lsb = data[1] & 0b00001111
+					if direction == .backwards {
+						rawHours = Int(TC_H_lsb) + Int(TC_H_msb << 4)
+					}
 					TC_H_lsb_received = true
 					
 				case 0b111: // Rate and Hours msbit
 					TC_H_msb = data[1] & 0b00000001
-					rawHours = Int(TC_H_lsb) + Int(TC_H_msb << 4)
+					if direction == .forwards {
+						rawHours = Int(TC_H_lsb) + Int(TC_H_msb << 4)
+					}
 					TC_H_msb_received = true
 					
 					setMTCFrameRate(rateBits: (data[1] & 0b00000110) >> 1)
@@ -332,31 +382,38 @@ extension MTC {
 					break
 				}
 				
-				// quarter-frame direction
-				if let getDirection = Direction(previousQF: lastQuarterFrameReceived,
-												newQF: quarterFrameReceived) {
-					// update playback direction only if it has changed and can be reasonably inferred
-					direction = getDirection
-				}
-				
 				// update registers
 				lastQuarterFrameReceived = quarterFrameReceived
 				
 				// all 8 QFs must be received to ascertain a full SMTPE timecode
 				// however, do not update timecode until sync QF is reached
-				if QFBufferComplete() && receivedSyncQFSinceQFBufferComplete {
-					
-					// only notify handler that timecode has changed if this is a sync QF
+				if qfBufferComplete() && receivedSyncQFSinceQFBufferComplete {
 					
 					var tcc = lastCapturedWholeTimecode
 					
-					// offset timecode by 2 "MTC frames"
-					// just fail silently if this doesn't work
-					if let tc = tcc
-						.toTimecode(at: mtcFrameRate.directEquivalentFrameRate)?
-						.adding(wrapping: TCC(f: 2))
+					guard let lastCapturedWholeTimecodeDeltaQFs = lastCapturedWholeTimecodeDeltaQFs else {
+						preconditionFailure("lastCapturedWholeTimecodeDeltaQFs should not be nil.")
+					}
+					
+					// perform 2-frame offsets depending on direction
+					if lastCapturedWholeTimecodeDeltaQFs >= 0 &&
+						lastCapturedWholeTimecodeDirection != .backwards
 					{
-						tcc = tc.components
+						if let tc = tcc
+							.toTimecode(at: mtcFrameRate.directEquivalentFrameRate)?
+							.adding(wrapping: TCC(f: 2))
+						{
+							tcc = tc.components
+						}
+					} else if lastCapturedWholeTimecodeDeltaQFs < 0 &&
+								lastCapturedWholeTimecodeDirection == .backwards
+					{
+						if let tc = tcc
+							.toTimecode(at: mtcFrameRate.directEquivalentFrameRate)?
+							.subtracting(wrapping: TCC(f: 2))
+						{
+							tcc = tc.components
+						}
 					}
 					
 					// set up a variable to store the actual output frame rate
@@ -425,10 +482,10 @@ extension MTC {
 		}
 		
 		/// Internal: Returns true if all 8 quarter-frames have been received in order to assemble a full MTC timecode
-		internal func QFBufferComplete() -> Bool {
+		internal func qfBufferComplete() -> Bool {
 			
 			// return cached true value
-			if qfBufferComplete { return true }
+			if quarterFrameBufferIsComplete { return true }
 			
 			// ... otherwise, compute:
 			let requisiteIsMet =
@@ -442,7 +499,7 @@ extension MTC {
 				TC_F_msb_received
 			
 			// set cached value only if true
-			if requisiteIsMet { qfBufferComplete = true }
+			if requisiteIsMet { quarterFrameBufferIsComplete = true }
 			
 			return requisiteIsMet
 			
@@ -450,7 +507,7 @@ extension MTC {
 		
 		/// Flushes internal quarter-frame receive registers.
 		///
-		/// You may want to call this, for example, when QF stream is lost.
+		/// You may want to call this, for example, when QF stream is lost or interrupted.
 		///
 		/// Flushing the registers will ensure that the next quarter-frame stream received is treated as a new stream and can avoid forming nonsense timecodes prior to receiving the full 8 quarter-frames.
 		public func resetQFBuffer() {
@@ -464,9 +521,14 @@ extension MTC {
 			TC_F_lsb_received = false
 			TC_F_msb_received = false
 			
-			qfBufferComplete = false
+			quarterFrameBufferIsComplete = false
 			lastQuarterFrameReceived = 0b000
 			receivedSyncQFSinceQFBufferComplete = false
+			
+			lastCapturedWholeTimecode = TCC(h: 0, m: 0, s: 0, f: 0)
+			lastCapturedWholeTimecodeDirection = .ambiguous
+			lastTimecodeSentToHandler = TCC(h: 0, m: 0, s: 0, f: 0)
+			lastCapturedWholeTimecodeDeltaQFs = nil
 			
 		}
 		
