@@ -158,7 +158,7 @@ extension MTC {
 		/// - Note: If it is the first time `increment()` is being called since the last call to `locate(to:)` (or since initializing the class), this method will transmit the current quarter-frame without incrementing.
 		///
 		/// Used when playhead is moving later in time.
-		public func increment() {
+		@inline(__always) public func increment() {
 			
 			if mtcQuarterFrameStreamHasStartedSinceLastLocate {
 				if mtcQuarterFrame < 7 {
@@ -186,7 +186,7 @@ extension MTC {
 		/// - Note: If it is the first time `decrement()` is being called since the last call to `locate(to:)` (or since initializing the class), this method will transmit the current quarter-frame without decrementing.
 		///
 		/// Used when playhead is moving earlier in time.
-		public func decrement() {
+		@inline(__always) public func decrement() {
 			
 			if mtcQuarterFrameStreamHasStartedSinceLastLocate {
 			if mtcQuarterFrame > 0 {
@@ -249,14 +249,14 @@ extension MTC {
 		}
 		
 		/// Internal: triggers a handler event to transmit a quarter-frame message.
-		internal func sendQuarterFrameMIDIMessage() {
+		@inline(__always) internal func sendQuarterFrameMIDIMessage() {
 			
 			midiEventSendHandler?(generateQuarterFrameMIDIMessage())
 			
 		}
 		
 		/// Internal: generates a quarter-frame message at current position.
-		internal func generateQuarterFrameMIDIMessage() -> [Byte] {
+		@inline(__always) internal func generateQuarterFrameMIDIMessage() -> [Byte] {
 			
 			// Piece #	Data byte	Significance
 			// -------	---------	------------

@@ -108,12 +108,15 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 20, s: 32, f: 10))
 		
 		XCTAssertEqual(mtcEnc.timecode.components, TCC(h: 1, m: 20, s: 32, f: 20))
+		XCTAssertEqual(mtcEnc.timecode.frameRate, ._60)
 		
 		// quarter frames
 		
 		mtcEnc = MTC.Encoder()
 		mtcEnc.setLocalFrameRate(._60)
 		mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 20, s: 32, f: 10))
+		
+		XCTAssertEqual(mtcEnc.timecode.frameRate, ._60)
 		
 		mtcEnc.mtcQuarterFrame = 0
 		XCTAssertEqual(mtcEnc.timecode.components, TCC(h: 1, m: 20, s: 32, f: 20))

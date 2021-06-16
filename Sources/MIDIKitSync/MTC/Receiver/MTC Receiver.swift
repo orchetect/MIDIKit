@@ -144,15 +144,13 @@ extension MTC {
 			// 1 quarter-frame = 41.7/4 = 10.4... ms
 			// Timer checking twice per QF = ~5.0ms intervals = 200Hz
 			
-			timer = SafeDispatchTimer(frequencyInHz: 200.0,
+			timer = SafeDispatchTimer(rate: .hertz(200.0),
 									  queue: queue,
 									  eventHandler: { })
 			
-			timer.setEventHandler {
+			timer.setEventHandler { [weak self] in
 				
-				self.queue.async {
-					self.timerFired()
-				}
+				self?.timerFired()
 				
 			}
 			

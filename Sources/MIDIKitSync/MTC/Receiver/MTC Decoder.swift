@@ -167,7 +167,7 @@ extension MTC {
 		// MARK: - methods
 		
 		/// Incoming MIDI messages
-		public func midiIn(data: [Byte]) {
+		@inline(__always) public func midiIn(data: [Byte]) {
 			
 			// MTC Full Timecode message
 			// (1-frame resolution, does not carry subframe information)
@@ -473,7 +473,7 @@ extension MTC {
 		
 		/// Parses framerate info received from MTC stream and stores value
 		/// - parameter rateBits: two-bit number
-		internal func setMTCFrameRate(rateBits: UInt8) {
+		@inline(__always) internal func setMTCFrameRate(rateBits: UInt8) {
 			
 			if let bits = MTCFrameRate(rateBits) {
 				mtcFrameRate = bits
@@ -482,7 +482,7 @@ extension MTC {
 		}
 		
 		/// Internal: Returns true if all 8 quarter-frames have been received in order to assemble a full MTC timecode
-		internal func qfBufferComplete() -> Bool {
+		@inline(__always) internal func qfBufferComplete() -> Bool {
 			
 			// return cached true value
 			if quarterFrameBufferIsComplete { return true }
@@ -510,7 +510,7 @@ extension MTC {
 		/// You may want to call this, for example, when QF stream is lost or interrupted.
 		///
 		/// Flushing the registers will ensure that the next quarter-frame stream received is treated as a new stream and can avoid forming nonsense timecodes prior to receiving the full 8 quarter-frames.
-		public func resetQFBuffer() {
+		@inline(__always) public func resetQFBuffer() {
 			
 			TC_H_lsb_received = false
 			TC_H_msb_received = false

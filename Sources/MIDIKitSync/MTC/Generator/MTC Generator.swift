@@ -18,7 +18,7 @@ extension MTC {
 		
 		public private(set) var name: String
 		
-		/// The SMPTE frame rate (24, 25, 29.97d, or 30) that was last transmitted by the generator.
+		/// The MTC SMPTE frame rate (24, 25, 29.97d, or 30) that was last transmitted by the generator.
 		///
 		/// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the local `timecode.frameRate` property is used for automatic selection of MTC SMPTE frame rate and scaling of outgoing timecode accordingly.
 		public var mtcFrameRate: MTC.MTCFrameRate {
@@ -27,7 +27,7 @@ extension MTC {
 			
 		}
 		
-		public internal(set) var state: State = .idle
+		public private(set) var state: State = .idle
 		
 		/// Property updated whenever outgoing MTC timecode changes.
 		public var timecode: Timecode {
@@ -36,9 +36,18 @@ extension MTC {
 			
 		}
 		
+		public var localFrameRate: Timecode.FrameRate {
+			
+			encoder.localFrameRate
+			
+		}
+		
+		
 		// MARK: - Stored closures
 		
 		/// Closure called every time a MIDI message needs to be transmitted by the generator.
+		///
+		/// - Note: Handler is called on a dedicated thread so do not make UI updates from it.
 		internal var midiEventSendHandler: ((_ midiMessage: [Byte]) -> Void)? = nil
 		
 		/// Sets the closure called every time a MIDI message needs to be transmitted by the generator.
@@ -71,25 +80,25 @@ extension MTC {
 			queue = DispatchQueue(label: "midikit.mtcgenerator.\(name)",
 								  qos: .userInteractive)
 			
-			timer = SafeDispatchTimer(frequencyInHz: 1.0,
-									  queue: DispatchQueue.main,
+			timer = SafeDispatchTimer(rate: .seconds(1.0), // default, will be changed later
+									  queue: queue,
 									  eventHandler: { })
 			
-			timer.setEventHandler {
+			timer.setEventHandler { [weak self] in
 				
-				self.queue.async {
-					self.timerFired()
-				}
+				self?.timerFired()
 				
 			}
+			
+			setTimerRate(from: timecode.frameRate)
 			
 			// encoder setup
 			
 			encoder = Encoder()
 			
-			encoder.setMIDIEventSendHandler { midiMessage in
+			encoder.setMIDIEventSendHandler { [weak self] midiMessage in
 				
-				midiEventSendHandler?(midiMessage)
+				self?.midiEventSendHandler?(midiMessage)
 				
 			}
 			
@@ -104,7 +113,7 @@ extension MTC {
 		
 		// MARK: - Encoder (internal)
 		
-		internal var encoder: Encoder!
+		internal var encoder = Encoder()
 		
 		
 		// MARK: - Timer (internal)
@@ -114,9 +123,43 @@ extension MTC {
 		/// Internal: Fired from our timer object.
 		internal func timerFired() {
 			
-			#warning("> basic/naive - may need updating")
-			
 			encoder.increment()
+			
+		}
+		
+		/// Sets timer rate to corresponding MTC quarter-frame duration in Hz.
+		internal func setTimerRate(from frameRate: Timecode.FrameRate) {
+			
+			// const values generated from:
+			// TCC(f: 1).toTimecode(at: frameRate)!.realTimeValue
+			
+			// duration in seconds for one quarter-frame
+			let rate: Double
+			
+			switch frameRate {
+			case ._23_976:      rate = 0.010427083333333333
+			case ._24:          rate = 0.010416666666666666
+			case ._24_98:       rate = 0.010009999999999998
+			case ._25:          rate = 0.01
+			case ._29_97:       rate = 0.008341666666666666
+			case ._29_97_drop:  rate = 0.008341666666666666
+			case ._30:          rate = 0.008333333333333333
+			case ._30_drop:     rate = 0.008341666666666666
+			case ._47_952:      rate = 0.010427083333333333
+			case ._48:          rate = 0.010416666666666666
+			case ._50:          rate = 0.01
+			case ._59_94:       rate = 0.008341666666666666
+			case ._59_94_drop:  rate = 0.008341666666666666
+			case ._60:          rate = 0.008333333333333333
+			case ._60_drop:     rate = 0.008341666666666666
+			case ._100:         rate = 0.01
+			case ._119_88:      rate = 0.008341666666666666
+			case ._119_88_drop: rate = 0.008341666666666666
+			case ._120:         rate = 0.008333333333333333
+			case ._120_drop:    rate = 0.008341666666666666
+			}
+			
+			timer.setRate(.seconds(rate))
 			
 		}
 		
@@ -128,6 +171,7 @@ extension MTC {
 		public func locate(to timecode: Timecode) {
 			
 			encoder.locate(to: timecode)
+			setTimerRate(from: timecode.frameRate)
 			
 		}
 		
@@ -136,6 +180,16 @@ extension MTC {
 		public func locate(to components: Timecode.Components) {
 			
 			encoder.locate(to: components)
+			setTimerRate(from: timecode.frameRate)
+			
+		}
+		
+		/// Starts generating MTC continuous playback MIDI message stream events from the current time position at the current local frame rate.
+		public func start() {
+			
+			state = .generating
+			
+			timer.restart()
 			
 		}
 		
@@ -147,9 +201,9 @@ extension MTC {
 		/// - note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
 		///
 		/// Call `stop()` to stop generating events.
-		public func start(now timecode: Timecode) {
+		public func start(at timecode: Timecode) {
 			
-			start(now: timecode.components,
+			start(at: timecode.components,
 				  frameRate: timecode.frameRate)
 			
 		}
@@ -160,22 +214,18 @@ extension MTC {
 		/// - note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
 		///
 		/// Call `stop()` to stop generating events.
-		public func start(now components: Timecode.Components,
+		public func start(at components: Timecode.Components,
 						  frameRate: Timecode.FrameRate) {
 			
 			if state == .generating {
 				timer.stop()
 			}
 			
-			encoder.setLocalFrameRate(frameRate)
+			encoder.locate(to: components,
+						   frameRate: frameRate,
+						   triggerFullFrame: false)
 			
-			#warning("> scale down to MTC components")
-			
-			encoder.setMTCComponents(mtc: components)
-			
-			state = .generating
-			
-			timer.restart()
+			start()
 			
 		}
 		
@@ -185,7 +235,7 @@ extension MTC {
 		/// - note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
 		///
 		/// Call `stop()` to stop generating events.
-		public func start(now realTime: TimeInterval,
+		public func start(at realTime: TimeInterval,
 						  frameRate: Timecode.FrameRate) {
 			
 			guard let tc = Timecode(
@@ -194,15 +244,13 @@ extension MTC {
 				limit: ._24hours
 			) else { return }
 			
-			start(now: tc.components,
+			start(at: tc.components,
 				  frameRate: frameRate)
 			
 		}
 		
 		/// Stops generating MTC continuous playback MIDI message stream events.
 		public func stop() {
-			
-			#warning("> needs coding")
 			
 			state = .idle
 			
