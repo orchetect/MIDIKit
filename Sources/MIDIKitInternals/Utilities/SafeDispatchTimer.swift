@@ -6,6 +6,7 @@
 //
 
 import Dispatch
+@_implementationOnly import OTCore
 
 /// Simple custom safe `DispatchSourceTimer` wrapper.
 ///
@@ -20,7 +21,9 @@ public class SafeDispatchTimer {
 	internal weak var queue: DispatchQueue?
 	
 	/// (Read-only) Frequency in Hz of the timer
-	public internal(set) var rate: Double
+	public internal(set) var rate: Rate = .seconds(1.0)
+	
+	public var leeway: DispatchTimeInterval = .nanoseconds(0)
 	
 	/// (Read-only) State of whether timer is running or not
 	public internal(set) var running = false
@@ -31,21 +34,23 @@ public class SafeDispatchTimer {
 	///   - queue: optionally specify the `DispatchQueue` for the timer (weak storage)
 	///   - leeway: optionally specify custom leeway; default is 0 nanoseconds
 	///   - eventHandler: the closure to be called on each timer event
-	public init(frequencyInHz: Double,
+	public init(rate: Rate,
 				queue: DispatchQueue = DispatchQueue.main,
 				leeway: DispatchTimeInterval = .nanoseconds(0),
 				eventHandler: @escaping DispatchSource.DispatchSourceHandler = { }) {
 		
-		self.rate = frequencyInHz
+		self.rate = rate
 		
 		self.queue = queue
+		
+		self.leeway = leeway
 		
 		timer = DispatchSource.makeTimerSource(flags: .strict, queue: queue)
 		
 		// schedule the timer's start time to be the time of the class initialization
 		
 		timer.schedule(deadline: .now(),
-					   repeating: 1.0 / rate,
+					   repeating: rate.secondsValue,
 					   leeway: leeway)
 		
 		timer.setEventHandler(handler: eventHandler)
@@ -75,8 +80,8 @@ public class SafeDispatchTimer {
 		// if timer is not running, schedule the timer then start it
 		
 		timer.schedule(deadline: .now(),
-					   repeating: 1.0 / rate,
-					   leeway: .nanoseconds(0))
+					   repeating: rate.secondsValue,
+					   leeway: leeway)
 		
 		if !running {
 			start()
@@ -92,6 +97,14 @@ public class SafeDispatchTimer {
 		guard running else { return }
 		running = false
 		timer.suspend()
+		
+	}
+	
+	/// Sets the timer rate in Hz.
+	/// Change only takes effect the next time `restart()` is called.
+	public func setRate(_ newRate: Rate) {
+		
+		rate = newRate
 		
 	}
 	
@@ -113,6 +126,34 @@ public class SafeDispatchTimer {
 		if !running { timer.resume() }
 		
 		timer.cancel()
+		
+	}
+	
+}
+
+extension SafeDispatchTimer {
+	
+	public enum Rate: Hashable {
+		
+		case hertz(Double)
+		case seconds(Double)
+		
+		public var secondsValue: Double {
+			
+			let value: Double
+			
+			switch self {
+			case .hertz(let hz):
+				value = 1.0 / hz.clamped(to: 0.00001...)
+				
+			case .seconds(let secs):
+				value = secs
+				
+			}
+			
+			return value.clamped(to: 0.000_000_001...) // 1 nanosecond min
+			
+		}
 		
 	}
 	
