@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  mtcRecContentView.swift
 //  MIDIKitSyncTestHarness
 //
 //  Created by Steffan Andrews on 2020-12-02.
@@ -12,16 +12,18 @@ import OTCore
 import MIDIKit
 import TimecodeKit
 
-struct ContentView: View {
+struct mtcRecContentView: View {
+	
+	weak var midiManager: MIDIIO.Manager?
+	
+	init(midiManager: MIDIIO.Manager?) {
+		// normally in SwiftUI we would pass midiManager in as an EnvironmentObject
+		// but that only works on macOS 11.0+ and for sake of backwards compatibility
+		// we will do it old-school weak delegate storage pattern
+		self.midiManager = midiManager
+	}
 	
 	// MARK: - MIDI state
-	
-	var midiManager: MIDIIO.Manager = .init(
-		clientName: "MIDIKitSyncTestHarness",
-		model: "TestApp",
-		manufacturer: "Orchetect",
-		notificationHandler: nil
-	)
 	
 	@State var mtcRec: MTC.Receiver = .init(name: "dummy - will be set in .onAppear{} below")
 	
@@ -156,49 +158,27 @@ struct ContentView: View {
         .background(receiverState.stateColor)
 		.onAppear {
 			
-			// start MIDI manager
-			_ = try? midiManager.start()
-			
 			// mtc reader endpoint
 			do {
-				let uID = UserDefaults.standard
+				let cachedUniqueID = UserDefaults.standard
 					.integerOptional(forKey: "\(midiSources.MTCRec.tag) - Unique ID")?
 					.int32
 				
-				let newUniqueID = try midiManager.addInput(
+				if let newUniqueID = try midiManager?.addInput(
 					name: midiSources.MTCRec.name,
 					tag: midiSources.MTCRec.tag,
-					uniqueID: uID,
+					uniqueID: cachedUniqueID,
 					receiveHandler: .rawData({ midiPacketData in
 						mtcRec.midiIn(data: midiPacketData.bytes)
 					})
-				)
-				
-				// update stored unique ID for the port
-				UserDefaults.standard
-					.setValue(newUniqueID, forKey: "\(midiSources.MTCRec.tag) - Unique ID")
+				) {
+					// update stored unique ID for the port
+					UserDefaults.standard
+						.setValue(newUniqueID, forKey: "\(midiSources.MTCRec.tag) - Unique ID")
+				}
 			} catch {
 				Log.error(error)
 			}
-			
-			// mtc generator endpoint - MTC.Generator not yet implemented
-			//do {
-			//	let uID = UserDefaults.standard
-			//		.integerOptional(forKey: "\(midiSources.MTCGen.tag) - Unique ID")?
-			//		.int32
-			//
-			//	let newUniqueID = try midiManager.addOutput(
-			//		name: midiSources.MTCGen.name,
-			//		tag: midiSources.MTCGen.tag,
-			//		uniqueID: uID
-			//	)
-			//
-			//	// update stored unique ID for the port
-			//	UserDefaults.standard
-			//		.setValue(newUniqueID, forKey: "\(midiSources.MTCGen.tag) - Unique ID")
-			//} catch {
-			//	Log.error(error)
-			//}
 			
 			// set up new MTC receiver and configure it
 			mtcRec = MTC.Receiver(name: "main",
@@ -213,7 +193,7 @@ struct ContentView: View {
 				guard displayNeedsUpdate else { return }
 
 				if timecode.seconds != lastSeconds {
-					playClick()
+					playClickB()
 					lastSeconds = timecode.seconds
 				}
 				
@@ -260,7 +240,7 @@ struct ContentView: View {
 				// this is a stupid SwiftUI workaround, but it works fine for our purposes
 				if mtcRec.localFrameRate != localFrameRate {
 					Log.default("Setting MTC receiver's local frame rate to",
-								localFrameRate?.rawValue ?? "None")
+								localFrameRate?.stringValue ?? "None")
 					mtcRec.localFrameRate = localFrameRate
 				}
 				
@@ -278,7 +258,7 @@ extension MTC.Receiver.State {
 	
     var stateColor: Color {
         switch self {
-        case .idle: return Color.gray
+        case .idle: return Color.clear
         case .preSync: return Color.orange
         case .sync: return Color.green
         case .freewheeling: return Color.purple
@@ -288,10 +268,10 @@ extension MTC.Receiver.State {
 	
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct mtcRecContentView_Previews: PreviewProvider {
 	
     static var previews: some View {
-        ContentView()
+		mtcRecContentView(midiManager: nil)
     }
 	
 }

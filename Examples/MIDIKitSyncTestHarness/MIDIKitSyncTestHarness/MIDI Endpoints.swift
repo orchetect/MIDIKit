@@ -13,12 +13,12 @@ import MIDIKit
 enum midiSources {
 	
     enum MTCGen {
-        static let name = "MSK MTC Gen"
+        static let name = "MIDIKit MTC Gen"
 		static let tag = "MTCGen"
     }
 
     enum MTCRec {
-        static let name = "MSK MTC Read"
+        static let name = "MIDIKit MTC Rec"
 		static let tag = "MTCRec"
     }
 	

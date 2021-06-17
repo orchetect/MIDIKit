@@ -7,22 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E258622825F4BCE300679636 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E258622725F4BCE300679636 /* MIDIKit */; };
-		E27E3F9B25A6E5AB00F4B78E /* AudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27E3F9A25A6E5AB00F4B78E /* AudioKit */; };
+		E275EAB02679A444008E396D /* mtcRecContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E275EAAF2679A444008E396D /* mtcRecContentView.swift */; };
+		E275EAB42679A493008E396D /* mtcGenContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E275EAB32679A493008E396D /* mtcGenContentView.swift */; };
 		E27E3FA025A6E5C700F4B78E /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E3F9F25A6E5C700F4B78E /* Audio.swift */; };
+		E29EF02B267BF30700282F94 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29EF02A267BF30700282F94 /* MIDIKit */; };
+		E29EF032267BF4BA00282F94 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E29EF031267BF4BA00282F94 /* SwiftRadix */; };
+		E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29EF038267BF71B00282F94 /* DunneAudioKit */; };
 		E2E635B925EE4CE10039B8CF /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E2E635B825EE4CE10039B8CF /* OTCore */; };
 		E2FAC4DE257884E000A6DD31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */; };
-		E2FAC4E0257884E000A6DD31 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FAC4DF257884E000A6DD31 /* ContentView.swift */; };
 		E2FAC4E5257884E100A6DD31 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2FAC4E4257884E100A6DD31 /* Preview Assets.xcassets */; };
 		E2FAC4E8257884E100A6DD31 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2FAC4E6257884E100A6DD31 /* Main.storyboard */; };
 		E2FAC51E2578856F00A6DD31 /* MIDI Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FAC51D2578856F00A6DD31 /* MIDI Endpoints.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E275EAAF2679A444008E396D /* mtcRecContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mtcRecContentView.swift; sourceTree = "<group>"; };
+		E275EAB32679A493008E396D /* mtcGenContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mtcGenContentView.swift; sourceTree = "<group>"; };
 		E27E3F9F25A6E5C700F4B78E /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
+		E29EF027267BF2DE00282F94 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MIDIKit; path = ../..; sourceTree = "<group>"; };
 		E2FAC4DA257884E000A6DD31 /* MIDIKitSyncTestHarness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIDIKitSyncTestHarness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E2FAC4DF257884E000A6DD31 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E2FAC4E4257884E100A6DD31 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E2FAC4E7257884E100A6DD31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E2FAC4E9257884E100A6DD31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -35,20 +39,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E258622825F4BCE300679636 /* MIDIKit in Frameworks */,
+				E29EF02B267BF30700282F94 /* MIDIKit in Frameworks */,
+				E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */,
 				E2E635B925EE4CE10039B8CF /* OTCore in Frameworks */,
-				E27E3F9B25A6E5AB00F4B78E /* AudioKit in Frameworks */,
+				E29EF032267BF4BA00282F94 /* SwiftRadix in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E29EF029267BF30700282F94 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E2FAC4D1257884DF00A6DD31 = {
 			isa = PBXGroup;
 			children = (
+				E29EF027267BF2DE00282F94 /* MIDIKit */,
 				E2FAC4DC257884E000A6DD31 /* MIDIKitSyncTestHarness */,
 				E2FAC4DB257884E000A6DD31 /* Products */,
+				E29EF029267BF30700282F94 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,7 +78,8 @@
 			isa = PBXGroup;
 			children = (
 				E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */,
-				E2FAC4DF257884E000A6DD31 /* ContentView.swift */,
+				E275EAB32679A493008E396D /* mtcGenContentView.swift */,
+				E275EAAF2679A444008E396D /* mtcRecContentView.swift */,
 				E2FAC51D2578856F00A6DD31 /* MIDI Endpoints.swift */,
 				E27E3F9F25A6E5C700F4B78E /* Audio.swift */,
 				E2FAC4E6257884E100A6DD31 /* Main.storyboard */,
@@ -100,9 +115,10 @@
 			);
 			name = MIDIKitSyncTestHarness;
 			packageProductDependencies = (
-				E27E3F9A25A6E5AB00F4B78E /* AudioKit */,
 				E2E635B825EE4CE10039B8CF /* OTCore */,
-				E258622725F4BCE300679636 /* MIDIKit */,
+				E29EF02A267BF30700282F94 /* MIDIKit */,
+				E29EF031267BF4BA00282F94 /* SwiftRadix */,
+				E29EF038267BF71B00282F94 /* DunneAudioKit */,
 			);
 			productName = MIDIKitSyncTestHarness;
 			productReference = E2FAC4DA257884E000A6DD31 /* MIDIKitSyncTestHarness.app */;
@@ -132,9 +148,9 @@
 			);
 			mainGroup = E2FAC4D1257884DF00A6DD31;
 			packageReferences = (
-				E27E3F9925A6E5AB00F4B78E /* XCRemoteSwiftPackageReference "AudioKit" */,
 				E2E635B725EE4CE10039B8CF /* XCRemoteSwiftPackageReference "OTCore" */,
-				E258622625F4BCE300679636 /* XCRemoteSwiftPackageReference "MIDIKit" */,
+				E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */,
+				E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */,
 			);
 			productRefGroup = E2FAC4DB257884E000A6DD31 /* Products */;
 			projectDirPath = "";
@@ -162,8 +178,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E275EAB42679A493008E396D /* mtcGenContentView.swift in Sources */,
 				E27E3FA025A6E5C700F4B78E /* Audio.swift in Sources */,
-				E2FAC4E0257884E000A6DD31 /* ContentView.swift in Sources */,
+				E275EAB02679A444008E396D /* mtcRecContentView.swift in Sources */,
 				E2FAC4DE257884E000A6DD31 /* AppDelegate.swift in Sources */,
 				E2FAC51E2578856F00A6DD31 /* MIDI Endpoints.swift in Sources */,
 			);
@@ -372,20 +389,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E258622625F4BCE300679636 /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+		E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/MIDIKit.git";
+			repositoryURL = "https://github.com/orchetect/SwiftRadix.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.1;
+				minimumVersion = 1.0.1;
 			};
 		};
-		E27E3F9925A6E5AB00F4B78E /* XCRemoteSwiftPackageReference "AudioKit" */ = {
+		E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AudioKit/AudioKit.git";
+			repositoryURL = "https://github.com/AudioKit/DunneAudioKit.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.0;
+				kind = exactVersion;
+				version = 5.2.0;
 			};
 		};
 		E2E635B725EE4CE10039B8CF /* XCRemoteSwiftPackageReference "OTCore" */ = {
@@ -393,21 +410,25 @@
 			repositoryURL = "https://github.com/orchetect/OTCore.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.6;
+				minimumVersion = 1.1.8;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E258622725F4BCE300679636 /* MIDIKit */ = {
+		E29EF02A267BF30700282F94 /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E258622625F4BCE300679636 /* XCRemoteSwiftPackageReference "MIDIKit" */;
 			productName = MIDIKit;
 		};
-		E27E3F9A25A6E5AB00F4B78E /* AudioKit */ = {
+		E29EF031267BF4BA00282F94 /* SwiftRadix */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E27E3F9925A6E5AB00F4B78E /* XCRemoteSwiftPackageReference "AudioKit" */;
-			productName = AudioKit;
+			package = E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */;
+			productName = SwiftRadix;
+		};
+		E29EF038267BF71B00282F94 /* DunneAudioKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */;
+			productName = DunneAudioKit;
 		};
 		E2E635B825EE4CE10039B8CF /* OTCore */ = {
 			isa = XCSwiftPackageProductDependency;
