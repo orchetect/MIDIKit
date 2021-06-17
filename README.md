@@ -14,26 +14,30 @@
 <img src="http://img.shields.io/badge/license-MIT-green.svg?style=flat"
      alt="License: MIT" /></a>
 
-A modular Swift CoreMIDI wrapper with type-safe abstraction for MIDI events, MTC, MMC, HUI, and SMF (Standard MIDI Files).
+A modular Swift CoreMIDI wrapper with type-safe abstraction for MIDI events, MTC, HUI, and SMF (Standard MIDI Files).
 
 ### Available Modules
 
-| Module           | Description                        |                          Completion                          | Docs | Tests |
-| ---------------- | ---------------------------------- | :----------------------------------------------------------: | :--: | :---: |
-| `MIDIKitIO`      | CoreMIDI I/O ports & connections   | ![Progress](https://progress-bar.dev/80/?title=Testing&color=555555&width=95) |  ⚪️   |   🟠   |
-| `MIDIKitSync`    |                                    |                                                              |      |       |
-| ─ `MTC.Receiver` | MIDI Timecode Receiver abstraction | ![Progress](https://progress-bar.dev/90/?title=Testing&color=555555&width=95) |  🟢   |   🟢   |
+| Module            | Description                         |                          Completion                          | Docs | Tests |
+| ----------------- | ----------------------------------- | :----------------------------------------------------------: | :--: | :---: |
+| `MIDIKitIO`       | CoreMIDI I/O ports & connections    | ![Progress](https://progress-bar.dev/90/?title=Operational&color=555555&width=80) |  ⚪️   |   🟠   |
+| `MIDIKitSync`     |                                     |                                                              |      |       |
+| ─ `MTC.Receiver`  | MIDI Timecode Receiver abstraction  | ![Progress](https://progress-bar.dev/100/?title=Complete&color=555555&width=95) |  🟢   |   🟢   |
+| ─ `MTC.Generator` | MIDI Timecode Generator abstraction | ![Progress](https://progress-bar.dev/95/?title=Testing&color=555555&width=100) |  🟢   |   🟠   |
 
 ### Modules in Development
 
-| Module            | Description                         | Completion     | Docs | Tests |
-| ----------------- | ----------------------------------- | :------------: | :--: | :---: |
-| `MIDIKitEvents`   | MIDI events encoding/decoding       | ![Progress](https://progress-bar.dev/50/?title=Postponed&color=555555&width=80) |  ⚪️   |   ⚪️   |
-| `MIDIKitHUI`      | HUI protocol abstraction            | ![Progress](https://progress-bar.dev/40/?title=Future&color=555555&width=98) |  ⚪️   |   ⚪️   |
-| `MIDIKitSMF`      | Standard MIDI File read/write       | ![Progress](https://progress-bar.dev/80/?title=Future&color=555555&width=98) |  ⚪️   |   🟠   |
-| `MIDIKitSync`     |                                     |               |      |       |
-| ─ `MTC.Generator` | MIDI Timecode Generator abstraction | ![Progress](https://progress-bar.dev/0/?title=Future&color=555555&width=98) |  🟢   |   ⚪️   |
-| ─ `MMC`           | MIDI Machine Control abstraction    | ![Progress](https://progress-bar.dev/0/?title=Future&color=555555&width=98) |  ⚪️   |   ⚪️   |
+| Module          | Description                       |                          Completion                          | Docs | Tests |
+| --------------- | --------------------------------- | :----------------------------------------------------------: | :--: | :---: |
+| `MIDIKitEvents` | MIDI 1.0 events encoding/decoding | ![Progress](https://progress-bar.dev/50/?title=In%20Progress&color=555555&width=75) |  ⚪️   |   ⚪️   |
+| `MIDIKitEvents` | MIDI 2.0 events encoding/decoding | ![Progress](https://progress-bar.dev/0/?title=Soon&color=555555&width=117) |  ⚪️   |   ⚪️   |
+
+### Modules Planned
+
+| Module       | Description                       |                          Completion                          | Docs | Tests |
+| ------------ | --------------------------------- | :----------------------------------------------------------: | :--: | :---: |
+| `MIDIKitHUI` | HUI protocol abstraction          | ![Progress](https://progress-bar.dev/20/?title=Legacy%20Code&color=555555&width=80) |  ⚪️   |   ⚪️   |
+| `MIDIKitSMF` | Standard MIDI 1.0 File read/write | ![Progress](https://progress-bar.dev/80/?title=Future&color=555555&width=105) |  ⚪️   |   🟠   |
 
 ## Getting Started
 
@@ -51,14 +55,18 @@ Or import only specific submodules:
 ```swift
 import MIDIKitIO
 import MIDIKitEvents
+// etc. ...
 ```
 
-For documentation on how each module works, see individual module README files.
+## Documentation
+
+See [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder.
 
 ## Roadmap
 
-- [ ] Possible MIDI 2.0 support in future
+- [ ] MIDI 2.0 support
 - [ ] Bluetooth & network MIDI connection support
+- [ ] Rewrite of legacy HUI code
 
 ## Author
 
@@ -72,7 +80,7 @@ Licensed under the MIT license. See [LICENSE](https://github.com/orchetect/MIDIK
 
 Contributions are welcome. Discussion on bug fixes or new features is encouraged before creating pull requests.
 
-Individual commits should have commit messages prefixed with the module they are concerned with, as follows:
+Commit messages should be prefixed with the module they are concerned with, generally as follows:
 
 | Commits with changes within   | Commit message prefix                              |
 | ----------------------------- | -------------------------------------------------- |

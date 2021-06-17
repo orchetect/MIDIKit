@@ -1,29 +1,113 @@
 # MIDIKit: Sync
 
 
-A module for generating & receiving MIDI sync, such as MTC (MIDI Timecode) and MMC (MIDI Machine Control).
+A module for generating & receiving MIDI sync, such as MTC (MIDI Timecode).
 
-It provides simple, easy-to-use abstraction classes that handle the complexity of the raw MIDI message logic underneath.
+It provides simple, easy-to-use abstraction classes that handle the complexity of the raw MIDI message logic and timing underneath.
 
 ## Core Features
 
-- `MTC` (MIDI Timecode)
-  - `Receiver`
-    - Incoming timecode display (ie: `00:00:00:00` string)
-    - Sync abstraction (`idle/stopped`, `preSync`, `sync`, `freewheeling`, `incompatibleFrameRate`)
-  - `Generator`
-    - Sync abstraction (`locate(to: Timecode)`, `start(at: Timecode)`, `stop()`)
-- `MMC` (MIDI Machine Control) - planned (not implemented yet)
+- [`MTC`](#MTC) (MIDI Timecode)
+  - Encoding
+    - [`Encoder`](#MTC.Encoder)
+    - [`Decoder`](#MTC.Decoder)
+      - Incoming timecode display handler (ie: "`01:00:00:00`")
+  - Sync abstraction classes
+    - [`Generator`](#MTC.Generator) (wraps `Encoder`)
+      - Sync abstraction (`locate(to:)`, `start()`, `stop()`)
+    - [`Receiver`](#MTC.Receiver) (wraps `Decoder`)
+      - Incoming timecode display handler (ie: "`01:00:00:00`")
+      - Sync abstraction handler (`idle/stopped`, `preSync`, `sync`, `freewheeling`, `incompatibleFrameRate`)
+- [`MMC`](#MMC) (MIDI Machine Control) - planned (not implemented yet)
 
 ## MTC
 
 The MTC spec, by definition, only defines four base SMPTE frame rates: 24, 25, 29.97d or 30 fps for transmission.
 
-Modern DAWs get around this limitation by scaling these rates to related frame rates. For example: a DAW running at 48 fps will select the 24 fps MTC rate and scale down its frames from 48 to 24 in order to transmit MTC. As long as the receiving DAW is also set to 48 fps, it will know to scale back up from 24 to 48 fps. This happens transparently to the end-user.
+Modern DAWs get around this limitation by scaling these rates to related frame rates. For example: a DAW running at 48 fps will internally select the 24 fps MTC rate and scale down its frames from 48 to 24 in order to transmit MTC. As long as the receiving DAW is also set to 48 fps, it will know to scale back up from 24 to 48 fps. This happens transparently to the end-user.
 
-When MIDIKitSync's MTC objects contain a non-`nil` `localFrameRate` (which can be set to one of 20+ frame rates) then this process will happen in the same manner, and timecodes will be transparently scaled to/from these extended frame rates on your behalf.
+The MTC classes in MIDIKit will also transparently scale frames up or down in the same manner, abstracting the nuts and bolts away and leaving simple API that deals in user timecode and user frame rate.
 
 MTC can trasmit full-frame messages and quarter-frame sync messages. Not all DAW software or hardware implements full-frame messages (including Pro Tools). It means, for example, that Pro Tools only transmits and received quarter-frame continuous sync messages and does not respond to full-frame timecode position messages.
+
+### MTC.Encoder
+
+The `MTC.Encoder` class encodes outgoing MTC MIDI messages.
+
+It can be used when you are only interested in generating events and want to provide your own timing mechanism, and do not require the additional sync abstraction that the `MTC.Generator` adds.
+
+The `Encoder` is capable of forwards and backwards quarter-frame spooling.
+
+#### Init
+
+```swift
+let mtcEnc = MTC.Encoder() { (midiMessage) in
+    // pass MIDI messages generated to a MIDI output endpoint
+    yourMIDIEndpoint.send(midiMessage)
+}
+```
+
+No `localFrameRate` parameter is needed to be set, as it will be set at the time `locate(to:)` is called.
+
+#### Full-Frame Position
+
+```swift
+// send MTC full-frame position message
+let tc = Timecode("01:02:17:05", at: ._24) // form a timecode @ 24fps
+mtcEnc.locate(to: tc)
+```
+
+#### Quarter-Frame Events
+
+Call `increment()` to advance in time by one quarter-frame, or `decrement()` to rewind by one quarter-frame.
+
+No timing mechanism is provided in the `Encoder`. The `Generator` class provides timing mechanisms tailored to each frame rate. To understand how to manually manage timing and context of these events while exclusively using the `Encoder`, consult the [MIDI Timecode extension to the MIDI 1.0 spec](https://www.midi.org/specifications/midi1-specifications/midi-time-code).
+
+### MTC.Generator
+
+The `MTC.Generator` class is a wrapper for `MTC.Encoder` that adds MTC sync abstraction by way of methods and handler closures.
+
+#### Init
+
+```swift
+let mtcGen = MTC.Generator() { (midiMessage) in
+    // pass MIDI messages generated to a MIDI output endpoint
+    yourMIDIEndpoint.send(midiMessage)
+}
+```
+
+No `localFrameRate` parameter is needed to be set, as it will be set at the time `locate(to:)` is called.
+
+#### Full-Frame Position
+
+```swift
+// send MTC full-frame position message
+let tc = Timecode("01:02:17:05", at: ._24) // form a timecode @ 24fps
+mtcGen.locate(to: tc)
+```
+
+#### Sync
+
+While your software's transport is stopped (not playing back), send location change messages by calling `locate(to:)` whenever the playhead position changes (user locates to a new position in the timeline or actively while scrubbing the playhead). This informs the generator of the current timeline position, and also triggers a MTC full-frame message to be transmit.
+
+```swift
+// inform the generator you have located to a new timecode
+// this will also trigger the handler to transmit a MTC full-frame position message
+let tc = Timecode("01:02:17:05", at: ._24) // form a timecode @ 24fps
+mtcGen.locate(to: tc)
+```
+
+To start and stop transmission of continuous quarter-frame messages, first ensure that the generator has located to an origin timecode position from which to start generating. Then call `start()` when playback starts at the start of the frame of that timecode, and `stop()` when playback stops.
+
+```swift
+// start MTC sync generation
+let tc = Timecode("01:05:20:15", at: ._24)
+// transport starts playback at exactly 1:05:20:15 (start of the frame)
+mtcGen.start(at: tc)
+// ...
+// transport stopped
+mtcGen.stop()
+```
 
 ### MTC.Decoder
 
@@ -45,10 +129,10 @@ let mtcDec = MTC.Decoder { timecode, _, _, displayNeedsUpdate in
 }
 ```
 
-When MIDI messages are received on your MTC listener MIDI port, pass them into the `MTC.Decoder`.
+When MIDI messages are received on your MTC listener MIDI endpoint, pass them into the `MTC.Decoder`.
 
 ```swift
-mtcDec.midiIn(midiMessageBytes)
+mtcDec.midiIn(midiMessage)
 ```
 
 If a local frame rate is not specified, timecode and frame fate is derived from the MTC stream by default.
@@ -131,10 +215,10 @@ let mtcRec = MTC.Receiver(name: "main",
 }
 ```
 
-When MIDI messages are received on your MTC listener MIDI port, pass them into the `MTC.Receiver`.
+When MIDI messages are received on your MTC listener MIDI endpoint, pass them into the `MTC.Receiver`.
 
 ```swift
-mtcRec.midiIn(midiMessageBytes)
+mtcRec.midiIn(midiMessage)
 ```
 
 Remember to always update the `localFrameRate` property when your local software's operating frame rate changes. This ensures the object scales MTC timecode property and returns correct timecodes to the handlers.
@@ -143,58 +227,19 @@ Remember to always update the `localFrameRate` property when your local software
 mtcRec.localFrameRate = ._29_97
 ```
 
-### MTC.Generator
-
-#### Init
-
-```swift
-// yourMIDIPort == your MIDI I/O library of choice, not included in this library
-
-let mtcGen = MTC.Generator(localFrameRate: ._30) { (midiMessageBytes) in
-    // pass MIDI messages generated to the MIDI output port
-    yourMIDIPort.send(midiMessageBytes)
-}
-```
-
-**Important:** Remember to always update the `localFrameRate` property when your local software's operating frame rate changes. This ensures the object scales MTC timecode property and returns correct timecodes to the handlers.
-
-```swift
-mtcGen.localFrameRate = ._29_97
-```
-
-#### Full-Frame Position
-
-```swift
-// send MTC full-frame position message
-let tc = Timecode("01:02:17:05", at: ._24) // form a timecode @ 24fps
-mtcGen.locate(to: tc)
-```
-
-#### Sync
-
-```swift
-// start MTC sync generation
-let tc = Timecode("01:05:20:15", at: ._24)
-// transport starts playback at 1:05:20:15 @ 24fps
-mtcGen.start(at: tc)
-// ...
-// transport stopped
-mtcGen.stop()
-```
-
 ## MMC
 
-Not implemented yet.
-
-## Roadmap
-
-- [ ] Add unit tests (in-progress)
-- [ ] Add MMC capability
+Not implemented yet. Possible future addition to the library.
 
 ### Possible Future Additions
 
-- [ ] MIDI Beat Clock
+- [ ] MIDI Beat Clock abstraction
+- [ ] MIDI Machine Control (MMC) abstraction
 
 ## Dependencies
 
 - [TimecodeKit](https://github.com/orchetect/TimecodeKit) - a robust SMPTE timecode and frame rate library written in Swift
+
+## Links
+
+- [MIDI Timecode extension to the MIDI 1.0 spec](https://www.midi.org/specifications/midi1-specifications/midi-time-code)
