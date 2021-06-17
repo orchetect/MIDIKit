@@ -11,7 +11,7 @@ import MIDIKitTestsCommon
 
 final class MIDIKitEventsTests: XCTestCase {
 	
-	// no tests in this file, this is the root test class
+	// no tests in this file, this is the module root test file
 	
 	func testEmpty() {
 		XCTAssert(true)

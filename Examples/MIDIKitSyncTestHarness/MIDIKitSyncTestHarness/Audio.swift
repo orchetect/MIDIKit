@@ -7,11 +7,12 @@
 
 import Foundation
 import AudioKit
+import DunneAudioKit // provides Synth()
 import OTCore
 
 let globalAudioEngine = AudioEngine()
 
-private let synthClick = Synth(
+private let synthClickA = Synth(
     masterVolume: 1.0,
     pitchBend: 12,
     vibratoDepth: 0.0,
@@ -29,11 +30,29 @@ private let synthClick = Synth(
     filterReleaseDuration: 0.0
 )
 
+private let synthClickB = Synth(
+	masterVolume: 1.0,
+	pitchBend: 12,
+	vibratoDepth: 0.0,
+	filterCutoff: 1.0,
+	filterStrength: 2.0,
+	filterResonance: 0.0,
+	attackDuration: 0.0,
+	decayDuration: 0.0,
+	sustainLevel: 1.0,
+	releaseDuration: 0.0,
+	filterEnable: false,
+	filterAttackDuration: 0.0,
+	filterDecayDuration: 0.0,
+	filterSustainLevel: 1.0,
+	filterReleaseDuration: 0.0
+)
+
 func setupAudioEngine() {
 	
     // audio engine
     AudioKit.Settings.bufferLength = .veryShort
-    globalAudioEngine.output = Mixer(synthClick)
+    globalAudioEngine.output = Mixer(synthClickA, synthClickB)
 
     _ = Settings()
 
@@ -43,12 +62,26 @@ func setupAudioEngine() {
 	
 }
 
-func playClick() {
+func playClickA() {
 	
-    synthClick.play(noteNumber: 60, velocity: 127)
+	let note: UInt8 = 60
+	
+    synthClickA.play(noteNumber: note, velocity: 127)
 
-    DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.milliseconds(50)) {
-        synthClick.stop(noteNumber: 60)
+    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) {
+        synthClickA.stop(noteNumber: note)
     }
+	
+}
+
+func playClickB() {
+	
+	let note: UInt8 = 67
+	
+	synthClickB.play(noteNumber: note, velocity: 127)
+
+	DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) {
+		synthClickB.stop(noteNumber: note)
+	}
 	
 }

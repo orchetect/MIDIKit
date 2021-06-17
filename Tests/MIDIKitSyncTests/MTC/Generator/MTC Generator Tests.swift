@@ -13,27 +13,31 @@ import OTCoreTestingXCTest
 
 import TimecodeKit
 
-extension MIDIKitSyncTests {
+final class MTC_Generator_Generator_Tests: XCTestCase {
 	
 	func testMTC_Generator_Default() {
 		
 		let mtcGen1 = MTC.Generator()
-		mtcGen1.setMIDIEventSendHandler { [weak self] (midiBytes) in
+		mtcGen1.setMIDIEventSendHandler { [weak self] (midiMessage) in
 			// send midi message here
+			_ = midiMessage
 			self?.XCTWait(sec: 0.0)
 		}
 		
-		let _ = MTC.Generator { [weak self] (midiBytes) in
+		let _ = MTC.Generator { [weak self] (midiMessage) in
 			// send midi message here
+			_ = midiMessage
 			self?.XCTWait(sec: 0.0)
 		}
 		
-		let _ = MTC.Generator(midiEventSendHandler: { (midiBytes) in
+		let _ = MTC.Generator(midiEventSendHandler: { (midiMessage) in
 			//yourMIDIPort.send(midiBytes)
+			_ = midiMessage
 		})
 		
-		let _ = MTC.Generator { (midiMessageBytes) in
+		let _ = MTC.Generator { (midiMessage) in
 			//yourMIDIPort.send(midiBytes)
+			_ = midiMessage
 		}
 		
 	}

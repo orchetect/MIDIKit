@@ -11,7 +11,7 @@ import XCTest
 @testable import MIDIKitIO
 import MIDIKitTestsCommon
 
-final class MIDIKitIO_Errors_MIDIOSStatus_Tests: XCTestCase {
+final class Errors_MIDIOSStatus_Tests: XCTestCase {
 	
 	func testRawValue() {
 		

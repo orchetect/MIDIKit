@@ -17,14 +17,29 @@ public struct MIDIPacketData {
 	
 	/// Returns `[Byte]` representation `.data`.
 	/// - Note: accessing `.data` property is more performant.
-	@inline(__always) public var bytes: [Byte] { [Byte](data) }
+	@inline(__always) public var bytes: [Byte] {
+		
+		[Byte](data)
+		
+	}
 	
 	@available(swift, obsoleted: 1, renamed: "bytes")
-	public var array: [Byte] { bytes }
+	public var array: [Byte] {
+		
+		bytes
+		
+	}
 	
 	@inline(__always) public init(data: Data, timeStamp: MIDITimeStamp) {
 		
 		self.data = data
+		self.timeStamp = timeStamp
+		
+	}
+	
+	@inline(__always) public init(data: [Byte], timeStamp: MIDITimeStamp) {
+		
+		self.data = Data(data)
 		self.timeStamp = timeStamp
 		
 	}

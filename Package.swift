@@ -49,7 +49,7 @@ let package = Package(
 		.package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.1"),
 		
 		// Timecode
-		.package(url: "https://github.com/orchetect/TimecodeKit", from: "1.1.0")
+		.package(url: "https://github.com/orchetect/TimecodeKit", from: "1.1.2")
 		
 	],
 	
@@ -129,7 +129,7 @@ let package = Package(
 		.target(
 			name: "MIDIKitInternals",
 			dependencies: [
-				// none
+				.product(name: "OTCore", package: "OTCore")
 			]
 		),
 		

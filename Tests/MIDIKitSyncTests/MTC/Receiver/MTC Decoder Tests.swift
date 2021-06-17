@@ -12,7 +12,7 @@ import XCTest
 
 import TimecodeKit
 
-extension MIDIKitSyncTests {
+final class MTC_Receiver_Decoder_Tests: XCTestCase {
 	
 	func testMTC_Decoder_Default() {
 		
@@ -73,59 +73,59 @@ extension MIDIKitSyncTests {
 		
 		let mtcDec = MTC.Decoder()
 		
-		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
+		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_0110]) // QF 0
 		
-		XCTAssertEqual(mtcDec.QFBufferComplete(), false)
+		XCTAssertEqual(mtcDec.qfBufferComplete(), false)
 		XCTAssertEqual(mtcDec.timecode, TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(at: ._24)!)
 		XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
 		
-		XCTAssertEqual(mtcDec.QFBufferComplete(), false)
+		XCTAssertEqual(mtcDec.qfBufferComplete(), false)
 		XCTAssertEqual(mtcDec.timecode, TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(at: ._24)!)
 		XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0010_0100]) // QF 2
 		
-		XCTAssertEqual(mtcDec.QFBufferComplete(), false)
+		XCTAssertEqual(mtcDec.qfBufferComplete(), false)
 		XCTAssertEqual(mtcDec.timecode, TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(at: ._24)!)
 		XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
 		
-		XCTAssertEqual(mtcDec.QFBufferComplete(), false)
+		XCTAssertEqual(mtcDec.qfBufferComplete(), false)
 		XCTAssertEqual(mtcDec.timecode, TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(at: ._24)!)
 		XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0100_0011]) // QF 4
 		
-		XCTAssertEqual(mtcDec.QFBufferComplete(), false)
+		XCTAssertEqual(mtcDec.qfBufferComplete(), false)
 		XCTAssertEqual(mtcDec.timecode, TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(at: ._24)!)
 		XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
 		
-		XCTAssertEqual(mtcDec.QFBufferComplete(), false)
+		XCTAssertEqual(mtcDec.qfBufferComplete(), false)
 		XCTAssertEqual(mtcDec.timecode, TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(at: ._24)!)
 		XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0110_0010]) // QF 6
 		
-		XCTAssertEqual(mtcDec.QFBufferComplete(), false)
+		XCTAssertEqual(mtcDec.qfBufferComplete(), false)
 		XCTAssertEqual(mtcDec.timecode, TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(at: ._24)!)
 		XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0111_0000]) // QF 7
 		
-		XCTAssertEqual(mtcDec.QFBufferComplete(), true)
+		XCTAssertEqual(mtcDec.qfBufferComplete(), true)
 		XCTAssertEqual(mtcDec.timecode, TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(at: ._24)!)
 		XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_1000]) // QF 0
 		
-		XCTAssertEqual(mtcDec.QFBufferComplete(), true)
+		XCTAssertEqual(mtcDec.qfBufferComplete(), true)
 		XCTAssertEqual(mtcDec.timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // new TC
 		XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
 		
@@ -175,7 +175,7 @@ extension MIDIKitSyncTests {
 		
 		let mtcDec = MTC.Decoder()
 		
-		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
+		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
 		// scaled to 48 fps real timecode frame rate
 		
 		mtcDec.localFrameRate = ._48
@@ -190,7 +190,7 @@ extension MIDIKitSyncTests {
 		mtcDec.midiIn(data: [0xF1, 0b0111_0000])
 		mtcDec.midiIn(data: [0xF1, 0b0000_1000])
 		
-		XCTAssertEqual(mtcDec.QFBufferComplete(), true)
+		XCTAssertEqual(mtcDec.qfBufferComplete(), true)
 		XCTAssertEqual(mtcDec.timecode, TCC(h: 2, m: 3, s: 4, f: 16).toTimecode(at: ._48)!) // new TC
 		XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
 		
@@ -228,16 +228,367 @@ extension MIDIKitSyncTests {
 		
 	}
 	
+	func testMTC_Decoder_InternalState_QFMessages_25FPS() {
+		
+		// 25 fps behaves differently from 24/29.97d/30 MTC SMPTE rates
+		
+		var mtcDec: MTC.Decoder
+		
+		
+		// Starting on even frame number:
+		// 25fps QFs starting at 01:00:00:00, locking at 01:00:00:02 (+ 2 MTC frame offset)
+		
+		mtcDec = MTC.Decoder()
+		mtcDec.localFrameRate = ._25
+		
+		mtcDec.midiIn(data: [0xF1, 0b0000_0000]) // QF 0
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0000]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0010]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0010]) // QF 0 MTC 01:00:00:00 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(at: ._25)!)
+		
+		
+		// Starting on odd frame number:
+		// 25fps QFs starting at 01:00:00:00, locking at 01:00:00:02 (+ 2 MTC frame offset)
+		
+		mtcDec = MTC.Decoder()
+		mtcDec.localFrameRate = ._25
+		
+		mtcDec.midiIn(data: [0xF1, 0b0000_0001]) // QF 0
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0000]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0010]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0011]) // QF 0 MTC 01:00:00:01 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 00, f: 03).toTimecode(at: ._25)!)
+		
+		
+		// Starting on even frame number:
+		// 25fps QFs starting at 01:00:00:22, locking at 01:00:00:24 (+ 2 MTC frame offset)
+		
+		mtcDec = MTC.Decoder()
+		mtcDec.localFrameRate = ._25
+		
+		mtcDec.midiIn(data: [0xF1, 0b0000_0110]) // QF 0
+		mtcDec.midiIn(data: [0xF1, 0b0001_0001]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0000]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0010]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_1000]) // QF 0 MTC 01:00:00:22 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 00, f: 24).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0001]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0000]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 00).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0010]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0001]) // QF 0 MTC 01:00:00:24 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 01).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0001]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 02).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0010]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0011]) // QF 0 MTC 01:00:01:01
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 03).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0001]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 04).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0010]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0101]) // QF 0 MTC 01:00:01:03 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 05).toTimecode(at: ._25)!)
+		
+		
+		// Starting on odd frame number:
+		// 25fps QFs starting at 01:00:00:22, locking at 01:00:00:24 (+ 2 MTC frame offset)
+		
+		mtcDec = MTC.Decoder()
+		mtcDec.localFrameRate = ._25
+		
+		mtcDec.midiIn(data: [0xF1, 0b0000_0101]) // QF 0
+		mtcDec.midiIn(data: [0xF1, 0b0001_0001]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0000]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0010]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0111]) // QF 0 MTC 01:00:00:21 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 00, f: 23).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0001]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0000]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 00, f: 24).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0010]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0000]) // QF 0 MTC 01:00:00:23 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 00).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0001]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 01).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0010]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0010]) // QF 0 MTC 01:00:01:00
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 02).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0001]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 03).toTimecode(at: ._25)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0010]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0100]) // QF 0 MTC 01:00:01:02 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 01, f: 04).toTimecode(at: ._25)!)
+		
+	}
+	
+	func testMTC_Decoder_InternalState_QFMessages_2997DropFPS() {
+		
+		// test for edge cases and peculiarities with 29.97 drop fps
+		
+		var mtcDec: MTC.Decoder
+		
+		// 29.97dfps QFs starting at 01:00:00;00, locking at 01:00:00;02 (+ 2 MTC frame offset)
+		
+		mtcDec = MTC.Decoder()
+		mtcDec.localFrameRate = ._29_97_drop
+		
+		mtcDec.midiIn(data: [0xF1, 0b0000_0000]) // QF 0
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0000]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0100]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0010]) // QF 0 MTC 01:00:00;00 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0000]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0100]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0100]) // QF 0 MTC 01:00:00;02 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 00, f: 04).toTimecode(at: ._29_97_drop)!)
+		
+		// 29.97dfps QFs starting at 01:00:59;26, locking at 01:00:59;28 (+ 2 MTC frame offset)
+		
+		mtcDec = MTC.Decoder()
+		mtcDec.localFrameRate = ._29_97_drop
+		
+		mtcDec.midiIn(data: [0xF1, 0b0000_1010]) // QF 0
+		mtcDec.midiIn(data: [0xF1, 0b0001_0001]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_1011]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0011]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0100]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_1100]) // QF 0 MTC 01:00:59;26 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 59, f: 28).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0001]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_1011]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0011]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0100]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0010]) // QF 0 MTC 01:00:59;28 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 01, s: 00, f: 02).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0000]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0001]) // QF 4 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 01, s: 00, f: 03).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0100]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0100]) // QF 0 MTC 01:01:00;02
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 01, s: 00, f: 04).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_0000]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0001]) // QF 4 // sync qf // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 01, s: 00, f: 05).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0100]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0110]) // QF 0 MTC 01:01:00;04 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 01, s: 00, f: 06).toTimecode(at: ._29_97_drop)!)
+		
+		// edge case:
+		// 29.97dfps QFs starting at 01:00:59;26, locking at 01:00:59;28 (+ 2 MTC frame offset)
+		// with changes of direction
+		
+		mtcDec = MTC.Decoder()
+		mtcDec.localFrameRate = ._29_97_drop
+		
+		mtcDec.midiIn(data: [0xF1, 0b0000_1010]) // QF 0
+		mtcDec.midiIn(data: [0xF1, 0b0001_0001]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_1011]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0011]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0100]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_1100]) // QF 0 MTC 01:00:59;26 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 59, f: 28).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0001]) // QF 1
+		mtcDec.midiIn(data: [0xF1, 0b0010_1011]) // QF 2
+		mtcDec.midiIn(data: [0xF1, 0b0011_0011]) // QF 3
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0111_0100]) // QF 7
+		mtcDec.midiIn(data: [0xF1, 0b0000_0010]) // QF 0 MTC 01:00:59;28 // sync qf
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 01, s: 00, f: 02).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 01, s: 00, f: 02).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0000_0010]) // QF 0 ** reverse direction **
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 01, s: 00, f: 02).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0111_0100]) // QF 7
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0110_0001]) // QF 6
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		mtcDec.midiIn(data: [0xF1, 0b0100_0000]) // QF 4
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(at: ._29_97_drop)!)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0011_0011]) // QF 3
+		
+		XCTAssertEqual(mtcDec.timecode,
+					   TCC(h: 1, m: 00, s: 59, f: 28).toTimecode(at: ._29_97_drop)!)
+		
+	}
+	
 	func testMTC_Decoder_InternalState_QFMessages_Direction() {
 		
 		let mtcDec = MTC.Decoder()
 		
-		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
+		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
 		
 		// sequential, forwards and backwards
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_0110]) // QF 0
-		XCTAssertEqual(mtcDec.direction, .forwards)
+		XCTAssertEqual(mtcDec.direction, .ambiguous)
 		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
 		XCTAssertEqual(mtcDec.direction, .forwards)
 		mtcDec.midiIn(data: [0xF1, 0b0010_0100]) // QF 2
@@ -270,10 +621,10 @@ extension MIDIKitSyncTests {
 		// non-sequential (jumps)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
-		XCTAssertEqual(mtcDec.direction, .forwards) // default to forwards
+		XCTAssertEqual(mtcDec.direction, .ambiguous)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0111_0000]) // QF 7
-		XCTAssertEqual(mtcDec.direction, .forwards) // default to forwards
+		XCTAssertEqual(mtcDec.direction, .ambiguous)
 		
 	}
 	
@@ -308,15 +659,23 @@ extension MIDIKitSyncTests {
 		XCTAssertNil(_displayNeedsUpdate)
 		XCTAssertNil(_mtcFR)
 		
-		// full-frame MTC message
+		// full-frame MTC messages
 		
 		mtcDec.midiIn(data: kRawMIDI.MTC_FullFrame._01_02_03_04_at_24fps)
 		
-		XCTAssertEqual(_timecode, TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(at: ._24))
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 02, s: 03, f: 04).toTimecode(at: ._24))
 		XCTAssertEqual(_mType, .fullFrame)
 		XCTAssertEqual(_direction, .forwards)
 		XCTAssertEqual(_displayNeedsUpdate, true)
 		XCTAssertEqual(_mtcFR, .mtc24)
+		
+		mtcDec.midiIn(data: kRawMIDI.MTC_FullFrame._02_11_17_20_at_25fps)
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 11, s: 17, f: 20).toTimecode(at: ._25))
+		XCTAssertEqual(_mType, .fullFrame)
+		XCTAssertEqual(_direction, .forwards)
+		XCTAssertEqual(_displayNeedsUpdate, true)
+		XCTAssertEqual(_mtcFR, .mtc25)
 		
 	}
 	
@@ -351,7 +710,7 @@ extension MIDIKitSyncTests {
 		XCTAssertNil(_displayNeedsUpdate)
 		XCTAssertNil(_mtcFR)
 		
-		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
+		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_0110]) // QF 0
 		
@@ -406,8 +765,8 @@ extension MIDIKitSyncTests {
 		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // new TC
 		XCTAssertEqual(_mType, .quarterFrame)
 		XCTAssertEqual(_displayNeedsUpdate, true)
-		XCTAssertEqual(_direction, .forwards)
 		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .forwards)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
 		
@@ -466,26 +825,201 @@ extension MIDIKitSyncTests {
 		XCTAssertEqual(_direction, .forwards)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_1010]) // QF 0
-		
+
 		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 10).toTimecode(at: ._24)!) // new TC
 		XCTAssertEqual(_mType, .quarterFrame)
 		XCTAssertEqual(_displayNeedsUpdate, true)
 		XCTAssertEqual(_mtcFR, .mtc24)
 		XCTAssertEqual(_direction, .forwards)
+
+		// reverse
+
+		mtcDec.midiIn(data: [0xF1, 0b0111_0000]) // QF 7
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // new TC
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, true)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0110_0010]) // QF 6
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0100_0011]) // QF 4
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // new TC
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, true)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0010_0100]) // QF 2
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		// forwards
+		
+		mtcDec.midiIn(data: [0xF1, 0b0010_0100]) // QF 2
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .forwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .forwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0100_0011]) // QF 4
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // new TC
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, true)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .forwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .forwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0110_0010]) // QF 6
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .forwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0111_0000]) // QF 7
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .forwards)
 		
 		// reverse
 		
-		mtcDec.midiIn(data: [0xF1, 0b0111_0000]) // QF 7
-		XCTAssertEqual(_direction, .backwards)
-		mtcDec.midiIn(data: [0xF1, 0b0000_1010]) // QF 0
-		XCTAssertEqual(_direction, .forwards)
+		mtcDec.midiIn(data: [0xF1, 0b0110_0010]) // QF 6
 		
-		// non-sequential (discontinuous jumps)
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0100_0011]) // QF 4
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
 		
 		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
-		XCTAssertEqual(_direction, .forwards) // default to forwards
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // new TC
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, true)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0010_0100]) // QF 2
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0001_0000]) // QF 1
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0000_1000]) // QF 0
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0111_0000]) // QF 7
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 7).toTimecode(at: ._24)!) // new TC
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, true)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		mtcDec.midiIn(data: [0xF1, 0b0110_0010]) // QF 6
+		
+		XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 7).toTimecode(at: ._24)!) // unchanged
+		XCTAssertEqual(_mType, .quarterFrame)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mtcFR, .mtc24)
+		XCTAssertEqual(_direction, .backwards)
+		
+		// non-sequential (discontinuous jumps)
+
+		mtcDec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
+		XCTAssertEqual(_direction, .ambiguous)
+		
 		mtcDec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
-		XCTAssertEqual(_direction, .forwards) // default to forwards
+		XCTAssertEqual(_direction, .ambiguous)
 		
 	}
 	

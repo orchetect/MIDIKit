@@ -85,22 +85,23 @@ extension Timecode.FrameRate {
 
 extension MTC.MTCFrameRate {
 	
-	/// Scales MTC frames at `self` MTC base rate to actual frames at real timecode frame rate.
-	///
-	/// A `Double` is returned with the integer part representing frame number and the fractional part representing the fraction of the frame derived from quarter-frames.
+	/// Scales MTC frames at `self` MTC base rate to frames at other timecode frame rate.
 	///
 	/// - Note: This is a specialized calculation, and is intended to act upon raw MTC frames as decoded from quarter-frame messages; not intended to be a generalized scale function.
 	///
 	/// This is a double-duty function which first checks frame rate compatibility (and returns `nil` if rates are not H:MM:SS stable), then returns the scaled frames value if they are compatible.
 	///
 	/// - Parameters:
-	///   - fromRawMTCFrames: raw MTC frame number, as decoded from quarter-frame messages
-	///   - quarterFrames: 0...7 number of QFs elapsed
-	///   - timecodeRate: real timecode frame rate to scale to
-	/// - Returns: Frame number scaled to real timecode frame rate.
-	internal func scaledFrames(fromRawMTCFrames: Int,
-							   quarterFrames: UInt8,
-							   to timecodeRate: Timecode.FrameRate) -> Double? {
+	///   - fromRawMTCFrames: Raw MTC frame number, as decoded from quarter-frame messages.
+	///   - quarterFrames: Number of QFs elapsed (0...7).
+	///   - timecodeRate: Real timecode frame rate to scale to.
+	///
+	/// - Returns: A `Double` is returned with the integer part representing frame number and the fractional part representing the fraction of the frame derived from quarter-frames.
+	internal func scaledFrames(
+		fromRawMTCFrames: Int,
+		quarterFrames: UInt8,
+		to timecodeRate: Timecode.FrameRate
+	) -> Double? {
 		
 		// if real timecode frame rates are not compatible (H:MM:SS stable), frame value scaling is not possible
 		guard self.derivedFrameRates.contains(timecodeRate) else {
@@ -109,29 +110,101 @@ extension MTC.MTCFrameRate {
 		
 		// sanitize inputs
 		let rawMTCFrames = fromRawMTCFrames.clamped(to: 0...)
-		let quarterFrames = quarterFrames.clamped(to: 0...7)
+		let rawMTCQuarterFrames = quarterFrames.clamped(to: 0...7)
 		
 		// baseline check: if MTC frame rate is exactly equivalent to resultant timecode frame rate, skip the scale math
 		if self.directEquivalentFrameRate == timecodeRate {
-			return quarterFrames == 0
+			return rawMTCQuarterFrames == 0
 				? Double(rawMTCFrames)
-				: Double(rawMTCFrames) + (Double(quarterFrames) * 0.25)
+				: Double(rawMTCFrames) + (Double(rawMTCQuarterFrames) * 0.25)
 		}
-		
-		// denominators
-		let maxBaseFrames = fpsValueForScaling
-		let maxRealFrames = timecodeRate.maxFrameNumberDisplayable + 1
 		
 		// prep
 		let _rawMTCFrames = Double(rawMTCFrames)
-		let _frameFraction = Double(quarterFrames) * 0.25
-		let _scaleFactor = Double(maxRealFrames) / Double(maxBaseFrames)
+		let _frameFraction = Double(rawMTCQuarterFrames) * 0.25
 		
 		// calculation
-		let scaled = (_rawMTCFrames + _frameFraction) * _scaleFactor
+		var scaled = (_rawMTCFrames + _frameFraction) * timecodeRate.mtcScaleFactor
+		
+		// account for 24.98fps rounding weirdness
+		// due to it being transmit as MTC-24fps, the scaled value will always be underestimated so adding a static offset is a clumsy but effective workaround
+		if timecodeRate == ._24_98 {
+			if scaled > 0.0 {
+				scaled += 0.24
+			}
+		}
 		
 		// return
 		return scaled
+		
+	}
+	
+}
+
+extension Timecode.FrameRate {
+	
+	/// Scales frames at other timecode frame rate to MTC frames at `self` MTC base rate.
+	///
+	/// - Note: This is a specialized calculation, and is intended to produce raw MTC frames and quarter-frame messages; not intended to be a generalized scale function.
+	///
+	/// - Parameter fromTimecodeFrames: A `Double` with the integer part representing frame number and the fractional part representing the fraction of the frame.
+	///
+	/// - Returns: `(rawMTCFrames: Int, rawMTCQuarterFrames: UInt8)` where `rawMTCFrames` is raw MTC frame number, as decoded from quarter-frame messages and `rawMTCQuarterFrames` is number of QFs elapsed (0...7).
+	internal func scaledFrames(
+		fromTimecodeFrames: Double
+	) -> (rawMTCFrames: Int,
+		  rawMTCQuarterFrames: UInt8)
+	{
+		
+		// account for 24.98fps rounding weirdness
+		let scaleFactor = self == ._24_98
+			? mtcScaleFactor - 0.001
+			: mtcScaleFactor
+		
+		// prep
+		let scaled = fromTimecodeFrames / scaleFactor
+		let _tcFrameFraction = scaled.truncatingRemainder(dividingBy: 2)
+		
+		let _rawMTCFrames = Int(scaled - _tcFrameFraction) // truncates at decimal
+		let _rawMTCQuarterFrames = UInt8(_tcFrameFraction / 0.25)
+		
+		return (rawMTCFrames: _rawMTCFrames,
+				rawMTCQuarterFrames: _rawMTCQuarterFrames)
+		
+	}
+	
+}
+
+extension Timecode.FrameRate {
+	
+	/// Internal: scale factor used when scaling timecode frame rate to/from MTC SMPTE frame rates
+	internal var mtcScaleFactor: Double {
+		
+		// calculated from:
+		// (self.maxFrameNumberDisplayable + 1) / self.mtcFrameRate.fpsValueForScaling
+		
+		switch self {
+		case ._23_976:		return 1
+		case ._24:			return 1
+		case ._24_98:		return 1.0416666666666666666666 // 25.0/24.0
+		case ._25:			return 1
+		case ._29_97:		return 1
+		case ._29_97_drop:	return 1
+		case ._30:			return 1
+		case ._30_drop:		return 1
+		case ._47_952:		return 2
+		case ._48:			return 2
+		case ._50:			return 2
+		case ._59_94:		return 2
+		case ._59_94_drop:	return 2
+		case ._60:			return 2
+		case ._60_drop:		return 2
+		case ._100:			return 4
+		case ._119_88:		return 4
+		case ._119_88_drop:	return 4
+		case ._120:			return 4
+		case ._120_drop:	return 4
+		}
 		
 	}
 	

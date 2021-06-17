@@ -12,15 +12,15 @@ import XCTest
 
 import TimecodeKit
 
-extension MIDIKitSyncTests {
+final class MTC_Direction_Tests: XCTestCase {
 	
 	func testMTC_Direction() {
 		
 		// ensure direction infer produces expected direction states
 		
-		// identical values produces ambiguous state (nil)
+		// identical values produces ambiguous state
 		for bits in UInt8(0b000)...UInt8(0b111) {
-			XCTAssertEqual(MTC.Direction(previousQF: bits, newQF: bits), nil)
+			XCTAssertEqual(MTC.Direction(previousQF: bits, newQF: bits), .ambiguous)
 		}
 		
 		// sequential ascending values produces forwards
@@ -43,16 +43,16 @@ extension MIDIKitSyncTests {
 		XCTAssertEqual(MTC.Direction(previousQF: 0b001, newQF: 0b000), .backwards)
 		XCTAssertEqual(MTC.Direction(previousQF: 0b000, newQF: 0b111), .backwards) // wraps
 		
-		// non-sequential values produces ambiguous state (nil)
-		XCTAssertEqual(MTC.Direction(previousQF: 0b000, newQF: 0b010), nil)
-		XCTAssertEqual(MTC.Direction(previousQF: 0b010, newQF: 0b000), nil)
-		XCTAssertEqual(MTC.Direction(previousQF: 0b000, newQF: 0b101), nil)
-		XCTAssertEqual(MTC.Direction(previousQF: 0b101, newQF: 0b000), nil)
+		// non-sequential values produces ambiguous state
+		XCTAssertEqual(MTC.Direction(previousQF: 0b000, newQF: 0b010), .ambiguous)
+		XCTAssertEqual(MTC.Direction(previousQF: 0b010, newQF: 0b000), .ambiguous)
+		XCTAssertEqual(MTC.Direction(previousQF: 0b000, newQF: 0b101), .ambiguous)
+		XCTAssertEqual(MTC.Direction(previousQF: 0b101, newQF: 0b000), .ambiguous)
 		
 		// edge cases: internal UInt8 underflow/overflow failsafe test
-		XCTAssertEqual(MTC.Direction(previousQF: 255, newQF: 0b000), nil)
-		XCTAssertEqual(MTC.Direction(previousQF: 255, newQF: 0b001), nil)
-		XCTAssertEqual(MTC.Direction(previousQF: 255, newQF: 0b111), nil)
+		XCTAssertEqual(MTC.Direction(previousQF: 255, newQF: 0b000), .ambiguous)
+		XCTAssertEqual(MTC.Direction(previousQF: 255, newQF: 0b001), .ambiguous)
+		XCTAssertEqual(MTC.Direction(previousQF: 255, newQF: 0b111), .ambiguous)
 		
 	}
 

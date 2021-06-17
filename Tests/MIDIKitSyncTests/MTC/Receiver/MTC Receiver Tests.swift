@@ -12,7 +12,7 @@ import XCTest
 import OTCore
 import TimecodeKit
 
-extension MIDIKitSyncTests {
+final class MTC_Receiver_Receiver_Tests: XCTestCase {
 	
 	func testMTC_Receiver_Default() {
 		
@@ -434,12 +434,12 @@ extension MIDIKitSyncTests {
 		mtcRec.midiIn(data: [0xF1, 0b0011_0000]) // QF 3
 		XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
 		
-		XCTAssertEqual(_direction, .forwards) // default to forwards
+		XCTAssertEqual(_direction, .ambiguous) 
 		
 		mtcRec.midiIn(data: [0xF1, 0b0101_0000]) // QF 5
 		XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
 		
-		XCTAssertEqual(_direction, .forwards) // default to forwards
+		XCTAssertEqual(_direction, .ambiguous)
 		
 	}
 	
