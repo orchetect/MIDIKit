@@ -129,7 +129,7 @@ let package = Package(
 		.target(
 			name: "MIDIKitInternals",
 			dependencies: [
-				// none
+				.product(name: "OTCore", package: "OTCore")
 			]
 		),
 		
