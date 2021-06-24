@@ -41,7 +41,7 @@ The `Encoder` is capable of forwards and backwards quarter-frame spooling.
 #### Init
 
 ```swift
-let mtcEnc = MTC.Encoder() { (midiMessage) in
+let mtcEnc = MIDI.MTC.Encoder() { (midiMessage) in
     // pass MIDI messages generated to a MIDI output endpoint
     yourMIDIEndpoint.send(midiMessage)
 }
@@ -70,7 +70,7 @@ The `MTC.Generator` class is a wrapper for `MTC.Encoder` that adds MTC sync abst
 #### Init
 
 ```swift
-let mtcGen = MTC.Generator() { (midiMessage) in
+let mtcGen = MIDI.MTC.Generator() { (midiMessage) in
     // pass MIDI messages generated to a MIDI output endpoint
     yourMIDIEndpoint.send(midiMessage)
 }
@@ -120,7 +120,7 @@ It can be used when you are only interested in displaying timecode and do not re
 All of the callback handler closures are optional and can each be independently implemented or omitted.
 
 ```swift
-let mtcDec = MTC.Decoder { timecode, _, _, displayNeedsUpdate in
+let mtcDec = MIDI.MTC.Decoder { timecode, _, _, displayNeedsUpdate in
     if displayNeedsUpdate {
         print(timecode.stringValue) // "00:00:00:00"
         print(timecode.components)  // (h: 0, m: 0, s: 0, f: 0)
@@ -174,10 +174,10 @@ The `MTC.Receiver` class is a wrapper for `MTC.Decoder` that adds MTC sync abstr
 All of the callback handler closures are optional and can each be independently implemented or omitted.
 
 ```swift
-let mtcRec = MTC.Receiver(name: "main",
-                          localFrameRate: ._30,
-                          syncPolicy: .init(lockFrames: 16,
-                                            dropOutFrames: 10))
+let mtcRec = MIDI.MTC.Receiver(name: "main",
+                               localFrameRate: ._30,
+                               syncPolicy: .init(lockFrames: 16,
+                                                 dropOutFrames: 10))
 { timecode, messageType, direction, displayNeedsUpdate in
     if messageType == .fullFrame {
         // add logic to locate your software to a jump in timecode
