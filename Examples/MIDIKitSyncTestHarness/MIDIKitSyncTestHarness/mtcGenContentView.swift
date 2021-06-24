@@ -1,8 +1,7 @@
 //
 //  mtcGenContentView.swift
 //  MIDIKitSyncTestHarness
-//
-//  Created by Steffan Andrews on 2020-12-02.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import Combine
@@ -15,9 +14,9 @@ import SwiftRadix
 
 struct mtcGenContentView: View {
 	
-	weak var midiManager: MIDIIO.Manager?
+	weak var midiManager: MIDI.IO.Manager?
 	
-	init(midiManager: MIDIIO.Manager?) {
+	init(midiManager: MIDI.IO.Manager?) {
 		// normally in SwiftUI we would pass midiManager in as an EnvironmentObject
 		// but that only works on macOS 11.0+ and for sake of backwards compatibility
 		// we will do it old-school weak delegate storage pattern
@@ -26,7 +25,7 @@ struct mtcGenContentView: View {
 	
 	// MARK: - MIDI state
 	
-	@State var mtcGen: MTC.Generator = .init()
+	@State var mtcGen: MIDI.MTC.Generator = .init()
 	
 	@State var localFrameRate: Timecode.FrameRate = ._24
 	
@@ -122,7 +121,7 @@ struct mtcGenContentView: View {
 			}
 			
 			// set up new MTC receiver and configure it
-			mtcGen = MTC.Generator(
+			mtcGen = MIDI.MTC.Generator(
 				name: "main",
 				midiEventSendHandler: { midiMessage in
 					try? midiManager?

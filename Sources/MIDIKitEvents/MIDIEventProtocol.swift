@@ -1,11 +1,9 @@
 //
 //  MIDIEventProtocol.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-01-22.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-// MARK: - AnyMIDIEvent
+// MARK: - MIDIEventProtocol
 
 public protocol MIDIEventProtocol {
 	
@@ -16,7 +14,7 @@ public protocol MIDIEventProtocol {
 	/// Throws an error of type `ParseError` in the event of failure.
 	init(rawBytes: [Byte]) throws
 	
-	/// Constructs a `MIDIEvent` instance from this event case.
-	func asEvent() -> MIDIEvent
+	/// Constructs a `MIDI.Event` instance from this event case.
+	func asEvent() -> MIDI.Event
 	
 }

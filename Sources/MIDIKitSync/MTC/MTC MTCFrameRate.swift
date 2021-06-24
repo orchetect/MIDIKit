@@ -1,13 +1,11 @@
 //
 //  MTC MTCFrameRate.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-11-25.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import TimecodeKit
 
-extension MTC {
+extension MIDI.MTC {
 	
 	/*
 	MTC hour byte includes frame rate information

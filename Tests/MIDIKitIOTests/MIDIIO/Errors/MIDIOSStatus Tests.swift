@@ -1,8 +1,6 @@
 //
 //  MIDIOSStatus Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-02-22.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -18,24 +16,24 @@ final class Errors_MIDIOSStatus_Tests: XCTestCase {
 		// spot check: known constant
 		
 		XCTAssertEqual(
-			MIDIIO.MIDIOSStatus(rawValue: -10830),
+			MIDI.IO.MIDIOSStatus(rawValue: -10830),
 			.invalidClient
 		)
 		
 		XCTAssertEqual(
-			MIDIIO.MIDIOSStatus.invalidClient.rawValue,
+			MIDI.IO.MIDIOSStatus.invalidClient.rawValue,
 			-10830
 		)
 		
 		// other
 		
 		XCTAssertEqual(
-			MIDIIO.MIDIOSStatus(rawValue: 7777),
+			MIDI.IO.MIDIOSStatus(rawValue: 7777),
 			.other(7777)
 		)
 		
 		XCTAssertEqual(
-			MIDIIO.MIDIOSStatus.other(7777).rawValue,
+			MIDI.IO.MIDIOSStatus.other(7777).rawValue,
 			7777
 		)
 		
@@ -46,7 +44,7 @@ final class Errors_MIDIOSStatus_Tests: XCTestCase {
 		// spot check: known constant
 		
 		XCTAssert(
-			"\(MIDIIO.MIDIOSStatus.invalidClient)".contains("kMIDIInvalidClient")
+			"\(MIDI.IO.MIDIOSStatus.invalidClient)".contains("kMIDIInvalidClient")
 		)
 		
 	}

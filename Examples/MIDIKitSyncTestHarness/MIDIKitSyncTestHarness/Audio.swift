@@ -1,8 +1,7 @@
 //
 //  Audio.swift
 //  MIDIKitSyncTestHarness
-//
-//  Created by Steffan Andrews on 2021-01-06.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import Foundation

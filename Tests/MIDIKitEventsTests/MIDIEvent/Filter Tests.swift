@@ -1,8 +1,6 @@
 //
 //  Filter Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-01-28.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -17,7 +15,7 @@ class FilterTests: XCTestCase {
 	
 	func testFilter_Collection_MIDIEvent() {
 		
-		let coll: [MIDIEvent] =
+		let coll: [MIDI.Event] =
 		[
 			.chanVoice(.noteOn(note: 60, velocity: 100, channel: 0)),
 			.chanVoice(.cc(.modWheel(value: 80), channel: 0)),
@@ -27,16 +25,16 @@ class FilterTests: XCTestCase {
 			try! .raw([0xFF])
 		]
 		
-		// empty MIDIEventKind/KindPattern array
+		// empty MIDIEventKindProtocol/KindPattern array
 		
-		let emptyDropKinds: [MIDIEventKind] = []
+		let emptyDropKinds: [MIDIEventKindProtocol] = []
 		XCTAssertEqual(coll.filter(emptyDropKinds), [])
 		
-		let emptyDropKindPattern: [MIDIEvent.KindPattern] = []
+		let emptyDropKindPattern: [MIDI.Event.KindPattern] = []
 		XCTAssertEqual(coll.filter(pattern: emptyDropKindPattern), [])
 		
 		// -------------------------------------------------------------------
-		// MIDIEvent -> sub typed filters
+		// MIDI.Event -> sub typed filters
 		// -------------------------------------------------------------------
 		
 		XCTAssertEqual(coll.filterChannelVoice(),
@@ -53,7 +51,7 @@ class FilterTests: XCTestCase {
 					   [.sysEx(manufacturer: 0x41, message: [0x20, 0x42])])
 		
 		// -------------------------------------------------------------------
-		// [MIDIEvent].filter(_ kinds: [Element.Kind]) -> [Element]
+		// [MIDI.Event].filter(_ kinds: [Element.Kind]) -> [Element]
 		// -------------------------------------------------------------------
 		
 		XCTAssertEqual(coll.filter([.chanVoice]),
@@ -73,7 +71,7 @@ class FilterTests: XCTestCase {
 					   [try! .raw([0xFF])])
 		
 		// -------------------------------------------------------------------
-		// [MIDIEvent].filter(pattern: [MIDIEvent.KindPattern]) -> [MIDIEvent]
+		// [MIDI.Event].filter(pattern: [MIDI.Event.KindPattern]) -> [MIDI.Event]
 		// -------------------------------------------------------------------
 		
 		// ---- wildcard matching (empty sub-pattern arrays) ----
@@ -169,7 +167,7 @@ class FilterTests: XCTestCase {
 	
 	func testFilter_Collection_MIDIEvent_ChannelVoiceMessage() {
 		
-		let baseColl: [MIDIEvent] =
+		let baseColl: [MIDI.Event] =
 		[
 			.chanVoice(.noteOn(note: 60, velocity: 100, channel: 0)),
 			.chanVoice(.cc(.modWheel(value: 80), channel: 0)),
@@ -179,15 +177,15 @@ class FilterTests: XCTestCase {
 			try! .raw([0xFF])
 		]
 		
-		let coll: [MIDIEvent.ChannelVoiceMessage] = baseColl.filterChannelVoice()
+		let coll: [MIDI.Event.ChannelVoiceMessage] = baseColl.filterChannelVoice()
 		
 		// empty Kind array
 		
-		let emptyDropKinds: [MIDIEvent.ChannelVoiceMessage.Kind] = []
+		let emptyDropKinds: [MIDI.Event.ChannelVoiceMessage.Kind] = []
 		XCTAssertEqual(coll.filter(emptyDropKinds), [])
 		
 		// ----------------------------------------------------------------------------
-		// [MIDIEvent.ChannelVoiceMessage].filter(_ kinds: [Element.Kind]) -> [Element]
+		// [MIDI.Event.ChannelVoiceMessage].filter(_ kinds: [Element.Kind]) -> [Element]
 		// ----------------------------------------------------------------------------
 		
 		// just noteOn events
@@ -213,7 +211,7 @@ class FilterTests: XCTestCase {
 	
 	func testDrop_Collection_MIDIEvent() {
 		
-		let coll: [MIDIEvent] =
+		let coll: [MIDI.Event] =
 		[
 			.chanVoice(.noteOn(note: 60, velocity: 100, channel: 0)),
 			.chanVoice(.cc(.modWheel(value: 80), channel: 0)),
@@ -223,16 +221,16 @@ class FilterTests: XCTestCase {
 			try! .raw([0xFF])
 		]
 		
-		// empty MIDIEventKind/KindPattern array
+		// empty MIDIEventKindProtocol/KindPattern array
 		
-		let emptyDropKinds: [MIDIEventKind] = []
+		let emptyDropKinds: [MIDIEventKindProtocol] = []
 		XCTAssertEqual(coll.drop(emptyDropKinds), coll)
 		
-		let emptyDropKindPattern: [MIDIEvent.KindPattern] = []
+		let emptyDropKindPattern: [MIDI.Event.KindPattern] = []
 		XCTAssertEqual(coll.drop(pattern: emptyDropKindPattern), coll)
 		
 		// -------------------------------------------------------------------
-		// [MIDIEvent].drop(_ kinds: [Element.Kind]) -> [Element]
+		// [MIDI.Event].drop(_ kinds: [Element.Kind]) -> [Element]
 		// -------------------------------------------------------------------
 		
 		XCTAssertEqual(coll.drop([.chanVoice]),

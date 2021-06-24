@@ -1,8 +1,7 @@
 //
 //  Example Managed Objects.swift
 //  MIDIKitTestHarness
-//
-//  Created by Steffan Andrews on 2021-03-01.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import Foundation
@@ -54,7 +53,7 @@ import Foundation
 // MARK: - create an output port ----------
 // ----------------------------------------
 
-// var midiOutTimer: SafeDispatchTimer? = nil
+// var midiOutTimer: MIDI.SafeDispatchTimer? = nil
 //
 //	do {
 //		let uID = UserDefaults.standard
@@ -72,9 +71,9 @@ import Foundation
 //			.setValue(newUniqueID, forKey: "MIDIKitTestHarness Out - Unique ID")
 
 //		// create a timer that sends a message every 1 second for debug purposes
-//		midiOutTimer = SafeDispatchTimer(frequencyInHz: 1.0,
-//										 queue: DispatchQueue.main,
-//										 leeway: .milliseconds(10)) {
+//		midiOutTimer = MIDI.SafeDispatchTimer(frequencyInHz: 1.0,
+//											  queue: DispatchQueue.main,
+//											  leeway: .milliseconds(10)) {
 //
 //			// Send MIDI CC #1 value int 64 on channel 1
 //			try? midiManager.managedOutputs["MIDIKitTestHarness Out"]?
@@ -98,9 +97,9 @@ import Foundation
 //		)
 //
 //		// create a timer that sends a message every 1 second for debug purposes
-//		midiOutTimer2 = SafeDispatchTimer(frequencyInHz: 1.0,
-//										  queue: DispatchQueue.main,
-//										  leeway: .milliseconds(10)) {
+//		midiOutTimer2 = MIDI.SafeDispatchTimer(frequencyInHz: 1.0,
+//											   queue: DispatchQueue.main,
+//											   leeway: .milliseconds(10)) {
 //
 //			// Send MIDI CC #2 value int 64 on channel 1
 //			try? midiManager.managedOutputConnections["MIDI Monitor"]?
@@ -128,9 +127,9 @@ import Foundation
 //											  inputs: [inp],
 //											  tag: "Thru")
 //
-//			midiOutTimer2 = SafeDispatchTimer(frequencyInHz: 1.0,
-//											  queue: DispatchQueue.main,
-//											  leeway: .milliseconds(10)) {
+//			midiOutTimer2 = MIDI.SafeDispatchTimer(frequencyInHz: 1.0,
+//												   queue: DispatchQueue.main,
+//												   leeway: .milliseconds(10)) {
 //
 //				guard let conn = midiManager.managedThruConnections["Thru"] else {
 //					Log.debug("Can't find managed Thru connection")

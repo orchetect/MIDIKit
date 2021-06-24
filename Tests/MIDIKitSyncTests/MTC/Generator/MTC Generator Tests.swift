@@ -1,8 +1,6 @@
 //
 //  MTC Generator Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-01-08.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -17,25 +15,25 @@ final class MTC_Generator_Generator_Tests: XCTestCase {
 	
 	func testMTC_Generator_Default() {
 		
-		let mtcGen1 = MTC.Generator()
+		let mtcGen1 = MIDI.MTC.Generator()
 		mtcGen1.setMIDIEventSendHandler { [weak self] (midiMessage) in
 			// send midi message here
 			_ = midiMessage
 			self?.XCTWait(sec: 0.0)
 		}
 		
-		let _ = MTC.Generator { [weak self] (midiMessage) in
+		let _ = MIDI.MTC.Generator { [weak self] (midiMessage) in
 			// send midi message here
 			_ = midiMessage
 			self?.XCTWait(sec: 0.0)
 		}
 		
-		let _ = MTC.Generator(midiEventSendHandler: { (midiMessage) in
+		let _ = MIDI.MTC.Generator(midiEventSendHandler: { (midiMessage) in
 			//yourMIDIPort.send(midiBytes)
 			_ = midiMessage
 		})
 		
-		let _ = MTC.Generator { (midiMessage) in
+		let _ = MIDI.MTC.Generator { (midiMessage) in
 			//yourMIDIPort.send(midiBytes)
 			_ = midiMessage
 		}

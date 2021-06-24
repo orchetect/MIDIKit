@@ -1,8 +1,6 @@
 //
 //  MTC Decoder.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2017-04-15.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 /* Notes:
@@ -30,7 +28,7 @@ Logic Pro
 import MIDIKitInternals
 import TimecodeKit
 
-extension MTC {
+extension MIDI.MTC {
 	
 	/// MTC (MIDI Timecode) stream decoder object.
 	///
@@ -62,10 +60,10 @@ extension MTC {
 		/// When set, MTC frame numbers will be scaled to real frame rate frame numbers, but only when the incoming MTC frame rate and the `localFrameRate` are compatible.
 		///
 		/// Remember to also set this any time the local frame rate changes so the receiver can interpret the incoming MTC accordingly.
-		@AtomicAccess public var localFrameRate: Timecode.FrameRate? = nil
+		@MIDI.AtomicAccess public var localFrameRate: Timecode.FrameRate? = nil
 		
 		/// Status of the direction of MTC quarter-frames received
-		public internal(set) var direction: MTC.Direction = .forwards
+		public internal(set) var direction: Direction = .forwards
 		
 		
 		// MARK: - Stored closures
@@ -472,7 +470,7 @@ extension MTC {
 		}
 		
 		/// Parses framerate info received from MTC stream and stores value
-		/// - parameter rateBits: two-bit number
+		/// - Parameter rateBits: two-bit number
 		@inline(__always) internal func setMTCFrameRate(rateBits: UInt8) {
 			
 			if let bits = MTCFrameRate(rateBits) {

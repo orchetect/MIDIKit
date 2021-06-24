@@ -1,8 +1,6 @@
 //
 //  MIDIKitTests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-02-21.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -21,20 +19,20 @@ final class MIDIKitTests: XCTestCase {
 		// this test is here to diagnose Package.swift dependency tree issues
 		// as long as this test passes, then package configuration should be correct
 		
-//		_ = MIDIUInt7.self
-//		_ = MIDIKitCommon.MIDIUInt7.self
+//		_ = MIDI.UInt7.self
+//		_ = MIDIKitCommon.MIDI.UInt7.self
 //
 //		_ = AnyMIDIEventKind.self
 //		_ = MIDIKit.AnyMIDIEventKind.self
 //
-//		_ = MIDIIO.Manager.self
-//		_ = MIDIKitIO.MIDIIO.Manager.self
+//		_ = MIDI.IO.Manager.self
+//		_ = MIDIKitIO.MIDI.IO.Manager.self
 //
-//		_ = MIDIEvent.self
-//		_ = MIDIKitEvents.MIDIEvent.self
+//		_ = MIDI.Event.self
+//		_ = MIDIKitEvents.MIDI.Event.self
 //
-//		_ = MTC.Receiver.self
-//		_ = MIDIKitSync.MTC.Receiver.self
+//		_ = MIDI.MTC.Receiver.self
+//		_ = MIDIKitSync.MIDI.MTC.Receiver.self
 //
 //		_ = kMIDIPacket.emptyBytes256Length
 		

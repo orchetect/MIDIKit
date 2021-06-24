@@ -1,11 +1,9 @@
 //
 //  MTC MessageType.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-22.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MTC {
+extension MIDI.MTC {
 	
 	public enum MessageType {
 		

@@ -1,8 +1,7 @@
 //
 //  AppDelegate.swift
 //  MIDIKitTestHarness
-//
-//  Created by Steffan Andrews on 2021-01-12.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import SwiftUI
@@ -14,7 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	var window: NSWindow!
 	
-	fileprivate(set) var midiManager: MIDIIO.Manager?
+	fileprivate(set) var midiManager: MIDI.IO.Manager?
 
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		
@@ -39,7 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		window.contentView = {
 			if #available(macOS 11.0, *) {
 				
-				// for Big Sur, demonstrate using @StateObject to hold the MIDIIO.Manager in a subordinate scope and not in AppDelegate
+				// for Big Sur, demonstrate using @StateObject to hold the MIDI.IO.Manager in a subordinate scope and not in AppDelegate
 				window.title = "MIDIKit Test Harness (Big Sur)"
 				return NSHostingView(
 					rootView: ContentViewBigSur()
@@ -48,12 +47,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				
 			} else {
 				
-				// for Catalina, since @StateObject is not available for use, demonstrate storing the MIDIIO.Manager instance in AppDelegate and passing it by reference into ContentView's weak @ObservedObject storage.
+				// for Catalina, since @StateObject is not available for use, demonstrate storing the MIDI.IO.Manager instance in AppDelegate and passing it by reference into ContentView's weak @ObservedObject storage.
 				midiManager = {
 					let newManager =
-						MIDIIO.Manager(clientName: "MIDIKitTestHarness",
-									   model: "TestApp",
-									   manufacturer: "Orchetect")
+						MIDI.IO.Manager(clientName: "MIDIKitTestHarness",
+										model: "TestApp",
+										manufacturer: "Orchetect")
 					do {
 						Log.debug("Starting MIDI manager client")
 						try newManager.start()

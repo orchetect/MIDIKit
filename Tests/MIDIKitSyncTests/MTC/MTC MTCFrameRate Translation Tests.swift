@@ -1,8 +1,6 @@
 //
 //  MTC MTCFrameRate Translation Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-11.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -23,7 +21,7 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
 		// MTC: 24
 		
 		XCTAssertEqual(
-			MTC.MTCFrameRate.mtc24.derivedFrameRates,
+			MIDI.MTC.MTCFrameRate.mtc24.derivedFrameRates,
 			
 			[
 				._23_976,
@@ -37,7 +35,7 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
 		// MTC: 25
 		
 		XCTAssertEqual(
-			MTC.MTCFrameRate.mtc25.derivedFrameRates,
+			MIDI.MTC.MTCFrameRate.mtc25.derivedFrameRates,
 			
 			[
 				._25,
@@ -49,7 +47,7 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
 		// MTC: drop
 		
 		XCTAssertEqual(
-			MTC.MTCFrameRate.mtc2997d.derivedFrameRates,
+			MIDI.MTC.MTCFrameRate.mtc2997d.derivedFrameRates,
 			
 			[
 				._29_97_drop,
@@ -64,7 +62,7 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
 		// MTC: drop
 		
 		XCTAssertEqual(
-			MTC.MTCFrameRate.mtc30.derivedFrameRates,
+			MIDI.MTC.MTCFrameRate.mtc30.derivedFrameRates,
 			
 			[
 				._29_97,

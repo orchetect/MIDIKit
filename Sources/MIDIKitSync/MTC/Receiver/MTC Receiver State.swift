@@ -1,8 +1,6 @@
 //
 //  MTC Receiver State.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-21.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import Dispatch
@@ -10,7 +8,7 @@ import TimecodeKit
 
 // MARK: - State
 
-extension MTC.Receiver {
+extension MIDI.MTC.Receiver {
 	
 	/// MTC data stream receive state
 	public enum State: Equatable {
@@ -39,7 +37,7 @@ extension MTC.Receiver {
 	
 }
 
-extension MTC.Receiver.State: CustomStringConvertible {
+extension MIDI.MTC.Receiver.State: CustomStringConvertible {
 	
 	public var description: String {
 		

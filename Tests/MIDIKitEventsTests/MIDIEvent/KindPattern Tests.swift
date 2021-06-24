@@ -1,8 +1,6 @@
 //
 //  KindPattern Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-01-28.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -17,7 +15,7 @@ class KindPatternTests: XCTestCase {
 	
 	func testFilterChannelVoice_Nil() {
 		
-		let coll: [MIDIEvent.KindPattern] =
+		let coll: [MIDI.Event.KindPattern] =
 		[
 			.chanVoice(nil),
 			.sysCommon(nil),
@@ -29,17 +27,17 @@ class KindPatternTests: XCTestCase {
 		let collFiltered = coll.filterChannelVoiceAndConsolidate()
 		
 		// assert it's the expected return type
-		let expectedType: [MIDIEvent.ChannelVoiceMessage.KindPattern]? = nil
+		let expectedType: [MIDI.Event.ChannelVoiceMessage.KindPattern]? = nil
 		XCTAssert(type(of: collFiltered) == type(of: expectedType))
 		
 		// assert result contents
-		XCTAssertEqual(collFiltered, MIDIEvent.ChannelVoiceMessage.KindPattern.allCases)
+		XCTAssertEqual(collFiltered, MIDI.Event.ChannelVoiceMessage.KindPattern.allCases)
 		
 	}
 	
 	func testFilterChannelVoice_Empty() {
 		
-		let coll: [MIDIEvent.KindPattern] =
+		let coll: [MIDI.Event.KindPattern] =
 		[
 			.chanVoice([]),
 			.sysCommon(nil),
@@ -51,7 +49,7 @@ class KindPatternTests: XCTestCase {
 		let collFiltered = coll.filterChannelVoiceAndConsolidate()
 		
 		// assert it's the expected return type
-		let expectedType: [MIDIEvent.ChannelVoiceMessage.KindPattern]? = nil
+		let expectedType: [MIDI.Event.ChannelVoiceMessage.KindPattern]? = nil
 		XCTAssert(type(of: collFiltered) == type(of: expectedType))
 		
 		// assert result contents
@@ -61,7 +59,7 @@ class KindPatternTests: XCTestCase {
 	
 	func testFilterChannelVoice_SingleEntry() {
 		
-		let coll: [MIDIEvent.KindPattern] =
+		let coll: [MIDI.Event.KindPattern] =
 		[
 			.chanVoice([.noteOn]),
 			.sysCommon(nil),
@@ -73,7 +71,7 @@ class KindPatternTests: XCTestCase {
 		let collFiltered = coll.filterChannelVoiceAndConsolidate()
 		
 		// assert it's the expected return type
-		let expectedType: [MIDIEvent.ChannelVoiceMessage.KindPattern]? = nil
+		let expectedType: [MIDI.Event.ChannelVoiceMessage.KindPattern]? = nil
 		XCTAssert(type(of: collFiltered) == type(of: expectedType))
 		
 		// assert result contents
@@ -83,7 +81,7 @@ class KindPatternTests: XCTestCase {
 	
 	func testFilterChannelVoice_MultipleEntries() {
 		
-		let coll: [MIDIEvent.KindPattern] =
+		let coll: [MIDI.Event.KindPattern] =
 		[
 			.chanVoice([.noteOn, .noteOff, .controllerChange(nil)]),
 			.chanVoice([.pitchBend]),
@@ -96,7 +94,7 @@ class KindPatternTests: XCTestCase {
 		let collFiltered = coll.filterChannelVoiceAndConsolidate()
 		
 		// assert it's the expected return type
-		let expectedType: [MIDIEvent.ChannelVoiceMessage.KindPattern]? = nil
+		let expectedType: [MIDI.Event.ChannelVoiceMessage.KindPattern]? = nil
 		XCTAssert(type(of: collFiltered) == type(of: expectedType))
 		
 		// assert result contents
@@ -104,25 +102,25 @@ class KindPatternTests: XCTestCase {
 		
 	}
 	
-	// MIDIEvent.KindPattern .filterChannelVoice()
+	// MIDI.Event.KindPattern .filterChannelVoice()
 	
 	func testMIDIEvent_KindPattern_filterChannelVoice() {
 		
-		if let _ = MIDIEvent.KindPattern.chanVoice(nil)
+		if let _ = MIDI.Event.KindPattern.chanVoice(nil)
 			.filterChannelVoice() {
 			// Optional(nil)
 			// Have to test with `if let ...` and not XCTAssertEqual because it will equate to nil, not Optional(nil)
 		} else { XCTFail() }
 		
-		XCTAssertEqual(MIDIEvent.KindPattern.chanVoice([])
+		XCTAssertEqual(MIDI.Event.KindPattern.chanVoice([])
 						.filterChannelVoice(),
 					   Optional([]))
 		
-		XCTAssertEqual(MIDIEvent.KindPattern.chanVoice([.noteOn])
+		XCTAssertEqual(MIDI.Event.KindPattern.chanVoice([.noteOn])
 						.filterChannelVoice(),
 					   Optional([.noteOn]))
 		
-		if let _ = MIDIEvent.KindPattern.sysCommon(nil)
+		if let _ = MIDI.Event.KindPattern.sysCommon(nil)
 			.filterChannelVoice() {
 			XCTFail()
 		}

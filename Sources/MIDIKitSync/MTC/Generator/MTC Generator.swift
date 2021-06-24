@@ -1,15 +1,13 @@
 //
 //  MTC Generator.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-11-25.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import Foundation
 import MIDIKitInternals
 import TimecodeKit
 
-extension MTC {
+extension MIDI.MTC {
 	
 	/// MTC sync generator.
 	public class Generator {
@@ -21,7 +19,7 @@ extension MTC {
 		/// The MTC SMPTE frame rate (24, 25, 29.97d, or 30) that was last transmitted by the generator.
 		///
 		/// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the local `timecode.frameRate` property is used for automatic selection of MTC SMPTE frame rate and scaling of outgoing timecode accordingly.
-		public var mtcFrameRate: MTC.MTCFrameRate {
+		public var mtcFrameRate: MTCFrameRate {
 			
 			encoder.mtcFrameRate
 			
@@ -80,9 +78,9 @@ extension MTC {
 			queue = DispatchQueue(label: "midikit.mtcgenerator.\(name)",
 								  qos: .userInteractive)
 			
-			timer = SafeDispatchTimer(rate: .seconds(1.0), // default, will be changed later
-									  queue: queue,
-									  eventHandler: { })
+			timer = MIDI.SafeDispatchTimer(rate: .seconds(1.0), // default, will be changed later
+										   queue: queue,
+										   eventHandler: { })
 			
 			timer.setEventHandler { [weak self] in
 				
@@ -118,7 +116,7 @@ extension MTC {
 		
 		// MARK: - Timer (internal)
 		
-		internal var timer: SafeDispatchTimer
+		internal var timer: MIDI.SafeDispatchTimer
 		
 		/// Internal: Fired from our timer object.
 		internal func timerFired() {
@@ -198,7 +196,7 @@ extension MTC {
 		///
 		/// Frame rate will be derived from the `timecode` object passed in.
 		///
-		/// - note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
+		/// - Note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
 		///
 		/// Call `stop()` to stop generating events.
 		public func start(at timecode: Timecode) {
@@ -211,7 +209,7 @@ extension MTC {
 		/// Starts generating MTC continuous playback MIDI message stream events.
 		/// Call this method at the exact time that `realTime` occurs.
 		///
-		/// - note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
+		/// - Note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
 		///
 		/// Call `stop()` to stop generating events.
 		public func start(at components: Timecode.Components,
@@ -232,7 +230,7 @@ extension MTC {
 		/// Starts generating MTC continuous playback MIDI message stream events.
 		/// Call this method at the exact time that `realTime` occurs.
 		///
-		/// - note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
+		/// - Note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
 		///
 		/// Call `stop()` to stop generating events.
 		public func start(at realTime: TimeInterval,

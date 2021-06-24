@@ -1,8 +1,6 @@
 //
 //  MTC Encoder Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-06-10.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -20,7 +18,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// defaults
 		
-		let mtcEnc = MTC.Encoder()
+		let mtcEnc = MIDI.MTC.Encoder()
 		
 		XCTAssertEqual(mtcEnc.mtcComponents, TCC(h: 0, m: 0, s: 0, f: 0))
 		
@@ -35,11 +33,11 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// ensure MTC FrameRate is being updated correctly when localFrameRate is set
 		
-		var mtcEnc: MTC.Encoder!
+		var mtcEnc: MIDI.MTC.Encoder!
 		
 		Timecode.FrameRate.allCases.forEach {
 			
-			mtcEnc = MTC.Encoder()
+			mtcEnc = MIDI.MTC.Encoder()
 			mtcEnc.setLocalFrameRate($0)
 			
 			XCTAssertEqual(mtcEnc.mtcFrameRate, $0.mtcFrameRate)
@@ -52,11 +50,11 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// perform a spot-check to ensure the .timecode property is returning expected Timecode for nominal (non-scaling) frame rates
 		
-		var mtcEnc: MTC.Encoder!
+		var mtcEnc: MIDI.MTC.Encoder!
 		
 		// basic test
 		
-		mtcEnc = MTC.Encoder()
+		mtcEnc = MIDI.MTC.Encoder()
 		mtcEnc.setLocalFrameRate(._30)
 		
 		mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 20, s: 32, f: 10))
@@ -65,7 +63,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// quarter frames
 		
-		mtcEnc = MTC.Encoder()
+		mtcEnc = MIDI.MTC.Encoder()
 		mtcEnc.setLocalFrameRate(._30)
 		mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 20, s: 32, f: 10))
 		
@@ -99,11 +97,11 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// perform a spot-check to ensure the .timecode property is scaling to localFrameRate
 		
-		var mtcEnc: MTC.Encoder!
+		var mtcEnc: MIDI.MTC.Encoder!
 		
 		// basic test
 		
-		mtcEnc = MTC.Encoder()
+		mtcEnc = MIDI.MTC.Encoder()
 		mtcEnc.setLocalFrameRate(._60)
 		mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 20, s: 32, f: 10))
 		
@@ -112,7 +110,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// quarter frames
 		
-		mtcEnc = MTC.Encoder()
+		mtcEnc = MIDI.MTC.Encoder()
 		mtcEnc.setLocalFrameRate(._60)
 		mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 20, s: 32, f: 10))
 		
@@ -148,13 +146,13 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// perform a spot-check to ensure .locate(to:) functions as expected
 		
-		var mtcEnc: MTC.Encoder!
+		var mtcEnc: MIDI.MTC.Encoder!
 		
 		// nominal (non-scaling) SMPTE frame rates
 		
 		// 24fps
 		
-		mtcEnc = MTC.Encoder()
+		mtcEnc = MIDI.MTC.Encoder()
 		
 		mtcEnc.locate(to: Timecode(TCC(h: 1, m: 20, s: 32, f: 10), at: ._24)!)
 		XCTAssertEqual(mtcEnc.localFrameRate, ._24)
@@ -184,7 +182,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// 60fps
 		
-		mtcEnc = MTC.Encoder()
+		mtcEnc = MIDI.MTC.Encoder()
 		
 		mtcEnc.locate(to: Timecode(TCC(h: 1, m: 20, s: 32, f: 20), at: ._60)!)
 		XCTAssertEqual(mtcEnc.localFrameRate, ._60)
@@ -232,11 +230,11 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// test to ensure increment behavior is consistent across timecode frame rates
 		
-		var mtcEnc: MTC.Encoder!
+		var mtcEnc: MIDI.MTC.Encoder!
 		
 		Timecode.FrameRate.allCases.forEach {
 			
-			mtcEnc = MTC.Encoder()
+			mtcEnc = MIDI.MTC.Encoder()
 			mtcEnc.setLocalFrameRate($0)
 			mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 20, s: 32, f: 10))
 			
@@ -319,11 +317,11 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// spot-check: drop-frame rates
 		
-		var mtcEnc: MTC.Encoder!
+		var mtcEnc: MIDI.MTC.Encoder!
 		
 		Timecode.FrameRate.allDrop.forEach {
 			
-			mtcEnc = MTC.Encoder()
+			mtcEnc = MIDI.MTC.Encoder()
 			mtcEnc.setLocalFrameRate($0)
 			
 			// round raw MTC frame number down to an even number, as per MTC spec
@@ -441,9 +439,9 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// MTC-25 fps based frame rates (25, 50, 100 fps)
 		
-		var mtcEnc: MTC.Encoder!
+		var mtcEnc: MIDI.MTC.Encoder!
 		
-		MTC.MTCFrameRate.mtc25.derivedFrameRates.forEach {
+		MIDI.MTC.MTCFrameRate.mtc25.derivedFrameRates.forEach {
 			
 			let frMult: Int
 			switch $0 {
@@ -459,7 +457,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 			// Scenario 1: Starting on even frame number
 			// -----------------------------
 			
-			mtcEnc = MTC.Encoder()
+			mtcEnc = MIDI.MTC.Encoder()
 			mtcEnc.setLocalFrameRate($0)
 			
 			mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 00, s: 00, f: 24))
@@ -517,7 +515,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 			// Scenario 2: Starting on odd frame number
 			// ----------------------------
 			
-			mtcEnc = MTC.Encoder()
+			mtcEnc = MIDI.MTC.Encoder()
 			mtcEnc.setLocalFrameRate($0)
 			
 			mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 00, s: 00, f: 23))
@@ -614,11 +612,11 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		// test to ensure decrement behavior is consistent across timecode frame rates
 		
-		var mtcEnc: MTC.Encoder!
+		var mtcEnc: MIDI.MTC.Encoder!
 		
 		Timecode.FrameRate.allCases.forEach {
 			
-			mtcEnc = MTC.Encoder()
+			mtcEnc = MIDI.MTC.Encoder()
 			mtcEnc.setLocalFrameRate($0)
 			mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 20, s: 32, f: 10))
 			
@@ -711,7 +709,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		var _midiMessage: [Byte]?
 		
-		let mtcEnc = MTC.Encoder { midiMessage in
+		let mtcEnc = MIDI.MTC.Encoder { midiMessage in
 			_midiMessage = midiMessage
 		}
 		
@@ -740,7 +738,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 		var _midiMessage: [Byte]?
 		
-		let mtcEnc = MTC.Encoder { midiMessage in
+		let mtcEnc = MIDI.MTC.Encoder { midiMessage in
 			_midiMessage = midiMessage
 		}
 		
@@ -803,12 +801,12 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 	
 	func testMTC_Encoder_FullFrameMIDIMessage() {
 		
-		var mtcEnc: MTC.Encoder!
+		var mtcEnc: MIDI.MTC.Encoder!
 		
 		// test each of the four MTC SMPTE base frame rates
 		// and spot-check some arbitrary timecode values
 		
-		mtcEnc = MTC.Encoder()
+		mtcEnc = MIDI.MTC.Encoder()
 		mtcEnc.locate(to: Timecode(at: ._24))
 		
 		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage(),
@@ -821,7 +819,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 						0xF7
 					   ])
 		
-		mtcEnc = MTC.Encoder()
+		mtcEnc = MIDI.MTC.Encoder()
 		mtcEnc.locate(to: Timecode(at: ._25))
 		
 		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage(),
@@ -834,7 +832,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 						0xF7
 					   ])
 		
-		mtcEnc = MTC.Encoder()
+		mtcEnc = MIDI.MTC.Encoder()
 		mtcEnc.locate(to: TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(at: ._29_97_drop)!)
 		
 		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage(),
@@ -847,7 +845,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 						0xF7
 					   ])
 		
-		mtcEnc = MTC.Encoder()
+		mtcEnc = MIDI.MTC.Encoder()
 		mtcEnc.locate(to: TCC(h: 2, m: 4, s: 6, f: 8).toTimecode(at: ._30)!)
 		
 		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage(),
@@ -864,7 +862,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 	
 	func testMTC_Encoder_QFMIDIMessage() {
 		
-		let mtcEnc = MTC.Encoder()
+		let mtcEnc = MIDI.MTC.Encoder()
 		
 		// test an arbitrary timecode in all timecode frame rates
 		// while covering all four MTC SMPTE base frame rates

@@ -1,8 +1,6 @@
 //
 //  ThruConnection Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-02-24.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 // iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets
@@ -14,12 +12,12 @@ import OTCoreTestingXCTest
 import MIDIKitTestsCommon
 import CoreMIDI
 
-final class MIDIIO_InputsAndOutputs_ThruConnection_Tests: XCTestCase {
+final class InputsAndOutputs_ThruConnection_Tests: XCTestCase {
 	
-	var manager: MIDIIO.Manager! = nil
+	var manager: MIDI.IO.Manager! = nil
 	
 	override func setUp() {
-		manager = .init(clientName: "MIDIKitIO_MIDIIO_InputsAndOutputs_ThruConnection_Tests",
+		manager = .init(clientName: "MIDIKitIO_InputsAndOutputs_ThruConnection_Tests",
 						model: "",
 						manufacturer: "")
 	}
@@ -50,7 +48,7 @@ final class MIDIIO_InputsAndOutputs_ThruConnection_Tests: XCTestCase {
 //				.nonPersistent,
 //				params: nil
 //			)
-//		} catch let err as MIDIIO.MIDIError {
+//		} catch let err as MIDI.IO.MIDIError {
 //			XCTFail("\(err)") ; return
 //		} catch {
 //			XCTFail(error.localizedDescription) ; return

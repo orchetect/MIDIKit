@@ -1,8 +1,6 @@
 //
 //  MIDIEventProtocol Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-01-22.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -16,36 +14,36 @@ class MIDIEventProtocolTests: XCTestCase {
 	func testMIDIEventMessage_constructEvent() {
 		
 		XCTAssertEqual(
-			MIDIEvent.ChannelVoiceMessage
+			MIDI.Event.ChannelVoiceMessage
 				.noteOn(note: 5, velocity: 5, channel: 5)
 				.asEvent(),
 			
-			MIDIEvent(.noteOn(note: 5, velocity: 5, channel: 5))
+			MIDI.Event(.noteOn(note: 5, velocity: 5, channel: 5))
 		)
 		
 		XCTAssertEqual(
-			MIDIEvent.SystemCommon
+			MIDI.Event.SystemCommon
 				.timecode
 				.asEvent(),
 			
-			MIDIEvent(.timecode)
+			MIDI.Event(.timecode)
 		)
 		
 		XCTAssertEqual(
-			MIDIEvent.SystemRealTime
+			MIDI.Event.SystemRealTime
 				.activeSense
 				.asEvent(),
 			
-			MIDIEvent(.activeSense)
+			MIDI.Event(.activeSense)
 		)
 		
 		XCTAssertEqual(
-			MIDIEvent.SystemExclusive
+			MIDI.Event.SystemExclusive
 				.sysEx(manufacturer: 0x41,
 					   message: [0x01, 0x34]) //[0xF0, 0x41, 0x01, 0x34, 0xF7]
 				.asEvent(),
 			
-			MIDIEvent(.sysEx(manufacturer: 0x41, message: [0x01, 0x34]))
+			MIDI.Event(.sysEx(manufacturer: 0x41, message: [0x01, 0x34]))
 		)
 		
 	}

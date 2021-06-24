@@ -1,22 +1,21 @@
 //
 //  ContentViewManual.swift
 //  MIDIKitTestHarness
-//
-//  Created by Steffan Andrews on 2021-01-12.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import SwiftUI
 import MIDIKit
 import OTCore
 
-/// This alternative of ContentView uses MIDIIO.Manager's traditional notification callback handler instead of Combine to trigger local MIDI object arrays to refresh their contents, allowing SwiftUI to update the user interface when endpoints appear and disappear in the system
+/// This alternative of ContentView uses MIDI.IO.Manager's traditional notification callback handler instead of Combine to trigger local MIDI object arrays to refresh their contents, allowing SwiftUI to update the user interface when endpoints appear and disappear in the system
 struct ContentViewManual: View {
 	
-	var midiManager: MIDIIO.Manager = {
+	var midiManager: MIDI.IO.Manager = {
 		let newManager =
-			MIDIIO.Manager(clientName: "MIDIKitTestHarness",
-						   model: "TestApp",
-						   manufacturer: "Orchetect")
+			MIDI.IO.Manager(clientName: "MIDIKitTestHarness",
+							model: "TestApp",
+							manufacturer: "Orchetect")
 		do {
 			Log.debug("Starting MIDI manager client")
 			try newManager.start()
@@ -27,9 +26,9 @@ struct ContentViewManual: View {
 		return newManager
 	}()
 	
-	@State var devices: [MIDIIO.Device] = []
-	@State var outputs: [MIDIIO.OutputEndpoint] = []
-	@State var inputs: [MIDIIO.InputEndpoint] = []
+	@State var devices: [MIDI.IO.Device] = []
+	@State var outputs: [MIDI.IO.OutputEndpoint] = []
+	@State var inputs: [MIDI.IO.InputEndpoint] = []
 	
     var body: some View {
 		
@@ -42,13 +41,13 @@ struct ContentViewManual: View {
 				// set up MIDI manager notifications callback handler
 				// so we can be notified when MIDI endpoints in the system change,
 				// allowing us to update our local endpoint cache arrays
-				midiManager.notificationHandler = { notif, context in
+				midiManager.notificationHandler = { notif, manager in
 					switch notif {
 					case .systemEndpointsChanged:
 						// update local cache with new object arrays
-						devices = context.devices.devices
-						outputs = context.endpoints.outputs
-						inputs = context.endpoints.inputs
+						devices = manager.devices.devices
+						outputs = manager.endpoints.outputs
+						inputs = manager.endpoints.inputs
 					}
 				}
 			}

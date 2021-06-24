@@ -1,6 +1,6 @@
 //
 //  MIDIPacket PacketIterator Tests.swift
-//  MIDIKitTests
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -25,7 +25,7 @@ extension MIDIKitEventsTests {
 //
 //		XCTAssertEqual(events.count, 1)
 //		XCTAssertEqual(events[0].timeStamp, 123456789)
-//		XCTAssertEqual(events[0].event, MIDIIO.Event(rawData:[0x90, 0x3C, 0x41]))
+//		XCTAssertEqual(events[0].event, MIDI.IO.Event(rawData:[0x90, 0x3C, 0x41]))
 //
 //		// Single MIDIPacket containing two MIDI events
 //
@@ -34,9 +34,9 @@ extension MIDIKitEventsTests {
 //
 //		XCTAssertEqual(events.count, 2)
 //		XCTAssertEqual(events[0].timeStamp, 987654321)
-//		XCTAssertEqual(events[0].event, MIDIIO.Event(rawData:[0x90, 0x3C, 0x41]))
+//		XCTAssertEqual(events[0].event, MIDI.IO.Event(rawData:[0x90, 0x3C, 0x41]))
 //		XCTAssertEqual(events[1].timeStamp, 987654321)
-//		XCTAssertEqual(events[1].event, MIDIIO.Event(rawData:[0xB0, 0x08, 0x69]))
+//		XCTAssertEqual(events[1].event, MIDI.IO.Event(rawData:[0xB0, 0x08, 0x69]))
 //
 //	}
 	

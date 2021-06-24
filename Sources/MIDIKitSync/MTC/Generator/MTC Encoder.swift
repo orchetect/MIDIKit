@@ -1,15 +1,13 @@
 //
 //  MTC Encoder.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-06-08.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import MIDIKitInternals
 import TimecodeKit
 @_implementationOnly import OTCore
 
-extension MTC {
+extension MIDI.MTC {
 	
 	/// MTC (MIDI Timecode) stream encoder object.
 	///

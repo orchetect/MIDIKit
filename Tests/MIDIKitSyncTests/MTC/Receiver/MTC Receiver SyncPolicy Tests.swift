@@ -1,8 +1,6 @@
 //
 //  MTC Receiver SyncPolicy Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-21.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -16,7 +14,7 @@ final class MTC_Receiver_SyncPolicy_Tests: XCTestCase {
 	
 	func testMTC_Receiver_SyncPolicy_init() {
 		
-		var sp: MTC.Receiver.SyncPolicy
+		var sp: MIDI.MTC.Receiver.SyncPolicy
 		
 		// with defaults
 		
@@ -50,7 +48,7 @@ final class MTC_Receiver_SyncPolicy_Tests: XCTestCase {
 	
 	func testMTC_Receiver_SyncPolicy_Durations() {
 		
-		var sp: MTC.Receiver.SyncPolicy
+		var sp: MIDI.MTC.Receiver.SyncPolicy
 		
 		sp = .init(lockFrames: 30, dropOutFrames: 30)
 		

@@ -1,8 +1,6 @@
 //
 //  MIDIKitIOTests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-02-21.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)

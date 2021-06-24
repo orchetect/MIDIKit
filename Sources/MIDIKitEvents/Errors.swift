@@ -1,11 +1,9 @@
 //
 //  Errors.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-01-21.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDIEvent {
+extension MIDI.Event {
 	
 	public enum ParseError: Error {
 		

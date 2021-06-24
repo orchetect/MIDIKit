@@ -1,8 +1,6 @@
 //
 //  Typealiases.swift
-//  MITIKit
-//
-//  Created by Steffan Andrews on 2021-01-24.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 // MARK: - Byte and Nibble
@@ -16,7 +14,7 @@ public struct BytePair: Equatable, Hashable {
 	public let MSB: Byte
 	public let LSB: Byte
 	
-	public init(MSB: Byte, LSB: Byte) {
+	@inlinable public init(MSB: Byte, LSB: Byte) {
 		self.MSB = MSB
 		self.LSB = LSB
 	}
@@ -24,12 +22,12 @@ public struct BytePair: Equatable, Hashable {
 }
 
 /// Type representing a 4-bit nibble
-public typealias Nibble = MIDIUInt4
+public typealias Nibble = MIDI.UInt4
 
 extension Byte {
 	
 	/// Returns the high and low 4-bit nibbles
-	public var nibbles: (high: Nibble, low: Nibble) {
+	@inlinable public var nibbles: (high: Nibble, low: Nibble) {
 		let high = (self & 0b1111_0000) >> 4
 		let low = self & 0b1111
 		
@@ -37,7 +35,7 @@ extension Byte {
 	}
 	
 	/// Convenience initializer from high and low 4-bit nibbles
-	public init(high: Nibble, low: Nibble) {
+	@inlinable public init(high: Nibble, low: Nibble) {
 		self = (high.asUInt8 << 4) + low.asUInt8
 	}
 	
@@ -46,4 +44,4 @@ extension Byte {
 // MARK: - CCValue
 
 /// Type representing a 7-bit value (0...127)
-public typealias CCValue = MIDIUInt7
+public typealias CCValue = MIDI.UInt7

@@ -1,8 +1,6 @@
 //
 //  MTC Integration Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-06-11.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -20,12 +18,12 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
 		// decoder
 		
 		var _timecode: Timecode?       ; _ = _timecode
-		var _mType: MTC.MessageType?   ; _ = _mType
-		var _direction: MTC.Direction? ; _ = _direction
+		var _mType: MIDI.MTC.MessageType?   ; _ = _mType
+		var _direction: MIDI.MTC.Direction? ; _ = _direction
 		var _displayNeedsUpdate: Bool? ; _ = _displayNeedsUpdate
-		var _mtcFR: MTC.MTCFrameRate?  ; _ = _mtcFR
+		var _mtcFR: MIDI.MTC.MTCFrameRate?  ; _ = _mtcFR
 		
-		let mtcDec = MTC.Decoder(initialLocalFrameRate: nil)
+		let mtcDec = MIDI.MTC.Decoder(initialLocalFrameRate: nil)
 		{ timecode, messageType, direction, displayNeedsUpdate in
 			_timecode = timecode
 			_mType = messageType
@@ -37,7 +35,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
 		
 		// encoder
 		
-		let mtcEnc = MTC.Encoder { midiMessage in
+		let mtcEnc = MIDI.MTC.Encoder { midiMessage in
 			mtcDec.midiIn(data: midiMessage)
 		}
 		
@@ -110,12 +108,12 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
 		// decoder
 		
 		var _timecode: Timecode?       ; _ = _timecode
-		var _mType: MTC.MessageType?   ; _ = _mType
-		var _direction: MTC.Direction? ; _ = _direction
+		var _mType: MIDI.MTC.MessageType?   ; _ = _mType
+		var _direction: MIDI.MTC.Direction? ; _ = _direction
 		var _displayNeedsUpdate: Bool? ; _ = _displayNeedsUpdate
-		var _mtcFR: MTC.MTCFrameRate?  ; _ = _mtcFR
+		var _mtcFR: MIDI.MTC.MTCFrameRate?  ; _ = _mtcFR
 		
-		let mtcDec = MTC.Decoder(initialLocalFrameRate: nil)
+		let mtcDec = MIDI.MTC.Decoder(initialLocalFrameRate: nil)
 		{ timecode, messageType, direction, displayNeedsUpdate in
 			_timecode = timecode
 			_mType = messageType
@@ -127,7 +125,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
 		
 		// encoder
 		
-		let mtcEnc = MTC.Encoder { midiMessage in
+		let mtcEnc = MIDI.MTC.Encoder { midiMessage in
 			mtcDec.midiIn(data: midiMessage)
 		}
 		
@@ -268,12 +266,12 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
 		// decoder
 		
 		var _timecode: Timecode?       ; _ = _timecode
-		var _mType: MTC.MessageType?   ; _ = _mType
-		var _direction: MTC.Direction? ; _ = _direction
+		var _mType: MIDI.MTC.MessageType?   ; _ = _mType
+		var _direction: MIDI.MTC.Direction? ; _ = _direction
 		var _displayNeedsUpdate: Bool? ; _ = _displayNeedsUpdate
-		var _mtcFR: MTC.MTCFrameRate?  ; _ = _mtcFR
+		var _mtcFR: MIDI.MTC.MTCFrameRate?  ; _ = _mtcFR
 		
-		let mtcDec = MTC.Decoder(initialLocalFrameRate: nil)
+		let mtcDec = MIDI.MTC.Decoder(initialLocalFrameRate: nil)
 		{ timecode, messageType, direction, displayNeedsUpdate in
 			_timecode = timecode
 			_mType = messageType
@@ -285,7 +283,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
 		
 		// encoder
 		
-		let mtcEnc = MTC.Encoder { midiMessage in
+		let mtcEnc = MIDI.MTC.Encoder { midiMessage in
 			mtcDec.midiIn(data: midiMessage)
 		}
 		

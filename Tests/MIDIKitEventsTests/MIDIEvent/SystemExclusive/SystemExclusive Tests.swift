@@ -1,8 +1,6 @@
 //
 //  SystemExclusive Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-01-22.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -13,17 +11,17 @@ import MIDIKitTestsCommon
 
 class SystemExclusiveTests: XCTestCase {
 	
-	// MARK: - MIDIEvent.SystemExclusive
+	// MARK: - MIDI.Event.SystemExclusive
 	
 	func testInit_RawBytes_Typical() {
 		
 		let sourceRawBytes: [Byte] = [0xF0, 0x41, 0x01, 0x34, 0xF7]
 		
 		XCTAssertNoThrow(
-			try MIDIEvent.SystemExclusive(rawBytes: sourceRawBytes)
+			try MIDI.Event.SystemExclusive(rawBytes: sourceRawBytes)
 		)
 		
-		let event = try! MIDIEvent.SystemExclusive(rawBytes: sourceRawBytes)
+		let event = try! MIDI.Event.SystemExclusive(rawBytes: sourceRawBytes)
 		
 		XCTAssertEqual(event.manufacturer, 0x41)
 		XCTAssertEqual(event.messageBytes, [0x01, 0x34])
@@ -37,10 +35,10 @@ class SystemExclusiveTests: XCTestCase {
 		let sourceRawBytes: [Byte] = [0xF0, 0x41, 0xF7]
 		
 		XCTAssertNoThrow(
-			try MIDIEvent.SystemExclusive(rawBytes: sourceRawBytes)
+			try MIDI.Event.SystemExclusive(rawBytes: sourceRawBytes)
 		)
 		
-		let event = try! MIDIEvent.SystemExclusive(rawBytes: sourceRawBytes)
+		let event = try! MIDI.Event.SystemExclusive(rawBytes: sourceRawBytes)
 		
 		XCTAssertEqual(event.manufacturer, 0x41)
 		XCTAssertEqual(event.messageBytes, [])
@@ -53,7 +51,7 @@ class SystemExclusiveTests: XCTestCase {
 		
 		// valid - maximum byte length (256 bytes)
 		XCTAssertNoThrow(
-			try MIDIEvent.SystemExclusive(rawBytes:
+			try MIDI.Event.SystemExclusive(rawBytes:
 											[0xF0, 0x41]
 											+ [Byte](repeating: 0x20, count: 256-3)
 											+ [0xF7])
@@ -61,7 +59,7 @@ class SystemExclusiveTests: XCTestCase {
 		
 		// valid - length is larger than default 256 bytes (257 bytes)
 		XCTAssertNoThrow(
-			try MIDIEvent.SystemExclusive(rawBytes:
+			try MIDI.Event.SystemExclusive(rawBytes:
 											[0xF0, 0x41]
 											+ [Byte](repeating: 0x20, count: 256-2)
 											+ [0xF7])
@@ -73,27 +71,27 @@ class SystemExclusiveTests: XCTestCase {
 		
 		// empty raw bytes - invalid
 		XCTAssertThrowsError(
-			try MIDIEvent.SystemExclusive(rawBytes: [])
+			try MIDI.Event.SystemExclusive(rawBytes: [])
 		)
 		
 		// start byte only - invalid
 		XCTAssertThrowsError(
-			try MIDIEvent.SystemExclusive(rawBytes: [0xF0])
+			try MIDI.Event.SystemExclusive(rawBytes: [0xF0])
 		)
 		
 		// end byte only - invalid
 		XCTAssertThrowsError(
-			try MIDIEvent.SystemExclusive(rawBytes: [0xF7])
+			try MIDI.Event.SystemExclusive(rawBytes: [0xF7])
 		)
 		
 		// start and end bytes only - invalid
 		XCTAssertThrowsError(
-			try MIDIEvent.SystemExclusive(rawBytes: [0xF0, 0xF7])
+			try MIDI.Event.SystemExclusive(rawBytes: [0xF0, 0xF7])
 		)
 		
 		// correct start byte, valid length, but incorrect end byte
 		XCTAssertThrowsError(
-			try MIDIEvent.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF6])
+			try MIDI.Event.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF6])
 		)
 		
 	}
@@ -102,10 +100,10 @@ class SystemExclusiveTests: XCTestCase {
 		
 		// ensure instances equate correctly
 		
-		let event1A = try! MIDIEvent.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
-		let event1B = try! MIDIEvent.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+		let event1A = try! MIDI.Event.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+		let event1B = try! MIDI.Event.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
 		
-		let event2 = try! MIDIEvent.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
+		let event2 = try! MIDI.Event.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
 		
 		XCTAssert(event1A == event1B)
 		
@@ -117,14 +115,14 @@ class SystemExclusiveTests: XCTestCase {
 		
 		// ensure instances hash correctly
 		
-		let event1A = try! MIDIEvent.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
-		let event1B = try! MIDIEvent.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+		let event1A = try! MIDI.Event.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+		let event1B = try! MIDI.Event.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
 		
-		let event2 = try! MIDIEvent.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
+		let event2 = try! MIDI.Event.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
 		
-		let set1: Set<MIDIEvent.SystemExclusive> = [event1A, event1B]
+		let set1: Set<MIDI.Event.SystemExclusive> = [event1A, event1B]
 		
-		let set2: Set<MIDIEvent.SystemExclusive> = [event1A, event2]
+		let set2: Set<MIDI.Event.SystemExclusive> = [event1A, event2]
 		
 		XCTAssertEqual(set1.count, 1)
 		
@@ -136,7 +134,7 @@ class SystemExclusiveTests: XCTestCase {
 	
 	func testKind() {
 		
-		let event = try! MIDIEvent.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+		let event = try! MIDI.Event.SystemExclusive(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
 		
 		// .kind
 		

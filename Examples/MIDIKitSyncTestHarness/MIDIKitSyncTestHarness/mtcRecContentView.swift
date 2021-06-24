@@ -1,8 +1,7 @@
 //
 //  mtcRecContentView.swift
 //  MIDIKitSyncTestHarness
-//
-//  Created by Steffan Andrews on 2020-12-02.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import Combine
@@ -14,9 +13,9 @@ import TimecodeKit
 
 struct mtcRecContentView: View {
 	
-	weak var midiManager: MIDIIO.Manager?
+	weak var midiManager: MIDI.IO.Manager?
 	
-	init(midiManager: MIDIIO.Manager?) {
+	init(midiManager: MIDI.IO.Manager?) {
 		// normally in SwiftUI we would pass midiManager in as an EnvironmentObject
 		// but that only works on macOS 11.0+ and for sake of backwards compatibility
 		// we will do it old-school weak delegate storage pattern
@@ -25,15 +24,15 @@ struct mtcRecContentView: View {
 	
 	// MARK: - MIDI state
 	
-	@State var mtcRec: MTC.Receiver = .init(name: "dummy - will be set in .onAppear{} below")
+	@State var mtcRec: MIDI.MTC.Receiver = .init(name: "dummy - will be set in .onAppear{} below")
 	
 	// MARK: - UI state
 	
     @State var receiverTC = "--:--:--:--"
 	
-	@State var receiverFR: MTC.MTCFrameRate? = nil
+	@State var receiverFR: MIDI.MTC.MTCFrameRate? = nil
 	
-    @State var receiverState: MTC.Receiver.State = .idle {
+	@State var receiverState: MIDI.MTC.Receiver.State = .idle {
 		// Note: be aware didSet will trigger here on a @State var when the variable is imperatively set in code, but not when altered by a $receiverState binding in SwiftUI
 		didSet {
 			Log.default("MTC Receiver state:", receiverState)
@@ -181,10 +180,10 @@ struct mtcRecContentView: View {
 			}
 			
 			// set up new MTC receiver and configure it
-			mtcRec = MTC.Receiver(name: "main",
-								  initialLocalFrameRate: ._24,
-								  syncPolicy: .init(lockFrames: 16,
-													dropOutFrames: 10))
+			mtcRec = MIDI.MTC.Receiver(name: "main",
+									   initialLocalFrameRate: ._24,
+									   syncPolicy: .init(lockFrames: 16,
+														 dropOutFrames: 10))
 			{ timecode, _, _, displayNeedsUpdate in
 				
 				receiverTC = timecode.stringValue
@@ -254,7 +253,7 @@ struct mtcRecContentView: View {
 	
 }
 
-extension MTC.Receiver.State {
+extension MIDI.MTC.Receiver.State {
 	
     var stateColor: Color {
         switch self {

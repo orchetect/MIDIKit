@@ -1,8 +1,7 @@
 //
 //  HostingWindowKey.swift
 //  MIDIKitTestHarness
-//
-//  Created by Steffan Andrews on 2021-02-26.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import SwiftUI

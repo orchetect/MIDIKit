@@ -1,8 +1,6 @@
 //
 //  CoreMIDI.m
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-04-13.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #include "CoreMIDI.h"

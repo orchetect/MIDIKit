@@ -1,8 +1,6 @@
 //
 //  MTC Decoder Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-21.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -16,7 +14,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 	
 	func testMTC_Decoder_Default() {
 		
-		let mtcDec = MTC.Decoder()
+		let mtcDec = MIDI.MTC.Decoder()
 		
 		// check if defaults are nominal
 		
@@ -35,7 +33,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 	
 	func testMTC_Decoder_Init_Arguments() {
 		
-		let mtcDec = MTC.Decoder(initialLocalFrameRate: ._29_97)
+		let mtcDec = MIDI.MTC.Decoder(initialLocalFrameRate: ._29_97)
 		
 		XCTAssertEqual(mtcDec.localFrameRate, ._29_97)
 		
@@ -45,7 +43,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		
 		// test full frame MTC messages and check that properties get updated
 		
-		let mtcDec = MTC.Decoder()
+		let mtcDec = MIDI.MTC.Decoder()
 		
 		// 01:02:03:04 @ MTC 24fps
 		mtcDec.midiIn(data: kRawMIDI.MTC_FullFrame._01_02_03_04_at_24fps)
@@ -71,7 +69,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		
 		// test MTC quarter-frame messages and check that properties get updated
 		
-		let mtcDec = MTC.Decoder()
+		let mtcDec = MIDI.MTC.Decoder()
 		
 		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
 		
@@ -173,7 +171,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 	
 	func testMTC_Decoder_InternalState_QFMessages_Scaled_24to48() {
 		
-		let mtcDec = MTC.Decoder()
+		let mtcDec = MIDI.MTC.Decoder()
 		
 		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
 		// scaled to 48 fps real timecode frame rate
@@ -232,13 +230,13 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		
 		// 25 fps behaves differently from 24/29.97d/30 MTC SMPTE rates
 		
-		var mtcDec: MTC.Decoder
+		var mtcDec: MIDI.MTC.Decoder
 		
 		
 		// Starting on even frame number:
 		// 25fps QFs starting at 01:00:00:00, locking at 01:00:00:02 (+ 2 MTC frame offset)
 		
-		mtcDec = MTC.Decoder()
+		mtcDec = MIDI.MTC.Decoder()
 		mtcDec.localFrameRate = ._25
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_0000]) // QF 0
@@ -258,7 +256,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		// Starting on odd frame number:
 		// 25fps QFs starting at 01:00:00:00, locking at 01:00:00:02 (+ 2 MTC frame offset)
 		
-		mtcDec = MTC.Decoder()
+		mtcDec = MIDI.MTC.Decoder()
 		mtcDec.localFrameRate = ._25
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_0001]) // QF 0
@@ -278,7 +276,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		// Starting on even frame number:
 		// 25fps QFs starting at 01:00:00:22, locking at 01:00:00:24 (+ 2 MTC frame offset)
 		
-		mtcDec = MTC.Decoder()
+		mtcDec = MIDI.MTC.Decoder()
 		mtcDec.localFrameRate = ._25
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_0110]) // QF 0
@@ -346,7 +344,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		// Starting on odd frame number:
 		// 25fps QFs starting at 01:00:00:22, locking at 01:00:00:24 (+ 2 MTC frame offset)
 		
-		mtcDec = MTC.Decoder()
+		mtcDec = MIDI.MTC.Decoder()
 		mtcDec.localFrameRate = ._25
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_0101]) // QF 0
@@ -416,11 +414,11 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		
 		// test for edge cases and peculiarities with 29.97 drop fps
 		
-		var mtcDec: MTC.Decoder
+		var mtcDec: MIDI.MTC.Decoder
 		
 		// 29.97dfps QFs starting at 01:00:00;00, locking at 01:00:00;02 (+ 2 MTC frame offset)
 		
-		mtcDec = MTC.Decoder()
+		mtcDec = MIDI.MTC.Decoder()
 		mtcDec.localFrameRate = ._29_97_drop
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_0000]) // QF 0
@@ -450,7 +448,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		
 		// 29.97dfps QFs starting at 01:00:59;26, locking at 01:00:59;28 (+ 2 MTC frame offset)
 		
-		mtcDec = MTC.Decoder()
+		mtcDec = MIDI.MTC.Decoder()
 		mtcDec.localFrameRate = ._29_97_drop
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_1010]) // QF 0
@@ -518,7 +516,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		// 29.97dfps QFs starting at 01:00:59;26, locking at 01:00:59;28 (+ 2 MTC frame offset)
 		// with changes of direction
 		
-		mtcDec = MTC.Decoder()
+		mtcDec = MIDI.MTC.Decoder()
 		mtcDec.localFrameRate = ._29_97_drop
 		
 		mtcDec.midiIn(data: [0xF1, 0b0000_1010]) // QF 0
@@ -581,7 +579,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 	
 	func testMTC_Decoder_InternalState_QFMessages_Direction() {
 		
-		let mtcDec = MTC.Decoder()
+		let mtcDec = MIDI.MTC.Decoder()
 		
 		// 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
 		
@@ -636,12 +634,12 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		// testing vars
 		
 		var _timecode: Timecode?
-		var _mType: MTC.MessageType?
-		var _direction: MTC.Direction?
+		var _mType: MIDI.MTC.MessageType?
+		var _direction: MIDI.MTC.Direction?
 		var _displayNeedsUpdate: Bool?
-		var _mtcFR: MTC.MTCFrameRate?
+		var _mtcFR: MIDI.MTC.MTCFrameRate?
 		
-		let mtcDec = MTC.Decoder()
+		let mtcDec = MIDI.MTC.Decoder()
 		{ timecode, messageType, direction, displayNeedsUpdate in
 			_timecode = timecode
 			_mType = messageType
@@ -687,12 +685,12 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
 		// testing vars
 		
 		var _timecode: Timecode?
-		var _mType: MTC.MessageType?
-		var _direction: MTC.Direction?
+		var _mType: MIDI.MTC.MessageType?
+		var _direction: MIDI.MTC.Direction?
 		var _displayNeedsUpdate: Bool?
-		var _mtcFR: MTC.MTCFrameRate?
+		var _mtcFR: MIDI.MTC.MTCFrameRate?
 		
-		let mtcDec = MTC.Decoder()
+		let mtcDec = MIDI.MTC.Decoder()
 		{ timecode, messageType, direction, displayNeedsUpdate in
 			_timecode = timecode
 			_mType = messageType

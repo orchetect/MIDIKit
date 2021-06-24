@@ -1,8 +1,6 @@
 //
 //  MTC Receiver.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-11-25.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import Foundation
@@ -12,7 +10,7 @@ import TimecodeKit
 
 // MARK: - Receiver
 
-extension MTC {
+extension MIDI.MTC {
 	
 	/// MTC sync receiver wrapper for `MTC.Decoder`.
 	///
@@ -25,7 +23,7 @@ extension MTC {
 		
 		public private(set) var name: String
 		
-		@AtomicAccess public private(set) var state: State = .idle {
+		@MIDI.AtomicAccess public private(set) var state: State = .idle {
 			didSet {
 				if state != oldValue {
 					let newState = state
@@ -53,17 +51,17 @@ extension MTC {
 		/// The SMPTE frame rate (24, 25, 29.97d, or 30) that was last received by the receiver.
 		/// 
 		/// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the `localFrameRate` property is used for automatic validation and scaling of incoming timecode.
-		public var mtcFrameRate: MTC.MTCFrameRate {
+		public var mtcFrameRate: MTCFrameRate {
 			decoder.mtcFrameRate
 		}
 		
 		/// Status of the direction of MTC quarter-frames received
-		public var direction: MTC.Direction {
+		public var direction: Direction {
 			decoder.direction
 		}
 		
 		/// Behavior governing how locking occurs prior to chase
-		@AtomicAccess public var syncPolicy: SyncPolicy = SyncPolicy()
+		@MIDI.AtomicAccess public var syncPolicy: SyncPolicy = SyncPolicy()
 		
 		
 		// MARK: - Stored closures
@@ -72,16 +70,16 @@ extension MTC {
 		///
 		/// Implement this closure for when you only want to display timecode and do not need to sync to MTC.
 		internal var timecodeChangedHandler: ((_ timecode: Timecode,
-											   _ event: MTC.MessageType,
-											   _ direction: MTC.Direction,
+											   _ event: MessageType,
+											   _ direction: Direction,
 											   _ displayNeedsUpdate: Bool) -> Void)? = nil
 		
 		/// Sets the closure called when a meaningful change to the timecode has occurred which would require its display to be updated.
 		///
 		/// Implement this closure for when you only want to display timecode and do not need to sync to MTC.
 		public func setTimecodeChangedHandler(_ handler: ((_ timecode: Timecode,
-														   _ event: MTC.MessageType,
-														   _ direction: MTC.Direction,
+														   _ event: MessageType,
+														   _ direction: Direction,
 														   _ displayNeedsUpdate: Bool) -> Void)?) {
 			
 			timecodeChangedHandler = handler
@@ -89,10 +87,10 @@ extension MTC {
 		}
 		
 		/// Called when the MTC receiver's state changes
-		internal var stateChangedHandler: ((_ state: MTC.Receiver.State) -> Void)? = nil
+		internal var stateChangedHandler: ((_ state: State) -> Void)? = nil
 		
 		/// Sets the closure called when the MTC receiver's state changes
-		public func setStateChangedHandler(_ handler: ((_ state: MTC.Receiver.State) -> Void)?) {
+		public func setStateChangedHandler(_ handler: ((_ state: State) -> Void)?) {
 			
 			stateChangedHandler = handler
 			
@@ -114,10 +112,10 @@ extension MTC {
 			initialLocalFrameRate: Timecode.FrameRate? = nil,
 			syncPolicy: SyncPolicy? = nil,
 			timecodeChanged: ((_ timecode: Timecode,
-							   _ event: MTC.MessageType,
-							   _ direction: MTC.Direction,
+							   _ event: MessageType,
+							   _ direction: Direction,
 							   _ displayNeedsUpdate: Bool) -> Void)? = nil,
-			stateChanged: ((_ state: MTC.Receiver.State) -> Void)? = nil
+			stateChanged: ((_ state: Receiver.State) -> Void)? = nil
 		) {
 			
 			// handle init arguments
@@ -144,9 +142,9 @@ extension MTC {
 			// 1 quarter-frame = 41.7/4 = 10.4... ms
 			// Timer checking twice per QF = ~5.0ms intervals = 200Hz
 			
-			timer = SafeDispatchTimer(rate: .hertz(200.0),
-									  queue: queue,
-									  eventHandler: { })
+			timer = MIDI.SafeDispatchTimer(rate: .hertz(200.0),
+										   queue: queue,
+										   eventHandler: { })
 			
 			timer.setEventHandler { [weak self] in
 				
@@ -199,7 +197,7 @@ extension MTC {
 		
 		// MARK: - Timer (internal)
 		
-		internal let timer: SafeDispatchTimer
+		internal let timer: MIDI.SafeDispatchTimer
 		
 		/// Internal: Fired from our timer object.
 		internal func timerFired() {
@@ -268,12 +266,12 @@ extension MTC {
 
 // MARK: - Handler Methods
 
-extension MTC.Receiver {
+extension MIDI.MTC.Receiver {
 	
 	/// Internal: MTC.Decoder handler proxy method
 	internal func timecodeDidChange(to incomingTC: Timecode,
-									event: MTC.MessageType,
-									direction: MTC.Direction,
+									event: MIDI.MTC.MessageType,
+									direction: MIDI.MTC.Direction,
 									displayNeedsUpdate: Bool) {
 		
 		// determine frame rate compatibility

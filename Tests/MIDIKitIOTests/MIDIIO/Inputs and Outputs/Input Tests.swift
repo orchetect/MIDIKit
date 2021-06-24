@@ -1,8 +1,6 @@
 //
 //  Input Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-02-24.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 // iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets
@@ -14,12 +12,12 @@ import OTCoreTestingXCTest
 import MIDIKitTestsCommon
 import CoreMIDI
 
-final class MIDIIO_InputsAndOutputs_Input_Tests: XCTestCase {
+final class InputsAndOutputs_Input_Tests: XCTestCase {
 	
-	var manager: MIDIIO.Manager! = nil
+	var manager: MIDI.IO.Manager! = nil
 	
 	override func setUp() {
-		manager = .init(clientName: "MIDIKitIO_MIDIIO_InputsAndOutputs_Input_Tests",
+		manager = .init(clientName: "MIDIKitIO_InputsAndOutputs_Input_Tests",
 						model: "",
 						manufacturer: "")
 	}
@@ -40,7 +38,7 @@ final class MIDIIO_InputsAndOutputs_Input_Tests: XCTestCase {
 		
 		let tag1 = "1"
 		
-		var id1: MIDIIO.Endpoint.UniqueID? = nil
+		var id1: MIDI.IO.Endpoint.UniqueID? = nil
 		
 		do {
 			id1 = try manager.addInput(
@@ -50,7 +48,7 @@ final class MIDIIO_InputsAndOutputs_Input_Tests: XCTestCase {
 					_ = packets
 				})
 			)
-		} catch let err as MIDIIO.MIDIError {
+		} catch let err as MIDI.IO.MIDIError {
 			XCTFail(err.localizedDescription) ; return
 		} catch {
 			XCTFail(error.localizedDescription) ; return
@@ -63,7 +61,7 @@ final class MIDIIO_InputsAndOutputs_Input_Tests: XCTestCase {
 		
 		let tag2 = "2"
 		
-		var id2: MIDIIO.Endpoint.UniqueID? = nil
+		var id2: MIDI.IO.Endpoint.UniqueID? = nil
 		
 		do {
 			id2 = try manager.addInput(
@@ -74,7 +72,7 @@ final class MIDIIO_InputsAndOutputs_Input_Tests: XCTestCase {
 					_ = packet
 				})
 			)
-		} catch let err as MIDIIO.MIDIError {
+		} catch let err as MIDI.IO.MIDIError {
 			XCTFail("\(err)") ; return
 		} catch {
 			XCTFail(error.localizedDescription) ; return

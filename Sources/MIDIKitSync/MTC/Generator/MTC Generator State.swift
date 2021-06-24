@@ -1,13 +1,11 @@
 //
 //  MTC Generator State.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-06-09.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 // MARK: - State
 
-extension MTC.Generator {
+extension MIDI.MTC.Generator {
 	
 	public enum State: Equatable {
 		
@@ -23,7 +21,7 @@ extension MTC.Generator {
 	
 }
 
-extension MTC.Generator.State: CustomStringConvertible {
+extension MIDI.MTC.Generator.State: CustomStringConvertible {
 	
 	public var description: String {
 		
