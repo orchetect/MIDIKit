@@ -61,7 +61,7 @@ extension MIDI.IO {
 		// MIDIPacketListAdd's discussion section states that "The maximum size of a packet list is 65536 bytes."
 		guard bufferSize <= 65536 else {
 			throw MIDIError.malformed(
-				"Data array is too large (\(bufferSize) bytes). Requires a buffer larger than 65536"
+				"Data array is too large (\(bufferSize) bytes). Maximum size is 65536 bytes."
 			)
 		}
 		
