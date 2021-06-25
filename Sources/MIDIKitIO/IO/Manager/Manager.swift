@@ -8,7 +8,7 @@ import CoreMIDI
 
 extension MIDI.IO {
 	
-	/// Connection Manager for CoreMIDI.
+	/// Connection Manager wrapper for `CoreMIDI`.
 	///
 	/// One `Manager` instance stored in a global lifecycle context can manage multiple MIDI ports and connections, and is usually sufficient for all of an application's MIDI needs.
 	public class Manager: NSObject {
@@ -50,7 +50,7 @@ extension MIDI.IO {
 		///
 		/// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
 		/// - Throws: `MIDI.IO.MIDIError`
-		public func unmanagedPersistentThrus(ownerID: String) throws -> [MIDIThruConnectionRef] {
+		public func unmanagedPersistentThruConnections(ownerID: String) throws -> [MIDIThruConnectionRef] {
 			
 			try MIDI.IO.getSystemThruConnectionsPersistentEntries(matching: ownerID)
 			

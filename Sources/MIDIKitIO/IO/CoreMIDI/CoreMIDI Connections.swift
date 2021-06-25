@@ -8,11 +8,13 @@ import CoreMIDI
 
 extension MIDI.IO {
 	
-	/// Queries CoreMIDI for existing persistent play-through connections stored in the system matching the specified persistent owner ID.
+	/// Queries `CoreMIDI` for existing persistent play-thru connections stored in the system matching the specified persistent owner ID.
 	///
 	/// To delete them all, see sister function `removeAllSystemThruConnectionsPersistentEntries(:)`.
 	///
-	/// - Parameter byPersistentOwnerID: reverse-DNS domain that was used when the connection was first made
+	/// - Parameter persistentOwnerID: reverse-DNS domain that was used when the connection was first made
+	///
+	/// - Throws: `MIDI.IO.MIDIError.osStatus`
 	internal static func getSystemThruConnectionsPersistentEntries(
 		matching persistentOwnerID: String
 	) throws -> [MIDIThruConnectionRef] {
@@ -51,7 +53,11 @@ extension MIDI.IO {
 		
 	}
 	
-	/// Deletes all system-held MIDI thru connections matching an owner ID.
+	/// Deletes all system-held `CoreMIDI` MIDI play-thru connections matching an owner ID.
+	///
+	/// - Parameter persistentOwnerID: reverse-DNS domain that was used when the connection was first made
+	///
+	/// - Throws: `MIDI.IO.MIDIError.osStatus`
 	///
 	/// - Returns: Number of deleted matching connections.
 	internal static func removeAllSystemThruConnectionsPersistentEntries(
@@ -59,6 +65,8 @@ extension MIDI.IO {
 	) throws -> Int {
 		
 		let getList = try getSystemThruConnectionsPersistentEntries(matching: persistentOwnerID)
+		
+		var disposeCount = 0
 		
 		var result = noErr
 		
@@ -69,11 +77,13 @@ extension MIDI.IO {
 			
 			if result != noErr {
 				Log.debug("MIDI: Persistent connections: deletion of connection matching owner ID \"\(persistentOwnerID)\" with number \(thruConnection) failed.")
+			} else {
+				disposeCount += 1
 			}
 			
 		}
 		
-		return getList.count
+		return disposeCount
 		
 	}
 	

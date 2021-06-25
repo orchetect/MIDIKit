@@ -6,5 +6,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreMIDI/CoreMIDI.h>
 
-extern void CPacketListIterate(const MIDIPacketList *midiPacketList,
-							   void (NS_NOESCAPE ^closure)(const MIDIPacket *midiPacket));
+extern
+void CPacketListIterate(const MIDIPacketList *midiPacketList,
+						void (NS_NOESCAPE ^closure)(const MIDIPacket *midiPacket));
+
+extern
+OSStatus CMIDIThruConnectionCreateNonPersistent(CFDataRef inConnectionParams,
+												MIDIThruConnectionRef *outConnection);

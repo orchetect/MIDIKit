@@ -13,6 +13,7 @@
 import Foundation
 import CoreMIDI
 @_implementationOnly import OTCore
+@_implementationOnly import MIDIKitC
 
 extension MIDI.IO {
 	
@@ -149,20 +150,25 @@ extension MIDI.IO.ThruConnection {
 			cfPersistentOwnerID = ownerID as CFString
 		}
 		
-		// MIDIThruConnectionCreate parameters:
-		// - inPersistentOwnerID: CFString?
-		//   If null, then the connection is marked as owned by the client and will be automatically disposed with the client. if it is non-null, then it should be a unique identifier, e.g. "com.mycompany.MyApp".
-		// - inConnectionParams: CFData
-		//   A MIDIThruConnectionParams contained in a CFDataRef.
-		// - outConnection: UnsafeMutablePointer<MIDIThruConnectionRef>
-		//   On successful return, a reference to the newly-created connection.
-		
-		try MIDIThruConnectionCreate(
-			cfPersistentOwnerID,
-			paramsData,
-			&newConnection
-		)
-		.throwIfOSStatusErr()
+		switch cfPersistentOwnerID {
+		case nil:
+			// non-persistent thru connection
+			// there is a bug in CoreMIDI's Swift bridging whereby passing nil into MIDIThruConnectionCreate fails to create a non-persistent thru connection and actually creates a persistent thru connection, despite what the CoreMIDI documentation states.
+			// This is a C function that wraps this method to accomplish this instead.
+			try CMIDIThruConnectionCreateNonPersistent(
+				paramsData,
+				&newConnection
+			)
+			.throwIfOSStatusErr()
+		case .some(let id):
+			// persistent thru connection
+			try MIDIThruConnectionCreate(
+				id,
+				paramsData,
+				&newConnection
+			)
+			.throwIfOSStatusErr()
+		}
 		
 		thruConnectionRef = newConnection
 		

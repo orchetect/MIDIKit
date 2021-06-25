@@ -26,37 +26,35 @@ final class InputsAndOutputs_ThruConnection_Tests: XCTestCase {
 		manager = nil
 	}
 	
-	// test bypassed for now, until thru connection CoreMIDI issues can be resolved
-	
-//	func testThruConnection() {
-//
-//		// start midi client
-//
-//		try! manager.start()
-//
-//		XCTWait(sec: 0.1)
-//
-//		// add new connection
-//
-//		let tag1 = "1"
-//
-//		do {
-//			try manager.addThruConnection(
-//				outputs: [],
-//				inputs: [],
-//				tag: tag1,
-//				.nonPersistent,
-//				params: nil
-//			)
-//		} catch let err as MIDI.IO.MIDIError {
-//			XCTFail("\(err)") ; return
-//		} catch {
-//			XCTFail(error.localizedDescription) ; return
-//		}
-//
-//		XCTAssertNotNil(manager.managedThruConnections[tag1])
-//
-//	}
+	func testThruConnection() {
+
+		// start midi client
+
+		try! manager.start()
+
+		XCTWait(sec: 0.1)
+
+		// add new connection
+
+		let tag1 = "1"
+
+		do {
+			try manager.addThruConnection(
+				outputs: [],
+				inputs: [],
+				tag: tag1,
+				.nonPersistent,
+				params: nil
+			)
+		} catch let err as MIDI.IO.MIDIError {
+			XCTFail("\(err)") ; return
+		} catch {
+			XCTFail(error.localizedDescription) ; return
+		}
+
+		XCTAssertNotNil(manager.managedThruConnections[tag1])
+		
+	}
 
 }
 

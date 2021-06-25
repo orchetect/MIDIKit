@@ -37,7 +37,7 @@ final class Manager_Tests: XCTestCase {
 		XCTAssert(manager.managedOutputs.isEmpty)
 		XCTAssert(manager.managedThruConnections.isEmpty)
 		XCTAssert(try! manager
-					.unmanagedPersistentThrus(ownerID: Globals.bundle.bundleID)
+					.unmanagedPersistentThruConnections(ownerID: Globals.bundle.bundleID)
 					.isEmpty)
 		
 	}

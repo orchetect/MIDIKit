@@ -160,4 +160,4 @@ import Foundation
 // ----------------------------------------
 
 //	Log.debug("managedThruConnections:", midiManager.managedThruConnections)
-//	Log.debug("unmanagedThruConnections:", (try? midiManager.unmanagedPersistentThrus(ownerID: "")) as Any)
+//	Log.debug("unmanagedThruConnections:", (try? midiManager.unmanagedPersistentThruConnections(ownerID: "")) as Any)
