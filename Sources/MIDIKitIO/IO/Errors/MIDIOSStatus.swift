@@ -100,25 +100,25 @@ extension MIDI.IO.MIDIOSStatus {
 	public var rawValue: Int32 {
 		
 		switch self {
-		case .invalidClient: return -10830
-		case .invalidPort: return -10831
+		case .invalidClient:     return -10830
+		case .invalidPort:       return -10831
 		case .wrongEndpointType: return -10832
-		case .noConnection: return -10833
-		case .unknownEndpoint: return -10834
-		case .unknownProperty: return -10835
+		case .noConnection:      return -10833
+		case .unknownEndpoint:   return -10834
+		case .unknownProperty:   return -10835
 		case .wrongPropertyType: return -10836
-		case .noCurrentSetup: return -10837
-		case .messageSendErr: return -10838
-		case .serverStartErr: return -10839
-		case .setupFormatErr: return -10840
-		case .wrongThread: return -10841
-		case .objectNotFound: return -10842
-		case .iDNotUnique: return -10843
-		case .notPermitted: return -10844
-		case .unknownError: return -10845
-		case .ioError: return 7
-		case .internalError: return -50
-		case .other(let val): return val
+		case .noCurrentSetup:    return -10837
+		case .messageSendErr:    return -10838
+		case .serverStartErr:    return -10839
+		case .setupFormatErr:    return -10840
+		case .wrongThread:       return -10841
+		case .objectNotFound:    return -10842
+		case .iDNotUnique:       return -10843
+		case .notPermitted:      return -10844
+		case .unknownError:      return -10845
+		case .ioError:           return 7
+		case .internalError:     return -50
+		case .other(let val):    return val
 		}
 		
 	}
@@ -143,9 +143,9 @@ extension MIDI.IO.MIDIOSStatus {
 		case -10843: self = .iDNotUnique
 		case -10844: self = .notPermitted
 		case -10845: self = .unknownError
-		case 7: self = .ioError
-		case -50: self = .internalError
-		default: self = .other(rawValue)
+		case 7:      self = .ioError
+		case -50:    self = .internalError
+		default:     self = .other(rawValue)
 		}
 		
 	}

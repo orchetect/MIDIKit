@@ -9,9 +9,10 @@ extension MIDI.IO {
 	
 	/// Set a string value for a `MIDIObjectRef` property key.
 	///
-	/// - Parameter forProperty: a `CoreMIDI.kMIDIProperty*` property constant
-	/// - Parameter ref: `MIDIObjectRef`
-	/// - Parameter string: New string value
+	/// - Parameters:
+	///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
+	///   - ref: `MIDIObjectRef`
+	///   - string: New string value
 	/// - Throws: `MIDI.IO.MIDIError`
 	internal static func setString(forProperty: CFString,
 								   of ref: MIDIObjectRef,
@@ -28,9 +29,10 @@ extension MIDI.IO {
 	
 	/// Set an integer value for a `MIDIObjectRef` property key.
 	///
-	/// - Parameter forProperty: a `CoreMIDI.kMIDIProperty*` property constant
-	/// - Parameter ref: `MIDIObjectRef`
-	/// - Parameter integer: New integer value
+	/// - Parameters:
+	///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
+	///   - ref: `MIDIObjectRef`
+	///   - integer: New integer value
 	/// - Throws: `MIDI.IO.MIDIError`
 	internal static func setInteger(forProperty: CFString,
 									of ref: MIDIObjectRef,
@@ -47,9 +49,10 @@ extension MIDI.IO {
 	
 	/// Set a data value for a `MIDIObjectRef` property key.
 	///
-	/// - Parameter forProperty: a `CoreMIDI.kMIDIProperty*` property constant
-	/// - Parameter ref: `MIDIObjectRef`
-	/// - Parameter data: New data value
+	/// - Parameters:
+	///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
+	///   - ref: `MIDIObjectRef`
+	///   - data: New data value
 	/// - Throws: `MIDI.IO.MIDIError`
 	internal static func setData(forProperty: CFString,
 								 of ref: MIDIObjectRef,
@@ -66,9 +69,10 @@ extension MIDI.IO {
 	
 	/// Set a dictionary value for a `MIDIObjectRef` property key.
 	///
-	/// - Parameter forProperty: a `CoreMIDI.kMIDIProperty*` property constant
-	/// - Parameter ref: `MIDIObjectRef`
-	/// - Parameter dictionary: New dictionary value
+	/// - Parameters:
+	///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
+	///   - ref: `MIDIObjectRef`
+	///   - dictionary: New dictionary value
 	/// - Throws: `MIDI.IO.MIDIError`
 	internal static func setDictionary(forProperty: CFString,
 									   of ref: MIDIObjectRef,
@@ -144,7 +148,7 @@ extension MIDI.IO {
 	/// Set unique ID.
 	/// (`kMIDIPropertyUniqueID`)
 	///
-	/// The system assigns unique IDs to all objects.  Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
+	/// The system assigns unique IDs to all objects. Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
 	internal static func setUniqueID(of ref: MIDIObjectRef,
 									 to newValue: MIDI.IO.ObjectRef.UniqueID) throws {
 		

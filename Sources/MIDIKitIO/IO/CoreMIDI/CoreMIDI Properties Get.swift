@@ -509,7 +509,7 @@ extension MIDI.IO {
 	// https://developer.apple.com/documentation/coremidi/midi_services/midi_object_properties
 	//
 	//
-	//      Implemented in MIDIIO
+	//      Implemented in MIDIKit
 	//     / Device
 	//    / / Entity
 	//   / / / Endpoint
