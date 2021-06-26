@@ -8,8 +8,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /// C method to iterate on CoreMIDI MIDIPackets within a MIDIPacketList
-void CPacketListIterate(const MIDIPacketList *midiPacketList,
-						void (NS_NOESCAPE ^closure)(const MIDIPacket *midiPacket))
+void CMIDIPacketListIterate(const MIDIPacketList *midiPacketList,
+							void (NS_NOESCAPE ^closure)(const MIDIPacket *midiPacket))
 {
 	
 	if (midiPacketList->numPackets == 0) {
@@ -21,6 +21,24 @@ void CPacketListIterate(const MIDIPacketList *midiPacketList,
 	for (UInt32 idx = 0; idx < midiPacketList->numPackets; idx++) {
 		closure(midiPacket);
 		midiPacket = MIDIPacketNext(midiPacket);
+	}
+	
+}
+
+/// C method to iterate on CoreMIDI MIDIEventPackets within a MIDIEventList
+void CMIDIEventListIterate(const MIDIEventList *midiEventList,
+						   void (NS_NOESCAPE ^closure)(const MIDIEventPacket *midiEventPacket))
+{
+	
+	if (midiEventList->numPackets == 0) {
+		return;
+	}
+	
+	const MIDIEventPacket *midiEventPacket = &midiEventList->packet[0];
+	
+	for (UInt32 idx = 0; idx < midiEventList->numPackets; idx++) {
+		closure(midiEventPacket);
+		midiEventPacket = MIDIEventPacketNext(midiEventPacket);
 	}
 	
 }
