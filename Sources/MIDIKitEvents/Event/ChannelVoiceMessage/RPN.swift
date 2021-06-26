@@ -5,10 +5,6 @@
 
 import MIDIKitCommon
 
-// MARK: - Convenience typealias
-
-public typealias MIDICCRPN = MIDI.Event.ChannelVoiceMessage.ControllerChange.RPN
-
 // MARK: - MIDI.Event.ChannelVoiceMessage.ControllerChange.RPN
 
 extension MIDI.Event.ChannelVoiceMessage.ControllerChange {
@@ -31,7 +27,8 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange {
 	public enum RPN: Equatable, Hashable {
 		
 		/// Pitch Bend Sensitivity
-		case pitchBendSensitivity(semitones: MIDI.UInt7, cents: MIDI.UInt7)
+		case pitchBendSensitivity(semitones: MIDI.UInt7,
+								  cents: MIDI.UInt7)
 		
 		/// Channel Fine Tuning
 		/// (formerly Fine Tuning - see MMA RP-022)

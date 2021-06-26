@@ -5,10 +5,6 @@
 
 import MIDIKitCommon
 
-// MARK: - Convenience typealias
-
-public typealias MIDICC = MIDI.Event.ChannelVoiceMessage.ControllerChange
-
 // MARK: - MIDI.Event.ChannelVoiceMessage.ControllerChange
 
 extension MIDI.Event.ChannelVoiceMessage {

@@ -5,10 +5,6 @@
 
 import MIDIKitCommon
 
-// MARK: - Convenience typealias
-
-public typealias MIDICCLSB = MIDI.Event.ChannelVoiceMessage.ControllerChange.LSB
-
 // MARK: - MIDI.Event.ChannelVoiceMessage.ControllerChange.LSB
 
 extension MIDI.Event.ChannelVoiceMessage.ControllerChange {

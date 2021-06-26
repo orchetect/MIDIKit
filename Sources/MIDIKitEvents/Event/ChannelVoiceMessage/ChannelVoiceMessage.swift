@@ -5,8 +5,6 @@
 
 import MIDIKitCommon
 
-public typealias MIDICVMsg = MIDI.Event.ChannelVoiceMessage
-
 // MARK: - MIDI.Event.ChannelVoiceMessage
 
 extension MIDI.Event {

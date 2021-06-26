@@ -6,10 +6,6 @@
 import MIDIKitCommon
 @_implementationOnly import OTCoreTesting
 
-// MARK: - Convenience typealias
-
-public typealias MIDICCMode = MIDI.Event.ChannelVoiceMessage.ControllerChange.Mode
-
 // MARK: - MIDI.Event.ChannelVoiceMessage.ControllerChange.Mode
 
 extension MIDI.Event.ChannelVoiceMessage.ControllerChange {
