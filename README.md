@@ -14,7 +14,7 @@
 <img src="http://img.shields.io/badge/license-MIT-green.svg?style=flat"
      alt="License: MIT" /></a>
 
-A modular Swift CoreMIDI wrapper with type-safe abstraction for MIDI events, MTC, HUI, and SMF (Standard MIDI Files).
+A modular Swift CoreMIDI wrapper with type-safe abstraction for MIDI I/O, events, sync and Standard MIDI Files.
 
 ### Available Modules
 
@@ -23,20 +23,20 @@ A modular Swift CoreMIDI wrapper with type-safe abstraction for MIDI events, MTC
 | `MIDIKitIO`       | CoreMIDI I/O ports & connections    | ![Progress](https://progress-bar.dev/90/?title=Operational&color=555555&width=80) |  ⚪️   |   🟠   |
 | `MIDIKitSync`     |                                     |                                                              |      |       |
 | ─ `MTC.Receiver`  | MIDI Timecode Receiver abstraction  | ![Progress](https://progress-bar.dev/100/?title=Complete&color=555555&width=95) |  🟢   |   🟢   |
-| ─ `MTC.Generator` | MIDI Timecode Generator abstraction | ![Progress](https://progress-bar.dev/95/?title=Testing&color=555555&width=100) |  🟢   |   🟠   |
+| ─ `MTC.Generator` | MIDI Timecode Generator abstraction | ![Progress](https://progress-bar.dev/100/?title=Complete&color=555555&width=95) |  🟢   |   🟢   |
 
 ### Modules in Development
 
-| Module          | Description                       |                          Completion                          | Docs | Tests |
-| --------------- | --------------------------------- | :----------------------------------------------------------: | :--: | :---: |
-| `MIDIKitEvents` | MIDI 1.0 events encoding/decoding | ![Progress](https://progress-bar.dev/50/?title=In%20Progress&color=555555&width=75) |  ⚪️   |   ⚪️   |
-| `MIDIKitEvents` | MIDI 2.0 events encoding/decoding | ![Progress](https://progress-bar.dev/0/?title=Soon&color=555555&width=117) |  ⚪️   |   ⚪️   |
+| Module          | Description                                    |                          Completion                          | Docs | Tests |
+| --------------- | ---------------------------------------------- | :----------------------------------------------------------: | :--: | :---: |
+| `MIDIKitEvents` | MIDI 1.0: events                               | ![Progress](https://progress-bar.dev/50/?title=In%20Progress&color=555555&width=75) |  ⚪️   |   ⚪️   |
+| `MIDIKitEvents` | MIDI 2.0: events, MIDI-CI, UMP, 1.0 extensions | ![Progress](https://progress-bar.dev/0/?title=Future&color=555555&width=105) |  ⚪️   |   ⚪️   |
 
 ### Modules Planned
 
 | Module       | Description                       |                          Completion                          | Docs | Tests |
 | ------------ | --------------------------------- | :----------------------------------------------------------: | :--: | :---: |
-| `MIDIKitHUI` | HUI protocol abstraction          | ![Progress](https://progress-bar.dev/20/?title=Legacy%20Code&color=555555&width=80) |  ⚪️   |   ⚪️   |
+| `MIDIKitHUI` | HUI protocol abstraction          | ![Progress](https://progress-bar.dev/20/?title=Legacy%20Code&color=555555&width=76) |  ⚪️   |   ⚪️   |
 | `MIDIKitSMF` | Standard MIDI 1.0 File read/write | ![Progress](https://progress-bar.dev/80/?title=Future&color=555555&width=105) |  ⚪️   |   🟠   |
 
 ## Getting Started
@@ -45,9 +45,6 @@ Import all modules at once:
 
 ```swift
 import MIDIKit
-//     ├→ imports: MIDIKitIO
-//     ├→ imports: MIDIKitEvents
-//     └→ etc. ...
 ```
 
 Or import only specific submodules:
@@ -57,6 +54,8 @@ import MIDIKitIO
 import MIDIKitEvents
 // etc. ...
 ```
+
+See [Examples](https://github.com/orchetect/MIDIKit/blob/master/Examples/) folder and [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder for usage.
 
 ## Documentation
 
