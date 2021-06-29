@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-public typealias MIDISysEx = MIDI.Event.SystemExclusive
-
 // MARK: - MIDI.Event.SystemExclusive
 
 extension MIDI.Event {
@@ -67,7 +65,7 @@ extension MIDI.Event {
 		
 		public func asEvent() -> MIDI.Event {
 			
-			MIDI.Event(self)
+			.init(self)
 			
 		}
 		

@@ -121,7 +121,7 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange.RPN {
 	
 	public func asEvent(channel: MIDI.UInt4) -> MIDI.Event {
 		
-		MIDI.Event.chanVoice(.cc(.rpn(self), channel: channel))
+		.chanVoice(.cc(.rpn(self), channel: channel))
 		
 	}
 	

@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-public typealias MIDISysCom = MIDI.Event.SystemCommon
-
 // MARK: - MIDI.Event.SystemCommon
 
 extension MIDI.Event {
@@ -42,7 +40,7 @@ extension MIDI.Event {
 		
 		public func asEvent() -> MIDI.Event {
 			
-			MIDI.Event(self)
+			.init(self)
 			
 		}
 		

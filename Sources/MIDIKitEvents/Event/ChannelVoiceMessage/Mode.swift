@@ -52,9 +52,9 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange {
 extension MIDI.Event.ChannelVoiceMessage.ControllerChange.Mode {
 	
 	/// Internal initializer to return specific enum case with the provided controller number.
-	internal init(enumForController: MIDI.UInt7, value: MIDI.UInt7) {
+	internal init(controller: MIDI.UInt7, value: MIDI.UInt7) {
 		
-		switch enumForController {
+		switch controller {
 		case 120:
 			self = .allSoundOff(value: value)
 		case 121:
@@ -72,7 +72,7 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange.Mode {
 		case 127:
 			self = .polyModeOn(value: value)
 		default:
-			fatalError("Unexpected CC number encountered: \(enumForController.asInt)")
+			fatalError("Unexpected CC number encountered: \(controller.asInt)")
 		}
 		
 	}
@@ -83,7 +83,7 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange.Mode {
 	
 	public func asEvent(channel: MIDI.UInt4) -> MIDI.Event {
 		
-		MIDI.Event.chanVoice(.cc(.mode(self), channel: channel))
+		.chanVoice(.cc(.mode(self), channel: channel))
 		
 	}
 	

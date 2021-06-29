@@ -270,7 +270,7 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange {
 	
 	public func asEvent(channel: MIDI.UInt4) -> MIDI.Event {
 		
-		MIDI.Event.chanVoice(.cc(self, channel: channel))
+		.chanVoice(.cc(self, channel: channel))
 		
 	}
 	
@@ -279,11 +279,11 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange {
 extension MIDI.Event.ChannelVoiceMessage.ControllerChange {
 	
 	/// Internal initializer to return specific enum case with the provided controller number.
-	internal init(enumForController: MIDI.UInt7, value: MIDI.UInt7) {
+	internal init(controller: MIDI.UInt7, value: MIDI.UInt7) {
 		
 		#warning("> finish this")
 		
-		switch enumForController {
+		switch controller {
 		case 0:
 			self = .bankSelect(value: value)
 		case 1:
@@ -326,7 +326,7 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange {
 		// case 20...31: undefined
 			
 		case 32...63:
-			self = .lsb(LSB(enumForController: enumForController, value: value))
+			self = .lsb(LSB(controller: controller, value: value))
 		case 64:
 			self = .sustainPedal(value: value)
 		case 65:
@@ -399,13 +399,13 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange {
 		// case 102...119: undefined
 		
 		case 120...127:
-			self = .mode(Mode(enumForController: enumForController, value: value))
+			self = .mode(Mode(controller: controller, value: value))
 			
 		case 3, 9, 20...31, 85...87, 89...90, 102...119:
-			self = .undefined(enumForController, value: value)
+			self = .undefined(controller, value: value)
 			
 		default:
-			fatalError("Unexpected CC number encountered: \(enumForController.asInt)")
+			fatalError("Unexpected CC number encountered: \(controller.asInt)")
 			
 		}
 		

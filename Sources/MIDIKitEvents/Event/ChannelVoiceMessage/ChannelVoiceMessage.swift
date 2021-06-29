@@ -9,6 +9,7 @@ import MIDIKitCommon
 
 extension MIDI.Event {
 	
+	/// MIDI Channel Voice Message
 	public enum ChannelVoiceMessage: MIDIEventProtocol, Equatable, Hashable {
 		
 		#warning("> need associated values, and additional cases. check other midi lib.")
@@ -24,7 +25,7 @@ extension MIDI.Event {
 		case polyAftertouch(note: MIDI.UInt7, pressure: MIDI.UInt7, channel: MIDI.UInt4)
 		
 		/// Channel Voice Message: Controller Change (CC)
-		case cc(_ type: MIDICC, channel: MIDI.UInt4)
+		case cc(_ type: ControllerChange, channel: MIDI.UInt4)
 		
 		/// Channel Voice Message: Program Change
 		case programChange(program: MIDI.UInt7, channel: MIDI.UInt4)
@@ -46,7 +47,7 @@ extension MIDI.Event {
 		
 		public func asEvent() -> MIDI.Event {
 			
-			MIDI.Event(self)
+			.init(self)
 			
 		}
 		

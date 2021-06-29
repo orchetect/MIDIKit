@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-public typealias MIDISysRT = MIDI.Event.SystemRealTime
-
 // MARK: - MIDI.Event.SystemRealTime
 
 extension MIDI.Event {
@@ -31,7 +29,7 @@ extension MIDI.Event {
 		
 		public func asEvent() -> MIDI.Event {
 			
-			MIDI.Event(self)
+			.init(self)
 			
 		}
 		

@@ -9,7 +9,7 @@ import MIDIKitCommon
 
 extension MIDI.Event.ChannelVoiceMessage.ControllerChange {
 	
-	/// MIDI Controller Change Event (CC)
+	/// MIDI Controller Change LSB
 	public enum LSB: Equatable, Hashable {
 		
 		/// LSB for Control 0 (Bank Select)
@@ -95,7 +95,7 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange.LSB {
 	
 	public func asEvent(channel: MIDI.UInt4) -> MIDI.Event {
 		
-		MIDI.Event.chanVoice(.cc(.lsb(self), channel: channel))
+		.chanVoice(.cc(.lsb(self), channel: channel))
 		
 	}
 	
@@ -104,9 +104,9 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange.LSB {
 extension MIDI.Event.ChannelVoiceMessage.ControllerChange.LSB {
 	
 	/// Internal initializer to return specific enum case with the provided controller number.
-	internal init(enumForController: MIDI.UInt7, value: MIDI.UInt7) {
+	internal init(controller: MIDI.UInt7, value: MIDI.UInt7) {
 		
-		switch enumForController {
+		switch controller {
 		case 32:
 			self = .bankSelect(value: value)
 		case 33:
@@ -152,10 +152,10 @@ extension MIDI.Event.ChannelVoiceMessage.ControllerChange.LSB {
 		// case 52...63: undefined
 		
 		case 35, 41, 46...47, 52...63:
-			self = .undefined(enumForController, value: value)
+			self = .undefined(controller, value: value)
 			
 		default:
-			fatalError("Unexpected CC number encountered: \(enumForController.asInt)")
+			fatalError("Unexpected LSB number encountered: \(controller.asInt)")
 		
 		}
 		
