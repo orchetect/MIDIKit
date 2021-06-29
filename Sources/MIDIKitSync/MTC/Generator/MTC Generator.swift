@@ -40,6 +40,11 @@ extension MIDI.MTC {
 			
 		}
 		
+		/// Behavior determining when MTC Full-Frame MIDI messages should be generated.
+		///
+		/// `.ifDifferent` is recommended and suitable for most implementations.
+		public var locateBehavior: MTC.Encoder.FullFrameBehavior = .ifDifferent
+		
 		
 		// MARK: - Stored closures
 		
@@ -168,7 +173,7 @@ extension MIDI.MTC {
 		/// Sends a MTC full-frame message.
 		public func locate(to timecode: Timecode) {
 			
-			encoder.locate(to: timecode)
+			encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
 			setTimerRate(from: timecode.frameRate)
 			
 		}
@@ -177,7 +182,7 @@ extension MIDI.MTC {
 		/// Sends a MTC full-frame message.
 		public func locate(to components: Timecode.Components) {
 			
-			encoder.locate(to: components)
+			encoder.locate(to: components, transmitFullFrame: locateBehavior)
 			setTimerRate(from: timecode.frameRate)
 			
 		}
@@ -221,7 +226,7 @@ extension MIDI.MTC {
 			
 			encoder.locate(to: components,
 						   frameRate: frameRate,
-						   triggerFullFrame: false)
+						   transmitFullFrame: .always)
 			
 			start()
 			
