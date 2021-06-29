@@ -4,7 +4,7 @@
 //
 
 import CoreMIDI
-import MIDIKitC
+@_implementationOnly import MIDIKitC
 
 /// aka `UnsafePointer<MIDIPacketList>`
 /// allows iteration on the pointer directly, ie:
@@ -47,7 +47,7 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 			// Call custom C method wrapping MIDIPacketNext
 			// This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
 			
-			CPacketListIterate(packetListPtr) {
+			CMIDIPacketListIterate(packetListPtr) {
 				guard let unwrappedPtr = $0 else { return }
 				packets.append(safePacketUnwrapper(unwrappedPtr))
 			}
