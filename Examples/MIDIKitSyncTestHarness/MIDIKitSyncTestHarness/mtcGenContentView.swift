@@ -29,6 +29,8 @@ struct mtcGenContentView: View {
 	
 	@State var localFrameRate: Timecode.FrameRate = ._24
 	
+	@State var locateBehavior: MIDI.MTC.Encoder.FullFrameBehavior = .ifDifferent
+	
 	// MARK: - UI state
 	
     @State var mtcGenState = false
@@ -52,8 +54,8 @@ struct mtcGenContentView: View {
 			Spacer()
 				.frame(height: 20)
 			
-			Button("Locate to " + TCC(h: 1).toTimecode(rawValuesAt: localFrameRate).stringValue) {
-				locate()
+			Button("Locate to " + TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: localFrameRate).stringValue) {
+				locate(to: TCC(h: 1, m: 00, s: 00, f: 00))
 			}
 			.disabled(mtcGenState)
 			
@@ -96,6 +98,26 @@ struct mtcGenContentView: View {
 			}
 			
 			Text("will be transmit as \(localFrameRate.mtcFrameRate.stringValue)")
+			
+			Spacer()
+				.frame(height: 20)
+			
+			Picker("Locate Behavior", selection: $locateBehavior) {
+				ForEach(MIDI.MTC.Encoder.FullFrameBehavior.allCases, id: \.self) { locateBehaviorType in
+					Text(locateBehaviorType.nameForUI)
+						.tag(locateBehaviorType)
+				}
+			}
+			.frame(width: 250)
+			.disabled(mtcGenState)
+			.onHover { _ in
+				guard !mtcGenState else { return }
+				
+				// this is a stupid SwiftUI workaround, but it works fine for our purposes
+				if mtcGen.locateBehavior != locateBehavior {
+					mtcGen.locateBehavior = locateBehavior
+				}
+			}
 			
 		}
 		.frame(minWidth: 400, maxWidth: .infinity, minHeight: 300, maxHeight: .infinity, alignment: .center)
@@ -140,15 +162,18 @@ struct mtcGenContentView: View {
 				}
 			)
 			
+			mtcGen.locateBehavior = locateBehavior
+			
 			locate()
 			
 		}
 		
     }
 	
-	func locate() {
+	/// Locate to a timecode, or 00:00:00:00 by default.
+	func locate(to components: Timecode.Components = TCC(h: 00, m: 00, s: 00, f: 00)) {
 		
-		let tc = TCC(h: 1).toTimecode(rawValuesAt: localFrameRate)
+		let tc = components.toTimecode(rawValuesAt: localFrameRate)
 		generatorTC = tc.stringValue
 		mtcGen.locate(to: tc)
 		

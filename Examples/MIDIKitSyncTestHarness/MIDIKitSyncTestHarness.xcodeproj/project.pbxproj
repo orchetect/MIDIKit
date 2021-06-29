@@ -13,6 +13,7 @@
 		E29EF02B267BF30700282F94 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29EF02A267BF30700282F94 /* MIDIKit */; };
 		E29EF032267BF4BA00282F94 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E29EF031267BF4BA00282F94 /* SwiftRadix */; };
 		E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29EF038267BF71B00282F94 /* DunneAudioKit */; };
+		E2BE847F268BC6680034F62C /* MIDIKit Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BE847E268BC6680034F62C /* MIDIKit Extensions.swift */; };
 		E2E635B925EE4CE10039B8CF /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E2E635B825EE4CE10039B8CF /* OTCore */; };
 		E2FAC4DE257884E000A6DD31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */; };
 		E2FAC4E5257884E100A6DD31 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2FAC4E4257884E100A6DD31 /* Preview Assets.xcassets */; };
@@ -25,6 +26,7 @@
 		E275EAB32679A493008E396D /* mtcGenContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mtcGenContentView.swift; sourceTree = "<group>"; };
 		E27E3F9F25A6E5C700F4B78E /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		E29EF027267BF2DE00282F94 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MIDIKit; path = ../..; sourceTree = "<group>"; };
+		E2BE847E268BC6680034F62C /* MIDIKit Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MIDIKit Extensions.swift"; sourceTree = "<group>"; };
 		E2FAC4DA257884E000A6DD31 /* MIDIKitSyncTestHarness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIDIKitSyncTestHarness.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E2FAC4E4257884E100A6DD31 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				E275EAB32679A493008E396D /* mtcGenContentView.swift */,
 				E275EAAF2679A444008E396D /* mtcRecContentView.swift */,
 				E2FAC51D2578856F00A6DD31 /* MIDI Endpoints.swift */,
+				E2BE847E268BC6680034F62C /* MIDIKit Extensions.swift */,
 				E27E3F9F25A6E5C700F4B78E /* Audio.swift */,
 				E2FAC4E6257884E100A6DD31 /* Main.storyboard */,
 				E2FAC4E9257884E100A6DD31 /* Info.plist */,
@@ -178,6 +181,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2BE847F268BC6680034F62C /* MIDIKit Extensions.swift in Sources */,
 				E275EAB42679A493008E396D /* mtcGenContentView.swift in Sources */,
 				E27E3FA025A6E5C700F4B78E /* Audio.swift in Sources */,
 				E275EAB02679A444008E396D /* mtcRecContentView.swift in Sources */,
