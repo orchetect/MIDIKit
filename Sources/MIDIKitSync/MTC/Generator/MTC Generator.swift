@@ -1,8 +1,6 @@
 //
 //  MTC Generator.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-11-25.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import Foundation
@@ -21,7 +19,7 @@ extension MTC {
 		/// The MTC SMPTE frame rate (24, 25, 29.97d, or 30) that was last transmitted by the generator.
 		///
 		/// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the local `timecode.frameRate` property is used for automatic selection of MTC SMPTE frame rate and scaling of outgoing timecode accordingly.
-		public var mtcFrameRate: MTC.MTCFrameRate {
+		public var mtcFrameRate: MTCFrameRate {
 			
 			encoder.mtcFrameRate
 			
@@ -41,6 +39,11 @@ extension MTC {
 			encoder.localFrameRate
 			
 		}
+		
+		/// Behavior determining when MTC Full-Frame MIDI messages should be generated.
+		///
+		/// `.ifDifferent` is recommended and suitable for most implementations.
+		public var locateBehavior: MTC.Encoder.FullFrameBehavior = .ifDifferent
 		
 		
 		// MARK: - Stored closures
@@ -170,7 +173,7 @@ extension MTC {
 		/// Sends a MTC full-frame message.
 		public func locate(to timecode: Timecode) {
 			
-			encoder.locate(to: timecode)
+			encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
 			setTimerRate(from: timecode.frameRate)
 			
 		}
@@ -179,7 +182,7 @@ extension MTC {
 		/// Sends a MTC full-frame message.
 		public func locate(to components: Timecode.Components) {
 			
-			encoder.locate(to: components)
+			encoder.locate(to: components, transmitFullFrame: locateBehavior)
 			setTimerRate(from: timecode.frameRate)
 			
 		}
@@ -198,7 +201,7 @@ extension MTC {
 		///
 		/// Frame rate will be derived from the `timecode` object passed in.
 		///
-		/// - note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
+		/// - Note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
 		///
 		/// Call `stop()` to stop generating events.
 		public func start(at timecode: Timecode) {
@@ -211,7 +214,7 @@ extension MTC {
 		/// Starts generating MTC continuous playback MIDI message stream events.
 		/// Call this method at the exact time that `realTime` occurs.
 		///
-		/// - note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
+		/// - Note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
 		///
 		/// Call `stop()` to stop generating events.
 		public func start(at components: Timecode.Components,
@@ -223,7 +226,7 @@ extension MTC {
 			
 			encoder.locate(to: components,
 						   frameRate: frameRate,
-						   triggerFullFrame: false)
+						   transmitFullFrame: .always)
 			
 			start()
 			
@@ -232,7 +235,7 @@ extension MTC {
 		/// Starts generating MTC continuous playback MIDI message stream events.
 		/// Call this method at the exact time that `realTime` occurs.
 		///
-		/// - note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
+		/// - Note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
 		///
 		/// Call `stop()` to stop generating events.
 		public func start(at realTime: TimeInterval,

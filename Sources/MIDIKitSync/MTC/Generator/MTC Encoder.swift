@@ -1,8 +1,6 @@
 //
 //  MTC Encoder.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-06-08.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import MIDIKitInternals
@@ -29,6 +27,7 @@ extension MTC {
 				to: localFrameRate
 			) else {
 				// rates are not compatible; return a default instead of failing
+				// in future we may want this to be an error condition
 				return Timecode(at: localFrameRate)
 			}
 			
@@ -89,6 +88,10 @@ extension MTC {
 		/// Internal: flag indicating whether the quarter-frame output stream has already started since the last `locate(to:)` (or since initializing the class if `locate(to:)` has not yet been called).
 		internal var mtcQuarterFrameStreamHasStartedSinceLastLocate = false
 		
+		/// Internal: track last full-frame message sent to the handler.
+		internal var lastTransmitFullFrame: (mtcComponents: Timecode.Components,
+											 mtcFrameRate: MTCFrameRate)? = nil
+		
 		
 		// MARK: - init
 		
@@ -111,11 +114,11 @@ extension MTC {
 		///   - timecode: Timecode; frame rate is derived as well.
 		///   - triggerFullFrame: Triggers the MIDI handler to send a full-frame message.
 		public func locate(to timecode: Timecode,
-						   triggerFullFrame: Bool = true) {
+						   transmitFullFrame: FullFrameBehavior = .ifDifferent) {
 			
 			locate(to: timecode.components,
 				   frameRate: timecode.frameRate,
-				   triggerFullFrame: triggerFullFrame)
+				   transmitFullFrame: transmitFullFrame)
 			
 		}
 		
@@ -128,7 +131,7 @@ extension MTC {
 		///   - triggerFullFrame: Triggers the MIDI handler to send a full-frame message.
 		public func locate(to components: Timecode.Components,
 						   frameRate: Timecode.FrameRate? = nil,
-						   triggerFullFrame: Bool = true) {
+						   transmitFullFrame: FullFrameBehavior = .ifDifferent) {
 			
 			if let frameRate = frameRate {
 				setLocalFrameRate(frameRate)
@@ -147,8 +150,17 @@ extension MTC {
 			mtcQuarterFrameStreamHasStartedSinceLastLocate = false
 			
 			// tell handler to transmit MIDI message
-			if triggerFullFrame {
+			switch transmitFullFrame {
+			case .always:
 				sendFullFrameMIDIMessage()
+			case .ifDifferent:
+				let newFullFrame = (mtcComponents: newComponents,
+									mtcFrameRate: mtcFrameRate)
+				if !mtcIsEqual(lastTransmitFullFrame, newFullFrame) {
+					sendFullFrameMIDIMessage()
+				}
+			case .never:
+				break
 			}
 			
 		}
@@ -189,18 +201,18 @@ extension MTC {
 		@inline(__always) public func decrement() {
 			
 			if mtcQuarterFrameStreamHasStartedSinceLastLocate {
-			if mtcQuarterFrame > 0 {
-				mtcQuarterFrame -= 1
-			} else {
-				guard var tc = Timecode(
-					mtcComponents,
-					at: mtcFrameRate.directEquivalentFrameRate
-				) else { return }
-				
-				tc.subtract(wrapping: TCC(f: 2))
-				mtcComponents = tc.components
-				mtcQuarterFrame = 7
-			}
+				if mtcQuarterFrame > 0 {
+					mtcQuarterFrame -= 1
+				} else {
+					guard var tc = Timecode(
+						mtcComponents,
+						at: mtcFrameRate.directEquivalentFrameRate
+					) else { return }
+					
+					tc.subtract(wrapping: TCC(f: 2))
+					mtcComponents = tc.components
+					mtcQuarterFrame = 7
+				}
 			}
 			
 			// tell handler to transmit MIDI message
@@ -212,12 +224,19 @@ extension MTC {
 		/// Manually trigger a MIDI handler event to transmit a full-frame message at the current timecode.
 		public func sendFullFrameMIDIMessage() {
 			
-			midiEventSendHandler?(generateFullFrameMIDIMessage())
+			let ffMessage = generateFullFrameMIDIMessage()
+			
+			midiEventSendHandler?(ffMessage.message)
+			
+			lastTransmitFullFrame = (ffMessage.components, mtcFrameRate)
 			
 		}
 		
 		/// Internal: generates a full-frame message at current position.
-		internal func generateFullFrameMIDIMessage() -> [Byte] {
+		internal func generateFullFrameMIDIMessage() -> (
+			message: [Byte],
+			components: Timecode.Components
+		) {
 			
 			// MTC Full Timecode message
 			// (1-frame resolution, does not carry subframe information)
@@ -231,20 +250,23 @@ extension MTC {
 			// rr == 10: 29.97d frames/s (SMPTE drop-frame timecode)
 			// rr == 11: 30 frames/s
 			
+			var newComponents = mtcComponents
+			newComponents.f += ((25 * Int(mtcQuarterFrame)) / 100)
+			
 			let midiMessage: [Byte] = [
 				0xF0,
 				0x7F,
 				0x7F,
 				0x01,
 				0x01,
-				(Byte(mtcComponents.h) & 0b0001_1111) + (mtcFrameRate.bitValue << 5),
-				Byte(mtcComponents.m),
-				Byte(mtcComponents.s),
-				Byte(mtcComponents.f),
+				(Byte(newComponents.h) & 0b0001_1111) + (mtcFrameRate.bitValue << 5),
+				Byte(newComponents.m),
+				Byte(newComponents.s),
+				Byte(newComponents.f),
 				0xF7
 			]
 			
-			return midiMessage
+			return (midiMessage, newComponents)
 			
 		}
 		
@@ -252,6 +274,9 @@ extension MTC {
 		@inline(__always) internal func sendQuarterFrameMIDIMessage() {
 			
 			midiEventSendHandler?(generateQuarterFrameMIDIMessage())
+			
+			// invalidate last full-frame information
+			lastTransmitFullFrame = nil
 			
 		}
 		

@@ -1,8 +1,6 @@
 //
 //  MTC Integration Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-06-11.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -19,10 +17,10 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
 		
 		// decoder
 		
-		var _timecode: Timecode?       ; _ = _timecode
+		var _timecode: Timecode?            ; _ = _timecode
 		var _mType: MTC.MessageType?   ; _ = _mType
 		var _direction: MTC.Direction? ; _ = _direction
-		var _displayNeedsUpdate: Bool? ; _ = _displayNeedsUpdate
+		var _displayNeedsUpdate: Bool?      ; _ = _displayNeedsUpdate
 		var _mtcFR: MTC.MTCFrameRate?  ; _ = _mtcFR
 		
 		let mtcDec = MTC.Decoder(initialLocalFrameRate: nil)
@@ -109,10 +107,10 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
 		
 		// decoder
 		
-		var _timecode: Timecode?       ; _ = _timecode
+		var _timecode: Timecode?            ; _ = _timecode
 		var _mType: MTC.MessageType?   ; _ = _mType
 		var _direction: MTC.Direction? ; _ = _direction
-		var _displayNeedsUpdate: Bool? ; _ = _displayNeedsUpdate
+		var _displayNeedsUpdate: Bool?      ; _ = _displayNeedsUpdate
 		var _mtcFR: MTC.MTCFrameRate?  ; _ = _mtcFR
 		
 		let mtcDec = MTC.Decoder(initialLocalFrameRate: nil)
@@ -263,14 +261,233 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
 		
 	}
 	
+	func testMTC_Integration_EncoderDecoder_48fps() {
+		
+		// decoder
+		
+		var _timecode: Timecode?            ; _ = _timecode
+		var _mType: MTC.MessageType?   ; _ = _mType
+		var _direction: MTC.Direction? ; _ = _direction
+		var _displayNeedsUpdate: Bool?      ; _ = _displayNeedsUpdate
+		var _mtcFR: MTC.MTCFrameRate?  ; _ = _mtcFR
+		
+		let mtcDec = MTC.Decoder(initialLocalFrameRate: nil)
+		{ timecode, messageType, direction, displayNeedsUpdate in
+			_timecode = timecode
+			_mType = messageType
+			_direction = direction
+			_displayNeedsUpdate = displayNeedsUpdate
+		} mtcFrameRateChanged: { mtcFrameRate in
+			_mtcFR = mtcFrameRate
+		}
+		
+		// encoder
+		
+		let mtcEnc = MTC.Encoder { midiMessage in
+			mtcDec.midiIn(data: midiMessage)
+		}
+		
+		// test
+		
+		mtcDec.localFrameRate = ._48
+		mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._48)!)
+		
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._48)!)
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
+		mtcEnc.increment() // QF 0
+		mtcEnc.increment() // QF 1
+		mtcEnc.increment() // QF 2
+		mtcEnc.increment() // QF 3
+		mtcEnc.increment() // QF 4
+		mtcEnc.increment() // QF 5
+		mtcEnc.increment() // QF 6
+		mtcEnc.increment() // QF 7
+		mtcEnc.increment() // QF 0
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 04).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 1
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 04).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 2
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 05).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 3
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 05).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 4
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 06).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 5
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 06).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 6
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 07).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 7
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 07).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 0
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 08).toTimecode(at: ._48)!)
+		(19 * 4).repeatEach { mtcEnc.increment() } // advance 19 frames (4 QF per frame)
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 46).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 5
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 46).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 6
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 47).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 7
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 47).toTimecode(at: ._48)!)
+		mtcEnc.increment() // QF 0
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 01, f: 00).toTimecode(at: ._48)!)
+		XCTAssertEqual(_direction, .forwards)
+		mtcEnc.decrement() // QF 7
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 47).toTimecode(at: ._48)!)
+		XCTAssertEqual(_direction, .backwards)
+		mtcEnc.decrement() // QF 6
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 47).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 5
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 46).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 4
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 46).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 3
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 45).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 2
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 45).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 1
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 44).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 0
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 44).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 7
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 43).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 6
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 43).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 5
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 42).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 4
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 42).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 3
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 41).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 2
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 41).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 1
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 40).toTimecode(at: ._48)!)
+		mtcEnc.decrement() // QF 0
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 40).toTimecode(at: ._48)!)
+		
+	}
+	
+	func testMTC_Integration_EncoderDecoder_fullFrameBehavior() {
+		
+		// test expected outcomes regarding Encoder.locate() and transmitting MTC full-frame messages
+		
+		// decoder
+		
+		var _timecode: Timecode?            ; _ = _timecode
+		var _mType: MTC.MessageType?   ; _ = _mType
+		var _direction: MTC.Direction? ; _ = _direction
+		var _displayNeedsUpdate: Bool?      ; _ = _displayNeedsUpdate
+		var _mtcFR: MTC.MTCFrameRate?  ; _ = _mtcFR
+		
+		let mtcDec = MTC.Decoder(initialLocalFrameRate: nil)
+		{ timecode, messageType, direction, displayNeedsUpdate in
+			_timecode = timecode
+			_mType = messageType
+			_direction = direction
+			_displayNeedsUpdate = displayNeedsUpdate
+		} mtcFrameRateChanged: { mtcFrameRate in
+			_mtcFR = mtcFrameRate
+		}
+		
+		// encoder
+		
+		let mtcEnc = MTC.Encoder { midiMessage in
+			mtcDec.midiIn(data: midiMessage)
+		}
+		
+		// test -- basic behavior
+		
+		mtcDec.localFrameRate = ._24
+		
+		// locate
+		mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._24)!)
+		
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._24)!)
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
+		XCTAssertEqual(_displayNeedsUpdate, true)
+		
+		_displayNeedsUpdate = nil
+		
+		// locate to same position
+		mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._24)!)
+		
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._24)!)
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
+		XCTAssertEqual(_displayNeedsUpdate, nil)
+		
+		// locate to same position, but force a full-frame message to transmit
+		mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._24)!,
+					  transmitFullFrame: .always)
+		
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._24)!)
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		
+		// locate to new timecode
+		mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(at: ._24)!,
+					  transmitFullFrame: .always)
+		
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(at: ._24)!)
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
+		XCTAssertEqual(_displayNeedsUpdate, true)
+		
+		// locate to same timecode, but change frame rate
+		mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(at: ._25)!,
+					  transmitFullFrame: .always)
+		
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(at: ._25)!)
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		
+		_displayNeedsUpdate = nil
+		
+		// locate to new timecode, but request full-frame not be transmit
+		
+		mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 04).toTimecode(at: ._25)!,
+					  transmitFullFrame: .never)
+		
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(at: ._25)!)
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
+		XCTAssertEqual(_displayNeedsUpdate, nil)
+		
+		// edge cases
+		
+		// quarter-frame invalidation of last full-frame cache
+		// edge case: where the Encoder has locateBehavior == .ifDifferent, if the encoder produces quarter-frame messages it should clear its cache of last full-frame message produced so that in the rare case that we locate to the same full-frame message as the last full-frame message sent it succeeds instead of errantly preventing the message
+		
+		mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._24)!,
+					  transmitFullFrame: .always)
+		
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._24)!)
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
+		XCTAssertEqual(_displayNeedsUpdate, true)
+		
+		XCTAssertEqual(_mType, .fullFrame)
+		
+		mtcEnc.increment() // QF 0
+		mtcEnc.increment() // QF 1
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 1)
+		XCTAssertNil(mtcEnc.lastTransmitFullFrame) // brittle but only way to test this
+		
+		// locate to same timecode; full-frame should transmit
+		mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._24)!)
+		
+		XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(at: ._24)!)
+		XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
+		XCTAssertEqual(_displayNeedsUpdate, false)
+		XCTAssertEqual(_mType, .fullFrame)
+		
+	}
+	
 	func testBruteForce() {
 		
 		// decoder
 		
-		var _timecode: Timecode?       ; _ = _timecode
+		var _timecode: Timecode?            ; _ = _timecode
 		var _mType: MTC.MessageType?   ; _ = _mType
 		var _direction: MTC.Direction? ; _ = _direction
-		var _displayNeedsUpdate: Bool? ; _ = _displayNeedsUpdate
+		var _displayNeedsUpdate: Bool?      ; _ = _displayNeedsUpdate
 		var _mtcFR: MTC.MTCFrameRate?  ; _ = _mtcFR
 		
 		let mtcDec = MTC.Decoder(initialLocalFrameRate: nil)
