@@ -129,6 +129,7 @@ let package = Package(
 		.target(
 			name: "MIDIKitInternals",
 			dependencies: [
+				.target(name: "MIDIKitCommon"),
 				.product(name: "OTCore", package: "OTCore")
 			]
 		),

@@ -1,6 +1,9 @@
 //
 //  MIDIKitCommon.swift
-//  MIDIKit
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
-//  Created by Steffan Andrews on 2021-01-23.
-//
+
+/// Namespace for MIDIKit.
+public enum MIDI {
+	
+}

@@ -1,6 +1,6 @@
 //
 //  MIDIKitEventsTests.swift
-//  MIDIKit
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -11,7 +11,7 @@ import MIDIKitTestsCommon
 
 final class MIDIKitEventsTests: XCTestCase {
 	
-	// no tests in this file, this is the module root test file
+	// no tests in this file, this is the root test class
 	
 	func testEmpty() {
 		XCTAssert(true)

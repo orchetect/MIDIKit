@@ -1,12 +1,10 @@
 //
 //  MIDIPacketList PacketListIterator.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-02-22.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import CoreMIDI
-import MIDIKitC
+@_implementationOnly import MIDIKitC
 
 /// aka `UnsafePointer<MIDIPacketList>`
 /// allows iteration on the pointer directly, ie:
@@ -17,11 +15,12 @@ import MIDIKitC
 ///         }
 ///     }
 ///
-/// This must be performed on the `UnsafePointer` returned by CoreMIDI and not on `.pointee` (concrete `MIDIPacketList`) to avoid CoreMIDI-related crashes.
+/// This must be performed on the `UnsafePointer` returned by CoreMIDI and not on `.pointee` (concrete `CoreMIDI` `MIDIPacketList`) to avoid `CoreMIDI`-related crashes.
+///
 /// See the workaround `safePacketUnwrapper` method for more details.
 extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 	
-	public typealias Element = MIDIPacketData
+	public typealias Element = MIDI.PacketData
 	
 	public typealias Iterator = PacketListIterator
 	
@@ -32,23 +31,23 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 		
 	}
 	
-	/// Custom iterator to iterate `MIDIPacket`s within a `MIDIPacketList`.
+	/// Custom iterator to iterate `MIDIPacket`s within a `CoreMIDI` `MIDIPacketList`.
 	public struct PacketListIterator: IteratorProtocol {
 		
-		public typealias Element = MIDIPacketData
+		public typealias Element = MIDI.PacketData
 		
 		var index = 0
 		
 		var packets: [Element] = []
 		
 		/// Initialize the packet list generator with a packet list
-		/// - parameter packetList: MIDI Packet List
+		/// - Parameter packetList: MIDI Packet List
 		@inline(__always) public init(_ packetListPtr: UnsafePointer<MIDIPacketList>) {
 			
 			// Call custom C method wrapping MIDIPacketNext
 			// This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
 			
-			CPacketListIterate(packetListPtr) {
+			CMIDIPacketListIterate(packetListPtr) {
 				guard let unwrappedPtr = $0 else { return }
 				packets.append(safePacketUnwrapper(unwrappedPtr))
 			}
@@ -73,12 +72,12 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 	static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
 	
 	@inline(__always) fileprivate
-	static func safePacketUnwrapper(_ packetPtr: UnsafePointer<MIDIPacket>) -> MIDIPacketData {
+	static func safePacketUnwrapper(_ packetPtr: UnsafePointer<MIDIPacket>) -> MIDI.PacketData {
 
 		let packetDataCount = Int(packetPtr.pointee.length)
 
 		guard packetDataCount > 0 else {
-			return MIDIPacketData(
+			return MIDI.PacketData(
 				data: [],
 				timeStamp: packetPtr.pointee.timeStamp
 			)
@@ -91,7 +90,7 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
 			count: packetDataCount
 		)
 
-		return MIDIPacketData(
+		return MIDI.PacketData(
 			data: Data(rawMIDIPacketDataPtr),
 			timeStamp: packetPtr.pointee.timeStamp
 		)

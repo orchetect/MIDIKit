@@ -1,8 +1,7 @@
 //
 //  ContentViewCatalina.swift
 //  MIDIKitTestHarness
-//
-//  Created by Steffan Andrews on 2021-01-12.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import SwiftUI
@@ -14,7 +13,7 @@ struct ContentViewCatalina: View {
 	// if you declare a view that creates its own @ObservedObject instance, that instance is replaced every time SwiftUI decides that it needs to discard and redraw that view.
 	// it should instead be used to retain a weak reference from the view's initializer, with the original instance of the object stored in a parent scope as either a var or @StateObject but not an @ObservedObject
 	
-	@ObservedObject var midiManager: MIDIIO.Manager
+	@ObservedObject var midiManager: MIDI.IO.Manager
 	
     var body: some View {
 		

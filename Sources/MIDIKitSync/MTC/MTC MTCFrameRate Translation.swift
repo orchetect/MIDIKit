@@ -1,8 +1,6 @@
 //
 //  MTC MTCFrameRate Translation.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-11.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import TimecodeKit
@@ -10,7 +8,7 @@ import TimecodeKit
 
 // MARK: - Derived rates
 
-extension MTC.MTCFrameRate {
+extension MIDI.MTC.MTCFrameRate {
 	
 	/// Returns all timecode frame rates derived from the MTC base frame rate.
 	public var derivedFrameRates: [Timecode.FrameRate] {
@@ -44,7 +42,7 @@ extension MTC.MTCFrameRate {
 extension Timecode.FrameRate {
 	
 	/// Returns the base MTC frame rate that DAWs use to transmit timecode (scaling frame number if necessary)
-	@inline(__always) public var mtcFrameRate: MTC.MTCFrameRate {
+	@inline(__always) public var mtcFrameRate: MIDI.MTC.MTCFrameRate {
 		
 		switch self {
 		case ._23_976:		return .mtc24
@@ -72,7 +70,7 @@ extension Timecode.FrameRate {
 	}
 	
 	/// Returns true if the timecode frame rate is derived from the MTC frame rate.
-	@inlinable public func transmitsMTC(using mtcFrameRate: MTC.MTCFrameRate) -> Bool {
+	@inlinable public func transmitsMTC(using mtcFrameRate: MIDI.MTC.MTCFrameRate) -> Bool {
 		
 		self.mtcFrameRate == mtcFrameRate
 		
@@ -83,7 +81,7 @@ extension Timecode.FrameRate {
 
 // MARK: - Scaled
 
-extension MTC.MTCFrameRate {
+extension MIDI.MTC.MTCFrameRate {
 	
 	/// Scales MTC frames at `self` MTC base rate to frames at other timecode frame rate.
 	///

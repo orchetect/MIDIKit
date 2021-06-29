@@ -1,8 +1,6 @@
 //
 //  MTC MTCFrameRate ScaledFrames Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-20.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -17,10 +15,10 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
 	
 	// Local Constants
 	
-	fileprivate var mtc24: MTC.MTCFrameRate { .mtc24 }
-	fileprivate var mtc25: MTC.MTCFrameRate { .mtc25 }
-	fileprivate var mtcDF: MTC.MTCFrameRate { .mtc2997d }
-	fileprivate var mtc30: MTC.MTCFrameRate { .mtc30 }
+	fileprivate var mtc24: MIDI.MTC.MTCFrameRate { .mtc24 }
+	fileprivate var mtc25: MIDI.MTC.MTCFrameRate { .mtc25 }
+	fileprivate var mtcDF: MIDI.MTC.MTCFrameRate { .mtc2997d }
+	fileprivate var mtc30: MIDI.MTC.MTCFrameRate { .mtc30 }
 	
 	func testMTC_MTCFrameRate_ScaledFrames() {
 		

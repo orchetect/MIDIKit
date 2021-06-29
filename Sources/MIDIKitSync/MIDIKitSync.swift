@@ -1,6 +1,6 @@
 //
 //  MIDIKitSync.swift
-//  MIDIKit
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 // Export Common submodule

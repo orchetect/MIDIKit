@@ -5,7 +5,7 @@
 
 import TimecodeKit
 
-extension MTC {
+extension MIDI.MTC {
 	
 	/*
 	MTC hour byte includes frame rate information

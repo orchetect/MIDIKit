@@ -1,8 +1,6 @@
 //
 //  Constants.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-01-12.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import CoreMIDI

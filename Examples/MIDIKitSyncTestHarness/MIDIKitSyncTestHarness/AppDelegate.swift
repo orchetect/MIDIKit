@@ -1,8 +1,7 @@
 //
 //  AppDelegate.swift
 //  MIDIKitSyncTestHarness
-//
-//  Created by Steffan Andrews on 2020-12-02.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import Cocoa
@@ -15,7 +14,7 @@ import TimecodeKit
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 	
-	let midiManager: MIDIIO.Manager = .init(
+	let midiManager: MIDI.IO.Manager = .init(
 		clientName: "MIDIKitSyncTestHarness",
 		model: "TestApp",
 		manufacturer: "Orchetect",

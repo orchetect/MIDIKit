@@ -7,7 +7,7 @@ import MIDIKitInternals
 import TimecodeKit
 @_implementationOnly import OTCore
 
-extension MTC {
+extension MIDI.MTC {
 	
 	/// MTC (MIDI Timecode) stream encoder object.
 	///

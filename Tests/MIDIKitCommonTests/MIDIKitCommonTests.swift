@@ -1,6 +1,6 @@
 //
 //  MIDIKitCommonTests.swift
-//  MIDIKit
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)

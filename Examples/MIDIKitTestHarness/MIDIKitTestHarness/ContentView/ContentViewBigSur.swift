@@ -1,8 +1,7 @@
 //
 //  ContentViewBigSur.swift
 //  MIDIKitTestHarness
-//
-//  Created by Steffan Andrews on 2021-03-01.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import SwiftUI
@@ -12,11 +11,11 @@ import OTCore
 @available(macOS 11.0, *)
 struct ContentViewBigSur: View {
 	
-	@StateObject var midiManager: MIDIIO.Manager = {
+	@StateObject var midiManager: MIDI.IO.Manager = {
 		let newManager =
-			MIDIIO.Manager(clientName: "MIDIKitTestHarness",
-						   model: "TestApp",
-						   manufacturer: "Orchetect")
+			MIDI.IO.Manager(clientName: "MIDIKitTestHarness",
+							model: "TestApp",
+							manufacturer: "Orchetect")
 		do {
 			Log.debug("Starting MIDI manager client")
 			try newManager.start()

@@ -1,8 +1,6 @@
 //
 //  OutputConnection Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-02-24.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 // iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets
@@ -14,12 +12,12 @@ import OTCoreTestingXCTest
 import MIDIKitTestsCommon
 import CoreMIDI
 
-final class MIDIIO_InputsAndOutputs_OutputConnection_Tests: XCTestCase {
+final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
 	
-	var manager: MIDIIO.Manager! = nil
+	var manager: MIDI.IO.Manager! = nil
 	
 	override func setUp() {
-		manager = .init(clientName: "MIDIKitIO_MIDIIO_InputsAndOutputs_OutputConnection_Tests",
+		manager = .init(clientName: "MIDIKitIO_InputsAndOutputs_OutputConnection_Tests",
 						model: "",
 						manufacturer: "")
 	}
@@ -47,14 +45,14 @@ final class MIDIIO_InputsAndOutputs_OutputConnection_Tests: XCTestCase {
 				toInput: .name(UUID().uuidString),
 				tag: tag1
 			)
-		} catch let err as MIDIIO.MIDIError {
+		} catch let err as MIDI.IO.MIDIError {
 			// log error - expect: endpoint not found
 			caughtErr = err
 		} catch {
 			XCTFail(error.localizedDescription) ; return
 		}
 		
-		if let caughtErr = caughtErr as? MIDIIO.MIDIError,
+		if let caughtErr = caughtErr as? MIDI.IO.MIDIError,
 		   case .connectionError = caughtErr {
 			// correct - expect error to be present
 		}

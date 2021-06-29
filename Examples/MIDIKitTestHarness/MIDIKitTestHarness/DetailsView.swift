@@ -1,8 +1,7 @@
 //
 //  DetailsView.swift
 //  MIDIKitTestHarness
-//
-//  Created by Steffan Andrews on 2021-03-01.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import SwiftUI
@@ -25,7 +24,7 @@ struct EmptyDetailsView: View {
 	
 }
 
-struct DetailsView<T>: View where T : MIDIIO.ObjectRef {
+struct DetailsView<T>: View where T : MIDI.IO.ObjectRef {
 	
 	@Environment(\.hostingWindow) var hostingWindow
 	

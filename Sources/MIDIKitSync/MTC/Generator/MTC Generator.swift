@@ -7,7 +7,7 @@ import Foundation
 import MIDIKitInternals
 import TimecodeKit
 
-extension MTC {
+extension MIDI.MTC {
 	
 	/// MTC sync generator.
 	public class Generator {
@@ -83,9 +83,9 @@ extension MTC {
 			queue = DispatchQueue(label: "midikit.mtcgenerator.\(name)",
 								  qos: .userInteractive)
 			
-			timer = SafeDispatchTimer(rate: .seconds(1.0), // default, will be changed later
-									  queue: queue,
-									  eventHandler: { })
+			timer = MIDI.SafeDispatchTimer(rate: .seconds(1.0), // default, will be changed later
+										   queue: queue,
+										   eventHandler: { })
 			
 			timer.setEventHandler { [weak self] in
 				
@@ -121,7 +121,7 @@ extension MTC {
 		
 		// MARK: - Timer (internal)
 		
-		internal var timer: SafeDispatchTimer
+		internal var timer: MIDI.SafeDispatchTimer
 		
 		/// Internal: Fired from our timer object.
 		internal func timerFired() {

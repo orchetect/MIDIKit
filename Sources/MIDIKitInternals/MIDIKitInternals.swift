@@ -1,6 +1,7 @@
 //
 //  MIDIKitInternals.swift
-//  MIDIKit
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
-//  Created by Steffan Andrews on 2021-01-23.
-//
+
+// Export Common submodule
+@_exported import MIDIKitCommon

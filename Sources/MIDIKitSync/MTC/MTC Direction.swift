@@ -1,11 +1,9 @@
 //
 //  MTC Direction.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-20.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MTC {
+extension MIDI.MTC {
 	
 	/// Describes the timeline direction of MTC events.
 	public enum Direction {
@@ -23,7 +21,7 @@ extension MTC {
 	
 }
 
-extension MTC.Direction {
+extension MIDI.MTC.Direction {
 	
 	/// Infers playback direction by comparing previous and current quarter-frames received, taking into account value wrapping around min/max.
 	///

@@ -1,8 +1,6 @@
 //
 //  MTC MTCFrameRate Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-21.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -20,7 +18,7 @@ final class MTC_MTCFrameRate_Tests: XCTestCase {
 		
 		Timecode.FrameRate.allCases.forEach {
 			
-			XCTAssertEqual(MTC.MTCFrameRate($0), $0.mtcFrameRate)
+			XCTAssertEqual(MIDI.MTC.MTCFrameRate($0), $0.mtcFrameRate)
 			
 		}
 		

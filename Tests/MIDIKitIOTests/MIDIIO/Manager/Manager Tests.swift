@@ -1,8 +1,6 @@
 //
 //  Manager Tests.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2021-02-22.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)
@@ -14,12 +12,12 @@ import OTCoreTestingXCTest
 import MIDIKitTestsCommon
 import CoreMIDI
 
-final class MIDIIO_Manager_Tests: XCTestCase {
+final class Manager_Tests: XCTestCase {
 	
-	var manager: MIDIIO.Manager! = nil
+	var manager: MIDI.IO.Manager! = nil
 	
 	override func setUp() {
-		manager = .init(clientName: "MIDIKitIO_MIDIIO_Manager_Tests",
+		manager = .init(clientName: "MIDIKitIO_Manager_Tests",
 						model: "",
 						manufacturer: "")
 	}
@@ -30,7 +28,7 @@ final class MIDIIO_Manager_Tests: XCTestCase {
 	
 	func testMIDIO_Manager_defaults() {
 		
-		XCTAssertEqual(manager.clientName, "MIDIKitIO_MIDIIO_Manager_Tests")
+		XCTAssertEqual(manager.clientName, "MIDIKitIO_Manager_Tests")
 		XCTAssertEqual(manager.clientRef, MIDIClientRef())
 		
 		XCTAssert(manager.managedInputConnections.isEmpty)
@@ -39,7 +37,7 @@ final class MIDIIO_Manager_Tests: XCTestCase {
 		XCTAssert(manager.managedOutputs.isEmpty)
 		XCTAssert(manager.managedThruConnections.isEmpty)
 		XCTAssert(try! manager
-					.unmanagedPersistentThrus(ownerID: Globals.bundle.bundleID)
+					.unmanagedPersistentThruConnections(ownerID: Globals.bundle.bundleID)
 					.isEmpty)
 		
 	}

@@ -1,8 +1,6 @@
 //
 //  MIDIKitSyncTests Constants.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-21.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 #if !os(watchOS)

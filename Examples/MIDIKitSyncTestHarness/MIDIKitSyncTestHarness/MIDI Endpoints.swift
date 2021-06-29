@@ -1,8 +1,7 @@
 //
 //  MIDI Endpoints.swift
 //  MIDIKitSyncTestHarness
-//
-//  Created by Steffan Andrews on 2020-12-02.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import Foundation

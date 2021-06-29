@@ -1,14 +1,12 @@
 //
 //  MTC Receiver SyncPolicy.swift
-//  MIDIKit
-//
-//  Created by Steffan Andrews on 2020-12-21.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 @_implementationOnly import OTCore
 import TimecodeKit
 
-extension MTC.Receiver {
+extension MIDI.MTC.Receiver {
 	
 	/// Options defining behavior of the receiver
 	public struct SyncPolicy: Equatable, Codable {
