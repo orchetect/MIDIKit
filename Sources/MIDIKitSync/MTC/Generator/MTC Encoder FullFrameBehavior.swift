@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MTC.Encoder {
+extension MIDI.MTC.Encoder {
 	
 	/// Behavior determining when MTC Full-Frame MIDI messages should be generated.
 	public enum FullFrameBehavior {

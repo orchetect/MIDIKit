@@ -5,7 +5,7 @@
 
 import TimecodeKit
 
-extension MTC {
+extension MIDI.MTC {
 	
 	/// Internal: Returns `true` if both tuples are considered equal.
 	internal static func mtcIsEqual(
