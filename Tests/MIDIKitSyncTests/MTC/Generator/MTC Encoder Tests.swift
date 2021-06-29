@@ -933,6 +933,143 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
 		
 	}
 	
+	func testMTC_Encoder_LocateBehavior() {
+		
+		var mtcEnc: MIDI.MTC.Encoder
+		
+		var message: [Byte]?
+		
+		func initNewEnc() -> MIDI.MTC.Encoder {
+			return MIDI.MTC.Encoder { midiMessage in
+				message = midiMessage
+			}
+		}
+		
+		mtcEnc = initNewEnc()
+		mtcEnc.locate(to: Timecode(at: ._24))
+		
+		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
+					   TCC(h: 0, m: 00, s: 00, f: 00))
+		XCTAssertEqual(message,
+					   [
+						0xF0, 0x7F, 0x7F, 0x01, 0x01,
+						0b0000_0000, // 0rrh_hhhh
+						0x00, // M
+						0x00, // S
+						0x00, // F
+						0xF7
+					   ])
+		
+		mtcEnc = initNewEnc()
+		mtcEnc.locate(to: Timecode(at: ._25))
+		
+		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
+					   TCC(h: 0, m: 00, s: 00, f: 00))
+		XCTAssertEqual(message,
+					   [
+						0xF0, 0x7F, 0x7F, 0x01, 0x01,
+						0b0010_0000, // 0rrh_hhhh
+						0x00, // M
+						0x00, // S
+						0x00, // F
+						0xF7
+					   ])
+		
+		mtcEnc = initNewEnc()
+		mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 04).toTimecode(at: ._29_97_drop)!)
+		
+		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
+					   TCC(h: 1, m: 02, s: 03, f: 04))
+		XCTAssertEqual(message,
+					   [
+						0xF0, 0x7F, 0x7F, 0x01, 0x01,
+						0b0100_0001, // 0rrh_hhhh
+						0x02, // M
+						0x03, // S
+						0x04, // F
+						0xF7
+					   ])
+		
+		mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 05).toTimecode(at: ._29_97_drop)!)
+		
+		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
+					   TCC(h: 1, m: 02, s: 03, f: 05))
+		XCTAssertEqual(message,
+					   [
+						0xF0, 0x7F, 0x7F, 0x01, 0x01,
+						0b0100_0001, // 0rrh_hhhh
+						0x02, // M
+						0x03, // S
+						0x05, // F
+						0xF7
+					   ])
+		
+		mtcEnc = initNewEnc()
+		mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 08).toTimecode(at: ._30)!)
+		
+		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
+					   TCC(h: 2, m: 04, s: 06, f: 08))
+		XCTAssertEqual(message,
+					   [
+						0xF0, 0x7F, 0x7F, 0x01, 0x01,
+						0b0110_0010, // 0rrh_hhhh
+						0x04, // M
+						0x06, // S
+						0x08, // F
+						0xF7
+					   ])
+		
+		// scaling frame rates
+		
+		mtcEnc = initNewEnc()
+		
+		// scales to MTC-24 fps
+		mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 08).toTimecode(at: ._48)!)
+		
+		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
+					   TCC(h: 2, m: 04, s: 06, f: 04))
+		XCTAssertEqual(message,
+					   [
+						0xF0, 0x7F, 0x7F, 0x01, 0x01,
+						0b0000_0010, // 0rrh_hhhh
+						0x04, // M
+						0x06, // S
+						0x04, // F
+						0xF7
+					   ])
+		
+		// scales to MTC-24 fps
+		mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 09).toTimecode(at: ._48)!)
+		
+		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
+					   TCC(h: 2, m: 04, s: 06, f: 04))
+		XCTAssertEqual(message,
+					   [
+						0xF0, 0x7F, 0x7F, 0x01, 0x01,
+						0b0000_0010, // 0rrh_hhhh
+						0x04, // M
+						0x06, // S
+						0x04, // F -- rounds down to 4 from 4.5 from scaling
+						0xF7
+					   ])
+		
+		// scales to MTC-24 fps
+		mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 10).toTimecode(at: ._48)!)
+		
+		XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
+					   TCC(h: 2, m: 04, s: 06, f: 05))
+		XCTAssertEqual(message,
+					   [
+						0xF0, 0x7F, 0x7F, 0x01, 0x01,
+						0b0000_0010, // 0rrh_hhhh
+						0x04, // M
+						0x06, // S
+						0x05, // F
+						0xF7
+					   ])
+		
+	}
+	
 	func testMTC_Encoder_QFMIDIMessage() {
 		
 		let mtcEnc = MIDI.MTC.Encoder()

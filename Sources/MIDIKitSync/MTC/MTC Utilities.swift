@@ -35,4 +35,17 @@ extension MIDI.MTC {
 		
 	}
 	
+	/// Internal: Converts MTC components and quarter frames to full-frame components
+	internal static func convertToFullFrameComponents(
+		mtcComponents: Timecode.Components,
+		mtcQuarterFrames: UInt8
+	) -> Timecode.Components {
+		
+		var newComponents = mtcComponents
+		newComponents.f += ((25 * Int(mtcQuarterFrames)) / 100)
+		
+		return newComponents
+		
+	}
+	
 }

@@ -137,11 +137,14 @@ extension MIDI.MTC {
 				setLocalFrameRate(frameRate)
 			}
 			
+			// Step 1: set Encoder's internal MTC components
+			
 			let scaledFrames = localFrameRate
 				.scaledFrames(fromTimecodeFrames: Double(components.f))
 			
 			var newComponents = components
 			newComponents.f = scaledFrames.rawMTCFrames
+			
 			// sanitize: clear subframes since we're working at 1-frame resolution with timecode display values
 			newComponents.sf = 0
 			
@@ -149,11 +152,17 @@ extension MIDI.MTC {
 			mtcQuarterFrame = scaledFrames.rawMTCQuarterFrames
 			mtcQuarterFrameStreamHasStartedSinceLastLocate = false
 			
-			// tell handler to transmit MIDI message
+			// Step 2: tell handler to transmit full-frame message if applicable
+			
 			switch transmitFullFrame {
 			case .always:
 				sendFullFrameMIDIMessage()
 			case .ifDifferent:
+				newComponents = MIDI.MTC.convertToFullFrameComponents(
+					mtcComponents: newComponents,
+					mtcQuarterFrames: scaledFrames.rawMTCQuarterFrames
+				)
+				
 				let newFullFrame = (mtcComponents: newComponents,
 									mtcFrameRate: mtcFrameRate)
 				if !mtcIsEqual(lastTransmitFullFrame, newFullFrame) {
@@ -250,8 +259,10 @@ extension MIDI.MTC {
 			// rr == 10: 29.97d frames/s (SMPTE drop-frame timecode)
 			// rr == 11: 30 frames/s
 			
-			var newComponents = mtcComponents
-			newComponents.f += ((25 * Int(mtcQuarterFrame)) / 100)
+			let newComponents = convertToFullFrameComponents(
+				mtcComponents: mtcComponents,
+				mtcQuarterFrames: mtcQuarterFrame
+			)
 			
 			let midiMessage: [Byte] = [
 				0xF0,
