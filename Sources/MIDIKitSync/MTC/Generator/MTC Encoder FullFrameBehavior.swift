@@ -6,7 +6,7 @@
 extension MIDI.MTC.Encoder {
 	
 	/// Behavior determining when MTC Full-Frame MIDI messages should be generated.
-	public enum FullFrameBehavior {
+	public enum FullFrameBehavior: Hashable, CaseIterable {
 		
 		/// Always trigger a MTC Full-Frame MIDI message, with no data thinning.
 		case always
