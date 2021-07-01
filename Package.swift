@@ -19,7 +19,7 @@ let package = Package(
 		.library(
 			name: "MIDIKit",
 			type: .static,
-			targets: ["MIDIKit", "MIDIKitIO", "MIDIKitEvents"]),
+			targets: ["MIDIKit"]),
 		
 		// ---------------------------------------------
 		// MODULES
@@ -45,7 +45,7 @@ let package = Package(
 	dependencies: [
 		
 		// Boilerplate
-		.package(url: "https://github.com/orchetect/OTCore", from: "1.1.6"),
+		.package(url: "https://github.com/orchetect/OTCore", from: "1.1.8"),
 		.package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.1"),
 		
 		// Timecode
