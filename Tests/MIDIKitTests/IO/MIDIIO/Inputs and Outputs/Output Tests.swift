@@ -37,19 +37,22 @@ final class InputsAndOutputs_Output_Tests: XCTestCase {
 		
 		let tag1 = "1"
 		
-		var id1: MIDI.IO.Endpoint.UniqueID? = nil
-		
 		do {
-			id1 = try manager.addOutput(name: "MIDIKit IO Tests Source 1", tag: tag1)
-		} catch let err as MIDI.IO.MIDIError {
+            try manager.addOutput(
+                name: "MIDIKit IO Tests Source 1",
+                tag: tag1,
+                uniqueID: .none // allow system to generate random ID
+            )
+        } catch let err as MIDI.IO.MIDIError {
 			XCTFail(err.localizedDescription) ; return
 		} catch {
 			XCTFail(error.localizedDescription) ; return
 		}
 		
-		XCTAssertNotNil(id1)
 		XCTAssertNotNil(manager.managedOutputs[tag1])
-		
+        let id1 = manager.managedOutputs[tag1]?.uniqueID
+        XCTAssertNotNil(id1)
+        
 		// send a midi message
 		
 		XCTAssertNotNil(
@@ -60,18 +63,21 @@ final class InputsAndOutputs_Output_Tests: XCTestCase {
 		
 		let tag2 = "2"
 		
-		var id2: MIDI.IO.Endpoint.UniqueID? = nil
-		
 		do {
-			id2 = try manager.addOutput(name: "MIDIKit IO Tests Source 2", tag: tag2)
+            try manager.addOutput(
+                name: "MIDIKit IO Tests Source 2",
+                tag: tag2,
+                uniqueID: .preferred(id1!) // try to use existing ID
+            )
 		} catch let err as MIDI.IO.MIDIError {
 			XCTFail("\(err)") ; return
 		} catch {
 			XCTFail(error.localizedDescription) ; return
 		}
 		
-		XCTAssertNotNil(id2)
-		XCTAssertNotNil(manager.managedOutputs[tag2])
+        XCTAssertNotNil(manager.managedOutputs[tag2])
+        let id2 = manager.managedOutputs[tag2]?.uniqueID
+        XCTAssertNotNil(id2)
 		
 		// ensure ids are different
 		XCTAssertNotEqual(id1, id2)

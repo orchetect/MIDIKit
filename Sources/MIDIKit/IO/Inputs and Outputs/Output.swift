@@ -16,12 +16,12 @@ extension MIDI.IO {
 		public private(set) var endpointName: String = ""
 		
 		/// The port's unique ID in the system.
-		public private(set) var uniqueID: MIDI.IO.Endpoint.UniqueID? = nil
+		public private(set) var uniqueID: MIDI.IO.UniqueID? = nil
 		
 		public private(set) var portRef: MIDIPortRef? = nil
 		
 		internal init(name: String,
-					  uniqueID: MIDI.IO.Endpoint.UniqueID? = nil) {
+					  uniqueID: MIDI.IO.UniqueID? = nil) {
 			
 			self.endpointName = name
 			self.uniqueID = uniqueID
@@ -47,7 +47,7 @@ extension MIDI.IO.Output {
 			return nil
 		}
 		
-		if let endpoint = MIDI.IO.getSystemSourceEndpoint(matching: uniqueID) {
+        if let endpoint = MIDI.IO.getSystemSourceEndpoint(matching: uniqueID.id) {
 			return endpoint
 		}
 		

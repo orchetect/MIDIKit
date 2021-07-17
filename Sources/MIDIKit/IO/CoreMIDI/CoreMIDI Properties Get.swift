@@ -157,8 +157,8 @@ extension MIDI.IO {
 	/// (`kMIDIPropertyUniqueID`)
 	///
 	/// The system assigns unique IDs to all objects.  Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
-	internal static func getUniqueID(of ref: MIDIObjectRef) -> ObjectRef.UniqueID {
-		getInteger(forProperty: kMIDIPropertyUniqueID, of: ref)
+    internal static func getUniqueID(of ref: MIDIObjectRef) -> MIDI.IO.UniqueID {
+        .init(getInteger(forProperty: kMIDIPropertyUniqueID, of: ref))
 	}
 	
 	/// Get the user-visible System Exclusive (SysEx) identifier of a device or entity.

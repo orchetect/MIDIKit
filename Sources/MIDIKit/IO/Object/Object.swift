@@ -28,7 +28,7 @@ public protocol MIDIIOObjectRefProtocol {
 	var name: String { get }
 	
 	/// The unique ID for the CoreMIDI object
-	var uniqueID: UniqueID { get }
+    var uniqueID: MIDI.IO.UniqueID { get }
 	
 }
 
@@ -50,13 +50,7 @@ extension MIDI.IO {
 	
 }
 
-// MARK: - UniqueID
 
-extension MIDI.IO.ObjectRef {
-	
-	public typealias UniqueID = Int32
-	
-}
 
 // MARK: - Equatable
 
@@ -85,12 +79,11 @@ extension Collection where Element : MIDI.IO.ObjectRef {
 	/// Returns the array sorted alphabetically by name.
 	public func sortedByName() -> [Element] {
 		
-		self
-			.sorted(by: {
-				$0.name
-					.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
-			})
-		
+        self.sorted(by: {
+            $0.name
+                .localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+        })
+        
 	}
 	
 }
@@ -98,7 +91,7 @@ extension Collection where Element : MIDI.IO.ObjectRef {
 extension Collection where Element : MIDI.IO.ObjectRef {
 	
 	/// Returns the element where uniqueID matches if found.
-	public func filterBy(uniqueID: Element.UniqueID) -> Element? {
+    public func filterBy(uniqueID: MIDI.IO.UniqueID) -> Element? {
 		
 		first(where: { $0.uniqueID == uniqueID })
 		
@@ -168,7 +161,7 @@ extension MIDI.IO.ObjectRef {
 	/// (`kMIDIPropertyUniqueID`)
 	///
 	/// The system assigns unique IDs to all objects.  Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
-	public var getUniqueID: UniqueID {
+    public var getUniqueID: MIDI.IO.UniqueID {
 		MIDI.IO.getUniqueID(of: ref)
 	}
 	

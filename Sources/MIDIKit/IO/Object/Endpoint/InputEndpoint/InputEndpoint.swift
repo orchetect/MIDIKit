@@ -64,7 +64,7 @@ extension MIDI.IO.InputEndpoint {
 	/// Returns `true` if the object exists in the system by querying CoreMIDI.
 	public var exists: Bool {
 		
-		MIDI.IO.getSystemDestinationEndpoint(matching: uniqueID) != nil
+        MIDI.IO.getSystemDestinationEndpoint(matching: uniqueID.id) != nil
 		
 	}
 	

@@ -116,16 +116,16 @@ extension MIDI.IO.Manager {
 	///
 	/// A note on `uniqueID`:
 	///
-	/// It is required that the `uniqueID` be stored persistently in a data store of your choosing, and supplied when recreating the same port. This allows other applications to identify the port and reconnect to it, as the port name is not used to identify a MIDI port since MIDI ports are allowed to have the same name, but must have unique IDs.
-	///
-	/// It is best practise to re-store the `uniqueID` every time this method is called, since these IDs are temporal and not registered or reserved in the system in any way. Since ID collisions are possible, a new available random ID will be obtained and returned if that happens, and that updated ID should be stored in-place of the old one in your data store.
-	///
-	/// Do not generate the number yourself. Rather, if no ID is yet stored, pass `nil` for `uniqueID` and allow the method to generate the new ID for you, then store it. Next time the same port is added, fetch that ID and supply it as the `uniqueID`, remembering to re-store the returned `uniqueID` once more in the event that there was a collision and a new ID has been returned.
+    /// It is best practise that the `uniqueID` be stored persistently in a data store of your choosing, and supplied when recreating the same port. This allows other applications to identify the port and reconnect to it, as the port name is not used to identify a MIDI port since MIDI ports are allowed to have the same name, but must have unique IDs.
+    ///
+    /// It is best practise to re-store the `uniqueID` every time this method is called, since these IDs are temporal and not registered or permanently reserved in the system. Since ID collisions are possible, a new available random ID will be obtained and used if that happens, and that updated ID should be stored in-place of the old one in your data store.
+    ///
+    /// Do not generate the ID number yourself - it is always system-generated and then we should store and persist it. `UniqueIDPersistence` offers mechanisms to simplify this.
 	///
 	/// - Parameters:
 	///   - name: Name of the endpoint as seen in the system.
 	///   - tag: Internal unique tag to reference the managed item in the `Manager`.
-	///   - uniqueID: System-global unique identifier for the port. If nil, a random available ID will be assigned and returned if successful.
+	///   - uniqueID: System-global unique identifier for the port.
 	///   - receiveHandler: Event handler for received MIDI packets.
 	///
 	/// - Throws: `MIDI.IO.MIDIError`
@@ -133,13 +133,13 @@ extension MIDI.IO.Manager {
 	public func addInput(
 		name: String,
 		tag: String,
-		uniqueID: MIDI.IO.Endpoint.UniqueID? = nil,
+        uniqueID: MIDI.IO.UniqueID.Persistence,
 		receiveHandler: MIDI.IO.ReceiveHandler
-	) throws -> MIDI.IO.Endpoint.UniqueID {
+	) throws {
 		
 		let newVD = MIDI.IO.Input(
 			name: name,
-			uniqueID: uniqueID,
+			uniqueID: uniqueID.readID(),
 			receiveHandler: receiveHandler
 		)
 		
@@ -147,11 +147,11 @@ extension MIDI.IO.Manager {
 		
 		try newVD.create(in: self)
 		
-		guard let uniqueID = newVD.uniqueID else {
+		guard let successfulID = newVD.uniqueID else {
 			throw MIDI.IO.MIDIError.connectionError("Could not read virtual MIDI endpoint unique ID.")
 		}
 		
-		return uniqueID
+        uniqueID.writeID(successfulID)
 		
 	}
 	
@@ -161,39 +161,38 @@ extension MIDI.IO.Manager {
 	///
 	/// A note on `uniqueID`:
 	///
-	/// It is required that the `uniqueID` be stored persistently in a data store of your choosing, and supplied when recreating the same port. This allows other applications to identify the port and reconnect to it, as the port name is not used to identify a MIDI port since MIDI ports are allowed to have the same name, but must have unique IDs.
+	/// It is best practise that the `uniqueID` be stored persistently in a data store of your choosing, and supplied when recreating the same port. This allows other applications to identify the port and reconnect to it, as the port name is not used to identify a MIDI port since MIDI ports are allowed to have the same name, but must have unique IDs.
 	///
-	/// It is best practise to re-store the `uniqueID` every time this method is called, since these IDs are temporal and not registered or reserved in the system in any way. Since ID collisions are possible, a new available random ID will be obtained and returned if that happens, and that updated ID should be stored in-place of the old one in your data store.
+	/// It is best practise to re-store the `uniqueID` every time this method is called, since these IDs are temporal and not registered or permanently reserved in the system. Since ID collisions are possible, a new available random ID will be obtained and used if that happens, and that updated ID should be stored in-place of the old one in your data store.
 	///
-	/// Do not generate the number yourself. Rather, if no ID is yet stored, pass `nil` for `uniqueID` and allow the method to generate the new ID for you, then store it. Next time the same port is added, fetch that ID and supply it as the `uniqueID`, remembering to re-store the returned `uniqueID` once more in the event that there was a collision and a new ID has been returned.
+	/// Do not generate the ID number yourself - it is always system-generated and then we should store and persist it. `UniqueIDPersistence` offers mechanisms to simplify this.
 	///
 	/// - Parameters:
 	///   - name: Name of the endpoint as seen in the system.
 	///   - tag: Internal unique tag to reference the managed item in the `Manager`.
-	///   - uniqueID: System-global unique identifier for the port. If nil, a random available ID will be assigned and returned if successful.
+	///   - uniqueID: System-global unique identifier for the port.
 	///
 	/// - Throws: `MIDI.IO.MIDIError`
-	/// - Returns: The port's effective `uniqueID`.
 	public func addOutput(
 		name: String,
 		tag: String,
-		uniqueID: MIDI.IO.Endpoint.UniqueID? = nil
-	) throws -> MIDI.IO.Endpoint.UniqueID {
+        uniqueID: MIDI.IO.UniqueID.Persistence
+	) throws {
 		
 		let newVS = MIDI.IO.Output(
 			name: name,
-			uniqueID: uniqueID
+            uniqueID: uniqueID.readID()
 		)
 		
 		managedOutputs[tag] = newVS
 		
 		try newVS.create(in: self)
 		
-		guard let uniqueID = newVS.uniqueID else {
+		guard let successfulID = newVS.uniqueID else {
 			throw MIDI.IO.MIDIError.connectionError("Could not read virtual MIDI endpoint unique ID.")
 		}
 		
-		return uniqueID
+        uniqueID.writeID(successfulID)
 		
 	}
 	

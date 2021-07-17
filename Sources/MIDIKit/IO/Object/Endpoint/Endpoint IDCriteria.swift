@@ -20,7 +20,7 @@ extension MIDI.IO {
 		case displayName(String)
 		
 		/// Endpoint matching the unique ID.
-		case uniqueID(Endpoint.UniqueID)
+		case uniqueID(UniqueID)
 		
 	}
 	

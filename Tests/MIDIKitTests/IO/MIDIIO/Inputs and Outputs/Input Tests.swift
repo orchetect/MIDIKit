@@ -37,12 +37,11 @@ final class InputsAndOutputs_Input_Tests: XCTestCase {
 		
 		let tag1 = "1"
 		
-		var id1: MIDI.IO.Endpoint.UniqueID? = nil
-		
 		do {
-			id1 = try manager.addInput(
+			try manager.addInput(
 				name: "MIDIKit IO Tests Destination 1",
-				tag: tag1,
+                tag: tag1,
+                uniqueID: .none, // allow system to generate random ID
 				receiveHandler: .rawData({ packets in
 					_ = packets
 				})
@@ -53,20 +52,19 @@ final class InputsAndOutputs_Input_Tests: XCTestCase {
 			XCTFail(error.localizedDescription) ; return
 		}
 		
-		XCTAssertNotNil(id1)
 		XCTAssertNotNil(manager.managedInputs[tag1])
-		
+        let id1 = manager.managedInputs[tag1]?.uniqueID
+        XCTAssertNotNil(id1)
+        
 		// unique ID collision
 		
 		let tag2 = "2"
 		
-		var id2: MIDI.IO.Endpoint.UniqueID? = nil
-		
 		do {
-			id2 = try manager.addInput(
+			try manager.addInput(
 				name: "MIDIKit IO Tests Destination 2",
 				tag: tag2,
-				uniqueID: id1!, // try to use existing ID
+                uniqueID: .preferred(id1!), // try to use existing ID
 				receiveHandler: .rawData({ packet in
 					_ = packet
 				})
@@ -77,9 +75,9 @@ final class InputsAndOutputs_Input_Tests: XCTestCase {
 			XCTFail(error.localizedDescription) ; return
 		}
 		
-		XCTAssertNotNil(id2)
 		XCTAssertNotNil(manager.managedInputs[tag2])
-		
+        let id2 = manager.managedInputs[tag2]?.uniqueID
+        
 		// ensure ids are different
 		XCTAssertNotEqual(id1, id2)
 		
