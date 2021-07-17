@@ -20,6 +20,15 @@ extension MIDI.HUI {
         /// Parser event handler that triggers when HUI events are received.
         private var eventHandler: ((Event) -> Void)? = nil
         
+        /// Set the handler used when HUI events are received.
+        public func setEventHandler(
+            _ handler: ((Event) -> Void)?
+        ) {
+            
+            self.eventHandler = handler
+            
+        }
+        
         /// Called when a HUI MIDI message needs transmitting.
         internal var midiEventSendHandler: ((_ midiMessage: [MIDI.Byte]) -> Void)? = nil
         
@@ -28,7 +37,7 @@ extension MIDI.HUI {
             _ handler: ((_ midiMessage: [MIDI.Byte]) -> Void)?
         ) {
             
-            midiEventSendHandler = handler
+            self.midiEventSendHandler = handler
             
         }
         
