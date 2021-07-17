@@ -7,7 +7,6 @@
 
 @testable import MIDIKit
 import Foundation
-import MIDIKitTestsCommon
 
 /// Sync Tests Constants: Raw MIDI messages
 enum kRawMIDI {

@@ -36,7 +36,8 @@ let package = Package(
                 // external
                 .product(name: "OTCore", package: "OTCore"),
                 .product(name: "OTCore-Testing", package: "OTCore"),
-                .product(name: "SwiftRadix", package: "SwiftRadix")
+                .product(name: "SwiftRadix", package: "SwiftRadix"),
+                .product(name: "TimecodeKit", package: "TimecodeKit")
             ]
         ),
         

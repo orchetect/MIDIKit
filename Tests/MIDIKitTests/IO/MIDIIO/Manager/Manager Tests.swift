@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MIDIKit
-import MIDIKitTestsCommon
 import CoreMIDI
 import OTCore
 import OTCoreTestingXCTest

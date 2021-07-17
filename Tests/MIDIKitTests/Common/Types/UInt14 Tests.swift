@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MIDIKit
-import MIDIKitTestsCommon
 //import OTCoreTestingXCTest
 
 final class UInt14_Tests: XCTestCase {

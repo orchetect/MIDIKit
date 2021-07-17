@@ -9,7 +9,6 @@
 import XCTest
 @testable import MIDIKit
 import OTCoreTestingXCTest
-import MIDIKitTestsCommon
 import CoreMIDI
 
 final class InputsAndOutputs_Input_Tests: XCTestCase {

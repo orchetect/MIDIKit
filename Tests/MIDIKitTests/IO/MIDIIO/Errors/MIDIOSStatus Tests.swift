@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MIDIKit
-import MIDIKitTestsCommon
 
 final class Errors_MIDIOSStatus_Tests: XCTestCase {
 	
