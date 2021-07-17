@@ -37,7 +37,7 @@ timeline.xctimeline
 playground.xcworkspace
 
 ## SPM support in Xcode
-# .swiftpm - don't gitignore this! for Xcode Server CI use we need these checked in:
+# .swiftpm - for shared CI schemes we need these checked in:
 #     -> .swiftpm/xcode/package.xcworkspace
 #     -> .swiftpm/xcode/xcshareddata/xcschemes/*.*
 
