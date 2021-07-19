@@ -14,6 +14,13 @@ extension MIDI.HUI {
         // MARK: - State
         
         public internal(set) var state: State
+        {
+            willSet {
+                if #available(macOS 10.15, macCatalyst 13, iOS 13, *) {
+                    objectWillChange.send()
+                }
+            }
+        }
         
         // MARK: - Handlers
         
@@ -59,16 +66,26 @@ extension MIDI.HUI {
             
             parser = Parser()
             
-            parser.setEventHandler { event in
-                if event == .pingReceived {
-                    midiEventSendHandler?(MIDI.HUI.kMIDI.kPingReplyToHostMessage)
-                } else {
-                    if let surfaceEvent = self.state.updateState(receivedEvent: event) {
-                        self.eventHandler?(surfaceEvent)
+            parser.setEventHandler { [weak self] event in
+                switch event {
+                case .pingReceived:
+                    self?.transmitPing()
+                    
+                default:
+                    if let surfaceEvent = self?.state.updateState(receivedEvent: event) {
+                        self?.eventHandler?(surfaceEvent)
                     }
                 }
             }
             
+            // HUI control surfaces send a System Reset message when they are powered on
+            transmitSystemReset()
+            
+        }
+        
+        deinit {
+            // HUI control surfaces send a System Reset message when they are powered off
+            transmitSystemReset()
         }
         
         // MARK: - Methods
@@ -91,3 +108,12 @@ extension MIDI.HUI {
     }
     
 }
+
+#if canImport(Combine)
+import Combine
+
+@available(macOS 10.15, macCatalyst 13, iOS 13, *)
+extension MIDI.HUI.Surface: ObservableObject {
+    // nothing here; just add ObservableObject conformance
+}
+#endif

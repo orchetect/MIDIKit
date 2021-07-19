@@ -8,88 +8,82 @@ import Foundation
 
 extension MIDI.HUI.Surface {
     
-    /// Most basic switch transmit function
-    public func transmitSwitch(zone: Int,
-                               port: Int,
-                               state: Bool) {
+    /// HUI ping message transmit function
+    public func transmitPing() {
         
-        //set on off byte
-        var portByte: Int
+        midiEventSendHandler?(MIDI.HUI.kMIDI.kPingReplyToHostMessage)
+        
+    }
+    
+    /// Most basic switch transmit function
+    internal func transmitSwitch(zone: MIDI.Byte,
+                                 port:  MIDI.UInt4,
+                                 state: Bool) {
+        
+        // set on off byte
+        var portByte: MIDI.Byte
         
         if state == true {
-            portByte = port + 0x40
+            portByte = port.asUInt8 + 0x40
         } else {
-            portByte = port
+            portByte = port.asUInt8
         }
         
-        midiEventSendHandler?([0xb0, 0x0f, MIDI.Byte(zone)])            // zone select
-        midiEventSendHandler?([0xb0, 0x2f, MIDI.Byte(portByte)])        // switch message
+        midiEventSendHandler?([0xB0, 0x0F, zone,
+                               0xB0, 0x2F, portByte])
         
     }
     
     /// Convenience function to set a switch by referencing its `kHUIZonePortName` enumeration
-    @discardableResult
-    public func transmitSwitch(switchName: MIDI.HUI.Parameter,
-                               state: Bool) -> Bool {
+    public func transmitSwitch(_ param: MIDI.HUI.Parameter,
+                               state: Bool) {
         
-        guard let lookup = MIDI.HUI.kHUIZoneAndPortPairs[switchName]
-        else { return false }
+        let zoneAndPort = param.zoneAndPort
         
-        transmitSwitch(zone: lookup.zone,
-                       port: lookup.port,
+        transmitSwitch(zone: zoneAndPort.zone,
+                       port: zoneAndPort.port,
                        state: state)
-        return true
-        
-    }
-    
-    /// Convenience function to set a channel strip-related switch. Returns true if succeeded.
-    /// - parameter channelStrip: HUI channel strip (0-7)
-    @discardableResult
-    public func transmitSwitch(channelStrip: Int,
-                               param: MIDI.HUI.ChannelStripElement,
-                               state: Bool) -> Bool {
-        
-        guard let lookupZP = MIDI.HUI.Parameter(channelStrip: channelStrip,
-                                                channelElement: param)
-        else { return false }
-        
-        return transmitSwitch(switchName: lookupZP,
-                              state: state)
         
     }
     
     /// Transmit fader level to host
     /// - parameter level: between 0 - 16383
     public func transmitFader(level: Int,
-                              channel: Int) {
+                              channel: MIDI.UInt7) {
         
-        guard level >= 0 && level <= 16383 else { return }
-        guard channel >= 0x0 && channel <= 0xF else { return }
+        guard level.isContained(in: 0...16383) else { return }
+        guard channel.isContained(in: 0x0...0xF) else { return }
         
         let hi = level / 128;
         let low = level % 128;
-        let channelHi = channel;
-        let channelLow = channel + 0x20;
+        let channelHi = channel.asUInt8;
+        let channelLow = channel.asUInt8 + 0x20;
         
-        midiEventSendHandler?([0xb0, UInt8(channelHi), UInt8(hi), 0xb0, UInt8(channelLow), UInt8(low)])
+        // use running status to send two 0xB0 status messages in one packet
+        midiEventSendHandler?([0xB0,
+                               channelHi, hi.uint8,
+                               channelLow, low.uint8])
         
     }
     
     /// Transmit fader touch/release message to host
     /// - parameter isTouched: `true` sends touch message, `false` sends release message
     public func transmitFader(isTouched: Bool,
-                              channel: Int) {
+                              channel: MIDI.UInt7) {
         
-        guard channel >= 0x0 && channel <= 0xF else { return }
+        guard channel.isContained(in: 0x0...0xF) else { return }
         
-        midiEventSendHandler?([0xb0, 0x0f, UInt8(channel), 0xb0, 0x2f, isTouched ? 0x40 : 0x00])
+        // use running status to send two 0xB0 status messages in one packet
+        midiEventSendHandler?([0xB0,
+                               0x0F, channel.asUInt8,
+                               0x2F, isTouched ? 0x40 : 0x00])
         
     }
     
-    /// Sends a message that tells the host that the HUI unit is powering on or off.
+    /// Sends a message that tells the host that the HUI device is powering on or off.
     public func transmitSystemReset() {
         
-        Log.debug("MIDI.HUI: Sending system reset message.")
+        Log.debug("Sending system reset message.")
         
         // I believe this is correct but not sure if it's multiple 0xff bytes or just one.
         midiEventSendHandler?(MIDI.HUI.kMIDI.kSystemResetMessage)

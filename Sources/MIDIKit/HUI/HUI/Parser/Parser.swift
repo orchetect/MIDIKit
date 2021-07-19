@@ -112,15 +112,15 @@ extension MIDI.HUI.Parser {
             }
             
             // channel can be 0-8 (0-7 = channel strips, 8 = Select Assign text display)
-            let channel = dataAfterHeader[atOffset: 1].int
+            let channel = dataAfterHeader[atOffset: 1]
             var newString = ""
             
-            for byte in data[atOffsets: 2...5] {
+            for byte in dataAfterHeader[atOffsets: 2...5] {
                 newString += MIDI.HUI.kCharTables.smallDisplay[byte.int]
             }
             
             if channel.isContained(in: 0...7) {
-                eventHandler?(.channelText(text: newString, channel: channel))
+                eventHandler?(.channelText(channel: channel.midiUInt4, text: newString))
             } else if channel == 8 {
                 // ***** not storing local state yet - needs to be implemented
                 
@@ -159,7 +159,8 @@ extension MIDI.HUI.Parser {
             return
             
         case MIDI.HUI.kMIDI.kDisplayType.timeDisplayByte:
-            let tcData: [Int] = dataAfterHeader[1..<dataAfterHeader.count].map({Int($0)})
+            guard dataAfterHeader.count > 0 else { return }
+            let tcData: [Int] = dataAfterHeader[atOffsets: 1...dataAfterHeader.count-1].map({Int($0)})
             var i = 0
             
             for number in tcData {
@@ -206,7 +207,7 @@ extension MIDI.HUI.Parser {
         if dataByte1.isContained(in: MIDI.HUI.kMIDI.kVPotData1UpperNibble
                                     ... MIDI.HUI.kMIDI.kVPotData1UpperNibble + 0xB)
         {
-            let channel = dataByte1.int % 0x10
+            let channel = (dataByte1 % 0x10).midiUInt4
             let value = dataByte2.int
             
             eventHandler?(.vPot(channel: channel, value: value))
@@ -234,7 +235,7 @@ extension MIDI.HUI.Parser {
             
             defer { switchesZoneSelect = nil }
             
-            let port = dataByte2.hex.nibble(0).value
+            let port = dataByte2.hex.nibble(0).value.midiUInt4
             var state: Bool
             
             switch dataByte2.hex.nibble(1).value {
@@ -244,8 +245,8 @@ extension MIDI.HUI.Parser {
                 state = true
             default:
                 if let zone = switchesZoneSelect {
-                    if let guess = MIDI.HUI.Parameter(zone: zone.int,
-                                                      port: port.int)
+                    if let guess = MIDI.HUI.Parameter(zone: zone,
+                                                      port: port)
                     {
                         Log.debug("Received message 2 of a switch command \(data.hex.stringValue(padTo: 2, prefix: true)) matching \(guess) but has unexpected state bit \(dataByte2.hex.nibble(1).stringValue(prefix: true)). Ignoring message.")
                     } else {
@@ -260,7 +261,7 @@ extension MIDI.HUI.Parser {
             }
             
             if let zone = switchesZoneSelect {
-                eventHandler?(.switch(zone: zone.int, port: port.int, state: state))
+                eventHandler?(.switch(zone: zone, port: port, state: state))
                 switchesZoneSelect = nil // reset zone select
             } else {
                 Log.debug("Received message 2 of a switch command (\(data.hex.stringValue(padTo: 2, prefix: true)) port: \(port), state: \(state)) without first receiving a zone select message. Ignoring.")
@@ -269,7 +270,7 @@ extension MIDI.HUI.Parser {
             return
             
         default:
-            Log.debug("Unrecognized HUI MIDI control status data byte 1.")
+            Log.debug("Unrecognized HUI MIDI control status data byte 1: \(dataByte1.hex.stringValue(padTo: 2, prefix: true)).")
         }
         
     }
@@ -292,7 +293,7 @@ extension MIDI.HUI.Parser {
             let lsb = dataByte2.int
             let level = (faderMSB[channel] << 7) + lsb
             
-            eventHandler?(.faderLevel(channel: channel, level: level))
+            eventHandler?(.faderLevel(channel: channel.midiUInt4, level: level))
             return
             
         default:
@@ -307,21 +308,21 @@ extension MIDI.HUI.Parser {
         
         guard data.count >= 3 else { return }
         
-        let channel = data[atOffset: 1].int
-        let sideAndValue = data[atOffset: 2].int // encodes both side and value
+        guard let channel = MIDI.UInt4(exactly: data[atOffset: 1]) else { return }
+        let sideAndValue = data[atOffset: 2] // encodes both side and value
         
-        var side: Bool
+        var side: MIDI.HUI.Surface.State.StereoLevelMeter.Side
         var level: Int
         
         if sideAndValue >= 0x10 {
-            side = false // right
-            level = sideAndValue % 0x10
+            side = .right // right
+            level = (sideAndValue % 0x10).int
         } else {
-            side = true // left
-            level = sideAndValue
+            side = .left // left
+            level = sideAndValue.int
         }
         
-        eventHandler?(.levelMeters(channel: channel, leftSide: side, level: level))
+        eventHandler?(.levelMeters(channel: channel, side: side, level: level))
         
     }
     
