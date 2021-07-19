@@ -46,3 +46,22 @@ extension MIDIIOSendsMIDIMessagesProtocol {
 	}
 	
 }
+
+extension MIDIIOSendsMIDIMessagesProtocol {
+    
+    /// Send a MIDI Message.
+    @inlinable func send(event: MIDI.Event) throws {
+        
+        try send(rawMessage: event.rawBytes)
+        
+    }
+    
+    /// Send multiple MIDI Messages.
+    @inlinable func send(events: [MIDI.Event]) throws {
+        
+        try send(rawMessages: events.map { $0.rawBytes })
+        
+    }
+    
+}
+

@@ -60,6 +60,16 @@ extension MIDI.IO.ReceiveHandler {
 		Self(SeriesGroup(handlers))
 		
 	}
+    
+    /// Returns a new `Events` receive handler instance.
+    public static func events(
+        _ handler: @escaping Events.Handler
+    ) -> Self {
+        
+        Self(Events(handler))
+        
+    }
+    
 	
 	/// Returns a new `RawData` receive handler instance.
 	public static func rawData(
@@ -110,6 +120,38 @@ extension MIDI.IO.ReceiveHandler {
 		
 	}
 	
+}
+
+extension MIDI.IO.ReceiveHandler {
+    
+    /// Basic raw packet data receive handler.
+    public struct Events: MIDIIOReceiveHandlerProtocol {
+        
+        public typealias Handler = (_ events: [MIDI.Event]) -> Void
+        
+        @inline(__always) public var handler: Handler
+        
+        internal let parser = MIDI.MIDI1Parser()
+        
+        @inline(__always) public func midiReadBlock(
+            _ packetListPtr: UnsafePointer<MIDIPacketList>,
+            _ srcConnRefCon: UnsafeMutableRawPointer?
+        ) {
+            
+            packetListPtr.forEach { handler(parser.parsedEvents(in: $0)) }
+            
+        }
+        
+        public init(
+            _ handler: @escaping Handler
+        ) {
+            
+            self.handler = handler
+            
+        }
+        
+    }
+    
 }
 
 extension MIDI.IO.ReceiveHandler {
