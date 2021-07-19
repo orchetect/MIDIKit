@@ -12,7 +12,9 @@ public protocol MIDIIOSendsMIDIMessagesProtocol {
 	func send(rawMessage: [MIDI.Byte]) throws
 	func send(rawMessages: [[MIDI.Byte]]) throws
 	func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws
-	
+    func send(event: MIDI.Event) throws
+    func send(events: [MIDI.Event]) throws
+    
 }
 
 extension MIDIIOSendsMIDIMessagesProtocol {
@@ -50,14 +52,14 @@ extension MIDIIOSendsMIDIMessagesProtocol {
 extension MIDIIOSendsMIDIMessagesProtocol {
     
     /// Send a MIDI Message.
-    @inlinable func send(event: MIDI.Event) throws {
+    @inlinable public func send(event: MIDI.Event) throws {
         
         try send(rawMessage: event.rawBytes)
         
     }
     
     /// Send multiple MIDI Messages.
-    @inlinable func send(events: [MIDI.Event]) throws {
+    @inlinable public func send(events: [MIDI.Event]) throws {
         
         try send(rawMessages: events.map { $0.rawBytes })
         
