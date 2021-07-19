@@ -71,7 +71,7 @@ extension MIDI {
 		}
 		
 		/// Initialize the raw 14-bit value from two 7-bit value bytes
-		public init(_ bytePair: BytePair) {
+        public init(bytePair: MIDI.BytePair) {
 			let msb = Int(bytePair.MSB & 0b1111111) << 7
 			let lsb = Int(bytePair.LSB & 0b1111111)
 			value = msb + lsb
@@ -117,7 +117,7 @@ extension MIDI {
 		}
 		
 		/// Returns the raw 14-bit value as two 7-bit value bytes
-		public var bytePair: BytePair {
+        public var bytePair: MIDI.BytePair {
 			let msb = (value & 0b1111111_0000000) >> 7
 			let lsb = value & 0b1111111
 			return .init(MSB: MIDI.Byte(msb), LSB: MIDI.Byte(lsb))
@@ -125,6 +125,14 @@ extension MIDI {
 		
 	}
 	
+}
+
+extension MIDI.UInt14: CustomStringConvertible {
+    
+    public var description: String {
+        "\(value)"
+    }
+    
 }
 
 extension MIDI.UInt14: ExpressibleByIntegerLiteral {

@@ -88,9 +88,9 @@ final class UInt14_Tests: XCTestCase {
 	
 	func testInitBytePair() {
 		
-        XCTAssertEqual(MIDI.UInt14(MIDI.BytePair(MSB: 0x00, LSB: 0x00)).asInt, _min)
-        XCTAssertEqual(MIDI.UInt14(MIDI.BytePair(MSB: 0x40, LSB: 0x00)).asInt, _midpoint)
-        XCTAssertEqual(MIDI.UInt14(MIDI.BytePair(MSB: 0x7F, LSB: 0x7F)).asInt, _max)
+        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.BytePair(MSB: 0x00, LSB: 0x00)).asInt, _min)
+        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.BytePair(MSB: 0x40, LSB: 0x00)).asInt, _midpoint)
+        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.BytePair(MSB: 0x7F, LSB: 0x7F)).asInt, _max)
 		
 	}
 	

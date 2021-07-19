@@ -58,6 +58,14 @@ extension MIDI {
 	
 }
 
+extension MIDI.UInt7: CustomStringConvertible {
+    
+    public var description: String {
+        "\(value)"
+    }
+    
+}
+
 extension MIDI.UInt7: ExpressibleByIntegerLiteral {
 	
 	public typealias IntegerLiteralType = UInt8
