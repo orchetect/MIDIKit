@@ -21,16 +21,17 @@ extension MIDI.HUI.Surface {
                                  state: Bool) {
         
         // set on off byte
-        var portByte: MIDI.Byte
+        var portByte: MIDI.Byte = port.asUInt8
         
         if state == true {
-            portByte = port.asUInt8 + 0x40
-        } else {
-            portByte = port.asUInt8
+            portByte += 0x40
         }
         
-        midiEventSendHandler?([0xB0, 0x0F, zone,
-                               0xB0, 0x2F, portByte])
+        let event1 = MIDI.Event.cc(controller: 0x0F, value: zone.midiUInt7, channel: 0)
+        let event2 = MIDI.Event.cc(controller: 0x2F, value: portByte.midiUInt7, channel: 0)
+        
+        midiEventSendHandler?(event1)
+        midiEventSendHandler?(event2)
         
     }
     
@@ -48,21 +49,22 @@ extension MIDI.HUI.Surface {
     
     /// Transmit fader level to host
     /// - parameter level: between 0 - 16383
-    public func transmitFader(level: Int,
+    public func transmitFader(level: MIDI.UInt14,
                               channel: MIDI.UInt7) {
         
         guard level.isContained(in: 0...16383) else { return }
         guard channel.isContained(in: 0x0...0xF) else { return }
         
-        let hi = level / 128;
-        let low = level % 128;
-        let channelHi = channel.asUInt8;
-        let channelLow = channel.asUInt8 + 0x20;
+        let msb = level.bytePair.MSB.midiUInt7
+        let lsb = level.bytePair.LSB.midiUInt7
+        let channelHi = channel.asUInt8.midiUInt7
+        let channelLow = (channel.asUInt8 + 0x20).midiUInt7
         
-        // use running status to send two 0xB0 status messages in one packet
-        midiEventSendHandler?([0xB0,
-                               channelHi, hi.uint8,
-                               channelLow, low.uint8])
+        let event1 = MIDI.Event.cc(controller: channelHi, value: msb, channel: 0)
+        let event2 = MIDI.Event.cc(controller: channelLow, value: lsb, channel: 0)
+        
+        midiEventSendHandler?(event1)
+        midiEventSendHandler?(event2)
         
     }
     
@@ -73,19 +75,17 @@ extension MIDI.HUI.Surface {
         
         guard channel.isContained(in: 0x0...0xF) else { return }
         
-        // use running status to send two 0xB0 status messages in one packet
-        midiEventSendHandler?([0xB0,
-                               0x0F, channel.asUInt8,
-                               0x2F, isTouched ? 0x40 : 0x00])
+        let event1 = MIDI.Event.cc(controller: 0x0F, value: channel, channel: 0)
+        let event2 = MIDI.Event.cc(controller: 0x2F, value: isTouched ? 0x40 : 0x00, channel: 0)
+        
+        midiEventSendHandler?(event1)
+        midiEventSendHandler?(event2)
         
     }
     
     /// Sends a message that tells the host that the HUI device is powering on or off.
     public func transmitSystemReset() {
         
-        Log.debug("Sending system reset message.")
-        
-        // I believe this is correct but not sure if it's multiple 0xff bytes or just one.
         midiEventSendHandler?(MIDI.HUI.kMIDI.kSystemResetMessage)
         
     }

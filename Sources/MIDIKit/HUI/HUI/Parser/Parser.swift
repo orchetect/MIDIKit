@@ -62,42 +62,40 @@ extension MIDI.HUI {
 extension MIDI.HUI.Parser {
     
     /// HUI MIDI message is received from host
-    public func midiIn(data: [MIDI.Byte]) {
+    public func midiIn(event: MIDI.Event) {
         
         // HUI ping-reply
-        if data == MIDI.HUI.kMIDI.kPingFromHostMessage {
+        if event == MIDI.HUI.kMIDI.kPingFromHostMessage {
             // handler should send ping-reply to host
             eventHandler?(.pingReceived)
             return
         }
         
-        guard let firstByte = data.first else { return }
-        
-        switch firstByte {
-        case MIDI.HUI.kMIDI.kSysExStartByte :
-            parse(sysEx: data)
-            
-        case MIDI.HUI.kMIDI.kControlStatus:
-            parse(controlStatusMessage: data)
-            
-        case MIDI.HUI.kMIDI.kLevelMetersStatus:
-            parse(levelMetersMessage: data)
-            
+        switch event {
+        case .sysEx(manufacturer: let mfr, data: let bytes):
+            guard mfr == MIDI.HUI.kMIDI.kSysEx.kManufacturer else { return }
+            parse(sysExContent: bytes)
+        case .cc:
+            parse(controlStatusMessage: event)
+        case .polyAftertouch:
+            parse(levelMetersMessage: event)
         default:
             break
         }
         
     }
     
-    private func parse(sysEx data: [MIDI.Byte]) {
+    private func parse(sysExContent data: [MIDI.Byte]) {
         
         // check for SysEx header
-        guard data.starts(with: MIDI.HUI.kMIDI.kSysExHeader) else { return }
+        guard data[safe: 0] == MIDI.HUI.kMIDI.kSysEx.kSubID1,
+              data[safe: 1] == MIDI.HUI.kMIDI.kSysEx.kSubID2
+              else { return }
         
         let dataAfterHeader = data
             .suffix(
                 from: data.index(data.startIndex,
-                                 offsetBy: MIDI.HUI.kMIDI.kSysExHeader.count)
+                                 offsetBy: 2)
             )
         
         guard dataAfterHeader.count > 0 else { return }
@@ -194,7 +192,11 @@ extension MIDI.HUI.Parser {
         
     }
     
-    private func parse(controlStatusMessage data: [MIDI.Byte]) {
+    private func parse(controlStatusMessage event: MIDI.Event) {
+        
+        let data = event.rawBytes
+        
+        guard data[safe: 0] == MIDI.HUI.kMIDI.kControlStatus else { return }
         
         guard let dataByte1 = data[safe: 1],
               let dataByte2 = data[safe: 2]
@@ -304,12 +306,18 @@ extension MIDI.HUI.Parser {
         
     }
     
-    private func parse(levelMetersMessage data: [MIDI.Byte]) {
+    private func parse(levelMetersMessage event: MIDI.Event) {
         
-        guard data.count >= 3 else { return }
+        let data = event.rawBytes
         
-        guard let channel = MIDI.UInt4(exactly: data[atOffset: 1]) else { return }
-        let sideAndValue = data[atOffset: 2] // encodes both side and value
+        guard data[safe: 0] == MIDI.HUI.kMIDI.kLevelMetersStatus else { return }
+        
+        guard let dataByte1 = data[safe: 1],
+              let dataByte2 = data[safe: 2]
+        else { return }
+        
+        guard let channel = MIDI.UInt4(exactly: dataByte1) else { return }
+        let sideAndValue = dataByte2 // encodes both side and value
         
         var side: MIDI.HUI.Surface.State.StereoLevelMeter.Side
         var level: Int

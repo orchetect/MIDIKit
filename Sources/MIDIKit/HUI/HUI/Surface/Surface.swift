@@ -37,11 +37,11 @@ extension MIDI.HUI {
         }
         
         /// Called when a HUI MIDI message needs transmitting.
-        internal var midiEventSendHandler: ((_ midiMessage: [MIDI.Byte]) -> Void)? = nil
+        internal var midiEventSendHandler: ((_ event: MIDI.Event) -> Void)? = nil
         
         /// Set the handler used when a HUI MIDI message needs transmitting.
         public func setMIDIEventSendHandler(
-            _ handler: ((_ midiMessage: [MIDI.Byte]) -> Void)?
+            _ handler: ((_ event: MIDI.Event) -> Void)?
         ) {
             
             self.midiEventSendHandler = handler
@@ -56,7 +56,7 @@ extension MIDI.HUI {
         
         public init(
             eventHandler: ((Event) -> Void)? = nil,
-            midiEventSendHandler: ((_ midiMessage: [MIDI.Byte]) -> Void)? = nil
+            midiEventSendHandler: ((_ event: MIDI.Event) -> Void)? = nil
         ) {
             
             self.eventHandler = eventHandler
@@ -91,9 +91,9 @@ extension MIDI.HUI {
         // MARK: - Methods
         
         /// Incoming MIDI messages
-        public func midiIn(data: [MIDI.Byte]) {
+        public func midiIn(event: MIDI.Event) {
             
-            parser.midiIn(data: data)
+            parser.midiIn(event: event)
             
         }
         

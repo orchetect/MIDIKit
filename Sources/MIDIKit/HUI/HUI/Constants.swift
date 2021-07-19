@@ -12,14 +12,23 @@ extension MIDI.HUI {
         // MARK: System messages
         
         // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
-        public static let kPingFromHostMessage:    [MIDI.Byte] = [0x90, 0x00, 0x00]
+        public static let kPingFromHostMessage: MIDI.Event =
+            .noteOn(note: 0, velocity: 0, channel: 0) // [0x90, 0x00, 0x00]
         
         // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
-        public static let kPingReplyToHostMessage: [MIDI.Byte] = [0x90, 0x00, 0x7F]
+        public static let kPingReplyToHostMessage: MIDI.Event =
+            .noteOn(note: 0, velocity: 0x7F, channel: 0) // [0x90, 0x00, 0x7F]
         
-        public static let kSystemResetMessage:     [MIDI.Byte] = [0xFF]
+        public static let kSystemResetMessage: MIDI.Event =
+            .systemReset // [0xFF]
         
-        public static let kSysExHeader:            [MIDI.Byte] = [0xF0, 0x00, 0x00, 0x66, 0x05, 0x00]
+        // [0xF0, 0x00, 0x00, 0x66, 0x05, 0x00]
+        public enum kSysEx {
+            public static let kManufacturer: MIDI.Event.SysEx.Manufacturer =
+                .threeByte(byte2: 0x00, byte3: 0x66)! // Mackie
+            public static let kSubID1: MIDI.Byte = 0x05 // product ID?
+            public static let kSubID2: MIDI.Byte = 0x00
+        }
         
         public enum kDisplayType {
             /// 4-character channel name displays, and Select-Assign displays
