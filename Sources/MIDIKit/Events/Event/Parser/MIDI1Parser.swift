@@ -106,28 +106,28 @@ extension MIDI {
                         currentMessage += currentByte
                     case 0x8: // System Real Time - Timing Clock
                         runningStatus = nil
-                        queuedMessages += .sysRealTime(.timingClock)
+                        queuedMessages += .timingClock
                     case 0x9: // Real Time - undefined
                         // MIDI 1.0 Spec: "Real-Time messages should not affect Running Status."
                         break
                     case 0xA: // System Real Time - Start
                         // MIDI 1.0 Spec: "Real-Time messages should not affect Running Status."
-                        queuedMessages += .sysRealTime(.start)
+                        queuedMessages += .start
                     case 0xB: // System Real Time - Continue
                         // MIDI 1.0 Spec: "Real-Time messages should not affect Running Status."
-                        queuedMessages += .sysRealTime(.continue)
+                        queuedMessages += .continue
                     case 0xC: // System Real Time - Stop
                         // MIDI 1.0 Spec: "Real-Time messages should not affect Running Status."
-                        queuedMessages += .sysRealTime(.stop)
+                        queuedMessages += .stop
                     case 0xD: // Real Time - undefined
                         // MIDI 1.0 Spec: "Real-Time messages should not affect Running Status."
                         break
                     case 0xE:
                         runningStatus = nil
-                        queuedMessages += .sysRealTime(.activeSensing)
+                        queuedMessages += .activeSensing
                     case 0xF:
                         runningStatus = nil
-                        queuedMessages += .sysRealTime(.systemReset)
+                        queuedMessages += .systemReset
                     default:
                         break // should never happen
                     }
@@ -197,7 +197,7 @@ extension MIDI {
                           let velocity = dataByte2?.midiUInt7
                     else { return events }
                     
-                    events += .chanVoice(.noteOff(note: note, velocity: velocity, channel: channel))
+                    events += .noteOff(note: note, velocity: velocity, channel: channel)
                     currentPos += currentPos == 0 ? 3 : 2
                     
                 case 0x9: // note on
@@ -206,7 +206,7 @@ extension MIDI {
                           let velocity = dataByte2?.midiUInt7
                     else { return events }
                     
-                    events += .chanVoice(.noteOn(note: note, velocity: velocity, channel: channel))
+                    events += .noteOn(note: note, velocity: velocity, channel: channel)
                     currentPos += currentPos == 0 ? 3 : 2
                     
                 case 0xA: // poly aftertouch
@@ -215,7 +215,7 @@ extension MIDI {
                           let pressure = dataByte2?.midiUInt7
                     else { return events }
                     
-                    events += .chanVoice(.polyAftertouch(note: note, pressure: pressure, channel: channel))
+                    events += .polyAftertouch(note: note, pressure: pressure, channel: channel)
                     currentPos += currentPos == 0 ? 3 : 2
                     
                 case 0xB: // CC (incl. channel mode msgs 121-127)
@@ -224,7 +224,7 @@ extension MIDI {
                           let value = dataByte2?.midiUInt7
                     else { return events }
                     
-                    events += .chanVoice(.cc(.init(controller: cc, value: value), channel: channel))
+                    events += .cc(controller: cc, value: value, channel: channel)
                     currentPos += currentPos == 0 ? 3 : 2
                     
                 case 0xC: // program change
@@ -232,7 +232,7 @@ extension MIDI {
                     guard let program = dataByte1?.midiUInt7
                     else { return events }
                     
-                    events += .chanVoice(.programChange(program: program, channel: channel))
+                    events += .programChange(program: program, channel: channel)
                     currentPos += currentPos == 0 ? 2 : 1
                     
                 case 0xD: // channel aftertouch
@@ -240,7 +240,7 @@ extension MIDI {
                     guard let pressure = dataByte1?.midiUInt7
                     else { return events }
                     
-                    events += .chanVoice(.chanAftertouch(pressure: pressure, channel: channel))
+                    events += .chanAftertouch(pressure: pressure, channel: channel)
                     currentPos += currentPos == 0 ? 2 : 1
                     
                 case 0xE: // pitch bend
@@ -250,16 +250,16 @@ extension MIDI {
                     else { return events }
                     
                     let uint14 = MIDI.UInt14(bytePair: .init(MSB: dataByte2, LSB: dataByte1))
-                    events += .chanVoice(.pitchBend(value: uint14, channel: channel))
+                    events += .pitchBend(value: uint14, channel: channel)
                     currentPos += currentPos == 0 ? 3 : 2
                     
                 case 0xF: // system message
                     switch statusByte.nibbles.low {
                     case 0x0: // SysEx Start
-                        guard let parsedSysEx = try? MIDI.Event.SysEx(rawBytes: bytes)
+                        guard let parsedSysEx = try? MIDI.Event.SysEx.parsed(from: bytes)
                         else { return events }
                         
-                        events += .init(parsedSysEx)
+                        events += parsedSysEx
                         
                         // MIDI 1.0 Spec: if a MIDI packet contains a SysEx, the entire packet is guaranteed to only be the single SysEx and not contain additional MIDI messages or SysEx messages.
                         currentPos = bytes.count
@@ -268,7 +268,7 @@ extension MIDI {
                         guard let dataByte = dataByte1
                         else { return events }
                         
-                        events += .sysCommon(.timecodeQuarterFrame(byte: dataByte))
+                        events += .timecodeQuarterFrame(byte: dataByte)
                         currentPos += currentPos == 0 ? 2 : 1
                      
                     case 0x2: // System Common - Song Position Pointer
@@ -277,14 +277,14 @@ extension MIDI {
                         else { return events }
                         
                         let uint14 = MIDI.UInt14(bytePair: .init(MSB: dataByte2, LSB: dataByte1))
-                        events += .sysCommon(.songPositionPointer(midiBeat: uint14))
+                        events += .songPositionPointer(midiBeat: uint14)
                         currentPos += currentPos == 0 ? 3 : 2
                         
                     case 0x3: // System Common - Song Select
                         guard let songNumber = dataByte1?.midiUInt7
                         else { return events }
                         
-                        events += .sysCommon(.songSelect(number: songNumber))
+                        events += .songSelect(number: songNumber)
                         currentPos += currentPos == 0 ? 2 : 1
                         
                     case 0x4, 0x5: // undefined System Common bytes
@@ -292,7 +292,7 @@ extension MIDI {
                         currentPos += 1
                         
                     case 0x6: // System Common - Tune Request
-                        events += .sysCommon(.tuneRequest)
+                        events += .tuneRequest
                         currentPos += 1
                         
                     case 0x7: // System Common - System Exclusive End (EOX / End Of Exclusive)
@@ -300,33 +300,33 @@ extension MIDI {
                         currentPos += 1
                         
                     case 0x8: // System Real Time - Timing Clock
-                        events += .sysRealTime(.timingClock)
+                        events += .timingClock
                         currentPos += 1
                         
                     case 0x9: // Real Time - undefined
                         currentPos += 1
                         
                     case 0xA: // System Real Time - Start
-                        events += .sysRealTime(.start)
+                        events += .start
                         currentPos += 1
                         
                     case 0xB: // System Real Time - Continue
-                        events += .sysRealTime(.continue)
+                        events += .continue
                         currentPos += 1
                         
                     case 0xC: // System Real Time - Stop
-                        events += .sysRealTime(.stop)
+                        events += .stop
                         currentPos += 1
                         
                     case 0xD: // Real Time - undefined
                         currentPos += 1
                         
                     case 0xE:
-                        events += .sysRealTime(.activeSensing)
+                        events += .activeSensing
                         currentPos += 1
                         
                     case 0xF:
-                        events += .sysRealTime(.systemReset)
+                        events += .systemReset
                         currentPos += 1
                         
                     default:
