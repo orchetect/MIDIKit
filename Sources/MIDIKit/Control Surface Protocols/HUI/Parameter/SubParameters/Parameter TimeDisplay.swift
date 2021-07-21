@@ -36,12 +36,35 @@ extension MIDI.HUI.Parameter.TimeDisplay: MIDIHUIParameterProtocol {
     public var zoneAndPort: MIDI.HUI.ZoneAndPortPair {
         
         switch self {
+        
+        // Zone 0x16
+        // Timecode LEDs (no buttons, LEDs only)
         case .timecode:  return (0x16, 0x0)
         case .feet:      return (0x16, 0x1)
         case .beats:     return (0x16, 0x2)
         case .rudeSolo:  return (0x16, 0x3)
+            
         }
         
     }
     
+}
+
+extension MIDI.HUI.Parameter.TimeDisplay: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zone 0x16
+        // Timecode LEDs (no buttons, LEDs only)
+        case .timecode:  return ".timecode"
+        case .feet:      return ".feet"
+        case .beats:     return ".beats"
+        case .rudeSolo:  return ".rudeSolo"
+        
+        }
+
+    }
+
 }

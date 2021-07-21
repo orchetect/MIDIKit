@@ -46,3 +46,26 @@ extension MIDI.HUI.Parameter.FunctionKey: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.FunctionKey: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zone 0x1B
+        // Function Keys
+        case .f1:         return ".f1"
+        case .f2:         return ".f2"
+        case .f3:         return ".f3"
+        case .f4:         return ".f4"
+        case .f5:         return ".f5"
+        case .f6:         return ".f6"
+        case .f7:         return ".f7"
+        case .f8OrEsc:    return ".f8OrEsc"
+        
+        }
+
+    }
+
+}

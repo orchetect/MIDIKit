@@ -73,3 +73,42 @@ extension MIDI.HUI.Parameter.NumPad: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.NumPad: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zone 0x13
+        // Num Pad
+        case .num0:          return ".num0"
+        case .num1:          return ".num1"
+        case .num4:          return ".num4"
+        case .num2:          return ".num2"
+        case .num5:          return ".num5"
+        case .period:        return ".period"
+        case .num3:          return ".num3"
+        case .num6:          return ".num6"
+        
+        // Zone 0x14
+        // Num Pad
+        case .enter:         return ".enter"
+        case .plus:          return ".plus"
+        
+        // Zone 0x15
+        // Num Pad
+        case .num7:          return ".num7"
+        case .num8:          return ".num8"
+        case .num9:          return ".num9"
+        case .minus:         return ".minus"
+        case .clr:           return ".clr"
+        case .equals:        return ".equals"
+        case .forwardSlash:  return ".forwardSlash"
+        case .asterisk:      return ".asterisk"
+        
+        }
+
+    }
+
+}

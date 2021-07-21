@@ -68,3 +68,40 @@ extension MIDI.HUI.Parameter.Transport: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.Transport: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zone 0x0E
+        // Transport Main
+        case .talkback:        return ".talkback"
+        case .rewind:          return ".rewind"
+        case .fastFwd:         return ".fastFwd"
+        case .stop:            return ".stop"
+        case .play:            return ".play"
+        case .record:          return ".record"
+            
+        // Zone 0x0F
+        // Transport continued
+        case .rtz:             return ".rtz"
+        case .end:             return ".end"
+        case .online:          return ".online"
+        case .loop:            return ".loop"
+        case .quickPunch:      return ".quickPunch"
+            
+        // Zone 0x10
+        // Transport Punch
+        case .punchAudition:   return ".punchAudition"
+        case .punchPre:        return ".punchPre"
+        case .punchIn:         return ".punchIn"
+        case .punchOut:        return ".punchOut"
+        case .punchPost:       return ".punchPost"
+        
+        }
+
+    }
+
+}

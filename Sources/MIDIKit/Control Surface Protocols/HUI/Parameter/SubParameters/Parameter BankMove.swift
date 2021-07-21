@@ -39,3 +39,22 @@ extension MIDI.HUI.Parameter.BankMove: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.BankMove: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zone 0x0A
+        // Channel Selection (scroll/bank channels in view)
+        case .channelLeft:   return ".channelLeft"
+        case .bankLeft:      return ".bankLeft"
+        case .channelRight:  return ".channelRight"
+        case .bankRight:     return ".bankRight"
+        
+        }
+
+    }
+
+}

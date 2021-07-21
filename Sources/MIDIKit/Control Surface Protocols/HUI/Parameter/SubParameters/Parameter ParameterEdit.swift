@@ -43,3 +43,24 @@ extension MIDI.HUI.Parameter.ParameterEdit: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.ParameterEdit: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        case .insertOrParam:  return ".insertOrParam"
+        case .assign:         return ".assign"
+        case .select1:        return ".select1"
+        case .select2:        return ".select2"
+        case .select3:        return ".select3"
+        case .select4:        return ".select4"
+        case .bypass:         return ".bypass"
+        case .compare:        return ".compare"
+        
+        }
+
+    }
+
+}

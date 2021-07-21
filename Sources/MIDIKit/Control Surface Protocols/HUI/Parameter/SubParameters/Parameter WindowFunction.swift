@@ -42,3 +42,24 @@ extension MIDI.HUI.Parameter.WindowFunction: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.WindowFunction: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zone 0x09
+        // Window Functions
+        case .mix:        return ".mix"
+        case .edit:       return ".edit"
+        case .transport:  return ".transport"
+        case .memLoc:     return ".memLoc"
+        case .status:     return ".status"
+        case .alt:        return ".alt"
+        
+        }
+
+    }
+
+}

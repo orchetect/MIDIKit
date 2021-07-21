@@ -46,3 +46,26 @@ extension MIDI.HUI.Parameter.HotKey: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.HotKey: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zone 0x08
+        // Keyboard Shortcuts
+        case .ctrl:      return ".ctrl"
+        case .shift:     return ".shift"
+        case .editMode:  return ".editMode"
+        case .undo:      return ".undo"
+        case .cmd:       return ".cmd"
+        case .option:    return ".option"
+        case .editTool:  return ".editTool"
+        case .save:      return ".save"
+        
+        }
+
+    }
+
+}

@@ -62,3 +62,36 @@ extension MIDI.HUI.Parameter.Assign: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.Assign: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zone 0x0B
+        // Assign 1 (buttons to top left of channel strips)
+        case .output:          return ".output"
+        case .input:           return ".input"
+        case .pan:             return ".pan"
+        case .sendE:           return ".sendE"
+        case .sendD:           return ".sendD"
+        case .sendC:           return ".sendC"
+        case .sendB:           return ".sendB"
+        case .sendA:           return ".sendA"
+            
+        // Zone 0x0C
+        // Assign 2 (buttons to top left of channel strips)
+        case .assign:          return ".assign"
+        case .default:         return ".default"
+        case .suspend:         return ".suspend"
+        case .shift:           return ".shift"
+        case .mute:            return ".mute"
+        case .bypass:          return ".bypass"
+        case .recordReadyAll:  return ".recordReadyAll"
+            
+        }
+        
+    }
+    
+}

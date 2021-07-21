@@ -58,3 +58,26 @@ extension MIDI.HUI.Parameter.ChannelParameter: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.ChannelParameter: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zones 0x00 - 0x07
+        // Channel Strips
+        case .faderTouched:  return ".faderTouched"
+        case .select:        return ".select"
+        case .mute:          return ".mute"
+        case .solo:          return ".solo"
+        case .auto:          return ".auto"
+        case .vPotSelect:    return ".vPotSelect"
+        case .insert:        return ".insert"
+        case .recordReady:   return ".recordReady"
+            
+        }
+        
+    }
+    
+}

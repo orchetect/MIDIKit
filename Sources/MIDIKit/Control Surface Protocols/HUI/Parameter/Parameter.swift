@@ -376,9 +376,71 @@ extension MIDI.HUI.Parameter: MIDIHUIParameterProtocol {
     
 }
 
+extension MIDI.HUI.Parameter: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        case .channelStrip(let channelStrip, let channelParameter):
+            return ".channelStrip(\(channelStrip), \(channelParameter))"
+
+        case .hotKey(let param):
+            return ".hotKey(\(param))"
+
+        case .window(let param):
+            return ".window(\(param))"
+
+        case .bankMove(let param):
+            return ".bankMove(\(param))"
+
+        case .assign(let param):
+            return ".assign(\(param))"
+
+        case .cursor(let param):
+            return ".cursor(\(param))"
+
+        case .transport(let param):
+            return ".transport(\(param))"
+
+        case .controlRoom(let param):
+            return ".controlRoom(\(param))"
+
+        case .numPad(let param):
+            return ".numPad(\(param))"
+
+        case .timeDisplay(let param):
+            return ".timeDisplay(\(param))"
+
+        case .autoEnable(let param):
+            return ".autoEnable(\(param))"
+
+        case .autoMode(let param):
+            return ".autoMode(\(param))"
+
+        case .statusAndGroup(let param):
+            return ".statusAndGroup(\(param))"
+
+        case .edit(let param):
+            return ".edit(\(param))"
+
+        case .functionKey(let param):
+            return ".functionKey(\(param))"
+
+        case .parameterEdit(let param):
+            return ".parameterEdit(\(param))"
+
+        case .footswitchesAndSounds(let param):
+            return ".footswitchesAndSounds(\(param))"
+        }
+        
+    }
+    
+}
+
 extension MIDI.HUI.Parameter {
     
-    /// Convenience constructor.
+    /// Construct from a HUI zone and port pair.
+    /// Returns `nil` if the pair is undefined.
     public init?(zone: MIDI.Byte,
                  port: MIDI.UInt4)
     {
@@ -390,15 +452,6 @@ extension MIDI.HUI.Parameter {
         else { return nil }
         
         self = parameter
-        
-    }
-    
-    /// Convenience constructor.
-    public init(channelStrip: Int,
-                component: MIDI.HUI.Parameter.ChannelParameter)
-    {
-        
-        self = .channelStrip(channelStrip, component)
         
     }
     

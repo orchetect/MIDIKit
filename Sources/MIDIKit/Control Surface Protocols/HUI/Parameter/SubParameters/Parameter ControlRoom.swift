@@ -53,3 +53,31 @@ extension MIDI.HUI.Parameter.ControlRoom: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.ControlRoom: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zone 0x11
+        // Control Room - Monitor Input
+        case .input3:             return ".input3"
+        case .input2:             return ".input2"
+        case .input1:             return ".input1"
+        case .mute:               return ".mute"
+        case .discreteInput1to1:  return ".discreteInput1to1"
+            
+        // Zone 0x12
+        // Control Room - Monitor Output
+        case .output3:            return ".output3"
+        case .output2:            return ".output2"
+        case .output1:            return ".output1"
+        case .dim:                return ".dim"
+        case .mono:               return ".mono"
+        
+        }
+
+    }
+
+}

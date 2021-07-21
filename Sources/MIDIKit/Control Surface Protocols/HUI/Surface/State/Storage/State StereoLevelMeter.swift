@@ -74,6 +74,15 @@ extension MIDI.HUI.Surface.State.StereoLevelMeter {
         case left
         case right
         
+        public var description: String {
+            
+            switch self {
+            case .left: return ".left"
+            case .right: return ".right"
+            }
+            
+        }
+        
     }
     
     public func level(of side: Side) -> Int {

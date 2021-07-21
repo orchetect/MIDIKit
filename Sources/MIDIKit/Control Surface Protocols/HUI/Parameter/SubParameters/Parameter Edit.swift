@@ -42,3 +42,24 @@ extension MIDI.HUI.Parameter.Edit: MIDIHUIParameterProtocol {
     }
     
 }
+
+extension MIDI.HUI.Parameter.Edit: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        
+        // Zone 0x1A
+        // Edit (To the right of the channel strips)
+        case .paste:     return ".paste"
+        case .cut:       return ".cut"
+        case .capture:   return ".capture"
+        case .delete:    return ".delete"
+        case .copy:      return ".copy"
+        case .separate:  return ".separate"
+        
+        }
+
+    }
+
+}
