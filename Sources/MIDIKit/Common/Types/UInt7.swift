@@ -113,4 +113,9 @@ extension BinaryInteger {
 		MIDI.UInt7(self)
 	}
 	
+    /// Convenience initializer for `MIDI.UInt7(exactly:)`.
+    public var midiUInt7Exactly: MIDI.UInt7? {
+        MIDI.UInt7(exactly: self)
+    }
+    
 }

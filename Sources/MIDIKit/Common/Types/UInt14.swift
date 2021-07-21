@@ -180,4 +180,9 @@ extension BinaryInteger {
 		MIDI.UInt14(self)
 	}
 	
+    /// Convenience initializer for `MIDI.UInt14(exactly:)`.
+    public var midiUInt14Exactly: MIDI.UInt14? {
+        MIDI.UInt14(exactly: self)
+    }
+    
 }

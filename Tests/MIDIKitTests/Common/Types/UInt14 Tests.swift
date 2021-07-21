@@ -203,6 +203,23 @@ final class UInt14_Tests: XCTestCase {
 		
 	}
 	
+    func testBinaryInteger_UInt14Exactly() {
+        
+        XCTAssertEqual(0b00_0000_0000_0000.midiUInt14Exactly, 0b00_0000_0000_0000)
+        XCTAssertEqual(0b11_1111_1111_1111.midiUInt14Exactly, 0b11_1111_1111_1111)
+        
+        XCTAssertEqual(Int8(10).midiUInt14Exactly, 10)
+        XCTAssertEqual(UInt8(10).midiUInt14Exactly, 10)
+        
+        XCTAssertEqual(Int16(10).midiUInt14Exactly, 10)
+        XCTAssertEqual(UInt16(10).midiUInt14Exactly, 10)
+        
+        // nil (overflow)
+        
+        XCTAssertNil(0b100_0000_0000_0000.midiUInt14Exactly)
+        
+    }
+    
 }
 
 #endif
