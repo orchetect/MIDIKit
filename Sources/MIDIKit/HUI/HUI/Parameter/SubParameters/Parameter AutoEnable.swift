@@ -28,6 +28,8 @@ extension MIDI.HUI.Parameter.AutoEnable: MIDIHUIParameterProtocol {
         
         switch self {
         
+        // Zone 0x17
+        // Auto Enable (To the right of the channel strips)
         case.plugin:    return (0x17, 0x0)
         case.pan:       return (0x17, 0x1)
         case.fader:     return (0x17, 0x2)
