@@ -38,7 +38,7 @@ extension MIDI.MTC {
 	/// - Note:
 	/// - A running MTC data stream (during playback) only updates the frame number every 2 frames, so this data stream should not be relied on for deriving exact frame position, but rather as a mechanism for displaying running timecode to the user on screen or synchronizing playback to the incoming MTC data stream.
 	/// - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate timecodes when scrubbing or locating to different times, but will be limited to the base frame rates supported by MTC.
-	public class Decoder {
+    public class Decoder: ReceivesMIDIEvents {
 		
 		// MARK: - Public properties
 		
@@ -164,8 +164,10 @@ extension MIDI.MTC {
 		// MARK: - methods
 		
 		/// Incoming MIDI messages
-		@inline(__always) public func midiIn(data: [MIDI.Byte]) {
+		@inline(__always) public func midiIn(event: MIDI.Event) {
 			
+            let data = event.rawBytes
+            
 			// MTC Full Timecode message
 			// (1-frame resolution, does not carry subframe information)
 			// ---------------------

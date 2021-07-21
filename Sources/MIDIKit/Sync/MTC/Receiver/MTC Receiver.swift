@@ -248,12 +248,12 @@ extension MIDI.MTC {
 		// MARK: - Public methods
 		
 		/// (Async) Incoming MIDI messages
-		public func midiIn(data: [MIDI.Byte]) {
+		public func midiIn(event: MIDI.Event) {
 			
 			// The decoder's midiIn can trigger handler callbacks as a result, which will in turn all be executed on the queue
 			
 			queue.async {
-				self.decoder.midiIn(data: data)
+				self.decoder.midiIn(event: event)
 			}
 			
 		}
