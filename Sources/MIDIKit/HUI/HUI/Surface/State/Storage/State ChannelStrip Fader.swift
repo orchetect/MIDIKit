@@ -12,7 +12,7 @@ extension MIDI.HUI.Surface.State.ChannelStrip {
     public struct Fader: Equatable, Hashable {
         
         /// Raw level value
-        public var level: Int = 0
+        public var level: MIDI.UInt14 = 0
         
         /// Touch Status (true = fader is being touched by the user)
         public var touched: Bool = false
@@ -32,7 +32,7 @@ extension MIDI.HUI.Surface.State.ChannelStrip {
         
         /// Returns `.level` expressed as a unit interval between 0.0...1.0
         public var levelUnitInterval: Double {
-            level.double / Self.levelMax.double
+            level.value.double / Self.levelMax.double
         }
         
     }

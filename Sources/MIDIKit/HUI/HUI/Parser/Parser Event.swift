@@ -10,15 +10,15 @@ extension MIDI.HUI.Parser {
         
         case pingReceived
         
-        case levelMeters(channel: MIDI.UInt4,
+        case levelMeters(channelStrip: Int,
                          side: MIDI.HUI.Surface.State.StereoLevelMeter.Side,
                          level: Int)
         
-        case faderLevel(channel: MIDI.UInt4,
-                        level: Int)
+        case faderLevel(channelStrip: Int,
+                        level: MIDI.UInt14)
         
-        case vPot(channel: MIDI.UInt4,
-                  value: Int)
+        case vPot(channelStrip: Int,
+                  value: MIDI.UInt7)
         
         case largeDisplayText(components: [String])
         
@@ -26,7 +26,7 @@ extension MIDI.HUI.Parser {
         
         case selectAssignText(text: String)
         
-        case channelText(channel: MIDI.UInt4,
+        case channelName(channelStrip: Int,
                          text: String)
         
         case `switch`(zone: MIDI.Byte,

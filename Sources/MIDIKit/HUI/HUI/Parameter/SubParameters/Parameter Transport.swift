@@ -16,11 +16,11 @@ extension MIDI.HUI.Parameter {
         case stop
         case play
         case record
-        case punch_audition
-        case punch_pre
-        case punch_in
-        case punch_out
-        case punch_post
+        case punchAudition
+        case punchPre
+        case punchIn
+        case punchOut
+        case punchPost
         case rtz          // |< RTZ
         case end          // END >|
         case online
@@ -57,11 +57,11 @@ extension MIDI.HUI.Parameter.Transport: MIDIHUIParameterProtocol {
             
         // Zone 0x10
         // Transport Punch
-        case .punch_audition:  return (0x10, 0x0)
-        case .punch_pre:       return (0x10, 0x1)
-        case .punch_in:        return (0x10, 0x2)
-        case .punch_out:       return (0x10, 0x3)
-        case .punch_post:      return (0x10, 0x4)
+        case .punchAudition:   return (0x10, 0x0)
+        case .punchPre:        return (0x10, 0x1)
+        case .punchIn:         return (0x10, 0x2)
+        case .punchOut:        return (0x10, 0x3)
+        case .punchPost:       return (0x10, 0x4)
             
         }
         

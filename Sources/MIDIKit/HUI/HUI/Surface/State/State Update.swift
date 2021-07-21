@@ -18,21 +18,21 @@ extension MIDI.HUI.Surface.State {
         case .pingReceived:
             return .ping
             
-        case .levelMeters(channel: let channel,
+        case .levelMeters(channelStrip: let channelStrip,
                           side: let side,
                           level: let level):
-            return updateState_LevelMeters(channel: channel,
+            return updateState_LevelMeters(channelStrip: channelStrip,
                                            side: side,
                                            level: level)
             
-        case .faderLevel(channel: let channel,
+        case .faderLevel(channelStrip: let channelStrip,
                          level: let level):
-            return updateState_FaderLevel(channel: channel,
+            return updateState_FaderLevel(channelStrip: channelStrip,
                                           level: level)
             
-        case .vPot(channel: let channel,
+        case .vPot(channelStrip: let channelStrip,
                    value: let value):
-            return updateState_VPot(channel: channel,
+            return updateState_VPot(channelStrip: channelStrip,
                                     value: value)
             
         case .largeDisplayText(components: let components):
@@ -44,10 +44,10 @@ extension MIDI.HUI.Surface.State {
         case .selectAssignText(text: let text):
             return updateState_AssignText(text: text)
             
-        case .channelText(channel: let channel,
+        case .channelName(channelStrip: let channelStrip,
                           text: let text):
             return updateState_ChannelText(text: text,
-                                           channel: channel)
+                                           channelStrip: channelStrip)
             
         case .switch(zone: let zone,
                      port: let port,
@@ -67,48 +67,48 @@ extension MIDI.HUI.Surface.State {
 extension MIDI.HUI.Surface.State {
     
     private mutating func updateState_LevelMeters(
-        channel: MIDI.UInt4,
+        channelStrip: Int,
         side: MIDI.HUI.Surface.State.StereoLevelMeter.Side,
         level: Int
     ) -> MIDI.HUI.Surface.Event? {
         
         switch side {
-        case .left: channels[channel].levelMeter.left = level
-        case .right: channels[channel].levelMeter.right = level
+        case .left: channelStrips[channelStrip].levelMeter.left = level
+        case .right: channelStrips[channelStrip].levelMeter.right = level
         }
         
         return .channelStrip(
-            channel: channel,
-            param: .levelMeter(side: side, level: level)
+            channel: channelStrip,
+            component: .levelMeter(side: side, level: level)
         )
         
     }
     
     private mutating func updateState_FaderLevel(
-        channel: MIDI.UInt4,
-        level: Int
+        channelStrip: Int,
+        level: MIDI.UInt14
     ) -> MIDI.HUI.Surface.Event? {
         
-        channels[channel].fader.level = level
+        channelStrips[channelStrip].fader.level = level
         
-        return .channelStrip(channel: channel, param: .faderLevel(level))
+        return .channelStrip(channel: channelStrip, component: .faderLevel(level))
         
     }
     
     private mutating func updateState_VPot(
-        channel: MIDI.UInt4,
-        value: Int
+        channelStrip: Int,
+        value: MIDI.UInt7
     ) -> MIDI.HUI.Surface.Event? {
         
-        guard channel.isContained(in: 0...7)
+        guard channelStrip.isContained(in: 0...7)
         else {
-            Log.debug("HUI: VPot with channel \(channel) not handled - needs coding. Probably a Large Display vPot?")
+            Log.debug("HUI: VPot with channel \(channelStrip) not handled - needs coding. Probably a Large Display vPot?")
             return nil
         }
         
-        channels[channel].vPotLevel = value
+        channelStrips[channelStrip].vPotLevel = value
         
-        return .channelStrip(channel: channel, param: .vPot(value))
+        return .channelStrip(channel: channelStrip, component: .vPot(value))
         
     }
     
@@ -149,12 +149,12 @@ extension MIDI.HUI.Surface.State {
     
     private mutating func updateState_ChannelText(
         text: String,
-        channel: MIDI.UInt4
+        channelStrip: Int
     ) -> MIDI.HUI.Surface.Event? {
         
-        channels[channel].textDisplayString = text
+        channelStrips[channelStrip].nameTextDisplay = text
         
-        return .channelStrip(channel: channel, param: .textDisplay(text))
+        return .channelStrip(channel: channelStrip, component: .nameTextDisplay(text))
         
     }
     
@@ -176,24 +176,24 @@ extension MIDI.HUI.Surface.State {
         // return event wrapping the control and its value
         
         switch param {
-        case .channel(let channel, let channelParam):
+        case .channelStrip(let channel, let channelParam):
             switch channelParam {
             case .recordReady:
-                return .channelStrip(channel: channel, param: .recordReady(state))
+                return .channelStrip(channel: channel, component: .recordReady(state))
             case .insert:
-                return .channelStrip(channel: channel, param: .insert(state))
-            case .vSel:
-                return .channelStrip(channel: channel, param: .vPotSelect(state))
+                return .channelStrip(channel: channel, component: .insert(state))
+            case .vPotSelect:
+                return .channelStrip(channel: channel, component: .vPotSelect(state))
             case .auto:
-                return .channelStrip(channel: channel, param: .auto(state))
+                return .channelStrip(channel: channel, component: .auto(state))
             case .solo:
-                return .channelStrip(channel: channel, param: .solo(state))
+                return .channelStrip(channel: channel, component: .solo(state))
             case .mute:
-                return .channelStrip(channel: channel, param: .mute(state))
+                return .channelStrip(channel: channel, component: .mute(state))
             case .select:
-                return .channelStrip(channel: channel, param: .select(state))
+                return .channelStrip(channel: channel, component: .select(state))
             case .faderTouched:
-                return .channelStrip(channel: channel, param: .faderTouched(state))
+                return .channelStrip(channel: channel, component: .faderTouched(state))
             }
             
         case .hotKey(let subParam):
@@ -238,11 +238,11 @@ extension MIDI.HUI.Surface.State {
         case .functionKey(let subParam):
             return .functionKey(param: subParam, state: state)
             
-        case .paramEdit(let subParam):
+        case .parameterEdit(let subParam):
             return .paramEdit(param: subParam, state: state)
             
-        case .internalUse(let subParam):
-            return .internalUse(param: subParam, state: state)
+        case .footswitchesAndSounds(let subParam):
+            return .footswitchesAndSounds(param: subParam, state: state)
         }
         
     }

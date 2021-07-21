@@ -32,7 +32,6 @@ extension MIDI.HUI.Surface.State.ParameterEdit: MIDIHUIStateProtocol {
     public func state(of param: Enum) -> Bool {
         
         switch param {
-        
         case .assign:         return assign
         case .compare:        return compare
         case .bypass:         return bypass
@@ -41,7 +40,6 @@ extension MIDI.HUI.Surface.State.ParameterEdit: MIDIHUIStateProtocol {
         case .select3:        return select3
         case .select4:        return select4
         case .insertOrParam:  return insertOrParam
-            
         }
         
     }
@@ -49,7 +47,6 @@ extension MIDI.HUI.Surface.State.ParameterEdit: MIDIHUIStateProtocol {
     public mutating func setState(of param: Enum, to state: Bool) {
         
         switch param {
-        
         case .assign:         assign = state
         case .compare:        compare = state
         case .bypass:         bypass = state
@@ -58,7 +55,6 @@ extension MIDI.HUI.Surface.State.ParameterEdit: MIDIHUIStateProtocol {
         case .select3:        select3 = state
         case .select4:        select4 = state
         case .insertOrParam:  insertOrParam = state
-        
         }
         
     }

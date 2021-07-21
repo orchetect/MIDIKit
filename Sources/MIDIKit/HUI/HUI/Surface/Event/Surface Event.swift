@@ -36,10 +36,10 @@ extension MIDI.HUI.Surface {
         // MARK: Channel Strips
         
         /// A channel strip-related element was changed.
-        /// - `channel`: channel strip 0-7
+        /// - `channel`: channel strip 0...7
         /// - `param`: enum describing what control was changed
-        case channelStrip(channel: MIDI.UInt4,
-                          param: MIDI.HUI.Surface.State.ChannelStrip.ComponentValue)
+        case channelStrip(channel: Int,
+                          component: ChannelStripComponent)
         
         // MARK: Switches
         
@@ -71,7 +71,7 @@ extension MIDI.HUI.Surface {
         
         case transport(param: MIDI.HUI.Parameter.Transport, state: Bool)
         
-        case internalUse(param: MIDI.HUI.Parameter.InternalUse, state: Bool)
+        case footswitchesAndSounds(param: MIDI.HUI.Parameter.FootswitchesAndSounds, state: Bool)
         
         // MARK: Unhandled
         

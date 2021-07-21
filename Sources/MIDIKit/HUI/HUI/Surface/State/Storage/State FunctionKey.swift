@@ -17,7 +17,7 @@ extension MIDI.HUI.Surface.State {
         public var f5 = false
         public var f6 = false
         public var f7 = false
-        public var f8_or_Esc = false
+        public var f8OrEsc = false
         
     }
     
@@ -30,7 +30,6 @@ extension MIDI.HUI.Surface.State.FunctionKey: MIDIHUIStateProtocol {
     public func state(of param: Enum) -> Bool {
         
         switch param {
-        
         case .f1:         return f1
         case .f2:         return f2
         case .f3:         return f3
@@ -38,8 +37,7 @@ extension MIDI.HUI.Surface.State.FunctionKey: MIDIHUIStateProtocol {
         case .f5:         return f5
         case .f6:         return f6
         case .f7:         return f7
-        case .f8_or_Esc:  return f8_or_Esc
-            
+        case .f8OrEsc:    return f8OrEsc
         }
         
     }
@@ -47,7 +45,6 @@ extension MIDI.HUI.Surface.State.FunctionKey: MIDIHUIStateProtocol {
     public mutating func setState(of param: Enum, to state: Bool) {
         
         switch param {
-        
         case .f1:         f1 = state
         case .f2:         f2 = state
         case .f3:         f3 = state
@@ -55,8 +52,7 @@ extension MIDI.HUI.Surface.State.FunctionKey: MIDIHUIStateProtocol {
         case .f5:         f5 = state
         case .f6:         f6 = state
         case .f7:         f7 = state
-        case .f8_or_Esc:  f8_or_Esc = state
-        
+        case .f8OrEsc:    f8OrEsc = state
         }
         
     }

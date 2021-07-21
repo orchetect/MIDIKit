@@ -15,7 +15,7 @@ extension MIDI.HUI {
         
         private var timeDisplay: [String] = []
         private var largeDisplay: [String] = []
-        private var faderMSB: [Int] = []
+        private var faderMSB: [MIDI.Byte] = []
         private var switchesZoneSelect: UInt8? = nil
         
         // MARK: handlers
@@ -43,12 +43,19 @@ extension MIDI.HUI {
             
         }
         
-        /// Resets the parser to original init state. Handlers are unaffected.
+        /// Resets the parser to original init state. (Handlers are unaffected.)
         public func reset() {
             
-            timeDisplay = [String](repeating: "", count: 8) // ***** is 8 correct?
+            timeDisplay = [String](repeating: "", count: 8)
+            
             largeDisplay = [String](repeating: "", count: 8)
-            faderMSB = [Int](repeating: 0, count: 9) // ***** is 9 correct?
+            
+            // HUI protocol (and the HUI hardware control surface) has only 8 channel faders.
+            // Even though some control surface models have a 9th master fader
+            // such as EMAGIC Logic Control and Mackie Control Universal,
+            // when running in HUI mode, the master fader is disabled.
+            faderMSB = [MIDI.Byte](repeating: 0, count: 8)
+            
             switchesZoneSelect = nil
             
         }
@@ -130,7 +137,7 @@ extension MIDI.HUI.Parser {
             }
             
             if channel.isContained(in: 0...7) {
-                eventHandler?(.channelText(channel: channel.midiUInt4, text: newString))
+                eventHandler?(.channelName(channelStrip: channel.int, text: newString))
             } else if channel == 8 {
                 // ***** not storing local state yet - needs to be implemented
                 
@@ -225,25 +232,27 @@ extension MIDI.HUI.Parser {
             
             let channel = dataByte1.hex.nibble(0).value.int
             
-            faderMSB[channel] = dataByte2.int
+            faderMSB[channel] = dataByte2
             
         case 0x20...0x27:
             // Channel Strip Fader level LSB
             
             let channel = dataByte1.hex.nibble(0).value.int
             
-            let lsb = dataByte2.int
-            let level = (faderMSB[channel] << 7) + lsb
+            let msb = faderMSB[channel].uint16 << 7
+            let lsb = dataByte2.uint16
             
-            eventHandler?(.faderLevel(channel: channel.midiUInt4, level: level))
+            guard let level = (msb + lsb).midiUInt14Exactly else { return }
+            
+            eventHandler?(.faderLevel(channelStrip: channel, level: level))
             
         case 0x10...0x1B:
             // V-Pots
             
-            let channel = (dataByte1 % 0x10).midiUInt4
-            let value = dataByte2.int
+            let channel = (dataByte1 % 0x10).int
+            let value = dataByte2.midiUInt7
             
-            eventHandler?(.vPot(channel: channel, value: value))
+            eventHandler?(.vPot(channelStrip: channel, value: value))
             
         case MIDI.HUI.kMIDI.kControlDataByte1.zoneSelectByte:
             // zone select (1st message)
@@ -303,7 +312,7 @@ extension MIDI.HUI.Parser {
               let dataByte2 = data[safe: 2]
         else { return }
         
-        guard let channel = MIDI.UInt4(exactly: dataByte1) else { return }
+        let channel = dataByte1.int
         let sideAndValue = dataByte2 // encodes both side and value
         
         var side: MIDI.HUI.Surface.State.StereoLevelMeter.Side
@@ -317,7 +326,7 @@ extension MIDI.HUI.Parser {
             level = sideAndValue.int
         }
         
-        eventHandler?(.levelMeters(channel: channel, side: side, level: level))
+        eventHandler?(.levelMeters(channelStrip: channel, side: side, level: level))
         
     }
     

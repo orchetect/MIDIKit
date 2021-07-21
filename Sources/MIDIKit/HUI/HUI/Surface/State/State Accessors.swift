@@ -13,8 +13,8 @@ extension MIDI.HUI.Surface.State: MIDIHUIStateProtocol {
     public func state(of param: Enum) -> Bool {
         
         switch param {
-        case .channel(let channel, let channelParam):
-            return channels[channel].state(of: channelParam)
+        case .channelStrip(let channel, let channelParam):
+            return channelStrips[channel].state(of: channelParam)
             
         case .hotKey(let subParam):
             return hotKeys.state(of: subParam)
@@ -38,43 +38,40 @@ extension MIDI.HUI.Surface.State: MIDIHUIStateProtocol {
             return controlRoom.state(of: subParam)
             
         case .numPad(let subParam):
-            _ = subParam ; break //return numPad.state(of: subParam)
+            return numPad.state(of: subParam)
             
         case .timeDisplay(let subParam):
             return timeDisplay.state(of: subParam)
             
         case .autoEnable(let subParam):
-            _ = subParam ; break //return autoEnable.state(of: subParam)
+            return autoEnable.state(of: subParam)
             
         case .autoMode(let subParam):
-            _ = subParam ; break //return autoMode.state(of: subParam)
+            return autoMode.state(of: subParam)
             
         case .statusAndGroup(let subParam):
-            _ = subParam ; break //return statusAndGroup.state(of: subParam)
+            return statusAndGroup.state(of: subParam)
             
         case .edit(let subParam):
-            _ = subParam ; break //return statusAndGroup.state(of: subParam)
+            return edit.state(of: subParam)
             
         case .functionKey(let subParam):
-            _ = subParam ; break //return functionKey.state(of: subParam)
+            return functionKey.state(of: subParam)
             
-        case .paramEdit(let subParam):
-            _ = subParam ; break //return paramEdit.state(of: subParam)
+        case .parameterEdit(let subParam):
+            return parameterEdit.state(of: subParam)
             
-        case .internalUse(let subParam):
-            _ = subParam ; break //return internalUse.state(of: subParam)
+        case .footswitchesAndSounds(let subParam):
+            return footswitchesAndSounds.state(of: subParam)
         }
-        
-        Log.error("MIDI.HUI.Surface.State not yet implemented for this switch: \(param). 🤷‍♂️")
-        return false
         
     }
     
     public mutating func setState(of param: Enum, to state: Bool) {
         
         switch param {
-        case .channel(let channel, let channelParam):
-            channels[channel].setState(of: channelParam, to: state)
+        case .channelStrip(let channel, let channelParam):
+            channelStrips[channel].setState(of: channelParam, to: state)
             
         case .hotKey(let subParam):
             hotKeys.setState(of: subParam, to: state)
@@ -118,11 +115,11 @@ extension MIDI.HUI.Surface.State: MIDIHUIStateProtocol {
         case .functionKey(let subParam):
             functionKey.setState(of: subParam, to: state)
             
-        case .paramEdit(let subParam):
+        case .parameterEdit(let subParam):
             parameterEdit.setState(of: subParam, to: state)
             
-        case .internalUse(let subParam):
-            internalUse.setState(of: subParam, to: state)
+        case .footswitchesAndSounds(let subParam):
+            footswitchesAndSounds.setState(of: subParam, to: state)
         }
         
     }

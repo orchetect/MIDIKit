@@ -30,7 +30,6 @@ extension MIDI.HUI.Parameter.ParameterEdit: MIDIHUIParameterProtocol {
     public var zoneAndPort: MIDI.HUI.ZoneAndPortPair {
         
         switch self {
-        
         case .insertOrParam:  return (0x1C, 0x0)
         case .assign:         return (0x1C, 0x1)
         case .select1:        return (0x1C, 0x2)
@@ -39,7 +38,6 @@ extension MIDI.HUI.Parameter.ParameterEdit: MIDIHUIParameterProtocol {
         case .select4:        return (0x1C, 0x5)
         case .bypass:         return (0x1C, 0x6)
         case .compare:        return (0x1C, 0x7)
-            
         }
         
     }

@@ -28,6 +28,8 @@ extension MIDI.HUI.Parameter.AutoMode: MIDIHUIParameterProtocol {
         
         switch self {
         
+        // Zone 0x18
+        // Auto Mode (To the right of the channel strips)
         case .trim:   return (0x18, 0x0)
         case .latch:  return (0x18, 0x1)
         case .read:   return (0x18, 0x2)

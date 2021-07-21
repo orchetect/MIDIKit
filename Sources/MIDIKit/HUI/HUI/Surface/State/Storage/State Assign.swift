@@ -10,7 +10,15 @@ extension MIDI.HUI.Surface.State {
     /// State storage representing the Assign controls
     public struct Assign: Equatable, Hashable {
         
-        public var textDisplay = "   "
+        public var textDisplay = "    "
+        {
+            didSet {
+                if textDisplay.count != 4 {
+                    // trims or pads string to always be exactly 4 characters wide
+                    textDisplay = textDisplay.padding(toLength: 4, withPad: " ", startingAt: 0)
+                }
+            }
+        }
         
         public var recordReadyAll = false
         public var bypass = false
@@ -49,7 +57,7 @@ extension MIDI.HUI.Surface.State.Assign: MIDIHUIStateProtocol {
         case .sendD:           return sendD
         case .sendE:           return sendE
         case .pan:             return pan
-            
+        
         case .recordReadyAll:  return recordReadyAll
         case .bypass:          return bypass
         case .mute:            return mute

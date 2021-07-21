@@ -31,9 +31,23 @@ extension MIDI.HUI.Surface.State {
         
         /// Left Meter Channel
         public var left: Int = 0
+        {
+            didSet {
+                if !left.isContained(in: Self.levelRange) {
+                    left = left.clamped(to: Self.levelRange)
+                }
+            }
+        }
         
         /// Right Meter Channel
         public var right: Int = 0
+        {
+            didSet {
+                if !right.isContained(in: Self.levelRange) {
+                    right = right.clamped(to: Self.levelRange)
+                }
+            }
+        }
         
         // constants
         
@@ -64,7 +78,7 @@ extension MIDI.HUI.Surface.State.StereoLevelMeter {
     
     public func level(of side: Side) -> Int {
         switch side {
-        case .left: return left
+        case .left:  return left
         case .right: return right
         }
     }

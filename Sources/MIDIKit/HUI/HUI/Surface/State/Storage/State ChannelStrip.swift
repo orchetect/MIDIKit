@@ -20,7 +20,7 @@ extension MIDI.HUI.Surface.State {
         
         /// V-Sel Button LED
         public var vPotSelect = false
-        public var vPotLevel: Int = 0
+        public var vPotLevel: MIDI.UInt7 = 0
         
         /// Auto(mation) Button LED
         public var auto = false
@@ -31,8 +31,16 @@ extension MIDI.HUI.Surface.State {
         /// Mute Button LED
         public var mute = false
         
-        /// 4-character Channel Name LCD Display
-        public var textDisplayString: String = "    "
+        /// 4-character Channel Name LCD Text Display
+        public var nameTextDisplay: String = "    "
+        {
+            didSet {
+                if nameTextDisplay.count != 4 {
+                    // trims or pads string to always be exactly 4 characters wide
+                    nameTextDisplay = nameTextDisplay.padding(toLength: 4, withPad: " ", startingAt: 0)
+                }
+            }
+        }
         
         /// Select Button LED
         public var select = false
@@ -53,7 +61,7 @@ extension MIDI.HUI.Surface.State.ChannelStrip: MIDIHUIStateProtocol {
         switch param {
         case .recordReady:  return recordReady
         case .insert:       return insert
-        case .vSel:         return vPotSelect
+        case .vPotSelect:   return vPotSelect
         case .auto:         return auto
         case .solo:         return solo
         case .mute:         return mute
@@ -68,7 +76,7 @@ extension MIDI.HUI.Surface.State.ChannelStrip: MIDIHUIStateProtocol {
         switch param {
         case .recordReady:  recordReady = state
         case .insert:       insert = state
-        case .vSel:         vPotSelect = state
+        case .vPotSelect:   vPotSelect = state
         case .auto:         auto = state
         case .solo:         solo = state
         case .mute:         mute = state

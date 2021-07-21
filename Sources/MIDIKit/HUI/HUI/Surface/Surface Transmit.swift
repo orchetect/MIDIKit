@@ -8,14 +8,19 @@ import Foundation
 
 extension MIDI.HUI.Surface {
     
-    /// HUI ping message transmit function
+    /// HUI ping message transmit to host.
+    /// It is not necessary to call this manually. The `Surface` object will handle ping replies automatically.
     public func transmitPing() {
         
         midiEventSendHandler?(MIDI.HUI.kMIDI.kPingReplyToHostMessage)
         
     }
     
-    /// Most basic switch transmit function
+    /// Transmit switch state to host.
+    /// - Parameters:
+    ///   - zone: HUI zone number
+    ///   - port: HUI port number
+    ///   - state: State of switch or action
     internal func transmitSwitch(zone: MIDI.Byte,
                                  port:  MIDI.UInt4,
                                  state: Bool) {
@@ -35,7 +40,7 @@ extension MIDI.HUI.Surface {
         
     }
     
-    /// Convenience function to set a switch by referencing its `kHUIZonePortName` enumeration
+    /// Transmit switch state to host.
     public func transmitSwitch(_ param: MIDI.HUI.Parameter,
                                state: Bool) {
         
@@ -47,8 +52,10 @@ extension MIDI.HUI.Surface {
         
     }
     
-    /// Transmit fader level to host
-    /// - parameter level: between 0 - 16383
+    /// Transmit fader level to host.
+    /// - parameters:
+    ///   - level: 0...16383
+    ///   - channel: 0...7
     public func transmitFader(level: MIDI.UInt14,
                               channel: Int) {
         
@@ -68,8 +75,10 @@ extension MIDI.HUI.Surface {
         
     }
     
-    /// Transmit fader touch/release message to host
-    /// - parameter isTouched: `true` sends touch message, `false` sends release message
+    /// Transmit fader touch/release message to host.
+    /// - parameters:
+    ///   - isTouched: `true` sends touch message, `false` sends release message
+    ///   - channel: 0...7
     public func transmitFader(isTouched: Bool,
                               channel: Int) {
         

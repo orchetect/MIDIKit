@@ -21,6 +21,21 @@ extension MIDI.HUI.Surface.State {
             MIDI.HUI.kCharTables.timeDisplay[0x00], // "0"
             MIDI.HUI.kCharTables.timeDisplay[0x00]  // "0"
         ]
+        {
+            didSet {
+                switch components.count {
+                case ...7:
+                    components.append(
+                        contentsOf: [String](repeating: MIDI.HUI.kCharTables.timeDisplay[0x20],
+                                             count: 8 - components.count)
+                    )
+                case 9...:
+                    components = components.prefix(8).array
+                default:
+                    break
+                }
+            }
+        }
         
         // LEDs
         public var timecode = false
@@ -43,25 +58,21 @@ extension MIDI.HUI.Surface.State.TimeDisplay: MIDIHUIStateProtocol {
     public typealias Enum = MIDI.HUI.Parameter.TimeDisplay
 
     public func state(of param: Enum) -> Bool {
-        
         switch param {
         case .timecode:  return timecode
         case .feet:      return feet
         case .beats:     return beats
         case .rudeSolo:  return rudeSolo
         }
-        
     }
     
     public mutating func setState(of param: Enum, to state: Bool) {
-        
         switch param {
         case .timecode:  timecode = state
         case .feet:      feet = state
         case .beats:     beats = state
         case .rudeSolo:  rudeSolo = state
         }
-        
     }
     
 }

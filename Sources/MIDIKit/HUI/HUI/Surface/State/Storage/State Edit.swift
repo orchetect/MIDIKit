@@ -28,14 +28,12 @@ extension MIDI.HUI.Surface.State.Edit: MIDIHUIStateProtocol {
     public func state(of param: Enum) -> Bool {
         
         switch param {
-        
         case .capture:  return capture
         case .cut:      return cut
         case .paste:    return paste
         case .separate: return separate
         case .copy:     return copy
         case .delete:   return delete
-            
         }
         
     }
@@ -43,14 +41,12 @@ extension MIDI.HUI.Surface.State.Edit: MIDIHUIStateProtocol {
     public mutating func setState(of param: Enum, to state: Bool) {
         
         switch param {
-        
         case .capture:  capture = state
         case .cut:      cut = state
         case .paste:    paste = state
         case .separate: separate = state
         case .copy:     copy = state
         case .delete:   delete = state
-        
         }
         
     }

@@ -8,7 +8,7 @@ import Foundation
 
 extension MIDI.HUI {
     
-    /// A class representing a single HUI control surface device.
+    /// Object representing a single HUI control surface device.
     public class Surface {
         
         // MARK: - State
@@ -21,6 +21,10 @@ extension MIDI.HUI {
                 }
             }
         }
+        
+        // MARK: - Parser
+        
+        internal var parser: Parser
         
         // MARK: - Handlers
         
@@ -47,10 +51,6 @@ extension MIDI.HUI {
             self.midiEventSendHandler = handler
             
         }
-        
-        // MARK: - Parser
-        
-        internal var parser: Parser
         
         // MARK: - init
         
@@ -90,14 +90,14 @@ extension MIDI.HUI {
         
         // MARK: - Methods
         
-        /// Process incoming MIDI messages
+        /// Process incoming MIDI messages.
         public func midiIn(event: MIDI.Event) {
             
             parser.midiIn(event: event)
             
         }
         
-        /// Process incoming MIDI messages
+        /// Process incoming MIDI messages.
         public func midiIn(events: [MIDI.Event]) {
             
             parser.midiIn(events: events)

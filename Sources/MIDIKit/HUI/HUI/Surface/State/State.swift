@@ -10,7 +10,9 @@ extension MIDI.HUI.Surface {
     /// Represents state of an entire HUI surface (all controls, parameters, etc.)
     public struct State: Equatable, Hashable {
         
-        public internal(set)var channels: [ChannelStrip] = []
+        /// Channel strips. (0...7)
+        public internal(set)var channelStrips: [ChannelStrip] = []
+        
         public internal(set)var timeDisplay = TimeDisplay()
         public internal(set)var largeDisplay = LargeDisplay()
         public internal(set)var transport = Transport()
@@ -27,53 +29,18 @@ extension MIDI.HUI.Surface {
         public internal(set)var edit = Edit()
         public internal(set)var functionKey = FunctionKey()
         public internal(set)var parameterEdit = ParameterEdit()
-        public internal(set)var internalUse = InternalUse()
+        public internal(set)var footswitchesAndSounds = FootswitchesAndSounds()
         
         public init() {
             
             // populate arrays that hold unique class instances
-            channels.removeAll()
+            channelStrips.removeAll()
             for _ in 0...7 {
-                channels.append(ChannelStrip())
+                channelStrips.append(ChannelStrip())
             }
             
         }
         
-    }
-    
-}
-
-extension MIDI.HUI.Surface.State.ChannelStrip {
-    
-    /// Enum describing a discrete component of a HUI channel strip
-    public enum ComponentValue: Equatable, Hashable {
-        
-        case levelMeter(side: MIDI.HUI.Surface.State.StereoLevelMeter.Side, level: Int)
-        case recordReady(Bool)
-        case insert(Bool)
-        case vPotSelect(Bool)
-        case vPot(Int)
-        case auto(Bool)
-        case solo(Bool)
-        case mute(Bool)
-        case textDisplay(String)
-        case select(Bool)
-        case faderTouched(Bool)
-        case faderLevel(Int)
-        
-    }
-    
-}
-
-extension Array where Element == MIDI.HUI.Surface.State.ChannelStrip {
-    
-    public internal(set) subscript(_ idx: MIDI.UInt4) -> Element {
-        get {
-            self[idx.asInt]
-        }
-        set {
-            self[idx.asInt] = newValue
-        }
     }
     
 }

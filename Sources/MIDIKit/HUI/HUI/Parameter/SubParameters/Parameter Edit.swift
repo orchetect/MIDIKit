@@ -28,6 +28,8 @@ extension MIDI.HUI.Parameter.Edit: MIDIHUIParameterProtocol {
         
         switch self {
         
+        // Zone 0x1A
+        // Edit (To the right of the channel strips)
         case .paste:     return (0x1A, 0x0)
         case .cut:       return (0x1A, 0x1)
         case .capture:   return (0x1A, 0x2)

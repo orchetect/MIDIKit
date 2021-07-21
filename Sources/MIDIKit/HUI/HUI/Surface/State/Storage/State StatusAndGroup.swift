@@ -28,14 +28,12 @@ extension MIDI.HUI.Surface.State.StatusAndGroup: MIDIHUIStateProtocol {
     public func state(of param: Enum) -> Bool {
         
         switch param {
-        
         case .auto:     return auto
         case .monitor:  return monitor
         case .phase:    return phase
         case .group:    return group
         case .create:   return create
         case .suspend:  return suspend
-            
         }
         
     }
@@ -43,14 +41,12 @@ extension MIDI.HUI.Surface.State.StatusAndGroup: MIDIHUIStateProtocol {
     public mutating func setState(of param: Enum, to state: Bool) {
         
         switch param {
-        
         case .auto:     auto = state
         case .monitor:  monitor = state
         case .phase:    phase = state
         case .group:    group = state
         case .create:   create = state
         case .suspend:  suspend = state
-        
         }
         
     }

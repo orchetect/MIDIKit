@@ -28,7 +28,6 @@ extension MIDI.HUI.Surface.State.AutoEnable: MIDIHUIStateProtocol {
     public func state(of param: Enum) -> Bool {
         
         switch param {
-        
         case .fader:     return fader
         case .pan:       return pan
         case .plugin:    return plugin
@@ -43,14 +42,12 @@ extension MIDI.HUI.Surface.State.AutoEnable: MIDIHUIStateProtocol {
     public mutating func setState(of param: Enum, to state: Bool) {
         
         switch param {
-        
         case .fader:     fader = state
         case .pan:       pan = state
         case .plugin:    plugin = state
         case .mute:      mute = state
         case .send:      send = state
         case .sendMute:  sendMute = state
-        
         }
         
     }

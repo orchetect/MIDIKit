@@ -46,11 +46,11 @@ extension MIDI.HUI.Surface.State.Transport: MIDIHUIStateProtocol {
         case .stop:            return stop
         case .play:            return play
         case .record:          return record
-        case .punch_audition:  return punch_audition
-        case .punch_pre:       return punch_pre
-        case .punch_in:        return punch_in
-        case .punch_out:       return punch_out
-        case .punch_post:      return punch_post
+        case .punchAudition:   return punch_audition
+        case .punchPre:        return punch_pre
+        case .punchIn:         return punch_in
+        case .punchOut:        return punch_out
+        case .punchPost:       return punch_post
         case .rtz:             return rtz
         case .end:             return end
         case .online:          return online
@@ -69,11 +69,11 @@ extension MIDI.HUI.Surface.State.Transport: MIDIHUIStateProtocol {
         case .stop:            stop = state
         case .play:            play = state
         case .record:          record = state
-        case .punch_audition:  punch_audition = state
-        case .punch_pre:       punch_pre = state
-        case .punch_in:        punch_in = state
-        case .punch_out:       punch_out = state
-        case .punch_post:      punch_post = state
+        case .punchAudition:   punch_audition = state
+        case .punchPre:        punch_pre = state
+        case .punchIn:         punch_in = state
+        case .punchOut:        punch_out = state
+        case .punchPost:       punch_post = state
         case .rtz:             rtz = state
         case .end:             end = state
         case .online:          online = state
