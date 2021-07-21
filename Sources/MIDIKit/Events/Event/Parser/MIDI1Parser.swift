@@ -23,6 +23,7 @@ extension MIDI {
                                            runningStatus: runningStatus)
             runningStatus = result.runningStatus
             return result.events
+            
         }
         
         /// Parses raw packet data into an array of MIDI Events, without instancing a MIDI parser object.

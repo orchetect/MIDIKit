@@ -34,7 +34,9 @@ extension MIDI {
         /// Channel Voice Message: Pitch Bend (Status `0xE`)
         case pitchBend(value: MIDI.UInt14, channel: MIDI.UInt4)
         
+        // ----------------------
         // MARK: System Exclusive
+        // ----------------------
         
         /// System Exclusive: Manufacturer-specific (Status `0xF0`)
         ///
@@ -147,7 +149,9 @@ extension MIDI.Event {
         
         switch self {
         
-        // channel voice
+        // -------------------
+        // MARK: Channel Voice
+        // -------------------
         
         case .noteOn(note: let note, velocity: let velocity, channel: let channel):
             return [0x90 + channel.asUInt8, note.asUInt8, velocity.asUInt8]
@@ -155,13 +159,25 @@ extension MIDI.Event {
         case .noteOff(note: let note, velocity: let velocity, channel: let channel):
             return [0x80 + channel.asUInt8, note.asUInt8, velocity.asUInt8]
             
+        case .polyAftertouch(note: let note, pressure: let pressure, channel: let channel):
+            return [0xA0 + channel.asUInt8, note.asUInt8, pressure.asUInt8]
+            
         case .cc(controller: let controller, value: let value, channel: let channel):
-            _ = channel
-            _ = controller
-            _ = value
             return [0xB0 + channel.asUInt8, controller.asUInt8, value.asUInt8]
             
-        // system
+        case .programChange(program: let program, channel: let channel):
+            return [0xC0 + channel.asUInt8, program.asUInt8]
+            
+        case .chanAftertouch(pressure: let pressure, channel: let channel):
+            return [0xD0 + channel.asUInt8, pressure.asUInt8]
+            
+        case .pitchBend(value: let value, channel: let channel):
+            let bytePair = value.bytePair
+            return [0xE0 + channel.asUInt8, bytePair.LSB, bytePair.MSB]
+            
+        // ----------------------
+        // MARK: System Exclusive
+        // ----------------------
         
         case .sysEx(manufacturer: let manufacturer, data: let data):
             return [0xF0] + manufacturer.bytes + data + [0xF7]
@@ -173,8 +189,48 @@ extension MIDI.Event {
                              data: let data):
             return [0xF0, universalType.rawValue.uint8, deviceID.asUInt8, subID1.asUInt8, subID2.asUInt8] + data + [0xF7]
             
-        default:
-            fatalError("Unhandled case: \(self)")
+        // -------------------
+        // MARK: System Common
+        // -------------------
+        
+        case .timecodeQuarterFrame(byte: let byte):
+            return [0xF1, byte]
+            
+        case .songPositionPointer(midiBeat: let midiBeat):
+            let bytePair = midiBeat.bytePair
+            return [0xF2, bytePair.LSB, bytePair.MSB]
+            
+        case .songSelect(number: let number):
+            return [0xF3, number.asUInt8]
+            
+        case .unofficialBusSelect:
+            return [0xF5]
+            
+        case .tuneRequest:
+            return [0xF6]
+            
+        // ----------------------
+        // MARK: System Real Time
+        // ----------------------
+            
+        case .timingClock:
+            return [0xF8]
+            
+        case .start:
+            return [0xFA]
+            
+        case .continue:
+            return [0xFB]
+            
+        case .stop:
+            return [0xFC]
+            
+        case .activeSensing:
+            return [0xFE]
+            
+        case .systemReset:
+            return [0xFF]
+            
         }
         
     }
@@ -187,18 +243,34 @@ extension MIDI.Event: CustomStringConvertible {
         
         switch self {
         
-        // channel voice
+        // -------------------
+        // MARK: Channel Voice
+        // -------------------
         
         case .noteOn(note: let note, velocity: let velocity, channel: let channel):
-            return "noteOn(note: \(note), vel: \(velocity), chan: \(channel))"
+            return "noteOn(\(note), vel: \(velocity), chan: \(channel))"
             
         case .noteOff(note: let note, velocity: let velocity, channel: let channel):
-            return "noteOff(note: \(note), vel: \(velocity), chan: \(channel))"
-            
+            return "noteOff(\(note), vel: \(velocity), chan: \(channel))"
+                
+        case .polyAftertouch(note: let note, pressure: let pressure, channel: let channel):
+            return "polyAftertouch(note:\(note), pressure: \(pressure), chan: \(channel))"
+        
         case .cc(controller: let controller, value: let value, channel: let channel):
-            return "cc(num: \(controller), value: \(value), chan: \(channel))"
+            return "cc(\(controller), val: \(value), chan: \(channel))"
             
-        // system
+        case .programChange(program: let program, channel: let channel):
+            return "prgChange(\(program), chan: \(channel))"
+            
+        case .chanAftertouch(pressure: let pressure, channel: let channel):
+            return "chanAftertouch(pressure: \(pressure), chan: \(channel))"
+            
+        case .pitchBend(value: let value, channel: let channel):
+            return "pitchBend(\(value), chan: \(channel))"
+            
+        // ----------------------
+        // MARK: System Exclusive
+        // ----------------------
         
         case .sysEx(manufacturer: let manufacturer, data: let data):
             let dataString = data.hex.stringValue(padTo: 2, prefix: true)
@@ -212,9 +284,47 @@ extension MIDI.Event: CustomStringConvertible {
             let dataString = data.hex.stringValue(padTo: 2, prefix: true)
             return "sysExUniversal(\(universalType), deviceID: \(deviceID), subID1: \(subID1), subID2: \(subID2), data: [\(dataString)])"
             
-        default:
-            fatalError("Unhandled case: \(self)")
+        // -------------------
+        // MARK: System Common
+        // -------------------
+        
+        case .timecodeQuarterFrame(byte: let byte):
+            return "timecodeQF(\(byte.binary.stringValue(prefix: true)))"
             
+        case .songPositionPointer(midiBeat: let midiBeat):
+            return "songPositionPointer(beat: \(midiBeat))"
+            
+        case .songSelect(number: let number):
+            return "songSelect(number: \(number))"
+            
+        case .unofficialBusSelect:
+            return "unofficialBusSelect"
+            
+        case .tuneRequest:
+            return "tuneRequest"
+            
+        // ----------------------
+        // MARK: System Real Time
+        // ----------------------
+            
+        case .timingClock:
+            return "timingClock"
+            
+        case .start:
+            return "start"
+            
+        case .continue:
+            return "continue"
+            
+        case .stop:
+            return "stop"
+            
+        case .activeSensing:
+            return "activeSensing"
+            
+        case .systemReset:
+            return "systemReset"
+        
         }
         
     }
