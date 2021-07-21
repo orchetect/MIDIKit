@@ -78,4 +78,64 @@ extension kRawMIDI {
 	
 }
 
+/// Sync Tests Constants: Raw MIDI messages
+enum kMIDIEvent {
+    
+    enum MTC_FullFrame {
+        
+        static var _00_00_00_00_at_24fps: MIDI.Event {
+            let hh: MIDI.Byte = 0b00000000 // 24fps, 1 hours
+            let mm: MIDI.Byte = 0
+            let ss: MIDI.Byte = 0
+            let ff: MIDI.Byte = 0
+            
+            let msg = MIDI.Event.sysExUniversal(
+                universalType: .realTime,
+                deviceID: 0x7F,
+                subID1: 0x01,
+                subID2: 0x01,
+                data: [hh, mm, ss, ff]
+            )
+            
+            return msg
+        }
+        
+        static var _01_02_03_04_at_24fps: MIDI.Event {
+            let hh: MIDI.Byte = 0b00000001 // 24fps, 1 hours
+            let mm: MIDI.Byte = 2
+            let ss: MIDI.Byte = 3
+            let ff: MIDI.Byte = 4
+            
+            let msg = MIDI.Event.sysExUniversal(
+                universalType: .realTime,
+                deviceID: 0x7F,
+                subID1: 0x01,
+                subID2: 0x01,
+                data: [hh, mm, ss, ff]
+            )
+            
+            return msg
+        }
+        
+        static var _02_11_17_20_at_25fps: MIDI.Event {
+            let hh: MIDI.Byte = 0b00100010 // 25fps, 2 hours
+            let mm: MIDI.Byte = 11
+            let ss: MIDI.Byte = 17
+            let ff: MIDI.Byte = 20
+            
+            let msg = MIDI.Event.sysExUniversal(
+                universalType: .realTime,
+                deviceID: 0x7F,
+                subID1: 0x01,
+                subID2: 0x01,
+                data: [hh, mm, ss, ff]
+            )
+            
+            return msg
+        }
+        
+    }
+    
+}
+
 #endif

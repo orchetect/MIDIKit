@@ -12,7 +12,7 @@ extension MIDI.HUI.Surface {
     /// It is not necessary to call this manually. The `Surface` object will handle ping replies automatically.
     public func transmitPing() {
         
-        midiEventSendHandler?(MIDI.HUI.kMIDI.kPingReplyToHostMessage)
+        midiOut(MIDI.HUI.kMIDI.kPingReplyToHostMessage)
         
     }
     
@@ -26,7 +26,7 @@ extension MIDI.HUI.Surface {
                                  state: Bool) {
         
         // set on off byte
-        var portByte: MIDI.Byte = port.asUInt8
+        var portByte: MIDI.Byte = port.uint8
         
         if state == true {
             portByte += 0x40
@@ -35,8 +35,8 @@ extension MIDI.HUI.Surface {
         let event1 = MIDI.Event.cc(controller: 0x0F, value: zone.midiUInt7, channel: 0)
         let event2 = MIDI.Event.cc(controller: 0x2F, value: portByte.midiUInt7, channel: 0)
         
-        midiEventSendHandler?(event1)
-        midiEventSendHandler?(event2)
+        midiOut(event1)
+        midiOut(event2)
         
     }
     
@@ -70,8 +70,8 @@ extension MIDI.HUI.Surface {
         let event1 = MIDI.Event.cc(controller: channelHi, value: msb, channel: 0)
         let event2 = MIDI.Event.cc(controller: channelLow, value: lsb, channel: 0)
         
-        midiEventSendHandler?(event1)
-        midiEventSendHandler?(event2)
+        midiOut(event1)
+        midiOut(event2)
         
     }
     
@@ -87,15 +87,15 @@ extension MIDI.HUI.Surface {
         let event1 = MIDI.Event.cc(controller: 0x0F, value: channel.midiUInt7, channel: 0)
         let event2 = MIDI.Event.cc(controller: 0x2F, value: isTouched ? 0x40 : 0x00, channel: 0)
         
-        midiEventSendHandler?(event1)
-        midiEventSendHandler?(event2)
+        midiOut(event1)
+        midiOut(event2)
         
     }
     
     /// Sends a message that tells the host that the HUI device is powering on or off.
     public func transmitSystemReset() {
         
-        midiEventSendHandler?(MIDI.HUI.kMIDI.kSystemResetMessage)
+        midiOut(MIDI.HUI.kMIDI.kSystemResetMessage)
         
     }
     

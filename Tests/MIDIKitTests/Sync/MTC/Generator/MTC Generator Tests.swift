@@ -15,7 +15,7 @@ final class MTC_Generator_Generator_Tests: XCTestCase {
 	func testMTC_Generator_Default() {
 		
 		let mtcGen1 = MIDI.MTC.Generator()
-		mtcGen1.setMIDIEventSendHandler { [weak self] (midiMessage) in
+		mtcGen1.midiOutHandler = { [weak self] (midiMessage) in
 			// send midi message here
 			_ = midiMessage
 			self?.XCTWait(sec: 0.0)
@@ -27,7 +27,7 @@ final class MTC_Generator_Generator_Tests: XCTestCase {
 			self?.XCTWait(sec: 0.0)
 		}
 		
-		let _ = MIDI.MTC.Generator(midiEventSendHandler: { (midiMessage) in
+		let _ = MIDI.MTC.Generator(midiOutHandler: { (midiMessage) in
 			//yourMIDIPort.send(midiBytes)
 			_ = midiMessage
 		})

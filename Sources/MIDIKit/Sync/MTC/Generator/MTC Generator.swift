@@ -9,7 +9,7 @@ import TimecodeKit
 extension MIDI.MTC {
 	
 	/// MTC sync generator.
-	public class Generator {
+    public class Generator: SendsMIDIEvents {
 		
 		// MARK: - Public properties
 		
@@ -50,23 +50,13 @@ extension MIDI.MTC {
 		/// Closure called every time a MIDI message needs to be transmitted by the generator.
 		///
 		/// - Note: Handler is called on a dedicated thread so do not make UI updates from it.
-		internal var midiEventSendHandler: ((_ midiMessage: [MIDI.Byte]) -> Void)? = nil
-		
-		/// Sets the closure called every time a MIDI message needs to be transmitted by the generator.
-		public func setMIDIEventSendHandler(
-			_ handler: ((_ midiMessage: [MIDI.Byte]) -> Void)?
-		) {
-			
-			midiEventSendHandler = handler
-			
-		}
-		
+        public var midiOutHandler: MIDIOutHandler? = nil
 		
 		// MARK: - init
 		
 		public init(
 			name: String? = nil,
-			midiEventSendHandler: ((_ midiMessage: [MIDI.Byte]) -> Void)? = nil
+            midiOutHandler: MIDIOutHandler? = nil
 		) {
 			
 			// handle init arguments
@@ -75,7 +65,7 @@ extension MIDI.MTC {
 			
 			self.name = name
 			
-			self.midiEventSendHandler = midiEventSendHandler
+			self.midiOutHandler = midiOutHandler
 			
 			// queue
 			
@@ -98,9 +88,9 @@ extension MIDI.MTC {
 			
 			encoder = Encoder()
 			
-			encoder.setMIDIEventSendHandler { [weak self] midiMessage in
+			encoder.midiOutHandler = { [weak self] midiEvents in
 				
-				self?.midiEventSendHandler?(midiMessage)
+				self?.midiOut(midiEvents)
 				
 			}
 			

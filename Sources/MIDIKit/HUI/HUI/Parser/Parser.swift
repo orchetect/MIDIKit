@@ -20,25 +20,18 @@ extension MIDI.HUI {
         
         // MARK: handlers
         
-        /// Parser event handler that triggers when HUI events are received.
-        private var eventHandler: ((Event) -> Void)?
+        public typealias HUIEventHandler = ((Event) -> Void)
         
-        /// Set the handler used when a HUI MIDI message needs transmitting.
-        public func setEventHandler(
-            _ handler: ((Event) -> Void)?
-        ) {
-            
-            eventHandler = handler
-            
-        }
+        /// Parser event handler that triggers when HUI events are received.
+        public var huiEventHandler: HUIEventHandler?
         
         // MARK: - init
         
         public init(
-            eventHandler: ((Event) -> Void)? = nil
+            huiEventHandler: HUIEventHandler? = nil
         ) {
             
-            self.eventHandler = eventHandler
+            self.huiEventHandler = huiEventHandler
             reset()
             
         }
@@ -46,9 +39,9 @@ extension MIDI.HUI {
         /// Resets the parser to original init state. (Handlers are unaffected.)
         public func reset() {
             
-            timeDisplay = [String](repeating: "", count: 8)
+            timeDisplay = [String](repeating: " ", count: 8)
             
-            largeDisplay = [String](repeating: "", count: 8)
+            largeDisplay = [String](repeating: MIDI.HUI.Surface.State.LargeDisplay.defaultStringComponent, count: 8)
             
             // HUI protocol (and the HUI hardware control surface) has only 8 channel faders.
             // Even though some control surface models have a 9th master fader
@@ -74,7 +67,7 @@ extension MIDI.HUI.Parser: ReceivesMIDIEvents {
         // HUI ping-reply
         if event == MIDI.HUI.kMIDI.kPingFromHostMessage {
             // handler should send ping-reply to host
-            eventHandler?(.pingReceived)
+            huiEventHandler?(.pingReceived)
             return
         }
         
@@ -134,12 +127,12 @@ extension MIDI.HUI.Parser {
             }
             
             if channel.isContained(in: 0...7) {
-                eventHandler?(.channelName(channelStrip: channel.int, text: newString))
+                huiEventHandler?(.channelName(channelStrip: channel.int, text: newString))
             } else if channel == 8 {
                 // ***** not storing local state yet - needs to be implemented
                 
                 // ***** should get folded into a master Select Assign callback
-                eventHandler?(.selectAssignText(text: newString))
+                huiEventHandler?(.selectAssignText(text: newString))
             } else {
                 Log.debug("Small Display text message channel not expected: \(channel). Needs to be coded.")
             }
@@ -171,7 +164,7 @@ extension MIDI.HUI.Parser {
                 largeDisplayData = largeDisplayData.dropFirst(11)
             }
             
-            eventHandler?(.largeDisplayText(components: largeDisplay))
+            huiEventHandler?(.largeDisplayText(components: largeDisplay))
             return
             
         case MIDI.HUI.kMIDI.kDisplayType.timeDisplayByte:
@@ -199,7 +192,7 @@ extension MIDI.HUI.Parser {
                 }
             }
             
-            eventHandler?(.timeDisplayText(components: timeDisplay))
+            huiEventHandler?(.timeDisplayText(components: timeDisplay))
             return
             
         default:
@@ -241,7 +234,7 @@ extension MIDI.HUI.Parser {
             
             guard let level = (msb + lsb).midiUInt14Exactly else { return }
             
-            eventHandler?(.faderLevel(channelStrip: channel, level: level))
+            huiEventHandler?(.faderLevel(channelStrip: channel, level: level))
             
         case 0x10...0x1B:
             // V-Pots
@@ -249,7 +242,7 @@ extension MIDI.HUI.Parser {
             let channel = (dataByte1 % 0x10).int
             let value = dataByte2.midiUInt7
             
-            eventHandler?(.vPot(channelStrip: channel, value: value))
+            huiEventHandler?(.vPot(channelStrip: channel, value: value))
             
         case MIDI.HUI.kMIDI.kControlDataByte1.zoneSelectByte:
             // zone select (1st message)
@@ -287,7 +280,7 @@ extension MIDI.HUI.Parser {
             }
             
             if let zone = switchesZoneSelect {
-                eventHandler?(.switch(zone: zone, port: port, state: state))
+                huiEventHandler?(.switch(zone: zone, port: port, state: state))
                 switchesZoneSelect = nil // reset zone select
             } else {
                 Log.debug("Received message 2 of a switch command (\(data.hex.stringValue(padTo: 2, prefix: true)) port: \(port), state: \(state)) without first receiving a zone select message. Ignoring.")
@@ -323,7 +316,7 @@ extension MIDI.HUI.Parser {
             level = sideAndValue.int
         }
         
-        eventHandler?(.levelMeters(channelStrip: channel, side: side, level: level))
+        huiEventHandler?(.levelMeters(channelStrip: channel, side: side, level: level))
         
     }
     

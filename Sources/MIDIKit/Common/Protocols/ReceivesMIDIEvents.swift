@@ -1,5 +1,5 @@
 //
-//  ReceivesMIDI.swift
+//  ReceivesMIDIEvents.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 

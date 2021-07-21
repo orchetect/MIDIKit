@@ -13,7 +13,7 @@ extension MIDI.MTC {
 	/// Takes timecode values and produces a stream of MIDI events.
 	///
 	/// This object is not affected by or reliant on timing at all and simply processes events as they are received. For outbound MTC sync, use the `MTC.Generator` wrapper object which adds additional abstraction for generating MTC sync.
-	public class Encoder {
+    public class Encoder: SendsMIDIEvents {
 		
 		// MARK: - Public properties
 		
@@ -66,17 +66,7 @@ extension MIDI.MTC {
 		/// The base MTC frame rate last transmitted.
 		public internal(set) var mtcFrameRate: MTCFrameRate = .mtc30
 		
-		/// Called when a MTC MIDI message needs transmitting.
-		internal var midiEventSendHandler: ((_ midiMessage: [MIDI.Byte]) -> Void)? = nil
-		
-		/// Set the handler used when a MTC MIDI message needs transmitting.
-		public func setMIDIEventSendHandler(
-			_ handler: ((_ midiMessage: [MIDI.Byte]) -> Void)?
-		) {
-			
-			midiEventSendHandler = handler
-			
-		}
+        public var midiOutHandler: MIDIOutHandler? = nil
 		
 		
 		// MARK: - Internal properties
@@ -96,10 +86,10 @@ extension MIDI.MTC {
 		
 		/// Initialize and optionally set the handler used when a MTC MIDI message needs transmitting.
 		init(
-			midiEventSendHandler: ((_ midiMessage: [MIDI.Byte]) -> Void)? = nil
+			midiOutHandler: MIDIOutHandler? = nil
 		) {
 			
-			setMIDIEventSendHandler(midiEventSendHandler)
+            self.midiOutHandler = midiOutHandler
 			
 		}
 		
@@ -234,7 +224,7 @@ extension MIDI.MTC {
 			
 			let ffMessage = generateFullFrameMIDIMessage()
 			
-			midiEventSendHandler?(ffMessage.message)
+			midiOut(ffMessage.event)
 			
 			lastTransmitFullFrame = (ffMessage.components, mtcFrameRate)
 			
@@ -242,7 +232,7 @@ extension MIDI.MTC {
 		
 		/// Internal: generates a full-frame message at current position.
 		internal func generateFullFrameMIDIMessage() -> (
-			message: [MIDI.Byte],
+			event: MIDI.Event,
 			components: Timecode.Components
 		) {
 			
@@ -263,27 +253,27 @@ extension MIDI.MTC {
 				mtcQuarterFrames: mtcQuarterFrame
 			)
 			
-			let midiMessage: [MIDI.Byte] = [
-				0xF0,
-				0x7F,
-				0x7F,
-				0x01,
-				0x01,
-				(MIDI.Byte(newComponents.h) & 0b0001_1111) + (mtcFrameRate.bitValue << 5),
-				MIDI.Byte(newComponents.m),
-				MIDI.Byte(newComponents.s),
-				MIDI.Byte(newComponents.f),
-				0xF7
-			]
-			
-			return (midiMessage, newComponents)
+            let midiEvent = MIDI.Event.sysExUniversal(
+                universalType: .realTime,
+                deviceID: 0x7F,
+                subID1: 0x01,
+                subID2: 0x01,
+                data: [
+                    (MIDI.Byte(newComponents.h) & 0b0001_1111) + (mtcFrameRate.bitValue << 5),
+                    MIDI.Byte(newComponents.m),
+                    MIDI.Byte(newComponents.s),
+                    MIDI.Byte(newComponents.f)
+                ]
+            )
+            
+            return (event: midiEvent, components: newComponents)
 			
 		}
 		
 		/// Internal: triggers a handler event to transmit a quarter-frame message.
 		@inline(__always) internal func sendQuarterFrameMIDIMessage() {
 			
-			midiEventSendHandler?(generateQuarterFrameMIDIMessage())
+			midiOut(generateQuarterFrameMIDIMessage())
 			
 			// invalidate last full-frame information
 			lastTransmitFullFrame = nil
@@ -291,7 +281,7 @@ extension MIDI.MTC {
 		}
 		
 		/// Internal: generates a quarter-frame message at current position.
-		@inline(__always) internal func generateQuarterFrameMIDIMessage() -> [MIDI.Byte] {
+		@inline(__always) internal func generateQuarterFrameMIDIMessage() -> MIDI.Event {
 			
 			// Piece #	Data byte	Significance
 			// -------	---------	------------
@@ -303,8 +293,6 @@ extension MIDI.MTC {
 			// 5		0101 00mm	Minutes msbits
 			// 6		0110 hhhh	Hours lsbits
 			// 7		0111 0rrh	Rate and hours msbit
-			
-			var midiMessage: [MIDI.Byte] = [0xF1, 0x00]
 			
 			var dataByte: MIDI.Byte = mtcQuarterFrame << 4
 			
@@ -330,9 +318,9 @@ extension MIDI.MTC {
 				break // will never happen
 			}
 			
-			midiMessage[1] = dataByte
+            let midiEvent = MIDI.Event.timecodeQuarterFrame(byte: dataByte)
 			
-			return midiMessage
+			return midiEvent
 			
 		}
 		

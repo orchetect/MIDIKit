@@ -28,52 +28,37 @@ extension MIDI.HUI {
         
         // MARK: - Handlers
         
-        /// Parser event handler that triggers when HUI events are received.
-        private var eventHandler: ((Event) -> Void)? = nil
+        public typealias HUIEventHandler = ((Event) -> Void)
         
-        /// Set the handler used when HUI events are received.
-        public func setEventHandler(
-            _ handler: ((Event) -> Void)?
-        ) {
-            
-            self.eventHandler = handler
-            
-        }
+        /// Parser event handler that triggers when HUI events are received.
+        public var huiEventHandler: HUIEventHandler? = nil
         
         /// Called when a HUI MIDI message needs transmitting.
-        internal var midiEventSendHandler: ((_ event: MIDI.Event) -> Void)? = nil
+        public var midiOutHandler: MIDIOutHandler? = nil
         
-        /// Set the handler used when a HUI MIDI message needs transmitting.
-        public func setMIDIEventSendHandler(
-            _ handler: ((_ event: MIDI.Event) -> Void)?
-        ) {
-            
-            self.midiEventSendHandler = handler
-            
-        }
         
         // MARK: - init
         
         public init(
-            eventHandler: ((Event) -> Void)? = nil,
-            midiEventSendHandler: ((_ event: MIDI.Event) -> Void)? = nil
+            huiEventHandler: HUIEventHandler? = nil,
+            midiOutHandler: MIDIOutHandler? = nil
         ) {
             
-            self.eventHandler = eventHandler
-            self.midiEventSendHandler = midiEventSendHandler
+            self.huiEventHandler = huiEventHandler
+            self.midiOutHandler = midiOutHandler
             
             state = State()
             
             parser = Parser()
             
-            parser.setEventHandler { [weak self] event in
+            parser.huiEventHandler = { [weak self] event in
                 switch event {
                 case .pingReceived:
                     self?.transmitPing()
                     
                 default:
                     if let surfaceEvent = self?.state.updateState(receivedEvent: event) {
-                        self?.eventHandler?(surfaceEvent)
+                        self?.huiEventHandler?(surfaceEvent)
                     }
                 }
             }
@@ -90,20 +75,6 @@ extension MIDI.HUI {
         
         // MARK: - Methods
         
-        /// Process incoming MIDI messages.
-        public func midiIn(event: MIDI.Event) {
-            
-            parser.midiIn(event: event)
-            
-        }
-        
-        /// Process incoming MIDI messages.
-        public func midiIn(events: [MIDI.Event]) {
-            
-            parser.midiIn(events: events)
-            
-        }
-        
         /// Resets state back to init state. Handlers are unaffected.
         public func reset() {
             
@@ -113,6 +84,20 @@ extension MIDI.HUI {
         }
         
     }
+    
+}
+
+extension MIDI.HUI.Surface: ReceivesMIDIEvents {
+    
+    public func midiIn(event: MIDI.Event) {
+        
+        parser.midiIn(event: event)
+        
+    }
+    
+}
+
+extension MIDI.HUI.Surface: SendsMIDIEvents {
     
 }
 
