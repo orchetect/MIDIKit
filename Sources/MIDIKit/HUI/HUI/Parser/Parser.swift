@@ -64,18 +64,9 @@ extension MIDI.HUI {
 	
 }
 
-// MARK: MIDI Parser
+// MARK: ReceivesMIDIEvents
 
-extension MIDI.HUI.Parser {
-    
-    /// Process HUI MIDI messages received from host
-    public func midiIn(events: [MIDI.Event]) {
-        
-        for event in events{
-            midiIn(event: event)
-        }
-        
-    }
+extension MIDI.HUI.Parser: ReceivesMIDIEvents {
     
     /// Process HUI MIDI message received from host
     public func midiIn(event: MIDI.Event) {
@@ -103,6 +94,12 @@ extension MIDI.HUI.Parser {
         }
         
     }
+    
+}
+
+// MARK: Parser
+
+extension MIDI.HUI.Parser {
     
     private func parse(sysExContent data: [MIDI.Byte]) {
         
