@@ -8,71 +8,51 @@
 
 extension MIDI {
 	
-	/// An 4-bit unsigned integer value type used in `MIDIKit`.
+	/// A 4-bit unsigned integer value type used in `MIDIKit`.
 	public struct UInt4: MIDIKitIntegerProtocol {
 		
 		// MARK: Storage
 		
-		internal var value: UInt8
+        public typealias Storage = UInt8
+        public internal(set) var value: Storage
 		
 		// MARK: Inits
 		
-		public init() {
-			value = 0
-		}
-		
-		public init<T: BinaryInteger>(_ source: T) {
-			if source < 0 { fatalError("Underflow") }
-			if source > 0b1111 { fatalError("Overflow") }
-			value = UInt8(source)
-		}
-		
-		public init?<T: BinaryInteger>(exactly source: T) {
-			if source < 0 { return nil }
-			if source > 0b1111 { return nil }
-			value = UInt8(source)
-		}
-		
-		public init<T: BinaryInteger>(clamping source: T) {
-			value = UInt8(source.clamped(to: 0...0b1111))
-		}
-		
+        public init() {
+            value = 0
+        }
+        
+        public init<T: BinaryInteger>(_ source: T) {
+            if source.int < Self.min(Int.self) { fatalError("Underflow") }
+            if source.int > Self.max(Int.self) { fatalError("Overflow") }
+            value = Storage(source)
+        }
+        
 		// MARK: Constants
 		
 		public static let bitWidth: Int = 4
 		
-		public static let min: Self = Self(0)
+        public static func min<T: BinaryInteger>(_ ofType: T.Type) -> T { 0 }
 		
-		public static let max: Self = Self(0b1111)
-		
+        public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 0b1111 }
+        
 		// MARK: Computed properties
 		
-		public var asInt: Int { Int(value) }
-		
 		/// Returns the integer as a `UInt8` instance
-		public var asUInt8: UInt8 { UInt8(value) }
+		public var uint8: UInt8 { value }
 		
 	}
 	
 }
-
-extension MIDI.UInt4: CustomStringConvertible {
-    
-    public var description: String {
-        "\(value)"
-    }
-    
-}
-
 
 extension MIDI.UInt4: ExpressibleByIntegerLiteral {
-	
-	public typealias IntegerLiteralType = UInt8
-	
-	public init(integerLiteral value: UInt8) {
-		self.value = value
-	}
-	
+    
+    public typealias IntegerLiteralType = Storage
+    
+    public init(integerLiteral value: Storage) {
+        self.init(value)
+    }
+    
 }
 
 extension MIDI.UInt4: Equatable, Comparable {
@@ -103,6 +83,14 @@ extension MIDI.UInt4: Codable {
 	
 }
 
+extension MIDI.UInt4: CustomStringConvertible {
+    
+    public var description: String {
+        "\(value)"
+    }
+    
+}
+
 // MARK: - Standard library extensions
 
 extension BinaryInteger {
@@ -115,16 +103,6 @@ extension BinaryInteger {
     /// Convenience initializer for `MIDI.UInt4(exactly:)`.
     public var midiUInt4Exactly: MIDI.UInt4? {
         MIDI.UInt4(exactly: self)
-    }
-	
-    /// Creates a new instance from the given integer.
-    public init(_ source: MIDI.UInt4) {
-        self.init(source.value)
-    }
-    
-    /// Creates a new instance from the given integer, if it can be represented exactly.
-    public init?(exactly source: MIDI.UInt4) {
-        self.init(exactly: source.value)
     }
     
 }

@@ -15,39 +15,20 @@ extension MIDI {
 		
 		// MARK: Storage
 		
-		/// Raw value
-		public let value: Int
+        public typealias Storage = UInt16
+		public internal(set) var value: Storage
 		
 		// MARK: Inits
 		
-		/// Defaults to neutral midpoint value
-		public init() {
-			value = 8192
-		}
-		
-		/// Initialize with a raw value (0...16383)
-		public init<T: BinaryInteger>(_ source: T) {
-			let sourceInt = Int(source)
-			
-			guard (0...16383).contains(sourceInt)
-			else { fatalError("Overflow") }
-			
-			self.value = sourceInt.clamped(to: 0...16383)
-		}
-		
-		/// Initialize with a raw value (0...16383)
-		/// Returns `nil` in the event of overflow.
-		public init?<T: BinaryInteger>(exactly source: T) {
-			let sourceInt = Int(source)
-			
-			if !(0...16383).contains(sourceInt) { return nil }
-			
-			value = sourceInt
-		}
-		
-		public init<T: BinaryInteger>(clamping source: T) {
-			self.value = Int(source).clamped(to: 0...16383)
-		}
+        public init() {
+            value = 0
+        }
+        
+        public init<T: BinaryInteger>(_ source: T) {
+            if source.int < Self.min(Int.self) { fatalError("Underflow") }
+            if source.int > Self.max(Int.self) { fatalError("Overflow") }
+            value = Storage(source)
+        }
 		
 		/// Converts from a floating-point unit interval having a 0.0 neutral midpoint
 		/// (`-1.0...0.0...1.0` to `0...8192...16383`)
@@ -63,45 +44,41 @@ extension MIDI {
 			let zeroMidpointFloat = zeroMidpointFloat.clamped(to: (-1.0)...(1.0))
 			
 			if zeroMidpointFloat > 0.0 {
-				value = 8192 + Int(zeroMidpointFloat * 8191)
+				value = 8192 + Storage(zeroMidpointFloat * 8191)
 			} else {
-				value = 8192 - Int(abs(zeroMidpointFloat) * 8192)
+				value = 8192 - Storage(abs(zeroMidpointFloat) * 8192)
 			}
 			
 		}
 		
 		/// Initialize the raw 14-bit value from two 7-bit value bytes
         public init(bytePair: MIDI.BytePair) {
-			let msb = Int(bytePair.MSB & 0b1111111) << 7
-			let lsb = Int(bytePair.LSB & 0b1111111)
+			let msb = Storage(bytePair.MSB & 0b111_1111) << 7
+			let lsb = Storage(bytePair.LSB & 0b111_1111)
 			value = msb + lsb
 		}
-		
 		
 		// MARK: Constants
 		
 		public static let bitWidth: Int = 14
 		
-		/// Minimum value
-		public static let min = Self(0)
-		
+		public static func min<T: BinaryInteger>(_ ofType: T.Type) -> T { 0 }
+        
 		// (0x40 << 7) + 0x00
 		// 0b1000000_0000000
 		/// Neutral midpoint
-		public static let midpoint = Self(8192)
-		
+        public static let midpoint = Self(Self.midpoint(Storage.self))
+        public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 8192 }
+        
 		// (0x7F << 7) + 0x7F
 		// 0b1111111_1111111
 		/// Maximum value
-		public static let max = Self(16383)
-		
-		
+        public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 16383 }
+        
 		// MARK: Computed properties
 		
-		public var asInt: Int { value }
-		
 		/// Returns the integer as a `UInt16` instance
-		public var asUInt16: UInt16 { UInt16(value) }
+		public var uint16: UInt16 { value }
 		
 		/// Converts from integer to a floating-point unit interval having a 0.0 neutral midpoint
 		/// (`0...8192...16383` to `-1.0...0.0...1.0`)
@@ -127,22 +104,14 @@ extension MIDI {
 	
 }
 
-extension MIDI.UInt14: CustomStringConvertible {
+extension MIDI.UInt14: ExpressibleByIntegerLiteral {
     
-    public var description: String {
-        "\(value)"
+    public typealias IntegerLiteralType = Storage
+    
+    public init(integerLiteral value: Storage) {
+        self.init(value)
     }
     
-}
-
-extension MIDI.UInt14: ExpressibleByIntegerLiteral {
-	
-	public typealias IntegerLiteralType = UInt16
-	
-	public init(integerLiteral value: UInt16) {
-		self.value = Int(value).clamped(to: 0...16383)
-	}
-	
 }
 
 extension MIDI.UInt14: Equatable, Comparable {
@@ -173,6 +142,16 @@ extension MIDI.UInt14: Codable {
 	
 }
 
+extension MIDI.UInt14: CustomStringConvertible {
+    
+    public var description: String {
+        "\(value)"
+    }
+    
+}
+
+// MARK: - Standard library extensions
+
 extension BinaryInteger {
 	
 	/// Convenience initializer for `MIDI.UInt14`.
@@ -183,16 +162,6 @@ extension BinaryInteger {
     /// Convenience initializer for `MIDI.UInt14(exactly:)`.
     public var midiUInt14Exactly: MIDI.UInt14? {
         MIDI.UInt14(exactly: self)
-    }
-    
-    /// Creates a new instance from the given integer.
-    public init(_ source: MIDI.UInt14) {
-        self.init(source.value)
-    }
-    
-    /// Creates a new instance from the given integer, if it can be represented exactly.
-    public init?(exactly source: MIDI.UInt14) {
-        self.init(exactly: source.value)
     }
     
 }

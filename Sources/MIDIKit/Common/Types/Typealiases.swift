@@ -27,7 +27,7 @@ extension MIDI.Byte {
 	
 	/// Convenience initializer from high and low 4-bit nibbles
 	@inlinable public init(high: MIDI.Nibble, low: MIDI.Nibble) {
-		self = (high.asUInt8 << 4) + low.asUInt8
+		self = (high.uint8 << 4) + low.uint8
 	}
 	
 }

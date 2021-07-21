@@ -17,18 +17,18 @@ final class UInt4_Tests: XCTestCase {
 		
 		// default
 		
-		XCTAssertEqual(MIDI.UInt4().asInt, 0)
+		XCTAssertEqual(MIDI.UInt4().int, 0)
 		
 		// different integer types
 		
-		XCTAssertEqual(MIDI.UInt4(0).asInt, 0)
-		XCTAssertEqual(MIDI.UInt4(UInt8(0)).asInt, 0)
-		XCTAssertEqual(MIDI.UInt4(UInt16(0)).asInt, 0)
+		XCTAssertEqual(MIDI.UInt4(0).int, 0)
+		XCTAssertEqual(MIDI.UInt4(UInt8(0)).int, 0)
+		XCTAssertEqual(MIDI.UInt4(UInt16(0)).int, 0)
 		
 		// values
 		
-		XCTAssertEqual(MIDI.UInt4(1).asInt, 1)
-		XCTAssertEqual(MIDI.UInt4(2).asInt, 2)
+		XCTAssertEqual(MIDI.UInt4(1).int, 1)
+		XCTAssertEqual(MIDI.UInt4(2).int, 2)
 		
 		// overflow
 		
@@ -46,11 +46,11 @@ final class UInt4_Tests: XCTestCase {
 		
 		// typical
 		
-		XCTAssertEqual(MIDI.UInt4(exactly: 0)?.asInt, 0)
+		XCTAssertEqual(MIDI.UInt4(exactly: 0)?.int, 0)
 		
-		XCTAssertEqual(MIDI.UInt4(exactly: 1)?.asInt, 1)
+		XCTAssertEqual(MIDI.UInt4(exactly: 1)?.int, 1)
 		
-		XCTAssertEqual(MIDI.UInt4(exactly: _max)?.asInt, _max)
+		XCTAssertEqual(MIDI.UInt4(exactly: _max)?.int, _max)
 		
 		// overflow
 		
@@ -64,33 +64,33 @@ final class UInt4_Tests: XCTestCase {
 		
 		// within range
 		
-		XCTAssertEqual(MIDI.UInt4(clamping: 0).asInt, 0)
-		XCTAssertEqual(MIDI.UInt4(clamping: 1).asInt, 1)
-		XCTAssertEqual(MIDI.UInt4(clamping: _max).asInt, _max)
+		XCTAssertEqual(MIDI.UInt4(clamping: 0).int, 0)
+		XCTAssertEqual(MIDI.UInt4(clamping: 1).int, 1)
+		XCTAssertEqual(MIDI.UInt4(clamping: _max).int, _max)
 		
 		// overflow
 		
-		XCTAssertEqual(MIDI.UInt4(clamping: -1).asInt, 0)
-		XCTAssertEqual(MIDI.UInt4(clamping: _max + 1).asInt, _max)
+		XCTAssertEqual(MIDI.UInt4(clamping: -1).int, 0)
+		XCTAssertEqual(MIDI.UInt4(clamping: _max + 1).int, _max)
 		
 	}
 	
 	func testMin() {
 		
-		XCTAssertEqual(MIDI.UInt4.min.asInt, 0)
+		XCTAssertEqual(MIDI.UInt4.min.int, 0)
 		
 	}
 	
 	func testMax() {
 		
-		XCTAssertEqual(MIDI.UInt4.max.asInt, _max)
+		XCTAssertEqual(MIDI.UInt4.max.int, _max)
 		
 	}
 	
 	func testComputedProperties() {
 		
-		XCTAssertEqual(MIDI.UInt4(1).asInt, 1)
-		XCTAssertEqual(MIDI.UInt4(1).asUInt8, 1)
+		XCTAssertEqual(MIDI.UInt4(1).int, 1)
+		XCTAssertEqual(MIDI.UInt4(1).uint8, 1)
 		
 	}
 	
@@ -188,6 +188,50 @@ final class UInt4_Tests: XCTestCase {
         
     }
 	
+    // MARK: - Operators
+    
+    func testOperators() {
+        
+        XCTAssertEqual(1.midiUInt4 + 1           , 2.midiUInt4)
+        XCTAssertEqual(1 + 1.midiUInt4           , 2.midiUInt4)
+        XCTAssertEqual(1.midiUInt4 + 1.midiUInt4 , 2)
+        
+        XCTAssertEqual(2.midiUInt4 - 1           , 1.midiUInt4)
+        XCTAssertEqual(2 - 1.midiUInt4           , 1.midiUInt4)
+        XCTAssertEqual(2.midiUInt4 - 1.midiUInt4 , 1)
+        
+        XCTAssertEqual(2.midiUInt4 * 2           , 4.midiUInt4)
+        XCTAssertEqual(2 * 2.midiUInt4           , 4.midiUInt4)
+        XCTAssertEqual(2.midiUInt4 * 2.midiUInt4 , 4)
+        
+        XCTAssertEqual(8.midiUInt4 / 2           , 4.midiUInt4)
+        XCTAssertEqual(8 / 2.midiUInt4           , 4.midiUInt4)
+        XCTAssertEqual(8.midiUInt4 / 2.midiUInt4 , 4)
+        
+        XCTAssertEqual(8.midiUInt4 % 3           , 2.midiUInt4)
+        XCTAssertEqual(8 % 3.midiUInt4           , 2.midiUInt4)
+        XCTAssertEqual(8.midiUInt4 % 3.midiUInt4 , 2)
+        
+    }
+    
+    func testAssignmentOperators() {
+        
+        var val = MIDI.UInt4(2)
+        
+        val += 5
+        XCTAssertEqual(val, 7)
+        
+        val -= 5
+        XCTAssertEqual(val, 2)
+        
+        val *= 3
+        XCTAssertEqual(val, 6)
+        
+        val /= 3
+        XCTAssertEqual(val, 2)
+        
+    }
+    
 }
 
 #endif

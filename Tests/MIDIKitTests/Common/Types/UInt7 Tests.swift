@@ -17,18 +17,18 @@ final class UInt7_Tests: XCTestCase {
 		
 		// default
 		
-		XCTAssertEqual(MIDI.UInt7().asInt, 0)
+		XCTAssertEqual(MIDI.UInt7().int, 0)
 		
 		// different integer types
 		
-		XCTAssertEqual(MIDI.UInt7(0).asInt, 0)
-		XCTAssertEqual(MIDI.UInt7(UInt8(0)).asInt, 0)
-		XCTAssertEqual(MIDI.UInt7(UInt16(0)).asInt, 0)
+		XCTAssertEqual(MIDI.UInt7(0).int, 0)
+		XCTAssertEqual(MIDI.UInt7(UInt8(0)).int, 0)
+		XCTAssertEqual(MIDI.UInt7(UInt16(0)).int, 0)
 		
 		// values
 		
-		XCTAssertEqual(MIDI.UInt7(1).asInt, 1)
-		XCTAssertEqual(MIDI.UInt7(2).asInt, 2)
+		XCTAssertEqual(MIDI.UInt7(1).int, 1)
+		XCTAssertEqual(MIDI.UInt7(2).int, 2)
 		
 		// overflow
 		
@@ -46,11 +46,11 @@ final class UInt7_Tests: XCTestCase {
 		
 		// typical
 		
-		XCTAssertEqual(MIDI.UInt7(exactly: 0)?.asInt, 0)
+		XCTAssertEqual(MIDI.UInt7(exactly: 0)?.int, 0)
 		
-		XCTAssertEqual(MIDI.UInt7(exactly: 1)?.asInt, 1)
+		XCTAssertEqual(MIDI.UInt7(exactly: 1)?.int, 1)
 		
-		XCTAssertEqual(MIDI.UInt7(exactly: _max)?.asInt, _max)
+		XCTAssertEqual(MIDI.UInt7(exactly: _max)?.int, _max)
 		
 		// overflow
 		
@@ -64,33 +64,33 @@ final class UInt7_Tests: XCTestCase {
 		
 		// within range
 		
-		XCTAssertEqual(MIDI.UInt7(clamping: 0).asInt, 0)
-		XCTAssertEqual(MIDI.UInt7(clamping: 1).asInt, 1)
-		XCTAssertEqual(MIDI.UInt7(clamping: _max).asInt, _max)
+		XCTAssertEqual(MIDI.UInt7(clamping: 0).int, 0)
+		XCTAssertEqual(MIDI.UInt7(clamping: 1).int, 1)
+		XCTAssertEqual(MIDI.UInt7(clamping: _max).int, _max)
 		
 		// overflow
 		
-		XCTAssertEqual(MIDI.UInt7(clamping: -1).asInt, 0)
-		XCTAssertEqual(MIDI.UInt7(clamping: _max + 1).asInt, _max)
+		XCTAssertEqual(MIDI.UInt7(clamping: -1).int, 0)
+		XCTAssertEqual(MIDI.UInt7(clamping: _max + 1).int, _max)
 		
 	}
 	
 	func testMin() {
 		
-		XCTAssertEqual(MIDI.UInt7.min.asInt, 0)
+		XCTAssertEqual(MIDI.UInt7.min.int, 0)
 		
 	}
 	
 	func testMax() {
 		
-		XCTAssertEqual(MIDI.UInt7.max.asInt, _max)
+		XCTAssertEqual(MIDI.UInt7.max.int, _max)
 		
 	}
 	
 	func testComputedProperties() {
 		
-		XCTAssertEqual(MIDI.UInt7(1).asInt, 1)
-		XCTAssertEqual(MIDI.UInt7(1).asUInt8, 1)
+		XCTAssertEqual(MIDI.UInt7(1).int, 1)
+		XCTAssertEqual(MIDI.UInt7(1).uint8, 1)
 		
 	}
 	
@@ -185,6 +185,50 @@ final class UInt7_Tests: XCTestCase {
         
         // no BinaryInteger-conforming type in the Swift standard library is smaller than 8 bits, so we can't really test .init(exactly:) producing nil because it always succeeds (?)
         XCTAssertEqual(Int(exactly: 0b111_1111.midiUInt7), 0b111_1111)
+        
+    }
+    
+    // MARK: - Operators
+    
+    func testOperators() {
+        
+        XCTAssertEqual(1.midiUInt7 + 1           , 2.midiUInt7)
+        XCTAssertEqual(1 + 1.midiUInt7           , 2.midiUInt7)
+        XCTAssertEqual(1.midiUInt7 + 1.midiUInt7 , 2)
+        
+        XCTAssertEqual(2.midiUInt7 - 1           , 1.midiUInt7)
+        XCTAssertEqual(2 - 1.midiUInt7           , 1.midiUInt7)
+        XCTAssertEqual(2.midiUInt7 - 1.midiUInt7 , 1)
+        
+        XCTAssertEqual(2.midiUInt7 * 2           , 4.midiUInt7)
+        XCTAssertEqual(2 * 2.midiUInt7           , 4.midiUInt7)
+        XCTAssertEqual(2.midiUInt7 * 2.midiUInt7 , 4)
+        
+        XCTAssertEqual(8.midiUInt7 / 2           , 4.midiUInt7)
+        XCTAssertEqual(8 / 2.midiUInt7           , 4.midiUInt7)
+        XCTAssertEqual(8.midiUInt7 / 2.midiUInt7 , 4)
+        
+        XCTAssertEqual(8.midiUInt7 % 3           , 2.midiUInt7)
+        XCTAssertEqual(8 % 3.midiUInt7           , 2.midiUInt7)
+        XCTAssertEqual(8.midiUInt7 % 3.midiUInt7 , 2)
+        
+    }
+    
+    func testAssignmentOperators() {
+        
+        var val = MIDI.UInt7(2)
+        
+        val += 5
+        XCTAssertEqual(val, 7)
+        
+        val -= 5
+        XCTAssertEqual(val, 2)
+        
+        val *= 3
+        XCTAssertEqual(val, 6)
+        
+        val /= 3
+        XCTAssertEqual(val, 2)
         
     }
     
