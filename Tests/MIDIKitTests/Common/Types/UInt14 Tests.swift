@@ -220,6 +220,16 @@ final class UInt14_Tests: XCTestCase {
         
     }
     
+    func testBinaryInteger_Init_UInt14() {
+        
+        XCTAssertEqual(Int(10.midiUInt14), 10)
+        XCTAssertEqual(Int(exactly: 10.midiUInt14), 10)
+        
+        XCTAssertEqual(Int(exactly: 0b11_1111_1111_1111.midiUInt14), 0b11_1111_1111_1111)
+        XCTAssertNil(UInt8(exactly: 0b11_1111_1111_1111.midiUInt14))
+        
+    }
+    
 }
 
 #endif

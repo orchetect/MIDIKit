@@ -185,4 +185,14 @@ extension BinaryInteger {
         MIDI.UInt14(exactly: self)
     }
     
+    /// Creates a new instance from the given integer.
+    public init(_ source: MIDI.UInt14) {
+        self.init(source.value)
+    }
+    
+    /// Creates a new instance from the given integer, if it can be represented exactly.
+    public init?(exactly source: MIDI.UInt14) {
+        self.init(exactly: source.value)
+    }
+    
 }

@@ -177,6 +177,16 @@ final class UInt4_Tests: XCTestCase {
         XCTAssertNil(0b1_0000.midiUInt4Exactly)
         
     }
+    
+    func testBinaryInteger_Init_UInt4() {
+        
+        XCTAssertEqual(Int(10.midiUInt4), 10)
+        XCTAssertEqual(Int(exactly: 10.midiUInt4), 10)
+        
+        // no BinaryInteger-conforming type in the Swift standard library is smaller than 8 bits, so we can't really test .init(exactly:) producing nil because it always succeeds (?)
+        XCTAssertEqual(Int(exactly: 0b1111.midiUInt4), 0b1111)
+        
+    }
 	
 }
 
