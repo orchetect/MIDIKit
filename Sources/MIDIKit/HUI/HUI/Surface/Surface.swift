@@ -90,10 +90,17 @@ extension MIDI.HUI {
         
         // MARK: - Methods
         
-        /// Incoming MIDI messages
+        /// Process incoming MIDI messages
         public func midiIn(event: MIDI.Event) {
             
             parser.midiIn(event: event)
+            
+        }
+        
+        /// Process incoming MIDI messages
+        public func midiIn(events: [MIDI.Event]) {
+            
+            parser.midiIn(events: events)
             
         }
         

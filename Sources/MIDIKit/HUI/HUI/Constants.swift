@@ -54,8 +54,6 @@ extension MIDI.HUI {
             public static let portOnOffByte:       MIDI.Byte   = 0x2C
         }
         
-        public static let kVPotData1UpperNibble:   MIDI.Byte   = 0x10
-        
         public enum kChannelStripElement: MIDI.UInt4, Equatable, Hashable {
             
             case fader  = 0x0

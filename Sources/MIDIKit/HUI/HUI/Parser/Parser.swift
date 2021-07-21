@@ -61,7 +61,16 @@ extension MIDI.HUI {
 
 extension MIDI.HUI.Parser {
     
-    /// HUI MIDI message is received from host
+    /// Process HUI MIDI messages received from host
+    public func midiIn(events: [MIDI.Event]) {
+        
+        for event in events{
+            midiIn(event: event)
+        }
+        
+    }
+    
+    /// Process HUI MIDI message received from host
     public func midiIn(event: MIDI.Event) {
         
         // HUI ping-reply
@@ -75,10 +84,13 @@ extension MIDI.HUI.Parser {
         case .sysEx(manufacturer: let mfr, data: let bytes):
             guard mfr == MIDI.HUI.kMIDI.kSysEx.kManufacturer else { return }
             parse(sysExContent: bytes)
+            
         case .cc:
             parse(controlStatusMessage: event)
+            
         case .polyAftertouch:
             parse(levelMetersMessage: event)
+            
         default:
             break
         }
@@ -102,9 +114,9 @@ extension MIDI.HUI.Parser {
         
         switch dataAfterHeader.first {
         case MIDI.HUI.kMIDI.kDisplayType.smallByte:
-            // <header> 10 <channel> <char1> <char2> <char3> <char4> F7
+            // 0x10 channel [4 chars]
             
-            guard dataAfterHeader.count == 7 else {
+            guard dataAfterHeader.count == 6 else {
                 Log.debug("Received Small Display text MIDI message \(data.hex.stringValue(padTo: 2)) but length was not expected.")
                 return
             }
@@ -131,16 +143,18 @@ extension MIDI.HUI.Parser {
             return
             
         case MIDI.HUI.kMIDI.kDisplayType.largeByte:
-            // message length test: remove first byte (0x12) and last byte (SysEx end 0xF7), then see if remainder is divisible by 11
-            guard (dataAfterHeader.count - 2) % 11 == 0 else {
+            // 0x12 zone [10 chars]
+            // it may be possible to receive multiple blocks in the same SysEx message (?), ie:
+            // 0x12 zone [10 chars] zone [10 chars]
+            // message length test: remove first byte (0x12), then see if remainder is divisible by 11
+            guard (dataAfterHeader.count - 1) % 11 == 0 else {
                 Log.debug("Received Large Display text MIDI message \(data.hex.stringValue(padTo: 2)) but length was not expected.")
                 return
             }
             
             var largeDisplayData = dataAfterHeader[atOffsets: 1...dataAfterHeader.count-1]
             
-            // ***** this block of code assumes we won't be receiving malformed/unexpected data which could cause a crash (subscript indexes)
-            while largeDisplayData[atOffset: 0] != MIDI.HUI.kMIDI.kSysExEndByte {
+            while largeDisplayData.count >= 11 {
                 let zone = largeDisplayData[atOffset: 0].int
                 var newString = ""
                 let letters = largeDisplayData[atOffsets: 1...10]
@@ -158,7 +172,7 @@ extension MIDI.HUI.Parser {
             
         case MIDI.HUI.kMIDI.kDisplayType.timeDisplayByte:
             guard dataAfterHeader.count > 0 else { return }
-            let tcData: [Int] = dataAfterHeader[atOffsets: 1...dataAfterHeader.count-1].map({Int($0)})
+            let tcData: [Int] = dataAfterHeader[atOffsets: 1...dataAfterHeader.count-1].map { Int($0) }
             var i = 0
             
             for number in tcData {
@@ -204,33 +218,37 @@ extension MIDI.HUI.Parser {
         
         // Control Segment
         
-        // V-Pots
-        // ***** CODE HAS NOT BEEN TESTED
-        if dataByte1.isContained(in: MIDI.HUI.kMIDI.kVPotData1UpperNibble
-                                    ... MIDI.HUI.kMIDI.kVPotData1UpperNibble + 0xB)
-        {
+        
+        switch dataByte1 {
+        case 0x00...0x07:
+            // Channel Strip Fader level MSB
+            
+            let channel = dataByte1.hex.nibble(0).value.int
+            
+            faderMSB[channel] = dataByte2.int
+            
+        case 0x20...0x27:
+            // Channel Strip Fader level LSB
+            
+            let channel = dataByte1.hex.nibble(0).value.int
+            
+            let lsb = dataByte2.int
+            let level = (faderMSB[channel] << 7) + lsb
+            
+            eventHandler?(.faderLevel(channel: channel.midiUInt4, level: level))
+            
+        case 0x10...0x1B:
+            // V-Pots
+            
             let channel = (dataByte1 % 0x10).midiUInt4
             let value = dataByte2.int
             
             eventHandler?(.vPot(channel: channel, value: value))
-            return
-        }
-        
-        // Fader levels (channel strips 1-8)
-        if dataByte1.isContained(in: 0...7)
-        {
-            parseFaderLevel(dataByte1: dataByte1, dataByte2: dataByte2)
-            return
-        }
-        
-        // Switches (2 discrete MIDI messages of 3 bytes each, all to perform one switch state change)
-        // This includes buttons and LEDs, as well as some internal HUI behavior functions
-        switch dataByte1 {
+            
         case MIDI.HUI.kMIDI.kControlDataByte1.zoneSelectByte:
             // zone select (1st message)
             
             switchesZoneSelect = dataByte2
-            return
             
         case MIDI.HUI.kMIDI.kControlDataByte1.portOnOffByte:
             // port on, or port off (2nd message)
@@ -269,39 +287,8 @@ extension MIDI.HUI.Parser {
                 Log.debug("Received message 2 of a switch command (\(data.hex.stringValue(padTo: 2, prefix: true)) port: \(port), state: \(state)) without first receiving a zone select message. Ignoring.")
             }
             
-            return
-            
         default:
-            Log.debug("Unrecognized HUI MIDI control status data byte 1: \(dataByte1.hex.stringValue(padTo: 2, prefix: true)).")
-        }
-        
-    }
-    
-    private func parseFaderLevel(dataByte1: MIDI.Byte, dataByte2: MIDI.Byte) {
-        
-        let channel = dataByte1.hex.nibble(0).value.int
-        let part = dataByte1.hex.nibble(1).value
-        
-        switch part {
-        case 0x0:
-            // MSB (1st message) of fader move
-            
-            faderMSB[channel] = dataByte2.int
-            return
-            
-        case 0x2:
-            // LSB (2nd message) of fader move
-            
-            let lsb = dataByte2.int
-            let level = (faderMSB[channel] << 7) + lsb
-            
-            eventHandler?(.faderLevel(channel: channel.midiUInt4, level: level))
-            return
-            
-        default:
-            Log.debug("Malformed Fader Level message.")
-            break
-            
+            Log.debug("Unrecognized HUI MIDI status 0xB0 data byte 1: \(dataByte1.hex.stringValue(padTo: 2, prefix: true)) in message: \(data.hex.stringValue(padTo: 2, prefix: true)).")
         }
         
     }
