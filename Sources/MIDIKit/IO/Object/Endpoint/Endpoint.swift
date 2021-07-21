@@ -9,8 +9,6 @@ import CoreMIDI
 
 public protocol MIDIIOEndpointProtocol: MIDI.IO.Object, MIDI.IO.ObjectRef {
 	
-	// nothing here; just conformances
-	
 }
 
 extension MIDI.IO {
@@ -21,6 +19,8 @@ extension MIDI.IO {
 
 extension MIDI.IO.Endpoint {
 	
+    public static var objectType: MIDI.IO.ObjectType { .endpoint }
+    
 	/// List of entities within the device.
 	public var entity: MIDI.IO.Entity? {
 		
