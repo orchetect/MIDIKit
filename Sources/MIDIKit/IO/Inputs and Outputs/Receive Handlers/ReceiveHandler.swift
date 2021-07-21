@@ -124,7 +124,7 @@ extension MIDI.IO.ReceiveHandler {
 
 extension MIDI.IO.ReceiveHandler {
     
-    /// Basic raw packet data receive handler.
+    /// MIDI Event receive handler.
     public struct Events: MIDIIOReceiveHandlerProtocol {
         
         public typealias Handler = (_ events: [MIDI.Event]) -> Void
@@ -147,6 +147,57 @@ extension MIDI.IO.ReceiveHandler {
         ) {
             
             self.handler = handler
+            
+        }
+        
+    }
+    
+    /// MIDI Event logging handler (event description strings).
+    /// If `handler` is nil, all events are logged to the console (but only in DEBUG builds, not in RELEASE builds).
+    /// If `handler` is provided, the event description string is supplied as a parameter and not automatically logged.
+    public struct EventsLogging: MIDIIOReceiveHandlerProtocol {
+        
+        public typealias Handler = (_ eventString: String) -> Void
+        
+        @inline(__always) public var handler: Handler
+        
+        internal let parser = MIDI.MIDI1Parser()
+        
+        @inline(__always) public var filterActiveSensingAndClock = false
+        
+        @inline(__always) public func midiReadBlock(
+            _ packetListPtr: UnsafePointer<MIDIPacketList>,
+            _ srcConnRefCon: UnsafeMutableRawPointer?
+        ) {
+            
+            for packetData in packetListPtr {
+                
+                let events = parser.parsedEvents(in: packetData)
+                    .drop {
+                        $0 == .timingClock ||
+                        $0 == .activeSensing
+                    }
+                
+                let stringOutput = events
+                    .map { "\($0)" }
+                    .joined(separator: ", ")
+                
+                handler(stringOutput)
+                
+            }
+            
+        }
+        
+        public init(
+            filterActiveSensingAndClock: Bool = false,
+            _ handler: Handler? = nil
+        ) {
+            
+            self.filterActiveSensingAndClock = filterActiveSensingAndClock
+            
+            self.handler = handler ?? { packetBytesString in
+                Log.debug(packetBytesString)
+            }
             
         }
         
@@ -198,9 +249,9 @@ extension MIDI.IO.ReceiveHandler {
 			_ srcConnRefCon: UnsafeMutableRawPointer?
 		) {
 			
-			for packet in packetListPtr {
+			for packetData in packetListPtr {
 				
-				let bytes = packet.data
+				let bytes = packetData.data
 				
 				if filterActiveSensingAndClock {
 					guard bytes.first != 0xF8, // midi clock pulse
