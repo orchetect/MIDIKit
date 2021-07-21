@@ -10,8 +10,10 @@ extension MIDI.HUI.Surface.State {
     /// State storage representing the Large Text Display (40x2 character matrix)
     public struct LargeDisplay: Equatable, Hashable {
         
-        static let defaultStringComponent = String(repeating: MIDI.HUI.kCharTables.largeDisplay[0x20],
-                                                   count: 8)
+        static let defaultStringComponent = String(
+            repeating: MIDI.HUI.kCharTables.largeDisplay[0x20],
+            count: 10
+        )
         
         /// Returns the individual string components that make up the large display contents
         public var components = [String](repeating: Self.defaultStringComponent,
@@ -24,8 +26,10 @@ extension MIDI.HUI.Surface.State {
                         contentsOf: [String](repeating: Self.defaultStringComponent,
                                              count: 8 - components.count)
                     )
+                    
                 case 9...:
                     components = components.prefix(8).array
+                    
                 default:
                     break
                 }
