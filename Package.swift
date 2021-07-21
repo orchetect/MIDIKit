@@ -18,16 +18,11 @@ let package = Package(
     ],
     
     dependencies: [
-        // Boilerplate
         .package(url: "https://github.com/orchetect/OTCore", from: "1.1.8"),
-        .package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.1"),
-        
-        // Timecode
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.1.2")
+        .package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.1")
     ],
     
     targets: [
-        // MIDIKit main library
         .target(
             name: "MIDIKit",
             dependencies: [
@@ -36,12 +31,10 @@ let package = Package(
                 // external
                 .product(name: "OTCore", package: "OTCore"),
                 .product(name: "OTCore-Testing", package: "OTCore"),
-                .product(name: "SwiftRadix", package: "SwiftRadix"),
-                .product(name: "TimecodeKit", package: "TimecodeKit")
+                .product(name: "SwiftRadix", package: "SwiftRadix")
             ]
         ),
         
-        // MIDIKit internal C functions
         .target(
             name: "MIDIKitC",
             dependencies: [],
@@ -58,8 +51,7 @@ let package = Package(
                 .target(name: "MIDIKit"),
                 // external
                 .product(name: "OTCore-Testing-XCTest", package: "OTCore"),
-                .product(name: "SwiftRadix", package: "SwiftRadix"),
-                .product(name: "TimecodeKit", package: "TimecodeKit")
+                .product(name: "SwiftRadix", package: "SwiftRadix")
             ]
         )
     ]
