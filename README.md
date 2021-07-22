@@ -1,4 +1,4 @@
-# MIDIKit
+# 🎹 MIDIKit
 
 <p>
 <a href="https://developer.apple.com/swift">
@@ -16,47 +16,37 @@
 
 An elegant and modern Swift CoreMIDI wrapper with type-safe handling of MIDI events, MTC, HUI, and SMF (Standard MIDI Files).
 
-### Available Modules
+## MIDIKit Extensions
 
-| Module            | Description                         |                          Completion                          | Docs | Tests |
-| ----------------- | ----------------------------------- | :----------------------------------------------------------: | :--: | :---: |
-| `I/O`       | CoreMIDI I/O ports & connections    | ![Progress](https://progress-bar.dev/90/?title=Operational&color=555555&width=80) |  ⚪️   |   🟠   |
-| Sync: `MTC.Receiver` | MIDI Timecode Receiver abstraction  | ![Progress](https://progress-bar.dev/100/?title=Complete&color=555555&width=95) |  🟢   |   🟢   |
-| Sync: `MTC.Generator` | MIDI Timecode Generator abstraction | ![Progress](https://progress-bar.dev/100/?title=Complete&color=555555&width=95) |  🟢   |   🟢   |
+Abstractions are built as optional extensions in their own repos.
 
-### Modules in Development
-
-| Module          | Description                                    |                          Completion                          | Docs | Tests |
-| --------------- | ---------------------------------------------- | :----------------------------------------------------------: | :--: | :---: |
-| `Events` | MIDI 1.0: events                               | ![Progress](https://progress-bar.dev/50/?title=In%20Progress&color=555555&width=75) |  ⚪️   |   ⚪️   |
-| `Events` | MIDI 2.0: events, MIDI-CI, UMP, 1.0 extensions | ![Progress](https://progress-bar.dev/0/?title=Future&color=555555&width=105) |  ⚪️   |   ⚪️   |
-| `HUI` | HUI protocol abstraction          | ![Progress](https://progress-bar.dev/50/?title=In%20Progress&color=555555&width=75) |  ⚪️   |   ⚪️   |
-
-### Modules Planned
-
-| Module       | Description                       |                          Completion                          | Docs | Tests |
-| ------------ | --------------------------------- | :----------------------------------------------------------: | :--: | :---: |
-| `SMF` | Standard MIDI 1.0 File read/write | ![Progress](https://progress-bar.dev/80/?title=Future&color=555555&width=105) |  ⚪️   |   🟠   |
+- [MIDIKitControlSurfaces](https://github.com/orchetect/MIDIKitControlSurfaces): MIDIKit extension for Control Surfaces (HUI, etc.)
+- [MIDIKitSync](https://github.com/orchetect/MIDIKitSync): MIDIKit extension for sync (MTC, etc.)
 
 ## Getting Started
 
-Import the library, and all objects will be accessible under the `MIDI` namespace in your project.
+1. Add MIDIKit as a dependency  using Swift Package Manager.
+  - In an app project or framework, in Xcode:
 
-```swift
-import MIDIKit
-```
+    - Select the menu: **File → Swift Packages → Add Package Dependency...**
+    - Enter this URL: `https://github.com/orchetect/MIDIKit` and enter the version or branch to use.
+  
+  - In a Swift Package, add it to the Package.swift dependencies:
+  
+    ```swift
+    .package(url: "https://github.com/orchetect/MIDIKit", from: "0.2.0")
+    ```
+  
+1. Import the library:
+  ```swift
+  import MIDIKit
+  ```
 
-See [Examples](https://github.com/orchetect/MIDIKit/blob/master/Examples/) folder and [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder for usage.
+3. See [Examples](https://github.com/orchetect/MIDIKit/blob/master/Examples/) folder and [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder for usage.
 
 ## Documentation
 
 See [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder.
-
-## Roadmap
-
-- [ ] MIDI 2.0 support
-- [ ] Bluetooth & network MIDI connection support
-- [ ] Rewrite of legacy HUI code (♻️ in progress)
 
 ## Author
 
@@ -68,18 +58,4 @@ Licensed under the MIT license. See [LICENSE](https://github.com/orchetect/MIDIK
 
 ## Contributions
 
-Contributions are welcome. Discussion on bug fixes or new features is encouraged before creating pull requests.
-
-Commit messages should be prefixed with the module they are concerned with, generally as follows:
-
-| Commits with changes within   | Commit message prefix                              |
-| ----------------------------- | -------------------------------------------------- |
-| `/`                           | "Common: "                                         |
-| `/Sources/MIDIKit`            | "Common: "                                         |
-| `/Sources/MIDIKit/Common`      | "Common: "                                         |
-| `/Sources/MIDIKit/Events`      | "Events: "                                         |
-| `/Sources/MIDIKit/IO`          | "IO: "                                             |
-| `/Sources/MIDIKit/HUI`        | "HUI: "                                           |
-| `/Sources/MIDIKit/Sync`        | "Sync: "                                           |
-| `/Sources/MIDIKitTestsCommon` | "Common: "                                         |
-| `/Tests/<subfolder>`          | use corresponding <subfolder> prefix as seen above |
+Contributions are welcome. Discussion in Issues is encouraged prior to new features or modifications.
