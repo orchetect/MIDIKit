@@ -18,12 +18,12 @@ public protocol SendsMIDIEvents {
 extension SendsMIDIEvents {
     
     /// Transmit a MIDI event.
-    internal func midiOut(_ event: MIDI.Event) {
+    public func midiOut(_ event: MIDI.Event) {
         midiOutHandler?([event])
     }
     
     /// Transmit MIDI events.
-    internal func midiOut(_ events: [MIDI.Event]) {
+    public func midiOut(_ events: [MIDI.Event]) {
         midiOutHandler?(events)
     }
     
