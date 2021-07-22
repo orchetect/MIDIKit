@@ -29,7 +29,7 @@ Abstractions are built as optional extensions in their own repos.
   - In an app project or framework, in Xcode:
 
     - Select the menu: **File → Swift Packages → Add Package Dependency...**
-    - Enter this URL: `https://github.com/orchetect/MIDIKit` and enter the version or branch to use.
+    - Enter this URL: `https://github.com/orchetect/MIDIKit`
   
   - In a Swift Package, add it to the Package.swift dependencies:
   
