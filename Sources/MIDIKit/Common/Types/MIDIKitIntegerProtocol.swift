@@ -5,46 +5,46 @@
 
 /// Specialized integer types representing non-standard bit-width values in `MIDIKit`.
 public protocol MIDIKitIntegerProtocol {
-	
+    
     // Storage
     
     associatedtype Storage: BinaryInteger
     var value: Storage { get }
     
-	// Inits
-	
-	/// Creates a new value equal to zero.
-	init()
-	
-	/// Creates a new instance from the given integer.
-	/// Throws an exception in the event of overflow.
-	init<T: BinaryInteger>(_ source: T)
-	
-	/// Creates a new instance from the given integer.
-	/// Returns `nil` in the event of overflow.
-	init?<T: BinaryInteger>(exactly source: T)
-	
-	/// Creates a new instance from the given integer.
-	/// Clamps value to `min` or `max` in the event of overflow.
-	init<T: BinaryInteger>(clamping source: T)
-	
-	// Constants
-	
-	/// Bit width of the integer
-	static var bitWidth: Int { get }
-	
-	/// Minimum value storable
-	static var min: Self { get }
+    // Inits
+    
+    /// Creates a new value equal to zero.
+    init()
+    
+    /// Creates a new instance from the given integer.
+    /// Throws an exception in the event of overflow.
+    init<T: BinaryInteger>(_ source: T)
+    
+    /// Creates a new instance from the given integer.
+    /// Returns `nil` in the event of overflow.
+    init?<T: BinaryInteger>(exactly source: T)
+    
+    /// Creates a new instance from the given integer.
+    /// Clamps value to `min` or `max` in the event of overflow.
+    init<T: BinaryInteger>(clamping source: T)
+    
+    // Constants
+    
+    /// Bit width of the integer
+    static var bitWidth: Int { get }
+    
+    /// Minimum value storable
+    static var min: Self { get }
     static func min<T: BinaryInteger>(_ ofType: T.Type) -> T
     
-	/// Maximum value storable
-	static var max: Self { get }
+    /// Maximum value storable
+    static var max: Self { get }
     static func max<T: BinaryInteger>(_ ofType: T.Type) -> T
     
-	// Computed properties
-	
-	/// Returns the integer as an `Int` instance
-	var int: Int { get }
+    // Computed properties
+    
+    /// Returns the integer as an `Int` instance
+    var int: Int { get }
     
 }
 

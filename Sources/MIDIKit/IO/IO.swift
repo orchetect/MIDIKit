@@ -4,10 +4,10 @@
 //
 
 extension MIDI {
-	
-	/// Namespace for MIDIKit I/O
-	public enum IO {
-		
-	}
-	
+    
+    /// Namespace for MIDIKit I/O
+    public enum IO {
+        
+    }
+    
 }
