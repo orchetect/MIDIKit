@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-// MARK: - MIDI.Event.SysEx
-
 extension MIDI.Event {
 	
 	/// System Exclusive Message

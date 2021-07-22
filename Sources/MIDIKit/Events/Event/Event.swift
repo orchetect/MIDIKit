@@ -50,6 +50,10 @@ extension MIDI {
         /// System Exclusive: Universal SysEx (Status `0xF0`)
         ///
         /// Used in both MIDI 1.0 and 2.0 spec.
+        ///
+        /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
+        ///
+        /// - `deviceID` of 0x7F indicates "All Devices".
         case sysExUniversal(universalType: SysEx.UniversalType,
                             deviceID: MIDI.UInt7,
                             subID1: MIDI.UInt7,
@@ -143,6 +147,8 @@ extension MIDI {
     
 }
 
+// MARK: - rawBytes
+
 extension MIDI.Event {
     
     public var rawBytes: [MIDI.Byte] {
@@ -173,7 +179,7 @@ extension MIDI.Event {
             
         case .pitchBend(value: let value, channel: let channel):
             let bytePair = value.bytePair
-            return [0xE0 + channel.uint8, bytePair.LSB, bytePair.MSB]
+            return [0xE0 + channel.uint8, bytePair.lsb, bytePair.msb]
             
         // ----------------------
         // MARK: System Exclusive
@@ -198,7 +204,7 @@ extension MIDI.Event {
             
         case .songPositionPointer(midiBeat: let midiBeat):
             let bytePair = midiBeat.bytePair
-            return [0xF2, bytePair.LSB, bytePair.MSB]
+            return [0xF2, bytePair.lsb, bytePair.msb]
             
         case .songSelect(number: let number):
             return [0xF3, number.uint8]
@@ -236,6 +242,47 @@ extension MIDI.Event {
     }
     
 }
+
+// MARK: - Static inits
+
+extension MIDI.Event {
+    
+    /// Channel Voice Message: Controller Change (CC) (Status `0xB`)
+    public static func cc(controller: CC,
+                          value: MIDI.UInt7,
+                          channel: MIDI.UInt4) -> Self {
+
+        .cc(controller: controller.controller,
+            value: value,
+            channel: channel)
+
+    }
+
+    /// Creates an RPN message.
+    public static func ccRPN(_ rpn: CC.RPN,
+                             channel: MIDI.UInt4) -> [MIDI.Event] {
+
+        rpn.events(channel: channel)
+
+    }
+
+    /// Creates an NRPN message, consisting of 3 or 4 MIDI Events.
+    public static func ccNRPN(parameter: MIDI.UInt7.Pair,
+                              dataEntryMSB: MIDI.UInt7?,
+                              dataEntryLSB: MIDI.UInt7?,
+                              channel: MIDI.UInt4) -> [MIDI.Event] {
+        
+        CC
+            .NRPN(parameter: parameter,
+                  dataEntryMSB: dataEntryMSB,
+                  dataEntryLSB: dataEntryLSB)
+            .events(channel: channel)
+
+    }
+    
+}
+
+// MARK: - CustomStringConvertible
 
 extension MIDI.Event: CustomStringConvertible {
     
