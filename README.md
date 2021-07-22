@@ -14,7 +14,7 @@
 <img src="http://img.shields.io/badge/license-MIT-green.svg?style=flat"
      alt="License: MIT" /></a>
 
-An elegant and modern Swift CoreMIDI wrapper with type-safe handling of MIDI events, MTC, HUI, and SMF (Standard MIDI Files).
+An elegant and modern Swift CoreMIDI wrapper with strongly-typed MIDI events.
 
 ## MIDIKit Extensions
 
