@@ -250,7 +250,7 @@ extension MIDI {
                           let dataByte2 = dataByte2
                     else { return events }
                     
-                    let uint14 = MIDI.UInt14(bytePair: .init(MSB: dataByte2, LSB: dataByte1))
+                    let uint14 = MIDI.UInt14(bytePair: .init(msb: dataByte2, lsb: dataByte1))
                     events += .pitchBend(value: uint14, channel: channel)
                     currentPos += currentPos == 0 ? 3 : 2
                     
@@ -277,7 +277,7 @@ extension MIDI {
                               let dataByte2 = dataByte2
                         else { return events }
                         
-                        let uint14 = MIDI.UInt14(bytePair: .init(MSB: dataByte2, LSB: dataByte1))
+                        let uint14 = MIDI.UInt14(bytePair: .init(msb: dataByte2, lsb: dataByte1))
                         events += .songPositionPointer(midiBeat: uint14)
                         currentPos += currentPos == 0 ? 3 : 2
                         

@@ -88,11 +88,19 @@ final class UInt14_Tests: XCTestCase {
 	
 	func testInitBytePair() {
 		
-        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.BytePair(MSB: 0x00, LSB: 0x00)).int, _min)
-        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.BytePair(MSB: 0x40, LSB: 0x00)).int, _midpoint)
-        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.BytePair(MSB: 0x7F, LSB: 0x7F)).int, _max)
+        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.Byte.Pair(msb: 0x00, lsb: 0x00)).int, _min)
+        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.Byte.Pair(msb: 0x40, lsb: 0x00)).int, _midpoint)
+        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.Byte.Pair(msb: 0x7F, lsb: 0x7F)).int, _max)
 		
 	}
+    
+    func testInitUInt7Pair() {
+        
+        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x00, lsb: 0x00)).int, _min)
+        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x40, lsb: 0x00)).int, _midpoint)
+        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x7F, lsb: 0x7F)).int, _max)
+        
+    }
 	
 	func testMin() {
 		
@@ -125,16 +133,29 @@ final class UInt14_Tests: XCTestCase {
 	
 	func testBytePair() {
 		
-		XCTAssertEqual(MIDI.UInt14(_min).bytePair.MSB, 0x00)
-		XCTAssertEqual(MIDI.UInt14(_min).bytePair.LSB, 0x00)
+		XCTAssertEqual(MIDI.UInt14(_min).bytePair.msb, 0x00)
+		XCTAssertEqual(MIDI.UInt14(_min).bytePair.lsb, 0x00)
 		
-		XCTAssertEqual(MIDI.UInt14(_midpoint).bytePair.MSB, 0x40)
-		XCTAssertEqual(MIDI.UInt14(_midpoint).bytePair.LSB, 0x00)
+		XCTAssertEqual(MIDI.UInt14(_midpoint).bytePair.msb, 0x40)
+		XCTAssertEqual(MIDI.UInt14(_midpoint).bytePair.lsb, 0x00)
 		
-		XCTAssertEqual(MIDI.UInt14(_max).bytePair.MSB, 0x7F)
-		XCTAssertEqual(MIDI.UInt14(_max).bytePair.LSB, 0x7F)
+		XCTAssertEqual(MIDI.UInt14(_max).bytePair.msb, 0x7F)
+		XCTAssertEqual(MIDI.UInt14(_max).bytePair.lsb, 0x7F)
 		
 	}
+    
+    func testUInt7Pair() {
+        
+        XCTAssertEqual(MIDI.UInt14(_min).midiUInt7Pair.msb, 0x00)
+        XCTAssertEqual(MIDI.UInt14(_min).midiUInt7Pair.lsb, 0x00)
+        
+        XCTAssertEqual(MIDI.UInt14(_midpoint).midiUInt7Pair.msb, 0x40)
+        XCTAssertEqual(MIDI.UInt14(_midpoint).midiUInt7Pair.lsb, 0x00)
+        
+        XCTAssertEqual(MIDI.UInt14(_max).midiUInt7Pair.msb, 0x7F)
+        XCTAssertEqual(MIDI.UInt14(_max).midiUInt7Pair.lsb, 0x7F)
+        
+    }
 	
 	func testEquatable() {
 		

@@ -51,12 +51,20 @@ extension MIDI {
 			
 		}
 		
-		/// Initialize the raw 14-bit value from two 7-bit value bytes
-        public init(bytePair: MIDI.BytePair) {
-			let msb = Storage(bytePair.MSB & 0b111_1111) << 7
-			let lsb = Storage(bytePair.LSB & 0b111_1111)
+		/// Initialize the raw 14-bit value from two 7-bit value bytes.
+        /// The top bit of each byte (0b1000_0000) will be truncated (set to 0).
+        public init(bytePair: MIDI.Byte.Pair) {
+			let msb = Storage(bytePair.msb & 0b111_1111) << 7
+			let lsb = Storage(bytePair.lsb & 0b111_1111)
 			value = msb + lsb
 		}
+        
+        /// Initialize the raw 14-bit value from two 7-bit value bytes
+        public init(uint7Pair: MIDI.UInt7.Pair) {
+            let msb = Storage(uint7Pair.msb.value) << 7
+            let lsb = Storage(uint7Pair.lsb.value)
+            value = msb + lsb
+        }
 		
 		// MARK: Constants
 		
@@ -94,11 +102,22 @@ extension MIDI {
 		}
 		
 		/// Returns the raw 14-bit value as two 7-bit value bytes
-        public var bytePair: MIDI.BytePair {
+        public var bytePair: MIDI.Byte.Pair {
+            
 			let msb = (value & 0b1111111_0000000) >> 7
 			let lsb = value & 0b1111111
-			return .init(MSB: MIDI.Byte(msb), LSB: MIDI.Byte(lsb))
+			return .init(msb: MIDI.Byte(msb), lsb: MIDI.Byte(lsb))
+            
 		}
+        
+        /// Returns the raw 14-bit value as two 7-bit value bytes
+        public var midiUInt7Pair: MIDI.UInt7.Pair {
+            
+            let msb = (value & 0b1111111_0000000) >> 7
+            let lsb = value & 0b1111111
+            return .init(msb: MIDI.UInt7(msb), lsb: MIDI.UInt7(lsb))
+            
+        }
 		
 	}
 	
