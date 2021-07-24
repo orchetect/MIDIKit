@@ -6,6 +6,8 @@
 import Foundation
 import CoreMIDI
 
+// MARK: - MIDIIOUniqueIDProtocol
+
 public protocol MIDIIOUniqueIDProtocol {
     
     /// CoreMIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
@@ -15,11 +17,23 @@ public protocol MIDIIOUniqueIDProtocol {
     
 }
 
+// default Equatable implementation
+// conforming types to MIDIIOUniqueIDProtocol just need to conform to Equatable and this implementation will be used
 extension MIDIIOUniqueIDProtocol {
+    
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.isEqual(to: rhs)
+    }
     
     public func isEqual(to other: Self) -> Bool {
         coreMIDIUniqueID == other.coreMIDIUniqueID
     }
+    
+}
+
+// default Hashable implementation
+// conforming types to MIDIIOUniqueIDProtocol just need to conform to Equatable and this implementation will be used
+extension MIDIIOUniqueIDProtocol {
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(coreMIDIUniqueID)
@@ -27,184 +41,8 @@ extension MIDIIOUniqueIDProtocol {
     
 }
 
+// MARK: - MIDIIOEndpointUniqueIDProtocol
+
 public protocol MIDIIOEndpointUniqueIDProtocol: MIDIIOUniqueIDProtocol {
     
 }
-
-
-
-
-
-
-
-
-extension MIDI.IO.InputEndpoint {
-    
-    /// MIDIKit Object Unique ID value type.
-    /// Analogous with CoreMIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
-    public struct UniqueID: MIDIIOEndpointUniqueIDProtocol, Hashable {
-        
-        public let coreMIDIUniqueID: MIDIUniqueID
-        
-        public init(_ coreMIDIUniqueID: MIDIUniqueID) {
-            self.coreMIDIUniqueID = coreMIDIUniqueID
-        }
-        
-    }
-    
-}
-
-extension MIDI.IO.InputEndpoint.UniqueID: ExpressibleByIntegerLiteral {
-    
-    public typealias IntegerLiteralType = MIDIUniqueID
-    
-    public init(integerLiteral value: IntegerLiteralType) {
-        
-        coreMIDIUniqueID = value
-        
-    }
-    
-}
-
-extension MIDI.IO.InputEndpoint.UniqueID: CustomStringConvertible {
-    
-    public var description: String {
-        
-        return "\(coreMIDIUniqueID)"
-        
-    }
-    
-}
-
-
-
-
-
-
-
-
-extension MIDI.IO.OutputEndpoint {
-    
-    /// MIDIKit Object Unique ID value type.
-    /// Analogous with CoreMIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
-    public struct UniqueID: MIDIIOEndpointUniqueIDProtocol, Hashable {
-        
-        public let coreMIDIUniqueID: MIDIUniqueID
-        
-        public init(_ coreMIDIUniqueID: MIDIUniqueID) {
-            self.coreMIDIUniqueID = coreMIDIUniqueID
-        }
-        
-    }
-    
-}
-
-extension MIDI.IO.OutputEndpoint.UniqueID: ExpressibleByIntegerLiteral {
-    
-    public typealias IntegerLiteralType = MIDIUniqueID
-    
-    public init(integerLiteral value: IntegerLiteralType) {
-        
-        coreMIDIUniqueID = value
-        
-    }
-    
-}
-
-extension MIDI.IO.OutputEndpoint.UniqueID: CustomStringConvertible {
-    
-    public var description: String {
-        
-        return "\(coreMIDIUniqueID)"
-        
-    }
-    
-}
-
-
-
-
-
-
-
-extension MIDI.IO.Device {
-    
-    /// MIDIKit Object Unique ID value type.
-    /// Analogous with CoreMIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
-    public struct UniqueID: MIDIIOUniqueIDProtocol, Hashable {
-        
-        public let coreMIDIUniqueID: MIDIUniqueID
-        
-        public init(_ coreMIDIUniqueID: MIDIUniqueID) {
-            self.coreMIDIUniqueID = coreMIDIUniqueID
-        }
-        
-    }
-    
-}
-
-extension MIDI.IO.Device.UniqueID: ExpressibleByIntegerLiteral {
-    
-    public typealias IntegerLiteralType = MIDIUniqueID
-    
-    public init(integerLiteral value: IntegerLiteralType) {
-        
-        coreMIDIUniqueID = value
-        
-    }
-    
-}
-
-extension MIDI.IO.Device.UniqueID: CustomStringConvertible {
-    
-    public var description: String {
-        
-        return "\(coreMIDIUniqueID)"
-        
-    }
-    
-}
-
-
-
-
-
-
-extension MIDI.IO.Entity {
-    
-    /// MIDIKit Object Unique ID value type.
-    /// Analogous with CoreMIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
-    public struct UniqueID: MIDIIOUniqueIDProtocol, Hashable {
-        
-        public let coreMIDIUniqueID: MIDIUniqueID
-        
-        public init(_ coreMIDIUniqueID: MIDIUniqueID) {
-            self.coreMIDIUniqueID = coreMIDIUniqueID
-        }
-        
-    }
-    
-}
-
-extension MIDI.IO.Entity.UniqueID: ExpressibleByIntegerLiteral {
-    
-    public typealias IntegerLiteralType = MIDIUniqueID
-    
-    public init(integerLiteral value: IntegerLiteralType) {
-        
-        coreMIDIUniqueID = value
-        
-    }
-    
-}
-
-extension MIDI.IO.Entity.UniqueID: CustomStringConvertible {
-    
-    public var description: String {
-        
-        return "\(coreMIDIUniqueID)"
-        
-    }
-    
-}
-
