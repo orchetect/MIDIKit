@@ -17,7 +17,7 @@ extension MIDI.IO.Manager {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addInputConnection(
-        toOutput: MIDI.IO.EndpointIDCriteria,
+        toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
         tag: String,
         receiveHandler: MIDI.IO.ReceiveHandler
     ) throws {
@@ -43,7 +43,7 @@ extension MIDI.IO.Manager {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addOutputConnection(
-        toInput: MIDI.IO.EndpointIDCriteria,
+        toInput: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>,
         tag: String
     ) throws {
         
@@ -133,7 +133,7 @@ extension MIDI.IO.Manager {
     public func addInput(
         name: String,
         tag: String,
-        uniqueID: MIDI.IO.UniqueID.Persistence,
+        uniqueID: MIDI.IO.UniqueIDPersistence<MIDI.IO.InputEndpoint.UniqueID>,
         receiveHandler: MIDI.IO.ReceiveHandler
     ) throws {
         
@@ -176,7 +176,7 @@ extension MIDI.IO.Manager {
     public func addOutput(
         name: String,
         tag: String,
-        uniqueID: MIDI.IO.UniqueID.Persistence
+        uniqueID: MIDI.IO.UniqueIDPersistence<MIDI.IO.OutputEndpoint.UniqueID>
     ) throws {
         
         let newVS = MIDI.IO.Output(

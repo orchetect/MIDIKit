@@ -13,7 +13,7 @@ extension MIDI.IO {
     /// This connects to an external output in the system and subscribes to its MIDI events.
     public class InputConnection {
         
-        public private(set) var outputCriteria: MIDI.IO.EndpointIDCriteria
+        public private(set) var outputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>
         
         internal private(set) var outputEndpointRef: MIDIEndpointRef? = nil
         
@@ -23,7 +23,7 @@ extension MIDI.IO {
         
         public private(set) var isConnected: Bool = false
         
-        internal init(toOutput: MIDI.IO.EndpointIDCriteria,
+        internal init(toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
                       receiveHandler: ReceiveHandler) {
             
             self.outputCriteria = toOutput
@@ -55,7 +55,7 @@ extension MIDI.IO.InputConnection {
         
         guard let getOutputEndpointRef = outputCriteria
                 .locate(in: manager.endpoints.outputs)?
-                .ref
+                .coreMIDIObjectRef
         else {
             
             isConnected = false

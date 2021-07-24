@@ -9,7 +9,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// A MIDI device, wrapping `MIDIEntityRef`.
+    /// A MIDI device, wrapping a CoreMIDI `MIDIEntityRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     public struct Entity: Object {
@@ -18,11 +18,7 @@ extension MIDI.IO {
         
         // MARK: CoreMIDI ref
         
-        public let ref: MIDIEntityRef
-        
-        // MARK: Identifiable
-        
-        public var id = UUID()
+        public let coreMIDIObjectRef: MIDIEntityRef
         
         // MARK: Init
         
@@ -30,7 +26,7 @@ extension MIDI.IO {
             
             assert(ref != MIDIEntityRef())
             
-            self.ref = ref
+            self.coreMIDIObjectRef = ref
             update()
             
         }
@@ -48,8 +44,8 @@ extension MIDI.IO {
         /// Update the cached properties
         internal mutating func update() {
             
-            self.name = (try? MIDI.IO.getName(of: ref)) ?? ""
-            self.uniqueID = MIDI.IO.getUniqueID(of: ref)
+            self.name = (try? MIDI.IO.getName(of: coreMIDIObjectRef)) ?? ""
+            self.uniqueID = .init(MIDI.IO.getUniqueID(of: coreMIDIObjectRef))
             
         }
         
@@ -61,21 +57,21 @@ extension MIDI.IO.Entity {
     
     public var device: MIDI.IO.Device? {
         
-        try? MIDI.IO.getSystemDevice(for: ref)
+        try? MIDI.IO.getSystemDevice(for: coreMIDIObjectRef)
         
     }
     
     /// Returns the inputs for the entity.
     public var inputs: [MIDI.IO.InputEndpoint] {
         
-        MIDI.IO.getSystemDestinations(for: ref)
+        MIDI.IO.getSystemDestinations(for: coreMIDIObjectRef)
         
     }
     
     /// Returns the outputs for the entity.
     public var outputs: [MIDI.IO.OutputEndpoint] {
         
-        MIDI.IO.getSystemSources(for: ref)
+        MIDI.IO.getSystemSources(for: coreMIDIObjectRef)
         
     }
     

@@ -16,12 +16,12 @@ extension MIDI.IO {
         public private(set) var endpointName: String = ""
         
         /// The port's unique ID in the system.
-        public private(set) var uniqueID: MIDI.IO.UniqueID? = nil
+        public private(set) var uniqueID: MIDI.IO.OutputEndpoint.UniqueID? = nil
         
         public private(set) var portRef: MIDIPortRef? = nil
         
         internal init(name: String,
-                      uniqueID: MIDI.IO.UniqueID? = nil) {
+                      uniqueID: MIDI.IO.OutputEndpoint.UniqueID? = nil) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
@@ -47,7 +47,7 @@ extension MIDI.IO.Output {
             return nil
         }
         
-        if let endpoint = MIDI.IO.getSystemSourceEndpoint(matching: uniqueID.id) {
+        if let endpoint = MIDI.IO.getSystemSourceEndpoint(matching: uniqueID.coreMIDIUniqueID) {
             return endpoint
         }
         
@@ -98,11 +98,11 @@ extension MIDI.IO.Output {
         if let uniqueID = self.uniqueID {
             // inject previously-stored unique ID into port
             try MIDI.IO.setUniqueID(of: newPortRef,
-                                    to: uniqueID)
+                                    to: uniqueID.coreMIDIUniqueID)
         } else {
             // if managed ID is nil, either it was not supplied or it was already in use
             // so fetch the new ID from the port we just created
-            uniqueID = MIDI.IO.getUniqueID(of: newPortRef)
+            uniqueID = .init(MIDI.IO.getUniqueID(of: newPortRef))
         }
         
     }

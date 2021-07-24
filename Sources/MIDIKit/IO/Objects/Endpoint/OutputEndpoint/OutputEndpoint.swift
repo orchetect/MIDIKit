@@ -9,7 +9,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// A MIDI output endpoint in the system.
+    /// A MIDI output endpoint in the system, wrapping a CoreMIDI `MIDIEndpointRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     ///
@@ -18,11 +18,7 @@ extension MIDI.IO {
         
         // MARK: CoreMIDI ref
         
-        public let ref: MIDIEndpointRef
-        
-        // MARK: Identifiable
-        
-        public var id = UUID()
+        public let coreMIDIObjectRef: MIDIEndpointRef
         
         // MARK: Init
         
@@ -30,7 +26,7 @@ extension MIDI.IO {
             
             assert(ref != MIDIEndpointRef())
             
-            self.ref = ref
+            self.coreMIDIObjectRef = ref
             update()
             
         }
@@ -48,8 +44,8 @@ extension MIDI.IO {
         /// Update the cached properties
         internal mutating func update() {
             
-            self.name = (try? MIDI.IO.getName(of: ref)) ?? ""
-            self.uniqueID = MIDI.IO.getUniqueID(of: ref)
+            self.name = (try? MIDI.IO.getName(of: coreMIDIObjectRef)) ?? ""
+            self.uniqueID = .init(MIDI.IO.getUniqueID(of: coreMIDIObjectRef))
             
         }
         
@@ -62,7 +58,7 @@ extension MIDI.IO.OutputEndpoint {
     /// Returns `true` if the object exists in the system by querying CoreMIDI.
     public var exists: Bool {
         
-        MIDI.IO.getSystemSourceEndpoint(matching: uniqueID.id) != nil
+        MIDI.IO.getSystemSourceEndpoint(matching: uniqueID.coreMIDIUniqueID) != nil
         
     }
     

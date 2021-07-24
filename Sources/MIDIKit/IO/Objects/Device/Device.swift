@@ -9,7 +9,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// A MIDI device, wrapping `MIDIDeviceRef`.
+    /// A MIDI device, wrapping a CoreMIDI `MIDIDeviceRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     ///
@@ -20,11 +20,7 @@ extension MIDI.IO {
         
         // MARK: CoreMIDI ref
         
-        public let ref: MIDIDeviceRef
-        
-        // MARK: Identifiable
-        
-        public var id = UUID()
+        public let coreMIDIObjectRef: MIDIDeviceRef
         
         // MARK: Init
         
@@ -32,7 +28,7 @@ extension MIDI.IO {
             
             assert(ref != MIDIDeviceRef())
             
-            self.ref = ref
+            self.coreMIDIObjectRef = ref
             update()
             
         }
@@ -50,8 +46,8 @@ extension MIDI.IO {
         /// Update the cached properties
         internal mutating func update() {
             
-            self.name = (try? MIDI.IO.getName(of: ref)) ?? ""
-            self.uniqueID = MIDI.IO.getUniqueID(of: ref)
+            self.name = (try? MIDI.IO.getName(of: coreMIDIObjectRef)) ?? ""
+            self.uniqueID = .init(MIDI.IO.getUniqueID(of: coreMIDIObjectRef))
             
         }
         
@@ -63,7 +59,7 @@ extension MIDI.IO.Device {
     /// List of entities within the device.
     public var entities: [MIDI.IO.Entity] {
         
-        MIDI.IO.getSystemEntities(for: ref)
+        MIDI.IO.getSystemEntities(for: coreMIDIObjectRef)
         
     }
     
@@ -88,3 +84,4 @@ extension MIDI.IO.Device: CustomDebugStringConvertible {
     }
     
 }
+

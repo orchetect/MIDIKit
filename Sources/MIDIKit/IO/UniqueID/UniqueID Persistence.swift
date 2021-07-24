@@ -4,23 +4,24 @@
 //
 
 import Foundation
+import CoreMIDI
 
-extension MIDI.IO.UniqueID {
+extension MIDI.IO {
     
-    /// Defines persistence behavior of a MIDI endpoint's unique ID in the system.
-    public enum Persistence {
+    /// Defines persistence behavior of a MIDI unique ID in the system.
+    public enum UniqueIDPersistence<T: MIDIIOUniqueIDProtocol> {
         
         /// The unique ID will be randomly generated every time it is created in the system.
         case none
         
         /// Provide a preferred MIDI endpoint unique ID value, without attaching any persistent storage mechanism.
         ///
-        /// In the event a collision with an existing MIDI endpoint unique ID in the system, a new random ID will be generated until there are no collisions.
-        case preferred(MIDI.IO.UniqueID)
+        /// In the event a collision with an existing unique ID in the system, a new random ID will be generated until there are no collisions.
+        case preferred(T)
         
         /// The MIDI endpoint's unique ID is managed automatically and persistently stored in `UserDefaults`.
         ///
-        /// If a unique ID does not yet exist for this endpoint, one will be generated randomly.
+        /// If a unique ID does not yet exist for this object, one will be generated randomly.
         ///
         /// In the event a collision with an existing MIDI endpoint unique ID in the system, a new random ID will be generated until there are no collisions.
         /// The ID will then be cached in `UserDefaults` using the key string provided - if the key exists, it will be overwritten.
@@ -32,8 +33,8 @@ extension MIDI.IO.UniqueID {
         ///
         /// In the event a collision with an existing MIDI endpoint unique ID in the system, a new random ID will be generated until there are no collisions.
         /// The ID will then be passed into the `storeHandler` closure in order to store the updated ID.
-        case manualStorage(readHandler: () -> Int32?,
-                           storeHandler: (Int32?) -> ())
+        case manualStorage(readHandler: () -> MIDIUniqueID?,
+                           storeHandler: (MIDIUniqueID?) -> ())
         
     }
     
@@ -41,10 +42,10 @@ extension MIDI.IO.UniqueID {
 
 // MARK: - Read/Write Methods
 
-extension MIDI.IO.UniqueID.Persistence {
+extension MIDI.IO.UniqueIDPersistence {
     
     /// Reads the unique ID from the persistent storage, if applicable.
-    public func readID() -> MIDI.IO.UniqueID? {
+    public func readID() -> T? {
         
         switch self {
         case .none:
@@ -58,13 +59,13 @@ extension MIDI.IO.UniqueID.Persistence {
                 .integerOptional(forKey: key)?
                 .int32Exactly
             {
-                return .init(readInt)
+                return T(readInt)
             }
             return nil
             
         case .manualStorage(readHandler: let readHandler, storeHandler: _):
             if let readInt = readHandler() {
-                return .init(readInt)
+                return T(readInt)
             }
             return nil
         }
@@ -72,7 +73,7 @@ extension MIDI.IO.UniqueID.Persistence {
     }
     
     /// Writes the unique ID to the persistent storage, if applicable.
-    public func writeID(_ newValue: MIDI.IO.UniqueID?) {
+    public func writeID(_ newValue: T?) {
         
         switch self {
         case .none:
@@ -82,10 +83,10 @@ extension MIDI.IO.UniqueID.Persistence {
             return // no storage
         
         case .userDefaultsManaged(key: let key):
-            UserDefaults.standard.setValue(newValue?.id, forKey: key)
+            UserDefaults.standard.setValue(newValue?.coreMIDIUniqueID, forKey: key)
             
         case .manualStorage(readHandler: _, storeHandler: let storeHandler):
-            storeHandler(newValue?.id)
+            storeHandler(newValue?.coreMIDIUniqueID)
         }
         
     }

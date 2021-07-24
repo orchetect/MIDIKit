@@ -106,14 +106,14 @@ extension MIDI.IO.ThruConnection {
         
         for srcEP in 0..<outputs.count {
             switch srcEP {
-            case 0: params.sources.0.endpointRef = outputs[0].ref
-            case 1: params.sources.1.endpointRef = outputs[1].ref
-            case 2: params.sources.2.endpointRef = outputs[2].ref
-            case 3: params.sources.3.endpointRef = outputs[3].ref
-            case 4: params.sources.4.endpointRef = outputs[4].ref
-            case 5: params.sources.5.endpointRef = outputs[5].ref
-            case 6: params.sources.6.endpointRef = outputs[6].ref
-            case 7: params.sources.7.endpointRef = outputs[7].ref
+            case 0: params.sources.0.endpointRef = outputs[0].coreMIDIObjectRef
+            case 1: params.sources.1.endpointRef = outputs[1].coreMIDIObjectRef
+            case 2: params.sources.2.endpointRef = outputs[2].coreMIDIObjectRef
+            case 3: params.sources.3.endpointRef = outputs[3].coreMIDIObjectRef
+            case 4: params.sources.4.endpointRef = outputs[4].coreMIDIObjectRef
+            case 5: params.sources.5.endpointRef = outputs[5].coreMIDIObjectRef
+            case 6: params.sources.6.endpointRef = outputs[6].coreMIDIObjectRef
+            case 7: params.sources.7.endpointRef = outputs[7].coreMIDIObjectRef
             default: break // ignores more than 8 endpoints
             }
         }
@@ -122,14 +122,14 @@ extension MIDI.IO.ThruConnection {
         
         for destEP in 0..<inputs.count {
             switch destEP {
-            case 0: params.destinations.0.endpointRef = inputs[0].ref
-            case 1: params.destinations.1.endpointRef = inputs[1].ref
-            case 2: params.destinations.2.endpointRef = inputs[2].ref
-            case 3: params.destinations.3.endpointRef = inputs[3].ref
-            case 4: params.destinations.4.endpointRef = inputs[4].ref
-            case 5: params.destinations.5.endpointRef = inputs[5].ref
-            case 6: params.destinations.6.endpointRef = inputs[6].ref
-            case 7: params.destinations.7.endpointRef = inputs[7].ref
+            case 0: params.destinations.0.endpointRef = inputs[0].coreMIDIObjectRef
+            case 1: params.destinations.1.endpointRef = inputs[1].coreMIDIObjectRef
+            case 2: params.destinations.2.endpointRef = inputs[2].coreMIDIObjectRef
+            case 3: params.destinations.3.endpointRef = inputs[3].coreMIDIObjectRef
+            case 4: params.destinations.4.endpointRef = inputs[4].coreMIDIObjectRef
+            case 5: params.destinations.5.endpointRef = inputs[5].coreMIDIObjectRef
+            case 6: params.destinations.6.endpointRef = inputs[6].coreMIDIObjectRef
+            case 7: params.destinations.7.endpointRef = inputs[7].coreMIDIObjectRef
             default: break // ignores more than 8 endpoints
             }
         }

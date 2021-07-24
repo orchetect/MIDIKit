@@ -21,10 +21,10 @@ extension MIDI.IO.Endpoint {
     
     public static var objectType: MIDI.IO.ObjectType { .endpoint }
     
-    /// List of entities within the device.
+    /// The entity that owns the endpoint, if any. Virtual endpoints will not have an owning entity.
     public var entity: MIDI.IO.Entity? {
         
-        try? MIDI.IO.getSystemEntity(for: ref)
+        try? MIDI.IO.getSystemEntity(for: coreMIDIObjectRef)
         
     }
     

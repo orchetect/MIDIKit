@@ -74,7 +74,7 @@ extension MIDI.IO {
         
         for i in 0..<MIDIGetNumberOfSources() {
             let endpoint = MIDIGetSource(i)
-            if MIDI.IO.getUniqueID(of: endpoint).id == uniqueID { return endpoint }
+            if MIDI.IO.getUniqueID(of: endpoint) == uniqueID { return endpoint }
         }
         
         return nil
@@ -106,7 +106,7 @@ extension MIDI.IO {
         
         for i in 0..<MIDIGetNumberOfDestinations() {
             let endpoint = MIDIGetDestination(i)
-            if MIDI.IO.getUniqueID(of: endpoint).id == uniqueID { return endpoint }
+            if MIDI.IO.getUniqueID(of: endpoint) == uniqueID { return endpoint }
         }
         
         return nil
