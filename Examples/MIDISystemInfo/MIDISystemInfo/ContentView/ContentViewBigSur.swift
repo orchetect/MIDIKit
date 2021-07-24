@@ -1,6 +1,6 @@
 //
 //  ContentViewBigSur.swift
-//  MIDIKitTestHarness
+//  MIDISystemInfo
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -13,7 +13,7 @@ struct ContentViewBigSur: View {
 	
 	@StateObject var midiManager: MIDI.IO.Manager = {
 		let newManager =
-			MIDI.IO.Manager(clientName: "MIDIKitTestHarness",
+			MIDI.IO.Manager(clientName: "MIDISystemInfo",
 							model: "TestApp",
 							manufacturer: "Orchetect")
 		do {
@@ -34,7 +34,7 @@ struct ContentViewBigSur: View {
 				
 				Section(header: Text("MIDI Devices")) {
 
-					ForEach(midiManager.devices.devices.sortedByName(), id: \.id) { item in
+					ForEach(midiManager.devices.devices.sortedByName()) { item in
 						Group {
 							if let nsImg = item.getImageAsNSImage {
 								Image(nsImage: nsImg)
@@ -52,7 +52,7 @@ struct ContentViewBigSur: View {
 				
 				Section(header: Text("MIDI Outputs")) {
 
-					ForEach(midiManager.endpoints.outputs.sortedByName(), id: \.id) { item in
+					ForEach(midiManager.endpoints.outputs.sortedByName()) { item in
 						Group {
 							if let nsImg = item.getImageAsNSImage {
 								Image(nsImage: nsImg)
@@ -70,7 +70,7 @@ struct ContentViewBigSur: View {
 
 				Section(header: Text("MIDI Inputs")) {
 
-					ForEach(midiManager.endpoints.inputs.sortedByName(), id: \.id) { item in
+					ForEach(midiManager.endpoints.inputs.sortedByName()) { item in
 						Group {
 							if let nsImg = item.getImageAsNSImage {
 								Image(nsImage: nsImg)

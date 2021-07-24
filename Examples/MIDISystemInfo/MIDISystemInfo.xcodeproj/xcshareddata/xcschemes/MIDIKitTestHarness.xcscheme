@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E230C49E25AE7B31005DCB55"
-               BuildableName = "MIDIKitTestHarness.app"
-               BlueprintName = "MIDIKitTestHarness"
-               ReferencedContainer = "container:MIDIKitTestHarness.xcodeproj">
+               BuildableName = "MIDISystemInfo.app"
+               BlueprintName = "MIDISystemInfo"
+               ReferencedContainer = "container:MIDISystemInfo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -26,32 +26,13 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E230C4B325AE7B33005DCB55"
-               BuildableName = "MIDIKitTestHarnessTests.xctest"
-               BlueprintName = "MIDIKitTestHarnessTests"
-               ReferencedContainer = "container:MIDIKitTestHarness.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E230C4BE25AE7B33005DCB55"
-               BuildableName = "MIDIKitTestHarnessUITests.xctest"
-               BlueprintName = "MIDIKitTestHarnessUITests"
-               ReferencedContainer = "container:MIDIKitTestHarness.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -65,9 +46,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E230C49E25AE7B31005DCB55"
-            BuildableName = "MIDIKitTestHarness.app"
-            BlueprintName = "MIDIKitTestHarness"
-            ReferencedContainer = "container:MIDIKitTestHarness.xcodeproj">
+            BuildableName = "MIDISystemInfo.app"
+            BlueprintName = "MIDISystemInfo"
+            ReferencedContainer = "container:MIDISystemInfo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -82,9 +63,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E230C49E25AE7B31005DCB55"
-            BuildableName = "MIDIKitTestHarness.app"
-            BlueprintName = "MIDIKitTestHarness"
-            ReferencedContainer = "container:MIDIKitTestHarness.xcodeproj">
+            BuildableName = "MIDISystemInfo.app"
+            BlueprintName = "MIDISystemInfo"
+            ReferencedContainer = "container:MIDISystemInfo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

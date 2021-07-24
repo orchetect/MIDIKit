@@ -1,6 +1,6 @@
 //
 //  HostingWindowKey.swift
-//  MIDIKitTestHarness
+//  MIDISystemInfo
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 

@@ -1,6 +1,6 @@
 //
 //  ContentViewCatalina.swift
-//  MIDIKitTestHarness
+//  MIDISystemInfo
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -23,7 +23,7 @@ struct ContentViewCatalina: View {
 				
 				Section(header: Text("MIDI Devices")) {
 					
-					ForEach(midiManager.devices.devices.sortedByName(), id: \.id) { item in
+					ForEach(midiManager.devices.devices.sortedByName()) { item in
 						NavigationLink(destination: DetailsView(endpoint: item)) {
 							Group {
 								if let nsImg = item.getImageAsNSImage {
@@ -43,7 +43,7 @@ struct ContentViewCatalina: View {
 				
 				Section(header: Text("MIDI Output Endpoints")) {
 					
-					ForEach(midiManager.endpoints.outputs.sortedByName(), id: \.id) { item in
+					ForEach(midiManager.endpoints.outputs.sortedByName()) { item in
 						NavigationLink(destination: DetailsView(endpoint: item)) {
 							Group {
 								if let nsImg = item.getImageAsNSImage {
@@ -63,7 +63,7 @@ struct ContentViewCatalina: View {
 				
 				Section(header: Text("MIDI Input Endpoints")) {
 					
-					ForEach(midiManager.endpoints.inputs.sortedByName(), id: \.id) { item in
+					ForEach(midiManager.endpoints.inputs.sortedByName()) { item in
 						NavigationLink(destination: DetailsView(endpoint: item)) {
 							Group {
 								if let nsImg = item.getImageAsNSImage {

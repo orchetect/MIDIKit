@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  MIDIKitTestHarness
+//  MIDISystemInfo
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -50,7 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				// for Catalina, since @StateObject is not available for use, demonstrate storing the MIDI.IO.Manager instance in AppDelegate and passing it by reference into ContentView's weak @ObservedObject storage.
 				midiManager = {
 					let newManager =
-						MIDI.IO.Manager(clientName: "MIDIKitTestHarness",
+						MIDI.IO.Manager(clientName: "MIDISystemInfo",
 										model: "TestApp",
 										manufacturer: "Orchetect")
 					do {

@@ -1,6 +1,6 @@
 //
 //  ContentViewManual.swift
-//  MIDIKitTestHarness
+//  MIDISystemInfo
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -13,7 +13,7 @@ struct ContentViewManual: View {
 	
 	var midiManager: MIDI.IO.Manager = {
 		let newManager =
-			MIDI.IO.Manager(clientName: "MIDIKitTestHarness",
+			MIDI.IO.Manager(clientName: "MIDISystemInfo",
 							model: "TestApp",
 							manufacturer: "Orchetect")
 		do {
@@ -58,7 +58,7 @@ struct ContentViewManual: View {
 				
 				Section(header: Text("MIDI Devices")) {
 					
-					ForEach(devices.sortedByName(), id: \.id) { item in
+					ForEach(devices.sortedByName()) { item in
 						NavigationLink(destination: DetailsView(endpoint: item)) {
 							Group {
 								if let nsImg = item.getImageAsNSImage {
@@ -78,7 +78,7 @@ struct ContentViewManual: View {
 				
 				Section(header: Text("MIDI Outputs")) {
 					
-					ForEach(outputs.sortedByName(), id: \.id) { item in
+					ForEach(outputs.sortedByName()) { item in
 						NavigationLink(destination: DetailsView(endpoint: item)) {
 							Group {
 								if let nsImg = item.getImageAsNSImage {
@@ -98,7 +98,7 @@ struct ContentViewManual: View {
 				
 				Section(header: Text("MIDI Inputs")) {
 					
-					ForEach(inputs.sortedByName(), id: \.id) { item in
+					ForEach(inputs.sortedByName()) { item in
 						NavigationLink(destination: DetailsView(endpoint: item)) {
 							Group {
 								if let nsImg = item.getImageAsNSImage {
