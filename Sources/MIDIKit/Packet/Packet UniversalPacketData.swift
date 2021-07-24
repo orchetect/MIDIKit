@@ -13,6 +13,7 @@ extension MIDI.Packet {
         /// Universal MIDI Packet Words
         let words: [UInt32]
         
+        /// CoreMIDI packet timestamp
         let timeStamp: MIDITimeStamp
         
         /// Flat array of raw bytes
@@ -30,12 +31,12 @@ extension MIDI.Packet {
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
         @inline(__always) public init(_ eventPacketPtr: UnsafeMutablePointer<MIDIEventPacket>) {
             
-            let unsafeWrapper = UnsafeMutableMIDIEventPacketPointer(eventPacketPtr)
+            let eventPacketIterator = UnsafeMutableMIDIEventPacketPointer(eventPacketPtr)
             
             var words: [UInt32] = []
-            words.reserveCapacity(unsafeWrapper.count)
+            words.reserveCapacity(eventPacketIterator.count)
             
-            for word in unsafeWrapper {
+            for word in eventPacketIterator {
                 words.append(word)
             }
             

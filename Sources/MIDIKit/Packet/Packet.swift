@@ -29,7 +29,7 @@ extension MIDI {
             
         }
         
-        /// CoreMIDI timestamp
+        /// CoreMIDI packet timestamp
         public var timeStamp: MIDITimeStamp {
             
             switch self {
