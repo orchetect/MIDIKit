@@ -7,7 +7,7 @@ import Foundation
 
 extension MIDI.IO {
     
-    /// Enum defining a `MIDI.IO.Object`'s MIDI object type.
+    /// Enum defining a `MIDIIOObjectProtocol`'s MIDI object type.
     public enum ObjectType: CaseIterable, Hashable {
         
         case device

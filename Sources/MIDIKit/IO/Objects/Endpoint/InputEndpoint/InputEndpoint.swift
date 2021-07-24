@@ -14,7 +14,7 @@ extension MIDI.IO {
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     ///
     /// Instead, read endpoint arrays and individual endpoint properties from `MIDI.IO.Manager.endpoints` ad-hoc when they are needed.
-    public struct InputEndpoint: Endpoint {
+    public struct InputEndpoint: MIDIIOEndpointProtocol {
         
         // MARK: CoreMIDI ref
         

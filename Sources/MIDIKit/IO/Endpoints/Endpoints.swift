@@ -5,7 +5,8 @@
 
 import Foundation
 
-public protocol MIDIIOEndpoints {
+// this protocol may not be necessary, it was experimental so that the `MIDI.IO.Manager.endpoints` property could be swapped out with a different Endpoints class with Combine support
+public protocol MIDIIOEndpointsProtocol {
     
     /// List of MIDI output endpoints in the system
     var outputs: [MIDI.IO.OutputEndpoint] { get }
@@ -22,7 +23,7 @@ public protocol MIDIIOEndpoints {
 extension MIDI.IO {
     
     /// Manages system MIDI endpoints information cache.
-    public class Endpoints: NSObject, MIDIIOEndpoints {
+    public class Endpoints: NSObject, MIDIIOEndpointsProtocol {
         
         public internal(set) dynamic var outputs: [OutputEndpoint] = []
         

@@ -60,7 +60,7 @@ extension MIDI.IO {
         public internal(set) var devices: MIDIIODevicesProtocol = Devices()
         
         /// MIDI input and output endpoints in the system.
-        public internal(set) var endpoints: MIDIIOEndpoints = Endpoints()
+        public internal(set) var endpoints: MIDIIOEndpointsProtocol = Endpoints()
         
         /// Handler that is called when state has changed in the manager.
         public var notificationHandler: ((_ notification: Notification,

@@ -5,6 +5,7 @@
 
 import Foundation
 
+// this protocol may not be necessary, it was experimental so that the `MIDI.IO.Manager.devices` property could be swapped out with a different Devices class with Combine support
 public protocol MIDIIODevicesProtocol {
     
     /// List of MIDI devices in the system

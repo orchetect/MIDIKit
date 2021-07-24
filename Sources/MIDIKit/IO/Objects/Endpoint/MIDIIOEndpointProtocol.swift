@@ -1,5 +1,5 @@
 //
-//  Endpoint.swift
+//  MIDIIOEndpointProtocol.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -7,17 +7,11 @@ import CoreMIDI
 
 // MARK: - Endpoint
 
-public protocol MIDIIOEndpointProtocol: MIDI.IO.Object {
+public protocol MIDIIOEndpointProtocol: MIDIIOObjectProtocol {
     
 }
 
-extension MIDI.IO {
-    
-    public typealias Endpoint = MIDIIOEndpointProtocol
-    
-}
-
-extension MIDI.IO.Endpoint {
+extension MIDIIOEndpointProtocol {
     
     public static var objectType: MIDI.IO.ObjectType { .endpoint }
     
