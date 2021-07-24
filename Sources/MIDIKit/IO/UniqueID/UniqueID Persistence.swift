@@ -3,7 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import Foundation
 import CoreMIDI
 
 extension MIDI.IO {
