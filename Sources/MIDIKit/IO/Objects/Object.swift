@@ -14,7 +14,7 @@ import AppKit
 import UIKit
 #endif
 
-public protocol MIDIIOObjectRefProtocol {
+public protocol MIDIIOObjectProtocol {
     
     /// Enum describing the abstracted object type.
     static var objectType: MIDI.IO.ObjectType { get }
@@ -32,7 +32,7 @@ public protocol MIDIIOObjectRefProtocol {
 
 extension MIDI.IO {
     
-    public typealias Object = MIDIIOObjectRefProtocol
+    public typealias Object = MIDIIOObjectProtocol
     
 }
 
