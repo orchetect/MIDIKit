@@ -29,6 +29,10 @@ extension MIDI.IO.InputEndpoint.UniqueID: Hashable {
     // default implementation provided by MIDIIOUniqueIDProtocol
 }
 
+extension MIDI.IO.InputEndpoint.UniqueID: Identifiable {
+    // default implementation provided by MIDIIOUniqueIDProtocol
+}
+
 extension MIDI.IO.InputEndpoint.UniqueID: ExpressibleByIntegerLiteral {
     
     public typealias IntegerLiteralType = MIDIUniqueID

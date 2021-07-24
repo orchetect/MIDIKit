@@ -18,7 +18,7 @@ public protocol MIDIIOUniqueIDProtocol {
 }
 
 // default Equatable implementation
-// conforming types to MIDIIOUniqueIDProtocol just need to conform to Equatable and this implementation will be used
+// (conforming types to MIDIIOUniqueIDProtocol just need to conform to Equatable and this implementation will be used)
 extension MIDIIOUniqueIDProtocol {
     
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -32,12 +32,22 @@ extension MIDIIOUniqueIDProtocol {
 }
 
 // default Hashable implementation
-// conforming types to MIDIIOUniqueIDProtocol just need to conform to Equatable and this implementation will be used
+// (conforming types to MIDIIOUniqueIDProtocol just need to conform to Hashable and this implementation will be used)
 extension MIDIIOUniqueIDProtocol {
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(coreMIDIUniqueID)
     }
+    
+}
+
+// default Identifiable implementation
+// (conforming types to MIDIIOUniqueIDProtocol just need to conform to Identifiable and this implementation will be used)
+extension MIDIIOUniqueIDProtocol {
+    
+    public typealias ID = MIDIUniqueID
+    
+    public var id: MIDIUniqueID { coreMIDIUniqueID }
     
 }
 
