@@ -1,5 +1,5 @@
 //
-//  MIDIPacketData.swift
+//  PacketData PacketData.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
