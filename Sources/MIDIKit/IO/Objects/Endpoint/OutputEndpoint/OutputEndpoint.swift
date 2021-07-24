@@ -53,6 +53,14 @@ extension MIDI.IO {
     
 }
 
+extension MIDI.IO.OutputEndpoint: Equatable {
+    // default implementation is provided in MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.OutputEndpoint: Hashable {
+    // default implementation is provided in MIDIIOObjectProtocol
+}
+
 extension MIDI.IO.OutputEndpoint {
     
     /// Returns `true` if the object exists in the system by querying CoreMIDI.
