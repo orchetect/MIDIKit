@@ -1,5 +1,5 @@
 //
-//  Object.swift
+//  ObjectRef.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -13,8 +13,6 @@ import AppKit
 #if canImport(UIKit)
 import UIKit
 #endif
-
-// MARK: - MIDIIOObjectRefProtocol (aka MIDI.IO.ObjectRef)
 
 public protocol MIDIIOObjectRefProtocol {
     
@@ -37,20 +35,6 @@ extension MIDI.IO {
     public typealias ObjectRef = MIDIIOObjectRefProtocol
     
 }
-
-// MARK: - MIDIIOObject (aka MIDI.IO.Object)
-
-public protocol MIDIIOObjectProtocol: Hashable {
-    
-}
-
-extension MIDI.IO {
-    
-    public typealias Object = MIDIIOObjectProtocol
-    
-}
-
-
 
 // MARK: - Equatable
 
@@ -622,7 +606,7 @@ extension MIDI.IO.ObjectRef {
         // MARK: Protocols
         case .protocolID:
             var valueString = "-"
-            if #available(macOS 11.0, macCatalyst 14, iOS 14, *) {
+            if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
                 valueString = "\(getProtocolID?.rawValue, ifNil: "-")"
             } else {
                 valueString = "OS not supported. Requires macOS 11.0, macCatalyst 14.0, or iOS 14.0."

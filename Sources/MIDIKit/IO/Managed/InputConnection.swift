@@ -71,13 +71,27 @@ extension MIDI.IO.InputConnection {
         var newConnection = MIDIPortRef()
         
         // connection name must be unique, otherwise process might hang (?)
-        try MIDIInputPortCreateWithBlock(
-            manager.clientRef,
-            UUID().uuidString as CFString,
-            &newConnection,
-            receiveHandler.midiReadBlock
-        )
-        .throwIfOSStatusErr()
+        
+        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
+            try MIDIInputPortCreateWithProtocol(
+                manager.clientRef,
+                UUID().uuidString as CFString,
+                ._1_0,
+                &newConnection,
+                receiveHandler.midiReceiveBlock
+            )
+            .throwIfOSStatusErr()
+        } else {
+            // MIDIInputPortCreateWithBlock is deprecated after macOS 11 / iOS 14
+            
+            try MIDIInputPortCreateWithBlock(
+                manager.clientRef,
+                UUID().uuidString as CFString,
+                &newConnection,
+                receiveHandler.midiReadBlock
+            )
+            .throwIfOSStatusErr()
+        }
         
         try MIDIPortConnectSource(
             newConnection,
@@ -137,7 +151,7 @@ extension MIDI.IO.InputConnection: CustomStringConvertible {
         let outputEndpointName = (
             outputEndpointRef?
                 .transformed { try? MIDI.IO.getName(of: $0) }?
-                .transformed({ " " + $0 })
+                .transformed { " " + $0 }
                 .quoted
         ) ?? ""
         

@@ -20,7 +20,7 @@ import CoreMIDI
 /// See the workaround `safePacketUnwrapper` method for more details.
 extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
     
-    public typealias Element = MIDI.PacketData
+    public typealias Element = MIDI.Packet.PacketData
     
     public typealias Iterator = PacketListIterator
     
@@ -34,7 +34,7 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
     /// Custom iterator to iterate `MIDIPacket`s within a `CoreMIDI` `MIDIPacketList`.
     public struct PacketListIterator: IteratorProtocol {
         
-        public typealias Element = MIDI.PacketData
+        public typealias Element = MIDI.Packet.PacketData
         
         var index = 0
         
@@ -72,13 +72,13 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
     static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
     
     @inline(__always) fileprivate
-    static func safePacketUnwrapper(_ packetPtr: UnsafePointer<MIDIPacket>) -> MIDI.PacketData {
+    static func safePacketUnwrapper(_ packetPtr: UnsafePointer<MIDIPacket>) -> MIDI.Packet.PacketData {
         
         let packetDataCount = Int(packetPtr.pointee.length)
         
         guard packetDataCount > 0 else {
-            return MIDI.PacketData(
-                data: [],
+            return MIDI.Packet.PacketData(
+                bytes: [],
                 timeStamp: packetPtr.pointee.timeStamp
             )
         }
@@ -90,8 +90,8 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
             count: packetDataCount
         )
         
-        return MIDI.PacketData(
-            data: Data(rawMIDIPacketDataPtr),
+        return MIDI.Packet.PacketData(
+            bytes: Array<MIDI.Byte>(rawMIDIPacketDataPtr),
             timeStamp: packetPtr.pointee.timeStamp
         )
         

@@ -1,5 +1,5 @@
 //
-//  Output.swift
+//  Input.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -9,8 +9,8 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// A managed virtual MIDI output endpoint created in the system by the `Manager`.
-    public class Output {
+    /// A managed virtual MIDI input endpoint created in the system by the `Manager`.
+    public class Input {
         
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
@@ -20,11 +20,15 @@ extension MIDI.IO {
         
         public private(set) var portRef: MIDIPortRef? = nil
         
+        internal var receiveHandler: ReceiveHandler
+        
         internal init(name: String,
-                      uniqueID: MIDI.IO.UniqueID? = nil) {
+                      uniqueID: MIDI.IO.UniqueID? = nil,
+                      receiveHandler: ReceiveHandler) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
+            self.receiveHandler = receiveHandler
             
         }
         
@@ -38,16 +42,16 @@ extension MIDI.IO {
     
 }
 
-extension MIDI.IO.Output {
+extension MIDI.IO.Input {
     
     /// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
-    public var uniqueIDExistsInSystem: MIDIEndpointRef? {
+    internal var uniqueIDExistsInSystem: MIDIEndpointRef? {
         
         guard let uniqueID = self.uniqueID else {
             return nil
         }
         
-        if let endpoint = MIDI.IO.getSystemSourceEndpoint(matching: uniqueID.id) {
+        if let endpoint = MIDI.IO.getSystemDestinationEndpoint(matching: uniqueID.id) {
             return endpoint
         }
         
@@ -57,25 +61,39 @@ extension MIDI.IO.Output {
     
 }
 
-extension MIDI.IO.Output {
+extension MIDI.IO.Input {
     
     internal func create(in manager: MIDI.IO.Manager) throws {
         
         if uniqueIDExistsInSystem != nil {
             // if uniqueID is already in use, set it to nil here
-            // so MIDISourceCreate can return a new unused ID;
+            // so MIDIDestinationCreateWithBlock can return a new unused ID;
             // this should prevent errors thrown due to ID collisions in the system
             uniqueID = nil
         }
         
         var newPortRef = MIDIPortRef()
         
-        try MIDISourceCreate(
-            manager.clientRef,
-            endpointName as CFString,
-            &newPortRef
-        )
-        .throwIfOSStatusErr()
+        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
+            try MIDIDestinationCreateWithProtocol(
+                manager.clientRef,
+                endpointName as CFString,
+                ._1_0,
+                &newPortRef,
+                receiveHandler.midiReceiveBlock
+            )
+            .throwIfOSStatusErr()
+        } else {
+            // MIDIDestinationCreateWithBlock is deprecated after macOS 11 / iOS 14
+            
+            try MIDIDestinationCreateWithBlock(
+                manager.clientRef,
+                endpointName as CFString,
+                &newPortRef,
+                receiveHandler.midiReadBlock
+            )
+            .throwIfOSStatusErr()
+        }
         
         portRef = newPortRef
         
@@ -111,30 +129,13 @@ extension MIDI.IO.Output {
     
 }
 
-extension MIDI.IO.Output: CustomStringConvertible {
+extension MIDI.IO.Input: CustomStringConvertible {
     
     public var description: String {
         
         let uniqueID = "\(self.uniqueID, ifNil: "nil")"
         
-        return "Output(name: \(endpointName.quoted), uniqueID: \(uniqueID))"
-        
-    }
-    
-}
-
-extension MIDI.IO.Output: MIDIIOSendsMIDIMessagesProtocol {
-    
-    public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
-        
-        guard let portRef = self.portRef else {
-            throw MIDI.IO.MIDIError.internalInconsistency(
-                "Port reference is nil."
-            )
-        }
-        
-        try MIDIReceived(portRef, packetList)
-            .throwIfOSStatusErr()
+        return "Input(name: \(endpointName.quoted), uniqueID: \(uniqueID))"
         
     }
     

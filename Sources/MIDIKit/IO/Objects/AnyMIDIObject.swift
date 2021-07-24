@@ -44,7 +44,7 @@ extension MIDI.IO.AnyMIDIObject: Hashable {
     
 }
 
-@available(macOS 10.15, macCatalyst 13, iOS 13, *)
+@available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 9, watchOS 2, *)
 extension MIDI.IO.AnyMIDIObject: Identifiable {
     
     public var id: UUID {
@@ -52,15 +52,20 @@ extension MIDI.IO.AnyMIDIObject: Identifiable {
         switch base {
         case let typed as MIDI.IO.Device:
             return typed.id
+            
         case let typed as MIDI.IO.Entity:
             return typed.id
+            
         case let typed as MIDI.IO.InputEndpoint:
             return typed.id
+            
         case let typed as MIDI.IO.OutputEndpoint:
             return typed.id
+            
         default:
             assertionFailure("Unhandled MIDI.IO.Object type.")
             return fallbackID
+            
         }
         
     }

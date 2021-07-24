@@ -20,6 +20,11 @@ extension MIDI {
         case noteOff(note: MIDI.UInt7, velocity: MIDI.UInt7, channel: MIDI.UInt4)
         
         /// Channel Voice Message: Polyphonic Aftertouch (Status `0xA`)
+        ///
+        /// DAWs have slightly different terminology for this:
+        /// - Pro Tools: "Polyphonic Aftertouch"
+        /// - Logic Pro: "Polyphonic Aftertouch"
+        /// - Cubase: "Poly Pressure"
         case polyAftertouch(note: MIDI.UInt7, pressure: MIDI.UInt7, channel: MIDI.UInt4)
         
         /// Channel Voice Message: Controller Change (CC) (Status `0xB`)
@@ -29,6 +34,11 @@ extension MIDI {
         case programChange(program: MIDI.UInt7, channel: MIDI.UInt4)
         
         /// Channel Voice Message: Channel Aftertouch (Status `0xD`)
+        ///
+        /// DAWs have slightly different terminology for this:
+        /// - Pro Tools: "Mono Aftertouch"
+        /// - Logic Pro: "Aftertouch"
+        /// - Cubase: "Aftertouch"
         case chanAftertouch(pressure: MIDI.UInt7, channel: MIDI.UInt4)
         
         /// Channel Voice Message: Pitch Bend (Status `0xE`)
@@ -143,141 +153,6 @@ extension MIDI {
         /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
         case systemReset
         
-    }
-    
-}
-
-// MARK: - rawBytes
-
-extension MIDI.Event {
-    
-    public var rawBytes: [MIDI.Byte] {
-        
-        switch self {
-        
-        // -------------------
-        // MARK: Channel Voice
-        // -------------------
-        
-        case .noteOn(note: let note, velocity: let velocity, channel: let channel):
-            return [0x90 + channel.uint8, note.uint8, velocity.uint8]
-            
-        case .noteOff(note: let note, velocity: let velocity, channel: let channel):
-            return [0x80 + channel.uint8, note.uint8, velocity.uint8]
-            
-        case .polyAftertouch(note: let note, pressure: let pressure, channel: let channel):
-            return [0xA0 + channel.uint8, note.uint8, pressure.uint8]
-            
-        case .cc(controller: let controller, value: let value, channel: let channel):
-            return [0xB0 + channel.uint8, controller.uint8, value.uint8]
-            
-        case .programChange(program: let program, channel: let channel):
-            return [0xC0 + channel.uint8, program.uint8]
-            
-        case .chanAftertouch(pressure: let pressure, channel: let channel):
-            return [0xD0 + channel.uint8, pressure.uint8]
-            
-        case .pitchBend(value: let value, channel: let channel):
-            let bytePair = value.bytePair
-            return [0xE0 + channel.uint8, bytePair.lsb, bytePair.msb]
-            
-        // ----------------------
-        // MARK: System Exclusive
-        // ----------------------
-        
-        case .sysEx(manufacturer: let manufacturer, data: let data):
-            return [0xF0] + manufacturer.bytes + data + [0xF7]
-            
-        case .sysExUniversal(universalType: let universalType,
-                             deviceID: let deviceID,
-                             subID1: let subID1,
-                             subID2: let subID2,
-                             data: let data):
-            return [0xF0, universalType.rawValue.uint8, deviceID.uint8, subID1.uint8, subID2.uint8] + data + [0xF7]
-            
-        // -------------------
-        // MARK: System Common
-        // -------------------
-        
-        case .timecodeQuarterFrame(byte: let byte):
-            return [0xF1, byte]
-            
-        case .songPositionPointer(midiBeat: let midiBeat):
-            let bytePair = midiBeat.bytePair
-            return [0xF2, bytePair.lsb, bytePair.msb]
-            
-        case .songSelect(number: let number):
-            return [0xF3, number.uint8]
-            
-        case .unofficialBusSelect:
-            return [0xF5]
-            
-        case .tuneRequest:
-            return [0xF6]
-            
-        // ----------------------
-        // MARK: System Real Time
-        // ----------------------
-            
-        case .timingClock:
-            return [0xF8]
-            
-        case .start:
-            return [0xFA]
-            
-        case .continue:
-            return [0xFB]
-            
-        case .stop:
-            return [0xFC]
-            
-        case .activeSensing:
-            return [0xFE]
-            
-        case .systemReset:
-            return [0xFF]
-            
-        }
-        
-    }
-    
-}
-
-// MARK: - Static inits
-
-extension MIDI.Event {
-    
-    /// Channel Voice Message: Controller Change (CC) (Status `0xB`)
-    public static func cc(controller: CC,
-                          value: MIDI.UInt7,
-                          channel: MIDI.UInt4) -> Self {
-
-        .cc(controller: controller.controller,
-            value: value,
-            channel: channel)
-
-    }
-
-    /// Creates an RPN message.
-    public static func ccRPN(_ rpn: CC.RPN,
-                             channel: MIDI.UInt4) -> [MIDI.Event] {
-
-        rpn.events(channel: channel)
-
-    }
-
-    /// Creates an NRPN message, consisting of 3 or 4 MIDI Events.
-    public static func ccNRPN(parameter: MIDI.UInt7.Pair,
-                              dataEntryMSB: MIDI.UInt7?,
-                              dataEntryLSB: MIDI.UInt7?,
-                              channel: MIDI.UInt4) -> [MIDI.Event] {
-        
-        CC
-            .NRPN(parameter: parameter,
-                  dataEntryMSB: dataEntryMSB,
-                  dataEntryLSB: dataEntryLSB)
-            .events(channel: channel)
-
     }
     
 }

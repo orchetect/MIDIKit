@@ -1,5 +1,5 @@
 //
-//  Errors.swift
+//  Event Errors.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 

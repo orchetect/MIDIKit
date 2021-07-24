@@ -7,13 +7,27 @@ import CoreMIDI
 
 public protocol MIDIIOSendsMIDIMessagesProtocol {
     
+    /// CoreMIDI Port Ref
     var portRef: MIDIPortRef? { get }
     
+    /// Send a raw MIDI message.
     func send(rawMessage: [MIDI.Byte]) throws
+    
+    /// Send one ore more raw MIDI messages.
     func send(rawMessages: [[MIDI.Byte]]) throws
-    func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws
+    
+    /// Send a MIDI Event.
     func send(event: MIDI.Event) throws
+    
+    /// Send one or more MIDI Events.
     func send(events: [MIDI.Event]) throws
+    
+    /// Send a CoreMIDI `MIDIPacketList`.
+    func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws
+    
+    /// Send a CoreMIDI `MIDIEventList`.
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+    func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws
     
 }
 

@@ -144,7 +144,6 @@ extension MIDI.IO.OutputConnection: CustomStringConvertible {
 
 extension MIDI.IO.OutputConnection: MIDIIOSendsMIDIMessagesProtocol {
     
-    /// Sends a MIDI packet list to the connected input.
     public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         
         guard let outputPortRef = self.portRef else {
@@ -162,6 +161,28 @@ extension MIDI.IO.OutputConnection: MIDIIOSendsMIDIMessagesProtocol {
         try MIDISend(outputPortRef,
                      inputEndpointRef,
                      packetList)
+            .throwIfOSStatusErr()
+        
+    }
+    
+    @available(macOS 11, iOS 15, macCatalyst 15, *)
+    public func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
+        
+        guard let outputPortRef = self.portRef else {
+            throw MIDI.IO.MIDIError.internalInconsistency(
+                "Output port reference is nil."
+            )
+        }
+        
+        guard let inputEndpointRef = self.inputEndpointRef else {
+            throw MIDI.IO.MIDIError.internalInconsistency(
+                "Input port reference is nil."
+            )
+        }
+        
+        try MIDISendEventList(outputPortRef,
+                              inputEndpointRef,
+                              eventList)
             .throwIfOSStatusErr()
         
     }

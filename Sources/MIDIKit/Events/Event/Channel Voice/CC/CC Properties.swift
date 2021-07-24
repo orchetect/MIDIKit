@@ -1,5 +1,5 @@
 //
-//  CC controller.swift
+//  CC Properties.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 

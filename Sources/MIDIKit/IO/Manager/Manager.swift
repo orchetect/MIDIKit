@@ -106,7 +106,7 @@ extension MIDI.IO {
         /// Internal: calls `update()` on all objects caches.
         internal dynamic func updateObjectsCache() {
             
-            if #available(macOS 10.15, macCatalyst 13, iOS 13, *) {
+            if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13, watchOS 6, *) {
                 // calling this means we don't need to use @Published on local variables in order for Combine/SwiftUI to be notified that ObservableObject class property values have changed
                 objectWillChange.send()
             }

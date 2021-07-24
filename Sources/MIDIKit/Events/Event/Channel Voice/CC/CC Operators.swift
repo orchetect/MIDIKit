@@ -1,5 +1,5 @@
 //
-//  CC Extensions.swift
+//  CC Operators.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 

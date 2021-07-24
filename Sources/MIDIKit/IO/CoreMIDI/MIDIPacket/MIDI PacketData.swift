@@ -5,34 +5,25 @@
 
 import CoreMIDI
 
-extension MIDI {
+extension MIDI.Packet {
     
-    /// Clean data encapsulation of a `MIDIPacket`.
+    /// Clean consolidated data encapsulation of raw data from a CoreMIDI MIDI 1.0 `MIDIPacket`.
     public struct PacketData {
         
-        /// Raw data
-        @inline(__always) public var data: Data
+        let bytes: [MIDI.Byte]
         
-        @inline(__always) public var timeStamp: MIDITimeStamp
+        let timeStamp: MIDITimeStamp
         
-        /// Returns `[MIDI.Byte]` representation of `.data`.
-        /// - Note: accessing `.data` property is more performant.
-        @inline(__always) public var bytes: [MIDI.Byte] {
-            
-            [MIDI.Byte](data)
-            
-        }
+        //@inline(__always) public init(data: Data, timeStamp: MIDITimeStamp) {
+        //
+        //    self.data = data
+        //    self.timeStamp = timeStamp
+        //
+        //}
         
-        @inline(__always) public init(data: Data, timeStamp: MIDITimeStamp) {
+        @inline(__always) public init(bytes: [MIDI.Byte], timeStamp: MIDITimeStamp) {
             
-            self.data = data
-            self.timeStamp = timeStamp
-            
-        }
-        
-        @inline(__always) public init(data: [MIDI.Byte], timeStamp: MIDITimeStamp) {
-            
-            self.data = Data(data)
+            self.bytes = bytes
             self.timeStamp = timeStamp
             
         }

@@ -17,9 +17,9 @@ extension MIDI {
         internal var runningStatus: MIDI.Byte? = nil
         
         /// Parse
-        public func parsedEvents(in packetData: MIDI.PacketData) -> [MIDI.Event] {
+        public func parsedEvents(in packetData: MIDI.Packet.PacketData) -> [MIDI.Event] {
             
-            let result = Self.parsedEvents(in: packetData.data,
+            let result = Self.parsedEvents(in: packetData.bytes,
                                            runningStatus: runningStatus)
             runningStatus = result.runningStatus
             return result.events
@@ -30,13 +30,13 @@ extension MIDI {
         ///
         /// Persisted status data is normally the role of the parser class, but this method gives access to an abstracted parsing method by way of injecting and emitting persistent state (ie: running status).
         public static func parsedEvents(
-            in data: Data,
+            in bytes: [MIDI.Byte],
             runningStatus: MIDI.Byte? = nil
         ) -> (events: [MIDI.Event],
               runningStatus: MIDI.Byte?)
         {
             
-            guard !data.isEmpty else {
+            guard !bytes.isEmpty else {
                 return (events: [],
                         runningStatus: runningStatus)
             }
@@ -52,7 +52,7 @@ extension MIDI {
             
             func resetCurrentMessage() {
                 currentMessage = []
-                currentMessage.reserveCapacity(data.count)
+                currentMessage.reserveCapacity(bytes.count)
             }
             
             func parseCurrentMessage() {
@@ -63,9 +63,9 @@ extension MIDI {
                 resetCurrentMessage()
             }
             
-            while currentPos < data.count {
+            while currentPos < bytes.count {
                 
-                let currentByte = data[currentPos]
+                let currentByte = bytes[currentPos]
                 
                 // look for status byte as first message byte
                 switch currentByte.nibbles.high {
@@ -147,7 +147,7 @@ extension MIDI {
                             continue
                         } else {
                             // unless running status is active, data bytes should never be the first byte in a message
-                            currentPos = data.count
+                            currentPos = bytes.count
                             continue
                         }
                     } else {
@@ -352,7 +352,7 @@ extension MIDI {
     
 }
 
-extension MIDI.PacketData {
+extension MIDI.Packet.PacketData {
     
     /// Parse this instance's raw packet data into an array of MIDI Events.
     internal func parsedEvents(using parser: MIDI.MIDI1Parser) -> [MIDI.Event] {
@@ -360,6 +360,10 @@ extension MIDI.PacketData {
         parser.parsedEvents(in: self)
         
     }
+    
+}
+
+extension MIDI.Packet {
     
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     ///
@@ -369,7 +373,7 @@ extension MIDI.PacketData {
     ) -> (events: [MIDI.Event],
           runningStatus: MIDI.Byte?) {
         
-        MIDI.MIDI1Parser.parsedEvents(in: data, runningStatus: runningStatus)
+        MIDI.MIDI1Parser.parsedEvents(in: bytes, runningStatus: runningStatus)
         
     }
     
