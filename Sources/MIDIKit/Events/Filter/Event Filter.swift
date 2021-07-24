@@ -86,10 +86,12 @@ extension MIDI.Event.Filter {
             return events.filterOutSystemRealTime()
             
         case .filterOutChannelVoiceChannel(channel: let channel):
-            return events.filterOutChannelVoice(channel: channel)
+            #warning("> finish this")
+            return [] //events.filterOutChannelVoice(channel: channel)
             
         case .filterOutChannelVoiceChannels(channels: let channels):
-            return events.filterOutChannelVoice(channels: channels)
+            #warning("> finish this")
+            return [] //events.filterOutChannelVoice(channels: channels)
             
         case .filterOutChannel(channel: let channel):
             return events.filterOut(channel: channel)
