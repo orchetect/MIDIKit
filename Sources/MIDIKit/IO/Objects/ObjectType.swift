@@ -5,11 +5,9 @@
 
 import Foundation
 
-// MARK: - MIDI.IO.ObjectType
-
 extension MIDI.IO {
     
-    /// Enum defining a `MIDIIOObjectRefProtocol`'s MIDI object type.
+    /// Enum defining a `MIDI.IO.Object`'s MIDI object type.
     public enum ObjectType: CaseIterable, Hashable {
         
         case device

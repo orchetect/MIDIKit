@@ -7,7 +7,7 @@ import CoreMIDI
 
 // MARK: - Endpoint
 
-public protocol MIDIIOEndpointProtocol: MIDI.IO.ObjectRef {
+public protocol MIDIIOEndpointProtocol: MIDI.IO.Object {
     
 }
 

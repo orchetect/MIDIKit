@@ -1,5 +1,5 @@
 //
-//  ObjectRef.swift
+//  Object.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -32,13 +32,13 @@ public protocol MIDIIOObjectRefProtocol {
 
 extension MIDI.IO {
     
-    public typealias ObjectRef = MIDIIOObjectRefProtocol
+    public typealias Object = MIDIIOObjectRefProtocol
     
 }
 
 // MARK: - Equatable
 
-extension MIDI.IO.ObjectRef {
+extension MIDI.IO.Object {
     
     static public func == (lhs: Self, rhs: Self) -> Bool {
         lhs.ref == rhs.ref
@@ -48,7 +48,7 @@ extension MIDI.IO.ObjectRef {
 
 // MARK: - Hashable
 
-extension MIDI.IO.ObjectRef {
+extension MIDI.IO.Object {
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(ref)
@@ -58,7 +58,7 @@ extension MIDI.IO.ObjectRef {
 
 // MARK: - Collection methods
 
-extension Collection where Element : MIDI.IO.ObjectRef {
+extension Collection where Element : MIDI.IO.Object {
     
     /// Returns the array sorted alphabetically by name.
     public func sortedByName() -> [Element] {
@@ -72,7 +72,7 @@ extension Collection where Element : MIDI.IO.ObjectRef {
     
 }
 
-extension Collection where Element : MIDI.IO.ObjectRef {
+extension Collection where Element : MIDI.IO.Object {
     
     /// Returns the element where uniqueID matches if found.
     public func filterBy(uniqueID: MIDI.IO.UniqueID) -> Element? {
@@ -99,7 +99,7 @@ extension Collection where Element : MIDI.IO.ObjectRef {
 
 // MARK: - Properties (Computed)
 
-extension MIDI.IO.ObjectRef {
+extension MIDI.IO.Object {
     
     // MARK: Identification
     
@@ -506,7 +506,7 @@ extension MIDI.IO.ObjectRef {
     
 }
 
-extension MIDI.IO.ObjectRef {
+extension MIDI.IO.Object {
     
     /// Get all properties as a key/value pair array, formatted as human-readable strings.
     /// Useful for displaying in a user interface or outputting to console for debugging.
@@ -525,7 +525,7 @@ extension MIDI.IO.ObjectRef {
     
 }
 
-extension MIDI.IO.ObjectRef {
+extension MIDI.IO.Object {
     
     internal func getPropertyKeyValuePairAsStrings(of property: MIDI.IO.kMIDIProperty) -> (key: String, value: String) {
         

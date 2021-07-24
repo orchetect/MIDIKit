@@ -24,7 +24,7 @@ struct EmptyDetailsView: View {
 	
 }
 
-struct DetailsView<T>: View where T : MIDI.IO.ObjectRef {
+struct DetailsView<T>: View where T : MIDI.IO.Object {
 	
 	@Environment(\.hostingWindow) var hostingWindow
 	

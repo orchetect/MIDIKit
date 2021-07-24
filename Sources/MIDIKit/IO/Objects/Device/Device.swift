@@ -14,7 +14,7 @@ extension MIDI.IO {
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     ///
     /// Instead, read `Device` arrays and individual `Device` properties from `MIDI.IO.Manager.devices` ad-hoc when they are needed.
-    public struct Device: ObjectRef {
+    public struct Device: Object {
         
         public static let objectType: MIDI.IO.ObjectType = .device
         

@@ -9,7 +9,7 @@ import Foundation
 
 extension MIDI.IO {
     
-    /// Property keys of `MIDI.IO.ObjectRef`.
+    /// Property keys of `MIDI.IO.Object`.
     internal enum kMIDIProperty: CaseIterable, Hashable {
         
         // MARK: Identification
