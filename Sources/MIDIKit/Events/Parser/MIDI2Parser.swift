@@ -27,6 +27,8 @@ extension MIDI {
             
             #warning("> code this")
             
+            Log.debug("MIDI 2 Event Parser is not yet implemented.")
+            
             return []
             
         }
