@@ -97,55 +97,57 @@ extension MIDI.IO {
 extension MIDI.IO.MIDIOSStatus {
     
     /// Returns the corresponding `CoreMIDI` OSStatus raw value.
-    public var rawValue: Int32 {
+    ///
+    /// Core MIDI headers note: "These are the OSStatus error constants that are unique to Core MIDI. Note that Core MIDI functions may return other codes that are not listed here."
+    public var rawValue: OSStatus {
         
         switch self {
-        case .invalidClient:     return -10830
-        case .invalidPort:       return -10831
-        case .wrongEndpointType: return -10832
-        case .noConnection:      return -10833
-        case .unknownEndpoint:   return -10834
-        case .unknownProperty:   return -10835
-        case .wrongPropertyType: return -10836
-        case .noCurrentSetup:    return -10837
-        case .messageSendErr:    return -10838
-        case .serverStartErr:    return -10839
-        case .setupFormatErr:    return -10840
-        case .wrongThread:       return -10841
-        case .objectNotFound:    return -10842
-        case .iDNotUnique:       return -10843
-        case .notPermitted:      return -10844
-        case .unknownError:      return -10845
-        case .ioError:           return 7
-        case .internalError:     return -50
-        case .other(let val):    return val
+        case .invalidClient      : return kMIDIInvalidClient     // -10830
+        case .invalidPort        : return kMIDIInvalidPort       // -10831
+        case .wrongEndpointType  : return kMIDIWrongEndpointType // -10832
+        case .noConnection       : return kMIDINoConnection      // -10833
+        case .unknownEndpoint    : return kMIDIUnknownEndpoint   // -10834
+        case .unknownProperty    : return kMIDIUnknownProperty   // -10835
+        case .wrongPropertyType  : return kMIDIWrongPropertyType // -10836
+        case .noCurrentSetup     : return kMIDINoCurrentSetup    // -10837
+        case .messageSendErr     : return kMIDIMessageSendErr    // -10838
+        case .serverStartErr     : return kMIDIServerStartErr    // -10839
+        case .setupFormatErr     : return kMIDISetupFormatErr    // -10840
+        case .wrongThread        : return kMIDIWrongThread       // -10841
+        case .objectNotFound     : return kMIDIObjectNotFound    // -10842
+        case .iDNotUnique        : return kMIDIIDNotUnique       // -10843
+        case .notPermitted       : return kMIDINotPermitted      // -10844
+        case .unknownError       : return kMIDIUnknownError      // -10845
+        case .ioError            : return 7 // no CoreMIDI constant exists
+        case .internalError      : return -50 // no CoreMIDI constant exists
+        case .other(let val)     : return val
         }
         
     }
     
     /// Initializes from the corresponding `CoreMIDI` OSStatus raw value.
-    public init(rawValue: Int32) {
+    public init(rawValue: OSStatus) {
         
         switch rawValue {
-        case -10830: self = .invalidClient
-        case -10831: self = .invalidPort
-        case -10832: self = .wrongEndpointType
-        case -10833: self = .noConnection
-        case -10834: self = .unknownEndpoint
-        case -10835: self = .unknownProperty
-        case -10836: self = .wrongPropertyType
-        case -10837: self = .noCurrentSetup
-        case -10838: self = .messageSendErr
-        case -10839: self = .serverStartErr
-        case -10840: self = .setupFormatErr
-        case -10841: self = .wrongThread
-        case -10842: self = .objectNotFound
-        case -10843: self = .iDNotUnique
-        case -10844: self = .notPermitted
-        case -10845: self = .unknownError
-        case 7:      self = .ioError
-        case -50:    self = .internalError
-        default:     self = .other(rawValue)
+        case kMIDIInvalidClient      : self = .invalidClient
+        case kMIDIInvalidPort        : self = .invalidPort
+        case kMIDIWrongEndpointType  : self = .wrongEndpointType
+        case kMIDINoConnection       : self = .noConnection
+        case kMIDIUnknownEndpoint    : self = .unknownEndpoint
+        case kMIDIUnknownProperty    : self = .unknownProperty
+        case kMIDIWrongPropertyType  : self = .wrongPropertyType
+        case kMIDINoCurrentSetup     : self = .noCurrentSetup
+        case kMIDIMessageSendErr     : self = .messageSendErr
+        case kMIDIServerStartErr     : self = .serverStartErr
+        case kMIDISetupFormatErr     : self = .setupFormatErr
+        case kMIDIWrongThread        : self = .wrongThread
+        case kMIDIObjectNotFound     : self = .objectNotFound
+        case kMIDIIDNotUnique        : self = .iDNotUnique
+        case kMIDINotPermitted       : self = .notPermitted
+        case kMIDIUnknownError       : self = .unknownError
+        case 7                       : self = .ioError
+        case -50                     : self = .internalError
+        default                      : self = .other(rawValue)
         }
         
     }
