@@ -12,7 +12,7 @@ extension MIDI.IO {
     /// A MIDI device, wrapping `MIDIEntityRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
-    public struct Entity: Object, ObjectRef {
+    public struct Entity: ObjectRef {
         
         public static let objectType: MIDI.IO.ObjectType = .entity
         

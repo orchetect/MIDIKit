@@ -38,7 +38,7 @@ extension MIDI.IO {
 
 // MARK: - Equatable
 
-extension MIDI.IO.Object where Self : MIDI.IO.ObjectRef {
+extension MIDI.IO.ObjectRef {
     
     static public func == (lhs: Self, rhs: Self) -> Bool {
         lhs.ref == rhs.ref
@@ -48,7 +48,7 @@ extension MIDI.IO.Object where Self : MIDI.IO.ObjectRef {
 
 // MARK: - Hashable
 
-extension MIDI.IO.Object where Self : MIDI.IO.ObjectRef {
+extension MIDI.IO.ObjectRef {
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(ref)
