@@ -26,6 +26,52 @@ extension MIDI.IO {
     
 }
 
+extension MIDI.IO.EndpointIDCriteria: Equatable where T : MIDIIOObjectProtocol {
+    
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        
+        switch lhs {
+        case .name(let lhsName):
+            guard case .name(let rhsName) = rhs else { return false }
+            return lhsName == rhsName
+            
+        case .displayName(let lhsDisplayName):
+            guard case .displayName(let rhsDisplayName) = rhs else { return false }
+            return lhsDisplayName == rhsDisplayName
+            
+        case .uniqueID(let lhsUniqueID):
+            guard case .uniqueID(let rhsUniqueID) = rhs else { return false }
+            return lhsUniqueID.isEqual(to: rhsUniqueID)
+            
+        }
+        
+    }
+    
+}
+
+extension MIDI.IO.EndpointIDCriteria: Hashable where T : MIDIIOObjectProtocol {
+    
+    public func hash(into hasher: inout Hasher) {
+        
+        switch self {
+        case .name(let name):
+            hasher.combine("name")
+            hasher.combine(name)
+            
+        case .displayName(let displayName):
+            hasher.combine("displayName")
+            hasher.combine(displayName)
+            
+        case .uniqueID(let uniqueID):
+            hasher.combine("uniqueID")
+            uniqueID.hash(into: &hasher)
+            
+        }
+        
+    }
+    
+}
+
 extension MIDI.IO.EndpointIDCriteria {
     
     /// Uses the criteria to find the first match and returns it if found.
@@ -34,17 +80,17 @@ extension MIDI.IO.EndpointIDCriteria {
         switch self {
         case .name(let endpointName):
             return endpoints
-                .filterBy(name: endpointName)
+                .filter(name: endpointName)
                 .first
             
         case .displayName(let endpointName):
             return endpoints
-                .filterBy(displayName: endpointName)
+                .filter(displayName: endpointName)
                 .first
             
         case .uniqueID(let uID):
             return endpoints
-                .filterBy(uniqueID: uID)
+                .first(whereUniqueID: uID)
             
         }
         

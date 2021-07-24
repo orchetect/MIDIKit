@@ -1,5 +1,5 @@
 //
-//  UniqueID.swift
+//  MIDIIOUniqueIDProtocol.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -17,10 +17,12 @@ public protocol MIDIIOUniqueIDProtocol {
 
 extension MIDIIOUniqueIDProtocol {
     
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+    public func isEqual(to other: Self) -> Bool {
+        coreMIDIUniqueID == other.coreMIDIUniqueID
+    }
     
-        lhs.coreMIDIUniqueID == rhs.coreMIDIUniqueID
-    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(coreMIDIUniqueID)
     }
     
 }
