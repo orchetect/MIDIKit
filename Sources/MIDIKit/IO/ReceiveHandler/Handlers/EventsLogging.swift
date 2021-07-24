@@ -28,7 +28,8 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            packetListPtr.forEach { packetData in
+            packetListPtr.mkUnsafeSequence().forEach { midiPacketPacketPtr in
+                let packetData = MIDI.Packet.PacketData(midiPacketPacketPtr)
                 let events = midi1Parser.parsedEvents(in: packetData)
                 logEvents(events)
             }

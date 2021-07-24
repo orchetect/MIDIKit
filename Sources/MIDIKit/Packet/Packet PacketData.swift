@@ -12,14 +12,8 @@ extension MIDI.Packet {
         
         let bytes: [MIDI.Byte]
         
+        /// CoreMIDI packet timestamp
         let timeStamp: MIDITimeStamp
-        
-        //@inline(__always) public init(data: Data, timeStamp: MIDITimeStamp) {
-        //
-        //    self.data = data
-        //    self.timeStamp = timeStamp
-        //
-        //}
         
         @inline(__always) public init(bytes: [MIDI.Byte], timeStamp: MIDITimeStamp) {
             
@@ -27,6 +21,45 @@ extension MIDI.Packet {
             self.timeStamp = timeStamp
             
         }
+        
+        @inline(__always) public init(_ midiPacketPtr: UnsafePointer<MIDIPacket>) {
+            
+            self = Self.safePacketUnwrapper(midiPacketPtr)
+            
+        }
+        
+    }
+    
+}
+
+extension MIDI.Packet.PacketData {
+    
+    @inline(__always) fileprivate
+    static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
+    
+    @inline(__always) fileprivate
+    static func safePacketUnwrapper(_ midiPacketPtr: UnsafePointer<MIDIPacket>) -> MIDI.Packet.PacketData {
+        
+        let packetDataCount = Int(midiPacketPtr.pointee.length)
+        
+        guard packetDataCount > 0 else {
+            return MIDI.Packet.PacketData(
+                bytes: [],
+                timeStamp: midiPacketPtr.pointee.timeStamp
+            )
+        }
+        
+        // Access the raw memory instead of using the .pointee
+        // This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
+        let rawMIDIPacketDataPtr = UnsafeRawBufferPointer(
+            start: UnsafeRawPointer(midiPacketPtr) + midiPacketDataOffset,
+            count: packetDataCount
+        )
+        
+        return MIDI.Packet.PacketData(
+            bytes: Array<MIDI.Byte>(rawMIDIPacketDataPtr),
+            timeStamp: midiPacketPtr.pointee.timeStamp
+        )
         
     }
     
