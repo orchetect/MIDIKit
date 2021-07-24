@@ -54,11 +54,15 @@ extension MIDI.IO {
 }
 
 extension MIDI.IO.InputEndpoint: Equatable {
-    // default implementation is provided in MIDIIOObjectProtocol
+    // default implementation provided in MIDIIOObjectProtocol
 }
 
 extension MIDI.IO.InputEndpoint: Hashable {
-    // default implementation is provided in MIDIIOObjectProtocol
+    // default implementation provided in MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.InputEndpoint: Identifiable {
+    // default implementation provided by MIDIIOObjectProtocol
 }
 
 extension MIDI.IO.InputEndpoint {

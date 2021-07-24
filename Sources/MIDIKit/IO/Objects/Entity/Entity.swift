@@ -54,12 +54,17 @@ extension MIDI.IO {
 }
 
 extension MIDI.IO.Entity: Equatable {
-    // default implementation is provided in MIDIIOObjectProtocol
+    // default implementation provided in MIDIIOObjectProtocol
 }
 
 extension MIDI.IO.Entity: Hashable {
-    // default implementation is provided in MIDIIOObjectProtocol
+    // default implementation provided in MIDIIOObjectProtocol
 }
+
+extension MIDI.IO.Entity: Identifiable {
+    // default implementation provided by MIDIIOObjectProtocol
+}
+
 
 extension MIDI.IO.Entity {
     

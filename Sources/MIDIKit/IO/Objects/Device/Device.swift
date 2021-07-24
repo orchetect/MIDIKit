@@ -55,11 +55,15 @@ extension MIDI.IO {
 }
 
 extension MIDI.IO.Device: Equatable {
-    // default implementation is provided in MIDIIOObjectProtocol
+    // default implementation provided in MIDIIOObjectProtocol
 }
 
 extension MIDI.IO.Device: Hashable {
-    // default implementation is provided in MIDIIOObjectProtocol
+    // default implementation provided in MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.Device: Identifiable {
+    // default implementation provided by MIDIIOObjectProtocol
 }
 
 extension MIDI.IO.Device {
