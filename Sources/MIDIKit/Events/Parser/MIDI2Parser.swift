@@ -37,6 +37,13 @@ extension MIDI {
 
 extension MIDI.Packet.UniversalPacketData {
     
+    /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
+    internal func parsedEvents() -> [MIDI.Event] {
+        
+        MIDI.MIDI2Parser.parsedEvents(in: bytes)
+        
+    }
+    
     /// Parse this instance's raw packet data into an array of MIDI Events.
     internal func parsedEvents(using parser: MIDI.MIDI2Parser) -> [MIDI.Event] {
         

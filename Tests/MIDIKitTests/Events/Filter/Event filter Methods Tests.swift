@@ -22,7 +22,7 @@ class MIDIEventFilterMethodsTests: XCTestCase {
                 .cc(controller: .modWheel, value: 80, channel: 0),
                 .timecodeQuarterFrame(byte: 0x00),
                 .activeSensing,
-                .sysEx(manufacturer: .oneByte(0x41)!, data: [0x20, 0x42]))
+                .sysEx(manufacturer: .oneByte(0x41)!, data: [0x20, 0x42])
             ]
         
         // -------------------------------------------------------------------
