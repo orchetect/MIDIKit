@@ -150,10 +150,10 @@ extension MIDI.IO {
     ///
     /// The system assigns unique IDs to all objects. Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
     internal static func setUniqueID(of ref: MIDIObjectRef,
-                                     to newValue: MIDI.IO.UniqueID) throws {
+                                     to newValue: MIDIUniqueID) throws {
         
         try setInteger(forProperty: kMIDIPropertyUniqueID,
-                       of: ref, to: newValue.id)
+                       of: ref, to: newValue)
         
     }
     

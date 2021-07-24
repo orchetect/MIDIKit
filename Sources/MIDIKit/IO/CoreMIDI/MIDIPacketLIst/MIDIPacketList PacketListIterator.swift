@@ -15,7 +15,7 @@ import CoreMIDI
 ///         }
 ///     }
 ///
-/// This must be performed on the `UnsafePointer` returned by CoreMIDI and not on `.pointee` (concrete `CoreMIDI` `MIDIPacketList`) to avoid `CoreMIDI`-related crashes.
+/// This must be performed on the `UnsafePointer` returned by CoreMIDI and not on `.pointee` (concrete CoreMIDI `MIDIPacketList`) to avoid CoreMIDI-related crashes.
 ///
 /// See the workaround `safePacketUnwrapper` method for more details.
 extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
@@ -31,7 +31,7 @@ extension UnsafePointer: Sequence where Pointee == MIDIPacketList {
         
     }
     
-    /// Custom iterator to iterate `MIDIPacket`s within a `CoreMIDI` `MIDIPacketList`.
+    /// Custom iterator to iterate `MIDIPacket`s within a CoreMIDI `MIDIPacketList`.
     public struct PacketListIterator: IteratorProtocol {
         
         public typealias Element = MIDI.Packet.PacketData

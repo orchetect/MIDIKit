@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+import CoreMIDI
+
 extension MIDI.IO {
     
     /// Error type returned by `MIDI.IO` methods.
@@ -31,7 +33,7 @@ extension MIDI.IO {
 extension MIDI.IO.MIDIError {
     
     /// Convenience to return a case of `osStatus` with its associated `MIDI.IO.MIDIOSStatus` formed from a raw CoreMIDI `OSStatus` (Int32) integer value.
-    public static func osStatus(_ rawValue: Int32) -> Self {
+    public static func osStatus(_ rawValue: OSStatus) -> Self {
         
         .osStatus(.init(rawValue: rawValue))
         

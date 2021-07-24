@@ -8,7 +8,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// Connection Manager wrapper for `CoreMIDI`.
+    /// Connection Manager wrapper for CoreMIDI.
     ///
     /// One `Manager` instance stored in a global lifecycle context can manage multiple MIDI ports and connections, and is usually sufficient for all of an application's MIDI needs.
     public class Manager: NSObject {
@@ -68,7 +68,7 @@ extension MIDI.IO {
         
         // MARK: - Init
         
-        /// Initialize the MIDI manager (and `CoreMIDI` client).
+        /// Initialize the MIDI manager (and CoreMIDI client).
         ///
         /// - Parameters:
         ///   - clientName: Name identifying this instance, used as CoreMIDI client ID. This is internal and not visible to the end-user.

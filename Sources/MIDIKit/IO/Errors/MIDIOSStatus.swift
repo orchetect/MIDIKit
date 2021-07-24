@@ -88,7 +88,7 @@ extension MIDI.IO {
         case internalError
         
         /// Other `OSStatus`
-        case other(Int32)
+        case other(OSStatus)
         
     }
     
@@ -96,7 +96,7 @@ extension MIDI.IO {
 
 extension MIDI.IO.MIDIOSStatus {
     
-    /// Returns the corresponding `CoreMIDI` OSStatus raw value.
+    /// Returns the corresponding CoreMIDI OSStatus raw value.
     ///
     /// Core MIDI headers note: "These are the OSStatus error constants that are unique to Core MIDI. Note that Core MIDI functions may return other codes that are not listed here."
     public var rawValue: OSStatus {
@@ -125,7 +125,7 @@ extension MIDI.IO.MIDIOSStatus {
         
     }
     
-    /// Initializes from the corresponding `CoreMIDI` OSStatus raw value.
+    /// Initializes from the corresponding CoreMIDI OSStatus raw value.
     public init(rawValue: OSStatus) {
         
         switch rawValue {
