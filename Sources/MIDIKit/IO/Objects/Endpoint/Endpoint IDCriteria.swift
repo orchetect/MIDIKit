@@ -9,7 +9,7 @@ import CoreMIDI
 extension MIDI.IO {
     
     /// Enum describing the criteria with which to identify endpoints.
-    public enum EndpointIDCriteria: Hashable {
+    public enum EndpointIDCriteria<T: MIDIIOObjectProtocol> {
         
         /// Utilizes first endpoint matching the endpoint name.
         /// Use of this is discouraged outside of debugging, since multiple endpoints can potentially share the same name in the system.
@@ -20,7 +20,7 @@ extension MIDI.IO {
         case displayName(String)
         
         /// Endpoint matching the unique ID.
-        case uniqueID(UniqueID)
+        case uniqueID(T.UniqueID)
         
     }
     
@@ -29,7 +29,7 @@ extension MIDI.IO {
 extension MIDI.IO.EndpointIDCriteria {
     
     /// Uses the criteria to find the first match and returns it if found.
-    internal func locate<T: MIDI.IO.Endpoint>(in endpoints: [T]) -> T? {
+    internal func locate(in endpoints: [T]) -> T? {
         
         switch self {
         case .name(let endpointName):
