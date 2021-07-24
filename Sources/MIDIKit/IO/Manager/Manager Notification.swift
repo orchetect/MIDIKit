@@ -41,31 +41,29 @@ extension MIDI.IO.Manager.InternalNotification {
         
         switch messageID {
         case .msgSetupChanged:
-            
             self = .setupChanged
             
-        case .msgObjectAdded,
-             .msgObjectRemoved:
-            
+        case .msgObjectAdded:
             self = message.withMemoryRebound(
                 to: MIDIObjectAddRemoveNotification.self,
-                capacity: 1
-            ) { (message) in
-                
+                capacity: 1)
+            { (message) in
                 let m = message.pointee
-                
-                if messageID == .msgObjectAdded {
-                    return .added(parent: m.parent, parentType: m.parentType,
-                                  child: m.child, childType: m.childType)
-                } else {
-                    return .removed(parent: m.parent, parentType: m.parentType,
-                                    child: m.child, childType: m.childType)
-                }
-                
+                return .added(parent: m.parent, parentType: m.parentType,
+                              child: m.child, childType: m.childType)
+            }
+            
+        case .msgObjectRemoved:
+            self = message.withMemoryRebound(
+                to: MIDIObjectAddRemoveNotification.self,
+                capacity: 1)
+            { (message) in
+                let m = message.pointee
+                return .removed(parent: m.parent, parentType: m.parentType,
+                                child: m.child, childType: m.childType)
             }
             
         case .msgPropertyChanged:
-            
             self = message.withMemoryRebound(
                 to: MIDIObjectPropertyChangeNotification.self,
                 capacity: 1
@@ -82,31 +80,24 @@ extension MIDI.IO.Manager.InternalNotification {
             }
             
         case .msgThruConnectionsChanged:
-            
             self = .thruConnectionChanged
             
         case .msgSerialPortOwnerChanged:
-            
             self = .serialPortOwnerChanged
             
         case .msgIOError:
-            
             self = message.withMemoryRebound(
                 to: MIDIIOErrorNotification.self,
-                capacity: 1
-            ) { (message) in
-                
+                capacity: 1)
+            { (message) in
                 let m = message.pointee
-                
                 return .ioError(
                     device: m.driverDevice,
                     error: .osStatus(m.errorCode)
                 )
-                
             }
             
         @unknown default:
-            
             self = .other(messageIDRawValue: messageID.rawValue)
             
         }
