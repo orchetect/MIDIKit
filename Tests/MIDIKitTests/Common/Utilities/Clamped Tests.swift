@@ -3,6 +3,16 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+
+
+/// ------------------------------------------------------------------------------------
+/// ------------------------------------------------------------------------------------
+/// Borrowed from [OTCore 1.1.8](https://github.com/orchetect/OTCore) under MIT license.
+/// ------------------------------------------------------------------------------------
+/// ------------------------------------------------------------------------------------
+
+
+
 #if !os(watchOS)
 
 import XCTest
@@ -10,8 +20,6 @@ import XCTest
 
 class Utilities_ClampedTests: XCTestCase {
     
-    /// `Comparable.clamped(to:)` unit tests
-    /// - copyright: Borrowed from [OTCore 1.1.8](https://github.com/orchetect/OTCore) under MIT license.
     func testNumberClampedToRanges() {
         
         // .clamped(ClosedRange)

@@ -22,8 +22,7 @@ public func print(_ closure: () -> Any) {
 	
 }
 
-#if !os(watchOS) && canImport(XCTest)
-
+#if !os(watchOS)
 import XCTest
 
 public extension XCTestCase {
@@ -39,5 +38,4 @@ public extension XCTestCase {
     }
     
 }
-
 #endif
