@@ -109,7 +109,9 @@ extension MIDIIOObjectProtocol {
         case .protocolID:
             var valueString = "-"
             if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
-                valueString = "\(getProtocolID?.rawValue, ifNil: "-")"
+                if let unwrappedProtocolID = getProtocolID?.rawValue {
+                    valueString = "\(unwrappedProtocolID)"
+                }
             } else {
                 valueString = "OS not supported. Requires macOS 11.0, macCatalyst 14.0, or iOS 14.0."
             }

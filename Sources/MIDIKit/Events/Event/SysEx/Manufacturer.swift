@@ -3,7 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-@_implementationOnly import OTCore
 @_implementationOnly import SwiftRadix
 
 extension MIDI.Event.SysEx {
@@ -26,7 +25,7 @@ extension MIDI.Event.SysEx {
         /// 0x00 is reserved to prefix a 2-byte ID (such that 3 total bytes)
         @inline(__always) public init?(oneByte: MIDI.Byte) {
             
-            guard oneByte.isContained(in: 0x01...0x7D) else { return nil }
+            guard (0x01...0x7D).contains(oneByte) else { return nil }
             bytes = [oneByte]
             
         }
@@ -38,8 +37,8 @@ extension MIDI.Event.SysEx {
         /// Byte 1 is always 0x00.
         @inline(__always) public init?(threeByte: (byte2: MIDI.Byte, byte3: MIDI.Byte)) {
             
-            guard threeByte.byte2.isContained(in: 0x00...0x7F),
-                  threeByte.byte3.isContained(in: 0x00...0x7F)
+            guard (0x00...0x7F).contains(threeByte.byte2),
+                  (0x00...0x7F).contains(threeByte.byte3)
             else { return nil }
             
             bytes = [0x00, threeByte.byte2, threeByte.byte3]

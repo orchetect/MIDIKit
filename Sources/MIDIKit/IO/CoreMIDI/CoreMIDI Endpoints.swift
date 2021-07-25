@@ -4,7 +4,6 @@
 //
 
 import CoreMIDI
-@_implementationOnly import OTCore
 
 extension MIDI.IO {
     
@@ -21,7 +20,7 @@ extension MIDI.IO {
         for i in 0..<srcCount {
             let endpoint = MIDIGetSource(i)
             
-            endpoints += .init(endpoint)
+            endpoints.append(.init(endpoint))
         }
         
         return endpoints
@@ -41,7 +40,7 @@ extension MIDI.IO {
         for i in 0..<destCount {
             let endpoint = MIDIGetDestination(i)
             
-            endpoints += .init(endpoint)
+            endpoints.append(.init(endpoint))
         }
         
         return endpoints

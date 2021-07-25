@@ -4,7 +4,6 @@
 //
 
 import CoreMIDI
-@_implementationOnly import OTCore
 
 extension MIDI.IO {
     
@@ -76,7 +75,7 @@ extension MIDI.IO {
             result = MIDIThruConnectionDispose(thruConnection)
             
             if result != noErr {
-                Log.debug("MIDI: Persistent connections: deletion of connection matching owner ID \"\(persistentOwnerID)\" with number \(thruConnection) failed.")
+                //Log.debug("MIDI: Persistent connections: deletion of connection matching owner ID \(persistentOwnerID.quoted) with number \(thruConnection) failed.")
             } else {
                 disposeCount += 1
             }

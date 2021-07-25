@@ -5,8 +5,6 @@
 
 import CoreMIDI
 
-@_implementationOnly import OTCore
-
 extension MIDI {
     
     /// Parser for MIDI 2.0 events.
@@ -26,8 +24,6 @@ extension MIDI {
         ) -> [MIDI.Event] {
             
             #warning("> code this")
-            
-            Log.debug("MIDI 2 Event Parser is not yet implemented.")
             
             return []
             

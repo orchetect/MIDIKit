@@ -4,7 +4,6 @@
 //
 
 import CoreMIDI
-@_implementationOnly import OTCore
 
 extension MIDI.IO {
     

@@ -12,7 +12,6 @@
 
 import Foundation
 import CoreMIDI
-@_implementationOnly import OTCore
 @_implementationOnly import MIDIKitC
 
 extension MIDI.IO {
@@ -172,13 +171,13 @@ extension MIDI.IO.ThruConnection {
         
         thruConnectionRef = newConnection
         
-        switch lifecycle {
-        case .nonPersistent:
-            Log.debug("MIDI: Thru Connection: Successfully formed non-persistent connection.")
-            
-        case .persistent(let ownerID):
-            Log.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID \(ownerID.quoted).")
-        }
+        //switch lifecycle {
+        //case .nonPersistent:
+        //    Log.debug("MIDI: Thru Connection: Successfully formed non-persistent connection.")
+        //
+        //case .persistent(let ownerID):
+        //    Log.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID //\(ownerID.quoted).")
+        //}
         
     }
     
@@ -204,9 +203,12 @@ extension MIDI.IO.ThruConnection: CustomStringConvertible {
     
     public var description: String {
         
-        let thruConnectionRef = "\(self.thruConnectionRef, ifNil: "nil")"
+        var thruConnectionRefString: String = "nil"
+        if let thruConnectionRef = thruConnectionRef {
+            thruConnectionRefString = "\(thruConnectionRef)"
+        }
         
-        return "ThruConnection(ref: \(thruConnectionRef), outputs: \(outputs), inputs: \(inputs), \(lifecycle)"
+        return "ThruConnection(ref: \(thruConnectionRefString), outputs: \(outputs), inputs: \(inputs), \(lifecycle)"
         
     }
     

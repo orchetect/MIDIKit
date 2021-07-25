@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-@_implementationOnly import OTCore
-
 // MARK: - Event Classification
 
 extension Collection where Element == MIDI.Event {

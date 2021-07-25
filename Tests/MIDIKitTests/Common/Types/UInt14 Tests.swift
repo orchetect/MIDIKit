@@ -7,7 +7,7 @@
 
 import XCTest
 @testable import MIDIKit
-//import OTCoreTestingXCTest
+import XCTestExtensions
 
 final class UInt14_Tests: XCTestCase {
 	
@@ -34,10 +34,10 @@ final class UInt14_Tests: XCTestCase {
 		
 		// overflow
 		
-		expectFatalError { [self] in
+        _XCTAssertThrows { [self] in
 			_ = MIDI.UInt14(_min - 1)
 		}
-		expectFatalError { [self] in
+        _XCTAssertThrows { [self] in
 			_ = MIDI.UInt14(_max + 1)
 		}
 		
@@ -51,7 +51,7 @@ final class UInt14_Tests: XCTestCase {
 		
 		XCTAssertEqual(MIDI.UInt14(exactly: 1), 1)
 		
-		XCTAssertEqual(MIDI.UInt14(exactly: _max)?.int, _max)
+		XCTAssertEqual(MIDI.UInt14(exactly: _max)?.intValue, _max)
 		
 		// overflow
 		
@@ -67,67 +67,67 @@ final class UInt14_Tests: XCTestCase {
 		
 		XCTAssertEqual(MIDI.UInt14(clamping: 0), 0)
 		XCTAssertEqual(MIDI.UInt14(clamping: 1), 1)
-		XCTAssertEqual(MIDI.UInt14(clamping: _max).int, _max)
+		XCTAssertEqual(MIDI.UInt14(clamping: _max).intValue, _max)
 		
 		// overflow
 		
-		XCTAssertEqual(MIDI.UInt14(clamping: -1).int, 0)
-		XCTAssertEqual(MIDI.UInt14(clamping: _max + 1).int, _max)
+		XCTAssertEqual(MIDI.UInt14(clamping: -1).intValue, 0)
+		XCTAssertEqual(MIDI.UInt14(clamping: _max + 1).intValue, _max)
 		
 	}
 	
 	func testInitZeroMidpointFloat() {
 		
-		XCTAssertEqual(MIDI.UInt14(zeroMidpointFloat: -1.0).int, _min)
-		XCTAssertEqual(MIDI.UInt14(zeroMidpointFloat: -0.5).int, 4096)
-		XCTAssertEqual(MIDI.UInt14(zeroMidpointFloat:  0.0).int, _midpoint)
-		XCTAssertEqual(MIDI.UInt14(zeroMidpointFloat:  0.5).int, 12287)
-		XCTAssertEqual(MIDI.UInt14(zeroMidpointFloat:  1.0).int, _max)
+		XCTAssertEqual(MIDI.UInt14(unitIntervalAroundZero: -1.0).intValue, _min)
+		XCTAssertEqual(MIDI.UInt14(unitIntervalAroundZero: -0.5).intValue, 4096)
+		XCTAssertEqual(MIDI.UInt14(unitIntervalAroundZero:  0.0).intValue, _midpoint)
+		XCTAssertEqual(MIDI.UInt14(unitIntervalAroundZero:  0.5).intValue, 12287)
+		XCTAssertEqual(MIDI.UInt14(unitIntervalAroundZero:  1.0).intValue, _max)
 		
 	}
 	
 	func testInitBytePair() {
 		
-        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.Byte.Pair(msb: 0x00, lsb: 0x00)).int, _min)
-        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.Byte.Pair(msb: 0x40, lsb: 0x00)).int, _midpoint)
-        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.Byte.Pair(msb: 0x7F, lsb: 0x7F)).int, _max)
+        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.Byte.Pair(msb: 0x00, lsb: 0x00)).intValue, _min)
+        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.Byte.Pair(msb: 0x40, lsb: 0x00)).intValue, _midpoint)
+        XCTAssertEqual(MIDI.UInt14(bytePair: MIDI.Byte.Pair(msb: 0x7F, lsb: 0x7F)).intValue, _max)
 		
 	}
     
     func testInitUInt7Pair() {
         
-        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x00, lsb: 0x00)).int, _min)
-        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x40, lsb: 0x00)).int, _midpoint)
-        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x7F, lsb: 0x7F)).int, _max)
+        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x00, lsb: 0x00)).intValue, _min)
+        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x40, lsb: 0x00)).intValue, _midpoint)
+        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x7F, lsb: 0x7F)).intValue, _max)
         
     }
 	
 	func testMin() {
 		
-		XCTAssertEqual(MIDI.UInt14.min.int, _min)
+		XCTAssertEqual(MIDI.UInt14.min.intValue, _min)
 		
 	}
 	
 	func testMax() {
 		
-		XCTAssertEqual(MIDI.UInt14.max.int, _max)
+		XCTAssertEqual(MIDI.UInt14.max.intValue, _max)
 		
 	}
 	
 	func testComputedProperties() {
 		
-		XCTAssertEqual(MIDI.UInt14(1).int, 1)
-		XCTAssertEqual(MIDI.UInt14(1).uint16, 1)
+		XCTAssertEqual(MIDI.UInt14(1).intValue, 1)
+		XCTAssertEqual(MIDI.UInt14(1).uInt16Value, 1)
 		
 	}
 	
 	func testZeroMidpointFloat() {
 		
-		XCTAssertEqual(MIDI.UInt14(_min).zeroMidpointFloat, -1.0)
-		XCTAssertEqual(MIDI.UInt14(4096).zeroMidpointFloat, -0.5)
-		XCTAssertEqual(MIDI.UInt14(_midpoint).zeroMidpointFloat, 0.0)
-		XCTAssertEqual(MIDI.UInt14(12287).zeroMidpointFloat, 0.5, accuracy: 0.0001)
-		XCTAssertEqual(MIDI.UInt14(_max).zeroMidpointFloat, 1.0)
+		XCTAssertEqual(MIDI.UInt14(_min).unitIntervalAroundZero, -1.0)
+		XCTAssertEqual(MIDI.UInt14(4096).unitIntervalAroundZero, -0.5)
+		XCTAssertEqual(MIDI.UInt14(_midpoint).unitIntervalAroundZero, 0.0)
+		XCTAssertEqual(MIDI.UInt14(12287).unitIntervalAroundZero, 0.5, accuracy: 0.0001)
+		XCTAssertEqual(MIDI.UInt14(_max).unitIntervalAroundZero, 1.0)
 		
 	}
 	

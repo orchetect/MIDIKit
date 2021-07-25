@@ -5,8 +5,6 @@
 
 import CoreMIDI
 
-@_implementationOnly import OTCore
-
 extension MIDI {
     
     /// Parser for MIDI 1.0 events.
@@ -77,7 +75,7 @@ extension MIDI {
                     default:
                         runningStatus = nil
                     }
-                    currentMessage += currentByte
+                    currentMessage.append(currentByte)
                     currentPos += 1
                     continue
                     
@@ -86,49 +84,49 @@ extension MIDI {
                     
                     switch currentByte.nibbles.low {
                     case 0x0: // System Exclusive - Start
-                        currentMessage += currentByte
+                        currentMessage.append(currentByte)
                     case 0x1: // System Common - timecode quarter-frame
-                        currentMessage += currentByte
+                        currentMessage.append(currentByte)
                     case 0x2: // System Common - Song Position Pointer
-                        currentMessage += currentByte
+                        currentMessage.append(currentByte)
                     case 0x3: // System Common - Song Select
-                        currentMessage += currentByte
+                        currentMessage.append(currentByte)
                     case 0x4, 0x5: // undefined System Common bytes
                         // MIDI 1.0 Spec: ignore these events, but we should clear running status
                         runningStatus = nil
                     case 0x6: // System Common - Tune Request
-                        currentMessage += currentByte
+                        currentMessage.append(currentByte)
                     case 0x7: // System Common - System Exclusive End (EOX / End Of Exclusive)
                         // 0xF7 is not always present at the end of a SysEx message. A SysEx message can end in any one of several cases:
                         //   - byte 0xF7
                         //   - parsing reaches the end of the MIDI message bytes
                         //   - another Status byte, thus starting a new message
                         runningStatus = nil
-                        currentMessage += currentByte
+                        currentMessage.append(currentByte)
                     case 0x8: // System Real Time - Timing Clock
                         runningStatus = nil
-                        queuedMessages += .timingClock
+                        queuedMessages.append(.timingClock)
                     case 0x9: // Real Time - undefined
                         // MIDI 1.0 Spec: "Real-Time messages should not affect Running Status."
                         break
                     case 0xA: // System Real Time - Start
                         // MIDI 1.0 Spec: "Real-Time messages should not affect Running Status."
-                        queuedMessages += .start
+                        queuedMessages.append(.start)
                     case 0xB: // System Real Time - Continue
                         // MIDI 1.0 Spec: "Real-Time messages should not affect Running Status."
-                        queuedMessages += .continue
+                        queuedMessages.append(.continue)
                     case 0xC: // System Real Time - Stop
                         // MIDI 1.0 Spec: "Real-Time messages should not affect Running Status."
-                        queuedMessages += .stop
+                        queuedMessages.append(.stop)
                     case 0xD: // Real Time - undefined
                         // MIDI 1.0 Spec: "Real-Time messages should not affect Running Status."
                         break
                     case 0xE:
                         runningStatus = nil
-                        queuedMessages += .activeSensing
+                        queuedMessages.append(.activeSensing)
                     case 0xF:
                         runningStatus = nil
-                        queuedMessages += .systemReset
+                        queuedMessages.append(.systemReset)
                     default:
                         break // should never happen
                     }
@@ -141,8 +139,8 @@ extension MIDI {
                         if let runningStatus = runningStatus {
                             // byte is a running status data byte, following a previously received (and cached) running status byte
                             // set the status byte to the start of the message before appending data bytes
-                            currentMessage += runningStatus
-                            currentMessage += currentByte
+                            currentMessage.append(runningStatus)
+                            currentMessage.append(currentByte)
                             currentPos += 1
                             continue
                         } else {
@@ -151,7 +149,7 @@ extension MIDI {
                             continue
                         }
                     } else {
-                        currentMessage += currentByte
+                        currentMessage.append(currentByte)
                         currentPos += 1
                         continue
                     }
@@ -183,13 +181,23 @@ extension MIDI {
 
             var events: [MIDI.Event] = []
             
-            guard let statusByte = bytes[safe: 0] else { return events }
+            guard !bytes.isEmpty else { return events }
+            
+            let statusByte = bytes[0]
             var currentPos = 0
             
             while currentPos < bytes.count {
                 
-                let dataByte1 = bytes[safe: currentPos + (currentPos == 0 ? 1 : 0)]
-                let dataByte2 = bytes[safe: currentPos + (currentPos == 0 ? 2 : 1)]
+                var dataByte1: MIDI.Byte? = nil
+                var dataByte2: MIDI.Byte? = nil
+                
+                // load dataByte1 if enough bytes are left
+                let dataByte1Index = currentPos + (currentPos == 0 ? 1 : 0)
+                if dataByte1Index < bytes.count { dataByte1 = bytes[dataByte1Index] }
+                
+                // load dataByte2 if enough bytes are left
+                let dataByte2Index = currentPos + (currentPos == 0 ? 2 : 1)
+                if dataByte2Index < bytes.count { dataByte2 = bytes[dataByte2Index] }
                 
                 switch statusByte.nibbles.high {
                 case 0x8: // note off
@@ -198,7 +206,7 @@ extension MIDI {
                           let velocity = dataByte2?.midiUInt7
                     else { return events }
                     
-                    events += .noteOff(note: note, velocity: velocity, channel: channel)
+                    events.append(.noteOff(note: note, velocity: velocity, channel: channel))
                     currentPos += currentPos == 0 ? 3 : 2
                     
                 case 0x9: // note on
@@ -207,7 +215,7 @@ extension MIDI {
                           let velocity = dataByte2?.midiUInt7
                     else { return events }
                     
-                    events += .noteOn(note: note, velocity: velocity, channel: channel)
+                    events.append(.noteOn(note: note, velocity: velocity, channel: channel))
                     currentPos += currentPos == 0 ? 3 : 2
                     
                 case 0xA: // poly aftertouch
@@ -216,7 +224,7 @@ extension MIDI {
                           let pressure = dataByte2?.midiUInt7
                     else { return events }
                     
-                    events += .polyAftertouch(note: note, pressure: pressure, channel: channel)
+                    events.append(.polyAftertouch(note: note, pressure: pressure, channel: channel))
                     currentPos += currentPos == 0 ? 3 : 2
                     
                 case 0xB: // CC (incl. channel mode msgs 121-127)
@@ -225,7 +233,7 @@ extension MIDI {
                           let value = dataByte2?.midiUInt7
                     else { return events }
                     
-                    events += .cc(controller: cc, value: value, channel: channel)
+                    events.append(.cc(controller: cc, value: value, channel: channel))
                     currentPos += currentPos == 0 ? 3 : 2
                     
                 case 0xC: // program change
@@ -233,7 +241,7 @@ extension MIDI {
                     guard let program = dataByte1?.midiUInt7
                     else { return events }
                     
-                    events += .programChange(program: program, channel: channel)
+                    events.append(.programChange(program: program, channel: channel))
                     currentPos += currentPos == 0 ? 2 : 1
                     
                 case 0xD: // channel aftertouch
@@ -241,7 +249,7 @@ extension MIDI {
                     guard let pressure = dataByte1?.midiUInt7
                     else { return events }
                     
-                    events += .chanAftertouch(pressure: pressure, channel: channel)
+                    events.append(.chanAftertouch(pressure: pressure, channel: channel))
                     currentPos += currentPos == 0 ? 2 : 1
                     
                 case 0xE: // pitch bend
@@ -251,7 +259,7 @@ extension MIDI {
                     else { return events }
                     
                     let uint14 = MIDI.UInt14(bytePair: .init(msb: dataByte2, lsb: dataByte1))
-                    events += .pitchBend(value: uint14, channel: channel)
+                    events.append(.pitchBend(value: uint14, channel: channel))
                     currentPos += currentPos == 0 ? 3 : 2
                     
                 case 0xF: // system message
@@ -260,7 +268,7 @@ extension MIDI {
                         guard let parsedSysEx = try? MIDI.Event.SysEx.parsed(from: bytes)
                         else { return events }
                         
-                        events += parsedSysEx
+                        events.append(parsedSysEx)
                         
                         // MIDI 1.0 Spec: if a MIDI packet contains a SysEx, the entire packet is guaranteed to only be the single SysEx and not contain additional MIDI messages or SysEx messages.
                         currentPos = bytes.count
@@ -269,7 +277,7 @@ extension MIDI {
                         guard let dataByte = dataByte1
                         else { return events }
                         
-                        events += .timecodeQuarterFrame(byte: dataByte)
+                        events.append(.timecodeQuarterFrame(byte: dataByte))
                         currentPos += currentPos == 0 ? 2 : 1
                      
                     case 0x2: // System Common - Song Position Pointer
@@ -278,14 +286,14 @@ extension MIDI {
                         else { return events }
                         
                         let uint14 = MIDI.UInt14(bytePair: .init(msb: dataByte2, lsb: dataByte1))
-                        events += .songPositionPointer(midiBeat: uint14)
+                        events.append(.songPositionPointer(midiBeat: uint14))
                         currentPos += currentPos == 0 ? 3 : 2
                         
                     case 0x3: // System Common - Song Select
                         guard let songNumber = dataByte1?.midiUInt7
                         else { return events }
                         
-                        events += .songSelect(number: songNumber)
+                        events.append(.songSelect(number: songNumber))
                         currentPos += currentPos == 0 ? 2 : 1
                         
                     case 0x4, 0x5: // undefined System Common bytes
@@ -293,7 +301,7 @@ extension MIDI {
                         currentPos += 1
                         
                     case 0x6: // System Common - Tune Request
-                        events += .tuneRequest
+                        events.append(.tuneRequest)
                         currentPos += 1
                         
                     case 0x7: // System Common - System Exclusive End (EOX / End Of Exclusive)
@@ -301,44 +309,44 @@ extension MIDI {
                         currentPos += 1
                         
                     case 0x8: // System Real Time - Timing Clock
-                        events += .timingClock
+                        events.append(.timingClock)
                         currentPos += 1
                         
                     case 0x9: // Real Time - undefined
                         currentPos += 1
                         
                     case 0xA: // System Real Time - Start
-                        events += .start
+                        events.append(.start)
                         currentPos += 1
                         
                     case 0xB: // System Real Time - Continue
-                        events += .continue
+                        events.append(.continue)
                         currentPos += 1
                         
                     case 0xC: // System Real Time - Stop
-                        events += .stop
+                        events.append(.stop)
                         currentPos += 1
                         
                     case 0xD: // Real Time - undefined
                         currentPos += 1
                         
                     case 0xE:
-                        events += .activeSensing
+                        events.append(.activeSensing)
                         currentPos += 1
                         
                     case 0xF:
-                        events += .systemReset
+                        events.append(.systemReset)
                         currentPos += 1
                         
                     default:
                         // should never happen, but just in case we will increment the position to avoid infinite loops if the code above ever changes
-                        Log.debug("Unhandled System Status: \(statusByte)")
+                        //Log.debug("Unhandled System Status: \(statusByte)")
                         currentPos += 1
                     }
                     
                 default:
                     // should never happen, but just in case we will increment the position to avoid infinite loops if the code above ever changes
-                    Log.debug("Unhandled Status: \(statusByte)")
+                    //Log.debug("Unhandled Status: \(statusByte)")
                     currentPos += 1
                 }
                 

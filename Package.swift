@@ -18,7 +18,6 @@ let package = Package(
     ],
     
     dependencies: [
-        .package(url: "https://github.com/orchetect/OTCore", from: "1.1.8"),
         .package(url: "https://github.com/orchetect/SwiftRadix", from: "1.0.1")
     ],
     
@@ -26,11 +25,7 @@ let package = Package(
         .target(
             name: "MIDIKit",
             dependencies: [
-                // internal
                 .target(name: "MIDIKitC"),
-                // external
-                .product(name: "OTCore", package: "OTCore"),
-                .product(name: "OTCore-Testing", package: "OTCore"),
                 .product(name: "SwiftRadix", package: "SwiftRadix")
             ]
         ),
@@ -44,14 +39,14 @@ let package = Package(
             ]
         ),
         
+        .target(name: "XCTestExtensions"),
+        
         .testTarget(
             name: "MIDIKitTests",
             dependencies: [
-                // internal
                 .target(name: "MIDIKit"),
-                // external
-                .product(name: "OTCore-Testing-XCTest", package: "OTCore"),
-                .product(name: "SwiftRadix", package: "SwiftRadix")
+                .product(name: "SwiftRadix", package: "SwiftRadix"),
+                .target(name: "XCTestExtensions")
             ]
         )
     ]

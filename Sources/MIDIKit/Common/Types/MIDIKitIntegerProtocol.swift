@@ -44,7 +44,7 @@ public protocol MIDIKitIntegerProtocol {
     // Computed properties
     
     /// Returns the integer as an `Int` instance
-    var int: Int { get }
+    var intValue: Int { get }
     
 }
 
@@ -57,14 +57,14 @@ extension MIDIKitIntegerProtocol {
     }
     
     public init<T: BinaryInteger>(clamping source: T) {
-        let clamped = Storage(source.int.clamped(to: Self.min(Int.self)...Self.max(Int.self)))
+        let clamped = Storage(Int(source).clamped(to: Self.min(Int.self)...Self.max(Int.self)))
         self.init(clamped)
     }
     
     public static var min: Self { Self(Self.min(Storage.self)) }
     public static var max: Self { Self(Self.max(Storage.self)) }
     
-    public var int: Int { value.int }
+    public var intValue: Int { Int(value) }
     
 }
 

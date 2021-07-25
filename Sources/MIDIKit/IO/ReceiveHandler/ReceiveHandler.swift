@@ -5,7 +5,6 @@
 
 import CoreMIDI
 
-@_implementationOnly import OTCore
 @_implementationOnly import SwiftRadix
 
 // MARK: - ReceiveHandler

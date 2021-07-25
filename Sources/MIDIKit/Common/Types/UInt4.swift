@@ -3,9 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-@_implementationOnly import OTCore
-@_implementationOnly import OTCoreTesting
-
 extension MIDI {
     
     /// A 4-bit unsigned integer value type used in `MIDIKit`.
@@ -23,8 +20,8 @@ extension MIDI {
         }
         
         public init<T: BinaryInteger>(_ source: T) {
-            if source.int < Self.min(Int.self) { fatalError("Underflow") }
-            if source.int > Self.max(Int.self) { fatalError("Overflow") }
+            if source < Self.min(Storage.self) { Exception.underflow.raise() }
+            if source > Self.max(Storage.self) { Exception.overflow.raise() }
             value = Storage(source)
         }
         
@@ -39,7 +36,7 @@ extension MIDI {
         // MARK: Computed properties
         
         /// Returns the integer as a `UInt8` instance
-        public var uint8: UInt8 { value }
+        public var uInt8Value: UInt8 { value }
         
     }
     

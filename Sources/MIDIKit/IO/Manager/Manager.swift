@@ -4,7 +4,6 @@
 //
 
 import CoreMIDI
-@_implementationOnly import OTCore
 
 extension MIDI.IO {
     
@@ -96,7 +95,7 @@ extension MIDI.IO {
             
             if result != noErr {
                 let osStatusMessage = MIDIOSStatus(rawValue: result).description
-                Log.debug("Error disposing of MIDI client: \(osStatusMessage)")
+                //Log.debug("Error disposing of MIDI client: \(osStatusMessage)")
             }
             
         }

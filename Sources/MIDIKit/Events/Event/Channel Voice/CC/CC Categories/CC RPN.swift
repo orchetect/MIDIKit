@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-@_implementationOnly import OTCore
-
 extension MIDI.Event.CC {
     
     /// Cases describing MIDI CC RPNs (Registered Parameter Numbers)
@@ -190,15 +188,15 @@ extension MIDI.Event.CC.RPN {
         let dataEntryBytes = self.dataEntryBytes
         
         if let dataEntryMSB = dataEntryBytes.msb {
-            rpnEvents += .cc(controller: .dataEntry,
+            rpnEvents.append(.cc(controller: .dataEntry,
                              value: dataEntryMSB,
-                             channel: channel)
+                             channel: channel))
         }
         
         if let dataEntryLSB = dataEntryBytes.lsb {
-            rpnEvents += .cc(controller: .dataEntry,
+            rpnEvents.append(.cc(controller: .dataEntry,
                              value: dataEntryLSB,
-                             channel: channel)
+                             channel: channel))
         }
         
         return rpnEvents

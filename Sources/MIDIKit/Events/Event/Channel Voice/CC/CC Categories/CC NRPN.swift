@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-@_implementationOnly import OTCore
-
 extension MIDI.Event.CC {
     
     /// MIDI CC NRPNs (Non-Registered Parameter Numbers)
@@ -42,15 +40,15 @@ extension MIDI.Event.CC.NRPN {
         ]
         
         if let dataEntryMSB = dataEntryMSB {
-            nrpnEvents += .cc(controller: .dataEntry,
-                              value: dataEntryMSB,
-                              channel: channel)
+            nrpnEvents.append(.cc(controller: .dataEntry,
+                                  value: dataEntryMSB,
+                                  channel: channel))
         }
         
         if let dataEntryLSB = dataEntryLSB {
-            nrpnEvents += .cc(controller: .dataEntry,
-                              value: dataEntryLSB,
-                              channel: channel)
+            nrpnEvents.append(.cc(controller: .dataEntry,
+                                  value: dataEntryLSB,
+                                  channel: channel))
         }
         
         return nrpnEvents

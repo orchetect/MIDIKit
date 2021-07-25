@@ -54,13 +54,17 @@ extension MIDI.IO.UniqueIDPersistence {
             return uniqueID
             
         case .userDefaultsManaged(key: let key):
-            if let readInt = UserDefaults.standard
-                .integerOptional(forKey: key)?
-                .int32Exactly
-            {
-                return T(readInt)
-            }
-            return nil
+            // test to see if key does not exist first
+            // otherwise just calling integer(forKey:) returns 0 if key does not exist
+            guard UserDefaults.standard.object(forKey: key) != nil
+            else { return nil }
+            
+            let readInt = UserDefaults.standard.integer(forKey: key)
+            
+            guard let int32Exactly = Int32(exactly: readInt)
+            else { return nil }
+            
+            return T(int32Exactly)
             
         case .manualStorage(readHandler: let readHandler, storeHandler: _):
             if let readInt = readHandler() {

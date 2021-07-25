@@ -3,9 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-@_implementationOnly import OTCore
-@_implementationOnly import OTCoreTesting
-
 extension MIDI {
     
     /// A 14-bit unsigned integer value type used in `MIDIKit`.
@@ -25,8 +22,8 @@ extension MIDI {
         }
         
         public init<T: BinaryInteger>(_ source: T) {
-            if source.int < Self.min(Int.self) { fatalError("Underflow") }
-            if source.int > Self.max(Int.self) { fatalError("Overflow") }
+            if source < Self.min(Storage.self) { Exception.underflow.raise() }
+            if source > Self.max(Storage.self) { Exception.overflow.raise() }
             value = Storage(source)
         }
         
@@ -40,13 +37,13 @@ extension MIDI {
         ///     init(zeroMidpointFloat:  0.0) == 8192  == .midpoint
         ///     init(zeroMidpointFloat:  0.5) == 12287
         ///     init(zeroMidpointFloat:  1.0) == 16383 == .max
-        public init<T: BinaryFloatingPoint>(zeroMidpointFloat: T) {
-            let zeroMidpointFloat = zeroMidpointFloat.clamped(to: (-1.0)...(1.0))
+        public init<T: BinaryFloatingPoint>(unitIntervalAroundZero: T) {
+            let unitIntervalAroundZero = unitIntervalAroundZero.clamped(to: (-1.0)...(1.0))
             
-            if zeroMidpointFloat > 0.0 {
-                value = 8192 + Storage(zeroMidpointFloat * 8191)
+            if unitIntervalAroundZero > 0.0 {
+                value = 8192 + Storage(unitIntervalAroundZero * 8191)
             } else {
-                value = 8192 - Storage(abs(zeroMidpointFloat) * 8192)
+                value = 8192 - Storage(abs(unitIntervalAroundZero) * 8192)
             }
             
         }
@@ -86,11 +83,11 @@ extension MIDI {
         // MARK: Computed properties
         
         /// Returns the integer as a `UInt16` instance
-        public var uint16: UInt16 { value }
+        public var uInt16Value: UInt16 { value }
         
         /// Converts from integer to a floating-point unit interval having a 0.0 neutral midpoint
         /// (`0...8192...16383` to `-1.0...0.0...1.0`)
-        public var zeroMidpointFloat: Double {
+        public var unitIntervalAroundZero: Double {
             
             // account for non-symmetry of the pitch wheel raw value range
             if value > 8192 {

@@ -4,8 +4,7 @@
 //
 
 import CoreMIDI
-
-@_implementationOnly import OTCore
+import os.log
 
 extension MIDI.IO.ReceiveHandler {
     
@@ -58,7 +57,12 @@ extension MIDI.IO.ReceiveHandler {
             self.filterActiveSensingAndClock = filterActiveSensingAndClock
             
             self.handler = handler ?? { packetBytesString in
-                Log.debug(packetBytesString)
+                #if DEBUG
+                os_log("%{public}@",
+                       log: OSLog.default,
+                       type: .debug,
+                       packetBytesString)
+                #endif
             }
             
         }

@@ -5,7 +5,6 @@
 
 import Foundation
 import CoreMIDI
-@_implementationOnly import OTCore
 
 extension MIDI.IO {
     
@@ -148,18 +147,23 @@ extension MIDI.IO.InputConnection: CustomStringConvertible {
     
     public var description: String {
         
-        let outputEndpointName = (
-            outputEndpointRef?
-                .transformed { try? MIDI.IO.getName(of: $0) }?
-                .transformed { " " + $0 }
-                .quoted
-        ) ?? ""
+        var outputEndpointName: String = "?"
+        if let outputEndpointRef = outputEndpointRef,
+           let getName = try? MIDI.IO.getName(of: outputEndpointRef) {
+            outputEndpointName = "\(getName)".quoted
+        }
         
-        let outputEndpointRef = "\(self.outputEndpointRef, ifNil: "nil")"
+        var outputEndpointRefString: String = "nil"
+        if let outputEndpointRef = outputEndpointRef {
+            outputEndpointRefString = "\(outputEndpointRef)"
+        }
         
-        let inputPortRef = "\(self.inputPortRef, ifNil: "nil")"
-        
-        return "InputConnection(criteria: \(outputCriteria), outputEndpointRef: \(outputEndpointRef)\(outputEndpointName), inputPortRef: \(inputPortRef), isConnected: \(isConnected))"
+        var inputPortRefString: String = "nil"
+        if let inputPortRef = inputPortRef {
+            inputPortRefString = "\(inputPortRef)"
+        }
+                
+        return "InputConnection(criteria: \(outputCriteria), outputEndpointRef: \(outputEndpointRefString) \(outputEndpointName), inputPortRef: \(inputPortRefString), isConnected: \(isConnected))"
         
     }
     

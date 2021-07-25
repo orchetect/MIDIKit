@@ -5,7 +5,6 @@
 
 import Foundation
 import CoreMIDI
-@_implementationOnly import OTCore
 
 extension MIDI.IO {
     
@@ -127,9 +126,12 @@ extension MIDI.IO.Output: CustomStringConvertible {
     
     public var description: String {
         
-        let uniqueID = "\(self.uniqueID, ifNil: "nil")"
+        var uniqueIDString: String = "nil"
+        if let uniqueID = uniqueID {
+            uniqueIDString = "\(uniqueID)"
+        }
         
-        return "Output(name: \(endpointName.quoted), uniqueID: \(uniqueID))"
+        return "Output(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"
         
     }
     

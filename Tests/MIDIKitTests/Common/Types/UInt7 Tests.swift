@@ -7,7 +7,7 @@
 
 import XCTest
 @testable import MIDIKit
-import OTCoreTestingXCTest
+import XCTestExtensions
 
 final class UInt7_Tests: XCTestCase {
 	
@@ -17,26 +17,26 @@ final class UInt7_Tests: XCTestCase {
 		
 		// default
 		
-		XCTAssertEqual(MIDI.UInt7().int, 0)
+		XCTAssertEqual(MIDI.UInt7().intValue, 0)
 		
 		// different integer types
 		
-		XCTAssertEqual(MIDI.UInt7(0).int, 0)
-		XCTAssertEqual(MIDI.UInt7(UInt8(0)).int, 0)
-		XCTAssertEqual(MIDI.UInt7(UInt16(0)).int, 0)
+		XCTAssertEqual(MIDI.UInt7(0).intValue, 0)
+		XCTAssertEqual(MIDI.UInt7(UInt8(0)).intValue, 0)
+		XCTAssertEqual(MIDI.UInt7(UInt16(0)).intValue, 0)
 		
 		// values
 		
-		XCTAssertEqual(MIDI.UInt7(1).int, 1)
-		XCTAssertEqual(MIDI.UInt7(2).int, 2)
+		XCTAssertEqual(MIDI.UInt7(1).intValue, 1)
+		XCTAssertEqual(MIDI.UInt7(2).intValue, 2)
 		
 		// overflow
 		
-		expectFatalError {
+        _XCTAssertThrows {
 			_ = MIDI.UInt7(0 - 1)
 		}
 		
-		expectFatalError { [self] in
+        _XCTAssertThrows { [self] in
 			_ = MIDI.UInt7(_max + 1)
 		}
 		
@@ -46,11 +46,11 @@ final class UInt7_Tests: XCTestCase {
 		
 		// typical
 		
-		XCTAssertEqual(MIDI.UInt7(exactly: 0)?.int, 0)
+		XCTAssertEqual(MIDI.UInt7(exactly: 0)?.intValue, 0)
 		
-		XCTAssertEqual(MIDI.UInt7(exactly: 1)?.int, 1)
+		XCTAssertEqual(MIDI.UInt7(exactly: 1)?.intValue, 1)
 		
-		XCTAssertEqual(MIDI.UInt7(exactly: _max)?.int, _max)
+		XCTAssertEqual(MIDI.UInt7(exactly: _max)?.intValue, _max)
 		
 		// overflow
 		
@@ -64,33 +64,33 @@ final class UInt7_Tests: XCTestCase {
 		
 		// within range
 		
-		XCTAssertEqual(MIDI.UInt7(clamping: 0).int, 0)
-		XCTAssertEqual(MIDI.UInt7(clamping: 1).int, 1)
-		XCTAssertEqual(MIDI.UInt7(clamping: _max).int, _max)
+		XCTAssertEqual(MIDI.UInt7(clamping: 0).intValue, 0)
+		XCTAssertEqual(MIDI.UInt7(clamping: 1).intValue, 1)
+		XCTAssertEqual(MIDI.UInt7(clamping: _max).intValue, _max)
 		
 		// overflow
 		
-		XCTAssertEqual(MIDI.UInt7(clamping: -1).int, 0)
-		XCTAssertEqual(MIDI.UInt7(clamping: _max + 1).int, _max)
+		XCTAssertEqual(MIDI.UInt7(clamping: -1).intValue, 0)
+		XCTAssertEqual(MIDI.UInt7(clamping: _max + 1).intValue, _max)
 		
 	}
 	
 	func testMin() {
 		
-		XCTAssertEqual(MIDI.UInt7.min.int, 0)
+		XCTAssertEqual(MIDI.UInt7.min.intValue, 0)
 		
 	}
 	
 	func testMax() {
 		
-		XCTAssertEqual(MIDI.UInt7.max.int, _max)
+		XCTAssertEqual(MIDI.UInt7.max.intValue, _max)
 		
 	}
 	
 	func testComputedProperties() {
 		
-		XCTAssertEqual(MIDI.UInt7(1).int, 1)
-		XCTAssertEqual(MIDI.UInt7(1).uint8, 1)
+		XCTAssertEqual(MIDI.UInt7(1).intValue, 1)
+		XCTAssertEqual(MIDI.UInt7(1).uInt8Value, 1)
 		
 	}
 	

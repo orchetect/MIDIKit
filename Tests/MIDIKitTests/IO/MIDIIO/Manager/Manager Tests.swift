@@ -8,8 +8,6 @@
 import XCTest
 @testable import MIDIKit
 import CoreMIDI
-import OTCore
-import OTCoreTestingXCTest
 
 final class Manager_Tests: XCTestCase {
 	
@@ -36,7 +34,7 @@ final class Manager_Tests: XCTestCase {
 		XCTAssert(manager.managedOutputs.isEmpty)
 		XCTAssert(manager.managedThruConnections.isEmpty)
 		XCTAssert(try! manager
-					.unmanagedPersistentThruConnections(ownerID: Globals.bundle.bundleID)
+                    .unmanagedPersistentThruConnections(ownerID: Bundle.main.bundleIdentifier ?? "nil")
 					.isEmpty)
 		
 	}

@@ -22,7 +22,12 @@ extension MIDI.Packet {
             #warning("> this is dumb?")
             var bytes: [MIDI.Byte] = []
             bytes.reserveCapacity(4 * words.count)
-            words.forEach { bytes.append(contentsOf: $0.toData().bytes) }
+            words.forEach {
+                bytes.append(MIDI.Byte($0 & 0xFF000000) >> (6*4))
+                bytes.append(MIDI.Byte($0 & 0x00FF0000) >> (4*4))
+                bytes.append(MIDI.Byte($0 & 0x0000FF00) >> (2*4))
+                bytes.append(MIDI.Byte($0 & 0x000000FF))
+            }
             return bytes
             
         }

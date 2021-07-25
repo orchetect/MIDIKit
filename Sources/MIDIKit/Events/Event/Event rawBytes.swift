@@ -14,26 +14,26 @@ extension MIDI.Event {
         // -------------------
         
         case .noteOn(note: let note, velocity: let velocity, channel: let channel):
-            return [0x90 + channel.uint8, note.uint8, velocity.uint8]
+            return [0x90 + channel.uInt8Value, note.uInt8Value, velocity.uInt8Value]
             
         case .noteOff(note: let note, velocity: let velocity, channel: let channel):
-            return [0x80 + channel.uint8, note.uint8, velocity.uint8]
+            return [0x80 + channel.uInt8Value, note.uInt8Value, velocity.uInt8Value]
             
         case .polyAftertouch(note: let note, pressure: let pressure, channel: let channel):
-            return [0xA0 + channel.uint8, note.uint8, pressure.uint8]
+            return [0xA0 + channel.uInt8Value, note.uInt8Value, pressure.uInt8Value]
             
         case .cc(controller: let controller, value: let value, channel: let channel):
-            return [0xB0 + channel.uint8, controller.uint8, value.uint8]
+            return [0xB0 + channel.uInt8Value, controller.uInt8Value, value.uInt8Value]
             
         case .programChange(program: let program, channel: let channel):
-            return [0xC0 + channel.uint8, program.uint8]
+            return [0xC0 + channel.uInt8Value, program.uInt8Value]
             
         case .chanAftertouch(pressure: let pressure, channel: let channel):
-            return [0xD0 + channel.uint8, pressure.uint8]
+            return [0xD0 + channel.uInt8Value, pressure.uInt8Value]
             
         case .pitchBend(value: let value, channel: let channel):
             let bytePair = value.bytePair
-            return [0xE0 + channel.uint8, bytePair.lsb, bytePair.msb]
+            return [0xE0 + channel.uInt8Value, bytePair.lsb, bytePair.msb]
             
         // ----------------------
         // MARK: System Exclusive
@@ -47,7 +47,13 @@ extension MIDI.Event {
                              subID1: let subID1,
                              subID2: let subID2,
                              data: let data):
-            return [0xF0, universalType.rawValue.uint8, deviceID.uint8, subID1.uint8, subID2.uint8] + data + [0xF7]
+            return [0xF0,
+                    MIDI.Byte(universalType.rawValue),
+                    deviceID.uInt8Value,
+                    subID1.uInt8Value,
+                    subID2.uInt8Value]
+                + data
+                + [0xF7]
             
         // -------------------
         // MARK: System Common
@@ -61,7 +67,7 @@ extension MIDI.Event {
             return [0xF2, bytePair.lsb, bytePair.msb]
             
         case .songSelect(number: let number):
-            return [0xF3, number.uint8]
+            return [0xF3, number.uInt8Value]
             
         case .unofficialBusSelect:
             return [0xF5]

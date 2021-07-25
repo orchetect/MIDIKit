@@ -4,7 +4,6 @@
 //
 
 import CoreMIDI
-@_implementationOnly import OTCore
 
 extension MIDI.IO {
     
@@ -19,7 +18,7 @@ extension MIDI.IO {
         for i in 0..<devCount {
             let device = MIDIGetDevice(i)
             
-            devices += .init(device)
+            devices.append(.init(device))
         }
         
         return devices
@@ -41,7 +40,7 @@ extension MIDI.IO {
         for i in 0..<entityCount {
             let entity = MIDIDeviceGetEntity(device, i)
             
-            entities += .init(entity)
+            entities.append(.init(entity))
         }
         
         return entities

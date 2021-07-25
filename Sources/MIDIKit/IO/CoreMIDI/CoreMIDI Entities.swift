@@ -6,7 +6,6 @@
 import Foundation
 
 import CoreMIDI
-@_implementationOnly import OTCore
 
 extension MIDI.IO {
     
@@ -35,7 +34,7 @@ extension MIDI.IO {
         for i in 0..<srcCount {
             let endpoint = MIDIEntityGetSource(entity, i)
             
-            endpoints += .init(endpoint)
+            endpoints.append(.init(endpoint))
         }
         
         return endpoints
@@ -53,7 +52,7 @@ extension MIDI.IO {
         for i in 0..<srcCount {
             let endpoint = MIDIEntityGetDestination(entity, i)
             
-            endpoints += .init(endpoint)
+            endpoints.append(.init(endpoint))
         }
         
         return endpoints
