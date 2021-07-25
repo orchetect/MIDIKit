@@ -28,6 +28,14 @@ public protocol MIDIKitIntegerProtocol {
     /// Clamps value to `min` or `max` in the event of overflow.
     init<T: BinaryInteger>(clamping source: T)
     
+    /// Creates a new instance from the given floating point number.
+    /// Throws an exception in the event of overflow.
+    init<T: BinaryFloatingPoint>(_ source: T)
+    
+    /// Creates a new instance from the given floating point number.
+    /// Returns `nil` in the event of overflow.
+    init?<T: BinaryFloatingPoint>(exactly source: T)
+    
     // Constants
     
     /// Bit width of the integer
@@ -36,10 +44,12 @@ public protocol MIDIKitIntegerProtocol {
     /// Minimum value storable
     static var min: Self { get }
     static func min<T: BinaryInteger>(_ ofType: T.Type) -> T
+    static func min<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T
     
     /// Maximum value storable
     static var max: Self { get }
     static func max<T: BinaryInteger>(_ ofType: T.Type) -> T
+    static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T
     
     // Computed properties
     
@@ -59,6 +69,14 @@ extension MIDIKitIntegerProtocol {
     public init<T: BinaryInteger>(clamping source: T) {
         let clamped = Storage(Int(source).clamped(to: Self.min(Int.self)...Self.max(Int.self)))
         self.init(clamped)
+    }
+    
+    public init?<T: BinaryFloatingPoint>(exactly source: T) {
+        // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type less than the largest MIDIKitIntegerProtocol concrete type we're using (UInt14).
+        // the smallest floating point number in the Swift standard library is Float16 which can hold UInt14.max fine.
+        if source < Self.min(T.self) { return nil }
+        if source > Self.max(T.self) { return nil }
+        self.init(source)
     }
     
     public static var min: Self { Self(Self.min(Storage.self)) }

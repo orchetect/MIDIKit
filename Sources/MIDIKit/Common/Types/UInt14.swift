@@ -27,6 +27,14 @@ extension MIDI {
             value = Storage(source)
         }
         
+        public init<T: BinaryFloatingPoint>(_ source: T) {
+            // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type less than the largest MIDIKitIntegerProtocol concrete type we're using (UInt14).
+            // the smallest floating point number in the Swift standard library is Float16 which can hold UInt14.max fine.
+            if source < Self.min(T.self) { Exception.underflow.raise() }
+            if source > Self.max(T.self) { Exception.overflow.raise() }
+            value = Storage(source)
+        }
+        
         /// Converts from a floating-point unit interval having a 0.0 neutral midpoint
         /// (`-1.0...0.0...1.0` to `0...8192...16383`)
         ///
@@ -68,6 +76,7 @@ extension MIDI {
         public static let bitWidth: Int = 14
         
         public static func min<T: BinaryInteger>(_ ofType: T.Type) -> T { 0 }
+        public static func min<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0 }
         
         // (0x40 << 7) + 0x00
         // 0b1000000_0000000
@@ -77,8 +86,8 @@ extension MIDI {
         
         // (0x7F << 7) + 0x7F
         // 0b1111111_1111111
-        /// Maximum value
         public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 16383 }
+        public static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 16383 }
         
         // MARK: Computed properties
         
@@ -169,6 +178,20 @@ extension MIDI.UInt14: CustomStringConvertible {
 // MARK: - Standard library extensions
 
 extension BinaryInteger {
+    
+    /// Convenience initializer for `MIDI.UInt14`.
+    public var toMIDIUInt14: MIDI.UInt14 {
+        MIDI.UInt14(self)
+    }
+    
+    /// Convenience initializer for `MIDI.UInt14(exactly:)`.
+    public var toMIDIUInt14Exactly: MIDI.UInt14? {
+        MIDI.UInt14(exactly: self)
+    }
+    
+}
+
+extension BinaryFloatingPoint {
     
     /// Convenience initializer for `MIDI.UInt14`.
     public var toMIDIUInt14: MIDI.UInt14 {

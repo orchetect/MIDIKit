@@ -25,13 +25,23 @@ extension MIDI {
             value = Storage(source)
         }
         
+        public init<T: BinaryFloatingPoint>(_ source: T) {
+            // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type less than the largest MIDIKitIntegerProtocol concrete type we're using (UInt14).
+            // the smallest floating point number in the Swift standard library is Float16 which can hold UInt14.max fine.
+            if source < Self.min(T.self) { Exception.underflow.raise() }
+            if source > Self.max(T.self) { Exception.overflow.raise() }
+            value = Storage(source)
+        }
+        
         // MARK: Constants
         
         public static let bitWidth: Int = 4
         
         public static func min<T: BinaryInteger>(_ ofType: T.Type) -> T { 0 }
+        public static func min<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0 }
         
         public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 0b1111 }
+        public static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0b1111 }
         
         // MARK: Computed properties
         
@@ -91,6 +101,20 @@ extension MIDI.UInt4: CustomStringConvertible {
 // MARK: - Standard library extensions
 
 extension BinaryInteger {
+    
+    /// Convenience initializer for `MIDI.UInt4`.
+    public var toMIDIUInt4: MIDI.UInt4 {
+        MIDI.UInt4(self)
+    }
+    
+    /// Convenience initializer for `MIDI.UInt4(exactly:)`.
+    public var toMIDIUInt4Exactly: MIDI.UInt4? {
+        MIDI.UInt4(exactly: self)
+    }
+    
+}
+
+extension BinaryFloatingPoint {
     
     /// Convenience initializer for `MIDI.UInt4`.
     public var toMIDIUInt4: MIDI.UInt4 {

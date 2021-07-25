@@ -13,7 +13,7 @@ final class UInt4_Tests: XCTestCase {
 	
 	fileprivate let _max = 0b1111
 	
-	func testInit() {
+	func testInit_BinaryInteger() {
 		
 		// default
 		
@@ -42,7 +42,7 @@ final class UInt4_Tests: XCTestCase {
 		
 	}
 	
-	func testInitExactly() {
+	func testInit_BinaryInteger_Exactly() {
 		
 		// typical
 		
@@ -60,7 +60,7 @@ final class UInt4_Tests: XCTestCase {
 		
 	}
 	
-	func testInitClamping() {
+	func testInitBinaryInteger_Clamping() {
 		
 		// within range
 		
@@ -74,7 +74,49 @@ final class UInt4_Tests: XCTestCase {
 		XCTAssertEqual(MIDI.UInt4(clamping: _max + 1).intValue, _max)
 		
 	}
-	
+    
+    func testInit_BinaryFloatingPoint() {
+        
+        XCTAssertEqual(MIDI.UInt4(Double(0)).intValue, 0)
+        XCTAssertEqual(MIDI.UInt4(Double(1)).intValue, 1)
+        XCTAssertEqual(MIDI.UInt4(Double(5.9)).intValue, 5)
+        
+        XCTAssertEqual(MIDI.UInt4(Float(0)).intValue, 0)
+        XCTAssertEqual(MIDI.UInt4(Float(1)).intValue, 1)
+        XCTAssertEqual(MIDI.UInt4(Float(5.9)).intValue, 5)
+        
+        // overflow
+        
+        _XCTAssertThrows {
+            _ = MIDI.UInt4(Double(0 - 1))
+            _ = MIDI.UInt4(Float(0 - 1))
+        }
+        
+        _XCTAssertThrows { [self] in
+            _ = MIDI.UInt4(Double(_max + 1))
+            _ = MIDI.UInt4(Float(_max + 1))
+        }
+        
+    }
+    
+    func testInit_BinaryFloatingPoint_Exactly() {
+        
+        // typical
+        
+        XCTAssertEqual(MIDI.UInt4(exactly: 0.0), 0)
+        
+        XCTAssertEqual(MIDI.UInt4(exactly: 1.0), 1)
+        
+        XCTAssertEqual(MIDI.UInt4(exactly: Double(_max))?.intValue, _max)
+        
+        // overflow
+        
+        XCTAssertNil(MIDI.UInt4(exactly: -1.0))
+        
+        XCTAssertNil(MIDI.UInt4(exactly: Double(_max) + 1.0))
+        
+    }
+    
 	func testMin() {
 		
 		XCTAssertEqual(MIDI.UInt4.min.intValue, 0)
