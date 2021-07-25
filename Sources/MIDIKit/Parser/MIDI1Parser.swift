@@ -202,8 +202,8 @@ extension MIDI {
                 switch statusByte.nibbles.high {
                 case 0x8: // note off
                     let channel = statusByte.nibbles.low
-                    guard let note = dataByte1?.midiUInt7,
-                          let velocity = dataByte2?.midiUInt7
+                    guard let note = dataByte1?.toMIDIUInt7,
+                          let velocity = dataByte2?.toMIDIUInt7
                     else { return events }
                     
                     events.append(.noteOff(note: note, velocity: velocity, channel: channel))
@@ -211,8 +211,8 @@ extension MIDI {
                     
                 case 0x9: // note on
                     let channel = statusByte.nibbles.low
-                    guard let note = dataByte1?.midiUInt7,
-                          let velocity = dataByte2?.midiUInt7
+                    guard let note = dataByte1?.toMIDIUInt7,
+                          let velocity = dataByte2?.toMIDIUInt7
                     else { return events }
                     
                     events.append(.noteOn(note: note, velocity: velocity, channel: channel))
@@ -220,8 +220,8 @@ extension MIDI {
                     
                 case 0xA: // poly aftertouch
                     let channel = statusByte.nibbles.low
-                    guard let note = dataByte1?.midiUInt7,
-                          let pressure = dataByte2?.midiUInt7
+                    guard let note = dataByte1?.toMIDIUInt7,
+                          let pressure = dataByte2?.toMIDIUInt7
                     else { return events }
                     
                     events.append(.polyAftertouch(note: note, pressure: pressure, channel: channel))
@@ -229,8 +229,8 @@ extension MIDI {
                     
                 case 0xB: // CC (incl. channel mode msgs 121-127)
                     let channel = statusByte.nibbles.low
-                    guard let cc = dataByte1?.midiUInt7,
-                          let value = dataByte2?.midiUInt7
+                    guard let cc = dataByte1?.toMIDIUInt7,
+                          let value = dataByte2?.toMIDIUInt7
                     else { return events }
                     
                     events.append(.cc(controller: cc, value: value, channel: channel))
@@ -238,7 +238,7 @@ extension MIDI {
                     
                 case 0xC: // program change
                     let channel = statusByte.nibbles.low
-                    guard let program = dataByte1?.midiUInt7
+                    guard let program = dataByte1?.toMIDIUInt7
                     else { return events }
                     
                     events.append(.programChange(program: program, channel: channel))
@@ -246,7 +246,7 @@ extension MIDI {
                     
                 case 0xD: // channel aftertouch
                     let channel = statusByte.nibbles.low
-                    guard let pressure = dataByte1?.midiUInt7
+                    guard let pressure = dataByte1?.toMIDIUInt7
                     else { return events }
                     
                     events.append(.chanAftertouch(pressure: pressure, channel: channel))
@@ -290,7 +290,7 @@ extension MIDI {
                         currentPos += currentPos == 0 ? 3 : 2
                         
                     case 0x3: // System Common - Song Select
-                        guard let songNumber = dataByte1?.midiUInt7
+                        guard let songNumber = dataByte1?.toMIDIUInt7
                         else { return events }
                         
                         events.append(.songSelect(number: songNumber))

@@ -134,12 +134,12 @@ extension MIDI.Event.CC.RPN {
             
         case .tuningProgramChange(number: let number):
             #warning("> not sure if this is correct")
-            return (msb: number.midiUInt7Exactly,
+            return (msb: number.toMIDIUInt7Exactly,
                     lsb: nil)
             
         case .tuningBankSelect(number: let number):
             #warning("> not sure if this is correct")
-            return (msb: number.midiUInt7Exactly,
+            return (msb: number.toMIDIUInt7Exactly,
                     lsb: nil)
             
         case .modulationDepthRange(dataEntryMSB: let dataEntryMSB,

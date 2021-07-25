@@ -93,12 +93,12 @@ extension MIDI.UInt4: CustomStringConvertible {
 extension BinaryInteger {
     
     /// Convenience initializer for `MIDI.UInt4`.
-    public var midiUInt4: MIDI.UInt4 {
+    public var toMIDIUInt4: MIDI.UInt4 {
         MIDI.UInt4(self)
     }
     
     /// Convenience initializer for `MIDI.UInt4(exactly:)`.
-    public var midiUInt4Exactly: MIDI.UInt4? {
+    public var toMIDIUInt4Exactly: MIDI.UInt4? {
         MIDI.UInt4(exactly: self)
     }
     

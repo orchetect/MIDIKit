@@ -151,40 +151,40 @@ final class UInt7_Tests: XCTestCase {
 	
 	func testBinaryInteger_UInt7() {
 		
-		XCTAssertEqual(10.midiUInt7, 10)
+		XCTAssertEqual(10.toMIDIUInt7, 10)
 		
-		XCTAssertEqual(Int8(10).midiUInt7, 10)
-		XCTAssertEqual(UInt8(10).midiUInt7, 10)
+		XCTAssertEqual(Int8(10).toMIDIUInt7, 10)
+		XCTAssertEqual(UInt8(10).toMIDIUInt7, 10)
 		
-		XCTAssertEqual(Int16(10).midiUInt7, 10)
-		XCTAssertEqual(UInt16(10).midiUInt7, 10)
+		XCTAssertEqual(Int16(10).toMIDIUInt7, 10)
+		XCTAssertEqual(UInt16(10).toMIDIUInt7, 10)
 		
 	}
 	
     func testBinaryInteger_UInt7Exactly() {
         
-        XCTAssertEqual(0b000_0000.midiUInt7Exactly, 0b000_0000)
-        XCTAssertEqual(0b111_1111.midiUInt7Exactly, 0b111_1111)
+        XCTAssertEqual(0b000_0000.toMIDIUInt7Exactly, 0b000_0000)
+        XCTAssertEqual(0b111_1111.toMIDIUInt7Exactly, 0b111_1111)
         
-        XCTAssertEqual(Int8(10).midiUInt7Exactly, 10)
-        XCTAssertEqual(UInt8(10).midiUInt7Exactly, 10)
+        XCTAssertEqual(Int8(10).toMIDIUInt7Exactly, 10)
+        XCTAssertEqual(UInt8(10).toMIDIUInt7Exactly, 10)
         
-        XCTAssertEqual(Int16(10).midiUInt7Exactly, 10)
-        XCTAssertEqual(UInt16(10).midiUInt7Exactly, 10)
+        XCTAssertEqual(Int16(10).toMIDIUInt7Exactly, 10)
+        XCTAssertEqual(UInt16(10).toMIDIUInt7Exactly, 10)
         
         // nil (overflow)
         
-        XCTAssertNil(0b1000_0000.midiUInt7Exactly)
+        XCTAssertNil(0b1000_0000.toMIDIUInt7Exactly)
         
     }
     
     func testBinaryInteger_Init_UInt7() {
         
-        XCTAssertEqual(Int(10.midiUInt7), 10)
-        XCTAssertEqual(Int(exactly: 10.midiUInt7), 10)
+        XCTAssertEqual(Int(10.toMIDIUInt7), 10)
+        XCTAssertEqual(Int(exactly: 10.toMIDIUInt7), 10)
         
         // no BinaryInteger-conforming type in the Swift standard library is smaller than 8 bits, so we can't really test .init(exactly:) producing nil because it always succeeds (?)
-        XCTAssertEqual(Int(exactly: 0b111_1111.midiUInt7), 0b111_1111)
+        XCTAssertEqual(Int(exactly: 0b111_1111.toMIDIUInt7), 0b111_1111)
         
     }
     
@@ -192,25 +192,25 @@ final class UInt7_Tests: XCTestCase {
     
     func testOperators() {
         
-        XCTAssertEqual(1.midiUInt7 + 1           , 2.midiUInt7)
-        XCTAssertEqual(1 + 1.midiUInt7           , 2.midiUInt7)
-        XCTAssertEqual(1.midiUInt7 + 1.midiUInt7 , 2)
+        XCTAssertEqual(1.toMIDIUInt7 + 1             , 2.toMIDIUInt7)
+        XCTAssertEqual(1 + 1.toMIDIUInt7             , 2.toMIDIUInt7)
+        XCTAssertEqual(1.toMIDIUInt7 + 1.toMIDIUInt7 , 2)
         
-        XCTAssertEqual(2.midiUInt7 - 1           , 1.midiUInt7)
-        XCTAssertEqual(2 - 1.midiUInt7           , 1.midiUInt7)
-        XCTAssertEqual(2.midiUInt7 - 1.midiUInt7 , 1)
+        XCTAssertEqual(2.toMIDIUInt7 - 1             , 1.toMIDIUInt7)
+        XCTAssertEqual(2 - 1.toMIDIUInt7             , 1.toMIDIUInt7)
+        XCTAssertEqual(2.toMIDIUInt7 - 1.toMIDIUInt7 , 1)
         
-        XCTAssertEqual(2.midiUInt7 * 2           , 4.midiUInt7)
-        XCTAssertEqual(2 * 2.midiUInt7           , 4.midiUInt7)
-        XCTAssertEqual(2.midiUInt7 * 2.midiUInt7 , 4)
+        XCTAssertEqual(2.toMIDIUInt7 * 2             , 4.toMIDIUInt7)
+        XCTAssertEqual(2 * 2.toMIDIUInt7             , 4.toMIDIUInt7)
+        XCTAssertEqual(2.toMIDIUInt7 * 2.toMIDIUInt7 , 4)
         
-        XCTAssertEqual(8.midiUInt7 / 2           , 4.midiUInt7)
-        XCTAssertEqual(8 / 2.midiUInt7           , 4.midiUInt7)
-        XCTAssertEqual(8.midiUInt7 / 2.midiUInt7 , 4)
+        XCTAssertEqual(8.toMIDIUInt7 / 2             , 4.toMIDIUInt7)
+        XCTAssertEqual(8 / 2.toMIDIUInt7             , 4.toMIDIUInt7)
+        XCTAssertEqual(8.toMIDIUInt7 / 2.toMIDIUInt7 , 4)
         
-        XCTAssertEqual(8.midiUInt7 % 3           , 2.midiUInt7)
-        XCTAssertEqual(8 % 3.midiUInt7           , 2.midiUInt7)
-        XCTAssertEqual(8.midiUInt7 % 3.midiUInt7 , 2)
+        XCTAssertEqual(8.toMIDIUInt7 % 3             , 2.toMIDIUInt7)
+        XCTAssertEqual(8 % 3.toMIDIUInt7             , 2.toMIDIUInt7)
+        XCTAssertEqual(8.toMIDIUInt7 % 3.toMIDIUInt7 , 2)
         
     }
     

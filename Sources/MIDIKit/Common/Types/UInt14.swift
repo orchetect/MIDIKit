@@ -171,12 +171,12 @@ extension MIDI.UInt14: CustomStringConvertible {
 extension BinaryInteger {
     
     /// Convenience initializer for `MIDI.UInt14`.
-    public var midiUInt14: MIDI.UInt14 {
+    public var toMIDIUInt14: MIDI.UInt14 {
         MIDI.UInt14(self)
     }
     
     /// Convenience initializer for `MIDI.UInt14(exactly:)`.
-    public var midiUInt14Exactly: MIDI.UInt14? {
+    public var toMIDIUInt14Exactly: MIDI.UInt14? {
         MIDI.UInt14(exactly: self)
     }
     
