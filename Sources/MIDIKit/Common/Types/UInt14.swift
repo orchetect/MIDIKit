@@ -94,11 +94,11 @@ extension MIDI {
         /// Returns the integer as a `UInt16` instance
         public var uInt16Value: UInt16 { value }
         
-        /// Converts from integer to a floating-point unit interval having a 0.0 neutral midpoint
+        /// Converts from integer to a floating-point unit interval having a 0.0 neutral midpoint at 8192.
         /// (`0...8192...16383` to `-1.0...0.0...1.0`)
         public var unitIntervalAroundZero: Double {
             
-            // account for non-symmetry of the pitch wheel raw value range
+            // account for non-symmetry and round up. (This is how MIDI 1.0 Spec pitchbend works)
             if value > 8192 {
                 return (Double(value) - 8192) / 8191
             } else {
