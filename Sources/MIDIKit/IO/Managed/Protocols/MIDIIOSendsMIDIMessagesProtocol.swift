@@ -22,10 +22,10 @@ public protocol MIDIIOSendsMIDIMessagesProtocol {
     /// Send one or more MIDI Events.
     func send(events: [MIDI.Event]) throws
     
-    /// Send a CoreMIDI `MIDIPacketList`.
+    /// Send a CoreMIDI `MIDIPacketList` (MIDI 1.0).
     func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws
     
-    /// Send a CoreMIDI `MIDIEventList`.
+    /// Send a CoreMIDI `MIDIEventList` (MIDI 2.0).
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws
     

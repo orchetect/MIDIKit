@@ -94,7 +94,8 @@ extension MIDI.IO {
             let result = MIDIClientDispose(clientRef)
             
             if result != noErr {
-                let osStatusMessage = MIDIOSStatus(rawValue: result).description
+                // not important to log this, we can omit it for now
+                //let osStatusMessage = MIDIOSStatus(rawValue: result).description
                 //Log.debug("Error disposing of MIDI client: \(osStatusMessage)")
             }
             
@@ -105,10 +106,12 @@ extension MIDI.IO {
         /// Internal: calls `update()` on all objects caches.
         internal dynamic func updateObjectsCache() {
             
+            #if canImport(Combine)
             if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13, watchOS 6, *) {
                 // calling this means we don't need to use @Published on local variables in order for Combine/SwiftUI to be notified that ObservableObject class property values have changed
                 objectWillChange.send()
             }
+            #endif
             
             devices.update()
             endpoints.update()
@@ -123,7 +126,7 @@ extension MIDI.IO {
 #if canImport(Combine)
 import Combine
 
-@available(macOS 10.15, macCatalyst 13, iOS 13, *)
+@available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13, watchOS 6, *)
 extension MIDI.IO.Manager: ObservableObject {
     // nothing here; just add ObservableObject conformance
 }

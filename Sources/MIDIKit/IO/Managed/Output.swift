@@ -152,7 +152,7 @@ extension MIDI.IO.Output: MIDIIOSendsMIDIMessagesProtocol {
         
     }
     
-    @available(macOS 11, iOS 15, macCatalyst 15, *)
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     public func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
         guard let portRef = self.portRef else {
