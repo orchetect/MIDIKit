@@ -24,13 +24,13 @@
             buildForTesting = "YES"
             buildForRunning = "YES"
             buildForProfiling = "YES"
-            buildForArchiving = "YES"
+            buildForArchiving = "NO"
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MIDIKitC"
-               BuildableName = "MIDIKitC"
-               BlueprintName = "MIDIKitC"
+               BlueprintIdentifier = "MIDIKitTests"
+               BuildableName = "MIDIKitTests"
+               BlueprintName = "MIDIKitTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -38,13 +38,13 @@
             buildForTesting = "YES"
             buildForRunning = "YES"
             buildForProfiling = "YES"
-            buildForArchiving = "YES"
+            buildForArchiving = "NO"
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "XCTestExtensions"
-               BuildableName = "XCTestExtensions"
-               BlueprintName = "XCTestExtensions"
+               BlueprintIdentifier = "MIDIKitC"
+               BuildableName = "MIDIKitC"
+               BlueprintName = "MIDIKitC"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
