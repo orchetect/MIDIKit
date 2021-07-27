@@ -50,15 +50,17 @@ jobs:
     - name: iPhone 12 Simulator - Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12"
 
-  tvOS:
-    name: tvOS
-    runs-on: macos-latest # this must be macos, GitHub does not offer tvOS directly but we can use xcodebuild
-    steps:
-    - uses: actions/checkout@main
-    - name: Apple TV - Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV"
-    - name: Apple TV - Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV"
+# we flew too close to the sun... tvOS is not yet ready for primetime because CoreMIDI is still in beta for tvOS
+#
+#  tvOS:
+#    name: tvOS
+#    runs-on: macos-latest # this must be macos, GitHub does not offer tvOS directly but we can use xcodebuild
+#    steps:
+#    - uses: actions/checkout@main
+#    - name: Apple TV - Build
+#      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV"
+#    - name: Apple TV - Unit Tests
+#      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV"
 
 
 # xcodebuild test reference:
