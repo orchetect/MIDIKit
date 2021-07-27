@@ -1,0 +1,65 @@
+name: build
+
+on:
+  push:
+    branches: [main, dev]
+    paths-ignore:
+      - 'Docs/**'       # Docs folder in root of repo
+      - '**/*.md'       # .md files anywhere in the repo
+      - '**/LICENSE'    # LICENSE files anywhere in the repo
+      - '**/.gitignore' # .gitignore files anywhere in the repo
+      
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - 'Docs/**'       # Docs folder in root of repo
+      - '**/*.md'       # .md files anywhere in the repo
+      - '**/LICENSE'    # LICENSE files anywhere in the repo
+      - '**/.gitignore' # .gitignore files anywhere in the repo
+      
+  workflow_dispatch:
+    
+jobs: 
+  macOS:
+    name: macOS
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
+    - name: Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
+      
+  macCatalyst:
+    name: macCatalyst
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,variant=Mac Catalyst,arch=x86_64"
+    - name: Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,variant=Mac Catalyst,arch=x86_64"
+
+  iOS:
+    name: iOS
+    runs-on: macos-latest # this must be macos, GitHub does not offer iOS directly but we can use xcodebuild
+    steps:
+    - uses: actions/checkout@main
+    - name: iPhone 12 Simulator - Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12"
+    - name: iPhone 12 Simulator - Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12"
+
+  tvOS:
+    name: tvOS
+    runs-on: macos-latest # this must be macos, GitHub does not offer tvOS directly but we can use xcodebuild
+    steps:
+    - uses: actions/checkout@main
+    - name: Apple TV - Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV"
+    - name: Apple TV - Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV"
+
+
+# xcodebuild test reference:
+# https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/testing_with_xcode/chapters/08-automation.html
