@@ -53,6 +53,15 @@ jobs:
     - name: iPhone 12 Simulator - Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12"
 
+  Examples:
+    name: Examples
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: MIDISystemInfo - Build
+      run: xcodebuild build -project "Examples/MIDISystemInfo/MIDISystemInfo.xcodeproj" -scheme "MIDISystemInfo"
+  
+  
 # we flew too close to the sun... tvOS is not yet ready for primetime because CoreMIDI is still in beta for tvOS
 #
 #  tvOS:
