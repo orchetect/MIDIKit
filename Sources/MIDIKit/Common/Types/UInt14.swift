@@ -22,16 +22,24 @@ extension MIDI {
         }
         
         public init<T: BinaryInteger>(_ source: T) {
-            if source < Self.min(Storage.self) { Exception.underflow.raise() }
-            if source > Self.max(Storage.self) { Exception.overflow.raise() }
+            if source < Self.min(Storage.self) {
+                Exception.underflow.raise(reason: "UInt14 integer underflowed")
+            }
+            if source > Self.max(Storage.self) {
+                Exception.overflow.raise(reason: "UInt14 integer overflowed")
+            }
             value = Storage(source)
         }
         
         public init<T: BinaryFloatingPoint>(_ source: T) {
             // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type less than the largest MIDIKitIntegerProtocol concrete type we're using (UInt14).
             // the smallest floating point number in the Swift standard library is Float16 which can hold UInt14.max fine.
-            if source < Self.min(T.self) { Exception.underflow.raise() }
-            if source > Self.max(T.self) { Exception.overflow.raise() }
+            if source < Self.min(T.self) {
+                Exception.underflow.raise(reason: "UInt14 integer underflowed")
+            }
+            if source > Self.max(T.self) {
+                Exception.overflow.raise(reason: "UInt14 integer overflowed")
+            }
             value = Storage(source)
         }
         

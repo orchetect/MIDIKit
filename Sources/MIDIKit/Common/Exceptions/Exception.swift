@@ -22,17 +22,17 @@ internal enum Exception {
     case underflow
     case divisionByZero
     
-    internal func raise() {
+    internal func raise(reason: String? = nil) {
         
         switch self {
         case .overflow:
-            raiseException(.decimalNumberOverflowException, reason: nil)
+            raiseException(.decimalNumberOverflowException, reason: reason)
             
         case .underflow:
-            raiseException(.decimalNumberUnderflowException, reason: nil)
+            raiseException(.decimalNumberUnderflowException, reason: reason)
             
         case .divisionByZero:
-            raiseException(.decimalNumberDivideByZeroException, reason: nil)
+            raiseException(.decimalNumberDivideByZeroException, reason: reason)
             
         }
         
