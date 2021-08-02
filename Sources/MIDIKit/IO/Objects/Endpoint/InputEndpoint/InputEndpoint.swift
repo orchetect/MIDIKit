@@ -1,0 +1,86 @@
+//
+//  InputEndpoint.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
+//
+
+import CoreMIDI
+
+// MARK: - InputEndpoint
+
+extension MIDI.IO {
+    
+    /// A MIDI input endpoint in the system, wrapping a CoreMIDI `MIDIEndpointRef`.
+    ///
+    /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
+    ///
+    /// Instead, read endpoint arrays and individual endpoint properties from `MIDI.IO.Manager.endpoints` ad-hoc when they are needed.
+    public struct InputEndpoint: MIDIIOEndpointProtocol {
+        
+        // MARK: CoreMIDI ref
+        
+        public let coreMIDIObjectRef: MIDIEndpointRef
+        
+        // MARK: Init
+        
+        internal init(_ ref: MIDIEndpointRef) {
+            
+            assert(ref != MIDIEndpointRef())
+            
+            self.coreMIDIObjectRef = ref
+            update()
+            
+        }
+        
+        // MARK: - Properties (Cached)
+        
+        /// User-visible endpoint name.
+        /// (`kMIDIPropertyName`)
+        public internal(set) var name: String = ""
+        
+        /// System-global Unique ID.
+        /// (`kMIDIPropertyUniqueID`)
+        public internal(set) var uniqueID: UniqueID = 0
+        
+        /// Update the cached properties
+        internal mutating func update() {
+            
+            self.name = (try? MIDI.IO.getName(of: coreMIDIObjectRef)) ?? ""
+            self.uniqueID = UniqueID(MIDI.IO.getUniqueID(of: coreMIDIObjectRef))
+            
+        }
+        
+    }
+    
+}
+
+extension MIDI.IO.InputEndpoint: Equatable {
+    // default implementation provided in MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.InputEndpoint: Hashable {
+    // default implementation provided in MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.InputEndpoint: Identifiable {
+    // default implementation provided by MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.InputEndpoint {
+    
+    /// Returns `true` if the object exists in the system by querying CoreMIDI.
+    public var exists: Bool {
+        
+        MIDI.IO.getSystemDestinationEndpoint(matching: uniqueID.coreMIDIUniqueID) != nil
+        
+    }
+    
+}
+
+
+extension MIDI.IO.InputEndpoint: CustomDebugStringConvertible {
+    
+    public var debugDescription: String {
+        "InputEndpoint(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists)"
+    }
+    
+}

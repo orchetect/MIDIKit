@@ -1,0 +1,73 @@
+//
+//  Packet UniversalPacketData.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
+//
+
+import CoreMIDI
+
+extension MIDI.Packet {
+    
+    /// Clean consolidated data encapsulation of raw data from a CoreMIDI MIDI 2.0 `MIDIEventPacket` (Universal MIDI Packet).
+    public struct UniversalPacketData {
+        
+        /// Universal MIDI Packet Words
+        let words: [UInt32]
+        
+        /// CoreMIDI packet timestamp
+        let timeStamp: MIDITimeStamp
+        
+        /// Flat array of raw bytes
+        @inline(__always) public var bytes: [MIDI.Byte] {
+            
+            #warning("> this is dumb?")
+            var bytes: [MIDI.Byte] = []
+            bytes.reserveCapacity(4 * words.count)
+            words.forEach {
+                bytes.append(MIDI.Byte($0 & 0xFF000000) >> (6*4))
+                bytes.append(MIDI.Byte($0 & 0x00FF0000) >> (4*4))
+                bytes.append(MIDI.Byte($0 & 0x0000FF00) >> (2*4))
+                bytes.append(MIDI.Byte($0 & 0x000000FF))
+            }
+            return bytes
+            
+        }
+        
+        /// Universal MIDI Packet
+        @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        @inline(__always) public init(_ eventPacketPtr: UnsafeMutablePointer<MIDIEventPacket>) {
+            
+            let eventPacketIterator = UnsafeMutableMIDIEventPacketPointer(eventPacketPtr)
+            
+            var words: [UInt32] = []
+            words.reserveCapacity(eventPacketIterator.count)
+            
+            for word in eventPacketIterator {
+                words.append(word)
+            }
+            
+            self.words = words
+            self.timeStamp = eventPacketPtr.pointee.timeStamp
+            
+        }
+        
+        /// Universal MIDI Packet
+        @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        @inline(__always) public init(_ eventPacketPtr: UnsafePointer<MIDIEventPacket>) {
+            
+            let wordCollection = eventPacketPtr.words()
+            
+            var words: [UInt32] = []
+            words.reserveCapacity(wordCollection.count)
+            
+            for word in wordCollection {
+                words.append(word)
+            }
+            
+            self.words = words
+            self.timeStamp = eventPacketPtr.pointee.timeStamp
+            
+        }
+        
+    }
+    
+}

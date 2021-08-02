@@ -1,71 +1,38 @@
-# MIDIKit
+# 🎹 MIDIKit
 
-<p>
-<a href="https://developer.apple.com/swift">
-<img src="https://img.shields.io/badge/Swift-5.3-blue.svg?style=flat"
-     alt="Swift 5.3 compatible" /></a>
-<a href="#installation">
-<img src="https://img.shields.io/badge/SPM-5.3-blue.svg?style=flat"
-     alt="Swift Package Manager (SPM) compatible" /></a>
-<a href="https://developer.apple.com/swift">
-<img src="https://img.shields.io/badge/platforms-macOS%2010.12%20|%20iOS%2010%20-%23989898.svg?style=flat"
-     alt="Platforms - macOS 10.12 | iOS 10" /></a>
-<a href="https://github.com/orchetect/MIDIKit/blob/main/LICENSE">
-<img src="http://img.shields.io/badge/license-MIT-green.svg?style=flat"
-     alt="License: MIT" /></a>
+[![CI Build Status](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml) [![Platforms - macOS 10.12+ | iOS 10+ | tvOS (beta) | watchOS (beta)](https://img.shields.io/badge/platforms-macOS%2010.12%2B%20|%20iOS%2010%2B%20|%20tvOS%20(beta)%20|%20watchOS%20(beta)-lightgrey.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
 
-A modular Swift CoreMIDI wrapper with type-safe abstraction for MIDI I/O, events, sync and Standard MIDI Files.
+An elegant and modern Swift CoreMIDI wrapper with strongly-typed MIDI events.
 
-### Available Modules
+## MIDIKit Extensions
 
-| Module            | Description                         |                          Completion                          | Docs | Tests |
-| ----------------- | ----------------------------------- | :----------------------------------------------------------: | :--: | :---: |
-| `MIDIKitIO`       | CoreMIDI I/O ports & connections    | ![Progress](https://progress-bar.dev/90/?title=Operational&color=555555&width=80) |  ⚪️   |   🟠   |
-| `MIDIKitSync`     |                                     |                                                              |      |       |
-| ─ `MTC.Receiver`  | MIDI Timecode Receiver abstraction  | ![Progress](https://progress-bar.dev/100/?title=Complete&color=555555&width=95) |  🟢   |   🟢   |
-| ─ `MTC.Generator` | MIDI Timecode Generator abstraction | ![Progress](https://progress-bar.dev/100/?title=Complete&color=555555&width=95) |  🟢   |   🟢   |
+Abstractions are built as optional extensions in their own repos.
 
-### Modules in Development
-
-| Module          | Description                                    |                          Completion                          | Docs | Tests |
-| --------------- | ---------------------------------------------- | :----------------------------------------------------------: | :--: | :---: |
-| `MIDIKitEvents` | MIDI 1.0: events                               | ![Progress](https://progress-bar.dev/50/?title=In%20Progress&color=555555&width=75) |  ⚪️   |   ⚪️   |
-| `MIDIKitEvents` | MIDI 2.0: events, MIDI-CI, UMP, 1.0 extensions | ![Progress](https://progress-bar.dev/0/?title=Future&color=555555&width=105) |  ⚪️   |   ⚪️   |
-
-### Modules Planned
-
-| Module       | Description                       |                          Completion                          | Docs | Tests |
-| ------------ | --------------------------------- | :----------------------------------------------------------: | :--: | :---: |
-| `MIDIKitHUI` | HUI protocol abstraction          | ![Progress](https://progress-bar.dev/20/?title=Legacy%20Code&color=555555&width=76) |  ⚪️   |   ⚪️   |
-| `MIDIKitSMF` | Standard MIDI 1.0 File read/write | ![Progress](https://progress-bar.dev/80/?title=Future&color=555555&width=105) |  ⚪️   |   🟠   |
+- [MIDIKitControlSurfaces](https://github.com/orchetect/MIDIKitControlSurfaces): MIDIKit extension for Control Surfaces (HUI, etc.)
+- [MIDIKitSync](https://github.com/orchetect/MIDIKitSync): MIDIKit extension for sync (MTC, etc.)
 
 ## Getting Started
 
-Import all modules at once:
+1. Add MIDIKit as a dependency  using Swift Package Manager.
+   - In an app project or framework, in Xcode:
+     - Select the menu: **File → Swift Packages → Add Package Dependency...**
+     - Enter this URL: `https://github.com/orchetect/MIDIKit`
+  
+   - In a Swift Package, add it to the Package.swift dependencies:
+     ```swift
+     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.2.0")
+     ```
+  
+1. Import the library:
+  ```swift
+  import MIDIKit
+  ```
 
-```swift
-import MIDIKit
-```
-
-Or import only specific submodules:
-
-```swift
-import MIDIKitIO
-import MIDIKitEvents
-// etc. ...
-```
-
-See [Examples](https://github.com/orchetect/MIDIKit/blob/master/Examples/) folder and [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder for usage.
+3. See [Examples](https://github.com/orchetect/MIDIKit/blob/master/Examples/) folder and [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder for usage.
 
 ## Documentation
 
 See [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder.
-
-## Roadmap
-
-- [ ] MIDI 2.0 support
-- [ ] Bluetooth & network MIDI connection support
-- [ ] Rewrite of legacy HUI code
 
 ## Author
 
@@ -77,17 +44,4 @@ Licensed under the MIT license. See [LICENSE](https://github.com/orchetect/MIDIK
 
 ## Contributions
 
-Contributions are welcome. Discussion on bug fixes or new features is encouraged before creating pull requests.
-
-Commit messages should be prefixed with the module they are concerned with, generally as follows:
-
-| Commits with changes within   | Commit message prefix                              |
-| ----------------------------- | -------------------------------------------------- |
-| `/`                           | "Common: "                                         |
-| `/Sources/MIDIKit`            | "Common: "                                         |
-| `/Sources/MIDIKitCommon`      | "Common: "                                         |
-| `/Sources/MIDIKitEvents`      | "Events: "                                         |
-| `/Sources/MIDIKitIO`          | "IO: "                                             |
-| `/Sources/MIDIKitSync`        | "Sync: "                                           |
-| `/Sources/MIDIKitTestsCommon` | "Common: "                                         |
-| `/Tests/<subfolder>`          | use corresponding <subfolder> prefix as seen above |
+Contributions are welcome. Discussion in Issues is encouraged prior to new features or modifications.
