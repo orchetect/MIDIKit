@@ -33,12 +33,8 @@ extension MIDI.IO {
         
         // MARK: - Properties (Cached)
         
-        /// User-visible endpoint name.
-        /// (`kMIDIPropertyName`)
         public internal(set) var name: String = ""
         
-        /// System-global Unique ID.
-        /// (`kMIDIPropertyUniqueID`)
         public internal(set) var uniqueID: UniqueID = 0
         
         /// Update the cached properties
@@ -76,6 +72,14 @@ extension MIDI.IO.InputEndpoint {
     
 }
 
+extension MIDI.IO.InputEndpoint {
+    
+    /// Returns the endpoint as a type-erased `AnyEndpoint`.
+    public var asAnyEndpoint: MIDI.IO.AnyEndpoint {
+        .init(self)
+    }
+
+}
 
 extension MIDI.IO.InputEndpoint: CustomDebugStringConvertible {
     
