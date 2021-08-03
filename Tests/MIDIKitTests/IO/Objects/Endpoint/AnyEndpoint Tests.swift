@@ -57,7 +57,6 @@ class AnyEndpoint_Tests: XCTestCase {
         
         let anyInput = MIDI.IO.AnyEndpoint(inputEndpoint)
         _ = inputEndpoint.asAnyEndpoint // also works
-        
         XCTAssertEqual(anyInput.coreMIDIObjectRef, inputEndpoint.coreMIDIObjectRef)
         XCTAssertEqual(anyInput.name, kInputName)
         XCTAssertEqual(anyInput.endpointType, .input)
@@ -70,7 +69,6 @@ class AnyEndpoint_Tests: XCTestCase {
         
         let anyOutput = MIDI.IO.AnyEndpoint(outputEndpoint)
         _ = outputEndpoint.asAnyEndpoint // also works
-        
         XCTAssertEqual(outputEndpoint.coreMIDIObjectRef, anyOutput.coreMIDIObjectRef)
         XCTAssertEqual(anyOutput.name, kOutputName)
         XCTAssertEqual(anyOutput.endpointType, .output)
@@ -89,6 +87,13 @@ class AnyEndpoint_Tests: XCTestCase {
         
         let combined = inputArrayAsAnyEndpoints + outputArrayAsAnyEndpoints
         XCTAssertEqual(combined.count, 2)
+        
+        // AnyEndpoint from AnyEndpoint (just to check for crashes)
+        let anyAny = MIDI.IO.AnyEndpoint(anyInput)
+        XCTAssertEqual(anyAny.coreMIDIObjectRef, anyInput.coreMIDIObjectRef)
+        XCTAssertEqual(anyAny.name, anyInput.name)
+        XCTAssertEqual(anyAny.endpointType, .input)
+        XCTAssertEqual(anyAny.uniqueID, anyInput.uniqueID)
         
     }
     

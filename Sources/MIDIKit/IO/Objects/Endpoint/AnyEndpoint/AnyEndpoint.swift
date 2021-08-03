@@ -20,8 +20,15 @@ extension MIDI.IO {
         
         internal init<T: MIDIIOEndpointProtocol>(_ other: T) {
             switch other {
-            case is MIDI.IO.InputEndpoint: endpointType = .input
-            case is MIDI.IO.OutputEndpoint: endpointType = .output
+            case is MIDI.IO.InputEndpoint:
+                endpointType = .input
+                
+            case is MIDI.IO.OutputEndpoint:
+                endpointType = .output
+                
+            case let otherCast as Self:
+                endpointType = otherCast.endpointType
+                
             default:
                 preconditionFailure("Unexpected MIDIIOEndpointProtocol type: \(other)")
             }
