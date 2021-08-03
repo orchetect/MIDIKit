@@ -16,6 +16,17 @@ public protocol MIDIIOUniqueIDProtocol {
     
 }
 
+extension Collection where Element == MIDIIOUniqueIDProtocol {
+    
+    /// Returns the collection as a collection of type-erased `AnyUniqueID` unique IDs.
+    public var asAnyUniqueIDs: [MIDI.IO.AnyUniqueID] {
+        
+        map { MIDI.IO.AnyUniqueID($0.coreMIDIUniqueID) }
+        
+    }
+    
+}
+
 // MARK: - MIDIIOEndpointUniqueIDProtocol
 
 public protocol MIDIIOEndpointUniqueIDProtocol: MIDIIOUniqueIDProtocol {
