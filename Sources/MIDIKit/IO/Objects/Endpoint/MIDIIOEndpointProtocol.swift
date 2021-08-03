@@ -23,3 +23,14 @@ extension MIDIIOEndpointProtocol {
     }
     
 }
+
+extension Collection where Element : MIDIIOEndpointProtocol {
+    
+    /// Returns the collection as a collection of type-erased `AnyEndpoint` endpoints.
+    public var asAnyEndpoints: [MIDI.IO.AnyEndpoint] {
+        
+        map { MIDI.IO.AnyEndpoint($0) }
+        
+    }
+    
+}

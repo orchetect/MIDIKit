@@ -25,6 +25,8 @@ final class Manager_Tests: XCTestCase {
 	
 	func testMIDIO_Manager_defaults() {
 		
+        // just check defaults without calling .start() on the manager
+        
 		XCTAssertEqual(manager.clientName, "MIDIKit_IO_Manager_Tests")
 		XCTAssertEqual(manager.clientRef, MIDIClientRef())
 		
