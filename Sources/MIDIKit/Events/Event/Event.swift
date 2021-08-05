@@ -211,7 +211,7 @@ extension MIDI.Event: CustomStringConvertible {
         // -------------------
         
         case .timecodeQuarterFrame(byte: let byte):
-            return "timecodeQF(\(byte.binary.stringValue(prefix: true)))"
+            return "timecodeQF(\(byte.binary.stringValue(padTo: 8, splitEvery: 8, prefix: true)))"
             
         case .songPositionPointer(midiBeat: let midiBeat):
             return "songPositionPointer(beat: \(midiBeat))"
