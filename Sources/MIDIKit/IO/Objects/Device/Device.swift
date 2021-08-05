@@ -92,7 +92,7 @@ extension MIDI.IO.Device {
 extension MIDI.IO.Device: CustomDebugStringConvertible {
     
     public var debugDescription: String {
-        "Device(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists)"
+        "Device(name: \(name.otcQuoted), uniqueID: \(uniqueID), exists: \(exists)"
     }
     
 }

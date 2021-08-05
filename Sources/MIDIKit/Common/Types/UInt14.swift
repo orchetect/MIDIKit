@@ -54,7 +54,7 @@ extension MIDI {
         ///     init(zeroMidpointFloat:  0.5) == 12287
         ///     init(zeroMidpointFloat:  1.0) == 16383 == .max
         public init<T: BinaryFloatingPoint>(unitIntervalAroundZero: T) {
-            let unitIntervalAroundZero = unitIntervalAroundZero.clamped(to: (-1.0)...(1.0))
+            let unitIntervalAroundZero = unitIntervalAroundZero.otcClamped(to: (-1.0)...(1.0))
             
             if unitIntervalAroundZero > 0.0 {
                 value = 8192 + Storage(unitIntervalAroundZero * 8191)

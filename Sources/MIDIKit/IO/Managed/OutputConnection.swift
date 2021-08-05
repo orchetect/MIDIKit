@@ -127,7 +127,7 @@ extension MIDI.IO.OutputConnection: CustomStringConvertible {
         var inputEndpointName: String = "?"
         if let unwrappedInputEndpointRef = inputEndpointRef,
            let getName = try? MIDI.IO.getName(of: unwrappedInputEndpointRef) {
-            inputEndpointName = "\(getName)".quoted
+            inputEndpointName = "\(getName)".otcQuoted
         }
         
         var inputEndpointRefString: String = "nil"

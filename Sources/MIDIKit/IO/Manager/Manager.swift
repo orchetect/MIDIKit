@@ -88,7 +88,7 @@ extension MIDI.IO {
         ) {
             
             // set up dedicated manager queue
-            var clientNameForQueue = clientName.onlyAlphanumerics
+            var clientNameForQueue = clientName.otcOnlyAlphanumerics
             if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
             let queueName = (Bundle.main.bundleIdentifier ?? "unknown") + ".midiManager." + clientNameForQueue
             queue = DispatchQueue(label: queueName,

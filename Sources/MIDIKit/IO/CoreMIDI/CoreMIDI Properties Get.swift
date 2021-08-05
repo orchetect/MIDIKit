@@ -83,7 +83,7 @@ extension MIDI.IO {
         guard let unwrappedVal = val?.takeRetainedValue() else {
             val?.release()
             throw MIDI.IO.MIDIError.readError(
-                "Got nil while reading MIDIEndpointRef property value \((forProperty as String).quoted)"
+                "Got nil while reading MIDIEndpointRef property value \((forProperty as String).otcQuoted)"
             )
         }
         

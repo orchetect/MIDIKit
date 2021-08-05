@@ -24,50 +24,50 @@ class Utilities_ClampedTests: XCTestCase {
         
         // .clamped(ClosedRange)
         
-        XCTAssertEqual(    5.clamped(to: 7...10),         7  )
-        XCTAssertEqual(    8.clamped(to: 7...10),         8  )
-        XCTAssertEqual(   20.clamped(to: 7...10),        10  )
+        XCTAssertEqual(    5.otcClamped(to: 7...10),         7  )
+        XCTAssertEqual(    8.otcClamped(to: 7...10),         8  )
+        XCTAssertEqual(   20.otcClamped(to: 7...10),        10  )
         
-        XCTAssertEqual(  5.0.clamped(to: 7.0...10.0),     7.0)
-        XCTAssertEqual(  8.0.clamped(to: 7.0...10.0),     8.0)
-        XCTAssertEqual( 20.0.clamped(to: 7.0...10.0),    10.0)
+        XCTAssertEqual(  5.0.otcClamped(to: 7.0...10.0),     7.0)
+        XCTAssertEqual(  8.0.otcClamped(to: 7.0...10.0),     8.0)
+        XCTAssertEqual( 20.0.otcClamped(to: 7.0...10.0),    10.0)
         
-        XCTAssertEqual(  "a".clamped(to: "b"..."h"),    "b"  )
-        XCTAssertEqual(  "c".clamped(to: "b"..."h"),    "c"  )
-        XCTAssertEqual(  "k".clamped(to: "b"..."h"),    "h"  )
+        XCTAssertEqual(  "a".otcClamped(to: "b"..."h"),    "b"  )
+        XCTAssertEqual(  "c".otcClamped(to: "b"..."h"),    "c"  )
+        XCTAssertEqual(  "k".otcClamped(to: "b"..."h"),    "h"  )
         
         // .clamped(Range)
         
-        XCTAssertEqual(    5.clamped(to: 7..<10),         7  )
-        XCTAssertEqual(    8.clamped(to: 7..<10),         8  )
-        XCTAssertEqual(   20.clamped(to: 7..<10),         9  )
+        XCTAssertEqual(    5.otcClamped(to: 7..<10),         7  )
+        XCTAssertEqual(    8.otcClamped(to: 7..<10),         8  )
+        XCTAssertEqual(   20.otcClamped(to: 7..<10),         9  )
         
         // .clamped(PartialRangeFrom)
         
-        XCTAssertEqual(    5.clamped(to: 300...),       300  )
-        XCTAssertEqual(  400.clamped(to: 300...),       400  )
+        XCTAssertEqual(    5.otcClamped(to: 300...),       300  )
+        XCTAssertEqual(  400.otcClamped(to: 300...),       400  )
         
-        XCTAssertEqual(  5.0.clamped(to: 300.00...),    300.0)
-        XCTAssertEqual(400.0.clamped(to: 300.00...),    400.0)
+        XCTAssertEqual(  5.0.otcClamped(to: 300.00...),    300.0)
+        XCTAssertEqual(400.0.otcClamped(to: 300.00...),    400.0)
         
-        XCTAssertEqual(  "a".clamped(to: "b"...),       "b"  )
-        XCTAssertEqual(  "g".clamped(to: "b"...),       "g"  )
+        XCTAssertEqual(  "a".otcClamped(to: "b"...),       "b"  )
+        XCTAssertEqual(  "g".otcClamped(to: "b"...),       "g"  )
         
         // .clamped(PartialRangeThrough)
         
-        XCTAssertEqual(200  .clamped(to: ...300),       200  )
-        XCTAssertEqual(400  .clamped(to: ...300),       300  )
+        XCTAssertEqual(200  .otcClamped(to: ...300),       200  )
+        XCTAssertEqual(400  .otcClamped(to: ...300),       300  )
         
-        XCTAssertEqual(200.0.clamped(to: ...300.0),     200.0)
-        XCTAssertEqual(400.0.clamped(to: ...300.0),     300.0)
+        XCTAssertEqual(200.0.otcClamped(to: ...300.0),     200.0)
+        XCTAssertEqual(400.0.otcClamped(to: ...300.0),     300.0)
         
-        XCTAssertEqual(  "a".clamped(to: ..."h"),       "a"  )
-        XCTAssertEqual(  "k".clamped(to: ..."h"),       "h"  )
+        XCTAssertEqual(  "a".otcClamped(to: ..."h"),       "a"  )
+        XCTAssertEqual(  "k".otcClamped(to: ..."h"),       "h"  )
         
         // .clamped(PartialRangeUpTo)
         
-        XCTAssertEqual(200  .clamped(to: ..<300),       200  )
-        XCTAssertEqual(400  .clamped(to: ..<300),       299  )
+        XCTAssertEqual(200  .otcClamped(to: ..<300),       200  )
+        XCTAssertEqual(400  .otcClamped(to: ..<300),       299  )
         
     }
     
