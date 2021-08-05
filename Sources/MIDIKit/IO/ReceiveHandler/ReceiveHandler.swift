@@ -11,7 +11,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    public struct ReceiveHandler: MIDIIOReceiveHandlerProtocol {
+    public class ReceiveHandler: MIDIIOReceiveHandlerProtocol {
         
         public typealias Handler = (_ packets: [MIDI.Packet]) -> Void
         
@@ -48,52 +48,113 @@ extension MIDI.IO {
 
 // MARK: - Static inits
 
+//extension MIDI.IO.ReceiveHandler {
+//    
+//    /// Returns a new `Group` receive handler instance.
+//    public static func group(
+//        _ handlers: [MIDI.IO.ReceiveHandler]
+//    ) -> Self {
+//        
+//        Self(Group(handlers))
+//        
+//    }
+//    
+//    /// Returns a new `Events` receive handler instance.
+//    public static func events(
+//        _ handler: @escaping Events.Handler
+//    ) -> Self {
+//        
+//        Self(Events(handler))
+//        
+//    }
+//    
+//    /// Returns a new `EventsLogging` receive handler instance.
+//    public static func eventsLogging(
+//        filterActiveSensingAndClock: Bool = false,
+//        _ handler: EventsLogging.Handler? = nil
+//    ) -> Self {
+//        
+//        Self(EventsLogging(filterActiveSensingAndClock: filterActiveSensingAndClock,
+//                           handler))
+//        
+//    }
+//    
+//    /// Returns a new `RawData` receive handler instance.
+//    public static func rawData(
+//        _ handler: @escaping RawData.Handler
+//    ) -> Self {
+//        
+//        Self(RawData(handler))
+//        
+//    }
+//    
+//    /// Returns a new `RawDataLogging` receive handler instance.
+//    public static func rawDataLogging(
+//        filterActiveSensingAndClock: Bool = false,
+//        _ handler: RawDataLogging.Handler? = nil
+//    ) -> Self {
+//        
+//        Self(RawDataLogging(filterActiveSensingAndClock: filterActiveSensingAndClock,
+//                            handler))
+//        
+//    }
+//    
+//}
+
 extension MIDI.IO.ReceiveHandler {
     
-    /// Returns a new `Group` receive handler instance.
-    public static func group(
-        _ handlers: [MIDI.IO.ReceiveHandler]
-    ) -> Self {
+    public enum Definition {
         
-        Self(Group(handlers))
+        case group([Definition])
         
-    }
-    
-    /// Returns a new `Events` receive handler instance.
-    public static func events(
-        _ handler: @escaping Events.Handler
-    ) -> Self {
+        case events(Events.Handler)
         
-        Self(Events(handler))
+        case eventsLogging(filterActiveSensingAndClock: Bool = false,
+                           _ handler: EventsLogging.Handler? = nil)
         
-    }
-    
-    /// Returns a new `EventsLogging` receive handler instance.
-    public static func eventsLogging(
-        _ handler: @escaping EventsLogging.Handler
-    ) -> Self {
+        case rawData(RawData.Handler)
         
-        Self(EventsLogging(handler))
+        case rawDataLogging(
+                filterActiveSensingAndClock: Bool = false,
+                _ handler: RawDataLogging.Handler? = nil)
         
     }
     
-    /// Returns a new `RawData` receive handler instance.
-    public static func rawData(
-        _ handler: @escaping RawData.Handler
-    ) -> Self {
-        
-        Self(RawData(handler))
-        
-    }
+}
+
+extension MIDI.IO.ReceiveHandler.Definition {
     
-    /// Returns a new `RawDataLogging` receive handler instance.
-    public static func rawDataLogging(
-        filterActiveSensingAndClock: Bool = false,
-        _ handler: RawDataLogging.Handler? = nil
-    ) -> Self {
+    internal func createReceiveHandler() -> MIDI.IO.ReceiveHandler {
         
-        Self(RawDataLogging(filterActiveSensingAndClock: filterActiveSensingAndClock,
-                            handler))
+        switch self {
+        case .group(let definitions):
+            let handlers = definitions.map { $0.createReceiveHandler() }
+            return .init(MIDI.IO.ReceiveHandler.Group(handlers))
+            
+        case .events(let handler):
+            return .init(MIDI.IO.ReceiveHandler.Events(handler))
+            
+        case .eventsLogging(let filterActiveSensingAndClock,
+                            let handler):
+            return .init(
+                MIDI.IO.ReceiveHandler.EventsLogging(
+                    filterActiveSensingAndClock: filterActiveSensingAndClock,
+                    handler
+                )
+            )
+            
+        case .rawData(let handler):
+            return .init(MIDI.IO.ReceiveHandler.RawData(handler))
+            
+        case .rawDataLogging(let filterActiveSensingAndClock, let handler):
+            return .init(
+                MIDI.IO.ReceiveHandler.RawDataLogging(
+                    filterActiveSensingAndClock: filterActiveSensingAndClock,
+                    handler
+                )
+            )
+            
+        }
         
     }
     

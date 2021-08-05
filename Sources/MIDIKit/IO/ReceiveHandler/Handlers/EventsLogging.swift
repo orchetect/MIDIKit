@@ -11,7 +11,7 @@ extension MIDI.IO.ReceiveHandler {
     /// MIDI Event logging handler (event description strings).
     /// If `handler` is nil, all events are logged to the console (but only in DEBUG builds, not in RELEASE builds).
     /// If `handler` is provided, the event description string is supplied as a parameter and not automatically logged.
-    public struct EventsLogging: MIDIIOReceiveHandlerProtocol {
+    public class EventsLogging: MIDIIOReceiveHandlerProtocol {
         
         public typealias Handler = (_ eventString: String) -> Void
         
@@ -27,7 +27,7 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            packetListPtr.mkUnsafeSequence().forEach { midiPacketPacketPtr in
+            for midiPacketPacketPtr in packetListPtr.mkUnsafeSequence() {
                 let packetData = MIDI.Packet.PacketData(midiPacketPacketPtr)
                 let events = midi1Parser.parsedEvents(in: packetData)
                 logEvents(events)
@@ -41,7 +41,7 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            eventListPtr.unsafeSequence().forEach { universalMIDIPacketPtr in
+            for universalMIDIPacketPtr in eventListPtr.unsafeSequence() {
                 let universalPacketData = MIDI.Packet.UniversalPacketData(universalMIDIPacketPtr)
                 let events = midi2Parser.parsedEvents(in: universalPacketData)
                 logEvents(events)
@@ -49,7 +49,7 @@ extension MIDI.IO.ReceiveHandler {
             
         }
         
-        public init(
+        internal init(
             filterActiveSensingAndClock: Bool = false,
             _ handler: Handler? = nil
         ) {

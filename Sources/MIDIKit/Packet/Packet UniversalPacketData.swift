@@ -11,10 +11,10 @@ extension MIDI.Packet {
     public struct UniversalPacketData {
         
         /// Universal MIDI Packet Words
-        let words: [UInt32]
+        public let words: [UInt32]
         
         /// CoreMIDI packet timestamp
-        let timeStamp: MIDITimeStamp
+        public let timeStamp: MIDITimeStamp
         
         /// Flat array of raw bytes
         @inline(__always) public var bytes: [MIDI.Byte] {

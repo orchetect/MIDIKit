@@ -41,16 +41,19 @@ extension MIDIPacketList {
         
         public struct Iterator: IteratorProtocol {
             
-            let pointers: [UnsafePointer<MIDIPacket>]
-            let idx = 0
+            let pointers: [Element]
+            var idx: Array<Element>.Index
             
-            init(_ pointers: [UnsafePointer<MIDIPacket>]) {
+            init(_ pointers: [Element]) {
+                self.idx = pointers.startIndex
                 self.pointers = pointers
             }
             
-            public func next() -> Element? {
+            public mutating func next() -> Element? {
                 
-                guard idx < pointers.count else { return nil }
+                guard pointers.indices.contains(idx) else { return nil }
+                
+                defer { idx += idx.advanced(by: 1) }
                 
                 return pointers[idx]
                 

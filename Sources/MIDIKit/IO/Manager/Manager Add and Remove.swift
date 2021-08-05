@@ -19,19 +19,24 @@ extension MIDI.IO.Manager {
     public func addInputConnection(
         toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
         tag: String,
-        receiveHandler: MIDI.IO.ReceiveHandler
+        receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         
-        let newCD = MIDI.IO.InputConnection(
-            toOutput: toOutput,
-            receiveHandler: receiveHandler
-        )
-        
-        // store the connection object in the manager,
-        // even if subsequent connection fails
-        managedInputConnections[tag] = newCD
-        
-        try newCD.connect(in: self)
+        try queue.sync {
+            
+            let newCD = MIDI.IO.InputConnection(
+                toOutput: toOutput,
+                receiveHandler: receiveHandler,
+                midiManager: self
+            )
+            
+            // store the connection object in the manager,
+            // even if subsequent connection fails
+            managedInputConnections[tag] = newCD
+            
+            try newCD.connect(in: self)
+            
+        }
         
     }
     
@@ -47,15 +52,19 @@ extension MIDI.IO.Manager {
         tag: String
     ) throws {
         
-        let newCS = MIDI.IO.OutputConnection(
-            toInput: toInput
-        )
-        
-        // store the connection object in the manager,
-        // even if subsequent connection fails
-        managedOutputConnections[tag] = newCS
-        
-        try newCS.connect(in: self)
+        try queue.sync {
+            
+            let newCS = MIDI.IO.OutputConnection(
+                toInput: toInput
+            )
+            
+            // store the connection object in the manager,
+            // even if subsequent connection fails
+            managedOutputConnections[tag] = newCS
+            
+            try newCS.connect(in: self)
+            
+        }
         
     }
     
@@ -87,26 +96,30 @@ extension MIDI.IO.Manager {
         params: MIDIThruConnectionParams? = nil
     ) throws {
         
-        let newCT = MIDI.IO.ThruConnection(
-            outputs: outputs,
-            inputs: inputs,
-            lifecycle,
-            params: params
-        )
-        
-        // if non-persistent, add to managed array
-        if lifecycle == .nonPersistent {
-            // store the connection object in the manager,
-            // even if subsequent connection fails
-            managedThruConnections[tag] = newCT
+        try queue.sync {
+            
+            let newCT = MIDI.IO.ThruConnection(
+                outputs: outputs,
+                inputs: inputs,
+                lifecycle,
+                params: params
+            )
+            
+            // if non-persistent, add to managed array
+            if lifecycle == .nonPersistent {
+                // store the connection object in the manager,
+                // even if subsequent connection fails
+                managedThruConnections[tag] = newCT
+            }
+            
+            // otherwise, we won't store a reference to a persistent thru connection
+            // persistent connections are stored by the system
+            // to analyze or delete a persistent connection,
+            // access the `unmanagedPersistentThruConnections(ownerID:)` method.
+            
+            try newCT.create(in: self)
+            
         }
-        
-        // otherwise, we won't store a reference to a persistent thru connection
-        // persistent connections are stored by the system
-        // to analyze or delete a persistent connection,
-        // access the `unmanagedPersistentThruConnections(ownerID:)` method.
-        
-        try newCT.create(in: self)
         
     }
     
@@ -134,24 +147,29 @@ extension MIDI.IO.Manager {
         name: String,
         tag: String,
         uniqueID: MIDI.IO.UniqueIDPersistence<MIDI.IO.InputEndpoint.UniqueID>,
-        receiveHandler: MIDI.IO.ReceiveHandler
+        receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         
-        let newVD = MIDI.IO.Input(
-            name: name,
-            uniqueID: uniqueID.readID(),
-            receiveHandler: receiveHandler
-        )
-        
-        managedInputs[tag] = newVD
-        
-        try newVD.create(in: self)
-        
-        guard let successfulID = newVD.uniqueID else {
-            throw MIDI.IO.MIDIError.connectionError("Could not read virtual MIDI endpoint unique ID.")
+        try queue.sync {
+            
+            let newVD = MIDI.IO.Input(
+                name: name,
+                uniqueID: uniqueID.readID(),
+                receiveHandler: receiveHandler,
+                midiManager: self
+            )
+            
+            managedInputs[tag] = newVD
+            
+            try newVD.create(in: self)
+            
+            guard let successfulID = newVD.uniqueID else {
+                throw MIDI.IO.MIDIError.connectionError("Could not read virtual MIDI endpoint unique ID.")
+            }
+            
+            uniqueID.writeID(successfulID)
+            
         }
-        
-        uniqueID.writeID(successfulID)
         
     }
     
@@ -179,20 +197,24 @@ extension MIDI.IO.Manager {
         uniqueID: MIDI.IO.UniqueIDPersistence<MIDI.IO.OutputEndpoint.UniqueID>
     ) throws {
         
-        let newVS = MIDI.IO.Output(
-            name: name,
-            uniqueID: uniqueID.readID()
-        )
-        
-        managedOutputs[tag] = newVS
-        
-        try newVS.create(in: self)
-        
-        guard let successfulID = newVS.uniqueID else {
-            throw MIDI.IO.MIDIError.connectionError("Could not read virtual MIDI endpoint unique ID.")
+        try queue.sync {
+            
+            let newVS = MIDI.IO.Output(
+                name: name,
+                uniqueID: uniqueID.readID()
+            )
+            
+            managedOutputs[tag] = newVS
+            
+            try newVS.create(in: self)
+            
+            guard let successfulID = newVS.uniqueID else {
+                throw MIDI.IO.MIDIError.connectionError("Could not read virtual MIDI endpoint unique ID.")
+            }
+            
+            uniqueID.writeID(successfulID)
+            
         }
-        
-        uniqueID.writeID(successfulID)
         
     }
     
@@ -219,45 +241,49 @@ extension MIDI.IO.Manager {
     public func remove(_ type: ManagedType,
                        _ tagSelection: TagSelection) {
         
-        switch type {
-        case .inputConnection:
-            switch tagSelection {
-            case .all:
-                managedInputConnections.removeAll()
-            case .withTag(let tag):
-                managedInputConnections[tag] = nil
-            }
+        queue.sync {
             
-        case .outputConnection:
-            switch tagSelection {
-            case .all:
-                managedOutputConnections.removeAll()
-            case .withTag(let tag):
-                managedOutputConnections[tag] = nil
-            }
-            
-        case .nonPersistentThruConnection:
-            switch tagSelection {
-            case .all:
-                managedThruConnections.removeAll()
-            case .withTag(let tag):
-                managedThruConnections[tag] = nil
-            }
-            
-        case .input:
-            switch tagSelection {
-            case .all:
-                managedInputs.removeAll()
-            case .withTag(let tag):
-                managedInputs[tag] = nil
-            }
-            
-        case .output:
-            switch tagSelection {
-            case .all:
-                managedOutputs.removeAll()
-            case .withTag(let tag):
-                managedOutputs[tag] = nil
+            switch type {
+            case .inputConnection:
+                switch tagSelection {
+                case .all:
+                    managedInputConnections.removeAll()
+                case .withTag(let tag):
+                    managedInputConnections[tag] = nil
+                }
+                
+            case .outputConnection:
+                switch tagSelection {
+                case .all:
+                    managedOutputConnections.removeAll()
+                case .withTag(let tag):
+                    managedOutputConnections[tag] = nil
+                }
+                
+            case .nonPersistentThruConnection:
+                switch tagSelection {
+                case .all:
+                    managedThruConnections.removeAll()
+                case .withTag(let tag):
+                    managedThruConnections[tag] = nil
+                }
+                
+            case .input:
+                switch tagSelection {
+                case .all:
+                    managedInputs.removeAll()
+                case .withTag(let tag):
+                    managedInputs[tag] = nil
+                }
+                
+            case .output:
+                switch tagSelection {
+                case .all:
+                    managedOutputs.removeAll()
+                case .withTag(let tag):
+                    managedOutputs[tag] = nil
+                }
+                
             }
             
         }
@@ -274,8 +300,11 @@ extension MIDI.IO.Manager {
     /// - `manufacturer` property
     public func removeAll() {
         
-        ManagedType.allCases.forEach {
-            remove($0, .all)
+        // `self.remove(...)` internally uses queue.sync{}
+        // so don't need to wrap this with it here
+        
+        for managedEndpointType in ManagedType.allCases {
+            remove(managedEndpointType, .all)
         }
         
     }

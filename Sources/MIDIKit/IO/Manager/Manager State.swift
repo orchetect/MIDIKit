@@ -14,23 +14,27 @@ extension MIDI.IO.Manager {
     /// - Throws: `MIDI.IO.MIDIError.osStatus`
     public func start() throws {
         
-        // if start() was already called, return
-        guard clientRef == MIDIClientRef() else { return }
-        
-        try MIDIClientCreateWithBlock(clientName as CFString, &clientRef)
-        { [weak self] notificationPtr in
-            guard let self = self else { return }
-            self.notificationHandler(notificationPtr)
+        try queue.sync {
+            
+            // if start() was already called, return
+            guard clientRef == MIDIClientRef() else { return }
+            
+            try MIDIClientCreateWithBlock(clientName as CFString, &clientRef)
+            { [weak self] notificationPtr in
+                guard let self = self else { return }
+                self.internalNotificationHandler(notificationPtr)
+            }
+            .throwIfOSStatusErr()
+            
+            // initial cache of endpoints
+            
+            updateObjectsCache()
+            
         }
-        .throwIfOSStatusErr()
-        
-        // initial cache of endpoints
-        
-        updateObjectsCache()
         
     }
     
-    internal func notificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
+    internal func internalNotificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
         
         let notification = InternalNotification(pointer)
         
