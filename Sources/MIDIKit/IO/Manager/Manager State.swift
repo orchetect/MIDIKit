@@ -21,8 +21,8 @@ extension MIDI.IO.Manager {
             
             try MIDIClientCreateWithBlock(clientName as CFString, &clientRef)
             { [weak self] notificationPtr in
-                guard let self = self else { return }
-                self.internalNotificationHandler(notificationPtr)
+                guard let strongSelf = self else { return }
+                strongSelf.internalNotificationHandler(notificationPtr)
             }
             .throwIfOSStatusErr()
             
