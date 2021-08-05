@@ -23,29 +23,6 @@ extension MIDI.IO {
         
         internal var receiveHandler: ReceiveHandler
         
-        @inline(__always) private func midiReadBlock(
-            _ packetListPtr: UnsafePointer<MIDIPacketList>,
-            _ srcConnRefCon: UnsafeMutableRawPointer?
-        ) {
-            
-            midiManager?.queue.async {
-                self.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
-            }
-            
-        }
-        
-        @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-        @inline(__always) private func midiReceiveBlock(
-            _ eventListPtr: UnsafePointer<MIDIEventList>,
-            _ srcConnRefCon: UnsafeMutableRawPointer?
-        ) {
-            
-            midiManager?.queue.async {
-                self.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
-            }
-            
-        }
-        
         internal init(name: String,
                       uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil,
                       receiveHandler: ReceiveHandler.Definition,
@@ -60,7 +37,7 @@ extension MIDI.IO {
         
         deinit {
             
-            try? dispose()
+            _ = try? dispose()
             
         }
         
@@ -106,7 +83,13 @@ extension MIDI.IO.Input {
                 endpointName as CFString,
                 ._1_0,
                 &newPortRef,
-                midiReceiveBlock
+                { [weak self] eventListPtr, srcConnRefCon in
+                    guard let self = self else { return }
+                    self.midiManager?.queue.async {
+                        self.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+                    }
+                    
+                }
             )
             .throwIfOSStatusErr()
         } else {
@@ -116,7 +99,12 @@ extension MIDI.IO.Input {
                 manager.clientRef,
                 endpointName as CFString,
                 &newPortRef,
-                midiReadBlock
+                { [weak self] packetListPtr, srcConnRefCon in
+                    guard let self = self else { return }
+                    self.midiManager?.queue.async {
+                        self.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
+                    }
+                }
             )
             .throwIfOSStatusErr()
         }
@@ -124,8 +112,8 @@ extension MIDI.IO.Input {
         portRef = newPortRef
         
         // set meta data properties; ignore errors in case of failure
-        try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
-        try? MIDI.IO.setManufacturer(of: newPortRef, to: manager.manufacturer)
+        _ = try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
+        _ = try? MIDI.IO.setManufacturer(of: newPortRef, to: manager.manufacturer)
         
         if let uniqueID = self.uniqueID {
             // inject previously-stored unique ID into port
