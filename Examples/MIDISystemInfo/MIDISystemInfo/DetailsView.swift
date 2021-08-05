@@ -121,11 +121,11 @@ struct DetailsView<T>: View where T : MIDIIOObjectProtocol {
 	
 	var body: some View {
 		
-		if let endpoint = endpoint {
+		if let unwrappedEndpoint = endpoint {
 			
 			WebKitView(dynamicHeight: $webViewHeight,
 					   webview: $webview,
-					   html: generateHTML(endpoint))
+					   html: generateHTML(unwrappedEndpoint))
 			
 			Group {
 				if showAll {

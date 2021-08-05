@@ -204,8 +204,8 @@ extension MIDI.IO.ThruConnection: CustomStringConvertible {
     public var description: String {
         
         var thruConnectionRefString: String = "nil"
-        if let thruConnectionRef = thruConnectionRef {
-            thruConnectionRefString = "\(thruConnectionRef)"
+        if let unwrappedThruConnectionRef = thruConnectionRef {
+            thruConnectionRefString = "\(unwrappedThruConnectionRef)"
         }
         
         return "ThruConnection(ref: \(thruConnectionRefString), outputs: \(outputs), inputs: \(inputs), \(lifecycle)"

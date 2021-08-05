@@ -115,10 +115,10 @@ extension MIDI.IO.Input {
         _ = try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
         _ = try? MIDI.IO.setManufacturer(of: newPortRef, to: manager.manufacturer)
         
-        if let uniqueID = self.uniqueID {
+        if let unwrappedUniqueID = self.uniqueID {
             // inject previously-stored unique ID into port
             try MIDI.IO.setUniqueID(of: newPortRef,
-                                    to: uniqueID.coreMIDIUniqueID)
+                                    to: unwrappedUniqueID.coreMIDIUniqueID)
         } else {
             // if managed ID is nil, either it was not supplied or it was already in use
             // so fetch the new ID from the port we just created
@@ -148,8 +148,8 @@ extension MIDI.IO.Input: CustomStringConvertible {
     public var description: String {
         
         var uniqueIDString: String = "nil"
-        if let uniqueID = uniqueID {
-            uniqueIDString = "\(uniqueID)"
+        if let unwrappedUniqueID = uniqueID {
+            uniqueIDString = "\(unwrappedUniqueID)"
         }
         
         return "Input(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"

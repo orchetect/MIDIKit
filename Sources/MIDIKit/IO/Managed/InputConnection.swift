@@ -162,19 +162,19 @@ extension MIDI.IO.InputConnection: CustomStringConvertible {
     public var description: String {
         
         var outputEndpointName: String = "?"
-        if let outputEndpointRef = outputEndpointRef,
-           let getName = try? MIDI.IO.getName(of: outputEndpointRef) {
+        if let unwrappedOutputEndpointRef = outputEndpointRef,
+           let getName = try? MIDI.IO.getName(of: unwrappedOutputEndpointRef) {
             outputEndpointName = "\(getName)".quoted
         }
         
         var outputEndpointRefString: String = "nil"
-        if let outputEndpointRef = outputEndpointRef {
-            outputEndpointRefString = "\(outputEndpointRef)"
+        if let unwrappedOutputEndpointRef = outputEndpointRef {
+            outputEndpointRefString = "\(unwrappedOutputEndpointRef)"
         }
         
         var inputPortRefString: String = "nil"
-        if let inputPortRef = inputPortRef {
-            inputPortRefString = "\(inputPortRef)"
+        if let unwrappedInputPortRef = inputPortRef {
+            inputPortRefString = "\(unwrappedInputPortRef)"
         }
                 
         return "InputConnection(criteria: \(outputCriteria), outputEndpointRef: \(outputEndpointRefString) \(outputEndpointName), inputPortRef: \(inputPortRefString), isConnected: \(isConnected))"

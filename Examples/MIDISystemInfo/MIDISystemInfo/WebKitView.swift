@@ -31,8 +31,8 @@ struct WebKitView: NSViewRepresentable {
 				"document.documentElement.scrollHeight",
 				completionHandler: { (height, error) in
 					DispatchQueue.main.async {
-						if let height = height as? CGFloat {
-							self.parent.dynamicHeight = height
+						if let unwrappedHeight = height as? CGFloat {
+							self.parent.dynamicHeight = unwrappedHeight
 						}
 					}
 				})
