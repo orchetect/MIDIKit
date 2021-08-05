@@ -186,13 +186,13 @@ extension MIDI.IO.ThruConnection {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         
-        guard let thruConnectionRef = self.thruConnectionRef else { return }
+        guard let upwrappedThruConnectionRef = self.thruConnectionRef else { return }
         
         defer {
             self.thruConnectionRef = nil
         }
         
-        try MIDIThruConnectionDispose(thruConnectionRef)
+        try MIDIThruConnectionDispose(upwrappedThruConnectionRef)
             .throwIfOSStatusErr()
         
     }
@@ -204,8 +204,8 @@ extension MIDI.IO.ThruConnection: CustomStringConvertible {
     public var description: String {
         
         var thruConnectionRefString: String = "nil"
-        if let thruConnectionRef = thruConnectionRef {
-            thruConnectionRefString = "\(thruConnectionRef)"
+        if let unwrappedThruConnectionRef = thruConnectionRef {
+            thruConnectionRefString = "\(unwrappedThruConnectionRef)"
         }
         
         return "ThruConnection(ref: \(thruConnectionRefString), outputs: \(outputs), inputs: \(inputs), \(lifecycle)"

@@ -82,9 +82,9 @@ extension MIDI.IO.InputConnection {
                 ._1_0,
                 &newConnection,
                 { [weak self] eventListPtr, srcConnRefCon in
-                    guard let self = self else { return }
-                    self.midiManager?.queue.async {
-                        self.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+                    guard let strongSelf = self else { return }
+                    strongSelf.midiManager?.queue.async {
+                        strongSelf.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
                     }
                 }
             )
@@ -97,9 +97,9 @@ extension MIDI.IO.InputConnection {
                 UUID().uuidString as CFString,
                 &newConnection,
                 { [weak self] packetListPtr, srcConnRefCon in
-                    guard let self = self else { return }
-                    self.midiManager?.queue.async {
-                        self.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
+                    guard let strongSelf = self else { return }
+                    strongSelf.midiManager?.queue.async {
+                        strongSelf.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
                     }
                 }
             )
@@ -126,12 +126,12 @@ extension MIDI.IO.InputConnection {
         
         isConnected = false
         
-        guard let inputPortRef = self.inputPortRef,
-              let outputEndpointRef = self.outputEndpointRef else { return }
+        guard let upwrappedInputPortRef = self.inputPortRef,
+              let upwrappedOutputEndpointRef = self.outputEndpointRef else { return }
         
         defer { self.inputPortRef = nil }
         
-        try MIDIPortDisconnectSource(inputPortRef, outputEndpointRef)
+        try MIDIPortDisconnectSource(upwrappedInputPortRef, upwrappedOutputEndpointRef)
             .throwIfOSStatusErr()
         
     }
@@ -162,19 +162,19 @@ extension MIDI.IO.InputConnection: CustomStringConvertible {
     public var description: String {
         
         var outputEndpointName: String = "?"
-        if let outputEndpointRef = outputEndpointRef,
-           let getName = try? MIDI.IO.getName(of: outputEndpointRef) {
+        if let unwrappedOutputEndpointRef = outputEndpointRef,
+           let getName = try? MIDI.IO.getName(of: unwrappedOutputEndpointRef) {
             outputEndpointName = "\(getName)".quoted
         }
         
         var outputEndpointRefString: String = "nil"
-        if let outputEndpointRef = outputEndpointRef {
-            outputEndpointRefString = "\(outputEndpointRef)"
+        if let unwrappedOutputEndpointRef = outputEndpointRef {
+            outputEndpointRefString = "\(unwrappedOutputEndpointRef)"
         }
         
         var inputPortRefString: String = "nil"
-        if let inputPortRef = inputPortRef {
-            inputPortRefString = "\(inputPortRef)"
+        if let unwrappedInputPortRef = inputPortRef {
+            inputPortRefString = "\(unwrappedInputPortRef)"
         }
                 
         return "InputConnection(criteria: \(outputCriteria), outputEndpointRef: \(outputEndpointRefString) \(outputEndpointName), inputPortRef: \(inputPortRefString), isConnected: \(isConnected))"

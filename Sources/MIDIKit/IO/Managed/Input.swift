@@ -50,11 +50,11 @@ extension MIDI.IO.Input {
     /// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
     internal var uniqueIDExistsInSystem: MIDIEndpointRef? {
         
-        guard let uniqueID = self.uniqueID else {
+        guard let unwrappedUniqueID = self.uniqueID else {
             return nil
         }
         
-        if let endpoint = MIDI.IO.getSystemDestinationEndpoint(matching: uniqueID.coreMIDIUniqueID) {
+        if let endpoint = MIDI.IO.getSystemDestinationEndpoint(matching: unwrappedUniqueID.coreMIDIUniqueID) {
             return endpoint
         }
         
@@ -84,9 +84,9 @@ extension MIDI.IO.Input {
                 ._1_0,
                 &newPortRef,
                 { [weak self] eventListPtr, srcConnRefCon in
-                    guard let self = self else { return }
-                    self.midiManager?.queue.async {
-                        self.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+                    guard let strongSelf = self else { return }
+                    strongSelf.midiManager?.queue.async {
+                        strongSelf.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
                     }
                     
                 }
@@ -100,9 +100,9 @@ extension MIDI.IO.Input {
                 endpointName as CFString,
                 &newPortRef,
                 { [weak self] packetListPtr, srcConnRefCon in
-                    guard let self = self else { return }
-                    self.midiManager?.queue.async {
-                        self.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
+                    guard let strongSelf = self else { return }
+                    strongSelf.midiManager?.queue.async {
+                        strongSelf.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
                     }
                 }
             )
@@ -115,10 +115,10 @@ extension MIDI.IO.Input {
         _ = try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
         _ = try? MIDI.IO.setManufacturer(of: newPortRef, to: manager.manufacturer)
         
-        if let uniqueID = self.uniqueID {
+        if let unwrappedUniqueID = self.uniqueID {
             // inject previously-stored unique ID into port
             try MIDI.IO.setUniqueID(of: newPortRef,
-                                    to: uniqueID.coreMIDIUniqueID)
+                                    to: unwrappedUniqueID.coreMIDIUniqueID)
         } else {
             // if managed ID is nil, either it was not supplied or it was already in use
             // so fetch the new ID from the port we just created
@@ -132,11 +132,11 @@ extension MIDI.IO.Input {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         
-        guard let portRef = self.portRef else { return }
+        guard let unwrappedPortRef = self.portRef else { return }
         
         defer { self.portRef = nil }
         
-        try MIDIEndpointDispose(portRef)
+        try MIDIEndpointDispose(unwrappedPortRef)
             .throwIfOSStatusErr()
         
     }
@@ -148,8 +148,8 @@ extension MIDI.IO.Input: CustomStringConvertible {
     public var description: String {
         
         var uniqueIDString: String = "nil"
-        if let uniqueID = uniqueID {
-            uniqueIDString = "\(uniqueID)"
+        if let unwrappedUniqueID = uniqueID {
+            uniqueIDString = "\(unwrappedUniqueID)"
         }
         
         return "Input(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"

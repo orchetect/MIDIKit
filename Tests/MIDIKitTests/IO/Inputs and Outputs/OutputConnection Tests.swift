@@ -50,8 +50,8 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
 			XCTFail(error.localizedDescription) ; return
 		}
 		
-		if let caughtErr = caughtErr as? MIDI.IO.MIDIError,
-		   case .connectionError = caughtErr {
+		if let castCaughtErr = caughtErr as? MIDI.IO.MIDIError,
+		   case .connectionError = castCaughtErr {
 			// correct - expect error to be present
 		}
 		else {

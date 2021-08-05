@@ -86,15 +86,15 @@ extension MIDI.IO.OutputConnection {
         
         isConnected = false
         
-        guard let outputPortRef = self.portRef,
-              let inputEndpointRef = self.inputEndpointRef else { return }
+        guard let upwrappedOutputPortRef = self.portRef,
+              let upwrappedInputEndpointRef = self.inputEndpointRef else { return }
         
         defer {
             self.portRef = nil
             self.inputEndpointRef = nil
         }
         
-        try MIDIPortDisconnectSource(outputPortRef, inputEndpointRef)
+        try MIDIPortDisconnectSource(upwrappedOutputPortRef, upwrappedInputEndpointRef)
             .throwIfOSStatusErr()
         
     }
@@ -125,19 +125,19 @@ extension MIDI.IO.OutputConnection: CustomStringConvertible {
     public var description: String {
         
         var inputEndpointName: String = "?"
-        if let inputEndpointRef = inputEndpointRef,
-           let getName = try? MIDI.IO.getName(of: inputEndpointRef) {
+        if let unwrappedInputEndpointRef = inputEndpointRef,
+           let getName = try? MIDI.IO.getName(of: unwrappedInputEndpointRef) {
             inputEndpointName = "\(getName)".quoted
         }
         
         var inputEndpointRefString: String = "nil"
-        if let inputEndpointRef = inputEndpointRef {
-            inputEndpointRefString = "\(inputEndpointRef)"
+        if let unwrappediInputEndpointRef = inputEndpointRef {
+            inputEndpointRefString = "\(unwrappediInputEndpointRef)"
         }
         
         var outputPortRefString: String = "nil"
-        if let portRef = portRef {
-            outputPortRefString = "\(portRef)"
+        if let unwrappedPortRef = portRef {
+            outputPortRefString = "\(unwrappedPortRef)"
         }
         
         return "OutputConnection(criteria: \(inputCriteria), inputEndpointRef: \(inputEndpointRefString) \(inputEndpointName), outputPortRef: \(outputPortRefString), isConnected: \(isConnected))"
@@ -150,20 +150,20 @@ extension MIDI.IO.OutputConnection: MIDIIOSendsMIDIMessagesProtocol {
     
     public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         
-        guard let outputPortRef = self.portRef else {
+        guard let upwrappedOutputPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Output port reference is nil."
             )
         }
         
-        guard let inputEndpointRef = self.inputEndpointRef else {
+        guard let upwrappedInputEndpointRef = self.inputEndpointRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Input port reference is nil."
             )
         }
         
-        try MIDISend(outputPortRef,
-                     inputEndpointRef,
+        try MIDISend(upwrappedOutputPortRef,
+                     upwrappedInputEndpointRef,
                      packetList)
             .throwIfOSStatusErr()
         
@@ -172,20 +172,20 @@ extension MIDI.IO.OutputConnection: MIDIIOSendsMIDIMessagesProtocol {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     public func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
-        guard let outputPortRef = self.portRef else {
+        guard let upwrappedOutputPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Output port reference is nil."
             )
         }
         
-        guard let inputEndpointRef = self.inputEndpointRef else {
+        guard let upwrappedInputEndpointRef = self.inputEndpointRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Input port reference is nil."
             )
         }
         
-        try MIDISendEventList(outputPortRef,
-                              inputEndpointRef,
+        try MIDISendEventList(upwrappedOutputPortRef,
+                              upwrappedInputEndpointRef,
                               eventList)
             .throwIfOSStatusErr()
         
