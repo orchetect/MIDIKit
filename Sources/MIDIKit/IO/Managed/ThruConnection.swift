@@ -176,7 +176,7 @@ extension MIDI.IO.ThruConnection {
         //    Log.debug("MIDI: Thru Connection: Successfully formed non-persistent connection.")
         //
         //case .persistent(let ownerID):
-        //    Log.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID //\(ownerID.quoted).")
+        //    Log.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID //\(ownerID.otcQuoted).")
         //}
         
     }

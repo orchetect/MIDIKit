@@ -145,14 +145,14 @@ extension MIDI.SafeDispatchTimer {
             
             switch self {
             case .hertz(let hz):
-                value = 1.0 / hz.clamped(to: 0.00001...)
+                value = 1.0 / hz.otcClamped(to: 0.00001...)
                 
             case .seconds(let secs):
                 value = secs
                 
             }
             
-            return value.clamped(to: 0.000_000_001...) // 1 nanosecond min
+            return value.otcClamped(to: 0.000_000_001...) // 1 nanosecond min
             
         }
         

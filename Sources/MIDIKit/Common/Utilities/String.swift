@@ -18,7 +18,7 @@ import Foundation
 extension String {
     
     /// Wraps a string with double-quotes (`"`)
-    @inlinable internal var quoted: Self {
+    @inlinable internal var otcQuoted: Self {
         
         "\"\(self)\""
         
@@ -37,7 +37,7 @@ extension StringProtocol {
     ///
     ///     "A string 123".only(.alphanumerics)`
     ///
-    public func only(_ characterSet: CharacterSet) -> String {
+    public func otcOnly(_ characterSet: CharacterSet) -> String {
         
         self.map { characterSet.contains(UnicodeScalar("\($0)")!) ? "\($0)" : "" }
             .joined()
@@ -46,23 +46,23 @@ extension StringProtocol {
     
     /// **OTCore:**
     /// Returns a string preserving only characters from the passed string and removing all other characters.
-    public func only(characters: String) -> String {
+    public func otcOnly(characters: String) -> String {
         
-        self.only(CharacterSet(charactersIn: characters))
+        self.otcOnly(CharacterSet(charactersIn: characters))
         
     }
     
     /// **OTCore:**
     /// Returns a string containing only alphanumeric characters and removing all other characters.
-    public var onlyAlphanumerics: String {
+    public var otcOnlyAlphanumerics: String {
         
-        self.only(.alphanumerics)
+        self.otcOnly(.alphanumerics)
         
     }
     
     /// **OTCore:**
     /// Returns a string removing all characters from the passed CharacterSet.
-    public func removing(_ characterSet: CharacterSet) -> String {
+    public func otcRemoving(_ characterSet: CharacterSet) -> String {
         
         self.components(separatedBy: characterSet)
             .joined()
@@ -71,7 +71,7 @@ extension StringProtocol {
     
     /// **OTCore:**
     /// Returns a string removing all characters from the passed string.
-    public func removing(characters: String) -> String {
+    public func otcRemoving(characters: String) -> String {
         
         self.components(separatedBy: CharacterSet(charactersIn: characters))
             .joined()
