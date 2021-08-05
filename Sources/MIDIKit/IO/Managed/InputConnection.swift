@@ -24,29 +24,6 @@ extension MIDI.IO {
         
         public private(set) var isConnected: Bool = false
         
-        @inline(__always) private func midiReadBlock(
-            _ packetListPtr: UnsafePointer<MIDIPacketList>,
-            _ srcConnRefCon: UnsafeMutableRawPointer?
-        ) {
-            
-            midiManager?.queue.async {
-                self.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
-            }
-            
-        }
-        
-        @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-        @inline(__always) private func midiReceiveBlock(
-            _ eventListPtr: UnsafePointer<MIDIEventList>,
-            _ srcConnRefCon: UnsafeMutableRawPointer?
-        ) {
-            
-            midiManager?.queue.async {
-                self.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
-            }
-            
-        }
-        
         internal init(toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
                       receiveHandler: ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager) {
@@ -104,7 +81,12 @@ extension MIDI.IO.InputConnection {
                 UUID().uuidString as CFString,
                 ._1_0,
                 &newConnection,
-                midiReceiveBlock
+                { [weak self] eventListPtr, srcConnRefCon in
+                    guard let self = self else { return }
+                    self.midiManager?.queue.async {
+                        self.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+                    }
+                }
             )
             .throwIfOSStatusErr()
         } else {
@@ -114,7 +96,12 @@ extension MIDI.IO.InputConnection {
                 manager.clientRef,
                 UUID().uuidString as CFString,
                 &newConnection,
-                midiReadBlock
+                { [weak self] packetListPtr, srcConnRefCon in
+                    guard let self = self else { return }
+                    self.midiManager?.queue.async {
+                        self.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
+                    }
+                }
             )
             .throwIfOSStatusErr()
         }

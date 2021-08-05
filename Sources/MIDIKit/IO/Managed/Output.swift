@@ -91,8 +91,8 @@ extension MIDI.IO.Output {
         portRef = newPortRef
         
         // set meta data properties; ignore errors in case of failure
-        try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
-        try? MIDI.IO.setManufacturer(of: newPortRef, to: manager.manufacturer)
+        _ = try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
+        _ = try? MIDI.IO.setManufacturer(of: newPortRef, to: manager.manufacturer)
         
         if let uniqueID = self.uniqueID {
             // inject previously-stored unique ID into port
