@@ -65,6 +65,11 @@ extension MIDI.IO {
         public var notificationHandler: ((_ notification: Notification,
                                           _ manager: Manager) -> Void)? = nil
         
+        // MARK: - Internal dispatch queue
+        
+        /// Thread for all Manager operations and I/O.
+        internal var queue: DispatchQueue
+        
         // MARK: - Init
         
         /// Initialize the MIDI manager (and CoreMIDI client).
@@ -82,6 +87,17 @@ extension MIDI.IO {
                                    _ manager: Manager) -> Void)? = nil
         ) {
             
+            // set up dedicated manager queue
+            var clientNameForQueue = clientName.onlyAlphanumerics
+            if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
+            let queueName = (Bundle.main.bundleIdentifier ?? "unknown") + ".midiManager." + clientNameForQueue
+            queue = DispatchQueue(label: queueName,
+                                  qos: .userInteractive,
+                                  attributes: [],
+                                  autoreleaseFrequency: .workItem,
+                                  target: .global(qos: .userInteractive))
+            
+            // assign other properties
             self.clientName = clientName
             self.model = model
             self.manufacturer = manufacturer
@@ -90,15 +106,15 @@ extension MIDI.IO {
         }
         
         deinit {
-            
-            let result = MIDIClientDispose(clientRef)
-            
-            if result != noErr {
-                // not important to log this, we can omit it for now
-                //let osStatusMessage = MIDIOSStatus(rawValue: result).description
-                //Log.debug("Error disposing of MIDI client: \(osStatusMessage)")
+            queue.sync {
+                let result = MIDIClientDispose(clientRef)
+                
+                if result != noErr {
+                    // not important to log this, we can omit it for now
+                    //let osStatusMessage = MIDIOSStatus(rawValue: result).description
+                    //Log.debug("Error disposing of MIDI client: \(osStatusMessage)")
+                }
             }
-            
         }
         
         // MARK: - Helper methods
@@ -115,7 +131,9 @@ extension MIDI.IO {
             
             devices.update()
             endpoints.update()
-            notificationHandler?(.systemEndpointsChanged, self)
+            DispatchQueue.main.async {
+                self.notificationHandler?(.systemEndpointsChanged, self)
+            }
             
         }
         

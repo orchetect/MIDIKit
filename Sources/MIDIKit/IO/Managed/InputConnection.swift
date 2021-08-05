@@ -12,6 +12,8 @@ extension MIDI.IO {
     /// This connects to an external output in the system and subscribes to its MIDI events.
     public class InputConnection {
         
+        internal weak var midiManager: MIDI.IO.Manager?
+        
         public private(set) var outputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>
         
         internal private(set) var outputEndpointRef: MIDIEndpointRef? = nil
@@ -22,11 +24,36 @@ extension MIDI.IO {
         
         public private(set) var isConnected: Bool = false
         
+        @inline(__always) private func midiReadBlock(
+            _ packetListPtr: UnsafePointer<MIDIPacketList>,
+            _ srcConnRefCon: UnsafeMutableRawPointer?
+        ) {
+            
+            midiManager?.queue.async {
+                self.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
+            }
+            
+        }
+        
+        @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        @inline(__always) private func midiReceiveBlock(
+            _ eventListPtr: UnsafePointer<MIDIEventList>,
+            _ srcConnRefCon: UnsafeMutableRawPointer?
+        ) {
+            
+            midiManager?.queue.async {
+                self.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+            }
+            
+        }
+        
         internal init(toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
-                      receiveHandler: ReceiveHandler) {
+                      receiveHandler: ReceiveHandler.Definition,
+                      midiManager: MIDI.IO.Manager) {
             
             self.outputCriteria = toOutput
-            self.receiveHandler = receiveHandler
+            self.receiveHandler = receiveHandler.createReceiveHandler()
+            self.midiManager = midiManager
             
         }
         
@@ -77,7 +104,7 @@ extension MIDI.IO.InputConnection {
                 UUID().uuidString as CFString,
                 ._1_0,
                 &newConnection,
-                receiveHandler.midiReceiveBlock
+                midiReceiveBlock
             )
             .throwIfOSStatusErr()
         } else {
@@ -87,7 +114,7 @@ extension MIDI.IO.InputConnection {
                 manager.clientRef,
                 UUID().uuidString as CFString,
                 &newConnection,
-                receiveHandler.midiReadBlock
+                midiReadBlock
             )
             .throwIfOSStatusErr()
         }

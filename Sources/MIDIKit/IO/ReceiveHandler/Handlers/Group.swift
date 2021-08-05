@@ -9,7 +9,7 @@ extension MIDI.IO.ReceiveHandler {
     
     /// `ReceiveHandler` group.
     /// Can contain one or more `ReceiveHandler` in series.
-    public struct Group: MIDIIOReceiveHandlerProtocol {
+    public class Group: MIDIIOReceiveHandlerProtocol {
         
         public var receiveHandlers: [MIDI.IO.ReceiveHandler] = []
         
@@ -18,8 +18,8 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            receiveHandlers.forEach {
-                $0.midiReadBlock(packetListPtr, srcConnRefCon)
+            for handler in receiveHandlers {
+                handler.midiReadBlock(packetListPtr, srcConnRefCon)
             }
             
         }
@@ -30,13 +30,13 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            receiveHandlers.forEach {
-                $0.midiReceiveBlock(eventListPtr, srcConnRefCon)
+            for handler in receiveHandlers {
+                handler.midiReceiveBlock(eventListPtr, srcConnRefCon)
             }
             
         }
         
-        public init(_ receiveHandlers: [MIDI.IO.ReceiveHandler]) {
+        internal init(_ receiveHandlers: [MIDI.IO.ReceiveHandler]) {
             
             self.receiveHandlers = receiveHandlers
             

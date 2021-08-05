@@ -18,6 +18,10 @@ extension MIDI {
             case sysExOpenEnded
         }
         
+        public init() {
+            
+        }
+        
         internal var runningStatus: MIDI.Byte? = nil
         
         /// Parse

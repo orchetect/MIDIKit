@@ -8,7 +8,7 @@ import CoreMIDI
 extension MIDI.IO.ReceiveHandler {
     
     /// MIDI Event receive handler.
-    public struct Events: MIDIIOReceiveHandlerProtocol {
+    public class Events: MIDIIOReceiveHandlerProtocol {
         
         public typealias Handler = (_ events: [MIDI.Event]) -> Void
         
@@ -22,7 +22,7 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            packetListPtr.mkUnsafeSequence().forEach { midiPacketPacketPtr in
+            for midiPacketPacketPtr in packetListPtr.mkUnsafeSequence() {
                 let packetData = MIDI.Packet.PacketData(midiPacketPacketPtr)
                 let events = midi1Parser.parsedEvents(in: packetData)
                 handler(events)
@@ -36,7 +36,7 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            eventListPtr.unsafeSequence().forEach { universalMIDIPacketPtr in
+            for universalMIDIPacketPtr in eventListPtr.unsafeSequence() {
                 let universalPacketData = MIDI.Packet.UniversalPacketData(universalMIDIPacketPtr)
                 let events = midi2Parser.parsedEvents(in: universalPacketData)
                 handler(events)
@@ -44,7 +44,7 @@ extension MIDI.IO.ReceiveHandler {
             
         }
         
-        public init(_ handler: @escaping Handler) {
+        internal init(_ handler: @escaping Handler) {
             
             self.handler = handler
             

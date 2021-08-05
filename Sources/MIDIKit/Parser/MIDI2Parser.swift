@@ -10,6 +10,10 @@ extension MIDI {
     /// Parser for MIDI 2.0 events.
     public class MIDI2Parser {
         
+        public init() {
+            
+        }
+        
         /// Parse
         public func parsedEvents(in packetData: MIDI.Packet.UniversalPacketData) -> [MIDI.Event] {
             

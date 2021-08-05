@@ -8,7 +8,7 @@ import CoreMIDI
 extension MIDI.IO.ReceiveHandler {
     
     /// Basic raw packet data receive handler.
-    public struct RawData: MIDIIOReceiveHandlerProtocol {
+    public class RawData: MIDIIOReceiveHandlerProtocol {
         
         public typealias Handler = (_ packet: MIDI.Packet) -> Void
         
@@ -19,7 +19,7 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            packetListPtr.mkUnsafeSequence().forEach { midiPacketPacketPtr in
+            for midiPacketPacketPtr in packetListPtr.mkUnsafeSequence() {
                 let packetData = MIDI.Packet.PacketData(midiPacketPacketPtr)
                 let typeErasedPacket = MIDI.Packet.packet(packetData)
                 handler(typeErasedPacket)
@@ -33,7 +33,7 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            eventListPtr.unsafeSequence().forEach { universalMIDIPacketPtr in
+            for universalMIDIPacketPtr in eventListPtr.unsafeSequence() { 
                 let universalPacketData = MIDI.Packet.UniversalPacketData(universalMIDIPacketPtr)
                 let typeErasedPacket = MIDI.Packet.universalPacket(universalPacketData)
                 handler(typeErasedPacket)
@@ -41,7 +41,7 @@ extension MIDI.IO.ReceiveHandler {
             
         }
         
-        public init(
+        internal init(
             _ handler: @escaping Handler
         ) {
             

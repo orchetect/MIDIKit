@@ -11,6 +11,8 @@ extension MIDI.IO {
     /// A managed virtual MIDI input endpoint created in the system by the `Manager`.
     public class Input {
         
+        internal weak var midiManager: MIDI.IO.Manager?
+        
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
         
@@ -21,19 +23,44 @@ extension MIDI.IO {
         
         internal var receiveHandler: ReceiveHandler
         
+        @inline(__always) private func midiReadBlock(
+            _ packetListPtr: UnsafePointer<MIDIPacketList>,
+            _ srcConnRefCon: UnsafeMutableRawPointer?
+        ) {
+            
+            midiManager?.queue.async {
+                self.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
+            }
+            
+        }
+        
+        @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        @inline(__always) private func midiReceiveBlock(
+            _ eventListPtr: UnsafePointer<MIDIEventList>,
+            _ srcConnRefCon: UnsafeMutableRawPointer?
+        ) {
+            
+            midiManager?.queue.async {
+                self.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+            }
+            
+        }
+        
         internal init(name: String,
                       uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil,
-                      receiveHandler: ReceiveHandler) {
+                      receiveHandler: ReceiveHandler.Definition,
+                      midiManager: MIDI.IO.Manager) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
-            self.receiveHandler = receiveHandler
+            self.receiveHandler = receiveHandler.createReceiveHandler()
+            self.midiManager = midiManager
             
         }
         
         deinit {
             
-            _ = try? dispose()
+            try? dispose()
             
         }
         
@@ -79,7 +106,7 @@ extension MIDI.IO.Input {
                 endpointName as CFString,
                 ._1_0,
                 &newPortRef,
-                receiveHandler.midiReceiveBlock
+                midiReceiveBlock
             )
             .throwIfOSStatusErr()
         } else {
@@ -89,7 +116,7 @@ extension MIDI.IO.Input {
                 manager.clientRef,
                 endpointName as CFString,
                 &newPortRef,
-                receiveHandler.midiReadBlock
+                midiReadBlock
             )
             .throwIfOSStatusErr()
         }
