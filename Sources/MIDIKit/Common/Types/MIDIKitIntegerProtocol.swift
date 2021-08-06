@@ -67,7 +67,7 @@ extension MIDIKitIntegerProtocol {
     }
     
     public init<T: BinaryInteger>(clamping source: T) {
-        let clamped = Storage(Int(source).otcClamped(to: Self.min(Int.self)...Self.max(Int.self)))
+        let clamped = Storage(Int(source).clamped(to: Self.min(Int.self)...Self.max(Int.self)))
         self.init(clamped)
     }
     
