@@ -32,11 +32,10 @@ let package = Package(
         
         .target(
             name: "MIDIKitC",
-            dependencies: [],
-            publicHeadersPath: ".",
-            cxxSettings: [
-                .headerSearchPath(".")
-            ]
+            publicHeadersPath: "."
+//            cxxSettings: [
+//                .headerSearchPath(".")
+//            ]
         ),
         
         .target(name: "XCTestExtensions"),
