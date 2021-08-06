@@ -7,23 +7,17 @@
 
 @implementation XCTestCase(SwiftAssertThrows)
 
-- (void) _XCTAssertThrows
-:(void (^)(void))block
+- (void) _XCTAssertThrows:(void (^)(void))block
 {
     XCTAssertThrows(block(), "");
 }
 
-- (void) _XCTAssertThrows
-:(void (^)(void))block
-:(NSString *)message
+- (void) _XCTAssertThrows:(void (^)(void))block :(NSString *)message
 {
     XCTAssertThrows(block(), @"%@", message);
 }
 
-- (void) _XCTAssertThrowsSpecific
-:(void (^)(void))block
-:(NSString *)exceptionName
-:(NSString *)message
+- (void) _XCTAssertThrowsSpecific:(void (^)(void))block :(NSString *)exceptionName :(NSString *)message
 {
     BOOL __didThrow = NO;
     @try {
