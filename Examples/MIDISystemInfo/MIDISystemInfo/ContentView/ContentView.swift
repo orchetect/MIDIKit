@@ -1,5 +1,5 @@
 //
-//  ContentViewCatalina.swift
+//  ContentView.swift
 //  MIDISystemInfo
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
