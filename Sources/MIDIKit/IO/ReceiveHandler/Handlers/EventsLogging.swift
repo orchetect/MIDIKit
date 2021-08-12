@@ -72,10 +72,7 @@ extension MIDI.IO.ReceiveHandler {
             var events = events
             
             if filterActiveSensingAndClock {
-                events = events.filter {
-                    $0 != .timingClock &&
-                        $0 != .activeSensing
-                }
+                events = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
             }
             
             let stringOutput: String = events

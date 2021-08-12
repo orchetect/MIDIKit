@@ -201,7 +201,8 @@ extension MIDI.IO.Manager {
             
             let newVS = MIDI.IO.Output(
                 name: name,
-                uniqueID: uniqueID.readID()
+                uniqueID: uniqueID.readID(),
+                midiManager: self
             )
             
             managedOutputs[tag] = newVS

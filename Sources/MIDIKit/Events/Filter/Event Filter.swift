@@ -8,31 +8,10 @@ extension MIDI.Event {
     /// A MIDI event filter definition.
     public enum Filter {
         
-        #warning("> add inline docs for each enum case")
-        
-        // filter
-        
-        case filterChannelVoice
-        case filterSystemExclusive
-        case filterSystemCommon
-        case filterSystemRealTime
-        
-        case filterChannelVoiceChannel(channel: MIDI.UInt4)
-        case filterChannelVoiceChannels(channels: [MIDI.UInt4])
-        case filterChannel(channel: MIDI.UInt4)
-        case filterChannels(channels: [MIDI.UInt4])
-        
-        // filter out
-        
-        case filterOutChannelVoice
-        case filterOutSystemExclusive
-        case filterOutSystemCommon
-        case filterOutSystemRealTime
-        
-        case filterOutChannelVoiceChannel(channel: MIDI.UInt4)
-        case filterOutChannelVoiceChannels(channels: [MIDI.UInt4])
-        case filterOutChannel(channel: MIDI.UInt4)
-        case filterOutChannels(channels: [MIDI.UInt4])
+        case chanVoice(MIDI.Event.ChanVoiceTypes)
+        case sysEx(MIDI.Event.SysExTypes)
+        case sysCommon(MIDI.Event.SysCommonTypes)
+        case sysRealTime(MIDI.Event.SysRealTimeTypes)
         
     }
     
@@ -44,60 +23,17 @@ extension MIDI.Event.Filter {
     public func apply(to events: [MIDI.Event]) -> [MIDI.Event] {
         
         switch self {
-        
-        // filter
-        
-        case .filterChannelVoice:
-            return events.filterChannelVoice()
+        case .chanVoice(let types):
+            return events.filter(chanVoice: types)
             
-        case .filterSystemExclusive:
-            return events.filterSystemExclusive()
+        case .sysEx(let types):
+            return events.filter(sysEx: types)
             
-        case .filterSystemCommon:
-            return events.filterSystemCommon()
+        case .sysCommon(let types):
+            return events.filter(sysCommon: types)
             
-        case .filterSystemRealTime:
-            return events.filterSystemRealTime()
-            
-        case .filterChannelVoiceChannel(channel: let channel):
-            return events.filterChannelVoice(channel: channel)
-            
-        case .filterChannelVoiceChannels(channels: let channels):
-            return events.filterChannelVoice(channels: channels)
-            
-        case .filterChannel(channel: let channel):
-            return events.filter(channel: channel)
-            
-        case .filterChannels(channels: let channels):
-            return events.filter(channels: channels)
-            
-        // filter out
-
-        case .filterOutChannelVoice:
-            return events.filterOutChannelVoice()
-            
-        case .filterOutSystemExclusive:
-            return events.filterOutSystemExclusive()
-            
-        case .filterOutSystemCommon:
-            return events.filterOutSystemCommon()
-            
-        case .filterOutSystemRealTime:
-            return events.filterOutSystemRealTime()
-            
-        case .filterOutChannelVoiceChannel(channel: let channel):
-            #warning("> finish this")
-            return [] //events.filterOutChannelVoice(channel: channel)
-            
-        case .filterOutChannelVoiceChannels(channels: let channels):
-            #warning("> finish this")
-            return [] //events.filterOutChannelVoice(channels: channels)
-            
-        case .filterOutChannel(channel: let channel):
-            return events.filterOut(channel: channel)
-            
-        case .filterOutChannels(channels: let channels):
-            return events.filterOut(channels: channels)
+        case .sysRealTime(let types):
+            return events.filter(sysRealTime: types)
             
         }
         

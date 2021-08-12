@@ -77,7 +77,9 @@ extension MIDI.IO.Input {
         
         var newPortRef = MIDIPortRef()
         
-        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
+        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *),
+           manager.coreMIDIVersion == .new
+        {
             try MIDIDestinationCreateWithProtocol(
                 manager.clientRef,
                 endpointName as CFString,

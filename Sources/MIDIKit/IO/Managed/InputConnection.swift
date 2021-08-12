@@ -16,9 +16,9 @@ extension MIDI.IO {
         
         public private(set) var outputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>
         
-        internal private(set) var outputEndpointRef: MIDIEndpointRef? = nil
+        public private(set) var outputEndpointRef: MIDIEndpointRef? = nil
         
-        internal private(set) var inputPortRef: MIDIPortRef? = nil
+        public private(set) var inputPortRef: MIDIPortRef? = nil
         
         internal var receiveHandler: ReceiveHandler
         
@@ -75,7 +75,9 @@ extension MIDI.IO.InputConnection {
         
         // connection name must be unique, otherwise process might hang (?)
         
-        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
+        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *),
+           manager.coreMIDIVersion == .new
+        {
             try MIDIInputPortCreateWithProtocol(
                 manager.clientRef,
                 UUID().uuidString as CFString,

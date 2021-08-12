@@ -12,6 +12,8 @@ extension MIDI.IO {
     /// This connects to an external input in the system and outputs MIDI events to it.
     public class OutputConnection {
         
+        public weak var midiManager: MIDI.IO.Manager?
+        
         public var inputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>
         
         public private(set) var inputEndpointRef: MIDIEndpointRef? = nil

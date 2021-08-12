@@ -25,30 +25,35 @@ extension MIDI.Event.CC {
 extension MIDI.Event.CC.NRPN {
     
     /// Returns the NRPN message consisting of 2-4 MIDI Events.
-    public func events(channel: MIDI.UInt4) -> [MIDI.Event] {
+    public func events(channel: MIDI.UInt4,
+                       group: MIDI.UInt4 = 0) -> [MIDI.Event] {
         
         #warning("> not sure this is correct")
         
         var nrpnEvents: [MIDI.Event] = [
             .cc(controller: .nrpnMSB,
                 value: parameter.msb,
-                channel: channel),
+                channel: channel,
+                group: group),
             
             .cc(controller: .nrpnLSB,
                 value: parameter.lsb,
-                channel: channel)
+                channel: channel,
+                group: group)
         ]
         
         if let dataEntryMSB = dataEntryMSB {
             nrpnEvents.append(.cc(controller: .dataEntry,
                                   value: dataEntryMSB,
-                                  channel: channel))
+                                  channel: channel,
+                                  group: group))
         }
         
         if let dataEntryLSB = dataEntryLSB {
             nrpnEvents.append(.cc(controller: .dataEntry,
                                   value: dataEntryLSB,
-                                  channel: channel))
+                                  channel: channel,
+                                  group: group))
         }
         
         return nrpnEvents

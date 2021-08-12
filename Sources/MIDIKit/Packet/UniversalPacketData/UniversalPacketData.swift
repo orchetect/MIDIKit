@@ -1,5 +1,5 @@
 //
-//  Packet UniversalPacketData.swift
+//  UniversalPacketData.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 

@@ -25,10 +25,28 @@ extension MIDI {
         internal var runningStatus: MIDI.Byte? = nil
         
         /// Parse
-        public func parsedEvents(in packetData: MIDI.Packet.PacketData) -> [MIDI.Event] {
+        public func parsedEvents(
+            in packetData: MIDI.Packet.PacketData,
+            umpGroup: MIDI.UInt4 = 0
+        ) -> [MIDI.Event] {
             
             let result = Self.parsedEvents(in: packetData.bytes,
-                                           runningStatus: runningStatus)
+                                           runningStatus: runningStatus,
+                                           umpGroup: umpGroup)
+            runningStatus = result.runningStatus
+            return result.events
+            
+        }
+        
+        /// Parse
+        public func parsedEvents(
+            in bytes: [MIDI.Byte],
+            umpGroup: MIDI.UInt4 = 0
+        ) -> [MIDI.Event] {
+            
+            let result = Self.parsedEvents(in: bytes,
+                                           runningStatus: runningStatus,
+                                           umpGroup: umpGroup)
             runningStatus = result.runningStatus
             return result.events
             
@@ -39,7 +57,8 @@ extension MIDI {
         /// Persisted status data is normally the role of the parser class, but this method gives access to an abstracted parsing method by way of injecting and emitting persistent state (ie: running status).
         public static func parsedEvents(
             in bytes: [MIDI.Byte],
-            runningStatus: MIDI.Byte? = nil
+            runningStatus: MIDI.Byte? = nil,
+            umpGroup: MIDI.UInt4 = 0
         ) -> (events: [MIDI.Event],
               runningStatus: MIDI.Byte?)
         {
@@ -92,7 +111,7 @@ extension MIDI {
             
             func parseCurrentMessage() {
                 if currentMessageBuffer.isEmpty { return }
-                events += parseSingleMessage(currentMessageBuffer)
+                events += parseSingleMessage(currentMessageBuffer, umpGroup: umpGroup)
                 resetCurrentMessage()
             }
             
@@ -199,7 +218,7 @@ extension MIDI {
                         //   "Real-Time messages should not affect Running Status."
                         
                         // don't change expectedExactNumberOfDataBytes here!
-                        events.append(.timingClock)
+                        events.append(.timingClock(group: umpGroup))
                         
                     case 0x9:
                         // System Real Time - Undefined
@@ -223,7 +242,7 @@ extension MIDI {
                         
                         // don't change expectedExactNumberOfDataBytes here!
                         // don't change runningStatus here!
-                        events.append(.start)
+                        events.append(.start(group: umpGroup))
                         
                     case 0xB:
                         // System Real Time - Continue
@@ -235,7 +254,7 @@ extension MIDI {
                         
                         // don't change expectedExactNumberOfDataBytes here!
                         // don't change runningStatus here!
-                        events.append(.continue)
+                        events.append(.continue(group: umpGroup))
                         
                     case 0xC:
                         // System Real Time - Stop
@@ -247,7 +266,7 @@ extension MIDI {
                         
                         // don't change expectedExactNumberOfDataBytes here!
                         // don't change runningStatus here!
-                        events.append(.stop)
+                        events.append(.stop(group: umpGroup))
                         
                     case 0xD:
                         // System Real Time - Undefined
@@ -269,7 +288,7 @@ extension MIDI {
                         
                         // don't change expectedExactNumberOfDataBytes here!
                         // don't change runningStatus here!
-                        events.append(.activeSensing)
+                        events.append(.activeSensing(group: umpGroup))
                         
                     case 0xF:
                         // System Real Time - System Reset
@@ -281,7 +300,7 @@ extension MIDI {
                         
                         // don't change expectedExactNumberOfDataBytes here!
                         // don't change runningStatus here!
-                        events.append(.systemReset)
+                        events.append(.systemReset(group: umpGroup))
                         
                     default:
                         assertionFailure("Unhandled MIDI System Status Byte")
@@ -339,7 +358,8 @@ extension MIDI {
         ///
         /// - note: This is a helper method only intended to be called internally from within `MIDI.PacketData.parseEvents()`.
         internal static func parseSingleMessage(
-            _ bytes: [MIDI.Byte]
+            _ bytes: [MIDI.Byte],
+            umpGroup: MIDI.UInt4 = 0
         ) -> [MIDI.Event] {
             
             var events: [MIDI.Event] = []
@@ -358,7 +378,12 @@ extension MIDI {
                       let velocity = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                events.append(.noteOff(note: note, velocity: velocity, channel: channel))
+                let newEvent: MIDI.Event = .noteOff(note: note,
+                                                    velocity: velocity,
+                                                    channel: channel,
+                                                    group: umpGroup)
+                
+                events.append(newEvent)
                 
             case 0x9: // note on
                 let channel = statusByte.nibbles.low
@@ -366,7 +391,12 @@ extension MIDI {
                       let velocity = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                events.append(.noteOn(note: note, velocity: velocity, channel: channel))
+                let newEvent: MIDI.Event = .noteOn(note: note,
+                                                   velocity: velocity,
+                                                   channel: channel,
+                                                   group: umpGroup)
+                
+                events.append(newEvent)
                 
             case 0xA: // poly aftertouch
                 let channel = statusByte.nibbles.low
@@ -374,7 +404,12 @@ extension MIDI {
                       let pressure = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                events.append(.polyAftertouch(note: note, pressure: pressure, channel: channel))
+                let newEvent: MIDI.Event = .polyAftertouch(note: note,
+                                                           pressure: pressure,
+                                                           channel: channel,
+                                                           group: umpGroup)
+                
+                events.append(newEvent)
                 
             case 0xB: // CC (incl. channel mode msgs 121-127)
                 let channel = statusByte.nibbles.low
@@ -382,21 +417,34 @@ extension MIDI {
                       let value = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                events.append(.cc(controller: cc, value: value, channel: channel))
+                let newEvent: MIDI.Event = .cc(controller: cc,
+                                               value: value,
+                                               channel: channel,
+                                               group: umpGroup)
+                
+                events.append(newEvent)
                 
             case 0xC: // program change
                 let channel = statusByte.nibbles.low
                 guard let program = dataByte1?.toMIDIUInt7Exactly
                 else { return events }
                 
-                events.append(.programChange(program: program, channel: channel))
+                let newEvent: MIDI.Event = .programChange(program: program,
+                                                          channel: channel,
+                                                          group: umpGroup)
+                
+                events.append(newEvent)
                 
             case 0xD: // channel aftertouch
                 let channel = statusByte.nibbles.low
                 guard let pressure = dataByte1?.toMIDIUInt7Exactly
                 else { return events }
                 
-                events.append(.chanAftertouch(pressure: pressure, channel: channel))
+                let newEvent: MIDI.Event = .chanAftertouch(pressure: pressure,
+                                                           channel: channel,
+                                                           group: umpGroup)
+                
+                events.append(newEvent)
                 
             case 0xE: // pitch bend
                 let channel = statusByte.nibbles.low
@@ -404,8 +452,14 @@ extension MIDI {
                       let unwrappedDataByte2 = dataByte2
                 else { return events }
                 
-                let uint14 = MIDI.UInt14(bytePair: .init(msb: unwrappedDataByte2, lsb: unwrappedDataByte1))
-                events.append(.pitchBend(value: uint14, channel: channel))
+                let uint14 = MIDI.UInt14(bytePair: .init(msb: unwrappedDataByte2,
+                                                         lsb: unwrappedDataByte1))
+                
+                let newEvent: MIDI.Event = .pitchBend(value: uint14,
+                                                      channel: channel,
+                                                      group: umpGroup)
+                
+                events.append(newEvent)
                 
             case 0xF: // system message
                 switch statusByte.nibbles.low {
@@ -440,35 +494,35 @@ extension MIDI {
                     break
                     
                 case 0x6: // System Common - Tune Request
-                    events.append(.tuneRequest)
+                    events.append(.tuneRequest(group: umpGroup))
                     
                 case 0x7: // System Common - System Exclusive End (EOX / End Of Exclusive)
                     // on its own, 0xF7 is ignored
                     break
                     
                 case 0x8: // System Real Time - Timing Clock
-                    events.append(.timingClock)
+                    events.append(.timingClock(group: umpGroup))
                     
                 case 0x9: // Real Time - undefined
                     break
                     
                 case 0xA: // System Real Time - Start
-                    events.append(.start)
+                    events.append(.start(group: umpGroup))
                     
                 case 0xB: // System Real Time - Continue
-                    events.append(.continue)
+                    events.append(.continue(group: umpGroup))
                     
                 case 0xC: // System Real Time - Stop
-                    events.append(.stop)
+                    events.append(.stop(group: umpGroup))
                     
                 case 0xD: // Real Time - undefined
                     break
                     
                 case 0xE:
-                    events.append(.activeSensing)
+                    events.append(.activeSensing(group: umpGroup))
                     
                 case 0xF:
-                    events.append(.systemReset)
+                    events.append(.systemReset(group: umpGroup))
                     
                 default:
                     // should never happen

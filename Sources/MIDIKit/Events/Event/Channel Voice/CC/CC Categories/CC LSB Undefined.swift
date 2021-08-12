@@ -103,4 +103,40 @@ extension MIDI.Event.CC.LSB.Undefined {
         
     }
     
+    /// Returns the LSB's corresponding MSB controller number.
+    @inlinable public var msbController: MIDI.UInt7 {
+        
+        switch self {
+            
+        case .cc3  : return 3
+        case .cc9  : return 9
+        case .cc14 : return 14
+        case .cc15 : return 15
+        case .cc20 : return 20
+        case .cc21 : return 21
+        case .cc22 : return 22
+        case .cc23 : return 23
+        case .cc24 : return 24
+        case .cc25 : return 25
+        case .cc26 : return 26
+        case .cc27 : return 27
+        case .cc28 : return 28
+        case .cc29 : return 29
+        case .cc30 : return 30
+        case .cc31 : return 31
+            
+        }
+        
+    }
+    
+}
+
+extension MIDI.Event.CC.LSB.Undefined {
+    
+    /// Returns the controller name as a human-readable String.
+    @inlinable public var name: String {
+        
+        "Undefined CC\(msbController) LSB"
+        
+    }
 }

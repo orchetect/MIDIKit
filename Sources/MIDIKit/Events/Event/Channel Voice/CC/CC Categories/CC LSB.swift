@@ -119,3 +119,35 @@ extension MIDI.Event.CC.LSB {
     }
     
 }
+
+extension MIDI.Event.CC.LSB {
+    
+    /// Returns the controller name as a human-readable String.
+    @inlinable public var name: String {
+        
+        switch self {
+        case .bankSelect      : return "Bank Select LSB"
+        case .modWheel        : return "Mod Wheel LSB"
+        case .breath          : return "Breath Controller LSB"
+        case .footController  : return "Foot Controller LSB"
+        case .portamentoTime  : return "PortamentoTime LSB"
+        case .dataEntry       : return "Data Entry LSB"
+        case .channelVolume   : return "Volume LSB"
+        case .balance         : return "Balance LSB"
+        case .pan             : return "Pan LSB"
+        case .expression      : return "Expression LSB"
+        case .effectControl1  : return "Effect Control 1 LSB"
+        case .effectControl2  : return "Effect Control 2 LSB"
+        case .generalPurpose1 : return "General Purpose 1 LSB"
+        case .generalPurpose2 : return "General Purpose 2 LSB"
+        case .generalPurpose3 : return "General Purpose 3 LSB"
+        case .generalPurpose4 : return "General Purpose 4 LSB"
+            
+        case .undefined(let undefinedCC):
+            return undefinedCC.name
+            
+        }
+        
+    }
+    
+}
