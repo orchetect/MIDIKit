@@ -19,15 +19,21 @@ extension MIDI.Packet {
         /// Flat array of raw bytes
         @inline(__always) public var bytes: [MIDI.Byte] {
             
-            #warning("> this is dumb?")
             var bytes: [MIDI.Byte] = []
             bytes.reserveCapacity(4 * words.count)
-            words.forEach {
-                bytes.append(MIDI.Byte($0 & 0xFF000000) >> (6*4))
-                bytes.append(MIDI.Byte($0 & 0x00FF0000) >> (4*4))
-                bytes.append(MIDI.Byte($0 & 0x0000FF00) >> (2*4))
-                bytes.append(MIDI.Byte($0 & 0x000000FF))
+            
+            words.forEach { word in
+                let byte1 = MIDI.Byte((word & 0xFF000000) >> 24)
+                let byte2 = MIDI.Byte((word & 0x00FF0000) >> 16)
+                let byte3 = MIDI.Byte((word & 0x0000FF00) >> 8)
+                let byte4 = MIDI.Byte(word & 0x000000FF)
+                
+                bytes.append(byte1)
+                bytes.append(byte2)
+                bytes.append(byte3)
+                bytes.append(byte4)
             }
+            
             return bytes
             
         }

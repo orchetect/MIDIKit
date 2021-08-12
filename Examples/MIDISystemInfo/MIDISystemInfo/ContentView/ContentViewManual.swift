@@ -34,9 +34,12 @@ struct ContentViewManual: View {
 		
 		ZStack { }
 			.onAppear {
-				// onAppear has the potential to trigger more than once during the lifecycle of the view, so it's not best practise to put setup code here
-				// however it won't have any dire consequences if this onAppear block runs more than once, and
-				// we don't care too much that this setup code may happen lazily while the rest of the view loads
+				// onAppear has the potential to trigger more than once
+                // during the lifecycle of the view, so it's not best
+                // practise to put setup code here. however it won't have
+                // any dire consequences if this onAppear block runs more
+                // than once, and we don't care too much that this setup
+                // code may happen lazily while the rest of the view loads
 				
 				// set up MIDI manager notifications callback handler
 				// so we can be notified when MIDI endpoints in the system change,
@@ -76,7 +79,7 @@ struct ContentViewManual: View {
 					
 				}
 				
-				Section(header: Text("MIDI Outputs")) {
+				Section(header: Text("MIDI Output Endpoints")) {
 					
 					ForEach(outputs.sortedByName()) { item in
 						NavigationLink(destination: DetailsView(endpoint: item)) {
@@ -96,7 +99,7 @@ struct ContentViewManual: View {
 					
 				}
 				
-				Section(header: Text("MIDI Inputs")) {
+				Section(header: Text("MIDI Input Endpoints")) {
 					
 					ForEach(inputs.sortedByName()) { item in
 						NavigationLink(destination: DetailsView(endpoint: item)) {
