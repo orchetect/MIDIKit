@@ -90,7 +90,7 @@ extension MIDI.Event.SysEx.Manufacturer {
     /// Returns a new instance containing the Educational Use ID.
     ///
     /// - note: Reserved for use only in educational institutions or for unit testing; not public release.
-    public func educational() -> Self {
+    public static func educational() -> Self {
         
         Self(bytes: [0x7D])
         
