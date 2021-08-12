@@ -30,7 +30,8 @@ class SysExTests: XCTestCase {
 		XCTAssertEqual(data, [0x01, 0x34])
         XCTAssertEqual(group, 0)
 		
-		XCTAssertEqual(event.rawBytes, sourceRawBytes)
+		XCTAssertEqual(event.midi1RawBytes, sourceRawBytes)
+        #warning("> also test umpRawBytes here")
 		
 	}
 	
@@ -52,8 +53,9 @@ class SysExTests: XCTestCase {
 		XCTAssertEqual(data, [])
         XCTAssertEqual(group, 0)
         
-		XCTAssertEqual(event.rawBytes, sourceRawBytes)
-		
+		XCTAssertEqual(event.midi1RawBytes, sourceRawBytes)
+        #warning("> also test umpRawBytes here")
+        
 	}
     
     func testInit_RawBytes_EmptyMessageBytes_WithMfr() {
@@ -74,7 +76,8 @@ class SysExTests: XCTestCase {
         XCTAssertEqual(data, [])
         XCTAssertEqual(group, 0)
         
-        XCTAssertEqual(event.rawBytes, [0xF0, 0x41, 0xF7])
+        XCTAssertEqual(event.midi1RawBytes, [0xF0, 0x41, 0xF7])
+        #warning("> also test umpRawBytes here")
         
     }
     

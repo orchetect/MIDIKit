@@ -171,32 +171,37 @@ extension MIDI.Event.CC.RPN {
 extension MIDI.Event.CC.RPN {
     
     /// Returns the RPN message consisting of 2-4 MIDI Events.
-    public func events(channel: MIDI.UInt4) -> [MIDI.Event] {
+    public func events(channel: MIDI.UInt4,
+                       group: MIDI.UInt4 = 0) -> [MIDI.Event] {
         
         #warning("> not sure this is correct")
         
         var rpnEvents: [MIDI.Event] = [
             .cc(controller: .rpnMSB,
                 value: parameter.msb,
-                channel: channel),
+                channel: channel,
+                group: group),
             
             .cc(controller: .rpnLSB,
                 value: parameter.lsb,
-                channel: channel)
+                channel: channel,
+                group: group)
         ]
         
         let dataEntryBytes = self.dataEntryBytes
         
         if let dataEntryMSB = dataEntryBytes.msb {
             rpnEvents.append(.cc(controller: .dataEntry,
-                             value: dataEntryMSB,
-                             channel: channel))
+                                 value: dataEntryMSB,
+                                 channel: channel,
+                                 group: group))
         }
         
         if let dataEntryLSB = dataEntryBytes.lsb {
             rpnEvents.append(.cc(controller: .dataEntry,
-                             value: dataEntryLSB,
-                             channel: channel))
+                                 value: dataEntryLSB,
+                                 channel: channel,
+                                 group: group))
         }
         
         return rpnEvents
