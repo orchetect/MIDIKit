@@ -14,7 +14,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         // isChannelVoice
         
-        let events = kEvents.ChannelVoice.oneOfEachEventType
+        let events = kEvents.ChanVoice.oneOfEachEventType
         
         events.forEach {
             XCTAssertTrue($0.isChannelVoice)
@@ -67,7 +67,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         let filteredEvents = events.filter(chanVoice: .only)
         
-        let expectedEvents = kEvents.ChannelVoice.oneOfEachEventType
+        let expectedEvents = kEvents.ChanVoice.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
         
@@ -79,7 +79,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         let filteredEvents = events.filter(chanVoice: .onlyType(.noteOn))
         
-        let expectedEvents = [kEvents.ChannelVoice.noteOn]
+        let expectedEvents = [kEvents.ChanVoice.noteOn]
         
         XCTAssertEqual(filteredEvents, expectedEvents)
         
@@ -93,11 +93,11 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         var expectedEvents: [MIDI.Event]
         
         filteredEvents = events.filter(chanVoice: .onlyTypes([.noteOn]))
-        expectedEvents = [kEvents.ChannelVoice.noteOn]
+        expectedEvents = [kEvents.ChanVoice.noteOn]
         XCTAssertEqual(filteredEvents, expectedEvents)
         
         filteredEvents = events.filter(chanVoice: .onlyTypes([.noteOn, .noteOff]))
-        expectedEvents = [kEvents.ChannelVoice.noteOn, kEvents.ChannelVoice.noteOff]
+        expectedEvents = [kEvents.ChanVoice.noteOn, kEvents.ChanVoice.noteOff]
         XCTAssertEqual(filteredEvents, expectedEvents)
         
         filteredEvents = events.filter(chanVoice: .onlyTypes([]))
@@ -131,10 +131,10 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         let filteredEvents = events.filter(chanVoice: .keepType(.noteOn))
         
         let expectedEvents = [
-            kEvents.ChannelVoice.noteOn
+            kEvents.ChanVoice.noteOn
         ]
         + kEvents.SysCommon.oneOfEachEventType
-        + kEvents.SysExclusive.oneOfEachEventType
+        + kEvents.SysEx.oneOfEachEventType
         + kEvents.SysRealTime.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
@@ -148,11 +148,11 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         let filteredEvents = events.filter(chanVoice: .keepTypes([.noteOn, .noteOff]))
         
         let expectedEvents = [
-            kEvents.ChannelVoice.noteOn,
-            kEvents.ChannelVoice.noteOff
+            kEvents.ChanVoice.noteOn,
+            kEvents.ChanVoice.noteOff
         ]
         + kEvents.SysCommon.oneOfEachEventType
-        + kEvents.SysExclusive.oneOfEachEventType
+        + kEvents.SysEx.oneOfEachEventType
         + kEvents.SysRealTime.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
@@ -185,7 +185,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         let expectedEvents =
         kEvents.SysCommon.oneOfEachEventType
-        + kEvents.SysExclusive.oneOfEachEventType
+        + kEvents.SysEx.oneOfEachEventType
         + kEvents.SysRealTime.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
@@ -199,15 +199,15 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         let filteredEvents = events.filter(chanVoice: .dropType(.noteOn))
         
         let expectedEvents = [
-            kEvents.ChannelVoice.noteOff,
-            kEvents.ChannelVoice.polyAftertouch,
-            kEvents.ChannelVoice.cc,
-            kEvents.ChannelVoice.programChange,
-            kEvents.ChannelVoice.chanAftertouch,
-            kEvents.ChannelVoice.pitchBend
+            kEvents.ChanVoice.noteOff,
+            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.cc,
+            kEvents.ChanVoice.programChange,
+            kEvents.ChanVoice.chanAftertouch,
+            kEvents.ChanVoice.pitchBend
         ]
         + kEvents.SysCommon.oneOfEachEventType
-        + kEvents.SysExclusive.oneOfEachEventType
+        + kEvents.SysEx.oneOfEachEventType
         + kEvents.SysRealTime.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
@@ -221,14 +221,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         let filteredEvents = events.filter(chanVoice: .dropTypes([.noteOn, .noteOff]))
         
         let expectedEvents = [
-            kEvents.ChannelVoice.polyAftertouch,
-            kEvents.ChannelVoice.cc,
-            kEvents.ChannelVoice.programChange,
-            kEvents.ChannelVoice.chanAftertouch,
-            kEvents.ChannelVoice.pitchBend
+            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.cc,
+            kEvents.ChanVoice.programChange,
+            kEvents.ChanVoice.chanAftertouch,
+            kEvents.ChanVoice.pitchBend
         ]
         + kEvents.SysCommon.oneOfEachEventType
-        + kEvents.SysExclusive.oneOfEachEventType
+        + kEvents.SysEx.oneOfEachEventType
         + kEvents.SysRealTime.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)

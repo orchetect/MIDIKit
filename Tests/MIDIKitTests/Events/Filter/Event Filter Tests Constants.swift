@@ -7,7 +7,7 @@ import MIDIKit
 
 enum kEvents {
     
-    enum ChannelVoice {
+    enum ChanVoice {
         
         static let noteOn: MIDI.Event = .noteOn(note: 60, velocity: 48, channel: 2, group: 0)
         static let noteOff: MIDI.Event = .noteOff(note: 61, velocity: 0, channel: 3, group: 0)
@@ -47,7 +47,7 @@ enum kEvents {
         
     }
     
-    enum SysExclusive {
+    enum SysEx {
         
         static let sysEx: MIDI.Event = .sysEx(manufacturer: .educational(),
                                               data: [0x20],
@@ -87,9 +87,9 @@ enum kEvents {
     }
     
     static let oneOfEachMIDI1EventType: [MIDI.Event] =
-    ChannelVoice.oneOfEachEventType +
+    ChanVoice.oneOfEachEventType +
     SysCommon.oneOfEachEventType +
-    SysExclusive.oneOfEachEventType +
+    SysEx.oneOfEachEventType +
     SysRealTime.oneOfEachEventType
     
 }
