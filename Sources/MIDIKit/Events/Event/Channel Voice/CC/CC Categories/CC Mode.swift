@@ -65,3 +65,25 @@ extension MIDI.Event.CC.Mode {
     }
     
 }
+
+extension MIDI.Event.CC.Mode {
+    
+    /// Returns the controller name as a human-readable String.
+    @inlinable public var name: String {
+        
+        switch self {
+            
+        case .allSoundOff         : return "All Sound Off"
+        case .resetAllControllers : return "Reset All Controllers"
+        case .localControl        : return "Local Control"
+        case .allNotesOff         : return "All Notes Off"
+        case .omniModeOff         : return "Omni Mode Off"
+        case .omniModeOn          : return "Omni Mode On"
+        case .monoModeOn          : return "Mono Mode On"
+        case .polyModeOn          : return "Poly Mode On"
+            
+        }
+        
+    }
+    
+}

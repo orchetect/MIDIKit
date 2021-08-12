@@ -219,3 +219,13 @@ extension MIDI.Event.CC.Undefined {
     }
     
 }
+
+extension MIDI.Event.CC.Undefined {
+    
+    /// Returns the controller name as a human-readable String.
+    @inlinable public var name: String {
+        
+        "Undefined CC\(controller)"
+        
+    }
+}
