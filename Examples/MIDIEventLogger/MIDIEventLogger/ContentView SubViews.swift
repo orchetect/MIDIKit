@@ -43,7 +43,10 @@ extension ContentView {
                 
                 Picker("UMP Group", selection: $midiGroup) {
                     ForEach(0..<15+1) {
-                        Text("\($0 + 1) (\($0.hex.stringValue(padTo: 1, prefix: true)))")
+                        let groupNum = $0 + 1
+                        let groupNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
+                        
+                        Text("\(groupNum) (\(groupNumHex))")
                             .tag(MIDI.UInt4($0))
                     }
                 }
@@ -76,7 +79,10 @@ extension ContentView {
                 
                 Picker("Channel", selection: $midiChannel) {
                     ForEach(0..<15+1) {
-                        Text("\($0 + 1) (\($0.hex.stringValue(padTo: 1, prefix: true)))")
+                        let channelNum = $0 + 1
+                        let channelNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
+                        
+                        Text("\(channelNum) (\(channelNumHex))")
                             .tag(MIDI.UInt4($0))
                     }
                 }

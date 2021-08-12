@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             model: "LoggerApp",
                             manufacturer: "Orchetect")
             do {
-                Log.debug("Starting MIDI manager client")
+                Log.debug("Starting MIDI manager")
                 try newManager.start()
             } catch {
                 Log.default(error)
@@ -47,7 +47,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 width: ContentView.kMinHeight,
                                 height: ContentView.kMinWidth),
             styleMask: [.titled, .miniaturizable, .resizable],
-            backing: .buffered, defer: false)
+            backing: .buffered,
+            defer: false)
         
         // Create the SwiftUI view that provides the window contents.
         window.isReleasedWhenClosed = false
