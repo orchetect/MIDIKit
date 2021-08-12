@@ -165,9 +165,45 @@ extension ContentView {
                 
                 Button {
                     sendEvent(.sysEx(manufacturer: .educational(),
+                                     data: [],
+                                     group: midiGroup))
+                } label: { Text("SysEx with 0 Bytes") }
+                
+                Button {
+                    sendEvent(.sysEx(manufacturer: .educational(),
+                                     data: [0x01, 0x02],
+                                     group: midiGroup))
+                } label: { Text("SysEx with 2 Bytes") }
+                
+                Button {
+                    sendEvent(.sysEx(manufacturer: .educational(),
                                      data: [0x01, 0x02, 0x03, 0x04],
                                      group: midiGroup))
                 } label: { Text("SysEx with 4 Bytes") }
+                
+                Button {
+                    sendEvent(.sysEx(manufacturer: .educational(),
+                                     data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08],
+                                     group: midiGroup))
+                } label: { Text("SysEx with 8 Bytes") }
+                
+                Button {
+                    sendEvent(.sysExUniversal(universalType: .realTime,
+                                              deviceID: 0x7F,
+                                              subID1: 0x7F,
+                                              subID2: 0x7F,
+                                              data: [],
+                                              group: midiGroup))
+                } label: { Text("Universal SysEx with 0 Bytes") }
+                
+                Button {
+                    sendEvent(.sysExUniversal(universalType: .realTime,
+                                              deviceID: 0x7F,
+                                              subID1: 0x7F,
+                                              subID2: 0x7F,
+                                              data: [0x01, 0x02],
+                                              group: midiGroup))
+                } label: { Text("Universal SysEx with 2 Bytes") }
                 
                 Button {
                     sendEvent(.sysExUniversal(universalType: .realTime,
@@ -177,6 +213,15 @@ extension ContentView {
                                               data: [0x01, 0x02, 0x03, 0x04],
                                               group: midiGroup))
                 } label: { Text("Universal SysEx with 4 Bytes") }
+                
+                Button {
+                    sendEvent(.sysExUniversal(universalType: .realTime,
+                                              deviceID: 0x7F,
+                                              subID1: 0x7F,
+                                              subID2: 0x7F,
+                                              data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08],
+                                              group: midiGroup))
+                } label: { Text("Universal SysEx with 8 Bytes") }
                 
             }
             .padding()
