@@ -90,7 +90,8 @@ struct ContentView: View {
             // wait a short delay in order to give CoreMIDI time
             // to set up the virtual endpoints we created in the view's init()
             DispatchQueue.main
-                .asyncAfter(deadline: .now().advanced(by: .milliseconds(500)))
+                .asyncAfter(deadline: DispatchTime.now()
+                                .advanced(by: .milliseconds(500)))
             {
                 setInputConnectionToVirtual()
             }

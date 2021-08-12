@@ -42,7 +42,7 @@ extension ContentView {
             VStack(alignment: .center, spacing: 8) {
                 
                 Picker("UMP Group", selection: $midiGroup) {
-                    ForEach(0..<15+1) {
+                    ForEach(0..<15+1, id: \.self) {
                         let groupNum = $0 + 1
                         let groupNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
                         
@@ -78,7 +78,7 @@ extension ContentView {
             VStack(alignment: .center, spacing: 8) {
                 
                 Picker("Channel", selection: $midiChannel) {
-                    ForEach(0..<15+1) {
+                    ForEach(0..<15+1, id: \.self) {
                         let channelNum = $0 + 1
                         let channelNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
                         
