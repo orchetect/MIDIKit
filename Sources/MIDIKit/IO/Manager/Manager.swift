@@ -26,6 +26,17 @@ extension MIDI.IO {
         /// MIDI Manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
         public internal(set) var manufacturer: String = ""
         
+        /// Which underlying CoreMIDI API is being used internally.
+        public let coreMIDIVersion: MIDI.CoreMIDIVersion = {
+            
+            if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
+                return .new
+            } else {
+                return .legacy
+            }
+            
+        }()
+        
         /// Dictionary of MIDI input connections managed by this instance.
         public internal(set) var managedInputConnections: [String : InputConnection] = [:]
         

@@ -11,6 +11,8 @@ extension MIDI.IO {
     /// A managed virtual MIDI output endpoint created in the system by the `Manager`.
     public class Output {
         
+        public weak var midiManager: MIDI.IO.Manager?
+        
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
         
@@ -20,10 +22,12 @@ extension MIDI.IO {
         public private(set) var portRef: MIDIPortRef? = nil
         
         internal init(name: String,
-                      uniqueID: MIDI.IO.OutputEndpoint.UniqueID? = nil) {
+                      uniqueID: MIDI.IO.OutputEndpoint.UniqueID? = nil,
+                      midiManager: MIDI.IO.Manager) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
+            self.midiManager = midiManager
             
         }
         
@@ -69,7 +73,9 @@ extension MIDI.IO.Output {
         
         var newPortRef = MIDIPortRef()
         
-        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
+        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *),
+           manager.coreMIDIVersion == .new
+        {
             try MIDISourceCreateWithProtocol(
                 manager.clientRef,
                 endpointName as CFString,
