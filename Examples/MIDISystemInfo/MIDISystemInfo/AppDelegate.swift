@@ -52,9 +52,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.center()
         window.setFrameAutosaveName("Main Window")
         
-        window.title = "MIDIKit Test Harness (Catalina)"
+        window.title = "MIDIKit System Info"
         window.contentView = NSHostingView(
-            rootView: ContentViewCatalina(midiManager: midiManager!)
+            rootView: ContentView(midiManager: midiManager!)
                 .environment(\.hostingWindow, { [weak window] in window })
         )
         
