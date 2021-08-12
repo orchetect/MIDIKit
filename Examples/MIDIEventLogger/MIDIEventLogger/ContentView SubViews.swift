@@ -266,16 +266,59 @@ extension ContentView {
     
     func ReceiveMIDIEventsView() -> some View {
         
-        GroupBox(label: Text("Receive MIDI Events")) {
+        ZStack(alignment: .center) {
             
-            Text("MIDI Events received will be logged to the console in a debug build.")
-                .lineLimit(nil)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            GroupBox(label: Text("Receive MIDI Events")) {
+                
+                VStack(alignment: .center, spacing: 0) {
+                    
+                    HStack {
+                        GroupBox(label: Text("Source: Virtual")) {
+                            Text(kInputName)
+                                .padding()
+                        }
+                        
+                        GroupBox(label: Text("Source: Connection")) {
+                            Picker("", selection: $midiInputConnection) {
+                                Text("None")
+                                    .tag(MIDI.IO.OutputEndpoint?.none)
+                                
+                                Text("----")
+                                
+                                ForEach(midiManager.endpoints.outputs) {
+                                    Text($0.getDisplayName ?? $0.name)
+                                        .tag(MIDI.IO.OutputEndpoint?.some($0))
+                                }
+                            }
+                            .padding()
+                            .frame(maxWidth: 400)
+                        }
+                    }
+                    
+                    Text("MIDI Events received will be logged to the console in a debug build.")
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    
+                }
+                
+            }
+            .frame(idealHeight: 100, maxHeight: 150, alignment: .center)
+            
+            
+            Text({
+                // this is a stupid SwiftUI workaround because we can't use .onChange{} in Catalina and didSet{} is not reliable on a @State var, so works fine for our purposes
+                let _ = midiInputConnection
+                
+                updateInputConnection()
+                
+                return ""
+            }())
+                .opacity(0.0)
+                .frame(width: 0, height: 0)
             
         }
-        .frame(idealHeight: 100, maxHeight: 100,
-               alignment: .center)
+        .frame(maxWidth: .infinity, alignment: .center)
         
     }
     
