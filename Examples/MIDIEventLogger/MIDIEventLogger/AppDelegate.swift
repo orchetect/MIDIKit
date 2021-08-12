@@ -44,14 +44,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window = NSWindow(
             contentRect: NSRect(x: 0,
                                 y: 0,
-                                width: ContentView.kMinHeight,
-                                height: ContentView.kMinWidth),
+                                width: ContentView.kMinWidth,
+                                height: ContentView.kMinHeight),
             styleMask: [.titled, .miniaturizable, .resizable],
             backing: .buffered,
             defer: false)
         
         // Create the SwiftUI view that provides the window contents.
-        window.isReleasedWhenClosed = false
+        window.isReleasedWhenClosed = true
         
         window.center()
         window.setFrameAutosaveName("Main Window")

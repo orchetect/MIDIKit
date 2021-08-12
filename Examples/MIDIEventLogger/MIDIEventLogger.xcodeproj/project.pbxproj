@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E216886126C5E5A400BF7959 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E216886026C5E5A400BF7959 /* Info.plist */; };
 		E26A25B426C586F700FFCF40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E26A25B326C586F700FFCF40 /* Assets.xcassets */; };
 		E26A25B726C586F700FFCF40 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E26A25B526C586F700FFCF40 /* Main.storyboard */; };
 		E26A25C126C5873B00FFCF40 /* HostingWindowKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25BD26C5873B00FFCF40 /* HostingWindowKey.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E216886026C5E5A400BF7959 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E26A25AC26C586F600FFCF40 /* MIDIEventLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIDIEventLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E26A25B326C586F700FFCF40 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E26A25B626C586F700FFCF40 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 				E26A25CE26C5AD4700FFCF40 /* ContentView SubViews.swift */,
 				E26A25BD26C5873B00FFCF40 /* HostingWindowKey.swift */,
 				E26A25BF26C5873B00FFCF40 /* logErrors.swift */,
+				E216886026C5E5A400BF7959 /* Info.plist */,
 				E26A25B326C586F700FFCF40 /* Assets.xcassets */,
 				E26A25B526C586F700FFCF40 /* Main.storyboard */,
 			);
@@ -115,7 +118,7 @@
 				};
 			};
 			buildConfigurationList = E26A25A726C586F600FFCF40 /* Build configuration list for PBXProject "MIDIEventLogger" */;
-			compatibilityVersion = "Xcode 13.0";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -142,6 +145,7 @@
 			files = (
 				E26A25B426C586F700FFCF40 /* Assets.xcassets in Resources */,
 				E26A25B726C586F700FFCF40 /* Main.storyboard in Resources */,
+				E216886126C5E5A400BF7959 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +307,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MIDIEventLogger/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -334,6 +340,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MIDIEventLogger/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
