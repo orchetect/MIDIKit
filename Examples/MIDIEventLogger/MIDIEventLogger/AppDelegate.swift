@@ -40,6 +40,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return newManager
         }()
         
+        guard let unwrappedMIDIManager = midiManager
+        else { return }
+        
         // Create the window and set the content view.
         window = NSWindow(
             contentRect: NSRect(x: 0,
@@ -48,7 +51,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 height: ContentView.kMinHeight),
             styleMask: [.titled, .miniaturizable, .resizable],
             backing: .buffered,
-            defer: false)
+            defer: false
+        )
         
         // Create the SwiftUI view that provides the window contents.
         window.isReleasedWhenClosed = true
@@ -58,8 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         window.title = "MIDIKit Event Logger"
         window.contentView = NSHostingView(
-            rootView: ContentView(midiManager: midiManager!)
-                .environment(\.hostingWindow, { [weak window] in window })
+            rootView: ContentView(midiManager: unwrappedMIDIManager)
         )
         
         window.makeKeyAndOrderFront(nil)

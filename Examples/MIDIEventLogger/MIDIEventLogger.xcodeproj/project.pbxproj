@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		E26A25B426C586F700FFCF40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E26A25B326C586F700FFCF40 /* Assets.xcassets */; };
 		E26A25B726C586F700FFCF40 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E26A25B526C586F700FFCF40 /* Main.storyboard */; };
-		E26A25C126C5873B00FFCF40 /* HostingWindowKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25BD26C5873B00FFCF40 /* HostingWindowKey.swift */; };
 		E26A25C226C5873B00FFCF40 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25BE26C5873B00FFCF40 /* AppDelegate.swift */; };
 		E26A25C326C5873B00FFCF40 /* logErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25BF26C5873B00FFCF40 /* logErrors.swift */; };
 		E26A25C426C5873B00FFCF40 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25C026C5873B00FFCF40 /* ContentView.swift */; };
@@ -23,7 +22,6 @@
 		E26A25AC26C586F600FFCF40 /* MIDIEventLogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIDIEventLogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E26A25B326C586F700FFCF40 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E26A25B626C586F700FFCF40 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		E26A25BD26C5873B00FFCF40 /* HostingWindowKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HostingWindowKey.swift; sourceTree = "<group>"; };
 		E26A25BE26C5873B00FFCF40 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E26A25BF26C5873B00FFCF40 /* logErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = logErrors.swift; sourceTree = "<group>"; };
 		E26A25C026C5873B00FFCF40 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -65,13 +63,12 @@
 		E26A25AE26C586F600FFCF40 /* MIDIEventLogger */ = {
 			isa = PBXGroup;
 			children = (
-				E2B38F2026C63918008770A6 /* MIDIEventLogger.entitlements */,
 				E26A25BE26C5873B00FFCF40 /* AppDelegate.swift */,
 				E26A25C026C5873B00FFCF40 /* ContentView.swift */,
 				E26A25CE26C5AD4700FFCF40 /* ContentView SubViews.swift */,
-				E26A25BD26C5873B00FFCF40 /* HostingWindowKey.swift */,
 				E26A25BF26C5873B00FFCF40 /* logErrors.swift */,
 				E216886026C5E5A400BF7959 /* Info.plist */,
+				E2B38F2026C63918008770A6 /* MIDIEventLogger.entitlements */,
 				E26A25B326C586F700FFCF40 /* Assets.xcassets */,
 				E26A25B526C586F700FFCF40 /* Main.storyboard */,
 			);
@@ -158,7 +155,6 @@
 			files = (
 				E26A25CF26C5AD4700FFCF40 /* ContentView SubViews.swift in Sources */,
 				E26A25C326C5873B00FFCF40 /* logErrors.swift in Sources */,
-				E26A25C126C5873B00FFCF40 /* HostingWindowKey.swift in Sources */,
 				E26A25C426C5873B00FFCF40 /* ContentView.swift in Sources */,
 				E26A25C226C5873B00FFCF40 /* AppDelegate.swift in Sources */,
 			);

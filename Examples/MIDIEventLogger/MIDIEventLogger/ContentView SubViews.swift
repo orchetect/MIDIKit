@@ -318,27 +318,32 @@ extension ContentView {
                 VStack(alignment: .center, spacing: 0) {
                     
                     HStack {
-                        GroupBox(label: Text("Source: Virtual")) {
-                            Text(kInputName)
-                                .padding()
-                        }
-                        
-                        GroupBox(label: Text("Source: Connection")) {
-                            Picker("", selection: $midiInputConnection) {
-                                Text("None")
-                                    .tag(MIDI.IO.OutputEndpoint?.none)
-                                
-                                Text("----")
-                                
-                                ForEach(midiManager.endpoints.outputs) {
-                                    Text($0.getDisplayName ?? $0.name)
-                                        .tag(MIDI.IO.OutputEndpoint?.some($0))
-                                }
+                        Group {
+                            GroupBox(label: Text("Source: Virtual")) {
+                                Text("🎹 " + kInputName)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                             }
-                            .padding()
-                            .frame(maxWidth: 400)
+                            
+                            GroupBox(label: Text("Source: Connection")) {
+                                Picker("", selection: $midiInputConnection) {
+                                    Text("None")
+                                        .tag(MIDI.IO.OutputEndpoint?.none)
+                                    
+                                    VStack { Divider().padding(.leading) }
+                                    
+                                    ForEach(midiManager.endpoints.outputs) {
+                                        Text("🎹 " + ($0.getDisplayName ?? $0.name))
+                                            .tag(MIDI.IO.OutputEndpoint?.some($0))
+                                    }
+                                }
+                                .padding()
+                                .frame(maxWidth: 400)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                            }
                         }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     }
+                    .frame(height: 80)
                     
                     Text("MIDI Events received will be logged to the console in a debug build.")
                         .lineLimit(nil)
@@ -350,9 +355,11 @@ extension ContentView {
             }
             .frame(idealHeight: 100, maxHeight: 150, alignment: .center)
             
-            
             Text({
-                // this is a stupid SwiftUI workaround because we can't use .onChange{} in Catalina and didSet{} is not reliable on a @State var, so works fine for our purposes
+                // this is a stupid SwiftUI workaround because we
+                // can't use .onChange{} in Catalina and didSet{}
+                // is not reliable on a @State var, so this works
+                // fine for our purposes
                 let _ = midiInputConnection
                 
                 updateInputConnection()
