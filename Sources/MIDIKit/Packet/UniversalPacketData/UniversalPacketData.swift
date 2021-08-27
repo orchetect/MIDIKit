@@ -41,6 +41,14 @@ extension MIDI.Packet {
             
         }
         
+        /// Universal MIDI Packet
+        @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        @inline(__always) public init(_ eventPacket: MIDIEventPacket) {
+            
+            self = Self.packetUnwrapper(eventPacket)
+            
+        }
+        
     }
     
 }
@@ -48,8 +56,8 @@ extension MIDI.Packet {
 @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
 extension MIDI.Packet.UniversalPacketData {
     
-    @inline(__always) fileprivate
-    static let midiEventPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIEventPacket.words)!
+//    @inline(__always) fileprivate
+//    static let midiEventPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIEventPacket.words)!
     
     @inline(__always) fileprivate
     static func safePacketUnwrapper(
@@ -84,6 +92,48 @@ extension MIDI.Packet.UniversalPacketData {
             words: words,
             timeStamp: eventPacketPtr.pointee.timeStamp
         )
+        
+    }
+    
+    @inline(__always) fileprivate
+    static func packetUnwrapper(
+        _ eventPacket: MIDIEventPacket
+    ) -> MIDI.Packet.UniversalPacketData {
+        
+        var localEventPacket = eventPacket
+        
+        return withUnsafePointer(to: localEventPacket)
+        { unsafePtr -> MIDI.Packet.UniversalPacketData in
+            
+            let wordCollection = MIDIEventPacket.WordCollection(&localEventPacket)
+            
+            guard wordCollection.count > 0 else {
+                return MIDI.Packet.UniversalPacketData(
+                    words: [],
+                    timeStamp: localEventPacket.timeStamp
+                )
+            }
+            
+            guard wordCollection.count <= 64 else {
+                assertionFailure("Received MIDIEventPacket reporting \(wordCollection.count) words.")
+                return MIDI.Packet.UniversalPacketData(
+                    words: [],
+                    timeStamp: localEventPacket.timeStamp
+                )
+            }
+            
+            var words: [UInt32] = []
+            words.reserveCapacity(wordCollection.count)
+            
+            for word in wordCollection {
+                words.append(word)
+            }
+            
+            return MIDI.Packet.UniversalPacketData(
+                words: words,
+                timeStamp: localEventPacket.timeStamp
+            )
+        }
         
     }
     

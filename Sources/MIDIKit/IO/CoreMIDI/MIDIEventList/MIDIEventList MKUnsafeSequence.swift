@@ -24,21 +24,33 @@ extension MIDIEventList {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     public struct MKUnsafeSequence: Sequence {
         
-        public typealias Element = UnsafePointer<MIDIEventPacket>
+        public typealias Element = MIDIEventPacket
         
-        internal var pointers: [UnsafePointer<MIDIEventPacket>] = []
+        internal var packets: [MIDIEventPacket] = []
         
         public init(_ midiPacketListPtr: UnsafePointer<MIDIEventList>) {
             
-            CMIDIEventListIterate(midiPacketListPtr) {
-                guard let unwrappedPtr = $0 else { return }
-                pointers.append(unwrappedPtr)
+            guard midiPacketListPtr.pointee.numPackets > 0 else { return }
+            
+            var packet = midiPacketListPtr.pointee.packet
+            
+            // first packet
+            packets.append(midiPacketListPtr.pointee.packet)
+            
+            for _ in 0...midiPacketListPtr.pointee.numPackets {
+                MIDIEventPacketNext(&packet)
+                packets.append(midiPacketListPtr.pointee.packet)
             }
+            
+//            CMIDIEventListIterate(midiPacketListPtr) {
+//                guard let unwrappedPtr = $0 else { return }
+//                pointers.append(unwrappedPtr)
+//            }
             
         }
         
         public func makeIterator() -> Iterator {
-            Iterator(pointers)
+            Iterator(packets)
         }
         
         public struct Iterator: IteratorProtocol {
