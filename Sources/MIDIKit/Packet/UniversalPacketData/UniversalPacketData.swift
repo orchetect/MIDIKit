@@ -13,26 +13,24 @@ extension MIDI.Packet {
 //        /// Universal MIDI Packet Words
 //        public let words: [UInt32]
         
+        /// Flat array of raw bytes
+        @inline(__always) public var bytes: [MIDI.Byte]
+        
         /// CoreMIDI packet timestamp
         public let timeStamp: MIDITimeStamp
         
-        /// Flat array of raw bytes
-        @inline(__always) public var bytes: [MIDI.Byte]
+        @inline(__always) public init(bytes: [MIDI.Byte], timeStamp: MIDITimeStamp) {
+            
+            self.bytes = bytes
+            self.timeStamp = timeStamp
+            
+        }
         
         /// Universal MIDI Packet
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
         @inline(__always) public init(_ eventPacketPtr: UnsafeMutablePointer<MIDIEventPacket>) {
             
-            let wordCount = eventPacketPtr.pointee.wordCount
-            
-            // Access the raw memory instead of using the pointee.words tuple
-            let rawMIDIPacketDataPtr = UnsafeRawBufferPointer(
-                start: UnsafeRawPointer(eventPacketPtr),
-                count: Int(wordCount) * 4 // byte count == word count * UInt32 length (4 bytes)
-            )
-            
-            self.bytes = Array<UInt8>(rawMIDIPacketDataPtr)
-            self.timeStamp = eventPacketPtr.pointee.timeStamp
+            self = Self.safePacketUnwrapper(eventPacketPtr)
             
         }
         
@@ -40,11 +38,45 @@ extension MIDI.Packet {
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
         @inline(__always) public init(_ eventPacketPtr: UnsafePointer<MIDIEventPacket>) {
             
-            let ptr: UnsafeMutablePointer<MIDIEventPacket> = .init(mutating: eventPacketPtr)
+            let mutablePtr: UnsafeMutablePointer<MIDIEventPacket> = .init(mutating: eventPacketPtr)
             
-            self.init(ptr)
+            self = Self.safePacketUnwrapper(mutablePtr)
             
         }
+        
+    }
+    
+}
+
+@available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+extension MIDI.Packet.UniversalPacketData {
+    
+    @inline(__always) fileprivate
+    static let midiEventPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIEventPacket.words)!
+    
+    @inline(__always) fileprivate
+    static func safePacketUnwrapper(_ midiEventPacketPtr: UnsafeMutablePointer<MIDIEventPacket>) -> MIDI.Packet.UniversalPacketData {
+        
+        let packetDataCount = Int(midiEventPacketPtr.pointee.wordCount) * 4
+        
+        guard packetDataCount > 0 else {
+            return MIDI.Packet.UniversalPacketData(
+                bytes: [],
+                timeStamp: midiEventPacketPtr.pointee.timeStamp
+            )
+        }
+        
+        // Access the raw memory instead of using the .pointee
+        // This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or large/malformed MIDI event lists / packets arrive
+        let rawMIDIEventPacketWordsPtr = UnsafeRawBufferPointer(
+            start: UnsafeRawPointer(midiEventPacketPtr) + midiEventPacketDataOffset,
+            count: packetDataCount
+        )
+        
+        return MIDI.Packet.UniversalPacketData(
+            bytes: Array<MIDI.Byte>(rawMIDIEventPacketWordsPtr),
+            timeStamp: midiEventPacketPtr.pointee.timeStamp
+        )
         
     }
     
