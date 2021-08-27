@@ -18,9 +18,13 @@ void CMIDIPacketListIterate(const MIDIPacketList *midiPacketList,
     
     const MIDIPacket *midiPacket = &midiPacketList->packet[0];
     
-    for (UInt32 idx = 0; idx < midiPacketList->numPackets; idx++) {
-        closure(midiPacket);
+    // call closure for first packet
+    closure(midiPacket);
+    
+    // call closure for subsequent packets, if they exist
+    for (UInt32 idx = 1; idx < midiPacketList->numPackets; idx++) {
         midiPacket = MIDIPacketNext(midiPacket);
+        closure(midiPacket);
     }
     
 }
@@ -36,9 +40,13 @@ void CMIDIEventListIterate(const MIDIEventList *midiEventList,
     
     const MIDIEventPacket *midiEventPacket = &midiEventList->packet[0];
     
-    for (UInt32 idx = 0; idx < midiEventList->numPackets; idx++) {
-        closure(midiEventPacket);
+    // call closure for first packet
+    closure(midiEventPacket);
+    
+    // call closure for subsequent packets, if they exist
+    for (UInt32 idx = 1; idx < midiEventList->numPackets; idx++) {
         midiEventPacket = MIDIEventPacketNext(midiEventPacket);
+        closure(midiEventPacket);
     }
     
 }
