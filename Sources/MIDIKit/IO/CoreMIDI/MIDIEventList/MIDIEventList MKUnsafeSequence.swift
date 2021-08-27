@@ -41,7 +41,7 @@ extension MIDIEventList {
             
             // subsequent packets, if available
             for _ in 1..<numPackets {
-                MIDIEventPacketNext(&packet)
+                packet = MIDIEventPacketNext(&packet).pointee
                 packets.append(packet)
             }
             
