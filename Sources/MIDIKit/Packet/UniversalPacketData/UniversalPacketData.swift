@@ -26,6 +26,13 @@ extension MIDI.Packet {
             
         }
         
+        @inline(__always) public init(words: [UInt32], timeStamp: MIDITimeStamp) {
+            
+            self.bytes = wordsToBytes(words)
+            self.timeStamp = timeStamp
+            
+        }
+        
         /// Universal MIDI Packet
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
         @inline(__always) public init(_ eventPacketPtr: UnsafeMutablePointer<MIDIEventPacket>) {
@@ -55,27 +62,22 @@ extension MIDI.Packet.UniversalPacketData {
     static let midiEventPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIEventPacket.words)!
     
     @inline(__always) fileprivate
-    static func safePacketUnwrapper(_ midiEventPacketPtr: UnsafeMutablePointer<MIDIEventPacket>) -> MIDI.Packet.UniversalPacketData {
+    static func safePacketUnwrapper(
+        _ eventPacketPtr: UnsafeMutablePointer<MIDIEventPacket>
+    ) -> MIDI.Packet.UniversalPacketData {
         
-        let packetDataCount = Int(midiEventPacketPtr.pointee.wordCount) * 4
+        let wordCollection = MIDIEventPacket.WordCollection(eventPacketPtr)
         
-        guard packetDataCount > 0 else {
-            return MIDI.Packet.UniversalPacketData(
-                bytes: [],
-                timeStamp: midiEventPacketPtr.pointee.timeStamp
-            )
+        var words: [UInt32] = []
+        words.reserveCapacity(wordCollection.count)
+        
+        for word in wordCollection {
+            words.append(word)
         }
         
-        // Access the raw memory instead of using the .pointee
-        // This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or large/malformed MIDI event lists / packets arrive
-        let rawMIDIEventPacketWordsPtr = UnsafeRawBufferPointer(
-            start: UnsafeRawPointer(midiEventPacketPtr) + midiEventPacketDataOffset,
-            count: packetDataCount
-        )
-        
         return MIDI.Packet.UniversalPacketData(
-            bytes: Array<MIDI.Byte>(rawMIDIEventPacketWordsPtr),
-            timeStamp: midiEventPacketPtr.pointee.timeStamp
+            words: words,
+            timeStamp: eventPacketPtr.pointee.timeStamp
         )
         
     }
