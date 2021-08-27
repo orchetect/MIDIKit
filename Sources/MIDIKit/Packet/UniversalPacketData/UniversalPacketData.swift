@@ -60,17 +60,9 @@ extension MIDI.Packet {
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
         @inline(__always) public init(_ eventPacketPtr: UnsafePointer<MIDIEventPacket>) {
             
-            let wordCollection = eventPacketPtr.pointee.words
+            let ptr: UnsafeMutablePointer<MIDIEventPacket> = .init(mutating: eventPacketPtr)
             
-            var words: [UInt32] = []
-            words.reserveCapacity(wordCollection.count)
-            
-            for word in wordCollection {
-                words.append(word)
-            }
-            
-            self.words = words
-            self.timeStamp = eventPacketPtr.pointee.timeStamp
+            self.init(ptr)
             
         }
         
