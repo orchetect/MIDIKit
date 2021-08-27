@@ -37,12 +37,12 @@ extension MIDIEventList {
             var packet = midiPacketListPtr.pointee.packet
             
             // first packet
-            packets.append(midiPacketListPtr.pointee.packet)
+            packets.append(packet)
             
             // subsequent packets, if available
             for _ in 1..<numPackets {
                 MIDIEventPacketNext(&packet)
-                packets.append(midiPacketListPtr.pointee.packet)
+                packets.append(packet)
             }
             
         }
