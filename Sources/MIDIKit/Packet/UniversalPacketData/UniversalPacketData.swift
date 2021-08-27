@@ -35,14 +35,6 @@ extension MIDI.Packet {
         
         /// Universal MIDI Packet
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-        @inline(__always) public init(_ eventPacketPtr: UnsafePointer<MIDIEventPacket>) {
-            
-            self = Self.safePacketUnwrapper(eventPacketPtr)
-            
-        }
-        
-        /// Universal MIDI Packet
-        @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
         @inline(__always) public init(_ eventPacket: MIDIEventPacket) {
             
             self = Self.packetUnwrapper(eventPacket)
@@ -55,45 +47,6 @@ extension MIDI.Packet {
 
 @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
 extension MIDI.Packet.UniversalPacketData {
-    
-//    @inline(__always) fileprivate
-//    static let midiEventPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIEventPacket.words)!
-    
-    @inline(__always) fileprivate
-    static func safePacketUnwrapper(
-        _ eventPacketPtr: UnsafePointer<MIDIEventPacket>
-    ) -> MIDI.Packet.UniversalPacketData {
-        
-        let wordCollection = MIDIEventPacket.WordCollection(eventPacketPtr)
-        
-        guard wordCollection.count > 0 else {
-            return MIDI.Packet.UniversalPacketData(
-                words: [],
-                timeStamp: eventPacketPtr.pointee.timeStamp
-            )
-        }
-        
-        guard wordCollection.count <= 64 else {
-            assertionFailure("Received MIDIEventPacket reporting \(wordCollection.count) words.")
-            return MIDI.Packet.UniversalPacketData(
-                words: [],
-                timeStamp: eventPacketPtr.pointee.timeStamp
-            )
-        }
-        
-        var words: [UInt32] = []
-        words.reserveCapacity(wordCollection.count)
-        
-        for word in wordCollection {
-            words.append(word)
-        }
-        
-        return MIDI.Packet.UniversalPacketData(
-            words: words,
-            timeStamp: eventPacketPtr.pointee.timeStamp
-        )
-        
-    }
     
     @inline(__always) fileprivate
     static func packetUnwrapper(

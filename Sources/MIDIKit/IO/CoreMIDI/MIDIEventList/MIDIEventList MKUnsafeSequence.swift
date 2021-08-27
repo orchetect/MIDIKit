@@ -8,11 +8,11 @@ import CoreMIDI
 
 extension UnsafePointer where Pointee == MIDIEventList {
     
-    /// MIDIKit backwards-compatible implementation of CoreMIDI's `MIDIPacketList.UnsafeSequence`
+    /// MIDIKit sequence on `UnsafePointer<MIDIEventList>` to return `[MIDIEventPacket]`
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-    public func mkUnsafeSequence() -> MIDIEventList.MKUnsafeSequence {
+    public func mkSequence() -> MIDIEventList.MKSequence {
         
-        MIDIEventList.MKUnsafeSequence(self)
+        MIDIEventList.MKSequence(self)
         
     }
     
@@ -20,9 +20,9 @@ extension UnsafePointer where Pointee == MIDIEventList {
 
 extension MIDIEventList {
     
-    /// MIDIKit backwards-compatible implementation of CoreMIDI's `MIDIEventList.UnsafeSequence`
+    /// MIDIKit sequence on `UnsafePointer<MIDIEventList>` to return `[MIDIEventPacket]`
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-    public struct MKUnsafeSequence: Sequence {
+    public struct MKSequence: Sequence {
         
         public typealias Element = MIDIEventPacket
         
@@ -37,15 +37,11 @@ extension MIDIEventList {
             // first packet
             packets.append(midiPacketListPtr.pointee.packet)
             
-            for _ in 0...midiPacketListPtr.pointee.numPackets {
+            // subsequent packets, if available
+            for _ in 1..<midiPacketListPtr.pointee.numPackets {
                 MIDIEventPacketNext(&packet)
                 packets.append(midiPacketListPtr.pointee.packet)
             }
-            
-//            CMIDIEventListIterate(midiPacketListPtr) {
-//                guard let unwrappedPtr = $0 else { return }
-//                pointers.append(unwrappedPtr)
-//            }
             
         }
         
