@@ -68,6 +68,21 @@ extension MIDI.Packet.UniversalPacketData {
         
         let wordCollection = MIDIEventPacket.WordCollection(eventPacketPtr)
         
+        guard wordCollection.count > 0 else {
+            return MIDI.Packet.UniversalPacketData(
+                words: [],
+                timeStamp: eventPacketPtr.pointee.timeStamp
+            )
+        }
+        
+        guard wordCollection.count <= 64 else {
+            assertionFailure("Received MIDIEventPacket reporting \(wordCollection.count) words.")
+            return MIDI.Packet.UniversalPacketData(
+                words: [],
+                timeStamp: eventPacketPtr.pointee.timeStamp
+            )
+        }
+        
         var words: [UInt32] = []
         words.reserveCapacity(wordCollection.count)
         
