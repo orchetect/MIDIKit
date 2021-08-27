@@ -30,19 +30,10 @@ extension MIDIEventList {
         
         public init(_ midiPacketListPtr: UnsafePointer<MIDIEventList>) {
             
-            let numPackets = midiPacketListPtr.pointee.numPackets
-            
-            guard numPackets > 0 else { return }
-            
-            var packet = midiPacketListPtr.pointee.packet
-            
-            // first packet
-            packets.append(packet)
-            
-            // subsequent packets, if available
-            for _ in 1..<numPackets {
-                packet = MIDIEventPacketNext(&packet).pointee
-                packets.append(packet)
+            CMIDIEventListIterate(midiPacketListPtr) {
+                if let packet = $0?.pointee {
+                    packets.append(packet)
+                }
             }
             
         }
