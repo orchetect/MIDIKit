@@ -35,19 +35,9 @@ extension MIDI.Packet {
         
         /// Universal MIDI Packet
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-        @inline(__always) public init(_ eventPacketPtr: UnsafeMutablePointer<MIDIEventPacket>) {
-            
-            self = Self.safePacketUnwrapper(eventPacketPtr)
-            
-        }
-        
-        /// Universal MIDI Packet
-        @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
         @inline(__always) public init(_ eventPacketPtr: UnsafePointer<MIDIEventPacket>) {
             
-            let mutablePtr: UnsafeMutablePointer<MIDIEventPacket> = .init(mutating: eventPacketPtr)
-            
-            self = Self.safePacketUnwrapper(mutablePtr)
+            self = Self.safePacketUnwrapper(eventPacketPtr)
             
         }
         
@@ -63,7 +53,7 @@ extension MIDI.Packet.UniversalPacketData {
     
     @inline(__always) fileprivate
     static func safePacketUnwrapper(
-        _ eventPacketPtr: UnsafeMutablePointer<MIDIEventPacket>
+        _ eventPacketPtr: UnsafePointer<MIDIEventPacket>
     ) -> MIDI.Packet.UniversalPacketData {
         
         let wordCollection = MIDIEventPacket.WordCollection(eventPacketPtr)
