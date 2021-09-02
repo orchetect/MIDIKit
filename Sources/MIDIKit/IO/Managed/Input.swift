@@ -93,7 +93,9 @@ extension MIDI.IO.Input {
                 &newPortRef,
                 { [weak self] packetListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
-                    strongSelf.midiManager?.queue.async {
+                    
+                    // this must be sync and not async, otherwise the pointer gets freed before we can use it
+                    strongSelf.midiManager?.queue.sync {
                         strongSelf.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
                     }
                 }
@@ -112,10 +114,11 @@ extension MIDI.IO.Input {
                 &newPortRef,
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
-                    strongSelf.midiManager?.queue.async {
+                    
+                    // this must be sync and not async, otherwise the pointer gets freed before we can use it
+                    strongSelf.midiManager?.queue.sync {
                         strongSelf.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
                     }
-                    
                 }
             )
             .throwIfOSStatusErr()
