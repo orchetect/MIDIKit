@@ -114,7 +114,7 @@ extension MIDI.IO.OutputConnection {
 extension MIDI.IO.OutputConnection {
     
     /// Refresh the connection.
-    /// This is typically called after receiving a CoreMIDI notification that system port configuration has changed or endpoints were added/removed.
+    /// This is typically called after receiving a Core MIDI notification that system port configuration has changed or endpoints were added/removed.
     internal func refreshConnection(in manager: MIDI.IO.Manager) throws {
         
         guard inputCriteria

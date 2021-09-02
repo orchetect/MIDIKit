@@ -1,5 +1,5 @@
 //
-//  CoreMIDI Properties Set.swift
+//  Core MIDI Properties Set.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 

@@ -7,7 +7,7 @@ import CoreMIDI
 
 extension MIDI.Packet {
     
-    /// Clean consolidated data encapsulation of raw data from a CoreMIDI MIDI 2.0 `MIDIEventPacket` (Universal MIDI Packet).
+    /// Clean consolidated data encapsulation of raw data from a CoreMIDI `MIDIEventPacket` (MIDI 2.0 Universal MIDI Packet).
     public struct UniversalPacketData {
         
 //        /// Universal MIDI Packet Words
@@ -16,7 +16,7 @@ extension MIDI.Packet {
         /// Flat array of raw bytes
         @inline(__always) public var bytes: [MIDI.Byte]
         
-        /// CoreMIDI packet timestamp
+        /// Core MIDI packet timestamp
         public let timeStamp: MIDITimeStamp
         
         @inline(__always) public init(bytes: [MIDI.Byte], timeStamp: MIDITimeStamp) {

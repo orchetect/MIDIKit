@@ -10,7 +10,7 @@ public protocol MIDIIOObjectProtocol {
     /// Enum describing the abstracted object type.
     static var objectType: MIDI.IO.ObjectType { get }
     
-    /// The CoreMIDI object reference (integer)
+    /// The Core MIDI object reference (integer)
     var coreMIDIObjectRef: MIDIObjectRef { get }
     
     /// Name of the object
@@ -18,7 +18,7 @@ public protocol MIDIIOObjectProtocol {
     
     associatedtype UniqueID: MIDIIOUniqueIDProtocol
     
-    /// The unique ID for the CoreMIDI object
+    /// The unique ID for the Core MIDI object
     var uniqueID: UniqueID { get }
     
 }

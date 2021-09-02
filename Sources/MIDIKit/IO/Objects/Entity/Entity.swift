@@ -9,7 +9,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// A MIDI device, wrapping a CoreMIDI `MIDIEntityRef`.
+    /// A MIDI device, wrapping a Core MIDI `MIDIEntityRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     public struct Entity: MIDIIOObjectProtocol {
@@ -92,7 +92,7 @@ extension MIDI.IO.Entity {
 
 extension MIDI.IO.Entity {
     
-    /// Returns `true` if the object exists in the system by querying CoreMIDI.
+    /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
         
         device != nil

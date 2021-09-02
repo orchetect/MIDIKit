@@ -8,7 +8,7 @@ import CoreMIDI
 extension MIDI.IO {
     
     /// Internal use.
-    /// Assembles a single CoreMIDI `MIDIPacket` from a MIDI message byte array and wraps it in a CoreMIDI `MIDIPacketList`.
+    /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a Core MIDI `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
     @inlinable internal static func assemblePacketList(data: [MIDI.Byte]) throws -> UnsafeMutablePointer<MIDIPacketList> {
@@ -51,7 +51,7 @@ extension MIDI.IO {
     }
     
     /// Experimental.
-    /// Assembles an array of `Byte` arrays into CoreMIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
+    /// Assembles an array of `Byte` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
     @inlinable internal static func assemblePacketList(data: [[MIDI.Byte]]) throws -> UnsafeMutablePointer<MIDIPacketList> {

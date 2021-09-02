@@ -7,7 +7,7 @@ import CoreMIDI
 
 public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
     
-    /// CoreMIDI Port Ref
+    /// Core MIDI Port Ref
     var portRef: MIDIPortRef? { get }
     
     /// Send a raw MIDI message.
@@ -22,10 +22,10 @@ public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
     /// Send one or more MIDI Events.
     func send(events: [MIDI.Event]) throws
     
-    /// Send a CoreMIDI `MIDIPacketList`. (MIDI 1.0, using old CoreMIDI API).
+    /// Send a Core MIDI `MIDIPacketList`. (MIDI 1.0, using old Core MIDI API).
     func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws
     
-    /// Send a CoreMIDI `MIDIEventList`. (MIDI 1.0 and 2.0, using new CoreMIDI API).
+    /// Send a Core MIDI `MIDIEventList`. (MIDI 1.0 and 2.0, using new Core MIDI API).
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws
     

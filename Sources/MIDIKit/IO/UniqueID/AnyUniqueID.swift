@@ -10,7 +10,7 @@ extension MIDI.IO {
     /// Type-erased box for `MIDIIOUniqueIDProtocol`.
     ///
     /// MIDIKit Object Unique ID value type.
-    /// Analogous with CoreMIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
+    /// Analogous with Core MIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
     public struct AnyUniqueID: MIDIIOUniqueIDProtocol {
         
         public let coreMIDIUniqueID: MIDIUniqueID

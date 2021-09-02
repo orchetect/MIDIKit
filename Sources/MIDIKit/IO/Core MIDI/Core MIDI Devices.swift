@@ -1,5 +1,5 @@
 //
-//  CoreMIDI Devices.swift
+//  Core MIDI Devices.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 

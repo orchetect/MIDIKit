@@ -9,7 +9,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// A MIDI input endpoint in the system, wrapping a CoreMIDI `MIDIEndpointRef`.
+    /// A MIDI input endpoint in the system, wrapping a Core MIDI `MIDIEndpointRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     ///
@@ -63,7 +63,7 @@ extension MIDI.IO.InputEndpoint: Identifiable {
 
 extension MIDI.IO.InputEndpoint {
     
-    /// Returns `true` if the object exists in the system by querying CoreMIDI.
+    /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
         
         MIDI.IO.getSystemDestinationEndpoint(matching: uniqueID.coreMIDIUniqueID) != nil

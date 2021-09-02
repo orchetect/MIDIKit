@@ -7,7 +7,7 @@ import CoreMIDI
 
 /// MIDI I/O Receive Handler Protocol.
 ///
-/// For operating system backwards compatibility, both `MIDIReadBlock` (old CoreMIDI API) and `MIDIReceiveBlock` (new CoreMIDI API) must be handled.
+/// For operating system backwards compatibility, both `MIDIReadBlock` (old Core MIDI API) and `MIDIReceiveBlock` (new Core MIDI API) must be handled.
 public protocol MIDIIOReceiveHandlerProtocol {
     
     /// CoreMIDI `MIDIReadBlock` signature

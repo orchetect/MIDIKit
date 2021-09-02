@@ -9,7 +9,7 @@ import CoreMIDI
 
 public protocol MIDIIOUniqueIDProtocol {
     
-    /// CoreMIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
+    /// Core MIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
     var coreMIDIUniqueID: MIDIUniqueID { get }
     
     init(_ coreMIDIUniqueID: MIDIUniqueID)
