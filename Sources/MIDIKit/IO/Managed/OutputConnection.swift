@@ -10,9 +10,13 @@ extension MIDI.IO {
     
     /// A managed MIDI output connection created in the system by the `Manager`.
     /// This connects to an external input in the system and outputs MIDI events to it.
-    public class OutputConnection {
+    public class OutputConnection: MIDIIOManagedProtocol {
         
-        public weak var midiManager: MIDI.IO.Manager?
+        // MIDIIOManagedProtocol
+        public weak var midiManager: Manager?
+        
+        // MIDIIOManagedProtocol
+        public private(set) var apiVersion: APIVersion
         
         public var inputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>
         
@@ -22,9 +26,13 @@ extension MIDI.IO {
         
         public private(set) var isConnected = false
         
-        internal init(toInput: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>) {
+        internal init(
+            toInput: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>,
+            api: APIVersion = .bestForPlatform()
+        ) {
             
             self.inputCriteria = toInput
+            self.apiVersion = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             
         }
         

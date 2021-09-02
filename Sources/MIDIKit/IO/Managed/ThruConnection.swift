@@ -19,7 +19,13 @@ extension MIDI.IO {
     /// A managed MIDI thru connection created in the system by the `Manager`.
     ///
     /// CoreMIDI MIDI play-through connections can be non-persistent (client-owned, auto-disposed when `Manager` deinits) or persistent (maintained even after system reboots).
-    public class ThruConnection {
+    public class ThruConnection: MIDIIOManagedProtocol {
+        
+        // MIDIIOManagedProtocol
+        public weak var midiManager: Manager?
+        
+        // MIDIIOManagedProtocol
+        public private(set) var apiVersion: APIVersion
         
         public private(set) var thruConnectionRef: MIDIThruConnectionRef? = nil
         
@@ -39,7 +45,9 @@ extension MIDI.IO {
         internal init(outputs: [OutputEndpoint],
                       inputs: [InputEndpoint],
                       _ lifecycle: Lifecycle = .nonPersistent,
-                      params: MIDIThruConnectionParams? = nil) {
+                      params: MIDIThruConnectionParams? = nil,
+                      midiManager: MIDI.IO.Manager,
+                      api: APIVersion = .bestForPlatform()) {
             
             // truncate arrays to 8 members or less;
             // CoreMIDI thru connections can only have up to 8 outputs and 8 inputs
@@ -48,6 +56,8 @@ extension MIDI.IO {
             self.inputs = Array(inputs.prefix(8))
             self.lifecycle = lifecycle
             self.params = params
+            self.midiManager = midiManager
+            self.apiVersion = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             
         }
         

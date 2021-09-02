@@ -102,7 +102,8 @@ extension MIDI.IO.Manager {
                 outputs: outputs,
                 inputs: inputs,
                 lifecycle,
-                params: params
+                params: params,
+                midiManager: self
             )
             
             // if non-persistent, add to managed array

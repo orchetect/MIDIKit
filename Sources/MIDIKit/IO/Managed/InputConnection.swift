@@ -10,9 +10,13 @@ extension MIDI.IO {
     
     /// A managed MIDI input connection created in the system by the `Manager`.
     /// This connects to an external output in the system and subscribes to its MIDI events.
-    public class InputConnection {
+    public class InputConnection: MIDIIOManagedProtocol {
         
-        internal weak var midiManager: MIDI.IO.Manager?
+        // MIDIIOManagedProtocol
+        public weak var midiManager: Manager?
+        
+        // MIDIIOManagedProtocol
+        public private(set) var apiVersion: APIVersion
         
         public private(set) var outputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>
         
@@ -26,11 +30,13 @@ extension MIDI.IO {
         
         internal init(toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
                       receiveHandler: ReceiveHandler.Definition,
-                      midiManager: MIDI.IO.Manager) {
+                      midiManager: MIDI.IO.Manager,
+                      api: APIVersion = .bestForPlatform()) {
             
             self.outputCriteria = toOutput
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
+            self.apiVersion = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             
         }
         
@@ -75,23 +81,8 @@ extension MIDI.IO.InputConnection {
         
         // connection name must be unique, otherwise process might hang (?)
         
-        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *),
-           manager.coreMIDIVersion == .new
-        {
-            try MIDIInputPortCreateWithProtocol(
-                manager.clientRef,
-                UUID().uuidString as CFString,
-                ._1_0,
-                &newConnection,
-                { [weak self] eventListPtr, srcConnRefCon in
-                    guard let strongSelf = self else { return }
-                    strongSelf.midiManager?.queue.async {
-                        strongSelf.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
-                    }
-                }
-            )
-            .throwIfOSStatusErr()
-        } else {
+        switch apiVersion {
+        case .legacyCoreMIDI:
             // MIDIInputPortCreateWithBlock is deprecated after macOS 11 / iOS 14
             
             try MIDIInputPortCreateWithBlock(
@@ -106,6 +97,26 @@ extension MIDI.IO.InputConnection {
                 }
             )
             .throwIfOSStatusErr()
+            
+        case .newCoreMIDI:
+            guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
+                throw MIDI.IO.MIDIError.internalInconsistency("\(self) is not valid on this platform.")
+            }
+            
+            try MIDIInputPortCreateWithProtocol(
+                manager.clientRef,
+                UUID().uuidString as CFString,
+                ._1_0,
+                &newConnection,
+                { [weak self] eventListPtr, srcConnRefCon in
+                    guard let strongSelf = self else { return }
+                    strongSelf.midiManager?.queue.async {
+                        strongSelf.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+                    }
+                }
+            )
+            .throwIfOSStatusErr()
+            
         }
         
         try MIDIPortConnectSource(
@@ -182,5 +193,11 @@ extension MIDI.IO.InputConnection: CustomStringConvertible {
         return "InputConnection(criteria: \(outputCriteria), outputEndpointRef: \(outputEndpointRefString) \(outputEndpointName), inputPortRef: \(inputPortRefString), isConnected: \(isConnected))"
         
     }
+    
+}
+
+extension MIDI.IO.InputConnection: MIDIIOReceivesMIDIMessagesProtocol {
+    
+    // empty
     
 }
