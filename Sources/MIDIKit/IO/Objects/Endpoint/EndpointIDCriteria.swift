@@ -103,10 +103,10 @@ extension MIDI.IO.EndpointIDCriteria: CustomStringConvertible {
         
         switch self {
         case .name(let endpointName):
-            return "EndpointName: \(endpointName.otcQuoted)"
+            return "EndpointName: \(endpointName.quoted)"
             
         case .displayName(let displayName):
-            return "EndpointDisplayName: \(displayName.otcQuoted))"
+            return "EndpointDisplayName: \(displayName.quoted))"
             
         case .uniqueID(let uID):
             return "UniqueID: \(uID)"

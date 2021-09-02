@@ -84,7 +84,7 @@ extension MIDI.IO.InputEndpoint {
 extension MIDI.IO.InputEndpoint: CustomDebugStringConvertible {
     
     public var debugDescription: String {
-        "InputEndpoint(name: \(name.otcQuoted), uniqueID: \(uniqueID), exists: \(exists)"
+        "InputEndpoint(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists)"
     }
     
 }

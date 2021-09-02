@@ -104,7 +104,7 @@ extension MIDI.IO.Entity {
 extension MIDI.IO.Entity: CustomDebugStringConvertible {
     
     public var debugDescription: String {
-        "Entity(name: \(name.otcQuoted), uniqueID: \(uniqueID), exists: \(exists)"
+        "Entity(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists)"
     }
     
 }

@@ -148,7 +148,7 @@ extension MIDI.IO.Output: CustomStringConvertible {
             uniqueIDString = "\(unwrappedUniqueID)"
         }
         
-        return "Output(name: \(endpointName.otcQuoted), uniqueID: \(uniqueIDString))"
+        return "Output(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"
         
     }
     
