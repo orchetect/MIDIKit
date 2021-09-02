@@ -47,28 +47,29 @@ extension MIDI.IO.APIVersion {
     /// Returns true if API version can be used on the current platform (operating system).
     public var isValidOnCurrentPlatform: Bool {
         
-        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
-            return true
+        switch self {
+        case .legacyCoreMIDI:
+            #if os(macOS)
+                if #available(macOS 12, *) { return false }
+                return true
+            #elseif os(iOS)
+                if #available(iOS 15, *) { return false }
+                return true
+            #elseif os(tvOS) || os(watchOS)
+                // only new API is supported on tvOS and watchOS
+                return false
+            #else
+                // future or unknown/unsupported platform
+                return false
+            #endif
+            
+        case .newCoreMIDI:
+            if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
+                return true
+            }
+            
+            return false
         }
-        
-        #if os(macOS)
-        
-        return true
-        
-        #elseif os(iOS)
-        
-        return true
-        
-        #elseif os(tvOS) || os(watchOS)
-        
-        // only new API is supported on tvOS and watchOS
-        return false
-        
-        #else // future or unknown/unsupported platform
-        
-        return false
-        
-        #endif
         
     }
     
