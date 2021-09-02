@@ -22,7 +22,7 @@ void CMIDIPacketListIterate(const MIDIPacketList *midiPacketList,
     closure(midiPacket);
     
     // call closure for subsequent packets, if they exist
-    for (UInt32 idx = 1; idx < midiPacketList->numPackets; idx++) {
+    for (unsigned idx = 1; idx < midiPacketList->numPackets; idx++) {
         midiPacket = MIDIPacketNext(midiPacket);
         closure(midiPacket);
     }
@@ -44,7 +44,7 @@ void CMIDIEventListIterate(const MIDIEventList *midiEventList,
     closure(midiEventPacket);
     
     // call closure for subsequent packets, if they exist
-    for (UInt32 idx = 1; idx < midiEventList->numPackets; idx++) {
+    for (unsigned idx = 1; idx < midiEventList->numPackets; idx++) {
         midiEventPacket = MIDIEventPacketNext(midiEventPacket);
         closure(midiEventPacket);
     }
