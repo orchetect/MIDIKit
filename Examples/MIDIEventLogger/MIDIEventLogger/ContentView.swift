@@ -50,14 +50,14 @@ struct ContentView: View {
             try midiManager.addInput(
                 name: kInputName,
                 tag: kInputTag,
-                uniqueID: .none,
+                uniqueID: .userDefaultsManaged(key: kInputTag),
                 receiveHandler: .eventsLogging()
             )
             
             try midiManager.addOutput(
                 name: kOutputName,
                 tag: kOutputTag,
-                uniqueID: .none
+                uniqueID: .userDefaultsManaged(key: kOutputTag)
             )
         } catch {
             Log.error(error)
@@ -87,7 +87,7 @@ struct ContentView: View {
         .padding([.leading, .trailing])
         
         .onAppear {
-            // wait a short delay in order to give CoreMIDI time
+            // wait a short delay in order to give Core MIDI time
             // to set up the virtual endpoints we created in the view's init()
             DispatchQueue.main
                 .asyncAfter(deadline: DispatchTime.now()

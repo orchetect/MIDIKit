@@ -26,7 +26,7 @@ extension MIDI.IO.Manager {
         
         case ioError(device: MIDIDeviceRef, error: MIDI.IO.MIDIError)
         
-        /// Typically will never happen unless Apple adds additional cases to CoreMIDI's `MIDINotificationMessageID` enum.
+        /// Typically will never happen unless Apple adds additional cases to Core MIDI's `MIDINotificationMessageID` enum.
         case other(messageIDRawValue: Int32)
         
     }

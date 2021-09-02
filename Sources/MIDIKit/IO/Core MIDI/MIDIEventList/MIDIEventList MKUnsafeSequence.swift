@@ -1,42 +1,45 @@
 //
-//  MIDIPacketList MKUnsafeSequence.swift
+//  MIDIEventList MKUnsafeSequence.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import CoreMIDI
 @_implementationOnly import MIDIKitC
 
-extension UnsafePointer where Pointee == MIDIPacketList {
+extension UnsafePointer where Pointee == MIDIEventList {
     
-    /// MIDIKit backwards-compatible implementation of CoreMIDI's `MIDIPacketList.UnsafeSequence`
-    public func mkUnsafeSequence() -> MIDIPacketList.MKUnsafeSequence {
+    /// MIDIKit sequence on `UnsafePointer<MIDIEventList>` to return `[MIDIEventPacket]`
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+    public func mkSequence() -> MIDIEventList.MKSequence {
         
-        MIDIPacketList.MKUnsafeSequence(self)
+        MIDIEventList.MKSequence(self)
         
     }
     
 }
 
-extension MIDIPacketList {
+extension MIDIEventList {
     
-    /// MIDIKit backwards-compatible implementation of CoreMIDI's `MIDIPacketList.UnsafeSequence`
-    public struct MKUnsafeSequence: Sequence {
+    /// MIDIKit sequence on `UnsafePointer<MIDIEventList>` to return `[MIDIEventPacket]`
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+    public struct MKSequence: Sequence {
         
-        public typealias Element = UnsafePointer<MIDIPacket>
+        public typealias Element = MIDIEventPacket
         
-        internal var pointers: [UnsafePointer<MIDIPacket>] = []
+        internal var packets: [MIDIEventPacket] = []
         
-        public init(_ midiPacketListPtr: UnsafePointer<MIDIPacketList>) {
+        public init(_ midiPacketListPtr: UnsafePointer<MIDIEventList>) {
             
-            CMIDIPacketListIterate(midiPacketListPtr) {
-                guard let unwrappedPtr = $0 else { return }
-                pointers.append(unwrappedPtr)
+            CMIDIEventListIterate(midiPacketListPtr) {
+                if let packet = $0?.pointee {
+                    packets.append(packet)
+                }
             }
             
         }
         
         public func makeIterator() -> Iterator {
-            Iterator(pointers)
+            Iterator(packets)
         }
         
         public struct Iterator: IteratorProtocol {

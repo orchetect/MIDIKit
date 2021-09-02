@@ -8,7 +8,7 @@ import CoreMIDI
 
 extension MIDI.IO.Manager {
     
-    /// Starts the manager and registers itself with the CoreMIDI subsystem.
+    /// Starts the manager and registers itself with the Core MIDI subsystem.
     /// Call this method once after initializing a new instance.
     /// Subsequent calls will not have any effect.
     /// - Throws: `MIDI.IO.MIDIError.osStatus`

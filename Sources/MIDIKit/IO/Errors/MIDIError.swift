@@ -22,7 +22,7 @@ extension MIDI.IO {
         
         case readError(_ verboseError: String)
         
-        // CoreMIDI.OSStatus
+        // Core MIDI.OSStatus
         
         case osStatus(MIDI.IO.MIDIOSStatus)
         
@@ -32,7 +32,7 @@ extension MIDI.IO {
 
 extension MIDI.IO.MIDIError {
     
-    /// Convenience to return a case of `osStatus` with its associated `MIDI.IO.MIDIOSStatus` formed from a raw CoreMIDI `OSStatus` (Int32) integer value.
+    /// Convenience to return a case of `osStatus` with its associated `MIDI.IO.MIDIOSStatus` formed from a raw Core MIDI `OSStatus` (Int32) integer value.
     public static func osStatus(_ rawValue: OSStatus) -> Self {
         
         .osStatus(.init(rawValue: rawValue))

@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-// Apple CoreMIDI play-through connection documentation:
+// Apple Core MIDI play-through connection documentation:
 // https://developer.apple.com/documentation/coremidi/midi_thru_connection
 //
 // Thru connections are observable in:
@@ -18,8 +18,14 @@ extension MIDI.IO {
     
     /// A managed MIDI thru connection created in the system by the `Manager`.
     ///
-    /// CoreMIDI MIDI play-through connections can be non-persistent (client-owned, auto-disposed when `Manager` deinits) or persistent (maintained even after system reboots).
-    public class ThruConnection {
+    /// Core MIDI play-through connections can be non-persistent (client-owned, auto-disposed when `Manager` deinits) or persistent (maintained even after system reboots).
+    public class ThruConnection: MIDIIOManagedProtocol {
+        
+        // MIDIIOManagedProtocol
+        public weak var midiManager: Manager?
+        
+        // MIDIIOManagedProtocol
+        public private(set) var apiVersion: APIVersion
         
         public private(set) var thruConnectionRef: MIDIThruConnectionRef? = nil
         
@@ -39,15 +45,19 @@ extension MIDI.IO {
         internal init(outputs: [OutputEndpoint],
                       inputs: [InputEndpoint],
                       _ lifecycle: Lifecycle = .nonPersistent,
-                      params: MIDIThruConnectionParams? = nil) {
+                      params: MIDIThruConnectionParams? = nil,
+                      midiManager: MIDI.IO.Manager,
+                      api: APIVersion = .bestForPlatform()) {
             
             // truncate arrays to 8 members or less;
-            // CoreMIDI thru connections can only have up to 8 outputs and 8 inputs
+            // Core MIDI thru connections can only have up to 8 outputs and 8 inputs
             
             self.outputs = Array(outputs.prefix(8))
             self.inputs = Array(inputs.prefix(8))
             self.lifecycle = lifecycle
             self.params = params
+            self.midiManager = midiManager
+            self.apiVersion = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             
         }
         
@@ -152,7 +162,7 @@ extension MIDI.IO.ThruConnection {
         switch cfPersistentOwnerID {
         case nil:
             // non-persistent thru connection
-            // there is a bug in CoreMIDI's Swift bridging whereby passing nil into MIDIThruConnectionCreate fails to create a non-persistent thru connection and actually creates a persistent thru connection, despite what the CoreMIDI documentation states.
+            // there is a bug in Core MIDI's Swift bridging whereby passing nil into MIDIThruConnectionCreate fails to create a non-persistent thru connection and actually creates a persistent thru connection, despite what the Core MIDI documentation states.
             // This is a C function that wraps this method to accomplish this instead.
             try CMIDIThruConnectionCreateNonPersistent(
                 paramsData,

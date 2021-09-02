@@ -8,7 +8,7 @@ import CoreMIDI
 extension MIDI.IO.InputEndpoint {
     
     /// MIDIKit Object Unique ID value type.
-    /// Analogous with CoreMIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
+    /// Analogous with Core MIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
     public struct UniqueID: MIDIIOEndpointUniqueIDProtocol {
         
         public let coreMIDIUniqueID: MIDIUniqueID

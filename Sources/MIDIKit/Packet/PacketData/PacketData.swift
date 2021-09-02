@@ -7,12 +7,12 @@ import CoreMIDI
 
 extension MIDI.Packet {
     
-    /// Clean consolidated data encapsulation of raw data from a CoreMIDI MIDI 1.0 `MIDIPacket`.
+    /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIPacket` (MIDI 1.0).
     public struct PacketData {
         
         let bytes: [MIDI.Byte]
         
-        /// CoreMIDI packet timestamp
+        /// Core MIDI packet timestamp
         let timeStamp: MIDITimeStamp
         
         @inline(__always) public init(bytes: [MIDI.Byte], timeStamp: MIDITimeStamp) {

@@ -9,7 +9,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// A MIDI device, wrapping a CoreMIDI `MIDIDeviceRef`.
+    /// A MIDI device, wrapping a Core MIDI `MIDIDeviceRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     ///
@@ -79,7 +79,7 @@ extension MIDI.IO.Device {
 
 extension MIDI.IO.Device {
     
-    /// Returns `true` if the object exists in the system by querying CoreMIDI.
+    /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
         
         MIDI.IO.getSystemDevices
@@ -92,7 +92,7 @@ extension MIDI.IO.Device {
 extension MIDI.IO.Device: CustomDebugStringConvertible {
     
     public var debugDescription: String {
-        "Device(name: \(name.otcQuoted), uniqueID: \(uniqueID), exists: \(exists)"
+        "Device(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists)"
     }
     
 }

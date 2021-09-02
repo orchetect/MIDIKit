@@ -9,9 +9,13 @@ import CoreMIDI
 extension MIDI.IO {
     
     /// A managed virtual MIDI input endpoint created in the system by the `Manager`.
-    public class Input {
+    public class Input: MIDIIOManagedProtocol {
         
-        internal weak var midiManager: MIDI.IO.Manager?
+        // MIDIIOManagedProtocol
+        public weak var midiManager: Manager?
+        
+        // MIDIIOManagedProtocol
+        public private(set) var apiVersion: APIVersion
         
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
@@ -26,12 +30,14 @@ extension MIDI.IO {
         internal init(name: String,
                       uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil,
                       receiveHandler: ReceiveHandler.Definition,
-                      midiManager: MIDI.IO.Manager) {
+                      midiManager: MIDI.IO.Manager,
+                      api: APIVersion = .bestForPlatform()) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
+            self.apiVersion = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             
         }
         
@@ -77,24 +83,8 @@ extension MIDI.IO.Input {
         
         var newPortRef = MIDIPortRef()
         
-        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *),
-           manager.coreMIDIVersion == .new
-        {
-            try MIDIDestinationCreateWithProtocol(
-                manager.clientRef,
-                endpointName as CFString,
-                ._1_0,
-                &newPortRef,
-                { [weak self] eventListPtr, srcConnRefCon in
-                    guard let strongSelf = self else { return }
-                    strongSelf.midiManager?.queue.async {
-                        strongSelf.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
-                    }
-                    
-                }
-            )
-            .throwIfOSStatusErr()
-        } else {
+        switch apiVersion {
+        case .legacyCoreMIDI:
             // MIDIDestinationCreateWithBlock is deprecated after macOS 11 / iOS 14
             
             try MIDIDestinationCreateWithBlock(
@@ -103,12 +93,36 @@ extension MIDI.IO.Input {
                 &newPortRef,
                 { [weak self] packetListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
-                    strongSelf.midiManager?.queue.async {
+                    
+                    // this must be sync and not async, otherwise the pointer gets freed before we can use it
+                    strongSelf.midiManager?.queue.sync {
                         strongSelf.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
                     }
                 }
             )
             .throwIfOSStatusErr()
+            
+        case .newCoreMIDI:
+            guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
+                throw MIDI.IO.MIDIError.internalInconsistency("\(self) is not valid on this platform.")
+            }
+            
+            try MIDIDestinationCreateWithProtocol(
+                manager.clientRef,
+                endpointName as CFString,
+                ._1_0,
+                &newPortRef,
+                { [weak self] eventListPtr, srcConnRefCon in
+                    guard let strongSelf = self else { return }
+                    
+                    // this must be sync and not async, otherwise the pointer gets freed before we can use it
+                    strongSelf.midiManager?.queue.sync {
+                        strongSelf.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+                    }
+                }
+            )
+            .throwIfOSStatusErr()
+            
         }
         
         portRef = newPortRef
@@ -154,8 +168,14 @@ extension MIDI.IO.Input: CustomStringConvertible {
             uniqueIDString = "\(unwrappedUniqueID)"
         }
         
-        return "Input(name: \(endpointName.otcQuoted), uniqueID: \(uniqueIDString))"
+        return "Input(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"
         
     }
+    
+}
+
+extension MIDI.IO.Output: MIDIIOReceivesMIDIMessagesProtocol {
+    
+    // empty
     
 }

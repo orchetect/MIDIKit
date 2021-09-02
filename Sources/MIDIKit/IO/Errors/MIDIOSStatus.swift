@@ -96,7 +96,7 @@ extension MIDI.IO {
 
 extension MIDI.IO.MIDIOSStatus {
     
-    /// Returns the corresponding CoreMIDI OSStatus raw value.
+    /// Returns the corresponding Core MIDI `OSStatus` raw value.
     ///
     /// Core MIDI headers note: "These are the OSStatus error constants that are unique to Core MIDI. Note that Core MIDI functions may return other codes that are not listed here."
     public var rawValue: OSStatus {
@@ -118,14 +118,14 @@ extension MIDI.IO.MIDIOSStatus {
         case .iDNotUnique        : return kMIDIIDNotUnique       // -10843
         case .notPermitted       : return kMIDINotPermitted      // -10844
         case .unknownError       : return kMIDIUnknownError      // -10845
-        case .ioError            : return 7 // no CoreMIDI constant exists
-        case .internalError      : return -50 // no CoreMIDI constant exists
+        case .ioError            : return 7 // no Core MIDI constant exists
+        case .internalError      : return -50 // no Core MIDI constant exists
         case .other(let val)     : return val
         }
         
     }
     
-    /// Initializes from the corresponding CoreMIDI OSStatus raw value.
+    /// Initializes from the corresponding Core MIDI `OSStatus` raw value.
     public init(rawValue: OSStatus) {
         
         switch rawValue {

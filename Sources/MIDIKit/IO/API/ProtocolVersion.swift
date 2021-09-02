@@ -3,11 +3,11 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI {
+extension MIDI.IO {
     
     #warning("> this is currently unused")
     
-    /// Enum describing which underlying CoreMIDI API is being used internally.
+    /// MIDI protocol version.
     public enum ProtocolVersion {
         
         /// MIDI 1.0

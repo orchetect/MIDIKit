@@ -9,7 +9,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// A MIDI output endpoint in the system, wrapping a CoreMIDI `MIDIEndpointRef`.
+    /// A MIDI output endpoint in the system, wrapping a Core MIDI `MIDIEndpointRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     ///
@@ -63,7 +63,7 @@ extension MIDI.IO.OutputEndpoint: Identifiable {
 
 extension MIDI.IO.OutputEndpoint {
     
-    /// Returns `true` if the object exists in the system by querying CoreMIDI.
+    /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
         
         MIDI.IO.getSystemSourceEndpoint(matching: uniqueID.coreMIDIUniqueID) != nil
@@ -84,7 +84,7 @@ extension MIDI.IO.OutputEndpoint {
 extension MIDI.IO.OutputEndpoint: CustomDebugStringConvertible {
     
     public var debugDescription: String {
-        "OutputEndpoint(name: \(name.otcQuoted), uniqueID: \(uniqueID), exists: \(exists)"
+        "OutputEndpoint(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists)"
     }
     
 }

@@ -7,7 +7,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// Connection Manager wrapper for CoreMIDI.
+    /// Connection Manager wrapper for Core MIDI.
     ///
     /// One `Manager` instance stored in a global lifecycle context can manage multiple MIDI ports and connections, and is usually sufficient for all of an application's MIDI needs.
     public class Manager: NSObject {
@@ -26,16 +26,19 @@ extension MIDI.IO {
         /// MIDI Manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
         public internal(set) var manufacturer: String = ""
         
-        /// Which underlying CoreMIDI API is being used internally.
-        public let coreMIDIVersion: MIDI.CoreMIDIVersion = {
-            
-            if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
-                return .new
-            } else {
-                return .legacy
+        /// Preferred underlying Core MIDI API to use as default when creating new managed endpoints.
+        ///
+        /// The preferred API will be used where possible, unless operating system requirements force the use of a specific.
+        ///
+        /// - Note: Currently, legacy API is recommended as it is more stable. (New API is experimental due to bugs in Core MIDI itself, until workarounds or resolutions can be found.)
+        public var preferredAPI: APIVersion {
+            didSet {
+                // prevent setting of an invalid API
+                if !preferredAPI.isValidOnCurrentPlatform {
+                    preferredAPI = .bestForPlatform()
+                }
             }
-            
-        }()
+        }
         
         /// Dictionary of MIDI input connections managed by this instance.
         public internal(set) var managedInputConnections: [String : InputConnection] = [:]
@@ -83,10 +86,10 @@ extension MIDI.IO {
         
         // MARK: - Init
         
-        /// Initialize the MIDI manager (and CoreMIDI client).
+        /// Initialize the MIDI manager (and Core MIDI client).
         ///
         /// - Parameters:
-        ///   - clientName: Name identifying this instance, used as CoreMIDI client ID. This is internal and not visible to the end-user.
+        ///   - clientName: Name identifying this instance, used as Core MIDI client ID. This is internal and not visible to the end-user.
         ///   - model: The name of your software, which will be visible to the end-user in ports created by the manager.
         ///   - manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
         ///   - notificationHandler: Optionally supply a callback handler for MIDI system notifications.
@@ -98,8 +101,14 @@ extension MIDI.IO {
                                    _ manager: Manager) -> Void)? = nil
         ) {
             
+            // API version
+            // Currently, legacy API is recommended as it is more stable. (New API is experimental due to bugs in Core MIDI itself, until workarounds or resolutions can be found.)
+            // So we will default to legacy here if possible.
+            preferredAPI = APIVersion.legacyCoreMIDI.isValidOnCurrentPlatform
+            ? .legacyCoreMIDI : .bestForPlatform()
+            
             // set up dedicated manager queue
-            var clientNameForQueue = clientName.otcOnlyAlphanumerics
+            var clientNameForQueue = clientName.onlyAlphanumerics
             if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
             let queueName = (Bundle.main.bundleIdentifier ?? "unknown") + ".midiManager." + clientNameForQueue
             queue = DispatchQueue(label: queueName,

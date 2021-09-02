@@ -1,5 +1,5 @@
 //
-//  CoreMIDI Properties Get.swift
+//  Core MIDI Properties Get.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -9,7 +9,7 @@ extension MIDI.IO {
     
     // MARK: - Property Readers
     
-    /// Retrieves the entire properties dictionary as the CoreMIDI-native `CFPropertyList`.
+    /// Retrieves the entire properties dictionary as the Core MIDI-native `CFPropertyList`.
     ///
     /// - Parameter deep: Returns nested results for all children if `True`.
     /// - Throws: `MIDI.IO.MIDIError`
@@ -83,7 +83,7 @@ extension MIDI.IO {
         guard let unwrappedVal = val?.takeRetainedValue() else {
             val?.release()
             throw MIDI.IO.MIDIError.readError(
-                "Got nil while reading MIDIEndpointRef property value \((forProperty as String).otcQuoted)"
+                "Got nil while reading MIDIEndpointRef property value \((forProperty as String).quoted)"
             )
         }
         
@@ -514,7 +514,7 @@ extension MIDI.IO {
     //    / / Entity
     //   / / / Endpoint
     //  / / / /
-    // *|D|E|E|   CoreMIDI Constant                        value type
+    // *|D|E|E|   Core MIDI Constant                       value type
     // -|-|-|-|------------------------------------------- ----------
     //  | | | | Identification:
     // *|•|•|•|   kMIDIPropertyName                        string

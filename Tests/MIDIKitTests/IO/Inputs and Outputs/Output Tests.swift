@@ -55,7 +55,7 @@ final class InputsAndOutputs_Output_Tests: XCTestCase {
 		// send a midi message
 		
 		XCTAssertNotNil(
-            _ = try? manager.managedOutputs[tag1]!.send(rawMessage: [0xFF], api: .legacy)
+            _ = try? manager.managedOutputs[tag1]!.send(rawMessage: [0xFF])
 		)
 		
 		// unique ID collision

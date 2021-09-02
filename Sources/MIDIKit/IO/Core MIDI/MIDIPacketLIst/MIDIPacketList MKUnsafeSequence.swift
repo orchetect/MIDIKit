@@ -1,36 +1,34 @@
 //
-//  MIDIEventList MKUnsafeSequence.swift
+//  MIDIPacketList MKUnsafeSequence.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 import CoreMIDI
 @_implementationOnly import MIDIKitC
 
-extension UnsafePointer where Pointee == MIDIEventList {
+extension UnsafePointer where Pointee == MIDIPacketList {
     
-    /// MIDIKit backwards-compatible implementation of CoreMIDI's `MIDIPacketList.UnsafeSequence`
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-    public func mkUnsafeSequence() -> MIDIEventList.MKUnsafeSequence {
+    /// MIDIKit backwards-compatible implementation of Core MIDI's `MIDIPacketList.UnsafeSequence`
+    public func mkUnsafeSequence() -> MIDIPacketList.MKUnsafeSequence {
         
-        MIDIEventList.MKUnsafeSequence(self)
+        MIDIPacketList.MKUnsafeSequence(self)
         
     }
     
 }
 
-extension MIDIEventList {
+extension MIDIPacketList {
     
-    /// MIDIKit backwards-compatible implementation of CoreMIDI's `MIDIEventList.UnsafeSequence`
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+    /// MIDIKit backwards-compatible implementation of Core MIDI's `MIDIPacketList.UnsafeSequence`
     public struct MKUnsafeSequence: Sequence {
         
-        public typealias Element = UnsafePointer<MIDIEventPacket>
+        public typealias Element = UnsafePointer<MIDIPacket>
         
-        internal var pointers: [UnsafePointer<MIDIEventPacket>] = []
+        internal var pointers: [UnsafePointer<MIDIPacket>] = []
         
-        public init(_ midiPacketListPtr: UnsafePointer<MIDIEventList>) {
+        public init(_ midiPacketListPtr: UnsafePointer<MIDIPacketList>) {
             
-            CMIDIEventListIterate(midiPacketListPtr) {
+            CMIDIPacketListIterate(midiPacketListPtr) {
                 guard let unwrappedPtr = $0 else { return }
                 pointers.append(unwrappedPtr)
             }

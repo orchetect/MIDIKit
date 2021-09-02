@@ -46,7 +46,7 @@ class AnyEndpoint_Tests: XCTestCase {
                               tag: kOutputTag,
                               uniqueID: .none)
         
-        // have to give CoreMIDI a bit of time to create the ports (async)
+        // have to give Core MIDI a bit of time to create the ports (async)
         XCTWait(sec: 1.0)
         
         // input

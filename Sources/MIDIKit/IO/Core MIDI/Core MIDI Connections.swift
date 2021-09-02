@@ -1,5 +1,5 @@
 //
-//  CoreMIDI Connections.swift
+//  Core MIDI Connections.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -7,7 +7,7 @@ import CoreMIDI
 
 extension MIDI.IO {
     
-    /// Queries CoreMIDI for existing persistent play-thru connections stored in the system matching the specified persistent owner ID.
+    /// Queries Core MIDI for existing persistent play-thru connections stored in the system matching the specified persistent owner ID.
     ///
     /// To delete them all, see sister function `removeAllSystemThruConnectionsPersistentEntries(:)`.
     ///
@@ -52,7 +52,7 @@ extension MIDI.IO {
         
     }
     
-    /// Deletes all system-held CoreMIDI MIDI play-thru connections matching an owner ID.
+    /// Deletes all system-held Core MIDI MIDI play-thru connections matching an owner ID.
     ///
     /// - Parameter persistentOwnerID: reverse-DNS domain that was used when the connection was first made
     ///

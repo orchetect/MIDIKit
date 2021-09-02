@@ -17,10 +17,7 @@ extension ContentView {
         
         GroupBox(label: Text("MIDI Subsystem Status")) {
             
-            Text("Using "
-                 + (midiManager.coreMIDIVersion == .legacy ? "legacy" : "new")
-                 + " CoreMIDI API"
-            )
+            Text("Using " + midiManager.preferredAPI.description)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             
         }
@@ -51,7 +48,7 @@ extension ContentView {
                     }
                 }
                 .frame(maxWidth: 200)
-                .disabled(midiManager.coreMIDIVersion == .legacy)
+                .disabled(midiManager.preferredAPI == .legacyCoreMIDI)
                 
                 Spacer()
                     .frame(height: 10)
