@@ -50,14 +50,14 @@ struct ContentView: View {
             try midiManager.addInput(
                 name: kInputName,
                 tag: kInputTag,
-                uniqueID: .none,
+                uniqueID: .userDefaultsManaged(key: kInputTag),
                 receiveHandler: .eventsLogging()
             )
             
             try midiManager.addOutput(
                 name: kOutputName,
                 tag: kOutputTag,
-                uniqueID: .none
+                uniqueID: .userDefaultsManaged(key: kOutputTag)
             )
         } catch {
             Log.error(error)

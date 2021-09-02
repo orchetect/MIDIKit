@@ -17,8 +17,7 @@ extension ContentView {
         
         GroupBox(label: Text("MIDI Subsystem Status")) {
             
-            Text("Using \(midiManager.preferredAPI)"
-            )
+            Text("Using " + midiManager.preferredAPI.description)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             
         }
