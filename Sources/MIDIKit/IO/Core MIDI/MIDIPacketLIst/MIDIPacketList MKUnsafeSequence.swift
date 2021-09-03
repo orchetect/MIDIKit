@@ -9,7 +9,7 @@ import CoreMIDI
 extension UnsafePointer where Pointee == MIDIPacketList {
     
     /// MIDIKit backwards-compatible implementation of Core MIDI's `MIDIPacketList.UnsafeSequence`
-    public func mkUnsafeSequence() -> MIDIPacketList.MKUnsafeSequence {
+    internal func mkUnsafeSequence() -> MIDIPacketList.MKUnsafeSequence {
         
         MIDIPacketList.MKUnsafeSequence(self)
         
@@ -20,7 +20,7 @@ extension UnsafePointer where Pointee == MIDIPacketList {
 extension MIDIPacketList {
     
     /// MIDIKit backwards-compatible implementation of Core MIDI's `MIDIPacketList.UnsafeSequence`
-    public struct MKUnsafeSequence: Sequence {
+    internal struct MKUnsafeSequence: Sequence {
         
         public typealias Element = UnsafePointer<MIDIPacket>
         
@@ -32,6 +32,9 @@ extension MIDIPacketList {
                 guard let unwrappedPtr = $0 else { return }
                 pointers.append(unwrappedPtr)
             }
+            
+            assert(pointers.count == midiPacketListPtr.pointee.numPackets,
+                   "Packet count does not match iterated count.")
             
         }
         
