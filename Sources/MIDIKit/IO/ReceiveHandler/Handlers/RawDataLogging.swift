@@ -26,9 +26,8 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            for midiPacketPacketPtr in packetListPtr.mkUnsafeSequence() {
-                let packetData = MIDI.Packet.PacketData(midiPacketPacketPtr)
-                handleBytes(packetData.bytes)
+            for midiPacket in packetListPtr.packets() {
+                handleBytes(midiPacket.bytes)
             }
             
         }
@@ -39,9 +38,8 @@ extension MIDI.IO.ReceiveHandler {
             _ srcConnRefCon: UnsafeMutableRawPointer?
         ) {
             
-            for universalMIDIPacketPtr in eventListPtr.mkSequence() {
-                let universalPacketData = MIDI.Packet.UniversalPacketData(universalMIDIPacketPtr)
-                handleBytes(universalPacketData.bytes)
+            for midiPacket in eventListPtr.packets() {
+                handleBytes(midiPacket.bytes)
             }
             
         }
