@@ -27,6 +27,8 @@ extension MIDI.IO {
         
         internal var receiveHandler: ReceiveHandler
         
+        internal var isReceiveReady: Bool = false
+        
         internal init(name: String,
                       uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil,
                       receiveHandler: ReceiveHandler.Definition,
@@ -74,6 +76,8 @@ extension MIDI.IO.Input {
     
     internal func create(in manager: MIDI.IO.Manager) throws {
         
+        isReceiveReady = false
+        
         if uniqueIDExistsInSystem != nil {
             // if uniqueID is already in use, set it to nil here
             // so MIDIDestinationCreateWithBlock can return a new unused ID;
@@ -93,6 +97,7 @@ extension MIDI.IO.Input {
                 &newPortRef,
                 { [weak self] packetListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
+                    guard strongSelf.isReceiveReady else { return }
                     
                     // this must be sync and not async, otherwise the pointer gets freed before we can use it
                     strongSelf.midiManager?.queue.sync {
@@ -114,6 +119,7 @@ extension MIDI.IO.Input {
                 &newPortRef,
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
+                    guard strongSelf.isReceiveReady else { return }
                     
                     // this must be sync and not async, otherwise the pointer gets freed before we can use it
                     strongSelf.midiManager?.queue.sync {
@@ -140,6 +146,8 @@ extension MIDI.IO.Input {
             // so fetch the new ID from the port we just created
             uniqueID = .init(MIDI.IO.getUniqueID(of: newPortRef))
         }
+        
+        isReceiveReady = true
         
     }
     

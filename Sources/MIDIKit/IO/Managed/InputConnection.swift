@@ -28,6 +28,8 @@ extension MIDI.IO {
         
         public private(set) var isConnected: Bool = false
         
+        internal var isReceiveReady: Bool = false
+        
         internal init(toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
                       receiveHandler: ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
@@ -58,6 +60,8 @@ extension MIDI.IO.InputConnection {
     internal func connect(in manager: MIDI.IO.Manager) throws {
         
         if isConnected { return }
+        
+        isReceiveReady = false
         
         // if previously connected, clean the old connection
         _ = try? disconnect()
@@ -91,6 +95,7 @@ extension MIDI.IO.InputConnection {
                 &newConnection,
                 { [weak self] packetListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
+                    guard strongSelf.isReceiveReady else { return }
                     
                     // this must be sync and not async, otherwise the pointer gets freed before we can use it
                     strongSelf.midiManager?.queue.sync {
@@ -112,6 +117,7 @@ extension MIDI.IO.InputConnection {
                 &newConnection,
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
+                    guard strongSelf.isReceiveReady else { return }
                     
                     // this must be sync and not async, otherwise the pointer gets freed before we can use it
                     strongSelf.midiManager?.queue.sync {
@@ -133,6 +139,8 @@ extension MIDI.IO.InputConnection {
         inputPortRef = newConnection
         
         isConnected = true
+        
+        isReceiveReady = true
         
     }
     
