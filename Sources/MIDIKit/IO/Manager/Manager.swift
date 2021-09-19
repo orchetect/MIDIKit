@@ -81,8 +81,8 @@ extension MIDI.IO {
         
         // MARK: - Internal dispatch queue
         
-        /// Thread for all Manager operations and I/O.
-        internal var queue: DispatchQueue
+        /// Thread for MIDI event I/O.
+        internal var eventQueue: DispatchQueue
         
         // MARK: - Init
         
@@ -107,15 +107,17 @@ extension MIDI.IO {
             preferredAPI = APIVersion.legacyCoreMIDI.isValidOnCurrentPlatform
             ? .legacyCoreMIDI : .bestForPlatform()
             
-            // set up dedicated manager queue
+            // queue client name
             var clientNameForQueue = clientName.onlyAlphanumerics
             if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
-            let queueName = (Bundle.main.bundleIdentifier ?? "unknown") + ".midiManager." + clientNameForQueue
-            queue = DispatchQueue(label: queueName,
-                                  qos: .userInteractive,
-                                  attributes: [],
-                                  autoreleaseFrequency: .workItem,
-                                  target: .global(qos: .userInteractive))
+            
+            // manager event queue
+            let eventQueueName = (Bundle.main.bundleIdentifier ?? "unknown") + ".midiManager." + clientNameForQueue + ".events"
+            eventQueue = DispatchQueue(label: eventQueueName,
+                                       qos: .userInteractive,
+                                       attributes: [],
+                                       autoreleaseFrequency: .workItem,
+                                       target: .global(qos: .userInteractive))
             
             // assign other properties
             self.clientName = clientName
@@ -126,7 +128,7 @@ extension MIDI.IO {
         }
         
         deinit {
-            queue.sync {
+            eventQueue.sync {
                 let result = MIDIClientDispose(clientRef)
                 
                 if result != noErr {

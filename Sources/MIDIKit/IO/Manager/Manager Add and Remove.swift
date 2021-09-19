@@ -35,14 +35,15 @@ extension MIDI.IO.Manager {
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         
-        try queue.sync {
+        try eventQueue.sync {
             
             let newVD = MIDI.IO.Input(
                 name: name,
                 uniqueID: uniqueID.readID(),
                 receiveHandler: receiveHandler,
                 midiManager: self,
-                api: preferredAPI
+                api: preferredAPI,
+                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
             )
             
             managedInputs[tag] = newVD
@@ -75,13 +76,14 @@ extension MIDI.IO.Manager {
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         
-        try queue.sync {
+        try eventQueue.sync {
             
             let newCD = MIDI.IO.InputConnection(
                 toOutput: toOutput,
                 receiveHandler: receiveHandler,
                 midiManager: self,
-                api: preferredAPI
+                api: preferredAPI,
+                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
             )
             
             // store the connection object in the manager,
@@ -118,13 +120,14 @@ extension MIDI.IO.Manager {
         uniqueID: MIDI.IO.UniqueIDPersistence<MIDI.IO.OutputEndpoint.UniqueID>
     ) throws {
         
-        try queue.sync {
+        try eventQueue.sync {
             
             let newVS = MIDI.IO.Output(
                 name: name,
                 uniqueID: uniqueID.readID(),
                 midiManager: self,
-                api: preferredAPI
+                api: preferredAPI,
+                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
             )
             
             managedOutputs[tag] = newVS
@@ -155,11 +158,12 @@ extension MIDI.IO.Manager {
         tag: String
     ) throws {
         
-        try queue.sync {
+        try eventQueue.sync {
             
             let newCS = MIDI.IO.OutputConnection(
                 toInput: toInput,
-                api: preferredAPI
+                api: preferredAPI,
+                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
             )
             
             // store the connection object in the manager,
@@ -200,7 +204,7 @@ extension MIDI.IO.Manager {
         params: MIDIThruConnectionParams? = nil
     ) throws {
         
-        try queue.sync {
+        try eventQueue.sync {
             
             let newCT = MIDI.IO.ThruConnection(
                 outputs: outputs,
@@ -252,7 +256,7 @@ extension MIDI.IO.Manager {
     public func remove(_ type: ManagedType,
                        _ tagSelection: TagSelection) {
         
-        queue.sync {
+        eventQueue.sync {
             
             switch type {
             case .inputConnection:
@@ -311,7 +315,7 @@ extension MIDI.IO.Manager {
     /// - `manufacturer` property
     public func removeAll() {
         
-        // `self.remove(...)` internally uses queue.sync{}
+        // `self.remove(...)` internally uses operationQueue.sync{}
         // so don't need to wrap this with it here
         
         for managedEndpointType in ManagedType.allCases {

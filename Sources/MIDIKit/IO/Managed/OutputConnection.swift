@@ -14,9 +14,8 @@ extension MIDI.IO {
         
         // MIDIIOManagedProtocol
         public weak var midiManager: Manager?
-        
-        // MIDIIOManagedProtocol
-        public private(set) var apiVersion: APIVersion
+        public private(set) var api: APIVersion
+        public private(set) var `protocol`: MIDI.IO.ProtocolVersion
         
         public var inputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>
         
@@ -28,11 +27,13 @@ extension MIDI.IO {
         
         internal init(
             toInput: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>,
-            api: APIVersion = .bestForPlatform()
+            api: APIVersion = .bestForPlatform(),
+            protocol midiProtocol: MIDI.IO.ProtocolVersion = ._2_0
         ) {
             
             self.inputCriteria = toInput
-            self.apiVersion = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            self.protocol = api == .legacyCoreMIDI ? ._1_0 : midiProtocol
             
         }
         
@@ -96,15 +97,15 @@ extension MIDI.IO.OutputConnection {
         
         isConnected = false
         
-        guard let upwrappedOutputPortRef = self.portRef,
-              let upwrappedInputEndpointRef = self.inputEndpointRef else { return }
+        guard let unwrappedOutputPortRef = self.portRef,
+              let unwrappedInputEndpointRef = self.inputEndpointRef else { return }
         
         defer {
             self.portRef = nil
             self.inputEndpointRef = nil
         }
         
-        try MIDIPortDisconnectSource(upwrappedOutputPortRef, upwrappedInputEndpointRef)
+        try MIDIPortDisconnectSource(unwrappedOutputPortRef, unwrappedInputEndpointRef)
             .throwIfOSStatusErr()
         
     }
@@ -160,20 +161,20 @@ extension MIDI.IO.OutputConnection: MIDIIOSendsMIDIMessagesProtocol {
     
     public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         
-        guard let upwrappedOutputPortRef = self.portRef else {
+        guard let unwrappedOutputPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Output port reference is nil."
             )
         }
         
-        guard let upwrappedInputEndpointRef = self.inputEndpointRef else {
+        guard let unwrappedInputEndpointRef = self.inputEndpointRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Input port reference is nil."
             )
         }
         
-        try MIDISend(upwrappedOutputPortRef,
-                     upwrappedInputEndpointRef,
+        try MIDISend(unwrappedOutputPortRef,
+                     unwrappedInputEndpointRef,
                      packetList)
             .throwIfOSStatusErr()
         
@@ -182,20 +183,20 @@ extension MIDI.IO.OutputConnection: MIDIIOSendsMIDIMessagesProtocol {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     public func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
-        guard let upwrappedOutputPortRef = self.portRef else {
+        guard let unwrappedOutputPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Output port reference is nil."
             )
         }
         
-        guard let upwrappedInputEndpointRef = self.inputEndpointRef else {
+        guard let unwrappedInputEndpointRef = self.inputEndpointRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Input port reference is nil."
             )
         }
         
-        try MIDISendEventList(upwrappedOutputPortRef,
-                              upwrappedInputEndpointRef,
+        try MIDISendEventList(unwrappedOutputPortRef,
+                              unwrappedInputEndpointRef,
                               eventList)
             .throwIfOSStatusErr()
         

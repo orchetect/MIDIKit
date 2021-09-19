@@ -13,9 +13,8 @@ extension MIDI.IO {
         
         // MIDIIOManagedProtocol
         public weak var midiManager: Manager?
-        
-        // MIDIIOManagedProtocol
-        public private(set) var apiVersion: APIVersion
+        public private(set) var api: APIVersion
+        public private(set) var `protocol`: MIDI.IO.ProtocolVersion
         
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
@@ -27,19 +26,19 @@ extension MIDI.IO {
         
         internal var receiveHandler: ReceiveHandler
         
-        internal var isReceiveReady: Bool = false
-        
         internal init(name: String,
                       uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil,
                       receiveHandler: ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform()) {
+                      api: APIVersion = .bestForPlatform(),
+                      protocol midiProtocol: MIDI.IO.ProtocolVersion = ._2_0) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
-            self.apiVersion = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            self.protocol = api == .legacyCoreMIDI ? ._1_0 : midiProtocol
             
         }
         
@@ -76,8 +75,6 @@ extension MIDI.IO.Input {
     
     internal func create(in manager: MIDI.IO.Manager) throws {
         
-        isReceiveReady = false
-        
         if uniqueIDExistsInSystem != nil {
             // if uniqueID is already in use, set it to nil here
             // so MIDIDestinationCreateWithBlock can return a new unused ID;
@@ -87,21 +84,20 @@ extension MIDI.IO.Input {
         
         var newPortRef = MIDIPortRef()
         
-        switch apiVersion {
+        switch api {
         case .legacyCoreMIDI:
             // MIDIDestinationCreateWithBlock is deprecated after macOS 11 / iOS 14
-            
             try MIDIDestinationCreateWithBlock(
                 manager.clientRef,
                 endpointName as CFString,
                 &newPortRef,
                 { [weak self] packetListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
-                    guard strongSelf.isReceiveReady else { return }
                     
-                    // this must be sync and not async, otherwise the pointer gets freed before we can use it
-                    strongSelf.midiManager?.queue.sync {
-                        strongSelf.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
+                    let packets = packetListPtr.packets()
+                    
+                    strongSelf.midiManager?.eventQueue.async {
+                        strongSelf.receiveHandler.packetListReceived(packets)
                     }
                 }
             )
@@ -109,21 +105,25 @@ extension MIDI.IO.Input {
             
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
-                throw MIDI.IO.MIDIError.internalInconsistency("\(self) is not valid on this platform.")
+                throw MIDI.IO.MIDIError.internalInconsistency(
+                    "New Core MIDI API is not accessible on this platform."
+                )
             }
             
             try MIDIDestinationCreateWithProtocol(
                 manager.clientRef,
                 endpointName as CFString,
-                ._1_0,
+                self.protocol.coreMIDIProtocol,
                 &newPortRef,
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
-                    guard strongSelf.isReceiveReady else { return }
                     
-                    // this must be sync and not async, otherwise the pointer gets freed before we can use it
-                    strongSelf.midiManager?.queue.sync {
-                        strongSelf.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+                    let packets = eventListPtr.packets()
+                    let midiProtocol = MIDI.IO.ProtocolVersion(eventListPtr.pointee.protocol)
+                    
+                    strongSelf.midiManager?.eventQueue.async {
+                        strongSelf.receiveHandler.eventListReceived(packets,
+                                                                    protocol: midiProtocol)
                     }
                 }
             )
@@ -146,8 +146,6 @@ extension MIDI.IO.Input {
             // so fetch the new ID from the port we just created
             uniqueID = .init(MIDI.IO.getUniqueID(of: newPortRef))
         }
-        
-        isReceiveReady = true
         
     }
     

@@ -7,6 +7,7 @@ import CoreMIDI
 
 public protocol MIDIIOReceivesMIDIMessagesProtocol: MIDIIOManagedProtocol {
     
-    // empty
+    /// MIDI Spec version used for this endpoint.
+    /* public private(set) */ var `protocol`: MIDI.IO.ProtocolVersion { get }
     
 }

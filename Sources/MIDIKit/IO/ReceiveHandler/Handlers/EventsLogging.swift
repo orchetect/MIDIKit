@@ -22,12 +22,11 @@ extension MIDI.IO.ReceiveHandler {
         
         @inline(__always) public var filterActiveSensingAndClock = false
         
-        @inline(__always) public func midiReadBlock(
-            _ packetListPtr: UnsafePointer<MIDIPacketList>,
-            _ srcConnRefCon: UnsafeMutableRawPointer?
+        @inline(__always) public func packetListReceived(
+            _ packets: [MIDI.Packet.PacketData]
         ) {
             
-            for midiPacket in packetListPtr.packets() {
+            for midiPacket in packets {
                 let events = midi1Parser.parsedEvents(in: midiPacket)
                 logEvents(events)
             }
@@ -35,12 +34,12 @@ extension MIDI.IO.ReceiveHandler {
         }
         
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-        @inline(__always) public func midiReceiveBlock(
-            _ eventListPtr: UnsafePointer<MIDIEventList>,
-            _ srcConnRefCon: UnsafeMutableRawPointer?
+        @inline(__always) public func eventListReceived(
+            _ packets: [MIDI.Packet.UniversalPacketData],
+            protocol midiProtocol: MIDI.IO.ProtocolVersion
         ) {
             
-            for midiPacket in eventListPtr.packets() {
+            for midiPacket in packets {
                 let events = midi2Parser.parsedEvents(in: midiPacket)
                 logEvents(events)
             }

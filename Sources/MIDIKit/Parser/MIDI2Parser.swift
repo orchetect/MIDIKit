@@ -47,6 +47,7 @@ extension MIDI {
             
             switch messageType {
             case .utility: // 0x0
+                // TODO: nothing implemented here yet
                 break
                 
             case .systemRealTimeAndCommon: // 0x1
@@ -56,12 +57,14 @@ extension MIDI {
                 // byte 2: [MIDI1 data byte 1, or 0x00 if not applicable]
                 // byte 3: [MIDI1 data byte 2, or 0x00 if not applicable]
                 
-                let parsedMIDI1Event = Self.midi1Parser.parsedEvents(
-                    in: Array(bytes[bytes.startIndex.advanced(by: 1)...]),
-                    umpGroup: group
-                )
+                let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
                 
-                events.append(contentsOf: parsedMIDI1Event)
+                if let parsedEvent = parseSystemRealTimeAndCommon(
+                    bytes: midiBytes,
+                    group: group
+                ) {
+                    events.append(parsedEvent)
+                }
                 
             case .midi1ChannelVoice: // 0x2
                 // always 32 bits (4 bytes)
@@ -70,61 +73,26 @@ extension MIDI {
                 // byte 2: [MIDI1 data byte 1, or 0x00 if not applicable]
                 // byte 3: [MIDI1 data byte 2, or 0x00 if not applicable]
                 
-                let parsedMIDI1Event = Self.midi1Parser.parsedEvents(
-                    in: Array(bytes[bytes.startIndex.advanced(by: 1)...]),
-                    umpGroup: group
-                )
+                let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
                 
-                events.append(contentsOf: parsedMIDI1Event)
+                if let parsedEvent = parseMIDI1ChannelVoice(
+                    bytes: midiBytes,
+                    group: group
+                ) {
+                    events.append(parsedEvent)
+                }
                 
             case .data64bit: // 0x3
                 // SysEx 7
                 
-                // MIDI 2.0 Spec:
-                // "The MIDI 1.0 Protocol bracketing method with 0xF0 Start and 0xF7 End Status bytes is not used in the UMP Format. Instead, the SysEx payload is carried in one or more 64-bit UMPs, discarding the 0xF0 and 0xF7 bytes. The standard ID Number (Manufacturer ID, Special ID 0x7D, or Universal System Exclusive ID), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable) are included in the initial data bytes, just as they are in MIDI 1.0 Protocol message equivalents."
+                let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
                 
-                let byte1Nibbles = bytes[bytes.startIndex.advanced(by: 1)].nibbles
-                
-                guard let sysExStatusField = MIDI.Packet.UniversalPacketData
-                        .SysExStatusField(rawValue: byte1Nibbles.high)
-                else {
-                    return events
+                if let parsedEvent = parseData64Bit(
+                    bytes: midiBytes,
+                    group: group
+                ) {
+                    events.append(parsedEvent)
                 }
-                
-                let numberOfBytes = byte1Nibbles.low.intValue
-                
-                switch sysExStatusField {
-                case .complete:
-                    guard bytes.count >= numberOfBytes + 2
-                    else { return events }
-                    
-                    let payloadBytes = bytes[
-                        bytes.startIndex.advanced(by: 2)
-                        ..<
-                        bytes.startIndex.advanced(by: 2 + numberOfBytes)
-                    ]
-                    
-                    guard let parsedSysEx = try? MIDI.Event.SysEx
-                            .parsed(from: [0xF0] + payloadBytes + [0xF7])
-                    else { return events }
-                    
-                    events.append(parsedSysEx)
-                    
-                case .start:
-                    #warning("> handle multi-packet SysEx Messages")
-                    return events
-                    
-                case .continue:
-                    #warning("> handle multi-packet SysEx Messages")
-                    return events
-                    
-                case .end:
-                    #warning("> handle multi-packet SysEx Messages")
-                    return events
-                    
-                }
-                
-                break
                 
             case .midi2ChannelVoice: // 0x4
                 // always 64 bits (8 bytes)
@@ -133,7 +101,7 @@ extension MIDI {
                 // byte 2&3: [index]
                 // byte 4...7: [data bytes]
                 
-                // currently MIDIKit can only receive MIDI 1.0 events because
+                // TODO: currently MIDIKit can only receive MIDI 1.0 events because
                 // we are forcing Protocol 1.0 since MIDI 2.0 events are not
                 // implemented yet, so this should never happen (for the time being)
                 break
@@ -141,11 +109,264 @@ extension MIDI {
             case .data128bit: // 0x5
                 // can contain a SysEx 8 message
                 
+                // TODO: needs implementation
+                
                 break
                 
             }
             
             return events
+            
+        }
+        
+        internal static func parseSystemRealTimeAndCommon(
+            bytes: Array<MIDI.Byte>.SubSequence,
+            group: MIDI.UInt4
+        ) -> MIDI.Event? {
+            
+            let statusByte = bytes[bytes.startIndex]
+            
+            func dataByte1() -> MIDI.Byte? {
+                bytes.count > 1
+                    ? bytes[bytes.startIndex.advanced(by: 1)] : nil
+            }
+            
+            func dataByte2() -> MIDI.Byte? {
+                bytes.count > 2
+                    ? bytes[bytes.startIndex.advanced(by: 2)] : nil
+            }
+            
+            switch statusByte {
+            case 0xF0: // System Common - SysEx Start
+                return nil
+                
+            case 0xF1: // System Common - timecode quarter-frame
+                guard let unwrappedDataByte1 = dataByte1()
+                else { return nil }
+                
+                return .timecodeQuarterFrame(byte: unwrappedDataByte1)
+                
+            case 0xF2: // System Common - Song Position Pointer
+                guard let unwrappedDataByte1 = dataByte1(),
+                      let unwrappedDataByte2 = dataByte2()
+                else { return nil }
+                
+                let uint14 = MIDI.UInt14(bytePair: .init(msb: unwrappedDataByte2, lsb: unwrappedDataByte1))
+                return .songPositionPointer(midiBeat: uint14)
+                
+            case 0xF3: // System Common - Song Select
+                guard let songNumber = dataByte1()?.toMIDIUInt7Exactly
+                else { return nil }
+                
+                return .songSelect(number: songNumber)
+                
+            case 0xF4, 0xF5: // System Common - Undefined
+                // MIDI 1.0 Spec: ignore these events
+                return nil
+                
+            case 0xF6: // System Common - Tune Request
+                return .tuneRequest(group: group)
+                
+            case 0xF7: // System Common - System Exclusive End (EOX / End Of Exclusive)
+                // on its own, 0xF7 is ignored
+                return nil
+                
+            case 0xF8: // System Real Time - Timing Clock
+                return .timingClock(group: group)
+                
+            case 0xF9: // Real Time - undefined
+                return nil
+                
+            case 0xFA: // System Real Time - Start
+                return .start(group: group)
+                
+            case 0xFB: // System Real Time - Continue
+                return .continue(group: group)
+                
+            case 0xFC: // System Real Time - Stop
+                return .stop(group: group)
+                
+            case 0xFD: // Real Time - undefined
+                return nil
+                
+            case 0xFE:
+                return .activeSensing(group: group)
+                
+            case 0xFF:
+                return .systemReset(group: group)
+                
+            default:
+                // should never happen
+                //Log.debug("Unhandled System Status: \(statusByte)")
+                return nil
+            }
+            
+        }
+        
+        internal static func parseMIDI1ChannelVoice(
+            bytes: Array<MIDI.Byte>.SubSequence,
+            group: MIDI.UInt4
+        ) -> MIDI.Event? {
+            
+            guard !bytes.isEmpty else { return nil }
+            
+            let statusByte = bytes[bytes.startIndex]
+            
+            let dataByte1: MIDI.Byte? =
+                bytes.count > 1
+                ? bytes[bytes.startIndex.advanced(by: 1)]
+                : nil
+            
+            let dataByte2: MIDI.Byte? =
+                bytes.count > 2
+                ? bytes[bytes.startIndex.advanced(by: 2)]
+                : nil
+            
+            switch statusByte.nibbles.high {
+            case 0x8: // note off
+                let channel = statusByte.nibbles.low
+                guard let note = dataByte1?.toMIDIUInt7Exactly,
+                      let velocity = dataByte2?.toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .noteOff(note: note,
+                                                    velocity: velocity,
+                                                    channel: channel,
+                                                    group: group)
+                
+                return newEvent
+                
+            case 0x9: // note on
+                let channel = statusByte.nibbles.low
+                guard let note = dataByte1?.toMIDIUInt7Exactly,
+                      let velocity = dataByte2?.toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .noteOn(note: note,
+                                                   velocity: velocity,
+                                                   channel: channel,
+                                                   group: group)
+                
+                return newEvent
+                
+            case 0xA: // poly aftertouch
+                let channel = statusByte.nibbles.low
+                guard let note = dataByte1?.toMIDIUInt7Exactly,
+                      let pressure = dataByte2?.toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .polyAftertouch(note: note,
+                                                           pressure: pressure,
+                                                           channel: channel,
+                                                           group: group)
+                
+                return newEvent
+                
+            case 0xB: // CC (incl. channel mode msgs 121-127)
+                let channel = statusByte.nibbles.low
+                guard let cc = dataByte1?.toMIDIUInt7Exactly,
+                      let value = dataByte2?.toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .cc(controller: cc,
+                                               value: value,
+                                               channel: channel,
+                                               group: group)
+                
+                return newEvent
+                
+            case 0xC: // program change
+                let channel = statusByte.nibbles.low
+                guard let program = dataByte1?.toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .programChange(program: program,
+                                                          channel: channel,
+                                                          group: group)
+                
+                return newEvent
+                
+            case 0xD: // channel aftertouch
+                let channel = statusByte.nibbles.low
+                guard let pressure = dataByte1?.toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .chanAftertouch(pressure: pressure,
+                                                           channel: channel,
+                                                           group: group)
+                
+                return newEvent
+                
+            case 0xE: // pitch bend
+                let channel = statusByte.nibbles.low
+                guard let unwrappedDataByte1 = dataByte1,
+                      let unwrappedDataByte2 = dataByte2
+                else { return nil }
+                
+                let uint14 = MIDI.UInt14(bytePair: .init(msb: unwrappedDataByte2,
+                                                         lsb: unwrappedDataByte1))
+                
+                let newEvent: MIDI.Event = .pitchBend(value: uint14,
+                                                      channel: channel,
+                                                      group: group)
+                
+                return newEvent
+                
+            default:
+                return nil
+                
+            }
+            
+        }
+        
+        internal static func parseData64Bit(
+            bytes: Array<MIDI.Byte>.SubSequence,
+            group: MIDI.UInt4
+        ) -> MIDI.Event? {
+            
+            // MIDI 2.0 Spec:
+            // "The MIDI 1.0 Protocol bracketing method with 0xF0 Start and 0xF7 End Status bytes is not used in the UMP Format. Instead, the SysEx payload is carried in one or more 64-bit UMPs, discarding the 0xF0 and 0xF7 bytes. The standard ID Number (Manufacturer ID, Special ID 0x7D, or Universal System Exclusive ID), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable) are included in the initial data bytes, just as they are in MIDI 1.0 Protocol message equivalents."
+            
+            let byte1Nibbles = bytes[bytes.startIndex.advanced(by: 1)].nibbles
+            
+            guard let sysExStatusField = MIDI.Packet.UniversalPacketData
+                    .SysExStatusField(rawValue: byte1Nibbles.high)
+            else {
+                return nil
+            }
+            
+            let numberOfBytes = byte1Nibbles.low.intValue
+            
+            switch sysExStatusField {
+            case .complete:
+                guard bytes.count >= numberOfBytes + 2
+                else { return nil }
+                
+                let payloadBytes = bytes[
+                    bytes.startIndex.advanced(by: 2)
+                        ..<
+                        bytes.startIndex.advanced(by: 2 + numberOfBytes)
+                ]
+                
+                guard let parsedSysEx = try? MIDI.Event.SysEx
+                        .parsed(from: [0xF0] + payloadBytes + [0xF7])
+                else { return nil }
+                
+                return parsedSysEx
+                
+            case .start:
+                #warning("> handle multi-packet SysEx Messages")
+                return nil
+                
+            case .continue:
+                #warning("> handle multi-packet SysEx Messages")
+                return nil
+                
+            case .end:
+                #warning("> handle multi-packet SysEx Messages")
+                return nil
+                
+            }
             
         }
         
