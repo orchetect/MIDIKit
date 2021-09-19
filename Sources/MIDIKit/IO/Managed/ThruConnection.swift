@@ -23,9 +23,7 @@ extension MIDI.IO {
         
         // MIDIIOManagedProtocol
         public weak var midiManager: Manager?
-        
-        // MIDIIOManagedProtocol
-        public private(set) var apiVersion: APIVersion
+        public private(set) var api: APIVersion
         
         public private(set) var thruConnectionRef: MIDIThruConnectionRef? = nil
         
@@ -57,7 +55,7 @@ extension MIDI.IO {
             self.lifecycle = lifecycle
             self.params = params
             self.midiManager = midiManager
-            self.apiVersion = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             
         }
         
@@ -196,13 +194,13 @@ extension MIDI.IO.ThruConnection {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         
-        guard let upwrappedThruConnectionRef = self.thruConnectionRef else { return }
+        guard let unwrappedThruConnectionRef = self.thruConnectionRef else { return }
         
         defer {
             self.thruConnectionRef = nil
         }
         
-        try MIDIThruConnectionDispose(upwrappedThruConnectionRef)
+        try MIDIThruConnectionDispose(unwrappedThruConnectionRef)
             .throwIfOSStatusErr()
         
     }

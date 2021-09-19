@@ -13,9 +13,8 @@ extension MIDI.IO {
         
         // MIDIIOManagedProtocol
         public weak var midiManager: Manager?
-        
-        // MIDIIOManagedProtocol
-        public private(set) var apiVersion: APIVersion
+        public private(set) var api: APIVersion
+        public private(set) var `protocol`: MIDI.IO.ProtocolVersion
         
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
@@ -31,13 +30,15 @@ extension MIDI.IO {
                       uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil,
                       receiveHandler: ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform()) {
+                      api: APIVersion = .bestForPlatform(),
+                      protocol midiProtocol: MIDI.IO.ProtocolVersion = ._2_0) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
-            self.apiVersion = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            self.protocol = api == .legacyCoreMIDI ? ._1_0 : midiProtocol
             
         }
         
@@ -83,10 +84,9 @@ extension MIDI.IO.Input {
         
         var newPortRef = MIDIPortRef()
         
-        switch apiVersion {
+        switch api {
         case .legacyCoreMIDI:
             // MIDIDestinationCreateWithBlock is deprecated after macOS 11 / iOS 14
-            
             try MIDIDestinationCreateWithBlock(
                 manager.clientRef,
                 endpointName as CFString,
@@ -94,9 +94,10 @@ extension MIDI.IO.Input {
                 { [weak self] packetListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
                     
-                    // this must be sync and not async, otherwise the pointer gets freed before we can use it
-                    strongSelf.midiManager?.queue.sync {
-                        strongSelf.receiveHandler.midiReadBlock(packetListPtr, srcConnRefCon)
+                    let packets = packetListPtr.packets()
+                    
+                    strongSelf.midiManager?.eventQueue.async {
+                        strongSelf.receiveHandler.packetListReceived(packets)
                     }
                 }
             )
@@ -104,20 +105,25 @@ extension MIDI.IO.Input {
             
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
-                throw MIDI.IO.MIDIError.internalInconsistency("\(self) is not valid on this platform.")
+                throw MIDI.IO.MIDIError.internalInconsistency(
+                    "New Core MIDI API is not accessible on this platform."
+                )
             }
             
             try MIDIDestinationCreateWithProtocol(
                 manager.clientRef,
                 endpointName as CFString,
-                ._1_0,
+                self.protocol.coreMIDIProtocol,
                 &newPortRef,
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
                     
-                    // this must be sync and not async, otherwise the pointer gets freed before we can use it
-                    strongSelf.midiManager?.queue.sync {
-                        strongSelf.receiveHandler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+                    let packets = eventListPtr.packets()
+                    let midiProtocol = MIDI.IO.ProtocolVersion(eventListPtr.pointee.protocol)
+                    
+                    strongSelf.midiManager?.eventQueue.async {
+                        strongSelf.receiveHandler.eventListReceived(packets,
+                                                                    protocol: midiProtocol)
                     }
                 }
             )

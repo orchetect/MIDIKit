@@ -14,7 +14,7 @@ extension MIDI.IO.Manager {
     /// - Throws: `MIDI.IO.MIDIError.osStatus`
     public func start() throws {
         
-        try queue.sync {
+        try eventQueue.sync {
             
             // if start() was already called, return
             guard clientRef == MIDIClientRef() else { return }

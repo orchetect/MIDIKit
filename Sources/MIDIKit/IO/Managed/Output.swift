@@ -13,9 +13,8 @@ extension MIDI.IO {
         
         // MIDIIOManagedProtocol
         public weak var midiManager: Manager?
-        
-        // MIDIIOManagedProtocol
-        public private(set) var apiVersion: APIVersion
+        public private(set) var api: APIVersion
+        public private(set) var `protocol`: MIDI.IO.ProtocolVersion
         
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
@@ -28,12 +27,14 @@ extension MIDI.IO {
         internal init(name: String,
                       uniqueID: MIDI.IO.OutputEndpoint.UniqueID? = nil,
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform()) {
+                      api: APIVersion = .bestForPlatform(),
+                      protocol midiProtocol: MIDI.IO.ProtocolVersion = ._2_0) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
             self.midiManager = midiManager
-            self.apiVersion = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            self.protocol = api == .legacyCoreMIDI ? ._1_0 : midiProtocol
             
         }
         
@@ -52,11 +53,11 @@ extension MIDI.IO.Output {
     /// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
     public var uniqueIDExistsInSystem: MIDIEndpointRef? {
         
-        guard let upwrappedUniqueID = self.uniqueID else {
+        guard let unwrappedUniqueID = self.uniqueID else {
             return nil
         }
         
-        if let endpoint = MIDI.IO.getSystemSourceEndpoint(matching: upwrappedUniqueID.coreMIDIUniqueID) {
+        if let endpoint = MIDI.IO.getSystemSourceEndpoint(matching: unwrappedUniqueID.coreMIDIUniqueID) {
             return endpoint
         }
         
@@ -79,10 +80,9 @@ extension MIDI.IO.Output {
         
         var newPortRef = MIDIPortRef()
         
-        switch apiVersion {
+        switch api {
         case .legacyCoreMIDI:
             // MIDISourceCreate is deprecated after macOS 11 / iOS 14
-            
             try MIDISourceCreate(
                 manager.clientRef,
                 endpointName as CFString,
@@ -92,13 +92,15 @@ extension MIDI.IO.Output {
             
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
-                throw MIDI.IO.MIDIError.internalInconsistency("\(self) is not valid on this platform.")
+                throw MIDI.IO.MIDIError.internalInconsistency(
+                    "New Core MIDI API is not accessible on this platform."
+                )
             }
             
             try MIDISourceCreateWithProtocol(
                 manager.clientRef,
                 endpointName as CFString,
-                ._1_0,
+                self.protocol.coreMIDIProtocol,
                 &newPortRef
             )
             .throwIfOSStatusErr()
@@ -128,11 +130,11 @@ extension MIDI.IO.Output {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         
-        guard let upwrappedPortRef = self.portRef else { return }
+        guard let unwrappedPortRef = self.portRef else { return }
         
         defer { self.portRef = nil }
         
-        try MIDIEndpointDispose(upwrappedPortRef)
+        try MIDIEndpointDispose(unwrappedPortRef)
             .throwIfOSStatusErr()
         
     }
@@ -158,13 +160,13 @@ extension MIDI.IO.Output: MIDIIOSendsMIDIMessagesProtocol {
     
     public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         
-        guard let upwrappedPortRef = self.portRef else {
+        guard let unwrappedPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Port reference is nil."
             )
         }
         
-        try MIDIReceived(upwrappedPortRef, packetList)
+        try MIDIReceived(unwrappedPortRef, packetList)
             .throwIfOSStatusErr()
         
     }
@@ -172,13 +174,13 @@ extension MIDI.IO.Output: MIDIIOSendsMIDIMessagesProtocol {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     public func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
-        guard let upwrappedPortRef = self.portRef else {
+        guard let unwrappedPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Port reference is nil."
             )
         }
         
-        try MIDIReceivedEventList(upwrappedPortRef, eventList)
+        try MIDIReceivedEventList(unwrappedPortRef, eventList)
             .throwIfOSStatusErr()
         
     }

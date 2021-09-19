@@ -13,25 +13,24 @@ extension MIDI.IO.ReceiveHandler {
         
         public var receiveHandlers: [MIDI.IO.ReceiveHandler] = []
         
-        @inline(__always) public func midiReadBlock(
-            _ packetListPtr: UnsafePointer<MIDIPacketList>,
-            _ srcConnRefCon: UnsafeMutableRawPointer?
+        @inline(__always) public func packetListReceived(
+            _ packets: [MIDI.Packet.PacketData]
         ) {
             
             for handler in receiveHandlers {
-                handler.midiReadBlock(packetListPtr, srcConnRefCon)
+                handler.packetListReceived(packets)
             }
             
         }
         
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-        @inline(__always) public func midiReceiveBlock(
-            _ eventListPtr: UnsafePointer<MIDIEventList>,
-            _ srcConnRefCon: UnsafeMutableRawPointer?
+        @inline(__always) public func eventListReceived(
+            _ packets: [MIDI.Packet.UniversalPacketData],
+            protocol midiProtocol: MIDI.IO.ProtocolVersion
         ) {
             
             for handler in receiveHandlers {
-                handler.midiReceiveBlock(eventListPtr, srcConnRefCon)
+                handler.eventListReceived(packets, protocol: midiProtocol)
             }
             
         }

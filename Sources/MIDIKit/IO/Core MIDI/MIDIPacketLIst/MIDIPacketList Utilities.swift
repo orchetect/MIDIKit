@@ -5,17 +5,41 @@
 
 import CoreMIDI
 
-extension MIDI.IO {
+extension MIDIPacketList {
+    
+    /// Internal use.
+    /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a Core MIDI `MIDIPacketList`.
+    @inlinable internal init(data: [MIDI.Byte]) {
+        
+        let packetList = UnsafeMutablePointer<MIDIPacketList>(data: data)
+        self = packetList.pointee
+        packetList.deallocate()
+        
+    }
+    
+    /// Experimental.
+    /// Assembles an array of `Byte` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
+    @inlinable internal init(data: [[MIDI.Byte]]) throws {
+        
+        let packetList = try UnsafeMutablePointer<MIDIPacketList>(data: data)
+        self = packetList.pointee
+        packetList.deallocate()
+        
+    }
+    
+}
+
+extension UnsafeMutablePointer where Pointee == MIDIPacketList {
     
     /// Internal use.
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a Core MIDI `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
-    @inlinable internal static func assemblePacketList(data: [MIDI.Byte]) throws -> UnsafeMutablePointer<MIDIPacketList> {
+    @inlinable internal init(data: [MIDI.Byte]) {
         
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
-        let bufferSize = data.count + MIDI.IO.kSizeOfMIDICombinedHeaders
+        let bufferSize = data.count + MIDI.IO.kSizeOfMIDIPacketCombinedHeaders
         
         // the discussion section of MIDIPacketListAdd states that "The maximum
         // size of a packet list is 65536 bytes." Checking for that limit here.
@@ -29,24 +53,17 @@ extension MIDI.IO {
         let packetListPointer: UnsafeMutablePointer<MIDIPacketList> = .allocate(capacity: 1)
         
         // prepare packet
-        var currentPacket: UnsafeMutablePointer<MIDIPacket>?
-        currentPacket = MIDIPacketListInit(packetListPointer)
+        var currentPacket: UnsafeMutablePointer<MIDIPacket> = MIDIPacketListInit(packetListPointer)
         
-        // returns NULL if there was not room in the packet list for the event
+        // returns NULL if there was not room in the packet list for the event (?)
         currentPacket = MIDIPacketListAdd(packetListPointer,
                                           bufferSize,
-                                          currentPacket!,
+                                          currentPacket,
                                           timeTag,
                                           data.count,
                                           data)
         
-        guard currentPacket != nil else {
-            throw MIDIError.malformed(
-                "Failed to add packet to packet list."
-            )
-        }
-        
-        return packetListPointer
+        self = packetListPointer
         
     }
     
@@ -54,7 +71,7 @@ extension MIDI.IO {
     /// Assembles an array of `Byte` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
-    @inlinable internal static func assemblePacketList(data: [[MIDI.Byte]]) throws -> UnsafeMutablePointer<MIDIPacketList> {
+    @inlinable internal init(data: [[MIDI.Byte]]) throws {
         
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
@@ -64,7 +81,7 @@ extension MIDI.IO {
         
         // MIDIPacketListAdd's discussion section states that "The maximum size of a packet list is 65536 bytes."
         guard bufferSize <= 65536 else {
-            throw MIDIError.malformed(
+            throw MIDI.IO.MIDIError.malformed(
                 "Data array is too large (\(bufferSize) bytes). Maximum size is 65536 bytes."
             )
         }
@@ -74,28 +91,21 @@ extension MIDI.IO {
         let packetListPointer: UnsafeMutablePointer<MIDIPacketList> = .allocate(capacity: 1)
         
         // prepare packet
-        var currentPacket: UnsafeMutablePointer<MIDIPacket>?
-        
-        currentPacket = MIDIPacketListInit(packetListPointer)
+        var currentPacket: UnsafeMutablePointer<MIDIPacket> = MIDIPacketListInit(packetListPointer)
         
         for dataBlock in 0..<data.count {
             
             // returns NULL if there was not room in the packet list for the event
             currentPacket = MIDIPacketListAdd(packetListPointer,
-                                              bufferSize, currentPacket!,
+                                              bufferSize,
+                                              currentPacket,
                                               timeTag,
                                               data[dataBlock].count,
                                               data[dataBlock])
             
-            guard currentPacket != nil else {
-                throw MIDIError.malformed(
-                    "Failed to add packet index \(dataBlock) of \(data.count-1) to packet list."
-                )
-            }
-            
         }
         
-        return packetListPointer
+        self = packetListPointer
         
     }
     

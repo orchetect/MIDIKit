@@ -35,6 +35,18 @@ extension MIDI.IO {
     
     /// Size of both Core MIDI `MIDIPacketList` header and `MIDIPacket` header.
     @inline(__always) @usableFromInline
-    internal static let kSizeOfMIDICombinedHeaders = kSizeOfMIDIPacketListHeader + kSizeOfMIDIPacketHeader
+    internal static let kSizeOfMIDIPacketCombinedHeaders = kSizeOfMIDIPacketListHeader + kSizeOfMIDIPacketHeader
+    
+}
+
+extension MIDI.IO {
+    
+    /// Size of Core MIDI `MIDIEventList` struct memory.
+    @inline(__always) @usableFromInline
+    internal static let kSizeOfMIDIEventList = MemoryLayout<MIDIEventList>.size
+    
+    /// Size of Core MIDI `MIDIEventPacket` struct memory.
+    @inline(__always) @usableFromInline
+    internal static let kSizeOfMIDIEventPacket = MemoryLayout<MIDIEventPacket>.size
     
 }
