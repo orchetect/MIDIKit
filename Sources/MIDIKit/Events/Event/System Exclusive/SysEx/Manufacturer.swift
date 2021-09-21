@@ -9,45 +9,57 @@ extension MIDI.Event.SysEx {
     
     /// Type representing a Manufacturer System Exclusive ID
     ///
-    /// Standard MIDI 1.0 Spec:
+    /// - remark: MIDI 1.0 Spec:
     ///
-    /// "To avoid conflicts with non-compatible Exclusive messages, a specific ID number is granted to manufacturers of MIDI instruments by the MMA or JMSC."
+    /// - "To avoid conflicts with non-compatible Exclusive messages, a specific ID number is granted to manufacturers of MIDI instruments by the MMA or JMSC."
     ///
-    /// "`0x00` and `0x00 0x00 0x00` are not to be used. Special ID `0x7D` is reserved for non-commercial use (e.g. schools, research, etc.) and is not to be used on any product released to the public. Since Non-Commercial codes would not be seen or used by an ordinary user, there is no standard format. Special IDs `0x7E` and `0x7F` are the Universal System Exclusive IDs."
-    public struct Manufacturer: Hashable {
+    /// - "`[0x00]` and `[0x00 0x00 0x00]` are not to be used. Special ID `0x7D` is reserved for non-commercial use (e.g. schools, research, etc.) and is not to be used on any product released to the public. Since Non-Commercial codes would not be seen or used by an ordinary user, there is no standard format."
+    ///
+    /// - "Special IDs `0x7E` and `0x7F` are the Universal System Exclusive IDs."
+    ///
+    /// For these special IDs, use MIDIKit's `UniversalSysEx` type instead of `SysEx`.
+    public enum Manufacturer: Equatable, Hashable {
         
-        public let bytes: [MIDI.Byte]
-        
-        /// Initialize from a single-byte Manufacturer System Exclusive ID
-        ///
         /// Valid range: `0x01...0x7D`
         ///
         /// 0x00 is reserved to prefix a 2-byte ID (such that 3 total bytes)
-        @inline(__always) public init?(oneByte: MIDI.Byte) {
-            
-            guard (0x01...0x7D).contains(oneByte) else { return nil }
-            bytes = [oneByte]
-            
-        }
+        case oneByte(MIDI.Byte)
         
-        /// Initialize from a three-byte Manufacturer System Exclusive ID
-        ///
         /// Valid range for bytes 2 & 3: `0x00...0x7F`
         ///
         /// Byte 1 is always 0x00.
-        @inline(__always) public init?(threeByte: (byte2: MIDI.Byte, byte3: MIDI.Byte)) {
+        case threeByte(byte2: MIDI.Byte, byte3: MIDI.Byte)
+        
+        /// Returns the Manufacturer byte(s)
+        public var bytes: [MIDI.Byte] {
             
-            guard (0x00...0x7F).contains(threeByte.byte2),
-                  (0x00...0x7F).contains(threeByte.byte3)
-            else { return nil }
-            
-            bytes = [0x00, threeByte.byte2, threeByte.byte3]
+            switch self {
+            case .oneByte(let byte):
+                return [byte]
+                
+            case .threeByte(byte2: let byte2, byte3: let byte3):
+                return [0x00, byte2, byte3]
+            }
             
         }
         
-        /// Internal: init to force bytes.
-        @inline(__always) private init(bytes: [MIDI.Byte]) {
-            self.bytes = bytes
+        /// Returns whether the byte(s) are valid SysEx Manufacturer IDs.
+        ///
+        /// This does not test whether the ID belongs to a registered manufacturer. Rather, it simply reports if the bytes are legal.
+        ///
+        /// Use the `.name` property to return the manufacturer's name associated with the ID, or `nil` if the ID is not registered.
+        public var isValid: Bool {
+            
+            switch self {
+            case .oneByte(let byte):
+                return (0x01...0x7D).contains(byte)
+                
+            case .threeByte(byte2: let byte2, byte3: let byte3):
+                return
+                    (0x00...0x7F).contains(byte2) &&
+                    (0x00...0x7F).contains(byte3)
+            }
+            
         }
         
         /// Returns the name of the manufacturer associated with the Manufacturer System Exclusive ID, as assigned by the MIDI Manufacturers Association.
@@ -68,19 +80,9 @@ extension MIDI.Event.SysEx {
 extension MIDI.Event.SysEx.Manufacturer: CustomStringConvertible {
     
     public var description: String {
+        
         "\(bytes.hex.stringValue(padTo: 2, prefix: true))"
-    }
-    
-}
-
-extension MIDI.Event.SysEx.Manufacturer {
-    
-    public static func oneByte(_ byte: MIDI.Byte) -> Self? {
-        Self(oneByte: byte)
-    }
-    
-    public static func threeByte(byte2: MIDI.Byte, byte3: MIDI.Byte) -> Self? {
-        Self(threeByte: (byte2: byte2, byte3: byte3))
+        
     }
     
 }
@@ -92,7 +94,7 @@ extension MIDI.Event.SysEx.Manufacturer {
     /// - note: Reserved for use only in educational institutions or for unit testing; not public release.
     public static func educational() -> Self {
         
-        Self(bytes: [0x7D])
+        .oneByte(0x7D)
         
     }
     
@@ -108,11 +110,11 @@ extension MIDI.Event.SysEx.Manufacturer {
     /// (IDs can be either 1 or 3 bytes long.)
     static let kSysExIDs: [[MIDI.Byte] : String] = [
         
-        // MARK: - Special IDs
+        // MARK: Special IDs
         
         [0x7D] : "-", // used for Educational Use or for unit testing, not public release
         
-        // MARK: - North American Group
+        // MARK: North American Group
         
         // 0x00 is Used for ID extensions and is not a valid 1-byte ID
         [0x01] : "Sequential Circuits",
@@ -495,7 +497,7 @@ extension MIDI.Event.SysEx.Manufacturer {
         [0x00, 0x02, 0x3A] : "Soundiron LLC",
         [0x00, 0x02, 0x3B] : "Sonoclast, LLC",
         
-        // MARK: - European and 'Other' Group
+        // MARK: European and 'Other' Group
         
         [0x00, 0x20, 0x00] : "Dream SAS",
         [0x00, 0x20, 0x01] : "Strand Lighting",
@@ -716,7 +718,7 @@ extension MIDI.Event.SysEx.Manufacturer {
         [0x00, 0x21, 0x58] : "Nonlinear Labs GmbH",
         [0x00, 0x21, 0x59] : "Robkoo Information & Technologies Co., Ltd.",
         
-        // MARK: - Japanese Group
+        // MARK: Japanese Group
         
         [0x40] : "Kawai Musical Instruments MFG. CO. Ltd",
         [0x41] : "Roland Corporation",

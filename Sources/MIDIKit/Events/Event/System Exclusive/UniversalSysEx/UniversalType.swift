@@ -3,9 +3,9 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.SysEx {
+extension MIDI.Event.UniversalSysEx {
     
-    /// Type describing a Universal System Exclusive message type.
+    /// Universal System Exclusive message type.
     public enum UniversalType: MIDI.Byte, Hashable {
         
         /// Real Time System Exclusive ID number (`0x7F`).
@@ -18,7 +18,7 @@ extension MIDI.Event.SysEx {
     
 }
 
-extension MIDI.Event.SysEx.UniversalType: CustomStringConvertible {
+extension MIDI.Event.UniversalSysEx.UniversalType: CustomStringConvertible {
     
     public var description: String {
         

@@ -1,12 +1,12 @@
 //
-//  CC.swift
+//  CC Controller.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event {
+extension MIDI.Event.CC {
     
-    /// MIDI Controller Change Event (CC)
-    public enum CC: Equatable, Hashable {
+    /// MIDI Controller
+    public enum Controller: Equatable, Hashable {
         
         /// Bank Select
         /// (Int: 0, Hex: 0x00)

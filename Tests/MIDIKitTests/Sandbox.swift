@@ -147,7 +147,7 @@ final class Sandbox: XCTestCase {
 //                                data: let data):
 //                        _ = manufacturer
 //                        _ = data
-//                    case .sysExUniversal(let type,
+//                    case .universalSysEx(let type,
 //                                         deviceID: let deviceID,
 //                                         subID1: let subID1,
 //                                         subID2: let subID2,

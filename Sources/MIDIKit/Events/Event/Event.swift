@@ -7,6 +7,7 @@ import Foundation
 
 extension MIDI {
     
+    /// MIDI Event
     public enum Event: Equatable, Hashable {
         
         // -------------------
@@ -14,16 +15,10 @@ extension MIDI {
         // -------------------
         
         /// Channel Voice Message: Note On (Status `0x9`)
-        case noteOn(note: MIDI.UInt7,
-                    velocity: MIDI.UInt7,
-                    channel: MIDI.UInt4,
-                    group: MIDI.UInt4 = 0)
+        case noteOn(NoteOn)
         
         /// Channel Voice Message: Note Off (Status `0x8`)
-        case noteOff(note: MIDI.UInt7,
-                     velocity: MIDI.UInt7,
-                     channel: MIDI.UInt4,
-                     group: MIDI.UInt4 = 0)
+        case noteOff(NoteOff)
         
         /// Channel Voice Message: Polyphonic Aftertouch (Status `0xA`)
         ///
@@ -31,21 +26,13 @@ extension MIDI {
         /// - Pro Tools: "Polyphonic Aftertouch"
         /// - Logic Pro: "Polyphonic Aftertouch"
         /// - Cubase: "Poly Pressure"
-        case polyAftertouch(note: MIDI.UInt7,
-                            pressure: MIDI.UInt7,
-                            channel: MIDI.UInt4,
-                            group: MIDI.UInt4 = 0)
+        case polyAftertouch(PolyAftertouch)
         
         /// Channel Voice Message: Controller Change (CC) (Status `0xB`)
-        case cc(controller: MIDI.UInt7,
-                value: MIDI.UInt7,
-                channel: MIDI.UInt4,
-                group: MIDI.UInt4 = 0)
+        case cc(CC)
         
         /// Channel Voice Message: Program Change (Status `0xC`)
-        case programChange(program: MIDI.UInt7,
-                           channel: MIDI.UInt4,
-                           group: MIDI.UInt4 = 0)
+        case programChange(ProgramChange)
         
         /// Channel Voice Message: Channel Aftertouch (Status `0xD`)
         ///
@@ -53,14 +40,10 @@ extension MIDI {
         /// - Pro Tools: "Mono Aftertouch"
         /// - Logic Pro: "Aftertouch"
         /// - Cubase: "Aftertouch"
-        case chanAftertouch(pressure: MIDI.UInt7,
-                            channel: MIDI.UInt4,
-                            group: MIDI.UInt4 = 0)
+        case chanAftertouch(ChanAftertouch)
         
         /// Channel Voice Message: Pitch Bend (Status `0xE`)
-        case pitchBend(value: MIDI.UInt14,
-                       channel: MIDI.UInt4,
-                       group: MIDI.UInt4 = 0)
+        case pitchBend(PitchBend)
         
         // ----------------------
         // MARK: System Exclusive
@@ -73,9 +56,7 @@ extension MIDI {
         /// "Receivers should ignore non-universal Exclusive messages with ID numbers that do not correspond to their own ID."
         ///
         /// "Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification."
-        case sysEx(manufacturer: SysEx.Manufacturer,
-                   data: [MIDI.Byte],
-                   group: MIDI.UInt4 = 0)
+        case sysEx(SysEx)
         
         /// System Exclusive: Universal SysEx (Status `0xF0`)
         ///
@@ -84,12 +65,7 @@ extension MIDI {
         /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
         ///
         /// - `deviceID` of 0x7F indicates "All Devices".
-        case sysExUniversal(universalType: SysEx.UniversalType,
-                            deviceID: MIDI.UInt7,
-                            subID1: MIDI.UInt7,
-                            subID2: MIDI.UInt7,
-                            data: [MIDI.Byte],
-                            group: MIDI.UInt4 = 0)
+        case universalSysEx(UniversalSysEx)
         
         // -------------------
         // MARK: System Common
@@ -193,72 +169,47 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
         // MARK: Channel Voice
         // -------------------
         
-        case .noteOn(note: let note,
-                     velocity: let velocity,
-                     channel: let channel,
-                     group: let group):
+        case .noteOn(let event):
             
-            return "noteOn(\(note), vel: \(velocity), chan: \(channel), group: \(group))"
+            return "noteOn(\(event.note), vel: \(event.velocity), chan: \(event.channel), group: \(event.group))"
             
-        case .noteOff(note: let note,
-                      velocity: let velocity,
-                      channel: let channel,
-                      group: let group):
+        case .noteOff(let event):
             
-            return "noteOff(\(note), vel: \(velocity), chan: \(channel), group: \(group))"
+            return "noteOff(\(event.note), vel: \(event.velocity), chan: \(event.channel), group: \(event.group))"
                 
-        case .polyAftertouch(note: let note,
-                             pressure: let pressure,
-                             channel: let channel,
-                             group: let group):
+        case .polyAftertouch(let event):
             
-            return "polyAftertouch(note:\(note), pressure: \(pressure), chan: \(channel), group: \(group))"
+            return "polyAftertouch(note:\(event.note), pressure: \(event.pressure), chan: \(event.channel), group: \(event.group))"
         
-        case .cc(controller: let controller,
-                 value: let value,
-                 channel: let channel,
-                 group: let group):
+        case .cc(let event):
             
-            return "cc(\(controller), val: \(value), chan: \(channel), group: \(group))"
+            return "cc(\(event.controller.number), val: \(event.value), chan: \(event.channel), group: \(event.group))"
             
-        case .programChange(program: let program,
-                            channel: let channel,
-                            group: let group):
+        case .programChange(let event):
             
-            return "prgChange(\(program), chan: \(channel), group: \(group))"
+            return "prgChange(\(event.program), chan: \(event.channel), group: \(event.group))"
             
-        case .chanAftertouch(pressure: let pressure,
-                             channel: let channel,
-                             group: let group):
+        case .chanAftertouch(let event):
             
-            return "chanAftertouch(pressure: \(pressure), chan: \(channel), group: \(group))"
+            return "chanAftertouch(pressure: \(event.pressure), chan: \(event.channel), group: \(event.group))"
             
-        case .pitchBend(value: let value,
-                        channel: let channel,
-                        group: let group):
+        case .pitchBend(let event):
             
-            return "pitchBend(\(value), chan: \(channel), group: \(group))"
+            return "pitchBend(\(event.value), chan: \(event.channel), group: \(event.group))"
             
         // ----------------------
         // MARK: System Exclusive
         // ----------------------
         
-        case .sysEx(manufacturer: let manufacturer,
-                    data: let data,
-                    group: let group):
+        case .sysEx(let event):
             
-            let dataString = data.hex.stringValue(padTo: 2, prefix: true)
-            return "sysEx(mfr: \(manufacturer), data: [\(dataString)], group: \(group))"
+            let dataString = event.data.hex.stringValue(padTo: 2, prefix: true)
+            return "sysEx(mfr: \(event.manufacturer), data: [\(dataString)], group: \(event.group))"
             
-        case .sysExUniversal(universalType: let universalType,
-                             deviceID: let deviceID,
-                             subID1: let subID1,
-                             subID2: let subID2,
-                             data: let data,
-                             group: let group):
+        case .universalSysEx(let event):
             
-            let dataString = data.hex.stringValue(padTo: 2, prefix: true)
-            return "sysExUniversal(\(universalType), deviceID: \(deviceID), subID1: \(subID1), subID2: \(subID2), data: [\(dataString)], group: \(group))"
+            let dataString = event.data.hex.stringValue(padTo: 2, prefix: true)
+            return "universalSysEx(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(event.group))"
             
         // -------------------
         // MARK: System Common

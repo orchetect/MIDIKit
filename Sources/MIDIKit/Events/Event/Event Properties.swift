@@ -9,26 +9,26 @@ extension MIDI.Event {
     public var channel: MIDI.UInt4? {
         
         switch self {
-        case .noteOn(note: _, velocity: _, channel: let channel, group: _):
-            return channel
+        case .noteOn(let event):
+            return event.channel
         
-        case .noteOff(note: _, velocity: _, channel: let channel, group: _):
-            return channel
+        case .noteOff(let event):
+            return event.channel
         
-        case .polyAftertouch(note: _, pressure: _, channel: let channel, group: _):
-            return channel
+        case .polyAftertouch(let event):
+            return event.channel
         
-        case .cc(controller: _, value: _, channel: let channel, group: _):
-            return channel
+        case .cc(let event):
+            return event.channel
         
-        case .programChange(program: _, channel: let channel, group: _):
-            return channel
+        case .programChange(let event):
+            return event.channel
         
-        case .chanAftertouch(pressure: _, channel: let channel, group: _):
-            return channel
+        case .chanAftertouch(let event):
+            return event.channel
         
-        case .pitchBend(value: _, channel: let channel, group: _):
-            return channel
+        case .pitchBend(let event):
+            return event.channel
             
         default:
             return nil

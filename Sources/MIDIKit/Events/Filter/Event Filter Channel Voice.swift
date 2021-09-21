@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#warning("> These are incomplete, will be finished in a future release")
-
 // MARK: - Metadata properties
 
 extension MIDI.Event {
@@ -85,26 +83,18 @@ extension Collection where Element == MIDI.Event {
             
         case .onlyCC(let cc):
             return filter {
-                guard case .cc(controller: let controller,
-                               value: _,
-                               channel: _,
-                               group: _) = $0
+                guard case .cc(let event) = $0
                 else { return false }
                 
-                return controller == cc.controller
+                return event.controller == cc
             }
             
         case .onlyCCs(let ccs):
-            let isIncludedCCNumbers = ccs.map { $0.controller }
-            
             return filter {
-                guard case .cc(controller: let controller,
-                               value: _,
-                               channel: _,
-                               group: _) = $0
+                guard case .cc(let event) = $0
                 else { return false }
                 
-                return isIncludedCCNumbers.contains(controller)
+                return ccs.contains(event.controller)
             }
             
         case .keepChannel(let channel):
@@ -135,28 +125,20 @@ extension Collection where Element == MIDI.Event {
             return filter {
                 guard $0.isChannelVoice else { return true }
                 
-                guard case .cc(controller: let controller,
-                               value: _,
-                               channel: _,
-                               group: _) = $0
+                guard case .cc(let event) = $0
                 else { return true }
                 
-                return controller == cc.controller
+                return event.controller == cc
             }
             
         case .keepCCs(let ccs):
-            let isIncludedCCNumbers = ccs.map { $0.controller }
-            
             return filter {
                 guard $0.isChannelVoice else { return true }
                 
-                guard case .cc(controller: let controller,
-                               value: _,
-                               channel: _,
-                               group: _) = $0
+                guard case .cc(let event) = $0
                 else { return true }
                 
-                return isIncludedCCNumbers.contains(controller)
+                return ccs.contains(event.controller)
             }
             
         case .drop:
@@ -185,26 +167,18 @@ extension Collection where Element == MIDI.Event {
         
         case .dropCC(let cc):
             return filter {
-                guard case .cc(controller: let controller,
-                               value: _,
-                               channel: _,
-                               group: _) = $0
+                guard case .cc(let event) = $0
                 else { return true }
                 
-                return controller != cc.controller
+                return event.controller != cc
             }
             
         case .dropCCs(let ccs):
-            let isIncludedCCNumbers = ccs.map { $0.controller }
-            
             return filter {
-                guard case .cc(controller: let controller,
-                               value: _,
-                               channel: _,
-                               group: _) = $0
+                guard case .cc(let event) = $0
                 else { return true }
                 
-                return !isIncludedCCNumbers.contains(controller)
+                return !ccs.contains(event.controller)
             }
             
         }

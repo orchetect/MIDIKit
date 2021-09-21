@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.CC {
+extension MIDI.Event.CC.Controller {
     
     /// MIDI CC NRPNs (Non-Registered Parameter Numbers)
     ///
@@ -22,7 +22,7 @@ extension MIDI.Event.CC {
     
 }
 
-extension MIDI.Event.CC.NRPN {
+extension MIDI.Event.CC.Controller.NRPN {
     
     /// Returns the NRPN message consisting of 2-4 MIDI Events.
     public func events(channel: MIDI.UInt4,
@@ -31,32 +31,52 @@ extension MIDI.Event.CC.NRPN {
         #warning("> not sure this is correct")
         
         var nrpnEvents: [MIDI.Event] = [
-            .cc(controller: .nrpnMSB,
+            .cc(.nrpnMSB,
                 value: parameter.msb,
                 channel: channel,
                 group: group),
             
-            .cc(controller: .nrpnLSB,
+            .cc(.nrpnLSB,
                 value: parameter.lsb,
                 channel: channel,
                 group: group)
         ]
         
         if let dataEntryMSB = dataEntryMSB {
-            nrpnEvents.append(.cc(controller: .dataEntry,
+            nrpnEvents.append(.cc(.dataEntry,
                                   value: dataEntryMSB,
                                   channel: channel,
                                   group: group))
         }
         
         if let dataEntryLSB = dataEntryLSB {
-            nrpnEvents.append(.cc(controller: .dataEntry,
+            nrpnEvents.append(.cc(.dataEntry,
                                   value: dataEntryLSB,
                                   channel: channel,
                                   group: group))
         }
         
         return nrpnEvents
+        
+    }
+    
+}
+
+extension MIDI.Event {
+    
+    /// Creates an NRPN message, consisting of multiple MIDI Events.
+    public static func ccNRPN(parameter: MIDI.UInt7.Pair,
+                              dataEntryMSB: MIDI.UInt7?,
+                              dataEntryLSB: MIDI.UInt7?,
+                              channel: MIDI.UInt4,
+                              group: MIDI.UInt4 = 0) -> [MIDI.Event] {
+        
+        CC.Controller
+            .NRPN(parameter: parameter,
+                  dataEntryMSB: dataEntryMSB,
+                  dataEntryLSB: dataEntryLSB)
+            .events(channel: channel,
+                    group: group)
         
     }
     

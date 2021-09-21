@@ -378,7 +378,7 @@ extension MIDI {
                       let velocity = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .noteOff(note: note,
+                let newEvent: MIDI.Event = .noteOff(note,
                                                     velocity: velocity,
                                                     channel: channel,
                                                     group: umpGroup)
@@ -391,7 +391,7 @@ extension MIDI {
                       let velocity = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .noteOn(note: note,
+                let newEvent: MIDI.Event = .noteOn(note,
                                                    velocity: velocity,
                                                    channel: channel,
                                                    group: umpGroup)
@@ -417,7 +417,7 @@ extension MIDI {
                       let value = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .cc(controller: cc,
+                let newEvent: MIDI.Event = .cc(cc,
                                                value: value,
                                                channel: channel,
                                                group: umpGroup)
@@ -464,7 +464,7 @@ extension MIDI {
             case 0xF: // system message
                 switch statusByte.nibbles.low {
                 case 0x0: // System Common - SysEx Start
-                    guard let parsedSysEx = try? MIDI.Event.SysEx.parsed(from: bytes)
+                    guard let parsedSysEx = try? MIDI.Event.sysEx(from: bytes)
                     else { return events }
                     
                     events.append(parsedSysEx)

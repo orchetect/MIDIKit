@@ -23,7 +23,7 @@ extension MIDI.Event {
     public enum SysExType {
         
         case sysEx
-        case sysExUniversal
+        case universalSysEx
         
     }
     

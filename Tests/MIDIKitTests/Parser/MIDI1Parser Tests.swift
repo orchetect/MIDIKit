@@ -28,14 +28,14 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(
             MIDI.Packet.PacketData(bytes: [0x80, 0x3C, 0x40], timeStamp: 0)
                 .parsedEvents().events,
-            [.noteOff(note: 60, velocity: 64, channel: 0, group: 0)]
+            [.noteOff(60, velocity: 64, channel: 0, group: 0)]
         )
         
         // note on
         XCTAssertEqual(
             MIDI.Packet.PacketData(bytes: [0x91, 0x3C, 0x40], timeStamp: 0)
                 .parsedEvents().events,
-            [.noteOn(note: 60, velocity: 64, channel: 1, group: 0)]
+            [.noteOn(60, velocity: 64, channel: 1, group: 0)]
         )
         
         // poly aftertouch
@@ -49,7 +49,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(
             MIDI.Packet.PacketData(bytes: [0xB1, 0x01, 0x7F], timeStamp: 0)
                 .parsedEvents().events,
-            [.cc(controller: 1, value: 127, channel: 1, group: 0)]
+            [.cc(1, value: 127, channel: 1, group: 0)]
         )
         
         // program change
@@ -207,8 +207,8 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
             )
             .parsedEvents().events,
             
-            [.noteOff(note: 60, velocity: 64, channel: 0),
-             .noteOn(note: 60, velocity: 64, channel: 0)]
+            [.noteOff(60, velocity: 64, channel: 0),
+             .noteOn(60, velocity: 64, channel: 0)]
         )
         
         XCTAssertEqual(
@@ -222,9 +222,9 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
             )
             .parsedEvents().events,
             
-            [.cc(controller: 1, value: 127, channel: 1),
-             .noteOn(note: 60, velocity: 64, channel: 6),
-             .cc(controller: 2, value: 8, channel: 2)]
+            [.cc(1, value: 127, channel: 1),
+             .noteOn(60, velocity: 64, channel: 6),
+             .cc(2, value: 8, channel: 2)]
         )
         
     }
@@ -242,8 +242,8 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
             )
             .parsedEvents().events,
             
-            [.noteOn(note: 60, velocity: 64, channel: 0),
-             .noteOn(note: 61, velocity: 65, channel: 0)]
+            [.noteOn(60, velocity: 64, channel: 0),
+             .noteOn(61, velocity: 65, channel: 0)]
         )
         
         XCTAssertEqual(
@@ -258,9 +258,9 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
             )
             .parsedEvents().events,
             
-            [.noteOn(note: 60, velocity: 64, channel: 15),
-             .noteOn(note: 61, velocity: 65, channel: 15),
-             .noteOn(note: 62, velocity: 66, channel: 15)]
+            [.noteOn(60, velocity: 64, channel: 15),
+             .noteOn(61, velocity: 65, channel: 15),
+             .noteOn(62, velocity: 66, channel: 15)]
         )
         
     }
@@ -278,7 +278,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         XCTAssertEqual(
             parsed.events,
-            [.noteOn(note: 60, velocity: 64, channel: 2)]
+            [.noteOn(60, velocity: 64, channel: 2)]
         )
         
         XCTAssertEqual(
@@ -296,7 +296,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         XCTAssertEqual(
             parsed.events,
-            [.noteOn(note: 62, velocity: 66, channel: 2)]
+            [.noteOn(62, velocity: 66, channel: 2)]
         )
         
         XCTAssertEqual(
@@ -315,7 +315,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         XCTAssertEqual(
             parsed.events,
-            [.noteOff(note: 1, velocity: 2, channel: 4)]
+            [.noteOff(1, velocity: 2, channel: 4)]
         )
         
         XCTAssertEqual(
@@ -366,7 +366,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                             realTimeByte, // inserted between status and databyte1
                             0x3C, 0x40]),
                 
-                realTimeEvent + [.noteOn(note: 60, velocity: 64, channel: 0)]
+                realTimeEvent + [.noteOn(60, velocity: 64, channel: 0)]
             )
             
             XCTAssertEqual(
@@ -375,7 +375,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                             realTimeByte, // inserted between databyte1 and databyte2
                             0x40]),
                 
-                realTimeEvent + [.noteOn(note: 60, velocity: 64, channel: 0)]
+                realTimeEvent + [.noteOn(60, velocity: 64, channel: 0)]
             )
             
         }
@@ -422,9 +422,9 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                             0x3D, 0x41 // CV running status data bytes
                     ]),
                 
-                [.noteOn(note: 60, velocity: 64, channel: 0)]
+                [.noteOn(60, velocity: 64, channel: 0)]
                     + realTimeEvent
-                    + [.noteOn(note: 61, velocity: 65, channel: 0)]
+                    + [.noteOn(61, velocity: 65, channel: 0)]
             )
             
             // system real time events are not a SysEx terminator
@@ -482,7 +482,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                             + [0x3D, 0x41] // CV running status data bytes
                     ),
                 
-                [.noteOn(note: 60, velocity: 64, channel: 0)]
+                [.noteOn(60, velocity: 64, channel: 0)]
                     + commonEvent
             )
             
@@ -535,11 +535,11 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0x80, 0x3C]), [])
         // incomplete running status; should return only one event
         XCTAssertEqual(parsedEvents(bytes: [0x80, 0x3C, 0x40, 0x3C]),
-                       [.noteOff(note: 0x3C, velocity: 0x40, channel: 0)])
+                       [.noteOff(0x3C, velocity: 0x40, channel: 0)])
         // valid running status
         XCTAssertEqual(parsedEvents(bytes: [0x80, 0x3C, 0x40, 0x3D, 0x41]),
-                       [.noteOff(note: 0x3C, velocity: 0x40, channel: 0),
-                        .noteOff(note: 0x3D, velocity: 0x41, channel: 0)])
+                       [.noteOff(0x3C, velocity: 0x40, channel: 0),
+                        .noteOff(0x3D, velocity: 0x41, channel: 0)])
         
         // note on:
         // requires two data bytes to follow
@@ -547,11 +547,11 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0x90, 0x3C]), [])
         // incomplete running status; should return only one event
         XCTAssertEqual(parsedEvents(bytes: [0x90, 0x3C, 0x40, 0x3C]),
-                       [.noteOn(note: 0x3C, velocity: 0x40, channel: 0)])
+                       [.noteOn(0x3C, velocity: 0x40, channel: 0)])
         // valid running status
         XCTAssertEqual(parsedEvents(bytes: [0x90, 0x3C, 0x40, 0x3D, 0x41]),
-                       [.noteOn(note: 0x3C, velocity: 0x40, channel: 0),
-                        .noteOn(note: 0x3D, velocity: 0x41, channel: 0)])
+                       [.noteOn(0x3C, velocity: 0x40, channel: 0),
+                        .noteOn(0x3D, velocity: 0x41, channel: 0)])
         
         // poly aftertouch:
         // requires two data bytes to follow
@@ -571,11 +571,11 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0xB0, 0x3C]), [])
         // incomplete running status; should return only one event
         XCTAssertEqual(parsedEvents(bytes: [0xB0, 0x3C, 0x40, 0x3C]),
-                       [.cc(controller: 0x3C, value: 0x40, channel: 0)])
+                       [.cc(0x3C, value: 0x40, channel: 0)])
         // valid running status
         XCTAssertEqual(parsedEvents(bytes: [0xB0, 0x3C, 0x40, 0x3D, 0x41]),
-                       [.cc(controller: 0x3C, value: 0x40, channel: 0),
-                        .cc(controller: 0x3D, value: 0x41, channel: 0)])
+                       [.cc(0x3C, value: 0x40, channel: 0),
+                        .cc(0x3D, value: 0x41, channel: 0)])
         
         // program change
         // requires one data byte to follow
@@ -716,7 +716,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34,
                                             0x90, 0x3C, 0x40]),
                        [.sysEx(manufacturer: .oneByte(0x41)!, data: [0x01, 0x34], group: 0),
-                        .noteOn(note: 60, velocity: 64, channel: 0, group: 0)])
+                        .noteOn(60, velocity: 64, channel: 0, group: 0)])
         
         // system real time events are not a SysEx terminator, as the parser does not look ahead and assumes the SysEx could continue to receive data bytes
         XCTAssertEqual(parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34,

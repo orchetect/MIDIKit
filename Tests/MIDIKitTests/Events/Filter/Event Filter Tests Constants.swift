@@ -9,10 +9,10 @@ enum kEvents {
     
     enum ChanVoice {
         
-        static let noteOn: MIDI.Event = .noteOn(note: 60, velocity: 48, channel: 2, group: 0)
-        static let noteOff: MIDI.Event = .noteOff(note: 61, velocity: 0, channel: 3, group: 0)
+        static let noteOn: MIDI.Event = .noteOn(60, velocity: 48, channel: 2, group: 0)
+        static let noteOff: MIDI.Event = .noteOff(61, velocity: 0, channel: 3, group: 0)
         static let polyAftertouch: MIDI.Event = .polyAftertouch(note: 42, pressure: 102, channel: 1, group: 0)
-        static let cc: MIDI.Event = .cc(controller: 11, value: 127, channel: 0, group: 0)
+        static let cc: MIDI.Event = .cc(11, value: 127, channel: 0, group: 0)
         static let programChange: MIDI.Event = .programChange(program: 1, channel: 1, group: 0)
         static let chanAftertouch: MIDI.Event = .chanAftertouch(pressure: 1, channel: 1, group: 0)
         static let pitchBend: MIDI.Event = .pitchBend(value: 1, channel: 1, group: 0)
@@ -49,19 +49,23 @@ enum kEvents {
     
     enum SysEx {
         
-        static let sysEx: MIDI.Event = .sysEx(manufacturer: .educational(),
-                                              data: [0x20],
-                                              group: 0)
-        static let sysExUniversal: MIDI.Event = .sysExUniversal(universalType: .realTime,
-                                                                deviceID: 0x7F,
-                                                                subID1: 0x01,
-                                                                subID2: 0x01,
-                                                                data: [0x20],
-                                                                group: 0)
+        static let sysEx: MIDI.Event = .sysEx(
+            manufacturer: .educational(),
+            data: [0x20],
+            group: 0
+        )
+        static let universalSysEx: MIDI.Event = .universalSysEx(
+            universalType: .realTime,
+            deviceID: 0x7F,
+            subID1: 0x01,
+            subID2: 0x01,
+            data: [0x20],
+            group: 0
+        )
         
         static let oneOfEachEventType: [MIDI.Event] = [
             Self.sysEx,
-            Self.sysExUniversal
+            Self.universalSysEx
         ]
         
     }

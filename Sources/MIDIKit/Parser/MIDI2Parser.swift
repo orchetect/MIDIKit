@@ -229,7 +229,7 @@ extension MIDI {
                       let velocity = dataByte2?.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .noteOff(note: note,
+                let newEvent: MIDI.Event = .noteOff(note,
                                                     velocity: velocity,
                                                     channel: channel,
                                                     group: group)
@@ -242,7 +242,7 @@ extension MIDI {
                       let velocity = dataByte2?.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .noteOn(note: note,
+                let newEvent: MIDI.Event = .noteOn(note,
                                                    velocity: velocity,
                                                    channel: channel,
                                                    group: group)
@@ -268,7 +268,7 @@ extension MIDI {
                       let value = dataByte2?.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .cc(controller: cc,
+                let newEvent: MIDI.Event = .cc(cc,
                                                value: value,
                                                channel: channel,
                                                group: group)
@@ -348,8 +348,10 @@ extension MIDI {
                         bytes.startIndex.advanced(by: 2 + numberOfBytes)
                 ]
                 
-                guard let parsedSysEx = try? MIDI.Event.SysEx
-                        .parsed(from: [0xF0] + payloadBytes + [0xF7])
+                guard let parsedSysEx = try? MIDI.Event.sysEx(
+                    from: [0xF0] + payloadBytes + [0xF7],
+                    group: group
+                )
                 else { return nil }
                 
                 return parsedSysEx

@@ -1,14 +1,14 @@
 //
-//  CC init.swift
+//  CC Controller init.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.CC {
+extension MIDI.Event.CC.Controller {
     
     /// Initialize an enum case from the controller number.
-    public init(controller: MIDI.UInt7) {
+    public init(number: MIDI.UInt7) {
         
-        switch controller {
+        switch number {
         
         case   0: self = .bankSelect
         case   1: self = .modWheel
@@ -141,7 +141,7 @@ extension MIDI.Event.CC {
             
         default:
             // should never happen since the switch case covers all 128 values of MIDI.UInt7
-            assertionFailure("Unhandled MIDI CC controller number.")
+            assertionFailure("Unhandled MIDI CC controller number: \(number).")
             self = .modWheel
             
         }

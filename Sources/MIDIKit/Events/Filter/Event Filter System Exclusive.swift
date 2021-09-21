@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#warning("> These are incomplete, will be finished in a future release")
-
 // MARK: - Metadata properties
 
 extension MIDI.Event {
@@ -14,7 +12,7 @@ extension MIDI.Event {
         
         switch self {
         case .sysEx,
-                .sysExUniversal:
+                .universalSysEx:
             return true
             
         default:
@@ -28,7 +26,7 @@ extension MIDI.Event {
         
         switch self {
         case .sysEx          : return sysExType == .sysEx
-        case .sysExUniversal : return sysExType == .sysExUniversal
+        case .universalSysEx : return sysExType == .universalSysEx
         default              : return false
         }
         

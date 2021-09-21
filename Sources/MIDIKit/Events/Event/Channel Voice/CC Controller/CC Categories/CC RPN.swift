@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.CC {
+extension MIDI.Event.CC.Controller {
     
     /// Cases describing MIDI CC RPNs (Registered Parameter Numbers)
     ///
@@ -77,7 +77,7 @@ extension MIDI.Event.CC {
     
 }
 
-extension MIDI.Event.CC.RPN {
+extension MIDI.Event.CC.Controller.RPN {
     
     /// Parameter number byte pair
     public var parameter: MIDI.UInt7.Pair {
@@ -168,7 +168,7 @@ extension MIDI.Event.CC.RPN {
     
 }
 
-extension MIDI.Event.CC.RPN {
+extension MIDI.Event.CC.Controller.RPN {
     
     /// Returns the RPN message consisting of 2-4 MIDI Events.
     public func events(channel: MIDI.UInt4,
@@ -177,12 +177,12 @@ extension MIDI.Event.CC.RPN {
         #warning("> not sure this is correct")
         
         var rpnEvents: [MIDI.Event] = [
-            .cc(controller: .rpnMSB,
+            .cc(.rpnMSB,
                 value: parameter.msb,
                 channel: channel,
                 group: group),
             
-            .cc(controller: .rpnLSB,
+            .cc(.rpnLSB,
                 value: parameter.lsb,
                 channel: channel,
                 group: group)
@@ -191,14 +191,14 @@ extension MIDI.Event.CC.RPN {
         let dataEntryBytes = self.dataEntryBytes
         
         if let dataEntryMSB = dataEntryBytes.msb {
-            rpnEvents.append(.cc(controller: .dataEntry,
+            rpnEvents.append(.cc(.dataEntry,
                                  value: dataEntryMSB,
                                  channel: channel,
                                  group: group))
         }
         
         if let dataEntryLSB = dataEntryBytes.lsb {
-            rpnEvents.append(.cc(controller: .dataEntry,
+            rpnEvents.append(.cc(.dataEntry,
                                  value: dataEntryLSB,
                                  channel: channel,
                                  group: group))
@@ -208,4 +208,18 @@ extension MIDI.Event.CC.RPN {
         
     }
     
+}
+
+extension MIDI.Event {
+    
+    /// Creates an RPN message, consisting of multiple MIDI Events.
+    public static func ccRPN(_ rpn: CC.Controller.RPN,
+                             channel: MIDI.UInt4,
+                             group: MIDI.UInt4 = 0) -> [MIDI.Event] {
+        
+        rpn.events(channel: channel,
+                   group: group)
+        
+    }
+
 }

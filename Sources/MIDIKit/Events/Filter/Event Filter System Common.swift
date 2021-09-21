@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#warning("> These are incomplete, will be finished in a future release")
-
 // MARK: - Metadata properties
 
 extension MIDI.Event {
