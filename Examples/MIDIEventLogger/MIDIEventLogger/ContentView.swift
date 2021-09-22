@@ -34,7 +34,7 @@ struct ContentView: View {
     
     @State var midiChannel: MIDI.UInt4 = 0
     @State var midiGroup: MIDI.UInt4 = 0
-    @State var chanVoiceCC: MIDI.Event.CC = .modWheel
+    @State var chanVoiceCC: MIDI.Event.CC.Controller = .modWheel
     
     @State var midiInputConnection: MIDI.IO.OutputEndpoint? = nil
     
