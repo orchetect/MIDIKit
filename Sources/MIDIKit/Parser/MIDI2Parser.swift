@@ -144,7 +144,7 @@ extension MIDI {
                 guard let unwrappedDataByte1 = dataByte1()
                 else { return nil }
                 
-                return .timecodeQuarterFrame(byte: unwrappedDataByte1)
+                return .timecodeQuarterFrame(byte: unwrappedDataByte1, group: group)
                 
             case 0xF2: // System Common - Song Position Pointer
                 guard let unwrappedDataByte1 = dataByte1(),
@@ -152,13 +152,13 @@ extension MIDI {
                 else { return nil }
                 
                 let uint14 = MIDI.UInt14(bytePair: .init(msb: unwrappedDataByte2, lsb: unwrappedDataByte1))
-                return .songPositionPointer(midiBeat: uint14)
+                return .songPositionPointer(midiBeat: uint14, group: group)
                 
             case 0xF3: // System Common - Song Select
                 guard let songNumber = dataByte1()?.toMIDIUInt7Exactly
                 else { return nil }
                 
-                return .songSelect(number: songNumber)
+                return .songSelect(number: songNumber, group: group)
                 
             case 0xF4, 0xF5: // System Common - Undefined
                 // MIDI 1.0 Spec: ignore these events
@@ -327,7 +327,7 @@ extension MIDI {
             // MIDI 2.0 Spec:
             // "The MIDI 1.0 Protocol bracketing method with 0xF0 Start and 0xF7 End Status bytes is not used in the UMP Format. Instead, the SysEx payload is carried in one or more 64-bit UMPs, discarding the 0xF0 and 0xF7 bytes. The standard ID Number (Manufacturer ID, Special ID 0x7D, or Universal System Exclusive ID), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable) are included in the initial data bytes, just as they are in MIDI 1.0 Protocol message equivalents."
             
-            let byte1Nibbles = bytes[bytes.startIndex.advanced(by: 1)].nibbles
+            let byte1Nibbles = bytes[bytes.startIndex].nibbles
             
             guard let sysExStatusField = MIDI.Packet.UniversalPacketData
                     .SysExStatusField(rawValue: byte1Nibbles.high)
@@ -343,9 +343,9 @@ extension MIDI {
                 else { return nil }
                 
                 let payloadBytes = bytes[
-                    bytes.startIndex.advanced(by: 2)
+                    bytes.startIndex.advanced(by: 1)
                         ..<
-                        bytes.startIndex.advanced(by: 2 + numberOfBytes)
+                        bytes.startIndex.advanced(by: 1 + numberOfBytes)
                 ]
                 
                 guard let parsedSysEx = try? MIDI.Event.sysEx(
