@@ -436,7 +436,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                     ]),
                 
                 realTimeEvent
-                    + [.sysEx(manufacturer: .oneByte(0x41)!, data: [0x01, 0x34, 0x27, 0x52])]
+                    + [.sysEx(manufacturer: .oneByte(0x41), data: [0x01, 0x34, 0x27, 0x52])]
             )
             
         }
@@ -706,35 +706,35 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         // 0xF7 termination byte
         XCTAssertEqual(parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34, 0xF7]),
-                       [.sysEx(manufacturer: .oneByte(0x41)!, data: [0x01, 0x34], group: 0)])
+                       [.sysEx(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0)])
         
         // no termination byte
         XCTAssertEqual(parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34]),
-                       [.sysEx(manufacturer: .oneByte(0x41)!, data: [0x01, 0x34], group: 0)])
+                       [.sysEx(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0)])
         
         // new status byte (non-realtime)
         XCTAssertEqual(parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34,
                                             0x90, 0x3C, 0x40]),
-                       [.sysEx(manufacturer: .oneByte(0x41)!, data: [0x01, 0x34], group: 0),
+                       [.sysEx(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0),
                         .noteOn(60, velocity: 64, channel: 0, group: 0)])
         
         // system real time events are not a SysEx terminator, as the parser does not look ahead and assumes the SysEx could continue to receive data bytes
         XCTAssertEqual(parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34,
                                             0xFE]),
                        [.activeSensing(group: 0),
-                        .sysEx(manufacturer: .oneByte(0x41)!, data: [0x01, 0x34], group: 0)])
+                        .sysEx(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0)])
         
         // multiple SysEx messages in a single packet
         XCTAssertEqual(parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x02, 0xF7,   // 0xF7 termination
                                             0xF0, 0x42, 0x03, 0x04, 0xF7]), // 0xF7 termination
-                       [.sysEx(manufacturer: .oneByte(0x41)!, data: [0x01, 0x02], group: 0),
-                        .sysEx(manufacturer: .oneByte(0x42)!, data: [0x03, 0x04], group: 0)])
+                       [.sysEx(manufacturer: .oneByte(0x41), data: [0x01, 0x02], group: 0),
+                        .sysEx(manufacturer: .oneByte(0x42), data: [0x03, 0x04], group: 0)])
         
         // multiple SysEx messages in a single packet
         XCTAssertEqual(parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x02,   // no 0xF7 termination
                                             0xF0, 0x42, 0x03, 0x04]), // 0xF0 acts as termination to 1st sysex
-                       [.sysEx(manufacturer: .oneByte(0x41)!, data: [0x01, 0x02], group: 0),
-                        .sysEx(manufacturer: .oneByte(0x42)!, data: [0x03, 0x04], group: 0)])
+                       [.sysEx(manufacturer: .oneByte(0x41), data: [0x01, 0x02], group: 0),
+                        .sysEx(manufacturer: .oneByte(0x42), data: [0x03, 0x04], group: 0)])
         
         
     }
