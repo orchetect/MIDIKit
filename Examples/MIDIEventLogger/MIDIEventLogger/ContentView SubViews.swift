@@ -194,7 +194,7 @@ extension ContentView {
                 } label: { Text("Universal SysEx with 0 Bytes") }
                 
                 Button {
-                    sendEvent(.universalSysEx(universalType: .realTime,
+                    sendEvent(.universalSysEx(universalType: .nonRealTime,
                                               deviceID: 0x7F,
                                               subID1: 0x7F,
                                               subID2: 0x7F,
@@ -212,7 +212,7 @@ extension ContentView {
                 } label: { Text("Universal SysEx with 4 Bytes") }
                 
                 Button {
-                    sendEvent(.universalSysEx(universalType: .realTime,
+                    sendEvent(.universalSysEx(universalType: .nonRealTime,
                                               deviceID: 0x7F,
                                               subID1: 0x7F,
                                               subID2: 0x7F,
@@ -234,7 +234,7 @@ extension ContentView {
             VStack(alignment: .center, spacing: 8) {
                 
                 Button {
-                    sendEvent(.timecodeQuarterFrame(byte: 0x00,
+                    sendEvent(.timecodeQuarterFrame(dataByte: 0x00,
                                                     group: midiGroup))
                 } label: { Text("Timecode Quarter-Frame") }
                 
