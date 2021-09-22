@@ -31,7 +31,7 @@ enum kEvents {
     
     enum SysCommon {
         
-        static let timecodeQuarterFrame: MIDI.Event = .timecodeQuarterFrame(byte: 0b0000_0000, group: 0)
+        static let timecodeQuarterFrame: MIDI.Event = .timecodeQuarterFrame(dataByte: 0b0000_0000, group: 0)
         static let songPositionPointer: MIDI.Event = .songPositionPointer(midiBeat: 8, group: 0)
         static let songSelect: MIDI.Event = .songSelect(number: 4, group: 0)
         static let unofficialBusSelect: MIDI.Event = .unofficialBusSelect(group: 0)

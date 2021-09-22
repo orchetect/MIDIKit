@@ -470,10 +470,10 @@ extension MIDI {
                     events.append(parsedSysEx)
                     
                 case 0x1: // System Common - timecode quarter-frame
-                    guard let unwrappedDataByte1 = dataByte1
+                    guard let unwrappedDataByte1 = dataByte1?.toMIDIUInt7Exactly
                     else { return events }
                     
-                    events.append(.timecodeQuarterFrame(byte: unwrappedDataByte1))
+                    events.append(.timecodeQuarterFrame(dataByte: unwrappedDataByte1))
                     
                 case 0x2: // System Common - Song Position Pointer
                     guard let unwrappedDataByte1 = dataByte1,
