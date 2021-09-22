@@ -45,6 +45,7 @@ extension MIDI {
         /// Channel Voice Message: Pitch Bend (Status `0xE`)
         case pitchBend(PitchBend)
         
+        
         // ----------------------
         // MARK: System Exclusive
         // ----------------------
@@ -66,6 +67,7 @@ extension MIDI {
         ///
         /// - `deviceID` of 0x7F indicates "All Devices".
         case universalSysEx(UniversalSysEx)
+        
         
         // -------------------
         // MARK: System Common
@@ -101,6 +103,7 @@ extension MIDI {
         ///
         /// "Used with analog synthesizers to request that all oscillators be tuned."
         case tuneRequest(TuneRequest)
+        
         
         // ----------------------
         // MARK: System Real Time
@@ -149,125 +152,6 @@ extension MIDI {
         ///
         /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
         case systemReset(SystemReset)
-        
-    }
-    
-}
-
-// MARK: - CustomStringConvertible
-
-extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
-    
-    public var description: String {
-        
-        switch self {
-        
-        // -------------------
-        // MARK: Channel Voice
-        // -------------------
-        
-        case .noteOn(let event):
-            
-            return "noteOn(\(event.note), vel: \(event.velocity), chan: \(event.channel), group: \(event.group))"
-            
-        case .noteOff(let event):
-            
-            return "noteOff(\(event.note), vel: \(event.velocity), chan: \(event.channel), group: \(event.group))"
-                
-        case .polyAftertouch(let event):
-            
-            return "polyAftertouch(note:\(event.note), pressure: \(event.pressure), chan: \(event.channel), group: \(event.group))"
-        
-        case .cc(let event):
-            
-            return "cc(\(event.controller.number), val: \(event.value), chan: \(event.channel), group: \(event.group))"
-            
-        case .programChange(let event):
-            
-            return "prgChange(\(event.program), chan: \(event.channel), group: \(event.group))"
-            
-        case .chanAftertouch(let event):
-            
-            return "chanAftertouch(pressure: \(event.pressure), chan: \(event.channel), group: \(event.group))"
-            
-        case .pitchBend(let event):
-            
-            return "pitchBend(\(event.value), chan: \(event.channel), group: \(event.group))"
-            
-        // ----------------------
-        // MARK: System Exclusive
-        // ----------------------
-        
-        case .sysEx(let event):
-            
-            let dataString = event.data.hex.stringValue(padTo: 2, prefix: true)
-            return "sysEx(mfr: \(event.manufacturer), data: [\(dataString)], group: \(event.group))"
-            
-        case .universalSysEx(let event):
-            
-            let dataString = event.data.hex.stringValue(padTo: 2, prefix: true)
-            return "universalSysEx(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(event.group))"
-            
-        // -------------------
-        // MARK: System Common
-        // -------------------
-        
-        case .timecodeQuarterFrame(let event):
-            
-            let dataByteString = event.byte.binary.stringValue(padTo: 8, splitEvery: 8, prefix: true)
-            return "timecodeQF(\(dataByteString), group: \(event.group))"
-            
-        case .songPositionPointer(let event):
-            
-            return "songPositionPointer(beat: \(event.midiBeat), group: \(event.group))"
-            
-        case .songSelect(let event):
-            
-            return "songSelect(number: \(event.number), group: \(event.group))"
-            
-        case .unofficialBusSelect(group: let group):
-            
-            return "unofficialBusSelect(group: \(group))"
-            
-        case .tuneRequest(group: let group):
-            
-            return "tuneRequest(group: \(group))"
-            
-        // ----------------------
-        // MARK: System Real Time
-        // ----------------------
-            
-        case .timingClock(group: let group):
-            
-            return "timingClock(group: \(group))"
-            
-        case .start(group: let group):
-            
-            return "start(group: \(group))"
-            
-        case .continue(group: let group):
-            
-            return "continue(group: \(group))"
-            
-        case .stop(group: let group):
-            
-            return "stop(group: \(group))"
-            
-        case .activeSensing(group: let group):
-            
-            return "activeSensing(group: \(group))"
-            
-        case .systemReset(group: let group):
-            
-            return "systemReset(group: \(group))"
-        
-        }
-        
-    }
-    
-    public var debugDescription: String {
-        
-        description
         
     }
     
