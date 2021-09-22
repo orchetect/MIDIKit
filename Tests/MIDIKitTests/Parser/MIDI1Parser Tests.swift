@@ -10,66 +10,66 @@ import XCTest
 
 class MIDIEventMIDI1ParserTests: XCTestCase {
     
-    func testMIDIPacketData_parsedEvents_Empty() {
+    func testPacketData_parsedEvents_Empty() {
         
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [], timeStamp: 0)
+            MIDI.Packet.PacketData(bytes: [], timeStamp: .zero)
                 .parsedEvents().events,
             []
         )
         
     }
     
-    func testMIDIPacketData_parsedEvents_SingleEvents() {
+    func testPacketData_parsedEvents_SingleEvents() {
+        
+        // template method
+        
+        func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
+            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
+                .parsedEvents().events
+        }
         
         // - channel voice
         
         // note off
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0x80, 0x3C, 0x40], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0x80, 0x3C, 0x40]),
             [.noteOff(60, velocity: 64, channel: 0, group: 0)]
         )
         
         // note on
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0x91, 0x3C, 0x40], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0x91, 0x3C, 0x40]),
             [.noteOn(60, velocity: 64, channel: 1, group: 0)]
         )
         
         // poly aftertouch
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xA4, 0x3C, 0x40], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xA4, 0x3C, 0x40]),
             [.polyAftertouch(note: 60, pressure: 64, channel: 4, group: 0)]
         )
         
         // cc
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xB1, 0x01, 0x7F], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xB1, 0x01, 0x7F]),
             [.cc(1, value: 127, channel: 1, group: 0)]
         )
         
         // program change
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xCA, 0x20], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xCA, 0x20]),
             [.programChange(program: 32, channel: 10, group: 0)]
         )
         
         // channel aftertouch
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xD8, 0x40], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xD8, 0x40]),
             [.chanAftertouch(pressure: 64, channel: 8, group: 0)]
         )
         
         // pitch bend
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xE3, 0x00, 0x40], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xE3, 0x00, 0x40]),
             [.pitchBend(value: 8192, channel: 3, group: 0)]
         )
         
@@ -77,8 +77,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         // SysEx
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xF0, 0x7D, 0x01, 0xF7], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xF0, 0x7D, 0x01, 0xF7]),
             [.sysEx(manufacturer: .oneByte(0x7D),
                     data: [0x01],
                     group: 0)
@@ -87,113 +86,98 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         // System Common - timecode quarter-frame
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xF1, 0x00], timeStamp: 0)
-                .parsedEvents().events,
-            [.timecodeQuarterFrame(byte: 0x00, group: 0)]
+            parsedEvents(bytes: [0xF1, 0x00]),
+            [.timecodeQuarterFrame(dataByte: 0x00, group: 0)]
         )
         
         // System Common - Song Position Pointer
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xF2, 0x08, 0x00], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xF2, 0x08, 0x00]),
             [.songPositionPointer(midiBeat: 8, group: 0)]
         )
         
         // System Common - Song Select
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xF3, 0x08], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xF3, 0x08]),
             [.songSelect(number: 8, group: 0)]
         )
         
         // System Common - (0xF4 is undefined in MIDI 1.0 Spec)
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xF4], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xF4]),
             []
         )
         
         // System Common - (0xF5 is undefined in MIDI 1.0 Spec)
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xF5], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xF5]),
             []
         )
         
         // System Common - Tune Request
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xF6], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xF6]),
             [.tuneRequest(group: 0)]
         )
         
         // System Common - System Exclusive End (EOX / End Of Exclusive)
         // on its own, 0xF7 is ignored
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xF7], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xF7]),
             []
         )
         
         // real time: timing clock
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xF8], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xF8]),
             [.timingClock(group: 0)]
         )
         
         // real time: (undefined)
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xF9], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xF9]),
             []
         )
         
         // real time: start
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xFA], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xFA]),
             [.start(group: 0)]
         )
         
         // real time: continue
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xFB], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xFB]),
             [.continue(group: 0)]
         )
         
         // real time: stop
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xFC], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xFC]),
             [.stop(group: 0)]
         )
         
         // real time: (undefined)
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xFD], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xFD]),
             []
         )
         
         // real time: active sensing
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xFE], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xFE]),
             [.activeSensing(group: 0)]
         )
         
         // real time: system reset
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [0xFF], timeStamp: 0)
-                .parsedEvents().events,
+            parsedEvents(bytes: [0xFF]),
             [.systemReset(group: 0)]
         )
         
     }
     
-    func testMIDIPacketData_parsedEvents_MultipleEvents() {
+    func testPacketData_parsedEvents_MultipleEvents() {
         
         // channel voice
         
@@ -203,7 +187,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                     0x80, 0x3C, 0x40,
                     0x90, 0x3C, 0x40
                 ],
-                timeStamp: 0
+                timeStamp: .zero
             )
             .parsedEvents().events,
             
@@ -218,7 +202,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                     0x96, 0x3C, 0x40,
                     0xB2, 0x02, 0x08
                 ],
-                timeStamp: 0
+                timeStamp: .zero
             )
             .parsedEvents().events,
             
@@ -229,7 +213,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
     }
     
-    func testMIDIPacketData_parsedEvents_RunningStatus_SinglePacket() {
+    func testPacketData_parsedEvents_RunningStatus_SinglePacket() {
         
         XCTAssertEqual(
             MIDI.Packet.PacketData(
@@ -238,7 +222,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                     0x3C, 0x40,
                     0x3D, 0x41
                 ],
-                timeStamp: 0
+                timeStamp: .zero
             )
             .parsedEvents().events,
             
@@ -254,7 +238,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                     0x3D, 0x41,
                     0x3E, 0x42
                 ],
-                timeStamp: 0
+                timeStamp: .zero
             )
             .parsedEvents().events,
             
@@ -265,14 +249,14 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
     }
     
-    func testMIDIPacketData_parsedEvents_RunningStatus_SeparatePackets_Simple() {
+    func testPacketData_parsedEvents_RunningStatus_SeparatePackets_Simple() {
         
         var parsed = MIDI.Packet.PacketData(
             bytes: [
                 0x92,
                 0x3C, 0x40
             ],
-            timeStamp: 0
+            timeStamp: .zero
         )
         .parsedEvents(runningStatus: nil)
         
@@ -290,7 +274,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
             bytes: [
                 0x3E, 0x42
             ],
-            timeStamp: 0
+            timeStamp: .zero
         )
         .parsedEvents(runningStatus: parsed.runningStatus)
         
@@ -309,7 +293,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                 0x84,
                 0x01, 0x02
             ],
-            timeStamp: 0
+            timeStamp: .zero
         )
         .parsedEvents(runningStatus: parsed.runningStatus)
         
@@ -325,12 +309,12 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
     }
     
-    func testMIDIPacketData_parsedEvents_MidstreamRealTimeMessages() {
+    func testPacketData_parsedEvents_MidstreamRealTimeMessages_SinglePacket() {
         
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: 0)
+            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents().events
         }
         
@@ -382,12 +366,12 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
     }
     
-    func testMIDIPacketData_parsedEvents_RunningStatus_SystemRealTime() {
+    func testPacketData_parsedEvents_RunningStatus_SystemRealTime() {
         
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: 0)
+            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents().events
         }
         
@@ -443,18 +427,18 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
     }
     
-    func testMIDIPacketData_parsedEvents_RunningStatus_SystemCommon() {
+    func testPacketData_parsedEvents_RunningStatus_SystemCommon() {
         
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: 0)
+            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents().events
         }
         
         let systemCommonMessages: [[MIDI.Byte] : [MIDI.Event]] = [
             // 0xF0 - SysEx Start, not applicable to check in this test
-            [0xF1, 0x00]       : [.timecodeQuarterFrame(byte: 0x00, group: 0)],
+            [0xF1, 0x00]       : [.timecodeQuarterFrame(dataByte: 0x00, group: 0)],
             [0xF2, 0x08, 0x00] : [.songPositionPointer(midiBeat: 8, group: 0)],
             [0xF3, 0x05]       : [.songSelect(number: 5, group: 0)],
             [0xF4]             : [], // undefined
@@ -513,12 +497,12 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
     }
     
-    func testMIDIPacketData_parsedEvents_Malformed() {
+    func testPacketData_parsedEvents_Malformed() {
         
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: 0)
+            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents().events
         }
         
@@ -529,7 +513,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
             XCTAssertEqual(parsedEvents(bytes: [byte]), [])
         }
         
-        // note off:
+        // note off
         // requires two data bytes to follow
         XCTAssertEqual(parsedEvents(bytes: [0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x80, 0x3C]), [])
@@ -541,7 +525,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                        [.noteOff(0x3C, velocity: 0x40, channel: 0),
                         .noteOff(0x3D, velocity: 0x41, channel: 0)])
         
-        // note on:
+        // note on
         // requires two data bytes to follow
         XCTAssertEqual(parsedEvents(bytes: [0x90]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x90, 0x3C]), [])
@@ -553,7 +537,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                        [.noteOn(0x3C, velocity: 0x40, channel: 0),
                         .noteOn(0x3D, velocity: 0x41, channel: 0)])
         
-        // poly aftertouch:
+        // poly aftertouch
         // requires two data bytes to follow
         XCTAssertEqual(parsedEvents(bytes: [0xA0]), [])
         XCTAssertEqual(parsedEvents(bytes: [0xA0, 0x3C]), [])
@@ -611,11 +595,11 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                        [.pitchBend(value: 8192, channel: 0),
                         .pitchBend(value: 8193, channel: 0)])
         
-        // SysEx start
+        // System Common - System Exclusive start
         // [0xF0, ... variable number of SysEx bytes]
         XCTAssertEqual(parsedEvents(bytes: [0xF0]), [])
         
-        // System Common - timecode quarter-frame
+        // System Common - Timecode quarter-frame
         // [0xF1, byte]
         XCTAssertEqual(parsedEvents(bytes: [0xF1]), [])
         
@@ -688,12 +672,12 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
     }
     
-    func testMIDIPacketData_parsedEvents_SysEx() {
+    func testPacketData_parsedEvents_SysEx() {
         
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: 0)
+            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents().events
         }
         

@@ -21,7 +21,6 @@ extension MIDI {
             
             Self.parsedEvents(in: packetData.bytes)
             
-            
         }
         
         /// Parses raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
@@ -29,9 +28,10 @@ extension MIDI {
             in bytes: [MIDI.Byte]
         ) -> [MIDI.Event] {
             
-            // instead of checking if it's empty, check if it's at least 4 bytes
-            // since a UMP packet will never be less than 4 bytes
-            guard bytes.count > 3 else { return [] }
+            // UMP packet will never be empty and will always be 4-byte aligned (UInt32 words)
+            guard !bytes.isEmpty,
+                  bytes.count % 4 == 0
+            else { return [] }
             
             // MIDI 2.0 Spec Parser
             
@@ -119,43 +119,46 @@ extension MIDI {
             
         }
         
+        /// Internal sub-parser: Parse System RealTime/Common UMP message.
+        ///
+        /// - Parameters:
+        ///   - bytes: 3 UMP bytes after the first byte ([1...3])
+        ///   - group: UMP group
         internal static func parseSystemRealTimeAndCommon(
             bytes: Array<MIDI.Byte>.SubSequence,
             group: MIDI.UInt4
         ) -> MIDI.Event? {
             
+            // ensure packet is 32-bits (4 bytes / 1 UInt32 word) wide
+            // (first byte is stripped when bytes are passed into this function so we expect 3 bytes here)
+            guard bytes.count == 3 else { return nil }
+            
             let statusByte = bytes[bytes.startIndex]
-            
-            func dataByte1() -> MIDI.Byte? {
-                bytes.count > 1
-                    ? bytes[bytes.startIndex.advanced(by: 1)] : nil
-            }
-            
-            func dataByte2() -> MIDI.Byte? {
-                bytes.count > 2
-                    ? bytes[bytes.startIndex.advanced(by: 2)] : nil
-            }
+            //let dataByte1: MIDI.Byte = bytes[bytes.startIndex.advanced(by: 1)]
+            //let dataByte2: MIDI.Byte = bytes[bytes.startIndex.advanced(by: 2)]
+            func dataByte1() -> MIDI.Byte { bytes[bytes.startIndex.advanced(by: 1)] }
+            func dataByte2() -> MIDI.Byte { bytes[bytes.startIndex.advanced(by: 2)] }
             
             switch statusByte {
             case 0xF0: // System Common - SysEx Start
                 return nil
                 
             case 0xF1: // System Common - timecode quarter-frame
-                guard let unwrappedDataByte1 = dataByte1()
+                guard let dataByte = dataByte1().toMIDIUInt7Exactly
                 else { return nil }
                 
-                return .timecodeQuarterFrame(byte: unwrappedDataByte1, group: group)
+                return .timecodeQuarterFrame(dataByte: dataByte, group: group)
                 
             case 0xF2: // System Common - Song Position Pointer
-                guard let unwrappedDataByte1 = dataByte1(),
-                      let unwrappedDataByte2 = dataByte2()
+                guard let dataByte1 = dataByte1().toMIDIUInt7Exactly,
+                      let dataByte2 = dataByte2().toMIDIUInt7Exactly
                 else { return nil }
                 
-                let uint14 = MIDI.UInt14(bytePair: .init(msb: unwrappedDataByte2, lsb: unwrappedDataByte1))
+                let uint14 = MIDI.UInt14(uInt7Pair: .init(msb: dataByte2, lsb: dataByte1))
                 return .songPositionPointer(midiBeat: uint14, group: group)
                 
             case 0xF3: // System Common - Song Select
-                guard let songNumber = dataByte1()?.toMIDIUInt7Exactly
+                guard let songNumber = dataByte1().toMIDIUInt7Exactly
                 else { return nil }
                 
                 return .songSelect(number: songNumber, group: group)
@@ -203,30 +206,29 @@ extension MIDI {
             
         }
         
+        /// Internal sub-parser: Parse MIDI 1.0 Channel Voice UMP message.
+        ///
+        /// - Parameters:
+        ///   - bytes: 3 UMP bytes after the first byte ([1...3])
+        ///   - group: UMP group
         internal static func parseMIDI1ChannelVoice(
             bytes: Array<MIDI.Byte>.SubSequence,
             group: MIDI.UInt4
         ) -> MIDI.Event? {
             
-            guard !bytes.isEmpty else { return nil }
+            // ensure packet is 32-bits (4 bytes / 1 UInt32 word) wide
+            // (first byte is stripped when bytes are passed into this function so we expect 3 bytes here)
+            guard bytes.count == 3 else { return nil }
             
             let statusByte = bytes[bytes.startIndex]
-            
-            let dataByte1: MIDI.Byte? =
-                bytes.count > 1
-                ? bytes[bytes.startIndex.advanced(by: 1)]
-                : nil
-            
-            let dataByte2: MIDI.Byte? =
-                bytes.count > 2
-                ? bytes[bytes.startIndex.advanced(by: 2)]
-                : nil
+            let dataByte1: MIDI.Byte = bytes[bytes.startIndex.advanced(by: 1)]
+            let dataByte2: MIDI.Byte = bytes[bytes.startIndex.advanced(by: 2)]
             
             switch statusByte.nibbles.high {
             case 0x8: // note off
                 let channel = statusByte.nibbles.low
-                guard let note = dataByte1?.toMIDIUInt7Exactly,
-                      let velocity = dataByte2?.toMIDIUInt7Exactly
+                guard let note = dataByte1.toMIDIUInt7Exactly,
+                      let velocity = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
                 
                 let newEvent: MIDI.Event = .noteOff(note,
@@ -238,8 +240,8 @@ extension MIDI {
                 
             case 0x9: // note on
                 let channel = statusByte.nibbles.low
-                guard let note = dataByte1?.toMIDIUInt7Exactly,
-                      let velocity = dataByte2?.toMIDIUInt7Exactly
+                guard let note = dataByte1.toMIDIUInt7Exactly,
+                      let velocity = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
                 
                 let newEvent: MIDI.Event = .noteOn(note,
@@ -251,8 +253,8 @@ extension MIDI {
                 
             case 0xA: // poly aftertouch
                 let channel = statusByte.nibbles.low
-                guard let note = dataByte1?.toMIDIUInt7Exactly,
-                      let pressure = dataByte2?.toMIDIUInt7Exactly
+                guard let note = dataByte1.toMIDIUInt7Exactly,
+                      let pressure = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
                 
                 let newEvent: MIDI.Event = .polyAftertouch(note: note,
@@ -264,8 +266,8 @@ extension MIDI {
                 
             case 0xB: // CC (incl. channel mode msgs 121-127)
                 let channel = statusByte.nibbles.low
-                guard let cc = dataByte1?.toMIDIUInt7Exactly,
-                      let value = dataByte2?.toMIDIUInt7Exactly
+                guard let cc = dataByte1.toMIDIUInt7Exactly,
+                      let value = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
                 
                 let newEvent: MIDI.Event = .cc(cc,
@@ -277,7 +279,7 @@ extension MIDI {
                 
             case 0xC: // program change
                 let channel = statusByte.nibbles.low
-                guard let program = dataByte1?.toMIDIUInt7Exactly
+                guard let program = dataByte1.toMIDIUInt7Exactly
                 else { return nil }
                 
                 let newEvent: MIDI.Event = .programChange(program: program,
@@ -288,7 +290,7 @@ extension MIDI {
                 
             case 0xD: // channel aftertouch
                 let channel = statusByte.nibbles.low
-                guard let pressure = dataByte1?.toMIDIUInt7Exactly
+                guard let pressure = dataByte1.toMIDIUInt7Exactly
                 else { return nil }
                 
                 let newEvent: MIDI.Event = .chanAftertouch(pressure: pressure,
@@ -299,12 +301,12 @@ extension MIDI {
                 
             case 0xE: // pitch bend
                 let channel = statusByte.nibbles.low
-                guard let unwrappedDataByte1 = dataByte1,
-                      let unwrappedDataByte2 = dataByte2
+                guard let unwrappedDataByte1 = dataByte1.toMIDIUInt7Exactly,
+                      let unwrappedDataByte2 = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let uint14 = MIDI.UInt14(bytePair: .init(msb: unwrappedDataByte2,
-                                                         lsb: unwrappedDataByte1))
+                let uint14 = MIDI.UInt14(uInt7Pair: .init(msb: unwrappedDataByte2,
+                                                          lsb: unwrappedDataByte1))
                 
                 let newEvent: MIDI.Event = .pitchBend(value: uint14,
                                                       channel: channel,
@@ -319,6 +321,11 @@ extension MIDI {
             
         }
         
+        /// Internal sub-parser: Parse SysEx7 UMP message.
+        ///
+        /// - Parameters:
+        ///   - bytes: 7 UMP bytes after the first byte ([1...7])
+        ///   - group: UMP group
         internal static func parseData64Bit(
             bytes: Array<MIDI.Byte>.SubSequence,
             group: MIDI.UInt4
@@ -326,6 +333,10 @@ extension MIDI {
             
             // MIDI 2.0 Spec:
             // "The MIDI 1.0 Protocol bracketing method with 0xF0 Start and 0xF7 End Status bytes is not used in the UMP Format. Instead, the SysEx payload is carried in one or more 64-bit UMPs, discarding the 0xF0 and 0xF7 bytes. The standard ID Number (Manufacturer ID, Special ID 0x7D, or Universal System Exclusive ID), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable) are included in the initial data bytes, just as they are in MIDI 1.0 Protocol message equivalents."
+            
+            // ensure packet is 64-bits (8 bytes / 2 UInt32 words) wide
+            // (first byte is stripped when bytes are passed into this function so we expect 7 bytes here)
+            guard bytes.count == 7 else { return nil }
             
             let byte1Nibbles = bytes[bytes.startIndex].nibbles
             
