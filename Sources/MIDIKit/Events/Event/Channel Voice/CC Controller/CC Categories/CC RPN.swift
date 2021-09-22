@@ -124,9 +124,9 @@ extension MIDI.Event.CC.Controller.RPN {
                     lsb: cents)
             
         case .channelFineTuning(let value):
-            let uint7Pair = value.midiUInt7Pair
-            return (msb: uint7Pair.msb,
-                    lsb: uint7Pair.lsb)
+            let uInt7Pair = value.midiUInt7Pair
+            return (msb: uInt7Pair.msb,
+                    lsb: uInt7Pair.lsb)
             
         case .channelCoarseTuning(let value):
             return (msb: value,

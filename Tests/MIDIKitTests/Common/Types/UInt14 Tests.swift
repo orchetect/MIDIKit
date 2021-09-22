@@ -138,9 +138,9 @@ final class UInt14_Tests: XCTestCase {
     
     func testInitUInt7Pair() {
         
-        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x00, lsb: 0x00)).intValue, _min)
-        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x40, lsb: 0x00)).intValue, _midpoint)
-        XCTAssertEqual(MIDI.UInt14(uint7Pair: MIDI.UInt7.Pair(msb: 0x7F, lsb: 0x7F)).intValue, _max)
+        XCTAssertEqual(MIDI.UInt14(uInt7Pair: MIDI.UInt7.Pair(msb: 0x00, lsb: 0x00)).intValue, _min)
+        XCTAssertEqual(MIDI.UInt14(uInt7Pair: MIDI.UInt7.Pair(msb: 0x40, lsb: 0x00)).intValue, _midpoint)
+        XCTAssertEqual(MIDI.UInt14(uInt7Pair: MIDI.UInt7.Pair(msb: 0x7F, lsb: 0x7F)).intValue, _max)
         
     }
     
