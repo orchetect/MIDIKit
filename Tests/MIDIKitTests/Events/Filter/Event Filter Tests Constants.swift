@@ -17,6 +17,9 @@ enum kEvents {
         static let chanAftertouch: MIDI.Event = .chanAftertouch(pressure: 1, channel: 1, group: 0)
         static let pitchBend: MIDI.Event = .pitchBend(value: 1, channel: 1, group: 0)
         
+        // ancillary events
+        static let cc1: MIDI.Event = .cc(1, value: 127, channel: 0, group: 0)
+        
         static let oneOfEachEventType: [MIDI.Event] = [
             Self.noteOn,
             Self.noteOff,
