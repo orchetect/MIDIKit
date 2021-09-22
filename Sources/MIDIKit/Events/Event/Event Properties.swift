@@ -43,7 +43,7 @@ extension MIDI.Event {
     }
     
     /// Returns the event's UMP group.
-    public var group: MIDI.UInt4? {
+    public var group: MIDI.UInt4 {
         
         switch self {
             
