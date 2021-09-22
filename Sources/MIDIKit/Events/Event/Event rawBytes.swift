@@ -234,7 +234,7 @@ extension MIDI.Event {
             
             return [word]
             
-        // ----------------------
+        
         // ----------------------
         // MARK: System Exclusive
         // ----------------------

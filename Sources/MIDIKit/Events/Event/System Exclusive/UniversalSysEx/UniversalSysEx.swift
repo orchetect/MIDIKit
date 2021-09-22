@@ -14,7 +14,7 @@ extension MIDI.Event {
     /// - `deviceID` of 0x7F indicates "All Devices".
     public struct UniversalSysEx: Equatable, Hashable {
         
-        public var universalType: UniversalType
+        public var universalType: UniversalSysExType
         
         public var deviceID: MIDI.UInt7
         
@@ -41,22 +41,20 @@ extension MIDI.Event {
     ///   - subID2: Sub ID #2
     ///   - data: Data bytes
     ///   - group: UMP group
-    public static func universalSysEx(universalType: UniversalSysEx.UniversalType,
+    public static func universalSysEx(universalType: UniversalSysExType,
                                       deviceID: MIDI.UInt7,
                                       subID1: MIDI.UInt7,
                                       subID2: MIDI.UInt7,
                                       data: [MIDI.Byte],
-                                      group: MIDI.UInt4 = 0) -> MIDI.Event {
-        
+                                      group: MIDI.UInt4 = 0) -> Self {
+
         .universalSysEx(
-            .init(
-                universalType: universalType,
-                deviceID: deviceID,
-                subID1: subID1,
-                subID2: subID2,
-                data: data,
-                group: group
-            )
+            .init(universalType: universalType,
+                  deviceID: deviceID,
+                  subID1: subID1,
+                  subID2: subID2,
+                  data: data,
+                  group: group)
         )
 
     }

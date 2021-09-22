@@ -1,12 +1,12 @@
 //
-//  UniversalType.swift
+//  UniversalSysExType.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.UniversalSysEx {
+extension MIDI.Event {
     
     /// Universal System Exclusive message type.
-    public enum UniversalType: MIDI.Byte, Hashable {
+    public enum UniversalSysExType: MIDI.Byte, Equatable, Hashable {
         
         /// Real Time System Exclusive ID number (`0x7F`).
         case realTime = 0x7F
@@ -18,7 +18,7 @@ extension MIDI.Event.UniversalSysEx {
     
 }
 
-extension MIDI.Event.UniversalSysEx.UniversalType: CustomStringConvertible {
+extension MIDI.Event.UniversalSysExType: CustomStringConvertible {
     
     public var description: String {
         

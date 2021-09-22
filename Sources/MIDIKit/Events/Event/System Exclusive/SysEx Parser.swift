@@ -67,7 +67,7 @@ extension MIDI.Event {
         case 0x7E, 0x7F:
             // universal sys ex
             
-            let universalType = UniversalSysEx.UniversalType(rawValue: idByte1)!
+            let universalType = UniversalSysExType(rawValue: idByte1)!
             
             try readPosAdvance(by: 1)
             guard let deviceID = MIDI.UInt7(exactly: rawBytes[readPos])
@@ -94,7 +94,7 @@ extension MIDI.Event {
             )
             
         case 0x00...0x7D:
-            var readManufacturer: SysEx.Manufacturer?
+            var readManufacturer: SysExManufacturer?
             
             switch idByte1 {
             case 0x00:
@@ -103,11 +103,11 @@ extension MIDI.Event {
                 let idByte2 = rawBytes[readPos]
                 try readPosAdvance(by: 1)
                 let idByte3 = rawBytes[readPos]
-                readManufacturer = SysEx.Manufacturer.threeByte(byte2: idByte2, byte3: idByte3)
+                readManufacturer = .threeByte(byte2: idByte2, byte3: idByte3)
                 
             case 0x01...0x7D:
                 // 1-byte ID
-                readManufacturer = SysEx.Manufacturer.oneByte(idByte1)
+                readManufacturer = .oneByte(idByte1)
                 
             default:
                 break // will never happen

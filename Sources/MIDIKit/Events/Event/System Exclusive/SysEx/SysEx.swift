@@ -14,7 +14,7 @@ extension MIDI.Event {
     /// - "Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification."
     public struct SysEx: Equatable, Hashable {
         
-        public var manufacturer: Manufacturer
+        public var manufacturer: SysExManufacturer
                    
         public var data: [MIDI.Byte]
         
@@ -34,15 +34,14 @@ extension MIDI.Event {
     ///   - manufacturer: SysEx Manufacturer ID
     ///   - data: Data bytes
     ///   - group: UMP group
-    public static func sysEx(manufacturer: SysEx.Manufacturer,
+    public static func sysEx(manufacturer: SysExManufacturer,
                              data: [MIDI.Byte],
-                             group: MIDI.UInt4 = 0) -> MIDI.Event {
+                             group: MIDI.UInt4 = 0) -> Self {
         
         .sysEx(
             .init(manufacturer: manufacturer,
                   data: data,
-                  group: group
-            )
+                  group: group)
         )
         
     }

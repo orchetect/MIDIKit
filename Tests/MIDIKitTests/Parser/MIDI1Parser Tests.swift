@@ -79,7 +79,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(
             MIDI.Packet.PacketData(bytes: [0xF0, 0x7D, 0x01, 0xF7], timeStamp: 0)
                 .parsedEvents().events,
-            [.sysEx(manufacturer: MIDI.Event.SysEx.Manufacturer(oneByte: 0x7D)!,
+            [.sysEx(manufacturer: .oneByte(0x7D),
                     data: [0x01],
                     group: 0)
             ]
