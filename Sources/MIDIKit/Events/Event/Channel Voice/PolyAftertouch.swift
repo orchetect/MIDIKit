@@ -55,4 +55,19 @@ extension MIDI.Event.PolyAftertouch {
         
     }
     
+    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
+    
+    public func umpRawWords() -> [MIDI.UMPWord] {
+        
+        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        
+        let word = MIDI.UMPWord(mtAndGroup,
+                                0xA0 + channel.uInt8Value,
+                                note.uInt8Value,
+                                pressure.uInt8Value)
+        
+        return [word]
+        
+    }
+    
 }

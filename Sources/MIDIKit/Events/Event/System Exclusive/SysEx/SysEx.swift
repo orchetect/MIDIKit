@@ -56,4 +56,20 @@ extension MIDI.Event.SysEx {
         
     }
     
+    #warning("> this needs specializing?")
+    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit
+    
+    public func umpRawWords() -> [MIDI.UMPWord] {
+        
+        #warning("> needs coding")
+        
+        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        
+        _ = manufacturer
+        _ = data
+        
+        return []
+        
+    }
+    
 }

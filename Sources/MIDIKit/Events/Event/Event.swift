@@ -76,34 +76,31 @@ extension MIDI {
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "For device synchronization, MIDI Time Code uses two basic types of messages, described as Quarter Frame and Full. There is also a third, optional message for encoding SMPTE user bits. The Quarter Frame message communicates the Frame, Seconds, Minutes and Hours Count in an 8-message sequence. There is also an MTC FULL FRAME message which is a MIDI System Exclusive Message."
-        case timecodeQuarterFrame(byte: MIDI.Byte,
-                                  group: MIDI.UInt4 = 0)
+        case timecodeQuarterFrame(TimecodeQuarterFrame)
         
         /// System Common: Song Position Pointer (Status `0xF2`)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start of the song and is used to begin playback of a sequence from a position other than the beginning of the song."
-        case songPositionPointer(midiBeat: MIDI.UInt14,
-                                 group: MIDI.UInt4 = 0)
+        case songPositionPointer(SongPositionPointer)
         
         /// System Common: Song Select (Status `0xF3`)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real Time messages (MIDI Sync)."
-        case songSelect(number: MIDI.UInt7,
-                        group: MIDI.UInt4 = 0)
+        case songSelect(SongSelect)
         
         /// Bus Select - unofficial (Status `0xF5`)
-        case unofficialBusSelect(group: MIDI.UInt4 = 0)
+        case unofficialBusSelect(UnofficialBusSelect)
         
         /// System Common: Tune Request (Status `0xF6`)
         ///
         /// - remark: MIDI Spec:
         ///
         /// "Used with analog synthesizers to request that all oscillators be tuned."
-        case tuneRequest(group: MIDI.UInt4 = 0)
+        case tuneRequest(TuneRequest)
         
         // ----------------------
         // MARK: System Real Time
@@ -114,28 +111,28 @@ extension MIDI {
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Clock-based MIDI systems are synchronized with this message, which is sent at a rate of 24 per quarter note. If Timing Clocks (`0xF8`) are sent during idle time they should be sent at the current tempo setting of the transmitter even while it is not playing. Receivers which are synchronized to incoming Real Time messages (MIDI Sync mode) can thus phase lock their internal clocks while waiting for a Start (`0xFA`) or Continue (`0xFB`) command."
-        case timingClock(group: MIDI.UInt4 = 0)
+        case timingClock(TimingClock)
         
         /// System Real Time: Start (Status `0xFA`)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real Time messages (MIDI Sync mode) to start at the beginning of the song or sequence."
-        case start(group: MIDI.UInt4 = 0)
+        case start(Start)
         
         /// System Real Time: Continue (Status `0xFB`)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Continue (`0xFB`) is sent when a CONTINUE button is hit. A sequence will continue from its current location upon receipt of the next Timing Clock (`0xF8`)."
-        case `continue`(group: MIDI.UInt4 = 0)
+        case `continue`(Continue)
         
         /// System Real Time: Stop (Status `0xFC`)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately."
-        case stop(group: MIDI.UInt4 = 0)
+        case stop(Stop)
         
         /// System Real Time: Active Sensing (Status `0xFE`)
         ///
@@ -144,14 +141,14 @@ extension MIDI {
         /// "Use of Active Sensing is optional for either receivers or transmitters. This byte (`0xFE`) is sent every 300 ms (maximum) whenever there is no other MIDI data being transmitted. If a device never receives Active Sensing it should operate normally. However, once the receiver recognizes Active Sensing (`0xFE`), it then will expect to get a message of some kind every 300 milliseconds. If no messages are received within this time period the receiver will assume the MIDI cable has been disconnected for some reason and should turn off all voices and return to normal operation. It is recommended that transmitters transmit Active Sensing within 270ms and receivers judge at over 330ms leaving a margin of roughly 10%."
         ///
         /// - note: Use of Active Sensing in modern MIDI devices is uncommon and the use of this standard has been deprecated as of MIDI 2.0.
-        case activeSensing(group: MIDI.UInt4 = 0)
+        case activeSensing(ActiveSensing)
         
         /// System Real Time: System Reset (Status `0xFF`)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
-        case systemReset(group: MIDI.UInt4 = 0)
+        case systemReset(SystemReset)
         
     }
     
@@ -215,21 +212,18 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
         // MARK: System Common
         // -------------------
         
-        case .timecodeQuarterFrame(byte: let byte,
-                                   group: let group):
+        case .timecodeQuarterFrame(let event):
             
-            let dataByteString = byte.binary.stringValue(padTo: 8, splitEvery: 8, prefix: true)
-            return "timecodeQF(\(dataByteString), group: \(group))"
+            let dataByteString = event.byte.binary.stringValue(padTo: 8, splitEvery: 8, prefix: true)
+            return "timecodeQF(\(dataByteString), group: \(event.group))"
             
-        case .songPositionPointer(midiBeat: let midiBeat,
-                                  group: let group):
+        case .songPositionPointer(let event):
             
-            return "songPositionPointer(beat: \(midiBeat), group: \(group))"
+            return "songPositionPointer(beat: \(event.midiBeat), group: \(event.group))"
             
-        case .songSelect(number: let number,
-                         group: let group):
+        case .songSelect(let event):
             
-            return "songSelect(number: \(number), group: \(group))"
+            return "songSelect(number: \(event.number), group: \(event.group))"
             
         case .unofficialBusSelect(group: let group):
             

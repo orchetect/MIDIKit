@@ -45,4 +45,19 @@ extension MIDI.Event.NoteOff {
         
     }
     
+    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
+    
+    public func umpRawWords() -> [MIDI.UMPWord] {
+        
+        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        
+        let word = MIDI.UMPWord(mtAndGroup,
+                                0x80 + channel.uInt8Value,
+                                note.uInt8Value,
+                                velocity.uInt8Value)
+        
+        return [word]
+        
+    }
+    
 }

@@ -64,4 +64,19 @@ extension MIDI.Event.CC {
         
     }
     
+    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
+    
+    public func umpRawWords() -> [MIDI.UMPWord] {
+        
+        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        
+        let word = MIDI.UMPWord(mtAndGroup,
+                                0xB0 + channel.uInt8Value,
+                                controller.number.uInt8Value,
+                                value.uInt8Value)
+        
+        return [word]
+        
+    }
+    
 }
