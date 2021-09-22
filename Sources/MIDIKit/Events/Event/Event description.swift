@@ -50,12 +50,16 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
             
         case .sysEx(let event):
             
-            let dataString = event.data.hex.stringValue(padTo: 2, prefix: true)
+            let dataString = event.data
+                .hex.stringValue(padTo: 2, prefix: true)
+            
             return "sysEx(mfr: \(event.manufacturer), data: [\(dataString)], group: \(event.group))"
             
         case .universalSysEx(let event):
             
-            let dataString = event.data.hex.stringValue(padTo: 2, prefix: true)
+            let dataString = event.data
+                .hex.stringValue(padTo: 2, prefix: true)
+            
             return "universalSysEx(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(event.group))"
             
             
@@ -65,7 +69,9 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
             
         case .timecodeQuarterFrame(let event):
             
-            let dataByteString = event.byte.binary.stringValue(padTo: 8, splitEvery: 8, prefix: true)
+            let dataByteString = event.dataByte.uInt8Value
+                .binary.stringValue(padTo: 8, splitEvery: 8, prefix: true)
+            
             return "timecodeQF(\(dataByteString), group: \(event.group))"
             
         case .songPositionPointer(let event):
