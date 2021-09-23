@@ -5,23 +5,27 @@
 
 extension MIDI.Event {
     
-    /// System Real Time: Start (Status `0xFA`)
+    /// System Real Time: Start
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real Time messages (MIDI Sync mode) to start at the beginning of the song or sequence."
     public struct Start: Equatable, Hashable {
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
-    /// System Real Time: Start (Status `0xFA`)
+    /// System Real Time: Start
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real Time messages (MIDI Sync mode) to start at the beginning of the song or sequence."
-    public static func start(group: MIDI.UInt4 = 0) -> Self {
+    ///
+    /// - Parameters:
+    ///   - group: UMP Group (0x0...0xF)
+    public static func start(group: MIDI.UInt4 = 0x0) -> Self {
         
         .start(
             .init(group: group)

@@ -9,12 +9,14 @@ extension MIDI.Event {
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
-    /// "A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start of the song and is used to begin playback of a sequence from a position other than the beginning of the song."
+    /// "A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start and is used to begin playback of a sequence from a position other than the beginning of the song."
     public struct SongPositionPointer: Equatable, Hashable {
         
+        /// The number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start.
         public var midiBeat: MIDI.UInt14
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
@@ -23,8 +25,12 @@ extension MIDI.Event {
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start of the song and is used to begin playback of a sequence from a position other than the beginning of the song."
+    ///
+    /// - Parameters:
+    ///   - midiBeat: MIDI beat number elapsed from the start
+    ///   - group: UMP Group (0x0...0xF)
     public static func songPositionPointer(midiBeat: MIDI.UInt14,
-                                           group: MIDI.UInt4 = 0) -> Self {
+                                           group: MIDI.UInt4 = 0x0) -> Self {
         
         .songPositionPointer(
             .init(midiBeat: midiBeat,

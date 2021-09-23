@@ -12,7 +12,8 @@ extension MIDI.Event {
     /// "Used with analog synthesizers to request that all oscillators be tuned."
     public struct TuneRequest: Equatable, Hashable {
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
@@ -21,7 +22,10 @@ extension MIDI.Event {
     /// - remark: MIDI Spec:
     ///
     /// "Used with analog synthesizers to request that all oscillators be tuned."
-    public static func tuneRequest(group: MIDI.UInt4 = 0) -> Self {
+    ///
+    /// - Parameters:
+    ///   - group: UMP Group (0x0...0xF)
+    public static func tuneRequest(group: MIDI.UInt4 = 0x0) -> Self {
         
         .tuneRequest(
             .init(group: group)

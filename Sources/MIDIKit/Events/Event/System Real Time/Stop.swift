@@ -5,23 +5,27 @@
 
 extension MIDI.Event {
     
-    /// System Real Time: Stop (Status `0xFC`)
+    /// System Real Time: Stop
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately."
     public struct Stop: Equatable, Hashable {
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
-    /// System Real Time: Stop (Status `0xFC`)
+    /// System Real Time: Stop
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately."
-    public static func stop(group: MIDI.UInt4 = 0) -> Self {
+    ///
+    /// - Parameters:
+    ///   - group: UMP Group (0x0...0xF)
+    public static func stop(group: MIDI.UInt4 = 0x0) -> Self {
         
         .stop(
             .init(group: group)

@@ -5,23 +5,27 @@
 
 extension MIDI.Event {
     
-    /// System Real Time: Timing Clock (Status `0xF8`)
+    /// System Real Time: Timing Clock
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "Clock-based MIDI systems are synchronized with this message, which is sent at a rate of 24 per quarter note. If Timing Clocks (`0xF8`) are sent during idle time they should be sent at the current tempo setting of the transmitter even while it is not playing. Receivers which are synchronized to incoming Real Time messages (MIDI Sync mode) can thus phase lock their internal clocks while waiting for a Start (`0xFA`) or Continue (`0xFB`) command."
     public struct TimingClock: Equatable, Hashable {
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
-    /// System Real Time: Timing Clock (Status `0xF8`)
+    /// System Real Time: Timing Clock
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "Clock-based MIDI systems are synchronized with this message, which is sent at a rate of 24 per quarter note. If Timing Clocks (`0xF8`) are sent during idle time they should be sent at the current tempo setting of the transmitter even while it is not playing. Receivers which are synchronized to incoming Real Time messages (MIDI Sync mode) can thus phase lock their internal clocks while waiting for a Start (`0xFA`) or Continue (`0xFB`) command."
-    public static func timingClock(group: MIDI.UInt4 = 0) -> Self {
+    ///
+    /// - Parameters:
+    ///   - group: UMP Group (0x0...0xF)
+    public static func timingClock(group: MIDI.UInt4 = 0x0) -> Self {
         
         .timingClock(
             .init(group: group)

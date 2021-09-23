@@ -99,7 +99,7 @@ extension MIDI {
         
         /// System Common: Tune Request (Status `0xF6`)
         ///
-        /// - remark: MIDI Spec:
+        /// - remark: MIDI 1.0 Spec:
         ///
         /// "Used with analog synthesizers to request that all oscillators be tuned."
         case tuneRequest(TuneRequest)

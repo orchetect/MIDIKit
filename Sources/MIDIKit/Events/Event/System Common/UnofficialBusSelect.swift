@@ -8,12 +8,16 @@ extension MIDI.Event {
     /// Bus Select - unofficial (Status `0xF5`)
     public struct UnofficialBusSelect: Equatable, Hashable {
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
     /// Bus Select - unofficial (Status `0xF5`)
-    public static func unofficialBusSelect(group: MIDI.UInt4 = 0) -> Self {
+    ///
+    /// - Parameters:
+    ///   - group: UMP Group (0x0...0xF)
+    public static func unofficialBusSelect(group: MIDI.UInt4 = 0x0) -> Self {
         
         .unofficialBusSelect(
             .init(group: group)

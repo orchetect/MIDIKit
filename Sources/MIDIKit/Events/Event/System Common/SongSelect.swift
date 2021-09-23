@@ -5,18 +5,32 @@
 
 extension MIDI.Event {
     
-    
+    /// System Common: Song Select
+    ///
+    /// - remark: MIDI 1.0 Spec:
+    ///
+    /// "Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real Time messages (MIDI Sync)."
     public struct SongSelect: Equatable, Hashable {
         
+        /// Song Number
         public var number: MIDI.UInt7
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
-    
+    /// System Common: Song Select
+    ///
+    /// - remark: MIDI 1.0 Spec:
+    ///
+    /// "Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real Time messages (MIDI Sync)."
+    ///
+    /// - Parameters:
+    ///   - number: Song Number
+    ///   - group: UMP Group (0x0...0xF)
     public static func songSelect(number: MIDI.UInt7,
-                                  group: MIDI.UInt4 = 0) -> Self {
+                                  group: MIDI.UInt4 = 0x0) -> Self {
         
         .songSelect(
             .init(number: number,

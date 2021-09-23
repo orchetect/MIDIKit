@@ -8,17 +8,22 @@ extension MIDI.Event.Note {
     /// Channel Voice Message: Note On
     public struct On: Equatable, Hashable {
         
+        /// Note Number
+        ///
+        /// If MIDI 2.0 attribute is set to Pitch 7.9, then this value holds the note index.
         public var note: MIDI.UInt7
         
+        /// Velocity
         public var velocity: MIDI.Event.Note.Velocity
         
+        /// Channel Number (0x0...0xF)
         public var channel: MIDI.UInt4
         
         /// MIDI 2.0 Channel Voice Attribute
         public var attribute: Attribute = .none
         
-        /// MIDI UMP Group
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
 }
@@ -26,11 +31,18 @@ extension MIDI.Event.Note {
 extension MIDI.Event {
     
     /// Channel Voice Message: Note On
+    ///
+    /// - Parameters:
+    ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+    ///   - velocity: Velocity
+    ///   - channel: Channel Number (0x0...0xF)
+    ///   - attribute: MIDI 2.0 Channel Voice Attribute
+    ///   - group: UMP Group (0x0...0xF)
     public static func noteOn(_ note: MIDI.UInt7,
                               velocity: Note.Velocity,
                               channel: MIDI.UInt4,
                               attribute: Note.Attribute = .none,
-                              group: MIDI.UInt4 = 0) -> Self {
+                              group: MIDI.UInt4 = 0x0) -> Self {
         
         .noteOn(
             .init(note: note,
@@ -43,11 +55,18 @@ extension MIDI.Event {
     }
     
     /// Channel Voice Message: Note On
+    ///
+    /// - Parameters:
+    ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+    ///   - velocity: Velocity as a Double unit interval (0.0...1.0)
+    ///   - channel: Channel Number (0x0...0xF)
+    ///   - attribute: MIDI 2.0 Channel Voice Attribute
+    ///   - group: UMP Group (0x0...0xF)
     public static func noteOn(_ note: MIDI.UInt7,
                               velocity: Double,
                               channel: MIDI.UInt4,
                               attribute: Note.Attribute = .none,
-                              group: MIDI.UInt4 = 0) -> Self {
+                              group: MIDI.UInt4 = 0x0) -> Self {
         
         .noteOn(
             .init(note: note,

@@ -13,11 +13,14 @@ extension MIDI.Event {
     /// - Cubase: "Aftertouch"
     public struct ChanAftertouch: Equatable, Hashable {
         
+        /// Pressure
         public var pressure: MIDI.UInt7
         
+        /// Channel Number (0x0...0xF)
         public var channel: MIDI.UInt4
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
@@ -27,9 +30,14 @@ extension MIDI.Event {
     /// - Pro Tools: "Mono Aftertouch"
     /// - Logic Pro: "Aftertouch"
     /// - Cubase: "Aftertouch"
+    ///
+    /// - Parameters:
+    ///   - pressure: Pressure
+    ///   - channel: Channel Number (0x0...0xF)
+    ///   - group: UMP Group (0x0...0xF)
     public static func chanAftertouch(pressure: MIDI.UInt7,
                                       channel: MIDI.UInt4,
-                                      group: MIDI.UInt4 = 0) -> Self {
+                                      group: MIDI.UInt4 = 0x0) -> Self {
         
         .chanAftertouch(
             .init(pressure: pressure,

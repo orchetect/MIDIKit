@@ -5,23 +5,27 @@
 
 extension MIDI.Event {
     
-    /// System Real Time: System Reset (Status `0xFF`)
+    /// System Real Time: System Reset
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
     public struct SystemReset: Equatable, Hashable {
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
-    /// System Real Time: System Reset (Status `0xFF`)
+    /// System Real Time: System Reset
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
-    public static func systemReset(group: MIDI.UInt4 = 0) -> Self {
+    ///
+    /// - Parameters:
+    ///   - group: UMP Group (0x0...0xF)
+    public static func systemReset(group: MIDI.UInt4 = 0x0) -> Self {
         
         .systemReset(
             .init(group: group)

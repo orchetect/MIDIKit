@@ -5,21 +5,29 @@
 
 extension MIDI.Event {
     
-    /// Channel Voice Message: Program Change
+    /// Channel Voice Message: Pitch Bend
     public struct PitchBend: Equatable, Hashable {
         
+        /// Value
         public var value: MIDI.UInt14
         
+        /// Channel Number (0x0...0xF)
         public var channel: MIDI.UInt4
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
-    /// Channel Voice Message: Program Change
+    /// Channel Voice Message: Pitch Bend
+    ///
+    /// - Parameters:
+    ///   - value: 14-bit Value (0...16383) where midpoint is 8192
+    ///   - channel: Channel Number (0x0...0xF)
+    ///   - group: UMP Group (0x0...0xF)
     public static func pitchBend(value: MIDI.UInt14,
                                  channel: MIDI.UInt4,
-                                 group: MIDI.UInt4 = 0) -> Self {
+                                 group: MIDI.UInt4 = 0x0) -> Self {
         
         .pitchBend(
             .init(value: value,

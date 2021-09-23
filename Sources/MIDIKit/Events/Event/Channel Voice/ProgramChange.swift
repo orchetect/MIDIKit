@@ -8,18 +8,26 @@ extension MIDI.Event {
     /// Channel Voice Message: Program Change
     public struct ProgramChange: Equatable, Hashable {
         
+        /// Program Number
         public var program: MIDI.UInt7
         
+        /// Channel Number (0x0...0xF)
         public var channel: MIDI.UInt4
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
     /// Channel Voice Message: Program Change
+    ///
+    /// - Parameters:
+    ///   - program: Program Number
+    ///   - channel: Channel Number (0x0...0xF)
+    ///   - group: UMP Group (0x0...0xF)
     public static func programChange(program: MIDI.UInt7,
                                      channel: MIDI.UInt4,
-                                     group: MIDI.UInt4 = 0) -> Self {
+                                     group: MIDI.UInt4 = 0x0) -> Self {
         
         .programChange(
             .init(program: program,

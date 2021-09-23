@@ -5,23 +5,27 @@
 
 extension MIDI.Event {
     
-    /// System Real Time: Continue (Status `0xFB`)
+    /// System Real Time: Continue
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "Continue (`0xFB`) is sent when a CONTINUE button is hit. A sequence will continue from its current location upon receipt of the next Timing Clock (`0xF8`)."
     public struct Continue: Equatable, Hashable {
         
-        public var group: MIDI.UInt4 = 0
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
         
     }
     
-    /// System Real Time: Continue (Status `0xFB`)
+    /// System Real Time: Continue
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
     /// "Continue (`0xFB`) is sent when a CONTINUE button is hit. A sequence will continue from its current location upon receipt of the next Timing Clock (`0xF8`)."
-    public static func `continue`(group: MIDI.UInt4 = 0) -> Self {
+    ///
+    /// - Parameters:
+    ///   - group: UMP Group (0x0...0xF)
+    public static func `continue`(group: MIDI.UInt4 = 0x0) -> Self {
         
         .continue(
             .init(group: group)
