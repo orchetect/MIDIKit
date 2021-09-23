@@ -1,12 +1,12 @@
 //
-//  CC Properties.swift
+//  CC Controller Properties.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.CC {
+extension MIDI.Event.CC.Controller {
     
     /// Returns the controller number.
-    @inlinable public var controller: MIDI.UInt7 {
+    @inlinable public var number: MIDI.UInt7 {
         
         switch self {
         
@@ -27,7 +27,7 @@ extension MIDI.Event.CC {
         case .generalPurpose3               : return 18
         case .generalPurpose4               : return 19
             
-        case .lsb(let lsb): return lsb.controller
+        case .lsb(let lsb)                  : return lsb.controller
             
         case .sustainPedal                  : return 64
         case .portamento                    : return 65
@@ -63,9 +63,9 @@ extension MIDI.Event.CC {
         case .rpnLSB                        : return 100
         case .rpnMSB                        : return 101
             
-        case .mode(let mode): return mode.controller
+        case .mode(let mode)                : return mode.controller
             
-        case .undefined(let cc): return cc.controller
+        case .undefined(let cc)             : return cc.controller
             
         }
         

@@ -13,6 +13,9 @@ extension MIDI.Event {
         case sysCommon(MIDI.Event.SysCommonTypes)
         case sysRealTime(MIDI.Event.SysRealTimeTypes)
         
+        case group(MIDI.UInt4)
+        case groups([MIDI.UInt4])
+        
     }
     
 }
@@ -34,6 +37,12 @@ extension MIDI.Event.Filter {
             
         case .sysRealTime(let types):
             return events.filter(sysRealTime: types)
+            
+        case .group(let group):
+            return events.filter(group: group)
+            
+        case .groups(let groups):
+            return events.filter(groups: groups)
             
         }
         

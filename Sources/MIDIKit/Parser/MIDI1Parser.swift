@@ -378,8 +378,8 @@ extension MIDI {
                       let velocity = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .noteOff(note: note,
-                                                    velocity: velocity,
+                let newEvent: MIDI.Event = .noteOff(note,
+                                                    velocity: .midi1(velocity),
                                                     channel: channel,
                                                     group: umpGroup)
                 
@@ -391,8 +391,8 @@ extension MIDI {
                       let velocity = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .noteOn(note: note,
-                                                   velocity: velocity,
+                let newEvent: MIDI.Event = .noteOn(note,
+                                                   velocity: .midi1(velocity),
                                                    channel: channel,
                                                    group: umpGroup)
                 
@@ -417,7 +417,7 @@ extension MIDI {
                       let value = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .cc(controller: cc,
+                let newEvent: MIDI.Event = .cc(cc,
                                                value: value,
                                                channel: channel,
                                                group: umpGroup)
@@ -464,16 +464,16 @@ extension MIDI {
             case 0xF: // system message
                 switch statusByte.nibbles.low {
                 case 0x0: // System Common - SysEx Start
-                    guard let parsedSysEx = try? MIDI.Event.SysEx.parsed(from: bytes)
+                    guard let parsedSysEx = try? MIDI.Event.sysEx(from: bytes)
                     else { return events }
                     
                     events.append(parsedSysEx)
                     
                 case 0x1: // System Common - timecode quarter-frame
-                    guard let unwrappedDataByte1 = dataByte1
+                    guard let unwrappedDataByte1 = dataByte1?.toMIDIUInt7Exactly
                     else { return events }
                     
-                    events.append(.timecodeQuarterFrame(byte: unwrappedDataByte1))
+                    events.append(.timecodeQuarterFrame(dataByte: unwrappedDataByte1))
                     
                 case 0x2: // System Common - Song Position Pointer
                     guard let unwrappedDataByte1 = dataByte1,

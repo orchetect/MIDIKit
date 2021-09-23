@@ -14,23 +14,23 @@ extension MIDI.Event {
         case onlyTypes(Set<ChanVoiceType>)
         case onlyChannel(MIDI.UInt4)
         case onlyChannels([MIDI.UInt4])
-        case onlyCC(MIDI.Event.CC)
-        case onlyCCs([MIDI.Event.CC])
+        case onlyCC(MIDI.Event.CC.Controller)
+        case onlyCCs([MIDI.Event.CC.Controller])
         
         case keepType(ChanVoiceType)
         case keepTypes(Set<ChanVoiceType>)
         case keepChannel(MIDI.UInt4)
         case keepChannels([MIDI.UInt4])
-        case keepCC(MIDI.Event.CC)
-        case keepCCs([MIDI.Event.CC])
+        case keepCC(MIDI.Event.CC.Controller)
+        case keepCCs([MIDI.Event.CC.Controller])
         
         case drop
         case dropType(ChanVoiceType)
         case dropTypes(Set<ChanVoiceType>)
         case dropChannel(MIDI.UInt4)
         case dropChannels([MIDI.UInt4])
-        case dropCC(MIDI.Event.CC)
-        case dropCCs([MIDI.Event.CC])
+        case dropCC(MIDI.Event.CC.Controller)
+        case dropCCs([MIDI.Event.CC.Controller])
         
     }
     

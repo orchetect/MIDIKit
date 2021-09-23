@@ -73,9 +73,9 @@ extension MIDI {
         }
         
         /// Initialize the raw 14-bit value from two 7-bit value bytes
-        public init(uint7Pair: MIDI.UInt7.Pair) {
-            let msb = Storage(uint7Pair.msb.value) << 7
-            let lsb = Storage(uint7Pair.lsb.value)
+        public init(uInt7Pair: MIDI.UInt7.Pair) {
+            let msb = Storage(uInt7Pair.msb.value) << 7
+            let lsb = Storage(uInt7Pair.lsb.value)
             value = msb + lsb
         }
         

@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.CC {
+extension MIDI.Event.CC.Controller {
     
     public enum Mode: Equatable, Hashable {
         
@@ -44,7 +44,7 @@ extension MIDI.Event.CC {
     
 }
 
-extension MIDI.Event.CC.Mode {
+extension MIDI.Event.CC.Controller.Mode {
     
     /// Returns the controller number.
     @inlinable public var controller: MIDI.UInt7 {
@@ -66,7 +66,7 @@ extension MIDI.Event.CC.Mode {
     
 }
 
-extension MIDI.Event.CC.Mode {
+extension MIDI.Event.CC.Controller.Mode {
     
     /// Returns the controller name as a human-readable String.
     @inlinable public var name: String {

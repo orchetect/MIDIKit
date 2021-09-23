@@ -62,8 +62,8 @@ class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         expectedEvents = [kEvents.SysEx.sysEx]
         XCTAssertEqual(filteredEvents, expectedEvents)
         
-        filteredEvents = events.filter(sysEx: .onlyTypes([.sysEx, .sysExUniversal]))
-        expectedEvents = [kEvents.SysEx.sysEx, kEvents.SysEx.sysExUniversal]
+        filteredEvents = events.filter(sysEx: .onlyTypes([.sysEx, .universalSysEx]))
+        expectedEvents = [kEvents.SysEx.sysEx, kEvents.SysEx.universalSysEx]
         XCTAssertEqual(filteredEvents, expectedEvents)
         
         filteredEvents = events.filter(sysEx: .onlyTypes([]))
@@ -96,14 +96,14 @@ class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         
         let events = kEvents.oneOfEachMIDI1EventType
         
-        let filteredEvents = events.filter(sysEx: .keepTypes([.sysEx, .sysExUniversal]))
+        let filteredEvents = events.filter(sysEx: .keepTypes([.sysEx, .universalSysEx]))
         
         let expectedEvents =
         kEvents.ChanVoice.oneOfEachEventType
         + kEvents.SysCommon.oneOfEachEventType
         + [
             kEvents.SysEx.sysEx,
-            kEvents.SysEx.sysExUniversal
+            kEvents.SysEx.universalSysEx
         ]
         + kEvents.SysRealTime.oneOfEachEventType
         
@@ -139,7 +139,7 @@ class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         kEvents.ChanVoice.oneOfEachEventType
         + kEvents.SysCommon.oneOfEachEventType
         + [
-            kEvents.SysEx.sysExUniversal
+            kEvents.SysEx.universalSysEx
         ]
         + kEvents.SysRealTime.oneOfEachEventType
         
@@ -151,7 +151,7 @@ class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         
         let events = kEvents.oneOfEachMIDI1EventType
         
-        let filteredEvents = events.filter(sysEx: .dropTypes([.sysEx, .sysExUniversal]))
+        let filteredEvents = events.filter(sysEx: .dropTypes([.sysEx, .universalSysEx]))
         
         let expectedEvents =
         kEvents.ChanVoice.oneOfEachEventType

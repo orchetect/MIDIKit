@@ -1,9 +1,9 @@
 //
-//  CC Name.swift
+//  CC Controller Name.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.CC {
+extension MIDI.Event.CC.Controller {
     
     /// Returns the controller name as a human-readable String.
     @inlinable public var name: String {
@@ -27,7 +27,7 @@ extension MIDI.Event.CC {
         case .generalPurpose3               : return "General Purpose 3"
         case .generalPurpose4               : return "General Purpose 4"
             
-        case .lsb(let lsb): return lsb.name
+        case .lsb(let lsb)                  : return lsb.name
             
         case .sustainPedal                  : return "Sustain Pedal"
         case .portamento                    : return "Portamento"
@@ -63,9 +63,9 @@ extension MIDI.Event.CC {
         case .rpnLSB                        : return "RPN LSB"
         case .rpnMSB                        : return "RPN MSB"
             
-        case .mode(let mode): return mode.name
+        case .mode(let mode)                : return mode.name
             
-        case .undefined(let cc): return cc.name
+        case .undefined(let cc)             : return cc.name
             
         }
         

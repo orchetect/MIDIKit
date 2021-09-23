@@ -1,35 +1,35 @@
 //
-//  CC Operators.swift
+//  CC Controller Operators.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.CC {
+extension MIDI.Event.CC.Controller {
     
     @inline(__always)
     public static func == <T: BinaryInteger>(lhs: Self, rhs: T) -> Bool {
         
-        lhs.controller.value == rhs
+        lhs.number.value == rhs
         
     }
     
     @inline(__always)
     public static func != <T: BinaryInteger>(lhs: Self, rhs: T) -> Bool {
         
-        lhs.controller.value != rhs
+        lhs.number.value != rhs
         
     }
     
     @inline(__always)
     public static func == <T: BinaryInteger>(lhs: T, rhs: Self) -> Bool {
         
-        lhs == rhs.controller.value
+        lhs == rhs.number.value
         
     }
     
     @inline(__always)
     public static func != <T: BinaryInteger>(lhs: T, rhs: Self) -> Bool {
         
-        lhs != rhs.controller.value
+        lhs != rhs.number.value
         
     }
     

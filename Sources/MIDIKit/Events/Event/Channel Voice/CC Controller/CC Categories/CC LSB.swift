@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.CC {
+extension MIDI.Event.CC.Controller {
     
     /// MIDI Controller Change LSB
     public enum LSB: Equatable, Hashable {
@@ -88,7 +88,7 @@ extension MIDI.Event.CC {
     
 }
 
-extension MIDI.Event.CC.LSB {
+extension MIDI.Event.CC.Controller.LSB {
     
     /// Returns the controller number.
     @inlinable public var controller: MIDI.UInt7 {
@@ -120,7 +120,7 @@ extension MIDI.Event.CC.LSB {
     
 }
 
-extension MIDI.Event.CC.LSB {
+extension MIDI.Event.CC.Controller.LSB {
     
     /// Returns the controller name as a human-readable String.
     @inlinable public var name: String {

@@ -88,15 +88,15 @@ extension ContentView {
                     .frame(height: 10)
                 
                 Button {
-                    sendEvent(.noteOn(note: 60,
-                                      velocity: 64,
+                    sendEvent(.noteOn(60,
+                                      velocity: 0.5,
                                       channel: midiChannel,
                                       group: midiGroup))
                 } label: { Text("Note On") }
                 
                 Button {
-                    sendEvent(.noteOff(note: 60,
-                                       velocity: 0,
+                    sendEvent(.noteOff(60,
+                                       velocity: 0.0,
                                        channel: midiChannel,
                                        group: midiGroup))
                 } label: { Text("Note Off") }
@@ -110,15 +110,15 @@ extension ContentView {
                 
                 HStack(alignment: .center, spacing: 4) {
                     Button {
-                        sendEvent(.cc(controller: chanVoiceCC,
+                        sendEvent(.cc(chanVoiceCC,
                                       value: 64,
                                       channel: midiChannel,
                                       group: midiGroup))
                     } label: { Text("CC") }
                     
                     Picker("", selection: $chanVoiceCC) {
-                        ForEach(MIDI.Event.CC.allCases, id: \.self) {
-                            let ccInt = $0.controller.intValue
+                        ForEach(MIDI.Event.CC.Controller.allCases, id: \.self) {
+                            let ccInt = $0.number.intValue
                             let ccName = "\($0.name)"
                             let ccHex = ccInt.hex.stringValue(padTo: 2, prefix: true)
                             
@@ -185,7 +185,7 @@ extension ContentView {
                 } label: { Text("SysEx with 8 Bytes") }
                 
                 Button {
-                    sendEvent(.sysExUniversal(universalType: .realTime,
+                    sendEvent(.universalSysEx(universalType: .realTime,
                                               deviceID: 0x7F,
                                               subID1: 0x7F,
                                               subID2: 0x7F,
@@ -194,7 +194,7 @@ extension ContentView {
                 } label: { Text("Universal SysEx with 0 Bytes") }
                 
                 Button {
-                    sendEvent(.sysExUniversal(universalType: .realTime,
+                    sendEvent(.universalSysEx(universalType: .nonRealTime,
                                               deviceID: 0x7F,
                                               subID1: 0x7F,
                                               subID2: 0x7F,
@@ -203,7 +203,7 @@ extension ContentView {
                 } label: { Text("Universal SysEx with 2 Bytes") }
                 
                 Button {
-                    sendEvent(.sysExUniversal(universalType: .realTime,
+                    sendEvent(.universalSysEx(universalType: .realTime,
                                               deviceID: 0x7F,
                                               subID1: 0x7F,
                                               subID2: 0x7F,
@@ -212,7 +212,7 @@ extension ContentView {
                 } label: { Text("Universal SysEx with 4 Bytes") }
                 
                 Button {
-                    sendEvent(.sysExUniversal(universalType: .realTime,
+                    sendEvent(.universalSysEx(universalType: .nonRealTime,
                                               deviceID: 0x7F,
                                               subID1: 0x7F,
                                               subID2: 0x7F,
@@ -234,7 +234,7 @@ extension ContentView {
             VStack(alignment: .center, spacing: 8) {
                 
                 Button {
-                    sendEvent(.timecodeQuarterFrame(byte: 0x00,
+                    sendEvent(.timecodeQuarterFrame(dataByte: 0x00,
                                                     group: midiGroup))
                 } label: { Text("Timecode Quarter-Frame") }
                 

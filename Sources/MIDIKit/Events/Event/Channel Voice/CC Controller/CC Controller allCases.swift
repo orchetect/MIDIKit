@@ -1,9 +1,9 @@
 //
-//  CC allCases.swift
+//  CC Controller allCases.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event.CC: CaseIterable {
+extension MIDI.Event.CC.Controller: CaseIterable {
     
     public typealias AllCases = [Self]
     

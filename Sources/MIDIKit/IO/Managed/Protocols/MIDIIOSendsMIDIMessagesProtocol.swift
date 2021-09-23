@@ -126,7 +126,7 @@ extension MIDIIOSendsMIDIMessagesProtocol {
                 )
             }
             
-            try send(rawWords: event.umpRawWords)
+            try send(rawWords: event.umpRawWords(protocol: self.protocol))
         }
         
     }
@@ -146,7 +146,7 @@ extension MIDIIOSendsMIDIMessagesProtocol {
             }
             
             for event in events {
-                try send(rawWords: event.umpRawWords)
+                try send(rawWords: event.umpRawWords(protocol: self.protocol))
             }
         }
         

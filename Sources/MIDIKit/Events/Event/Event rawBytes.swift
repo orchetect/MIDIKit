@@ -13,136 +13,80 @@ extension MIDI.Event {
         // MARK: Channel Voice
         // -------------------
         
-        case .noteOn(note: let note,
-                     velocity: let velocity,
-                     channel: let channel,
-                     group: _):
+        case .noteOn(let event):
+            return event.midi1RawBytes()
             
-            return [0x90 + channel.uInt8Value, note.uInt8Value, velocity.uInt8Value]
+        case .noteOff(let event):
+            return event.midi1RawBytes()
             
-        case .noteOff(note: let note,
-                      velocity: let velocity,
-                      channel: let channel,
-                      group: _):
+        case .polyAftertouch(let event):
+            return event.midi1RawBytes()
             
-            return [0x80 + channel.uInt8Value, note.uInt8Value, velocity.uInt8Value]
+        case .cc(let event):
+            return event.midi1RawBytes()
             
-        case .polyAftertouch(note: let note,
-                             pressure: let pressure,
-                             channel: let channel,
-                             group: _):
+        case .programChange(let event):
+            return event.midi1RawBytes()
             
-            return [0xA0 + channel.uInt8Value, note.uInt8Value, pressure.uInt8Value]
+        case .chanAftertouch(let event):
+            return event.midi1RawBytes()
             
-        case .cc(controller: let controller,
-                 value: let value,
-                 channel: let channel,
-                 group: _):
-            
-            return [0xB0 + channel.uInt8Value, controller.uInt8Value, value.uInt8Value]
-            
-        case .programChange(program: let program,
-                            channel: let channel,
-                            group: _):
-            
-            return [0xC0 + channel.uInt8Value, program.uInt8Value]
-            
-        case .chanAftertouch(pressure: let pressure,
-                             channel: let channel,
-                             group: _):
-            
-            return [0xD0 + channel.uInt8Value, pressure.uInt8Value]
-            
-        case .pitchBend(value: let value,
-                        channel: let channel,
-                        group: _):
-            
-            let bytePair = value.bytePair
-            return [0xE0 + channel.uInt8Value, bytePair.lsb, bytePair.msb]
+        case .pitchBend(let event):
+            return event.midi1RawBytes()
             
             
         // ----------------------
         // MARK: System Exclusive
         // ----------------------
         
-        case .sysEx(manufacturer: let manufacturer,
-                    data: let data,
-                    group: _):
+        case .sysEx(let event):
+            return event.midi1RawBytes()
             
-            return [0xF0] + manufacturer.bytes + data + [0xF7]
-            
-        case .sysExUniversal(universalType: let universalType,
-                             deviceID: let deviceID,
-                             subID1: let subID1,
-                             subID2: let subID2,
-                             data: let data,
-                             group: _):
-            
-            return [0xF0,
-                    MIDI.Byte(universalType.rawValue),
-                    deviceID.uInt8Value,
-                    subID1.uInt8Value,
-                    subID2.uInt8Value]
-                + data
-                + [0xF7]
+        case .universalSysEx(let event):
+            return event.midi1RawBytes()
             
             
         // -------------------
         // MARK: System Common
         // -------------------
         
-        case .timecodeQuarterFrame(byte: let byte,
-                                   group: _):
+        case .timecodeQuarterFrame(let event):
+            return event.midi1RawBytes()
             
-            return [0xF1, byte]
+        case .songPositionPointer(let event):
+            return event.midi1RawBytes()
             
-        case .songPositionPointer(midiBeat: let midiBeat,
-                                  group: _):
+        case .songSelect(let event):
+            return event.midi1RawBytes()
             
-            let bytePair = midiBeat.bytePair
-            return [0xF2, bytePair.lsb, bytePair.msb]
+        case .unofficialBusSelect(let event):
+            return event.midi1RawBytes()
             
-        case .songSelect(number: let number,
-                         group: _):
-            
-            return [0xF3, number.uInt8Value]
-            
-        case .unofficialBusSelect(group: _):
-            
-            return [0xF5]
-            
-        case .tuneRequest(group: _):
-            
-            return [0xF6]
+        case .tuneRequest(let event):
+            return event.midi1RawBytes()
             
             
         // ----------------------
         // MARK: System Real Time
         // ----------------------
         
-        case .timingClock(group: _):
+        case .timingClock(let event):
+            return event.midi1RawBytes()
             
-            return [0xF8]
+        case .start(let event):
+            return event.midi1RawBytes()
             
-        case .start(group: _):
+        case .continue(let event):
+            return event.midi1RawBytes()
             
-            return [0xFA]
+        case .stop(let event):
+            return event.midi1RawBytes()
             
-        case .continue(group: _):
+        case .activeSensing(let event):
+            return event.midi1RawBytes()
             
-            return [0xFB]
-            
-        case .stop(group: _):
-            
-            return [0xFC]
-            
-        case .activeSensing(group: _):
-            
-            return [0xFE]
-            
-        case .systemReset(group: _):
-            
-            return [0xFF]
+        case .systemReset(let event):
+            return event.midi1RawBytes()
             
         }
         
@@ -152,321 +96,90 @@ extension MIDI.Event {
 
 extension MIDI.Event {
     
-    public var umpRawWords: [MIDI.UMPWord] {
+    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
         #warning("> this is incomplete and needs testing; for the time being MIDIKit will only use MIDI 1.0 event raw bytes")
         
-        let messageType: MIDI.Packet.UniversalPacketData.MessageType
-        
         switch self {
-        case .noteOn,
-                .noteOff,
-                .polyAftertouch,
-                .cc,
-                .programChange,
-                .chanAftertouch,
-                .pitchBend:
-            
-            messageType = .midi1ChannelVoice
-            
-        case .sysEx, .sysExUniversal:
-            
-            #warning("> this needs specializing")
-            messageType = .data64bit
-            
-        case .timecodeQuarterFrame,
-                .songPositionPointer,
-                .songSelect,
-                .unofficialBusSelect,
-                .tuneRequest,
-                .timingClock,
-                .start,
-                .continue,
-                .stop,
-                .activeSensing,
-                .systemReset:
-            
-            messageType = .systemRealTimeAndCommon
-            
-        }
         
-        switch self {
+        // -------------------
+        // MARK: Channel Voice
+        // -------------------
+        
+        case .noteOn(let event):
+            return event.umpRawWords(protocol: midiProtocol)
             
-            // -------------------
-            // MARK: Channel Voice
-            // -------------------
+        case .noteOff(let event):
+            return event.umpRawWords(protocol: midiProtocol)
             
-        case .noteOn(note: let note,
-                     velocity: let velocity,
-                     channel: let channel,
-                     group: let group):
+        case .polyAftertouch(let event):
+            return event.umpRawWords()
             
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
+        case .cc(let event):
+            return event.umpRawWords()
             
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0x90 + channel.uInt8Value,
-                                    note.uInt8Value,
-                                    velocity.uInt8Value)
+        case .programChange(let event):
+            return event.umpRawWords()
             
-            return [word]
+        case .chanAftertouch(let event):
+            return event.umpRawWords()
             
-        case .noteOff(note: let note,
-                      velocity: let velocity,
-                      channel: let channel,
-                      group: let group):
+        case .pitchBend(let event):
+            return event.umpRawWords()
             
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
             
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0x80 + channel.uInt8Value,
-                                    note.uInt8Value,
-                                    velocity.uInt8Value)
+        // ----------------------
+        // MARK: System Exclusive
+        // ----------------------
+        
+        case .sysEx(let event):
+            return event.umpRawWords()
             
-            return [word]
+        case .universalSysEx(let event):
+            return event.umpRawWords()
             
-        case .polyAftertouch(note: let note,
-                             pressure: let pressure,
-                             channel: let channel,
-                             group: let group):
             
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
+        // -------------------
+        // MARK: System Common
+        // -------------------
+        
+        case .timecodeQuarterFrame(let event):
+            return event.umpRawWords()
             
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xA0 + channel.uInt8Value,
-                                    note.uInt8Value,
-                                    pressure.uInt8Value)
+        case .songPositionPointer(let event):
+            return event.umpRawWords()
             
-            return [word]
+        case .songSelect(let event):
+            return event.umpRawWords()
             
-        case .cc(controller: let controller,
-                 value: let value,
-                 channel: let channel,
-                 group: let group):
+        case .unofficialBusSelect(let event):
+            return event.umpRawWords()
             
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
+        case .tuneRequest(let event):
+            return event.umpRawWords()
             
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xB0 + channel.uInt8Value,
-                                    controller.uInt8Value,
-                                    value.uInt8Value)
             
-            return [word]
+        // ----------------------
+        // MARK: System Real Time
+        // ----------------------
+        
+        case .timingClock(let event):
+            return event.umpRawWords()
             
-        case .programChange(program: let program,
-                            channel: let channel,
-                            group: let group):
+        case .start(let event):
+            return event.umpRawWords()
             
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
+        case .continue(let event):
+            return event.umpRawWords()
             
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xC0 + channel.uInt8Value,
-                                    program.uInt8Value,
-                                    0x00) // pad an empty byte to fill 4 bytes
+        case .stop(let event):
+            return event.umpRawWords()
             
-            return [word]
+        case .activeSensing(let event):
+            return event.umpRawWords()
             
-        case .chanAftertouch(pressure: let pressure,
-                             channel: let channel,
-                             group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xD0 + channel.uInt8Value,
-                                    pressure.uInt8Value,
-                                    0x00) // pad an empty byte to fill 4 bytes
-            
-            return [word]
-            
-        case .pitchBend(value: let value,
-                        channel: let channel,
-                        group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let bytePair = value.bytePair
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xE0 + channel.uInt8Value,
-                                    bytePair.lsb,
-                                    bytePair.msb)
-            
-            return [word]
-            
-            
-            // ----------------------
-            // MARK: System Exclusive
-            // ----------------------
-            
-        case .sysEx(manufacturer: let manufacturer,
-                    data: let data,
-                    group: let group):
-            
-            #warning("> this needs proper UMP fomatting")
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            _ = manufacturer
-            _ = data
-            _ = group
-            
-            return []
-            
-        case .sysExUniversal(universalType: let universalType,
-                             deviceID: let deviceID,
-                             subID1: let subID1,
-                             subID2: let subID2,
-                             data: let data,
-                             group: let group):
-            
-            #warning("> this needs proper UMP fomatting")
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            _ = universalType
-            _ = deviceID
-            _ = subID1
-            _ = subID2
-            _ = data
-            _ = group
-            
-            return []
-            
-            
-            // -------------------
-            // MARK: System Common
-            // -------------------
-            
-        case .timecodeQuarterFrame(byte: let byte,
-                                   group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xF1,
-                                    byte,
-                                    0x00) // pad an empty byte to fill 4 bytes
-            
-            return [word]
-            
-        case .songPositionPointer(midiBeat: let midiBeat,
-                                  group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let bytePair = midiBeat.bytePair
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xF2,
-                                    bytePair.lsb,
-                                    bytePair.msb)
-            
-            return [word]
-            
-        case .songSelect(number: let number,
-                         group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xF3,
-                                    number.uInt8Value,
-                                    0x00) // pad an empty byte to fill 4 bytes
-            
-            return [word]
-            
-        case .unofficialBusSelect(group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xF5,
-                                    0x00, // pad empty bytes to fill 4 bytes
-                                    0x00) // pad empty bytes to fill 4 bytes
-            
-            return [word]
-            
-        case .tuneRequest(group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xF6,
-                                    0x00, // pad empty bytes to fill 4 bytes
-                                    0x00) // pad empty bytes to fill 4 bytes
-            
-            return [word]
-            
-            
-            // ----------------------
-            // MARK: System Real Time
-            // ----------------------
-            
-        case .timingClock(group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xF8,
-                                    0x00, // pad empty bytes to fill 4 bytes
-                                    0x00) // pad empty bytes to fill 4 bytes
-            
-            return [word]
-            
-        case .start(group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xFA,
-                                    0x00, // pad empty bytes to fill 4 bytes
-                                    0x00) // pad empty bytes to fill 4 bytes
-            
-            return [word]
-            
-        case .continue(group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xFB,
-                                    0x00, // pad empty bytes to fill 4 bytes
-                                    0x00) // pad empty bytes to fill 4 bytes
-            
-            return [word]
-            
-        case .stop(group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xFC,
-                                    0x00, // pad empty bytes to fill 4 bytes
-                                    0x00) // pad empty bytes to fill 4 bytes
-            
-            return [word]
-            
-        case .activeSensing(group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xFE,
-                                    0x00, // pad empty bytes to fill 4 bytes
-                                    0x00) // pad empty bytes to fill 4 bytes
-            
-            return [word]
-            
-        case .systemReset(group: let group):
-            
-            let mtAndGroup = (messageType.rawValue.uInt8Value << 4) + group
-            
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xFF,
-                                    0x00, // pad empty bytes to fill 4 bytes
-                                    0x00) // pad empty bytes to fill 4 bytes
-            
-            return [word]
+        case .systemReset(let event):
+            return event.umpRawWords()
             
         }
         
