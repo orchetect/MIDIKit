@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Event Filter Tests Constants.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 

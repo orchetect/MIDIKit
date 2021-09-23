@@ -216,7 +216,7 @@ final class UInt9_Tests: XCTestCase {
         
         // nil (overflow)
         
-        XCTAssertNil(0b10_000_0000.toMIDIUInt9Exactly)
+        XCTAssertNil(0b10_0000_0000.toMIDIUInt9Exactly)
         
     }
     
