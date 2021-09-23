@@ -5,7 +5,7 @@
 
 extension MIDI.Event {
     
-    /// Channel Voice Message: Channel Aftertouch (Status `0xD`)
+    /// Channel Voice Message: Channel Aftertouch
     ///
     /// DAWs have slightly different terminology for this:
     /// - Pro Tools: "Mono Aftertouch"
@@ -21,7 +21,7 @@ extension MIDI.Event {
         
     }
     
-    /// Channel Voice Message: Channel Aftertouch (Status `0xD`)
+    /// Channel Voice Message: Channel Aftertouch
     ///
     /// DAWs have slightly different terminology for this:
     /// - Pro Tools: "Mono Aftertouch"

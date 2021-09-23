@@ -5,7 +5,7 @@
 
 extension MIDI.Event {
     
-    /// Channel Voice Message: Controller Change (CC) (Status `0xB`)
+    /// Channel Voice Message: Controller Change (CC)
     public struct CC: Equatable, Hashable {
         
         public var controller: Controller
@@ -22,7 +22,7 @@ extension MIDI.Event {
 
 extension MIDI.Event {
     
-    /// Channel Voice Message: Controller Change (CC) (Status `0xB`)
+    /// Channel Voice Message: Controller Change (CC)
     public static func cc(_ controller: CC.Controller,
                           value: MIDI.UInt7,
                           channel: MIDI.UInt4,
@@ -37,7 +37,7 @@ extension MIDI.Event {
         
     }
     
-    /// Channel Voice Message: Controller Change (CC) (Status `0xB`)
+    /// Channel Voice Message: Controller Change (CC)
     public static func cc(_ controller: MIDI.UInt7,
                           value: MIDI.UInt7,
                           channel: MIDI.UInt4,

@@ -5,7 +5,7 @@
 
 extension MIDI.Event {
     
-    /// Channel Voice Message: Polyphonic Aftertouch (Status `0xA`)
+    /// Channel Voice Message: Polyphonic Aftertouch
     ///
     /// DAWs have slightly different terminology for this:
     /// - Pro Tools: "Polyphonic Aftertouch"
@@ -23,7 +23,7 @@ extension MIDI.Event {
         
     }
     
-    /// Channel Voice Message: Polyphonic Aftertouch (Status `0xA`)
+    /// Channel Voice Message: Polyphonic Aftertouch
     ///
     /// DAWs have slightly different terminology for this:
     /// - Pro Tools: "Polyphonic Aftertouch"

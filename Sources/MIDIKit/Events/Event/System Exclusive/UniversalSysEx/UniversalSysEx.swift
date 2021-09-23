@@ -5,7 +5,7 @@
 
 extension MIDI.Event {
     
-    /// System Exclusive: Universal SysEx (Status `0xF0`)
+    /// System Exclusive: Universal SysEx
     ///
     /// Used in both MIDI 1.0 and 2.0 spec.
     ///
@@ -28,7 +28,7 @@ extension MIDI.Event {
         
     }
     
-    /// System Exclusive: Universal SysEx (Status `0xF0`)
+    /// System Exclusive: Universal SysEx
     ///
     /// Used in both MIDI 1.0 and 2.0 spec.
     ///

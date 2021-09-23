@@ -5,7 +5,7 @@
 
 extension MIDI.Event {
     
-    /// System Exclusive: Manufacturer-specific (Status `0xF0`)
+    /// System Exclusive: Manufacturer-specific
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -22,7 +22,7 @@ extension MIDI.Event {
         
     }
     
-    /// System Exclusive: Manufacturer-specific (Status `0xF0`)
+    /// System Exclusive: Manufacturer-specific
     ///
     /// - remark: MIDI 1.0 Spec:
     ///

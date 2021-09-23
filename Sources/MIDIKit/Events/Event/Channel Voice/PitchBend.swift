@@ -5,7 +5,7 @@
 
 extension MIDI.Event {
     
-    /// Channel Voice Message: Program Change (Status `0xC`)
+    /// Channel Voice Message: Program Change
     public struct PitchBend: Equatable, Hashable {
         
         public var value: MIDI.UInt14
@@ -16,7 +16,7 @@ extension MIDI.Event {
         
     }
     
-    /// Channel Voice Message: Program Change (Status `0xC`)
+    /// Channel Voice Message: Program Change
     public static func pitchBend(value: MIDI.UInt14,
                                  channel: MIDI.UInt4,
                                  group: MIDI.UInt4 = 0) -> Self {

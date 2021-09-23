@@ -14,13 +14,13 @@ extension MIDI {
         // MARK: Channel Voice
         // -------------------
         
-        /// Channel Voice Message: Note On (Status `0x9`)
+        /// Channel Voice Message: Note On
         case noteOn(Note.On)
         
-        /// Channel Voice Message: Note Off (Status `0x8`)
+        /// Channel Voice Message: Note Off
         case noteOff(Note.Off)
         
-        /// Channel Voice Message: Polyphonic Aftertouch (Status `0xA`)
+        /// Channel Voice Message: Polyphonic Aftertouch
         ///
         /// DAWs have slightly different terminology for this:
         /// - Pro Tools: "Polyphonic Aftertouch"
@@ -28,13 +28,13 @@ extension MIDI {
         /// - Cubase: "Poly Pressure"
         case polyAftertouch(PolyAftertouch)
         
-        /// Channel Voice Message: Controller Change (CC) (Status `0xB`)
+        /// Channel Voice Message: Controller Change (CC)
         case cc(CC)
         
-        /// Channel Voice Message: Program Change (Status `0xC`)
+        /// Channel Voice Message: Program Change
         case programChange(ProgramChange)
         
-        /// Channel Voice Message: Channel Aftertouch (Status `0xD`)
+        /// Channel Voice Message: Channel Aftertouch
         ///
         /// DAWs have slightly different terminology for this:
         /// - Pro Tools: "Mono Aftertouch"
@@ -42,7 +42,7 @@ extension MIDI {
         /// - Cubase: "Aftertouch"
         case chanAftertouch(ChanAftertouch)
         
-        /// Channel Voice Message: Pitch Bend (Status `0xE`)
+        /// Channel Voice Message: Pitch Bend
         case pitchBend(PitchBend)
         
         
@@ -50,7 +50,7 @@ extension MIDI {
         // MARK: System Exclusive
         // ----------------------
         
-        /// System Exclusive: Manufacturer-specific (Status `0xF0`)
+        /// System Exclusive: Manufacturer-specific
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -59,7 +59,7 @@ extension MIDI {
         /// "Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification."
         case sysEx(SysEx)
         
-        /// System Exclusive: Universal SysEx (Status `0xF0`)
+        /// System Exclusive: Universal SysEx
         ///
         /// Used in both MIDI 1.0 and 2.0 spec.
         ///
@@ -73,28 +73,28 @@ extension MIDI {
         // MARK: System Common
         // -------------------
         
-        /// System Common: Timecode Quarter-Frame (Status `0xF1`)
+        /// System Common: Timecode Quarter-Frame
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "For device synchronization, MIDI Time Code uses two basic types of messages, described as Quarter Frame and Full. There is also a third, optional message for encoding SMPTE user bits. The Quarter Frame message communicates the Frame, Seconds, Minutes and Hours Count in an 8-message sequence. There is also an MTC FULL FRAME message which is a MIDI System Exclusive Message."
         case timecodeQuarterFrame(TimecodeQuarterFrame)
         
-        /// System Common: Song Position Pointer (Status `0xF2`)
+        /// System Common: Song Position Pointer
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start of the song and is used to begin playback of a sequence from a position other than the beginning of the song."
         case songPositionPointer(SongPositionPointer)
         
-        /// System Common: Song Select (Status `0xF3`)
+        /// System Common: Song Select
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real Time messages (MIDI Sync)."
         case songSelect(SongSelect)
         
-        /// Bus Select - unofficial (Status `0xF5`)
+        /// Bus Select - unofficial
         case unofficialBusSelect(UnofficialBusSelect)
         
         /// System Common: Tune Request (Status `0xF6`)
@@ -109,35 +109,35 @@ extension MIDI {
         // MARK: System Real Time
         // ----------------------
         
-        /// System Real Time: Timing Clock (Status `0xF8`)
+        /// System Real Time: Timing Clock
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Clock-based MIDI systems are synchronized with this message, which is sent at a rate of 24 per quarter note. If Timing Clocks (`0xF8`) are sent during idle time they should be sent at the current tempo setting of the transmitter even while it is not playing. Receivers which are synchronized to incoming Real Time messages (MIDI Sync mode) can thus phase lock their internal clocks while waiting for a Start (`0xFA`) or Continue (`0xFB`) command."
         case timingClock(TimingClock)
         
-        /// System Real Time: Start (Status `0xFA`)
+        /// System Real Time: Start
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real Time messages (MIDI Sync mode) to start at the beginning of the song or sequence."
         case start(Start)
         
-        /// System Real Time: Continue (Status `0xFB`)
+        /// System Real Time: Continue
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Continue (`0xFB`) is sent when a CONTINUE button is hit. A sequence will continue from its current location upon receipt of the next Timing Clock (`0xF8`)."
         case `continue`(Continue)
         
-        /// System Real Time: Stop (Status `0xFC`)
+        /// System Real Time: Stop
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately."
         case stop(Stop)
         
-        /// System Real Time: Active Sensing (Status `0xFE`)
+        /// System Real Time: Active Sensing
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -146,7 +146,7 @@ extension MIDI {
         /// - note: Use of Active Sensing in modern MIDI devices is uncommon and the use of this standard has been deprecated as of MIDI 2.0.
         case activeSensing(ActiveSensing)
         
-        /// System Real Time: System Reset (Status `0xFF`)
+        /// System Real Time: System Reset
         ///
         /// - remark: MIDI 1.0 Spec:
         ///

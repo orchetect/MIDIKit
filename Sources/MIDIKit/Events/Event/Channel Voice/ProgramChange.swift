@@ -5,7 +5,7 @@
 
 extension MIDI.Event {
     
-    /// Channel Voice Message: Program Change (Status `0xC`)
+    /// Channel Voice Message: Program Change
     public struct ProgramChange: Equatable, Hashable {
         
         public var program: MIDI.UInt7
@@ -16,7 +16,7 @@ extension MIDI.Event {
         
     }
     
-    /// Channel Voice Message: Program Change (Status `0xC`)
+    /// Channel Voice Message: Program Change
     public static func programChange(program: MIDI.UInt7,
                                      channel: MIDI.UInt4,
                                      group: MIDI.UInt4 = 0) -> Self {
