@@ -5,7 +5,7 @@
 
 extension MIDI.Event.Note {
     
-    /// Channel Voice Message: Note On (Status `0x9`)
+    /// Channel Voice Message: Note On
     public struct On: Equatable, Hashable {
         
         public var note: MIDI.UInt7
@@ -14,12 +14,10 @@ extension MIDI.Event.Note {
         
         public var channel: MIDI.UInt4
         
-        /// MIDI 2.0 Channel Voice Attribute Type
-        public var attributeType: MIDI.Byte
+        /// MIDI 2.0 Channel Voice Attribute
+        public var attribute: Attribute = .none
         
-        /// MIDI 2.0 Channel Voice Attribute Data
-        public var attributeData: MIDI.Byte.Pair
-        
+        /// MIDI UMP Group
         public var group: MIDI.UInt4 = 0
         
     }
@@ -27,35 +25,35 @@ extension MIDI.Event.Note {
 
 extension MIDI.Event {
     
-    /// Channel Voice Message: Note On (Status `0x9`)
+    /// Channel Voice Message: Note On
     public static func noteOn(_ note: MIDI.UInt7,
                               velocity: Note.Velocity,
                               channel: MIDI.UInt4,
+                              attribute: Note.Attribute = .none,
                               group: MIDI.UInt4 = 0) -> Self {
         
         .noteOn(
             .init(note: note,
                   velocity: velocity,
                   channel: channel,
-                  attributeType: 0x00,
-                  attributeData: .init(msb: 0x00, lsb: 0x00),
+                  attribute: attribute,
                   group: group)
         )
         
     }
     
-    /// Channel Voice Message: Note On (Status `0x9`)
+    /// Channel Voice Message: Note On
     public static func noteOn(_ note: MIDI.UInt7,
                               velocity: Double,
                               channel: MIDI.UInt4,
+                              attribute: Note.Attribute = .none,
                               group: MIDI.UInt4 = 0) -> Self {
         
         .noteOn(
             .init(note: note,
                   velocity: .unitInterval(velocity),
                   channel: channel,
-                  attributeType: 0x00,
-                  attributeData: .init(msb: 0x00, lsb: 0x00),
+                  attribute: attribute,
                   group: group)
         )
         
