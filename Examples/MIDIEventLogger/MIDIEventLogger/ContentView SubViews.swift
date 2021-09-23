@@ -89,14 +89,14 @@ extension ContentView {
                 
                 Button {
                     sendEvent(.noteOn(60,
-                                      velocity: 64,
+                                      velocity: 0.5,
                                       channel: midiChannel,
                                       group: midiGroup))
                 } label: { Text("Note On") }
                 
                 Button {
                     sendEvent(.noteOff(60,
-                                       velocity: 0,
+                                       velocity: 0.0,
                                        channel: midiChannel,
                                        group: midiGroup))
                 } label: { Text("Note Off") }

@@ -96,7 +96,7 @@ extension MIDI.Event {
 
 extension MIDI.Event {
     
-    public var umpRawWords: [MIDI.UMPWord] {
+    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
         #warning("> this is incomplete and needs testing; for the time being MIDIKit will only use MIDI 1.0 event raw bytes")
         
@@ -107,10 +107,10 @@ extension MIDI.Event {
         // -------------------
         
         case .noteOn(let event):
-            return event.umpRawWords()
+            return event.umpRawWords(protocol: midiProtocol)
             
         case .noteOff(let event):
-            return event.umpRawWords()
+            return event.umpRawWords(protocol: midiProtocol)
             
         case .polyAftertouch(let event):
             return event.umpRawWords()

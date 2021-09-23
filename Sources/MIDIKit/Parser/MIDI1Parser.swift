@@ -379,7 +379,7 @@ extension MIDI {
                 else { return events }
                 
                 let newEvent: MIDI.Event = .noteOff(note,
-                                                    velocity: velocity,
+                                                    velocity: .midi1(velocity),
                                                     channel: channel,
                                                     group: umpGroup)
                 
@@ -392,7 +392,7 @@ extension MIDI {
                 else { return events }
                 
                 let newEvent: MIDI.Event = .noteOn(note,
-                                                   velocity: velocity,
+                                                   velocity: .midi1(velocity),
                                                    channel: channel,
                                                    group: umpGroup)
                 

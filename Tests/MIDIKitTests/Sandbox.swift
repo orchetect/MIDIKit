@@ -15,9 +15,9 @@ final class Sandbox: XCTestCase {
 //
 //        // MIDI.Event
 //
-//        _ = MIDI.Event.noteOn(note: 2, velocity: 100, channel: 0)
+//        _ = MIDI.Event.noteOn(note: 2, velocity: .midi1(100), channel: 0)
 //
-//        _ = MIDI.Event.noteOff(note: 2, velocity: 100, channel: 0)
+//        _ = MIDI.Event.noteOff(note: 2, velocity: .midi1(100), channel: 0)
 //
 //        _ = MIDI.Event.cc(.rpn(.channelFineTuning(.midpoint)), channel: 0)
 //
@@ -25,7 +25,7 @@ final class Sandbox: XCTestCase {
 //
 //        // MIDI.Event sub events
 //
-//        _ = MIDI.Event.noteOn(note: 2, velocity: 100, channel: 0)
+//        _ = MIDI.Event.noteOn(note: 2, velocity: .midi1(100), channel: 0)
 //
 //        _ = MIDI.Event.cc(.modWheel(value: 127), channel: 0)
 //
@@ -36,7 +36,7 @@ final class Sandbox: XCTestCase {
 //        // collections
 //
 //        let _: [MIDI.Event] = [
-//            .noteOn(note: 2, velocity: 100, channel: 0),
+//            .noteOn(note: 2, velocity: .midi1(100), channel: 0),
 //            .cc(.modWheel(value: 127), channel: 0),
 //            .cc(.lsb(.dataEntry(value: 64)), channel: 0),
 //            .cc(.raw(1, value: 127), channel: 0),
@@ -47,7 +47,7 @@ final class Sandbox: XCTestCase {
 //        ]
 //
 //        let _: [MIDI.Event?] = [
-//            .noteOn(note: 2, velocity: 100, channel: 0)
+//            .noteOn(note: 2, velocity: .midi1(100), channel: 0)
 //        ].compactMap { $0 }
 //
 //        let _: [MIDI.Event] = [
@@ -63,7 +63,7 @@ final class Sandbox: XCTestCase {
 //
 //        // parsing (receiver)
 //
-//        [MIDI.Event]([.chanVoice(.noteOn(note: 60, velocity: 64, channel: 0))])
+//        [MIDI.Event]([.chanVoice(.noteOn(note: 60, velocity: .midi1(64), channel: 0))])
 //            .forEach { event in
 //
 //                switch event.message {
@@ -193,10 +193,10 @@ final class Sandbox: XCTestCase {
 //
 //        _ = MIDI.Event.ChanVoice.Kind.controllerChange
 //
-//        _ = [MIDI.Event]([.chanVoice(.noteOn(note: 60, velocity: 64, channel: 0))])
+//        _ = [MIDI.Event]([.chanVoice(.noteOn(note: 60, velocity: .midi1(64), channel: 0))])
 //            .filter(pattern: [.raw])
 //
-//        _ = [MIDI.Event]([.chanVoice(.noteOn(note: 60, velocity: 64, channel: 0))])
+//        _ = [MIDI.Event]([.chanVoice(.noteOn(note: 60, velocity: .midi1(64), channel: 0))])
 //            .filter(pattern: [.chanVoice([.noteOn, .noteOff])])
 //            .filter([MIDI.Event.Kind.raw])
 //

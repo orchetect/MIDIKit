@@ -15,10 +15,10 @@ extension MIDI {
         // -------------------
         
         /// Channel Voice Message: Note On (Status `0x9`)
-        case noteOn(NoteOn)
+        case noteOn(Note.On)
         
         /// Channel Voice Message: Note Off (Status `0x8`)
-        case noteOff(NoteOff)
+        case noteOff(Note.Off)
         
         /// Channel Voice Message: Polyphonic Aftertouch (Status `0xA`)
         ///

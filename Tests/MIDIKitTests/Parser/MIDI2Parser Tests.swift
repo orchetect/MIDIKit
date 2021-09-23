@@ -34,13 +34,13 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         // note off
         XCTAssertEqual(
             parsedEvents(bytes: [0x20, 0x80, 0x3C, 0x40]),
-            [.noteOff(60, velocity: 64, channel: 0, group: 0x0)]
+            [.noteOff(60, velocity: .midi1(64), channel: 0, group: 0x0)]
         )
         
         // note on
         XCTAssertEqual(
             parsedEvents(bytes: [0x21, 0x91, 0x3C, 0x40]),
-            [.noteOn(60, velocity: 64, channel: 1, group: 0x1)]
+            [.noteOn(60, velocity: .midi1(64), channel: 1, group: 0x1)]
         )
         
         // poly aftertouch
