@@ -418,7 +418,7 @@ extension MIDI {
                 else { return events }
                 
                 let newEvent: MIDI.Event = .cc(cc,
-                                               value: value,
+                                               value: .midi1(value),
                                                channel: channel,
                                                group: umpGroup)
                 

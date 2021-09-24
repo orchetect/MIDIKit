@@ -116,7 +116,7 @@ extension MIDI.Event {
             return event.umpRawWords()
             
         case .cc(let event):
-            return event.umpRawWords()
+            return event.umpRawWords(protocol: midiProtocol)
             
         case .programChange(let event):
             return event.umpRawWords()

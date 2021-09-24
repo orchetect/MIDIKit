@@ -271,7 +271,7 @@ extension MIDI {
                 else { return nil }
                 
                 let newEvent: MIDI.Event = .cc(cc,
-                                               value: value,
+                                               value: .midi1(value),
                                                channel: channel,
                                                group: group)
                 

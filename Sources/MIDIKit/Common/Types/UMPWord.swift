@@ -28,4 +28,16 @@ extension MIDI.UMPWord {
         
     }
     
+    /// Internal: Pack a UInt32 with two 16-bit UInt16r.
+    @inline(__always) internal init(
+        _ byte0and1: UInt16,
+        _ byte2and3: UInt16
+    ) {
+        
+        self =
+            (Self(byte0and1) << 16) +
+            Self(byte2and3)
+        
+    }
+    
 }
