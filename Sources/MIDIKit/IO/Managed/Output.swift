@@ -14,7 +14,7 @@ extension MIDI.IO {
         // MIDIIOManagedProtocol
         public weak var midiManager: Manager?
         public private(set) var api: APIVersion
-        public private(set) var `protocol`: MIDI.IO.ProtocolVersion
+        public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
@@ -27,14 +27,12 @@ extension MIDI.IO {
         internal init(name: String,
                       uniqueID: MIDI.IO.OutputEndpoint.UniqueID? = nil,
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform(),
-                      protocol midiProtocol: MIDI.IO.ProtocolVersion = ._2_0) {
+                      api: APIVersion = .bestForPlatform()) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
             self.midiManager = midiManager
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-            self.protocol = api == .legacyCoreMIDI ? ._1_0 : midiProtocol
             
         }
         
@@ -100,7 +98,7 @@ extension MIDI.IO.Output {
             try MIDISourceCreateWithProtocol(
                 manager.clientRef,
                 endpointName as CFString,
-                self.protocol.coreMIDIProtocol,
+                self.api.midiProtocol.coreMIDIProtocol,
                 &newPortRef
             )
             .throwIfOSStatusErr()

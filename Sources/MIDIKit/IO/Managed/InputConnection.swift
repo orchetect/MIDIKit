@@ -15,7 +15,7 @@ extension MIDI.IO {
         // MIDIIOManagedProtocol
         public weak var midiManager: Manager?
         public private(set) var api: APIVersion
-        public private(set) var `protocol`: MIDI.IO.ProtocolVersion
+        public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
         public private(set) var outputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>
         
@@ -30,14 +30,12 @@ extension MIDI.IO {
         internal init(toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
                       receiveHandler: ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform(),
-                      protocol midiProtocol: MIDI.IO.ProtocolVersion = ._2_0) {
+                      api: APIVersion = .bestForPlatform()) {
             
             self.outputCriteria = toOutput
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-            self.protocol = api == .legacyCoreMIDI ? ._1_0 : midiProtocol
             
         }
         
@@ -111,7 +109,7 @@ extension MIDI.IO.InputConnection {
             try MIDIInputPortCreateWithProtocol(
                 manager.clientRef,
                 UUID().uuidString as CFString,
-                self.protocol.coreMIDIProtocol,
+                self.api.midiProtocol.coreMIDIProtocol,
                 &newConnection,
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }

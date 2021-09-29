@@ -15,7 +15,7 @@ extension MIDI.IO {
         // MIDIIOManagedProtocol
         public weak var midiManager: Manager?
         public private(set) var api: APIVersion
-        public private(set) var `protocol`: MIDI.IO.ProtocolVersion
+        public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
         public var inputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>
         
@@ -27,13 +27,11 @@ extension MIDI.IO {
         
         internal init(
             toInput: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>,
-            api: APIVersion = .bestForPlatform(),
-            protocol midiProtocol: MIDI.IO.ProtocolVersion = ._2_0
+            api: APIVersion = .bestForPlatform()
         ) {
             
             self.inputCriteria = toInput
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-            self.protocol = api == .legacyCoreMIDI ? ._1_0 : midiProtocol
             
         }
         
@@ -62,9 +60,7 @@ extension MIDI.IO.OutputConnection {
         guard let getInputEndpointRef = inputCriteria
                 .locate(in: manager.endpoints.inputs)?
                 .coreMIDIObjectRef
-        
         else {
-            
             isConnected = false
             
             throw MIDI.IO.MIDIError.connectionError(

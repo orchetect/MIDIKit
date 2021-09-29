@@ -18,7 +18,25 @@ extension MIDI.IO {
         /// New Core MIDI API introduced in macOS 11, iOS 14, macCatalyst 14, tvOS 14, and watchOS 7.
         ///
         /// Internally using `MIDIEventList` / `MIDIEventPacket`.
-        case newCoreMIDI
+        case newCoreMIDI(ProtocolVersion)
+        
+    }
+    
+}
+
+extension MIDI.IO.APIVersion {
+    
+    /// MIDI protocol version.
+    @inline(__always) public var midiProtocol: MIDI.IO.ProtocolVersion {
+        
+        switch self {
+        case .legacyCoreMIDI:
+            return ._1_0
+            
+        case .newCoreMIDI(let protocolVersion):
+            return protocolVersion
+            
+        }
         
     }
     
@@ -32,7 +50,7 @@ extension MIDI.IO.APIVersion {
         if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
             #warning("> switch to new API in future")
             // return legacy for now, since new API is buggy;
-            // in future, this should return .newCoreMIDI when new API is more stable
+            // in future, this should return .newCoreMIDI(._2_0) when new API is more stable
             return .legacyCoreMIDI
             
         } else {
@@ -85,7 +103,7 @@ extension MIDI.IO.APIVersion: CustomStringConvertible {
             return "Legacy Core MIDI API"
             
         case .newCoreMIDI:
-            return "New Core MIDI API"
+            return "New Core MIDI API (\(midiProtocol))"
         }
         
     }

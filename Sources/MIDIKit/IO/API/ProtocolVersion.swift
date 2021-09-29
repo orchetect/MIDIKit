@@ -58,3 +58,20 @@ extension MIDI.IO.ProtocolVersion {
     }
     
 }
+
+extension MIDI.IO.ProtocolVersion: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        case ._1_0:
+            return "MIDI 1.0"
+            
+        case ._2_0:
+            return "MIDI 2.0"
+            
+        }
+        
+    }
+    
+}

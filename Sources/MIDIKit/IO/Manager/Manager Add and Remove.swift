@@ -42,8 +42,7 @@ extension MIDI.IO.Manager {
                 uniqueID: uniqueID.readID(),
                 receiveHandler: receiveHandler,
                 midiManager: self,
-                api: preferredAPI,
-                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
+                api: preferredAPI
             )
             
             managedInputs[tag] = newVD
@@ -82,8 +81,7 @@ extension MIDI.IO.Manager {
                 toOutput: toOutput,
                 receiveHandler: receiveHandler,
                 midiManager: self,
-                api: preferredAPI,
-                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
+                api: preferredAPI
             )
             
             // store the connection object in the manager,
@@ -126,8 +124,7 @@ extension MIDI.IO.Manager {
                 name: name,
                 uniqueID: uniqueID.readID(),
                 midiManager: self,
-                api: preferredAPI,
-                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
+                api: preferredAPI
             )
             
             managedOutputs[tag] = newVS
@@ -162,8 +159,7 @@ extension MIDI.IO.Manager {
             
             let newCS = MIDI.IO.OutputConnection(
                 toInput: toInput,
-                api: preferredAPI,
-                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
+                api: preferredAPI
             )
             
             // store the connection object in the manager,

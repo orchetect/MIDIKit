@@ -7,8 +7,8 @@ import CoreMIDI
 
 public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
     
-    /// MIDI Spec version used for this endpoint.
-    /* public private(set) */ var `protocol`: MIDI.IO.ProtocolVersion { get }
+    /// MIDI Protocol version used for this endpoint.
+    /* public private(set) */ var midiProtocol: MIDI.IO.ProtocolVersion { get }
     
     /// Core MIDI Port Ref
     var portRef: MIDIPortRef? { get }
@@ -96,7 +96,7 @@ extension MIDIIOSendsMIDIMessagesProtocol {
             
         case .newCoreMIDI:
             var eventList = try MIDIEventList(
-                protocol: self.protocol.coreMIDIProtocol,
+                protocol: self.midiProtocol.coreMIDIProtocol,
                 packetWords: rawWords
             )
             
@@ -126,7 +126,7 @@ extension MIDIIOSendsMIDIMessagesProtocol {
                 )
             }
             
-            try send(rawWords: event.umpRawWords(protocol: self.protocol))
+            try send(rawWords: event.umpRawWords(protocol: self.midiProtocol))
         }
         
     }
@@ -146,7 +146,7 @@ extension MIDIIOSendsMIDIMessagesProtocol {
             }
             
             for event in events {
-                try send(rawWords: event.umpRawWords(protocol: self.protocol))
+                try send(rawWords: event.umpRawWords(protocol: self.midiProtocol))
             }
         }
         
