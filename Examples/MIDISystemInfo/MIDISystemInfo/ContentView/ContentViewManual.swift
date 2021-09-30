@@ -62,9 +62,11 @@ struct ContentViewManual: View {
 				Section(header: Text("MIDI Devices")) {
 					
 					ForEach(devices.sortedByName()) { item in
-						NavigationLink(destination: DetailsView(endpoint: item)) {
+                        let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
+                        
+                        NavigationLink(destination: detailsView) {
 							Group {
-								if let nsImg = item.getImageAsNSImage {
+								if let nsImg = item.getImageAsNSImage() {
 									Image(nsImage: nsImg)
 										.resizable()
 								} else {
@@ -82,9 +84,11 @@ struct ContentViewManual: View {
 				Section(header: Text("MIDI Output Endpoints")) {
 					
 					ForEach(outputs.sortedByName()) { item in
-						NavigationLink(destination: DetailsView(endpoint: item)) {
+                        let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
+                        
+                        NavigationLink(destination: detailsView) {
 							Group {
-								if let nsImg = item.getImageAsNSImage {
+								if let nsImg = item.getImageAsNSImage() {
 									Image(nsImage: nsImg)
 										.resizable()
 								} else {
@@ -102,9 +106,11 @@ struct ContentViewManual: View {
 				Section(header: Text("MIDI Input Endpoints")) {
 					
 					ForEach(inputs.sortedByName()) { item in
-						NavigationLink(destination: DetailsView(endpoint: item)) {
+                        let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
+                        
+                        NavigationLink(destination: detailsView) {
 							Group {
-								if let nsImg = item.getImageAsNSImage {
+								if let nsImg = item.getImageAsNSImage() {
 									Image(nsImage: nsImg)
 										.resizable()
 								} else {
