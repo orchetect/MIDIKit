@@ -30,7 +30,7 @@ extension MIDI.IO {
         case driverDeviceEditorApp
         
         // MARK: Presentation
-        case propertyImage
+        case image
         case displayName
         
         // MARK: Audio
@@ -116,7 +116,7 @@ extension MIDI.IO.kMIDIProperty {
         case .driverDeviceEditorApp: return [.device]
             
         // MARK: Presentation
-        case .propertyImage: return [.device]
+        case .image: return [.device]
         case .displayName: return [.device, .entity, .endpoint]
             
         // MARK: Audio

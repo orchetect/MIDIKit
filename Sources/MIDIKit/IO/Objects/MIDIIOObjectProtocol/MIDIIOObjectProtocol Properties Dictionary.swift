@@ -96,8 +96,8 @@ extension MIDIIOObjectProtocol {
             
             
         // MARK: Presentation
-        case .propertyImage:
-            return (key: "Property Image",
+        case .image:
+            return (key: "Image (File URL)",
                     value: getImageFileURL()?.absoluteString ?? "-")
             
         case .displayName:
