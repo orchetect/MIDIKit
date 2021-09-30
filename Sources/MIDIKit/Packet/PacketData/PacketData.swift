@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.Packet {
     
@@ -13,18 +13,13 @@ extension MIDI.Packet {
         let bytes: [MIDI.Byte]
         
         /// Core MIDI packet timestamp
-        let timeStamp: MIDITimeStamp
+        let timeStamp: MIDI.IO.CoreMIDITimeStamp
         
-        @inline(__always) public init(bytes: [MIDI.Byte], timeStamp: MIDITimeStamp) {
+        @inline(__always)
+        public init(bytes: [MIDI.Byte], timeStamp: MIDI.IO.CoreMIDITimeStamp) {
             
             self.bytes = bytes
             self.timeStamp = timeStamp
-            
-        }
-        
-        @inline(__always) public init(_ midiPacketPtr: UnsafePointer<MIDIPacket>) {
-            
-            self = Self.safePacketUnwrapper(midiPacketPtr)
             
         }
         
@@ -34,11 +29,18 @@ extension MIDI.Packet {
 
 extension MIDI.Packet.PacketData {
     
-    @inline(__always) fileprivate
-    static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
+    @inline(__always)
+    internal init(_ midiPacketPtr: UnsafePointer<MIDIPacket>) {
+        
+        self = Self.safePacketUnwrapper(midiPacketPtr)
+        
+    }
     
-    @inline(__always) fileprivate
-    static func safePacketUnwrapper(_ midiPacketPtr: UnsafePointer<MIDIPacket>) -> MIDI.Packet.PacketData {
+    @inline(__always)
+    fileprivate static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
+    
+    @inline(__always)
+    fileprivate static func safePacketUnwrapper(_ midiPacketPtr: UnsafePointer<MIDIPacket>) -> MIDI.Packet.PacketData {
         
         let packetDataCount = Int(midiPacketPtr.pointee.length)
         

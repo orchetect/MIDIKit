@@ -27,7 +27,8 @@ extension MIDI.IO {
 extension MIDI.IO.APIVersion {
     
     /// MIDI protocol version.
-    @inline(__always) public var midiProtocol: MIDI.IO.ProtocolVersion {
+    @inline(__always)
+    public var midiProtocol: MIDI.IO.ProtocolVersion {
         
         switch self {
         case .legacyCoreMIDI:

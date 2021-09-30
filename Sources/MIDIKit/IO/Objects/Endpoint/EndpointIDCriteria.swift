@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
@@ -71,7 +71,7 @@ extension MIDI.IO.EndpointIDCriteria: Hashable where T : MIDIIOObjectProtocol {
     
 }
 
-extension MIDI.IO.EndpointIDCriteria {
+extension MIDI.IO.EndpointIDCriteria where T : _MIDIIOObjectProtocol {
     
     /// Uses the criteria to find the first match and returns it if found.
     internal func locate(in endpoints: [T]) -> T? {

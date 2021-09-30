@@ -3,16 +3,14 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 // MARK: - MIDIIOUniqueIDProtocol
 
 public protocol MIDIIOUniqueIDProtocol {
     
     /// Core MIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
-    var coreMIDIUniqueID: MIDIUniqueID { get }
+    var coreMIDIUniqueID: MIDI.IO.CoreMIDIUniqueID { get }
     
-    init(_ coreMIDIUniqueID: MIDIUniqueID)
+    init(_ coreMIDIUniqueID: MIDI.IO.CoreMIDIUniqueID)
     
 }
 

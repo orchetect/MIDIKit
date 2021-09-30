@@ -3,17 +3,15 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 extension MIDI.IO.InputEndpoint {
     
     /// MIDIKit Object Unique ID value type.
     /// Analogous with Core MIDI value of `MIDIObjectRef` property key `kMIDIPropertyUniqueID`.
     public struct UniqueID: MIDIIOEndpointUniqueIDProtocol {
         
-        public let coreMIDIUniqueID: MIDIUniqueID
+        public let coreMIDIUniqueID: MIDI.IO.CoreMIDIUniqueID
         
-        public init(_ coreMIDIUniqueID: MIDIUniqueID) {
+        public init(_ coreMIDIUniqueID: MIDI.IO.CoreMIDIUniqueID) {
             self.coreMIDIUniqueID = coreMIDIUniqueID
         }
         
@@ -35,7 +33,7 @@ extension MIDI.IO.InputEndpoint.UniqueID: Identifiable {
 
 extension MIDI.IO.InputEndpoint.UniqueID: ExpressibleByIntegerLiteral {
     
-    public typealias IntegerLiteralType = MIDIUniqueID
+    public typealias IntegerLiteralType = MIDI.IO.CoreMIDIUniqueID
     
     public init(integerLiteral value: IntegerLiteralType) {
         

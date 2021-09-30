@@ -3,13 +3,14 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDIPacketList {
     
-    /// Internal use.
+    /// Internal:
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a Core MIDI `MIDIPacketList`.
-    @inlinable internal init(data: [MIDI.Byte]) {
+    @inline(__always)
+    internal init(data: [MIDI.Byte]) {
         
         let packetList = UnsafeMutablePointer<MIDIPacketList>(data: data)
         self = packetList.pointee
@@ -17,9 +18,10 @@ extension MIDIPacketList {
         
     }
     
-    /// Experimental.
+    /// Internal:
     /// Assembles an array of `Byte` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
-    @inlinable internal init(data: [[MIDI.Byte]]) throws {
+    @inline(__always)
+    internal init(data: [[MIDI.Byte]]) throws {
         
         let packetList = try UnsafeMutablePointer<MIDIPacketList>(data: data)
         self = packetList.pointee
@@ -31,11 +33,12 @@ extension MIDIPacketList {
 
 extension UnsafeMutablePointer where Pointee == MIDIPacketList {
     
-    /// Internal use.
+    /// Internal:
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a Core MIDI `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
-    @inlinable internal init(data: [MIDI.Byte]) {
+    @inline(__always)
+    internal init(data: [MIDI.Byte]) {
         
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
@@ -67,11 +70,12 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         
     }
     
-    /// Experimental.
+    /// Internal:
     /// Assembles an array of `Byte` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
-    @inlinable internal init(data: [[MIDI.Byte]]) throws {
+    @inline(__always)
+    internal init(data: [[MIDI.Byte]]) throws {
         
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.

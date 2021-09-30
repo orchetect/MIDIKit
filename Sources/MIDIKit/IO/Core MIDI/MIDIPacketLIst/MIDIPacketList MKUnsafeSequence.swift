@@ -3,11 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 @_implementationOnly import MIDIKitC
 
 extension UnsafePointer where Pointee == MIDIPacketList {
     
+    /// Internal:
     /// MIDIKit backwards-compatible implementation of Core MIDI's `MIDIPacketList.UnsafeSequence`
     internal func mkUnsafeSequence() -> MIDIPacketList.MKUnsafeSequence {
         
@@ -19,6 +20,7 @@ extension UnsafePointer where Pointee == MIDIPacketList {
 
 extension MIDIPacketList {
     
+    /// Internal:
     /// MIDIKit backwards-compatible implementation of Core MIDI's `MIDIPacketList.UnsafeSequence`
     internal struct MKUnsafeSequence: Sequence {
         

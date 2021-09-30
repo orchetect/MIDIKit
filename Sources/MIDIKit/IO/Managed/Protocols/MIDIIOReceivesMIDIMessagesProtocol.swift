@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 public protocol MIDIIOReceivesMIDIMessagesProtocol: MIDIIOManagedProtocol {
     
     /// MIDI Protocol version used for this endpoint.

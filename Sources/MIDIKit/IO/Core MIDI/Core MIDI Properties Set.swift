@@ -3,16 +3,18 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
+    /// Internal:
     /// Set a string value for a `MIDIObjectRef` property key.
     ///
     /// - Parameters:
     ///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
     ///   - ref: `MIDIObjectRef`
     ///   - string: New string value
+    ///
     /// - Throws: `MIDI.IO.MIDIError`
     internal static func setString(forProperty: CFString,
                                    of ref: MIDIObjectRef,
@@ -27,12 +29,14 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Set an integer value for a `MIDIObjectRef` property key.
     ///
     /// - Parameters:
     ///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
     ///   - ref: `MIDIObjectRef`
     ///   - integer: New integer value
+    ///
     /// - Throws: `MIDI.IO.MIDIError`
     internal static func setInteger(forProperty: CFString,
                                     of ref: MIDIObjectRef,
@@ -47,12 +51,14 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Set a data value for a `MIDIObjectRef` property key.
     ///
     /// - Parameters:
     ///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
     ///   - ref: `MIDIObjectRef`
     ///   - data: New data value
+    ///
     /// - Throws: `MIDI.IO.MIDIError`
     internal static func setData(forProperty: CFString,
                                  of ref: MIDIObjectRef,
@@ -67,12 +73,14 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Set a dictionary value for a `MIDIObjectRef` property key.
     ///
     /// - Parameters:
     ///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
     ///   - ref: `MIDIObjectRef`
     ///   - dictionary: New dictionary value
+    ///
     /// - Throws: `MIDI.IO.MIDIError`
     internal static func setDictionary(forProperty: CFString,
                                        of ref: MIDIObjectRef,
@@ -95,6 +103,7 @@ extension MIDI.IO {
     
     // MARK: Identification
     
+    /// Internal:
     /// Set user-visible endpoint name.
     /// (`kMIDIPropertyName`)
     ///
@@ -111,6 +120,7 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Set model name.
     /// (`kMIDIPropertyModel`)
     ///
@@ -128,6 +138,7 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Set manufacturer name.
     /// (`kMIDIPropertyManufacturer`)
     ///
@@ -145,10 +156,13 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Set unique ID.
     /// (`kMIDIPropertyUniqueID`)
     ///
     /// The system assigns unique IDs to all objects. Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
+    ///
+    /// - Throws: `MIDI.IO.MIDIError`
     internal static func setUniqueID(of ref: MIDIObjectRef,
                                      to newValue: MIDIUniqueID) throws {
         

@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
@@ -22,9 +22,9 @@ extension MIDI.IO {
 
 extension MIDI.IO.ProtocolVersion {
     
-    /// Initializes from the corresponding Core MIDI Protocol.
+    /// Initializes from the corresponding Core MIDI `MIDIProtocolID`.
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-    @inlinable
+    @inline(__always)
     internal init(_ coreMIDIProtocol: MIDIProtocolID) {
         
         switch coreMIDIProtocol {
@@ -41,9 +41,9 @@ extension MIDI.IO.ProtocolVersion {
         
     }
     
-    /// Returns the corresponding Core MIDI Protocol.
+    /// Returns the corresponding Core MIDI `MIDIProtocolID`.
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-    @inlinable
+    @inline(__always)
     internal var coreMIDIProtocol: MIDIProtocolID {
         
         switch self {

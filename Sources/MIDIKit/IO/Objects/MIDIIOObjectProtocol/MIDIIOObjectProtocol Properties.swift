@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 #if canImport(AppKit)
 import AppKit
@@ -16,7 +16,7 @@ import UIKit
 
 // MARK: - Properties (Computed)
 
-extension MIDIIOObjectProtocol {
+extension _MIDIIOObjectProtocol {
     
     // MARK: Identification
     
@@ -184,8 +184,9 @@ extension MIDIIOObjectProtocol {
     ///
     /// - requires: macOS 11.0, macCatalyst 14.0, iOS 14.0
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-    public var getProtocolID: MIDIProtocolID? {
-        MIDI.IO.getProtocolID(of: coreMIDIObjectRef)
+    public var getProtocolID: MIDI.IO.ProtocolVersion? {
+        guard let proto = MIDI.IO.getProtocolID(of: coreMIDIObjectRef) else { return nil }
+        return .init(proto)
     }
     
     // MARK: Timing
@@ -317,7 +318,7 @@ extension MIDIIOObjectProtocol {
     /// The value provided may be an integer. To indicate that a driver connects to multiple external objects, pass the array of big-endian SInt32 values as a CFData object.
     ///
     /// The property is nonexistent or 0 if there’s no connection.
-    public var getConnectionUniqueID: MIDIUniqueID {
+    public var getConnectionUniqueID: MIDI.IO.CoreMIDIUniqueID {
         MIDI.IO.getConnectionUniqueID(of: coreMIDIObjectRef)
     }
     

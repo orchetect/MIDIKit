@@ -1,9 +1,7 @@
 //
-//  MIDI2Parser.swift.swift
+//  MIDI2Parser.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
-
-import CoreMIDI
 
 extension MIDI {
     

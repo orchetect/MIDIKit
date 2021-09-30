@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 // MARK: - Equatable default implementation
 
 // (conforming types to MIDIIOUniqueIDProtocol just need to conform to Equatable and this implementation will be used)
@@ -39,8 +37,8 @@ extension MIDIIOUniqueIDProtocol {
 
 extension MIDIIOUniqueIDProtocol {
     
-    public typealias ID = MIDIUniqueID
+    public typealias ID = MIDI.IO.CoreMIDIUniqueID
     
-    public var id: MIDIUniqueID { coreMIDIUniqueID }
+    public var id: ID { coreMIDIUniqueID }
     
 }

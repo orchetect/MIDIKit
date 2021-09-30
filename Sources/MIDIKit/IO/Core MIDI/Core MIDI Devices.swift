@@ -3,11 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
-    /// (Computed property) List of MIDI devices in the system
+    /// Internal:
+    /// List of MIDI devices in the system (computed property)
     internal static var getSystemDevices: [Device] {
         
         let devCount = MIDIGetNumberOfDevices()
@@ -29,7 +30,8 @@ extension MIDI.IO {
 
 extension MIDI.IO {
     
-    /// (Computed property) List of MIDI entities in the system
+    /// Internal:
+    /// List of MIDI entities in the system (computed property)
     internal static func getSystemEntities(for device: MIDIDeviceRef) -> [Entity] {
         
         let entityCount = MIDIDeviceGetNumberOfEntities(device)

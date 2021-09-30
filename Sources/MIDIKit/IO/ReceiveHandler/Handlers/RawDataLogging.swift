@@ -3,25 +3,27 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 @_implementationOnly import SwiftRadix
 import os.log
 
 extension MIDI.IO.ReceiveHandler {
     
     /// Raw data logging handler (hex byte strings).
+    /// 
     /// If `handler` is nil, all raw packet data is logged to the console (but only in DEBUG builds, not in RELEASE builds).
     /// If `handler` is provided, the hex byte string is supplied as a parameter and not automatically logged.
     public class RawDataLogging: MIDIIOReceiveHandlerProtocol {
         
         public typealias Handler = (_ packetBytesString: String) -> Void
         
-        @inline(__always) public var handler: Handler
+        @inline(__always)
+        public var handler: Handler
         
-        @inline(__always) public var filterActiveSensingAndClock = false
+        @inline(__always)
+        public var filterActiveSensingAndClock = false
         
-        @inline(__always) public func packetListReceived(
+        @inline(__always)
+        public func packetListReceived(
             _ packets: [MIDI.Packet.PacketData]
         ) {
             
@@ -32,7 +34,8 @@ extension MIDI.IO.ReceiveHandler {
         }
         
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-        @inline(__always) public func eventListReceived(
+        @inline(__always)
+        public func eventListReceived(
             _ packets: [MIDI.Packet.UniversalPacketData],
             protocol midiProtocol: MIDI.IO.ProtocolVersion
         ) {

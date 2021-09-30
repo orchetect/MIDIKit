@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 extension MIDI {
     
     /// Parser for MIDI 1.0 events.

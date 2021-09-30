@@ -3,15 +3,17 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 // MARK: - Endpoint
 
 public protocol MIDIIOEndpointProtocol: MIDIIOObjectProtocol {
     
 }
 
-extension MIDIIOEndpointProtocol {
+internal protocol _MIDIIOEndpointProtocol: MIDIIOEndpointProtocol, _MIDIIOObjectProtocol {
+    
+}
+
+extension _MIDIIOEndpointProtocol {
     
     public static var objectType: MIDI.IO.ObjectType { .endpoint }
     
@@ -27,7 +29,7 @@ extension MIDIIOEndpointProtocol {
 extension Collection where Element : MIDIIOEndpointProtocol {
     
     /// Returns the collection as a collection of type-erased `AnyEndpoint` endpoints.
-    public var asAnyEndpoints: [MIDI.IO.AnyEndpoint] {
+    public func asAnyEndpoints() -> [MIDI.IO.AnyEndpoint] where Element : _MIDIIOEndpointProtocol {
         
         map { MIDI.IO.AnyEndpoint($0) }
         

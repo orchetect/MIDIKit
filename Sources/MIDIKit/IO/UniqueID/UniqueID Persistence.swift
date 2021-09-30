@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+import Foundation
 
 extension MIDI.IO {
     
@@ -32,8 +32,8 @@ extension MIDI.IO {
         ///
         /// In the event a collision with an existing MIDI endpoint unique ID in the system, a new random ID will be generated until there are no collisions.
         /// The ID will then be passed into the `storeHandler` closure in order to store the updated ID.
-        case manualStorage(readHandler: () -> MIDIUniqueID?,
-                           storeHandler: (MIDIUniqueID?) -> ())
+        case manualStorage(readHandler: () -> MIDI.IO.CoreMIDIUniqueID?,
+                           storeHandler: (MIDI.IO.CoreMIDIUniqueID?) -> ())
         
     }
     
@@ -71,6 +71,7 @@ extension MIDI.IO.UniqueIDPersistence {
                 return T(readInt)
             }
             return nil
+            
         }
         
     }
@@ -90,6 +91,7 @@ extension MIDI.IO.UniqueIDPersistence {
             
         case .manualStorage(readHandler: _, storeHandler: let storeHandler):
             storeHandler(newValue?.coreMIDIUniqueID)
+            
         }
         
     }

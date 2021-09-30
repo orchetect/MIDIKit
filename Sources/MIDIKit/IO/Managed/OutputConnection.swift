@@ -4,27 +4,34 @@
 //
 
 import Foundation
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
     /// A managed MIDI output connection created in the system by the `Manager`.
     /// This connects to an external input in the system and outputs MIDI events to it.
-    public class OutputConnection: MIDIIOManagedProtocol {
+    public class OutputConnection: _MIDIIOManagedProtocol {
+        
+        // _MIDIIOManagedProtocol
+        internal weak var midiManager: Manager?
         
         // MIDIIOManagedProtocol
-        public weak var midiManager: Manager?
         public private(set) var api: APIVersion
         public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
+        // _MIDIIOSendsMIDIMessagesProtocol
+        internal var portRef: MIDI.IO.CoreMIDIPortRef? = nil
+        
+        // class-specific
         public var inputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>
-        
-        public private(set) var inputEndpointRef: MIDIEndpointRef? = nil
-        
-        public private(set) var portRef: MIDIPortRef? = nil
-        
+        internal var inputEndpointRef: MIDI.IO.CoreMIDIEndpointRef? = nil
         public private(set) var isConnected = false
         
+        // init
+        
+        /// - Parameters:
+        ///   - toInput: Input to connect to.
+        ///   - api: Core MIDI API version.
         internal init(
             toInput: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>,
             api: APIVersion = .bestForPlatform()
@@ -155,7 +162,13 @@ extension MIDI.IO.OutputConnection: CustomStringConvertible {
 
 extension MIDI.IO.OutputConnection: MIDIIOSendsMIDIMessagesProtocol {
     
-    public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
+    // empty
+    
+}
+
+extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
+    
+    internal func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         
         guard let unwrappedOutputPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
@@ -177,7 +190,7 @@ extension MIDI.IO.OutputConnection: MIDIIOSendsMIDIMessagesProtocol {
     }
     
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-    public func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
+    internal func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
         guard let unwrappedOutputPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(

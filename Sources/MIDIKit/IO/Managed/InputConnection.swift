@@ -4,29 +4,40 @@
 //
 
 import Foundation
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
     /// A managed MIDI input connection created in the system by the `Manager`.
     /// This connects to an external output in the system and subscribes to its MIDI events.
-    public class InputConnection: MIDIIOManagedProtocol {
+    public class InputConnection: _MIDIIOManagedProtocol {
+        
+        // _MIDIIOManagedProtocol
+        internal weak var midiManager: Manager?
         
         // MIDIIOManagedProtocol
-        public weak var midiManager: Manager?
         public private(set) var api: APIVersion
         public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
+        // class-specific
+        
         public private(set) var outputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>
         
-        public private(set) var outputEndpointRef: MIDIEndpointRef? = nil
+        internal var outputEndpointRef: MIDI.IO.CoreMIDIEndpointRef? = nil
         
-        public private(set) var inputPortRef: MIDIPortRef? = nil
+        internal var inputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
         
         internal var receiveHandler: ReceiveHandler
         
         public private(set) var isConnected: Bool = false
         
+        // init
+        
+        /// - Parameters:
+        ///   - toOutput: Input to connect to.
+        ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
+        ///   - midiManager: Reference to I/O Manager object.
+        ///   - api: Core MIDI API version.
         internal init(toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
                       receiveHandler: ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,

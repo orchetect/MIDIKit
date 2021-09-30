@@ -4,17 +4,21 @@
 //
 
 import Foundation
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
     /// A managed virtual MIDI input endpoint created in the system by the `Manager`.
-    public class Input: MIDIIOManagedProtocol {
+    public class Input: _MIDIIOManagedProtocol {
+        
+        // _MIDIIOManagedProtocol
+        internal weak var midiManager: Manager?
         
         // MIDIIOManagedProtocol
-        public weak var midiManager: Manager?
         public private(set) var api: APIVersion
         public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
+        
+        // class-specific
         
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
@@ -22,10 +26,18 @@ extension MIDI.IO {
         /// The port's unique ID in the system.
         public private(set) var uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil
         
-        public private(set) var portRef: MIDIPortRef? = nil
+        internal var portRef: MIDI.IO.CoreMIDIPortRef? = nil
         
         internal var receiveHandler: ReceiveHandler
         
+        // init
+        
+        /// - Parameters:
+        ///   - name: The port name as displayed in the system.
+        ///   - uniqueID: The port's unique ID in the system.
+        ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
+        ///   - midiManager: Reference to I/O Manager object.
+        ///   - api: Core MIDI API version.
         internal init(name: String,
                       uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil,
                       receiveHandler: ReceiveHandler.Definition,
