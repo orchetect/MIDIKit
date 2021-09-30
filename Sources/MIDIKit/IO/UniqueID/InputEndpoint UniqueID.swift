@@ -12,7 +12,9 @@ extension MIDI.IO.InputEndpoint {
         public let coreMIDIUniqueID: MIDI.IO.CoreMIDIUniqueID
         
         public init(_ coreMIDIUniqueID: MIDI.IO.CoreMIDIUniqueID) {
+            
             self.coreMIDIUniqueID = coreMIDIUniqueID
+            
         }
         
     }
@@ -47,7 +49,7 @@ extension MIDI.IO.InputEndpoint.UniqueID: CustomStringConvertible {
     
     public var description: String {
         
-        return "\(coreMIDIUniqueID)"
+        "\(coreMIDIUniqueID)"
         
     }
     

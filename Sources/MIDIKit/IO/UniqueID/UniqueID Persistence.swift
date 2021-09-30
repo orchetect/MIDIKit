@@ -70,6 +70,7 @@ extension MIDI.IO.UniqueIDPersistence {
             if let readInt = readHandler() {
                 return T(readInt)
             }
+            
             return nil
             
         }

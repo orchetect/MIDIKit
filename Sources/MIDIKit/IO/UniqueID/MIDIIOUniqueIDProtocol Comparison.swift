@@ -10,11 +10,15 @@
 extension MIDIIOUniqueIDProtocol {
     
     public static func == (lhs: Self, rhs: Self) -> Bool {
+        
         lhs.isEqual(to: rhs)
+        
     }
     
     public func isEqual(to other: Self) -> Bool {
+        
         coreMIDIUniqueID == other.coreMIDIUniqueID
+        
     }
     
 }
@@ -26,7 +30,9 @@ extension MIDIIOUniqueIDProtocol {
 extension MIDIIOUniqueIDProtocol {
     
     public func hash(into hasher: inout Hasher) {
+        
         hasher.combine(coreMIDIUniqueID)
+        
     }
     
 }
