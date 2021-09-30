@@ -3,6 +3,16 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+import Foundation
+
+#if canImport(AppKit)
+import AppKit
+#endif
+
+#if canImport(UIKit)
+import UIKit
+#endif
+
 public protocol MIDIIOObjectProtocol {
     
     /// Enum describing the abstracted object type.
@@ -15,6 +25,114 @@ public protocol MIDIIOObjectProtocol {
     
     /// The unique ID for the Core MIDI object
     var uniqueID: UniqueID { get }
+    
+    
+    
+    // The following methods are defined in the public protocol (MIDIIOObjectProtocol) but implemented in an extension on the internal protocol (extension _MIDIIOObjectProtocol)
+    // This is to satisfy a Swift compiler quirk.
+    // If the methods are not defined here, they will not be accessible by a consumer of the library.
+    
+    
+    // MARK: - MIDIIOObjectProtocol Comparison.swift
+    
+    static func == (lhs: Self, rhs: Self) -> Bool
+    func hash(into hasher: inout Hasher)
+    
+    
+    // MARK: - MIDIIOObjectProtocol Properties.swift
+    
+    // Identification
+    func getName() -> String?
+    func getModel() -> String?
+    func getManufacturer() -> String?
+    func getUniqueID() -> UniqueID
+    func getDeviceManufacturerID() -> Int32
+    
+    // Capabilities
+    func getSupportsMMC() -> Bool
+    func getSupportsGeneralMIDI() -> Bool
+    func getSupportsShowControl() -> Bool
+    
+    // Configuration
+    @available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *)
+    func getNameConfigurationDictionary() -> NSDictionary?
+    func getMaxSysExSpeed() -> Int32
+    func getDriverDeviceEditorApp() -> URL?
+    
+    // Presentation
+    func getImageFileURL() -> URL?
+    #if canImport(AppKit) && os(macOS)
+    func getImageAsNSImage() -> NSImage?
+    #endif
+    #if canImport(UIKit)
+    func getImageAsUIImage() -> UIImage?
+    #endif
+    func getDisplayName() -> String?
+    
+    // Audio
+    func getPanDisruptsStereo() -> Bool
+    
+    // Protocols
+    @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
+    func getProtocolID() -> MIDI.IO.ProtocolVersion?
+    
+    // Timing
+    func getTransmitsMTC() -> Bool
+    func getReceivesMTC() -> Bool
+    func getTransmitsClock() -> Bool
+    func getReceivesClock() -> Bool
+    func getAdvanceScheduleTimeMuSec() -> String?
+    
+    // Roles
+    func getIsMixer() -> Bool
+    func getIsSampler() -> Bool
+    func getIsEffectUnit() -> Bool
+    func getIsDrumMachine() -> Bool
+    
+    // Status
+    func getIsOffline() -> Bool
+    func getIsPrivate() -> Bool
+    
+    // Drivers
+    func getDriverOwner() -> String?
+    func getDriverVersion() -> Int32
+    
+    // Connections
+    func getCanRoute() -> Bool
+    func getIsBroadcast() -> Bool
+    func getConnectionUniqueID() -> MIDI.IO.CoreMIDIUniqueID
+    func getIsEmbeddedEntity() -> Bool
+    func getSingleRealtimeEntity() -> Int32
+    
+    // Channels
+    func getReceiveChannels() -> Int32
+    func getTransmitChannels() -> Int32
+    func getMaxReceiveChannels() -> Int32
+    func getMaxTransmitChannels() -> Int32
+    
+    // Banks
+    func getReceivesBankSelectLSB() -> Bool
+    func getReceivesBankSelectMSB() -> Bool
+    func getTransmitsBankSelectLSB() -> Bool
+    func getTransmitsBankSelectMSB() -> Bool
+    
+    // Notes
+    func getReceivesNotes() -> Bool
+    func getTransmitsNotes() -> Bool
+    func getReceivesProgramChanges() -> Bool
+    func getTransmitsProgramChanges() -> Bool
+    
+    
+    // MARK: - MIDIIOObjectProtocol Properties Dictionary.swift
+    
+    func getPropertiesAsStrings(
+        onlyIncludeRelevant: Bool
+    ) -> [(key: String, value: String)]
+    
+    
+    // MARK: - AnyMIDIIOObject.swift
+    
+    func asAnyMIDIIOObject() -> MIDI.IO.AnyMIDIIOObject
     
 }
 

@@ -31,12 +31,10 @@ extension MIDI.IO {
     
 }
 
-extension MIDIIOObjectProtocol {
+extension _MIDIIOObjectProtocol {
     
     /// Return as `AnyMIDIIOObject`, a type-erased representation of a MIDIKit object conforming to `MIDIIOObjectProtocol`.
-    public func asAnyMIDIIOObject() -> MIDI.IO.AnyMIDIIOObject
-    where Self : _MIDIIOObjectProtocol
-    {
+    public func asAnyMIDIIOObject() -> MIDI.IO.AnyMIDIIOObject {
         
         .init(self)
         

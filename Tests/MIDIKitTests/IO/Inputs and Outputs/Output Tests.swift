@@ -54,10 +54,15 @@ final class InputsAndOutputs_Output_Tests: XCTestCase {
         
 		// send a midi message
 		
-		XCTAssertNotNil(
-            _ = try? manager.managedOutputs[tag1]!.send(event: .systemReset(group: 0))
+        XCTAssertNoThrow(
+            try manager.managedOutputs[tag1]?
+                .send(event: .systemReset(group: 0))
 		)
-		
+        XCTAssertNoThrow(
+            try manager.managedOutputs[tag1]?
+                .send(events: [.systemReset(group: 0)])
+		)
+        
 		// unique ID collision
 		
 		let tag2 = "2"
