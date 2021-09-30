@@ -71,10 +71,12 @@ extension MIDI.IO.EndpointIDCriteria: Hashable where T : MIDIIOObjectProtocol {
     
 }
 
-extension MIDI.IO.EndpointIDCriteria where T : _MIDIIOObjectProtocol {
+extension MIDI.IO.EndpointIDCriteria where T : MIDIIOObjectProtocol {
     
     /// Uses the criteria to find the first match and returns it if found.
-    internal func locate(in endpoints: [T]) -> T? {
+    internal func locate(in endpoints: [T]) -> T?
+    where T : _MIDIIOObjectProtocol
+    {
         
         switch self {
         case .name(let endpointName):

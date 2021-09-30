@@ -12,7 +12,7 @@ extension MIDI.IO {
     public class Output: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
-        internal weak var midiManager: Manager?
+        internal weak var midiManager: MIDI.IO.Manager?
         
         // MIDIIOManagedProtocol
         public private(set) var api: APIVersion
@@ -39,7 +39,7 @@ extension MIDI.IO {
         internal init(name: String,
                       uniqueID: MIDI.IO.OutputEndpoint.UniqueID? = nil,
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform()) {
+                      api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
             self.endpointName = name
             self.uniqueID = uniqueID

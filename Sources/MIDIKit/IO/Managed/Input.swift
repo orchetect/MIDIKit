@@ -12,10 +12,10 @@ extension MIDI.IO {
     public class Input: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
-        internal weak var midiManager: Manager?
+        internal weak var midiManager: MIDI.IO.Manager?
         
         // MIDIIOManagedProtocol
-        public private(set) var api: APIVersion
+        public private(set) var api: MIDI.IO.APIVersion
         public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
         // class-specific
@@ -28,7 +28,7 @@ extension MIDI.IO {
         
         internal var portRef: MIDI.IO.CoreMIDIPortRef? = nil
         
-        internal var receiveHandler: ReceiveHandler
+        internal var receiveHandler: MIDI.IO.ReceiveHandler
         
         // init
         
@@ -40,9 +40,9 @@ extension MIDI.IO {
         ///   - api: Core MIDI API version.
         internal init(name: String,
                       uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil,
-                      receiveHandler: ReceiveHandler.Definition,
+                      receiveHandler: MIDI.IO.ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform()) {
+                      api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
             self.endpointName = name
             self.uniqueID = uniqueID

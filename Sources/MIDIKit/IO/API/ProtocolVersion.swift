@@ -8,7 +8,7 @@
 extension MIDI.IO {
     
     /// MIDI protocol version.
-    public enum ProtocolVersion {
+    public enum ProtocolVersion: Equatable, Hashable {
         
         /// MIDI 1.0
         case _1_0

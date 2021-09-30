@@ -73,7 +73,7 @@ extension MIDI.IO.OutputEndpoint {
 extension MIDI.IO.OutputEndpoint {
     
     /// Returns the endpoint as a type-erased `AnyEndpoint`.
-    public var asAnyEndpoint: MIDI.IO.AnyEndpoint {
+    public func asAnyEndpoint() -> MIDI.IO.AnyEndpoint {
         .init(self)
     }
     

@@ -13,10 +13,10 @@ extension MIDI.IO {
     public class InputConnection: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
-        internal weak var midiManager: Manager?
+        internal weak var midiManager: MIDI.IO.Manager?
         
         // MIDIIOManagedProtocol
-        public private(set) var api: APIVersion
+        public private(set) var api: MIDI.IO.APIVersion
         public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
         // class-specific
@@ -27,7 +27,7 @@ extension MIDI.IO {
         
         internal var inputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
         
-        internal var receiveHandler: ReceiveHandler
+        internal var receiveHandler: MIDI.IO.ReceiveHandler
         
         public private(set) var isConnected: Bool = false
         
@@ -39,9 +39,9 @@ extension MIDI.IO {
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
         internal init(toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
-                      receiveHandler: ReceiveHandler.Definition,
+                      receiveHandler: MIDI.IO.ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform()) {
+                      api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
             self.outputCriteria = toOutput
             self.receiveHandler = receiveHandler.createReceiveHandler()
@@ -62,8 +62,24 @@ extension MIDI.IO {
 
 extension MIDI.IO.InputConnection {
     
-    /// Connect to a MIDI Output
+    /// Returns the output endpoint this connection is connected to.
+    public var endpoint: MIDI.IO.OutputEndpoint? {
+        
+        guard let unwrappedOutputEndpointRef = outputEndpointRef
+        else { return nil }
+        
+        return .init(unwrappedOutputEndpointRef)
+        
+    }
+    
+}
+
+extension MIDI.IO.InputConnection {
+    
+    /// Connect to a MIDI Output.
+    ///
     /// - Parameter manager: MIDI manager instance by reference
+    ///
     /// - Throws: `MIDI.IO.MIDIError`
     internal func connect(in manager: MIDI.IO.Manager) throws {
         
@@ -167,10 +183,6 @@ extension MIDI.IO.InputConnection {
             .throwIfOSStatusErr()
         
     }
-    
-}
-
-extension MIDI.IO.InputConnection {
     
     /// Refresh the connection.
     /// This is typically called after receiving a Core MIDI notification that system port configuration has changed or endpoints were added/removed.

@@ -6,7 +6,7 @@
 public protocol MIDIIOObjectProtocol {
     
     /// Enum describing the abstracted object type.
-    static var objectType: MIDI.IO.ObjectType { get }
+    var objectType: MIDI.IO.ObjectType { get }
     
     /// Name of the object
     var name: String { get }

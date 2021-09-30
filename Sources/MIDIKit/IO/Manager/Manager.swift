@@ -32,7 +32,7 @@ extension MIDI.IO {
         /// The preferred API will be used where possible, unless operating system requirements force the use of a specific.
         ///
         /// - Note: Currently, legacy API is recommended as it is more stable. (New API is experimental due to bugs in Core MIDI itself, until workarounds or resolutions can be found.)
-        public var preferredAPI: APIVersion {
+        public var preferredAPI: MIDI.IO.APIVersion {
             didSet {
                 // prevent setting of an invalid API
                 if !preferredAPI.isValidOnCurrentPlatform {

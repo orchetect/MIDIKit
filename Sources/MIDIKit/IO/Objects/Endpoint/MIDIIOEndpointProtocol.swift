@@ -13,14 +13,15 @@ internal protocol _MIDIIOEndpointProtocol: MIDIIOEndpointProtocol, _MIDIIOObject
     
 }
 
-extension _MIDIIOEndpointProtocol {
+extension MIDIIOEndpointProtocol {
     
-    public static var objectType: MIDI.IO.ObjectType { .endpoint }
+    public var objectType: MIDI.IO.ObjectType { .endpoint }
     
-    /// The entity that owns the endpoint, if any. Virtual endpoints will not have an owning entity.
-    public var entity: MIDI.IO.Entity? {
+    internal func getEntity() -> MIDI.IO.Entity?
+    where Self : _MIDIIOEndpointProtocol
+    {
         
-        try? MIDI.IO.getSystemEntity(for: coreMIDIObjectRef)
+        try? MIDI.IO.getSystemEntity(for: self.coreMIDIObjectRef)
         
     }
     
@@ -29,7 +30,9 @@ extension _MIDIIOEndpointProtocol {
 extension Collection where Element : MIDIIOEndpointProtocol {
     
     /// Returns the collection as a collection of type-erased `AnyEndpoint` endpoints.
-    public func asAnyEndpoints() -> [MIDI.IO.AnyEndpoint] where Element : _MIDIIOEndpointProtocol {
+    public func asAnyEndpoints() -> [MIDI.IO.AnyEndpoint]
+    where Element : _MIDIIOEndpointProtocol
+    {
         
         map { MIDI.IO.AnyEndpoint($0) }
         

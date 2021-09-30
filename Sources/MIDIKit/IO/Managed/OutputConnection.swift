@@ -13,10 +13,10 @@ extension MIDI.IO {
     public class OutputConnection: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
-        internal weak var midiManager: Manager?
+        internal weak var midiManager: MIDI.IO.Manager?
         
         // MIDIIOManagedProtocol
-        public private(set) var api: APIVersion
+        public private(set) var api: MIDI.IO.APIVersion
         public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
         // _MIDIIOSendsMIDIMessagesProtocol
@@ -34,7 +34,7 @@ extension MIDI.IO {
         ///   - api: Core MIDI API version.
         internal init(
             toInput: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>,
-            api: APIVersion = .bestForPlatform()
+            api: MIDI.IO.APIVersion = .bestForPlatform()
         ) {
             
             self.inputCriteria = toInput
@@ -54,8 +54,24 @@ extension MIDI.IO {
 
 extension MIDI.IO.OutputConnection {
     
-    /// Connect to a MIDI Input
+    /// Returns the input endpoint this connection is connected to.
+    public var endpoint: MIDI.IO.InputEndpoint? {
+        
+        guard let unwrappedInputEndpointRef = inputEndpointRef
+        else { return nil }
+        
+        return .init(unwrappedInputEndpointRef)
+        
+    }
+    
+}
+
+extension MIDI.IO.OutputConnection {
+    
+    /// Connect to a MIDI Input.
+    /// 
     /// - Parameter manager: MIDI manager instance by reference
+    ///
     /// - Throws: `MIDI.IO.MIDIError`
     internal func connect(in manager: MIDI.IO.Manager) throws {
         

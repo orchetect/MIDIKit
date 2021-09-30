@@ -22,10 +22,10 @@ extension MIDI.IO {
     public class ThruConnection: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
-        internal weak var midiManager: Manager?
+        internal weak var midiManager: MIDI.IO.Manager?
         
         // MIDIIOManagedProtocol
-        public private(set) var api: APIVersion
+        public private(set) var api: MIDI.IO.APIVersion
         
         // class-specific
         
@@ -49,7 +49,7 @@ extension MIDI.IO {
                       lifecycle: Lifecycle = .nonPersistent,
                       params: Parameters = .init(),
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform()) {
+                      api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
             // truncate arrays to 8 members or less;
             // Core MIDI thru connections can only have up to 8 outputs and 8 inputs

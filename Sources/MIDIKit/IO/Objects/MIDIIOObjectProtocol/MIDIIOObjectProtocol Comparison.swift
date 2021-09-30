@@ -7,10 +7,14 @@
 
 // (conforming types to MIDIIOObjectProtocol just need to conform to Equatable and this implementation will be used)
 
-extension _MIDIIOObjectProtocol {
+extension MIDIIOObjectProtocol {
     
-    static public func == (lhs: Self, rhs: Self) -> Bool {
+    static public func == (lhs: Self, rhs: Self) -> Bool
+    where Self : _MIDIIOObjectProtocol
+    {
+        
         lhs.coreMIDIObjectRef == rhs.coreMIDIObjectRef
+        
     }
     
 }
@@ -19,10 +23,15 @@ extension _MIDIIOObjectProtocol {
 
 // (conforming types to MIDIIOObjectProtocol just need to conform to Hashable and this implementation will be used)
 
-extension _MIDIIOObjectProtocol {
+extension MIDIIOObjectProtocol {
     
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(coreMIDIObjectRef)
+    /// Hash
+    public func hash(into hasher: inout Hasher)
+    where Self : _MIDIIOObjectProtocol
+    {
+        
+        hasher.combine(self.coreMIDIObjectRef)
+        
     }
     
 }

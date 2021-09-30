@@ -8,7 +8,7 @@ import Darwin
 extension MIDI.IO {
     
     /// Enum describing which underlying Core MIDI API is being used internally.
-    public enum APIVersion {
+    public enum APIVersion: Equatable, Hashable {
         
         /// Legacy Core MIDI API first introduced in early versions of OSX.
         ///
