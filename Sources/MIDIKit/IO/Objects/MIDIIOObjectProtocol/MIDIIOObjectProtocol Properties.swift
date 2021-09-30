@@ -176,7 +176,7 @@ extension MIDIIOObjectProtocol {
     public func getImageAsUIImage() -> UIImage?
     where Self : _MIDIIOObjectProtocol
     {
-        guard let url = getImageFileURL,
+        guard let url = getImageFileURL(),
               let data = try? Data(contentsOf: url) else { return nil }
         return UIImage(data: data)
     }
