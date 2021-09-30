@@ -7,7 +7,7 @@
 #if !os(watchOS) && !targetEnvironment(simulator)
 
 import XCTest
-@testable import MIDIKit
+import MIDIKit
 import CoreMIDI
 
 final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
@@ -16,8 +16,8 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
 	
 	override func setUp() {
 		manager = .init(clientName: "MIDIKit_IO_InputsAndOutputs_OutputConnection_Tests",
-						model: "",
-						manufacturer: "")
+                        model: "MIDIKit123",
+                        manufacturer: "MIDIKit")
 	}
 	
 	override func tearDown() {

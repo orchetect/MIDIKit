@@ -6,7 +6,7 @@
 #if !os(watchOS)
 
 import XCTest
-@testable import MIDIKit
+import MIDIKit
 
 class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
     
