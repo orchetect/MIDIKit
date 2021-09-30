@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 // MARK: - Equatable default implementation
 
 // (conforming types to MIDIIOUniqueIDProtocol just need to conform to Equatable and this implementation will be used)
@@ -12,11 +10,15 @@ import CoreMIDI
 extension MIDIIOUniqueIDProtocol {
     
     public static func == (lhs: Self, rhs: Self) -> Bool {
+        
         lhs.isEqual(to: rhs)
+        
     }
     
     public func isEqual(to other: Self) -> Bool {
+        
         coreMIDIUniqueID == other.coreMIDIUniqueID
+        
     }
     
 }
@@ -28,7 +30,9 @@ extension MIDIIOUniqueIDProtocol {
 extension MIDIIOUniqueIDProtocol {
     
     public func hash(into hasher: inout Hasher) {
+        
         hasher.combine(coreMIDIUniqueID)
+        
     }
     
 }
@@ -39,8 +43,8 @@ extension MIDIIOUniqueIDProtocol {
 
 extension MIDIIOUniqueIDProtocol {
     
-    public typealias ID = MIDIUniqueID
+    public typealias ID = MIDI.IO.CoreMIDIUniqueID
     
-    public var id: MIDIUniqueID { coreMIDIUniqueID }
+    public var id: ID { coreMIDIUniqueID }
     
 }

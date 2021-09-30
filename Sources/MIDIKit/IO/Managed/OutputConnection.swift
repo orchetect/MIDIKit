@@ -4,36 +4,41 @@
 //
 
 import Foundation
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
     /// A managed MIDI output connection created in the system by the `Manager`.
     /// This connects to an external input in the system and outputs MIDI events to it.
-    public class OutputConnection: MIDIIOManagedProtocol {
+    public class OutputConnection: _MIDIIOManagedProtocol {
+        
+        // _MIDIIOManagedProtocol
+        internal weak var midiManager: MIDI.IO.Manager?
         
         // MIDIIOManagedProtocol
-        public weak var midiManager: Manager?
-        public private(set) var api: APIVersion
-        public private(set) var `protocol`: MIDI.IO.ProtocolVersion
+        public private(set) var api: MIDI.IO.APIVersion
+        public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
+        // _MIDIIOSendsMIDIMessagesProtocol
+        internal var portRef: MIDI.IO.CoreMIDIPortRef? = nil
+        
+        // class-specific
         public var inputCriteria: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>
-        
-        public private(set) var inputEndpointRef: MIDIEndpointRef? = nil
-        
-        public private(set) var portRef: MIDIPortRef? = nil
-        
+        internal var inputEndpointRef: MIDI.IO.CoreMIDIEndpointRef? = nil
         public private(set) var isConnected = false
         
+        // init
+        
+        /// - Parameters:
+        ///   - toInput: Input to connect to.
+        ///   - api: Core MIDI API version.
         internal init(
             toInput: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>,
-            api: APIVersion = .bestForPlatform(),
-            protocol midiProtocol: MIDI.IO.ProtocolVersion = ._2_0
+            api: MIDI.IO.APIVersion = .bestForPlatform()
         ) {
             
             self.inputCriteria = toInput
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-            self.protocol = api == .legacyCoreMIDI ? ._1_0 : midiProtocol
             
         }
         
@@ -49,8 +54,24 @@ extension MIDI.IO {
 
 extension MIDI.IO.OutputConnection {
     
-    /// Connect to a MIDI Input
+    /// Returns the input endpoint this connection is connected to.
+    public var endpoint: MIDI.IO.InputEndpoint? {
+        
+        guard let unwrappedInputEndpointRef = inputEndpointRef
+        else { return nil }
+        
+        return .init(unwrappedInputEndpointRef)
+        
+    }
+    
+}
+
+extension MIDI.IO.OutputConnection {
+    
+    /// Connect to a MIDI Input.
+    /// 
     /// - Parameter manager: MIDI manager instance by reference
+    ///
     /// - Throws: `MIDI.IO.MIDIError`
     internal func connect(in manager: MIDI.IO.Manager) throws {
         
@@ -62,9 +83,7 @@ extension MIDI.IO.OutputConnection {
         guard let getInputEndpointRef = inputCriteria
                 .locate(in: manager.endpoints.inputs)?
                 .coreMIDIObjectRef
-        
         else {
-            
             isConnected = false
             
             throw MIDI.IO.MIDIError.connectionError(
@@ -159,7 +178,13 @@ extension MIDI.IO.OutputConnection: CustomStringConvertible {
 
 extension MIDI.IO.OutputConnection: MIDIIOSendsMIDIMessagesProtocol {
     
-    public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
+    // empty
+    
+}
+
+extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
+    
+    internal func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         
         guard let unwrappedOutputPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
@@ -181,7 +206,7 @@ extension MIDI.IO.OutputConnection: MIDIIOSendsMIDIMessagesProtocol {
     }
     
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-    public func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
+    internal func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
         guard let unwrappedOutputPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(

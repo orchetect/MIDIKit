@@ -3,12 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
     /// MIDI protocol version.
-    public enum ProtocolVersion {
+    public enum ProtocolVersion: Equatable, Hashable {
         
         /// MIDI 1.0
         case _1_0
@@ -22,9 +22,9 @@ extension MIDI.IO {
 
 extension MIDI.IO.ProtocolVersion {
     
-    /// Initializes from the corresponding Core MIDI Protocol.
+    /// Initializes from the corresponding Core MIDI `MIDIProtocolID`.
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-    @inlinable
+    @inline(__always)
     internal init(_ coreMIDIProtocol: MIDIProtocolID) {
         
         switch coreMIDIProtocol {
@@ -41,9 +41,9 @@ extension MIDI.IO.ProtocolVersion {
         
     }
     
-    /// Returns the corresponding Core MIDI Protocol.
+    /// Returns the corresponding Core MIDI `MIDIProtocolID`.
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-    @inlinable
+    @inline(__always)
     internal var coreMIDIProtocol: MIDIProtocolID {
         
         switch self {
@@ -52,6 +52,23 @@ extension MIDI.IO.ProtocolVersion {
             
         case ._2_0:
             return ._2_0
+            
+        }
+        
+    }
+    
+}
+
+extension MIDI.IO.ProtocolVersion: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        case ._1_0:
+            return "MIDI 1.0"
+            
+        case ._2_0:
+            return "MIDI 2.0"
             
         }
         

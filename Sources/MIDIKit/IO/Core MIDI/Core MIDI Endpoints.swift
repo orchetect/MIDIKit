@@ -3,13 +3,14 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
     // MARK: sources
     
-    /// (Computed property) List of MIDI endpoints in the system
+    /// Internal:
+    /// List of MIDI endpoints in the system (computed property)
     internal static var getSystemSourceEndpoints: [OutputEndpoint] {
         
         let srcCount = MIDIGetNumberOfSources()
@@ -29,7 +30,8 @@ extension MIDI.IO {
     
     // MARK: destinations
     
-    /// (Computed property) Dictionary of destination names & endpoint unique IDs
+    /// Internal:
+    /// Dictionary of destination names & endpoint unique IDs (computed property)
     internal static var getSystemDestinationEndpoints: [InputEndpoint] {
         
         let destCount = MIDIGetNumberOfDestinations()
@@ -52,7 +54,9 @@ extension MIDI.IO {
 
 extension MIDI.IO {
     
+    /// Internal:
     /// Returns all source `MIDIEndpointRef`s in the system that have a name matching `name`.
+    ///
     /// - Parameter name: MIDI port name to search for.
     internal static func getSystemSourceEndpoints(matching name: String) -> [MIDIEndpointRef] {
         
@@ -67,7 +71,9 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Returns the first source `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`. If not found, returns `nil`.
+    ///
     /// - Parameter uniqueID: MIDI port unique ID to search for.
     internal static func getSystemSourceEndpoint(matching uniqueID: MIDIUniqueID) -> MIDIEndpointRef? {
         
@@ -84,7 +90,9 @@ extension MIDI.IO {
 
 extension MIDI.IO {
     
+    /// Internal:
     /// Returns all destination `MIDIEndpointRef`s in the system that have a name matching `name`.
+    ///
     /// - Parameter name: MIDI port name to search for.
     internal static func getSystemDestinationEndpoints(matching name: String) -> [MIDIEndpointRef] {
         
@@ -99,7 +107,9 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Returns the first destination `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`. If not found, returns `nil`.
+    ///
     /// - Parameter uniqueID: MIDI port unique ID to search for.
     internal static func getSystemDestinationEndpoint(matching uniqueID: MIDIUniqueID) -> MIDIEndpointRef? {
         
@@ -117,14 +127,20 @@ extension MIDI.IO {
 
 extension MIDI.IO {
     
-    internal static func getSystemEntity(for endpoint: MIDIEndpointRef) throws -> Entity? {
+    /// Internal:
+    /// Returns an `Entity` instance of the endpoint's owning entity. Returns nil
+    internal static func getSystemEntity(for endpoint: MIDIEndpointRef) throws -> Entity {
         
         var ent: MIDIEntityRef = MIDIEntityRef()
         
         try MIDIEndpointGetEntity(endpoint, &ent)
             .throwIfOSStatusErr()
         
-        guard ent != MIDIEntityRef() else { return nil }
+        guard ent != MIDIEntityRef() else {
+            throw MIDI.IO.MIDIError.internalInconsistency(
+                "Error getting entity ID for endpoint ref \(endpoint)"
+            )
+        }
         
         return Entity(ent)
         

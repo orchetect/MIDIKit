@@ -178,12 +178,12 @@ extension MIDI.Event.CC.Controller.RPN {
         
         var rpnEvents: [MIDI.Event] = [
             .cc(.rpnMSB,
-                value: parameter.msb,
+                value: .midi1(parameter.msb),
                 channel: channel,
                 group: group),
             
             .cc(.rpnLSB,
-                value: parameter.lsb,
+                value: .midi1(parameter.lsb),
                 channel: channel,
                 group: group)
         ]
@@ -192,14 +192,14 @@ extension MIDI.Event.CC.Controller.RPN {
         
         if let dataEntryMSB = dataEntryBytes.msb {
             rpnEvents.append(.cc(.dataEntry,
-                                 value: dataEntryMSB,
+                                 value: .midi1(dataEntryMSB),
                                  channel: channel,
                                  group: group))
         }
         
         if let dataEntryLSB = dataEntryBytes.lsb {
             rpnEvents.append(.cc(.dataEntry,
-                                 value: dataEntryLSB,
+                                 value: .midi1(dataEntryLSB),
                                  channel: channel,
                                  group: group))
         }

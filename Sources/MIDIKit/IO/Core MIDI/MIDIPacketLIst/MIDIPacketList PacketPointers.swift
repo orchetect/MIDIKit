@@ -4,11 +4,14 @@
 //
 
 import Foundation
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension UnsafePointer where Pointee == MIDIPacketList {
     
-    func packetsPointers() -> [UnsafePointer<MIDIPacket>] {
+    /// Internal:
+    /// Returns array of Core MIDI `MIDIPacket` pointers.
+    @inline(__always)
+    internal func packetsPointers() -> [UnsafePointer<MIDIPacket>] {
         
         // prefer newer Core MIDI API if platform supports it
         
@@ -20,7 +23,10 @@ extension UnsafePointer where Pointee == MIDIPacketList {
         
     }
     
-    func packets() -> [MIDI.Packet.PacketData] {
+    /// Internal:
+    /// Returns array of MIDIKit `PacketData` instances.
+    @inline(__always)
+    internal func packets() -> [MIDI.Packet.PacketData] {
         
         packetsPointers().map { MIDI.Packet.PacketData($0) }
         

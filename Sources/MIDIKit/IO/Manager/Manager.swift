@@ -3,7 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+import Foundation
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
@@ -18,7 +19,7 @@ extension MIDI.IO {
         public internal(set) var clientName: String
         
         /// MIDI Client Reference.
-        public internal(set) var clientRef = MIDIClientRef()
+        internal var clientRef = MIDI.IO.CoreMIDIClientRef()
         
         /// MIDI Model: The name of your software, which will be visible to the end-user in ports created by the manager.
         public internal(set) var model: String = ""
@@ -31,7 +32,7 @@ extension MIDI.IO {
         /// The preferred API will be used where possible, unless operating system requirements force the use of a specific.
         ///
         /// - Note: Currently, legacy API is recommended as it is more stable. (New API is experimental due to bugs in Core MIDI itself, until workarounds or resolutions can be found.)
-        public var preferredAPI: APIVersion {
+        public var preferredAPI: MIDI.IO.APIVersion {
             didSet {
                 // prevent setting of an invalid API
                 if !preferredAPI.isValidOnCurrentPlatform {
@@ -63,7 +64,7 @@ extension MIDI.IO {
         ///
         /// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
         /// - Throws: `MIDI.IO.MIDIError`
-        public func unmanagedPersistentThruConnections(ownerID: String) throws -> [MIDIThruConnectionRef] {
+        public func unmanagedPersistentThruConnections(ownerID: String) throws -> [MIDI.IO.CoreMIDIThruConnectionRef] {
             
             try MIDI.IO.getSystemThruConnectionsPersistentEntries(matching: ownerID)
             

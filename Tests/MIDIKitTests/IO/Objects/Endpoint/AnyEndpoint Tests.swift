@@ -15,8 +15,8 @@ class AnyEndpoint_Tests: XCTestCase {
     
     override func setUp() {
         manager = .init(clientName: "MIDIKit_IO_AnyEndpoint_Tests",
-                        model: "",
-                        manufacturer: "")
+                        model: "MIDIKit123",
+                        manufacturer: "MIDIKit")
         
         guard let _ = try? manager.start() else {
             XCTFail("Couldn't start MIDI.IO.Manager.")
@@ -76,12 +76,12 @@ class AnyEndpoint_Tests: XCTestCase {
         // Collection
         
         let inputArray = [inputEndpoint]
-        let inputArrayAsAnyEndpoints = inputArray.asAnyEndpoints
+        let inputArrayAsAnyEndpoints = inputArray.asAnyEndpoints()
         XCTAssertEqual(inputArrayAsAnyEndpoints.count, 1)
         XCTAssertEqual(inputArrayAsAnyEndpoints[0].coreMIDIObjectRef, inputEndpoint.coreMIDIObjectRef)
         
         let outputArray = [outputEndpoint]
-        let outputArrayAsAnyEndpoints = outputArray.asAnyEndpoints
+        let outputArrayAsAnyEndpoints = outputArray.asAnyEndpoints()
         XCTAssertEqual(outputArrayAsAnyEndpoints.count, 1)
         XCTAssertEqual(outputArrayAsAnyEndpoints[0].coreMIDIObjectRef, outputEndpoint.coreMIDIObjectRef)
         

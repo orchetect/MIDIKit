@@ -52,7 +52,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         // cc
         XCTAssertEqual(
             parsedEvents(bytes: [0xB1, 0x01, 0x7F]),
-            [.cc(1, value: 127, channel: 1, group: 0)]
+            [.cc(1, value: .midi1(127), channel: 1, group: 0)]
         )
         
         // program change
@@ -206,9 +206,9 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
             )
             .parsedEvents().events,
             
-            [.cc(1, value: 127, channel: 1),
+            [.cc(1, value: .midi1(127), channel: 1),
              .noteOn(60, velocity: .midi1(64), channel: 6),
-             .cc(2, value: 8, channel: 2)]
+             .cc(2, value: .midi1(8), channel: 2)]
         )
         
     }
@@ -555,11 +555,11 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0xB0, 0x3C]), [])
         // incomplete running status; should return only one event
         XCTAssertEqual(parsedEvents(bytes: [0xB0, 0x3C, 0x40, 0x3C]),
-                       [.cc(0x3C, value: 0x40, channel: 0)])
+                       [.cc(0x3C, value: .midi1(0x40), channel: 0)])
         // valid running status
         XCTAssertEqual(parsedEvents(bytes: [0xB0, 0x3C, 0x40, 0x3D, 0x41]),
-                       [.cc(0x3C, value: 0x40, channel: 0),
-                        .cc(0x3D, value: 0x41, channel: 0)])
+                       [.cc(0x3C, value: .midi1(0x40), channel: 0),
+                        .cc(0x3D, value: .midi1(0x41), channel: 0)])
         
         // program change
         // requires one data byte to follow

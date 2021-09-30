@@ -12,23 +12,21 @@ struct EmptyDetailsView: View {
 	
 	/// coaxes WebKit to start up when EmptyDetailsView first shows in the main view, making the next WebKitView view that loads to load faster
 	private let dummyWKView = WKWebView()
-	
-	var body: some View {
-		
-		//ScrollView {
-			Text("Make a selection.")
-		//}
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		
-	}
+    
+    var body: some View {
+        
+        Text("Make a selection.")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        
+    }
 	
 }
 
-struct DetailsView<T>: View where T : MIDIIOObjectProtocol {
+struct DetailsView: View{
 	
 	@Environment(\.hostingWindow) var hostingWindow
 	
-	var endpoint: T?
+	var object: MIDI.IO.AnyMIDIIOObject?
 	
 	@State private var webViewHeight: CGFloat = .zero
 	
@@ -36,7 +34,7 @@ struct DetailsView<T>: View where T : MIDIIOObjectProtocol {
 	
 	@State private var showAll: Bool = false
 	
-	func generateHTML(_ endpoint: T) -> String {
+	func generateHTML(_ endpoint: MIDI.IO.AnyMIDIIOObject) -> String {
 		
 		let flatProperties = endpoint.getPropertiesAsStrings(onlyIncludeRelevant: !showAll)
 		
@@ -121,11 +119,11 @@ struct DetailsView<T>: View where T : MIDIIOObjectProtocol {
 	
 	var body: some View {
 		
-		if let unwrappedEndpoint = endpoint {
+		if let unwrappedObject = object {
 			
 			WebKitView(dynamicHeight: $webViewHeight,
 					   webview: $webview,
-					   html: generateHTML(unwrappedEndpoint))
+					   html: generateHTML(unwrappedObject))
 			
 			Group {
 				if showAll {

@@ -6,8 +6,10 @@
 extension MIDI.IO {
     
     public enum EndpointType: Equatable, Hashable, CaseIterable {
+        
         case input
         case output
+        
     }
     
 }

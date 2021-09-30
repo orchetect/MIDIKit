@@ -6,7 +6,7 @@
 #if !os(watchOS)
 
 import XCTest
-@testable import MIDIKit
+import MIDIKit
 
 class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
@@ -26,34 +26,34 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         // isChannelVoice(ofType:)
         
         XCTAssertTrue(
-            MIDI.Event.noteOn(1, velocity: 1.0, channel: 1, group: 0)
+            MIDI.Event.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofType: .noteOn)
         )
         
         XCTAssertFalse(
-            MIDI.Event.noteOn(1, velocity: 1.0, channel: 1, group: 0)
+            MIDI.Event.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofType: .noteOff)
         )
         
         // isChannelVoice(ofTypes:)
         
         XCTAssertTrue(
-            MIDI.Event.noteOn(1, velocity: 1.0, channel: 1, group: 0)
+            MIDI.Event.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofTypes: [.noteOn])
         )
         
         XCTAssertTrue(
-            MIDI.Event.noteOn(1, velocity: 1.0, channel: 1, group: 0)
+            MIDI.Event.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofTypes: [.noteOn, .noteOff])
         )
         
         XCTAssertFalse(
-            MIDI.Event.noteOn(1, velocity: 1.0, channel: 1, group: 0)
+            MIDI.Event.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofTypes: [.noteOff, .cc])
         )
         
         XCTAssertFalse(
-            MIDI.Event.noteOn(1, velocity: 1.0, channel: 1, group: 0)
+            MIDI.Event.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofTypes: [])
         )
         

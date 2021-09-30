@@ -3,22 +3,25 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 // MARK: - Endpoint
 
 public protocol MIDIIOEndpointProtocol: MIDIIOObjectProtocol {
     
 }
 
+internal protocol _MIDIIOEndpointProtocol: MIDIIOEndpointProtocol, _MIDIIOObjectProtocol {
+    
+}
+
 extension MIDIIOEndpointProtocol {
     
-    public static var objectType: MIDI.IO.ObjectType { .endpoint }
+    public var objectType: MIDI.IO.ObjectType { .endpoint }
     
-    /// The entity that owns the endpoint, if any. Virtual endpoints will not have an owning entity.
-    public var entity: MIDI.IO.Entity? {
+    internal func getEntity() -> MIDI.IO.Entity?
+    where Self : _MIDIIOEndpointProtocol
+    {
         
-        try? MIDI.IO.getSystemEntity(for: coreMIDIObjectRef)
+        try? MIDI.IO.getSystemEntity(for: self.coreMIDIObjectRef)
         
     }
     
@@ -27,7 +30,9 @@ extension MIDIIOEndpointProtocol {
 extension Collection where Element : MIDIIOEndpointProtocol {
     
     /// Returns the collection as a collection of type-erased `AnyEndpoint` endpoints.
-    public var asAnyEndpoints: [MIDI.IO.AnyEndpoint] {
+    public func asAnyEndpoints() -> [MIDI.IO.AnyEndpoint]
+    where Element : _MIDIIOEndpointProtocol
+    {
         
         map { MIDI.IO.AnyEndpoint($0) }
         

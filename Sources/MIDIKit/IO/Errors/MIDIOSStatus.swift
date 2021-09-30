@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
@@ -88,7 +88,7 @@ extension MIDI.IO {
         case internalError
         
         /// Other `OSStatus`
-        case other(OSStatus)
+        case other(MIDI.IO.CoreMIDIOSStatus)
         
     }
     
@@ -99,7 +99,7 @@ extension MIDI.IO.MIDIOSStatus {
     /// Returns the corresponding Core MIDI `OSStatus` raw value.
     ///
     /// Core MIDI headers note: "These are the OSStatus error constants that are unique to Core MIDI. Note that Core MIDI functions may return other codes that are not listed here."
-    public var rawValue: OSStatus {
+    public var rawValue: MIDI.IO.CoreMIDIOSStatus {
         
         switch self {
         case .invalidClient      : return kMIDIInvalidClient     // -10830
@@ -126,7 +126,7 @@ extension MIDI.IO.MIDIOSStatus {
     }
     
     /// Initializes from the corresponding Core MIDI `OSStatus` raw value.
-    public init(rawValue: OSStatus) {
+    public init(rawValue: MIDI.IO.CoreMIDIOSStatus) {
         
         switch rawValue {
         case kMIDIInvalidClient      : self = .invalidClient

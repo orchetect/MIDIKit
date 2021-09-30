@@ -54,30 +54,6 @@ extension MIDI.Event {
         
     }
     
-    /// Channel Voice Message: Note On
-    ///
-    /// - Parameters:
-    ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
-    ///   - velocity: Velocity as a Double unit interval (0.0...1.0)
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - attribute: MIDI 2.0 Channel Voice Attribute
-    ///   - group: UMP Group (0x0...0xF)
-    public static func noteOn(_ note: MIDI.UInt7,
-                              velocity: Double,
-                              channel: MIDI.UInt4,
-                              attribute: Note.Attribute = .none,
-                              group: MIDI.UInt4 = 0x0) -> Self {
-        
-        .noteOn(
-            .init(note: note,
-                  velocity: .unitInterval(velocity),
-                  channel: channel,
-                  attribute: attribute,
-                  group: group)
-        )
-        
-    }
-    
 }
 
 extension MIDI.Event.Note.On {
@@ -106,8 +82,15 @@ extension MIDI.Event.Note.On {
             return [word]
             
         case ._2_0:
-            #warning("> code this")
-            return []
+            let word1 = MIDI.UMPWord(mtAndGroup,
+                                     0x90 + channel.uInt8Value,
+                                     note.uInt8Value,
+                                     attribute.attributeType)
+            
+            let word2 = MIDI.UMPWord(velocity.midi2Value,
+                                     attribute.attributeData)
+            
+            return [word1, word2]
             
         }
         

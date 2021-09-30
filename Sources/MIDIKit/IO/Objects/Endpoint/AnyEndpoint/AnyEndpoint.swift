@@ -3,22 +3,20 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 extension MIDI.IO {
     
     /// Type-erased box that can contain `MIDI.IO.InputEndpoint` or `MIDI.IO.OutputEndpoint`.
-    public struct AnyEndpoint: MIDIIOEndpointProtocol {
+    public struct AnyEndpoint: _MIDIIOEndpointProtocol {
         
         public let endpointType: MIDI.IO.EndpointType
         
-        public let coreMIDIObjectRef: MIDIEndpointRef
+        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
         
         public let name: String
         
         public var uniqueID: UniqueID
         
-        internal init<T: MIDIIOEndpointProtocol>(_ other: T) {
+        internal init<T: _MIDIIOEndpointProtocol>(_ other: T) {
             switch other {
             case is MIDI.IO.InputEndpoint:
                 endpointType = .input

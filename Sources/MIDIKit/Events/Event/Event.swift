@@ -28,7 +28,7 @@ extension MIDI {
         /// - Cubase: "Poly Pressure"
         case polyAftertouch(PolyAftertouch)
         
-        /// Channel Voice Message: Controller Change (CC)
+        /// Channel Voice Message: Control Change (CC)
         case cc(CC)
         
         /// Channel Voice Message: Program Change

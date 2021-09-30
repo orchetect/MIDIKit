@@ -3,21 +3,14 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
+
+// MARK: - Public Protocol
 
 public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
     
-    /// MIDI Spec version used for this endpoint.
-    /* public private(set) */ var `protocol`: MIDI.IO.ProtocolVersion { get }
-    
-    /// Core MIDI Port Ref
-    var portRef: MIDIPortRef? { get }
-    
-    /// Send a raw MIDI message.
-    func send(rawMessage: [MIDI.Byte]) throws
-    
-    /// Send one ore more raw MIDI messages.
-    func send(rawMessages: [[MIDI.Byte]]) throws
+    /// MIDI Protocol version used for this endpoint.
+    /* public private(set) */ var midiProtocol: MIDI.IO.ProtocolVersion { get }
     
     /// Send a MIDI Event.
     func send(event: MIDI.Event) throws
@@ -25,25 +18,52 @@ public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
     /// Send one or more MIDI Events.
     func send(events: [MIDI.Event]) throws
     
+}
+
+// MARK: - Internal Protocol
+
+internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProtocol {
+    
+    /// Internal:
+    /// Core MIDI Port Ref
+    var portRef: MIDI.IO.CoreMIDIPortRef? { get }
+    
+    /// Internal:
+    /// Send a MIDI Message, automatically assembling it into a `MIDIPacketList`.
+    ///
+    /// - Parameter rawMessage: MIDI message
+    func send(rawMessage: [MIDI.Byte]) throws
+    
+    /// Internal:
+    /// Send one or more MIDI message(s), automatically assembling it into a `MIDIPacketList`.
+    ///
+    /// - Parameter rawMessages: Array of MIDI messages
+    func send(rawMessages: [[MIDI.Byte]]) throws
+    
+    /// Internal:
     /// Send a Core MIDI `MIDIPacketList`. (MIDI 1.0, using old Core MIDI API).
     func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws
     
+    /// Internal:
     /// Send a Core MIDI `MIDIEventList`. (MIDI 1.0 and 2.0, using new Core MIDI API).
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws
     
-    /// Send a Universal MIDI Packet (MIDI 2.0).
+    /// Internal:
+    /// Send a MIDI message inside a Universal MIDI Packet.
+    ///
+    /// - Parameter rawWords: Array of `UInt32` words
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     func send(rawWords: [MIDI.UMPWord]) throws
     
 }
 
-extension MIDIIOSendsMIDIMessagesProtocol {
+// MARK: - Implementation
+
+extension _MIDIIOSendsMIDIMessagesProtocol {
     
-    /// Send a MIDI Message, automatically assembling it into a `MIDIPacketList`.
-    ///
-    /// - Parameter rawMessage: MIDI message
-    @inlinable public func send(rawMessage: [MIDI.Byte]) throws {
+    @inline(__always)
+    internal func send(rawMessage: [MIDI.Byte]) throws {
         
         switch api {
         case .legacyCoreMIDI:
@@ -61,10 +81,8 @@ extension MIDIIOSendsMIDIMessagesProtocol {
         
     }
     
-    /// Send one or more MIDI message(s), automatically assembling it into a `MIDIPacketList`.
-    ///
-    /// - Parameter rawMessages: Array of MIDI messages
-    @inlinable public func send(rawMessages: [[MIDI.Byte]]) throws {
+    @inline(__always)
+    internal func send(rawMessages: [[MIDI.Byte]]) throws {
         
         switch api {
         case .legacyCoreMIDI:
@@ -82,11 +100,9 @@ extension MIDIIOSendsMIDIMessagesProtocol {
         
     }
     
-    /// Send a MIDI message inside a Universal MIDI Packet.
-    ///
-    /// - Parameter rawWords: Array of `UInt32` words
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-    @inlinable public func send(rawWords: [MIDI.UMPWord]) throws {
+    @inline(__always)
+    internal func send(rawWords: [MIDI.UMPWord]) throws {
         
         switch api {
         case .legacyCoreMIDI:
@@ -96,7 +112,7 @@ extension MIDIIOSendsMIDIMessagesProtocol {
             
         case .newCoreMIDI:
             var eventList = try MIDIEventList(
-                protocol: self.protocol.coreMIDIProtocol,
+                protocol: self.midiProtocol.coreMIDIProtocol,
                 packetWords: rawWords
             )
             
@@ -112,8 +128,10 @@ extension MIDIIOSendsMIDIMessagesProtocol {
 
 extension MIDIIOSendsMIDIMessagesProtocol {
     
-    /// Send a MIDI Message.
-    @inlinable public func send(event: MIDI.Event) throws {
+    @inline(__always)
+    public func send(event: MIDI.Event) throws
+    where Self : _MIDIIOSendsMIDIMessagesProtocol
+    {
         
         switch api {
         case .legacyCoreMIDI:
@@ -126,13 +144,15 @@ extension MIDIIOSendsMIDIMessagesProtocol {
                 )
             }
             
-            try send(rawWords: event.umpRawWords(protocol: self.protocol))
+            try send(rawWords: event.umpRawWords(protocol: self.midiProtocol))
         }
         
     }
     
-    /// Send multiple MIDI Messages.
-    @inlinable public func send(events: [MIDI.Event]) throws {
+    @inline(__always)
+    public func send(events: [MIDI.Event]) throws
+    where Self : _MIDIIOSendsMIDIMessagesProtocol
+    {
         
         switch api {
         case .legacyCoreMIDI:
@@ -146,7 +166,7 @@ extension MIDIIOSendsMIDIMessagesProtocol {
             }
             
             for event in events {
-                try send(rawWords: event.umpRawWords(protocol: self.protocol))
+                try send(rawWords: event.umpRawWords(protocol: self.midiProtocol))
             }
         }
         

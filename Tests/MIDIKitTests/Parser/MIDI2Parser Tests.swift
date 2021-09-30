@@ -52,7 +52,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         // cc
         XCTAssertEqual(
             parsedEvents(bytes: [0x23, 0xB1, 0x01, 0x7F]),
-            [.cc(1, value: 127, channel: 1, group: 0x3)]
+            [.cc(1, value: .midi1(127), channel: 1, group: 0x3)]
         )
         
         // program change

@@ -5,11 +5,12 @@
 
 import Foundation
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
-    /// (Computed property) List of MIDI entities in the system
+    /// Internal:
+    /// List of MIDI entities in the system (computed property)
     internal static func getSystemDevice(for entity: MIDIEntityRef) throws -> Device? {
         
         var dev: MIDIDeviceRef = MIDIDeviceRef()
@@ -23,7 +24,8 @@ extension MIDI.IO {
         
     }
     
-    /// (Computed property) List of source endpoints for the entity
+    /// Internal:
+    /// List of source endpoints for the entity (computed property)
     internal static func getSystemSources(for entity: MIDIEntityRef) -> [OutputEndpoint] {
         
         let srcCount = MIDIEntityGetNumberOfSources(entity)
@@ -41,7 +43,8 @@ extension MIDI.IO {
         
     }
     
-    /// (Computed property) List of destination endpoints for the entity
+    /// Internal:
+    /// List of destination endpoints for the entity (computed property)
     internal static func getSystemDestinations(for entity: MIDIEntityRef) -> [InputEndpoint] {
         
         let srcCount = MIDIEntityGetNumberOfDestinations(entity)

@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 extension MIDI {
     
     /// A type that can hold any MIDI packet type.
@@ -30,7 +28,7 @@ extension MIDI {
         }
         
         /// Core MIDI packet timestamp
-        public var timeStamp: MIDITimeStamp {
+        public var timeStamp: MIDI.IO.CoreMIDITimeStamp {
             
             switch self {
             case .packet(let packetData):

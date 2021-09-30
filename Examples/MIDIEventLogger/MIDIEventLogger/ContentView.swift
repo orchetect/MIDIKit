@@ -36,7 +36,7 @@ struct ContentView: View {
     @State var midiGroup: MIDI.UInt4 = 0
     @State var chanVoiceCC: MIDI.Event.CC.Controller = .modWheel
     
-    @State var midiInputConnection: MIDI.IO.OutputEndpoint? = nil
+    @State var midiInputConnectionEndpoint: MIDI.IO.OutputEndpoint? = nil
     
     // MARK: - Init
     
@@ -109,7 +109,7 @@ struct ContentView: View {
             .first
         {
             Log.debug("Found virtual endpoint: \(findInputConnectionEndpoint)")
-            midiInputConnection = findInputConnectionEndpoint
+            midiInputConnectionEndpoint = findInputConnectionEndpoint
         }
         
     }
@@ -119,7 +119,7 @@ struct ContentView: View {
         // check for existing connection and compare new selection against it
         if let ic = midiManager.managedInputConnections[kInputConnectionTag] {
             // if endpoint is the same, don't reconnect
-            if ic.outputEndpointRef == midiInputConnection?.coreMIDIObjectRef {
+            if ic.endpoint == midiInputConnectionEndpoint {
                 Log.debug("Already connected.")
                 return
             }
@@ -130,9 +130,9 @@ struct ContentView: View {
             midiManager.remove(.inputConnection, .all)
         }
         
-        guard let endpoint = midiInputConnection else { return }
+        guard let endpoint = midiInputConnectionEndpoint else { return }
         
-        let endpointName = (endpoint.getDisplayName ?? endpoint.name).quoted
+        let endpointName = (endpoint.getDisplayName() ?? endpoint.name).quoted
         
         Log.debug("Setting up new input connection to \(endpointName).")
         do {

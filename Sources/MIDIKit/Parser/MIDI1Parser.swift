@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 extension MIDI {
     
     /// Parser for MIDI 1.0 events.
@@ -418,7 +416,7 @@ extension MIDI {
                 else { return events }
                 
                 let newEvent: MIDI.Event = .cc(cc,
-                                               value: value,
+                                               value: .midi1(value),
                                                channel: channel,
                                                group: umpGroup)
                 

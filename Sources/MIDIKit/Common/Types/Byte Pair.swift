@@ -11,7 +11,8 @@ extension MIDI.Byte {
         public let msb: MIDI.Byte
         public let lsb: MIDI.Byte
         
-        @inline(__always) public init(msb: MIDI.Byte, lsb: MIDI.Byte) {
+        @inline(__always)
+        public init(msb: MIDI.Byte, lsb: MIDI.Byte) {
             
             self.msb = msb
             self.lsb = lsb

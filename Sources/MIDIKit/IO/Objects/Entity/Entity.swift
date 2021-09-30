@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 // MARK: - Entity
 
 extension MIDI.IO {
@@ -12,19 +10,19 @@ extension MIDI.IO {
     /// A MIDI device, wrapping a Core MIDI `MIDIEntityRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
-    public struct Entity: MIDIIOObjectProtocol {
+    public struct Entity: _MIDIIOObjectProtocol {
         
-        public static let objectType: MIDI.IO.ObjectType = .entity
+        public let objectType: MIDI.IO.ObjectType = .entity
         
         // MARK: CoreMIDI ref
         
-        public let coreMIDIObjectRef: MIDIEntityRef
+        internal let coreMIDIObjectRef: MIDI.IO.CoreMIDIEntityRef
         
         // MARK: Init
         
-        internal init(_ ref: MIDIEntityRef) {
+        internal init(_ ref: MIDI.IO.CoreMIDIEntityRef) {
             
-            assert(ref != MIDIEntityRef())
+            assert(ref != MIDI.IO.CoreMIDIEntityRef())
             
             self.coreMIDIObjectRef = ref
             update()
@@ -68,7 +66,7 @@ extension MIDI.IO.Entity: Identifiable {
 
 extension MIDI.IO.Entity {
     
-    public var device: MIDI.IO.Device? {
+    public func getDevice() -> MIDI.IO.Device? {
         
         try? MIDI.IO.getSystemDevice(for: coreMIDIObjectRef)
         
@@ -95,7 +93,7 @@ extension MIDI.IO.Entity {
     /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
         
-        device != nil
+        getDevice() != nil
         
     }
     

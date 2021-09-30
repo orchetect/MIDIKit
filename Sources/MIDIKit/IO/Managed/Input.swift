@@ -4,17 +4,21 @@
 //
 
 import Foundation
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
     /// A managed virtual MIDI input endpoint created in the system by the `Manager`.
-    public class Input: MIDIIOManagedProtocol {
+    public class Input: _MIDIIOManagedProtocol {
+        
+        // _MIDIIOManagedProtocol
+        internal weak var midiManager: MIDI.IO.Manager?
         
         // MIDIIOManagedProtocol
-        public weak var midiManager: Manager?
-        public private(set) var api: APIVersion
-        public private(set) var `protocol`: MIDI.IO.ProtocolVersion
+        public private(set) var api: MIDI.IO.APIVersion
+        public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
+        
+        // class-specific
         
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
@@ -22,23 +26,29 @@ extension MIDI.IO {
         /// The port's unique ID in the system.
         public private(set) var uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil
         
-        public private(set) var portRef: MIDIPortRef? = nil
+        internal var portRef: MIDI.IO.CoreMIDIPortRef? = nil
         
-        internal var receiveHandler: ReceiveHandler
+        internal var receiveHandler: MIDI.IO.ReceiveHandler
         
+        // init
+        
+        /// - Parameters:
+        ///   - name: The port name as displayed in the system.
+        ///   - uniqueID: The port's unique ID in the system.
+        ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
+        ///   - midiManager: Reference to I/O Manager object.
+        ///   - api: Core MIDI API version.
         internal init(name: String,
                       uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil,
-                      receiveHandler: ReceiveHandler.Definition,
+                      receiveHandler: MIDI.IO.ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform(),
-                      protocol midiProtocol: MIDI.IO.ProtocolVersion = ._2_0) {
+                      api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-            self.protocol = api == .legacyCoreMIDI ? ._1_0 : midiProtocol
             
         }
         
@@ -113,7 +123,7 @@ extension MIDI.IO.Input {
             try MIDIDestinationCreateWithProtocol(
                 manager.clientRef,
                 endpointName as CFString,
-                self.protocol.coreMIDIProtocol,
+                self.api.midiProtocol.coreMIDIProtocol,
                 &newPortRef,
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }

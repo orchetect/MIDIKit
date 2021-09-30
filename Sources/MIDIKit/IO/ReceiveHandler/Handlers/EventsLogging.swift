@@ -3,7 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
 import os.log
 
 extension MIDI.IO.ReceiveHandler {
@@ -15,14 +14,17 @@ extension MIDI.IO.ReceiveHandler {
         
         public typealias Handler = (_ eventString: String) -> Void
         
-        @inline(__always) public var handler: Handler
+        @inline(__always)
+        public var handler: Handler
         
         internal let midi1Parser = MIDI.MIDI1Parser()
         internal let midi2Parser = MIDI.MIDI2Parser()
         
-        @inline(__always) public var filterActiveSensingAndClock = false
+        @inline(__always)
+        public var filterActiveSensingAndClock = false
         
-        @inline(__always) public func packetListReceived(
+        @inline(__always)
+        public func packetListReceived(
             _ packets: [MIDI.Packet.PacketData]
         ) {
             
@@ -34,7 +36,8 @@ extension MIDI.IO.ReceiveHandler {
         }
         
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-        @inline(__always) public func eventListReceived(
+        @inline(__always)
+        public func eventListReceived(
             _ packets: [MIDI.Packet.UniversalPacketData],
             protocol midiProtocol: MIDI.IO.ProtocolVersion
         ) {

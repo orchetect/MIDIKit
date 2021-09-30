@@ -32,26 +32,26 @@ extension MIDI.Event.CC.Controller.NRPN {
         
         var nrpnEvents: [MIDI.Event] = [
             .cc(.nrpnMSB,
-                value: parameter.msb,
+                value: .midi1(parameter.msb),
                 channel: channel,
                 group: group),
             
             .cc(.nrpnLSB,
-                value: parameter.lsb,
+                value: .midi1(parameter.lsb),
                 channel: channel,
                 group: group)
         ]
         
         if let dataEntryMSB = dataEntryMSB {
             nrpnEvents.append(.cc(.dataEntry,
-                                  value: dataEntryMSB,
+                                  value: .midi1(dataEntryMSB),
                                   channel: channel,
                                   group: group))
         }
         
         if let dataEntryLSB = dataEntryLSB {
             nrpnEvents.append(.cc(.dataEntry,
-                                  value: dataEntryLSB,
+                                  value: .midi1(dataEntryLSB),
                                   channel: channel,
                                   group: group))
         }

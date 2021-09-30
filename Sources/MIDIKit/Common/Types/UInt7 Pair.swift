@@ -11,7 +11,8 @@ extension MIDI.UInt7 {
         public let msb: MIDI.UInt7
         public let lsb: MIDI.UInt7
         
-        @inline(__always) public init(msb: MIDI.UInt7, lsb: MIDI.UInt7) {
+        @inline(__always)
+        public init(msb: MIDI.UInt7, lsb: MIDI.UInt7) {
             
             self.msb = msb
             self.lsb = lsb

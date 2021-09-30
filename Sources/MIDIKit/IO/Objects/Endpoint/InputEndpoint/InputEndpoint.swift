@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
-
 // MARK: - InputEndpoint
 
 extension MIDI.IO {
@@ -14,17 +12,17 @@ extension MIDI.IO {
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     ///
     /// Instead, read endpoint arrays and individual endpoint properties from `MIDI.IO.Manager.endpoints` ad-hoc when they are needed.
-    public struct InputEndpoint: MIDIIOEndpointProtocol {
+    public struct InputEndpoint: _MIDIIOEndpointProtocol {
         
         // MARK: CoreMIDI ref
         
-        public let coreMIDIObjectRef: MIDIEndpointRef
+        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
         
         // MARK: Init
         
-        internal init(_ ref: MIDIEndpointRef) {
+        internal init(_ ref: MIDI.IO.CoreMIDIEndpointRef) {
             
-            assert(ref != MIDIEndpointRef())
+            assert(ref != MIDI.IO.CoreMIDIEndpointRef())
             
             self.coreMIDIObjectRef = ref
             update()
@@ -75,7 +73,7 @@ extension MIDI.IO.InputEndpoint {
 extension MIDI.IO.InputEndpoint {
     
     /// Returns the endpoint as a type-erased `AnyEndpoint`.
-    public var asAnyEndpoint: MIDI.IO.AnyEndpoint {
+    public func asAnyEndpoint() -> MIDI.IO.AnyEndpoint {
         .init(self)
     }
 

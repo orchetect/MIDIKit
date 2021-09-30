@@ -3,14 +3,15 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDIEventPacket {
     
-    /// Internal use.
+    /// Internal:
     /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-    @inlinable internal init(
+    @inline(__always)
+    internal init(
         words: [MIDI.UMPWord]
     ) throws {
         
@@ -50,10 +51,11 @@ extension MIDIEventPacket {
 
 //extension MIDIEventPacket {
 //
-//    /// Internal use.
+//    /// Internal:
 //    /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
 //    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-//    @inlinable internal init(
+//    @inline(__always)
+//    internal init(
 //        words: [MIDI.UMPWord]
 //    ) throws {
 //
@@ -90,10 +92,11 @@ extension MIDIEventPacket {
 
 extension MIDIEventList {
     
-    /// Internal use.
+    /// Internal:
     /// Assembles a single Core MIDI `MIDIEventPacket` from a Universal MIDI Packet `UInt32` word array and wraps it in a Core MIDI `MIDIEventList`.
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-    @inlinable internal init(
+    @inline(__always)
+    internal init(
         protocol midiProtocol: MIDIProtocolID,
         packetWords: [MIDI.UMPWord]
     ) throws {

@@ -33,10 +33,14 @@ extension Collection where Element : MIDIIOObjectProtocol {
         
     }
     
+}
+
+extension Collection where Element : MIDIIOObjectProtocol {
+    
     /// Returns all elements matching all supplied parameters.
-    public func filter(displayName: String) -> [Element] {
+    public func filter(displayName: String) -> [Element] where Element : _MIDIIOObjectProtocol {
         
-        filter { $0.getDisplayName == displayName }
+        filter { $0.getDisplayName() == displayName }
         
     }
     

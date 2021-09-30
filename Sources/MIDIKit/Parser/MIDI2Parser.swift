@@ -1,9 +1,7 @@
 //
-//  MIDI2Parser.swift.swift
+//  MIDI2Parser.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
-
-import CoreMIDI
 
 extension MIDI {
     
@@ -271,7 +269,7 @@ extension MIDI {
                 else { return nil }
                 
                 let newEvent: MIDI.Event = .cc(cc,
-                                               value: value,
+                                               value: .midi1(value),
                                                channel: channel,
                                                group: group)
                 

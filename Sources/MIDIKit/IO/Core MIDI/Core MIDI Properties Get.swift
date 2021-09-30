@@ -3,15 +3,19 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
     // MARK: - Property Readers
     
+    /// Internal:
     /// Retrieves the entire properties dictionary as the Core MIDI-native `CFPropertyList`.
     ///
-    /// - Parameter deep: Returns nested results for all children if `True`.
+    /// - Parameters:
+    ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
+    ///   - deep: Returns nested results for all children if `True`.
+    ///
     /// - Throws: `MIDI.IO.MIDIError`
     internal static func getProperties(of ref: MIDIObjectRef,
                                        deep: Bool = false) throws -> CFPropertyList {
@@ -39,6 +43,14 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
+    /// Returns dictionary data for the given property.
+    ///
+    /// - Parameters:
+    ///   - forProperty: a `CoreMIDI.kMIDIProperty*` property constant
+    ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
+    ///
+    /// - Throws: `MIDI.IO.MIDIError`
     internal static func getDictionary(forProperty: CFString,
                                        of ref: MIDIObjectRef) throws -> NSDictionary {
         
@@ -65,9 +77,13 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Get a string value from a `MIDIObjectRef` property key.
     ///
-    /// - Parameter forProperty: a `CoreMIDI.kMIDIProperty*` property constant
+    /// - Parameters:
+    ///   - forProperty: a `CoreMIDI.kMIDIProperty*` property constant
+    ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
+    ///
     /// - Throws: `MIDI.IO.MIDIError`
     internal static func getString(forProperty: CFString,
                                    of ref: MIDIObjectRef) throws -> String {
@@ -95,6 +111,7 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Get an integer value from a `MIDIObjectRef` property key.
     ///
     /// - Parameter forProperty: a `CoreMIDI.kMIDIProperty*` property constant

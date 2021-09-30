@@ -89,14 +89,14 @@ extension ContentView {
                 
                 Button {
                     sendEvent(.noteOn(60,
-                                      velocity: 0.5,
+                                      velocity: .unitInterval(0.5),
                                       channel: midiChannel,
                                       group: midiGroup))
                 } label: { Text("Note On") }
                 
                 Button {
                     sendEvent(.noteOff(60,
-                                       velocity: 0.0,
+                                       velocity: .unitInterval(0.0),
                                        channel: midiChannel,
                                        group: midiGroup))
                 } label: { Text("Note Off") }
@@ -111,7 +111,7 @@ extension ContentView {
                 HStack(alignment: .center, spacing: 4) {
                     Button {
                         sendEvent(.cc(chanVoiceCC,
-                                      value: 64,
+                                      value: .midi1(64),
                                       channel: midiChannel,
                                       group: midiGroup))
                     } label: { Text("CC") }
@@ -322,14 +322,14 @@ extension ContentView {
                             }
                             
                             GroupBox(label: Text("Source: Connection")) {
-                                Picker("", selection: $midiInputConnection) {
+                                Picker("", selection: $midiInputConnectionEndpoint) {
                                     Text("None")
                                         .tag(MIDI.IO.OutputEndpoint?.none)
                                     
                                     VStack { Divider().padding(.leading) }
                                     
                                     ForEach(midiManager.endpoints.outputs) {
-                                        Text("🎹 " + ($0.getDisplayName ?? $0.name))
+                                        Text("🎹 " + ($0.getDisplayName() ?? $0.name))
                                             .tag(MIDI.IO.OutputEndpoint?.some($0))
                                     }
                                 }
@@ -357,7 +357,7 @@ extension ContentView {
                 // can't use .onChange{} in Catalina and didSet{}
                 // is not reliable on a @State var, so this works
                 // fine for our purposes
-                let _ = midiInputConnection
+                let _ = midiInputConnectionEndpoint
                 
                 updateInputConnection()
                 

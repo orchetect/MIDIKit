@@ -3,10 +3,11 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
+    /// Internal:
     /// Queries Core MIDI for existing persistent play-thru connections stored in the system matching the specified persistent owner ID.
     ///
     /// To delete them all, see sister function `removeAllSystemThruConnectionsPersistentEntries(:)`.
@@ -16,7 +17,7 @@ extension MIDI.IO {
     /// - Throws: `MIDI.IO.MIDIError.osStatus`
     internal static func getSystemThruConnectionsPersistentEntries(
         matching persistentOwnerID: String
-    ) throws -> [MIDIThruConnectionRef] {
+    ) throws -> [MIDI.IO.CoreMIDIThruConnectionRef] {
         
         // set up empty unmanaged data pointer
         var getConnectionList: Unmanaged<CFData> = Unmanaged.passUnretained(Data([]) as CFData)
@@ -52,6 +53,7 @@ extension MIDI.IO {
         
     }
     
+    /// Internal:
     /// Deletes all system-held Core MIDI MIDI play-thru connections matching an owner ID.
     ///
     /// - Parameter persistentOwnerID: reverse-DNS domain that was used when the connection was first made

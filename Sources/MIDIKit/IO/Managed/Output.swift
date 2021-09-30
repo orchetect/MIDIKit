@@ -4,17 +4,24 @@
 //
 
 import Foundation
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
     /// A managed virtual MIDI output endpoint created in the system by the `Manager`.
-    public class Output: MIDIIOManagedProtocol {
+    public class Output: _MIDIIOManagedProtocol {
+        
+        // _MIDIIOManagedProtocol
+        internal weak var midiManager: MIDI.IO.Manager?
         
         // MIDIIOManagedProtocol
-        public weak var midiManager: Manager?
         public private(set) var api: APIVersion
-        public private(set) var `protocol`: MIDI.IO.ProtocolVersion
+        public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
+        
+        // _MIDIIOSendsMIDIMessagesProtocol
+        internal var portRef: MIDI.IO.CoreMIDIPortRef? = nil
+        
+        // class-specific
         
         /// The port name as displayed in the system.
         public private(set) var endpointName: String = ""
@@ -22,19 +29,22 @@ extension MIDI.IO {
         /// The port's unique ID in the system.
         public private(set) var uniqueID: MIDI.IO.OutputEndpoint.UniqueID? = nil
         
-        public private(set) var portRef: MIDIPortRef? = nil
+        // init
         
+        /// - Parameters:
+        ///   - name: The port name as displayed in the system.
+        ///   - uniqueID: The port's unique ID in the system.
+        ///   - midiManager: Reference to I/O Manager object.
+        ///   - api: Core MIDI API version.
         internal init(name: String,
                       uniqueID: MIDI.IO.OutputEndpoint.UniqueID? = nil,
                       midiManager: MIDI.IO.Manager,
-                      api: APIVersion = .bestForPlatform(),
-                      protocol midiProtocol: MIDI.IO.ProtocolVersion = ._2_0) {
+                      api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
             self.endpointName = name
             self.uniqueID = uniqueID
             self.midiManager = midiManager
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-            self.protocol = api == .legacyCoreMIDI ? ._1_0 : midiProtocol
             
         }
         
@@ -50,8 +60,8 @@ extension MIDI.IO {
 
 extension MIDI.IO.Output {
     
-    /// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
-    public var uniqueIDExistsInSystem: MIDIEndpointRef? {
+    /// Queries the system and returns the endpoint ref if the endpoint exists (by matching port name and unique ID)
+    internal var uniqueIDExistsInSystem: MIDIEndpointRef? {
         
         guard let unwrappedUniqueID = self.uniqueID else {
             return nil
@@ -100,7 +110,7 @@ extension MIDI.IO.Output {
             try MIDISourceCreateWithProtocol(
                 manager.clientRef,
                 endpointName as CFString,
-                self.protocol.coreMIDIProtocol,
+                self.api.midiProtocol.coreMIDIProtocol,
                 &newPortRef
             )
             .throwIfOSStatusErr()
@@ -158,7 +168,13 @@ extension MIDI.IO.Output: CustomStringConvertible {
 
 extension MIDI.IO.Output: MIDIIOSendsMIDIMessagesProtocol {
     
-    public func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
+    // empty
+    
+}
+
+extension MIDI.IO.Output: _MIDIIOSendsMIDIMessagesProtocol {
+    
+    internal func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         
         guard let unwrappedPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
@@ -172,7 +188,7 @@ extension MIDI.IO.Output: MIDIIOSendsMIDIMessagesProtocol {
     }
     
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-    public func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
+    internal func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
         guard let unwrappedPortRef = self.portRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(

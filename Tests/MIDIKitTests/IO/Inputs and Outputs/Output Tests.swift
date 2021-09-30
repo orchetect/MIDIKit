@@ -7,7 +7,7 @@
 #if !os(watchOS) && !targetEnvironment(simulator)
 
 import XCTest
-@testable import MIDIKit
+import MIDIKit
 import CoreMIDI
 
 final class InputsAndOutputs_Output_Tests: XCTestCase {
@@ -16,8 +16,8 @@ final class InputsAndOutputs_Output_Tests: XCTestCase {
 	
 	override func setUp() {
 		manager = .init(clientName: "MIDIKit_IO_InputsAndOutputs_Output_Tests",
-						model: "",
-						manufacturer: "")
+                        model: "MIDIKit123",
+                        manufacturer: "MIDIKit")
 	}
 	
 	override func tearDown() {
@@ -55,7 +55,7 @@ final class InputsAndOutputs_Output_Tests: XCTestCase {
 		// send a midi message
 		
 		XCTAssertNotNil(
-            _ = try? manager.managedOutputs[tag1]!.send(rawMessage: [0xFF])
+            _ = try? manager.managedOutputs[tag1]!.send(event: .systemReset(group: 0))
 		)
 		
 		// unique ID collision

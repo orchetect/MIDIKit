@@ -17,7 +17,7 @@ extension MIDI.Event.Note {
         /// MIDI 1.0 7-bit Channel Voice Note Velocity (0x00..0x7F)
         case midi1(MIDI.UInt7)
         
-        /// MIDI 2.0 Channel Voice Note Velocity (0x0000...0xFFFF)
+        /// MIDI 2.0 16-bit Channel Voice Note Velocity (0x0000...0xFFFF)
         case midi2(UInt16)
         
     }

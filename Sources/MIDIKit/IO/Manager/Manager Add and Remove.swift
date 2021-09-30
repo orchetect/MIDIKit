@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import CoreMIDI
+@_implementationOnly import CoreMIDI
 
 extension MIDI.IO.Manager {
     
@@ -27,7 +27,6 @@ extension MIDI.IO.Manager {
     ///   - receiveHandler: Event handler for received MIDI packets.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
-    /// - Returns: The port's effective `uniqueID`.
     public func addInput(
         name: String,
         tag: String,
@@ -42,8 +41,7 @@ extension MIDI.IO.Manager {
                 uniqueID: uniqueID.readID(),
                 receiveHandler: receiveHandler,
                 midiManager: self,
-                api: preferredAPI,
-                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
+                api: preferredAPI
             )
             
             managedInputs[tag] = newVD
@@ -82,8 +80,7 @@ extension MIDI.IO.Manager {
                 toOutput: toOutput,
                 receiveHandler: receiveHandler,
                 midiManager: self,
-                api: preferredAPI,
-                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
+                api: preferredAPI
             )
             
             // store the connection object in the manager,
@@ -126,8 +123,7 @@ extension MIDI.IO.Manager {
                 name: name,
                 uniqueID: uniqueID.readID(),
                 midiManager: self,
-                api: preferredAPI,
-                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
+                api: preferredAPI
             )
             
             managedOutputs[tag] = newVS
@@ -162,8 +158,7 @@ extension MIDI.IO.Manager {
             
             let newCS = MIDI.IO.OutputConnection(
                 toInput: toInput,
-                api: preferredAPI,
-                protocol: ._1_0 // hard-coded to 1.0 until full 2.0 support is added
+                api: preferredAPI
             )
             
             // store the connection object in the manager,
@@ -200,8 +195,8 @@ extension MIDI.IO.Manager {
         outputs: [MIDI.IO.OutputEndpoint],
         inputs: [MIDI.IO.InputEndpoint],
         tag: String,
-        _ lifecycle: MIDI.IO.ThruConnection.Lifecycle = .nonPersistent,
-        params: MIDIThruConnectionParams? = nil
+        lifecycle: MIDI.IO.ThruConnection.Lifecycle = .nonPersistent,
+        params: MIDI.IO.ThruConnection.Parameters = .init()
     ) throws {
         
         try eventQueue.sync {
@@ -209,7 +204,7 @@ extension MIDI.IO.Manager {
             let newCT = MIDI.IO.ThruConnection(
                 outputs: outputs,
                 inputs: inputs,
-                lifecycle,
+                lifecycle: lifecycle,
                 params: params,
                 midiManager: self,
                 api: preferredAPI
