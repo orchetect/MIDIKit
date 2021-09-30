@@ -7,19 +7,21 @@
 
 public protocol MIDIIOEndpointProtocol: MIDIIOObjectProtocol {
     
+    // implemented in extension _MIDIIOEndpointProtocol
+    
+    func getEntity() -> MIDI.IO.Entity?
+    
 }
 
 internal protocol _MIDIIOEndpointProtocol: MIDIIOEndpointProtocol, _MIDIIOObjectProtocol {
     
 }
 
-extension MIDIIOEndpointProtocol {
+extension _MIDIIOEndpointProtocol {
     
     public var objectType: MIDI.IO.ObjectType { .endpoint }
     
-    internal func getEntity() -> MIDI.IO.Entity?
-    where Self : _MIDIIOEndpointProtocol
-    {
+    public func getEntity() -> MIDI.IO.Entity? {
         
         try? MIDI.IO.getSystemEntity(for: self.coreMIDIObjectRef)
         

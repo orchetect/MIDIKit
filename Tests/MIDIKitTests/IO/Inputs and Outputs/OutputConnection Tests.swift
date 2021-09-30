@@ -59,7 +59,18 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
 		}
 		
 		XCTAssertNotNil(manager.managedOutputConnections[tag1])
-		
+        
+        // attempt to send a midi message
+        
+        XCTAssertThrowsError(
+            try manager.managedOutputConnections[tag1]?
+                .send(event: .systemReset(group: 0))
+        )
+        XCTAssertThrowsError(
+            try manager.managedOutputConnections[tag1]?
+                .send(events: [.systemReset(group: 0)])
+        )
+        
 	}
 	
 }

@@ -126,12 +126,10 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
     
 }
 
-extension MIDIIOSendsMIDIMessagesProtocol {
+extension _MIDIIOSendsMIDIMessagesProtocol {
     
     @inline(__always)
-    public func send(event: MIDI.Event) throws
-    where Self : _MIDIIOSendsMIDIMessagesProtocol
-    {
+    public func send(event: MIDI.Event) throws {
         
         switch api {
         case .legacyCoreMIDI:
@@ -145,14 +143,13 @@ extension MIDIIOSendsMIDIMessagesProtocol {
             }
             
             try send(rawWords: event.umpRawWords(protocol: self.midiProtocol))
+            
         }
         
     }
     
     @inline(__always)
-    public func send(events: [MIDI.Event]) throws
-    where Self : _MIDIIOSendsMIDIMessagesProtocol
-    {
+    public func send(events: [MIDI.Event]) throws {
         
         switch api {
         case .legacyCoreMIDI:
@@ -168,6 +165,7 @@ extension MIDIIOSendsMIDIMessagesProtocol {
             for event in events {
                 try send(rawWords: event.umpRawWords(protocol: self.midiProtocol))
             }
+            
         }
         
     }

@@ -5,15 +5,13 @@
 
 import Foundation
 
-extension MIDIIOObjectProtocol {
+extension _MIDIIOObjectProtocol {
     
     /// Get all properties as a key/value pair array, formatted as human-readable strings.
     /// Useful for displaying in a user interface or outputting to console for debugging.
     public func getPropertiesAsStrings(
         onlyIncludeRelevant: Bool = true
-    ) -> [(key: String, value: String)]
-    where Self : _MIDIIOObjectProtocol
-    {
+    ) -> [(key: String, value: String)] {
         
         (
             onlyIncludeRelevant
@@ -28,14 +26,12 @@ extension MIDIIOObjectProtocol {
     
 }
 
-extension MIDIIOObjectProtocol {
+extension _MIDIIOObjectProtocol {
     
     /// Returns a human-readable key and value pair for the property.
     internal func getPropertyKeyValuePairAsStrings(
         of property: MIDI.IO.kMIDIProperty
-    ) -> (key: String, value: String)
-    where Self : _MIDIIOObjectProtocol
-    {
+    ) -> (key: String, value: String) {
         
         switch property {
         
