@@ -5,14 +5,6 @@
 
 import Foundation
 
-extension MIDI {
-    
-    public struct ChanVoice32BitValue: Hashable {
-        
-    }
-    
-}
-
 extension MIDI.Event {
     
     /// Channel Voice 32-Bit Value
