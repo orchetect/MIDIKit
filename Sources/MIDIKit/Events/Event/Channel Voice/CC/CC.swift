@@ -6,6 +6,7 @@
 extension MIDI.Event {
     
     /// Channel Voice Message: Control Change (CC)
+    /// (MIDI 1.0 / 2.0)
     public struct CC: Equatable, Hashable {
         
         /// Controller
@@ -27,6 +28,7 @@ extension MIDI.Event {
 extension MIDI.Event {
     
     /// Channel Voice Message: Control Change (CC)
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - Parameters:
     ///   - controller: Controller type
@@ -48,6 +50,7 @@ extension MIDI.Event {
     }
     
     /// Channel Voice Message: Control Change (CC)
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - Parameters:
     ///   - controller: Controller number

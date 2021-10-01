@@ -12,12 +12,15 @@ extension MIDI.Event {
         
         switch self {
         case .noteOn,
-                .noteOff,
-                .polyAftertouch,
-                .cc,
-                .programChange,
-                .chanAftertouch,
-                .pitchBend:
+             .noteOff,
+             .noteCC,
+             .notePitchBend,
+             .notePressure,
+             .noteManagement,
+             .cc,
+             .programChange,
+             .pitchBend,
+             .pressure:
             return true
             
         default:
@@ -32,11 +35,14 @@ extension MIDI.Event {
         switch self {
         case .noteOn         : return chanVoiceType == .noteOn
         case .noteOff        : return chanVoiceType == .noteOff
-        case .polyAftertouch : return chanVoiceType == .polyAftertouch
+        case .noteCC         : return chanVoiceType == .noteCC
+        case .notePitchBend  : return chanVoiceType == .notePitchBend
+        case .notePressure   : return chanVoiceType == .notePressure
+        case .noteManagement : return chanVoiceType == .noteManagement
         case .cc             : return chanVoiceType == .cc
         case .programChange  : return chanVoiceType == .programChange
-        case .chanAftertouch : return chanVoiceType == .chanAftertouch
         case .pitchBend      : return chanVoiceType == .pitchBend
+        case .pressure       : return chanVoiceType == .pressure
         default              : return false
         }
         

@@ -5,7 +5,8 @@
 
 extension MIDI.Event {
     
-    /// System Common: Tune Request (Status `0xF6`)
+    /// System Common: Tune Request
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI Spec:
     ///
@@ -17,7 +18,8 @@ extension MIDI.Event {
         
     }
     
-    /// System Common: Tune Request (Status `0xF6`)
+    /// System Common: Tune Request
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI Spec:
     ///

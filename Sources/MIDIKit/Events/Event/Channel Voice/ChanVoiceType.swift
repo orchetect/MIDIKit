@@ -36,12 +36,15 @@ extension MIDI.Event {
     
     public enum ChanVoiceType {
         
-        case noteOff
         case noteOn
-        case polyAftertouch
+        case noteOff
+        case noteCC
+        case notePitchBend
+        case notePressure
+        case noteManagement
         case cc
         case programChange
-        case chanAftertouch
+        case pressure
         case pitchBend
         
     }

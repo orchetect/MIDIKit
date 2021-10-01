@@ -17,7 +17,7 @@ extension MIDI.Event.CC.Controller {
         case   4: self = .footController
         case   5: self = .portamentoTime
         case   6: self = .dataEntry
-        case   7: self = .channelVolume
+        case   7: self = .volume
         case   8: self = .balance
         case   9: self = .undefined(.cc9)
         case  10: self = .pan

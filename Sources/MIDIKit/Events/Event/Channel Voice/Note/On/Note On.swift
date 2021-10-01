@@ -6,11 +6,12 @@
 extension MIDI.Event.Note {
     
     /// Channel Voice Message: Note On
+    /// (MIDI 1.0 / 2.0)
     public struct On: Equatable, Hashable {
         
         /// Note Number
         ///
-        /// If MIDI 2.0 attribute is set to Pitch 7.9, then this value holds the note index.
+        /// If MIDI 2.0 attribute is set to Pitch 7.9, then this value represents the note index.
         public var note: MIDI.UInt7
         
         /// Velocity
@@ -31,6 +32,7 @@ extension MIDI.Event.Note {
 extension MIDI.Event {
     
     /// Channel Voice Message: Note On
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)

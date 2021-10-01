@@ -1,5 +1,5 @@
 //
-//  CC Value Tests.swift
+//  ChanVoice32BitValue Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -8,9 +8,9 @@
 import XCTest
 import MIDIKit
 
-class CCValueTests: XCTestCase {
+class ChanVoice32BitValueTests: XCTestCase {
     
-    typealias Value = MIDI.Event.CC.Value
+    typealias Value = MIDI.Event.ChanVoice32BitValue
     
     func testEquatable_unitInterval() {
         

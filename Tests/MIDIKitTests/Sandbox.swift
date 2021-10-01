@@ -80,7 +80,7 @@ final class Sandbox: XCTestCase {
 //                        _ = velocity
 //                        _ = channel
 //
-//                    case .polyAftertouch(let note, let pressure, let channel):
+//                    case .notePressure(let note, let pressure, let channel):
 //                        _ = note
 //                        _ = pressure
 //                        _ = channel
@@ -98,7 +98,7 @@ final class Sandbox: XCTestCase {
 //                        _ = program
 //                        _ = channel
 //
-//                    case .chanAftertouch(let pressure, let channel):
+//                    case .pressure(let pressure, let channel):
 //                        _ = pressure
 //                        _ = channel
 //

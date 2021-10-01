@@ -12,11 +12,11 @@ extension MIDI.Event {
         
         switch self {
         case .timingClock,
-                .start,
-                .continue,
-                .stop,
-                .activeSensing,
-                .systemReset:
+             .start,
+             .continue,
+             .stop,
+             .activeSensing,
+             .systemReset:
             return true
             
         default:

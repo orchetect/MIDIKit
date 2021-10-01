@@ -36,7 +36,7 @@ extension MIDI.Event.CC {
         
         /// Channel Volume
         /// (Int: 7, Hex: 0x07)
-        case channelVolume
+        case volume
         
         /// Balance
         /// (Int: 8, Hex: 0x08)
@@ -130,39 +130,48 @@ extension MIDI.Event.CC {
         /// (Int: 70, Hex: 0x46)
         case soundCtrl1_soundVariation
         
-        /// Sound Controller 2 (default: Timbre/Harmonic Intens.)
+        /// Sound Controller 2
+        /// (default: Timbre/Harmonic Intens.)
         /// (Int: 71, Hex: 0x47)
         case soundCtrl2_timbreIntensity
         
-        /// Sound Controller 3 (default: Release Time)
+        /// Sound Controller 3
+        /// (default: Release Time)
         /// (Int: 72, Hex: 0x48)
         case soundCtrl3_releaseTime
         
-        /// Sound Controller 4 (default: Attack Time)
+        /// Sound Controller 4
+        /// (default: Attack Time)
         /// (Int: 73, Hex: 0x49)
         case soundCtrl4_attackTime
         
-        /// Sound Controller 5 (default: Brightness)
+        /// Sound Controller 5
+        /// (default: Brightness)
         /// (Int: 74, Hex: 0x4A)
         case soundCtrl5_brightness
         
-        /// Sound Controller 6 (default: Decay Time - see MMA RP-021)
+        /// Sound Controller 6
+        /// (default: Decay Time - see MMA RP-021)
         /// (Int: 75, Hex: 0x4B)
         case soundCtrl6_decayTime
         
-        /// Sound Controller 7 (default: Vibrato Rate - see MMA RP-021)
+        /// Sound Controller 7
+        /// (default: Vibrato Rate - see MMA RP-021)
         /// (Int: 76, Hex: 0x4C)
         case soundCtrl7_vibratoRate
         
-        /// Sound Controller 8 (default: Vibrato Depth - see MMA RP-021)
+        /// Sound Controller 8
+        /// (default: Vibrato Depth - see MMA RP-021)
         /// (Int: 77, Hex: 0x4D)
         case soundCtrl8_vibratoDepth
         
-        /// Sound Controller 9 (default: Vibrato Delay - see MMA RP-021)
+        /// Sound Controller 9
+        /// (default: Vibrato Delay - see MMA RP-021)
         /// (Int: 78, Hex: 0x4E)
         case soundCtrl9_vibratoDelay
         
-        /// Sound Controller 10 (default undefined - see MMA RP-021)
+        /// Sound Controller 10
+        /// (default: Undefined - see MMA RP-021)
         /// (Int: 79, Hex: 0x4F)
         case soundCtrl10_defaultUndefined
         
@@ -202,7 +211,8 @@ extension MIDI.Event.CC {
         /// (Int: 91, Hex: 0x5B)
         case effects1Depth_reverbSendLevel
         
-        /// Effects 2 Depth (formerly Tremolo Depth)
+        /// Effects 2 Depth
+        /// (formerly Tremolo Depth)
         /// (Int: 92, Hex: 0x5C)
         case effects2Depth
         

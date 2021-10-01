@@ -26,6 +26,7 @@ extension MIDI.Event.Note.Attribute {
 
 extension MIDI.Event.Note.Attribute.Pitch7_9 {
     
+    /// Initialize from UInt16 representation.
     public init(_ bytePair: MIDI.Byte.Pair) {
         
         coarse = MIDI.UInt7((bytePair.msb & 0b1111_1110) >> 1)

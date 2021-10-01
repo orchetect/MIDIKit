@@ -120,10 +120,10 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         // channel 1
         filteredEvents = events.filter(chanVoice: .onlyChannel(1))
-        expectedEvents = [kEvents.ChanVoice.polyAftertouch,
+        expectedEvents = [kEvents.ChanVoice.notePressure,
                           kEvents.ChanVoice.programChange,
-                          kEvents.ChanVoice.chanAftertouch,
-                          kEvents.ChanVoice.pitchBend]
+                          kEvents.ChanVoice.pitchBend,
+                          kEvents.ChanVoice.pressure]
         XCTAssertEqual(filteredEvents, expectedEvents)
         
         // channel 2
@@ -134,6 +134,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         // channel 3
         filteredEvents = events.filter(chanVoice: .onlyChannel(3))
         expectedEvents = [kEvents.ChanVoice.noteOff]
+        XCTAssertEqual(filteredEvents, expectedEvents)
+        
+        // channel 4
+        filteredEvents = events.filter(chanVoice: .onlyChannel(4))
+        expectedEvents = [kEvents.ChanVoice.noteCC,
+                          kEvents.ChanVoice.notePitchBend,
+                          kEvents.ChanVoice.noteManagement]
         XCTAssertEqual(filteredEvents, expectedEvents)
         
         // channel 15
@@ -162,10 +169,10 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         // channel 1
         filteredEvents = events.filter(chanVoice: .onlyChannels([1]))
-        expectedEvents = [kEvents.ChanVoice.polyAftertouch,
+        expectedEvents = [kEvents.ChanVoice.notePressure,
                           kEvents.ChanVoice.programChange,
-                          kEvents.ChanVoice.chanAftertouch,
-                          kEvents.ChanVoice.pitchBend]
+                          kEvents.ChanVoice.pitchBend,
+                          kEvents.ChanVoice.pressure]
         XCTAssertEqual(filteredEvents, expectedEvents)
         
         // channel 2
@@ -178,6 +185,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [kEvents.ChanVoice.noteOff]
         XCTAssertEqual(filteredEvents, expectedEvents)
         
+        // channel 4
+        filteredEvents = events.filter(chanVoice: .onlyChannels([4]))
+        expectedEvents = [kEvents.ChanVoice.noteCC,
+                          kEvents.ChanVoice.notePitchBend,
+                          kEvents.ChanVoice.noteManagement]
+        XCTAssertEqual(filteredEvents, expectedEvents)
+        
         // channel 15
         filteredEvents = events.filter(chanVoice: .onlyChannels([15]))
         expectedEvents = []
@@ -185,11 +199,11 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         // channel 0, 1
         filteredEvents = events.filter(chanVoice: .onlyChannels([0, 1]))
-        expectedEvents = [kEvents.ChanVoice.polyAftertouch,
+        expectedEvents = [kEvents.ChanVoice.notePressure,
                           kEvents.ChanVoice.cc,
                           kEvents.ChanVoice.programChange,
-                          kEvents.ChanVoice.chanAftertouch,
-                          kEvents.ChanVoice.pitchBend]
+                          kEvents.ChanVoice.pitchBend,
+                          kEvents.ChanVoice.pressure]
         XCTAssertEqual(filteredEvents, expectedEvents)
         
     }
@@ -341,10 +355,10 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         // channel 1
         filteredEvents = events.filter(chanVoice: .keepChannel(1))
-        expectedEvents = [kEvents.ChanVoice.polyAftertouch,
+        expectedEvents = [kEvents.ChanVoice.notePressure,
                           kEvents.ChanVoice.programChange,
-                          kEvents.ChanVoice.chanAftertouch,
-                          kEvents.ChanVoice.pitchBend]
+                          kEvents.ChanVoice.pitchBend,
+                          kEvents.ChanVoice.pressure]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
         + kEvents.SysRealTime.oneOfEachEventType
@@ -401,10 +415,10 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         // channel 1
         filteredEvents = events.filter(chanVoice: .keepChannels([1]))
-        expectedEvents = [kEvents.ChanVoice.polyAftertouch,
+        expectedEvents = [kEvents.ChanVoice.notePressure,
                           kEvents.ChanVoice.programChange,
-                          kEvents.ChanVoice.chanAftertouch,
-                          kEvents.ChanVoice.pitchBend]
+                          kEvents.ChanVoice.pitchBend,
+                          kEvents.ChanVoice.pressure]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
         + kEvents.SysRealTime.oneOfEachEventType
@@ -436,11 +450,11 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         // channels 0, 1
         filteredEvents = events.filter(chanVoice: .keepChannels([0, 1]))
-        expectedEvents = [kEvents.ChanVoice.polyAftertouch,
+        expectedEvents = [kEvents.ChanVoice.notePressure,
                           kEvents.ChanVoice.cc,
                           kEvents.ChanVoice.programChange,
-                          kEvents.ChanVoice.chanAftertouch,
-                          kEvents.ChanVoice.pitchBend]
+                          kEvents.ChanVoice.pitchBend,
+                          kEvents.ChanVoice.pressure]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
         + kEvents.SysRealTime.oneOfEachEventType
@@ -459,11 +473,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -474,10 +491,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -494,11 +514,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -509,10 +532,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure,
             kEvents.ChanVoice.cc1
         ]
         + kEvents.SysCommon.oneOfEachEventType
@@ -524,10 +550,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -548,10 +577,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -563,11 +595,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -579,10 +614,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -600,10 +638,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -615,11 +656,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -631,10 +675,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure,
             kEvents.ChanVoice.cc1
         ]
         + kEvents.SysCommon.oneOfEachEventType
@@ -647,10 +694,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -662,11 +712,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure,
             kEvents.ChanVoice.cc1
         ]
         + kEvents.SysCommon.oneOfEachEventType
@@ -679,11 +732,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -717,11 +773,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         
         let expectedEvents = [
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -738,11 +797,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         let filteredEvents = events.filter(chanVoice: .dropTypes([.noteOn, .noteOff]))
         
         let expectedEvents = [
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -764,10 +826,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -779,6 +844,9 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc
         ]
         + kEvents.SysCommon.oneOfEachEventType
@@ -790,11 +858,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         filteredEvents = events.filter(chanVoice: .dropChannel(2))
         expectedEvents = [
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -805,11 +876,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         filteredEvents = events.filter(chanVoice: .dropChannel(3))
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -821,11 +895,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -846,11 +923,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -862,10 +942,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -877,6 +960,9 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc
         ]
         + kEvents.SysCommon.oneOfEachEventType
@@ -888,11 +974,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         filteredEvents = events.filter(chanVoice: .dropChannels([2]))
         expectedEvents = [
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -903,11 +992,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         filteredEvents = events.filter(chanVoice: .dropChannels([3]))
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -919,11 +1011,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -934,7 +1029,10 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         filteredEvents = events.filter(chanVoice: .dropChannels([0, 1]))
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
-            kEvents.ChanVoice.noteOff
+            kEvents.ChanVoice.noteOff,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.noteManagement
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -954,10 +1052,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -968,11 +1069,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -989,10 +1093,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure,
             kEvents.ChanVoice.cc1
         ]
         + kEvents.SysCommon.oneOfEachEventType
@@ -1004,11 +1111,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -1019,11 +1129,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure,
             kEvents.ChanVoice.cc1
         ]
         + kEvents.SysCommon.oneOfEachEventType
@@ -1045,11 +1158,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -1061,10 +1177,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -1076,11 +1195,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -1098,11 +1220,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure,
             kEvents.ChanVoice.cc1
         ]
         + kEvents.SysCommon.oneOfEachEventType
@@ -1115,10 +1240,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure,
             kEvents.ChanVoice.cc1
         ]
         + kEvents.SysCommon.oneOfEachEventType
@@ -1131,11 +1259,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
-            kEvents.ChanVoice.pitchBend
+            kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -1147,11 +1278,14 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure,
             kEvents.ChanVoice.cc1
         ]
         + kEvents.SysCommon.oneOfEachEventType
@@ -1164,10 +1298,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure
         ]
         + kEvents.SysCommon.oneOfEachEventType
         + kEvents.SysEx.oneOfEachEventType
@@ -1179,10 +1316,13 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
         expectedEvents = [
             kEvents.ChanVoice.noteOn,
             kEvents.ChanVoice.noteOff,
-            kEvents.ChanVoice.polyAftertouch,
+            kEvents.ChanVoice.noteCC,
+            kEvents.ChanVoice.notePitchBend,
+            kEvents.ChanVoice.notePressure,
+            kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
-            kEvents.ChanVoice.chanAftertouch,
             kEvents.ChanVoice.pitchBend,
+            kEvents.ChanVoice.pressure,
             kEvents.ChanVoice.cc1
         ]
         + kEvents.SysCommon.oneOfEachEventType

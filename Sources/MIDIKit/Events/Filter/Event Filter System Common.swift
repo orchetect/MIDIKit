@@ -12,10 +12,10 @@ extension MIDI.Event {
         
         switch self {
         case .timecodeQuarterFrame,
-                .songPositionPointer,
-                .songSelect,
-                .unofficialBusSelect,
-                .tuneRequest:
+             .songPositionPointer,
+             .songSelect,
+             .unofficialBusSelect,
+             .tuneRequest:
             return true
             
         default:

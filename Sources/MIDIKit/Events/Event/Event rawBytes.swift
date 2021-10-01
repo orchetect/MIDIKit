@@ -18,9 +18,18 @@ extension MIDI.Event {
             
         case .noteOff(let event):
             return event.midi1RawBytes()
+        
+        case .noteCC:
+            return []
             
-        case .polyAftertouch(let event):
+        case .notePitchBend:
+            return []
+            
+        case .notePressure(let event):
             return event.midi1RawBytes()
+            
+        case .noteManagement:
+            return []
             
         case .cc(let event):
             return event.midi1RawBytes()
@@ -28,7 +37,7 @@ extension MIDI.Event {
         case .programChange(let event):
             return event.midi1RawBytes()
             
-        case .chanAftertouch(let event):
+        case .pressure(let event):
             return event.midi1RawBytes()
             
         case .pitchBend(let event):
@@ -98,8 +107,6 @@ extension MIDI.Event {
     
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
-        #warning("> this is incomplete and needs testing; for the time being MIDIKit will only use MIDI 1.0 event raw bytes")
-        
         switch self {
         
         // -------------------
@@ -112,7 +119,16 @@ extension MIDI.Event {
         case .noteOff(let event):
             return event.umpRawWords(protocol: midiProtocol)
             
-        case .polyAftertouch(let event):
+        case .noteCC(let event):
+            return event.umpRawWords()
+            
+        case .notePitchBend(let event):
+            return event.umpRawWords()
+        
+        case .notePressure(let event):
+            return event.umpRawWords()
+        
+        case .noteManagement(let event):
             return event.umpRawWords()
             
         case .cc(let event):
@@ -121,7 +137,7 @@ extension MIDI.Event {
         case .programChange(let event):
             return event.umpRawWords()
             
-        case .chanAftertouch(let event):
+        case .pressure(let event):
             return event.umpRawWords()
             
         case .pitchBend(let event):

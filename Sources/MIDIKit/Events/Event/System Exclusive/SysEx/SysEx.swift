@@ -6,6 +6,7 @@
 extension MIDI.Event {
     
     /// System Exclusive: Manufacturer-specific
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -26,6 +27,7 @@ extension MIDI.Event {
     }
     
     /// System Exclusive: Manufacturer-specific
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///

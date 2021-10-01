@@ -12,15 +12,15 @@ extension MIDI.Event.CC.Controller {
         case cc3
         
         /// Undefined controller number 9
-        /// (Int: 9, Hex: 0x9)
+        /// (Int: 9, Hex: 0x09)
         case cc9
         
         /// Undefined controller number 14
-        /// (Int: 14, Hex: 0xE)
+        /// (Int: 14, Hex: 0x0E)
         case cc14
 
         /// Undefined controller number 15
-        /// (Int: 15, Hex: 0xF)
+        /// (Int: 15, Hex: 0x0F)
         case cc15
         
         /// Undefined controller number 20

@@ -1,20 +1,21 @@
 //
-//  ChanAftertouch.swift
+//  Pressure.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 extension MIDI.Event {
     
-    /// Channel Voice Message: Channel Aftertouch
+    /// Channel Voice Message: Channel Pressure
+    /// (MIDI 1.0 / 2.0)
     ///
-    /// DAWs have slightly different terminology for this:
+    /// DAWs are known to use variations on the terminology:
     /// - Pro Tools: "Mono Aftertouch"
     /// - Logic Pro: "Aftertouch"
     /// - Cubase: "Aftertouch"
-    public struct ChanAftertouch: Equatable, Hashable {
+    public struct Pressure: Equatable, Hashable {
         
-        /// Pressure
-        public var pressure: MIDI.UInt7
+        /// Pressure Amount
+        public var amount: Amount
         
         /// Channel Number (0x0...0xF)
         public var channel: MIDI.UInt4
@@ -24,23 +25,24 @@ extension MIDI.Event {
         
     }
     
-    /// Channel Voice Message: Channel Aftertouch
+    /// Channel Voice Message: Channel Pressure
+    /// (MIDI 1.0 / 2.0)
     ///
-    /// DAWs have slightly different terminology for this:
+    /// DAWs are known to use variations on the terminology:
     /// - Pro Tools: "Mono Aftertouch"
     /// - Logic Pro: "Aftertouch"
     /// - Cubase: "Aftertouch"
     ///
     /// - Parameters:
-    ///   - pressure: Pressure
+    ///   - amount: Pressure Amount
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    public static func chanAftertouch(pressure: MIDI.UInt7,
-                                      channel: MIDI.UInt4,
-                                      group: MIDI.UInt4 = 0x0) -> Self {
+    public static func pressure(amount: Pressure.Amount,
+                                channel: MIDI.UInt4,
+                                group: MIDI.UInt4 = 0x0) -> Self {
         
-        .chanAftertouch(
-            .init(pressure: pressure,
+        .pressure(
+            .init(amount: amount,
                   channel: channel,
                   group: group)
         )
@@ -49,12 +51,12 @@ extension MIDI.Event {
     
 }
 
-extension MIDI.Event.ChanAftertouch {
+extension MIDI.Event.Pressure {
     
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xD0 + channel.uInt8Value,
-         pressure.uInt8Value]
+         amount.midi1Value.uInt8Value]
         
     }
     
@@ -66,7 +68,7 @@ extension MIDI.Event.ChanAftertouch {
         
         let word = MIDI.UMPWord(mtAndGroup,
                                 0xD0 + channel.uInt8Value,
-                                pressure.uInt8Value,
+                                amount.midi1Value.uInt8Value,
                                 0x00) // pad an empty byte to fill 4 bytes
         
         return [word]

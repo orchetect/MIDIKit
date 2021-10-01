@@ -5,7 +5,8 @@
 
 extension MIDI.Event {
     
-    /// System Common: Timecode Quarter-Frame (Status `0xF1`)
+    /// System Common: Timecode Quarter-Frame
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -20,7 +21,8 @@ extension MIDI.Event {
         
     }
     
-    /// System Common: Timecode Quarter-Frame (Status `0xF1`)
+    /// System Common: Timecode Quarter-Frame
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///

@@ -5,6 +5,7 @@
 
 extension MIDI.Event.Note {
     
+    /// MIDI 2.0 Note Attribute
     public enum Attribute: Equatable, Hashable {
         
         /// None:

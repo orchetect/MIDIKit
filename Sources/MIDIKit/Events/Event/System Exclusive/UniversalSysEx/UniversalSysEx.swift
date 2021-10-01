@@ -6,8 +6,7 @@
 extension MIDI.Event {
     
     /// System Exclusive: Universal SysEx
-    ///
-    /// Used in both MIDI 1.0 and 2.0 spec.
+    /// (MIDI 1.0 / 2.0)
     ///
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
     ///
@@ -37,8 +36,7 @@ extension MIDI.Event {
     }
     
     /// System Exclusive: Universal SysEx
-    ///
-    /// Used in both MIDI 1.0 and 2.0 spec.
+    /// (MIDI 1.0 / 2.0)
     ///
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
     ///

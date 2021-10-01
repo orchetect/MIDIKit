@@ -46,7 +46,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         // poly aftertouch
         XCTAssertEqual(
             parsedEvents(bytes: [0xA4, 0x3C, 0x40]),
-            [.polyAftertouch(note: 60, pressure: 64, channel: 4, group: 0)]
+            [.notePressure(note: 60, amount: .midi1(64), channel: 4, group: 0)]
         )
         
         // cc
@@ -64,7 +64,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         // channel aftertouch
         XCTAssertEqual(
             parsedEvents(bytes: [0xD8, 0x40]),
-            [.chanAftertouch(pressure: 64, channel: 8, group: 0)]
+            [.pressure(amount: .midi1(64), channel: 8, group: 0)]
         )
         
         // pitch bend
@@ -543,11 +543,11 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0xA0, 0x3C]), [])
         // incomplete running status; should return only one event
         XCTAssertEqual(parsedEvents(bytes: [0xA0, 0x3C, 0x40, 0x3C]),
-                       [.polyAftertouch(note: 0x3C, pressure: 0x40, channel: 0)])
+                       [.notePressure(note: 0x3C, amount: .midi1(0x40), channel: 0)])
         // valid running status
         XCTAssertEqual(parsedEvents(bytes: [0xA0, 0x3C, 0x40, 0x3D, 0x41]),
-                       [.polyAftertouch(note: 0x3C, pressure: 0x40, channel: 0),
-                        .polyAftertouch(note: 0x3D, pressure: 0x41, channel: 0)])
+                       [.notePressure(note: 0x3C, amount: .midi1(0x40), channel: 0),
+                        .notePressure(note: 0x3D, amount: .midi1(0x41), channel: 0)])
         
         // cc
         // requires two data bytes to follow
@@ -577,11 +577,11 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0xD0]), [])
         // valid event
         XCTAssertEqual(parsedEvents(bytes: [0xD0, 0x3C]),
-                       [.chanAftertouch(pressure: 0x3C, channel: 0)])
+                       [.pressure(amount: .midi1(0x3C), channel: 0)])
         // valid running status
         XCTAssertEqual(parsedEvents(bytes: [0xD0, 0x3C, 0x3D]),
-                       [.chanAftertouch(pressure: 0x3C, channel: 0),
-                        .chanAftertouch(pressure: 0x3D, channel: 0)])
+                       [.pressure(amount: .midi1(0x3C), channel: 0),
+                        .pressure(amount: .midi1(0x3D), channel: 0)])
         
         // pitch bend
         // requires two data bytes to follow

@@ -12,7 +12,7 @@ extension MIDI.Event {
         
         switch self {
         case .sysEx,
-                .universalSysEx:
+             .universalSysEx:
             return true
             
         default:

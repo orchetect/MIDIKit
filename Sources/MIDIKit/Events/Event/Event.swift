@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import Foundation
-
 extension MIDI {
     
     /// MIDI Event
@@ -15,35 +13,56 @@ extension MIDI {
         // -------------------
         
         /// Channel Voice Message: Note On
+        /// (MIDI 1.0 / 2.0)
         case noteOn(Note.On)
         
         /// Channel Voice Message: Note Off
+        /// (MIDI 1.0 / 2.0)
         case noteOff(Note.Off)
         
-        /// Channel Voice Message: Polyphonic Aftertouch
+        /// Channel Voice Message: Per-Note Control Change (CC)
+        /// (MIDI 2.0)
+        case noteCC(Note.CC)
+        
+        /// Channel Voice Message: Per-Note Pitch Bend
+        /// (MIDI 2.0)
+        case notePitchBend(Note.PitchBend)
+        
+        /// Channel Voice Message: Per-Note Aftertouch (Polyphonic Aftertouch)
+        /// (MIDI 1.0 / 2.0)
         ///
-        /// DAWs have slightly different terminology for this:
+        /// DAWs are known to use variations on the terminology:
         /// - Pro Tools: "Polyphonic Aftertouch"
         /// - Logic Pro: "Polyphonic Aftertouch"
         /// - Cubase: "Poly Pressure"
-        case polyAftertouch(PolyAftertouch)
+        case notePressure(Note.Pressure)
         
-        /// Channel Voice Message: Control Change (CC)
+        /// Channel Voice Message: Per-Note Management
+        /// (MIDI 2.0)
+        ///
+        /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per- Note Controllers to multiple Notes on the same Note Number.
+        case noteManagement(Note.Management)
+        
+        /// Channel Voice Message: Channel Control Change (CC)
+        /// (MIDI 1.0 / 2.0)
         case cc(CC)
         
-        /// Channel Voice Message: Program Change
+        /// Channel Voice Message: Channel Program Change
+        /// (MIDI 1.0 / 2.0)
         case programChange(ProgramChange)
         
-        /// Channel Voice Message: Channel Aftertouch
+        /// Channel Voice Message: Channel Pitch Bend
+        /// (MIDI 1.0 / 2.0)
+        case pitchBend(PitchBend)
+        
+        /// Channel Voice Message: Channel Pressure (Aftertouch)
         ///
-        /// DAWs have slightly different terminology for this:
+        /// DAWs are known to use variations on the terminology:
         /// - Pro Tools: "Mono Aftertouch"
         /// - Logic Pro: "Aftertouch"
         /// - Cubase: "Aftertouch"
-        case chanAftertouch(ChanAftertouch)
-        
-        /// Channel Voice Message: Pitch Bend
-        case pitchBend(PitchBend)
+        /// (MIDI 1.0 / 2.0)
+        case pressure(Pressure)
         
         
         // ----------------------
@@ -51,6 +70,7 @@ extension MIDI {
         // ----------------------
         
         /// System Exclusive: Manufacturer-specific
+        /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -60,8 +80,7 @@ extension MIDI {
         case sysEx(SysEx)
         
         /// System Exclusive: Universal SysEx
-        ///
-        /// Used in both MIDI 1.0 and 2.0 spec.
+        /// (MIDI 1.0 / 2.0)
         ///
         /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
         ///
@@ -74,6 +93,7 @@ extension MIDI {
         // -------------------
         
         /// System Common: Timecode Quarter-Frame
+        /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -81,6 +101,7 @@ extension MIDI {
         case timecodeQuarterFrame(TimecodeQuarterFrame)
         
         /// System Common: Song Position Pointer
+        /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -88,16 +109,20 @@ extension MIDI {
         case songPositionPointer(SongPositionPointer)
         
         /// System Common: Song Select
+        /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
         /// "Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real Time messages (MIDI Sync)."
         case songSelect(SongSelect)
         
-        /// Bus Select - unofficial
+        /// Unofficial Bus Select (Status `0xF5`)
+        ///
+        /// "Some vendors have produced boxes with a single MIDI input, and multiple MIDI outputs. The Bus Select message specifies which of the outputs further data should be sent to. This is not an official message; the vendors in question should have used a SysEx command." -- [David Van Brink's MIDI Spec](https://www.cs.cmu.edu/~music/cmsip/readings/davids-midi-spec.htm)
         case unofficialBusSelect(UnofficialBusSelect)
         
-        /// System Common: Tune Request (Status `0xF6`)
+        /// System Common: Tune Request
+        /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -110,6 +135,7 @@ extension MIDI {
         // ----------------------
         
         /// System Real Time: Timing Clock
+        /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -117,6 +143,7 @@ extension MIDI {
         case timingClock(TimingClock)
         
         /// System Real Time: Start
+        /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -124,6 +151,7 @@ extension MIDI {
         case start(Start)
         
         /// System Real Time: Continue
+        /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -131,6 +159,7 @@ extension MIDI {
         case `continue`(Continue)
         
         /// System Real Time: Stop
+        /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -138,6 +167,7 @@ extension MIDI {
         case stop(Stop)
         
         /// System Real Time: Active Sensing
+        /// (MIDI 1.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///
@@ -147,6 +177,7 @@ extension MIDI {
         case activeSensing(ActiveSensing)
         
         /// System Real Time: System Reset
+        /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
         ///

@@ -6,6 +6,7 @@
 extension MIDI.Event {
     
     /// System Common: Song Select
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -21,6 +22,7 @@ extension MIDI.Event {
     }
     
     /// System Common: Song Select
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///

@@ -6,6 +6,7 @@
 extension MIDI.Event {
     
     /// System Real Time: Active Sensing
+    /// (MIDI 1.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -20,6 +21,7 @@ extension MIDI.Event {
     }
     
     /// System Real Time: Active Sensing
+    /// (MIDI 1.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///

@@ -6,6 +6,7 @@
 extension MIDI.Event {
     
     /// System Real Time: Timing Clock
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -18,6 +19,7 @@ extension MIDI.Event {
     }
     
     /// System Real Time: Timing Clock
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///

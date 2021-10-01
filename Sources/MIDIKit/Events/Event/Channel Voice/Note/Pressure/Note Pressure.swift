@@ -1,23 +1,24 @@
 //
-//  PolyAftertouch.swift
+//  Note Pressure.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Event {
+extension MIDI.Event.Note {
     
     /// Channel Voice Message: Polyphonic Aftertouch
+    /// (MIDI 1.0 / 2.0)
     ///
-    /// DAWs have slightly different terminology for this:
+    /// DAWs are known to use variations on the terminology:
     /// - Pro Tools: "Polyphonic Aftertouch"
     /// - Logic Pro: "Polyphonic Aftertouch"
     /// - Cubase: "Poly Pressure"
-    public struct PolyAftertouch: Equatable, Hashable {
+    public struct Pressure: Equatable, Hashable {
         
         /// Note Number for which pressure is applied
         public var note: MIDI.UInt7
         
-        /// Pressure
-        public var pressure: MIDI.UInt7
+        /// Pressure Amount
+        public var amount: Amount
         
         /// Channel Number (0x0...0xF)
         public var channel: MIDI.UInt4
@@ -27,26 +28,31 @@ extension MIDI.Event {
         
     }
     
+}
+
+extension MIDI.Event {
+    
     /// Channel Voice Message: Polyphonic Aftertouch
-    ///
-    /// DAWs have slightly different terminology for this:
+    /// (MIDI 1.0 / 2.0)
+    /// 
+    /// DAWs are known to use variations on the terminology:
     /// - Pro Tools: "Polyphonic Aftertouch"
     /// - Logic Pro: "Polyphonic Aftertouch"
     /// - Cubase: "Poly Pressure"
     ///
     /// - Parameters:
     ///   - note: Note Number for which pressure is applied
-    ///   - pressure: Pressure
+    ///   - amount: Pressure Amount
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    public static func polyAftertouch(note: MIDI.UInt7,
-                                      pressure: MIDI.UInt7,
-                                      channel: MIDI.UInt4,
-                                      group: MIDI.UInt4 = 0x0) -> Self {
+    public static func notePressure(note: MIDI.UInt7,
+                                    amount: Note.Pressure.Amount,
+                                    channel: MIDI.UInt4,
+                                    group: MIDI.UInt4 = 0x0) -> Self {
         
-        .polyAftertouch(
+        .notePressure(
             .init(note: note,
-                  pressure: pressure,
+                  amount: amount,
                   channel: channel,
                   group: group)
         )
@@ -55,13 +61,13 @@ extension MIDI.Event {
     
 }
 
-extension MIDI.Event.PolyAftertouch {
+extension MIDI.Event.Note.Pressure {
     
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xA0 + channel.uInt8Value,
          note.uInt8Value,
-         pressure.uInt8Value]
+         amount.midi1Value.uInt8Value]
         
     }
     
@@ -74,7 +80,7 @@ extension MIDI.Event.PolyAftertouch {
         let word = MIDI.UMPWord(mtAndGroup,
                                 0xA0 + channel.uInt8Value,
                                 note.uInt8Value,
-                                pressure.uInt8Value)
+                                amount.midi1Value.uInt8Value)
         
         return [word]
         

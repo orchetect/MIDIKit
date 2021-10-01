@@ -16,7 +16,7 @@ extension MIDI.Event.CC.Controller {
         case .footController                : return 4
         case .portamentoTime                : return 5
         case .dataEntry                     : return 6
-        case .channelVolume                 : return 7
+        case .volume                        : return 7
         case .balance                       : return 8
         case .pan                           : return 10
         case .expression                    : return 11
@@ -68,6 +68,16 @@ extension MIDI.Event.CC.Controller {
         case .undefined(let cc)             : return cc.controller
             
         }
+        
+    }
+    
+}
+
+extension MIDI.Event.CC.Controller: CustomStringConvertible {
+    
+    public var description: String {
+        
+        "\(number.value)"
         
     }
     
