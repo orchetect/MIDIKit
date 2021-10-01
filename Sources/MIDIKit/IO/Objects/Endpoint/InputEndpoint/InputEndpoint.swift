@@ -16,7 +16,7 @@ extension MIDI.IO {
         
         // MARK: CoreMIDI ref
         
-        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
+        internal let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
         
         // MARK: Init
         
@@ -68,15 +68,6 @@ extension MIDI.IO.InputEndpoint {
         
     }
     
-}
-
-extension MIDI.IO.InputEndpoint {
-    
-    /// Returns the endpoint as a type-erased `AnyEndpoint`.
-    public func asAnyEndpoint() -> MIDI.IO.AnyEndpoint {
-        .init(self)
-    }
-
 }
 
 extension MIDI.IO.InputEndpoint: CustomDebugStringConvertible {

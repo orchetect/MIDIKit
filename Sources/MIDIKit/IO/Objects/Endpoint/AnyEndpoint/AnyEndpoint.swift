@@ -10,14 +10,16 @@ extension MIDI.IO {
         
         public let endpointType: MIDI.IO.EndpointType
         
-        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
+        internal let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
         
         public let name: String
         
-        public var uniqueID: UniqueID
+        public typealias UniqueID = MIDI.IO.AnyUniqueID
+        public let uniqueID: UniqueID
         
-        internal init<T: _MIDIIOEndpointProtocol>(_ other: T) {
-            switch other {
+        internal init<E: _MIDIIOEndpointProtocol>(_ base: E) {
+            
+            switch base {
             case is MIDI.IO.InputEndpoint:
                 endpointType = .input
                 
@@ -28,20 +30,38 @@ extension MIDI.IO {
                 endpointType = otherCast.endpointType
                 
             default:
-                preconditionFailure("Unexpected MIDIIOEndpointProtocol type: \(other)")
+                preconditionFailure("Unexpected MIDIIOEndpointProtocol type: \(base)")
+                
             }
             
-            self.coreMIDIObjectRef = other.coreMIDIObjectRef
-            self.name = other.name
-            self.uniqueID = .init(other.uniqueID.coreMIDIUniqueID)
+            self.coreMIDIObjectRef = base.coreMIDIObjectRef
+            self.name = base.name
+            self.uniqueID = .init(base.uniqueID.coreMIDIUniqueID)
+            
         }
         
     }
     
 }
 
-extension MIDI.IO.AnyEndpoint {
+extension _MIDIIOEndpointProtocol {
     
-    public typealias UniqueID = MIDI.IO.AnyUniqueID
+    /// Returns the endpoint as a type-erased `AnyEndpoint`.
+    public func asAnyEndpoint() -> MIDI.IO.AnyEndpoint {
+        
+        .init(self)
+        
+    }
+    
+}
+
+extension Collection where Element : MIDIIOEndpointProtocol {
+    
+    /// Returns the collection as a collection of type-erased `AnyEndpoint` endpoints.
+    public func asAnyEndpoints() -> [MIDI.IO.AnyEndpoint] {
+        
+        map { $0.asAnyEndpoint() }
+        
+    }
     
 }

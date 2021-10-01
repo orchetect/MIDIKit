@@ -5,7 +5,7 @@
 
 // MARK: - Public Protocol
 
-public protocol MIDIIOManagedProtocol {
+public protocol MIDIIOManagedProtocol: AnyObject {
     
     /// Core MIDI API version used to create the endpoint and send/receive MIDI messages (if applicable).
     /* public private(set) */ var api: MIDI.IO.APIVersion { get }
