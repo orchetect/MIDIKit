@@ -7,17 +7,17 @@ import Foundation
 
 extension MIDI.Event {
     
-    /// Channel Voice Note Velocity
+    /// Channel Voice 16-Bit Value
     public enum ChanVoice16BitValue: Hashable {
         
         /// Protocol-agnostic unit interval (0.0...1.0)
         /// Scaled automatically depending on MIDI protocol (1.0/2.0) in use.
         case unitInterval(Double)
         
-        /// MIDI 1.0 7-bit Channel Voice Note Velocity (0x00..0x7F)
+        /// MIDI 1.0 7-bit Channel Voice Value (0x00..0x7F)
         case midi1(MIDI.UInt7)
         
-        /// MIDI 2.0 16-bit Channel Voice Note Velocity (0x0000...0xFFFF)
+        /// MIDI 2.0 16-bit Channel Voice Value (0x0000...0xFFFF)
         case midi2(UInt16)
         
     }
@@ -76,7 +76,7 @@ extension MIDI.Event.ChanVoice16BitValue: Equatable {
 
 extension MIDI.Event.ChanVoice16BitValue {
     
-    /// Returns velocity as protocol-agnostic unit interval, converting if necessary.
+    /// Returns value as protocol-agnostic unit interval, converting if necessary.
     public var unitIntervalValue: Double {
         
         switch self {
@@ -93,7 +93,7 @@ extension MIDI.Event.ChanVoice16BitValue {
         
     }
     
-    /// Returns velocity as a 7-bit MIDI 1.0 velocity value, converting if necessary.
+    /// Returns value as a MIDI 1.0 7-bit value, converting if necessary.
     public var midi1Value: MIDI.UInt7 {
         
         switch self {
@@ -112,7 +112,7 @@ extension MIDI.Event.ChanVoice16BitValue {
         
     }
     
-    /// Returns velocity as a 16-bit MIDI 2.0 velocity value, converting if necessary.
+    /// Returns value as a MIDI 2.0 16-bit value, converting if necessary.
     public var midi2Value: UInt16 {
         
         switch self {
