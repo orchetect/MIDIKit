@@ -102,11 +102,11 @@ extension ContentView {
                 } label: { Text("Note Off") }
                 
                 Button {
-                    sendEvent(.polyAftertouch(note: 60,
-                                              pressure: 64,
-                                              channel: midiChannel,
-                                              group: midiGroup))
-                } label: { Text("Poly Aftertouch") }
+                    sendEvent(.notePressure(note: 60,
+                                            amount: .midi1(64),
+                                            channel: midiChannel,
+                                            group: midiGroup))
+                } label: { Text("Note Pressure") }
                 
                 HStack(alignment: .center, spacing: 4) {
                     Button {
@@ -136,10 +136,10 @@ extension ContentView {
                 } label: { Text("Program Change") }
                 
                 Button {
-                    sendEvent(.chanAftertouch(pressure: 64,
-                                              channel: midiChannel,
-                                              group: midiGroup))
-                } label: { Text("Channel Aftertouch") }
+                    sendEvent(.pressure(amount: .midi1(64),
+                                        channel: midiChannel,
+                                        group: midiGroup))
+                } label: { Text("Channel Pressure") }
                 
                 Button {
                     sendEvent(.pitchBend(value: .midpoint,
@@ -249,7 +249,8 @@ extension ContentView {
                 } label: { Text("Song Select") }
                 
                 Button {
-                    sendEvent(.unofficialBusSelect(group: midiGroup))
+                    sendEvent(.unofficialBusSelect(bus: 2,
+                                                   group: midiGroup))
                 } label: { Text("Bus Select (Unofficial)") }
                 
                 Button {
