@@ -33,7 +33,7 @@ jobs:
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
 
-  macOS-10.15:
+  macOS-10_15:
     name: macOS 10.15 Catalina
     runs-on: macos-10.15
     steps:
@@ -43,7 +43,7 @@ jobs:
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
 
-  macOS-10.14:
+  macOS-10_14:
     name: macOS 10.14 Mojave
     runs-on: macos-10.14
     steps:
@@ -53,7 +53,7 @@ jobs:
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
 
-  macOS-10.13:
+  macOS-10_13:
     name: macOS 10.13 High Sierra
     runs-on: macos-10.13
     steps:
