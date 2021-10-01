@@ -23,7 +23,7 @@ on:
     - cron: '35 11 * * *'   # once a day @ 11:35am UTC (4:35am PST)
     
 jobs:
-  macOS 11:
+  macOS-11:
     name: macOS 11 Big Sur
     runs-on: macos-11
     steps:
@@ -33,7 +33,7 @@ jobs:
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
 
-  macOS 10.15:
+  macOS-10.15:
     name: macOS 10.15 Catalina
     runs-on: macos-10.15
     steps:
@@ -43,7 +43,7 @@ jobs:
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
 
-  macOS 10.14:
+  macOS-10.14:
     name: macOS 10.14 Mojave
     runs-on: macos-10.14
     steps:
@@ -53,7 +53,7 @@ jobs:
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
 
-  macOS 10.13:
+  macOS-10.13:
     name: macOS 10.13 High Sierra
     runs-on: macos-10.13
     steps:
