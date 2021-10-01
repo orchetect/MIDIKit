@@ -22,17 +22,47 @@ on:
   schedule:
     - cron: '35 11 * * *'   # once a day @ 11:35am UTC (4:35am PST)
     
-jobs: 
-  macOS:
-    name: macOS
-    runs-on: macos-latest
+jobs:
+  macOS 11:
+    name: macOS 11 Big Sur
+    runs-on: macos-11
     steps:
     - uses: actions/checkout@main
     - name: Build
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
-      
+
+  macOS 10.15:
+    name: macOS 10.15 Catalina
+    runs-on: macos-10.15
+    steps:
+    - uses: actions/checkout@main
+    - name: Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
+    - name: Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
+
+  macOS 10.14:
+    name: macOS 10.14 Mojave
+    runs-on: macos-10.14
+    steps:
+    - uses: actions/checkout@main
+    - name: Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
+    - name: Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
+
+  macOS 10.13:
+    name: macOS 10.13 High Sierra
+    runs-on: macos-10.13
+    steps:
+    - uses: actions/checkout@main
+    - name: Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
+    - name: Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch=x86_64"
+
   macCatalyst:
     name: macCatalyst
     runs-on: macos-latest
@@ -67,7 +97,7 @@ jobs:
     - name: MIDISystemInfo - Build
       run: xcodebuild build -project "Examples/MIDISystemInfo/MIDISystemInfo.xcodeproj" -scheme "MIDISystemInfo"
   
-# we flew too close to the sun... tvOS is not yet ready for primetime because CoreMIDI is still in beta for tvOS
+# Core MIDI is still in beta for tvOS and watchOS; can add CI tests later once it's supported
 #
 #  tvOS:
 #    name: tvOS
