@@ -15,9 +15,9 @@ extension MIDI.IO {
         public let uniqueID: MIDI.IO.AnyUniqueID
         
         // _MIDIIOObjectProtocol
-        var coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef
+        internal var coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef
         
-        internal init<T: _MIDIIOObjectProtocol>(_ base: T) {
+        internal init<O: _MIDIIOObjectProtocol>(_ base: O) {
             
             self.objectType = base.objectType
             self.name = base.name
@@ -37,6 +37,17 @@ extension _MIDIIOObjectProtocol {
     public func asAnyMIDIIOObject() -> MIDI.IO.AnyMIDIIOObject {
         
         .init(self)
+        
+    }
+    
+}
+
+extension Collection where Element : MIDIIOObjectProtocol {
+    
+    /// Return as [`AnyMIDIIOObject`], type-erased representations of MIDIKit objects conforming to `MIDIIOObjectProtocol`.
+    public func asAnyMIDIIOObjects() -> [MIDI.IO.AnyMIDIIOObject] {
+        
+        map { $0.asAnyMIDIIOObject() }
         
     }
     

@@ -49,7 +49,7 @@ final class Manager_Tests: XCTestCase {
         
         // public protocol
         
-        struct Foo: MIDIIOManagedProtocol {
+        class Foo: MIDIIOManagedProtocol {
             var api: MIDI.IO.APIVersion = .legacyCoreMIDI
         }
         
@@ -59,7 +59,7 @@ final class Manager_Tests: XCTestCase {
         
         // internal protocol
         
-        struct Bar: _MIDIIOManagedProtocol {
+        class Bar: _MIDIIOManagedProtocol {
             var midiManager: MIDI.IO.Manager? = nil
             var api: MIDI.IO.APIVersion = .legacyCoreMIDI
         }

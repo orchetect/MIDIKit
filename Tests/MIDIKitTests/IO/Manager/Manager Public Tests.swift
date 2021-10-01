@@ -115,7 +115,7 @@ final class Manager_Public_Tests: XCTestCase {
         
         // we just want to test the API
         
-        struct Foo: MIDIIOManagedProtocol {
+        class Foo: MIDIIOManagedProtocol {
             var api: MIDI.IO.APIVersion = .legacyCoreMIDI
         }
         
