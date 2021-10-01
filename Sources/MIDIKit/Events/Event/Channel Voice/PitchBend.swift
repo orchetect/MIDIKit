@@ -51,20 +51,35 @@ extension MIDI.Event.PitchBend {
         
     }
     
-    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
-    
-    public func umpRawWords() -> [MIDI.UMPWord] {
+    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
-        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
-        
-        let bytePair = value.bytePair
-        
-        let word = MIDI.UMPWord(mtAndGroup,
-                                0xE0 + channel.uInt8Value,
-                                bytePair.lsb,
-                                bytePair.msb)
-        
-        return [word]
+        switch midiProtocol {
+        case ._1_0:
+            let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
+            
+            let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+            
+            let bytePair = value.bytePair
+            
+            let word = MIDI.UMPWord(mtAndGroup,
+                                    0xE0 + channel.uInt8Value,
+                                    bytePair.lsb,
+                                    bytePair.msb)
+            
+            return [word]
+            
+        case ._2_0:
+            let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
+            
+            let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+            
+            #warning("> code this")
+            
+            //let word1 = MIDI.UMPWord()
+            
+            return []
+            
+        }
         
     }
     

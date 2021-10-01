@@ -69,14 +69,14 @@ extension MIDI.Event.Note.Off {
         
     }
     
-    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
-    
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
-        
-        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
         
         switch midiProtocol {
         case ._1_0:
+            let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
+            
+            let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+            
             let word = MIDI.UMPWord(mtAndGroup,
                                     0x80 + channel.uInt8Value,
                                     note.uInt8Value,
@@ -85,6 +85,10 @@ extension MIDI.Event.Note.Off {
             return [word]
             
         case ._2_0:
+            let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
+            
+            let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+            
             let word1 = MIDI.UMPWord(mtAndGroup,
                                      0x80 + channel.uInt8Value,
                                      note.uInt8Value,

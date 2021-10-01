@@ -44,12 +44,12 @@ extension MIDI.Event.TimingClock {
         [0xF8]
         
     }
-    
-    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
-    
+        
     public func umpRawWords() -> [MIDI.UMPWord] {
         
-        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
+        
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
         let word = MIDI.UMPWord(mtAndGroup,
                                 0xF8,

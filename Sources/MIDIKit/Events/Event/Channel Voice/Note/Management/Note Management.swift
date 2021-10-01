@@ -60,11 +60,11 @@ extension MIDI.Event {
 
 extension MIDI.Event.Note.Management {
     
-    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
-    
     public func umpRawWords() -> [MIDI.UMPWord] {
         
-        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
+        
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
         // MIDI 2.0 only
         

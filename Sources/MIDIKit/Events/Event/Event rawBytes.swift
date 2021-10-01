@@ -126,7 +126,7 @@ extension MIDI.Event {
             return event.umpRawWords()
         
         case .notePressure(let event):
-            return event.umpRawWords()
+            return event.umpRawWords(protocol: midiProtocol)
         
         case .noteManagement(let event):
             return event.umpRawWords()
@@ -135,13 +135,13 @@ extension MIDI.Event {
             return event.umpRawWords(protocol: midiProtocol)
             
         case .programChange(let event):
-            return event.umpRawWords()
+            return event.umpRawWords(protocol: midiProtocol)
             
         case .pressure(let event):
-            return event.umpRawWords()
+            return event.umpRawWords(protocol: midiProtocol)
             
         case .pitchBend(let event):
-            return event.umpRawWords()
+            return event.umpRawWords(protocol: midiProtocol)
             
             
         // ----------------------
