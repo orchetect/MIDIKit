@@ -15,6 +15,7 @@ extension MIDI.Event.Note {
         public var note: MIDI.UInt7
         
         /// Velocity
+        @VelocityValidated
         public var velocity: MIDI.Event.Note.Velocity
         
         /// Channel Number (0x0...0xF)
@@ -27,6 +28,7 @@ extension MIDI.Event.Note {
         public var group: MIDI.UInt4 = 0x0
         
     }
+    
 }
 
 extension MIDI.Event {

@@ -15,6 +15,7 @@ extension MIDI.Event {
     public struct Pressure: Equatable, Hashable {
         
         /// Pressure Amount
+        @AmountValidated
         public var amount: Amount
         
         /// Channel Number (0x0...0xF)

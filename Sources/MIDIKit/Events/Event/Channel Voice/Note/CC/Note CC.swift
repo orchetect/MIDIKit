@@ -14,6 +14,7 @@ extension MIDI.Event.Note {
         /// If attribute is set to Pitch 7.9, then this value represents the note index.
         public var note: MIDI.UInt7
         
+        /// Controller
         public var controller: Controller
         
         /// Value

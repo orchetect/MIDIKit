@@ -14,9 +14,11 @@ extension MIDI.Event.Note.Attribute {
     /// Range: 0+(0/512) ... 127+(511/512)
     public struct Pitch7_9: Equatable, Hashable {
         
-        var coarse: MIDI.UInt7
+        /// 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
+        public var coarse: MIDI.UInt7
         
-        var fine: MIDI.UInt9
+        /// 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
+        public var fine: MIDI.UInt9
         
     }
     

@@ -5,7 +5,8 @@
 
 extension MIDI.Event.CC {
     
-    /// Channel Voice CC Value
-    public typealias Value = MIDI.Event.ChanVoice32BitValue
+    public typealias Value = MIDI.Event.ChanVoice7Bit32BitValue
+    
+    public typealias ValueValidated = MIDI.Event.ChanVoice7Bit32BitValue.Validated
     
 }

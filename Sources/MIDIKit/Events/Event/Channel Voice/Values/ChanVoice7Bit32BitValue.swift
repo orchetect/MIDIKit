@@ -1,14 +1,12 @@
 //
-//  ChanVoice16BitValue.swift
+//  ChanVoice7Bit32BitValue.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import Foundation
-
 extension MIDI.Event {
     
-    /// Channel Voice 16-Bit Value
-    public enum ChanVoice16BitValue: Hashable {
+    /// Channel Voice 7-Bit (MIDI 1.0) / 32-Bit (MIDI 2.0) Value
+    public enum ChanVoice7Bit32BitValue: Hashable {
         
         /// Protocol-agnostic unit interval (0.0...1.0)
         /// Scaled automatically depending on MIDI protocol (1.0/2.0) in use.
@@ -17,14 +15,14 @@ extension MIDI.Event {
         /// MIDI 1.0 7-bit Channel Voice Value (0x00..0x7F)
         case midi1(MIDI.UInt7)
         
-        /// MIDI 2.0 16-bit Channel Voice Value (0x0000...0xFFFF)
-        case midi2(UInt16)
+        /// MIDI 2.0 32-bit Channel Voice Value (0x00000000...0xFFFFFFFF)
+        case midi2(UInt32)
         
     }
     
 }
 
-extension MIDI.Event.ChanVoice16BitValue: Equatable {
+extension MIDI.Event.ChanVoice7Bit32BitValue: Equatable {
     
     public static func == (lhs: Self, rhs: Self) -> Bool {
         
@@ -37,8 +35,8 @@ extension MIDI.Event.ChanVoice16BitValue: Equatable {
             case .midi1(let rhsUInt7):
                 return lhs.midi1Value == rhsUInt7
                 
-            case .midi2(let uInt16):
-                return lhs.midi2Value == uInt16
+            case .midi2(let rhsUInt32):
+                return lhs.midi2Value == rhsUInt32
                 
             }
             
@@ -50,12 +48,12 @@ extension MIDI.Event.ChanVoice16BitValue: Equatable {
             case .midi1(let rhsUInt7):
                 return lhsUInt7 == rhsUInt7
                 
-            case .midi2(let uInt16):
-                return lhs.midi2Value == uInt16
+            case .midi2(let rhsUInt32):
+                return lhs.midi2Value == rhsUInt32
                 
             }
             
-        case .midi2(let lhsUInt16):
+        case .midi2(let lhsUInt32):
             switch rhs {
             case .unitInterval(let rhsInterval):
                 return lhs.unitIntervalValue == rhsInterval
@@ -63,8 +61,8 @@ extension MIDI.Event.ChanVoice16BitValue: Equatable {
             case .midi1(let rhsUInt7):
                 return lhs.midi1Value == rhsUInt7
                 
-            case .midi2(let uInt16):
-                return lhsUInt16 == uInt16
+            case .midi2(let rhsUInt32):
+                return lhsUInt32 == rhsUInt32
                 
             }
             
@@ -74,7 +72,7 @@ extension MIDI.Event.ChanVoice16BitValue: Equatable {
     
 }
 
-extension MIDI.Event.ChanVoice16BitValue {
+extension MIDI.Event.ChanVoice7Bit32BitValue {
     
     /// Returns value as protocol-agnostic unit interval, converting if necessary.
     public var unitIntervalValue: Double {
@@ -86,8 +84,8 @@ extension MIDI.Event.ChanVoice16BitValue {
         case .midi1(let uInt7):
             return Double(uInt7.uInt8Value) / 0x7F
             
-        case .midi2(let uInt16):
-            return Double(uInt16) / 0xFFFF
+        case .midi2(let uInt32):
+            return Double(uInt32) / 0xFFFFFFFF
             
         }
         
@@ -99,34 +97,69 @@ extension MIDI.Event.ChanVoice16BitValue {
         switch self {
         case .unitInterval(let interval):
             let scaled = interval.clamped(to: 0.0...1.0) * 0x7F
-            return MIDI.UInt7(scaled)
+            return MIDI.UInt7(scaled.rounded())
             
         case .midi1(let uInt7):
             return uInt7
             
-        case .midi2(let uInt16):
-            let scaled = (Double(uInt16) / 0xFFFF) * 0x7F
-            return MIDI.UInt7(scaled)
+        case .midi2(let uInt32):
+            let scaled = (Double(uInt32) / 0xFFFFFFFF) * 0x7F
+            return MIDI.UInt7(scaled.rounded())
             
         }
         
     }
     
-    /// Returns value as a MIDI 2.0 16-bit value, converting if necessary.
-    public var midi2Value: UInt16 {
+    /// Returns value as a MIDI 2.0 32-bit value, converting if necessary.
+    public var midi2Value: UInt32 {
         
         switch self {
         case .unitInterval(let interval):
-            let scaled = interval.clamped(to: 0.0...1.0) * 0xFFFF
-            return UInt16(scaled)
+            let scaled = interval.clamped(to: 0.0...1.0) * 0xFFFFFFFF
+            return UInt32(scaled.rounded())
             
         case .midi1(let uInt7):
-            let scaled = (Double(uInt7.uInt8Value) / 0x7F) * 0xFFFF
-            return UInt16(scaled)
+            let scaled = (Double(uInt7.uInt8Value) / 0x7F) * 0xFFFFFFFF
+            return UInt32(scaled.rounded())
             
-        case .midi2(let uInt16):
-            return uInt16
+        case .midi2(let uInt32):
+            return uInt32
             
+        }
+        
+    }
+    
+}
+
+extension MIDI.Event.ChanVoice7Bit32BitValue {
+    
+    @propertyWrapper
+    public struct Validated: Equatable, Hashable {
+        
+        public typealias Value = MIDI.Event.ChanVoice7Bit32BitValue
+        
+        private var value: Value
+        
+        public var wrappedValue: Value {
+            get {
+                value
+            }
+            set {
+                switch newValue {
+                case .unitInterval(let interval):
+                    value = .unitInterval(interval.clamped(to: 0.0...1.0))
+                    
+                case .midi1:
+                    value = newValue
+                    
+                case .midi2:
+                    value = newValue
+                }
+            }
+        }
+        
+        public init(wrappedValue: Value) {
+            self.value = wrappedValue
         }
         
     }

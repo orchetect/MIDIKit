@@ -26,7 +26,7 @@ enum kEvents {
                                                 group: 0)
         
         static let notePitchBend: MIDI.Event = .notePitchBend(note: 61,
-                                                              value: 0x80000000,
+                                                              value: .midi2(0x80000000),
                                                               channel: 4,
                                                               group: 0)
         
@@ -49,7 +49,7 @@ enum kEvents {
                                                               channel: 1,
                                                               group: 0)
         
-        static let pitchBend: MIDI.Event = .pitchBend(value: 1,
+        static let pitchBend: MIDI.Event = .pitchBend(value: .bipolarUnitInterval(0.0),
                                                       channel: 1,
                                                       group: 0)
         

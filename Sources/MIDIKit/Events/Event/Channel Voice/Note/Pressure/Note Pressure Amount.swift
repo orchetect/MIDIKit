@@ -7,7 +7,8 @@ import Foundation
 
 extension MIDI.Event.Note.Pressure {
     
-    /// Channel Voice Note Pressure Amount
-    public typealias Amount = MIDI.Event.ChanVoice32BitValue
+    public typealias Amount = MIDI.Event.ChanVoice7Bit32BitValue
+    
+    public typealias AmountValidated = MIDI.Event.ChanVoice7Bit32BitValue.Validated
     
 }

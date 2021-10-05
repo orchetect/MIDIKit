@@ -306,7 +306,7 @@ extension MIDI {
                 let uint14 = MIDI.UInt14(uInt7Pair: .init(msb: unwrappedDataByte2,
                                                           lsb: unwrappedDataByte1))
                 
-                let newEvent: MIDI.Event = .pitchBend(value: uint14,
+                let newEvent: MIDI.Event = .pitchBend(value: .midi1(uint14),
                                                       channel: channel,
                                                       group: group)
                 

@@ -20,6 +20,8 @@ extension MIDI.Event.Note.CC.Controller {
         
         /// Pitch 7.25
         /// (Int: 3, Hex: 0x03)
+        ///
+        /// See `MIDI.Event.Note.CC.Controller.Registered.Pitch7_25` to convert `UInt32` value data to/from **Pitch 7.25** values.
         case pitch7_25
         
         // Registered Per-Note CC 4...6 undefined

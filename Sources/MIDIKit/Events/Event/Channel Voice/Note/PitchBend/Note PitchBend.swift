@@ -15,7 +15,8 @@ extension MIDI.Event.Note {
         public var note: MIDI.UInt7
         
         /// 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
-        public var value: UInt32
+        @ValueValidated
+        public var value: Value
         
         /// Channel Number (0x0...0xF)
         public var channel: MIDI.UInt4
@@ -38,7 +39,7 @@ extension MIDI.Event {
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
     public static func notePitchBend(note: MIDI.UInt7,
-                                     value: UInt32,
+                                     value: Note.PitchBend.Value,
                                      channel: MIDI.UInt4,
                                      group: MIDI.UInt4 = 0x0) -> Self {
         

@@ -1,15 +1,16 @@
 //
-//  ProgramChange.swift
+//  PitchBend.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 extension MIDI.Event {
     
-    /// Channel Voice Message: Program Change
-    public struct ProgramChange: Equatable, Hashable {
+    /// Channel Voice Message: Pitch Bend
+    public struct PitchBend: Equatable, Hashable {
         
-        /// Program Number
-        public var program: MIDI.UInt7
+        /// Value
+        @ValueValidated
+        public var value: Value
         
         /// Channel Number (0x0...0xF)
         public var channel: MIDI.UInt4
@@ -19,18 +20,18 @@ extension MIDI.Event {
         
     }
     
-    /// Channel Voice Message: Program Change
+    /// Channel Voice Message: Pitch Bend
     ///
     /// - Parameters:
-    ///   - program: Program Number
+    ///   - value: 14-bit Value (0...16383) where midpoint is 8192
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    public static func programChange(program: MIDI.UInt7,
-                                     channel: MIDI.UInt4,
-                                     group: MIDI.UInt4 = 0x0) -> Self {
+    public static func pitchBend(value: PitchBend.Value,
+                                 channel: MIDI.UInt4,
+                                 group: MIDI.UInt4 = 0x0) -> Self {
         
-        .programChange(
-            .init(program: program,
+        .pitchBend(
+            .init(value: value,
                   channel: channel,
                   group: group)
         )
@@ -39,12 +40,15 @@ extension MIDI.Event {
     
 }
 
-extension MIDI.Event.ProgramChange {
+extension MIDI.Event.PitchBend {
     
     public func midi1RawBytes() -> [MIDI.Byte] {
         
-        [0xC0 + channel.uInt8Value,
-         program.uInt8Value]
+        let bytePair = value.midi1Value.bytePair
+        
+        return [0xE0 + channel.uInt8Value,
+                bytePair.lsb,
+                bytePair.msb]
         
     }
     
@@ -56,10 +60,12 @@ extension MIDI.Event.ProgramChange {
             
             let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
             
+            let bytePair = value.midi1Value.bytePair
+            
             let word = MIDI.UMPWord(mtAndGroup,
-                                    0xC0 + channel.uInt8Value,
-                                    program.uInt8Value,
-                                    0x00) // pad an empty byte to fill 4 bytes
+                                    0xE0 + channel.uInt8Value,
+                                    bytePair.lsb,
+                                    bytePair.msb)
             
             return [word]
             

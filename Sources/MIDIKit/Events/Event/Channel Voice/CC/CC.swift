@@ -13,6 +13,7 @@ extension MIDI.Event {
         public var controller: Controller
         
         /// Value
+        @ValueValidated
         public var value: Value
         
         /// Channel Number (0x0...0xF)

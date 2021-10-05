@@ -70,7 +70,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         // pitch bend
         XCTAssertEqual(
             parsedEvents(bytes: [0x26, 0xE3, 0x00, 0x40]),
-            [.pitchBend(value: 8192, channel: 3, group: 0x6)]
+            [.pitchBend(value: .midi1(8192), channel: 3, group: 0x6)]
         )
         
         // - UMP MIDI 1.0 system messages

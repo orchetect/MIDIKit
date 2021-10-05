@@ -18,6 +18,7 @@ extension MIDI.Event.Note {
         public var note: MIDI.UInt7
         
         /// Pressure Amount
+        @AmountValidated
         public var amount: Amount
         
         /// Channel Number (0x0...0xF)

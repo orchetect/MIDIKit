@@ -70,7 +70,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         // pitch bend
         XCTAssertEqual(
             parsedEvents(bytes: [0xE3, 0x00, 0x40]),
-            [.pitchBend(value: 8192, channel: 3, group: 0)]
+            [.pitchBend(value: .midi1(8192), channel: 3, group: 0)]
         )
         
         // - system messages
@@ -589,11 +589,11 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0xE0, 0x00]), [])
         // incomplete running status; should return only one event
         XCTAssertEqual(parsedEvents(bytes: [0xE0, 0x00, 0x40, 0x01]),
-                       [.pitchBend(value: 8192, channel: 0)])
+                       [.pitchBend(value: .midi1(8192), channel: 0)])
         // valid running status
         XCTAssertEqual(parsedEvents(bytes: [0xE0, 0x00, 0x40, 0x01, 0x40]),
-                       [.pitchBend(value: 8192, channel: 0),
-                        .pitchBend(value: 8193, channel: 0)])
+                       [.pitchBend(value: .midi1(8192), channel: 0),
+                        .pitchBend(value: .midi1(8193), channel: 0)])
         
         // System Common - System Exclusive start
         // [0xF0, ... variable number of SysEx bytes]
