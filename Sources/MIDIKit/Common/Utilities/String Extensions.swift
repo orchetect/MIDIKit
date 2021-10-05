@@ -1,5 +1,5 @@
 //
-//  String.swift
+//  String Extensions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
