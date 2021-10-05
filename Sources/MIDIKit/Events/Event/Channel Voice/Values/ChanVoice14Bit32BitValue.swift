@@ -111,13 +111,13 @@ extension MIDI.Event.ChanVoice14Bit32BitValue {
             return interval.clamped(to: 0.0...1.0)
             
         case .bipolarUnitInterval(let interval):
-            return Double(bipolarUnitInterval: interval)
+            return MIDI.Event.scaledUnitInterval(fromBipolarUnitInterval: interval)
             
         case .midi1(let uInt14):
-            return Double(uInt14.uInt16Value) / 0x3FFF
+            return MIDI.Event.scaledUnitInterval(from14Bit: uInt14)
             
         case .midi2(let uInt32):
-            return Double(uInt32) / 0xFFFFFFFF
+            return MIDI.Event.scaledUnitInterval(from32Bit: uInt32)
             
         }
         
@@ -148,18 +148,16 @@ extension MIDI.Event.ChanVoice14Bit32BitValue {
         
         switch self {
         case .unitInterval(let interval):
-            let scaled = interval.clamped(to: 0.0...1.0) * 0x3FFF
-            return MIDI.UInt14(scaled.rounded())
+            return MIDI.Event.scaled14Bit(fromUnitInterval: interval)
             
         case .bipolarUnitInterval(let interval):
-            return MIDI.UInt14(bipolarUnitInterval: interval)
+            return MIDI.Event.scaled14Bit(fromBipolarUnitInterval: interval)
             
         case .midi1(let uInt14):
             return uInt14
             
         case .midi2(let uInt32):
-            let scaled = (Double(uInt32) / 0xFFFFFFFF) * 0x3FFF
-            return MIDI.UInt14(scaled.rounded())
+            return MIDI.Event.scaled14Bit(from32Bit: uInt32)
             
         }
         
@@ -170,15 +168,13 @@ extension MIDI.Event.ChanVoice14Bit32BitValue {
         
         switch self {
         case .unitInterval(let interval):
-            let scaled = interval.clamped(to: 0.0...1.0) * 0xFFFFFFFF
-            return UInt32(scaled.rounded())
+            return MIDI.Event.scaled32Bit(fromUnitInterval: interval)
             
         case .bipolarUnitInterval(let interval):
-            return UInt32(bipolarUnitInterval: interval)
+            return MIDI.Event.scaled32Bit(fromBipolarUnitInterval: interval)
             
         case .midi1(let uInt14):
-            let scaled = (Double(uInt14.uInt16Value) / 0x3FFF) * 0xFFFFFFFF
-            return UInt32(scaled.rounded())
+            return MIDI.Event.scaled32Bit(from14Bit: uInt14)
             
         case .midi2(let uInt32):
             return uInt32

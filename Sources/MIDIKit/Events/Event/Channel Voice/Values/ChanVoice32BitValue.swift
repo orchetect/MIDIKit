@@ -20,7 +20,7 @@ extension MIDI.Event {
         /// Returns `.unitInterval()` case converting from a MIDI 1.0 7-Bit value.
         public static func midi1(sevenBit: MIDI.UInt7) -> Self {
             
-            let scaled = Double(sevenBit.uInt8Value) / 0x7F
+            let scaled = MIDI.Event.scaledUnitInterval(from7Bit: sevenBit)
             return .unitInterval(scaled)
             
         }
@@ -28,7 +28,7 @@ extension MIDI.Event {
         /// Returns `.unitInterval()` case converting from a MIDI 1.0 14-Bit value.
         public static func midi1(fourteenBit: MIDI.UInt14) -> Self {
             
-            let scaled = Double(fourteenBit.uInt16Value) / 0x3FFF
+            let scaled = MIDI.Event.scaledUnitInterval(from14Bit: fourteenBit)
             return .unitInterval(scaled)
             
         }
@@ -78,7 +78,7 @@ extension MIDI.Event.ChanVoice32BitValue {
             return interval.clamped(to: 0.0...1.0)
                         
         case .midi2(let uInt32):
-            return Double(uInt32) / 0xFFFFFFFF
+            return MIDI.Event.scaledUnitInterval(from32Bit: uInt32)
             
         }
         
@@ -89,12 +89,10 @@ extension MIDI.Event.ChanVoice32BitValue {
         
         switch self {
         case .unitInterval(let interval):
-            let scaled = interval.clamped(to: 0.0...1.0) * 0x7F
-            return MIDI.UInt7(scaled.rounded())
+            return MIDI.Event.scaled7Bit(fromUnitInterval: interval)
             
         case .midi2(let uInt32):
-            let scaled = (Double(uInt32) / 0xFFFFFFFF) * 0x7F
-            return MIDI.UInt7(scaled.rounded())
+            return MIDI.Event.scaled7Bit(from32Bit: uInt32)
             
         }
         
@@ -105,12 +103,10 @@ extension MIDI.Event.ChanVoice32BitValue {
         
         switch self {
         case .unitInterval(let interval):
-            let scaled = interval.clamped(to: 0.0...1.0) * 0x3FFF
-            return MIDI.UInt14(scaled.rounded())
+            return MIDI.Event.scaled14Bit(fromUnitInterval: interval)
             
         case .midi2(let uInt32):
-            let scaled = (Double(uInt32) / 0xFFFFFFFF) * 0x3FFF
-            return MIDI.UInt14(scaled.rounded())
+            return MIDI.Event.scaled14Bit(from32Bit: uInt32)
             
         }
         
@@ -121,8 +117,7 @@ extension MIDI.Event.ChanVoice32BitValue {
         
         switch self {
         case .unitInterval(let interval):
-            let scaled = interval.clamped(to: 0.0...1.0) * 0xFFFFFFFF
-            return UInt32(scaled.rounded())
+            return MIDI.Event.scaled32Bit(fromUnitInterval: interval)
             
         case .midi2(let uInt32):
             return uInt32

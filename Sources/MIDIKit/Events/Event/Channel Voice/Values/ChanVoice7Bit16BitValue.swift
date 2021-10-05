@@ -84,10 +84,10 @@ extension MIDI.Event.ChanVoice7Bit16BitValue {
             return interval.clamped(to: 0.0...1.0)
             
         case .midi1(let uInt7):
-            return Double(uInt7.uInt8Value) / 0x7F
+            return MIDI.Event.scaledUnitInterval(from7Bit: uInt7)
             
         case .midi2(let uInt16):
-            return Double(uInt16) / 0xFFFF
+            return MIDI.Event.scaledUnitInterval(from16Bit: uInt16)
             
         }
         
@@ -98,15 +98,13 @@ extension MIDI.Event.ChanVoice7Bit16BitValue {
         
         switch self {
         case .unitInterval(let interval):
-            let scaled = interval.clamped(to: 0.0...1.0) * 0x7F
-            return MIDI.UInt7(scaled.rounded())
+            return MIDI.Event.scaled7Bit(fromUnitInterval: interval)
             
         case .midi1(let uInt7):
             return uInt7
             
         case .midi2(let uInt16):
-            let scaled = (Double(uInt16) / 0xFFFF) * 0x7F
-            return MIDI.UInt7(scaled.rounded())
+            return MIDI.Event.scaled7Bit(from16Bit: uInt16)
             
         }
         
@@ -117,12 +115,10 @@ extension MIDI.Event.ChanVoice7Bit16BitValue {
         
         switch self {
         case .unitInterval(let interval):
-            let scaled = interval.clamped(to: 0.0...1.0) * 0xFFFF
-            return UInt16(scaled.rounded())
+            return MIDI.Event.scaled16Bit(fromUnitInterval: interval)
             
         case .midi1(let uInt7):
-            let scaled = (Double(uInt7.uInt8Value) / 0x7F) * 0xFFFF
-            return UInt16(scaled.rounded())
+            return MIDI.Event.scaled16Bit(from7Bit: uInt7)
             
         case .midi2(let uInt16):
             return uInt16
