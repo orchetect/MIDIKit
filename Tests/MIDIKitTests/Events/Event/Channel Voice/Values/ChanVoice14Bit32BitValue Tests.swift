@@ -53,7 +53,12 @@ class ChanVoice14Bit32BitValueTests: XCTestCase {
     func testEquatable_unitInterval_Converted() {
         
         // unitInterval <--> bipolarUnitInterval
-        #warning("> write test")
+        XCTAssert(Value.unitInterval(0.00) == Value.bipolarUnitInterval(-1.0))
+        XCTAssert(Value.unitInterval(0.25) == Value.bipolarUnitInterval(-0.5))
+        XCTAssert(Value.unitInterval(0.50) == Value.bipolarUnitInterval( 0.0))
+        XCTAssert(Value.unitInterval(0.75) == Value.bipolarUnitInterval( 0.5))
+        XCTAssert(Value.unitInterval(1.00) == Value.bipolarUnitInterval( 1.0))
+        XCTAssert(Value.unitInterval(0.00) != Value.bipolarUnitInterval( 0.5))
         
         // unitInterval <--> midi1
         XCTAssert(Value.unitInterval(0.0) == Value.midi1(0))
@@ -112,7 +117,7 @@ class ChanVoice14Bit32BitValueTests: XCTestCase {
     func testMIDI1_Values() {
         
         XCTAssertEqual(Value.midi1(0)     .unitIntervalValue, 0.0)
-        XCTAssertEqual(Value.midi1(0x2000).unitIntervalValue, 0.5000305194408838)
+        XCTAssertEqual(Value.midi1(0x2000).unitIntervalValue, 0.5)
         XCTAssertEqual(Value.midi1(0x3FFF).unitIntervalValue, 1.0)
         
         XCTAssertEqual(Value.midi1(0)     .bipolarUnitIntervalValue, -1.0)
@@ -124,7 +129,7 @@ class ChanVoice14Bit32BitValueTests: XCTestCase {
         XCTAssertEqual(Value.midi1(0x3FFF).midi1Value, 0x3FFF)
         
         XCTAssertEqual(Value.midi1(0)     .midi2Value, 0x0)
-        XCTAssertEqual(Value.midi1(0x2000).midi2Value, 0x80020008)
+        XCTAssertEqual(Value.midi1(0x2000).midi2Value, 0x80000000)
         XCTAssertEqual(Value.midi1(0x3FFF).midi2Value, 0xFFFFFFFF)
         
     }
@@ -132,7 +137,7 @@ class ChanVoice14Bit32BitValueTests: XCTestCase {
     func testMIDI2_Values() {
         
         XCTAssertEqual(Value.midi2(0x0)       .unitIntervalValue, 0.0)
-        XCTAssertEqual(Value.midi2(0x80000000).unitIntervalValue, 0.5000000001164153)
+        XCTAssertEqual(Value.midi2(0x80000000).unitIntervalValue, 0.5)
         XCTAssertEqual(Value.midi2(0xFFFFFFFF).unitIntervalValue, 1.0)
         
         XCTAssertEqual(Value.midi2(0x0)       .bipolarUnitIntervalValue, -1.0)
