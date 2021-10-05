@@ -33,9 +33,6 @@ let package = Package(
         .target(
             name: "MIDIKitC",
             publicHeadersPath: "."
-//            cxxSettings: [
-//                .headerSearchPath(".")
-//            ]
         ),
         
         .target(name: "XCTestExtensions"),
@@ -48,6 +45,8 @@ let package = Package(
                 .target(name: "XCTestExtensions")
             ]
         )
-    ]
+    ],
+    
+    swiftLanguageVersions: [.v5]
     
 )
