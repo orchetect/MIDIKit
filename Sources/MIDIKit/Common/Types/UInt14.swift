@@ -43,25 +43,24 @@ extension MIDI {
             value = Storage(source)
         }
         
-        /// Converts from a floating-point unit interval having a 0.0 neutral midpoint
-        /// (`-1.0...0.0...1.0` to `0...8192...16383`)
+        /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint)
+        /// (`-1.0...0.0...1.0` == `0...8192...16383`)
         ///
         /// Example:
         ///
-        ///     init(zeroMidpointFloat: -1.0) == 0     == .min
-        ///     init(zeroMidpointFloat: -0.5) == 4096
-        ///     init(zeroMidpointFloat:  0.0) == 8192  == .midpoint
-        ///     init(zeroMidpointFloat:  0.5) == 12287
-        ///     init(zeroMidpointFloat:  1.0) == 16383 == .max
-        public init<T: BinaryFloatingPoint>(unitIntervalAroundZero: T) {
-            let unitIntervalAroundZero = unitIntervalAroundZero.clamped(to: (-1.0)...(1.0))
+        ///     init(bipolarUnitInterval: -1.0) == 0     == .min
+        ///     init(bipolarUnitInterval: -0.5) == 4096
+        ///     init(bipolarUnitInterval:  0.0) == 8192  == .midpoint
+        ///     init(bipolarUnitInterval:  0.5) == 12287
+        ///     init(bipolarUnitInterval:  1.0) == 16383 == .max
+        public init<T: BinaryFloatingPoint>(bipolarUnitInterval: T) {
+            let bipolarUnitInterval = bipolarUnitInterval.clamped(to: (-1.0)...(1.0))
             
-            if unitIntervalAroundZero > 0.0 {
-                value = 8192 + Storage(unitIntervalAroundZero * 8191)
+            if bipolarUnitInterval > 0.0 {
+                value = 8192 + Storage(bipolarUnitInterval * 8191)
             } else {
-                value = 8192 - Storage(abs(unitIntervalAroundZero) * 8192)
+                value = 8192 - Storage(abs(bipolarUnitInterval) * 8192)
             }
-            
         }
         
         /// Initialize the raw 14-bit value from two 7-bit value bytes.
@@ -102,9 +101,9 @@ extension MIDI {
         /// Returns the integer as a `UInt16` instance
         public var uInt16Value: UInt16 { value }
         
-        /// Converts from integer to a floating-point unit interval having a 0.0 neutral midpoint at 8192.
-        /// (`0...8192...16383` to `-1.0...0.0...1.0`)
-        public var unitIntervalAroundZero: Double {
+        /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral midpoint at 8192).
+        /// (`0...8192...16383` == `-1.0...0.0...1.0`)
+        public var bipolarUnitIntervalValue: Double {
             
             // account for non-symmetry and round up. (This is how MIDI 1.0 Spec pitchbend works)
             if value > 8192 {
