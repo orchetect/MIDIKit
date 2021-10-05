@@ -11,9 +11,9 @@ import XCTestExtensions
 
 final class UInt14_Tests: XCTestCase {
     
-    fileprivate let _min      = 0b00_0000_0000_0000
-    fileprivate let _midpoint = 0b10_0000_0000_0000
-    fileprivate let _max      = 0b11_1111_1111_1111
+    fileprivate let _min      = 0b00_0000_0000_0000 // int     0, hex 0x0000
+    fileprivate let _midpoint = 0b10_0000_0000_0000 // int  8192, hex 0x2000
+    fileprivate let _max      = 0b11_1111_1111_1111 // int 16383, hex 0x3FFF
     
     func testInit_BinaryInteger() {
         

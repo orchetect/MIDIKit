@@ -30,10 +30,11 @@ extension MIDI {
         }
         
         public init<T: BinaryFloatingPoint>(_ source: T) {
+            // we need to cast to UInt here to ensure comparison succeeds
             if source < Self.min(T.self) {
                 Exception.underflow.raise(reason: "UInt25 integer underflowed")
             }
-            if UInt32(source) > Self.max(UInt32.self) {
+            if UInt(source) > Self.max(UInt.self) {
                 Exception.overflow.raise(reason: "UInt25 integer overflowed")
             }
             value = Storage(source)
@@ -47,7 +48,6 @@ extension MIDI {
         public static func min<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0 }
         
         // 0b1_00000000_00000000_00000000
-        /// Neutral midpoint
         public static let midpoint = Self(Self.midpoint(Storage.self))
         public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 16777216 }
         

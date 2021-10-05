@@ -30,8 +30,7 @@ extension MIDI {
         }
         
         public init<T: BinaryFloatingPoint>(_ source: T) {
-            // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type less than the largest MIDIKitIntegerProtocol concrete type we're using (UInt14).
-            // the smallest floating point number in the Swift standard library is Float16 which can hold UInt14.max fine.
+            // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type that cannot fit UInt7.max
             if source < Self.min(T.self) {
                 Exception.underflow.raise(reason: "UInt7 integer underflowed")
             }
@@ -48,9 +47,11 @@ extension MIDI {
         public static func min<T: BinaryInteger>(_ ofType: T.Type) -> T { 0 }
         public static func min<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0 }
         
+        // 0b100_0000, int 64, hex 0x40
         public static let midpoint = Self(Self.midpoint(Storage.self))
-        public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 64 }
+        public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 0b100_0000 }
         
+        // 0b111_1111, int 127, hex 0x7F
         public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 0b111_1111 }
         public static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0b111_1111 }
         
