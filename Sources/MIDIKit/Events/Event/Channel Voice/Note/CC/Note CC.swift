@@ -41,6 +41,7 @@ extension MIDI.Event {
     ///   - value: Value
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func noteCC(note: MIDI.UInt7,
                               controller: Note.CC.Controller,
                               value: UInt32,
@@ -61,6 +62,7 @@ extension MIDI.Event {
 
 extension MIDI.Event.Note.CC {
     
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice

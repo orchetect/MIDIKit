@@ -8,7 +8,8 @@
 extension MIDI.Event {
     
     /// Returns true if the event is a Channel Voice message.
-    @inlinable public var isChannelVoice: Bool {
+    @inlinable
+    public var isChannelVoice: Bool {
         
         switch self {
         case .noteOn,
@@ -30,7 +31,8 @@ extension MIDI.Event {
     }
     
     /// Returns true if the event is a Channel Voice message of a specific type.
-    @inlinable public func isChannelVoice(ofType chanVoiceType: ChanVoiceType) -> Bool {
+    @inlinable
+    public func isChannelVoice(ofType chanVoiceType: ChanVoiceType) -> Bool {
         
         switch self {
         case .noteOn         : return chanVoiceType == .noteOn
@@ -49,7 +51,8 @@ extension MIDI.Event {
     }
     
     /// Returns true if the event is a Channel Voice message of a specific type.
-    @inlinable public func isChannelVoice(ofTypes chanVoiceTypes: Set<ChanVoiceType>) -> Bool {
+    @inlinable
+    public func isChannelVoice(ofTypes chanVoiceTypes: Set<ChanVoiceType>) -> Bool {
         
         for eventType in chanVoiceTypes {
             if self.isChannelVoice(ofType: eventType) { return true }
@@ -66,12 +69,13 @@ extension MIDI.Event {
 extension Collection where Element == MIDI.Event {
     
     /// Filter Channel Voice events.
-    @inlinable public func filter(chanVoice types: MIDI.Event.ChanVoiceTypes) -> [Element] {
+    @inlinable
+    public func filter(chanVoice types: MIDI.Event.ChanVoiceTypes) -> [Element] {
         
         switch types {
         case .only:
             return filter { $0.isChannelVoice }
-        
+            
         case .onlyType(let specificType):
             return filter { $0.isChannelVoice(ofType: specificType) }
             
@@ -149,7 +153,7 @@ extension Collection where Element == MIDI.Event {
             
         case .drop:
             return filter { !$0.isChannelVoice }
-        
+            
         case .dropChannel(let channel):
             return filter { $0.channel != channel }
             
@@ -170,7 +174,7 @@ extension Collection where Element == MIDI.Event {
                 guard $0.isChannelVoice else { return true }
                 return !$0.isChannelVoice(ofTypes: specificTypes)
             }
-        
+            
         case .dropCC(let cc):
             return filter {
                 guard case .cc(let event) = $0

@@ -42,6 +42,7 @@ extension MIDI.Event {
     ///   - channel: Channel Number (0x0...0xF)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func noteOff(_ note: MIDI.UInt7,
                                velocity: Note.Velocity,
                                channel: MIDI.UInt4,
@@ -62,6 +63,7 @@ extension MIDI.Event {
 
 extension MIDI.Event.Note.Off {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0x80 + channel.uInt8Value,
@@ -70,6 +72,7 @@ extension MIDI.Event.Note.Off {
         
     }
     
+    @inline(__always)
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
         switch midiProtocol {

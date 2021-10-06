@@ -5,6 +5,7 @@
 
 extension MIDI.Event {
     
+    @inline(__always)
     public var midi1RawBytes: [MIDI.Byte] {
         
         switch self {
@@ -105,6 +106,7 @@ extension MIDI.Event {
 
 extension MIDI.Event {
     
+    @inline(__always)
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
         switch self {

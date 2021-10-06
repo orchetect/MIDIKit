@@ -6,6 +6,7 @@
 extension MIDI.Event {
     
     /// Returns the event's channel, if one is associated with it.
+    @inline(__always)
     public var channel: MIDI.UInt4? {
         
         switch self {
@@ -52,6 +53,7 @@ extension MIDI.Event {
     }
     
     /// Returns the event's UMP group.
+    @inline(__always)
     public var group: MIDI.UInt4 {
         
         switch self {

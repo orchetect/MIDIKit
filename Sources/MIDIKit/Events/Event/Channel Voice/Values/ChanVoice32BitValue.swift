@@ -18,6 +18,7 @@ extension MIDI.Event {
         // conversion initializers from MIDI 1 value types
         
         /// Returns `.midi2()` case converting from a MIDI 1.0 7-Bit value.
+        @inline(__always)
         public static func midi1(sevenBit: MIDI.UInt7) -> Self {
             
             let scaled = MIDI.Event.scaled32Bit(from7Bit: sevenBit)
@@ -26,6 +27,7 @@ extension MIDI.Event {
         }
         
         /// Returns `.midi2()` case converting from a MIDI 1.0 14-Bit value.
+        @inline(__always)
         public static func midi1(fourteenBit: MIDI.UInt14) -> Self {
             
             let scaled = MIDI.Event.scaled32Bit(from14Bit: fourteenBit)
@@ -71,6 +73,7 @@ extension MIDI.Event.ChanVoice32BitValue: Equatable {
 extension MIDI.Event.ChanVoice32BitValue {
     
     /// Returns value as protocol-agnostic unit interval, converting if necessary.
+    @inline(__always)
     public var unitIntervalValue: Double {
         
         switch self {
@@ -85,6 +88,7 @@ extension MIDI.Event.ChanVoice32BitValue {
     }
     
     /// Returns value as a MIDI 1.0 7-bit value, converting if necessary.
+    @inline(__always)
     public var midi1_7BitValue: MIDI.UInt7 {
         
         switch self {
@@ -99,6 +103,7 @@ extension MIDI.Event.ChanVoice32BitValue {
     }
     
     /// Returns value as a MIDI 1.0 14-bit value, converting if necessary.
+    @inline(__always)
     public var midi1_14BitValue: MIDI.UInt14 {
         
         switch self {
@@ -113,6 +118,7 @@ extension MIDI.Event.ChanVoice32BitValue {
     }
     
     /// Returns value as a MIDI 2.0 32-bit value, converting if necessary.
+    @inline(__always)
     public var midi2Value: UInt32 {
         
         switch self {
@@ -135,8 +141,10 @@ extension MIDI.Event.ChanVoice32BitValue {
         
         public typealias Value = MIDI.Event.ChanVoice32BitValue
         
+        @inline(__always)
         private var value: Value
         
+        @inline(__always)
         public var wrappedValue: Value {
             get {
                 value
@@ -152,6 +160,7 @@ extension MIDI.Event.ChanVoice32BitValue {
             }
         }
         
+        @inline(__always)
         public init(wrappedValue: Value) {
             self.value = wrappedValue
         }

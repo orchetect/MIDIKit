@@ -29,6 +29,7 @@ extension MIDI.Event.Note.Attribute {
 extension MIDI.Event.Note.Attribute.Pitch7_9 {
     
     /// Initialize from UInt16 representation.
+    @inline(__always)
     public init(_ bytePair: MIDI.Byte.Pair) {
         
         coarse = MIDI.UInt7((bytePair.msb & 0b1111_1110) >> 1)
@@ -41,6 +42,7 @@ extension MIDI.Event.Note.Attribute.Pitch7_9 {
     }
     
     /// UInt16 representation.
+    @inline(__always)
     public var bytePair: MIDI.Byte.Pair {
         
         let msb = MIDI.Byte(coarse.value << 1) + MIDI.Byte((fine.value & 0b1_0000_0000) >> 8)
@@ -56,6 +58,7 @@ extension MIDI.Event.Note.Attribute.Pitch7_9 {
 
 extension MIDI.Event.Note.Attribute.Pitch7_9 {
     
+    @inline(__always)
     public init(_ uInt16Value: UInt16) {
         
         coarse = ((uInt16Value & 0b1111_1110_0000_0000) >> 9).toMIDIUInt7
@@ -64,6 +67,7 @@ extension MIDI.Event.Note.Attribute.Pitch7_9 {
     }
     
     /// UInt16 representation.
+    @inline(__always)
     public var uInt16Value: UInt16 {
         
         (UInt16(coarse.value) << 9) + fine.value
@@ -77,6 +81,7 @@ extension MIDI.Event.Note.Attribute.Pitch7_9 {
 extension MIDI.Event.Note.Attribute.Pitch7_9 {
     
     /// Converted from a Double value (0.0...127.998046875)
+    @inline(__always)
     public init(_ double: Double) {
         
         let double = double.clamped(to: 0.0...127.998046875)
@@ -89,6 +94,7 @@ extension MIDI.Event.Note.Attribute.Pitch7_9 {
     }
     
     /// Converted to a Double value (0.0...127.998046875)
+    @inline(__always)
     public var doubleValue: Double {
         
         Double(coarse.value) + (Double(fine.value) / 0b10_0000_0000)

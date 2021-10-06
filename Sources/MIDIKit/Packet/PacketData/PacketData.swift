@@ -10,9 +10,11 @@ extension MIDI.Packet {
     /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIPacket` (MIDI 1.0).
     public struct PacketData {
         
+        @inline(__always)
         let bytes: [MIDI.Byte]
         
         /// Core MIDI packet timestamp
+        @inline(__always)
         let timeStamp: MIDI.IO.CoreMIDITimeStamp
         
         @inline(__always)

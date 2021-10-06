@@ -77,11 +77,13 @@ extension MIDI.UInt9: Strideable {
     
     public typealias Stride = Int
     
-    @inlinable public func advanced(by n: Stride) -> Self {
+    @inlinable
+    public func advanced(by n: Stride) -> Self {
         self + Self(n)
     }
     
-    @inlinable public func distance(to other: Self) -> Stride {
+    @inlinable
+    public func distance(to other: Self) -> Stride {
         Stride(other) - Stride(self)
     }
     

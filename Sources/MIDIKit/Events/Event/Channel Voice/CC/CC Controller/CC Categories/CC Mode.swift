@@ -47,7 +47,8 @@ extension MIDI.Event.CC.Controller {
 extension MIDI.Event.CC.Controller.Mode {
     
     /// Returns the controller number.
-    @inlinable public var controller: MIDI.UInt7 {
+    @inlinable
+    public var controller: MIDI.UInt7 {
         
         switch self {
         
@@ -69,10 +70,11 @@ extension MIDI.Event.CC.Controller.Mode {
 extension MIDI.Event.CC.Controller.Mode {
     
     /// Returns the controller name as a human-readable String.
-    @inlinable public var name: String {
+    @inlinable
+    public var name: String {
         
         switch self {
-            
+        
         case .allSoundOff         : return "All Sound Off"
         case .resetAllControllers : return "Reset All Controllers"
         case .localControl        : return "Local Control"

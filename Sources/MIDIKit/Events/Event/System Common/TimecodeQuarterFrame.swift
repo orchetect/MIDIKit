@@ -31,6 +31,7 @@ extension MIDI.Event {
     /// - Parameters:
     ///   - dataByte: Data Byte containing quarter-frame bits
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func timecodeQuarterFrame(dataByte: MIDI.UInt7,
                                             group: MIDI.UInt4 = 0x0) -> Self {
         
@@ -45,12 +46,14 @@ extension MIDI.Event {
 
 extension MIDI.Event.TimecodeQuarterFrame {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xF1, dataByte.uInt8Value]
         
     }
     
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon

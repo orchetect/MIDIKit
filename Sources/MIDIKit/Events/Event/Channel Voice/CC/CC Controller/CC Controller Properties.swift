@@ -6,7 +6,8 @@
 extension MIDI.Event.CC.Controller {
     
     /// Returns the controller number.
-    @inlinable public var number: MIDI.UInt7 {
+    @inlinable
+    public var number: MIDI.UInt7 {
         
         switch self {
         

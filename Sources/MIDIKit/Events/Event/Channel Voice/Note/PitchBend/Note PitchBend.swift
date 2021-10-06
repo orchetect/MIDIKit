@@ -38,6 +38,7 @@ extension MIDI.Event {
     ///   - value: 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func notePitchBend(note: MIDI.UInt7,
                                      value: Note.PitchBend.Value,
                                      channel: MIDI.UInt4,
@@ -56,6 +57,7 @@ extension MIDI.Event {
 
 extension MIDI.Event.Note.PitchBend {
     
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice

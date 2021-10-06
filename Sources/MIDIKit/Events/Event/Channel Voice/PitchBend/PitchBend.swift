@@ -26,6 +26,7 @@ extension MIDI.Event {
     ///   - value: 14-bit Value (0...16383) where midpoint is 8192
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func pitchBend(value: PitchBend.Value,
                                  channel: MIDI.UInt4,
                                  group: MIDI.UInt4 = 0x0) -> Self {
@@ -42,6 +43,7 @@ extension MIDI.Event {
 
 extension MIDI.Event.PitchBend {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         let bytePair = value.midi1Value.bytePair
@@ -52,6 +54,7 @@ extension MIDI.Event.PitchBend {
         
     }
     
+    @inline(__always)
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
         switch midiProtocol {

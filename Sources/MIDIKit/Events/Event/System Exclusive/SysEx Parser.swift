@@ -7,6 +7,7 @@ import Foundation
 
 extension MIDI.Event {
     
+    @inline(__always)
     internal static func sysEx(
         from rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0

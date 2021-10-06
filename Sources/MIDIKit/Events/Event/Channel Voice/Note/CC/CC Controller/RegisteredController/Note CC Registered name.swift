@@ -6,14 +6,15 @@
 extension MIDI.Event.Note.CC.Controller.Registered {
     
     /// Returns the controller name as a human-readable String.
-    @inlinable public var name: String {
+    @inlinable
+    public var name: String {
         
         switch self {
-            
+        
         case .modWheel                      : return "Mod Wheel"
         case .breath                        : return "Breath Controller"
         case .pitch7_25                     : return "Pitch 7.25"
-        
+            
         case .volume                        : return "Volume"
         case .balance                       : return "Balance"
             
@@ -30,13 +31,13 @@ extension MIDI.Event.Note.CC.Controller.Registered {
         case .soundCtrl8_vibratoDepth       : return "Sound Control 8 - Vibrato Depth"
         case .soundCtrl9_vibratoDelay       : return "Sound Control 9 - Vibrato Delay"
         case .soundCtrl10_defaultUndefined  : return "Sound Control 10 - Undefined"
-        
+            
         case .effects1Depth_reverbSendLevel : return "Effects 1 Depth - Reverb Send Level"
         case .effects2Depth                 : return "Effects 2 Depth"
         case .effects3Depth_chorusSendLevel : return "Effects 3 Depth - Chorus Send Level"
         case .effects4Depth                 : return "Effects 4 Depth"
         case .effects5Depth                 : return "Effects 5 Depth"
-        
+            
         case .undefined(let cc)             : return cc.name
             
         }

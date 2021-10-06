@@ -38,7 +38,8 @@ extension MIDI.Event.Note.CC.Controller: CustomStringConvertible {
 extension MIDI.Event.Note.CC.Controller {
     
     /// Returns the controller number.
-    @inlinable public var number: UInt8 {
+    @inline(__always)
+    public var number: UInt8 {
         
         switch self {
         case .registered(let cc):

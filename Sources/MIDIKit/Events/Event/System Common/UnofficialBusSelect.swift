@@ -25,6 +25,7 @@ extension MIDI.Event {
     /// - Parameters:
     ///   - bus: Bus Number (0x00...0x7F)
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func unofficialBusSelect(bus: MIDI.UInt7,
                                            group: MIDI.UInt4 = 0x0) -> Self {
         
@@ -39,12 +40,14 @@ extension MIDI.Event {
 
 extension MIDI.Event.UnofficialBusSelect {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xF5, bus.uInt8Value]
         
     }
     
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon

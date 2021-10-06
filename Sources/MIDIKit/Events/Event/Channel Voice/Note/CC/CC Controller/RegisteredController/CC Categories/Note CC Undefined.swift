@@ -39,7 +39,7 @@ extension MIDI.Event.Note.CC.Controller.Registered {
         /// Undefined Per-Note controller number 14
         /// (Int: 14, Hex: 0x0E)
         case cc14
-
+        
         /// Undefined Per-Note controller number 15
         /// (Int: 15, Hex: 0x0F)
         case cc15
@@ -63,47 +63,47 @@ extension MIDI.Event.Note.CC.Controller.Registered {
         /// Undefined Per-Note controller number 20
         /// (Int: 20, Hex: 0x14)
         case cc20
-
+        
         /// Undefined Per-Note controller number 21
         /// (Int: 21, Hex: 0x15)
         case cc21
-
+        
         /// Undefined Per-Note controller number 22
         /// (Int: 22, Hex: 0x16)
         case cc22
-
+        
         /// Undefined Per-Note controller number 23
         /// (Int: 23, Hex: 0x17)
         case cc23
-
+        
         /// Undefined Per-Note controller number 24
         /// (Int: 24, Hex: 0x18)
         case cc24
-
+        
         /// Undefined Per-Note controller number 25
         /// (Int: 25, Hex: 0x19)
         case cc25
-
+        
         /// Undefined Per-Note controller number 26
         /// (Int: 26, Hex: 0x1A)
         case cc26
-
+        
         /// Undefined Per-Note controller number 27
         /// (Int: 27, Hex: 0x1B)
         case cc27
-
+        
         /// Undefined Per-Note controller number 28
         /// (Int: 28, Hex: 0x1C)
         case cc28
-
+        
         /// Undefined Per-Note controller number 29
         /// (Int: 29, Hex: 0x1D)
         case cc29
-
+        
         /// Undefined Per-Note controller number 30
         /// (Int: 30, Hex: 0x1E)
         case cc30
-
+        
         /// Undefined Per-Note controller number 31
         /// (Int: 31, Hex: 0x1F)
         case cc31
@@ -283,11 +283,11 @@ extension MIDI.Event.Note.CC.Controller.Registered {
         /// Undefined Per-Note controller number 85
         /// (Int: 85, Hex: 0x55)
         case cc85
-
+        
         /// Undefined Per-Note controller number 86
         /// (Int: 86, Hex: 0x56)
         case cc86
-
+        
         /// Undefined Per-Note controller number 87
         /// (Int: 87, Hex: 0x57)
         case cc87
@@ -299,7 +299,7 @@ extension MIDI.Event.Note.CC.Controller.Registered {
         /// Undefined Per-Note controller number 89
         /// (Int: 89, Hex: 0x59)
         case cc89
-
+        
         /// Undefined Per-Note controller number 90
         /// (Int: 90, Hex: 0x5A)
         case cc90
@@ -951,7 +951,8 @@ extension MIDI.Event.Note.CC.Controller.Registered {
 extension MIDI.Event.Note.CC.Controller.Registered.Undefined {
     
     /// Returns the controller number.
-    @inlinable public var controller: UInt8 {
+    @inline(__always)
+    public var controller: UInt8 {
         
         switch self {
         
@@ -1189,7 +1190,7 @@ extension MIDI.Event.Note.CC.Controller.Registered.Undefined {
         case .cc253 : return 253
         case .cc254 : return 254
         case .cc255 : return 255
-        
+            
         }
         
     }
@@ -1199,7 +1200,8 @@ extension MIDI.Event.Note.CC.Controller.Registered.Undefined {
 extension MIDI.Event.Note.CC.Controller.Registered.Undefined {
     
     /// Returns the controller name as a human-readable String.
-    @inlinable public var name: String {
+    @inlinable
+    public var name: String {
         
         "Undefined Per-Note CC\(controller)"
         

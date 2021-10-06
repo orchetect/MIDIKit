@@ -46,6 +46,7 @@ extension MIDI.Event {
     ///   - amount: Pressure Amount
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func notePressure(note: MIDI.UInt7,
                                     amount: Note.Pressure.Amount,
                                     channel: MIDI.UInt4,
@@ -64,6 +65,7 @@ extension MIDI.Event {
 
 extension MIDI.Event.Note.Pressure {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xA0 + channel.uInt8Value,
@@ -72,6 +74,7 @@ extension MIDI.Event.Note.Pressure {
         
     }
     
+    @inline(__always)
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
         switch midiProtocol {

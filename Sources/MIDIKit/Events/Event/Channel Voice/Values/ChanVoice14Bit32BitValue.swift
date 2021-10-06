@@ -104,6 +104,7 @@ extension MIDI.Event.ChanVoice14Bit32BitValue: Equatable {
 extension MIDI.Event.ChanVoice14Bit32BitValue {
     
     /// Returns value as protocol-agnostic unit interval, converting if necessary.
+    @inline(__always)
     public var unitIntervalValue: Double {
         
         switch self {
@@ -124,6 +125,7 @@ extension MIDI.Event.ChanVoice14Bit32BitValue {
     }
     
     /// Returns value as protocol-agnostic bipolar unit interval, converting if necessary.
+    @inline(__always)
     public var bipolarUnitIntervalValue: Double {
         
         switch self {
@@ -144,6 +146,7 @@ extension MIDI.Event.ChanVoice14Bit32BitValue {
     }
     
     /// Returns value as a MIDI 1.0 14-bit value, converting if necessary.
+    @inline(__always)
     public var midi1Value: MIDI.UInt14 {
         
         switch self {
@@ -164,6 +167,7 @@ extension MIDI.Event.ChanVoice14Bit32BitValue {
     }
     
     /// Returns value as a MIDI 2.0 32-bit value, converting if necessary.
+    @inline(__always)
     public var midi2Value: UInt32 {
         
         switch self {
@@ -192,8 +196,10 @@ extension MIDI.Event.ChanVoice14Bit32BitValue {
         
         public typealias Value = MIDI.Event.ChanVoice14Bit32BitValue
         
+        @inline(__always)
         private var value: Value
         
+        @inline(__always)
         public var wrappedValue: Value {
             get {
                 value
@@ -215,6 +221,7 @@ extension MIDI.Event.ChanVoice14Bit32BitValue {
             }
         }
         
+        @inline(__always)
         public init(wrappedValue: Value) {
             self.value = wrappedValue
         }

@@ -54,6 +54,7 @@ extension MIDI.Event {
     ///   - bank: Bank Select operation to occur first
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func programChange(program: MIDI.UInt7,
                                      bank: ProgramChange.Bank = .noBankSelect,
                                      channel: MIDI.UInt4,
@@ -72,6 +73,7 @@ extension MIDI.Event {
 
 extension MIDI.Event.ProgramChange {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         let programChangeMessage = [0xC0 + channel.uInt8Value,
@@ -100,6 +102,7 @@ extension MIDI.Event.ProgramChange {
         
     }
     
+    @inline(__always)
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
         switch midiProtocol {

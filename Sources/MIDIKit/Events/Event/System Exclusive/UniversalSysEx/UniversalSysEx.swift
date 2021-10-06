@@ -47,6 +47,7 @@ extension MIDI.Event {
     ///   - subID2: Sub ID #2
     ///   - data: Data bytes
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func universalSysEx(universalType: UniversalSysExType,
                                       deviceID: MIDI.UInt7,
                                       subID1: MIDI.UInt7,
@@ -69,6 +70,7 @@ extension MIDI.Event {
 
 extension MIDI.Event.UniversalSysEx {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xF0,
@@ -81,6 +83,7 @@ extension MIDI.Event.UniversalSysEx {
         
     }
     
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit

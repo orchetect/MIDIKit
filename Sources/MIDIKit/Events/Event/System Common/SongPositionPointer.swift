@@ -31,6 +31,7 @@ extension MIDI.Event {
     /// - Parameters:
     ///   - midiBeat: MIDI beat number elapsed from the start
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func songPositionPointer(midiBeat: MIDI.UInt14,
                                            group: MIDI.UInt4 = 0x0) -> Self {
         
@@ -45,6 +46,7 @@ extension MIDI.Event {
 
 extension MIDI.Event.SongPositionPointer {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         let bytePair = midiBeat.bytePair
@@ -52,6 +54,7 @@ extension MIDI.Event.SongPositionPointer {
         
     }
     
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon

@@ -6,7 +6,8 @@
 extension MIDI.Event.Note.CC.Controller.Registered {
     
     /// Returns the controller number.
-    @inlinable public var number: UInt8 {
+    @inline(__always)
+    public var number: UInt8 {
         
         switch self {
         

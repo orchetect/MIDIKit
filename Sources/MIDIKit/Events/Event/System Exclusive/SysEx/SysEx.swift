@@ -39,6 +39,7 @@ extension MIDI.Event {
     ///   - manufacturer: SysEx Manufacturer ID
     ///   - data: Data bytes
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func sysEx(manufacturer: SysExManufacturer,
                              data: [MIDI.Byte],
                              group: MIDI.UInt4 = 0x0) -> Self {
@@ -55,12 +56,14 @@ extension MIDI.Event {
 
 extension MIDI.Event.SysEx {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xF0] + manufacturer.bytes + data + [0xF7]
         
     }
     
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit

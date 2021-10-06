@@ -27,6 +27,7 @@ extension MIDI.Event {
     ///
     /// - Parameters:
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func start(group: MIDI.UInt4 = 0x0) -> Self {
         
         .start(
@@ -39,12 +40,14 @@ extension MIDI.Event {
 
 extension MIDI.Event.Start {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xFA]
         
     }
     
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon

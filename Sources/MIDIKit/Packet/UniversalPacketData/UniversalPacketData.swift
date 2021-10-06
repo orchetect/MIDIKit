@@ -18,6 +18,7 @@ extension MIDI.Packet {
         public var bytes: [MIDI.Byte]
         
         /// Core MIDI packet timestamp
+        @inline(__always)
         public let timeStamp: MIDI.IO.CoreMIDITimeStamp
         
         @inline(__always)

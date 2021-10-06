@@ -31,6 +31,7 @@ extension MIDI.Event {
     ///
     /// - Parameters:
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func activeSensing(group: MIDI.UInt4 = 0x0) -> Self {
         
         .activeSensing(
@@ -43,12 +44,14 @@ extension MIDI.Event {
 
 extension MIDI.Event.ActiveSensing {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xFE]
         
     }
     
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
