@@ -54,8 +54,8 @@ extension MIDI.Event.ChanVoice32BitValue: Equatable {
             
         case .midi2(let lhsUInt32):
             switch rhs {
-            case .unitInterval(let rhsInterval):
-                return lhs.unitIntervalValue == rhsInterval
+            case .unitInterval(_):
+                return lhsUInt32 == rhs.midi2Value
                 
             case .midi2(let rhsUInt32):
                 return lhsUInt32 == rhsUInt32

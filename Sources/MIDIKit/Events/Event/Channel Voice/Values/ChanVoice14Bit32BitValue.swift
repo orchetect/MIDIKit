@@ -56,7 +56,7 @@ extension MIDI.Event.ChanVoice14Bit32BitValue: Equatable {
                 return lhsInterval == rhsInterval
                 
             case .midi1(let rhsUInt14):
-                return lhsInterval == rhsUInt14.bipolarUnitIntervalValue
+                return lhs.midi1Value == rhsUInt14
                 
             case .midi2(let rhsUInt32):
                 return lhs.midi2Value == rhsUInt32
@@ -65,11 +65,11 @@ extension MIDI.Event.ChanVoice14Bit32BitValue: Equatable {
             
         case .midi1(let lhsUInt14):
             switch rhs {
-            case .unitInterval(let rhsInterval):
-                return lhs.unitIntervalValue == rhsInterval
+            case .unitInterval(_):
+                return lhsUInt14 == rhs.midi1Value
                 
-            case .bipolarUnitInterval(let rhsInterval):
-                return lhsUInt14.bipolarUnitIntervalValue == rhsInterval
+            case .bipolarUnitInterval(_):
+                return lhsUInt14 == rhs.midi1Value
                 
             case .midi1(let rhsUInt14):
                 return lhsUInt14 == rhsUInt14
@@ -81,11 +81,11 @@ extension MIDI.Event.ChanVoice14Bit32BitValue: Equatable {
             
         case .midi2(let lhsUInt32):
             switch rhs {
-            case .unitInterval(let rhsInterval):
-                return lhs.unitIntervalValue == rhsInterval
+            case .unitInterval(_):
+                return lhsUInt32 == rhs.midi2Value
                 
-            case .bipolarUnitInterval(let rhsInterval):
-                return lhs.bipolarUnitIntervalValue == rhsInterval
+            case .bipolarUnitInterval(_):
+                return lhsUInt32 == rhs.midi2Value
                 
             case .midi1(let rhsUInt14):
                 return lhs.midi1Value == rhsUInt14
@@ -131,7 +131,7 @@ extension MIDI.Event.ChanVoice14Bit32BitValue {
             return interval.bipolarUnitIntervalValue
             
         case .bipolarUnitInterval(let interval):
-            return interval.clamped(to: -1.0...0.0)
+            return interval
             
         case .midi1(let uInt14):
             return uInt14.bipolarUnitIntervalValue

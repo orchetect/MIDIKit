@@ -144,10 +144,11 @@ final class UInt25_Tests: XCTestCase {
         let max = MIDI.UInt25(_max)
         
         let strideBy1 = stride(from: min, through: max, by: 1)
-        // skip this, it takes way too long to compute
+        _ = strideBy1
+        // skip this, it takes way too long to compute ...
         //XCTAssertEqual(strideBy1.underestimatedCount, _max + 1)
-        XCTAssertTrue(strideBy1.starts(with: [min]))
-        XCTAssertEqual(strideBy1.suffix(1), [max])
+        //XCTAssertTrue(strideBy1.starts(with: [min]))
+        //XCTAssertEqual(strideBy1.suffix(1), [max])
         
         let range = min...max
         XCTAssertEqual(range.count, _max + 1)

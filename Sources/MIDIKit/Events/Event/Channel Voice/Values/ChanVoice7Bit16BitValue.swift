@@ -44,8 +44,8 @@ extension MIDI.Event.ChanVoice7Bit16BitValue: Equatable {
             
         case .midi1(let lhsUInt7):
             switch rhs {
-            case .unitInterval(let rhsInterval):
-                return lhs.unitIntervalValue == rhsInterval
+            case .unitInterval(_):
+                return lhsUInt7 == rhs.midi1Value
                 
             case .midi1(let rhsUInt7):
                 return lhsUInt7 == rhsUInt7
@@ -57,8 +57,8 @@ extension MIDI.Event.ChanVoice7Bit16BitValue: Equatable {
             
         case .midi2(let lhsUInt16):
             switch rhs {
-            case .unitInterval(let rhsInterval):
-                return lhs.unitIntervalValue == rhsInterval
+            case .unitInterval(_):
+                return lhsUInt16 == rhs.midi2Value
                 
             case .midi1(let rhsUInt7):
                 return lhs.midi1Value == rhsUInt7

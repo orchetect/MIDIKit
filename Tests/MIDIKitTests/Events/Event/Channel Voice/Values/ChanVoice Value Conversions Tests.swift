@@ -245,9 +245,9 @@ class ChanVoiceValueConversionsTests: XCTestCase {
         // UInt32 is too large to test every value in a reasonable amount of time, but for our needs it should be sufficient to test a few sufficiently large sample sizes
         
         let ranges: [ClosedRange<UInt32>] = [
-            0x00000000...0x0000FFFF, // lower range
-            0x7FFF0000...0x8000FFFF, // middle range
-            0xFFFF0000...0xFFFFFFFF  // upper range
+            0x00000000...0x0000FFFF, // min/lower range
+            0x7FFF0000...0x8000FFFF, // midpoint/middle range
+            0xFFFF0000...0xFFFFFFFF  // max/upper range
         ]
         
         for range in ranges {
