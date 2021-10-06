@@ -17,19 +17,19 @@ extension MIDI.Event {
         
         // conversion initializers from MIDI 1 value types
         
-        /// Returns `.unitInterval()` case converting from a MIDI 1.0 7-Bit value.
+        /// Returns `.midi2()` case converting from a MIDI 1.0 7-Bit value.
         public static func midi1(sevenBit: MIDI.UInt7) -> Self {
             
-            let scaled = MIDI.Event.scaledUnitInterval(from7Bit: sevenBit)
-            return .unitInterval(scaled)
+            let scaled = MIDI.Event.scaled32Bit(from7Bit: sevenBit)
+            return .midi2(scaled)
             
         }
         
-        /// Returns `.unitInterval()` case converting from a MIDI 1.0 14-Bit value.
+        /// Returns `.midi2()` case converting from a MIDI 1.0 14-Bit value.
         public static func midi1(fourteenBit: MIDI.UInt14) -> Self {
             
-            let scaled = MIDI.Event.scaledUnitInterval(from14Bit: fourteenBit)
-            return .unitInterval(scaled)
+            let scaled = MIDI.Event.scaled32Bit(from14Bit: fourteenBit)
+            return .midi2(scaled)
             
         }
         

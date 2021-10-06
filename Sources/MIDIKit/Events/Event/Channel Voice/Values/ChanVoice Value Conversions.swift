@@ -10,18 +10,22 @@ extension MIDI.Event {
     @inline(__always)
     internal static func scaled16Bit(from7Bit source: MIDI.UInt7) -> UInt16 {
         
-        #warning("> code this")
-        let scaled = (Double(source.uInt8Value) / 0x7F) * 0xFFFF
-        return UInt16(scaled.rounded())
+        let bitShiftedValue = UInt16(source) << 9
+        if source <= 64 {
+            return bitShiftedValue
+        }
+        // use bit repeat bits from extended 7-bit value
+        let repeatValue6 = UInt16(source) & 0b111111
+        return bitShiftedValue
+            | (repeatValue6 << 3)
+            | (repeatValue6 >> 3)
         
     }
     
     @inline(__always)
     internal static func scaled7Bit(from16Bit source: UInt16) -> MIDI.UInt7 {
         
-        #warning("> code this")
-        let scaled = (Double(source) / 0xFFFF) * 0x7F
-        return MIDI.UInt7(scaled.rounded())
+        MIDI.UInt7(source >> 9) // (16 - 7)
         
     }
     
@@ -34,18 +38,25 @@ extension MIDI.Event {
     @inline(__always)
     internal static func scaled32Bit(from7Bit source: MIDI.UInt7) -> UInt32 {
         
-        #warning("> code this")
-        let scaled = (Double(source.uInt8Value) / 0x7F) * 0xFFFFFFFF
-        return UInt32(scaled.rounded())
+        var bitShiftedValue = UInt32(source) << 25 // (32 - 7)
+        if source <= 0x40 {
+            return bitShiftedValue
+        }
+        // use bit repeat bits from extended 7-bit value
+        var repeatValue = UInt32(source) & 0b111111
+        repeatValue <<= 19 // ((32 - 7) - 6)
+        while (repeatValue != 0) {
+            bitShiftedValue |= repeatValue
+            repeatValue >>= 6 // repeat bits
+        }
+        return bitShiftedValue
         
     }
     
     @inline(__always)
     internal static func scaled7Bit(from32Bit source: UInt32) -> MIDI.UInt7 {
         
-        #warning("> code this")
-        let scaled = (Double(source) / 0xFFFFFFFF) * 0x7F
-        return MIDI.UInt7(scaled.rounded())
+        MIDI.UInt7(source >> 25) // (32 - 7)
         
     }
     
@@ -58,18 +69,25 @@ extension MIDI.Event {
     @inline(__always)
     internal static func scaled32Bit(from14Bit source: MIDI.UInt14) -> UInt32 {
         
-        #warning("> code this")
-        let scaled = (Double(source.uInt16Value) / 0x3FFF) * 0xFFFFFFFF
-        return UInt32(scaled.rounded())
+        var bitShiftedValue = UInt32(source) << 18 // (32 - 14)
+        if source <= 0x2000 {
+            return bitShiftedValue
+        }
+        // use bit repeat bits from extended 14-bit value
+        var repeatValue = UInt32(source) & 0b1_1111_1111_1111
+        repeatValue <<= 5 // ((32 - 14) - 13)
+        while (repeatValue != 0) {
+            bitShiftedValue |= repeatValue
+            repeatValue >>= 13 // repeat bits
+        }
+        return bitShiftedValue
         
     }
     
     @inline(__always)
     internal static func scaled14Bit(from32Bit source: UInt32) -> MIDI.UInt14 {
         
-        #warning("> code this")
-        let scaled = (Double(source) / 0xFFFFFFFF) * 0x3FFF
-        return MIDI.UInt14(scaled.rounded())
+        MIDI.UInt14(source >> 18) // (32 - 14)
         
     }
     
@@ -82,17 +100,26 @@ extension MIDI.Event {
     @inline(__always)
     internal static func scaledUnitInterval(from7Bit source: MIDI.UInt7) -> Double {
         
-        #warning("> code this")
-        return Double(source.uInt8Value) / 0x7F
+        if source <= 0x40 {
+            return Double(source.uInt8Value) / 0x80
+        } else if source == 0x7F {
+            return 1.0
+        } else {
+            return 0.5000000000023283 + (Double(source.uInt8Value - 0x40) / 0x7E)
+        }
         
     }
     
     @inline(__always)
     internal static func scaled7Bit(fromUnitInterval source: Double) -> MIDI.UInt7 {
         
-        #warning("> code this")
-        let scaled = source.clamped(to: 0.0...1.0) * 0x7F
-        return MIDI.UInt7(scaled.rounded())
+        let source = source.clamped(to: 0.0...1.0)
+        
+        if source <= 0.5 {
+            return MIDI.UInt7(source * 0x80)
+        } else {
+            return 0x40 + MIDI.UInt7((source - 0.5) * 0x7E)
+        }
         
     }
     
@@ -105,17 +132,26 @@ extension MIDI.Event {
     @inline(__always)
     internal static func scaledUnitInterval(from14Bit source: MIDI.UInt14) -> Double {
         
-        #warning("> code this")
-        return Double(source.uInt16Value) / 0x3FFF
+        if source <= 0x2000 {
+            return Double(source.uInt16Value) / 0x4000
+        } else if source == 0x3FFF {
+            return 1.0
+        } else {
+            return 0.5000000000023283 + (Double(source.uInt16Value - 0x2000) / 0x3FFE)
+        }
         
     }
     
     @inline(__always)
     internal static func scaled14Bit(fromUnitInterval source: Double) -> MIDI.UInt14 {
         
-        #warning("> code this")
-        let scaled = source.clamped(to: 0.0...1.0) * 0x3FFF
-        return MIDI.UInt14(scaled.rounded())
+        let source = source.clamped(to: 0.0...1.0)
+        
+        if source <= 0.5 {
+            return MIDI.UInt14(source * 0x4000)
+        } else {
+            return 0x2000 + MIDI.UInt14((source - 0.5) * 0x3FFE)
+        }
         
     }
     
@@ -128,17 +164,26 @@ extension MIDI.Event {
     @inline(__always)
     internal static func scaledUnitInterval(from16Bit source: UInt16) -> Double {
         
-        #warning("> code this")
-        return Double(source) / 0xFFFF
+        if source <= 0x8000 {
+            return Double(source) / 0x10000
+        } else if source == 0xFFFF {
+            return 1.0
+        } else {
+            return 0.5000000000023283 + (Double(source - 0x8000) / 0xFFFE)
+        }
         
     }
     
     @inline(__always)
     internal static func scaled16Bit(fromUnitInterval source: Double) -> UInt16 {
         
-        #warning("> code this")
-        let scaled = source.clamped(to: 0.0...1.0) * 0xFFFF
-        return UInt16(scaled.rounded())
+        let source = source.clamped(to: 0.0...1.0)
+        
+        if source <= 0.5 {
+            return UInt16(source * 0x10000)
+        } else {
+            return 0x8000 + UInt16((source - 0.5) * 0xFFFE)
+        }
         
     }
     
@@ -151,17 +196,26 @@ extension MIDI.Event {
     @inline(__always)
     internal static func scaledUnitInterval(from32Bit source: UInt32) -> Double {
         
-        #warning("> code this")
-        return Double(source) / 0xFFFFFFFF
+        if source <= 0x80000000 {
+            return Double(source) / 0x100000000
+        } else if source == 0xFFFFFFFF {
+            return 1.0
+        } else {
+            return 0.5000000000023283 + (Double(source - 0x80000000) / 0xFFFFFFFE)
+        }
         
     }
     
     @inline(__always)
     internal static func scaled32Bit(fromUnitInterval source: Double) -> UInt32 {
         
-        #warning("> code this")
-        let scaled = source.clamped(to: 0.0...1.0) * 0xFFFFFFFF
-        return UInt32(scaled.rounded())
+        let source = source.clamped(to: 0.0...1.0)
+        
+        if source <= 0.5 {
+            return UInt32(source * 0x100000000)
+        } else {
+            return 0x80000000 + UInt32((source - 0.5) * 0xFFFFFFFE)
+        }
         
     }
     
