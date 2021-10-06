@@ -28,7 +28,7 @@ extension MIDI.Event.CC.Controller.NRPN {
     public func events(channel: MIDI.UInt4,
                        group: MIDI.UInt4 = 0) -> [MIDI.Event] {
         
-        #warning("> not sure this is correct")
+        #warning("> TODO: not sure if this is correct")
         
         var nrpnEvents: [MIDI.Event] = [
             .cc(.nrpnMSB,

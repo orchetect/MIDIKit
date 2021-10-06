@@ -83,11 +83,12 @@ extension MIDI.Event.UniversalSysEx {
     
     public func umpRawWords() -> [MIDI.UMPWord] {
         
-        #warning("> needs coding")
-        
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit
         
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+        
+        #warning("> TODO: umpRawWords() needs coding")
+        _ = mtAndGroup
         
         return []
         

@@ -75,12 +75,14 @@ extension MIDI.Event.Pressure {
                                     0x00) // pad an empty byte to fill 4 bytes
             
             return [word]
+            
         case ._2_0:
             let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
             
             let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
             
-            #warning("> code this")
+            #warning("> TODO: umpRawWords() needs coding")
+            _ = mtAndGroup
             
             //let word1 = MIDI.UMPWord()
             

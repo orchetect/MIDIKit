@@ -92,7 +92,8 @@ extension MIDI.Event.Note.Pressure {
             
             let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
             
-            #warning("> code this")
+            #warning("> TODO: umpRawWords() needs coding")
+            _ = mtAndGroup
             
             //let word1 = MIDI.UMPWord()
             

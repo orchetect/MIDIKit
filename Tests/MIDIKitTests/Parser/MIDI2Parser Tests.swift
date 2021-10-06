@@ -462,9 +462,9 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         
     }
     
-    #warning("> write MIDI2 multi-packet SysEx7 / SysEx8 test")
+    #warning("> TODO: write MIDI2 multi-packet SysEx7 / SysEx8 test")
     
-    #warning("> write remaining MIDI2/UMP tests")
+    #warning("> TODO: write remaining MIDI2/UMP tests")
     
 }
 

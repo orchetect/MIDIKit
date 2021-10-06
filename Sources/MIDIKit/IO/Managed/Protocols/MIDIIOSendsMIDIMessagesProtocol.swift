@@ -74,7 +74,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
             }
             
         case .newCoreMIDI:
-            #warning("> code this")
+            #warning("> TODO: send(rawMessage:) new API code this")
             throw MIDI.IO.MIDIError.internalInconsistency("Not yet implemented.")
             
         }
@@ -93,7 +93,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
             }
             
         case .newCoreMIDI:
-            #warning("> code this")
+            #warning("> TODO: send(rawMessages:) new API code this")
             throw MIDI.IO.MIDIError.internalInconsistency("Not yet implemented.")
             
         }

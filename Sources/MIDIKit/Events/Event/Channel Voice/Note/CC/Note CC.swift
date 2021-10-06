@@ -69,7 +69,8 @@ extension MIDI.Event.Note.CC {
         
         // MIDI 2.0 only
         
-        #warning("> code this")
+        #warning("> TODO: umpRawWords() needs coding")
+        _ = mtAndGroup
         
         // let word1 = MIDI.UMPWord()
         

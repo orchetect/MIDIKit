@@ -74,7 +74,7 @@ extension MIDI.Event.ProgramChange {
     
     public func midi1RawBytes() -> [MIDI.Byte] {
         
-        #warning("> add bank select code")
+        #warning("> TODO: add bank select code")
         
         return [0xC0 + channel.uInt8Value,
                 program.uInt8Value]
@@ -101,7 +101,8 @@ extension MIDI.Event.ProgramChange {
             
             let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
             
-            #warning("> code this")
+            #warning("> TODO: umpRawWords() needs coding")
+            _ = mtAndGroup
             
             //let word1 = MIDI.UMPWord()
             
