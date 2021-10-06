@@ -74,10 +74,29 @@ extension MIDI.Event.ProgramChange {
     
     public func midi1RawBytes() -> [MIDI.Byte] {
         
-        #warning("> TODO: add bank select code")
+        let programChangeMessage = [0xC0 + channel.uInt8Value,
+                                    program.uInt8Value]
         
-        return [0xC0 + channel.uInt8Value,
-                program.uInt8Value]
+        switch bank {
+        case .noBankSelect:
+            return programChangeMessage
+            
+        case .bankSelect(let bankNumber):
+            
+            // Assemble 3 messages in order:
+            // - Bank Select MSB (CC 0)
+            // - Bank Select LSB (CC 32)
+            // - Program Change
+            
+            return [0xB0 + channel.uInt8Value,
+                    0x00,
+                    bankNumber.midiUInt7Pair.msb.uInt8Value]
+                + [0xB0 + channel.uInt8Value,
+                   0x32,
+                   bankNumber.midiUInt7Pair.lsb.uInt8Value]
+                + programChangeMessage
+            
+        }
         
     }
     
