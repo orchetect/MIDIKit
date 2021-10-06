@@ -11,7 +11,9 @@ import XCTestExtensions
 
 final class UInt4_Tests: XCTestCase {
 	
-	fileprivate let _max = 0b1111
+    fileprivate let _min      = 0b0000 // int  0, hex 0x0
+    fileprivate let _midpoint = 0b1000 // int  8, hex 0x8
+	fileprivate let _max      = 0b1111 // int 15, hex 0xF
 	
 	func testInit_BinaryInteger() {
 		
@@ -32,8 +34,8 @@ final class UInt4_Tests: XCTestCase {
 		
 		// overflow
 		
-		_XCTAssertThrows {
-			_ = MIDI.UInt4(0 - 1)
+		_XCTAssertThrows { [self] in
+			_ = MIDI.UInt4(_min - 1)
 		}
 		
         _XCTAssertThrows { [self] in
@@ -119,7 +121,7 @@ final class UInt4_Tests: XCTestCase {
     
 	func testMin() {
 		
-		XCTAssertEqual(MIDI.UInt4.min.intValue, 0)
+		XCTAssertEqual(MIDI.UInt4.min.intValue, _min)
 		
 	}
 	
@@ -135,6 +137,23 @@ final class UInt4_Tests: XCTestCase {
 		XCTAssertEqual(MIDI.UInt4(1).uInt8Value, 1)
 		
 	}
+    
+    func testStrideable() {
+        
+        let min = MIDI.UInt4(_min)
+        let max = MIDI.UInt4(_max)
+        
+        let strideBy1 = stride(from: min, through: max, by: 1)
+        XCTAssertEqual(strideBy1.underestimatedCount, _max + 1)
+        XCTAssertTrue(strideBy1.starts(with: [min]))
+        XCTAssertEqual(strideBy1.suffix(1), [max])
+        
+        let range = min...max
+        XCTAssertEqual(range.count, _max + 1)
+        XCTAssertEqual(range.lowerBound, min)
+        XCTAssertEqual(range.upperBound, max)
+        
+    }
 	
 	func testEquatable() {
 		

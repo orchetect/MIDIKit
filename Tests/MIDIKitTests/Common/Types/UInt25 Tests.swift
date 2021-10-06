@@ -138,6 +138,24 @@ final class UInt25_Tests: XCTestCase {
 		
 	}
 	
+    func testStrideable() {
+        
+        let min = MIDI.UInt25(_min)
+        let max = MIDI.UInt25(_max)
+        
+        let strideBy1 = stride(from: min, through: max, by: 1)
+        // skip this, it takes way too long to compute
+        //XCTAssertEqual(strideBy1.underestimatedCount, _max + 1)
+        XCTAssertTrue(strideBy1.starts(with: [min]))
+        XCTAssertEqual(strideBy1.suffix(1), [max])
+        
+        let range = min...max
+        XCTAssertEqual(range.count, _max + 1)
+        XCTAssertEqual(range.lowerBound, min)
+        XCTAssertEqual(range.upperBound, max)
+        
+    }
+    
 	func testEquatable() {
 		
 		XCTAssertTrue(MIDI.UInt25(0) == MIDI.UInt25(0))
