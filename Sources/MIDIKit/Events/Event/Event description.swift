@@ -45,7 +45,12 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
             
         case .programChange(let event):
             
-            return "prgChange(\(event.program), chan: \(event.channel), group: \(event.group))"
+            switch event.bank {
+            case .noBankSelect:
+                return "prgChange(\(event.program), chan: \(event.channel), group: \(event.group))"
+            case .bankSelect(let bank):
+                return "prgChange(\(event.program), bank: \(bank), chan: \(event.channel), group: \(event.group))"
+            }
             
         case .pressure(let event):
             
