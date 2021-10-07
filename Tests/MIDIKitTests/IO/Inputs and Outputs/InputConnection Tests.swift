@@ -36,27 +36,16 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
 		
 		let tag1 = "1"
 		
-		var caughtErr: Error? = nil
-		
 		do {
 			try manager.addInputConnection(
-				toOutput: .name(UUID().uuidString),
+				toOutputs: [.name(UUID().uuidString)],
 				tag: tag1,
 				receiveHandler: .rawDataLogging()
 			)
 		} catch let err as MIDI.IO.MIDIError {
-			// log error - expect: endpoint not found
-			caughtErr = err
+            XCTFail(err.localizedDescription) ; return
 		} catch {
 			XCTFail(error.localizedDescription) ; return
-		}
-		
-		if let castCaughtErr = caughtErr as? MIDI.IO.MIDIError,
-		   case .connectionError = castCaughtErr {
-			// correct - expect error to be present
-		}
-		else {
-			XCTFail("Expected error thrown; no error was thrown.")
 		}
 		
 		XCTAssertNotNil(manager.managedInputConnections[tag1])

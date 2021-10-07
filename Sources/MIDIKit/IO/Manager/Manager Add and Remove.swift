@@ -8,7 +8,7 @@ import Foundation
 
 extension MIDI.IO.Manager {
     
-    /// Adds a managed virtual input to the `managedInputs` dictionary of the `Manager` and creates the MIDI port in the system.
+    /// Adds a new managed virtual input to the `managedInputs` dictionary of the `Manager` and creates the MIDI port in the system.
     ///
     /// The lifecycle of the MIDI port exists for as long as the `Manager` instance exists, or until `.remove(::)` is called.
     ///
@@ -60,16 +60,16 @@ extension MIDI.IO.Manager {
         
     }
     
-    /// Adds a managed connected input to the `managedInputConnections` dictionary of the `Manager`.
+    /// Adds a new managed connected input to the `managedInputConnections` dictionary of the `Manager`.
     ///
     /// - Parameters:
-    ///   - toOutput: Criteria for identifying a MIDI endpoint in the system to connect to.
+    ///   - toOutputs: Criteria for identifying MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
     ///   - receiveHandler: Event handler for received MIDI packets.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addInputConnection(
-        toOutput: MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>,
+        toOutputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>],
         tag: String,
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
@@ -77,7 +77,7 @@ extension MIDI.IO.Manager {
         try eventQueue.sync {
             
             let newCD = MIDI.IO.InputConnection(
-                toOutput: toOutput,
+                toOutputs: toOutputs,
                 receiveHandler: receiveHandler,
                 midiManager: self,
                 api: preferredAPI
@@ -87,13 +87,14 @@ extension MIDI.IO.Manager {
             // even if subsequent connection fails
             managedInputConnections[tag] = newCD
             
+            try newCD.listen(in: self)
             try newCD.connect(in: self)
             
         }
         
     }
     
-    /// Adds a managed virtual output to the `managedOutputs` dictionary of the `Manager`.
+    /// Adds new a managed virtual output to the `managedOutputs` dictionary of the `Manager`.
     ///
     /// The lifecycle of the MIDI port exists for as long as the `Manager` instance exists, or until `.remove(::)` is called.
     ///
@@ -142,36 +143,38 @@ extension MIDI.IO.Manager {
         
     }
     
-    /// Adds a managed connected output to the `managedOutputConnections` dictionary of the `Manager`.
+    /// Adds a new managed connected output to the `managedOutputConnections` dictionary of the `Manager`.
     ///
     /// - Parameters:
-    ///   - toInput: Criteria for identifying a MIDI endpoint in the system to connect to.
+    ///   - toInputs: Criteria for identifying a MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addOutputConnection(
-        toInput: MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>,
+        toInputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>],
         tag: String
     ) throws {
         
         try eventQueue.sync {
             
             let newCS = MIDI.IO.OutputConnection(
-                toInput: toInput,
+                toInputs: toInputs,
+                midiManager: self,
                 api: preferredAPI
             )
             
             // store the connection object in the manager,
-            // even if subsequent connection fails
+            // even if subsequent operations fail
             managedOutputConnections[tag] = newCS
             
-            try newCS.connect(in: self)
+            try newCS.setupOutput(in: self)
+            try newCS.resolveEndpoints(in: self)
             
         }
         
     }
     
-    /// Creates a MIDI play-through (thru) connection.
+    /// Creates a new MIDI play-through (thru) connection.
     ///
     /// If the connection is non-persistent, a managed thru connection will be added to the `managedThruConnections` dictionary of the `Manager` and its lifecycle will be that of the `Manager` or until removeThruConnection is called for the connection.
     ///

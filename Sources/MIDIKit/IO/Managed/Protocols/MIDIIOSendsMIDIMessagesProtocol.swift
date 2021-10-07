@@ -25,8 +25,8 @@ public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
 internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProtocol {
     
     /// Internal:
-    /// Core MIDI Port Ref
-    var portRef: MIDI.IO.CoreMIDIPortRef? { get }
+    /// Core MIDI Port Ref(s)
+    var outputPortRef: MIDI.IO.CoreMIDIPortRef? { get }
     
     /// Internal:
     /// Send a MIDI Message, automatically assembling it into a `MIDIPacketList`.

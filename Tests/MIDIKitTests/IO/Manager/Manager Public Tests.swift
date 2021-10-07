@@ -58,8 +58,7 @@ final class Manager_Public_Tests: XCTestCase {
         
         _ = output?.api
         _ = output?.midiProtocol
-        _ = output?.inputCriteria
-        _ = output?.isConnected
+        _ = output?.inputsCriteria
         
         _ = output?.description
         
@@ -88,8 +87,7 @@ final class Manager_Public_Tests: XCTestCase {
         
         _ = input?.api
         _ = input?.midiProtocol
-        _ = input?.outputCriteria
-        _ = input?.isConnected
+        _ = input?.outputsCriteria
         
         _ = input?.description
         
