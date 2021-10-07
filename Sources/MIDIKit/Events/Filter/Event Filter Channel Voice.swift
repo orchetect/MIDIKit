@@ -107,6 +107,40 @@ extension Collection where Element == MIDI.Event {
                 return ccs.contains(event.controller)
             }
             
+        case .onlyNotesInRange(let noteRange):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    return noteRange.contains(noteOn.note)
+                    
+                case .noteOff(let noteOff):
+                    return noteRange.contains(noteOff.note)
+                    
+                default:
+                    return false
+                }
+            }
+            
+        case .onlyNotesInRanges(let noteRanges):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOn.note) { return true }
+                    }
+                    return false
+                    
+                case .noteOff(let noteOff):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOff.note) { return true }
+                    }
+                    return false
+                    
+                default:
+                    return false
+                }
+            }
+            
         case .keepChannel(let channel):
             return filter {
                 guard let _ = $0.channel else { return true }
@@ -151,6 +185,40 @@ extension Collection where Element == MIDI.Event {
                 return ccs.contains(event.controller)
             }
             
+        case .keepNotesInRange(let noteRange):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    return noteRange.contains(noteOn.note)
+                    
+                case .noteOff(let noteOff):
+                    return noteRange.contains(noteOff.note)
+                    
+                default:
+                    return true
+                }
+            }
+            
+        case .keepNotesInRanges(let noteRanges):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOn.note) { return true }
+                    }
+                    return false
+                    
+                case .noteOff(let noteOff):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOff.note) { return true }
+                    }
+                    return false
+                    
+                default:
+                    return true
+                }
+            }
+            
         case .drop:
             return filter { !$0.isChannelVoice }
             
@@ -189,6 +257,41 @@ extension Collection where Element == MIDI.Event {
                 else { return true }
                 
                 return !ccs.contains(event.controller)
+            }
+         
+        case .dropNotesInRange(let noteRange):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    return !noteRange.contains(noteOn.note)
+                    
+                case .noteOff(let noteOff):
+                    return !noteRange.contains(noteOff.note)
+                    
+                default:
+                    return true
+                }
+            }
+            
+            
+        case .dropNotesInRanges(let noteRanges):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOn.note) { return false }
+                    }
+                    return true
+                    
+                case .noteOff(let noteOff):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOff.note) { return false }
+                    }
+                    return true
+                    
+                default:
+                    return true
+                }
             }
             
         }
