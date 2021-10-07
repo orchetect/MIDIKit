@@ -19,7 +19,7 @@ extension MIDI.IO {
         public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
         // _MIDIIOSendsMIDIMessagesProtocol
-        internal var portRef: MIDI.IO.CoreMIDIPortRef? = nil
+        internal var outputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
         
         // class-specific
         
@@ -117,7 +117,7 @@ extension MIDI.IO.Output {
             
         }
         
-        portRef = newPortRef
+        outputPortRef = newPortRef
         
         // set meta data properties; ignore errors in case of failure
         _ = try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
@@ -140,11 +140,11 @@ extension MIDI.IO.Output {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         
-        guard let unwrappedPortRef = self.portRef else { return }
+        guard let unwrappedOutputPortRef = self.outputPortRef else { return }
         
-        defer { self.portRef = nil }
+        defer { self.outputPortRef = nil }
         
-        try MIDIEndpointDispose(unwrappedPortRef)
+        try MIDIEndpointDispose(unwrappedOutputPortRef)
             .throwIfOSStatusErr()
         
     }
@@ -176,13 +176,13 @@ extension MIDI.IO.Output: _MIDIIOSendsMIDIMessagesProtocol {
     
     internal func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         
-        guard let unwrappedPortRef = self.portRef else {
+        guard let unwrappedOutputPortRef = self.outputPortRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Port reference is nil."
             )
         }
         
-        try MIDIReceived(unwrappedPortRef, packetList)
+        try MIDIReceived(unwrappedOutputPortRef, packetList)
             .throwIfOSStatusErr()
         
     }
@@ -190,13 +190,13 @@ extension MIDI.IO.Output: _MIDIIOSendsMIDIMessagesProtocol {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     internal func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
-        guard let unwrappedPortRef = self.portRef else {
+        guard let unwrappedOutputPortRef = self.outputPortRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Port reference is nil."
             )
         }
         
-        try MIDIReceivedEventList(unwrappedPortRef, eventList)
+        try MIDIReceivedEventList(unwrappedOutputPortRef, eventList)
             .throwIfOSStatusErr()
         
     }

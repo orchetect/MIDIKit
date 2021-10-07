@@ -133,12 +133,12 @@ extension MIDI.Event.CC.Controller.RPN {
                     lsb: nil)
             
         case .tuningProgramChange(number: let number):
-            #warning("> not sure if this is correct")
+            #warning("> TODO: not sure if this is correct")
             return (msb: number.toMIDIUInt7Exactly,
                     lsb: nil)
             
         case .tuningBankSelect(number: let number):
-            #warning("> not sure if this is correct")
+            #warning("> TODO: not sure if this is correct")
             return (msb: number.toMIDIUInt7Exactly,
                     lsb: nil)
             
@@ -174,7 +174,7 @@ extension MIDI.Event.CC.Controller.RPN {
     public func events(channel: MIDI.UInt4,
                        group: MIDI.UInt4 = 0) -> [MIDI.Event] {
         
-        #warning("> not sure this is correct")
+        #warning("> TODO: not sure RPN messages are correct")
         
         var rpnEvents: [MIDI.Event] = [
             .cc(.rpnMSB,

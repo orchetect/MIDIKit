@@ -29,7 +29,7 @@ class SysExTests: XCTestCase {
         XCTAssertEqual(innerEvent.group, 0)
 		
 		XCTAssertEqual(event.midi1RawBytes, sourceRawBytes)
-        #warning("> also test umpRawBytes here")
+        #warning("> TODO: also test umpRawBytes here")
 		
 	}
 	
@@ -50,7 +50,7 @@ class SysExTests: XCTestCase {
         XCTAssertEqual(innerEvent.group, 0)
         
 		XCTAssertEqual(event.midi1RawBytes, sourceRawBytes)
-        #warning("> also test umpRawBytes here")
+        #warning("> TODO: also test umpRawBytes here")
         
 	}
     
@@ -71,7 +71,7 @@ class SysExTests: XCTestCase {
         XCTAssertEqual(innerEvent.group, 0)
         
         XCTAssertEqual(event.midi1RawBytes, [0xF0, 0x41, 0xF7])
-        #warning("> also test umpRawBytes here")
+        #warning("> TODO: also test umpRawBytes here")
         
     }
     

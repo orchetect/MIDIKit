@@ -10,7 +10,7 @@ extension MIDI.IO.ThruConnection {
     /// Parameters for a MIDI Thru connection.
     public struct Parameters {
         
-        #warning("> complete all available properties")
+        #warning("> TODO: complete all available properties")
         
         public var inputs: [MIDI.IO.CoreMIDIEndpointRef] = []
         public var outputs: [MIDI.IO.CoreMIDIEndpointRef] = []
@@ -32,7 +32,7 @@ extension MIDI.IO.ThruConnection.Parameters {
     /// Builds Core MIDI `MIDIThruConnectionParams` from local properties.
     internal func coreMIDIThruConnectionParams() -> MIDIThruConnectionParams {
         
-        #warning("> complete all available properties")
+        #warning("> TODO: complete all available properties")
         
         var params = MIDIThruConnectionParams()
         

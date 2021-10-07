@@ -25,8 +25,8 @@ public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
 internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProtocol {
     
     /// Internal:
-    /// Core MIDI Port Ref
-    var portRef: MIDI.IO.CoreMIDIPortRef? { get }
+    /// Core MIDI Port Ref(s)
+    var outputPortRef: MIDI.IO.CoreMIDIPortRef? { get }
     
     /// Internal:
     /// Send a MIDI Message, automatically assembling it into a `MIDIPacketList`.
@@ -74,7 +74,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
             }
             
         case .newCoreMIDI:
-            #warning("> code this")
+            #warning("> TODO: send(rawMessage:) new API code this")
             throw MIDI.IO.MIDIError.internalInconsistency("Not yet implemented.")
             
         }
@@ -93,7 +93,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
             }
             
         case .newCoreMIDI:
-            #warning("> code this")
+            #warning("> TODO: send(rawMessages:) new API code this")
             throw MIDI.IO.MIDIError.internalInconsistency("Not yet implemented.")
             
         }

@@ -6,8 +6,7 @@
 extension MIDI.Event {
     
     /// System Exclusive: Universal SysEx
-    ///
-    /// Used in both MIDI 1.0 and 2.0 spec.
+    /// (MIDI 1.0 / 2.0)
     ///
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
     ///
@@ -37,8 +36,7 @@ extension MIDI.Event {
     }
     
     /// System Exclusive: Universal SysEx
-    ///
-    /// Used in both MIDI 1.0 and 2.0 spec.
+    /// (MIDI 1.0 / 2.0)
     ///
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
     ///
@@ -49,6 +47,7 @@ extension MIDI.Event {
     ///   - subID2: Sub ID #2
     ///   - data: Data bytes
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func universalSysEx(universalType: UniversalSysExType,
                                       deviceID: MIDI.UInt7,
                                       subID1: MIDI.UInt7,
@@ -71,6 +70,7 @@ extension MIDI.Event {
 
 extension MIDI.Event.UniversalSysEx {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xF0,
@@ -83,14 +83,15 @@ extension MIDI.Event.UniversalSysEx {
         
     }
     
-    #warning("> this needs specializing?")
-    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit
-    
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
-        #warning("> needs coding")
+        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit
         
-        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+        
+        #warning("> TODO: umpRawWords() needs coding")
+        _ = mtAndGroup
         
         return []
         

@@ -6,21 +6,31 @@
 extension MIDI.Event {
     
     /// Returns the event's channel, if one is associated with it.
+    @inline(__always)
     public var channel: MIDI.UInt4? {
         
         switch self {
-            
-            // -------------------
-            // MARK: Channel Voice
-            // -------------------
-            
+        
+        // -------------------
+        // MARK: Channel Voice
+        // -------------------
+        
         case .noteOn(let event):
             return event.channel
             
         case .noteOff(let event):
             return event.channel
             
-        case .polyAftertouch(let event):
+        case .noteCC(let event):
+            return event.channel
+            
+        case .notePitchBend(let event):
+            return event.channel
+            
+        case .notePressure(let event):
+            return event.channel
+            
+        case .noteManagement(let event):
             return event.channel
             
         case .cc(let event):
@@ -29,7 +39,7 @@ extension MIDI.Event {
         case .programChange(let event):
             return event.channel
             
-        case .chanAftertouch(let event):
+        case .pressure(let event):
             return event.channel
             
         case .pitchBend(let event):
@@ -43,21 +53,31 @@ extension MIDI.Event {
     }
     
     /// Returns the event's UMP group.
+    @inline(__always)
     public var group: MIDI.UInt4 {
         
         switch self {
-            
-            // -------------------
-            // MARK: Channel Voice
-            // -------------------
-            
+        
+        // -------------------
+        // MARK: Channel Voice
+        // -------------------
+        
         case .noteOn(let event):
             return event.group
             
         case .noteOff(let event):
             return event.group
             
-        case .polyAftertouch(let event):
+        case .noteCC(let event):
+            return event.group
+            
+        case .notePitchBend(let event):
+            return event.group
+            
+        case .notePressure(let event):
+            return event.group
+            
+        case .noteManagement(let event):
             return event.group
             
         case .cc(let event):
@@ -66,17 +86,17 @@ extension MIDI.Event {
         case .programChange(let event):
             return event.group
             
-        case .chanAftertouch(let event):
+        case .pressure(let event):
             return event.group
             
         case .pitchBend(let event):
             return event.group
             
             
-            // ----------------------
-            // MARK: System Exclusive
-            // ----------------------
-            
+        // ----------------------
+        // MARK: System Exclusive
+        // ----------------------
+        
         case .sysEx(let event):
             return event.group
             
@@ -84,10 +104,10 @@ extension MIDI.Event {
             return event.group
             
             
-            // -------------------
-            // MARK: System Common
-            // -------------------
-            
+        // -------------------
+        // MARK: System Common
+        // -------------------
+        
         case .timecodeQuarterFrame(let event):
             return event.group
             
@@ -104,10 +124,10 @@ extension MIDI.Event {
             return event.group
             
             
-            // ----------------------
-            // MARK: System Real Time
-            // ----------------------
-            
+        // ----------------------
+        // MARK: System Real Time
+        // ----------------------
+        
         case .timingClock(let event):
             return event.group
             

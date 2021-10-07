@@ -5,7 +5,8 @@
 
 extension MIDI.Event {
     
-    /// System Common: Tune Request (Status `0xF6`)
+    /// System Common: Tune Request
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI Spec:
     ///
@@ -17,7 +18,8 @@ extension MIDI.Event {
         
     }
     
-    /// System Common: Tune Request (Status `0xF6`)
+    /// System Common: Tune Request
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI Spec:
     ///
@@ -25,6 +27,7 @@ extension MIDI.Event {
     ///
     /// - Parameters:
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func tuneRequest(group: MIDI.UInt4 = 0x0) -> Self {
         
         .tuneRequest(
@@ -37,17 +40,19 @@ extension MIDI.Event {
 
 extension MIDI.Event.TuneRequest {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xF6]
         
     }
     
-    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
-    
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
-        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
+        
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
         let word = MIDI.UMPWord(mtAndGroup,
                                 0xF6,

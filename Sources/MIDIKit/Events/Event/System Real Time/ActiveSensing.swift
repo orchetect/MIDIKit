@@ -6,6 +6,7 @@
 extension MIDI.Event {
     
     /// System Real Time: Active Sensing
+    /// (MIDI 1.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -20,6 +21,7 @@ extension MIDI.Event {
     }
     
     /// System Real Time: Active Sensing
+    /// (MIDI 1.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -29,6 +31,7 @@ extension MIDI.Event {
     ///
     /// - Parameters:
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func activeSensing(group: MIDI.UInt4 = 0x0) -> Self {
         
         .activeSensing(
@@ -41,17 +44,19 @@ extension MIDI.Event {
 
 extension MIDI.Event.ActiveSensing {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xFE]
         
     }
     
-    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
-    
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
-        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
+        
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
         let word = MIDI.UMPWord(mtAndGroup,
                                 0xFE,

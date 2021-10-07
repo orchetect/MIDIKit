@@ -32,8 +32,7 @@ extension MIDI {
         }
         
         public init<T: BinaryFloatingPoint>(_ source: T) {
-            // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type less than the largest MIDIKitIntegerProtocol concrete type we're using (UInt14).
-            // the smallest floating point number in the Swift standard library is Float16 which can hold UInt14.max fine.
+            // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type that cannot fit UInt14.max
             if source < Self.min(T.self) {
                 Exception.underflow.raise(reason: "UInt14 integer underflowed")
             }
@@ -43,25 +42,24 @@ extension MIDI {
             value = Storage(source)
         }
         
-        /// Converts from a floating-point unit interval having a 0.0 neutral midpoint
-        /// (`-1.0...0.0...1.0` to `0...8192...16383`)
+        /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint)
+        /// (`-1.0...0.0...1.0` == `0...8192...16383`)
         ///
         /// Example:
         ///
-        ///     init(zeroMidpointFloat: -1.0) == 0     == .min
-        ///     init(zeroMidpointFloat: -0.5) == 4096
-        ///     init(zeroMidpointFloat:  0.0) == 8192  == .midpoint
-        ///     init(zeroMidpointFloat:  0.5) == 12287
-        ///     init(zeroMidpointFloat:  1.0) == 16383 == .max
-        public init<T: BinaryFloatingPoint>(unitIntervalAroundZero: T) {
-            let unitIntervalAroundZero = unitIntervalAroundZero.clamped(to: (-1.0)...(1.0))
+        ///     init(bipolarUnitInterval: -1.0) == 0     == .min
+        ///     init(bipolarUnitInterval: -0.5) == 4096
+        ///     init(bipolarUnitInterval:  0.0) == 8192  == .midpoint
+        ///     init(bipolarUnitInterval:  0.5) == 12287
+        ///     init(bipolarUnitInterval:  1.0) == 16383 == .max
+        public init<T: BinaryFloatingPoint>(bipolarUnitInterval: T) {
+            let bipolarUnitInterval = bipolarUnitInterval.clamped(to: (-1.0)...(1.0))
             
-            if unitIntervalAroundZero > 0.0 {
-                value = 8192 + Storage(unitIntervalAroundZero * 8191)
+            if bipolarUnitInterval > 0.0 {
+                value = 8192 + Storage(bipolarUnitInterval * 8191)
             } else {
-                value = 8192 - Storage(abs(unitIntervalAroundZero) * 8192)
+                value = 8192 - Storage(abs(bipolarUnitInterval) * 8192)
             }
-            
         }
         
         /// Initialize the raw 14-bit value from two 7-bit value bytes.
@@ -87,13 +85,13 @@ extension MIDI {
         public static func min<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0 }
         
         // (0x40 << 7) + 0x00
-        // 0b1000000_0000000
+        // 0b1000000_0000000, int 8192, hex 0x2000
         /// Neutral midpoint
         public static let midpoint = Self(Self.midpoint(Storage.self))
         public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 8192 }
         
         // (0x7F << 7) + 0x7F
-        // 0b1111111_1111111
+        // 0b1111111_1111111, int 16383, hex 0x3FFF
         public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 16383 }
         public static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 16383 }
         
@@ -102,9 +100,9 @@ extension MIDI {
         /// Returns the integer as a `UInt16` instance
         public var uInt16Value: UInt16 { value }
         
-        /// Converts from integer to a floating-point unit interval having a 0.0 neutral midpoint at 8192.
-        /// (`0...8192...16383` to `-1.0...0.0...1.0`)
-        public var unitIntervalAroundZero: Double {
+        /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral midpoint at 8192).
+        /// (`0...8192...16383` == `-1.0...0.0...1.0`)
+        public var bipolarUnitIntervalValue: Double {
             
             // account for non-symmetry and round up. (This is how MIDI 1.0 Spec pitchbend works)
             if value > 8192 {
@@ -143,6 +141,22 @@ extension MIDI.UInt14: ExpressibleByIntegerLiteral {
     
     public init(integerLiteral value: Storage) {
         self.init(value)
+    }
+    
+}
+
+extension MIDI.UInt14: Strideable {
+    
+    public typealias Stride = Int
+    
+    @inlinable
+    public func advanced(by n: Stride) -> Self {
+        self + Self(n)
+    }
+    
+    @inlinable
+    public func distance(to other: Self) -> Stride {
+        Stride(other) - Stride(self)
     }
     
 }

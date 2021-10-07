@@ -31,6 +31,7 @@ extension MIDI.Event {
         case threeByte(byte2: MIDI.Byte, byte3: MIDI.Byte)
 
         /// Returns the Manufacturer byte(s)
+        @inline(__always)
         public var bytes: [MIDI.Byte] {
 
             switch self {
@@ -48,6 +49,7 @@ extension MIDI.Event {
         /// This does not test whether the ID belongs to a registered manufacturer. Rather, it simply reports if the bytes are legal.
         ///
         /// Use the `.name` property to return the manufacturer's name associated with the ID, or `nil` if the ID is not registered.
+        @inline(__always)
         public var isValid: Bool {
 
             switch self {
@@ -92,6 +94,7 @@ extension MIDI.Event.SysExManufacturer {
     /// Returns a new instance containing the Educational Use ID.
     ///
     /// - note: Reserved for use only in educational institutions or for unit testing; not public release.
+    @inline(__always)
     public static func educational() -> Self {
 
         .oneByte(0x7D)

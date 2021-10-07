@@ -91,7 +91,8 @@ extension MIDI.Event.CC.Controller {
 extension MIDI.Event.CC.Controller.LSB {
     
     /// Returns the controller number.
-    @inlinable public var controller: MIDI.UInt7 {
+    @inlinable
+    public var controller: MIDI.UInt7 {
         
         switch self {
         case .bankSelect      : return 32
@@ -123,7 +124,8 @@ extension MIDI.Event.CC.Controller.LSB {
 extension MIDI.Event.CC.Controller.LSB {
     
     /// Returns the controller name as a human-readable String.
-    @inlinable public var name: String {
+    @inlinable
+    public var name: String {
         
         switch self {
         case .bankSelect      : return "Bank Select LSB"

@@ -46,7 +46,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         // poly aftertouch
         XCTAssertEqual(
             parsedEvents(bytes: [0x22, 0xA4, 0x3C, 0x40]),
-            [.polyAftertouch(note: 60, pressure: 64, channel: 4, group: 0x2)]
+            [.notePressure(note: 60, amount: .midi1(64), channel: 4, group: 0x2)]
         )
         
         // cc
@@ -64,13 +64,13 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         // channel aftertouch
         XCTAssertEqual(
             parsedEvents(bytes: [0x25, 0xD8, 0x40, 0x00]),
-            [.chanAftertouch(pressure: 64, channel: 8, group: 0x5)]
+            [.pressure(amount: .midi1(64), channel: 8, group: 0x5)]
         )
         
         // pitch bend
         XCTAssertEqual(
             parsedEvents(bytes: [0x26, 0xE3, 0x00, 0x40]),
-            [.pitchBend(value: 8192, channel: 3, group: 0x6)]
+            [.pitchBend(value: .midi1(8192), channel: 3, group: 0x6)]
         )
         
         // - UMP MIDI 1.0 system messages
@@ -274,7 +274,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         // - requires one data byte to follow, with one null byte trailing padding
         // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xD0, 0x00, 0x80]),
-                       [.chanAftertouch(pressure: 0, channel: 0, group: 0)])
+                       [.pressure(amount: .midi1(0), channel: 0, group: 0)])
         // test data byte(s) > 127
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xD0, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xD0, 0x80, 0x80]), [])
@@ -462,9 +462,9 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         
     }
     
-    #warning("> write MIDI2 multi-packet SysEx7 / SysEx8 test")
+    #warning("> TODO: write MIDI2 multi-packet SysEx7 / SysEx8 test")
     
-    #warning("> write remaining MIDI2/UMP tests")
+    #warning("> TODO: write remaining MIDI2/UMP tests")
     
 }
 

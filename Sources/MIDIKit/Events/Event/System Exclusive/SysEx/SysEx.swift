@@ -6,6 +6,7 @@
 extension MIDI.Event {
     
     /// System Exclusive: Manufacturer-specific
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -26,6 +27,7 @@ extension MIDI.Event {
     }
     
     /// System Exclusive: Manufacturer-specific
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -37,6 +39,7 @@ extension MIDI.Event {
     ///   - manufacturer: SysEx Manufacturer ID
     ///   - data: Data bytes
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func sysEx(manufacturer: SysExManufacturer,
                              data: [MIDI.Byte],
                              group: MIDI.UInt4 = 0x0) -> Self {
@@ -53,23 +56,22 @@ extension MIDI.Event {
 
 extension MIDI.Event.SysEx {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xF0] + manufacturer.bytes + data + [0xF7]
         
     }
     
-    #warning("> this needs specializing?")
-    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit
-    
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
-        #warning("> needs coding")
+        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit
         
-        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
-        _ = manufacturer
-        _ = data
+        #warning("> TODO: umpRawWords() needs coding")
+        _ = mtAndGroup
         
         return []
         

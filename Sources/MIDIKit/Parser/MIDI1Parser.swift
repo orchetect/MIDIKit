@@ -399,13 +399,13 @@ extension MIDI {
             case 0xA: // poly aftertouch
                 let channel = statusByte.nibbles.low
                 guard let note = dataByte1?.toMIDIUInt7Exactly,
-                      let pressure = dataByte2?.toMIDIUInt7Exactly
+                      let amount = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .polyAftertouch(note: note,
-                                                           pressure: pressure,
-                                                           channel: channel,
-                                                           group: umpGroup)
+                let newEvent: MIDI.Event = .notePressure(note: note,
+                                                         amount: .midi1(amount),
+                                                         channel: channel,
+                                                         group: umpGroup)
                 
                 events.append(newEvent)
                 
@@ -435,12 +435,12 @@ extension MIDI {
                 
             case 0xD: // channel aftertouch
                 let channel = statusByte.nibbles.low
-                guard let pressure = dataByte1?.toMIDIUInt7Exactly
+                guard let amount = dataByte1?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .chanAftertouch(pressure: pressure,
-                                                           channel: channel,
-                                                           group: umpGroup)
+                let newEvent: MIDI.Event = .pressure(amount: .midi1(amount),
+                                                     channel: channel,
+                                                     group: umpGroup)
                 
                 events.append(newEvent)
                 
@@ -453,7 +453,7 @@ extension MIDI {
                 let uint14 = MIDI.UInt14(bytePair: .init(msb: unwrappedDataByte2,
                                                          lsb: unwrappedDataByte1))
                 
-                let newEvent: MIDI.Event = .pitchBend(value: uint14,
+                let newEvent: MIDI.Event = .pitchBend(value: .midi1(uint14),
                                                       channel: channel,
                                                       group: umpGroup)
                 

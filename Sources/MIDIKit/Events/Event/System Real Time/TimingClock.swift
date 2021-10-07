@@ -6,6 +6,7 @@
 extension MIDI.Event {
     
     /// System Real Time: Timing Clock
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -18,6 +19,7 @@ extension MIDI.Event {
     }
     
     /// System Real Time: Timing Clock
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
@@ -25,6 +27,7 @@ extension MIDI.Event {
     ///
     /// - Parameters:
     ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
     public static func timingClock(group: MIDI.UInt4 = 0x0) -> Self {
         
         .timingClock(
@@ -37,17 +40,19 @@ extension MIDI.Event {
 
 extension MIDI.Event.TimingClock {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xF8]
         
     }
     
-    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
-    
+    @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
-        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
+        
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
         let word = MIDI.UMPWord(mtAndGroup,
                                 0xF8,

@@ -16,7 +16,7 @@ extension MIDI.Event.CC.Controller: CaseIterable {
         .footController,                //   4
         .portamentoTime,                //   5
         .dataEntry,                     //   6
-        .channelVolume,                 //   7
+        .volume,                        //   7
         .balance,                       //   8
         .undefined(.cc9),               //   9
         .pan,                           //  10

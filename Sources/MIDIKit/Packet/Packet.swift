@@ -15,6 +15,7 @@ extension MIDI {
         case universalPacket(UniversalPacketData)
         
         /// Flat array of raw bytes
+        @inline(__always)
         public var bytes: [MIDI.Byte] {
             
             switch self {
@@ -28,6 +29,7 @@ extension MIDI {
         }
         
         /// Core MIDI packet timestamp
+        @inline(__always)
         public var timeStamp: MIDI.IO.CoreMIDITimeStamp {
             
             switch self {

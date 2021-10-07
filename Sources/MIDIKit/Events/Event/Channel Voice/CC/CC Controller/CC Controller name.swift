@@ -6,17 +6,18 @@
 extension MIDI.Event.CC.Controller {
     
     /// Returns the controller name as a human-readable String.
-    @inlinable public var name: String {
+    @inlinable
+    public var name: String {
         
         switch self {
-            
+        
         case .bankSelect                    : return "Bank Select"
         case .modWheel                      : return "Mod Wheel"
         case .breath                        : return "Breath Controller"
         case .footController                : return "Foot Controller"
         case .portamentoTime                : return "Portamento Time"
         case .dataEntry                     : return "Data Entry MSB"
-        case .channelVolume                 : return "Volume"
+        case .volume                        : return "Volume"
         case .balance                       : return "Balance"
         case .pan                           : return "Pan"
         case .expression                    : return "Expression"

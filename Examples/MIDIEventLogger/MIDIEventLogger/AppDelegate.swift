@@ -37,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 Log.default(error)
             }
             
-            #warning("> remove this")
+            #warning("> TODO: remove this")
             //newManager.preferredAPI = .newCoreMIDI
             
             return newManager

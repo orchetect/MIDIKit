@@ -8,15 +8,16 @@
 extension MIDI.Event {
     
     /// Returns true if the event is a System Real Time message.
-    @inlinable public var isSystemRealTime: Bool {
+    @inlinable
+    public var isSystemRealTime: Bool {
         
         switch self {
         case .timingClock,
-                .start,
-                .continue,
-                .stop,
-                .activeSensing,
-                .systemReset:
+             .start,
+             .continue,
+             .stop,
+             .activeSensing,
+             .systemReset:
             return true
             
         default:
@@ -26,7 +27,8 @@ extension MIDI.Event {
     }
     
     /// Returns true if the event is a System Real Time message of a specific type.
-    @inlinable public func isSystemRealTime(ofType sysRealTimeType: SysRealTimeType) -> Bool {
+    @inlinable
+    public func isSystemRealTime(ofType sysRealTimeType: SysRealTimeType) -> Bool {
         
         switch self {
         case .timingClock   : return sysRealTimeType == .timingClock
@@ -41,7 +43,8 @@ extension MIDI.Event {
     }
     
     /// Returns true if the event is a System Real Time message of a specific type.
-    @inlinable public func isSystemRealTime(ofTypes sysRealTimeTypes: Set<SysRealTimeType>) -> Bool {
+    @inlinable
+    public func isSystemRealTime(ofTypes sysRealTimeTypes: Set<SysRealTimeType>) -> Bool {
         
         for eventType in sysRealTimeTypes {
             if self.isSystemRealTime(ofType: eventType) { return true }
@@ -59,7 +62,8 @@ extension MIDI.Event {
 extension Collection where Element == MIDI.Event {
     
     /// Filter System Real Time events.
-    @inlinable public func filter(sysRealTime types: MIDI.Event.SysRealTimeTypes) -> [Element] {
+    @inlinable
+    public func filter(sysRealTime types: MIDI.Event.SysRealTimeTypes) -> [Element] {
         
         switch types {
         case .only:

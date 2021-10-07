@@ -8,14 +8,15 @@
 extension MIDI.Event {
     
     /// Returns true if the event is a System Common message.
-    @inlinable public var isSystemCommon: Bool {
+    @inlinable
+    public var isSystemCommon: Bool {
         
         switch self {
         case .timecodeQuarterFrame,
-                .songPositionPointer,
-                .songSelect,
-                .unofficialBusSelect,
-                .tuneRequest:
+             .songPositionPointer,
+             .songSelect,
+             .unofficialBusSelect,
+             .tuneRequest:
             return true
             
         default:
@@ -25,7 +26,8 @@ extension MIDI.Event {
     }
     
     /// Returns true if the event is a System Common message of a specific type.
-    @inlinable public func isSystemCommon(ofType sysCommonType: SysCommonType) -> Bool {
+    @inlinable
+    public func isSystemCommon(ofType sysCommonType: SysCommonType) -> Bool {
         
         switch self {
         case .timecodeQuarterFrame : return sysCommonType == .timecodeQuarterFrame
@@ -39,7 +41,8 @@ extension MIDI.Event {
     }
     
     /// Returns true if the event is a System Common message of a specific type.
-    @inlinable public func isSystemCommon(ofTypes sysCommonTypes: Set<SysCommonType>) -> Bool {
+    @inlinable
+    public func isSystemCommon(ofTypes sysCommonTypes: Set<SysCommonType>) -> Bool {
         
         for eventType in sysCommonTypes {
             if self.isSystemCommon(ofType: eventType) { return true }
@@ -56,7 +59,8 @@ extension MIDI.Event {
 extension Collection where Element == MIDI.Event {
     
     /// Filter System Common events.
-    @inlinable public func filter(sysCommon types: MIDI.Event.SysCommonTypes) -> [Element] {
+    @inlinable
+    public func filter(sysCommon types: MIDI.Event.SysCommonTypes) -> [Element] {
         
         switch types {
         case .only:
@@ -82,7 +86,7 @@ extension Collection where Element == MIDI.Event {
             
         case .drop:
             return filter { !$0.isSystemCommon }
-           
+            
         case .dropType(let specificType):
             return filter {
                 guard $0.isSystemCommon else { return true }
@@ -94,7 +98,7 @@ extension Collection where Element == MIDI.Event {
                 guard $0.isSystemCommon else { return true }
                 return !$0.isSystemCommon(ofTypes: specificTypes)
             }
-           
+            
         }
         
     }

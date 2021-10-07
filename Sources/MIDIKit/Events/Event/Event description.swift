@@ -10,11 +10,11 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         
         switch self {
-            
-            // -------------------
-            // MARK: Channel Voice
-            // -------------------
-            
+        
+        // -------------------
+        // MARK: Channel Voice
+        // -------------------
+        
         case .noteOn(let event):
             
             return "noteOn(\(event.note), vel: \(event.velocity), chan: \(event.channel), group: \(event.group))"
@@ -23,9 +23,21 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
             
             return "noteOff(\(event.note), vel: \(event.velocity), chan: \(event.channel), group: \(event.group))"
             
-        case .polyAftertouch(let event):
+        case .noteCC(let event):
             
-            return "polyAftertouch(note:\(event.note), pressure: \(event.pressure), chan: \(event.channel), group: \(event.group))"
+            return "noteCC(note: \(event.note), controller: \(event.controller), val: \(event.value), chan: \(event.channel), group: \(event.group))"
+            
+        case .notePitchBend(let event):
+            
+            return "notePitchBend(note: \(event.note), value: \(event.value), chan: \(event.channel), group: \(event.group))"
+            
+        case .notePressure(let event):
+            
+            return "notePressure(note:\(event.note), amount: \(event.amount), chan: \(event.channel), group: \(event.group))"
+            
+        case .noteManagement(let event):
+            
+            return "noteManagement(options: \(event.optionFlags), chan: \(event.channel), group: \(event.group))"
             
         case .cc(let event):
             
@@ -33,21 +45,26 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
             
         case .programChange(let event):
             
-            return "prgChange(\(event.program), chan: \(event.channel), group: \(event.group))"
+            switch event.bank {
+            case .noBankSelect:
+                return "prgChange(\(event.program), chan: \(event.channel), group: \(event.group))"
+            case .bankSelect(let bank):
+                return "prgChange(\(event.program), bank: \(bank), chan: \(event.channel), group: \(event.group))"
+            }
             
-        case .chanAftertouch(let event):
+        case .pressure(let event):
             
-            return "chanAftertouch(pressure: \(event.pressure), chan: \(event.channel), group: \(event.group))"
+            return "pressure(amount: \(event.amount), chan: \(event.channel), group: \(event.group))"
             
         case .pitchBend(let event):
             
             return "pitchBend(\(event.value), chan: \(event.channel), group: \(event.group))"
             
             
-            // ----------------------
-            // MARK: System Exclusive
-            // ----------------------
-            
+        // ----------------------
+        // MARK: System Exclusive
+        // ----------------------
+        
         case .sysEx(let event):
             
             let dataString = event.data
@@ -63,10 +80,10 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
             return "universalSysEx(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(event.group))"
             
             
-            // -------------------
-            // MARK: System Common
-            // -------------------
-            
+        // -------------------
+        // MARK: System Common
+        // -------------------
+        
         case .timecodeQuarterFrame(let event):
             
             let dataByteString = event.dataByte.uInt8Value
@@ -84,17 +101,17 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
             
         case .unofficialBusSelect(let event):
             
-            return "unofficialBusSelect(group: \(event.group))"
+            return "unofficialBusSelect(bus: \(event.bus), group: \(event.group))"
             
         case .tuneRequest(let event):
             
             return "tuneRequest(group: \(event.group))"
             
             
-            // ----------------------
-            // MARK: System Real Time
-            // ----------------------
-            
+        // ----------------------
+        // MARK: System Real Time
+        // ----------------------
+        
         case .timingClock(let event):
             
             return "timingClock(group: \(event.group))"

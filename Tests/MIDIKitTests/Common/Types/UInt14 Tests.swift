@@ -11,9 +11,9 @@ import XCTestExtensions
 
 final class UInt14_Tests: XCTestCase {
     
-    fileprivate let _min      = 0b00_0000_0000_0000
-    fileprivate let _midpoint = 0b10_0000_0000_0000
-    fileprivate let _max      = 0b11_1111_1111_1111
+    fileprivate let _min      = 0b00_0000_0000_0000 // int     0, hex 0x0000
+    fileprivate let _midpoint = 0b10_0000_0000_0000 // int  8192, hex 0x2000
+    fileprivate let _max      = 0b11_1111_1111_1111 // int 16383, hex 0x3FFF
     
     func testInit_BinaryInteger() {
         
@@ -118,13 +118,13 @@ final class UInt14_Tests: XCTestCase {
         
     }
     
-    func testInitZeroMidpointFloat() {
+    func testInitBipolarUnitInterval() {
         
-        XCTAssertEqual(MIDI.UInt14(unitIntervalAroundZero: -1.0).intValue, _min)
-        XCTAssertEqual(MIDI.UInt14(unitIntervalAroundZero: -0.5).intValue, 4096)
-        XCTAssertEqual(MIDI.UInt14(unitIntervalAroundZero:  0.0).intValue, _midpoint)
-        XCTAssertEqual(MIDI.UInt14(unitIntervalAroundZero:  0.5).intValue, 12287)
-        XCTAssertEqual(MIDI.UInt14(unitIntervalAroundZero:  1.0).intValue, _max)
+        XCTAssertEqual(MIDI.UInt14(bipolarUnitInterval: -1.0).intValue, _min)
+        XCTAssertEqual(MIDI.UInt14(bipolarUnitInterval: -0.5).intValue, 4096)
+        XCTAssertEqual(MIDI.UInt14(bipolarUnitInterval:  0.0).intValue, _midpoint)
+        XCTAssertEqual(MIDI.UInt14(bipolarUnitInterval:  0.5).intValue, 12287)
+        XCTAssertEqual(MIDI.UInt14(bipolarUnitInterval:  1.0).intValue, _max)
         
     }
     
@@ -163,13 +163,30 @@ final class UInt14_Tests: XCTestCase {
         
     }
     
-    func testZeroMidpointFloat() {
+    func testStrideable() {
         
-        XCTAssertEqual(MIDI.UInt14(_min).unitIntervalAroundZero, -1.0)
-        XCTAssertEqual(MIDI.UInt14(4096).unitIntervalAroundZero, -0.5)
-        XCTAssertEqual(MIDI.UInt14(_midpoint).unitIntervalAroundZero, 0.0)
-        XCTAssertEqual(MIDI.UInt14(12287).unitIntervalAroundZero, 0.5, accuracy: 0.0001)
-        XCTAssertEqual(MIDI.UInt14(_max).unitIntervalAroundZero, 1.0)
+        let min = MIDI.UInt14(_min)
+        let max = MIDI.UInt14(_max)
+        
+        let strideBy1 = stride(from: min, through: max, by: 1)
+        XCTAssertEqual(strideBy1.underestimatedCount, _max + 1)
+        XCTAssertTrue(strideBy1.starts(with: [min]))
+        XCTAssertEqual(strideBy1.suffix(1), [max])
+        
+        let range = min...max
+        XCTAssertEqual(range.count, _max + 1)
+        XCTAssertEqual(range.lowerBound, min)
+        XCTAssertEqual(range.upperBound, max)
+        
+    }
+    
+    func testBipolarUnitIntervalValue() {
+        
+        XCTAssertEqual(MIDI.UInt14(_min).bipolarUnitIntervalValue, -1.0)
+        XCTAssertEqual(MIDI.UInt14(4096).bipolarUnitIntervalValue, -0.5)
+        XCTAssertEqual(MIDI.UInt14(_midpoint).bipolarUnitIntervalValue, 0.0)
+        XCTAssertEqual(MIDI.UInt14(12287).bipolarUnitIntervalValue, 0.5, accuracy: 0.0001)
+        XCTAssertEqual(MIDI.UInt14(_max).bipolarUnitIntervalValue, 1.0)
         
     }
     

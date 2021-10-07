@@ -8,16 +8,20 @@
 extension MIDI.Event {
     
     /// Returns true if the event is a Channel Voice message.
-    @inlinable public var isChannelVoice: Bool {
+    @inlinable
+    public var isChannelVoice: Bool {
         
         switch self {
         case .noteOn,
-                .noteOff,
-                .polyAftertouch,
-                .cc,
-                .programChange,
-                .chanAftertouch,
-                .pitchBend:
+             .noteOff,
+             .noteCC,
+             .notePitchBend,
+             .notePressure,
+             .noteManagement,
+             .cc,
+             .programChange,
+             .pitchBend,
+             .pressure:
             return true
             
         default:
@@ -27,23 +31,28 @@ extension MIDI.Event {
     }
     
     /// Returns true if the event is a Channel Voice message of a specific type.
-    @inlinable public func isChannelVoice(ofType chanVoiceType: ChanVoiceType) -> Bool {
+    @inlinable
+    public func isChannelVoice(ofType chanVoiceType: ChanVoiceType) -> Bool {
         
         switch self {
         case .noteOn         : return chanVoiceType == .noteOn
         case .noteOff        : return chanVoiceType == .noteOff
-        case .polyAftertouch : return chanVoiceType == .polyAftertouch
+        case .noteCC         : return chanVoiceType == .noteCC
+        case .notePitchBend  : return chanVoiceType == .notePitchBend
+        case .notePressure   : return chanVoiceType == .notePressure
+        case .noteManagement : return chanVoiceType == .noteManagement
         case .cc             : return chanVoiceType == .cc
         case .programChange  : return chanVoiceType == .programChange
-        case .chanAftertouch : return chanVoiceType == .chanAftertouch
         case .pitchBend      : return chanVoiceType == .pitchBend
+        case .pressure       : return chanVoiceType == .pressure
         default              : return false
         }
         
     }
     
     /// Returns true if the event is a Channel Voice message of a specific type.
-    @inlinable public func isChannelVoice(ofTypes chanVoiceTypes: Set<ChanVoiceType>) -> Bool {
+    @inlinable
+    public func isChannelVoice(ofTypes chanVoiceTypes: Set<ChanVoiceType>) -> Bool {
         
         for eventType in chanVoiceTypes {
             if self.isChannelVoice(ofType: eventType) { return true }
@@ -60,12 +69,13 @@ extension MIDI.Event {
 extension Collection where Element == MIDI.Event {
     
     /// Filter Channel Voice events.
-    @inlinable public func filter(chanVoice types: MIDI.Event.ChanVoiceTypes) -> [Element] {
+    @inlinable
+    public func filter(chanVoice types: MIDI.Event.ChanVoiceTypes) -> [Element] {
         
         switch types {
         case .only:
             return filter { $0.isChannelVoice }
-        
+            
         case .onlyType(let specificType):
             return filter { $0.isChannelVoice(ofType: specificType) }
             
@@ -95,6 +105,40 @@ extension Collection where Element == MIDI.Event {
                 else { return false }
                 
                 return ccs.contains(event.controller)
+            }
+            
+        case .onlyNotesInRange(let noteRange):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    return noteRange.contains(noteOn.note)
+                    
+                case .noteOff(let noteOff):
+                    return noteRange.contains(noteOff.note)
+                    
+                default:
+                    return false
+                }
+            }
+            
+        case .onlyNotesInRanges(let noteRanges):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOn.note) { return true }
+                    }
+                    return false
+                    
+                case .noteOff(let noteOff):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOff.note) { return true }
+                    }
+                    return false
+                    
+                default:
+                    return false
+                }
             }
             
         case .keepChannel(let channel):
@@ -141,9 +185,43 @@ extension Collection where Element == MIDI.Event {
                 return ccs.contains(event.controller)
             }
             
+        case .keepNotesInRange(let noteRange):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    return noteRange.contains(noteOn.note)
+                    
+                case .noteOff(let noteOff):
+                    return noteRange.contains(noteOff.note)
+                    
+                default:
+                    return true
+                }
+            }
+            
+        case .keepNotesInRanges(let noteRanges):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOn.note) { return true }
+                    }
+                    return false
+                    
+                case .noteOff(let noteOff):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOff.note) { return true }
+                    }
+                    return false
+                    
+                default:
+                    return true
+                }
+            }
+            
         case .drop:
             return filter { !$0.isChannelVoice }
-        
+            
         case .dropChannel(let channel):
             return filter { $0.channel != channel }
             
@@ -164,7 +242,7 @@ extension Collection where Element == MIDI.Event {
                 guard $0.isChannelVoice else { return true }
                 return !$0.isChannelVoice(ofTypes: specificTypes)
             }
-        
+            
         case .dropCC(let cc):
             return filter {
                 guard case .cc(let event) = $0
@@ -179,6 +257,41 @@ extension Collection where Element == MIDI.Event {
                 else { return true }
                 
                 return !ccs.contains(event.controller)
+            }
+         
+        case .dropNotesInRange(let noteRange):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    return !noteRange.contains(noteOn.note)
+                    
+                case .noteOff(let noteOff):
+                    return !noteRange.contains(noteOff.note)
+                    
+                default:
+                    return true
+                }
+            }
+            
+            
+        case .dropNotesInRanges(let noteRanges):
+            return filter {
+                switch $0 {
+                case .noteOn(let noteOn):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOn.note) { return false }
+                    }
+                    return true
+                    
+                case .noteOff(let noteOff):
+                    for noteRange in noteRanges {
+                        if noteRange.contains(noteOff.note) { return false }
+                    }
+                    return true
+                    
+                default:
+                    return true
+                }
             }
             
         }

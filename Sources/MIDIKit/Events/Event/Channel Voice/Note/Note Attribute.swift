@@ -5,6 +5,7 @@
 
 extension MIDI.Event.Note {
     
+    /// MIDI 2.0 Note Attribute
     public enum Attribute: Equatable, Hashable {
         
         /// None:
@@ -37,6 +38,7 @@ extension MIDI.Event.Note {
 
 extension MIDI.Event.Note.Attribute {
     
+    @inline(__always)
     public init(type: MIDI.Byte, data: UInt16) {
         
         switch type {
@@ -64,6 +66,7 @@ extension MIDI.Event.Note.Attribute {
 extension MIDI.Event.Note.Attribute {
     
     /// Attribute Type Byte
+    @inline(__always)
     public var attributeType: MIDI.Byte {
         
         switch self {
@@ -87,6 +90,7 @@ extension MIDI.Event.Note.Attribute {
     }
     
     /// Attribute Data
+    @inline(__always)
     public var attributeData: UInt16 {
         
         switch self {

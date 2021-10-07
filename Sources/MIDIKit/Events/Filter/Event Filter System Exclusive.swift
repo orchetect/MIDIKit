@@ -8,11 +8,12 @@
 extension MIDI.Event {
     
     /// Returns true if the event is a System Exclusive message.
-    @inlinable public var isSystemExclusive: Bool {
+    @inlinable
+    public var isSystemExclusive: Bool {
         
         switch self {
         case .sysEx,
-                .universalSysEx:
+             .universalSysEx:
             return true
             
         default:
@@ -22,7 +23,8 @@ extension MIDI.Event {
     }
     
     /// Returns true if the event is a System Exclusive message of a specific type.
-    @inlinable public func isSystemExclusive(ofType sysExType: SysExType) -> Bool {
+    @inlinable
+    public func isSystemExclusive(ofType sysExType: SysExType) -> Bool {
         
         switch self {
         case .sysEx          : return sysExType == .sysEx
@@ -33,7 +35,8 @@ extension MIDI.Event {
     }
     
     /// Returns true if the event is a System Exclusive message of a specific type.
-    @inlinable public func isSystemExclusive(ofTypes sysExTypes: Set<SysExType>) -> Bool {
+    @inlinable
+    public func isSystemExclusive(ofTypes sysExTypes: Set<SysExType>) -> Bool {
         
         for eventType in sysExTypes {
             if self.isSystemExclusive(ofType: eventType) { return true }
@@ -50,7 +53,8 @@ extension MIDI.Event {
 extension Collection where Element == MIDI.Event {
     
     /// Filter System Exclusive events.
-    @inlinable public func filter(sysEx types: MIDI.Event.SysExTypes) -> [Element] {
+    @inlinable
+    public func filter(sysEx types: MIDI.Event.SysExTypes) -> [Element] {
         
         switch types {
         case .only:
