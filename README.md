@@ -8,11 +8,7 @@ An elegant and modern Swift CoreMIDI wrapper with:
   - (ie: a single 'note on' event & its value types are homogenous between MIDI 1.0 and 2.0)
 - event filters
   - easily filter or drop events by message type, channel, CC number, UMP group, and more
-- seamless unified API across **macOS 10.12 Sierra** and later (including **macOS 12.0 Monterey**)
-- seamless unified API across **iOS 10** and later (including **iOS 15**)
-- beta support for **tvOS** and **watchOS** in development
-
-Back-porting a limited subset of MIDI 2.0 features to older platforms (macOS Catalina or older, and iOS 13 or older) is planned, but not yet supported.
+- seamless unified API, transparently adopting newer Core MIDI API and MIDI 2.0 on platforms that support them
 
 ## MIDIKit Extensions
 
@@ -27,7 +23,7 @@ Abstractions are built as optional extensions in their own repos.
    - In an app project or framework, in Xcode:
      - Select the menu: **File → Swift Packages → Add Package Dependency...**
      - Enter this URL: `https://github.com/orchetect/MIDIKit`
-    
+   
    - In a Swift Package, add it to the Package.swift dependencies:
      ```swift
      .package(url: "https://github.com/orchetect/MIDIKit", from: "0.2.0")
@@ -40,9 +36,18 @@ Abstractions are built as optional extensions in their own repos.
 
 3. See [Examples](https://github.com/orchetect/MIDIKit/blob/master/Examples/) folder and [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder for usage.
 
+## Known Issues
+
+- MIDI 2.0 implementation on supported OS versions is still in active development and will be available in a future MIDIKit update. For the time being, MIDIKit will internally default to MIDI 1.0 which is fully operational.
+- Back-porting a limited subset of MIDI 2.0 features to older platforms (macOS Catalina or older, and iOS 13 or older) is planned, but not yet supported.
+
+- Beta support for **tvOS 14+** and **watchOS 7+** in development and is planned to be added in future.
+
 ## Documentation
 
 See [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder.
+
+Also see project [Examples](https://github.com/orchetect/MIDIKit/blob/master/Examples/) folder.
 
 ## Author
 
