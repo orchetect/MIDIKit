@@ -119,7 +119,7 @@ struct ContentView: View {
         // check for existing connection and compare new selection against it
         if let ic = midiManager.managedInputConnections[kInputConnectionTag] {
             // if endpoint is the same, don't reconnect
-            if ic.endpoint == midiInputConnectionEndpoint {
+            if ic.endpoints.first == midiInputConnectionEndpoint {
                 Log.debug("Already connected.")
                 return
             }
@@ -137,7 +137,7 @@ struct ContentView: View {
         Log.debug("Setting up new input connection to \(endpointName).")
         do {
             try midiManager.addInputConnection(
-                toOutput: .uniqueID(endpoint.uniqueID),
+                toOutputs: [.uniqueID(endpoint.uniqueID)],
                 tag: kInputConnectionTag,
                 receiveHandler: .eventsLogging()
             )

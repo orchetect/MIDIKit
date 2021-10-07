@@ -142,7 +142,7 @@ extension ContentView {
                 } label: { Text("Channel Pressure") }
                 
                 Button {
-                    sendEvent(.pitchBend(value: .midpoint,
+                    sendEvent(.pitchBend(value: .midi1(.midpoint),
                                          channel: midiChannel,
                                          group: midiGroup))
                 } label: { Text("PitchBend") }
