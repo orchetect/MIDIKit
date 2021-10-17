@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		// Configure console logging
 		Log.setup(enabled: true,
 				  defaultLog: nil,
-				  defaultSubsystem: Globals.bundle.bundleID,
+				  defaultSubsystem: Globals.MainBundle.bundleID,
 				  useEmoji: .all)
 		
         // set up midi manager
