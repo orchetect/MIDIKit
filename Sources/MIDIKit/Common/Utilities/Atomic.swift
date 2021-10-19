@@ -1,25 +1,39 @@
 //
-//  AtomicAccess.swift
+//  Atomic.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import Darwin
 
-// Derived from: https://stackoverflow.com/a/60814063/2805570
+
+/// ------------------------------------------------------------------------------------
+/// ------------------------------------------------------------------------------------
+/// Borrowed from [OTCore 1.1.17](https://github.com/orchetect/OTCore) under MIT license.
+/// ------------------------------------------------------------------------------------
+/// ------------------------------------------------------------------------------------
+
+
+
+import Foundation
 
 extension MIDI {
     
-    /// A property wrapper that ensures atomic access to a value, meaning thread-safe with implicit serial read/write access.
+    /// Atomic: A property wrapper that ensures thread-safe atomic access to a value.
     /// Multiple read accesses can potentially read at the same time, just not during a write.
+    ///
     /// By using `pthread` to do the locking, this safer than using a `DispatchQueue/barrier` as there isn't a chance of priority inversion.
+    ///
+    /// This is safe to use on collection types (`Array`, `Dictionary`, etc.)
     @propertyWrapper
-    public final class AtomicAccess<T> {
+    public final class Atomic<T> {
         
         private var value: T
+        
         private let lock: ThreadLock = RWThreadLock()
         
         public init(wrappedValue value: T) {
+            
             self.value = value
+            
         }
         
         public var wrappedValue: T {
@@ -29,30 +43,22 @@ extension MIDI {
                 defer { self.lock.unlock() }
                 return self.value
             }
-            set {
+            
+            // _modify { } is an internal Swift computed setter, similar to set { }
+            // however it gives in-place exclusive mutable access
+            // which allows get-then-set operations such as collection subscripts
+            // to be performed in a single thread-locked operation
+            _modify {
                 self.lock.writeLock()
-                self.value = newValue
+                yield &value
                 self.lock.unlock()
             }
-            
-        }
-        
-        /// Provides a closure that will be called synchronously.
-        /// This closure will be passed in the current value and it is free to modify it.
-        /// Any modifications will be saved back to the original value.
-        /// No other reads/writes will be allowed between when the closure is called and it returns.
-        public func mutate(_ closure: (inout T) -> Void) {
-            
-            self.lock.writeLock()
-            closure(&value)
-            self.lock.unlock()
             
         }
         
     }
     
 }
-
 
 /// Defines a basic signature to which all locks will conform. Provides the basis for atomic access to stuff.
 fileprivate protocol ThreadLock {
