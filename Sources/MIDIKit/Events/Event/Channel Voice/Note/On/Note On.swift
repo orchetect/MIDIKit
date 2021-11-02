@@ -59,6 +59,32 @@ extension MIDI.Event {
         
     }
     
+    /// Channel Voice Message: Note On
+    /// (MIDI 1.0 / 2.0)
+    ///
+    /// - Parameters:
+    ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+    ///   - velocity: Velocity
+    ///   - channel: Channel Number (0x0...0xF)
+    ///   - attribute: MIDI 2.0 Channel Voice Attribute
+    ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
+    public static func noteOn(_ note: MIDI.Note,
+                              velocity: Note.Velocity,
+                              channel: MIDI.UInt4,
+                              attribute: Note.Attribute = .none,
+                              group: MIDI.UInt4 = 0x0) -> Self {
+        
+        .noteOn(
+            .init(note: note.number,
+                  velocity: velocity,
+                  channel: channel,
+                  attribute: attribute,
+                  group: group)
+        )
+        
+    }
+    
 }
 
 extension MIDI.Event.Note.On {

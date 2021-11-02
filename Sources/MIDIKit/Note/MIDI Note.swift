@@ -19,10 +19,10 @@ public extension MIDI {
         // MARK: - Constants
         
         /// Constant: lowest possible note number
-        public static let lowestNote: UInt8 = 0x00
+        public static let lowestNote: MIDI.UInt7 = 0x00
         
         /// Constant: highest possible note number
-        public static let highestNote: UInt8 = 0x7F
+        public static let highestNote: MIDI.UInt7 = 0x7F
         
         /// MIDI note number.
         public var number: MIDI.UInt7 = 0
@@ -30,7 +30,7 @@ public extension MIDI {
         /// Tuning in Hertz, for use with frequency conversion
         public var tuning: Double = 440.0
         
-        public init() {}
+        public init() { }
         
         /// Construct from a MIDI note number.
         public init?(number: Int) {
@@ -53,7 +53,7 @@ public extension MIDI {
         /// Construct from a note `Name` and octave.
         /// Invalid values returns nil.
         public init?(_ name: Name, octave: Int) {
-            if !setNoteNumber(from: name, octave: octave) { return nil }
+            if !setNoteNumber(name, octave: octave) { return nil }
         }
         
         /// Construct from a MIDI note name string.
@@ -66,11 +66,11 @@ public extension MIDI {
         /// Sets the nearest note number to the frequency.
         /// If resulting note number is invalid, nil is returned.
         public init?(frequency: Double) {
-            if !setNoteNumber(fromFrequency: frequency) { return nil }
+            if !setNoteNumber(frequency: frequency) { return nil }
         }
         
         @discardableResult
-        public mutating func setNoteNumber(from source: Name,
+        public mutating func setNoteNumber(_ source: Name,
                                            octave: Int) -> Bool
         {
             let rootValue = 0
@@ -88,7 +88,6 @@ public extension MIDI {
         @discardableResult
         public mutating func setNoteNumber(from source: String) -> Bool {
             var noteString = ""
-            var noteName: Name?
             
             let testCharSet = CharacterSet(charactersIn: "ABCDEFG")
             guard let rngNote = source.rangeOfCharacter(
@@ -105,13 +104,16 @@ public extension MIDI {
                 noteString = String(source[rngNote])
             }
             
-            Name.allCases.forEach {
-                if $0.rawValue == noteString { noteName = $0 }
-            }
+            guard let noteName = Name.allCases
+                    .first(where: { $0.rawValue == noteString })
+            else { return false }
             
-            guard let noteName = noteName else { return false }
-            
-            let octaveString = String(source[source.index(source.startIndex, offsetBy: noteString.count)...])
+            let octaveString = String(
+                source[
+                    source.index(source.startIndex,
+                                 offsetBy: noteString.count)...
+                ]
+            )
             
             // must convert string to int
             guard let octave = Int(octaveString) else { return false }
@@ -119,18 +121,18 @@ public extension MIDI {
             // must be within range
             guard -2 ... 8 ~= octave else { return false }
             
-            return setNoteNumber(from: noteName, octave: octave)
+            return setNoteNumber(noteName, octave: octave)
         }
         
         /// Sets the nearest note number to the frequency
         @discardableResult
-        public mutating func setNoteNumber(fromFrequency: Double,
+        public mutating func setNoteNumber(frequency: Double,
                                            tuning: Double? = nil) -> Bool
         {
             let tuningHz = tuning ?? self.tuning
             
             let noteNum = Self.calculateMIDINoteNumber(
-                ofFrequency: fromFrequency,
+                ofFrequency: frequency,
                 tuning: tuningHz
             )
             
@@ -145,7 +147,7 @@ public extension MIDI {
         /// Case insensitive.
         public var stringValue: String {
             get {
-                let divided = Int(number)
+                let divided = number.intValue
                     .quotientAndRemainder(dividingBy: 12)
                 let octave = divided.quotient - 2
                 let scaleOffset = divided.remainder
@@ -153,7 +155,7 @@ public extension MIDI {
                 let findNoteName = Name.allCases
                     .first(where: { $0.scaleOffset == scaleOffset })
                 
-                let noteName = findNoteName?.rawValue ?? ""
+                let noteName = findNoteName?.rawValue ?? "?"
                 
                 return "\(noteName)\(octave)"
             }
@@ -165,11 +167,11 @@ public extension MIDI {
         /// Get or set MIDI note frequency in Hz, based on `.tuning` property.
         public var frequencyValue: Double {
             get {
-                Self.calculateFrequency(ofMIDINote: Int(number),
+                Self.calculateFrequency(ofMIDINote: number.intValue,
                                         tuning: tuning)
             }
             set {
-                setNoteNumber(fromFrequency: newValue,
+                setNoteNumber(frequency: newValue,
                               tuning: tuning)
             }
         }
@@ -177,7 +179,7 @@ public extension MIDI {
         /// Get MIDI note frequency in Hz, based on an arbitrary tuning (ignoring `.tuning` property).
         /// Does not set `tuning` property.
         public func frequencyValue(tuning: Double) -> Double {
-            Self.calculateFrequency(ofMIDINote: Int(number),
+            Self.calculateFrequency(ofMIDINote: number.intValue,
                                     tuning: tuning)
         }
     }
@@ -213,14 +215,14 @@ extension MIDI.Note: Strideable {
     public typealias Stride = Int
     
     public func distance(to other: Self) -> Int {
-        Int(other.number - number)
+        other.number.intValue - number.intValue
     }
     
     public func advanced(by n: Int) -> Self {
-        let val = (Int(number) + n)
-            .clamped(to: Int(Self.lowestNote) ... Int(Self.highestNote))
+        let val = (number.intValue + n)
+            .clamped(to: Self.lowestNote.intValue ... Self.highestNote.intValue)
         
-        return Self(number: UInt8(val)) ?? .init()
+        return Self(number: val) ?? .init()
     }
     
 }

@@ -58,6 +58,32 @@ extension MIDI.Event {
         
     }
     
+    /// Channel Voice Message: Per-Note Control Change (CC)
+    /// (MIDI 2.0)
+    ///
+    /// - Parameters:
+    ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+    ///   - controller: Controller type
+    ///   - value: Value
+    ///   - channel: Channel Number (0x0...0xF)
+    ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
+    public static func noteCC(note: MIDI.Note,
+                              controller: Note.CC.Controller,
+                              value: UInt32,
+                              channel: MIDI.UInt4,
+                              group: MIDI.UInt4 = 0x0) -> Self {
+        
+        .noteCC(
+            .init(note: note.number,
+                  controller: controller,
+                  value: value,
+                  channel: channel,
+                  group: group)
+        )
+        
+    }
+    
 }
 
 extension MIDI.Event.Note.CC {

@@ -56,6 +56,31 @@ extension MIDI.Event {
         
     }
     
+    /// Channel Voice Message: Per-Note Management
+    /// (MIDI 2.0)
+    ///
+    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per- Note Controllers to multiple Notes on the same Note Number.
+    ///
+    /// - Parameters:
+    ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+    ///   - velocity: Velocity
+    ///   - channel: Channel Number (0x0...0xF)
+    ///   - attribute: MIDI 2.0 Channel Voice Attribute
+    ///   - group: UMP Group (0x0...0xF)
+    public static func noteManagement(_ note: MIDI.Note,
+                                      flags: Set<Note.Management.OptionFlag>,
+                                      channel: MIDI.UInt4,
+                                      group: MIDI.UInt4 = 0x0) -> Self {
+        
+        .noteManagement(
+            .init(note: note.number,
+                  optionFlags: flags,
+                  channel: channel,
+                  group: group)
+        )
+        
+    }
+    
 }
 
 extension MIDI.Event.Note.Management {
