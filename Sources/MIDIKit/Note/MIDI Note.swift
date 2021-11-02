@@ -14,7 +14,7 @@ public extension MIDI {
     /// (Valid note range: C-2 to G8, or 0...127)
     ///
     /// Middle C is represented as C3 (note #60)
-    struct Note {
+    struct Note: Equatable, Hashable {
         
         // MARK: - Constants
         
