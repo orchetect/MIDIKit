@@ -9,6 +9,7 @@ import XCTest
 @testable import MIDIKit
 
 final class NoteTests: XCTestCase {
+    
     func testInitDefaults() {
         // ensure nominal defaults
         
@@ -24,21 +25,20 @@ final class NoteTests: XCTestCase {
         // test conversion:
         // note number -> frequency -> note number
         
-        stride(from: 0, to: 127, by: 1)
-            .forEach {
-                guard let freq = MIDI.Note(number: $0)?.frequencyValue
-                else {
-                    XCTFail("Failed to get note frequency for note number \($0)")
-                    return
-                }
-                
-                // check rounding
-                if let num = MIDI.Note(frequency: freq)?.number.intValue,
-                   num != $0
-                {
-                    XCTFail("Note number conversion failed for frequency \($0)Hz")
-                }
+        (0...127).forEach {
+            guard let freq = MIDI.Note(number: $0)?.frequencyValue
+            else {
+                XCTFail("Failed to get note frequency for note number \($0)")
+                return
             }
+            
+            // check rounding
+            if let num = MIDI.Note(frequency: freq)?.number.intValue,
+               num != $0
+            {
+                XCTFail("Note number conversion failed for frequency \($0)Hz")
+            }
+        }
     }
     
     func testAllNotes() {
@@ -99,6 +99,7 @@ final class NoteTests: XCTestCase {
         XCTAssertEqual(MIDI.Note(.B, octave: -3)?.number, nil)
         XCTAssertEqual(MIDI.Note(.G_sharp, octave: 8)?.number, nil)
     }
+    
 }
 
 #endif
