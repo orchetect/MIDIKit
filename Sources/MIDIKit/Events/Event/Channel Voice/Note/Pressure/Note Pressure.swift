@@ -61,6 +61,34 @@ extension MIDI.Event {
         
     }
     
+    /// Channel Voice Message: Polyphonic Aftertouch
+    /// (MIDI 1.0 / 2.0)
+    ///
+    /// DAWs are known to use variations on the terminology:
+    /// - Pro Tools: "Polyphonic Aftertouch"
+    /// - Logic Pro: "Polyphonic Aftertouch"
+    /// - Cubase: "Poly Pressure"
+    ///
+    /// - Parameters:
+    ///   - note: Note Number for which pressure is applied
+    ///   - amount: Pressure Amount
+    ///   - channel: Channel Number (0x0...0xF)
+    ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
+    public static func notePressure(note: MIDI.Note,
+                                    amount: Note.Pressure.Amount,
+                                    channel: MIDI.UInt4,
+                                    group: MIDI.UInt4 = 0x0) -> Self {
+        
+        .notePressure(
+            .init(note: note.number,
+                  amount: amount,
+                  channel: channel,
+                  group: group)
+        )
+        
+    }
+    
 }
 
 extension MIDI.Event.Note.Pressure {

@@ -53,6 +53,29 @@ extension MIDI.Event {
         
     }
     
+    /// Channel Voice Message: Per-Note Pitch Bend
+    /// (MIDI 2.0)
+    ///
+    /// - Parameters:
+    ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+    ///   - value: 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
+    ///   - channel: Channel Number (0x0...0xF)
+    ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
+    public static func notePitchBend(note: MIDI.Note,
+                                     value: Note.PitchBend.Value,
+                                     channel: MIDI.UInt4,
+                                     group: MIDI.UInt4 = 0x0) -> Self {
+        
+        .notePitchBend(
+            .init(note: note.number,
+                  value: value,
+                  channel: channel,
+                  group: group)
+        )
+        
+    }
+    
 }
 
 extension MIDI.Event.Note.PitchBend {
