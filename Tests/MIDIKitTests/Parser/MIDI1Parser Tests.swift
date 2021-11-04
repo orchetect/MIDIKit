@@ -723,5 +723,33 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
     }
     
+    func testTranslateNoteOnZeroVelocityToNoteOff() {
+        
+        // template method
+        
+        let parser = MIDI.MIDI1Parser()
+        
+        func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
+            parser.parsedEvents(in: bytes, umpGroup: 0)
+        }
+        
+        // on - default
+        // note on with velocity 0 should return a note off event
+        XCTAssertTrue(parser.translateNoteOnZeroVelocityToNoteOff)
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x90, 0x3C, 0x00]),
+            [.noteOff(60, velocity: .midi1(0), channel: 0, group: 0)]
+        )
+        
+        // off
+        // should return a note on event, exactly as received
+        parser.translateNoteOnZeroVelocityToNoteOff = false
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x90, 0x3C, 0x00]),
+            [.noteOn(60, velocity: .midi1(0), channel: 0, group: 0)]
+        )
+        
+    }
+    
 }
 #endif
