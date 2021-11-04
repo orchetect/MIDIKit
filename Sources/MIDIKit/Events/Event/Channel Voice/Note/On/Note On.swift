@@ -27,6 +27,9 @@ extension MIDI.Event.Note {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        /// For MIDI 1.0, transmit velocity of 0 as a Note Off event.
+        public var midi1ZeroVelocityAsNoteOff: Bool = true
+        
     }
     
 }
@@ -42,19 +45,22 @@ extension MIDI.Event {
     ///   - channel: Channel Number (0x0...0xF)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (0x0...0xF)
+    ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
     @inline(__always)
     public static func noteOn(_ note: MIDI.UInt7,
                               velocity: Note.Velocity,
                               channel: MIDI.UInt4,
                               attribute: Note.Attribute = .none,
-                              group: MIDI.UInt4 = 0x0) -> Self {
+                              group: MIDI.UInt4 = 0x0,
+                              midi1ZeroVelocityAsNoteOff: Bool = true) -> Self {
         
         .noteOn(
             .init(note: note,
                   velocity: velocity,
                   channel: channel,
                   attribute: attribute,
-                  group: group)
+                  group: group,
+                  midi1ZeroVelocityAsNoteOff: midi1ZeroVelocityAsNoteOff)
         )
         
     }
@@ -68,19 +74,22 @@ extension MIDI.Event {
     ///   - channel: Channel Number (0x0...0xF)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (0x0...0xF)
+    ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
     @inline(__always)
     public static func noteOn(_ note: MIDI.Note,
                               velocity: Note.Velocity,
                               channel: MIDI.UInt4,
                               attribute: Note.Attribute = .none,
-                              group: MIDI.UInt4 = 0x0) -> Self {
+                              group: MIDI.UInt4 = 0x0,
+                              midi1ZeroVelocityAsNoteOff: Bool = true) -> Self {
         
         .noteOn(
             .init(note: note.number,
                   velocity: velocity,
                   channel: channel,
                   attribute: attribute,
-                  group: group)
+                  group: group,
+                  midi1ZeroVelocityAsNoteOff: midi1ZeroVelocityAsNoteOff)
         )
         
     }
@@ -92,9 +101,41 @@ extension MIDI.Event.Note.On {
     @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
-        [0x90 + channel.uInt8Value,
-         note.uInt8Value,
-         velocity.midi1Value.uInt8Value]
+        func process(midi1Value: MIDI.UInt7) -> [MIDI.Byte] {
+            if midi1Value == 0, midi1ZeroVelocityAsNoteOff {
+                // send as Note Off event
+                return [0x80 + channel.uInt8Value,
+                        note.uInt8Value,
+                        velocity.midi1Value.uInt8Value]
+                
+            } else {
+                // send as Note On event
+                return [0x90 + channel.uInt8Value,
+                        note.uInt8Value,
+                        velocity.midi1Value.uInt8Value]
+            }
+        }
+        
+        switch velocity {
+        case .midi1(let midi1Value):
+            return process(midi1Value: midi1Value)
+            
+        case .midi2:
+            /// - remark: MIDI 2.0 Spec:
+            ///
+            /// When translating a MIDI 2.0 Note On message to the MIDI 1.0 Protocol, if the translated MIDI 1.0 value of the Velocity is zero, then the Translator shall replace the zero with a value of 1.
+            
+            var midi1Velocity = velocity.midi1Value.uInt8Value
+            if midi1Velocity == 0 { midi1Velocity = 1 }
+            
+            return [0x90 + channel.uInt8Value,
+                    note.uInt8Value,
+                    midi1Velocity]
+            
+        case .unitInterval:
+            return process(midi1Value: velocity.midi1Value)
+            
+        }
         
     }
     
@@ -107,14 +148,20 @@ extension MIDI.Event.Note.On {
             
             let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
             
+            let midi1Bytes = midi1RawBytes() // always 3 bytes
+            
             let word = MIDI.UMPWord(mtAndGroup,
-                                    0x90 + channel.uInt8Value,
-                                    note.uInt8Value,
-                                    velocity.midi1Value.uInt8Value)
+                                    midi1Bytes[0],
+                                    midi1Bytes[1],
+                                    midi1Bytes[2])
             
             return [word]
             
         case ._2_0:
+            /// - remark: MIDI 2.0 Spec:
+            ///
+            /// The allowable Velocity range for a MIDI 2.0 Note On message is 0x0000-0xFFFF. Unlike the MIDI 1.0 Note On message, a velocity value of zero does not function as a Note Off.
+            ///
             let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
             
             let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group

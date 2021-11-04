@@ -20,6 +20,9 @@ extension MIDI {
             
         }
         
+        /// Interpret received Note On events with a velocity value of 0 as a Note Off event instead.
+        var translateNoteOnZeroVelocityToNoteOff: Bool = true
+        
         internal var runningStatus: MIDI.Byte? = nil
         
         /// Parse
@@ -28,9 +31,12 @@ extension MIDI {
             umpGroup: MIDI.UInt4 = 0
         ) -> [MIDI.Event] {
             
-            let result = Self.parsedEvents(in: packetData.bytes,
-                                           runningStatus: runningStatus,
-                                           umpGroup: umpGroup)
+            let result = Self.parsedEvents(
+                in: packetData.bytes,
+                runningStatus: runningStatus,
+                translateNoteOnZeroVelocityToNoteOff: translateNoteOnZeroVelocityToNoteOff,
+                umpGroup: umpGroup
+            )
             runningStatus = result.runningStatus
             return result.events
             
@@ -42,9 +48,12 @@ extension MIDI {
             umpGroup: MIDI.UInt4 = 0
         ) -> [MIDI.Event] {
             
-            let result = Self.parsedEvents(in: bytes,
-                                           runningStatus: runningStatus,
-                                           umpGroup: umpGroup)
+            let result = Self.parsedEvents(
+                in: bytes,
+                runningStatus: runningStatus,
+                translateNoteOnZeroVelocityToNoteOff: translateNoteOnZeroVelocityToNoteOff,
+                umpGroup: umpGroup
+            )
             runningStatus = result.runningStatus
             return result.events
             
@@ -56,6 +65,7 @@ extension MIDI {
         public static func parsedEvents(
             in bytes: [MIDI.Byte],
             runningStatus: MIDI.Byte? = nil,
+            translateNoteOnZeroVelocityToNoteOff: Bool = true,
             umpGroup: MIDI.UInt4 = 0
         ) -> (events: [MIDI.Event],
               runningStatus: MIDI.Byte?)
@@ -109,7 +119,11 @@ extension MIDI {
             
             func parseCurrentMessage() {
                 if currentMessageBuffer.isEmpty { return }
-                events += parseSingleMessage(currentMessageBuffer, umpGroup: umpGroup)
+                events += parseSingleMessage(
+                    currentMessageBuffer,
+                    translateNoteOnZeroVelocityToNoteOff: translateNoteOnZeroVelocityToNoteOff,
+                    umpGroup: umpGroup
+                )
                 resetCurrentMessage()
             }
             
@@ -357,6 +371,7 @@ extension MIDI {
         /// - note: This is a helper method only intended to be called internally from within `MIDI.PacketData.parseEvents()`.
         internal static func parseSingleMessage(
             _ bytes: [MIDI.Byte],
+            translateNoteOnZeroVelocityToNoteOff: Bool = true,
             umpGroup: MIDI.UInt4 = 0
         ) -> [MIDI.Event] {
             
@@ -389,10 +404,22 @@ extension MIDI {
                       let velocity = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .noteOn(note,
-                                                   velocity: .midi1(velocity),
-                                                   channel: channel,
-                                                   group: umpGroup)
+                let newEvent: MIDI.Event
+                
+                if velocity == 0,
+                   translateNoteOnZeroVelocityToNoteOff
+                {
+                    // interpret Note On with velocity 0 as a Note Off event instead
+                    newEvent = .noteOff(note,
+                                        velocity: .midi1(velocity),
+                                        channel: channel,
+                                        group: umpGroup)
+                } else {
+                    newEvent = .noteOn(note,
+                                       velocity: .midi1(velocity),
+                                       channel: channel,
+                                       group: umpGroup)
+                }
                 
                 events.append(newEvent)
                 
