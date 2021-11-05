@@ -57,9 +57,14 @@ extension MIDI.Event {
 extension MIDI.Event.SysEx {
     
     @inline(__always)
-    public func midi1RawBytes() -> [MIDI.Byte] {
+    public func midi1RawBytes(
+        leadingF0: Bool = true,
+        trailingF7: Bool = true
+    ) -> [MIDI.Byte] {
         
-        [0xF0] + manufacturer.bytes + data + [0xF7]
+        (leadingF0 ? [0xF0] : [])
+        + manufacturer.bytes + data
+        + (trailingF7 ? [0xF7] : [])
         
     }
     

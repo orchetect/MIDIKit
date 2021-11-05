@@ -71,15 +71,18 @@ extension MIDI.Event {
 extension MIDI.Event.UniversalSysEx {
     
     @inline(__always)
-    public func midi1RawBytes() -> [MIDI.Byte] {
+    public func midi1RawBytes(
+        leadingF0: Bool = true,
+        trailingF7: Bool = true
+    ) -> [MIDI.Byte] {
         
-        [0xF0,
-         MIDI.Byte(universalType.rawValue),
-         deviceID.uInt8Value,
-         subID1.uInt8Value,
-         subID2.uInt8Value]
-            + data
-            + [0xF7]
+        (leadingF0 ? [0xF0] : [])
+        + [MIDI.Byte(universalType.rawValue),
+           deviceID.uInt8Value,
+           subID1.uInt8Value,
+           subID2.uInt8Value]
+        + data
+        + (trailingF7 ? [0xF7] : [])
         
     }
     
