@@ -30,6 +30,38 @@ extension MIDI.Event.Note {
         /// For MIDI 1.0, transmit velocity of 0 as a Note Off event.
         public var midi1ZeroVelocityAsNoteOff: Bool = true
         
+        public init(note: MIDI.UInt7,
+                    velocity: MIDI.Event.Note.Velocity,
+                    channel: MIDI.UInt4,
+                    attribute: MIDI.Event.Note.Attribute = .none,
+                    group: MIDI.UInt4 = 0x0,
+                    midi1ZeroVelocityAsNoteOff: Bool = true) {
+            
+            self.note = note
+            self.velocity = velocity
+            self.channel = channel
+            self.attribute = attribute
+            self.group = group
+            self.midi1ZeroVelocityAsNoteOff = midi1ZeroVelocityAsNoteOff
+            
+        }
+        
+        public init(note: MIDI.Note,
+                    velocity: MIDI.Event.Note.Velocity,
+                    channel: MIDI.UInt4,
+                    attribute: MIDI.Event.Note.Attribute = .none,
+                    group: MIDI.UInt4 = 0x0,
+                    midi1ZeroVelocityAsNoteOff: Bool = true) {
+            
+            self.note = note.number
+            self.velocity = velocity
+            self.channel = channel
+            self.attribute = attribute
+            self.group = group
+            self.midi1ZeroVelocityAsNoteOff = midi1ZeroVelocityAsNoteOff
+            
+        }
+        
     }
     
 }

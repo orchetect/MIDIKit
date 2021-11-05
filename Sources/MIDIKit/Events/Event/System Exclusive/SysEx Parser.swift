@@ -7,9 +7,12 @@ import Foundation
 
 extension MIDI.Event {
     
+    /// Parse a raw System Exclusive message and return a `.sysEx()` or `.universalSysEx()` case if successful.
+    ///
+    /// - Throws: `MIDI.Event.ParseError` if message is malformed.
     @inline(__always)
-    internal static func sysEx(
-        from rawBytes: [MIDI.Byte],
+    public static func sysEx(
+        rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0
     ) throws -> Self {
         

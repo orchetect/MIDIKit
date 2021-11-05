@@ -24,6 +24,16 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        public init(amount: Amount,
+                    channel: MIDI.UInt4,
+                    group: MIDI.UInt4 = 0x0) {
+            
+            self.amount = amount
+            self.channel = channel
+            self.group = group
+            
+        }
+        
     }
     
     /// Channel Voice Message: Channel Pressure

@@ -356,7 +356,7 @@ extension MIDI {
                 ]
                 
                 guard let parsedSysEx = try? MIDI.Event.sysEx(
-                    from: [0xF0] + payloadBytes + [0xF7],
+                    rawBytes: [0xF0] + payloadBytes + [0xF7],
                     group: group
                 )
                 else { return nil }

@@ -24,6 +24,16 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        public init(manufacturer: MIDI.Event.SysExManufacturer,
+                    data: [MIDI.Byte],
+                    group: MIDI.UInt4 = 0x0) {
+            
+            self.manufacturer = manufacturer
+            self.data = data
+            self.group = group
+            
+        }
+        
     }
     
     /// System Exclusive: Manufacturer-specific

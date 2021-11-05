@@ -19,6 +19,14 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        public init(midiBeat: MIDI.UInt14,
+                    group: MIDI.UInt4 = 0x0) {
+            
+            self.midiBeat = midiBeat
+            self.group = group
+            
+        }
+        
     }
     
     /// System Common: Song Position Pointer

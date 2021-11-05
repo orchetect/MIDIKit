@@ -19,6 +19,14 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        public init(dataByte: MIDI.UInt7,
+                    group: MIDI.UInt4 = 0x0) {
+            
+            self.dataByte = dataByte
+            self.group = group
+            
+        }
+        
     }
     
     /// System Common: Timecode Quarter-Frame

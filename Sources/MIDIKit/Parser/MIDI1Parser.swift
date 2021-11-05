@@ -489,7 +489,7 @@ extension MIDI {
             case 0xF: // system message
                 switch statusByte.nibbles.low {
                 case 0x0: // System Common - SysEx Start
-                    guard let parsedSysEx = try? MIDI.Event.sysEx(from: bytes)
+                    guard let parsedSysEx = try? MIDI.Event.sysEx(rawBytes: bytes)
                     else { return events }
                     
                     events.append(parsedSysEx)

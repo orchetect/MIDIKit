@@ -22,6 +22,30 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        public init(controller: Controller,
+                    value: Value,
+                    channel: MIDI.UInt4,
+                    group: MIDI.UInt4 = 0x0) {
+            
+            self.controller = controller
+            self.value = value
+            self.channel = channel
+            self.group = group
+            
+        }
+        
+        public init(controller: MIDI.UInt7,
+                    value: Value,
+                    channel: MIDI.UInt4,
+                    group: MIDI.UInt4 = 0x0) {
+            
+            self.controller = .init(number: controller)
+            self.value = value
+            self.channel = channel
+            self.group = group
+            
+        }
+        
     }
     
 }
@@ -64,7 +88,7 @@ extension MIDI.Event {
                           group: MIDI.UInt4 = 0x0) -> Self {
         
         .cc(
-            .init(controller: .init(number: controller),
+            .init(controller: controller,
                   value: value,
                   channel: channel,
                   group: group)
