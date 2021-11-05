@@ -16,6 +16,14 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        public init(bus: MIDI.UInt7 = 0,
+                    group: MIDI.UInt4 = 0x0) {
+            
+            self.bus = bus
+            self.group = group
+            
+        }
+        
     }
     
     /// Unofficial Bus Select (Status `0xF5`)

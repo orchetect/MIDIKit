@@ -33,6 +33,22 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        public init(universalType: MIDI.Event.UniversalSysExType,
+                    deviceID: MIDI.UInt7,
+                    subID1: MIDI.UInt7,
+                    subID2: MIDI.UInt7,
+                    data: [MIDI.Byte],
+                    group: MIDI.UInt4 = 0x0) {
+            
+            self.universalType = universalType
+            self.deviceID = deviceID
+            self.subID1 = subID1
+            self.subID2 = subID2
+            self.data = data
+            self.group = group
+            
+        }
+        
     }
     
     /// System Exclusive: Universal SysEx

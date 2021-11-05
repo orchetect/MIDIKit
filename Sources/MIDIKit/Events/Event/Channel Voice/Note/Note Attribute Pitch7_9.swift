@@ -20,6 +20,14 @@ extension MIDI.Event.Note.Attribute {
         /// 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
         public var fine: MIDI.UInt9
         
+        public init(coarse: MIDI.UInt7,
+                    fine: MIDI.UInt9) {
+            
+            self.coarse = coarse
+            self.fine = fine
+            
+        }
+        
     }
     
 }

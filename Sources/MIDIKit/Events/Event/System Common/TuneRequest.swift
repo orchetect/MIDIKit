@@ -16,6 +16,12 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        public init(group: MIDI.UInt4 = 0x0) {
+            
+            self.group = group
+            
+        }
+        
     }
     
     /// System Common: Tune Request

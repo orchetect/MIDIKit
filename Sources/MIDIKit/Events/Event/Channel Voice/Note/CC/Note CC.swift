@@ -26,6 +26,34 @@ extension MIDI.Event.Note {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        public init(note: MIDI.UInt7,
+                    controller: CC.Controller,
+                    value: UInt32,
+                    channel: MIDI.UInt4,
+                    group: MIDI.UInt4 = 0x0) {
+            
+            self.note = note
+            self.controller = controller
+            self.value = value
+            self.channel = channel
+            self.group = group
+            
+        }
+        
+        public init(note: MIDI.Note,
+                    controller: CC.Controller,
+                    value: UInt32,
+                    channel: MIDI.UInt4,
+                    group: MIDI.UInt4 = 0x0) {
+            
+            self.note = note.number
+            self.controller = controller
+            self.value = value
+            self.channel = channel
+            self.group = group
+            
+        }
+        
     }
     
 }
