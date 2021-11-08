@@ -16,6 +16,7 @@ Abstractions are built as optional extensions in their own repos.
 
 - [MIDIKitControlSurfaces](https://github.com/orchetect/MIDIKitControlSurfaces): MIDIKit extension for Control Surfaces (HUI, etc.)
 - [MIDIKitSync](https://github.com/orchetect/MIDIKitSync): MIDIKit extension for sync (MTC, etc.)
+- [MIDIKitSMF](https://github.com/orchetect/MIDIKitSMF): MIDIKit extension for reading/writing Standard MIDI Files (SMF)
 
 ## Getting Started
 
