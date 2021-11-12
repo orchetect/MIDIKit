@@ -10,7 +10,17 @@ import XCTest
 
 final class DoubleExtensions_Tests: XCTestCase {
     
-    func testInitBipolarUnitInterval() {
+    func testInitBipolarUnitInterval_Float() {
+        
+        XCTAssertEqual(Double(bipolarUnitInterval: Float(-1.0)), 0.00)
+        XCTAssertEqual(Double(bipolarUnitInterval: Float(-0.5)), 0.25)
+        XCTAssertEqual(Double(bipolarUnitInterval: Float( 0.0)), 0.50)
+        XCTAssertEqual(Double(bipolarUnitInterval: Float( 0.5)), 0.75)
+        XCTAssertEqual(Double(bipolarUnitInterval: Float( 1.0)), 1.00)
+        
+    }
+    
+    func testInitBipolarUnitInterval_Double() {
         
         XCTAssertEqual(Double(bipolarUnitInterval: -1.0), 0.00)
         XCTAssertEqual(Double(bipolarUnitInterval: -0.5), 0.25)

@@ -14,7 +14,17 @@ final class UInt32Extensions_Tests: XCTestCase {
     fileprivate let _midpoint = 0x8000_0000
     fileprivate let _max      = 0xFFFF_FFFF
     
-    func testInitBipolarUnitInterval() {
+    func testInitBipolarUnitInterval_Float() {
+        
+        XCTAssertEqual(UInt32(bipolarUnitInterval: Float(-1.0)), UInt32(_min))
+        XCTAssertEqual(UInt32(bipolarUnitInterval: Float(-0.5)), UInt32(0x4000_0000))
+        XCTAssertEqual(UInt32(bipolarUnitInterval: Float( 0.0)), UInt32(_midpoint))
+        XCTAssertEqual(UInt32(bipolarUnitInterval: Float( 0.5)), UInt32(0xBFFF_FFFF))
+        XCTAssertEqual(UInt32(bipolarUnitInterval: Float( 1.0)), UInt32(_max))
+        
+    }
+    
+    func testInitBipolarUnitInterval_Double() {
         
         XCTAssertEqual(UInt32(bipolarUnitInterval: -1.0), UInt32(_min))
         XCTAssertEqual(UInt32(bipolarUnitInterval: -0.5), UInt32(0x4000_0000))
