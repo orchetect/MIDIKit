@@ -5,14 +5,14 @@
 
 extension MIDI {
     
-    /// Type representing an 8-bit byte
+    /// Type representing an 8-bit byte.
     public typealias Byte = UInt8
     
 }
 
 extension MIDI.Byte {
     
-    /// Returns a `Byte` as its 4-bit nibbles: high `(& 0xF0 >> 4)` and low `(& 0x0F)`
+    /// Returns a `Byte` as its 4-bit nibbles: high `(& 0xF0 >> 4)` and low `(& 0x0F)`.
     @inline(__always)
     public var nibbles: (high: MIDI.Nibble, low: MIDI.Nibble) {
         
@@ -23,7 +23,7 @@ extension MIDI.Byte {
         
     }
     
-    /// Convenience initializer from high and low 4-bit nibbles
+    /// Convenience initializer from high and low 4-bit nibbles.
     @inline(__always)
     public init(high: MIDI.Nibble, low: MIDI.Nibble) {
         

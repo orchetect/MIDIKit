@@ -1,17 +1,9 @@
-//
-//  String Extensions.swift
-//  MIDIKit • https://github.com/orchetect/MIDIKit
-//
-
-
-
 /// ------------------------------------------------------------------------------------
 /// ------------------------------------------------------------------------------------
 /// Borrowed from [OTCore 1.1.8](https://github.com/orchetect/OTCore) under MIT license.
+/// Methods herein are unit tested in OTCore, so no unit tests are necessary in MIDIKit.
 /// ------------------------------------------------------------------------------------
 /// ------------------------------------------------------------------------------------
-
-
 
 import Foundation
 

@@ -21,7 +21,7 @@ extension MIDI.Byte {
         
         public var uInt16Value: UInt16 {
             
-            UInt16(msb << 8) + UInt16(lsb)
+            (UInt16(msb) << 8) + UInt16(lsb)
             
         }
         
