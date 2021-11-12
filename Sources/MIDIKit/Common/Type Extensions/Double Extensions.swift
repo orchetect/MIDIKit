@@ -16,6 +16,7 @@ extension Double {
     ///     init(bipolarUnitInterval:  0.0) == 0.5
     ///     init(bipolarUnitInterval:  0.5) == 0.75
     ///     init(bipolarUnitInterval:  1.0) == 1.0
+    @_disfavoredOverload
     public init<T: BinaryFloatingPoint>(bipolarUnitInterval: T) {
         
         self = Double((bipolarUnitInterval / 2.0) + 0.5)
