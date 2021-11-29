@@ -370,7 +370,7 @@
 			repositoryURL = "https://github.com/orchetect/OTCore.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.11;
+				minimumVersion = 1.1.22;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
