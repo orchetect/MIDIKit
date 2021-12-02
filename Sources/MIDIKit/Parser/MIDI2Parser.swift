@@ -198,7 +198,7 @@ extension MIDI {
                 
             default:
                 // should never happen
-                //Log.debug("Unhandled System Status: \(statusByte)")
+                //logger.debug("Unhandled System Status: \(statusByte)")
                 return nil
             }
             

@@ -17,10 +17,10 @@ struct ContentViewManual: View {
 							model: "TestApp",
 							manufacturer: "Orchetect")
 		do {
-			Log.debug("Starting MIDI manager client")
+			logger.debug("Starting MIDI manager client")
 			try newManager.start()
 		} catch {
-			Log.default(error)
+			logger.default(error)
 		}
 		
 		return newManager

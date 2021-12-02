@@ -44,7 +44,7 @@ struct ContentView: View {
         
         self.midiManager = midiManager
         
-        Log.debug("Adding virtual MIDI ports to system.")
+        logger.debug("Adding virtual MIDI ports to system.")
         
         do {
             try midiManager.addInput(
@@ -60,7 +60,7 @@ struct ContentView: View {
                 uniqueID: .userDefaultsManaged(key: kOutputTag)
             )
         } catch {
-            Log.error(error)
+            logger.error(error)
         }
         
     }
@@ -108,7 +108,7 @@ struct ContentView: View {
             .filter(name: kOutputName)
             .first
         {
-            Log.debug("Found virtual endpoint: \(findInputConnectionEndpoint)")
+            logger.debug("Found virtual endpoint: \(findInputConnectionEndpoint)")
             midiInputConnectionEndpoint = findInputConnectionEndpoint
         }
         
@@ -120,13 +120,13 @@ struct ContentView: View {
         if let ic = midiManager.managedInputConnections[kInputConnectionTag] {
             // if endpoint is the same, don't reconnect
             if ic.endpoints.first == midiInputConnectionEndpoint {
-                Log.debug("Already connected.")
+                logger.debug("Already connected.")
                 return
             }
         }
         
         if !midiManager.managedInputConnections.isEmpty {
-            Log.debug("Removing input connections.")
+            logger.debug("Removing input connections.")
             midiManager.remove(.inputConnection, .all)
         }
         
@@ -134,7 +134,7 @@ struct ContentView: View {
         
         let endpointName = (endpoint.getDisplayName() ?? endpoint.name).quoted
         
-        Log.debug("Setting up new input connection to \(endpointName).")
+        logger.debug("Setting up new input connection to \(endpointName).")
         do {
             try midiManager.addInputConnection(
                 toOutputs: [.uniqueID(endpoint.uniqueID)],
@@ -142,7 +142,7 @@ struct ContentView: View {
                 receiveHandler: .eventsLogging()
             )
         } catch {
-            Log.error(error)
+            logger.error(error)
         }
         
     }

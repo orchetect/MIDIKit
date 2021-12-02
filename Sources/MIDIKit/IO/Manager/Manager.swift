@@ -135,7 +135,7 @@ extension MIDI.IO {
                 if result != noErr {
                     // not important to log this, we can omit it for now
                     //let osStatusMessage = MIDIOSStatus(rawValue: result).description
-                    //Log.debug("Error disposing of MIDI client: \(osStatusMessage)")
+                    //logger.debug("Error disposing of MIDI client: \(osStatusMessage)")
                 }
             }
         }

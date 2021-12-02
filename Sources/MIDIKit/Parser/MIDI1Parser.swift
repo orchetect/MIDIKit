@@ -551,13 +551,13 @@ extension MIDI {
                     
                 default:
                     // should never happen
-                    //Log.debug("Unhandled System Status: \(statusByte)")
+                    //logger.debug("Unhandled System Status: \(statusByte)")
                     break
                 }
                 
             default:
                 // should never happen
-                //Log.debug("Unhandled Status: \(statusByte)")
+                //logger.debug("Unhandled Status: \(statusByte)")
                 break
             }
             

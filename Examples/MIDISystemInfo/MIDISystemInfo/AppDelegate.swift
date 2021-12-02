@@ -17,12 +17,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		
-		// Configure console logging
-		Log.setup(enabled: true,
-				  defaultLog: nil,
-				  defaultSubsystem: Globals.MainBundle.bundleID,
-				  useEmoji: .all)
-		
         // set up midi manager
         
         midiManager = {
@@ -31,10 +25,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 model: "TestApp",
                                 manufacturer: "Orchetect")
             do {
-                Log.debug("Starting MIDI manager client")
+                logger.debug("Starting MIDI manager client")
                 try newManager.start()
             } catch {
-                Log.default(error)
+                logger.default(error)
             }
             
             return newManager
