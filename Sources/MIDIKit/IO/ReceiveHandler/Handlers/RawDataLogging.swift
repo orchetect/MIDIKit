@@ -48,6 +48,7 @@ extension MIDI.IO.ReceiveHandler {
         
         internal init(
             filterActiveSensingAndClock: Bool = false,
+            log: OSLog = .default,
             _ handler: Handler? = nil
         ) {
             
@@ -56,7 +57,7 @@ extension MIDI.IO.ReceiveHandler {
             self.handler = handler ?? { packetBytesString in
                 #if DEBUG
                 os_log("%{public}@",
-                       log: OSLog.default,
+                       log: log,
                        type: .debug,
                        packetBytesString)
                 #endif

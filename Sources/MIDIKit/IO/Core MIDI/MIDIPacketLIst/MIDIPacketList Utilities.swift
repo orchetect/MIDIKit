@@ -47,7 +47,7 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         // the discussion section of MIDIPacketListAdd states that "The maximum
         // size of a packet list is 65536 bytes." Checking for that limit here.
         //        if bufferSize > 65_536 {
-        //            Log.default("MIDI: assemblePacketList(data:) Error: Data array is too large (\(bufferSize) bytes), requires a buffer larger than 65536")
+        //            logger.default("MIDI: assemblePacketList(data:) Error: Data array is too large (\(bufferSize) bytes), requires a buffer larger than 65536")
         //            return nil
         //        }
         

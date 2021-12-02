@@ -124,10 +124,10 @@ extension MIDI.IO.ThruConnection {
         
         //switch lifecycle {
         //case .nonPersistent:
-        //    Log.debug("MIDI: Thru Connection: Successfully formed non-persistent connection.")
+        //    logger.debug("MIDI: Thru Connection: Successfully formed non-persistent connection.")
         //
         //case .persistent(let ownerID):
-        //    Log.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID //\(ownerID.otcQuoted).")
+        //    logger.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID //\(ownerID.otcQuoted).")
         //}
         
     }
