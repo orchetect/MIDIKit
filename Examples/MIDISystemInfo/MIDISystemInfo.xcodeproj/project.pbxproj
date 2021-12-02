@@ -16,6 +16,7 @@
 		E26B849C25EDA4F400080052 /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26B849B25EDA4F400080052 /* DetailsView.swift */; };
 		E293070425E90D750011904C /* HostingWindowKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E293070325E90D750011904C /* HostingWindowKey.swift */; };
 		E2AC6C7B25EDF96C008A4558 /* ContentViewManual.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AC6C7A25EDF96C008A4558 /* ContentViewManual.swift */; };
+		E2F71ED22758E92E006254C0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F71ED12758E92E006254C0 /* Log.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		E293070325E90D750011904C /* HostingWindowKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingWindowKey.swift; sourceTree = "<group>"; };
 		E2AC6C7A25EDF96C008A4558 /* ContentViewManual.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewManual.swift; sourceTree = "<group>"; };
 		E2BE8483268BCA570034F62C /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MIDIKit; path = ../..; sourceTree = "<group>"; };
+		E2F71ED12758E92E006254C0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				E26B849B25EDA4F400080052 /* DetailsView.swift */,
 				E205B44325E86AA7001A07D1 /* WebKitView.swift */,
 				E293070325E90D750011904C /* HostingWindowKey.swift */,
+				E2F71ED12758E92E006254C0 /* Log.swift */,
 				E230C4AB25AE7B33005DCB55 /* Main.storyboard */,
 				E230C4AE25AE7B33005DCB55 /* Info.plist */,
 				E230C4AF25AE7B33005DCB55 /* MIDISystemInfo.entitlements */,
@@ -162,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E205B44425E86AA7001A07D1 /* WebKitView.swift in Sources */,
+				E2F71ED22758E92E006254C0 /* Log.swift in Sources */,
 				E26B849C25EDA4F400080052 /* DetailsView.swift in Sources */,
 				E230C4A525AE7B31005DCB55 /* ContentView.swift in Sources */,
 				E293070425E90D750011904C /* HostingWindowKey.swift in Sources */,
