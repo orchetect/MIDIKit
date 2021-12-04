@@ -6,8 +6,9 @@
 
 import OTCore
 
-let logger = OSLogger(enabled: true,
-                      useEmoji: .all)
+let logger = OSLogger {
+    $0.defaultTemplate = .withEmoji()
+}
 
 func logErrors(_ closure: (() throws -> Void)) {
     
