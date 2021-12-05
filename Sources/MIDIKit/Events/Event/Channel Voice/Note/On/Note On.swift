@@ -7,7 +7,7 @@ extension MIDI.Event.Note {
     
     /// Channel Voice Message: Note On
     /// (MIDI 1.0 / 2.0)
-    public struct On: Equatable, Hashable {
+    public struct On {
         
         /// Note Number
         ///
@@ -61,6 +61,38 @@ extension MIDI.Event.Note {
             self.midi1ZeroVelocityAsNoteOff = midi1ZeroVelocityAsNoteOff
             
         }
+        
+    }
+    
+}
+
+extension MIDI.Event.Note.On: Equatable {
+    
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        
+        // ensure midi1ZeroVelocityAsNoteOff is not factored into Equatable
+        
+        lhs.note == rhs.note &&
+        lhs.velocity == rhs.velocity &&
+        lhs.channel == rhs.channel &&
+        lhs.attribute == rhs.attribute &&
+        lhs.group == rhs.group
+        
+    }
+    
+}
+
+extension MIDI.Event.Note.On: Hashable {
+    
+    public func hash(into hasher: inout Hasher) {
+        
+        // ensure midi1ZeroVelocityAsNoteOff is not factored into Hashable
+        
+        hasher.combine(note)
+        hasher.combine(velocity)
+        hasher.combine(channel)
+        hasher.combine(attribute)
+        hasher.combine(group)
         
     }
     

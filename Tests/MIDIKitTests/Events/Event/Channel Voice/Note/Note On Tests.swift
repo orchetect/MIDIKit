@@ -246,6 +246,34 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         
     }
     
+    func testEquatable() {
+        
+        // ensure midi1ZeroVelocityAsNoteOff is not factored into Equatable
+        
+        XCTAssertEqual(
+            MIDI.Event.noteOn(60,
+                              velocity: .midi1(0),
+                              channel: 0,
+                              midi1ZeroVelocityAsNoteOff: false),
+            MIDI.Event.noteOn(60,
+                              velocity: .midi1(0),
+                              channel: 0,
+                              midi1ZeroVelocityAsNoteOff: true)
+        )
+        
+        XCTAssertEqual(
+            MIDI.Event.noteOn(60,
+                              velocity: .midi1(1),
+                              channel: 0,
+                              midi1ZeroVelocityAsNoteOff: false),
+            MIDI.Event.noteOn(60,
+                              velocity: .midi1(1),
+                              channel: 0,
+                              midi1ZeroVelocityAsNoteOff: true)
+        )
+        
+    }
+    
 }
 
 #endif
