@@ -23,7 +23,9 @@ final class RoundTrip_Tests: XCTestCase {
         
         print("RoundTrip_Tests setUp() starting")
         
-        manager = .init(clientName: "MIDIKit_IO_InputsAndOutputs_Input_Tests",
+        XCTWait(sec: 0.5)
+        
+        manager = .init(clientName: "MIDIKit_IO_RoundTrip_Input_Tests",
                         model: "MIDIKit123",
                         manufacturer: "MIDIKit")
         
@@ -34,7 +36,7 @@ final class RoundTrip_Tests: XCTestCase {
             return
         }
         
-        XCTWait(sec: 0.2)
+        XCTWait(sec: 0.3)
         
         createPorts()
         
@@ -84,9 +86,10 @@ final class RoundTrip_Tests: XCTestCase {
             try manager.addInputConnection(
                 toOutputs: [.uniqueID(outputID)],
                 tag: inputConnectionTag,
-                receiveHandler: .events({ events in
+                receiveHandler: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false)
+                    { events in
                     self.receivedEvents.append(contentsOf: events)
-                })
+                }
             )
         } catch let err as MIDI.IO.MIDIError {
             XCTFail("\(err)") ; return
@@ -111,6 +114,9 @@ final class RoundTrip_Tests: XCTestCase {
         
         manager.remove(.inputConnection, .withTag(inputConnectionTag))
         XCTAssertNil(manager.managedInputConnections[inputConnectionTag])
+        
+        manager = nil
+        XCTWait(sec: 0.3)
         
         print("RoundTrip_Tests tearDown done")
         

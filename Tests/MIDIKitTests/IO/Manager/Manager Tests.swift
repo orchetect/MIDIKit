@@ -21,6 +21,7 @@ final class Manager_Tests: XCTestCase {
 	
 	override func tearDown() {
 		manager = nil
+        XCTWait(sec: 0.3)
 	}
 	
 	func testMIDIO_Manager_defaults() {
