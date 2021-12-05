@@ -20,6 +20,9 @@ final class RoundTrip_Tests: XCTestCase {
     var receivedEvents: [MIDI.Event] = []
     
     override func setUp() {
+        
+        print("RoundTrip_Tests setUp starting")
+        
         manager = .init(clientName: "MIDIKit_IO_InputsAndOutputs_Input_Tests",
                         model: "MIDIKit123",
                         manufacturer: "MIDIKit")
@@ -83,9 +86,13 @@ final class RoundTrip_Tests: XCTestCase {
         
         XCTWait(sec: 1.0)
         
+        print("RoundTrip_Tests setUp done")
+        
     }
     
     override func tearDown() {
+        
+        print("RoundTrip_Tests tearDown starting")
         
         // remove endpoints
         
@@ -94,6 +101,8 @@ final class RoundTrip_Tests: XCTestCase {
         
         manager.remove(.inputConnection, .withTag(inputConnectionTag))
         XCTAssertNil(manager.managedInputConnections[inputConnectionTag])
+        
+        print("RoundTrip_Tests tearDown done")
         
     }
     
