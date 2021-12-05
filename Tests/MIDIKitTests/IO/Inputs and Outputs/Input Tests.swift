@@ -22,6 +22,7 @@ final class InputsAndOutputs_Input_Tests: XCTestCase {
 	
 	override func tearDown() {
 		manager = nil
+        XCTWait(sec: 0.3)
 	}
 	
 	func testInput() throws {

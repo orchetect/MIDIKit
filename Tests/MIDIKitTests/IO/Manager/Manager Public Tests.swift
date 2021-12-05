@@ -21,6 +21,7 @@ final class Manager_Public_Tests: XCTestCase {
     
     override func tearDown() {
         manager = nil
+        XCTWait(sec: 0.3)
     }
     
     func testManager_PublicMethods() {

@@ -26,6 +26,7 @@ class AnyEndpoint_Tests: XCTestCase {
     
     override func tearDown() {
         manager = nil
+        XCTWait(sec: 0.3)
     }
     
     func testAnyEndpoint() throws {

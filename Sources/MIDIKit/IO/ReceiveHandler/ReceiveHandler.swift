@@ -54,7 +54,8 @@ extension MIDI.IO.ReceiveHandler {
         
         case group([Definition])
         
-        case events(Events.Handler)
+        case events(translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
+                    Events.Handler)
         
         case eventsLogging(filterActiveSensingAndClock: Bool = false,
                            _ handler: EventsLogging.Handler? = nil)
@@ -77,8 +78,12 @@ extension MIDI.IO.ReceiveHandler.Definition {
             let handlers = definitions.map { $0.createReceiveHandler() }
             return .init(MIDI.IO.ReceiveHandler.Group(handlers))
             
-        case .events(let handler):
-            return .init(MIDI.IO.ReceiveHandler.Events(handler))
+        case .events(let translateMIDI1NoteOnZeroVelocityToNoteOff,
+                     let handler):
+            return .init(MIDI.IO.ReceiveHandler.Events(
+                translateMIDI1NoteOnZeroVelocityToNoteOff: translateMIDI1NoteOnZeroVelocityToNoteOff,
+                handler)
+            )
             
         case .eventsLogging(let filterActiveSensingAndClock,
                             let handler):
