@@ -24,11 +24,11 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
 		manager = nil
 	}
 	
-	func testOutputConnection() {
+	func testOutputConnection() throws {
 		
 		// start midi client
 		
-		try! manager.start()
+		try manager.start()
 		
 		XCTWait(sec: 0.1)
 		
