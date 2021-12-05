@@ -11,15 +11,17 @@ import XCTest
 
 class AnyEndpoint_Tests: XCTestCase {
     
-    var manager: MIDI.IO.Manager! = nil
+    fileprivate var manager: MIDI.IO.Manager! = nil
     
     override func setUp() {
         manager = .init(clientName: "MIDIKit_IO_AnyEndpoint_Tests",
                         model: "MIDIKit123",
                         manufacturer: "MIDIKit")
         
-        guard let _ = try? manager.start() else {
-            XCTFail("Couldn't start MIDI.IO.Manager.")
+        do {
+            try manager.start()
+        } catch {
+            XCTFail("Could not start MIDI Manager. \(error.localizedDescription)")
             return
         }
     }
