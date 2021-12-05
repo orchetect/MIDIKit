@@ -21,7 +21,7 @@ final class RoundTrip_Tests: XCTestCase {
     
     override func setUp() {
         
-        print("RoundTrip_Tests setUp starting")
+        print("RoundTrip_Tests setUp() starting")
         
         manager = .init(clientName: "MIDIKit_IO_InputsAndOutputs_Input_Tests",
                         model: "MIDIKit123",
@@ -35,6 +35,22 @@ final class RoundTrip_Tests: XCTestCase {
         }
         
         XCTWait(sec: 0.2)
+        
+        createPorts()
+        
+        // reset local results
+        
+        receivedEvents = []
+        
+        XCTWait(sec: 0.5)
+        
+        print("RoundTrip_Tests setUp() done")
+        
+    }
+    
+    func createPorts() {
+        
+        print("RoundTrip_Tests createPorts() starting")
         
         // add new output endpoint
         
@@ -80,13 +96,7 @@ final class RoundTrip_Tests: XCTestCase {
         
         XCTAssertNotNil(manager.managedInputConnections[inputConnectionTag])
         
-        // reset local results
-        
-        receivedEvents = []
-        
-        XCTWait(sec: 1.0)
-        
-        print("RoundTrip_Tests setUp done")
+        print("RoundTrip_Tests createPorts() done")
         
     }
     
@@ -108,7 +118,9 @@ final class RoundTrip_Tests: XCTestCase {
     
     // ------------------------------------------------------------
     
-    func testRapidMIDIEvents() throws {
+    func runRapidMIDIEvents() throws {
+        
+        print("RoundTrip_Tests runRapidMIDIEvents() starting")
         
         guard let output = manager.managedOutputs[outputTag] else {
             XCTFail("Could not reference managed output.")
@@ -177,7 +189,40 @@ final class RoundTrip_Tests: XCTestCase {
         
         XCTAssertEqual(sourceEvents, receivedEvents)
         
+        print("RoundTrip_Tests runRapidMIDIEvents() done")
+        
     }
+    
+    func testRapidMIDIEvents_OldCoreMIDIAPI() throws {
+        
+        manager.preferredAPI = .legacyCoreMIDI
+        XCTWait(sec: 0.5)
+        createPorts()
+        XCTWait(sec: 0.5)
+        try runRapidMIDIEvents()
+        
+    }
+    
+    func testRapidMIDIEvents_NewCoreMIDIAPI_1_0_Protocol() throws {
+        
+        manager.preferredAPI = .newCoreMIDI(._1_0)
+        XCTWait(sec: 0.5)
+        createPorts()
+        XCTWait(sec: 0.5)
+        try runRapidMIDIEvents()
+        
+    }
+    
+    #warning("> TODO: enable this test once MIDI 2.0 is fully implemented")
+//    func testRapidMIDIEvents_NewCoreMIDIAPI_2_0_Protocol() throws {
+//
+//        manager.preferredAPI = .newCoreMIDI(._2_0)
+//        XCTWait(sec: 0.5)
+//        createPorts()
+//        XCTWait(sec: 0.5)
+//        try runRapidMIDIEvents()
+//
+//    }
     
 }
 
