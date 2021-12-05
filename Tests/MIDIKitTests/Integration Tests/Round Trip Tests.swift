@@ -81,7 +81,7 @@ final class RoundTrip_Tests: XCTestCase {
         
         receivedEvents = []
         
-        XCTWait(sec: 0.2)
+        XCTWait(sec: 1.0)
         
     }
     
