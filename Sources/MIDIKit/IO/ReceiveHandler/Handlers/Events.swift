@@ -42,8 +42,12 @@ extension MIDI.IO.ReceiveHandler {
             
         }
         
-        internal init(_ handler: @escaping Handler) {
+        internal init(
+            translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
+            _ handler: @escaping Handler
+        ) {
             
+            midi1Parser.translateNoteOnZeroVelocityToNoteOff = translateMIDI1NoteOnZeroVelocityToNoteOff
             self.handler = handler
             
         }
