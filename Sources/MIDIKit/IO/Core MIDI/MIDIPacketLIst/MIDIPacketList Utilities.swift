@@ -51,7 +51,7 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         //            return nil
         //        }
         
-        let timeTag = mach_absolute_time()
+        let timeTag: UInt64 = 0 // 0 means "now"
         
         let packetListPointer: UnsafeMutablePointer<MIDIPacketList> = .allocate(capacity: 1)
         
@@ -90,7 +90,7 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
             )
         }
         
-        let timeTag = mach_absolute_time()
+        let timeTag: UInt64 = 0 // 0 means "now"
         
         let packetListPointer: UnsafeMutablePointer<MIDIPacketList> = .allocate(capacity: 1)
         
