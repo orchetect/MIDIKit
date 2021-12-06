@@ -10,14 +10,14 @@ import XCTest
 import MIDIKit
 import CoreMIDI
 
-final class RoundTrip_Tests: XCTestCase {
+class RoundTrip_Tests_Base: XCTestCase {
     
-    var manager: MIDI.IO.Manager! = nil
+    fileprivate var manager: MIDI.IO.Manager! = nil
     
-    let outputTag = "1"
-    let inputConnectionTag = "2"
+    fileprivate let outputTag = "1"
+    fileprivate let inputConnectionTag = "2"
     
-    var receivedEvents: [MIDI.Event] = []
+    fileprivate var receivedEvents: [MIDI.Event] = []
     
     override func setUp() {
         
@@ -31,8 +31,10 @@ final class RoundTrip_Tests: XCTestCase {
         
         // start midi client
         
-        guard (try? manager.start()) != nil else {
-            XCTFail("Could not start MIDI Manager.")
+        do {
+            try manager.start()
+        } catch {
+            XCTFail("Could not start MIDI Manager. \(error.localizedDescription)")
             return
         }
         
@@ -199,6 +201,10 @@ final class RoundTrip_Tests: XCTestCase {
         
     }
     
+}
+
+final class RoundTrip_OldCoreMIDIAPI_Tests: RoundTrip_Tests_Base {
+    
     func testRapidMIDIEvents_OldCoreMIDIAPI() throws {
         
         manager.preferredAPI = .legacyCoreMIDI
@@ -208,6 +214,10 @@ final class RoundTrip_Tests: XCTestCase {
         try runRapidMIDIEvents()
         
     }
+    
+}
+
+final class RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests: RoundTrip_Tests_Base {
     
     func testRapidMIDIEvents_NewCoreMIDIAPI_1_0_Protocol() throws {
         
@@ -219,7 +229,11 @@ final class RoundTrip_Tests: XCTestCase {
         
     }
     
-    #warning("> TODO: enable this test once MIDI 2.0 is fully implemented")
+}
+
+final class RoundTrip_NewCoreMIDIAPI_2_0_Protocol_Tests: RoundTrip_Tests_Base {
+    
+#warning("> TODO: enable this test once MIDI 2.0 is fully implemented")
 //    func testRapidMIDIEvents_NewCoreMIDIAPI_2_0_Protocol() throws {
 //
 //        manager.preferredAPI = .newCoreMIDI(._2_0)

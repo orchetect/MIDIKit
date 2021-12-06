@@ -66,6 +66,17 @@
                BlueprintName = "MIDIKitTests"
                ReferencedContainer = "container:">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests">
+               </Test>
+               <Test
+                  Identifier = "RoundTrip_NewCoreMIDIAPI_2_0_Protocol_Tests">
+               </Test>
+               <Test
+                  Identifier = "RoundTrip_OldCoreMIDIAPI_Tests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

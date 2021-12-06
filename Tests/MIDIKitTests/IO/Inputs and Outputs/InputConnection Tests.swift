@@ -12,7 +12,7 @@ import CoreMIDI
 
 final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
 	
-	var manager: MIDI.IO.Manager! = nil
+    fileprivate var manager: MIDI.IO.Manager! = nil
 	
 	override func setUp() {
 		manager = .init(clientName: "MIDIKit_IO_InputsAndOutputs_InputConnection_Tests",
