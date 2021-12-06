@@ -51,7 +51,7 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         //            return nil
         //        }
         
-        let timeTag: UInt64 = 0 // 0 means "now"
+        let timeTag: UInt64 = mach_absolute_time()
         
         let packetListPointer: UnsafeMutablePointer<MIDIPacketList> = .allocate(capacity: 1)
         
@@ -90,7 +90,8 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
             )
         }
         
-        let timeTag: UInt64 = 0 // 0 means "now"
+        // As per Apple docs, timeTag must not be 0 when a packet is sent with `MIDIReceived()`. It must be a proper timeTag.
+        let timeTag: UInt64 = mach_absolute_time()
         
         let packetListPointer: UnsafeMutablePointer<MIDIPacketList> = .allocate(capacity: 1)
         
