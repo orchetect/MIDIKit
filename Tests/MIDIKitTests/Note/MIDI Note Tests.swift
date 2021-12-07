@@ -100,6 +100,52 @@ final class NoteTests: XCTestCase {
         XCTAssertEqual(MIDI.Note(.G_sharp, octave: 8)?.number, nil)
     }
     
+    func testPianoKeyType_WhiteKeys() {
+        
+        // generate white keys
+        
+        let whiteKeyNames = ["C", "D", "E", "F", "G", "A", "B"]
+        let whiteKeyNamesTopOctave = ["C", "D", "E", "F", "G"]
+        
+        let whiteKeyNoteNames = ((-2)...7)
+            .flatMap { octave in
+                whiteKeyNames.map { "\($0)\(octave)" }
+            }
+        + whiteKeyNamesTopOctave.map { "\($0)8" }
+        
+        let whiteKeyNotes: [MIDI.Note] = whiteKeyNoteNames
+            .map { MIDI.Note(string: $0)! }
+        
+        // test white keys
+        
+        XCTAssertEqual(whiteKeyNotes.count, 75)
+        XCTAssert(whiteKeyNotes.allSatisfy { $0.pianoKey == .white })
+        
+    }
+    
+    func testPianoKeyType_BlackKeys() {
+        
+        // generate black keys
+        
+        let blackKeyNames = ["C#", "D#", "F#", "G#", "A#"]
+        let blackKeyNamesTopOctave = ["C#", "D#", "F#"]
+        
+        let blackKeyNoteNames = ((-2)...7)
+            .flatMap { octave in
+                blackKeyNames.map { "\($0)\(octave)" }
+            }
+        + blackKeyNamesTopOctave.map { "\($0)8" }
+        
+        let blackKeyNotes: [MIDI.Note] = blackKeyNoteNames
+            .map { MIDI.Note(string: $0)! }
+        
+        // test black keys
+        
+        XCTAssertEqual(blackKeyNotes.count, 53)
+        XCTAssert(blackKeyNotes.allSatisfy { $0.pianoKey == .black })
+        
+    }
+    
 }
 
 #endif
