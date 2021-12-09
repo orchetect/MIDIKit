@@ -213,6 +213,20 @@ final class NoteTests: XCTestCase {
         XCTAssertEqual(MIDI.Note(.G_sharp, octave: 8)?.number, nil)
     }
     
+    func testNoteName() {
+        XCTAssertEqual(MIDI.Note(0).name, .C)
+        XCTAssertEqual(MIDI.Note(0).octave, -2)
+        
+        XCTAssertEqual(MIDI.Note(59).name, .B)
+        XCTAssertEqual(MIDI.Note(59).octave, 2)
+        
+        XCTAssertEqual(MIDI.Note(60).name, .C)
+        XCTAssertEqual(MIDI.Note(60).octave, 3)
+        
+        XCTAssertEqual(MIDI.Note(127).name, .G)
+        XCTAssertEqual(MIDI.Note(127).octave, 8)
+    }
+    
     func testPianoKeyType_WhiteKeys() {
         
         // generate white keys

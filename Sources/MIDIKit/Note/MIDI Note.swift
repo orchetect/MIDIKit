@@ -73,9 +73,7 @@ public extension MIDI {
         public mutating func setNoteNumber(_ source: Name,
                                            octave: Int) -> Bool {
             
-            let rootValue = 0
-            
-            let noteNum = rootValue + ((octave + 2) * 12) + source.scaleOffset
+            let noteNum = ((octave + 2) * 12) + source.scaleOffset
             
             guard let uint7 = MIDI.UInt7(exactly: noteNum) else { return false }
             
@@ -156,6 +154,16 @@ public extension MIDI {
             
             return true
             
+        }
+        
+        /// Get the MIDI note name enum case.
+        public var name: Name {
+            Name.convert(noteNumber: number).name
+        }
+        
+        /// Get the MIDI note name enum case.
+        public var octave: Int {
+            Name.convert(noteNumber: number).octave
         }
         
         /// Get the MIDI note name string (ie: "A-2" "C#6")
