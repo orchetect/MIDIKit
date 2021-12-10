@@ -220,6 +220,29 @@ extension MIDI.Note {
             
         }
         
+        /// Returns `true` if note is sharp (has a ♯ accidental). On a piano keyboard, this would be a black key.
+        public var isSharp: Bool {
+            
+            switch self {
+            case .A,
+                 .B,
+                 .C,
+                 .D,
+                 .E,
+                 .F,
+                 .G:
+                return false
+                
+            case .A_sharp,
+                 .C_sharp,
+                 .D_sharp,
+                 .F_sharp,
+                 .G_sharp:
+                return true
+            }
+            
+        }
+        
         /// Returns note name and octave for the MIDI note number.
         /// Returns `nil` if MIDI note number is invalid.
         internal static func convert(noteNumber: MIDI.UInt7) -> (name: Self, octave: Int) {

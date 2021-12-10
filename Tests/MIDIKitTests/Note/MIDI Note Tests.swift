@@ -246,7 +246,7 @@ final class NoteTests: XCTestCase {
         // test white keys
         
         XCTAssertEqual(whiteKeyNotes.count, 75)
-        XCTAssert(whiteKeyNotes.allSatisfy { $0.pianoKey == .white })
+        XCTAssert(whiteKeyNotes.allSatisfy { !$0.isSharp })
         
     }
     
@@ -269,7 +269,7 @@ final class NoteTests: XCTestCase {
         // test black keys
         
         XCTAssertEqual(blackKeyNotes.count, 53)
-        XCTAssert(blackKeyNotes.allSatisfy { $0.pianoKey == .black })
+        XCTAssert(blackKeyNotes.allSatisfy { $0.isSharp })
         
     }
     

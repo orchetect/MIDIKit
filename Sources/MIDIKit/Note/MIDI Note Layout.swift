@@ -43,10 +43,17 @@ extension MIDI.NoteRange {
 
 extension MIDI.Note {
     
-    public var pianoKey: MIDI.PianoKeyType {
+    /// Returns `true` if note is sharp (has a ♯ accidental). On a piano keyboard, this would be a black key.
+    @inline(__always)
+    public var isSharp: Bool {
         
         let octaveMod = number % 12
-        return [0,2,4,5,7,9,11].contains(octaveMod) ? .white : .black
+        return [1,3,6,8,10].contains(octaveMod)
+        
+        
+        // this also works, but the math above may be slightly more performant,
+        // since the `name` property would have to call `Name.convert(noteNumber:)`
+        //return name.isSharp
         
     }
     
