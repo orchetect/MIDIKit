@@ -7,11 +7,11 @@ import Foundation
 
 extension MIDI {
     
-    public typealias NoteRange = ClosedRange<MIDI.UInt7>
+    public typealias NoteNumberRange = ClosedRange<MIDI.UInt7>
         
 }
 
-extension MIDI.NoteRange {
+extension MIDI.NoteNumberRange {
     
     /// All 128 notes (C-2...G8, or 0...127)
     @inline(__always)
@@ -25,12 +25,19 @@ extension MIDI.NoteRange {
 
 extension MIDI {
     
-    public enum PianoKeyType {
-        
-        case white
-        case black
-        
-    }
+    public typealias NoteRange = ClosedRange<MIDI.Note>
+    
+}
+
+extension MIDI.NoteRange {
+    
+    /// All 128 notes (C-2...G8, or 0...127)
+    @inline(__always)
+    public static let all: Self = MIDI.Note(0)...MIDI.Note(127)
+    
+    /// 88-key piano keyboard note range: (A-1...C7, or 12...108)
+    @inline(__always)
+    public static let eightyEightKeys: Self = MIDI.Note(21)...MIDI.Note(108)
     
 }
 
