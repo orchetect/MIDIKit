@@ -73,9 +73,7 @@ public extension MIDI {
         public mutating func setNoteNumber(_ source: Name,
                                            octave: Int) -> Bool {
             
-            let rootValue = 0
-            
-            let noteNum = rootValue + ((octave + 2) * 12) + source.scaleOffset
+            let noteNum = ((octave + 2) * 12) + source.scaleOffset
             
             guard let uint7 = MIDI.UInt7(exactly: noteNum) else { return false }
             
@@ -156,6 +154,16 @@ public extension MIDI {
             
             return true
             
+        }
+        
+        /// Get the MIDI note name enum case.
+        public var name: Name {
+            Name.convert(noteNumber: number).name
+        }
+        
+        /// Get the MIDI note name enum case.
+        public var octave: Int {
+            Name.convert(noteNumber: number).octave
         }
         
         /// Get the MIDI note name string (ie: "A-2" "C#6")
@@ -251,7 +259,7 @@ extension MIDI.Note: Strideable {
     public func advanced(by n: Int) -> Self {
         
         let val = (number.intValue + n)
-            .clamped(to: MIDI.NoteRange.all.lowerBound.intValue ... MIDI.NoteRange.all.upperBound.intValue)
+            .clamped(to: MIDI.NoteNumberRange.all.lowerBound.intValue ... MIDI.NoteNumberRange.all.upperBound.intValue)
         
         return Self(number: val) ?? .init()
         
@@ -262,8 +270,7 @@ extension MIDI.Note: Strideable {
 public extension MIDI.Note {
     
     /// Returns an array of all 128 MIDI notes.
-    static let allNotes: [Self] =
-        MIDI.NoteRange.all.map { Self($0) }
+    static let allNotes: [Self] = MIDI.NoteRange.all.map { $0 }
     
 }
 

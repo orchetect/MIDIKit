@@ -200,7 +200,7 @@ extension MIDI.Note {
             
         }
         
-        /// Semitone offset, originating from note C
+        /// Semitone offset originating from note C, ascending.
         public var scaleOffset: Int {
             
             switch self {
@@ -218,6 +218,56 @@ extension MIDI.Note {
             case .G_sharp: return 8
             }
             
+        }
+        
+        /// Returns `true` if note is sharp (has a ♯ accidental). On a piano keyboard, this would be a black key.
+        public var isSharp: Bool {
+            
+            switch self {
+            case .A,
+                 .B,
+                 .C,
+                 .D,
+                 .E,
+                 .F,
+                 .G:
+                return false
+                
+            case .A_sharp,
+                 .C_sharp,
+                 .D_sharp,
+                 .F_sharp,
+                 .G_sharp:
+                return true
+            }
+            
+        }
+        
+        /// Returns note name and octave for the MIDI note number.
+        /// Returns `nil` if MIDI note number is invalid.
+        internal static func convert(noteNumber: MIDI.UInt7) -> (name: Self, octave: Int) {
+            // UInt7 is guaranteed to be a valid MIDI note number
+            
+            let octave = (noteNumber.intValue / 12) - 2
+            
+            switch noteNumber.intValue % 12 {
+            case 9:  return (name: .A, octave: octave)
+            case 10: return (name: .A_sharp, octave: octave)
+            case 11: return (name: .B, octave: octave)
+            case 0:  return (name: .C, octave: octave)
+            case 1:  return (name: .C_sharp, octave: octave)
+            case 2:  return (name: .D, octave: octave)
+            case 3:  return (name: .D_sharp, octave: octave)
+            case 4:  return (name: .E, octave: octave)
+            case 5:  return (name: .F, octave: octave)
+            case 6:  return (name: .F_sharp, octave: octave)
+            case 7:  return (name: .G, octave: octave)
+            case 8:  return (name: .G_sharp, octave: octave)
+            default:
+                // should never happen
+                assertionFailure("Modulus is broken.")
+                return (name: .C, octave: -2)
+            }
         }
         
     }
