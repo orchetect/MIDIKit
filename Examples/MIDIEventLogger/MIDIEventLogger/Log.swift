@@ -19,4 +19,3 @@ func logErrors(_ closure: (() throws -> Void)) {
     }
     
 }
-
