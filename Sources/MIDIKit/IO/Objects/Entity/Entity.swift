@@ -10,13 +10,21 @@ extension MIDI.IO {
     /// A MIDI device, wrapping a Core MIDI `MIDIEntityRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
-    public struct Entity: _MIDIIOObjectProtocol {
+    public struct Entity: MIDIIOObjectProtocol {
+        
+        // MARK: MIDIIOObjectProtocol
         
         public let objectType: MIDI.IO.ObjectType = .entity
         
-        // MARK: CoreMIDI ref
+        /// User-visible endpoint name.
+        /// (`kMIDIPropertyName`)
+        public internal(set) var name: String = ""
         
-        internal let coreMIDIObjectRef: MIDI.IO.CoreMIDIEntityRef
+        /// System-global Unique ID.
+        /// (`kMIDIPropertyUniqueID`)
+        public internal(set) var uniqueID: UniqueID = 0
+        
+        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEntityRef
         
         // MARK: Init
         
@@ -29,15 +37,7 @@ extension MIDI.IO {
             
         }
         
-        // MARK: - Properties (Cached)
-        
-        /// User-visible endpoint name.
-        /// (`kMIDIPropertyName`)
-        public internal(set) var name: String = ""
-        
-        /// System-global Unique ID.
-        /// (`kMIDIPropertyUniqueID`)
-        public internal(set) var uniqueID: UniqueID = 0
+        // MARK: - Cached Properties Update
         
         /// Update the cached properties
         internal mutating func update() {

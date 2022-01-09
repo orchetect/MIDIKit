@@ -16,7 +16,7 @@ import UIKit
 
 // MARK: - Properties (Computed)
 
-extension _MIDIIOObjectProtocol {
+extension MIDIIOObjectProtocol {
     
     // MARK: Identification
     

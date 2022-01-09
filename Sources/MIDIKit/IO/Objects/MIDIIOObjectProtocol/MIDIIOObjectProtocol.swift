@@ -26,12 +26,8 @@ public protocol MIDIIOObjectProtocol {
     /// The unique ID for the Core MIDI object
     var uniqueID: UniqueID { get }
     
-    
-    
-    // The following methods are defined in the public protocol (MIDIIOObjectProtocol) but implemented in an extension on the internal protocol (extension _MIDIIOObjectProtocol)
-    // This is to satisfy a Swift compiler quirk.
-    // If the methods are not defined here, they will not be accessible by a consumer of the library.
-    
+    /// The Core MIDI object reference
+    var coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef { get }
     
     // MARK: - MIDIIOObjectProtocol Comparison.swift
     
@@ -133,12 +129,5 @@ public protocol MIDIIOObjectProtocol {
     // MARK: - AnyMIDIIOObject.swift
     
     func asAnyMIDIIOObject() -> MIDI.IO.AnyMIDIIOObject
-    
-}
-
-internal protocol _MIDIIOObjectProtocol: MIDIIOObjectProtocol {
-    
-    /// The Core MIDI object reference
-    var coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef { get }
     
 }

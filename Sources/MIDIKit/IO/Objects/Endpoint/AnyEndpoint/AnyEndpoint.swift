@@ -10,12 +10,16 @@ extension MIDI.IO {
         
         public let endpointType: MIDI.IO.EndpointType
         
-        internal let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
+        // MARK: MIDIIOObjectProtocol
+        
+        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
         
         public let name: String
         
         public typealias UniqueID = MIDI.IO.AnyUniqueID
         public let uniqueID: UniqueID
+        
+        // MARK: Init
         
         internal init<E: _MIDIIOEndpointProtocol>(_ base: E) {
             

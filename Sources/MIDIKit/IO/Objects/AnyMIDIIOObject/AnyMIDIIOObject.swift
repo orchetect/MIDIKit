@@ -6,18 +6,22 @@
 extension MIDI.IO {
     
     /// Type-erased representation of a MIDIKit object conforming to `MIDIIOObjectProtocol`.
-    public struct AnyMIDIIOObject: _MIDIIOObjectProtocol {
+    public struct AnyMIDIIOObject: MIDIIOObjectProtocol {
         
-        // MIDIIOObjectProtocol
+        // MARK: MIDIIOObjectProtocol
+        
         public let objectType: MIDI.IO.ObjectType
+        
         public let name: String
+        
         public typealias UniqueID = MIDI.IO.AnyUniqueID
         public let uniqueID: MIDI.IO.AnyUniqueID
         
-        // _MIDIIOObjectProtocol
-        internal var coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef
+        public var coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef
         
-        internal init<O: _MIDIIOObjectProtocol>(_ base: O) {
+        // MARK: Init
+        
+        internal init<O: MIDIIOObjectProtocol>(_ base: O) {
             
             self.objectType = base.objectType
             self.name = base.name
@@ -31,7 +35,7 @@ extension MIDI.IO {
     
 }
 
-extension _MIDIIOObjectProtocol {
+extension MIDIIOObjectProtocol {
     
     /// Return as `AnyMIDIIOObject`, a type-erased representation of a MIDIKit object conforming to `MIDIIOObjectProtocol`.
     public func asAnyMIDIIOObject() -> MIDI.IO.AnyMIDIIOObject {
