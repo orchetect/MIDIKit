@@ -12,12 +12,12 @@ extension MIDI.IO {
         
         // MARK: MIDIIOObjectProtocol
         
-        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
-        
         public let name: String
         
         public typealias UniqueID = MIDI.IO.AnyUniqueID
         public let uniqueID: UniqueID
+        
+        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
         
         // MARK: Init
         

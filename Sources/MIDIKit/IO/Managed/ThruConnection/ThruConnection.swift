@@ -29,7 +29,7 @@ extension MIDI.IO {
         
         // class-specific
         
-        internal var thruConnectionRef: MIDI.IO.CoreMIDIThruConnectionRef? = nil
+        internal var coreMIDIThruConnectionRef: MIDI.IO.CoreMIDIThruConnectionRef? = nil
         public private(set) var outputs: [OutputEndpoint]
         public private(set) var inputs: [InputEndpoint]
         public private(set) var lifecycle: Lifecycle
@@ -120,7 +120,7 @@ extension MIDI.IO.ThruConnection {
             .throwIfOSStatusErr()
         }
         
-        thruConnectionRef = newConnection
+        coreMIDIThruConnectionRef = newConnection
         
         //switch lifecycle {
         //case .nonPersistent:
@@ -137,10 +137,10 @@ extension MIDI.IO.ThruConnection {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         
-        guard let unwrappedThruConnectionRef = self.thruConnectionRef else { return }
+        guard let unwrappedThruConnectionRef = self.coreMIDIThruConnectionRef else { return }
         
         defer {
-            self.thruConnectionRef = nil
+            self.coreMIDIThruConnectionRef = nil
         }
         
         try MIDIThruConnectionDispose(unwrappedThruConnectionRef)
@@ -155,7 +155,7 @@ extension MIDI.IO.ThruConnection: CustomStringConvertible {
     public var description: String {
         
         var thruConnectionRefString: String = "nil"
-        if let unwrappedThruConnectionRef = thruConnectionRef {
+        if let unwrappedThruConnectionRef = coreMIDIThruConnectionRef {
             thruConnectionRefString = "\(unwrappedThruConnectionRef)"
         }
         

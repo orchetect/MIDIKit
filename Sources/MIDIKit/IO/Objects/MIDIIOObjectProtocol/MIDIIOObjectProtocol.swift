@@ -18,15 +18,15 @@ public protocol MIDIIOObjectProtocol {
     /// Enum describing the abstracted object type.
     var objectType: MIDI.IO.ObjectType { get }
     
-    /// Name of the object
+    /// Name of the object.
     var name: String { get }
     
     associatedtype UniqueID: MIDIIOUniqueIDProtocol
     
-    /// The unique ID for the Core MIDI object
+    /// The unique ID for the Core MIDI object.
     var uniqueID: UniqueID { get }
     
-    /// The Core MIDI object reference
+    /// The Core MIDI object reference.
     var coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef { get }
     
     // MARK: - MIDIIOObjectProtocol Comparison.swift

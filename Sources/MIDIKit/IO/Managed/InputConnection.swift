@@ -22,8 +22,8 @@ extension MIDI.IO {
         // class-specific
         
         public private(set) var outputsCriteria: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
-        internal var outputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
-        internal var inputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
+        internal var coreMIDIOutputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
+        internal var coreMIDIInputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
         
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
@@ -62,7 +62,7 @@ extension MIDI.IO.InputConnection {
     /// Returns the output endpoint(s) this connection is connected to.
     public var endpoints: [MIDI.IO.OutputEndpoint] {
         
-        outputEndpointRefs.compactMap {
+        coreMIDIOutputEndpointRefs.compactMap {
             if let unwrapped = $0 {
                 return MIDI.IO.OutputEndpoint(unwrapped)
             } else { return nil }
@@ -81,7 +81,7 @@ extension MIDI.IO.InputConnection {
     /// - Throws: `MIDI.IO.MIDIError`
     internal func listen(in manager: MIDI.IO.Manager) throws {
         
-        guard inputPortRef == nil else {
+        guard coreMIDIInputPortRef == nil else {
             // if we're already listening, it's not really an error condition
             // so just return; don't throw an error
             return
@@ -138,16 +138,16 @@ extension MIDI.IO.InputConnection {
             
         }
         
-        inputPortRef = newInputPortRef
+        coreMIDIInputPortRef = newInputPortRef
         
     }
     
     /// Disposes of the listening port if it exists.
     internal func stopListening() throws {
         
-        guard let unwrappedInputPortRef = inputPortRef else { return }
+        guard let unwrappedInputPortRef = coreMIDIInputPortRef else { return }
         
-        defer { self.inputPortRef = nil }
+        defer { self.coreMIDIInputPortRef = nil }
         
         try MIDIPortDispose(unwrappedInputPortRef)
             .throwIfOSStatusErr()
@@ -162,11 +162,11 @@ extension MIDI.IO.InputConnection {
     internal func connect(in manager: MIDI.IO.Manager) throws {
         
         // if not already listening, start listening
-        if inputPortRef == nil {
+        if coreMIDIInputPortRef == nil {
             try listen(in: manager)
         }
         
-        guard let unwrappedInputPortRef = inputPortRef else {
+        guard let unwrappedInputPortRef = coreMIDIInputPortRef else {
             throw MIDI.IO.MIDIError.connectionError(
                 "Not in a listening state; can't connect to endpoints."
             )
@@ -182,7 +182,7 @@ extension MIDI.IO.InputConnection {
                     .coreMIDIObjectRef
             }
         
-        outputEndpointRefs = getOutputEndpointRefs
+        coreMIDIOutputEndpointRefs = getOutputEndpointRefs
         
         for refIndex in 0..<getOutputEndpointRefs.count {
             
@@ -206,15 +206,15 @@ extension MIDI.IO.InputConnection {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func disconnect() throws {
         
-        guard let unwrappedInputPortRef = self.inputPortRef else {
+        guard let unwrappedInputPortRef = self.coreMIDIInputPortRef else {
             throw MIDI.IO.MIDIError.connectionError(
                 "Attempted to disconnect outputs but was not in a listening state; nothing to disconnect."
             )
         }
         
-        for refIndex in 0..<outputEndpointRefs.count {
+        for refIndex in 0..<coreMIDIOutputEndpointRefs.count {
             
-            if let unwrappedOutputEndpointRef = outputEndpointRefs[refIndex] {
+            if let unwrappedOutputEndpointRef = coreMIDIOutputEndpointRefs[refIndex] {
                 
                 do {
                     try MIDIPortDisconnectSource(
@@ -258,7 +258,7 @@ extension MIDI.IO.InputConnection: CustomStringConvertible {
     
     public var description: String {
         
-        let outputEndpointsString: [String] = outputEndpointRefs
+        let outputEndpointsString: [String] = coreMIDIOutputEndpointRefs
             .map {
                 var str = ""
                 
@@ -281,7 +281,7 @@ extension MIDI.IO.InputConnection: CustomStringConvertible {
             }
         
         var inputPortRefString: String = "nil"
-        if let unwrappedInputPortRef = inputPortRef {
+        if let unwrappedInputPortRef = coreMIDIInputPortRef {
             inputPortRefString = "\(unwrappedInputPortRef)"
         }
                 

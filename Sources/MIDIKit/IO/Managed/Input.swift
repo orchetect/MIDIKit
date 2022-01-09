@@ -26,7 +26,8 @@ extension MIDI.IO {
         /// The port's unique ID in the system.
         public private(set) var uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil
         
-        internal var portRef: MIDI.IO.CoreMIDIPortRef? = nil
+        /// The Core MIDI port reference.
+        internal var coreMIDIPortRef: MIDI.IO.CoreMIDIPortRef? = nil
         
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
@@ -141,7 +142,7 @@ extension MIDI.IO.Input {
             
         }
         
-        portRef = newPortRef
+        coreMIDIPortRef = newPortRef
         
         // set meta data properties; ignore errors in case of failure
         _ = try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
@@ -164,9 +165,9 @@ extension MIDI.IO.Input {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         
-        guard let unwrappedPortRef = self.portRef else { return }
+        guard let unwrappedPortRef = self.coreMIDIPortRef else { return }
         
-        defer { self.portRef = nil }
+        defer { self.coreMIDIPortRef = nil }
         
         try MIDIEndpointDispose(unwrappedPortRef)
             .throwIfOSStatusErr()

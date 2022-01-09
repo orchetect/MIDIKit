@@ -17,7 +17,7 @@ extension MIDI.IO {
         public typealias UniqueID = MIDI.IO.AnyUniqueID
         public let uniqueID: MIDI.IO.AnyUniqueID
         
-        public var coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef
+        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef
         
         // MARK: Init
         
