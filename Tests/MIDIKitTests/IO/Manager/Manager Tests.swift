@@ -31,7 +31,7 @@ final class Manager_Tests: XCTestCase {
 		XCTAssertEqual(manager.clientName, "MIDIKit_IO_Manager_Tests")
         XCTAssertEqual(manager.model, "MIDIKit123")
         XCTAssertEqual(manager.manufacturer, "MIDIKit")
-		XCTAssertEqual(manager.clientRef, MIDIClientRef())
+		XCTAssertEqual(manager.coreMIDIClientRef, MIDIClientRef())
 		
 		XCTAssert(manager.managedInputConnections.isEmpty)
 		XCTAssert(manager.managedOutputConnections.isEmpty)

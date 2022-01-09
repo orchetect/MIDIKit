@@ -98,7 +98,7 @@ extension MIDI.IO.Input {
         case .legacyCoreMIDI:
             // MIDIDestinationCreateWithBlock is deprecated after macOS 11 / iOS 14
             try MIDIDestinationCreateWithBlock(
-                manager.clientRef,
+                manager.coreMIDIClientRef,
                 endpointName as CFString,
                 &newPortRef,
                 { [weak self] packetListPtr, srcConnRefCon in
@@ -121,7 +121,7 @@ extension MIDI.IO.Input {
             }
             
             try MIDIDestinationCreateWithProtocol(
-                manager.clientRef,
+                manager.coreMIDIClientRef,
                 endpointName as CFString,
                 self.api.midiProtocol.coreMIDIProtocol,
                 &newPortRef,

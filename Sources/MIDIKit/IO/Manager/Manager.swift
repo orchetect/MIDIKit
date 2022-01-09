@@ -19,7 +19,7 @@ extension MIDI.IO {
         public internal(set) var clientName: String
         
         /// MIDI Client Reference.
-        internal var clientRef = MIDI.IO.CoreMIDIClientRef()
+        public var coreMIDIClientRef = MIDI.IO.CoreMIDIClientRef()
         
         /// MIDI Model: The name of your software, which will be visible to the end-user in ports created by the manager.
         public internal(set) var model: String = ""
@@ -130,7 +130,7 @@ extension MIDI.IO {
         
         deinit {
             eventQueue.sync {
-                let result = MIDIClientDispose(clientRef)
+                let result = MIDIClientDispose(coreMIDIClientRef)
                 
                 if result != noErr {
                     // not important to log this, we can omit it for now

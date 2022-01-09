@@ -89,7 +89,7 @@ extension MIDI.IO.OutputConnection {
         
         // connection name must be unique, otherwise process might hang (?)
         try? MIDIOutputPortCreate(
-            manager.clientRef,
+            manager.coreMIDIClientRef,
             UUID().uuidString as CFString,
             &newOutputPortRef
         )

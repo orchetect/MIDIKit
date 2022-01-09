@@ -94,7 +94,7 @@ extension MIDI.IO.Output {
         case .legacyCoreMIDI:
             // MIDISourceCreate is deprecated after macOS 11 / iOS 14
             try MIDISourceCreate(
-                manager.clientRef,
+                manager.coreMIDIClientRef,
                 endpointName as CFString,
                 &newPortRef
             )
@@ -108,7 +108,7 @@ extension MIDI.IO.Output {
             }
             
             try MIDISourceCreateWithProtocol(
-                manager.clientRef,
+                manager.coreMIDIClientRef,
                 endpointName as CFString,
                 self.api.midiProtocol.coreMIDIProtocol,
                 &newPortRef

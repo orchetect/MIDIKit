@@ -31,7 +31,7 @@ final class Manager_Public_Tests: XCTestCase {
         // we just want to test the API
         
         _ = manager.clientName
-        //_ = manager.clientRef // this shouldn't be accessible
+        _ = manager.coreMIDIClientRef
         _ = manager.model
         
     }
