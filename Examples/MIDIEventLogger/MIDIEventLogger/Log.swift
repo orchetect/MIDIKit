@@ -10,7 +10,7 @@ let logger = OSLogger {
     $0.defaultTemplate = .withEmoji()
 }
 
-func logErrors(_ closure: (() throws -> Void)) {
+func logIfThrowsError(_ closure: (() throws -> Void)) {
     
     do {
         try closure()
