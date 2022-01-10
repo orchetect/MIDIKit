@@ -3,8 +3,6 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import AppKit
-
 extension MIDI.Event.Note {
     
     /// Channel Voice Message: Per-Note Control Change (CC)
