@@ -8,7 +8,11 @@ import Foundation
 
 extension MIDI.IO {
     
-    /// A managed virtual MIDI output endpoint created in the system by the `Manager`.
+    /// A managed virtual MIDI output endpoint created in the system by the MIDI I/O `Manager`.
+    ///
+    /// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `Manager`'s `managedOutputs` collection.
+    ///
+    /// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the endpoint (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.output, ...)` or `.removeAll` on the `Manager` to destroy the managed output.)
     public class Output: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
@@ -31,6 +35,9 @@ extension MIDI.IO {
         
         // init
         
+        /// Internal init.
+        /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addOutput()`, and destroyed when calling `.remove(.output, ...)` or `.removeAll()`.
+        ///
         /// - Parameters:
         ///   - name: The port name as displayed in the system.
         ///   - uniqueID: The port's unique ID in the system.

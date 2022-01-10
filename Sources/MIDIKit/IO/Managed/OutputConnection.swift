@@ -8,8 +8,12 @@ import Foundation
 
 extension MIDI.IO {
     
-    /// A managed MIDI output connection created in the system by the `Manager`.
-    /// This connects to an external input in the system and outputs MIDI events to it.
+    /// A managed MIDI output connection created in the system by the MIDI I/O `Manager`.
+    /// This connects to one or more inputs in the system and outputs MIDI events to them.
+    ///
+    /// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `Manager`'s `managedOutputConnections` collection.
+    ///
+    /// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed output connection (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.outputConnection, ...)` or `.removeAll` on the `Manager` to destroy the managed output connection.)
     public class OutputConnection: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
@@ -29,6 +33,9 @@ extension MIDI.IO {
         
         // init
         
+        /// Internal init.
+        /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addOutputConnection()`, and destroyed when calling `.remove(.outputConnection, ...)` or `.removeAll()`.
+        ///
         /// - Parameters:
         ///   - toInputs: Input(s) to connect to.
         ///   - midiManager: Reference to I/O Manager object.

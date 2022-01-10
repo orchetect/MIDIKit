@@ -8,7 +8,11 @@ import Foundation
 
 extension MIDI.IO {
     
-    /// A managed virtual MIDI input endpoint created in the system by the `Manager`.
+    /// A managed virtual MIDI input endpoint created in the system by the MIDI I/O `Manager`.
+    ///
+    /// - Note: Avoid storing or caching this object unless it is unavoidable. Instead, whenever possible access it via the `Manager`'s `managedInputs` collection. The `Manager` owns this object and maintains its lifecycle.
+    ///
+    /// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the endpoint (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.input, ...)` or `.removeAll` on the `Manager` to destroy the managed input.)
     public class Input: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
@@ -33,6 +37,9 @@ extension MIDI.IO {
         
         // init
         
+        /// Internal init.
+        /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addInput()`, and destroyed when calling `.remove(.input, ...)` or `.removeAll()`.
+        ///
         /// - Parameters:
         ///   - name: The port name as displayed in the system.
         ///   - uniqueID: The port's unique ID in the system.
