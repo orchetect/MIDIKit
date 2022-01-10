@@ -18,11 +18,11 @@ extension MIDI.Event.Note {
         @VelocityValidated
         public var velocity: MIDI.Event.Note.Velocity
         
-        /// Channel Number (0x0...0xF)
-        public var channel: MIDI.UInt4
-        
         /// MIDI 2.0 Channel Voice Attribute
         public var attribute: Attribute = .none
+        
+        /// Channel Number (0x0...0xF)
+        public var channel: MIDI.UInt4
         
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
@@ -32,8 +32,8 @@ extension MIDI.Event.Note {
         
         public init(note: MIDI.UInt7,
                     velocity: MIDI.Event.Note.Velocity,
-                    channel: MIDI.UInt4,
                     attribute: MIDI.Event.Note.Attribute = .none,
+                    channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0,
                     midi1ZeroVelocityAsNoteOff: Bool = true) {
             
@@ -48,8 +48,8 @@ extension MIDI.Event.Note {
         
         public init(note: MIDI.Note,
                     velocity: MIDI.Event.Note.Velocity,
-                    channel: MIDI.UInt4,
                     attribute: MIDI.Event.Note.Attribute = .none,
+                    channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0,
                     midi1ZeroVelocityAsNoteOff: Bool = true) {
             
@@ -74,8 +74,8 @@ extension MIDI.Event.Note.On: Equatable {
         
         lhs.note == rhs.note &&
         lhs.velocity == rhs.velocity &&
-        lhs.channel == rhs.channel &&
         lhs.attribute == rhs.attribute &&
+        lhs.channel == rhs.channel &&
         lhs.group == rhs.group
         
     }
@@ -90,8 +90,8 @@ extension MIDI.Event.Note.On: Hashable {
         
         hasher.combine(note)
         hasher.combine(velocity)
-        hasher.combine(channel)
         hasher.combine(attribute)
+        hasher.combine(channel)
         hasher.combine(group)
         
     }
@@ -113,16 +113,16 @@ extension MIDI.Event {
     @inline(__always)
     public static func noteOn(_ note: MIDI.UInt7,
                               velocity: Note.Velocity,
-                              channel: MIDI.UInt4,
                               attribute: Note.Attribute = .none,
+                              channel: MIDI.UInt4,
                               group: MIDI.UInt4 = 0x0,
                               midi1ZeroVelocityAsNoteOff: Bool = true) -> Self {
         
         .noteOn(
             .init(note: note,
                   velocity: velocity,
-                  channel: channel,
                   attribute: attribute,
+                  channel: channel,
                   group: group,
                   midi1ZeroVelocityAsNoteOff: midi1ZeroVelocityAsNoteOff)
         )
@@ -142,16 +142,16 @@ extension MIDI.Event {
     @inline(__always)
     public static func noteOn(_ note: MIDI.Note,
                               velocity: Note.Velocity,
-                              channel: MIDI.UInt4,
                               attribute: Note.Attribute = .none,
+                              channel: MIDI.UInt4,
                               group: MIDI.UInt4 = 0x0,
                               midi1ZeroVelocityAsNoteOff: Bool = true) -> Self {
         
         .noteOn(
             .init(note: note.number,
                   velocity: velocity,
-                  channel: channel,
                   attribute: attribute,
+                  channel: channel,
                   group: group,
                   midi1ZeroVelocityAsNoteOff: midi1ZeroVelocityAsNoteOff)
         )
@@ -204,14 +204,25 @@ extension MIDI.Event.Note.On {
     }
     
     @inline(__always)
-    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
+    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.Packet.UniversalPacketData.MessageType {
         
         switch midiProtocol {
         case ._1_0:
-            let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
+            return .midi1ChannelVoice
             
-            let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-            
+        case ._2_0:
+            return .midi2ChannelVoice
+        }
+        
+    }
+    
+    @inline(__always)
+    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
+        
+        let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
+        
+        switch midiProtocol {
+        case ._1_0:
             let midi1Bytes = midi1RawBytes() // always 3 bytes
             
             let word = MIDI.UMPWord(mtAndGroup,
@@ -226,10 +237,6 @@ extension MIDI.Event.Note.On {
             ///
             /// The allowable Velocity range for a MIDI 2.0 Note On message is 0x0000-0xFFFF. Unlike the MIDI 1.0 Note On message, a velocity value of zero does not function as a Note Off.
             ///
-            let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
-            
-            let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-            
             let word1 = MIDI.UMPWord(mtAndGroup,
                                      0x90 + channel.uInt8Value,
                                      note.uInt8Value,

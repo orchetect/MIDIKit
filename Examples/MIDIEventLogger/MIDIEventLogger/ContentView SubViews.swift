@@ -36,10 +36,10 @@ extension ContentView {
         
         @EnvironmentObject var midiManager: MIDI.IO.Manager
         
-        @Binding var midiChannel: MIDI.UInt4
         @Binding var midiGroup: MIDI.UInt4
-        @Binding var chanVoiceCC: MIDI.Event.CC.Controller
         var sendEvent: (MIDI.Event) -> Void
+        
+        @State var midiChannel: MIDI.UInt4 = 0
         
         var body: some View {
             
@@ -66,24 +66,45 @@ extension ContentView {
                     .disabled(midiManager.preferredAPI == .legacyCoreMIDI)
                     
                     HStack(alignment: .top) {
-                        SendMIDIEventsChannelVoiceView(midiChannel: $midiChannel,
-                                                       midiGroup: $midiGroup,
-                                                       chanVoiceCC: $chanVoiceCC,
-                                                       sendEvent: { sendEvent($0) })
-                        SendMIDIEventsSystemExclusiveView(midiChannel: $midiChannel,
-                                                          midiGroup: $midiGroup,
-                                                          chanVoiceCC: $chanVoiceCC,
-                                                          sendEvent: { sendEvent($0) })
-                        SendMIDIEventsSystemCommonView(midiChannel: $midiChannel,
-                                                       midiGroup: $midiGroup,
-                                                       chanVoiceCC: $chanVoiceCC,
-                                                       sendEvent: { sendEvent($0) })
-                        SendMIDIEventsSystemRealTimeView(midiChannel: $midiChannel,
-                                                         midiGroup: $midiGroup,
-                                                         chanVoiceCC: $chanVoiceCC,
-                                                         sendEvent: { sendEvent($0) })
+                        GroupBox(label: Text("Channel Voice")) {
+                            Picker("Channel", selection: $midiChannel) {
+                                ForEach(0..<15+1, id: \.self) {
+                                    let channelNum = $0 + 1
+                                    let channelNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
+                                    
+                                    Text("\(channelNum) (\(channelNumHex))")
+                                        .tag(MIDI.UInt4($0))
+                                }
+                            }
+                            .frame(maxWidth: 200)
+                            
+                            Spacer()
+                                .frame(height: 10)
+                            
+                            HStack {
+                                SendMIDIEventsChannelVoiceView(midiGroup: $midiGroup,
+                                                               midiChannel: $midiChannel) {
+                                    sendEvent($0)
+                                }
+                                SendMIDIEventsMIDI2ChannelVoiceView(midiGroup: $midiGroup,
+                                                                    midiChannel: $midiChannel) {
+                                    sendEvent($0)
+                                }
+                            }
+                        }
+                        .frame(width: 280 + 280 + 40, height: 270)
+                        
+                        SendMIDIEventsSystemExclusiveView(midiGroup: $midiGroup) {
+                            sendEvent($0)
+                        }
+                        SendMIDIEventsSystemCommonView(midiGroup: $midiGroup) {
+                            sendEvent($0)
+                        }
+                        SendMIDIEventsSystemRealTimeView(midiGroup: $midiGroup) {
+                            sendEvent($0)
+                        }
                     }
-                    .frame(width: 1000, height: 320)
+                    .frame(width: 1250, height: 320)
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -97,30 +118,17 @@ extension ContentView {
     
     struct SendMIDIEventsChannelVoiceView: View {
         
-        @Binding var midiChannel: MIDI.UInt4
         @Binding var midiGroup: MIDI.UInt4
-        @Binding var chanVoiceCC: MIDI.Event.CC.Controller
+        @Binding var midiChannel: MIDI.UInt4
         var sendEvent: (MIDI.Event) -> Void
+        
+        @State var chanVoiceCC: MIDI.Event.CC.Controller = .modWheel
         
         var body: some View {
             
-            GroupBox(label: Text("Channel Voice")) {
+            GroupBox(label: Text("MIDI 1.0 and MIDI 2.0")) {
                 
                 VStack(alignment: .center, spacing: 8) {
-                    
-                    Picker("Channel", selection: $midiChannel) {
-                        ForEach(0..<15+1, id: \.self) {
-                            let channelNum = $0 + 1
-                            let channelNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
-                            
-                            Text("\(channelNum) (\(channelNumHex))")
-                                .tag(MIDI.UInt4($0))
-                        }
-                    }
-                    .frame(maxWidth: 200)
-                    
-                    Spacer()
-                        .frame(height: 10)
                     
                     Button {
                         sendEvent(.noteOn(60,
@@ -164,11 +172,21 @@ extension ContentView {
                         .frame(width: 200)
                     }
                     
-                    Button {
-                        sendEvent(.programChange(program: 10,
-                                                 channel: midiChannel,
-                                                 group: midiGroup))
-                    } label: { Text("Program Change") }
+                    HStack {
+                        Button {
+                            sendEvent(.programChange(program: 10,
+                                                     bank: .noBankSelect,
+                                                     channel: midiChannel,
+                                                     group: midiGroup))
+                        } label: { Text("Program Change") }
+                        
+                        Button {
+                            sendEvent(.programChange(program: 10,
+                                                     bank: .bankSelect(123),
+                                                     channel: midiChannel,
+                                                     group: midiGroup))
+                        } label: { Text("with Bank Select") }
+                    }
                     
                     Button {
                         sendEvent(.pressure(amount: .midi1(64),
@@ -184,7 +202,101 @@ extension ContentView {
                     
                 }
                 .padding()
-                .frame(width: 280, height: 270)
+                .frame(width: 280, height: 200)
+                
+            }
+            
+        }
+        
+    }
+    
+    struct SendMIDIEventsMIDI2ChannelVoiceView: View {
+        
+        @Binding var midiGroup: MIDI.UInt4
+        @Binding var midiChannel: MIDI.UInt4
+        var sendEvent: (MIDI.Event) -> Void
+        
+        @State var chanVoiceCC: MIDI.Event.CC.Controller = .modWheel
+        
+        var body: some View {
+            
+            GroupBox(label: Text("MIDI 2.0 Only")) {
+                
+                VStack(alignment: .center, spacing: 8) {
+                    
+                    Button {
+                        sendEvent(.noteOn(60,
+                                          velocity: .unitInterval(0.5),
+                                          attribute: .pitch7_9(coarse: 2, fine: 0b1_0000_0000),
+                                          channel: midiChannel,
+                                          group: midiGroup))
+                    } label: { Text("Note On with Attribute") }
+                    
+                    Button {
+                        sendEvent(.noteOff(60,
+                                           velocity: .unitInterval(0.0),
+                                           attribute: .pitch7_9(coarse: 2, fine: 0b1_0000_0000),
+                                           channel: midiChannel,
+                                           group: midiGroup))
+                    } label: { Text("Note Off with Attribute") }
+                    
+                    Button {
+                        sendEvent(.noteCC(note: 60,
+                                          controller: .registered(.modWheel),
+                                          value: 0x8000_0000, // UInt32 "midpoint" value
+                                          channel: midiChannel,
+                                          group: midiGroup))
+                    } label: { Text("Note CC (Registered)") }
+                    
+                    Button {
+                        sendEvent(.noteCC(note: 60,
+                                          controller: .assignable(2),
+                                          value: 0x8000_0000, // UInt32 "midpoint" value
+                                          channel: midiChannel,
+                                          group: midiGroup))
+                    } label: { Text("Note CC (Assignable)") }
+                    
+                    Button {
+                        sendEvent(.notePitchBend(note: 60,
+                                                 value: .midi2(0x8000_0000),
+                                                 channel: midiChannel,
+                                                 group: midiGroup))
+                    } label: { Text("Note PitchBend") }
+                    
+                    HStack {
+                        Button {
+                            sendEvent(.noteManagement(60,
+                                                      flags: [],
+                                                      channel: midiChannel,
+                                                      group: midiGroup))
+                        } label: { Text("Note Management") }
+                        
+                        Button {
+                            sendEvent(.noteManagement(60,
+                                                      flags: [.detachPerNoteControllers],
+                                                      channel: midiChannel,
+                                                      group: midiGroup))
+                        } label: { Text("D") }
+                        
+                        Button {
+                            sendEvent(.noteManagement(60,
+                                                      flags: [.resetPerNoteControllers],
+                                                      channel: midiChannel,
+                                                      group: midiGroup))
+                        } label: { Text("S") }
+                        
+                        Button {
+                            sendEvent(.noteManagement(60,
+                                                      flags: [.detachPerNoteControllers,
+                                                              .resetPerNoteControllers],
+                                                      channel: midiChannel,
+                                                      group: midiGroup))
+                        } label: { Text("DS") }
+                    }
+                    
+                }
+                .padding()
+                .frame(width: 280, height: 200)
                 
             }
             
@@ -194,9 +306,7 @@ extension ContentView {
     
     struct SendMIDIEventsSystemExclusiveView: View {
         
-        @Binding var midiChannel: MIDI.UInt4
         @Binding var midiGroup: MIDI.UInt4
-        @Binding var chanVoiceCC: MIDI.Event.CC.Controller
         var sendEvent: (MIDI.Event) -> Void
         
         var body: some View {
@@ -277,9 +387,7 @@ extension ContentView {
     
     struct SendMIDIEventsSystemCommonView: View {
         
-        @Binding var midiChannel: MIDI.UInt4
         @Binding var midiGroup: MIDI.UInt4
-        @Binding var chanVoiceCC: MIDI.Event.CC.Controller
         var sendEvent: (MIDI.Event) -> Void
         
         var body: some View {
@@ -324,9 +432,7 @@ extension ContentView {
     
     struct SendMIDIEventsSystemRealTimeView: View {
         
-        @Binding var midiChannel: MIDI.UInt4
         @Binding var midiGroup: MIDI.UInt4
-        @Binding var chanVoiceCC: MIDI.Event.CC.Controller
         var sendEvent: (MIDI.Event) -> Void
         
         var body: some View {

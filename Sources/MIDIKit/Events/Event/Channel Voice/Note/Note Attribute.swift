@@ -61,6 +61,44 @@ extension MIDI.Event.Note.Attribute {
         
     }
     
+    /// Pitch 7.9:
+    /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
+    @inline(__always)
+    public static func pitch7_9(coarse: MIDI.UInt7,
+                                fine: MIDI.UInt9) -> Self {
+        
+        .pitch7_9(.init(coarse: coarse, fine: fine))
+        
+    }
+    
+}
+
+extension MIDI.Event.Note.Attribute: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        case .none:
+            return "none"
+            
+        case .manufacturerSpecific(let data):
+            return "manufacturerSpecific(\(data))"
+            
+        case .profileSpecific(let data):
+            return "profileSpecific(\(data))"
+            
+        case .pitch7_9(let p79):
+            return "\(p79)"
+            
+        case .undefined(attributeType: let attributeType, let data):
+            let attrString = attributeType.hex.stringValue(padTo: 2, prefix: true)
+            let dataString = data.hex.stringValue(padTo: 4, prefix: true)
+            return "undefined(\(attrString), data: \(dataString))"
+            
+        }
+        
+    }
+    
 }
 
 extension MIDI.Event.Note.Attribute {

@@ -100,6 +100,7 @@ extension MIDI.Event {
 
 extension MIDI.Event.CC {
     
+    @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xB0 + channel.uInt8Value,
@@ -108,11 +109,23 @@ extension MIDI.Event.CC {
         
     }
     
-    public static let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
+    @inline(__always)
+    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.Packet.UniversalPacketData.MessageType {
+        
+        switch midiProtocol {
+        case ._1_0:
+            return .midi1ChannelVoice
+            
+        case ._2_0:
+            return .midi2ChannelVoice
+        }
+        
+    }
     
+    @inline(__always)
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
-        let mtAndGroup = (Self.umpMessageType.rawValue.uInt8Value << 4) + group
+        let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
         
         switch midiProtocol {
         case ._1_0:

@@ -16,12 +16,26 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
         // -------------------
         
         case .noteOn(let event):
+            let attrStr: String
+            switch event.attribute {
+            case .none:
+                attrStr = ""
+            default:
+                attrStr = "\(event.attribute), "
+            }
             
-            return "noteOn(\(event.note), vel: \(event.velocity), chan: \(event.channel), group: \(event.group))"
+            return "noteOn(\(event.note), vel: \(event.velocity), \(attrStr)chan: \(event.channel), group: \(event.group))"
             
         case .noteOff(let event):
+            let attrStr: String
+            switch event.attribute {
+            case .none:
+                attrStr = ""
+            default:
+                attrStr = "\(event.attribute), "
+            }
             
-            return "noteOff(\(event.note), vel: \(event.velocity), chan: \(event.channel), group: \(event.group))"
+            return "noteOff(\(event.note), vel: \(event.velocity), \(attrStr)chan: \(event.channel), group: \(event.group))"
             
         case .noteCC(let event):
             

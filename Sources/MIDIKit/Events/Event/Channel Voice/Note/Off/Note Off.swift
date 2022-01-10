@@ -18,19 +18,19 @@ extension MIDI.Event.Note {
         @VelocityValidated
         public var velocity: MIDI.Event.Note.Velocity
         
-        /// Channel Number (0x0...0xF)
-        public var channel: MIDI.UInt4
-        
         /// MIDI 2.0 Channel Voice Attribute
         public var attribute: Attribute = .none
+        
+        /// Channel Number (0x0...0xF)
+        public var channel: MIDI.UInt4
         
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
         public init(note: MIDI.UInt7,
                     velocity: MIDI.Event.Note.Velocity,
-                    channel: MIDI.UInt4,
                     attribute: MIDI.Event.Note.Attribute = .none,
+                    channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
             self.note = note
@@ -43,8 +43,8 @@ extension MIDI.Event.Note {
         
         public init(note: MIDI.Note,
                     velocity: MIDI.Event.Note.Velocity,
-                    channel: MIDI.UInt4,
                     attribute: MIDI.Event.Note.Attribute = .none,
+                    channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
             self.note = note.number
@@ -73,15 +73,15 @@ extension MIDI.Event {
     @inline(__always)
     public static func noteOff(_ note: MIDI.UInt7,
                                velocity: Note.Velocity,
-                               channel: MIDI.UInt4,
                                attribute: Note.Attribute = .none,
+                               channel: MIDI.UInt4,
                                group: MIDI.UInt4 = 0x0) -> Self {
         
         .noteOff(
             .init(note: note,
                   velocity: velocity,
-                  channel: channel,
                   attribute: attribute,
+                  channel: channel,
                   group: group)
         )
         
@@ -99,15 +99,15 @@ extension MIDI.Event {
     @inline(__always)
     public static func noteOff(_ note: MIDI.Note,
                                velocity: Note.Velocity,
-                               channel: MIDI.UInt4,
                                attribute: Note.Attribute = .none,
+                               channel: MIDI.UInt4,
                                group: MIDI.UInt4 = 0x0) -> Self {
         
         .noteOff(
             .init(note: note.number,
                   velocity: velocity,
-                  channel: channel,
                   attribute: attribute,
+                  channel: channel,
                   group: group)
         )
         
@@ -127,14 +127,25 @@ extension MIDI.Event.Note.Off {
     }
     
     @inline(__always)
-    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
+    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.Packet.UniversalPacketData.MessageType {
         
         switch midiProtocol {
         case ._1_0:
-            let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
+            return .midi1ChannelVoice
             
-            let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-            
+        case ._2_0:
+            return .midi2ChannelVoice
+        }
+        
+    }
+    
+    @inline(__always)
+    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
+        
+        let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
+        
+        switch midiProtocol {
+        case ._1_0:
             let word = MIDI.UMPWord(mtAndGroup,
                                     0x80 + channel.uInt8Value,
                                     note.uInt8Value,
@@ -143,10 +154,6 @@ extension MIDI.Event.Note.Off {
             return [word]
             
         case ._2_0:
-            let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
-            
-            let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-            
             let word1 = MIDI.UMPWord(mtAndGroup,
                                      0x80 + channel.uInt8Value,
                                      note.uInt8Value,

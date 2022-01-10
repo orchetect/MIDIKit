@@ -15,7 +15,7 @@ struct ContentView: View {
     
     // MARK: - Constants
     
-    static let kMinWidth: CGFloat = 1020
+    static let kMinWidth: CGFloat = 1270
     static let kMaxWidth: CGFloat = 1400
     static let kMinHeight: CGFloat = 650
     static let kMaxHeight: CGFloat = 1000
@@ -30,9 +30,7 @@ struct ContentView: View {
     
     // MARK: - UI State
     
-    @State var midiChannel: MIDI.UInt4 = 0
     @State var midiGroup: MIDI.UInt4 = 0
-    @State var chanVoiceCC: MIDI.Event.CC.Controller = .modWheel
     
     @State var midiInputConnectionEndpoint: MIDI.IO.OutputEndpoint? = nil
     
@@ -48,11 +46,10 @@ struct ContentView: View {
             
             Spacer().frame(height: 10)
             
-            SendMIDIEventsView(midiChannel: $midiChannel,
-                               midiGroup: $midiGroup,
-                               chanVoiceCC: $chanVoiceCC,
-                               sendEvent: { sendEvent($0) })
-                .environmentObject(midiManager)
+            SendMIDIEventsView(midiGroup: $midiGroup) {
+                sendEvent($0)   
+            }
+            .environmentObject(midiManager)
             
             Spacer().frame(height: 10)
             

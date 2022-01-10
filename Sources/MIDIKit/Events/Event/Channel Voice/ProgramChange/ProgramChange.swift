@@ -115,14 +115,25 @@ extension MIDI.Event.ProgramChange {
     }
     
     @inline(__always)
-    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
+    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.Packet.UniversalPacketData.MessageType {
         
         switch midiProtocol {
         case ._1_0:
-            let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi1ChannelVoice
+            return .midi1ChannelVoice
             
-            let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-            
+        case ._2_0:
+            return .midi2ChannelVoice
+        }
+        
+    }
+    
+    @inline(__always)
+    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
+        
+        let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
+        
+        switch midiProtocol {
+        case ._1_0:
             let word = MIDI.UMPWord(mtAndGroup,
                                     0xC0 + channel.uInt8Value,
                                     program.uInt8Value,
@@ -131,16 +142,34 @@ extension MIDI.Event.ProgramChange {
             return [word]
             
         case ._2_0:
-            let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
+            let optionFlags: MIDI.Byte
+            let bankMSB: MIDI.Byte
+            let bankLSB: MIDI.Byte
             
-            let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+            switch bank {
+            case .noBankSelect:
+                optionFlags = 0b0000_0000
+                bankMSB = 0x00
+                bankLSB = 0x00
+                
+            case .bankSelect(let bankUInt14):
+                optionFlags = 0b0000_0001
+                let bytePair = bankUInt14.bytePair
+                bankMSB = bytePair.msb
+                bankLSB = bytePair.lsb
+            }
             
-            #warning("> TODO: umpRawWords() needs coding")
-            _ = mtAndGroup
+            let word1 = MIDI.UMPWord(mtAndGroup,
+                                     0xC0 + channel.uInt8Value,
+                                     0x00, // reserved
+                                     optionFlags)
             
-            //let word1 = MIDI.UMPWord()
+            let word2 = MIDI.UMPWord(program.uInt8Value,
+                                     0x00, // reserved
+                                     bankMSB,
+                                     bankLSB)
             
-            return []
+            return [word1, word2]
             
         }
         
