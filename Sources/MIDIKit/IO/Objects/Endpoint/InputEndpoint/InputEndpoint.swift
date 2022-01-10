@@ -16,7 +16,7 @@ extension MIDI.IO {
         
         // MARK: CoreMIDI ref
         
-        internal let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
+        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
         
         // MARK: Init
         

@@ -26,7 +26,7 @@ internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProto
     
     /// Internal:
     /// Core MIDI Port Ref(s)
-    var outputPortRef: MIDI.IO.CoreMIDIPortRef? { get }
+    var coreMIDIOutputPortRef: MIDI.IO.CoreMIDIPortRef? { get }
     
     /// Internal:
     /// Send a MIDI Message, automatically assembling it into a `MIDIPacketList`.

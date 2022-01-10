@@ -73,8 +73,11 @@ extension MIDI {
                 
                 let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
                 
+                let channel = bytes[1].nibbles.low
+                
                 if let parsedEvent = parseMIDI1ChannelVoice(
                     bytes: midiBytes,
+                    channel: channel,
                     group: group
                 ) {
                     events.append(parsedEvent)
@@ -99,10 +102,17 @@ extension MIDI {
                 // byte 2&3: [index]
                 // byte 4...7: [data bytes]
                 
-                // TODO: currently MIDIKit can only receive MIDI 1.0 events because
-                // we are forcing Protocol 1.0 since MIDI 2.0 events are not
-                // implemented yet, so this should never happen (for the time being)
-                break
+                let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
+                
+                let channel = bytes[1].nibbles.low
+                
+                if let parsedEvent = parseMIDI2ChannelVoice(
+                    bytes: midiBytes,
+                    channel: channel,
+                    group: group
+                ) {
+                    events.append(parsedEvent)
+                }
                 
             case .data128bit: // 0x5
                 // can contain a SysEx 8 message
@@ -211,6 +221,7 @@ extension MIDI {
         ///   - group: UMP group
         internal static func parseMIDI1ChannelVoice(
             bytes: Array<MIDI.Byte>.SubSequence,
+            channel: MIDI.UInt4,
             group: MIDI.UInt4
         ) -> MIDI.Event? {
             
@@ -218,13 +229,12 @@ extension MIDI {
             // (first byte is stripped when bytes are passed into this function so we expect 3 bytes here)
             guard bytes.count == 3 else { return nil }
             
-            let statusByte = bytes[bytes.startIndex]
+            let statusNibble = bytes[bytes.startIndex].nibbles.high
             let dataByte1: MIDI.Byte = bytes[bytes.startIndex.advanced(by: 1)]
             let dataByte2: MIDI.Byte = bytes[bytes.startIndex.advanced(by: 2)]
             
-            switch statusByte.nibbles.high {
+            switch statusNibble {
             case 0x8: // note off
-                let channel = statusByte.nibbles.low
                 guard let note = dataByte1.toMIDIUInt7Exactly,
                       let velocity = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
@@ -237,7 +247,6 @@ extension MIDI {
                 return newEvent
                 
             case 0x9: // note on
-                let channel = statusByte.nibbles.low
                 guard let note = dataByte1.toMIDIUInt7Exactly,
                       let velocity = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
@@ -250,7 +259,6 @@ extension MIDI {
                 return newEvent
                 
             case 0xA: // poly aftertouch
-                let channel = statusByte.nibbles.low
                 guard let note = dataByte1.toMIDIUInt7Exactly,
                       let amount = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
@@ -263,7 +271,6 @@ extension MIDI {
                 return newEvent
                 
             case 0xB: // CC (incl. channel mode msgs 121-127)
-                let channel = statusByte.nibbles.low
                 guard let cc = dataByte1.toMIDIUInt7Exactly,
                       let value = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
@@ -276,7 +283,6 @@ extension MIDI {
                 return newEvent
                 
             case 0xC: // program change
-                let channel = statusByte.nibbles.low
                 guard let program = dataByte1.toMIDIUInt7Exactly
                 else { return nil }
                 
@@ -287,7 +293,6 @@ extension MIDI {
                 return newEvent
                 
             case 0xD: // channel aftertouch
-                let channel = statusByte.nibbles.low
                 guard let amount = dataByte1.toMIDIUInt7Exactly
                 else { return nil }
                 
@@ -298,7 +303,6 @@ extension MIDI {
                 return newEvent
                 
             case 0xE: // pitch bend
-                let channel = statusByte.nibbles.low
                 guard let unwrappedDataByte1 = dataByte1.toMIDIUInt7Exactly,
                       let unwrappedDataByte2 = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
@@ -309,6 +313,186 @@ extension MIDI {
                 let newEvent: MIDI.Event = .pitchBend(value: .midi1(uint14),
                                                       channel: channel,
                                                       group: group)
+                
+                return newEvent
+                
+            default:
+                return nil
+                
+            }
+            
+        }
+        
+        /// Internal sub-parser: Parse MIDI 1.0 Channel Voice UMP message.
+        ///
+        /// - Parameters:
+        ///   - bytes: 3 UMP bytes after the first byte ([1...3])
+        ///   - group: UMP group
+        internal static func parseMIDI2ChannelVoice(
+            bytes: Array<MIDI.Byte>.SubSequence,
+            channel: MIDI.UInt4,
+            group: MIDI.UInt4
+        ) -> MIDI.Event? {
+            
+            // ensure packet is 64-bits (8 bytes / 2 UInt32 words) wide
+            // (first byte is stripped when bytes are passed into this function so we expect 7 bytes here)
+            guard bytes.count == 7 else { return nil }
+            
+            // byte 1: [status]
+            // byte 2&3: [index]
+            // byte 4...7: [data bytes]
+            
+            let statusNibble = bytes[bytes.startIndex].nibbles.high
+            
+            // helper methods
+            func byte(_ offset: Int) -> MIDI.Byte {
+                bytes[bytes.startIndex.advanced(by: offset)]
+            }
+            func word2() -> MIDI.UMPWord {
+                UMPWord(bytes[bytes.startIndex.advanced(by: 3)],
+                        bytes[bytes.startIndex.advanced(by: 4)],
+                        bytes[bytes.startIndex.advanced(by: 5)],
+                        bytes[bytes.startIndex.advanced(by: 6)])
+            }
+            func word2A() -> UInt16 {
+                (UInt16(bytes[bytes.startIndex.advanced(by: 3)]) << 8)
+                + UInt16(bytes[bytes.startIndex.advanced(by: 4)])
+            }
+            func word2B() -> UInt16 {
+                (UInt16(bytes[bytes.startIndex.advanced(by: 5)]) << 8)
+                + UInt16(bytes[bytes.startIndex.advanced(by: 6)])
+            }
+            
+            switch statusNibble {
+            case 0x0, // Note CC (registered)
+                 0x1: // Note CC (assignable)
+                guard let note = byte(1).toMIDIUInt7Exactly
+                else { return nil }
+                
+                let index = byte(2)
+                
+                let cc: MIDI.Event.Note.CC.Controller
+                switch statusNibble {
+                case 0x0:
+                    cc = .registered(.init(number: index))
+                    
+                case 0x1:
+                    cc = .assignable(index)
+                    
+                default:
+                    // should never happen, since parent switch case guarantees 0x00 or 0x01
+                    assertionFailure("Status nibble was unexpected.")
+                    cc = .assignable(index)
+                }
+                
+                let newEvent: MIDI.Event = .noteCC(note: note,
+                                                   controller: cc,
+                                                   value: word2(),
+                                                   channel: channel,
+                                                   group: group)
+                
+                return newEvent
+                
+            case 0x6: // note pitchbend
+                guard let note = byte(1).toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .notePitchBend(note: note,
+                                                          value: .midi2(word2()),
+                                                          channel: channel,
+                                                          group: group)
+                
+                return newEvent
+                
+            case 0x8: // note off
+                guard let note = byte(1).toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .noteOff(note,
+                                                    velocity: .midi2(word2A()),
+                                                    attribute: .init(type: byte(2), data: word2B()),
+                                                    channel: channel,
+                                                    group: group)
+                
+                return newEvent
+                
+            case 0x9: // note on
+                guard let note = byte(1).toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .noteOn(note,
+                                                   velocity: .midi2(word2A()),
+                                                   attribute: .init(type: byte(2), data: word2B()),
+                                                   channel: channel,
+                                                   group: group,
+                                                   midi1ZeroVelocityAsNoteOff: false)
+                
+                return newEvent
+                
+            case 0xA: // note pressure
+                guard let note = byte(1).toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .notePressure(note: note,
+                                                         amount: .midi2(word2()),
+                                                         channel: channel,
+                                                         group: group)
+                
+                return newEvent
+                
+            case 0xB: // note CC
+                guard let index = byte(1).toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .cc(index,
+                                               value: .midi2(word2()),
+                                               channel: channel,
+                                               group: group)
+                
+                return newEvent
+                
+            case 0xC: // program change (with optional bank select)
+                guard let program = byte(3).toMIDIUInt7Exactly,
+                      let bankMSB = byte(5).toMIDIUInt7Exactly,
+                      let bankLSB = byte(6).toMIDIUInt7Exactly
+                else { return nil }
+                
+                let optionFlags = byte(2)
+                let useBankSelect = (optionFlags & 0b0000_0001) == 0b1
+                
+                let bank: MIDI.Event.ProgramChange.Bank = useBankSelect
+                    ? .bankSelect(.init(uInt7Pair: .init(msb: bankMSB, lsb: bankLSB)))
+                    : .noBankSelect
+                 
+                let newEvent: MIDI.Event = .programChange(program: program,
+                                                          bank: bank,
+                                                          channel: channel,
+                                                          group: group)
+                
+                return newEvent
+                
+            case 0xD: // channel pressure
+                let newEvent: MIDI.Event = .pressure(amount: .midi2(word2()),
+                                                     channel: channel,
+                                                     group: group)
+                
+                return newEvent
+                
+            case 0xE: // pitch bend
+                let newEvent: MIDI.Event = .pitchBend(value: .midi2(word2()),
+                                                      channel: channel,
+                                                      group: group)
+                
+                return newEvent
+                
+            case 0xF: // note management
+                guard let note = byte(1).toMIDIUInt7Exactly
+                else { return nil }
+                
+                let newEvent: MIDI.Event = .noteManagement(note,
+                                                           flags: .init(byte: byte(2)),
+                                                           channel: channel,
+                                                           group: group)
                 
                 return newEvent
                 

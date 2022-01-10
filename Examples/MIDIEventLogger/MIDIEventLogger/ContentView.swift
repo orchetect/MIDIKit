@@ -11,16 +11,14 @@ import MIDIKit
 
 struct ContentView: View {
     
-    // if you declare a view that creates its own @ObservedObject instance, that instance is replaced every time SwiftUI decides that it needs to discard and redraw that view.
-    // it should instead be used to retain a weak reference from the view's initializer, with the original instance of the object stored in a parent scope as either a var or @StateObject but not an @ObservedObject
-    
-    @ObservedObject var midiManager: MIDI.IO.Manager
+    @EnvironmentObject var midiManager: MIDI.IO.Manager
     
     // MARK: - Constants
     
-    static let kMinWidth: CGFloat = 1020
+    static let kMinWidth: CGFloat = 1270
     static let kMaxWidth: CGFloat = 1400
     static let kMinHeight: CGFloat = 650
+    static let kMaxHeight: CGFloat = 1000
     
     let kInputTag = "EventLoggerInput"
     let kInputName = "MIDIKit Event Logger In"
@@ -32,38 +30,10 @@ struct ContentView: View {
     
     // MARK: - UI State
     
-    @State var midiChannel: MIDI.UInt4 = 0
     @State var midiGroup: MIDI.UInt4 = 0
-    @State var chanVoiceCC: MIDI.Event.CC.Controller = .modWheel
     
     @State var midiInputConnectionEndpoint: MIDI.IO.OutputEndpoint? = nil
     
-    // MARK: - Init
-    
-    init(midiManager: MIDI.IO.Manager) {
-        
-        self.midiManager = midiManager
-        
-        logger.debug("Adding virtual MIDI ports to system.")
-        
-        do {
-            try midiManager.addInput(
-                name: kInputName,
-                tag: kInputTag,
-                uniqueID: .userDefaultsManaged(key: kInputTag),
-                receiveHandler: .eventsLogging()
-            )
-            
-            try midiManager.addOutput(
-                name: kOutputName,
-                tag: kOutputTag,
-                uniqueID: .userDefaultsManaged(key: kOutputTag)
-            )
-        } catch {
-            logger.error(error)
-        }
-        
-    }
     // MARK: - Body
     
     var body: some View {
@@ -71,11 +41,20 @@ struct ContentView: View {
         VStack(alignment: .center, spacing: 0) {
             
             Spacer().frame(height: 10)
+            
             MIDISubsystemStatusView()
+            
             Spacer().frame(height: 10)
-            SendMIDIEventsView()
+            
+            SendMIDIEventsView(midiGroup: $midiGroup) {
+                sendEvent($0)   
+            }
+            .environmentObject(midiManager)
+            
             Spacer().frame(height: 10)
+            
             ReceiveMIDIEventsView()
+            
             Spacer().frame(height: 18)
             
         }
@@ -83,19 +62,49 @@ struct ContentView: View {
                idealWidth: Self.kMinWidth,
                maxWidth: Self.kMaxWidth,
                minHeight: Self.kMinHeight,
+               maxHeight: Self.kMaxHeight,
                alignment: .center)
         .padding([.leading, .trailing])
         
         .onAppear {
+            do {
+                if midiManager.managedInputs[kInputTag] == nil {
+                    logger.debug("Adding virtual MIDI input port to the manager.")
+                    
+                    try midiManager.addInput(
+                        name: kInputName,
+                        tag: kInputTag,
+                        uniqueID: .userDefaultsManaged(key: kInputTag),
+                        receiveHandler: .eventsLogging()
+                    )
+                }
+                
+                if midiManager.managedOutputs[kOutputTag] == nil {
+                    logger.debug("Adding virtual MIDI output port to the manager.")
+                    
+                    try midiManager.addOutput(
+                        name: kOutputName,
+                        tag: kOutputTag,
+                        uniqueID: .userDefaultsManaged(key: kOutputTag)
+                    )
+                }
+            } catch {
+                logger.error(error)
+            }
+            
             // wait a short delay in order to give Core MIDI time
             // to set up the virtual endpoints we created in the view's init()
-            DispatchQueue.main
-                .asyncAfter(deadline: DispatchTime.now()
-                                .advanced(by: .milliseconds(500)))
-            {
+            DispatchQueue.main.asyncAfter(
+                deadline: DispatchTime.now().advanced(by: .milliseconds(500))
+            ) {
                 setInputConnectionToVirtual()
             }
         }
+        
+        .onChange(of: midiInputConnectionEndpoint) { _ in
+            updateInputConnection()
+        }
+        
     }
     
     // MARK: - Helper Methods
@@ -150,7 +159,7 @@ struct ContentView: View {
     /// Send a MIDI event using our virtual output endpoint.
     func sendEvent(_ event: MIDI.Event) {
         
-        logErrors {
+        logIfThrowsError {
             try midiManager.managedOutputs[kOutputTag]?
                 .send(event: event)
         }
@@ -160,7 +169,12 @@ struct ContentView: View {
 }
 
 struct ContentView_Previews: PreviewProvider {
+    private static let midiManager = MIDI.IO.Manager(clientName: "Preview",
+                                                     model: "",
+                                                     manufacturer: "")
+    
     static var previews: some View {
-        ContentView(midiManager: .init(clientName: "Preview", model: "", manufacturer: ""))
+        ContentView()
+            .environmentObject(Self.midiManager)
     }
 }

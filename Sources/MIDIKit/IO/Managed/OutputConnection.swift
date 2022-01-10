@@ -8,8 +8,12 @@ import Foundation
 
 extension MIDI.IO {
     
-    /// A managed MIDI output connection created in the system by the `Manager`.
-    /// This connects to an external input in the system and outputs MIDI events to it.
+    /// A managed MIDI output connection created in the system by the MIDI I/O `Manager`.
+    /// This connects to one or more inputs in the system and outputs MIDI events to them.
+    ///
+    /// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `Manager`'s `managedOutputConnections` collection.
+    ///
+    /// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed output connection (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.outputConnection, ...)` or `.removeAll` on the `Manager` to destroy the managed output connection.)
     public class OutputConnection: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
@@ -20,15 +24,18 @@ extension MIDI.IO {
         public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
         // _MIDIIOSendsMIDIMessagesProtocol
-        internal var outputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
+        internal var coreMIDIOutputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
         
         // class-specific
         
-        public var inputsCriteria: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>]
-        internal var inputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
+        public private(set) var inputsCriteria: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>]
+        internal var coreMIDIInputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
         
         // init
         
+        /// Internal init.
+        /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addOutputConnection()`, and destroyed when calling `.remove(.outputConnection, ...)` or `.removeAll()`.
+        ///
         /// - Parameters:
         ///   - toInputs: Input(s) to connect to.
         ///   - midiManager: Reference to I/O Manager object.
@@ -60,7 +67,7 @@ extension MIDI.IO.OutputConnection {
     /// Returns the input endpoint(s) this connection is connected to.
     public var endpoints: [MIDI.IO.InputEndpoint] {
         
-        inputEndpointRefs.compactMap {
+        coreMIDIInputEndpointRefs.compactMap {
             if let unwrapped = $0 {
                 return MIDI.IO.InputEndpoint(unwrapped)
             } else { return nil }
@@ -79,7 +86,7 @@ extension MIDI.IO.OutputConnection {
     /// - Throws: `MIDI.IO.MIDIError`
     internal func setupOutput(in manager: MIDI.IO.Manager) throws {
         
-        guard outputPortRef == nil else {
+        guard coreMIDIOutputPortRef == nil else {
             // if we already set the output port up, it's not really an error condition
             // so just return; don't throw an error
             return
@@ -89,22 +96,22 @@ extension MIDI.IO.OutputConnection {
         
         // connection name must be unique, otherwise process might hang (?)
         try? MIDIOutputPortCreate(
-            manager.clientRef,
+            manager.coreMIDIClientRef,
             UUID().uuidString as CFString,
             &newOutputPortRef
         )
         .throwIfOSStatusErr()
         
-        outputPortRef = newOutputPortRef
+        coreMIDIOutputPortRef = newOutputPortRef
         
     }
     
     /// Disposes of the output port if it exists.
     internal func closeOutput() throws {
         
-        guard let unwrappedOutputPortRef = outputPortRef else { return }
+        guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else { return }
         
-        defer { self.outputPortRef = nil }
+        defer { self.coreMIDIOutputPortRef = nil }
         
         try MIDIPortDispose(unwrappedOutputPortRef)
             .throwIfOSStatusErr()
@@ -125,7 +132,7 @@ extension MIDI.IO.OutputConnection {
                     .coreMIDIObjectRef
             }
         
-        inputEndpointRefs = getInputEndpointRefs
+        coreMIDIInputEndpointRefs = getInputEndpointRefs
         
     }
     
@@ -159,7 +166,7 @@ extension MIDI.IO.OutputConnection: CustomStringConvertible {
     
     public var description: String {
         
-        let inputEndpointsString: [String] = inputEndpointRefs
+        let inputEndpointsString: [String] = coreMIDIInputEndpointRefs
             .map {
                 var str = ""
                 
@@ -182,7 +189,7 @@ extension MIDI.IO.OutputConnection: CustomStringConvertible {
             }
         
         var outputPortRefString: String = "nil"
-        if let unwrappedOutputPortRef = outputPortRef {
+        if let unwrappedOutputPortRef = coreMIDIOutputPortRef {
             outputPortRefString = "\(unwrappedOutputPortRef)"
         }
         
@@ -202,7 +209,7 @@ extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
     
     internal func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         
-        guard let unwrappedOutputPortRef = self.outputPortRef else {
+        guard let unwrappedOutputPortRef = self.coreMIDIOutputPortRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Output port reference is nil."
             )
@@ -211,7 +218,7 @@ extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
         // dispatch the packetlist to each input independently
         // but we can use the same output port
         
-        for inputEndpointRef in inputEndpointRefs {
+        for inputEndpointRef in coreMIDIInputEndpointRefs {
             
             if let unwrappedInputEndpointRef = inputEndpointRef {
                 
@@ -230,7 +237,7 @@ extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     internal func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
-        guard let unwrappedOutputPortRef = self.outputPortRef else {
+        guard let unwrappedOutputPortRef = self.coreMIDIOutputPortRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Output port reference is nil."
             )
@@ -239,7 +246,7 @@ extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
         // dispatch the eventlist to each input independently
         // but we can use the same output port
         
-        for inputEndpointRef in inputEndpointRefs {
+        for inputEndpointRef in coreMIDIInputEndpointRefs {
             
             if let unwrappedInputEndpointRef = inputEndpointRef {
                 

@@ -12,13 +12,13 @@ extension MIDI.IO {
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     ///
     /// Instead, read `Device` arrays and individual `Device` properties from `MIDI.IO.Manager.devices` ad-hoc when they are needed.
-    public struct Device: _MIDIIOObjectProtocol {
+    public struct Device: MIDIIOObjectProtocol {
+        
+        // MARK: MIDIIOObjectProtocol
         
         public let objectType: MIDI.IO.ObjectType = .device
         
-        // MARK: CoreMIDI ref
-        
-        internal let coreMIDIObjectRef: MIDI.IO.CoreMIDIDeviceRef
+        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIDeviceRef
         
         // MARK: Init
         

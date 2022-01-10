@@ -117,12 +117,14 @@ extension MIDI.Event.Note.Management {
         
         // MIDI 2.0 only
         
-        #warning("> TODO: umpRawWords() needs coding")
-        _ = mtAndGroup
+        let word1 = MIDI.UMPWord(mtAndGroup,
+                                 0xF0 + channel.uInt8Value,
+                                 note.uInt8Value,
+                                 optionFlags.byte)
         
-        //let word1 = MIDI.UMPWord()
+        let word2: UInt32 = 0x00000000 // reserved
         
-        return []
+        return [word1, word2]
         
     }
     
@@ -148,6 +150,42 @@ extension MIDI.Event.Note.Management {
         ///
         /// "When a device receives a Per-Note Management message with S = 1, all Per-Note controllers on the referenced Note Number should be reset to their default values."
         case resetPerNoteControllers
+        
+    }
+    
+}
+
+extension Set where Element == MIDI.Event.Note.Management.OptionFlag {
+    
+    /// Initialize flags from a raw option flags byte.
+    public init(byte: MIDI.Byte) {
+        
+        self.init()
+        
+        if byte & 0b0000_0001 == 1 {
+            insert(.resetPerNoteControllers)
+        }
+        
+        if (byte & 0b0000_0010) >> 1 == 1 {
+            insert(.detachPerNoteControllers)
+        }
+        
+    }
+    
+    /// Returns the flags as a raw option flags byte.
+    public var byte: MIDI.Byte {
+        
+        var byte: MIDI.Byte = 0b0000_0000
+        
+        if contains(.resetPerNoteControllers) {
+            byte |= 0b0000_0001
+        }
+        
+        if contains(.detachPerNoteControllers) {
+            byte |= 0b0000_0010
+        }
+        
+        return byte
         
     }
     

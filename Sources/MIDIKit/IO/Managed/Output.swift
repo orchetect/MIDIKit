@@ -8,7 +8,11 @@ import Foundation
 
 extension MIDI.IO {
     
-    /// A managed virtual MIDI output endpoint created in the system by the `Manager`.
+    /// A managed virtual MIDI output endpoint created in the system by the MIDI I/O `Manager`.
+    ///
+    /// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `Manager`'s `managedOutputs` collection.
+    ///
+    /// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the endpoint (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.output, ...)` or `.removeAll` on the `Manager` to destroy the managed output.)
     public class Output: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
@@ -19,7 +23,7 @@ extension MIDI.IO {
         public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
         // _MIDIIOSendsMIDIMessagesProtocol
-        internal var outputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
+        internal var coreMIDIOutputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
         
         // class-specific
         
@@ -31,6 +35,9 @@ extension MIDI.IO {
         
         // init
         
+        /// Internal init.
+        /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addOutput()`, and destroyed when calling `.remove(.output, ...)` or `.removeAll()`.
+        ///
         /// - Parameters:
         ///   - name: The port name as displayed in the system.
         ///   - uniqueID: The port's unique ID in the system.
@@ -94,7 +101,7 @@ extension MIDI.IO.Output {
         case .legacyCoreMIDI:
             // MIDISourceCreate is deprecated after macOS 11 / iOS 14
             try MIDISourceCreate(
-                manager.clientRef,
+                manager.coreMIDIClientRef,
                 endpointName as CFString,
                 &newPortRef
             )
@@ -108,7 +115,7 @@ extension MIDI.IO.Output {
             }
             
             try MIDISourceCreateWithProtocol(
-                manager.clientRef,
+                manager.coreMIDIClientRef,
                 endpointName as CFString,
                 self.api.midiProtocol.coreMIDIProtocol,
                 &newPortRef
@@ -117,7 +124,7 @@ extension MIDI.IO.Output {
             
         }
         
-        outputPortRef = newPortRef
+        coreMIDIOutputPortRef = newPortRef
         
         // set meta data properties; ignore errors in case of failure
         _ = try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
@@ -140,9 +147,9 @@ extension MIDI.IO.Output {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         
-        guard let unwrappedOutputPortRef = self.outputPortRef else { return }
+        guard let unwrappedOutputPortRef = self.coreMIDIOutputPortRef else { return }
         
-        defer { self.outputPortRef = nil }
+        defer { self.coreMIDIOutputPortRef = nil }
         
         try MIDIEndpointDispose(unwrappedOutputPortRef)
             .throwIfOSStatusErr()
@@ -176,7 +183,7 @@ extension MIDI.IO.Output: _MIDIIOSendsMIDIMessagesProtocol {
     
     internal func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         
-        guard let unwrappedOutputPortRef = self.outputPortRef else {
+        guard let unwrappedOutputPortRef = self.coreMIDIOutputPortRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Port reference is nil."
             )
@@ -190,7 +197,7 @@ extension MIDI.IO.Output: _MIDIIOSendsMIDIMessagesProtocol {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     internal func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
-        guard let unwrappedOutputPortRef = self.outputPortRef else {
+        guard let unwrappedOutputPortRef = self.coreMIDIOutputPortRef else {
             throw MIDI.IO.MIDIError.internalInconsistency(
                 "Port reference is nil."
             )

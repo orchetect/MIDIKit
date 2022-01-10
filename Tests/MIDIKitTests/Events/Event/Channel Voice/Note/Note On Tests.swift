@@ -19,8 +19,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi1(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: true)
                 .midi1RawBytes(),
@@ -30,8 +30,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi1(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: false)
                 .midi1RawBytes(),
@@ -43,8 +43,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi2(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: true)
                 .midi1RawBytes(),
@@ -54,8 +54,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi2(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: false)
                 .midi1RawBytes(),
@@ -67,8 +67,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .unitInterval(0.0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: true)
                 .midi1RawBytes(),
@@ -78,8 +78,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .unitInterval(0.0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: false)
                 .midi1RawBytes(),
@@ -95,8 +95,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi1(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: true)
                 .umpRawWords(protocol: ._1_0),
@@ -106,8 +106,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi1(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: false)
                 .umpRawWords(protocol: ._1_0),
@@ -119,8 +119,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi2(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: true)
                 .umpRawWords(protocol: ._1_0),
@@ -130,8 +130,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi2(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: false)
                 .umpRawWords(protocol: ._1_0),
@@ -143,8 +143,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .unitInterval(0.0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: true)
                 .umpRawWords(protocol: ._1_0),
@@ -154,8 +154,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .unitInterval(0.0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: false)
                 .umpRawWords(protocol: ._1_0),
@@ -171,8 +171,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi1(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: true) // no effect for MIDI 2.0 note on
                 .umpRawWords(protocol: ._2_0),
@@ -183,8 +183,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi1(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: false) // no effect for MIDI 2.0 note on
                 .umpRawWords(protocol: ._2_0),
@@ -197,8 +197,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi2(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: true) // no effect for MIDI 2.0 note on
                 .umpRawWords(protocol: ._2_0),
@@ -209,8 +209,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .midi2(0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: false) // no effect for MIDI 2.0 note on
                 .umpRawWords(protocol: ._2_0),
@@ -223,8 +223,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .unitInterval(0.0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: true) // no effect for MIDI 2.0 note on
                 .umpRawWords(protocol: ._2_0),
@@ -235,8 +235,8 @@ class MIDIEventNoteOn_Tests: XCTestCase {
         XCTAssertEqual(
             NoteOn(note: 60,
                    velocity: .unitInterval(0.0),
-                   channel: 0,
                    attribute: .none,
+                   channel: 0,
                    group: 0,
                    midi1ZeroVelocityAsNoteOff: false) // no effect for MIDI 2.0 note on
                 .umpRawWords(protocol: ._2_0),

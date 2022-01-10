@@ -113,12 +113,14 @@ extension MIDI.Event.Note.PitchBend {
         
         // MIDI 2.0 only
         
-        #warning("> TODO: umpRawWords() needs coding")
-        _ = mtAndGroup
+        let word1 = MIDI.UMPWord(mtAndGroup,
+                                 0x60 + channel.uInt8Value,
+                                 note.uInt8Value,
+                                 0x00) // reserved
         
-        //let word1 = MIDI.UMPWord()
+        let word2 = value.midi2Value
         
-        return []
+        return [word1, word2]
         
     }
     

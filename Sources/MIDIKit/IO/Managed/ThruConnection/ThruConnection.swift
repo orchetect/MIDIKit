@@ -16,9 +16,13 @@ import Foundation
 
 extension MIDI.IO {
     
-    /// A managed MIDI thru connection created in the system by the `Manager`.
+    /// A managed MIDI thru connection created in the system by the MIDI I/O `Manager`.
     ///
-    /// Core MIDI play-through connections can be non-persistent (client-owned, auto-disposed when `Manager` deinits) or persistent (maintained even after system reboots).
+    /// Core MIDI play-through connections can be non-persistent (client-owned, auto-disposed when `Manager` de-initializes) or persistent (maintained even after system reboots).
+    ///
+    /// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing non-persistent thru connections using the `Manager`'s `managedThruConnections` collection.
+    ///
+    /// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed thru connection (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.nonPersistentThruConnection, ...)` or `.removeAll` on the `Manager` to destroy the managed thru connection.)
     public class ThruConnection: _MIDIIOManagedProtocol {
         
         // _MIDIIOManagedProtocol
@@ -29,7 +33,7 @@ extension MIDI.IO {
         
         // class-specific
         
-        internal var thruConnectionRef: MIDI.IO.CoreMIDIThruConnectionRef? = nil
+        internal var coreMIDIThruConnectionRef: MIDI.IO.CoreMIDIThruConnectionRef? = nil
         public private(set) var outputs: [OutputEndpoint]
         public private(set) var inputs: [InputEndpoint]
         public private(set) var lifecycle: Lifecycle
@@ -37,6 +41,9 @@ extension MIDI.IO {
         
         // init
         
+        /// Internal init.
+        /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addThruConnection()`, and destroyed when calling `.remove(.nonPersistentThruConnection, ...)` or `.removeAll()`.
+        ///
         /// - Parameters:
         ///   - outputs: One or more output endpoints, maximum of 8.
         ///   - inputs: One or more input endpoints, maximum of 8.
@@ -120,7 +127,7 @@ extension MIDI.IO.ThruConnection {
             .throwIfOSStatusErr()
         }
         
-        thruConnectionRef = newConnection
+        coreMIDIThruConnectionRef = newConnection
         
         //switch lifecycle {
         //case .nonPersistent:
@@ -137,10 +144,10 @@ extension MIDI.IO.ThruConnection {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         
-        guard let unwrappedThruConnectionRef = self.thruConnectionRef else { return }
+        guard let unwrappedThruConnectionRef = self.coreMIDIThruConnectionRef else { return }
         
         defer {
-            self.thruConnectionRef = nil
+            self.coreMIDIThruConnectionRef = nil
         }
         
         try MIDIThruConnectionDispose(unwrappedThruConnectionRef)
@@ -155,7 +162,7 @@ extension MIDI.IO.ThruConnection: CustomStringConvertible {
     public var description: String {
         
         var thruConnectionRefString: String = "nil"
-        if let unwrappedThruConnectionRef = thruConnectionRef {
+        if let unwrappedThruConnectionRef = coreMIDIThruConnectionRef {
             thruConnectionRefString = "\(unwrappedThruConnectionRef)"
         }
         

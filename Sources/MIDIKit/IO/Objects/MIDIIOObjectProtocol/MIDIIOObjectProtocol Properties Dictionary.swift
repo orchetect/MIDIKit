@@ -5,7 +5,7 @@
 
 import Foundation
 
-extension _MIDIIOObjectProtocol {
+extension MIDIIOObjectProtocol {
     
     /// Get all properties as a key/value pair array, formatted as human-readable strings.
     /// Useful for displaying in a user interface or outputting to console for debugging.
@@ -23,10 +23,6 @@ extension _MIDIIOObjectProtocol {
         }
         
     }
-    
-}
-
-extension _MIDIIOObjectProtocol {
     
     /// Returns a human-readable key and value pair for the property.
     internal func getPropertyKeyValuePairAsStrings(

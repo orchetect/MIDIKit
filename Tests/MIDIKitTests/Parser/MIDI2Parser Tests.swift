@@ -29,7 +29,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
                 .parsedEvents()
         }
         
-        // - UMP MIDI 1.0 channel voice
+        // - UMP MIDI 1.0 Channel Voice
         
         // note off
         XCTAssertEqual(
@@ -43,7 +43,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
             [.noteOn(60, velocity: .midi1(64), channel: 1, group: 0x1)]
         )
         
-        // poly aftertouch
+        // note pressure
         XCTAssertEqual(
             parsedEvents(bytes: [0x22, 0xA4, 0x3C, 0x40]),
             [.notePressure(note: 60, amount: .midi1(64), channel: 4, group: 0x2)]
@@ -61,7 +61,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
             [.programChange(program: 32, channel: 10, group: 0x4)]
         )
         
-        // channel aftertouch
+        // channel pressure
         XCTAssertEqual(
             parsedEvents(bytes: [0x25, 0xD8, 0x40, 0x00]),
             [.pressure(amount: .midi1(64), channel: 8, group: 0x5)]
@@ -73,7 +73,115 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
             [.pitchBend(value: .midi1(8192), channel: 3, group: 0x6)]
         )
         
-        // - UMP MIDI 1.0 system messages
+    }
+    
+    func testUniversalPacketData_parsedEvents_SingleEvents_MIDI2_0() {
+        
+        // template method
+        
+        func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
+            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+                .parsedEvents()
+        }
+        
+        // - UMP MIDI 2.0 Channel Voice
+        
+        // note cc (assignable cc2)
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x43, 0x11, 0x3C, 0x02,
+                                 0x12, 0x34, 0x56, 0x78]),
+            [.noteCC(note: 60, controller: .assignable(2), value: 0x12345678, channel: 1, group: 0x3)]
+        )
+        
+        // note pitchbend
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x43, 0x61, 0x3C, 0x00,
+                                 0x12, 0x34, 0x56, 0x78]),
+            [.notePitchBend(note: 60, value: .midi2(0x12345678), channel: 1, group: 0x3)]
+        )
+        
+        // note off
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x40, 0x80, 0x3C, 0x02,
+                                 0x80, 0x00, 0x12, 0x34]),
+            [.noteOff(60, velocity: .midi2(0x8000), attribute: .profileSpecific(data: 0x1234), channel: 0, group: 0x0)]
+        )
+        
+        // note on
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x41, 0x91, 0x3C, 0x02,
+                                 0x80, 0x00, 0x12, 0x34]),
+            [.noteOn(60, velocity: .midi2(0x8000), attribute: .profileSpecific(data: 0x1234), channel: 1, group: 0x1)]
+        )
+        
+        // note pressure
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x42, 0xA4, 0x3C, 0x00,
+                                 0x12, 0x34, 0x56, 0x78]),
+            [.notePressure(note: 60, amount: .midi2(0x12345678), channel: 4, group: 0x2)]
+        )
+        
+        // cc
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x43, 0xB1, 0x01, 0x00,
+                                 0x12, 0x34, 0x56, 0x78]),
+            [.cc(1, value: .midi2(0x12345678), channel: 1, group: 0x3)]
+        )
+        
+        // program change (no bank select)
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x44, 0xCA, 0x00, 0x00,
+                                 0x20, 0x00, 0x00, 0x00]),
+            [.programChange(program: 32, bank: .noBankSelect, channel: 10, group: 0x4)]
+        )
+        
+        // program change (with bank select)
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x44, 0xCA, 0x00, 0x01,
+                                 0x20, 0x00, 0x01, 0x02]),
+            [.programChange(program: 32, bank: .bankSelect(0x82), channel: 10, group: 0x4)]
+        )
+        
+        // channel pressure
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x45, 0xD8, 0x00, 0x00,
+                                 0x12, 0x34, 0x56, 0x78]),
+            [.pressure(amount: .midi2(0x12345678), channel: 8, group: 0x5)]
+        )
+        
+        // pitch bend
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x46, 0xE3, 0x00, 0x00,
+                                 0x12, 0x34, 0x56, 0x78]),
+            [.pitchBend(value: .midi2(0x12345678), channel: 3, group: 0x6)]
+        )
+        
+        // note cc (registered cc2)
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x43, 0x01, 0x3C, 0x02,
+                                 0x12, 0x34, 0x56, 0x78]),
+            [.noteCC(note: 60, controller: .registered(.breath), value: 0x12345678, channel: 1, group: 0x3)]
+        )
+        
+        // note management
+        XCTAssertEqual(
+            parsedEvents(bytes: [0x43, 0xF1, 0x3C, 0b0000_0011,
+                                 0x12, 0x34, 0x56, 0x78]),
+            [.noteManagement(60, flags: [.detachPerNoteControllers, .resetPerNoteControllers], channel: 1, group: 3)]
+        )
+        
+    }
+    
+    func testUniversalPacketData_parsedEvents_SingleEvents_System() {
+        
+        // template method
+        
+        func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
+            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+                .parsedEvents()
+        }
+        
+        // UMP System Events
         
         // SysEx
         XCTAssertEqual(
@@ -132,49 +240,49 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
             []
         )
         
-        // real time: timing clock
+        // System Real Time - timing clock
         XCTAssertEqual(
             parsedEvents(bytes: [0x1B, 0xF8, 0x00, 0x00]),
             [.timingClock(group: 0xB)]
         )
         
-        // real time: (undefined)
+        // System Real Time - (undefined)
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xF9, 0x00, 0x00]),
             []
         )
         
-        // real time: start
+        // System Real Time - start
         XCTAssertEqual(
             parsedEvents(bytes: [0x1C, 0xFA, 0x00, 0x00]),
             [.start(group: 0xC)]
         )
         
-        // real time: continue
+        // System Real Time - continue
         XCTAssertEqual(
             parsedEvents(bytes: [0x1D, 0xFB, 0x00, 0x00]),
             [.continue(group: 0xD)]
         )
         
-        // real time: stop
+        // System Real Time - stop
         XCTAssertEqual(
             parsedEvents(bytes: [0x1E, 0xFC, 0x00, 0x00]),
             [.stop(group: 0xE)]
         )
         
-        // real time: (undefined)
+        // System Real Time - (undefined)
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFD, 0x00, 0x00]),
             []
         )
         
-        // real time: active sensing
+        // System Real Time - active sensing
         XCTAssertEqual(
             parsedEvents(bytes: [0x1F, 0xFE, 0x00, 0x00]),
             [.activeSensing(group: 0xF)]
         )
         
-        // real time: system reset
+        // System Real Time - system reset
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFF, 0x00, 0x00]),
             [.systemReset(group: 0x0)]
@@ -186,6 +294,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         
         // UMP packets do not allow for multiple events in a single packet
         // UMP packets only ever contain a single discrete MIDI event
+        
         // nothing to test
         
     }
@@ -195,6 +304,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         // MIDI 2.0 does not support/allow Running Status
         // UMP packets containing MIDI 1.0 events must always be the entire, complete message including status byte
         // UMP packets only ever contain a single discrete MIDI event, so Running Status within a single packet is not supported either
+        
         // nothing to test
         
     }
@@ -247,7 +357,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0x90, 0x00, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0x90, 0x80, 0x80]), [])
         
-        // poly aftertouch
+        // note pressure
         // - requires two data bytes to follow, which fills out the entire word without needing null byte padding
         // test data byte(s) > 127
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xA0, 0x80, 0x00]), [])
@@ -270,7 +380,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xC0, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xC0, 0x80, 0x80]), [])
         
-        // channel aftertouch
+        // channel pressure
         // - requires one data byte to follow, with one null byte trailing padding
         // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xD0, 0x00, 0x80]),

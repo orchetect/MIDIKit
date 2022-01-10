@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+import AppKit
+
 extension MIDI.Event.Note {
     
     /// Channel Voice Message: Per-Note Control Change (CC)
@@ -125,12 +127,28 @@ extension MIDI.Event.Note.CC {
         
         // MIDI 2.0 only
         
-        #warning("> TODO: umpRawWords() needs coding")
-        _ = mtAndGroup
+        let statusByte: MIDI.Byte
+        let index: MIDI.Byte
         
-        // let word1 = MIDI.UMPWord()
+        switch controller {
+        case .assignable(let ccNum):
+            statusByte = 0x10
+            index = ccNum
+            
+        case .registered(let ccNum):
+            statusByte = 0x00
+            index = ccNum.number
+            
+        }
         
-        return []
+        let word1 = MIDI.UMPWord(mtAndGroup,
+                                 statusByte + channel.uInt8Value,
+                                 note.uInt8Value,
+                                 index)
+        
+        let word2 = value
+        
+        return [word1, word2]
         
     }
     

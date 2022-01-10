@@ -32,6 +32,16 @@ extension MIDI.Event.Note.Attribute {
     
 }
 
+extension MIDI.Event.Note.Attribute.Pitch7_9: CustomStringConvertible {
+    
+    public var description: String {
+        
+        "pitch7.9(\(coarse), fine:\(fine))"
+        
+    }
+    
+}
+
 // MARK: - Byte.Pair
 
 extension MIDI.Event.Note.Attribute.Pitch7_9 {

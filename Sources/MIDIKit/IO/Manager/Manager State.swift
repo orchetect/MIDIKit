@@ -18,9 +18,9 @@ extension MIDI.IO.Manager {
         try eventQueue.sync {
             
             // if start() was already called, return
-            guard clientRef == MIDIClientRef() else { return }
+            guard coreMIDIClientRef == MIDIClientRef() else { return }
             
-            try MIDIClientCreateWithBlock(clientName as CFString, &clientRef)
+            try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef)
             { [weak self] notificationPtr in
                 guard let strongSelf = self else { return }
                 strongSelf.internalNotificationHandler(notificationPtr)

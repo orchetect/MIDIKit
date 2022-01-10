@@ -19,7 +19,7 @@ public protocol MIDIIOEndpointProtocol: MIDIIOObjectProtocol {
 
 // MARK: - Internal Protocol
 
-internal protocol _MIDIIOEndpointProtocol: MIDIIOEndpointProtocol, _MIDIIOObjectProtocol {
+internal protocol _MIDIIOEndpointProtocol: MIDIIOEndpointProtocol {
     
 }
 
