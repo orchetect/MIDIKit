@@ -70,6 +70,8 @@ extension MIDI.IO.ReceiveHandler {
         
         internal func logEvents(_ events: [MIDI.Event]) {
             
+            guard !events.isEmpty else { return }
+            
             var events = events
             
             if filterActiveSensingAndClock {
