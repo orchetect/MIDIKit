@@ -49,11 +49,17 @@ extension MIDI.Event {
         // MARK: System Exclusive
         // ----------------------
         
-        case .sysEx(let event):
+        case .sysEx7(let event):
             return event.midi1RawBytes()
             
-        case .universalSysEx(let event):
+        case .universalSysEx7(let event):
             return event.midi1RawBytes()
+            
+        case .sysEx8:
+            return []
+            
+        case .universalSysEx8:
+            return []
             
             
         // -------------------
@@ -107,7 +113,7 @@ extension MIDI.Event {
 extension MIDI.Event {
     
     @inline(__always)
-    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
+    public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [[MIDI.UMPWord]] {
         
         switch self {
         
@@ -116,44 +122,50 @@ extension MIDI.Event {
         // -------------------
         
         case .noteOn(let event):
-            return event.umpRawWords(protocol: midiProtocol)
+            return [event.umpRawWords(protocol: midiProtocol)]
             
         case .noteOff(let event):
-            return event.umpRawWords(protocol: midiProtocol)
+            return [event.umpRawWords(protocol: midiProtocol)]
             
         case .noteCC(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .notePitchBend(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
         
         case .notePressure(let event):
-            return event.umpRawWords(protocol: midiProtocol)
+            return [event.umpRawWords(protocol: midiProtocol)]
         
         case .noteManagement(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .cc(let event):
-            return event.umpRawWords(protocol: midiProtocol)
+            return [event.umpRawWords(protocol: midiProtocol)]
             
         case .programChange(let event):
-            return event.umpRawWords(protocol: midiProtocol)
+            return [event.umpRawWords(protocol: midiProtocol)]
             
         case .pressure(let event):
-            return event.umpRawWords(protocol: midiProtocol)
+            return [event.umpRawWords(protocol: midiProtocol)]
             
         case .pitchBend(let event):
-            return event.umpRawWords(protocol: midiProtocol)
+            return [event.umpRawWords(protocol: midiProtocol)]
             
             
         // ----------------------
         // MARK: System Exclusive
         // ----------------------
         
-        case .sysEx(let event):
+        case .sysEx7(let event):
             return event.umpRawWords()
             
-        case .universalSysEx(let event):
+        case .universalSysEx7(let event):
+            return event.umpRawWords()
+            
+        case .sysEx8(let event):
+            return event.umpRawWords()
+            
+        case .universalSysEx8(let event):
             return event.umpRawWords()
             
             
@@ -162,19 +174,19 @@ extension MIDI.Event {
         // -------------------
         
         case .timecodeQuarterFrame(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .songPositionPointer(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .songSelect(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .unofficialBusSelect(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .tuneRequest(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
             
         // ----------------------
@@ -182,22 +194,22 @@ extension MIDI.Event {
         // ----------------------
         
         case .timingClock(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .start(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .continue(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .stop(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .activeSensing(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         case .systemReset(let event):
-            return event.umpRawWords()
+            return [event.umpRawWords()]
             
         }
         

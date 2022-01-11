@@ -63,7 +63,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_only() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(chanVoice: .only)
         
@@ -75,7 +75,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_onlyType() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(chanVoice: .onlyType(.noteOn))
         
@@ -87,7 +87,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_onlyTypes() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -108,7 +108,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_onlyChannel() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -152,7 +152,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_onlyChannels() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -210,7 +210,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_onlyCC() {
         
-        var events = kEvents.oneOfEachMIDI1EventType
+        var events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -242,7 +242,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_onlyCCs() {
         
-        var events = kEvents.oneOfEachMIDI1EventType
+        var events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -303,7 +303,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_onlyNotesInRange() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -344,7 +344,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_onlyNotesInRanges() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -404,7 +404,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_keepType() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(chanVoice: .keepType(.noteOn))
         
@@ -421,7 +421,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_keepTypes() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(chanVoice: .keepTypes([.noteOn, .noteOff]))
         
@@ -439,7 +439,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_keepChannel() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -491,7 +491,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_keepChannels() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -563,7 +563,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_keepCC() {
         
-        var events = kEvents.oneOfEachMIDI1EventType
+        var events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -666,7 +666,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_keepCCs() {
         
-        var events = kEvents.oneOfEachMIDI1EventType
+        var events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -849,7 +849,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_keepNotesInRange() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -956,7 +956,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_keepNotesInRanges() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -1115,7 +1115,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_drop() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(chanVoice: .drop)
         
@@ -1130,7 +1130,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_dropType() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(chanVoice: .dropType(.noteOn))
         
@@ -1155,7 +1155,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_dropTypes() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(chanVoice: .dropTypes([.noteOn, .noteOff]))
         
@@ -1179,7 +1179,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_dropChannel() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -1276,7 +1276,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_dropChannels() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -1406,7 +1406,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_dropCC() {
         
-        var events = kEvents.oneOfEachMIDI1EventType
+        var events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -1511,7 +1511,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_dropCCs() {
         
-        var events = kEvents.oneOfEachMIDI1EventType
+        var events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -1697,7 +1697,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_dropNotesInRange() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -1804,7 +1804,7 @@ class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testFilter_ChanVoice_dropNotesInRanges() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]

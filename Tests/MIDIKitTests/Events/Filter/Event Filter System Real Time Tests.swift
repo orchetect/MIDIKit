@@ -63,7 +63,7 @@ class MIDIEventFilter_SystemRealTime_Tests: XCTestCase {
     
     func testFilter_SysRealTime_only() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysRealTime: .only)
         
@@ -75,7 +75,7 @@ class MIDIEventFilter_SystemRealTime_Tests: XCTestCase {
     
     func testFilter_SysRealTime_onlyType() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysRealTime: .onlyType(.start))
         
@@ -87,7 +87,7 @@ class MIDIEventFilter_SystemRealTime_Tests: XCTestCase {
     
     func testFilter_SysRealTime_onlyTypes() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
         var expectedEvents: [MIDI.Event]
@@ -110,7 +110,7 @@ class MIDIEventFilter_SystemRealTime_Tests: XCTestCase {
     
     func testFilter_SysRealTime_keepType() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysRealTime: .keepType(.start))
         
@@ -128,7 +128,7 @@ class MIDIEventFilter_SystemRealTime_Tests: XCTestCase {
     
     func testFilter_SysRealTime_keepTypes() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysRealTime: .keepTypes([.start, .stop]))
         
@@ -149,7 +149,7 @@ class MIDIEventFilter_SystemRealTime_Tests: XCTestCase {
     
     func testFilter_SysRealTime_drop() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysRealTime: .drop)
         
@@ -164,7 +164,7 @@ class MIDIEventFilter_SystemRealTime_Tests: XCTestCase {
     
     func testFilter_SysRealTime_dropType() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysRealTime: .dropType(.start))
         
@@ -186,7 +186,7 @@ class MIDIEventFilter_SystemRealTime_Tests: XCTestCase {
     
     func testFilter_SysRealTime_dropTypes() {
         
-        let events = kEvents.oneOfEachMIDI1EventType
+        let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysRealTime: .dropTypes([.start, .stop]))
         

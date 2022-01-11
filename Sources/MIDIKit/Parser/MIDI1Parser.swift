@@ -7,25 +7,31 @@ extension MIDI {
     
     /// Parser for MIDI 1.0 events.
     ///
-    /// Running status is maintained internally. Use one parser class instance per MIDI endpoint for the lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and do not use a single global parser class instance for all MIDI endpoints.)
+    /// State is maintained internally. Use one parser class instance per MIDI endpoint for the lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and do not use a single global parser class instance for all MIDI endpoints.)
     public class MIDI1Parser {
         
-        internal enum ExpectedDataBytes {
-            case none
-            case exact(Int)
-            case sysExOpenEnded
-        }
+        // MARK: - Internal Default Instance
+        
+        /// Internal:
+        /// Default static instance for MIDIKit objects that support parsing events without requiring a parser to be instanced first.
+        internal static let `default` = MIDI1Parser()
+        
+        // MARK: - Parser State
+        
+        /// Interpret received Note On events with a velocity value of 0 as a Note Off event instead.
+        internal var translateNoteOnZeroVelocityToNoteOff: Bool = true
+        
+        internal var runningStatus: MIDI.Byte? = nil
+        
+        // MARK: - Init
         
         public init() {
             
         }
         
-        /// Interpret received Note On events with a velocity value of 0 as a Note Off event instead.
-        var translateNoteOnZeroVelocityToNoteOff: Bool = true
+        // MARK: - Public Parser Methods
         
-        internal var runningStatus: MIDI.Byte? = nil
-        
-        /// Parse
+        /// Parses raw packet data into an array of MIDI Events.
         public func parsedEvents(
             in packetData: MIDI.Packet.PacketData,
             umpGroup: MIDI.UInt4 = 0
@@ -42,7 +48,7 @@ extension MIDI {
             
         }
         
-        /// Parse
+        /// Parses raw packet data into an array of MIDI Events.
         public func parsedEvents(
             in bytes: [MIDI.Byte],
             umpGroup: MIDI.UInt4 = 0
@@ -59,10 +65,18 @@ extension MIDI {
             
         }
         
+        // MARK: - Internal Parser Methods
+        
+        internal enum ExpectedDataBytes {
+            case none
+            case exact(Int)
+            case sysExOpenEnded
+        }
+        
         /// Parses raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
         ///
         /// Persisted status data is normally the role of the parser class, but this method gives access to an abstracted parsing method by way of injecting and emitting persistent state (ie: running status).
-        public static func parsedEvents(
+        internal static func parsedEvents(
             in bytes: [MIDI.Byte],
             runningStatus: MIDI.Byte? = nil,
             translateNoteOnZeroVelocityToNoteOff: Bool = true,
@@ -489,7 +503,7 @@ extension MIDI {
             case 0xF: // system message
                 switch statusByte.nibbles.low {
                 case 0x0: // System Common - SysEx Start
-                    guard let parsedSysEx = try? MIDI.Event.sysEx(rawBytes: bytes)
+                    guard let parsedSysEx = try? MIDI.Event.sysEx7(rawBytes: bytes)
                     else { return events }
                     
                     events.append(parsedSysEx)
@@ -569,18 +583,14 @@ extension MIDI {
     
 }
 
+// MARK: - MIDI.Packet Extensions
+
 extension MIDI.Packet.PacketData {
     
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
-    ///
-    /// Persisted status data is normally the role of the parser class, but this method gives access to an abstracted parsing method by way of injecting and emitting persistent state (ie: running status).
-    internal func parsedEvents(
-        runningStatus: MIDI.Byte? = nil
-    ) -> (events: [MIDI.Event],
-          runningStatus: MIDI.Byte?)
-    {
+    internal func parsedEvents() -> [MIDI.Event] {
         
-        MIDI.MIDI1Parser.parsedEvents(in: bytes, runningStatus: runningStatus)
+        MIDI.MIDI1Parser.default.parsedEvents(in: bytes)
         
     }
     
@@ -596,15 +606,9 @@ extension MIDI.Packet.PacketData {
 extension MIDI.Packet {
     
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
-    ///
-    /// Persisted status data is normally the role of the parser class, but this method gives access to an abstracted parsing method by way of injecting and emitting persistent state (ie: running status).
-    internal func parsedMIDI1Events(
-        runningStatus: MIDI.Byte? = nil
-    ) -> (events: [MIDI.Event],
-          runningStatus: MIDI.Byte?)
-    {
+    internal func parsedMIDI1Events() -> [MIDI.Event] {
         
-        MIDI.MIDI1Parser.parsedEvents(in: bytes, runningStatus: runningStatus)
+        MIDI.MIDI1Parser.default.parsedEvents(in: bytes)
         
     }
     

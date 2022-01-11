@@ -17,73 +17,167 @@ extension MIDI.Event {
     ///
     /// - "Special IDs `0x7E` and `0x7F` are the Universal System Exclusive IDs."
     ///
-    /// For these special IDs, use MIDIKit's `UniversalSysEx` type instead of `SysEx`.
+    /// For these special IDs, use MIDIKit's `UniversalSysEx7` type instead of `SysEx7`.
     public enum SysExManufacturer: Equatable, Hashable {
 
         /// Valid range: `0x01...0x7D`
         ///
-        /// 0x00 is reserved to prefix a 2-byte ID (such that 3 total bytes)
-        case oneByte(MIDI.Byte)
+        /// 0x00 is reserved to prefix a 2-byte ID (3 total bytes)
+        case oneByte(MIDI.UInt7)
 
         /// Valid range for bytes 2 & 3: `0x00...0x7F`
         ///
         /// Byte 1 is always 0x00.
-        case threeByte(byte2: MIDI.Byte, byte3: MIDI.Byte)
-
-        /// Returns the Manufacturer byte(s)
-        @inline(__always)
-        public var bytes: [MIDI.Byte] {
-
-            switch self {
-            case .oneByte(let byte):
-                return [byte]
-
-            case .threeByte(byte2: let byte2, byte3: let byte3):
-                return [0x00, byte2, byte3]
-            }
-
-        }
-
-        /// Returns whether the byte(s) are valid SysEx Manufacturer IDs.
-        ///
-        /// This does not test whether the ID belongs to a registered manufacturer. Rather, it simply reports if the bytes are legal.
-        ///
-        /// Use the `.name` property to return the manufacturer's name associated with the ID, or `nil` if the ID is not registered.
-        @inline(__always)
-        public var isValid: Bool {
-
-            switch self {
-            case .oneByte(let byte):
-                return (0x01...0x7D).contains(byte)
-
-            case .threeByte(byte2: let byte2, byte3: let byte3):
-                return
-                    (0x00...0x7F).contains(byte2) &&
-                    (0x00...0x7F).contains(byte3)
-            }
-
-        }
-
-        /// Returns the name of the manufacturer associated with the Manufacturer System Exclusive ID, as assigned by the MIDI Manufacturers Association.
-        ///
-        /// Returns `nil` if the ID is not recognized.
-        public var name: String? {
-
-            Self.kSysExIDs
-                .first(where: { $0.key == bytes })?
-                .value
-
-        }
-
+        case threeByte(byte2: MIDI.UInt7, byte3: MIDI.UInt7)
+        
     }
 
+}
+
+extension MIDI.Event.SysExManufacturer {
+    
+    /// Initialize from a MIDI 1.0 SysEx7 ID (one or three bytes).
+    public init?(sysEx7RawBytes: [MIDI.Byte]) {
+        
+        switch sysEx7RawBytes.count {
+        case 1:
+            switch sysEx7RawBytes[0] {
+            case 0x00:
+                // 0x00 is invalid if no bytes follow
+                return nil
+                
+            case 0x01...0x7D:
+                self = .oneByte(sysEx7RawBytes[0].toMIDIUInt7)
+                return
+                
+            case 0x7E, 0x7F:
+                // reserved for Universal Sys Ex, not valid manufacturer IDs
+                return nil
+                
+            default: // 0x80...
+                // top bit set is invalid; malformed
+                return nil
+            }
+            
+        case 3:
+            guard sysEx7RawBytes[0] == 0x00 else { return nil }
+            
+            guard let byte2 = MIDI.UInt7(exactly: sysEx7RawBytes[1]),
+                  let byte3 = MIDI.UInt7(exactly: sysEx7RawBytes[2])
+            else { return nil }
+            
+            self = .threeByte(byte2: byte2, byte3: byte3)
+            return
+            
+        default:
+            return nil
+        }
+        
+    }
+    
+    /// Initialize from a MIDI 2.0 SysEx8 ID (two bytes).
+    public init?(sysEx8RawBytes: [MIDI.Byte]) {
+        
+        guard sysEx8RawBytes.count == 2 else { return nil }
+        
+        switch sysEx8RawBytes[0] {
+        case 0x00: // "one byte" ID
+            // 0x00 is not valid for one-byte ID
+            guard sysEx8RawBytes[1] > 0x00 else { return nil }
+            
+            // 0x7E and 0x7F are reserved for Universal SysEx
+            guard sysEx8RawBytes[1] < 0x7E else { return nil }
+            
+            guard let byte = MIDI.UInt7(exactly: sysEx8RawBytes[1]) else { return nil }
+            self = .oneByte(byte)
+            return
+            
+        case 0x80...: // "three byte" ID
+            let byte2 = (sysEx8RawBytes[0] & 0b0111_1111).toMIDIUInt7
+            guard let byte3 = MIDI.UInt7(exactly: sysEx8RawBytes[1]) else { return nil }
+            self = .threeByte(byte2: byte2, byte3: byte3)
+            
+        default:
+            return nil
+        }
+        
+    }
+    
+}
+
+extension MIDI.Event.SysExManufacturer {
+    
+    /// Returns the Manufacturer byte(s) formatted for MIDI 1.0 SysEx7, as one byte (7-bit) or three bytes (21-bit).
+    @inline(__always)
+    public func sysEx7RawBytes() -> [MIDI.Byte] {
+        
+        switch self {
+        case .oneByte(let byte):
+            return [byte.uInt8Value]
+            
+        case .threeByte(byte2: let byte2, byte3: let byte3):
+            return [0x00, byte2.uInt8Value, byte3.uInt8Value]
+        }
+        
+    }
+    
+    /// Returns the Manufacturer byte(s) formatted for MIDI 2.0 SysEx8, as two bytes (16-bit).
+    @inline(__always)
+    public func sysEx8RawBytes() -> [MIDI.Byte] {
+        
+        switch self {
+        case .oneByte(let byte):
+            return [0x00, byte.uInt8Value]
+            
+        case .threeByte(byte2: let byte2, byte3: let byte3):
+            return [0b1000_0000 + byte2.uInt8Value,
+                    byte3.uInt8Value]
+        }
+        
+    }
+    
+}
+
+extension MIDI.Event.SysExManufacturer {
+    
+    /// Returns whether the byte(s) are valid SysEx Manufacturer IDs.
+    ///
+    /// This does not test whether the ID belongs to a registered manufacturer. Rather, it simply reports if the bytes are legal.
+    ///
+    /// Use the `.name` property to return the manufacturer's name associated with the ID, or `nil` if the ID is not registered.
+    @inline(__always)
+    public var isValid: Bool {
+        
+        switch self {
+        case .oneByte(let byte):
+            return (0x01...0x7D).contains(byte)
+            
+        case .threeByte(byte2: let byte2, byte3: let byte3):
+            return
+                (0x00...0x7F).contains(byte2) &&
+                (0x00...0x7F).contains(byte3)
+        }
+        
+    }
+    
+    /// Returns the name of the manufacturer associated with the Manufacturer System Exclusive ID, as assigned by the MIDI Manufacturers Association.
+    ///
+    /// Returns `nil` if the ID is not recognized.
+    public var name: String? {
+        
+        Self.kSysExIDs
+            .first(where: { $0.key == sysEx7RawBytes() })?
+            .value
+        
+    }
+    
 }
 
 extension MIDI.Event.SysExManufacturer: CustomStringConvertible {
 
     public var description: String {
 
-        bytes.hex.stringValue(padTo: 2, prefix: true)
+        sysEx7RawBytes().hex.stringValue(padTo: 2, prefix: true)
 
     }
 

@@ -98,12 +98,12 @@ enum kEvents {
     
     enum SysEx {
         
-        static let sysEx: MIDI.Event = .sysEx(
+        static let sysEx7: MIDI.Event = .sysEx7(
             manufacturer: .educational(),
             data: [0x20],
             group: 0
         )
-        static let universalSysEx: MIDI.Event = .universalSysEx(
+        static let universalSysEx7: MIDI.Event = .universalSysEx7(
             universalType: .realTime,
             deviceID: 0x7F,
             subID1: 0x01,
@@ -112,9 +112,25 @@ enum kEvents {
             group: 0
         )
         
+        static let sysEx8: MIDI.Event = .sysEx8(
+            manufacturer: .educational(),
+            data: [0xE6],
+            group: 0
+        )
+        static let universalSysEx8: MIDI.Event = .universalSysEx8(
+            universalType: .nonRealTime,
+            deviceID: 0x05,
+            subID1: 0x02,
+            subID2: 0x03,
+            data: [0xE6],
+            group: 0
+        )
+        
         static let oneOfEachEventType: [MIDI.Event] = [
-            Self.sysEx,
-            Self.universalSysEx
+            Self.sysEx7,
+            Self.universalSysEx7,
+            Self.sysEx8,
+            Self.universalSysEx8
         ]
         
     }
@@ -139,10 +155,10 @@ enum kEvents {
         
     }
     
-    static let oneOfEachMIDI1EventType: [MIDI.Event] =
-    ChanVoice.oneOfEachEventType +
-    SysCommon.oneOfEachEventType +
-    SysEx.oneOfEachEventType +
-    SysRealTime.oneOfEachEventType
+    static let oneOfEachEventType: [MIDI.Event] =
+        ChanVoice.oneOfEachEventType +
+        SysCommon.oneOfEachEventType +
+        SysEx.oneOfEachEventType +
+        SysRealTime.oneOfEachEventType
     
 }

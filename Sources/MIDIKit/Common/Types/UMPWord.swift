@@ -46,7 +46,8 @@ extension MIDI.UMPWord {
 
 extension Collection where Element == MIDI.UMPWord {
     
-    /// Internal: Flattens an array of `UInt32` words into a `UInt8` array of bytes.
+    /// Internal: Flattens an array of `UInt32` words into an array of bytes.
+    @inline(__always)
     internal func umpWordsToBytes() -> [MIDI.Byte] {
         
         var bytes: [MIDI.Byte] = []

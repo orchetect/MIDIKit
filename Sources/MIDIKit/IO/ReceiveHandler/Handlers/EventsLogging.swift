@@ -30,6 +30,7 @@ extension MIDI.IO.ReceiveHandler {
             
             for midiPacket in packets {
                 let events = midi1Parser.parsedEvents(in: midiPacket)
+                guard !events.isEmpty else { continue }
                 logEvents(events)
             }
             
@@ -44,6 +45,7 @@ extension MIDI.IO.ReceiveHandler {
             
             for midiPacket in packets {
                 let events = midi2Parser.parsedEvents(in: midiPacket)
+                guard !events.isEmpty else { continue }
                 logEvents(events)
             }
             

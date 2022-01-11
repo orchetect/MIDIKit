@@ -183,7 +183,7 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         
         // UMP System Events
         
-        // SysEx
+        // SysEx7
         XCTAssertEqual(
             parsedEvents(bytes:
                             [0x30, // UMP message type (0x3?), group 0 (0x?0)
@@ -191,9 +191,27 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
                              0x7D, 0x01, // SysEx7 data bytes
                              0x00, 0x00, 0x00, 0x00] // pad remaining bytes
                         ),
-            [.sysEx(manufacturer: .oneByte(0x7D),
-                    data: [0x01],
-                    group: 0)
+            [.sysEx7(manufacturer: .oneByte(0x7D),
+                     data: [0x01],
+                     group: 0)
+            ]
+        )
+        
+        // SysEx8
+        XCTAssertEqual(
+            parsedEvents(bytes:
+                            [0x50, // UMP message type (0x5?), group 0 (0x?0)
+                             0x04, // complete (0x0?) + 4 bytes (0x?3)
+                             0x00, // stream ID
+                             0x00, 0x7D, // sysEx ID
+                             0xE6, // SysEx8 data bytes
+                             0x00, 0x00,             // pad remaining bytes
+                             0x00, 0x00, 0x00, 0x00, // pad remaining bytes
+                             0x00, 0x00, 0x00, 0x00] // pad remaining bytes
+                        ),
+            [.sysEx8(manufacturer: .oneByte(0x7D),
+                     data: [0xE6],
+                     group: 0)
             ]
         )
         
@@ -572,9 +590,417 @@ class MIDIEventMIDI2ParserTests: XCTestCase {
         
     }
     
-    #warning("> TODO: write MIDI2 multi-packet SysEx7 / SysEx8 test")
+    func testUniversalPacketData_parser_SysEx7() {
+        
+        // template method
+        
+        var parser = MIDI.MIDI2Parser()
+        
+        func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
+            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+                .parsedEvents(using: parser)
+        }
+        
+        // -----------------------------------
+        // SysEx7 complete (single UMP packet)
+        // -----------------------------------
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x30, 0x01, 0x7D, 0x00,
+                                            0x00, 0x00, 0x00, 0x00]),
+                       [.sysEx7(manufacturer: .oneByte(0x7D),
+                                data: [],
+                                group: 0)])
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x31, 0x02, 0x7D, 0x01,
+                                            0x00, 0x00, 0x00, 0x00]),
+                       [.sysEx7(manufacturer: .oneByte(0x7D),
+                                data: [0x01],
+                                group: 1)])
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x06, 0x7D, 0x01,
+                                            0x02, 0x03, 0x04, 0x05]),
+                       [.sysEx7(manufacturer: .oneByte(0x7D),
+                                data: [0x01, 0x02, 0x03, 0x04, 0x05],
+                                group: 2)])
+        
+        // -----------------
+        // SysEx7 multi-part
+        // -----------------
+        
+        parser = MIDI.MIDI2Parser()
+        
+        // sysex start (1/2)
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x16, 0x7D, 0x01,
+                                            0x02, 0x03, 0x04, 0x05]),
+                       [])
+        
+        // sysex end (2/2)
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x32, 0x06, 0x07,
+                                            0x00, 0x00, 0x00, 0x00]),
+                       [.sysEx7(manufacturer: .oneByte(0x7D),
+                                data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07],
+                                group: 2)])
+        
+        parser = MIDI.MIDI2Parser()
+        
+        // sysex start (1/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x16, 0x7D, 0x01,
+                                            0x02, 0x03, 0x04, 0x05]),
+                       [])
+        
+        // sysex continue (2/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x26, 0x06, 0x07,
+                                            0x08, 0x09, 0x0A, 0x0B]),
+                       [])
+        
+        // sysex end (3/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x32, 0x0C, 0x0D,
+                                            0x00, 0x00, 0x00, 0x00]),
+                       [.sysEx7(manufacturer: .oneByte(0x7D),
+                                data: [0x01, 0x02, 0x03, 0x04,
+                                       0x05, 0x06, 0x07, 0x08,
+                                       0x09, 0x0A, 0x0B, 0x0C, 0x0D],
+                                group: 2)])
+        
+    }
     
-    #warning("> TODO: write remaining MIDI2/UMP tests")
+    func testUniversalPacketData_parser_UniversalSysEx7() {
+        
+        // template method
+        
+        var parser = MIDI.MIDI2Parser()
+        
+        func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
+            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+                .parsedEvents(using: parser)
+        }
+        
+        // --------------------------------------------
+        // UniversalSysEx7 complete (single UMP packet)
+        // --------------------------------------------
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x30, 0x04,
+                                            0x7F, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x00, 0x00]),
+                       [.universalSysEx7(universalType: .realTime,
+                                         deviceID: 0x01,
+                                         subID1: 0x02,
+                                         subID2: 0x03,
+                                         data: [],
+                                         group: 0)])
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x31, 0x05,
+                                            0x7F, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04, 0x00]),
+                       [.universalSysEx7(universalType: .realTime,
+                                         deviceID: 0x01,
+                                         subID1: 0x02,
+                                         subID2: 0x03,
+                                         data: [0x04],
+                                         group: 1)])
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x06,
+                                            0x7F, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04, 0x05]),
+                       [.universalSysEx7(universalType: .realTime,
+                                         deviceID: 0x01,
+                                         subID1: 0x02,
+                                         subID2: 0x03,
+                                         data: [0x04, 0x05],
+                                         group: 2)])
+        
+        // --------------------------
+        // UniversalSysEx7 multi-part
+        // --------------------------
+        
+        parser = MIDI.MIDI2Parser()
+        
+        // sysex start (1/2)
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x16,
+                                            0x7F, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04, 0x05]),
+                       [])
+        
+        // sysex end (2/2)
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x36,
+                                            0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B]),
+                       [.universalSysEx7(universalType: .realTime,
+                                         deviceID: 0x01,
+                                         subID1: 0x02,
+                                         subID2: 0x03,
+                                data: [0x04, 0x05, 0x06, 0x07,
+                                       0x08, 0x09, 0x0A, 0x0B],
+                                group: 2)])
+        
+        parser = MIDI.MIDI2Parser()
+        
+        // sysex start (1/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x16,
+                                            0x7F, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04, 0x05]),
+                       [])
+        
+        // sysex continue (2/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x26,
+                                            0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B]),
+                       [])
+        
+        // sysex end (3/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x32, 0x36,
+                                            0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11]),
+                       [.universalSysEx7(universalType: .realTime,
+                                         deviceID: 0x01,
+                                         subID1: 0x02,
+                                         subID2: 0x03,
+                                         data: [0x04, 0x05, 0x06, 0x07,
+                                                0x08, 0x09, 0x0A, 0x0B,
+                                                0x0C, 0x0D, 0x0E, 0x0F,
+                                                0x10, 0x11],
+                                         group: 2)])
+        
+    }
+    
+    func testUniversalPacketData_parser_SysEx8() {
+        
+        // template method
+        
+        var parser = MIDI.MIDI2Parser()
+        
+        func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
+            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+                .parsedEvents(using: parser)
+        }
+        
+        // -----------------------------------
+        // SysEx8 complete (single UMP packet)
+        // -----------------------------------
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x50, 0x03,
+                                            0x00, // stream ID
+                                            0x00, 0x7D, // sysEx ID
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00]),
+                       [.sysEx8(manufacturer: .oneByte(0x7D),
+                                data: [],
+                                group: 0)])
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x51, 0x04,
+                                            0x00, // stream ID
+                                            0x00, 0x7D, // sysEx ID
+                                            0x01, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00]),
+                       [.sysEx8(manufacturer: .oneByte(0x7D),
+                                data: [0x01],
+                                group: 1)])
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x0E,
+                                            0x00, // stream ID
+                                            0x00, 0x7D, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04,
+                                            0x05, 0x06, 0x07, 0x08,
+                                            0x09, 0x0A, 0xE6]),
+                       [.sysEx8(manufacturer: .oneByte(0x7D),
+                                data: [0x01, 0x02, 0x03, 0x04,
+                                       0x05, 0x06, 0x07, 0x08,
+                                       0x09, 0x0A, 0xE6],
+                                group: 2)])
+        
+        // -----------------
+        // SysEx8 multi-part
+        // -----------------
+        
+        parser = MIDI.MIDI2Parser()
+        
+        // sysex start (1/2)
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x1E,
+                                            0x00, // stream ID
+                                            0x00, 0x7D, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04,
+                                            0x05, 0x06, 0x07, 0x08,
+                                            0x09, 0x0A, 0xE6]),
+                       [])
+        
+        // sysex end (2/2)
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x33,
+                                            0x00, // stream ID
+                                            0x01, 0x02,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00]),
+                       [.sysEx8(manufacturer: .oneByte(0x7D),
+                                data: [0x01, 0x02, 0x03, 0x04,
+                                       0x05, 0x06, 0x07, 0x08,
+                                       0x09, 0x0A, 0xE6, 0x01, 0x02],
+                                group: 2)])
+        
+        parser = MIDI.MIDI2Parser()
+        
+        // sysex start (1/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x1E,
+                                            0x00, // stream ID
+                                            0x00, 0x7D, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04,
+                                            0x05, 0x06, 0x07, 0x08,
+                                            0x09, 0x0A, 0x0B]),
+                       [])
+        
+        // sysex continue (2/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x2E,
+                                            0x00, // stream ID
+                                            0x0C, 0x0D,
+                                            0x0E, 0x0F, 0x10, 0x11,
+                                            0x12, 0x13, 0x14, 0x15,
+                                            0x16, 0x17, 0x18]),
+                       [])
+        
+        // sysex end (3/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x33,
+                                            0x00, // stream ID
+                                            0x19, 0x20,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00]),
+                       [.sysEx8(manufacturer: .oneByte(0x7D),
+                                data: [0x01, 0x02, 0x03, 0x04,
+                                       0x05, 0x06, 0x07, 0x08,
+                                       0x09, 0x0A, 0x0B, 0x0C,
+                                       0x0D, 0x0E, 0x0F, 0x10,
+                                       0x11, 0x12, 0x13, 0x14,
+                                       0x15, 0x16, 0x17, 0x18,
+                                       0x19, 0x20],
+                                group: 2)])
+        
+    }
+    
+    func testUniversalPacketData_parser_UniversalSysEx8() {
+        
+        // template method
+        
+        var parser = MIDI.MIDI2Parser()
+        
+        func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
+            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+                .parsedEvents(using: parser)
+        }
+        
+        // --------------------------------------------
+        // UniversalSysEx8 complete (single UMP packet)
+        // --------------------------------------------
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x50, 0x06,
+                                            0x00, // stream ID
+                                            0x00, 0x7F, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x00,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00]),
+                       [.universalSysEx8(universalType: .realTime,
+                                         deviceID: 0x01,
+                                         subID1: 0x02,
+                                         subID2: 0x03,
+                                         data: [],
+                                         group: 0)])
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x51, 0x07,
+                                            0x00, // stream ID
+                                            0x00, 0x7F, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00]),
+                       [.universalSysEx8(universalType: .realTime,
+                                         deviceID: 0x01,
+                                         subID1: 0x02,
+                                         subID2: 0x03,
+                                         data: [0x04],
+                                         group: 1)])
+        
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x0E,
+                                            0x00, // stream ID
+                                            0x00, 0x7F, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04,
+                                            0x05, 0x06, 0x07, 0x08,
+                                            0x09, 0x0A, 0xE6]),
+                       [.universalSysEx8(universalType: .realTime,
+                                         deviceID: 0x01,
+                                         subID1: 0x02,
+                                         subID2: 0x03,
+                                         data: [0x04,
+                                                0x05, 0x06, 0x07, 0x08,
+                                                0x09, 0x0A, 0xE6],
+                                         group: 2)])
+        
+        // --------------------------
+        // UniversalSysEx8 multi-part
+        // --------------------------
+        
+        parser = MIDI.MIDI2Parser()
+        
+        // sysex start (1/2)
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x1E,
+                                            0x00, // stream ID
+                                            0x00, 0x7F, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04,
+                                            0x05, 0x06, 0x07, 0x08,
+                                            0x09, 0x0A, 0xE6]),
+                       [])
+        
+        // sysex end (2/2)
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x33,
+                                            0x00, // stream ID
+                                            0x10, 0x11,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00]),
+                       [.universalSysEx8(universalType: .realTime,
+                                         deviceID: 0x01,
+                                         subID1: 0x02,
+                                         subID2: 0x03,
+                                         data: [0x04, 0x05, 0x06, 0x07,
+                                                0x08, 0x09, 0x0A, 0xE6,
+                                                0x10, 0x11],
+                                         group: 2)])
+        
+        parser = MIDI.MIDI2Parser()
+        
+        // sysex start (1/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x1E,
+                                            0x00, // stream ID
+                                            0x00, 0x7F, // sysEx ID
+                                            0x01, 0x02, 0x03, 0x04,
+                                            0x05, 0x06, 0x07, 0x08,
+                                            0x09, 0x0A, 0x0B]),
+                       [])
+        
+        // sysex continue (2/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x2E,
+                                            0x00, // stream ID
+                                            0x0C, 0x0D,
+                                            0x0E, 0x0F, 0x10, 0x11,
+                                            0x12, 0x13, 0x14, 0x15,
+                                            0x16, 0x17, 0x18]),
+                       [])
+        
+        // sysex end (3/3)
+        XCTAssertEqual(parsedEvents(bytes: [0x52, 0x33,
+                                            0x00, // stream ID
+                                            0x19, 0x20,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00, 0x00,
+                                            0x00, 0x00, 0x00]),
+                       [.universalSysEx8(universalType: .realTime,
+                                         deviceID: 0x01,
+                                         subID1: 0x02,
+                                         subID2: 0x03,
+                                         data: [0x04, 0x05, 0x06, 0x07,
+                                                0x08, 0x09, 0x0A, 0x0B,
+                                                0x0C, 0x0D, 0x0E, 0x0F,
+                                                0x10, 0x11, 0x12, 0x13,
+                                                0x14, 0x15, 0x16, 0x17,
+                                                0x18, 0x19, 0x20],
+                                         group: 2)])
+        
+    }
     
 }
 

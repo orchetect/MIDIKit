@@ -104,7 +104,7 @@ extension ContentView {
                             sendEvent($0)
                         }
                     }
-                    .frame(width: 1250, height: 320)
+                    .frame(width: 1270, height: 320)
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -316,64 +316,74 @@ extension ContentView {
                 VStack(alignment: .center, spacing: 8) {
                     
                     Button {
-                        sendEvent(.sysEx(manufacturer: .educational(),
-                                         data: [],
-                                         group: midiGroup))
-                    } label: { Text("SysEx with 0 Bytes") }
+                        sendEvent(.sysEx7(manufacturer: .educational(),
+                                          data: [],
+                                          group: midiGroup))
+                    } label: { Text("SysEx7 (0 Data, 1 Total)") }
                     
                     Button {
-                        sendEvent(.sysEx(manufacturer: .educational(),
-                                         data: [0x01, 0x02],
-                                         group: midiGroup))
-                    } label: { Text("SysEx with 2 Bytes") }
+                        sendEvent(.sysEx7(manufacturer: .educational(),
+                                          data: [0x01, 0x02],
+                                          group: midiGroup))
+                    } label: { Text("SysEx7 (2 Data, 3 Total)") }
                     
                     Button {
-                        sendEvent(.sysEx(manufacturer: .educational(),
-                                         data: [0x01, 0x02, 0x03, 0x04],
-                                         group: midiGroup))
-                    } label: { Text("SysEx with 4 Bytes") }
+                        sendEvent(.sysEx7(manufacturer: .educational(),
+                                          data: [0x01, 0x02, 0x03, 0x04, 0x05],
+                                          group: midiGroup))
+                    } label: { Text("SysEx7 (5 Data, 6 Total)") }
                     
                     Button {
-                        sendEvent(.sysEx(manufacturer: .educational(),
-                                         data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08],
-                                         group: midiGroup))
-                    } label: { Text("SysEx with 8 Bytes") }
+                        sendEvent(.sysEx7(manufacturer: .educational(),
+                                          data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                                                 0x07],
+                                          group: midiGroup))
+                    } label: { Text("SysEx7 (7 Data, 8 Total)") }
                     
                     Button {
-                        sendEvent(.universalSysEx(universalType: .realTime,
-                                                  deviceID: 0x7F,
-                                                  subID1: 0x7F,
-                                                  subID2: 0x7F,
-                                                  data: [],
-                                                  group: midiGroup))
-                    } label: { Text("Universal SysEx with 0 Bytes") }
+                        sendEvent(.sysEx7(manufacturer: .educational(),
+                                          data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                                                 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                                                 0x0D],
+                                          group: midiGroup))
+                    } label: { Text("SysEx7 (13 Data, 14 Total)") }
                     
                     Button {
-                        sendEvent(.universalSysEx(universalType: .nonRealTime,
-                                                  deviceID: 0x7F,
-                                                  subID1: 0x7F,
-                                                  subID2: 0x7F,
-                                                  data: [0x01, 0x02],
-                                                  group: midiGroup))
-                    } label: { Text("Universal SysEx with 2 Bytes") }
+                        sendEvent(.universalSysEx7(universalType: .realTime,
+                                                   deviceID: 0x7F,
+                                                   subID1: 0x7F,
+                                                   subID2: 0x7F,
+                                                   data: [],
+                                                   group: midiGroup))
+                    } label: { Text("Universal SysEx7 (0 Data, 4 Total)") }
                     
                     Button {
-                        sendEvent(.universalSysEx(universalType: .realTime,
-                                                  deviceID: 0x7F,
-                                                  subID1: 0x7F,
-                                                  subID2: 0x7F,
-                                                  data: [0x01, 0x02, 0x03, 0x04],
-                                                  group: midiGroup))
-                    } label: { Text("Universal SysEx with 4 Bytes") }
+                        sendEvent(.universalSysEx7(universalType: .nonRealTime,
+                                                   deviceID: 0x7F,
+                                                   subID1: 0x7F,
+                                                   subID2: 0x7F,
+                                                   data: [0x01, 0x02],
+                                                   group: midiGroup))
+                    } label: { Text("Universal SysEx7 (2 Data, 6 Total)") }
                     
                     Button {
-                        sendEvent(.universalSysEx(universalType: .nonRealTime,
-                                                  deviceID: 0x7F,
-                                                  subID1: 0x7F,
-                                                  subID2: 0x7F,
-                                                  data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08],
-                                                  group: midiGroup))
-                    } label: { Text("Universal SysEx with 8 Bytes") }
+                        sendEvent(.universalSysEx7(universalType: .realTime,
+                                                   deviceID: 0x7F,
+                                                   subID1: 0x7F,
+                                                   subID2: 0x7F,
+                                                   data: [0x01, 0x02, 0x03, 0x04],
+                                                   group: midiGroup))
+                    } label: { Text("Universal SysEx7 (4 Data, 8 Total)") }
+                    
+                    Button {
+                        sendEvent(.universalSysEx7(universalType: .nonRealTime,
+                                                   deviceID: 0x7F,
+                                                   subID1: 0x7F,
+                                                   subID2: 0x7F,
+                                                   data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                                                          0x07, 0x08, 0x09, 0x0A],
+                                                   group: midiGroup))
+                    } label: { Text("Universal SysEx7 (10 Data, 14 Total)") }
                     
                 }
                 .padding()

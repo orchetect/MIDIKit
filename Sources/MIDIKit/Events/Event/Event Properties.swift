@@ -97,10 +97,16 @@ extension MIDI.Event {
         // MARK: System Exclusive
         // ----------------------
         
-        case .sysEx(let event):
+        case .sysEx7(let event):
             return event.group
             
-        case .universalSysEx(let event):
+        case .universalSysEx7(let event):
+            return event.group
+            
+        case .sysEx8(let event):
+            return event.group
+            
+        case .universalSysEx8(let event):
             return event.group
             
             
