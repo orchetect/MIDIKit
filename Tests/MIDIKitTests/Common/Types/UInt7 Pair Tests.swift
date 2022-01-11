@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MIDIKit
-import XCTestExtensions
 
 final class UInt7_Pair_Tests: XCTestCase {
     
