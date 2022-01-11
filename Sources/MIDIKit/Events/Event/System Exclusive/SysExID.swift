@@ -42,7 +42,7 @@ extension MIDI.Event.SysExID {
         }
         
         if sysEx7RawBytes.count == 1,
-           let ustype = MIDI.Event.UniversalSysExType(rawValue: sysEx7RawBytes[0])
+           let ustype = MIDI.Event.UniversalSysExType(rawUInt8Value: sysEx7RawBytes[0])
         {
             self = .universal(ustype)
             return
@@ -61,7 +61,7 @@ extension MIDI.Event.SysExID {
         
         if sysEx8RawBytes.count == 2,
            sysEx8RawBytes[0] == 0x00,
-           let ustype = MIDI.Event.UniversalSysExType(rawValue: sysEx8RawBytes[1])
+           let ustype = MIDI.Event.UniversalSysExType(rawUInt8Value: sysEx8RawBytes[1])
         {
             self = .universal(ustype)
             return
