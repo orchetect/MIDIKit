@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MIDIKit
-import XCTestExtensions
 
 final class Byte_Tests: XCTestCase {
     

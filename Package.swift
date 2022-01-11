@@ -29,14 +29,11 @@ let package = Package(
             ]
         ),
         
-        .target(name: "XCTestExtensions"),
-        
         .testTarget(
             name: "MIDIKitTests",
             dependencies: [
                 .target(name: "MIDIKit"),
                 .product(name: "SwiftRadix", package: "SwiftRadix"),
-                .target(name: "XCTestExtensions")
             ]
         )
     ],

@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MIDIKit
-import XCTestExtensions
 
 final class UInt14_Tests: XCTestCase {
     
@@ -34,12 +33,17 @@ final class UInt14_Tests: XCTestCase {
         
         // overflow
         
-        _XCTAssertThrows { [self] in
-            _ = MIDI.UInt14(_min - 1)
-        }
-        _XCTAssertThrows { [self] in
-            _ = MIDI.UInt14(_max + 1)
-        }
+        // TODO: need to find a pure Swift way to test exceptions
+        // removed Obj-C helper calls that enabled catching exceptions
+        // so that MIDIKit could be pure Swift
+        
+//        _XCTAssertThrows { [self] in
+//            _ = MIDI.UInt14(_min - 1)
+//        }
+//
+//        _XCTAssertThrows { [self] in
+//            _ = MIDI.UInt14(_max + 1)
+//        }
         
     }
     
@@ -88,15 +92,19 @@ final class UInt14_Tests: XCTestCase {
         
         // overflow
         
-        _XCTAssertThrows {
-            _ = MIDI.UInt14(Double(0 - 1))
-            _ = MIDI.UInt14(Float(0 - 1))
-        }
+        // TODO: need to find a pure Swift way to test exceptions
+        // removed Obj-C helper calls that enabled catching exceptions
+        // so that MIDIKit could be pure Swift
         
-        _XCTAssertThrows { [self] in
-            _ = MIDI.UInt14(Double(_max + 1))
-            _ = MIDI.UInt14(Float(_max + 1))
-        }
+//        _XCTAssertThrows {
+//            _ = MIDI.UInt14(Double(0 - 1))
+//            _ = MIDI.UInt14(Float(0 - 1))
+//        }
+//
+//        _XCTAssertThrows { [self] in
+//            _ = MIDI.UInt14(Double(_max + 1))
+//            _ = MIDI.UInt14(Float(_max + 1))
+//        }
         
     }
     
