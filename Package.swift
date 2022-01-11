@@ -25,14 +25,8 @@ let package = Package(
         .target(
             name: "MIDIKit",
             dependencies: [
-                .target(name: "MIDIKitC"),
                 .product(name: "SwiftRadix", package: "SwiftRadix")
             ]
-        ),
-        
-        .target(
-            name: "MIDIKitC",
-            publicHeadersPath: "."
         ),
         
         .target(name: "XCTestExtensions"),
