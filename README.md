@@ -1,6 +1,6 @@
 # 🎹 MIDIKit
 
-[![CI Build Status](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml) [![Platforms - macOS 10.12+ | iOS 10+ | tvOS (beta) | watchOS (beta)](https://img.shields.io/badge/platforms-macOS%2010.12%2B%20|%20iOS%2010%2B%20|%20tvOS%20(beta)%20|%20watchOS%20(beta)-lightgrey.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
+[![CI Build Status](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml) [![Platforms - macOS 10.12+ | iOS 10+ (beta)](https://img.shields.io/badge/platforms-macOS%2010.12%2B%20|%20iOS%2010%2B-lightgrey.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
 
 An elegant and modern Swift CoreMIDI wrapper with:
 
@@ -36,13 +36,6 @@ Abstractions are built as optional extensions in their own repos.
   ```
 
 3. See [Examples](https://github.com/orchetect/MIDIKit/blob/master/Examples/) folder and [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder for usage.
-
-## Known Issues
-
-- MIDI 2.0 implementation on supported OS versions is still in active development and will be available in a future MIDIKit update. For the time being, MIDIKit will internally default to MIDI 1.0 which is fully operational.
-- Back-porting a limited subset of MIDI 2.0 features to older platforms (macOS Catalina or older, and iOS 13 or older) is planned, but not yet supported.
-
-- Beta support for **tvOS 14+** and **watchOS 7+** in development and is planned to be added in future.
 
 ## Documentation
 
