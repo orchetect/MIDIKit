@@ -49,10 +49,7 @@ extension MIDI.IO.APIVersion {
     public static func bestForPlatform() -> Self {
         
         if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
-            #warning("> TODO: switch to new API in future")
-            // return legacy for now, since new API is buggy;
-            // in future, this should return .newCoreMIDI(._2_0) when new API is more stable
-            return .legacyCoreMIDI
+            return .newCoreMIDI(._2_0)
             
         } else {
             return .legacyCoreMIDI
@@ -70,10 +67,10 @@ extension MIDI.IO.APIVersion {
         switch self {
         case .legacyCoreMIDI:
             #if os(macOS)
-                if #available(macOS 12, *) { return false }
+                if #available(macOS 13, *) { return false }
                 return true
             #elseif os(iOS)
-                if #available(iOS 15, *) { return false }
+                if #available(iOS 16, *) { return false }
                 return true
             #elseif os(tvOS) || os(watchOS)
                 // only new API is supported on tvOS and watchOS

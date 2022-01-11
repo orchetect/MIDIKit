@@ -74,8 +74,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
             }
             
         case .newCoreMIDI:
-            #warning("> TODO: send(rawMessage:) new API code this")
-            throw MIDI.IO.MIDIError.internalInconsistency("Not yet implemented.")
+            throw MIDI.IO.MIDIError.internalInconsistency("Raw bytes cannot be sent using new Core MIDI API.")
             
         }
         
@@ -93,8 +92,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
             }
             
         case .newCoreMIDI:
-            #warning("> TODO: send(rawMessages:) new API code this")
-            throw MIDI.IO.MIDIError.internalInconsistency("Not yet implemented.")
+            throw MIDI.IO.MIDIError.internalInconsistency("Raw bytes cannot be sent using new Core MIDI API.")
             
         }
         
