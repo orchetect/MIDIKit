@@ -179,10 +179,20 @@ class RoundTrip_Tests_Base: XCTestCase {
         })
         
         sourceEvents.append(
-            .sysEx(manufacturer: .educational(),
-                   data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-                          0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
-                          0x0D])
+            .sysEx7(manufacturer: .educational(),
+                    data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                           0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                           0x0D])
+        )
+        
+        sourceEvents.append(
+            .universalSysEx7(universalType: .realTime,
+                             deviceID: 0x01,
+                             subID1: 0x02,
+                             subID2: 0x03,
+                             data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                                    0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                                    0x0D])
         )
         
         // add MIDI 2.0-only events if applicable
@@ -225,6 +235,23 @@ class RoundTrip_Tests_Base: XCTestCase {
                                 channel: (0...0xF).randomElement()!,
                                 group: (0...MIDI.UInt4.max).randomElement()!)
             })
+            
+            sourceEvents.append(
+                .sysEx8(manufacturer: .educational(),
+                        data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                               0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                               0xE6])
+            )
+            
+            sourceEvents.append(
+                .universalSysEx8(universalType: .realTime,
+                                 deviceID: 0x01,
+                                 subID1: 0x02,
+                                 subID2: 0x03,
+                                 data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                                        0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                                        0xE6])
+            )
             
         }
         

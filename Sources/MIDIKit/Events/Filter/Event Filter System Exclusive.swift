@@ -12,8 +12,10 @@ extension MIDI.Event {
     public var isSystemExclusive: Bool {
         
         switch self {
-        case .sysEx,
-             .universalSysEx:
+        case .sysEx7,
+             .universalSysEx7,
+             .sysEx8,
+             .universalSysEx8:
             return true
             
         default:
@@ -27,9 +29,11 @@ extension MIDI.Event {
     public func isSystemExclusive(ofType sysExType: SysExType) -> Bool {
         
         switch self {
-        case .sysEx          : return sysExType == .sysEx
-        case .universalSysEx : return sysExType == .universalSysEx
-        default              : return false
+        case .sysEx7          : return sysExType == .sysEx7
+        case .universalSysEx7 : return sysExType == .universalSysEx7
+        case .sysEx8          : return sysExType == .sysEx8
+        case .universalSysEx8 : return sysExType == .universalSysEx8
+        default               : return false
         }
         
     }

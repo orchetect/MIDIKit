@@ -1,11 +1,11 @@
 //
-//  SysEx.swift
+//  SysEx7.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
 extension MIDI.Event {
     
-    /// System Exclusive: Manufacturer-specific
+    /// System Exclusive: Manufacturer-specific (7-bit)
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
@@ -13,12 +13,12 @@ extension MIDI.Event {
     /// - "Receivers should ignore non-universal Exclusive messages with ID numbers that do not correspond to their own ID."
     ///
     /// - "Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification."
-    public struct SysEx: Equatable, Hashable {
+    public struct SysEx7: Equatable, Hashable {
         
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
         
-        /// Data bytes (excluding leading 0xF0, trailing 0xF7 and manufacturer bytes)
+        /// Data bytes (7-bit) (excluding leading 0xF0, trailing 0xF7 and manufacturer bytes)
         public var data: [MIDI.Byte]
         
         /// UMP Group (0x0...0xF)
@@ -36,7 +36,7 @@ extension MIDI.Event {
         
     }
     
-    /// System Exclusive: Manufacturer-specific
+    /// System Exclusive: Manufacturer-specific (7-bit)
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
@@ -47,14 +47,14 @@ extension MIDI.Event {
     ///
     /// - Parameters:
     ///   - manufacturer: SysEx Manufacturer ID
-    ///   - data: Data bytes
+    ///   - data: Data bytes (7-bit)
     ///   - group: UMP Group (0x0...0xF)
     @inline(__always)
-    public static func sysEx(manufacturer: SysExManufacturer,
-                             data: [MIDI.Byte],
-                             group: MIDI.UInt4 = 0x0) -> Self {
+    public static func sysEx7(manufacturer: SysExManufacturer,
+                              data: [MIDI.Byte],
+                              group: MIDI.UInt4 = 0x0) -> Self {
         
-        .sysEx(
+        .sysEx7(
             .init(manufacturer: manufacturer,
                   data: data,
                   group: group)
@@ -64,7 +64,7 @@ extension MIDI.Event {
     
 }
 
-extension MIDI.Event.SysEx {
+extension MIDI.Event.SysEx7 {
     
     @inline(__always)
     public func midi1RawBytes(
@@ -73,7 +73,7 @@ extension MIDI.Event.SysEx {
     ) -> [MIDI.Byte] {
         
         (leadingF0 ? [0xF0] : [])
-        + manufacturer.bytes
+        + manufacturer.sysEx7RawBytes()
         + data
         + (trailingF7 ? [0xF7] : [])
         
@@ -83,7 +83,7 @@ extension MIDI.Event.SysEx {
     @inline(__always)
     public func umpRawWords() -> [[MIDI.UMPWord]] {
         
-        let rawData = manufacturer.bytes + data
+        let rawData = manufacturer.sysEx7RawBytes() + data
         
         return Self.umpRawWords(fromSysEx7Data: rawData,
                                 group: group)
@@ -92,11 +92,13 @@ extension MIDI.Event.SysEx {
     
 }
 
-extension MIDI.Event.SysEx {
+extension MIDI.Event.SysEx7 {
     
     @inline(__always)
     internal static func umpRawWords(fromSysEx7Data data: [MIDI.Byte],
                                      group: MIDI.UInt4) -> [[MIDI.UMPWord]] {
+        
+        let maxDataBytesPerPacket = 6
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit
         
@@ -117,9 +119,9 @@ extension MIDI.Event.SysEx {
             let status: MIDI.Packet.UniversalPacketData.SysExStatusField
             switch rawDataPosition {
             case 0:
-                status = rawDataByteCountRemaining < 7 ? .complete : .start
-            case 6...:
-                status = rawDataByteCountRemaining < 7 ? .end : .continue
+                status = rawDataByteCountRemaining <= maxDataBytesPerPacket ? .complete : .start
+            case maxDataBytesPerPacket...:
+                status = rawDataByteCountRemaining <= maxDataBytesPerPacket ? .end : .continue
             default:
                 assertionFailure("Unexpected raw data position index.")
                 return []
@@ -127,7 +129,7 @@ extension MIDI.Event.SysEx {
             
             let statusByte = status.rawValue.uInt8Value << 4
             
-            let packetDataBytes = rawDataByteCountRemaining.clamped(to: 0...6)
+            let packetDataBytes = rawDataByteCountRemaining.clamped(to: 0...maxDataBytesPerPacket)
             
             let word1 = MIDI.UMPWord(mtAndGroup,
                                      statusByte + UInt8(packetDataBytes),

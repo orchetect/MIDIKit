@@ -7,11 +7,12 @@ import Foundation
 
 extension MIDI.Event {
     
-    /// Parse a raw MIDI 1.0 System Exclusive message and return a `.sysEx()` or `.universalSysEx()` case if successful.
+    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
+    /// Message must begin with 0xF0 but terminating 0xF7 byte is optional.
     ///
     /// - Throws: `MIDI.Event.ParseError` if message is malformed.
     @inline(__always)
-    public static func sysEx(
+    public static func sysEx7(
         rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0
     ) throws -> Self {
@@ -65,13 +66,17 @@ extension MIDI.Event {
         // manufacturer byte
         
         try readPosAdvance(by: 1)
-        let idByte1 = rawBytes[readPos]
+        guard let idByte1 = MIDI.UInt7(exactly: rawBytes[readPos]) else {
+            throw ParseError.malformed
+        }
         
         switch idByte1 {
         case 0x7E, 0x7F:
             // universal sys ex
             
-            let universalType = UniversalSysExType(rawValue: idByte1)!
+            guard let universalType = UniversalSysExType(rawValue: idByte1) else {
+                throw ParseError.malformed
+            }
             
             try readPosAdvance(by: 1)
             guard let deviceID = MIDI.UInt7(exactly: rawBytes[readPos])
@@ -88,7 +93,7 @@ extension MIDI.Event {
             try readPosAdvance(by: 1)
             let data = try readData()
             
-            return .universalSysEx(
+            return .universalSysEx7(
                 .init(universalType: universalType,
                       deviceID: deviceID,
                       subID1: subID1,
@@ -104,9 +109,15 @@ extension MIDI.Event {
             case 0x00:
                 // 3-byte ID; 0x00 means 2 bytes will follow
                 try readPosAdvance(by: 1)
-                let idByte2 = rawBytes[readPos]
+                guard let idByte2 = MIDI.UInt7(exactly: rawBytes[readPos]) else {
+                    throw ParseError.malformed
+                }
+                
                 try readPosAdvance(by: 1)
-                let idByte3 = rawBytes[readPos]
+                guard let idByte3 = MIDI.UInt7(exactly: rawBytes[readPos]) else {
+                    throw ParseError.malformed
+                }
+                
                 readManufacturer = .threeByte(byte2: idByte2, byte3: idByte3)
                 
             case 0x01...0x7D:
@@ -128,9 +139,111 @@ extension MIDI.Event {
                 data = try readData()
             }
             
-            return .sysEx(
+            return .sysEx7(
                 .init(manufacturer: manufacturer,
                       data: data,
+                      group: group)
+            )
+            
+        default:
+            // malformed
+            throw ParseError.malformed
+        }
+        
+    }
+    
+    /// Parse a complete MIDI 2.0 System Exclusive 8 message (starting with the Stream ID byte until the end of the packet) and return a `.sysEx8()` or `.universalSysEx8()` case if successful.
+    ///
+    /// Valid rawBytes count is 1...14. (Must always contain a Stream ID, even if there are zero data bytes to follow)
+    ///
+    /// - Throws: `MIDI.Event.ParseError` if message is malformed.
+    @inline(__always)
+    public static func sysEx8(
+        rawBytes: [MIDI.Byte],
+        group: MIDI.UInt4 = 0
+    ) throws -> Self {
+        
+        var readPos = rawBytes.startIndex
+        
+        func readPosAdvance(by: Int) throws {
+            let newPos = readPos + by
+            guard readPos + by < rawBytes.endIndex else {
+                throw ParseError.malformed
+            }
+            readPos = newPos
+        }
+        
+        func readData() -> [MIDI.Byte] {
+            Array(rawBytes[readPos...])
+        }
+        
+        // prevent zero-byte events from being formed
+        guard !rawBytes.isEmpty else {
+            throw ParseError.rawBytesEmpty
+        }
+        
+        // minimum length
+        guard rawBytes.count > 1 else {
+            throw ParseError.malformed
+        }
+        
+        let streamID = rawBytes[readPos]
+        
+        // ID bytes
+        
+        try readPosAdvance(by: 1)
+        let idByte1 = rawBytes[readPos]
+        try readPosAdvance(by: 1)
+        let idByte2 = rawBytes[readPos]
+        
+        let sysExID = SysExID(sysEx8RawBytes: [idByte1, idByte2])
+        
+        switch sysExID {
+        case .universal(let universalType):
+            try readPosAdvance(by: 1)
+            guard let deviceID = MIDI.UInt7(exactly: rawBytes[readPos])
+            else { throw ParseError.malformed }
+            
+            try readPosAdvance(by: 1)
+            guard let subID1 = MIDI.UInt7(exactly: rawBytes[readPos])
+            else { throw ParseError.malformed }
+            
+            try readPosAdvance(by: 1)
+            guard let subID2 = MIDI.UInt7(exactly: rawBytes[readPos])
+            else { throw ParseError.malformed }
+            
+            let data: [MIDI.Byte] = {
+                if nil != (try? readPosAdvance(by: 1)) {
+                    return readData()
+                } else {
+                    return []
+                }
+            }()
+            
+            return .universalSysEx8(
+                .init(universalType: universalType,
+                      deviceID: deviceID,
+                      subID1: subID1,
+                      subID2: subID2,
+                      data: data,
+                      streamID: streamID,
+                      group: group)
+            )
+            
+        case .manufacturer(let mfr):
+            var data: [MIDI.Byte] = []
+            
+            let actualEndIndex = rawBytes.endIndex.advanced(by: -1)
+            if readPos < actualEndIndex {
+                if nil != (try? readPosAdvance(by: 1)) {
+                    data = readData()
+                }
+            }
+            
+            return .sysEx8(
+                .init(manufacturer: mfr,
+                      data: data,
+                      streamID: streamID,
                       group: group)
             )
             

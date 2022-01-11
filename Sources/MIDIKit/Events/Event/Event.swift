@@ -69,7 +69,7 @@ extension MIDI {
         // MARK: System Exclusive
         // ----------------------
         
-        /// System Exclusive: Manufacturer-specific
+        /// System Exclusive: Manufacturer-specific (7-bit)
         /// (MIDI 1.0 / 2.0)
         ///
         /// - remark: MIDI 1.0 Spec:
@@ -77,15 +77,29 @@ extension MIDI {
         /// "Receivers should ignore non-universal Exclusive messages with ID numbers that do not correspond to their own ID."
         ///
         /// "Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification."
-        case sysEx(SysEx)
+        case sysEx7(SysEx7)
         
-        /// System Exclusive: Universal SysEx
+        /// Universal System Exclusive (7-bit)
         /// (MIDI 1.0 / 2.0)
         ///
         /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
         ///
         /// - `deviceID` of 0x7F indicates "All Devices".
-        case universalSysEx(UniversalSysEx)
+        case universalSysEx7(UniversalSysEx7)
+        
+        /// System Exclusive: Manufacturer-specific (8-bit)
+        /// (MIDI 2.0 only)
+        ///
+        /// - remark: MIDI 2.0 Spec:
+        ///
+        /// - "System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs."
+        case sysEx8(SysEx8)
+        
+        /// Universal System Exclusive (8-bit)
+        /// (MIDI 2.0 only)
+        ///
+        /// - `deviceID` of 0x7F indicates "All Devices".
+        case universalSysEx8(UniversalSysEx8)
         
         
         // -------------------
@@ -117,6 +131,8 @@ extension MIDI {
         case songSelect(SongSelect)
         
         /// Unofficial Bus Select (Status `0xF5`)
+        ///
+        /// This command is not officially supported and some MIDI subsystems will ignore it entirely. It is provided purely for legacy support and its use is discouraged.
         ///
         /// "Some vendors have produced boxes with a single MIDI input, and multiple MIDI outputs. The Bus Select message specifies which of the outputs further data should be sent to. This is not an official message; the vendors in question should have used a SysEx command." -- [David Van Brink's MIDI Spec](https://www.cs.cmu.edu/~music/cmsip/readings/davids-midi-spec.htm)
         case unofficialBusSelect(UnofficialBusSelect)

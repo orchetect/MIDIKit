@@ -34,8 +34,10 @@ extension MIDI.Event {
     
     public enum SysExType {
         
-        case sysEx
-        case universalSysEx
+        case sysEx7
+        case universalSysEx7
+        case sysEx8
+        case universalSysEx8
         
     }
     

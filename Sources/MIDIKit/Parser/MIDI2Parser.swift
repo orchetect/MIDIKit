@@ -19,6 +19,7 @@ extension MIDI {
         // MARK: - Parser State
         
         private var sysEx7MultiPartUMPBuffer: [MIDI.Byte] = []
+        private var sysEx8MultiPartUMPBuffer: [UInt8 : [MIDI.Byte]] = [:]
         
         // MARK: - Init
         
@@ -98,7 +99,7 @@ extension MIDI {
                 }
                 
             case .data64bit: // 0x3
-                // SysEx 7
+                // SysEx7
                 
                 let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
                 
@@ -129,11 +130,16 @@ extension MIDI {
                 }
                 
             case .data128bit: // 0x5
-                // can contain a SysEx 8 message
+                // can contain a SysEx8 message
                 
-                // TODO: needs implementation
+                let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
                 
-                break
+                if let parsedEvent = parseData128Bit(
+                    bytes: midiBytes,
+                    group: group
+                ) {
+                    events.append(parsedEvent)
+                }
                 
             }
             
@@ -553,7 +559,7 @@ extension MIDI {
             
             switch sysExStatusField {
             case .complete:
-                guard let parsedSysEx = try? MIDI.Event.sysEx(
+                guard let parsedSysEx = try? MIDI.Event.sysEx7(
                     rawBytes: [0xF0] + payloadBytes + [0xF7],
                     group: group
                 )
@@ -583,8 +589,107 @@ extension MIDI {
                 // reset buffer
                 sysEx7MultiPartUMPBuffer = []
                 
-                guard let parsedSysEx = try? MIDI.Event.sysEx(
+                guard let parsedSysEx = try? MIDI.Event.sysEx7(
                     rawBytes: [0xF0] + fullData + [0xF7],
+                    group: group
+                )
+                else { return nil }
+                
+                return parsedSysEx
+                
+            }
+            
+        }
+        
+        /// Internal sub-parser: Parse SysEx8 UMP message.
+        ///
+        /// - Parameters:
+        ///   - bytes: 15 UMP bytes after the first byte ([1...15])
+        ///   - group: UMP group
+        internal func parseData128Bit(
+            bytes: Array<MIDI.Byte>.SubSequence,
+            group: MIDI.UInt4
+        ) -> MIDI.Event? {
+            
+            // MIDI 2.0 Spec:
+            // "System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs with Message Type 0x5."
+            
+            // ensure packet is 128-bits (16 bytes / 4 UInt32 words) wide
+            // (first byte is stripped when bytes are passed into this function so we expect 15 bytes here)
+            guard bytes.count == 15 else { return nil }
+            
+            let byte1Nibbles = bytes[bytes.startIndex].nibbles
+            
+            guard let sysExStatusField = MIDI.Packet.UniversalPacketData
+                    .SysExStatusField(rawValue: byte1Nibbles.high)
+            else { return nil }
+            
+            let numberOfBytes = byte1Nibbles.low.intValue
+            guard (1...14).contains(numberOfBytes) else { return nil }
+            
+            switch sysExStatusField {
+            case .complete:
+                let payloadBytes = bytes[
+                    bytes.startIndex.advanced(by: 1)
+                    ..<
+                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                ]
+                
+                guard let parsedSysEx = try? MIDI.Event.sysEx8(
+                    rawBytes: Array(payloadBytes),
+                    group: group
+                )
+                else { return nil }
+                
+                return parsedSysEx
+                
+            case .start:
+                let streamID = bytes[bytes.startIndex.advanced(by: 1)]
+                let payloadBytes = bytes[
+                    bytes.startIndex.advanced(by: 1) // include stream ID because MIDI.Event.sysEx8() expects it to be the first byte
+                    ..<
+                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                ]
+                
+                sysEx8MultiPartUMPBuffer[streamID] = Array(payloadBytes)
+                
+                return nil
+                
+            case .continue:
+                let streamID = bytes[bytes.startIndex.advanced(by: 1)]
+                
+                guard let buffer = sysEx8MultiPartUMPBuffer[streamID],
+                      !buffer.isEmpty else { return nil }
+                
+                let payloadBytes = bytes[
+                    bytes.startIndex.advanced(by: 2)
+                    ..<
+                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                ]
+                
+                sysEx8MultiPartUMPBuffer[streamID]?.append(contentsOf: payloadBytes)
+                
+                return nil
+                
+            case .end:
+                let streamID = bytes[bytes.startIndex.advanced(by: 1)]
+                
+                guard let buffer = sysEx8MultiPartUMPBuffer[streamID],
+                      !buffer.isEmpty else { return nil }
+                
+                let payloadBytes = bytes[
+                    bytes.startIndex.advanced(by: 2)
+                    ..<
+                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                ]
+                
+                // reset buffer
+                sysEx8MultiPartUMPBuffer[streamID] = nil
+                
+                let fullData = buffer + Array(payloadBytes)
+                
+                guard let parsedSysEx = try? MIDI.Event.sysEx8(
+                    rawBytes: fullData,
                     group: group
                 )
                 else { return nil }

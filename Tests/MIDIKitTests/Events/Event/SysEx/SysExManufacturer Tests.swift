@@ -1,5 +1,5 @@
 //
-//  Manufacturer Tests.swift
+//  SysExManufacturer Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -8,9 +8,9 @@
 import XCTest
 @testable import MIDIKit
 
-class SystemExclusive_ManufacturerTests: XCTestCase {
+class SysExManufacturerTests: XCTestCase {
     
-    func testInitOneByte() {
+    func testOneByte() {
         
         // valid conditions
         
@@ -37,18 +37,9 @@ class SystemExclusive_ManufacturerTests: XCTestCase {
             MIDI.Event.SysExManufacturer.oneByte(0x7F).isValid
         )
         
-        // > 0x7F is illegal
-        XCTAssertFalse(
-            MIDI.Event.SysExManufacturer.oneByte(0x80).isValid
-        )
-        // > 0x7F is illegal
-        XCTAssertFalse(
-            MIDI.Event.SysExManufacturer.oneByte(0xFF).isValid
-        )
-        
     }
     
-    func testInitThreeByte() {
+    func testThreeByte() {
         
         // valid conditions
         
@@ -58,19 +49,6 @@ class SystemExclusive_ManufacturerTests: XCTestCase {
         )
         XCTAssertTrue(
             MIDI.Event.SysExManufacturer.threeByte(byte2: 0x7F, byte3: 0x7F).isValid
-        )
-        
-        // invalid conditions
-        
-        // > 0x7F is illegal
-        XCTAssertFalse(
-            MIDI.Event.SysExManufacturer.threeByte(byte2: 0x00, byte3: 0x80).isValid
-        )
-        XCTAssertFalse(
-            MIDI.Event.SysExManufacturer.threeByte(byte2: 0x80, byte3: 0x00).isValid
-        )
-        XCTAssertFalse(
-            MIDI.Event.SysExManufacturer.threeByte(byte2: 0x80, byte3: 0x80).isValid
         )
         
     }

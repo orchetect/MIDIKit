@@ -49,11 +49,17 @@ extension MIDI.Event {
         // MARK: System Exclusive
         // ----------------------
         
-        case .sysEx(let event):
+        case .sysEx7(let event):
             return event.midi1RawBytes()
             
-        case .universalSysEx(let event):
+        case .universalSysEx7(let event):
             return event.midi1RawBytes()
+            
+        case .sysEx8:
+            return []
+            
+        case .universalSysEx8:
+            return []
             
             
         // -------------------
@@ -150,10 +156,16 @@ extension MIDI.Event {
         // MARK: System Exclusive
         // ----------------------
         
-        case .sysEx(let event):
+        case .sysEx7(let event):
             return event.umpRawWords()
             
-        case .universalSysEx(let event):
+        case .universalSysEx7(let event):
+            return event.umpRawWords()
+            
+        case .sysEx8(let event):
+            return event.umpRawWords()
+            
+        case .universalSysEx8(let event):
             return event.umpRawWords()
             
             

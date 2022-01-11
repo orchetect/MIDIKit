@@ -79,19 +79,33 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
         // MARK: System Exclusive
         // ----------------------
         
-        case .sysEx(let event):
+        case .sysEx7(let event):
             
             let dataString = event.data
                 .hex.stringValue(padTo: 2, prefix: true)
             
-            return "sysEx(mfr: \(event.manufacturer), data: [\(dataString)], group: \(event.group))"
+            return "sysEx7(mfr: \(event.manufacturer), data: [\(dataString)], group: \(event.group))"
             
-        case .universalSysEx(let event):
+        case .universalSysEx7(let event):
             
             let dataString = event.data
                 .hex.stringValue(padTo: 2, prefix: true)
             
-            return "universalSysEx(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(event.group))"
+            return "universalSysEx7(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(event.group))"
+            
+        case .sysEx8(let event):
+            
+            let dataString = event.data
+                .hex.stringValue(padTo: 2, prefix: true)
+            
+            return "sysEx8(mfr: \(event.manufacturer), data: [\(dataString)], group: \(event.group), streamID: \(event.streamID))"
+            
+        case .universalSysEx8(let event):
+            
+            let dataString = event.data
+                .hex.stringValue(padTo: 2, prefix: true)
+            
+            return "universalSysEx8(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(event.group), streamID: \(event.streamID))"
             
             
         // -------------------
