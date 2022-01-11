@@ -67,8 +67,6 @@ extension MIDI.IO.ReceiveHandler {
         
         internal func handleBytes(_ bytes: [MIDI.Byte]) {
             
-            guard !bytes.isEmpty else { return }
-            
             if filterActiveSensingAndClock {
                 guard bytes.first != 0xF8, // midi clock pulse
                       bytes.first != 0xFE  // active sensing
