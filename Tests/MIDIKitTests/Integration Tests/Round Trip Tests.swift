@@ -178,6 +178,56 @@ class RoundTrip_Tests_Base: XCTestCase {
                       channel: (0...0xF).randomElement()!)
         })
         
+        sourceEvents.append(
+            .sysEx(manufacturer: .educational(),
+                   data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                          0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                          0x0D])
+        )
+        
+        // add MIDI 2.0-only events if applicable
+        if output.api == .newCoreMIDI(._2_0) {
+            
+            sourceEvents.append(contentsOf: (0...127).map {
+                .noteOn($0.toMIDIUInt7,
+                        velocity: .midi1((1...0x7F).randomElement()!),
+                        attribute: .pitch7_9(coarse: 123, fine: 456),
+                        channel: (0...0xF).randomElement()!,
+                        group: (0...MIDI.UInt4.max).randomElement()!)
+            })
+            
+            sourceEvents.append(contentsOf: (0...127).map {
+                .noteOff($0.toMIDIUInt7,
+                         velocity: .midi1((0...0x7F).randomElement()!),
+                         attribute: .profileSpecific(data: 0x1234),
+                         channel: (0...0xF).randomElement()!,
+                         group: (0...MIDI.UInt4.max).randomElement()!)
+            })
+            
+            sourceEvents.append(contentsOf: (0...127).map {
+                .noteCC(note: $0.toMIDIUInt7,
+                        controller: .registered(.expression),
+                        value: (0...UInt32.max).randomElement()!,
+                        channel: (0...0xF).randomElement()!,
+                        group: (0...MIDI.UInt4.max).randomElement()!)
+            })
+            
+            sourceEvents.append(contentsOf: (0...127).map {
+                .notePitchBend(note: $0.toMIDIUInt7,
+                               value: .midi2((0...UInt32.max).randomElement()!),
+                               channel: (0...0xF).randomElement()!,
+                               group: (0...MIDI.UInt4.max).randomElement()!)
+            })
+            
+            sourceEvents.append(contentsOf: (0...127).map {
+                .noteManagement($0.toMIDIUInt7,
+                                flags: [.resetPerNoteControllers],
+                                channel: (0...0xF).randomElement()!,
+                                group: (0...MIDI.UInt4.max).randomElement()!)
+            })
+            
+        }
+        
         sourceEvents.shuffle()
         
         // rapidly transmit events from output to input connection
@@ -195,7 +245,28 @@ class RoundTrip_Tests_Base: XCTestCase {
         
         XCTAssertEqual(sourceEvents.count, receivedEvents.count)
         
-        XCTAssertEqual(sourceEvents, receivedEvents)
+        let isEventsEqual = sourceEvents == receivedEvents
+        
+        if !isEventsEqual {
+            XCTFail("Source events and received events are not equal.")
+            print("Sent \(sourceEvents.count) events, received \(receivedEvents.count) events.")
+            
+            // itemize which source event(s) are missing from the received events, if any.
+            // this may reveal events that failed silently, were eaten by Core MIDI, or could not be parsed by the receiver.
+            sourceEvents.forEach {
+                if !receivedEvents.contains($0) {
+                    print("Missing from received events:", $0)
+                }
+            }
+            
+            // itemize which received events do not exist in source event(s), if any.
+            // this may catch any potentially malformed events.
+            receivedEvents.forEach {
+                if !sourceEvents.contains($0) {
+                    print("Present in received events but not source events:", $0)
+                }
+            }
+        }
         
         print("RoundTrip_Tests runRapidMIDIEvents() done")
         

@@ -7,7 +7,7 @@ import Foundation
 
 extension MIDI.Event {
     
-    /// Parse a raw System Exclusive message and return a `.sysEx()` or `.universalSysEx()` case if successful.
+    /// Parse a raw MIDI 1.0 System Exclusive message and return a `.sysEx()` or `.universalSysEx()` case if successful.
     ///
     /// - Throws: `MIDI.Event.ParseError` if message is malformed.
     @inline(__always)
