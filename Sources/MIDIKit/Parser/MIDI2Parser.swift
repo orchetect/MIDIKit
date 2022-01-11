@@ -6,23 +6,37 @@
 extension MIDI {
     
     /// Parser for MIDI 2.0 events.
+    ///
+    /// State is maintained internally. Use one parser class instance per MIDI endpoint for the lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and do not use a single global parser class instance for all MIDI endpoints.)
     public class MIDI2Parser {
         
-        internal static let midi1Parser: MIDI.MIDI1Parser = .init()
+        // MARK: - Internal Default Instance
+        
+        /// Internal:
+        /// Default static instance for MIDIKit objects that support parsing events without requiring a parser to be instanced first.
+        internal static let `default` = MIDI2Parser()
+        
+        // MARK: - Parser State
+        
+        private var sysEx7MultiPartUMPBuffer: [MIDI.Byte] = []
+        
+        // MARK: - Init
         
         public init() {
             
         }
         
-        /// Parse
+        // MARK: - Public Parser Methods
+        
+        /// Parses raw packet data into an array of MIDI Events.
         public func parsedEvents(in packetData: MIDI.Packet.UniversalPacketData) -> [MIDI.Event] {
             
-            Self.parsedEvents(in: packetData.bytes)
+            parsedEvents(in: packetData.bytes)
             
         }
         
-        /// Parses raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
-        public static func parsedEvents(
+        /// Parses raw packet data into an array of MIDI Events.
+        public func parsedEvents(
             in bytes: [MIDI.Byte]
         ) -> [MIDI.Event] {
             
@@ -127,12 +141,14 @@ extension MIDI {
             
         }
         
+        // MARK: - Internal Parser Methods
+        
         /// Internal sub-parser: Parse System RealTime/Common UMP message.
         ///
         /// - Parameters:
         ///   - bytes: 3 UMP bytes after the first byte ([1...3])
         ///   - group: UMP group
-        internal static func parseSystemRealTimeAndCommon(
+        internal func parseSystemRealTimeAndCommon(
             bytes: Array<MIDI.Byte>.SubSequence,
             group: MIDI.UInt4
         ) -> MIDI.Event? {
@@ -219,7 +235,7 @@ extension MIDI {
         /// - Parameters:
         ///   - bytes: 3 UMP bytes after the first byte ([1...3])
         ///   - group: UMP group
-        internal static func parseMIDI1ChannelVoice(
+        internal func parseMIDI1ChannelVoice(
             bytes: Array<MIDI.Byte>.SubSequence,
             channel: MIDI.UInt4,
             group: MIDI.UInt4
@@ -328,7 +344,7 @@ extension MIDI {
         /// - Parameters:
         ///   - bytes: 3 UMP bytes after the first byte ([1...3])
         ///   - group: UMP group
-        internal static func parseMIDI2ChannelVoice(
+        internal func parseMIDI2ChannelVoice(
             bytes: Array<MIDI.Byte>.SubSequence,
             channel: MIDI.UInt4,
             group: MIDI.UInt4
@@ -508,7 +524,7 @@ extension MIDI {
         /// - Parameters:
         ///   - bytes: 7 UMP bytes after the first byte ([1...7])
         ///   - group: UMP group
-        internal static func parseData64Bit(
+        internal func parseData64Bit(
             bytes: Array<MIDI.Byte>.SubSequence,
             group: MIDI.UInt4
         ) -> MIDI.Event? {
@@ -527,18 +543,16 @@ extension MIDI {
             else { return nil }
             
             let numberOfBytes = byte1Nibbles.low.intValue
+            guard (0...6).contains(numberOfBytes) else { return nil }
+            
+            let payloadBytes = bytes[
+                bytes.startIndex.advanced(by: 1)
+                ..<
+                bytes.startIndex.advanced(by: 1 + numberOfBytes)
+            ]
             
             switch sysExStatusField {
             case .complete:
-                guard bytes.count >= numberOfBytes + 2
-                else { return nil }
-                
-                let payloadBytes = bytes[
-                    bytes.startIndex.advanced(by: 1)
-                        ..<
-                        bytes.startIndex.advanced(by: 1 + numberOfBytes)
-                ]
-                
                 guard let parsedSysEx = try? MIDI.Event.sysEx(
                     rawBytes: [0xF0] + payloadBytes + [0xF7],
                     group: group
@@ -548,16 +562,34 @@ extension MIDI {
                 return parsedSysEx
                 
             case .start:
-                #warning("> TODO: handle multi-packet SysEx Messages")
+                sysEx7MultiPartUMPBuffer.removeAll()
+                sysEx7MultiPartUMPBuffer.append(contentsOf: payloadBytes)
+                
                 return nil
                 
             case .continue:
-                #warning("> TODO: handle multi-packet SysEx Messages")
+                guard !sysEx7MultiPartUMPBuffer.isEmpty else { return nil }
+                
+                sysEx7MultiPartUMPBuffer.append(contentsOf: payloadBytes)
                 return nil
                 
             case .end:
-                #warning("> TODO: handle multi-packet SysEx Messages")
-                return nil
+                guard !sysEx7MultiPartUMPBuffer.isEmpty else { return nil }
+                
+                sysEx7MultiPartUMPBuffer.append(contentsOf: payloadBytes)
+                
+                let fullData = sysEx7MultiPartUMPBuffer
+                
+                // reset buffer
+                sysEx7MultiPartUMPBuffer = []
+                
+                guard let parsedSysEx = try? MIDI.Event.sysEx(
+                    rawBytes: [0xF0] + fullData + [0xF7],
+                    group: group
+                )
+                else { return nil }
+                
+                return parsedSysEx
                 
             }
             
@@ -567,12 +599,14 @@ extension MIDI {
     
 }
 
+// MARK: - MIDI.Packet Extensions
+
 extension MIDI.Packet.UniversalPacketData {
     
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     internal func parsedEvents() -> [MIDI.Event] {
         
-        MIDI.MIDI2Parser.parsedEvents(in: bytes)
+        MIDI.MIDI2Parser.default.parsedEvents(in: bytes)
         
     }
     
@@ -590,7 +624,7 @@ extension MIDI.Packet {
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     internal func parsedMIDI2Events() -> [MIDI.Event] {
         
-        MIDI.MIDI2Parser.parsedEvents(in: bytes)
+        MIDI.MIDI2Parser.default.parsedEvents(in: bytes)
         
     }
     

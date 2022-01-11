@@ -14,7 +14,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         XCTAssertEqual(
             MIDI.Packet.PacketData(bytes: [], timeStamp: .zero)
-                .parsedEvents().events,
+                .parsedEvents(),
             []
         )
         
@@ -26,7 +26,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
             MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents().events
+                .parsedEvents()
         }
         
         // - channel voice
@@ -189,7 +189,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                 ],
                 timeStamp: .zero
             )
-            .parsedEvents().events,
+            .parsedEvents(),
             
             [.noteOff(60, velocity: .midi1(64), channel: 0),
              .noteOn(60, velocity: .midi1(64), channel: 0)]
@@ -204,7 +204,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                 ],
                 timeStamp: .zero
             )
-            .parsedEvents().events,
+            .parsedEvents(),
             
             [.cc(1, value: .midi1(127), channel: 1),
              .noteOn(60, velocity: .midi1(64), channel: 6),
@@ -224,7 +224,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                 ],
                 timeStamp: .zero
             )
-            .parsedEvents().events,
+            .parsedEvents(),
             
             [.noteOn(60, velocity: .midi1(64), channel: 0),
              .noteOn(61, velocity: .midi1(65), channel: 0)]
@@ -240,7 +240,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
                 ],
                 timeStamp: .zero
             )
-            .parsedEvents().events,
+            .parsedEvents(),
             
             [.noteOn(60, velocity: .midi1(64), channel: 15),
              .noteOn(61, velocity: .midi1(65), channel: 15),
@@ -251,6 +251,8 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
     
     func testPacketData_parsedEvents_RunningStatus_SeparatePackets_Simple() {
         
+        MIDI.MIDI1Parser.default.runningStatus = nil
+        
         var parsed = MIDI.Packet.PacketData(
             bytes: [
                 0x92,
@@ -258,15 +260,15 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
             ],
             timeStamp: .zero
         )
-        .parsedEvents(runningStatus: nil)
+        .parsedEvents()
         
         XCTAssertEqual(
-            parsed.events,
+            parsed,
             [.noteOn(60, velocity: .midi1(64), channel: 2)]
         )
         
         XCTAssertEqual(
-            parsed.runningStatus,
+            MIDI.MIDI1Parser.default.runningStatus,
             0x92
         )
         
@@ -276,15 +278,15 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
             ],
             timeStamp: .zero
         )
-        .parsedEvents(runningStatus: parsed.runningStatus)
+        .parsedEvents()
         
         XCTAssertEqual(
-            parsed.events,
+            parsed,
             [.noteOn(62, velocity: .midi1(66), channel: 2)]
         )
         
         XCTAssertEqual(
-            parsed.runningStatus,
+            MIDI.MIDI1Parser.default.runningStatus,
             0x92
         )
         
@@ -295,15 +297,15 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
             ],
             timeStamp: .zero
         )
-        .parsedEvents(runningStatus: parsed.runningStatus)
+        .parsedEvents()
         
         XCTAssertEqual(
-            parsed.events,
+            parsed,
             [.noteOff(1, velocity: .midi1(2), channel: 4)]
         )
         
         XCTAssertEqual(
-            parsed.runningStatus,
+            MIDI.MIDI1Parser.default.runningStatus,
             0x84
         )
         
@@ -315,7 +317,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
             MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents().events
+                .parsedEvents()
         }
         
         let systemRealTimeMessages: [MIDI.Byte : [MIDI.Event]] = [
@@ -372,7 +374,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
             MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents().events
+                .parsedEvents()
         }
         
         let systemRealTimeMessages: [MIDI.Byte : [MIDI.Event]] = [
@@ -433,7 +435,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
             MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents().events
+                .parsedEvents()
         }
         
         let systemCommonMessages: [[MIDI.Byte] : [MIDI.Event]] = [
@@ -503,7 +505,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
             MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents().events
+                .parsedEvents()
         }
         
         // tests
@@ -678,7 +680,7 @@ class MIDIEventMIDI1ParserTests: XCTestCase {
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
             MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents().events
+                .parsedEvents()
         }
         
         // tests
