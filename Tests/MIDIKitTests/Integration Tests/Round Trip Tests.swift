@@ -233,18 +233,16 @@ final class RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests: RoundTrip_Tests_Base {
 
 final class RoundTrip_NewCoreMIDIAPI_2_0_Protocol_Tests: RoundTrip_Tests_Base {
     
-#warning("> TODO: enable this test once MIDI 2.0 is fully implemented")
-//    func testRapidMIDIEvents_NewCoreMIDIAPI_2_0_Protocol() throws {
-//
-//        manager.preferredAPI = .newCoreMIDI(._2_0)
-//        XCTWait(sec: 0.5)
-//        createPorts()
-//        XCTWait(sec: 0.5)
-//        try runRapidMIDIEvents()
-//
-//    }
+    func testRapidMIDIEvents_NewCoreMIDIAPI_2_0_Protocol() throws {
+
+        manager.preferredAPI = .newCoreMIDI(._2_0)
+        XCTWait(sec: 0.5)
+        createPorts()
+        XCTWait(sec: 0.5)
+        try runRapidMIDIEvents()
+
+    }
     
 }
 
 #endif
-

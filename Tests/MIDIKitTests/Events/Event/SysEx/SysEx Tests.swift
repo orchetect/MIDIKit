@@ -134,14 +134,14 @@ class SysExTests: XCTestCase {
 		
 	}
 	
-	func testEquatable() {
+	func testEquatable() throws {
 		
 		// ensure instances equate correctly
 		
-		let event1A = try! MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
-		let event1B = try! MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+		let event1A = try MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+		let event1B = try MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
 		
-		let event2 = try! MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
+		let event2 = try MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
 		
 		XCTAssert(event1A == event1B)
 		
@@ -149,14 +149,14 @@ class SysExTests: XCTestCase {
 		
 	}
 	
-	func testHashable() {
+	func testHashable() throws {
 		
 		// ensure instances hash correctly
 		
-		let event1A = try! MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
-		let event1B = try! MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+		let event1A = try MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+		let event1B = try MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
 		
-		let event2 = try! MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
+		let event2 = try MIDI.Event.sysEx(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
 		
 		let set1: Set<MIDI.Event> = [event1A, event1B]
 		
