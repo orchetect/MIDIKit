@@ -27,7 +27,7 @@ extension MIDI.Event {
         /// Sub ID #2
         public var subID2: MIDI.UInt7
         
-        /// Data bytes
+        /// Data bytes (excluding leading 0xF0, trailing 0xF7, universal type and ID bytes)
         public var data: [MIDI.Byte]
         
         /// UMP Group (0x0...0xF)
@@ -103,16 +103,17 @@ extension MIDI.Event.UniversalSysEx {
     }
     
     @inline(__always)
-    public func umpRawWords() -> [MIDI.UMPWord] {
+    public func umpRawWords() -> [[MIDI.UMPWord]] {
         
-        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit
+        let rawData =
+        [MIDI.Byte(universalType.rawValue),
+         deviceID.uInt8Value,
+         subID1.uInt8Value,
+         subID2.uInt8Value]
+        + data
         
-        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
-        #warning("> TODO: umpRawWords() needs coding")
-        _ = mtAndGroup
-        
-        return []
+        return MIDI.Event.SysEx.umpRawWords(fromSysEx7Data: rawData,
+                                            group: group)
         
     }
     

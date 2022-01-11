@@ -18,7 +18,7 @@ extension MIDI.Event {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
         
-        /// Data bytes
+        /// Data bytes (excluding leading 0xF0, trailing 0xF7 and manufacturer bytes)
         public var data: [MIDI.Byte]
         
         /// UMP Group (0x0...0xF)
@@ -73,22 +73,78 @@ extension MIDI.Event.SysEx {
     ) -> [MIDI.Byte] {
         
         (leadingF0 ? [0xF0] : [])
-        + manufacturer.bytes + data
+        + manufacturer.bytes
+        + data
         + (trailingF7 ? [0xF7] : [])
         
     }
     
+    /// Generates one or more 64-bit UMP packets depending on the system exclusive data length (each packet comprised of two UInt32 words).
     @inline(__always)
-    public func umpRawWords() -> [MIDI.UMPWord] {
+    public func umpRawWords() -> [[MIDI.UMPWord]] {
+        
+        let rawData = manufacturer.bytes + data
+        
+        return Self.umpRawWords(fromSysEx7Data: rawData,
+                                group: group)
+        
+    }
+    
+}
+
+extension MIDI.Event.SysEx {
+    
+    @inline(__always)
+    internal static func umpRawWords(fromSysEx7Data data: [MIDI.Byte],
+                                     group: MIDI.UInt4) -> [[MIDI.UMPWord]] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit
         
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
-        #warning("> TODO: umpRawWords() needs coding")
-        _ = mtAndGroup
+        func rawDataOrNull(_ offset: Int) -> MIDI.Byte {
+            guard data.count > offset else { return 0x00 }
+            return data[data.startIndex.advanced(by: offset)]
+        }
         
-        return []
+        var rawDataByteCountRemaining: Int { data.count - rawDataPosition }
+        
+        var rawDataPosition = 0
+        var packets: [[MIDI.UMPWord]] = []
+        
+        while rawDataPosition < data.count {
+            
+            let status: MIDI.Packet.UniversalPacketData.SysExStatusField
+            switch rawDataPosition {
+            case 0:
+                status = rawDataByteCountRemaining < 7 ? .complete : .start
+            case 6...:
+                status = rawDataByteCountRemaining < 7 ? .end : .continue
+            default:
+                assertionFailure("Unexpected raw data position index.")
+                return []
+            }
+            
+            let statusByte = status.rawValue.uInt8Value << 4
+            
+            let packetDataBytes = rawDataByteCountRemaining.clamped(to: 0...6)
+            
+            let word1 = MIDI.UMPWord(mtAndGroup,
+                                     statusByte + UInt8(packetDataBytes),
+                                     rawDataOrNull(rawDataPosition + 0),
+                                     rawDataOrNull(rawDataPosition + 1))
+            
+            let word2 = MIDI.UMPWord(rawDataOrNull(rawDataPosition + 2),
+                                     rawDataOrNull(rawDataPosition + 3),
+                                     rawDataOrNull(rawDataPosition + 4),
+                                     rawDataOrNull(rawDataPosition + 5))
+            
+            packets.append([word1, word2])
+            rawDataPosition += packetDataBytes
+            
+        }
+        
+        return packets
         
     }
     

@@ -15,7 +15,7 @@ struct ContentView: View {
     
     // MARK: - Constants
     
-    static let kMinWidth: CGFloat = 1270
+    static let kMinWidth: CGFloat = 1290
     static let kMaxWidth: CGFloat = 1400
     static let kMinHeight: CGFloat = 650
     static let kMaxHeight: CGFloat = 1000
