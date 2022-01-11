@@ -2,13 +2,12 @@
 
 [![CI Build Status](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml) [![Platforms - macOS 10.12+ | iOS 10+ (beta)](https://img.shields.io/badge/platforms-macOS%2010.12%2B%20|%20iOS%2010%2B-lightgrey.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
 
-An elegant and modern Swift CoreMIDI wrapper with:
+An elegant and modern Swift CoreMIDI wrapper supporting MIDI 1.0 and MIDI 2.0.
 
-- strongly-typed protocol-agnostic MIDI events
-  - (ie: a single 'note on' event & its value types are homogenous between MIDI 1.0 and 2.0)
-- event filters
-  - easily filter or drop events by message type, channel, CC number, UMP group, and more
-- seamless unified API, transparently adopting newer Core MIDI API and MIDI 2.0 on platforms that support them
+- Modular, user-friendly I/O
+- Automatic MIDI endpoint connection management and unique ID persistence
+- Strongly-typed MIDI events that seamlessly interoperate between MIDI 1.0 and MIDI 2.0
+- Automatically uses appropriate Core MIDI API and defaults to MIDI 2.0 on platforms that support them
 
 ## MIDIKit Extensions
 
@@ -27,7 +26,7 @@ Abstractions are built as optional extensions in their own repos.
    
    - In a Swift Package, add it to the Package.swift dependencies:
      ```swift
-     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.2.0")
+     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.3.0")
      ```
   
 1. Import the library:

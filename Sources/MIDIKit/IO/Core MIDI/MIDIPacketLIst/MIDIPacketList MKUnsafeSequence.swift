@@ -4,7 +4,6 @@
 //
 
 @_implementationOnly import CoreMIDI
-@_implementationOnly import MIDIKitC
 
 extension UnsafePointer where Pointee == MIDIPacketList {
     
@@ -30,9 +29,10 @@ extension MIDIPacketList {
         
         public init(_ midiPacketListPtr: UnsafePointer<MIDIPacketList>) {
             
-            CMIDIPacketListIterate(midiPacketListPtr) {
-                guard let unwrappedPtr = $0 else { return }
-                pointers.append(unwrappedPtr)
+            pointers.reserveCapacity(Int(midiPacketListPtr.pointee.numPackets))
+            
+            MIDIPacketListIterate(midiPacketListPtr) {
+                pointers.append($0)
             }
             
             assert(pointers.count == midiPacketListPtr.pointee.numPackets,
@@ -41,7 +41,9 @@ extension MIDIPacketList {
         }
         
         public func makeIterator() -> Iterator {
+            
             Iterator(pointers)
+            
         }
         
         public struct Iterator: IteratorProtocol {
@@ -64,6 +66,27 @@ extension MIDIPacketList {
                 
             }
             
+        }
+        
+    }
+    
+    fileprivate static func MIDIPacketListIterate(_ midiPacketListPtr: UnsafePointer<MIDIPacketList>,
+                                                  _ closure: (UnsafePointer<MIDIPacket>) -> Void) {
+        
+        if midiPacketListPtr.pointee.numPackets == 0 {
+            return
+        }
+        
+        var midiPacket: UnsafePointer<MIDIPacket> = midiPacketListPtr.withMemoryRebound(to: MIDIPacket.self,
+                                                                                        capacity: 1) { $0 }
+        
+        // call closure for first packet
+        closure(midiPacket)
+        
+        // call closure for subsequent packets, if they exist
+        for _ in 1 ..< midiPacketListPtr.pointee.numPackets {
+            midiPacket = UnsafePointer(MIDIPacketNext(midiPacket))
+            closure(midiPacket)
         }
         
     }

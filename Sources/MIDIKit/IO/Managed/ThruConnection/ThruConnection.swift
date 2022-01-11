@@ -12,7 +12,6 @@
 
 import Foundation
 @_implementationOnly import CoreMIDI
-@_implementationOnly import MIDIKitC
 
 extension MIDI.IO {
     
@@ -109,13 +108,17 @@ extension MIDI.IO.ThruConnection {
         switch cfPersistentOwnerID {
         case nil:
             // non-persistent thru connection
-            // there is a bug in Core MIDI's Swift bridging whereby passing nil into MIDIThruConnectionCreate fails to create a non-persistent thru connection and actually creates a persistent thru connection, despite what the Core MIDI documentation states.
-            // This is a C function that wraps this method to accomplish this instead.
-            try CMIDIThruConnectionCreateNonPersistent(
+            
+            // TODO: fix MIDI thru bug
+            // There is a bug in Core MIDI's Swift bridging whereby passing nil into MIDIThruConnectionCreate fails to create a non-persistent thru connection and actually creates a persistent thru connection, despite what the Core MIDI documentation states.
+            // Radar FB9836833 was filed with Apple.
+            
+            try MIDIThruConnectionCreate(
+                nil, // this doesn't work, it needs an Obj-c NULL somehow
                 paramsData,
                 &newConnection
             )
-            .throwIfOSStatusErr()
+                .throwIfOSStatusErr()
             
         case .some(let id):
             // persistent thru connection
