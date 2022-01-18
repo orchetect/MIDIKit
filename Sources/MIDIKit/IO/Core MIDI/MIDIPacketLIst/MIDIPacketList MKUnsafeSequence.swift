@@ -31,7 +31,7 @@ extension MIDIPacketList {
             
             pointers.reserveCapacity(Int(midiPacketListPtr.pointee.numPackets))
             
-            MIDIPacketListIterate(midiPacketListPtr) {
+            iterateMIDIPacketList(midiPacketListPtr) {
                 pointers.append($0)
             }
             
@@ -70,15 +70,21 @@ extension MIDIPacketList {
         
     }
     
-    fileprivate static func MIDIPacketListIterate(_ midiPacketListPtr: UnsafePointer<MIDIPacketList>,
+    /// Utility to iterate over packets in a `MIDIPacketList` and encapsulate the ugly Obj-C/Swift pointer access.
+    fileprivate static func iterateMIDIPacketList(_ midiPacketListPtr: UnsafePointer<MIDIPacketList>,
                                                   _ closure: (UnsafePointer<MIDIPacket>) -> Void) {
         
         if midiPacketListPtr.pointee.numPackets == 0 {
             return
         }
         
-        var midiPacket: UnsafePointer<MIDIPacket> = midiPacketListPtr.withMemoryRebound(to: MIDIPacket.self,
-                                                                                        capacity: 1) { $0 }
+        // when written in Obj-C, we'd cast the packet list
+        // to MIDIPacket to access the first packet
+        var midiPacket: UnsafePointer<MIDIPacket> = midiPacketListPtr
+            .withMemoryRebound(to: MIDIPacket.self,
+                               capacity: 1) {
+                $0
+            }
         
         // call closure for first packet
         closure(midiPacket)
