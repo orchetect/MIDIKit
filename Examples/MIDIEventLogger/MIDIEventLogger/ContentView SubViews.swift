@@ -67,32 +67,34 @@ extension ContentView {
                     
                     HStack(alignment: .top) {
                         GroupBox(label: Text("Channel Voice")) {
-                            Picker("Channel", selection: $midiChannel) {
-                                ForEach(0..<15+1, id: \.self) {
-                                    let channelNum = $0 + 1
-                                    let channelNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
-                                    
-                                    Text("\(channelNum) (\(channelNumHex))")
-                                        .tag(MIDI.UInt4($0))
+                            VStack {
+                                Picker("Channel", selection: $midiChannel) {
+                                    ForEach(0..<15+1, id: \.self) {
+                                        let channelNum = $0 + 1
+                                        let channelNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
+                                        
+                                        Text("\(channelNum) (\(channelNumHex))")
+                                            .tag(MIDI.UInt4($0))
+                                    }
+                                }
+                                .frame(maxWidth: 200)
+                                
+                                Spacer()
+                                    .frame(height: 10)
+                                
+                                HStack {
+                                    SendMIDIEventsChannelVoiceView(midiGroup: $midiGroup,
+                                                                   midiChannel: $midiChannel) {
+                                        sendEvent($0)
+                                    }
+                                    SendMIDIEventsMIDI2ChannelVoiceView(midiGroup: $midiGroup,
+                                                                        midiChannel: $midiChannel) {
+                                        sendEvent($0)
+                                    }
                                 }
                             }
-                            .frame(maxWidth: 200)
-                            
-                            Spacer()
-                                .frame(height: 10)
-                            
-                            HStack {
-                                SendMIDIEventsChannelVoiceView(midiGroup: $midiGroup,
-                                                               midiChannel: $midiChannel) {
-                                    sendEvent($0)
-                                }
-                                SendMIDIEventsMIDI2ChannelVoiceView(midiGroup: $midiGroup,
-                                                                    midiChannel: $midiChannel) {
-                                    sendEvent($0)
-                                }
-                            }
+                            .frame(width: 280 + 280 + 40, height: 270)
                         }
-                        .frame(width: 280 + 280 + 40, height: 270)
                         
                         SendMIDIEventsSystemExclusiveView(midiGroup: $midiGroup) {
                             sendEvent($0)
@@ -220,7 +222,7 @@ extension ContentView {
         
         var body: some View {
             
-            GroupBox(label: Text("MIDI 2.0 Only")) {
+            GroupBox(label: Text("MIDI 2.0")) {
                 
                 VStack(alignment: .center, spacing: 8) {
                     
@@ -246,7 +248,7 @@ extension ContentView {
                                           value: 0x8000_0000, // UInt32 "midpoint" value
                                           channel: midiChannel,
                                           group: midiGroup))
-                    } label: { Text("Note CC (Registered)") }
+                    } label: { Text("Per-Note CC (Registered)") }
                     
                     Button {
                         sendEvent(.noteCC(note: 60,
@@ -254,14 +256,14 @@ extension ContentView {
                                           value: 0x8000_0000, // UInt32 "midpoint" value
                                           channel: midiChannel,
                                           group: midiGroup))
-                    } label: { Text("Note CC (Assignable)") }
+                    } label: { Text("Per-Note CC (Assignable)") }
                     
                     Button {
                         sendEvent(.notePitchBend(note: 60,
                                                  value: .midi2(0x8000_0000),
                                                  channel: midiChannel,
                                                  group: midiGroup))
-                    } label: { Text("Note PitchBend") }
+                    } label: { Text("Per-Note PitchBend") }
                     
                     HStack {
                         Button {
@@ -315,75 +317,173 @@ extension ContentView {
                 
                 VStack(alignment: .center, spacing: 8) {
                     
-                    Button {
-                        sendEvent(.sysEx7(manufacturer: .educational(),
-                                          data: [],
-                                          group: midiGroup))
-                    } label: { Text("SysEx7 (0 Data, 1 Total)") }
+                    GroupBox(label: Text("SysEx7")) {
+                        HStack {
+                            Text("Bytes:")
+                            
+                            Button {
+                                sendEvent(.sysEx7(manufacturer: .educational(),
+                                                  data: [],
+                                                  group: midiGroup))
+                            } label: { Text("0") }
+                            
+                            Button {
+                                sendEvent(.sysEx7(manufacturer: .educational(),
+                                                  data: [0x01, 0x02],
+                                                  group: midiGroup))
+                            } label: { Text("2") }
+                            
+                            Button {
+                                sendEvent(.sysEx7(manufacturer: .educational(),
+                                                  data: [0x01, 0x02, 0x03, 0x04, 0x05],
+                                                  group: midiGroup))
+                            } label: { Text("5") }
+                            
+                            Button {
+                                sendEvent(.sysEx7(manufacturer: .educational(),
+                                                  data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                                                         0x07],
+                                                  group: midiGroup))
+                            } label: { Text("7") }
+                            
+                            Button {
+                                sendEvent(.sysEx7(manufacturer: .educational(),
+                                                  data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                                                         0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                                                         0x0D],
+                                                  group: midiGroup))
+                            } label: { Text("13") }
+                        }
+                        .frame(width: 220)
+                    }
                     
-                    Button {
-                        sendEvent(.sysEx7(manufacturer: .educational(),
-                                          data: [0x01, 0x02],
-                                          group: midiGroup))
-                    } label: { Text("SysEx7 (2 Data, 3 Total)") }
+                    GroupBox(label: Text("Universal SysEx7")) {
+                        HStack {
+                            Text("Bytes:")
+                            
+                            Button {
+                                sendEvent(.universalSysEx7(universalType: .realTime,
+                                                           deviceID: 0x7F,
+                                                           subID1: 0x7F,
+                                                           subID2: 0x7F,
+                                                           data: [],
+                                                           group: midiGroup))
+                            } label: { Text("0") }
+                            
+                            Button {
+                                sendEvent(.universalSysEx7(universalType: .nonRealTime,
+                                                           deviceID: 0x7F,
+                                                           subID1: 0x7F,
+                                                           subID2: 0x7F,
+                                                           data: [0x01, 0x02],
+                                                           group: midiGroup))
+                            } label: { Text("2") }
+                            
+                            Button {
+                                sendEvent(.universalSysEx7(universalType: .realTime,
+                                                           deviceID: 0x7F,
+                                                           subID1: 0x7F,
+                                                           subID2: 0x7F,
+                                                           data: [0x01, 0x02, 0x03, 0x04],
+                                                           group: midiGroup))
+                            } label: { Text("4") }
+                            
+                            Button {
+                                sendEvent(.universalSysEx7(universalType: .nonRealTime,
+                                                           deviceID: 0x7F,
+                                                           subID1: 0x7F,
+                                                           subID2: 0x7F,
+                                                           data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                                                                  0x07, 0x08, 0x09, 0x0A],
+                                                           group: midiGroup))
+                            } label: { Text("10") }
+                        }
+                        .frame(width: 220)
+                    }
                     
-                    Button {
-                        sendEvent(.sysEx7(manufacturer: .educational(),
-                                          data: [0x01, 0x02, 0x03, 0x04, 0x05],
-                                          group: midiGroup))
-                    } label: { Text("SysEx7 (5 Data, 6 Total)") }
+                    GroupBox(label: Text("SysEx8 (MIDI 2.0)")) {
+                        HStack {
+                            Text("Bytes:")
+                            
+                            Button {
+                                sendEvent(.sysEx8(manufacturer: .educational(),
+                                                  data: [],
+                                                  group: midiGroup))
+                            } label: { Text("0") }
+                            
+                            Button {
+                                sendEvent(.sysEx8(manufacturer: .educational(),
+                                                  data: [0x01, 0xE0],
+                                                  group: midiGroup))
+                            } label: { Text("2") }
+                            
+                            Button {
+                                sendEvent(.sysEx8(manufacturer: .educational(),
+                                                  data: [0x01, 0x02, 0x03, 0xE0, 0xE1],
+                                                  group: midiGroup))
+                            } label: { Text("5") }
+                            
+                            Button {
+                                sendEvent(.sysEx8(manufacturer: .educational(),
+                                                  data: [0x01, 0x02, 0x03, 0x04, 0xE0, 0xE1,
+                                                         0xE2],
+                                                  group: midiGroup))
+                            } label: { Text("7") }
+                            
+                            Button {
+                                sendEvent(.sysEx8(manufacturer: .educational(),
+                                                  data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                                                         0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5,
+                                                         0xE6],
+                                                  group: midiGroup))
+                            } label: { Text("13") }
+                        }
+                        .frame(width: 220)
+                    }
                     
-                    Button {
-                        sendEvent(.sysEx7(manufacturer: .educational(),
-                                          data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-                                                 0x07],
-                                          group: midiGroup))
-                    } label: { Text("SysEx7 (7 Data, 8 Total)") }
-                    
-                    Button {
-                        sendEvent(.sysEx7(manufacturer: .educational(),
-                                          data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-                                                 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
-                                                 0x0D],
-                                          group: midiGroup))
-                    } label: { Text("SysEx7 (13 Data, 14 Total)") }
-                    
-                    Button {
-                        sendEvent(.universalSysEx7(universalType: .realTime,
-                                                   deviceID: 0x7F,
-                                                   subID1: 0x7F,
-                                                   subID2: 0x7F,
-                                                   data: [],
-                                                   group: midiGroup))
-                    } label: { Text("Universal SysEx7 (0 Data, 4 Total)") }
-                    
-                    Button {
-                        sendEvent(.universalSysEx7(universalType: .nonRealTime,
-                                                   deviceID: 0x7F,
-                                                   subID1: 0x7F,
-                                                   subID2: 0x7F,
-                                                   data: [0x01, 0x02],
-                                                   group: midiGroup))
-                    } label: { Text("Universal SysEx7 (2 Data, 6 Total)") }
-                    
-                    Button {
-                        sendEvent(.universalSysEx7(universalType: .realTime,
-                                                   deviceID: 0x7F,
-                                                   subID1: 0x7F,
-                                                   subID2: 0x7F,
-                                                   data: [0x01, 0x02, 0x03, 0x04],
-                                                   group: midiGroup))
-                    } label: { Text("Universal SysEx7 (4 Data, 8 Total)") }
-                    
-                    Button {
-                        sendEvent(.universalSysEx7(universalType: .nonRealTime,
-                                                   deviceID: 0x7F,
-                                                   subID1: 0x7F,
-                                                   subID2: 0x7F,
-                                                   data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-                                                          0x07, 0x08, 0x09, 0x0A],
-                                                   group: midiGroup))
-                    } label: { Text("Universal SysEx7 (10 Data, 14 Total)") }
+                    GroupBox(label: Text("Universal SysEx8 (MIDI 2.0)")) {
+                        HStack {
+                            Text("Bytes:")
+                            
+                            Button {
+                                sendEvent(.universalSysEx8(universalType: .realTime,
+                                                           deviceID: 0x7F,
+                                                           subID1: 0x7F,
+                                                           subID2: 0x7F,
+                                                           data: [],
+                                                           group: midiGroup))
+                            } label: { Text("0") }
+                            
+                            Button {
+                                sendEvent(.universalSysEx8(universalType: .nonRealTime,
+                                                           deviceID: 0x7F,
+                                                           subID1: 0x7F,
+                                                           subID2: 0x7F,
+                                                           data: [0x01, 0xE0],
+                                                           group: midiGroup))
+                            } label: { Text("2") }
+                            
+                            Button {
+                                sendEvent(.universalSysEx8(universalType: .realTime,
+                                                           deviceID: 0x7F,
+                                                           subID1: 0x7F,
+                                                           subID2: 0x7F,
+                                                           data: [0x01, 0x02, 0xE0, 0xE1],
+                                                           group: midiGroup))
+                            } label: { Text("4") }
+                            
+                            Button {
+                                sendEvent(.universalSysEx8(universalType: .nonRealTime,
+                                                           deviceID: 0x7F,
+                                                           subID1: 0x7F,
+                                                           subID2: 0x7F,
+                                                           data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                                                                  0xE0, 0xE1, 0xF1, 0xF2],
+                                                           group: midiGroup))
+                            } label: { Text("10") }
+                        }
+                        .frame(width: 220)
+                    }
                     
                 }
                 .padding()

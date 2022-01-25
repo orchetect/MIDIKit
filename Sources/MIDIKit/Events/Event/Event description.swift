@@ -4,6 +4,7 @@
 //
 
 import Foundation
+@_implementationOnly import SwiftRadix
 
 extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
     
@@ -24,7 +25,10 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
                 attrStr = "\(event.attribute), "
             }
             
-            return "noteOn(\(event.note), vel: \(event.velocity), \(attrStr)chan: \(event.channel), group: \(event.group))"
+            let channelString = event.channel.value.hex.stringValue(prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            
+            return "noteOn(\(event.note), vel: \(event.velocity), \(attrStr)chan: \(channelString), group: \(groupString))"
             
         case .noteOff(let event):
             let attrStr: String
@@ -35,44 +39,63 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
                 attrStr = "\(event.attribute), "
             }
             
-            return "noteOff(\(event.note), vel: \(event.velocity), \(attrStr)chan: \(event.channel), group: \(event.group))"
+            let channelString = event.channel.value.hex.stringValue(prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            
+            return "noteOff(\(event.note), vel: \(event.velocity), \(attrStr)chan: \(channelString), group: \(groupString))"
             
         case .noteCC(let event):
+            let channelString = event.channel.value.hex.stringValue(prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "noteCC(note: \(event.note), controller: \(event.controller), val: \(event.value), chan: \(event.channel), group: \(event.group))"
+            return "noteCC(note: \(event.note), controller: \(event.controller), val: \(event.value), chan: \(channelString), group: \(groupString))"
             
         case .notePitchBend(let event):
+            let channelString = event.channel.value.hex.stringValue(prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "notePitchBend(note: \(event.note), value: \(event.value), chan: \(event.channel), group: \(event.group))"
+            return "notePitchBend(note: \(event.note), value: \(event.value), chan: \(channelString), group: \(groupString))"
             
         case .notePressure(let event):
+            let channelString = event.channel.value.hex.stringValue(prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "notePressure(note:\(event.note), amount: \(event.amount), chan: \(event.channel), group: \(event.group))"
+            return "notePressure(note:\(event.note), amount: \(event.amount), chan: \(channelString), group: \(groupString))"
             
         case .noteManagement(let event):
+            let channelString = event.channel.value.hex.stringValue(prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "noteManagement(options: \(event.optionFlags), chan: \(event.channel), group: \(event.group))"
+            return "noteManagement(options: \(event.optionFlags), chan: \(channelString), group: \(groupString))"
             
         case .cc(let event):
+            let channelString = event.channel.value.hex.stringValue(prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "cc(\(event.controller.number), val: \(event.value), chan: \(event.channel), group: \(event.group))"
+            return "cc(\(event.controller.number), val: \(event.value), chan: \(channelString), group: \(groupString))"
             
         case .programChange(let event):
+            let channelString = event.channel.value.hex.stringValue(prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
             switch event.bank {
             case .noBankSelect:
-                return "prgChange(\(event.program), chan: \(event.channel), group: \(event.group))"
+                return "prgChange(\(event.program), chan: \(channelString), group: \(groupString))"
             case .bankSelect(let bank):
-                return "prgChange(\(event.program), bank: \(bank), chan: \(event.channel), group: \(event.group))"
+                return "prgChange(\(event.program), bank: \(bank), chan: \(channelString), group: \(groupString))"
             }
             
         case .pressure(let event):
+            let channelString = event.channel.value.hex.stringValue(prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "pressure(amount: \(event.amount), chan: \(event.channel), group: \(event.group))"
+            return "pressure(amount: \(event.amount), chan: \(channelString), group: \(groupString))"
             
         case .pitchBend(let event):
+            let channelString = event.channel.value.hex.stringValue(prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "pitchBend(\(event.value), chan: \(event.channel), group: \(event.group))"
+            return "pitchBend(\(event.value), chan: \(channelString), group: \(groupString))"
             
             
         // ----------------------
@@ -80,32 +103,28 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
         // ----------------------
         
         case .sysEx7(let event):
+            let dataString = event.data.hex.stringValue(padTo: 2, prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            let dataString = event.data
-                .hex.stringValue(padTo: 2, prefix: true)
-            
-            return "sysEx7(mfr: \(event.manufacturer), data: [\(dataString)], group: \(event.group))"
+            return "sysEx7(mfr: \(event.manufacturer), data: [\(dataString)], group: \(groupString))"
             
         case .universalSysEx7(let event):
+            let dataString = event.data.hex.stringValue(padTo: 2, prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            let dataString = event.data
-                .hex.stringValue(padTo: 2, prefix: true)
-            
-            return "universalSysEx7(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(event.group))"
+            return "universalSysEx7(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(groupString))"
             
         case .sysEx8(let event):
+            let dataString = event.data.hex.stringValue(padTo: 2, prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            let dataString = event.data
-                .hex.stringValue(padTo: 2, prefix: true)
-            
-            return "sysEx8(mfr: \(event.manufacturer), data: [\(dataString)], group: \(event.group), streamID: \(event.streamID))"
+            return "sysEx8(mfr: \(event.manufacturer), data: [\(dataString)], group: \(groupString), streamID: \(event.streamID))"
             
         case .universalSysEx8(let event):
+            let dataString = event.data.hex.stringValue(padTo: 2, prefix: true)
+            let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            let dataString = event.data
-                .hex.stringValue(padTo: 2, prefix: true)
-            
-            return "universalSysEx8(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(event.group), streamID: \(event.streamID))"
+            return "universalSysEx8(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(groupString), streamID: \(event.streamID))"
             
             
         // -------------------
@@ -113,27 +132,28 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
         // -------------------
         
         case .timecodeQuarterFrame(let event):
-            
             let dataByteString = event.dataByte.uInt8Value
                 .binary.stringValue(padTo: 8, splitEvery: 8, prefix: true)
             
-            return "timecodeQF(\(dataByteString), group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            
+            return "timecodeQF(\(dataByteString), group: \(groupString))"
             
         case .songPositionPointer(let event):
-            
-            return "songPositionPointer(beat: \(event.midiBeat), group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "songPositionPointer(beat: \(event.midiBeat), group: \(groupString))"
             
         case .songSelect(let event):
-            
-            return "songSelect(number: \(event.number), group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "songSelect(number: \(event.number), group: \(groupString))"
             
         case .unofficialBusSelect(let event):
-            
-            return "unofficialBusSelect(bus: \(event.bus), group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "unofficialBusSelect(bus: \(event.bus), group: \(groupString))"
             
         case .tuneRequest(let event):
-            
-            return "tuneRequest(group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "tuneRequest(group: \(groupString))"
             
             
         // ----------------------
@@ -141,28 +161,28 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
         // ----------------------
         
         case .timingClock(let event):
-            
-            return "timingClock(group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "timingClock(group: \(groupString))"
             
         case .start(let event):
-            
-            return "start(group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "start(group: \(groupString))"
             
         case .continue(let event):
-            
-            return "continue(group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "continue(group: \(groupString))"
             
         case .stop(let event):
-            
-            return "stop(group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "stop(group: \(groupString))"
             
         case .activeSensing(let event):
-            
-            return "activeSensing(group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "activeSensing(group: \(groupString))"
             
         case .systemReset(let event):
-            
-            return "systemReset(group: \(event.group))"
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "systemReset(group: \(groupString))"
             
         }
         

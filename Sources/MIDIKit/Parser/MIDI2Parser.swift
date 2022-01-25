@@ -559,8 +559,8 @@ extension MIDI {
             
             switch sysExStatusField {
             case .complete:
-                guard let parsedSysEx = try? MIDI.Event.sysEx7(
-                    rawBytes: [0xF0] + payloadBytes + [0xF7],
+                guard let parsedSysEx = try? MIDI.Event(
+                    sysEx7RawBytes: [0xF0] + payloadBytes + [0xF7],
                     group: group
                 )
                 else { return nil }
@@ -589,8 +589,8 @@ extension MIDI {
                 // reset buffer
                 sysEx7MultiPartUMPBuffer = []
                 
-                guard let parsedSysEx = try? MIDI.Event.sysEx7(
-                    rawBytes: [0xF0] + fullData + [0xF7],
+                guard let parsedSysEx = try? MIDI.Event(
+                    sysEx7RawBytes: [0xF0] + fullData + [0xF7],
                     group: group
                 )
                 else { return nil }
@@ -635,8 +635,8 @@ extension MIDI {
                     bytes.startIndex.advanced(by: 1 + numberOfBytes)
                 ]
                 
-                guard let parsedSysEx = try? MIDI.Event.sysEx8(
-                    rawBytes: Array(payloadBytes),
+                guard let parsedSysEx = try? MIDI.Event(
+                    sysEx8RawBytes: Array(payloadBytes),
                     group: group
                 )
                 else { return nil }
@@ -688,8 +688,8 @@ extension MIDI {
                 
                 let fullData = buffer + Array(payloadBytes)
                 
-                guard let parsedSysEx = try? MIDI.Event.sysEx8(
-                    rawBytes: fullData,
+                guard let parsedSysEx = try? MIDI.Event(
+                    sysEx8RawBytes: fullData,
                     group: group
                 )
                 else { return nil }

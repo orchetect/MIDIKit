@@ -12,10 +12,10 @@ extension MIDI.Event {
     ///
     /// - Throws: `MIDI.Event.ParseError` if message is malformed.
     @inline(__always)
-    public static func sysEx7(
-        rawBytes: [MIDI.Byte],
+    public init(
+        sysEx7RawBytes rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0
-    ) throws -> Self {
+    ) throws {
         
         var readPos = rawBytes.startIndex
         
@@ -93,7 +93,7 @@ extension MIDI.Event {
             try readPosAdvance(by: 1)
             let data = try readData()
             
-            return .universalSysEx7(
+            self = .universalSysEx7(
                 .init(universalType: universalType,
                       deviceID: deviceID,
                       subID1: subID1,
@@ -101,6 +101,7 @@ extension MIDI.Event {
                       data: data,
                       group: group)
             )
+            return
             
         case 0x00...0x7D:
             var readManufacturer: SysExManufacturer?
@@ -139,11 +140,12 @@ extension MIDI.Event {
                 data = try readData()
             }
             
-            return .sysEx7(
+            self = .sysEx7(
                 .init(manufacturer: manufacturer,
                       data: data,
                       group: group)
             )
+            return
             
         default:
             // malformed
@@ -158,10 +160,10 @@ extension MIDI.Event {
     ///
     /// - Throws: `MIDI.Event.ParseError` if message is malformed.
     @inline(__always)
-    public static func sysEx8(
-        rawBytes: [MIDI.Byte],
+    public init(
+        sysEx8RawBytes rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0
-    ) throws -> Self {
+    ) throws {
         
         var readPos = rawBytes.startIndex
         
@@ -220,7 +222,7 @@ extension MIDI.Event {
                 }
             }()
             
-            return .universalSysEx8(
+            self = .universalSysEx8(
                 .init(universalType: universalType,
                       deviceID: deviceID,
                       subID1: subID1,
@@ -229,6 +231,7 @@ extension MIDI.Event {
                       streamID: streamID,
                       group: group)
             )
+            return
             
         case .manufacturer(let mfr):
             var data: [MIDI.Byte] = []
@@ -240,12 +243,13 @@ extension MIDI.Event {
                 }
             }
             
-            return .sysEx8(
+            self = .sysEx8(
                 .init(manufacturer: mfr,
                       data: data,
                       streamID: streamID,
                       group: group)
             )
+            return
             
         default:
             // malformed

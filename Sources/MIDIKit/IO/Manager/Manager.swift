@@ -103,10 +103,7 @@ extension MIDI.IO {
         ) {
             
             // API version
-            // Currently, legacy API is recommended as it is more stable. (New API is experimental due to bugs in Core MIDI itself, until workarounds or resolutions can be found.)
-            // So we will default to legacy here if possible.
-            preferredAPI = APIVersion.legacyCoreMIDI.isValidOnCurrentPlatform
-            ? .legacyCoreMIDI : .bestForPlatform()
+            preferredAPI = .bestForPlatform()
             
             // queue client name
             var clientNameForQueue = clientName.onlyAlphanumerics
