@@ -101,10 +101,18 @@ struct ContentView: View {
             }
         }
         
-        .onChange(of: midiInputConnectionEndpoint) { _ in
-            updateInputConnection()
-        }
-        
+        // MARK: TODO: this works but only on macOS 11 and later
+        //.onChange(of: midiInputConnectionEndpoint) { _ in
+        //    updateInputConnection()
+        //}
+        // MARK: TODO: instead, we need a hack to update when the @State var changes:
+        ZStack {
+            Text({
+                let dummy = midiInputConnectionEndpoint?.name ?? ""
+                updateInputConnection()
+                return "\(dummy)"
+            }())
+        }.frame(width: 0, height: 0)
     }
     
     // MARK: - Helper Methods
