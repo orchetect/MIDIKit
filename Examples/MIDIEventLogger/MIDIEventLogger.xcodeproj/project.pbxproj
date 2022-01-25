@@ -13,6 +13,7 @@
 		E26A25C926C5875A00FFCF40 /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E26A25C826C5875A00FFCF40 /* OTCore */; };
 		E26A25CD26C5876400FFCF40 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E26A25CC26C5876400FFCF40 /* MIDIKit */; };
 		E26A25CF26C5AD4700FFCF40 /* ContentView SubViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25CE26C5AD4700FFCF40 /* ContentView SubViews.swift */; };
+		E2E8BD89279F8DF4007A1AF0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		E26A25CA26C5875F00FFCF40 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MIDIKit; path = ../..; sourceTree = "<group>"; };
 		E26A25CE26C5AD4700FFCF40 /* ContentView SubViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView SubViews.swift"; sourceTree = "<group>"; };
 		E2B38F2026C63918008770A6 /* MIDIEventLogger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MIDIEventLogger.entitlements; sourceTree = "<group>"; };
+		E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				E26A25CE26C5AD4700FFCF40 /* ContentView SubViews.swift */,
 				E26A25BF26C5873B00FFCF40 /* Log.swift */,
 				E216886026C5E5A400BF7959 /* Info.plist */,
+				E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */,
 				E2B38F2026C63918008770A6 /* MIDIEventLogger.entitlements */,
 			);
 			path = MIDIEventLogger;
@@ -135,6 +138,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2E8BD89279F8DF4007A1AF0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,7 +210,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -261,7 +265,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -287,7 +291,6 @@
 				INFOPLIST_FILE = MIDIEventLogger/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = MIDIEventLogger;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -319,7 +322,6 @@
 				INFOPLIST_FILE = MIDIEventLogger/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = MIDIEventLogger;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
