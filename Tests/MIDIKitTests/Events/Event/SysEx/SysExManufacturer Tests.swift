@@ -44,8 +44,14 @@ class SysExManufacturerTests: XCTestCase {
         // valid conditions
         
         // min/max valid
-        XCTAssertTrue(
+        XCTAssertFalse(
             MIDI.Event.SysExManufacturer.threeByte(byte2: 0x00, byte3: 0x00).isValid
+        )
+        XCTAssertTrue(
+            MIDI.Event.SysExManufacturer.threeByte(byte2: 0x01, byte3: 0x00).isValid
+        )
+        XCTAssertTrue(
+            MIDI.Event.SysExManufacturer.threeByte(byte2: 0x00, byte3: 0x01).isValid
         )
         XCTAssertTrue(
             MIDI.Event.SysExManufacturer.threeByte(byte2: 0x7F, byte3: 0x7F).isValid

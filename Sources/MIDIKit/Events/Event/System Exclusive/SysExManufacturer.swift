@@ -155,7 +155,8 @@ extension MIDI.Event.SysExManufacturer {
         case .threeByte(byte2: let byte2, byte3: let byte3):
             return
                 (0x00...0x7F).contains(byte2) &&
-                (0x00...0x7F).contains(byte3)
+                (0x00...0x7F).contains(byte3) &&
+                !(byte2 == 0x00 && byte3 == 0x00) // both can't be 0x00, only one or the other
         }
         
     }
