@@ -146,6 +146,72 @@ class SysExIDTests: XCTestCase {
         
     }
     
+    func testManufacturer_sysEx7RawBytes() {
+        
+        XCTAssertEqual(
+            MIDI.Event.SysExID.manufacturer(.oneByte(0x01)).sysEx7RawBytes(),
+            [0x01]
+        )
+        
+        XCTAssertEqual(
+            MIDI.Event.SysExID.manufacturer(.oneByte(0x7D)).sysEx7RawBytes(),
+            [0x7D]
+        )
+        
+        XCTAssertEqual(
+            MIDI.Event.SysExID.manufacturer(.threeByte(byte2: 0x7F, byte3: 0x7F)).sysEx7RawBytes(),
+            [0x00, 0x7F, 0x7F]
+        )
+        
+    }
+    
+    func testManufacturer_sysEx8RawBytes() {
+        
+        XCTAssertEqual(
+            MIDI.Event.SysExID.manufacturer(.oneByte(0x01)).sysEx8RawBytes(),
+            [0x00, 0x01]
+        )
+        
+        XCTAssertEqual(
+            MIDI.Event.SysExID.manufacturer(.oneByte(0x7D)).sysEx8RawBytes(),
+            [0x00, 0x7D]
+        )
+        
+        XCTAssertEqual(
+            MIDI.Event.SysExID.manufacturer(.threeByte(byte2: 0x7F, byte3: 0x7F)).sysEx8RawBytes(),
+            [0xFF, 0x7F]
+        )
+        
+    }
+    
+    func testUniversal_sysEx7RawBytes() {
+        
+        XCTAssertEqual(
+            MIDI.Event.SysExID.universal(.nonRealTime).sysEx7RawBytes(),
+            [0x7E]
+        )
+        
+        XCTAssertEqual(
+            MIDI.Event.SysExID.universal(.realTime).sysEx7RawBytes(),
+            [0x7F]
+        )
+        
+    }
+    
+    func testUniversal_sysEx8RawBytes() {
+        
+        XCTAssertEqual(
+            MIDI.Event.SysExID.universal(.nonRealTime).sysEx8RawBytes(),
+            [0x00, 0x7E]
+        )
+        
+        XCTAssertEqual(
+            MIDI.Event.SysExID.universal(.realTime).sysEx8RawBytes(),
+            [0x00, 0x7F]
+        )
+        
+    }
+    
 }
 
 #endif
