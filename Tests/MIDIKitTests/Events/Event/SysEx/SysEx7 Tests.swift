@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import MIDIKit
+import SwiftRadix
 
 class SysEx7Tests: XCTestCase {
 	
@@ -23,8 +24,8 @@ class SysEx7Tests: XCTestCase {
         XCTAssertEqual(innerEvent.group, 0)
 		
 		XCTAssertEqual(event.midi1RawBytes, sourceRawBytes)
-        
-        #warning("> TODO: also test umpRawWords")
+        XCTAssertEqual(event.umpRawWords(protocol: ._2_0),
+                       [[0x30034101, 0x34000000]])
 		
 	}
 	
@@ -41,8 +42,8 @@ class SysEx7Tests: XCTestCase {
         XCTAssertEqual(innerEvent.group, 0)
         
 		XCTAssertEqual(event.midi1RawBytes, sourceRawBytes)
-        
-        #warning("> TODO: also test umpRawWords")
+        XCTAssertEqual(event.umpRawWords(protocol: ._2_0),
+                       [[0x30014100, 0x00000000]])
         
 	}
     
@@ -59,8 +60,8 @@ class SysEx7Tests: XCTestCase {
         XCTAssertEqual(innerEvent.group, 0)
         
         XCTAssertEqual(event.midi1RawBytes, [0xF0, 0x41, 0xF7])
-        
-        #warning("> TODO: also test umpRawWords")
+        XCTAssertEqual(event.umpRawWords(protocol: ._2_0),
+                       [[0x30014100, 0x00000000]])
         
     }
     
@@ -94,7 +95,7 @@ class SysEx7Tests: XCTestCase {
         
     }
 	
-	func testInit_RawBytes_Malformed() {
+	func testSysEx7RawBytes_Malformed() {
 		
 		// empty raw bytes - invalid
 		XCTAssertThrowsError(
