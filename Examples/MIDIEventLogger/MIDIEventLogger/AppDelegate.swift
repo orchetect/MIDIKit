@@ -23,8 +23,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             logger.default(error)
         }
         
-//        #warning("> TODO: remove this")
-//        newManager.preferredAPI = .legacyCoreMIDI
+        // uncomment this to test different API versions or limit to MIDI 1.0 protocol
+        //newManager.preferredAPI = .legacyCoreMIDI
         
         return newManager
     }()
