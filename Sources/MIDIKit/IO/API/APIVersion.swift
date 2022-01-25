@@ -67,9 +67,13 @@ extension MIDI.IO.APIVersion {
         switch self {
         case .legacyCoreMIDI:
             #if os(macOS)
+                // Apple has deprecated legacy API but not yet obsoleted.
+                // We'll guess that it may become obsoleted as of macOS 13.0
                 if #available(macOS 13, *) { return false }
                 return true
             #elseif os(iOS)
+                // Apple has deprecated legacy API but not yet obsoleted.
+                // We'll guess that it may become obsoleted as of iOS 16.0
                 if #available(iOS 16, *) { return false }
                 return true
             #elseif os(tvOS) || os(watchOS)
