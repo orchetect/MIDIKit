@@ -23,13 +23,17 @@ extension MIDI.IO {
         public private(set) var api: MIDI.IO.APIVersion
         public var midiProtocol: MIDI.IO.ProtocolVersion { api.midiProtocol }
         
-        // _MIDIIOSendsMIDIMessagesProtocol
-        internal var coreMIDIOutputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
+        // MIDIIOSendsMIDIMessagesProtocol
+        
+        /// The Core MIDI output port reference.
+        public private(set) var coreMIDIOutputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
         
         // class-specific
         
         public private(set) var inputsCriteria: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>]
-        internal var coreMIDIInputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
+        
+        /// The Core MIDI input endpoint(s) reference(s).
+        public private(set) var coreMIDIInputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
         
         // init
         

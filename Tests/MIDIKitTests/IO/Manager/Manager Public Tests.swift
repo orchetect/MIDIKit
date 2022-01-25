@@ -43,8 +43,9 @@ final class Manager_Public_Tests: XCTestCase {
         let output = manager.managedOutputs.first?.value
         
         _ = output?.api
-        _ = output?.endpointName
         _ = output?.midiProtocol
+        _ = output?.coreMIDIOutputPortRef
+        _ = output?.endpointName
         _ = output?.uniqueID
         
         _ = output?.description
@@ -59,7 +60,9 @@ final class Manager_Public_Tests: XCTestCase {
         
         _ = output?.api
         _ = output?.midiProtocol
+        _ = output?.coreMIDIOutputPortRef
         _ = output?.inputsCriteria
+        _ = output?.coreMIDIInputEndpointRefs
         
         _ = output?.description
         
@@ -72,8 +75,9 @@ final class Manager_Public_Tests: XCTestCase {
         let input = manager.managedInputs.first?.value
         
         _ = input?.api
-        _ = input?.endpointName
         _ = input?.midiProtocol
+        _ = input?.coreMIDIInputPortRef
+        _ = input?.endpointName
         _ = input?.uniqueID
         
         _ = input?.description
@@ -88,7 +92,9 @@ final class Manager_Public_Tests: XCTestCase {
         
         _ = input?.api
         _ = input?.midiProtocol
+        _ = input?.coreMIDIInputPortRef
         _ = input?.outputsCriteria
+        _ = input?.coreMIDIOutputEndpointRefs
         
         _ = input?.description
         
@@ -101,6 +107,7 @@ final class Manager_Public_Tests: XCTestCase {
         let thru = manager.managedThruConnections.first?.value
         
         _ = thru?.api
+        _ = thru?.coreMIDIThruConnectionRef
         _ = thru?.inputs
         _ = thru?.outputs
         _ = thru?.lifecycle

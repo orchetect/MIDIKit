@@ -9,6 +9,9 @@
 
 public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
     
+    /// The Core MIDI output port ref.
+    /* public private(set) */ var coreMIDIOutputPortRef: MIDI.IO.CoreMIDIPortRef? { get }
+    
     /// MIDI Protocol version used for this endpoint.
     /* public private(set) */ var midiProtocol: MIDI.IO.ProtocolVersion { get }
     
@@ -23,10 +26,6 @@ public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
 // MARK: - Internal Protocol
 
 internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProtocol {
-    
-    /// Internal:
-    /// Core MIDI Port Ref(s)
-    var coreMIDIOutputPortRef: MIDI.IO.CoreMIDIPortRef? { get }
     
     /// Internal:
     /// Send a MIDI Message, automatically assembling it into a `MIDIPacketList`.

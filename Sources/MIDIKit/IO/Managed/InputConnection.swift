@@ -26,8 +26,12 @@ extension MIDI.IO {
         // class-specific
         
         public private(set) var outputsCriteria: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
-        internal var coreMIDIOutputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
-        internal var coreMIDIInputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
+        
+        /// The Core MIDI input port reference.
+        public private(set) var coreMIDIInputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
+        
+        /// The Core MIDI output endpoint(s) reference(s).
+        public private(set) var coreMIDIOutputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
         
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
