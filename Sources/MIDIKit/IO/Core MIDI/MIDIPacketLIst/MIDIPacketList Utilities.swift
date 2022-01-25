@@ -96,7 +96,7 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         let packetListPointer: UnsafeMutablePointer<MIDIPacketList> = .allocate(capacity: 1)
         
         // prepare packet
-        var currentPacket: UnsafeMutablePointer<MIDIPacket> = MIDIPacketListInit(packetListPointer)
+        var currentPacket: UnsafeMutablePointer<MIDIPacket>! = MIDIPacketListInit(packetListPointer)
         
         for dataBlock in 0..<data.count {
             
@@ -107,6 +107,12 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
                                               timeTag,
                                               data[dataBlock].count,
                                               data[dataBlock])
+            
+            guard currentPacket != nil else {
+                throw MIDI.IO.MIDIError.malformed(
+                    "Error adding MIDI packet to packet list."
+                )
+            }
             
         }
         
