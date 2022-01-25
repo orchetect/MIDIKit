@@ -16,7 +16,7 @@ class SysEx8Tests: XCTestCase {
                                            0x00, 0x41, // sysEx ID
                                            0x01, 0x34, 0xE6] // data bytes
 		
-		let event = try MIDI.Event.sysEx8(rawBytes: sourceRawBytes)
+		let event = try MIDI.Event(sysEx8RawBytes: sourceRawBytes)
         guard case .sysEx8(let innerEvent) = event
         else { XCTFail() ; return }
         
@@ -74,19 +74,19 @@ class SysEx8Tests: XCTestCase {
 		
 		// empty raw bytes - invalid
 		XCTAssertThrowsError(
-			try MIDI.Event.sysEx8(rawBytes: [])
+			try MIDI.Event(sysEx8RawBytes: [])
 		)
 		
 		// start byte only - invalid when in a complete SysEx8 UMP message
         XCTAssertThrowsError(
-			try MIDI.Event.sysEx8(rawBytes: [0x00])
+            try MIDI.Event(sysEx8RawBytes: [0x00])
 		)
 		
-		// invalid sysEx ID
-		XCTAssertThrowsError(
-            try MIDI.Event.sysEx8(rawBytes: [0x00, // stream ID
-                                             0x00, 0x80, // sysEx ID -- invalid
-                                             0x01, 0x34, 0xE6]) // data bytes
+        // invalid sysEx ID
+        XCTAssertThrowsError(
+            try MIDI.Event(sysEx8RawBytes: [0x00, // stream ID
+                                            0x00, 0x80, // sysEx ID -- invalid
+                                            0x01, 0x34, 0xE6]) // data bytes
 		)
 		
 	}
@@ -95,18 +95,18 @@ class SysEx8Tests: XCTestCase {
 		
 		// ensure instances equate correctly
 		
-        let event1A = try MIDI.Event.sysEx8(rawBytes: [0x00, // stream ID
-                                                       0x00, 0x41, // sysEx ID
-                                                       0x01, 0x34, 0xE6]) // data bytes)
-        let event1B = try MIDI.Event.sysEx8(rawBytes: [0x00, // stream ID
-                                                       0x00, 0x41, // sysEx ID
-                                                       0x01, 0x34, 0xE6]) // data bytes)
-		
-        let event2 = try MIDI.Event.sysEx8(rawBytes: [0x00, // stream ID
-                                                      0x00, 0x42, // sysEx ID
-                                                      0x01, 0x34, 0xE5]) // data bytes)
-		
-		XCTAssert(event1A == event1B)
+        let event1A = try MIDI.Event(sysEx8RawBytes: [0x00, // stream ID
+                                                      0x00, 0x41, // sysEx ID
+                                                      0x01, 0x34, 0xE6]) // data bytes)
+        let event1B = try MIDI.Event(sysEx8RawBytes: [0x00, // stream ID
+                                                      0x00, 0x41, // sysEx ID
+                                                      0x01, 0x34, 0xE6]) // data bytes)
+        
+        let event2 = try MIDI.Event(sysEx8RawBytes: [0x00, // stream ID
+                                                     0x00, 0x42, // sysEx ID
+                                                     0x01, 0x34, 0xE5]) // data bytes)
+        
+        XCTAssert(event1A == event1B)
 		
 		XCTAssert(event1A != event2)
 		
@@ -115,17 +115,17 @@ class SysEx8Tests: XCTestCase {
 	func testHashable() throws {
 		
 		// ensure instances hash correctly
-		
-        let event1A = try MIDI.Event.sysEx8(rawBytes: [0x00, // stream ID
-                                                       0x00, 0x41, // sysEx ID
-                                                       0x01, 0x34, 0xE6]) // data bytes)
-        let event1B = try MIDI.Event.sysEx8(rawBytes: [0x00, // stream ID
-                                                       0x00, 0x41, // sysEx ID
-                                                       0x01, 0x34, 0xE6]) // data bytes)
-		
-        let event2 = try MIDI.Event.sysEx8(rawBytes: [0x00, // stream ID
-                                                      0x00, 0x42, // sysEx ID
-                                                      0x01, 0x34, 0xE5]) // data bytes)
+        
+        let event1A = try MIDI.Event(sysEx8RawBytes: [0x00, // stream ID
+                                                      0x00, 0x41, // sysEx ID
+                                                      0x01, 0x34, 0xE6]) // data bytes)
+        let event1B = try MIDI.Event(sysEx8RawBytes: [0x00, // stream ID
+                                                      0x00, 0x41, // sysEx ID
+                                                      0x01, 0x34, 0xE6]) // data bytes)
+        
+        let event2 = try MIDI.Event(sysEx8RawBytes: [0x00, // stream ID
+                                                     0x00, 0x42, // sysEx ID
+                                                     0x01, 0x34, 0xE5]) // data bytes)
 		
 		let set1: Set<MIDI.Event> = [event1A, event1B]
 		
