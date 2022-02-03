@@ -28,7 +28,7 @@ public extension MIDI {
         
         /// Construct from a MIDI note number.
         /// Returns `nil` if note number is invalid.
-        public init?<T: BinaryInteger>(number: T) {
+        public init?<T: BinaryInteger>(_ number: T) {
             
             guard let uint7 = MIDI.UInt7(exactly: number) else { return nil }
             self.number = uint7
@@ -261,7 +261,7 @@ extension MIDI.Note: Strideable {
         let val = (number.intValue + n)
             .clamped(to: MIDI.NoteNumberRange.all.lowerBound.intValue ... MIDI.NoteNumberRange.all.upperBound.intValue)
         
-        return Self(number: val) ?? .init()
+        return Self(val) ?? .init()
         
     }
     

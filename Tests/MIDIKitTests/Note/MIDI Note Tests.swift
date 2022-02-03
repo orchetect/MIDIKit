@@ -25,16 +25,16 @@ final class NoteTests: XCTestCase {
         
         // test all common BinaryInteger inits, except MIDI.UInt7
         
-        XCTAssertEqual(MIDI.Note(number: Int(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(number: UInt(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(number: Int8(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(number: UInt8(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(number: Int16(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(number: UInt16(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(number: Int32(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(number: UInt32(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(number: Int64(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(number: UInt64(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(Int(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(UInt(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(Int8(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(UInt8(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(Int16(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(UInt16(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(Int32(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(UInt32(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(Int64(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(UInt64(0x60))?.number, 0x60)
     }
     
     func testFrequency() {
@@ -42,7 +42,7 @@ final class NoteTests: XCTestCase {
         // note number -> frequency -> note number
         
         (0...127).forEach {
-            guard let freq = MIDI.Note(number: $0)?.frequencyValue
+            guard let freq = MIDI.Note($0)?.frequencyValue
             else {
                 XCTFail("Failed to get note frequency for note number \($0)")
                 return
