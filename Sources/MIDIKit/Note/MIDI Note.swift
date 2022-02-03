@@ -259,7 +259,10 @@ extension MIDI.Note: Strideable {
     public func advanced(by n: Int) -> Self {
         
         let val = (number.intValue + n)
-            .clamped(to: MIDI.NoteNumberRange.all.lowerBound.intValue ... MIDI.NoteNumberRange.all.upperBound.intValue)
+            .clamped(to:
+                         MIDI.NoteNumberRange.all.lowerBound.intValue
+                     ... MIDI.NoteNumberRange.all.upperBound.intValue
+            )
         
         return Self(val) ?? .init()
         
