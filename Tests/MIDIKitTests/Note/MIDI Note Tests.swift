@@ -171,43 +171,43 @@ final class NoteTests: XCTestCase {
     func testNoteInit_String() {
         // spot check
         
-        XCTAssertEqual(MIDI.Note(string: "B-3")?.number, nil) // out of bounds
-        XCTAssertEqual(MIDI.Note(string: "C-2")?.number, 0)
+        XCTAssertEqual(MIDI.Note("B-3")?.number, nil) // out of bounds
+        XCTAssertEqual(MIDI.Note("C-2")?.number, 0)
         
-        XCTAssertEqual(MIDI.Note(string: "A#2")?.number, 58)
-        XCTAssertEqual(MIDI.Note(string: "Bb2")?.number, 58)
-        XCTAssertEqual(MIDI.Note(string: "B2")?.number, 59)
-        XCTAssertEqual(MIDI.Note(string: "C3")?.number, 60)
-        XCTAssertEqual(MIDI.Note(string: "C#3")?.number, 61)
+        XCTAssertEqual(MIDI.Note("A#2")?.number, 58)
+        XCTAssertEqual(MIDI.Note("Bb2")?.number, 58)
+        XCTAssertEqual(MIDI.Note("B2")?.number, 59)
+        XCTAssertEqual(MIDI.Note("C3")?.number, 60)
+        XCTAssertEqual(MIDI.Note("C#3")?.number, 61)
         
-        XCTAssertEqual(MIDI.Note(string: "G8")?.number, 127)
-        XCTAssertEqual(MIDI.Note(string: "G#8")?.number, nil) // out of bounds
+        XCTAssertEqual(MIDI.Note("G8")?.number, 127)
+        XCTAssertEqual(MIDI.Note("G#8")?.number, nil) // out of bounds
         
         // alternate accidental symbols
         
-        XCTAssertEqual(MIDI.Note(string: "Ab2")?.number, 56)
-        XCTAssertEqual(MIDI.Note(string: "A♭2")?.number, 56)
+        XCTAssertEqual(MIDI.Note("Ab2")?.number, 56)
+        XCTAssertEqual(MIDI.Note("A♭2")?.number, 56)
         
-        XCTAssertEqual(MIDI.Note(string: "A♯2")?.number, 58)
-        XCTAssertEqual(MIDI.Note(string: "B♭2")?.number, 58)
+        XCTAssertEqual(MIDI.Note("A♯2")?.number, 58)
+        XCTAssertEqual(MIDI.Note("B♭2")?.number, 58)
         
-        XCTAssertEqual(MIDI.Note(string: "B♯2"), nil) // don't allow C across different octave
-        XCTAssertEqual(MIDI.Note(string: "C♭3"), nil) // don't allow B across different octave
+        XCTAssertEqual(MIDI.Note("B♯2"), nil) // don't allow C across different octave
+        XCTAssertEqual(MIDI.Note("C♭3"), nil) // don't allow B across different octave
         
-        XCTAssertEqual(MIDI.Note(string: "C♯3")?.number, 61)
-        XCTAssertEqual(MIDI.Note(string: "D♭3")?.number, 61)
+        XCTAssertEqual(MIDI.Note("C♯3")?.number, 61)
+        XCTAssertEqual(MIDI.Note("D♭3")?.number, 61)
         
-        XCTAssertEqual(MIDI.Note(string: "D♯3")?.number, 63)
-        XCTAssertEqual(MIDI.Note(string: "E♭3")?.number, 63)
+        XCTAssertEqual(MIDI.Note("D♯3")?.number, 63)
+        XCTAssertEqual(MIDI.Note("E♭3")?.number, 63)
         
-        XCTAssertEqual(MIDI.Note(string: "E♯3")?.number, 65) // F♮
-        XCTAssertEqual(MIDI.Note(string: "F♭3")?.number, 64) // E♮
+        XCTAssertEqual(MIDI.Note("E♯3")?.number, 65) // F♮
+        XCTAssertEqual(MIDI.Note("F♭3")?.number, 64) // E♮
         
-        XCTAssertEqual(MIDI.Note(string: "F♯3")?.number, 66)
-        XCTAssertEqual(MIDI.Note(string: "G♭3")?.number, 66)
+        XCTAssertEqual(MIDI.Note("F♯3")?.number, 66)
+        XCTAssertEqual(MIDI.Note("G♭3")?.number, 66)
         
-        XCTAssertEqual(MIDI.Note(string: "G♯3")?.number, 68)
-        XCTAssertEqual(MIDI.Note(string: "A♭3")?.number, 68)
+        XCTAssertEqual(MIDI.Note("G♯3")?.number, 68)
+        XCTAssertEqual(MIDI.Note("A♭3")?.number, 68)
         
     }
     
@@ -257,7 +257,7 @@ final class NoteTests: XCTestCase {
         + whiteKeyNamesTopOctave.map { "\($0)8" }
         
         let whiteKeyNotes: [MIDI.Note] = whiteKeyNoteNames
-            .map { MIDI.Note(string: $0)! }
+            .map { MIDI.Note($0)! }
         
         // test white keys
         
@@ -280,7 +280,7 @@ final class NoteTests: XCTestCase {
         + blackKeyNamesTopOctave.map { "\($0)8" }
         
         let blackKeyNotes: [MIDI.Note] = blackKeyNoteNames
-            .map { MIDI.Note(string: $0)! }
+            .map { MIDI.Note($0)! }
         
         // test black keys
         

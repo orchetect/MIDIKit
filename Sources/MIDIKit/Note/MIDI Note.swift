@@ -52,7 +52,7 @@ public extension MIDI {
         
         /// Construct from a MIDI note name string.
         /// Returns `nil` if the string cannot be parsed.
-        public init?(string: String) {
+        public init?(_ string: String) {
             
             if !setNoteNumber(from: string) { return nil }
             
