@@ -28,7 +28,7 @@ public extension MIDI {
         
         /// Construct from a MIDI note number.
         /// Returns `nil` if note number is invalid.
-        public init?(number: Int) {
+        public init?<T: BinaryInteger>(number: T) {
             
             guard let uint7 = MIDI.UInt7(exactly: number) else { return nil }
             self.number = uint7

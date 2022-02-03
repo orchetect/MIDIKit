@@ -21,6 +21,22 @@ final class NoteTests: XCTestCase {
         XCTAssertEqual(note.stringValue(), "C-2")
     }
     
+    func testInitNumber() {
+        
+        // test all common BinaryInteger inits, except MIDI.UInt7
+        
+        XCTAssertEqual(MIDI.Note(number: Int(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(number: UInt(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(number: Int8(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(number: UInt8(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(number: Int16(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(number: UInt16(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(number: Int32(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(number: UInt32(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(number: Int64(0x60))?.number, 0x60)
+        XCTAssertEqual(MIDI.Note(number: UInt64(0x60))?.number, 0x60)
+    }
+    
     func testFrequency() {
         // test conversion:
         // note number -> frequency -> note number
