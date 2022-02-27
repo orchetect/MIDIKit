@@ -65,6 +65,7 @@ extension MIDI.IO.Manager {
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
+    @_disfavoredOverload
     public func addOutputConnection(
         toInputs: [MIDI.IO.InputEndpoint],
         tag: String

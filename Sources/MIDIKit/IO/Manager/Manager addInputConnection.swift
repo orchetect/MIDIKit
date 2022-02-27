@@ -70,6 +70,7 @@ extension MIDI.IO.Manager {
     ///   - receiveHandler: Event handler for received MIDI packets.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
+    @_disfavoredOverload
     public func addInputConnection(
         toOutputs: [MIDI.IO.OutputEndpoint],
         tag: String,
