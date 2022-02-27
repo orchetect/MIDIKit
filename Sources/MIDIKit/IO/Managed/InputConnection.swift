@@ -45,12 +45,12 @@ extension MIDI.IO {
         ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
-        internal init(toOutputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>],
+        internal init(toOutputs: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>>,
                       receiveHandler: MIDI.IO.ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
                       api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
-            self.outputsCriteria = Set(toOutputs)
+            self.outputsCriteria = toOutputs
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()

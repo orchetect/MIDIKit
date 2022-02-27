@@ -45,12 +45,12 @@ extension MIDI.IO {
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
         internal init(
-            toInputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>],
+            toInputs: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>>,
             midiManager: MIDI.IO.Manager,
             api: MIDI.IO.APIVersion = .bestForPlatform()
         ) {
             
-            self.inputsCriteria = Set(toInputs)
+            self.inputsCriteria = toInputs
             self.midiManager = midiManager
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             

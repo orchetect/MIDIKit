@@ -81,7 +81,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         let output2Ref = try XCTUnwrap(output2.coreMIDIOutputPortRef)
         
         // connect to 2nd virtual output
-        conn.addOutputs([.uniqueID(output2ID)])
+        conn.add(outputs: [.uniqueID(output2ID)])
         XCTWait(sec: 0.5) // some time for endpoint to be added to the connection
         XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID), .uniqueID(output2ID)])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref, output2Ref])
@@ -99,7 +99,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         connEvents = []
         
         // remove 1st virtual output from connection
-        conn.removeOutputs([.uniqueID(output1ID)])
+        conn.remove(outputs: [.uniqueID(output1ID)])
         XCTWait(sec: 0.5) // some time for endpoint to be removed from the connection
         XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output2ID)])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output2Ref])
@@ -117,7 +117,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         connEvents = []
         
         // remove 2nd virtual output from connection
-        conn.removeOutputs([.uniqueID(output2ID)])
+        conn.remove(outputs: [.uniqueID(output2ID)])
         XCTWait(sec: 0.5) // some time for endpoint to be removed from the connection
         XCTAssertEqual(conn.outputsCriteria, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
