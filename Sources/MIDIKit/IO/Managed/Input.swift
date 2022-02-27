@@ -72,6 +72,13 @@ extension MIDI.IO {
 
 extension MIDI.IO.Input {
     
+    /// Returns the input's endpoint in the system.
+    public var endpoint: MIDI.IO.InputEndpoint {
+        
+        .init(coreMIDIInputPortRef ?? 0)
+        
+    }
+    
     /// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
     internal var uniqueIDExistsInSystem: MIDIEndpointRef? {
         
