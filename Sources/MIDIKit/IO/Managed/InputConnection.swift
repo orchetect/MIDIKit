@@ -25,7 +25,26 @@ extension MIDI.IO {
         
         // class-specific
         
-        public private(set) var outputsCriteria: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>>
+        public typealias OutputsCriteria = MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>
+        
+        public private(set) var outputsCriteria: Set<OutputsCriteria> = []
+        
+        private func setOutputsCriteria(_ criteria: Set<OutputsCriteria>) {
+            
+            if preventAddingManagedOutputs,
+               let midiManager = midiManager
+            {
+                let managedOutputs: [OutputsCriteria] = midiManager.managedOutputs
+                    .map { $0.value.endpoint.uniqueID }
+                    .map { .uniqueID($0) }
+                
+                outputsCriteria = criteria
+                    .filter { !managedOutputs.contains($0) }
+            } else {
+                outputsCriteria = criteria
+            }
+            
+        }
         
         /// The Core MIDI input port reference.
         public private(set) var coreMIDIInputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
@@ -35,6 +54,9 @@ extension MIDI.IO {
         
         /// When new outputs appear in the system, automatically add them to the connection.
         public var automaticallyAddNewOutputs: Bool
+        
+        /// Prevent virtual outputs owned by the `Manager` (`.managedOutputs`) from being added to the connection.
+        public var preventAddingManagedOutputs: Bool
         
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
@@ -46,20 +68,25 @@ extension MIDI.IO {
         /// - Parameters:
         ///   - toOutputs: Output(s) to connect to.
         ///   - automaticallyAddNewOutputs: When new outputs appear in the system, automatically add them to the connection.
+        ///   - preventAddingManagedOutputs: Prevent virtual outputs owned by the `Manager` from being added to the connection.
         ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
-        internal init(toOutputs: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>>,
+        internal init(toOutputs: Set<OutputsCriteria>,
                       automaticallyAddNewOutputs: Bool,
+                      preventAddingManagedOutputs: Bool,
                       receiveHandler: MIDI.IO.ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
                       api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
-            self.outputsCriteria = toOutputs
-            self.automaticallyAddNewOutputs = automaticallyAddNewOutputs
-            self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
+            self.automaticallyAddNewOutputs = automaticallyAddNewOutputs
+            self.preventAddingManagedOutputs = preventAddingManagedOutputs
+            self.receiveHandler = receiveHandler.createReceiveHandler()
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            
+            // relies on midiManager and preventAddingManagedOutputs
+            setOutputsCriteria(toOutputs)
             
         }
         
@@ -276,7 +303,8 @@ extension MIDI.IO.InputConnection {
         outputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
     ) {
         
-        outputsCriteria.formUnion(outputs)
+        let combined = outputsCriteria.union(outputs)
+        setOutputsCriteria(combined)
         
         if let midiManager = midiManager {
             // this will re-generate coreMIDIOutputEndpointRefs and call connect()
@@ -301,7 +329,8 @@ extension MIDI.IO.InputConnection {
         outputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
     ) {
         
-        outputsCriteria.subtract(outputs)
+        let removed = outputsCriteria.subtracting(outputs)
+        setOutputsCriteria(removed)
         
         if let midiManager = midiManager {
             let refs = outputs
@@ -332,7 +361,7 @@ extension MIDI.IO.InputConnection {
         
         let outputsToDisconnect = outputsCriteria
         
-        outputsCriteria = []
+        setOutputsCriteria([])
         
         remove(outputs: Array(outputsToDisconnect))
         

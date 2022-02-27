@@ -14,6 +14,7 @@ extension MIDI.IO.Manager {
     ///   - toOutputs: Criteria for identifying MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
     ///   - automaticallyAddNewOutputs: When new outputs appear in the system, automatically add them to the connection.
+    ///   - preventAddingManagedOutputs: Prevent virtual outputs owned by the `Manager` from being added to the connection.
     ///   - receiveHandler: Event handler for received MIDI packets.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
@@ -21,6 +22,7 @@ extension MIDI.IO.Manager {
         toOutputs: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>>,
         tag: String,
         automaticallyAddNewOutputs: Bool = false,
+        preventAddingManagedOutputs: Bool = false,
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         
@@ -29,6 +31,7 @@ extension MIDI.IO.Manager {
             let newCD = MIDI.IO.InputConnection(
                 toOutputs: toOutputs,
                 automaticallyAddNewOutputs: automaticallyAddNewOutputs,
+                preventAddingManagedOutputs: preventAddingManagedOutputs,
                 receiveHandler: receiveHandler,
                 midiManager: self,
                 api: preferredAPI
@@ -50,6 +53,8 @@ extension MIDI.IO.Manager {
     /// - Parameters:
     ///   - toOutputs: Criteria for identifying MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
+    ///   - automaticallyAddNewOutputs: When new outputs appear in the system, automatically add them to the connection.
+    ///   - preventAddingManagedOutputs: Prevent virtual outputs owned by the `Manager` from being added to the connection.
     ///   - receiveHandler: Event handler for received MIDI packets.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
@@ -57,6 +62,7 @@ extension MIDI.IO.Manager {
         toOutputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>],
         tag: String,
         automaticallyAddNewOutputs: Bool = false,
+        preventAddingManagedOutputs: Bool = false,
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         
@@ -64,6 +70,7 @@ extension MIDI.IO.Manager {
             toOutputs: Set(toOutputs),
             tag: tag,
             automaticallyAddNewOutputs: automaticallyAddNewOutputs,
+            preventAddingManagedOutputs: preventAddingManagedOutputs,
             receiveHandler: receiveHandler
         )
         
@@ -74,6 +81,8 @@ extension MIDI.IO.Manager {
     /// - Parameters:
     ///   - toOutputs: Criteria for identifying MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
+    ///   - automaticallyAddNewOutputs: When new outputs appear in the system, automatically add them to the connection.
+    ///   - preventAddingManagedOutputs: Prevent virtual outputs owned by the `Manager` from being added to the connection.
     ///   - receiveHandler: Event handler for received MIDI packets.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
@@ -82,6 +91,7 @@ extension MIDI.IO.Manager {
         toOutputs: [MIDI.IO.OutputEndpoint],
         tag: String,
         automaticallyAddNewOutputs: Bool = false,
+        preventAddingManagedOutputs: Bool = false,
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         
@@ -89,6 +99,7 @@ extension MIDI.IO.Manager {
             toOutputs: toOutputs.map { .uniqueID($0.uniqueID) },
             tag: tag,
             automaticallyAddNewOutputs: automaticallyAddNewOutputs,
+            preventAddingManagedOutputs: preventAddingManagedOutputs,
             receiveHandler: receiveHandler
         )
         
