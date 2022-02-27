@@ -3,12 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
-@testable import MIDIKit
+import MIDIKit
 
-class SysEx8Tests: XCTestCase {
+final class SysEx8Tests: XCTestCase {
 	
 	func testSysEx8_SingleUMP() throws {
 		

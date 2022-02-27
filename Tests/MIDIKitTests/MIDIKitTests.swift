@@ -3,10 +3,10 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
-@testable import MIDIKit
+import MIDIKit
 import CoreMIDI
 
 final class MIDIKitTests: XCTestCase {
@@ -14,7 +14,9 @@ final class MIDIKitTests: XCTestCase {
 	// no tests in this file, this is the module root test file
 	
     func testEmpty() {
+        
         XCTAssert(true)
+        
     }
 	
 }

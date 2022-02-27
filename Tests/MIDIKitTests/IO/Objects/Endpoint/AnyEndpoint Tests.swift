@@ -4,12 +4,12 @@
 //
 
 // iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets
-#if !os(watchOS) && !targetEnvironment(simulator)
+#if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
 @testable import MIDIKit
 
-class AnyEndpoint_Tests: XCTestCase {
+final class AnyEndpoint_Tests: XCTestCase {
     
     fileprivate var manager: MIDI.IO.Manager! = nil
     
@@ -101,4 +101,5 @@ class AnyEndpoint_Tests: XCTestCase {
     }
     
 }
+
 #endif

@@ -3,12 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
-@testable import MIDIKit
+import MIDIKit
 
-class MIDIEventNoteOn_Tests: XCTestCase {
+final class MIDIEventNoteOn_Tests: XCTestCase {
     
     typealias NoteOn = MIDI.Event.Note.On
     

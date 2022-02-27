@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if shouldTestCurrentPlatform
+
 import CoreMIDI
 
 /// Constants and mocks for unit tests.
@@ -35,3 +37,5 @@ public enum kMIDIPacket {
 	)
 	
 }
+
+#endif

@@ -3,13 +3,13 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
-@testable import MIDIKit
+import MIDIKit
 import SwiftRadix
 
-class SysEx7Tests: XCTestCase {
+final class SysEx7Tests: XCTestCase {
 	
 	func testSysEx7RawBytes_Typical() throws {
 		

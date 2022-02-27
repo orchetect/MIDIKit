@@ -4,13 +4,13 @@
 //
 
 // iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets
-#if !os(watchOS) && !targetEnvironment(simulator)
+#if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
 import MIDIKit
 import CoreMIDI
 
-class RoundTrip_Tests_Base: XCTestCase {
+open class RoundTrip_Tests_Base: XCTestCase {
     
     fileprivate var manager: MIDI.IO.Manager! = nil
     
@@ -19,7 +19,7 @@ class RoundTrip_Tests_Base: XCTestCase {
     
     fileprivate var receivedEvents: [MIDI.Event] = []
     
-    override func setUp() {
+    open override func setUp() {
         
         print("RoundTrip_Tests setUp() starting")
         
@@ -105,7 +105,7 @@ class RoundTrip_Tests_Base: XCTestCase {
         
     }
     
-    override func tearDown() {
+    open override func tearDown() {
         
         print("RoundTrip_Tests tearDown starting")
         

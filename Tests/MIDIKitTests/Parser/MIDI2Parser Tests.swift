@@ -3,12 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
 @testable import MIDIKit
 
-class MIDIEventMIDI2ParserTests: XCTestCase {
+final class MIDIEventMIDI2ParserTests: XCTestCase {
     
     func testUniversalPacketData_parsedEvents_Empty() {
         

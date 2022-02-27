@@ -3,12 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
 @testable import MIDIKit
 
-class EndpointIDCriteriaTests: XCTestCase {
+final class EndpointIDCriteriaTests: XCTestCase {
     
     func testEndpoint_OutputEndpoint() {
         

@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if shouldTestCurrentPlatform
+
 import MIDIKit
 
 enum kEvents {
@@ -162,3 +164,5 @@ enum kEvents {
         SysRealTime.oneOfEachEventType
     
 }
+
+#endif
