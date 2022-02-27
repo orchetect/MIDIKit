@@ -33,6 +33,9 @@ extension MIDI.IO {
         /// The Core MIDI output endpoint(s) reference(s).
         public private(set) var coreMIDIOutputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
         
+        /// When new outputs appear in the system, automatically add them to the connection.
+        public var automaticallyAddNewOutputs: Bool
+        
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
         // init
@@ -42,15 +45,18 @@ extension MIDI.IO {
         ///
         /// - Parameters:
         ///   - toOutputs: Output(s) to connect to.
+        ///   - automaticallyAddNewOutputs: When new outputs appear in the system, automatically add them to the connection.
         ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
         internal init(toOutputs: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>>,
+                      automaticallyAddNewOutputs: Bool,
                       receiveHandler: MIDI.IO.ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
                       api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
             self.outputsCriteria = toOutputs
+            self.automaticallyAddNewOutputs = automaticallyAddNewOutputs
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
@@ -337,6 +343,17 @@ extension MIDI.IO.InputConnection {
 extension MIDI.IO.InputConnection {
     
     internal func notification(_ notif: MIDI.IO.Manager.InternalNotification) {
+        
+        if automaticallyAddNewOutputs,
+           case .added(parent: _,
+                       parentType: _,
+                       child: let childRef,
+                       childType: let childType) = notif,
+           childType == .source || childType == .externalSource
+        {
+            add(outputs: [MIDI.IO.OutputEndpoint(childRef)])
+            return
+        }
         
         switch notif {
         case .setupChanged, .added, .removed:

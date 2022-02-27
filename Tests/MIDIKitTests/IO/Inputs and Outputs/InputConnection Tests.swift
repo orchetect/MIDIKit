@@ -133,6 +133,58 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         connEvents = []
         
 	}
+    
+    func testInputConnection_automaticallyAddNewOutputs() throws {
+        
+        // start midi client
+        try manager.start()
+        XCTWait(sec: 0.1)
+        
+        connEvents = []
+        
+        // add new connection, connecting to output1
+        let connTag = "testInputConnection"
+        try manager.addInputConnection(
+            toOutputs: [],
+            tag: connTag,
+            automaticallyAddNewOutputs: true,
+            receiveHandler: .events { events in
+                print(events)
+                self.connEvents.append(contentsOf: events)
+            }
+        )
+        
+        let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
+        XCTWait(sec: 0.5) // some time for connection to setup
+        
+        XCTAssertEqual(conn.outputsCriteria, [])
+        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
+        XCTAssertEqual(conn.endpoints, [])
+        
+        // create a virtual output
+        let output1Tag = "output1"
+        try self.manager.addOutput(
+            name: "MIDIKit IO Tests Source 1",
+            tag: output1Tag,
+            uniqueID: .none // allow system to generate random ID
+        )
+        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
+        let output1ID = try XCTUnwrap(output1.uniqueID)
+        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
+        
+        XCTWait(sec: 0.5) // some time for connection to be added automatically
+        
+        XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID)])
+        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref])
+        XCTAssertEqual(conn.endpoints, [output1.endpoint])
+        
+        // send an event - it should be received by the connection
+        try output1.send(event: .start())
+        XCTWait(sec: 0.2)
+        XCTAssertEqual(connEvents, [.start()])
+        connEvents = []
+        
+    }
 
 }
 
