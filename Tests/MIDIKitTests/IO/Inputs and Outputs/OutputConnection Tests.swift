@@ -64,6 +64,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         
         XCTAssertEqual(conn.inputsCriteria, [.uniqueID(input1ID)])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [input1Ref])
+        XCTAssertEqual(conn.endpoints, [input1.endpoint])
         
         // attempt to send a midi message
         try conn.send(event: .start())
@@ -92,6 +93,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         XCTWait(sec: 0.3)
         XCTAssertEqual(conn.inputsCriteria, [.uniqueID(input1ID), .uniqueID(input2ID)])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [input1Ref, input2Ref])
+        XCTAssertEqual(Set(conn.endpoints), [input1.endpoint, input2.endpoint])
         
         // attempt to send a midi message
         try conn.send(event: .stop())
@@ -106,6 +108,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         XCTWait(sec: 0.3)
         XCTAssertEqual(conn.inputsCriteria, [.uniqueID(input2ID)])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [input2Ref])
+        XCTAssertEqual(conn.endpoints, [input2.endpoint])
         
         // attempt to send a midi message
         try conn.send(event: .continue())
@@ -120,6 +123,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         XCTWait(sec: 0.3)
         XCTAssertEqual(conn.inputsCriteria, [])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [])
+        XCTAssertEqual(conn.endpoints, [])
         
         // attempt to send a midi message
         try conn.send(event: .songSelect(number: 2))

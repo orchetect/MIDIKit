@@ -263,6 +263,8 @@ extension MIDI.IO.InputConnection {
 
 extension MIDI.IO.InputConnection {
     
+    // MARK: Add Endpoints
+    
     /// Add output endpoints to the connection.
     public func add(
         outputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
@@ -276,6 +278,17 @@ extension MIDI.IO.InputConnection {
         }
         
     }
+    
+    /// Add output endpoints to the connection.
+    public func add(
+        outputs: [MIDI.IO.OutputEndpoint]
+    ) {
+        
+        add(outputs: outputs.map { .uniqueID($0.uniqueID) })
+        
+    }
+    
+    // MARK: Remove Endpoints
     
     /// Remove output endpoints to the connection.
     public func remove(
@@ -297,6 +310,15 @@ extension MIDI.IO.InputConnection {
             // this will regenerate cached refs
             try? refreshConnection(in: midiManager)
         }
+        
+    }
+    
+    /// Remove output endpoints to the connection.
+    public func remove(
+        outputs: [MIDI.IO.OutputEndpoint]
+    ) {
+        
+        remove(outputs: outputs.map { .uniqueID($0.uniqueID) })
         
     }
     

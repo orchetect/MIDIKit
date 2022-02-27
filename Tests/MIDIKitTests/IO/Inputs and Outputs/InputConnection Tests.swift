@@ -62,6 +62,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID)])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref])
+        XCTAssertEqual(conn.endpoints, [output1.endpoint])
         
         // send an event - it should be received by the connection
         try output1.send(event: .start())
@@ -81,10 +82,11 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         let output2Ref = try XCTUnwrap(output2.coreMIDIOutputPortRef)
         
         // connect to 2nd virtual output
-        conn.add(outputs: [.uniqueID(output2ID)])
+        conn.add(outputs: [output2.endpoint])
         XCTWait(sec: 0.5) // some time for endpoint to be added to the connection
         XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID), .uniqueID(output2ID)])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref, output2Ref])
+        XCTAssertEqual(Set(conn.endpoints), [output1.endpoint, output2.endpoint])
         
         // send an event from 1st - it should be received by the connection
         try output1.send(event: .stop())
@@ -99,10 +101,11 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         connEvents = []
         
         // remove 1st virtual output from connection
-        conn.remove(outputs: [.uniqueID(output1ID)])
+        conn.remove(outputs: [output1.endpoint])
         XCTWait(sec: 0.5) // some time for endpoint to be removed from the connection
         XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output2ID)])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output2Ref])
+        XCTAssertEqual(conn.endpoints, [output2.endpoint])
         
         // send an event from 1st - it should not be received by the connection
         try output1.send(event: .songPositionPointer(midiBeat: 3))
@@ -117,10 +120,11 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         connEvents = []
         
         // remove 2nd virtual output from connection
-        conn.remove(outputs: [.uniqueID(output2ID)])
+        conn.remove(outputs: [output2.endpoint])
         XCTWait(sec: 0.5) // some time for endpoint to be removed from the connection
         XCTAssertEqual(conn.outputsCriteria, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
+        XCTAssertEqual(conn.endpoints, [])
         
         // send an event from 2nd - it should not be received by the connection
         try output2.send(event: .songSelect(number: 8))
