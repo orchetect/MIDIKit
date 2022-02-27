@@ -312,6 +312,24 @@ extension MIDI.IO.InputConnection {
     
 }
 
+extension MIDI.IO.InputConnection {
+    
+    internal func notification(_ notif: MIDI.IO.Manager.InternalNotification) {
+        
+        switch notif {
+        case .setupChanged, .added, .removed:
+            if let midiManager = midiManager {
+                try? refreshConnection(in: midiManager)
+            }
+            
+        default:
+            break
+        }
+        
+    }
+    
+}
+
 extension MIDI.IO.InputConnection: CustomStringConvertible {
     
     public var description: String {

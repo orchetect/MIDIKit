@@ -51,24 +51,14 @@ extension MIDI.IO.Manager {
             break
         }
         
-        switch notification {
-        case .setupChanged, .added, .removed:
-            
-            // refresh internal states of all outputs and inputs
-            // and reconnect any disconnected connections if an endpoint has reappeared
-            
-            for outputConnection in managedOutputConnections.values {
-                _ = try? outputConnection.refreshConnection(in: self)
-            }
-            
-            for inputConnection in managedInputConnections.values {
-                _ = try? inputConnection.refreshConnection(in: self)
-            }
-            
-        // thru connections
+        // propagate notification to managed objects
         
-        default:
-            break
+        for outputConnection in managedOutputConnections.values {
+            outputConnection.notification(notification)
+        }
+        
+        for inputConnection in managedInputConnections.values {
+            inputConnection.notification(notification)
         }
         
     }
