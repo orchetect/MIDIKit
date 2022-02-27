@@ -204,10 +204,13 @@ extension MIDI.IO.InputConnection {
         
     }
     
-    /// Disconnects the connections if any are currently connected.
+    /// Disconnects connections if any are currently connected.
+    /// If nil is passed, the all of the connection's endpoint refs will be disconnected.
     /// 
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-    internal func disconnect() throws {
+    internal func disconnect(
+        endpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef>? = nil
+    ) throws {
         
         guard let unwrappedInputPortRef = self.coreMIDIInputPortRef else {
             throw MIDI.IO.MIDIError.connectionError(
@@ -215,14 +218,16 @@ extension MIDI.IO.InputConnection {
             )
         }
         
-        for outputEndpointRef in coreMIDIOutputEndpointRefs {
+        let refs = endpointRefs ?? coreMIDIOutputEndpointRefs
+        
+        for outputEndpointRef in refs {
             
             do {
                 try MIDIPortDisconnectSource(
                     unwrappedInputPortRef,
                     outputEndpointRef
                 )
-                    .throwIfOSStatusErr()
+                .throwIfOSStatusErr()
             } catch {
                 // ignore errors
             }
@@ -245,9 +250,63 @@ extension MIDI.IO.InputConnection {
             if criteria.locate(in: getSystemOutputs) != nil { matchedEndpointCount += 1 }
         }
         
-        guard matchedEndpointCount > 0 else { return }
+        guard matchedEndpointCount > 0 else {
+            coreMIDIOutputEndpointRefs = []
+            return
+        }
         
         try connect(in: manager)
+        
+    }
+    
+}
+
+extension MIDI.IO.InputConnection {
+    
+    /// Add output endpoints to the connection.
+    public func add(
+        outputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
+    ) {
+        
+        outputsCriteria.formUnion(outputs)
+        
+        if let midiManager = midiManager {
+            // this will re-generate coreMIDIOutputEndpointRefs and call connect()
+            try? refreshConnection(in: midiManager)
+        }
+        
+    }
+    
+    /// Remove output endpoints to the connection.
+    public func remove(
+        outputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
+    ) {
+        
+        outputsCriteria.subtract(outputs)
+        
+        if let midiManager = midiManager {
+            let refs = outputs
+                .compactMap {
+                    $0.locate(in: midiManager.endpoints.outputs)?
+                        .coreMIDIObjectRef
+                }
+            
+            // disconnect removed endpoints first
+            try? disconnect(endpointRefs: Set(refs))
+            
+            // this will regenerate cached refs
+            try? refreshConnection(in: midiManager)
+        }
+        
+    }
+    
+    public func removeAllOutputs() {
+        
+        let outputsToDisconnect = outputsCriteria
+        
+        outputsCriteria = []
+        
+        remove(outputs: Array(outputsToDisconnect))
         
     }
     

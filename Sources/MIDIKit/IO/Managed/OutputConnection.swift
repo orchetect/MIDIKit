@@ -144,7 +144,7 @@ extension MIDI.IO.OutputConnection {
     /// This is typically called after receiving a Core MIDI notification that system port configuration has changed or endpoints were added/removed.
     internal func refreshConnection(in manager: MIDI.IO.Manager) throws {
         
-        // call (re-)connect only if at least one matching endpoint exists in the system
+        // re-resolve endpoints only if at least one matching endpoint exists in the system
         
         let getSystemInputs = manager.endpoints.inputs
         
@@ -154,9 +154,56 @@ extension MIDI.IO.OutputConnection {
             if criteria.locate(in: getSystemInputs) != nil { matchedEndpointCount += 1 }
         }
         
-        guard matchedEndpointCount > 0 else { return }
+        guard matchedEndpointCount > 0 else {
+            coreMIDIInputEndpointRefs = []
+            return
+        }
         
         try resolveEndpoints(in: manager)
+        
+    }
+    
+}
+
+extension MIDI.IO.OutputConnection {
+    
+    /// Add input endpoints from the connection.
+    public func add(
+        inputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>]
+    ) {
+        
+        inputsCriteria.formUnion(inputs)
+        
+        if let midiManager = midiManager {
+            // this will re-generate coreMIDIInputEndpointRefs
+            try? refreshConnection(in: midiManager)
+        }
+        
+    }
+    
+    /// Remove input endpoints from the connection.
+    public func remove(
+        inputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>]
+    ) {
+        
+        inputsCriteria.subtract(inputs)
+        
+        if let midiManager = midiManager {
+            // this will re-generate coreMIDIInputEndpointRefs
+            try? refreshConnection(in: midiManager)
+        }
+        
+    }
+    
+    /// Remove all input endpoints from the connection.
+    public func removeAllInputs() {
+        
+        inputsCriteria = []
+        
+        if let midiManager = midiManager {
+            // this will re-generate coreMIDIInputEndpointRefs
+            try? refreshConnection(in: midiManager)
+        }
         
     }
     
