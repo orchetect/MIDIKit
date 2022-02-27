@@ -71,6 +71,37 @@ extension MIDI.IO.EndpointIDCriteria: Hashable where T : MIDIIOObjectProtocol {
     
 }
 
+extension MIDI.IO.EndpointIDCriteria: CustomStringConvertible {
+    
+    public var description: String {
+        
+        switch self {
+        case .name(let endpointName):
+            return "EndpointName: \(endpointName.quoted)"
+            
+        case .displayName(let displayName):
+            return "EndpointDisplayName: \(displayName.quoted))"
+            
+        case .uniqueID(let uID):
+            return "UniqueID: \(uID)"
+            
+        }
+        
+    }
+    
+}
+
+extension MIDI.IO.EndpointIDCriteria where T : MIDIIOEndpointProtocol {
+    
+    /// A MIDI endpoint.
+    public static func endpoint(_ endpoint: T) -> Self {
+        
+        .uniqueID(endpoint.uniqueID)
+        
+    }
+    
+}
+
 extension MIDI.IO.EndpointIDCriteria where T : MIDIIOObjectProtocol {
     
     /// Uses the criteria to find the first match and returns it if found.
@@ -90,26 +121,6 @@ extension MIDI.IO.EndpointIDCriteria where T : MIDIIOObjectProtocol {
         case .uniqueID(let uID):
             return endpoints
                 .first(whereUniqueID: uID)
-            
-        }
-        
-    }
-    
-}
-
-extension MIDI.IO.EndpointIDCriteria: CustomStringConvertible {
-    
-    public var description: String {
-        
-        switch self {
-        case .name(let endpointName):
-            return "EndpointName: \(endpointName.quoted)"
-            
-        case .displayName(let displayName):
-            return "EndpointDisplayName: \(displayName.quoted))"
-            
-        case .uniqueID(let uID):
-            return "UniqueID: \(uID)"
             
         }
         
