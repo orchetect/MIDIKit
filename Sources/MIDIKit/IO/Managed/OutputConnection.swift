@@ -30,10 +30,10 @@ extension MIDI.IO {
         
         // class-specific
         
-        public private(set) var inputsCriteria: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>]
+        public private(set) var inputsCriteria: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>>
         
         /// The Core MIDI input endpoint(s) reference(s).
-        public private(set) var coreMIDIInputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
+        public private(set) var coreMIDIInputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
         
         // init
         
@@ -50,7 +50,7 @@ extension MIDI.IO {
             api: MIDI.IO.APIVersion = .bestForPlatform()
         ) {
             
-            self.inputsCriteria = toInputs
+            self.inputsCriteria = Set(toInputs)
             self.midiManager = midiManager
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             
@@ -71,11 +71,7 @@ extension MIDI.IO.OutputConnection {
     /// Returns the input endpoint(s) this connection is connected to.
     public var endpoints: [MIDI.IO.InputEndpoint] {
         
-        coreMIDIInputEndpointRefs.compactMap {
-            if let unwrapped = $0 {
-                return MIDI.IO.InputEndpoint(unwrapped)
-            } else { return nil }
-        }
+        coreMIDIInputEndpointRefs.map { MIDI.IO.InputEndpoint($0) }
         
     }
     
@@ -131,12 +127,12 @@ extension MIDI.IO.OutputConnection {
         
         // resolve criteria to endpoints in the system
         let getInputEndpointRefs = inputsCriteria
-            .map {
+            .compactMap {
                 $0.locate(in: manager.endpoints.inputs)?
                     .coreMIDIObjectRef
             }
         
-        coreMIDIInputEndpointRefs = getInputEndpointRefs
+        coreMIDIInputEndpointRefs = Set(getInputEndpointRefs)
         
     }
     
@@ -172,21 +168,14 @@ extension MIDI.IO.OutputConnection: CustomStringConvertible {
         
         let inputEndpointsString: [String] = coreMIDIInputEndpointRefs
             .map {
-                var str = ""
-                
                 // ref
-                if let unwrapped = $0 {
-                    // ref
-                    str = "\(unwrapped):"
-                    
-                    // name
-                    if let getName = try? MIDI.IO.getName(of: unwrapped) {
-                        str += "\(getName)".quoted
-                    } else {
-                        str += "nil"
-                    }
+                var str = "\($0):"
+                
+                // name
+                if let getName = try? MIDI.IO.getName(of: $0) {
+                    str += "\(getName)".quoted
                 } else {
-                    str = "nil"
+                    str += "nil"
                 }
                 
                 return str
@@ -224,15 +213,11 @@ extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
         
         for inputEndpointRef in coreMIDIInputEndpointRefs {
             
-            if let unwrappedInputEndpointRef = inputEndpointRef {
-                
-                // ignore errors with try? since we don't want to return early in the event that sending to subsequent inputs may succeed
-                try? MIDISend(unwrappedOutputPortRef,
-                              unwrappedInputEndpointRef,
-                              packetList)
-                    .throwIfOSStatusErr()
-                
-            }
+            // ignore errors with try? since we don't want to return early in the event that sending to subsequent inputs may succeed
+            try? MIDISend(unwrappedOutputPortRef,
+                          inputEndpointRef,
+                          packetList)
+                .throwIfOSStatusErr()
             
         }
         
@@ -252,15 +237,11 @@ extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
         
         for inputEndpointRef in coreMIDIInputEndpointRefs {
             
-            if let unwrappedInputEndpointRef = inputEndpointRef {
-                
-                // ignore errors with try? since we don't want to return early in the event that sending to subsequent inputs may succeed
-                try? MIDISendEventList(unwrappedOutputPortRef,
-                                       unwrappedInputEndpointRef,
-                                       eventList)
-                    .throwIfOSStatusErr()
-                
-            }
+            // ignore errors with try? since we don't want to return early in the event that sending to subsequent inputs may succeed
+            try? MIDISendEventList(unwrappedOutputPortRef,
+                                   inputEndpointRef,
+                                   eventList)
+                .throwIfOSStatusErr()
             
         }
         

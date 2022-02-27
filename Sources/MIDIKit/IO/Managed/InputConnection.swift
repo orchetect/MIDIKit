@@ -25,13 +25,13 @@ extension MIDI.IO {
         
         // class-specific
         
-        public private(set) var outputsCriteria: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
+        public private(set) var outputsCriteria: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>>
         
         /// The Core MIDI input port reference.
         public private(set) var coreMIDIInputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
         
         /// The Core MIDI output endpoint(s) reference(s).
-        public private(set) var coreMIDIOutputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
+        public private(set) var coreMIDIOutputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
         
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
@@ -50,7 +50,7 @@ extension MIDI.IO {
                       midiManager: MIDI.IO.Manager,
                       api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
-            self.outputsCriteria = toOutputs
+            self.outputsCriteria = Set(toOutputs)
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
@@ -73,11 +73,7 @@ extension MIDI.IO.InputConnection {
     /// Returns the output endpoint(s) this connection is connected to.
     public var endpoints: [MIDI.IO.OutputEndpoint] {
         
-        coreMIDIOutputEndpointRefs.compactMap {
-            if let unwrapped = $0 {
-                return MIDI.IO.OutputEndpoint(unwrapped)
-            } else { return nil }
-        }
+        coreMIDIOutputEndpointRefs.map { MIDI.IO.OutputEndpoint($0) }
         
     }
     
@@ -188,26 +184,22 @@ extension MIDI.IO.InputConnection {
         
         // resolve criteria to endpoints in the system
         let getOutputEndpointRefs = outputsCriteria
-            .map {
+            .compactMap {
                 $0.locate(in: manager.endpoints.outputs)?
                     .coreMIDIObjectRef
             }
         
-        coreMIDIOutputEndpointRefs = getOutputEndpointRefs
+        coreMIDIOutputEndpointRefs = Set(getOutputEndpointRefs)
         
-        for refIndex in 0..<getOutputEndpointRefs.count {
+        for outputEndpointRef in getOutputEndpointRefs {
             
-            if let outputEndpointRef = getOutputEndpointRefs[refIndex] {
-                
-                try? MIDIPortConnectSource(
-                    unwrappedInputPortRef,
-                    outputEndpointRef,
-                    nil
-                )
-                .throwIfOSStatusErr()
-                
-            }
-                
+            try? MIDIPortConnectSource(
+                unwrappedInputPortRef,
+                outputEndpointRef,
+                nil
+            )
+            .throwIfOSStatusErr()
+            
         }
         
     }
@@ -223,20 +215,16 @@ extension MIDI.IO.InputConnection {
             )
         }
         
-        for refIndex in 0..<coreMIDIOutputEndpointRefs.count {
+        for outputEndpointRef in coreMIDIOutputEndpointRefs {
             
-            if let unwrappedOutputEndpointRef = coreMIDIOutputEndpointRefs[refIndex] {
-                
-                do {
-                    try MIDIPortDisconnectSource(
-                        unwrappedInputPortRef,
-                        unwrappedOutputEndpointRef
-                    )
-                        .throwIfOSStatusErr()
-                } catch {
-                    // ignore errors
-                }
-                
+            do {
+                try MIDIPortDisconnectSource(
+                    unwrappedInputPortRef,
+                    outputEndpointRef
+                )
+                    .throwIfOSStatusErr()
+            } catch {
+                // ignore errors
             }
             
         }
@@ -271,21 +259,14 @@ extension MIDI.IO.InputConnection: CustomStringConvertible {
         
         let outputEndpointsString: [String] = coreMIDIOutputEndpointRefs
             .map {
-                var str = ""
-                
                 // ref
-                if let unwrapped = $0 {
-                    // ref
-                    str = "\(unwrapped):"
-                    
-                    // name
-                    if let getName = try? MIDI.IO.getName(of: unwrapped) {
-                        str += "\(getName)".quoted
-                    } else {
-                        str += "nil"
-                    }
+                var str = "\($0):"
+                
+                // name
+                if let getName = try? MIDI.IO.getName(of: $0) {
+                    str += "\(getName)".quoted
                 } else {
-                    str = "nil"
+                    str += "nil"
                 }
                 
                 return str
