@@ -22,7 +22,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
 	
 	override func tearDown() {
 		manager = nil
-        XCTWait(sec: 0.3)
+        wait(sec: 0.3)
 	}
 	
     @MIDI.Atomic var input1Events: [MIDI.Event] = []
@@ -33,7 +33,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
 		// start midi client
 		
 		try manager.start()
-		XCTWait(sec: 0.1)
+		wait(sec: 0.1)
 		
         input1Events = []
         input2Events = []
@@ -60,7 +60,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         )
 		
         let conn = try XCTUnwrap(manager.managedOutputConnections[connTag])
-        XCTWait(sec: 0.5) // some time for connection to setup
+        wait(sec: 0.5) // some time for connection to setup
         
         XCTAssertEqual(conn.inputsCriteria, [.uniqueID(input1ID)])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [input1Ref])
@@ -68,7 +68,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         
         // attempt to send a midi message
         try conn.send(event: .start())
-        XCTWait(sec: 0.2)
+        wait(sec: 0.2)
         XCTAssertEqual(input1Events, [.start()])
         XCTAssertEqual(input2Events, [])
         input1Events = []
@@ -90,14 +90,14 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         
         // add 2nd input to the connection
         conn.add(inputs: [.uniqueID(input2ID)])
-        XCTWait(sec: 0.3)
+        wait(sec: 0.3)
         XCTAssertEqual(conn.inputsCriteria, [.uniqueID(input1ID), .uniqueID(input2ID)])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [input1Ref, input2Ref])
         XCTAssertEqual(Set(conn.endpoints), [input1.endpoint, input2.endpoint])
         
         // attempt to send a midi message
         try conn.send(event: .stop())
-        XCTWait(sec: 0.2)
+        wait(sec: 0.2)
         XCTAssertEqual(input1Events, [.stop()])
         XCTAssertEqual(input2Events, [.stop()])
         input1Events = []
@@ -105,14 +105,14 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         
         // remove 1st input from connection
         conn.remove(inputs: [.uniqueID(input1ID)])
-        XCTWait(sec: 0.3)
+        wait(sec: 0.3)
         XCTAssertEqual(conn.inputsCriteria, [.uniqueID(input2ID)])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [input2Ref])
         XCTAssertEqual(conn.endpoints, [input2.endpoint])
         
         // attempt to send a midi message
         try conn.send(event: .continue())
-        XCTWait(sec: 0.2)
+        wait(sec: 0.2)
         XCTAssertEqual(input1Events, [])
         XCTAssertEqual(input2Events, [.continue()])
         input1Events = []
@@ -120,14 +120,14 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         
         // remove 2nd input from connection
         conn.remove(inputs: [.uniqueID(input2ID)])
-        XCTWait(sec: 0.3)
+        wait(sec: 0.3)
         XCTAssertEqual(conn.inputsCriteria, [])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [])
         XCTAssertEqual(conn.endpoints, [])
         
         // attempt to send a midi message
         try conn.send(event: .songSelect(number: 2))
-        XCTWait(sec: 0.2)
+        wait(sec: 0.2)
         XCTAssertEqual(input1Events, [])
         XCTAssertEqual(input2Events, [])
         input1Events = []

@@ -28,7 +28,7 @@ final class AnyEndpoint_Tests: XCTestCase {
     
     override func tearDown() {
         manager = nil
-        XCTWait(sec: 0.3)
+        wait(sec: 0.3)
     }
     
     func testAnyEndpoint() throws {
@@ -50,7 +50,7 @@ final class AnyEndpoint_Tests: XCTestCase {
                               uniqueID: .none)
         
         // have to give Core MIDI a bit of time to create the ports (async)
-        XCTWait(sec: 1.0)
+        wait(sec: 1.0)
         
         // input
         

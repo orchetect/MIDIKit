@@ -23,7 +23,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
         
         print("RoundTrip_Tests setUp() starting")
         
-        XCTWait(sec: 0.5)
+        wait(sec: 0.5)
         
         manager = .init(clientName: "MIDIKit_IO_RoundTrip_Input_Tests",
                         model: "MIDIKit123",
@@ -38,7 +38,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
             return
         }
         
-        XCTWait(sec: 0.3)
+        wait(sec: 0.3)
         
         createPorts()
         
@@ -46,7 +46,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
         
         receivedEvents = []
         
-        XCTWait(sec: 0.5)
+        wait(sec: 0.5)
         
         print("RoundTrip_Tests setUp() done")
         
@@ -80,7 +80,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
             return
         }
         
-        XCTWait(sec: 0.2)
+        wait(sec: 0.2)
         
         // output connection
         
@@ -118,7 +118,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
         XCTAssertNil(manager.managedInputConnections[inputConnectionTag])
         
         manager = nil
-        XCTWait(sec: 0.3)
+        wait(sec: 0.3)
         
         print("RoundTrip_Tests tearDown done")
         
@@ -266,7 +266,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
             try output.send(event: event)
         }
         
-        XCTWait(sec: 0.5)
+        wait(sec: 0.5)
         
         // ensure all events are received correctly
         
@@ -306,9 +306,9 @@ final class RoundTrip_OldCoreMIDIAPI_Tests: RoundTrip_Tests_Base {
     func testRapidMIDIEvents_OldCoreMIDIAPI() throws {
         
         manager.preferredAPI = .legacyCoreMIDI
-        XCTWait(sec: 0.5)
+        wait(sec: 0.5)
         createPorts()
-        XCTWait(sec: 0.5)
+        wait(sec: 0.5)
         try runRapidMIDIEvents()
         
     }
@@ -320,9 +320,9 @@ final class RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests: RoundTrip_Tests_Base {
     func testRapidMIDIEvents_NewCoreMIDIAPI_1_0_Protocol() throws {
         
         manager.preferredAPI = .newCoreMIDI(._1_0)
-        XCTWait(sec: 0.5)
+        wait(sec: 0.5)
         createPorts()
-        XCTWait(sec: 0.5)
+        wait(sec: 0.5)
         try runRapidMIDIEvents()
         
     }
@@ -334,9 +334,9 @@ final class RoundTrip_NewCoreMIDIAPI_2_0_Protocol_Tests: RoundTrip_Tests_Base {
     func testRapidMIDIEvents_NewCoreMIDIAPI_2_0_Protocol() throws {
 
         manager.preferredAPI = .newCoreMIDI(._2_0)
-        XCTWait(sec: 0.5)
+        wait(sec: 0.5)
         createPorts()
-        XCTWait(sec: 0.5)
+        wait(sec: 0.5)
         try runRapidMIDIEvents()
 
     }

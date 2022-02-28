@@ -7,6 +7,7 @@
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
+import XCTestUtils
 import MIDIKit
 import CoreMIDI
 
@@ -22,7 +23,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
 	
 	override func tearDown() {
 		manager = nil
-        XCTWait(sec: 0.3)
+        wait(sec: 0.3)
 	}
 	
     @MIDI.Atomic var connEvents: [MIDI.Event] = []
@@ -32,7 +33,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
 		
 		// start midi client
 		try manager.start()
-		XCTWait(sec: 0.1)
+		wait(sec: 0.1)
 		
         connEvents = []
         
@@ -59,7 +60,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         )
         
         let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        XCTWait(sec: 0.5) // some time for connection to setup
+        wait(for: conn.coreMIDIOutputEndpointRefs, equals: [output1Ref], timeout: 1.0)
         
         XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID)])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref])
@@ -67,8 +68,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         // send an event - it should be received by the connection
         try output1.send(event: .start())
-        XCTWait(sec: 0.2)
-        XCTAssertEqual(connEvents, [.start()])
+        wait(for: connEvents, equals: [.start()], timeout: 1.0)
         connEvents = []
         
         // create a 2nd virtual output
@@ -84,52 +84,49 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         // connect to 2nd virtual output
         conn.add(outputs: [output2.endpoint])
-        XCTWait(sec: 0.5) // some time for endpoint to be added to the connection
+        wait(for: conn.coreMIDIOutputEndpointRefs, equals: [output1Ref, output2Ref], timeout: 1.0)
         XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID), .uniqueID(output2ID)])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref, output2Ref])
         XCTAssertEqual(Set(conn.endpoints), [output1.endpoint, output2.endpoint])
         
         // send an event from 1st - it should be received by the connection
         try output1.send(event: .stop())
-        XCTWait(sec: 0.2)
-        XCTAssertEqual(connEvents, [.stop()])
+        wait(for: connEvents, equals: [.stop()], timeout: 0.5)
         connEvents = []
         
         // send an event from 2nd - it should be received by the connection
         try output2.send(event: .continue())
-        XCTWait(sec: 0.2)
-        XCTAssertEqual(connEvents, [.continue()])
+        wait(for: connEvents, equals: [.continue()], timeout: 0.5)
         connEvents = []
         
         // remove 1st virtual output from connection
         conn.remove(outputs: [output1.endpoint])
-        XCTWait(sec: 0.5) // some time for endpoint to be removed from the connection
+        wait(for: conn.coreMIDIOutputEndpointRefs, equals: [output2Ref], timeout: 1.0)
         XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output2ID)])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output2Ref])
         XCTAssertEqual(conn.endpoints, [output2.endpoint])
         
         // send an event from 1st - it should not be received by the connection
         try output1.send(event: .songPositionPointer(midiBeat: 3))
-        XCTWait(sec: 0.2)
+        wait(sec: 0.2) // wait a bit in case an event is sent
         XCTAssertEqual(connEvents, [])
         connEvents = []
         
         // send an event from 2nd - it should be received by the connection
         try output2.send(event: .songSelect(number: 2))
-        XCTWait(sec: 0.2)
-        XCTAssertEqual(connEvents, [.songSelect(number: 2)])
+        wait(for: connEvents, equals: [.songSelect(number: 2)], timeout: 0.5)
         connEvents = []
         
         // remove 2nd virtual output from connection
         conn.remove(outputs: [output2.endpoint])
-        XCTWait(sec: 0.5) // some time for endpoint to be removed from the connection
+        wait(for: conn.coreMIDIOutputEndpointRefs, equals: [], timeout: 1.0)
         XCTAssertEqual(conn.outputsCriteria, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
         XCTAssertEqual(conn.endpoints, [])
         
         // send an event from 2nd - it should not be received by the connection
         try output2.send(event: .songSelect(number: 8))
-        XCTWait(sec: 0.2)
+        wait(sec: 0.2) // wait a bit in case an event is sent
         XCTAssertEqual(connEvents, [])
         connEvents = []
         
@@ -140,7 +137,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         // start midi client
         try manager.start()
-        XCTWait(sec: 0.1)
+        wait(sec: 0.1)
         
         connEvents = []
         
@@ -158,7 +155,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         )
         
         let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        XCTWait(sec: 0.5) // some time for connection to setup
+        wait(sec: 0.5) // some time for connection to setup
         
         XCTAssertEqual(conn.outputsCriteria, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
@@ -175,7 +172,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         let output1ID = try XCTUnwrap(output1.uniqueID)
         let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
         
-        XCTWait(sec: 0.5) // some time for connection to be added automatically
+        wait(for: conn.coreMIDIOutputEndpointRefs, equals: [output1Ref], timeout: 1.0)
         
         XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID)])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref])
@@ -183,8 +180,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         // send an event - it should be received by the connection
         try output1.send(event: .start())
-        XCTWait(sec: 0.2)
-        XCTAssertEqual(connEvents, [.start()])
+        wait(for: connEvents, equals: [.start()], timeout: 0.5)
         connEvents = []
         
     }
@@ -194,7 +190,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         // start midi client
         try manager.start()
-        XCTWait(sec: 0.1)
+        wait(sec: 0.1)
         
         connEvents = []
         
@@ -212,7 +208,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         )
         
         let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        XCTWait(sec: 0.5) // some time for connection to setup
+        wait(sec: 0.5) // some time for connection to setup
         
         XCTAssertEqual(conn.outputsCriteria, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
@@ -229,7 +225,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
 //        let output1ID = try XCTUnwrap(output1.uniqueID)
 //        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
         
-        XCTWait(sec: 0.5) // some time for connection to be notified of new output
+        wait(sec: 0.5) // some time for connection to be notified of new output
         
         XCTAssertEqual(conn.outputsCriteria, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
@@ -237,7 +233,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        XCTWait(sec: 0.2)
+        wait(sec: 0.2) // wait a bit in case an event is sent
         XCTAssertEqual(connEvents, [])
         connEvents = []
         
@@ -248,7 +244,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         // start midi client
         try manager.start()
-        XCTWait(sec: 0.1)
+        wait(sec: 0.1)
         
         connEvents = []
         
@@ -263,7 +259,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
 //        let output1ID = try XCTUnwrap(output1.uniqueID)
 //        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
         
-        XCTWait(sec: 0.2)
+        wait(sec: 0.2)
         
         // add new connection, connecting to output1
         let connTag = "testInputConnection"
@@ -279,7 +275,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         )
         
         let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        XCTWait(sec: 0.5) // some time for connection to setup
+        wait(sec: 0.5) // some time for connection to setup
         
         XCTAssertEqual(conn.outputsCriteria, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
@@ -287,7 +283,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        XCTWait(sec: 0.2)
+        wait(sec: 0.2) // wait a bit in case an event is sent
         XCTAssertEqual(connEvents, [])
         connEvents = []
         

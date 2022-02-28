@@ -22,7 +22,7 @@ final class InputsAndOutputs_Input_Tests: XCTestCase {
 	
 	override func tearDown() {
 		manager = nil
-        XCTWait(sec: 0.3)
+        wait(sec: 0.3)
 	}
 	
 	func testInput() throws {
@@ -31,7 +31,7 @@ final class InputsAndOutputs_Input_Tests: XCTestCase {
 		
 		try manager.start()
 		
-		XCTWait(sec: 0.1)
+		wait(sec: 0.1)
 		
 		// add new endpoint
 		
