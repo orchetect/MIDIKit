@@ -41,10 +41,6 @@ extension MIDI.IO {
             }
         }
         
-        /// MIDI Network Session.
-        @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
-        internal var networkSession: MIDINetworkSession?
-        
         /// Dictionary of MIDI input connections managed by this instance.
         public internal(set) var managedInputConnections: [String : InputConnection] = [:]
         
@@ -131,10 +127,7 @@ extension MIDI.IO {
             
             super.init()
             
-            if #available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *),
-               let networkPolicy = networkPolicy {
-                setNetworkSession(enabled: true, policy: networkPolicy)
-            }
+            addNetworkSessionObservers()
             
         }
         
