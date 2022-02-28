@@ -6,6 +6,7 @@
 #if shouldTestCurrentPlatform
 
 import XCTest
+import XCTestUtils
 import MIDIKit
 import CoreMIDI
 
