@@ -53,9 +53,16 @@ extension MIDI.IO {
 
 extension MIDI.IO.Manager {
     
-    /// Sets the MIDI Network Session state.
+    /// Sets the default (global) MIDI Network Session state.
+    ///
+    /// Supported on macOS 10.15+, macCatalyst 13.0+ and iOS 4.2+.
+    ///
+    /// - Parameters:
+    ///   - enabled: Enable or disable the default MIDI network session.
+    ///   - policy: The policy that determines who can connect to this session.
     @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
-    public func setMIDINetwork(enabled: Bool, policy: MIDI.IO.NetworkConnectionPolicy) {
+    public static func setGlobalNetworkSession(enabled: Bool,
+                                               policy: MIDI.IO.NetworkConnectionPolicy) {
         
         MIDINetworkSession.default().isEnabled = enabled
         MIDINetworkSession.default().connectionPolicy = policy.coreMIDIPolicy

@@ -93,13 +93,11 @@ extension MIDI.IO {
         ///   - clientName: Name identifying this instance, used as Core MIDI client ID. This is internal and not visible to the end-user.
         ///   - model: The name of your software, which will be visible to the end-user in ports created by the manager.
         ///   - manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
-        ///   - networkPolicy: Enable network MIDI session features by supplying a connection policy. Passing `nil` disables network sessions. Supported on macOS 10.15+, macCatalyst 13.0+ and iOS 4.2+.
         ///   - notificationHandler: Optionally supply a callback handler for MIDI system notifications.
         public init(
             clientName: String,
             model: String,
             manufacturer: String,
-            networkPolicy: NetworkConnectionPolicy? = .anyone,
             notificationHandler: ((_ notification: Notification,
                                    _ manager: Manager) -> Void)? = nil
         ) {
@@ -126,11 +124,6 @@ extension MIDI.IO {
             self.notificationHandler = notificationHandler
             
             super.init()
-            
-            if #available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *),
-               let networkPolicy = networkPolicy {
-                setMIDINetwork(enabled: true, policy: networkPolicy)
-            }
             
         }
         
