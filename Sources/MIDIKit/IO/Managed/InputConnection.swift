@@ -33,7 +33,7 @@ extension MIDI.IO {
                let midiManager = midiManager
             {
                 let managedOutputs: [MIDI.IO.OutputEndpointIDCriteria] = midiManager.managedOutputs
-                    .map { $0.value.endpoint.uniqueID }
+                    .compactMap { $0.value.uniqueID }
                     .map { .uniqueID($0) }
                 
                 outputsCriteria = criteria
