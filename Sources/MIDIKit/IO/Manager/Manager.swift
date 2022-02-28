@@ -41,6 +41,10 @@ extension MIDI.IO {
             }
         }
         
+        /// MIDI Network Session.
+        @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
+        internal var networkSession: MIDINetworkSession?
+        
         /// Dictionary of MIDI input connections managed by this instance.
         public internal(set) var managedInputConnections: [String : InputConnection] = [:]
         
@@ -93,11 +97,13 @@ extension MIDI.IO {
         ///   - clientName: Name identifying this instance, used as Core MIDI client ID. This is internal and not visible to the end-user.
         ///   - model: The name of your software, which will be visible to the end-user in ports created by the manager.
         ///   - manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
+        ///   - networkPolicy: Enable network MIDI session connections by supplying a connection policy.
         ///   - notificationHandler: Optionally supply a callback handler for MIDI system notifications.
         public init(
             clientName: String,
             model: String,
             manufacturer: String,
+            networkPolicy: MIDI.IO.NetworkConnectionPolicy? = nil,
             notificationHandler: ((_ notification: Notification,
                                    _ manager: Manager) -> Void)? = nil
         ) {
@@ -125,6 +131,11 @@ extension MIDI.IO {
             
             super.init()
             
+            if #available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *),
+               let networkPolicy = networkPolicy {
+                setNetworkSession(enabled: true, policy: networkPolicy)
+            }
+            
         }
         
         deinit {
@@ -136,6 +147,8 @@ extension MIDI.IO {
                     //let osStatusMessage = MIDIOSStatus(rawValue: result).description
                     //logger.debug("Error disposing of MIDI client: \(osStatusMessage)")
                 }
+                
+                NotificationCenter.default.removeObserver(self)
             }
         }
         
