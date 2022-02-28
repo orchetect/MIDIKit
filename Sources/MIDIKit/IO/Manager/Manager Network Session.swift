@@ -12,6 +12,8 @@ extension MIDI.IO.Manager {
     /// Call this only once on class init.
     internal func addNetworkSessionObservers() {
         
+        guard #available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *) else { return }
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(midiNetworkChanged(notification:)),
@@ -26,6 +28,7 @@ extension MIDI.IO.Manager {
     }
     
     @objc
+    @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
     fileprivate func midiNetworkChanged(notification: NSNotification) {
         
         guard let session = notification.object as? MIDINetworkSession
@@ -38,6 +41,7 @@ extension MIDI.IO.Manager {
     }
     
     @objc
+    @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
     fileprivate func midiNetworkContactsChanged(notification: NSNotification) {
         
         guard let session = notification.object as? MIDINetworkSession

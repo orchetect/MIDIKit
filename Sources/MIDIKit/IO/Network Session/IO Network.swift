@@ -33,10 +33,12 @@ extension NSNotification.Name {
     
     /// aka MIDINetworkNotificationSessionDidChange
     @_disfavoredOverload
+    @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
     public static let midiNetworkSessionDidChange = NSNotification.Name(MIDINetworkNotificationSessionDidChange)
     
     /// aka MIDINetworkNotificationSessionDidChange
     @_disfavoredOverload
+    @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
     public static let midiNetworkContactsDidChange = NSNotification.Name(MIDINetworkNotificationSessionDidChange)
     
 }
