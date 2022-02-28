@@ -93,13 +93,11 @@ extension MIDI.IO {
         ///   - clientName: Name identifying this instance, used as Core MIDI client ID. This is internal and not visible to the end-user.
         ///   - model: The name of your software, which will be visible to the end-user in ports created by the manager.
         ///   - manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
-        ///   - networkPolicy: Enable network MIDI session connections by supplying a connection policy.
         ///   - notificationHandler: Optionally supply a callback handler for MIDI system notifications.
         public init(
             clientName: String,
             model: String,
             manufacturer: String,
-            networkPolicy: MIDI.IO.NetworkConnectionPolicy? = nil,
             notificationHandler: ((_ notification: Notification,
                                    _ manager: Manager) -> Void)? = nil
         ) {
