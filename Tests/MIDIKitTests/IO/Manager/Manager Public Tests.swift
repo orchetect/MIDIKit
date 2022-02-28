@@ -12,18 +12,9 @@ import CoreMIDI
 
 final class Manager_Public_Tests: XCTestCase {
     
-    var manager: MIDI.IO.Manager! = nil
-    
-    override func setUp() {
-        manager = .init(clientName: "MIDIKit_IO_Manager_Public_Tests",
-                        model: "MIDIKit123",
-                        manufacturer: "MIDIKit")
-    }
-    
-    override func tearDown() {
-        manager = nil
-        wait(sec: 0.3)
-    }
+    let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
+                                  model: "MIDIKit123",
+                                  manufacturer: "MIDIKit")
     
     func testManager_PublicMethods() {
         

@@ -12,26 +12,16 @@ import CoreMIDI
 
 final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
 	
-    fileprivate var manager: MIDI.IO.Manager! = nil
-	
-	override func setUp() {
-		manager = .init(clientName: "MIDIKit_IO_InputsAndOutputs_OutputConnection_Tests",
-                        model: "MIDIKit123",
-                        manufacturer: "MIDIKit")
-	}
-	
-	override func tearDown() {
-		manager = nil
-        wait(sec: 0.3)
-	}
-	
     @MIDI.Atomic var input1Events: [MIDI.Event] = []
     @MIDI.Atomic var input2Events: [MIDI.Event] = []
     
 	func testOutputConnection() throws {
 		
+        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
+                                      model: "MIDIKit123",
+                                      manufacturer: "MIDIKit")
+        
 		// start midi client
-		
 		try manager.start()
 		wait(sec: 0.1)
 		
@@ -40,7 +30,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         
         // create a virtual input
         let input1Tag = "input1"
-        try self.manager.addInput(
+        try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
             uniqueID: .none, // allow system to generate random ID
@@ -76,7 +66,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         
         // create a 2nd virtual input
         let input2Tag = "input2"
-        try self.manager.addInput(
+        try manager.addInput(
             name: "MIDIKit IO Tests Input 2",
             tag: input2Tag,
             uniqueID: .none, // allow system to generate random ID

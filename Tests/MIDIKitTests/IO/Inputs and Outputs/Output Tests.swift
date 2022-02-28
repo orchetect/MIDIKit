@@ -12,25 +12,14 @@ import CoreMIDI
 
 final class InputsAndOutputs_Output_Tests: XCTestCase {
 	
-    fileprivate var manager: MIDI.IO.Manager! = nil
-	
-	override func setUp() {
-		manager = .init(clientName: "MIDIKit_IO_InputsAndOutputs_Output_Tests",
-                        model: "MIDIKit123",
-                        manufacturer: "MIDIKit")
-	}
-	
-	override func tearDown() {
-		manager = nil
-        wait(sec: 0.3)
-	}
-	
 	func testOutput() throws {
 		
+        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
+                                      model: "MIDIKit123",
+                                      manufacturer: "MIDIKit")
+        
 		// start midi client
-		
 		try manager.start()
-		
 		wait(sec: 0.1)
 		
 		// add new endpoint

@@ -11,24 +11,17 @@ import CoreMIDI
 
 final class Manager_Tests: XCTestCase {
 	
-    fileprivate var manager: MIDI.IO.Manager! = nil
-	
-	override func setUp() {
-		manager = .init(clientName: "MIDIKit_IO_Manager_Tests",
-						model: "MIDIKit123",
-						manufacturer: "MIDIKit")
-	}
-	
-	override func tearDown() {
-		manager = nil
-        wait(sec: 0.3)
-	}
+    static let clientName = UUID().uuidString
+    
+    let manager = MIDI.IO.Manager(clientName: clientName,
+                                  model: "MIDIKit123",
+                                  manufacturer: "MIDIKit")
 	
 	func testMIDIO_Manager_defaults() {
 		
         // just check defaults without calling .start() on the manager
         
-		XCTAssertEqual(manager.clientName, "MIDIKit_IO_Manager_Tests")
+		XCTAssertEqual(manager.clientName, Self.clientName)
         XCTAssertEqual(manager.model, "MIDIKit123")
         XCTAssertEqual(manager.manufacturer, "MIDIKit")
 		XCTAssertEqual(manager.coreMIDIClientRef, MIDIClientRef())

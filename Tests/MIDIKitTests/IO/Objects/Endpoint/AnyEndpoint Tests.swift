@@ -11,27 +11,15 @@ import XCTest
 
 final class AnyEndpoint_Tests: XCTestCase {
     
-    fileprivate var manager: MIDI.IO.Manager! = nil
-    
-    override func setUp() {
-        manager = .init(clientName: "MIDIKit_IO_AnyEndpoint_Tests",
-                        model: "MIDIKit123",
-                        manufacturer: "MIDIKit")
-        
-        do {
-            try manager.start()
-        } catch {
-            XCTFail("Could not start MIDI Manager. \(error.localizedDescription)")
-            return
-        }
-    }
-    
-    override func tearDown() {
-        manager = nil
-        wait(sec: 0.3)
-    }
-    
     func testAnyEndpoint() throws {
+        
+        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
+                                      model: "MIDIKit123",
+                                      manufacturer: "MIDIKit")
+        
+        // start midi client
+        try manager.start()
+        wait(sec: 0.1)
         
         // to properly test this, we need to actually
         // create a couple MIDI endpoints in the system first
