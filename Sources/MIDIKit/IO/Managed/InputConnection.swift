@@ -25,13 +25,36 @@ extension MIDI.IO {
         
         // class-specific
         
-        public private(set) var outputsCriteria: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
+        public private(set) var outputsCriteria: Set<MIDI.IO.OutputEndpointIDCriteria> = []
+        
+        private func setOutputsCriteria(_ criteria: Set<MIDI.IO.OutputEndpointIDCriteria>) {
+            
+            if preventAddingManagedOutputs,
+               let midiManager = midiManager
+            {
+                let managedOutputs: [MIDI.IO.OutputEndpointIDCriteria] = midiManager.managedOutputs
+                    .compactMap { $0.value.uniqueID }
+                    .map { .uniqueID($0) }
+                
+                outputsCriteria = criteria
+                    .filter { !managedOutputs.contains($0) }
+            } else {
+                outputsCriteria = criteria
+            }
+            
+        }
         
         /// The Core MIDI input port reference.
         public private(set) var coreMIDIInputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
         
         /// The Core MIDI output endpoint(s) reference(s).
-        public private(set) var coreMIDIOutputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
+        public private(set) var coreMIDIOutputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
+        
+        /// When new outputs appear in the system, automatically add them to the connection.
+        public var automaticallyAddNewOutputs: Bool
+        
+        /// Prevent virtual outputs owned by the `Manager` (`.managedOutputs`) from being added to the connection.
+        public var preventAddingManagedOutputs: Bool
         
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
@@ -42,18 +65,26 @@ extension MIDI.IO {
         ///
         /// - Parameters:
         ///   - toOutputs: Output(s) to connect to.
+        ///   - automaticallyAddNewOutputs: When new outputs appear in the system, automatically add them to the connection.
+        ///   - preventAddingManagedOutputs: Prevent virtual outputs owned by the `Manager` from being added to the connection.
         ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
-        internal init(toOutputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>],
+        internal init(toOutputs: Set<MIDI.IO.OutputEndpointIDCriteria>,
+                      automaticallyAddNewOutputs: Bool,
+                      preventAddingManagedOutputs: Bool,
                       receiveHandler: MIDI.IO.ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
                       api: MIDI.IO.APIVersion = .bestForPlatform()) {
             
-            self.outputsCriteria = toOutputs
-            self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
+            self.automaticallyAddNewOutputs = automaticallyAddNewOutputs
+            self.preventAddingManagedOutputs = preventAddingManagedOutputs
+            self.receiveHandler = receiveHandler.createReceiveHandler()
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            
+            // relies on midiManager and preventAddingManagedOutputs
+            setOutputsCriteria(toOutputs)
             
         }
         
@@ -73,11 +104,7 @@ extension MIDI.IO.InputConnection {
     /// Returns the output endpoint(s) this connection is connected to.
     public var endpoints: [MIDI.IO.OutputEndpoint] {
         
-        coreMIDIOutputEndpointRefs.compactMap {
-            if let unwrapped = $0 {
-                return MIDI.IO.OutputEndpoint(unwrapped)
-            } else { return nil }
-        }
+        coreMIDIOutputEndpointRefs.map { MIDI.IO.OutputEndpoint($0) }
         
     }
     
@@ -188,34 +215,33 @@ extension MIDI.IO.InputConnection {
         
         // resolve criteria to endpoints in the system
         let getOutputEndpointRefs = outputsCriteria
-            .map {
+            .compactMap {
                 $0.locate(in: manager.endpoints.outputs)?
                     .coreMIDIObjectRef
             }
         
-        coreMIDIOutputEndpointRefs = getOutputEndpointRefs
+        coreMIDIOutputEndpointRefs = Set(getOutputEndpointRefs)
         
-        for refIndex in 0..<getOutputEndpointRefs.count {
+        for outputEndpointRef in getOutputEndpointRefs {
             
-            if let outputEndpointRef = getOutputEndpointRefs[refIndex] {
-                
-                try? MIDIPortConnectSource(
-                    unwrappedInputPortRef,
-                    outputEndpointRef,
-                    nil
-                )
-                .throwIfOSStatusErr()
-                
-            }
-                
+            try? MIDIPortConnectSource(
+                unwrappedInputPortRef,
+                outputEndpointRef,
+                nil
+            )
+            .throwIfOSStatusErr()
+            
         }
         
     }
     
-    /// Disconnects the connections if any are currently connected.
+    /// Disconnects connections if any are currently connected.
+    /// If nil is passed, the all of the connection's endpoint refs will be disconnected.
     /// 
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-    internal func disconnect() throws {
+    internal func disconnect(
+        endpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef>? = nil
+    ) throws {
         
         guard let unwrappedInputPortRef = self.coreMIDIInputPortRef else {
             throw MIDI.IO.MIDIError.connectionError(
@@ -223,20 +249,18 @@ extension MIDI.IO.InputConnection {
             )
         }
         
-        for refIndex in 0..<coreMIDIOutputEndpointRefs.count {
+        let refs = endpointRefs ?? coreMIDIOutputEndpointRefs
+        
+        for outputEndpointRef in refs {
             
-            if let unwrappedOutputEndpointRef = coreMIDIOutputEndpointRefs[refIndex] {
-                
-                do {
-                    try MIDIPortDisconnectSource(
-                        unwrappedInputPortRef,
-                        unwrappedOutputEndpointRef
-                    )
-                        .throwIfOSStatusErr()
-                } catch {
-                    // ignore errors
-                }
-                
+            do {
+                try MIDIPortDisconnectSource(
+                    unwrappedInputPortRef,
+                    outputEndpointRef
+                )
+                .throwIfOSStatusErr()
+            } catch {
+                // ignore errors
             }
             
         }
@@ -257,9 +281,116 @@ extension MIDI.IO.InputConnection {
             if criteria.locate(in: getSystemOutputs) != nil { matchedEndpointCount += 1 }
         }
         
-        guard matchedEndpointCount > 0 else { return }
+        guard matchedEndpointCount > 0 else {
+            coreMIDIOutputEndpointRefs = []
+            return
+        }
         
         try connect(in: manager)
+        
+    }
+    
+}
+
+extension MIDI.IO.InputConnection {
+    
+    // MARK: Add Endpoints
+    
+    /// Add output endpoints to the connection.
+    public func add(
+        outputs: [MIDI.IO.OutputEndpointIDCriteria]
+    ) {
+        
+        let combined = outputsCriteria.union(outputs)
+        setOutputsCriteria(combined)
+        
+        if let midiManager = midiManager {
+            // this will re-generate coreMIDIOutputEndpointRefs and call connect()
+            try? refreshConnection(in: midiManager)
+        }
+        
+    }
+    
+    /// Add output endpoints to the connection.
+    public func add(
+        outputs: [MIDI.IO.OutputEndpoint]
+    ) {
+        
+        add(outputs: outputs.map { .uniqueID($0.uniqueID) })
+        
+    }
+    
+    // MARK: Remove Endpoints
+    
+    /// Remove output endpoints to the connection.
+    public func remove(
+        outputs: [MIDI.IO.OutputEndpointIDCriteria]
+    ) {
+        
+        let removed = outputsCriteria.subtracting(outputs)
+        setOutputsCriteria(removed)
+        
+        if let midiManager = midiManager {
+            let refs = outputs
+                .compactMap {
+                    $0.locate(in: midiManager.endpoints.outputs)?
+                        .coreMIDIObjectRef
+                }
+            
+            // disconnect removed endpoints first
+            try? disconnect(endpointRefs: Set(refs))
+            
+            // this will regenerate cached refs
+            try? refreshConnection(in: midiManager)
+        }
+        
+    }
+    
+    /// Remove output endpoints to the connection.
+    public func remove(
+        outputs: [MIDI.IO.OutputEndpoint]
+    ) {
+        
+        remove(outputs: outputs.map { .uniqueID($0.uniqueID) })
+        
+    }
+    
+    public func removeAllOutputs() {
+        
+        let outputsToDisconnect = outputsCriteria
+        
+        setOutputsCriteria([])
+        
+        remove(outputs: Array(outputsToDisconnect))
+        
+    }
+    
+}
+
+extension MIDI.IO.InputConnection {
+    
+    internal func notification(_ notif: MIDI.IO.Manager.InternalNotification) {
+        
+        if automaticallyAddNewOutputs,
+           case .added(parent: _,
+                       parentType: _,
+                       child: let childRef,
+                       childType: let childType) = notif,
+           childType == .source || childType == .externalSource
+        {
+            add(outputs: [MIDI.IO.OutputEndpoint(childRef)])
+            return
+        }
+        
+        switch notif {
+        case .setupChanged, .added, .removed:
+            if let midiManager = midiManager {
+                try? refreshConnection(in: midiManager)
+            }
+            
+        default:
+            break
+        }
         
     }
     
@@ -271,21 +402,14 @@ extension MIDI.IO.InputConnection: CustomStringConvertible {
         
         let outputEndpointsString: [String] = coreMIDIOutputEndpointRefs
             .map {
-                var str = ""
-                
                 // ref
-                if let unwrapped = $0 {
-                    // ref
-                    str = "\(unwrapped):"
-                    
-                    // name
-                    if let getName = try? MIDI.IO.getName(of: unwrapped) {
-                        str += "\(getName)".quoted
-                    } else {
-                        str += "nil"
-                    }
+                var str = "\($0):"
+                
+                // name
+                if let getName = try? MIDI.IO.getName(of: $0) {
+                    str += "\(getName)".quoted
                 } else {
-                    str = "nil"
+                    str += "nil"
                 }
                 
                 return str

@@ -9,7 +9,8 @@ import Foundation
 extension MIDI.IO {
     
     /// A managed MIDI output connection created in the system by the MIDI I/O `Manager`.
-    /// This connects to one or more inputs in the system and outputs MIDI events to them.
+    ///
+    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `Manager`'s `managedOutputConnections` collection.
     ///
@@ -30,10 +31,10 @@ extension MIDI.IO {
         
         // class-specific
         
-        public private(set) var inputsCriteria: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>]
+        public private(set) var inputsCriteria: Set<MIDI.IO.InputEndpointIDCriteria>
         
         /// The Core MIDI input endpoint(s) reference(s).
-        public private(set) var coreMIDIInputEndpointRefs: [MIDI.IO.CoreMIDIEndpointRef?] = []
+        public private(set) var coreMIDIInputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
         
         // init
         
@@ -45,7 +46,7 @@ extension MIDI.IO {
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
         internal init(
-            toInputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>],
+            toInputs: Set<MIDI.IO.InputEndpointIDCriteria>,
             midiManager: MIDI.IO.Manager,
             api: MIDI.IO.APIVersion = .bestForPlatform()
         ) {
@@ -71,11 +72,7 @@ extension MIDI.IO.OutputConnection {
     /// Returns the input endpoint(s) this connection is connected to.
     public var endpoints: [MIDI.IO.InputEndpoint] {
         
-        coreMIDIInputEndpointRefs.compactMap {
-            if let unwrapped = $0 {
-                return MIDI.IO.InputEndpoint(unwrapped)
-            } else { return nil }
-        }
+        coreMIDIInputEndpointRefs.map { MIDI.IO.InputEndpoint($0) }
         
     }
     
@@ -131,12 +128,12 @@ extension MIDI.IO.OutputConnection {
         
         // resolve criteria to endpoints in the system
         let getInputEndpointRefs = inputsCriteria
-            .map {
+            .compactMap {
                 $0.locate(in: manager.endpoints.inputs)?
                     .coreMIDIObjectRef
             }
         
-        coreMIDIInputEndpointRefs = getInputEndpointRefs
+        coreMIDIInputEndpointRefs = Set(getInputEndpointRefs)
         
     }
     
@@ -148,7 +145,7 @@ extension MIDI.IO.OutputConnection {
     /// This is typically called after receiving a Core MIDI notification that system port configuration has changed or endpoints were added/removed.
     internal func refreshConnection(in manager: MIDI.IO.Manager) throws {
         
-        // call (re-)connect only if at least one matching endpoint exists in the system
+        // re-resolve endpoints only if at least one matching endpoint exists in the system
         
         let getSystemInputs = manager.endpoints.inputs
         
@@ -158,9 +155,96 @@ extension MIDI.IO.OutputConnection {
             if criteria.locate(in: getSystemInputs) != nil { matchedEndpointCount += 1 }
         }
         
-        guard matchedEndpointCount > 0 else { return }
+        guard matchedEndpointCount > 0 else {
+            coreMIDIInputEndpointRefs = []
+            return
+        }
         
         try resolveEndpoints(in: manager)
+        
+    }
+    
+}
+
+extension MIDI.IO.OutputConnection {
+    
+    // MARK: Add Endpoints
+    
+    /// Add input endpoints from the connection.
+    public func add(
+        inputs: [MIDI.IO.InputEndpointIDCriteria]
+    ) {
+        
+        inputsCriteria.formUnion(inputs)
+        
+        if let midiManager = midiManager {
+            // this will re-generate coreMIDIInputEndpointRefs
+            try? refreshConnection(in: midiManager)
+        }
+        
+    }
+    
+    /// Add input endpoints from the connection.
+    public func add(
+        inputs: [MIDI.IO.InputEndpoint]
+    ) {
+        
+        add(inputs: inputs.map { .uniqueID($0.uniqueID) })
+        
+    }
+    
+    // MARK: Remove Endpoints
+    
+    /// Remove input endpoints from the connection.
+    public func remove(
+        inputs: [MIDI.IO.InputEndpointIDCriteria]
+    ) {
+        
+        inputsCriteria.subtract(inputs)
+        
+        if let midiManager = midiManager {
+            // this will re-generate coreMIDIInputEndpointRefs
+            try? refreshConnection(in: midiManager)
+        }
+        
+    }
+    
+    /// Remove input endpoints from the connection.
+    public func remove(
+        inputs: [MIDI.IO.InputEndpoint]
+    ) {
+        
+        remove(inputs: inputs.map { .uniqueID($0.uniqueID) })
+        
+    }
+    
+    /// Remove all input endpoints from the connection.
+    public func removeAllInputs() {
+        
+        inputsCriteria = []
+        
+        if let midiManager = midiManager {
+            // this will re-generate coreMIDIInputEndpointRefs
+            try? refreshConnection(in: midiManager)
+        }
+        
+    }
+    
+}
+
+extension MIDI.IO.OutputConnection {
+    
+    internal func notification(_ notif: MIDI.IO.Manager.InternalNotification) {
+        
+        switch notif {
+        case .setupChanged, .added, .removed:
+            if let midiManager = midiManager {
+                try? refreshConnection(in: midiManager)
+            }
+            
+        default:
+            break
+        }
         
     }
     
@@ -172,21 +256,14 @@ extension MIDI.IO.OutputConnection: CustomStringConvertible {
         
         let inputEndpointsString: [String] = coreMIDIInputEndpointRefs
             .map {
-                var str = ""
-                
                 // ref
-                if let unwrapped = $0 {
-                    // ref
-                    str = "\(unwrapped):"
-                    
-                    // name
-                    if let getName = try? MIDI.IO.getName(of: unwrapped) {
-                        str += "\(getName)".quoted
-                    } else {
-                        str += "nil"
-                    }
+                var str = "\($0):"
+                
+                // name
+                if let getName = try? MIDI.IO.getName(of: $0) {
+                    str += "\(getName)".quoted
                 } else {
-                    str = "nil"
+                    str += "nil"
                 }
                 
                 return str
@@ -224,15 +301,11 @@ extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
         
         for inputEndpointRef in coreMIDIInputEndpointRefs {
             
-            if let unwrappedInputEndpointRef = inputEndpointRef {
-                
-                // ignore errors with try? since we don't want to return early in the event that sending to subsequent inputs may succeed
-                try? MIDISend(unwrappedOutputPortRef,
-                              unwrappedInputEndpointRef,
-                              packetList)
-                    .throwIfOSStatusErr()
-                
-            }
+            // ignore errors with try? since we don't want to return early in the event that sending to subsequent inputs may succeed
+            try? MIDISend(unwrappedOutputPortRef,
+                          inputEndpointRef,
+                          packetList)
+                .throwIfOSStatusErr()
             
         }
         
@@ -252,15 +325,11 @@ extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
         
         for inputEndpointRef in coreMIDIInputEndpointRefs {
             
-            if let unwrappedInputEndpointRef = inputEndpointRef {
-                
-                // ignore errors with try? since we don't want to return early in the event that sending to subsequent inputs may succeed
-                try? MIDISendEventList(unwrappedOutputPortRef,
-                                       unwrappedInputEndpointRef,
-                                       eventList)
-                    .throwIfOSStatusErr()
-                
-            }
+            // ignore errors with try? since we don't want to return early in the event that sending to subsequent inputs may succeed
+            try? MIDISendEventList(unwrappedOutputPortRef,
+                                   inputEndpointRef,
+                                   eventList)
+                .throwIfOSStatusErr()
             
         }
         

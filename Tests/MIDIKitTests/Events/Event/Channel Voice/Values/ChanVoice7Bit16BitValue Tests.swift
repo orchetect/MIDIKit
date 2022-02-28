@@ -3,12 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
-@testable import MIDIKit
+import MIDIKit
 
-class ChanVoice7Bit16BitValueTests: XCTestCase {
+final class ChanVoice7Bit16BitValueTests: XCTestCase {
     
     typealias Value = MIDI.Event.ChanVoice7Bit16BitValue
     

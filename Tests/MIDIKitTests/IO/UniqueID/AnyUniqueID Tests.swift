@@ -3,12 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
-@testable import MIDIKit
+import MIDIKit
 
-class AnyUniqueID_Tests: XCTestCase {
+final class AnyUniqueID_Tests: XCTestCase {
     
     func testAnyUniqueID() {
         

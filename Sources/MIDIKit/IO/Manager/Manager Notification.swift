@@ -11,13 +11,18 @@ extension MIDI.IO.Manager {
         
         case setupChanged
         
-        case added(parent: MIDIObjectRef, parentType: MIDIObjectType,
-                   child: MIDIObjectRef, childType: MIDIObjectType)
+        case added(parent: MIDIObjectRef,
+                   parentType: MIDIObjectType,
+                   child: MIDIObjectRef,
+                   childType: MIDIObjectType)
         
-        case removed(parent: MIDIObjectRef, parentType: MIDIObjectType,
-                     child: MIDIObjectRef, childType: MIDIObjectType)
+        case removed(parent: MIDIObjectRef,
+                     parentType: MIDIObjectType,
+                     child: MIDIObjectRef,
+                     childType: MIDIObjectType)
         
-        case propertyChanged(forRef: MIDIObjectRef, forRefType: MIDIObjectType,
+        case propertyChanged(forRef: MIDIObjectRef,
+                             forRefType: MIDIObjectType,
                              propertyName: String)
         
         case thruConnectionChanged

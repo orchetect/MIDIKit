@@ -22,7 +22,8 @@ extension MIDI.IO {
         
         internal init(_ ref: MIDI.IO.CoreMIDIEndpointRef) {
             
-            assert(ref != MIDI.IO.CoreMIDIEndpointRef())
+            assert(ref != MIDI.IO.CoreMIDIEndpointRef(),
+                   "Encountered Core MIDI input endpoint ref value of 0 which is invalid.")
             
             self.coreMIDIObjectRef = ref
             update()
@@ -73,7 +74,57 @@ extension MIDI.IO.InputEndpoint {
 extension MIDI.IO.InputEndpoint: CustomDebugStringConvertible {
     
     public var debugDescription: String {
+        
         "InputEndpoint(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists)"
+        
+    }
+    
+}
+
+// MARK: - Static conveniences
+
+extension Set where Element == MIDI.IO.InputEndpointIDCriteria {
+    
+    /// Returns the current input endpoints in the system.
+    public static func current() -> Self {
+        
+        Set(MIDI.IO.getSystemDestinationEndpoints.map { .uniqueID($0.uniqueID) })
+        
+    }
+    
+}
+
+extension Array where Element == MIDI.IO.InputEndpointIDCriteria {
+    
+    /// Returns the current input endpoints in the system.
+    @_disfavoredOverload
+    public static func current() -> Self {
+        
+        MIDI.IO.getSystemDestinationEndpoints.map { .uniqueID($0.uniqueID) }
+        
+    }
+    
+}
+
+extension Set where Element == MIDI.IO.InputEndpoint {
+    
+    /// Returns the current input endpoints in the system.
+    public static func current() -> Self {
+        
+        Set(MIDI.IO.getSystemDestinationEndpoints)
+        
+    }
+    
+}
+
+extension Array where Element == MIDI.IO.InputEndpoint {
+    
+    /// Returns the current input endpoints in the system.
+    @_disfavoredOverload
+    public static func current() -> Self {
+        
+        MIDI.IO.getSystemDestinationEndpoints
+        
     }
     
 }

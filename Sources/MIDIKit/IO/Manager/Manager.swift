@@ -123,17 +123,19 @@ extension MIDI.IO {
             self.manufacturer = manufacturer
             self.notificationHandler = notificationHandler
             
+            super.init()
+            
+            addNetworkSessionObservers()
+            
         }
         
         deinit {
             eventQueue.sync {
-                let result = MIDIClientDispose(coreMIDIClientRef)
+                // Apple docs:
+                // "Don’t explicitly dispose of your client; the system automatically disposes all clients when an app terminates. However, if you call this method to dispose the last or only client owned by an app, the MIDI server may exit if there are no other clients remaining in the system"
+                //_ = MIDIClientDispose(coreMIDIClientRef)
                 
-                if result != noErr {
-                    // not important to log this, we can omit it for now
-                    //let osStatusMessage = MIDIOSStatus(rawValue: result).description
-                    //logger.debug("Error disposing of MIDI client: \(osStatusMessage)")
-                }
+                NotificationCenter.default.removeObserver(self)
             }
         }
         

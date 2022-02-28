@@ -3,12 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
 import MIDIKit
 
-class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
+final class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
     
     func testMetadata() {
         

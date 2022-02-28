@@ -4,7 +4,7 @@
 //
 
 // iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets
-#if !os(watchOS) && !targetEnvironment(simulator)
+#if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
 import MIDIKit
@@ -12,26 +12,15 @@ import CoreMIDI
 
 final class InputsAndOutputs_ThruConnection_Tests: XCTestCase {
 	
-    fileprivate var manager: MIDI.IO.Manager! = nil
-	
-	override func setUp() {
-		manager = .init(clientName: "MIDIKit_IO_InputsAndOutputs_ThruConnection_Tests",
-                        model: "MIDIKit123",
-                        manufacturer: "MIDIKit")
-	}
-	
-	override func tearDown() {
-		manager = nil
-        XCTWait(sec: 0.3)
-	}
-	
 	func testThruConnection() throws {
 
+        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
+                                      model: "MIDIKit123",
+                                      manufacturer: "MIDIKit")
+        
 		// start midi client
-
 		try manager.start()
-
-		XCTWait(sec: 0.1)
+		wait(sec: 0.1)
 
 		// add new connection
 

@@ -3,12 +3,12 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
 @testable import MIDIKit
 
-class ChanVoiceValueConversionsTests: XCTestCase {
+final class ChanVoiceValueConversionsTests: XCTestCase {
     
     // MARK: - 7-Bit <--> 16-Bit
     
