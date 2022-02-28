@@ -22,7 +22,8 @@ extension MIDI.IO {
         
         internal init(_ ref: MIDI.IO.CoreMIDIEndpointRef) {
             
-            assert(ref != MIDI.IO.CoreMIDIEndpointRef())
+            assert(ref != MIDI.IO.CoreMIDIEndpointRef(),
+                   "Encountered Core MIDI output endpoint ref value of 0 which is invalid.")
             
             self.coreMIDIObjectRef = ref
             update()
