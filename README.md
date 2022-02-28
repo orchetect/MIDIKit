@@ -26,7 +26,7 @@ Abstractions are built as optional extensions in their own repos.
    
    - In a Swift Package, add it to the Package.swift dependencies:
      ```swift
-     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.3.0")
+     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.4.0")
      ```
   
 1. Import the library:
