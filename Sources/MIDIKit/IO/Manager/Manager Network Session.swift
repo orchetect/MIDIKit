@@ -93,7 +93,9 @@ extension MIDI.IO.Manager {
     @objc
     fileprivate func midiNetworkChanged(notification: NSNotification) {
         
-        guard let session = notification.object as? MIDINetworkSession else { return }
+        guard let session = notification.object as? MIDINetworkSession,
+              session == networkSession
+        else { return }
         
         _ = session
         // do nothing for now.
@@ -104,7 +106,9 @@ extension MIDI.IO.Manager {
     @objc
     fileprivate func midiNetworkContactsChanged(notification: NSNotification) {
         
-        guard let session = notification.object as? MIDINetworkSession else { return }
+        guard let session = notification.object as? MIDINetworkSession,
+              session == networkSession
+        else { return }
         
         _ = session
         // do nothing for now.
