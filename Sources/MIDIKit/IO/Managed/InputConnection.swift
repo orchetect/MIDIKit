@@ -25,16 +25,14 @@ extension MIDI.IO {
         
         // class-specific
         
-        public typealias OutputsCriteria = MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>
+        public private(set) var outputsCriteria: Set<MIDI.IO.OutputEndpointIDCriteria> = []
         
-        public private(set) var outputsCriteria: Set<OutputsCriteria> = []
-        
-        private func setOutputsCriteria(_ criteria: Set<OutputsCriteria>) {
+        private func setOutputsCriteria(_ criteria: Set<MIDI.IO.OutputEndpointIDCriteria>) {
             
             if preventAddingManagedOutputs,
                let midiManager = midiManager
             {
-                let managedOutputs: [OutputsCriteria] = midiManager.managedOutputs
+                let managedOutputs: [MIDI.IO.OutputEndpointIDCriteria] = midiManager.managedOutputs
                     .map { $0.value.endpoint.uniqueID }
                     .map { .uniqueID($0) }
                 
@@ -72,7 +70,7 @@ extension MIDI.IO {
         ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
-        internal init(toOutputs: Set<OutputsCriteria>,
+        internal init(toOutputs: Set<MIDI.IO.OutputEndpointIDCriteria>,
                       automaticallyAddNewOutputs: Bool,
                       preventAddingManagedOutputs: Bool,
                       receiveHandler: MIDI.IO.ReceiveHandler.Definition,
@@ -300,7 +298,7 @@ extension MIDI.IO.InputConnection {
     
     /// Add output endpoints to the connection.
     public func add(
-        outputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
+        outputs: [MIDI.IO.OutputEndpointIDCriteria]
     ) {
         
         let combined = outputsCriteria.union(outputs)
@@ -326,7 +324,7 @@ extension MIDI.IO.InputConnection {
     
     /// Remove output endpoints to the connection.
     public func remove(
-        outputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>]
+        outputs: [MIDI.IO.OutputEndpointIDCriteria]
     ) {
         
         let removed = outputsCriteria.subtracting(outputs)

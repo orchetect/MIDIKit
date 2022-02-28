@@ -25,6 +25,16 @@ extension MIDI.IO {
     
 }
 
+extension MIDI.IO {
+    
+    /// Enum describing the criteria with which to identify input endpoints.
+    public typealias InputEndpointIDCriteria = MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>
+    
+    /// Enum describing the criteria with which to identify output endpoints.
+    public typealias OutputEndpointIDCriteria = MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>
+    
+}
+
 extension MIDI.IO.EndpointIDCriteria: Equatable where T : MIDIIOObjectProtocol {
     
     public static func == (lhs: Self, rhs: Self) -> Bool {

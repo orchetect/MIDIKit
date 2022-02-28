@@ -82,7 +82,7 @@ extension MIDI.IO.OutputEndpoint: CustomDebugStringConvertible {
 
 // MARK: - Static conveniences
 
-extension Set where Element == MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint> {
+extension Set where Element == MIDI.IO.OutputEndpointIDCriteria {
     
     /// Returns the current output endpoints in the system.
     public static func current() -> Self {
@@ -93,7 +93,7 @@ extension Set where Element == MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint
     
 }
 
-extension Array where Element == MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint> {
+extension Array where Element == MIDI.IO.OutputEndpointIDCriteria {
     
     /// Returns the current output endpoints in the system.
     @_disfavoredOverload

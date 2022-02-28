@@ -8,7 +8,9 @@ import Foundation
 
 extension MIDI.IO.Manager {
     
-    /// Adds a new managed connected input to the `managedInputConnections` dictionary of the `Manager`.
+    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `Manager`.
+    ///
+    /// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Parameters:
     ///   - toOutputs: Criteria for identifying MIDI endpoint(s) in the system to connect to.
@@ -19,7 +21,7 @@ extension MIDI.IO.Manager {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addInputConnection(
-        toOutputs: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>>,
+        toOutputs: Set<MIDI.IO.OutputEndpointIDCriteria>,
         tag: String,
         automaticallyAddNewOutputs: Bool = false,
         preventAddingManagedOutputs: Bool = false,
@@ -48,7 +50,9 @@ extension MIDI.IO.Manager {
         
     }
     
-    /// Adds a new managed connected input to the `managedInputConnections` dictionary of the `Manager`.
+    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `Manager`.
+    ///
+    /// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Parameters:
     ///   - toOutputs: Criteria for identifying MIDI endpoint(s) in the system to connect to.
@@ -59,7 +63,7 @@ extension MIDI.IO.Manager {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addInputConnection(
-        toOutputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.OutputEndpoint>],
+        toOutputs: [MIDI.IO.OutputEndpointIDCriteria],
         tag: String,
         automaticallyAddNewOutputs: Bool = false,
         preventAddingManagedOutputs: Bool = false,
@@ -76,7 +80,9 @@ extension MIDI.IO.Manager {
         
     }
     
-    /// Adds a new managed connected input to the `managedInputConnections` dictionary of the `Manager`.
+    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `Manager`.
+    ///
+    /// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Parameters:
     ///   - toOutputs: Criteria for identifying MIDI endpoint(s) in the system to connect to.

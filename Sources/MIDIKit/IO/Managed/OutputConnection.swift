@@ -9,7 +9,8 @@ import Foundation
 extension MIDI.IO {
     
     /// A managed MIDI output connection created in the system by the MIDI I/O `Manager`.
-    /// This connects to one or more inputs in the system and outputs MIDI events to them.
+    ///
+    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `Manager`'s `managedOutputConnections` collection.
     ///
@@ -30,7 +31,7 @@ extension MIDI.IO {
         
         // class-specific
         
-        public private(set) var inputsCriteria: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>>
+        public private(set) var inputsCriteria: Set<MIDI.IO.InputEndpointIDCriteria>
         
         /// The Core MIDI input endpoint(s) reference(s).
         public private(set) var coreMIDIInputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
@@ -45,7 +46,7 @@ extension MIDI.IO {
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
         internal init(
-            toInputs: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>>,
+            toInputs: Set<MIDI.IO.InputEndpointIDCriteria>,
             midiManager: MIDI.IO.Manager,
             api: MIDI.IO.APIVersion = .bestForPlatform()
         ) {
@@ -171,7 +172,7 @@ extension MIDI.IO.OutputConnection {
     
     /// Add input endpoints from the connection.
     public func add(
-        inputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>]
+        inputs: [MIDI.IO.InputEndpointIDCriteria]
     ) {
         
         inputsCriteria.formUnion(inputs)
@@ -196,7 +197,7 @@ extension MIDI.IO.OutputConnection {
     
     /// Remove input endpoints from the connection.
     public func remove(
-        inputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>]
+        inputs: [MIDI.IO.InputEndpointIDCriteria]
     ) {
         
         inputsCriteria.subtract(inputs)

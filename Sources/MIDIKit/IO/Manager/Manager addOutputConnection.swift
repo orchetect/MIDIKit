@@ -10,13 +10,15 @@ extension MIDI.IO.Manager {
     
     /// Adds a new managed connected output to the `managedOutputConnections` dictionary of the `Manager`.
     ///
+    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
+    ///
     /// - Parameters:
     ///   - toInputs: Criteria for identifying a MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addOutputConnection(
-        toInputs: Set<MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>>,
+        toInputs: Set<MIDI.IO.InputEndpointIDCriteria>,
         tag: String
     ) throws {
         
@@ -41,13 +43,15 @@ extension MIDI.IO.Manager {
     
     /// Adds a new managed connected output to the `managedOutputConnections` dictionary of the `Manager`.
     ///
+    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
+    ///
     /// - Parameters:
     ///   - toInputs: Criteria for identifying a MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addOutputConnection(
-        toInputs: [MIDI.IO.EndpointIDCriteria<MIDI.IO.InputEndpoint>],
+        toInputs: [MIDI.IO.InputEndpointIDCriteria],
         tag: String
     ) throws {
         
@@ -59,6 +63,8 @@ extension MIDI.IO.Manager {
     }
     
     /// Adds a new managed connected output to the `managedOutputConnections` dictionary of the `Manager`.
+    ///
+    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Parameters:
     ///   - toInputs: Criteria for identifying a MIDI endpoint(s) in the system to connect to.
