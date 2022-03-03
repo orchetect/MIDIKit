@@ -64,7 +64,7 @@ extension MIDI.IO {
         
         /// `CoreMIDI.kMIDIIDNotUnique`:
         /// Attempt to set a non-unique `kMIDIPropertyUniqueID` on an object.
-        case iDNotUnique
+        case idNotUnique
         
         /// `CoreMIDI.kMIDINotPermitted`:
         /// The process does not have privileges for the requested operation.
@@ -115,7 +115,7 @@ extension MIDI.IO.MIDIOSStatus {
         case .setupFormatErr     : return kMIDISetupFormatErr    // -10840
         case .wrongThread        : return kMIDIWrongThread       // -10841
         case .objectNotFound     : return kMIDIObjectNotFound    // -10842
-        case .iDNotUnique        : return kMIDIIDNotUnique       // -10843
+        case .idNotUnique        : return kMIDIIDNotUnique       // -10843
         case .notPermitted       : return kMIDINotPermitted      // -10844
         case .unknownError       : return kMIDIUnknownError      // -10845
         case .ioError            : return 7 // no Core MIDI constant exists
@@ -142,7 +142,7 @@ extension MIDI.IO.MIDIOSStatus {
         case kMIDISetupFormatErr     : self = .setupFormatErr
         case kMIDIWrongThread        : self = .wrongThread
         case kMIDIObjectNotFound     : self = .objectNotFound
-        case kMIDIIDNotUnique        : self = .iDNotUnique
+        case kMIDIIDNotUnique        : self = .idNotUnique
         case kMIDINotPermitted       : self = .notPermitted
         case kMIDIUnknownError       : self = .unknownError
         case 7                       : self = .ioError
@@ -204,7 +204,7 @@ extension MIDI.IO.MIDIOSStatus: CustomStringConvertible {
         case .objectNotFound:
             return "The requested object does not exist. (kMIDIObjectNotFound)"
             
-        case .iDNotUnique:
+        case .idNotUnique:
             return "Attempt to set a non-unique kMIDIPropertyUniqueID on an object. (kMIDIIDNotUnique)"
             
         case .notPermitted:

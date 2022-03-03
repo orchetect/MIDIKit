@@ -75,7 +75,7 @@ extension MIDI.IO.InputEndpoint: CustomDebugStringConvertible {
     
     public var debugDescription: String {
         
-        "InputEndpoint(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists)"
+        "InputEndpoint(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists))"
         
     }
     

@@ -47,7 +47,7 @@ extension MIDI.IO {
     /// Returns dictionary data for the given property.
     ///
     /// - Parameters:
-    ///   - forProperty: a `CoreMIDI.kMIDIProperty*` property constant
+    ///   - forProperty: a `CoreMIDI.Property*` property constant
     ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
     ///
     /// - Throws: `MIDI.IO.MIDIError`
@@ -81,7 +81,7 @@ extension MIDI.IO {
     /// Get a string value from a `MIDIObjectRef` property key.
     ///
     /// - Parameters:
-    ///   - forProperty: a `CoreMIDI.kMIDIProperty*` property constant
+    ///   - forProperty: a `CoreMIDI.Property*` property constant
     ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
     ///
     /// - Throws: `MIDI.IO.MIDIError`
@@ -114,7 +114,7 @@ extension MIDI.IO {
     /// Internal:
     /// Get an integer value from a `MIDIObjectRef` property key.
     ///
-    /// - Parameter forProperty: a `CoreMIDI.kMIDIProperty*` property constant
+    /// - Parameter forProperty: a `CoreMIDI.Property*` property constant
     internal static func getInteger(forProperty: CFString,
                                     of ref: MIDIObjectRef) -> Int32 {
         
@@ -519,7 +519,7 @@ extension MIDI.IO {
     }
     
     
-    // MARK: - Full kMIDIProperty* List
+    // MARK: - Full Property* List
     // Up-to-date as of Feb 2021
     
     // For full details:

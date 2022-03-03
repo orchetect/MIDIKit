@@ -22,14 +22,14 @@ extension MIDI.IO.Manager {
             
             try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef)
             { [weak self] notificationPtr in
-                guard let strongSelf = self else { return }
-                strongSelf.internalNotificationHandler(notificationPtr)
+                guard let self = self else { return }
+                self.internalNotificationHandler(notificationPtr)
             }
             .throwIfOSStatusErr()
             
             // initial cache of endpoints
             
-            updateObjectsCache()
+            updateObjectsCache(sendSystemEndpointsChangedNotification: true)
             
         }
         
@@ -37,28 +37,49 @@ extension MIDI.IO.Manager {
     
     internal func internalNotificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
         
-        let notification = InternalNotification(pointer)
+        let internalNotification = InternalNotification(pointer)
         
-        switch notification {
-        case .setupChanged,
-             .added,
-             .removed,
-             .propertyChanged:
+        let cache = MIDI.IO.Manager.SystemNotification.MIDIObjectCache(from: self)
             
-            updateObjectsCache()
+            switch internalNotification {
+            case .setupChanged,
+                    .added,
+                    .removed,
+                    .propertyChanged:
+                
+            updateObjectsCache(sendSystemEndpointsChangedNotification: false)
             
         default:
             break
         }
         
+        switch internalNotification {
+        case .added,
+             .removed,
+             .propertyChanged:
+            
+            // umbrella notification
+            sendNotification(.systemEndpointsChanged)
+            
+        default:
+            break
+        }
+        
+        if let notification = MIDI.IO.Manager.SystemNotification(
+            internalNotification,
+            cache: cache
+        ) {
+            sendNotification(notification)
+        }
+        
         // propagate notification to managed objects
         
         for outputConnection in managedOutputConnections.values {
-            outputConnection.notification(notification)
+            outputConnection.notification(internalNotification)
         }
         
         for inputConnection in managedInputConnections.values {
-            inputConnection.notification(notification)
+            inputConnection.notification(internalNotification)
         }
         
     }
