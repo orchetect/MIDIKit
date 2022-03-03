@@ -77,7 +77,7 @@ extension MIDI.IO {
         public internal(set) var endpoints: MIDIIOEndpointsProtocol = Endpoints()
         
         /// Handler that is called when state has changed in the manager.
-        public var notificationHandler: ((_ notification: Notification,
+        public var notificationHandler: ((_ notification: SystemNotification,
                                           _ manager: Manager) -> Void)? = nil
         
         // MARK: - Internal dispatch queue
@@ -98,7 +98,7 @@ extension MIDI.IO {
             clientName: String,
             model: String,
             manufacturer: String,
-            notificationHandler: ((_ notification: Notification,
+            notificationHandler: ((_ notification: SystemNotification,
                                    _ manager: Manager) -> Void)? = nil
         ) {
             
@@ -141,6 +141,16 @@ extension MIDI.IO {
         
         // MARK: - Helper methods
         
+        internal func sendNotification(_ notif: SystemNotification) {
+            
+            if let notificationHandler = notificationHandler {
+                DispatchQueue.main.async {
+                    notificationHandler(notif, self)
+                }
+            }
+            
+        }
+        
         /// Internal: calls `update()` on all objects caches.
         internal dynamic func updateObjectsCache() {
             
@@ -153,9 +163,6 @@ extension MIDI.IO {
             
             devices.update()
             endpoints.update()
-            DispatchQueue.main.async {
-                self.notificationHandler?(.systemEndpointsChanged, self)
-            }
             
         }
         

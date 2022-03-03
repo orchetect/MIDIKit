@@ -22,8 +22,8 @@ extension MIDI.IO.Manager {
             
             try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef)
             { [weak self] notificationPtr in
-                guard let strongSelf = self else { return }
-                strongSelf.internalNotificationHandler(notificationPtr)
+                guard let self = self else { return }
+                self.internalNotificationHandler(notificationPtr)
             }
             .throwIfOSStatusErr()
             
@@ -37,9 +37,11 @@ extension MIDI.IO.Manager {
     
     internal func internalNotificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
         
-        let notification = InternalNotification(pointer)
+        let internalNotification = MIDI.IO.InternalNotification(pointer)
         
-        switch notification {
+        let cache = MIDI.IO.ObjectCache(from: self)
+        
+        switch internalNotification {
         case .setupChanged,
              .added,
              .removed,
@@ -51,14 +53,21 @@ extension MIDI.IO.Manager {
             break
         }
         
+        if let notification = MIDI.IO.SystemNotification(
+            internalNotification,
+            cache: cache
+        ) {
+            sendNotification(notification)
+        }
+        
         // propagate notification to managed objects
         
         for outputConnection in managedOutputConnections.values {
-            outputConnection.notification(notification)
+            outputConnection.notification(internalNotification)
         }
         
         for inputConnection in managedInputConnections.values {
-            inputConnection.notification(notification)
+            inputConnection.notification(internalNotification)
         }
         
     }

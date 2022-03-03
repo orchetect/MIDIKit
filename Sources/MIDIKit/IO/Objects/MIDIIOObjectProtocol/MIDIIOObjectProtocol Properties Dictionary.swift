@@ -16,7 +16,7 @@ extension MIDIIOObjectProtocol {
         (
             onlyIncludeRelevant
                 ? objectType.relevantProperties
-                : MIDI.IO.kMIDIProperty.allCases
+                : MIDI.IO.Object.Property.allCases
         )
         .map {
             getPropertyKeyValuePairAsStrings(of: $0)
@@ -26,7 +26,7 @@ extension MIDIIOObjectProtocol {
     
     /// Returns a human-readable key and value pair for the property.
     internal func getPropertyKeyValuePairAsStrings(
-        of property: MIDI.IO.kMIDIProperty
+        of property: MIDI.IO.Object.Property
     ) -> (key: String, value: String) {
         
         switch property {

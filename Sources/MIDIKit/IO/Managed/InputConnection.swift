@@ -369,20 +369,19 @@ extension MIDI.IO.InputConnection {
 
 extension MIDI.IO.InputConnection {
     
-    internal func notification(_ notif: MIDI.IO.Manager.InternalNotification) {
+    internal func notification(_ internalNotification: MIDI.IO.InternalNotification) {
         
         if automaticallyAddNewOutputs,
+           let notif = MIDI.IO.SystemNotification(internalNotification, cache: nil),
            case .added(parent: _,
-                       parentType: _,
-                       child: let childRef,
-                       childType: let childType) = notif,
-           childType == .source || childType == .externalSource
+                       child: let child) = notif,
+           case .outputEndpoint(let newOutput) = child
         {
-            add(outputs: [MIDI.IO.OutputEndpoint(childRef)])
+            add(outputs: [newOutput])
             return
         }
         
-        switch notif {
+        switch internalNotification {
         case .setupChanged, .added, .removed:
             if let midiManager = midiManager {
                 try? refreshConnection(in: midiManager)

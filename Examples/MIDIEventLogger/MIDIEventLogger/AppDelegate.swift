@@ -12,10 +12,12 @@ import MIDIKit
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     var midiManager: MIDI.IO.Manager = {
-        let newManager =
-        MIDI.IO.Manager(clientName: "MIDIEventLogger",
-                        model: "LoggerApp",
-                        manufacturer: "Orchetect")
+        let newManager = MIDI.IO.Manager(
+            clientName: "MIDIEventLogger",
+            model: "LoggerApp",
+            manufacturer: "Orchetect") { notification, manager in
+                print("Core MIDI notification:", notification)
+            }
         do {
             logger.debug("Starting MIDI manager")
             try newManager.start()

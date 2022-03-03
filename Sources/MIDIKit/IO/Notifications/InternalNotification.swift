@@ -1,24 +1,28 @@
 //
-//  Manager Notification.swift
+//  InternalNotification.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+import Foundation
 @_implementationOnly import CoreMIDI
 
-extension MIDI.IO.Manager {
+extension MIDI.IO {
     
+    /// Internal MIDI subsystem notification with raw values.
+    ///
+    /// This must be converted to an instance of `SystemNotification` before sending to the `Manager`'s public notification handler.
     internal enum InternalNotification {
         
         case setupChanged
         
-        case added(parent: MIDIObjectRef,
+        case added(parentRef: MIDIObjectRef,
                    parentType: MIDIObjectType,
-                   child: MIDIObjectRef,
+                   childRef: MIDIObjectRef,
                    childType: MIDIObjectType)
         
-        case removed(parent: MIDIObjectRef,
+        case removed(parentRef: MIDIObjectRef,
                      parentType: MIDIObjectType,
-                     child: MIDIObjectRef,
+                     childRef: MIDIObjectRef,
                      childType: MIDIObjectType)
         
         case propertyChanged(forRef: MIDIObjectRef,
@@ -29,7 +33,8 @@ extension MIDI.IO.Manager {
         
         case serialPortOwnerChanged
         
-        case ioError(device: MIDIDeviceRef, error: MIDI.IO.MIDIError)
+        case ioError(deviceRef: MIDIDeviceRef,
+                     error: MIDI.IO.MIDIError)
         
         /// Typically will never happen unless Apple adds additional cases to Core MIDI's `MIDINotificationMessageID` enum.
         case other(messageIDRawValue: Int32)
@@ -38,7 +43,7 @@ extension MIDI.IO.Manager {
     
 }
 
-extension MIDI.IO.Manager.InternalNotification {
+extension MIDI.IO.InternalNotification {
     
     internal init(_ message: UnsafePointer<MIDINotification>) {
         
@@ -54,8 +59,10 @@ extension MIDI.IO.Manager.InternalNotification {
                 capacity: 1)
             { (message) in
                 let m = message.pointee
-                return .added(parent: m.parent, parentType: m.parentType,
-                              child: m.child, childType: m.childType)
+                return .added(parentRef: m.parent,
+                              parentType: m.parentType,
+                              childRef: m.child,
+                              childType: m.childType)
             }
             
         case .msgObjectRemoved:
@@ -64,8 +71,10 @@ extension MIDI.IO.Manager.InternalNotification {
                 capacity: 1)
             { (message) in
                 let m = message.pointee
-                return .removed(parent: m.parent, parentType: m.parentType,
-                                child: m.child, childType: m.childType)
+                return .removed(parentRef: m.parent,
+                                parentType: m.parentType,
+                                childRef: m.child,
+                                childType: m.childType)
             }
             
         case .msgPropertyChanged:
@@ -97,7 +106,7 @@ extension MIDI.IO.Manager.InternalNotification {
             { (message) in
                 let m = message.pointee
                 return .ioError(
-                    device: m.driverDevice,
+                    deviceRef: m.driverDevice,
                     error: .osStatus(m.errorCode)
                 )
             }
@@ -106,16 +115,6 @@ extension MIDI.IO.Manager.InternalNotification {
             self = .other(messageIDRawValue: messageID.rawValue)
             
         }
-        
-    }
-    
-}
-
-extension MIDI.IO {
-    
-    public enum Notification {
-        
-        case systemEndpointsChanged
         
     }
     

@@ -11,7 +11,7 @@ extension MIDI.IO {
     /// Set a string value for a `MIDIObjectRef` property key.
     ///
     /// - Parameters:
-    ///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
+    ///   - forProperty: A `CoreMIDI.Property*` property constant
     ///   - ref: `MIDIObjectRef`
     ///   - string: New string value
     ///
@@ -33,7 +33,7 @@ extension MIDI.IO {
     /// Set an integer value for a `MIDIObjectRef` property key.
     ///
     /// - Parameters:
-    ///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
+    ///   - forProperty: A `CoreMIDI.Property*` property constant
     ///   - ref: `MIDIObjectRef`
     ///   - integer: New integer value
     ///
@@ -55,7 +55,7 @@ extension MIDI.IO {
     /// Set a data value for a `MIDIObjectRef` property key.
     ///
     /// - Parameters:
-    ///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
+    ///   - forProperty: A `CoreMIDI.Property*` property constant
     ///   - ref: `MIDIObjectRef`
     ///   - data: New data value
     ///
@@ -77,7 +77,7 @@ extension MIDI.IO {
     /// Set a dictionary value for a `MIDIObjectRef` property key.
     ///
     /// - Parameters:
-    ///   - forProperty: A `CoreMIDI.kMIDIProperty*` property constant
+    ///   - forProperty: A `CoreMIDI.Property*` property constant
     ///   - ref: `MIDIObjectRef`
     ///   - dictionary: New dictionary value
     ///
