@@ -29,7 +29,7 @@ extension MIDI.IO.Manager {
             
             // initial cache of endpoints
             
-            updateObjectsCache(sendSystemEndpointsChangedNotification: true)
+            updateObjectsCache()
             
         }
         
@@ -37,35 +37,23 @@ extension MIDI.IO.Manager {
     
     internal func internalNotificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
         
-        let internalNotification = InternalNotification(pointer)
+        let internalNotification = MIDI.IO.InternalNotification(pointer)
         
-        let cache = MIDI.IO.Manager.SystemNotification.MIDIObjectCache(from: self)
-            
-            switch internalNotification {
-            case .setupChanged,
-                    .added,
-                    .removed,
-                    .propertyChanged:
-                
-            updateObjectsCache(sendSystemEndpointsChangedNotification: false)
-            
-        default:
-            break
-        }
+        let cache = MIDI.IO.ObjectCache(from: self)
         
         switch internalNotification {
-        case .added,
+        case .setupChanged,
+             .added,
              .removed,
              .propertyChanged:
             
-            // umbrella notification
-            sendNotification(.systemEndpointsChanged)
+            updateObjectsCache()
             
         default:
             break
         }
         
-        if let notification = MIDI.IO.Manager.SystemNotification(
+        if let notification = MIDI.IO.SystemNotification(
             internalNotification,
             cache: cache
         ) {

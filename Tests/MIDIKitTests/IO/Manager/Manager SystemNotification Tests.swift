@@ -13,7 +13,7 @@ import CoreMIDI
 
 final class Manager_SystemNotification_Tests: XCTestCase {
     
-    fileprivate var notifications: [MIDI.IO.Manager.SystemNotification] = []
+    fileprivate var notifications: [MIDI.IO.SystemNotification] = []
     
     func testSystemNotification_Add_Remove() throws {
         
@@ -32,8 +32,8 @@ final class Manager_SystemNotification_Tests: XCTestCase {
         // start midi client
         try manager.start()
         
-        wait(for: notifications.count > 0, timeout: 0.5)
-        XCTAssertEqual(notifications, [.systemEndpointsChanged])
+        wait(sec: 0.5)
+        XCTAssertEqual(notifications, [])
         
         notifications = []
         
@@ -45,14 +45,14 @@ final class Manager_SystemNotification_Tests: XCTestCase {
             uniqueID: .none // allow system to generate random ID
         )
         
-        wait(for: notifications.count >= 6, timeout: 0.5)
+        wait(for: notifications.count >= 3, timeout: 0.5)
         wait(sec: 0.1)
         
         var addedNotifFound = false
         notifications.forEach { notif in
             switch notif {
-            case .systemAdded(parent: _,
-                              child: let child):
+            case .added(parent: _,
+                        child: let child):
                 switch child {
                 case .outputEndpoint(let endpoint):
                     if endpoint.name == "MIDIKit IO Tests Source 1" {
@@ -77,8 +77,8 @@ final class Manager_SystemNotification_Tests: XCTestCase {
         var removedNotifFound = false
         notifications.forEach { notif in
             switch notif {
-            case .systemRemoved(parent: _,
-                                child: let child):
+            case .removed(parent: _,
+                          child: let child):
                 switch child {
                 case .outputEndpoint(let endpoint):
                     if endpoint.name == "MIDIKit IO Tests Source 1" {

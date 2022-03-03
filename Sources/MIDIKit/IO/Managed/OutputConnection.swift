@@ -234,7 +234,7 @@ extension MIDI.IO.OutputConnection {
 
 extension MIDI.IO.OutputConnection {
     
-    internal func notification(_ internalNotification: MIDI.IO.Manager.InternalNotification) {
+    internal func notification(_ internalNotification: MIDI.IO.InternalNotification) {
         
         switch internalNotification {
         case .setupChanged, .added, .removed:

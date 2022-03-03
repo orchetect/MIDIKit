@@ -29,7 +29,7 @@ extension MIDI.IO.Object {
     internal init?(
         coreMIDIObjectRef: MIDIObjectRef,
         coreMIDIObjectType: MIDIObjectType,
-        using cache: MIDI.IO.Manager.SystemNotification.MIDIObjectCache? = nil
+        using cache: MIDI.IO.ObjectCache? = nil
     ) {
         
         guard coreMIDIObjectRef != 0 else { return nil }

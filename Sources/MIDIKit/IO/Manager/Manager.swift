@@ -152,9 +152,7 @@ extension MIDI.IO {
         }
         
         /// Internal: calls `update()` on all objects caches.
-        internal dynamic func updateObjectsCache(
-            sendSystemEndpointsChangedNotification: Bool
-        ) {
+        internal dynamic func updateObjectsCache() {
             
             #if canImport(Combine)
             if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13, watchOS 6, *) {
@@ -165,10 +163,6 @@ extension MIDI.IO {
             
             devices.update()
             endpoints.update()
-            
-            if sendSystemEndpointsChangedNotification {
-                sendNotification(.systemEndpointsChanged)
-            }
             
         }
         
