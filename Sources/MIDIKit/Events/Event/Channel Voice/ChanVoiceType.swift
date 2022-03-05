@@ -99,3 +99,65 @@ extension MIDI.Event {
     }
     
 }
+
+// MARK: - Convenience Static Constructors
+
+extension MIDI.Event.ChanVoiceTypes {
+
+    // MARK: Only
+    
+    /// Return only Control Change (CC) events matching a certain controller number.
+    @_disfavoredOverload
+    public static func onlyCC(_ cc: MIDI.UInt7) -> Self {
+        
+        .onlyCC(.init(number: cc))
+        
+    }
+    
+    /// Return only Control Change (CC) events matching certain controller number(s).
+    @_disfavoredOverload
+    public static func onlyCCs(_ ccs: [MIDI.UInt7]) -> Self {
+        
+        .onlyCCs(ccs.map { .init(number: $0) })
+        
+    }
+    
+    // MARK: Keep
+    
+    /// Retain only CC events with a certain controller,
+    /// while retaining all non-Channel Voice events.
+    @_disfavoredOverload
+    public static func keepCC(_ cc: MIDI.UInt7) -> Self {
+        
+        .keepCC(.init(number: cc))
+        
+    }
+    /// Retain only CC events with certain controller(s),
+    /// while retaining all non-Channel Voice events.
+    @_disfavoredOverload
+    public static func keepCCs(_ ccs: [MIDI.UInt7]) -> Self {
+        
+        .keepCCs(ccs.map { .init(number: $0) })
+        
+    }
+    
+    // MARK: Drop
+    
+    /// Drop any Control Change (CC) events matching a certain controller,
+    /// while retaining all non-Channel Voice events.
+    @_disfavoredOverload
+    public static func dropCC(_ cc: MIDI.UInt7) -> Self {
+        
+        .dropCC(.init(number: cc))
+        
+    }
+    /// Drop any Control Change (CC) events matching certain controller(s),
+    /// while retaining all non-Channel Voice events.
+    @_disfavoredOverload
+    public static func dropCCs(_ ccs: [MIDI.UInt7]) -> Self {
+        
+        .dropCCs(ccs.map { .init(number: $0) })
+        
+    }
+    
+}

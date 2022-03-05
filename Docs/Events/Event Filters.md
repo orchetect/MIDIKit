@@ -20,6 +20,18 @@ let events: [MIDI.Event] = [ ... ]
 let onlyChannel0Events = events.filter(chanVoice: .onlyChannel(0))
 ```
 
+Filters may be chained easily:
+
+```swift
+// - removes Active Sensing,
+// - removes all channel voice except CC 1, 11, or 64 events on "channel 1"
+// - retains all other Sys Common, Sys Exclusive, and Sys Real Time events
+let filteredEvents = events
+    .filter(sysRealTime: .dropTypes([.activeSensing]))
+    .filter(chanVoice: .keepChannel(0x0))
+    .filter(chanVoice: .keepCCs([1, 11, 64]))
+```
+
 ## Channel Voice
 
 There are three main categories of Channel Voice event filters:
@@ -62,8 +74,8 @@ Channel Voice filter sub-type(s) available:
 
 ```swift
 // return only events on certain channel(s)
-.filter(chanVoice: .onlyChannel(0))
-.filter(chanVoice: .onlyChannels([0, 1, 2]))
+.filter(chanVoice: .onlyChannel(0x0))
+.filter(chanVoice: .onlyChannels([0x0, 0x1, 0x2]))
 ```
 
 ```swift
@@ -95,8 +107,8 @@ Channel Voice filter sub-type(s) available:
 ```swift
 // retains Channel Voice events only with certain channel(s),
 // while retaining all non-Channel Voice events
-.filter(chanVoice: .keepChannel(0))
-.filter(chanVoice: .keepChannels([0, 1, 2]))
+.filter(chanVoice: .keepChannel(0x0))
+.filter(chanVoice: .keepChannels([0x0, 0x1, 0x2]))
 ```
 
 ```swift
@@ -136,8 +148,8 @@ Channel Voice filter sub-type(s) available:
 ```swift
 // drop Channel Voice events only with certain channel(s),
 // while retaining all non-Channel Voice events
-.filter(chanVoice: .dropChannel(0))
-.filter(chanVoice: .dropChannels([0, 1, 2]))
+.filter(chanVoice: .dropChannel(0x0))
+.filter(chanVoice: .dropChannels([0x0, 0x1, 0x2]))
 ```
 
 ```swift
