@@ -52,7 +52,18 @@ To allow Network MIDI connections via Apple's built-in network MIDI feature, ena
 MIDI.IO.setNetworkSession(policy: .anyone)
 ```
 
+If the application is sandboxed, ensure the following entitlements are added to your build target:
+
+- App Sandbox
+  - Incoming Connections (Server)
+  - Outgoing Connections (Client)
+
 ## Create Virtual MIDI Ports
+
+If the application is sandboxed, ensure the following entitlements are added to iOS and Catalyst build target:
+
+- Background Modes
+  - Audio, AirPlay, and Picture in Picture
 
 ### Virtual MIDI Inputs
 
