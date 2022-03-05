@@ -312,6 +312,7 @@ extension MIDI.IO.InputConnection {
     }
     
     /// Add output endpoints to the connection.
+    @_disfavoredOverload
     public func add(
         outputs: [MIDI.IO.OutputEndpoint]
     ) {
@@ -347,6 +348,7 @@ extension MIDI.IO.InputConnection {
     }
     
     /// Remove output endpoints to the connection.
+    @_disfavoredOverload
     public func remove(
         outputs: [MIDI.IO.OutputEndpoint]
     ) {
