@@ -110,7 +110,7 @@ private func receivedMIDIEvent(_ event: MIDI.Event) {
 
 ### Filter Events
 
-For simple and powerful event filtering API, see [Event Filters](./Events/Event Filters.md)
+For simple and powerful event filtering API, see [Event Filters](Events/Event%20Filters.md)
 
 ### Virtual MIDI Outputs
 
@@ -190,7 +190,7 @@ conn?.remove(outputs: [.uniqueID(uID)])
 
 ### Filter Events
 
-For simple and powerful event filtering API, see [Event Filters](./Events/Event Filters.md)
+For simple and powerful event filtering API, see [Event Filters](Events/Event%20Filters.md)
 
 ### Output Connection
 
