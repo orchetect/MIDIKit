@@ -19,8 +19,8 @@ Create an instance of `MIDI.IO.Manager` within a lifecycle scope that makes sens
 Typically MIDI functionality is scoped at an app-level, and a single `Manager` instance can be stored in your AppDelegate or even at top level as a global singleton.
 
 - `clientName` is an internal name used only to identify the manager instance to Core MIDI
-- `model` is the user-visible model name of your app
-- `manufacturer` is the user-visible manufacturer, or company name of your app
+- `model` is the user-visible model name of your app that is included in the meta-data of virtual ports you create
+- `manufacturer` is the user-visible manufacturer, or company name of your app that is included in the meta-data of virtual ports you create
 
 ```swift
 let midiManager = MIDI.IO.Manager(
@@ -55,19 +55,19 @@ MIDI.IO.setNetworkSession(policy: .anyone)
 If the application is sandboxed, ensure the following entitlements are added to your build target:
 
 - App Sandbox
-  - Incoming Connections (Server)
-  - Outgoing Connections (Client)
+  - [x] Incoming Connections (Server)
+  - [x] Outgoing Connections (Client)
 
 ## Create Virtual MIDI Ports
 
 If the application is sandboxed, ensure the following entitlements are added to iOS and Catalyst build target:
 
 - Background Modes
-  - Audio, AirPlay, and Picture in Picture
+  - [x] Audio, AirPlay, and Picture in Picture
 
 ### Virtual MIDI Inputs
 
-A virtual input port is created and owned by the `Manager` and will be disposed from the system either when you call `.remove` on the `Manager` or when the `Manager` de-inits.
+A virtual input port is created and owned by the `Manager` and will be disposed from the system either when you call `.remove(.output, .withTag())` on the `Manager` or when the `Manager` de-inits.
 
 MIDI events are received on the `receiveHandler:` block on a background thread. If the code in this block may result in UI updates, ensure that you encapsulate it inside a `DispatchQueue.main.async { }` block.
 
@@ -108,9 +108,13 @@ private func receivedMIDIEvent(_ event: MIDI.Event) {
 }
 ```
 
+### Filter Events
+
+For simple and powerful event filtering API, see [Event Filters](Events/Event Filters.md)
+
 ### Virtual MIDI Outputs
 
-A virtual output port is created and owned by the `Manager` and will be disposed from the system either when you call `.remove` on the `Manager` or when the `Manager` deinits.
+A virtual output port is created and owned by the `Manager` and will be disposed from the system either when you call `.remove(.output, .withTag())` on the `Manager` or when the `Manager` de-inits.
 
 ```swift
 let outputTag = "Virtual_MIDI_Out"
@@ -138,7 +142,7 @@ try output?.send(event: .cc(11, value: .midi1(64), channel: 0x2))
 >
 > If the target(s) are not present in the system at the time of creating the managed connection, the `Manager` will automatically subscribe to the target(s) if they appear. And if the target(s) disappear at any time, they will likewise be automatically re-subscribed once they appear again.
 
-> 💡 You may create the connection without any target port(s) and add/remove them later, or supply the target(s) at the time of creation by calling `.add(:)` or `.remove(:)` on the connection.
+> 💡 You may create the connection without any target port(s) and add/remove them later by calling `.add(:)` or `.remove(:)` on the connection, or supply the target(s) at the time of creation.
 
 ### Input Connection
 
@@ -170,6 +174,20 @@ try midiManager.addInputConnection(
 )
 ```
 
+Add or remove target(s) from the connection at any time:
+
+```swift
+let conn = midiManager.managedInputConnections["InputConnection1"]
+
+// add/remove endpoints from the system
+conn?.add(outputs: [endpoint])
+conn?.remove(outputs: [endpoint])
+
+// add/remove based on criteria such as unique ID
+conn?.add(outputs: [.uniqueID(uID)])
+conn?.remove(outputs: [.uniqueID(uID)])
+```
+
 ### Output Connection
 
 An Output Connection sends events to one or more system inputs.
@@ -187,6 +205,20 @@ To send events, call the `.send(event:)` method on the `managedOutputConnections
 let conn = midiManager.managedOutputConnections["OutputConnection1"]
 try conn?.send(event: .noteOn(60, velocity: .midi1(127), channel: 0x2))
 try conn?.send(event: .cc(11, value: .midi1(64), channel: 0x2))
+```
+
+Add or remove target(s) from the connection at any time:
+
+```swift
+let conn = midiManager.managedOutputConnections["OutputConnection1"]
+
+// add/remove endpoints from the system
+conn?.add(inputs: [endpoint])
+conn?.remove(inputs: [endpoint])
+
+// add/remove based on criteria such as unique ID
+conn?.add(inputs: [.uniqueID(uID)])
+conn?.remove(inputs: [.uniqueID(uID)])
 ```
 
 ## Remove a Virtual Port or Connection
