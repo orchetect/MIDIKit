@@ -57,7 +57,7 @@ extension MIDIEventPacket {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     @inline(__always)
     internal init(
-        wordsUsingBuilder: [MIDI.UMPWord]
+        wordsUsingBuilder words: [MIDI.UMPWord]
     ) throws {
 
         guard words.count > 0 else {
