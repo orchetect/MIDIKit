@@ -47,48 +47,47 @@ extension MIDIEventPacket {
     
 }
 
-// MARK: - This method "works" but MIDIEventPacket.Builder appears to have a heap overflow bug, so we shouldn't use this code for the meantime. A radar has been filed with Apple.
+extension MIDIEventPacket {
+    
+    // Note: this init isn't used but it works.
+    // It implements Apple's built-in Core MIDI event packet builder.
+    
+    /// Internal:
+    /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+    @inline(__always)
+    internal init(
+        wordsUsingBuilder: [MIDI.UMPWord]
+    ) throws {
 
-//extension MIDIEventPacket {
-//
-//    /// Internal:
-//    /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
-//    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-//    @inline(__always)
-//    internal init(
-//        words: [MIDI.UMPWord]
-//    ) throws {
-//
-//        guard words.count > 0 else {
-//            throw MIDI.IO.MIDIError.malformed(
-//                "A Universal MIDI Packet cannot contain zero UInt32 words."
-//            )
-//        }
-//
-//        guard words.count <= 64 else {
-//            throw MIDI.IO.MIDIError.malformed(
-//                "A Universal MIDI Packet cannot contain more than 64 UInt32 words."
-//            )
-//        }
-//
-//        let packetBuilder = MIDIEventPacket
-//            .Builder(maximumNumberMIDIWords: words.count)
-//
-//        words.forEach { packetBuilder.append($0) }
-//
-//        let packet = try packetBuilder
-//            .withUnsafePointer { unsafePtr -> Result<MIDIEventPacket, Error> in
-//                // this "works", but when ASAN is enabled accessing pointee throws a heap overflow error
-//                // I filed a radar with Apple on Sep 18, 2021: FB9637098
-//                .success(unsafePtr.pointee)
-//            }
-//            .get()
-//
-//        self = packet
-//
-//    }
-//
-//}
+        guard words.count > 0 else {
+            throw MIDI.IO.MIDIError.malformed(
+                "A Universal MIDI Packet cannot contain zero UInt32 words."
+            )
+        }
+
+        guard words.count <= 64 else {
+            throw MIDI.IO.MIDIError.malformed(
+                "A Universal MIDI Packet cannot contain more than 64 UInt32 words."
+            )
+        }
+
+        let packetBuilder = MIDIEventPacket
+            .Builder(maximumNumberMIDIWords: 64) // must be 64 or we get crashes!
+        
+        words.forEach { packetBuilder.append($0) }
+        
+        let packet = try packetBuilder
+            .withUnsafePointer { unsafePtr -> Result<MIDIEventPacket, Error> in
+                    .success(unsafePtr.pointee)
+            }
+            .get()
+        
+        self = packet
+
+    }
+
+}
 
 extension MIDIEventList {
     
