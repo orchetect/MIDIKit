@@ -174,8 +174,6 @@ extension MIDI.Event.CC.Controller.RPN {
     public func events(channel: MIDI.UInt4,
                        group: MIDI.UInt4 = 0) -> [MIDI.Event] {
         
-        #warning("> TODO: not sure RPN messages are correct")
-        
         var rpnEvents: [MIDI.Event] = [
             .cc(.rpnMSB,
                 value: .midi1(parameter.msb),
@@ -198,7 +196,7 @@ extension MIDI.Event.CC.Controller.RPN {
         }
         
         if let dataEntryLSB = dataEntryBytes.lsb {
-            rpnEvents.append(.cc(.dataEntry,
+            rpnEvents.append(.cc(.lsb(for: .dataEntry),
                                  value: .midi1(dataEntryLSB),
                                  channel: channel,
                                  group: group))
