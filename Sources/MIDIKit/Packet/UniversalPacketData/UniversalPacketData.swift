@@ -65,7 +65,7 @@ extension MIDI.Packet.UniversalPacketData {
         _ eventPacketPtr: UnsafePointer<MIDIEventPacket>
     ) -> MIDI.Packet.UniversalPacketData {
         
-        let wordCollection = MIDIEventPacket.WordCollection(eventPacketPtr)
+        let wordCollection = eventPacketPtr.words()
         
         guard wordCollection.count > 0 else {
             return MIDI.Packet.UniversalPacketData(

@@ -18,6 +18,28 @@ extension MIDI.Packet.UniversalPacketData {
         
     }
     
+}
+
+extension MIDI.Packet.UniversalPacketData.MessageType {
+    
+    @inline(__always)
+    public var wordLength: Int {
+        
+        switch self {
+        case .utility                 : return 1
+        case .systemRealTimeAndCommon : return 1
+        case .midi1ChannelVoice       : return 1
+        case .data64bit               : return 2
+        case .midi2ChannelVoice       : return 2
+        case .data128bit              : return 4
+        }
+        
+    }
+    
+}
+
+extension MIDI.Packet.UniversalPacketData {
+    
     public enum SysExStatusField: MIDI.Nibble, CaseIterable {
         
         /// Complete System Exclusive Message in one UMP System Exclusive.
