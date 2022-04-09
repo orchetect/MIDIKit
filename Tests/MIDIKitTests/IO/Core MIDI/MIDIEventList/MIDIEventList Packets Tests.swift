@@ -131,25 +131,25 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         check(&eventList)
         
     }
-
-}
-
-fileprivate func makeEventList(words: [[MIDI.UMPWord]],
-                               timeStamp: MIDITimeStamp) throws -> MIDIEventList {
     
-    var eventList: MIDIEventList = .init()
-    let packet = MIDIEventListInit(&eventList, ._2_0)
-    
-    for packetWords in words {
-        MIDIEventListAdd(&eventList,
-                         1024,
-                         packet,
-                         timeStamp,
-                         packetWords.count,
-                         packetWords)
+    fileprivate func makeEventList(words: [[MIDI.UMPWord]],
+                                   timeStamp: MIDITimeStamp) throws -> MIDIEventList {
+        
+        var eventList: MIDIEventList = .init()
+        let packet = MIDIEventListInit(&eventList, ._2_0)
+        
+        for packetWords in words {
+            MIDIEventListAdd(&eventList,
+                             1024,
+                             packet,
+                             timeStamp,
+                             packetWords.count,
+                             packetWords)
+        }
+        
+        return eventList
+        
     }
-    
-    return eventList
     
 }
 
