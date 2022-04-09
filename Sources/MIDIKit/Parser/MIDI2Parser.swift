@@ -345,7 +345,7 @@ extension MIDI {
             
         }
         
-        /// Internal sub-parser: Parse MIDI 1.0 Channel Voice UMP message.
+        /// Internal sub-parser: Parse MIDI 2.0 Channel Voice UMP message.
         ///
         /// - Parameters:
         ///   - bytes: 3 UMP bytes after the first byte ([1...3])

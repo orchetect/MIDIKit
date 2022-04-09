@@ -1,17 +1,42 @@
 //
-//  MIDIPacketList MKUnsafeSequence.swift
+//  MIDIPacketList Packets.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+import Foundation
 @_implementationOnly import CoreMIDI
 
 extension UnsafePointer where Pointee == MIDIPacketList {
     
     /// Internal:
-    /// MIDIKit backwards-compatible implementation of Core MIDI's `MIDIPacketList.UnsafeSequence`
-    internal func mkUnsafeSequence() -> MIDIPacketList.MKUnsafeSequence {
+    /// Returns array of MIDIKit `PacketData` instances.
+    @inline(__always)
+    internal func packets() -> [MIDI.Packet.PacketData] {
         
-        MIDIPacketList.MKUnsafeSequence(self)
+        packetPointers().map { MIDI.Packet.PacketData($0) }
+        
+    }
+    
+    /// Internal:
+    /// Returns array of Core MIDI `MIDIPacket` pointers.
+    @inline(__always)
+    internal func packetPointers() -> [UnsafePointer<MIDIPacket>] {
+        
+        // prefer newer Core MIDI API if platform supports it
+        
+        if #available(macOS 10.15, iOS 13.0, macCatalyst 13.0, *) {
+            return Array(unsafeSequence())
+        } else {
+            return packetPointerSequence().pointers
+        }
+        
+    }
+    
+    /// Internal:
+    /// Returns a sequence of Core MIDI `MIDIPacket` pointers.
+    internal func packetPointerSequence() -> MIDIPacketList.PointerSequence {
+        
+        MIDIPacketList.PointerSequence(self)
         
     }
     
@@ -20,8 +45,8 @@ extension UnsafePointer where Pointee == MIDIPacketList {
 extension MIDIPacketList {
     
     /// Internal:
-    /// MIDIKit backwards-compatible implementation of Core MIDI's `MIDIPacketList.UnsafeSequence`
-    internal struct MKUnsafeSequence: Sequence {
+    /// Returns a sequence of Core MIDI `MIDIPacket` pointers.
+    internal struct PointerSequence: Sequence {
         
         public typealias Element = UnsafePointer<MIDIPacket>
         
@@ -71,8 +96,10 @@ extension MIDIPacketList {
     }
     
     /// Utility to iterate over packets in a `MIDIPacketList` and encapsulate the ugly Obj-C/Swift pointer access.
-    fileprivate static func iterateMIDIPacketList(_ midiPacketListPtr: UnsafePointer<MIDIPacketList>,
-                                                  _ closure: (UnsafePointer<MIDIPacket>) -> Void) {
+    fileprivate static func iterateMIDIPacketList(
+        _ midiPacketListPtr: UnsafePointer<MIDIPacketList>,
+        _ closure: (UnsafePointer<MIDIPacket>) -> Void
+    ) {
         
         if midiPacketListPtr.pointee.numPackets == 0 {
             return
@@ -80,11 +107,8 @@ extension MIDIPacketList {
         
         // when written in Obj-C, we'd cast the packet list
         // to MIDIPacket to access the first packet
-        var midiPacket: UnsafePointer<MIDIPacket> = midiPacketListPtr
-            .withMemoryRebound(to: MIDIPacket.self,
-                               capacity: 1) {
-                $0
-            }
+        var midiPacket = UnsafeRawPointer(midiPacketListPtr)
+            .bindMemory(to: MIDIPacket.self, capacity: 1)
         
         // call closure for first packet
         closure(midiPacket)
@@ -98,4 +122,3 @@ extension MIDIPacketList {
     }
     
 }
-
