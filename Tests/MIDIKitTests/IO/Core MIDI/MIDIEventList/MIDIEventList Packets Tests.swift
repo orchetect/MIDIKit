@@ -9,9 +9,9 @@ import XCTest
 @testable import MIDIKit
 import CoreMIDI
 
-@available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
 final class MIDIEventListPackets_Tests: XCTestCase {
 	
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
 	func testSinglePacketWithOneUMP() throws {
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
@@ -37,6 +37,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         
     }
     
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     func testSinglePacketWithMultipleUMPs() throws {
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
@@ -66,6 +67,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         
     }
     
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     func testMultiplePacketsWithSingleUMPs() throws {
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
@@ -95,6 +97,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         
     }
     
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     func testMultiplePacketsWithMultipleUMPs() throws {
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
@@ -132,6 +135,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         
     }
     
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     fileprivate func makeEventList(words: [[MIDI.UMPWord]],
                                    timeStamp: MIDITimeStamp) throws -> MIDIEventList {
         
