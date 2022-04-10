@@ -12,7 +12,8 @@ extension MIDIEventPacket {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     @inline(__always)
     internal init(
-        words: [MIDI.UMPWord]
+        words: [MIDI.UMPWord],
+        timeStamp: UInt64 = mach_absolute_time()
     ) throws {
         
         guard words.count > 0 else {
@@ -30,7 +31,7 @@ extension MIDIEventPacket {
         var packet = MIDIEventPacket()
         
         // time stamp
-        packet.timeStamp = .zero // zero means "now" when sending MIDI
+        packet.timeStamp = timeStamp
         
         // word count
         packet.wordCount = UInt32(words.count)
@@ -57,7 +58,8 @@ extension MIDIEventPacket {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     @inline(__always)
     internal init(
-        wordsUsingBuilder words: [MIDI.UMPWord]
+        wordsUsingBuilder words: [MIDI.UMPWord],
+        timeStamp: UInt64 = mach_absolute_time()
     ) throws {
 
         guard words.count > 0 else {
@@ -73,7 +75,9 @@ extension MIDIEventPacket {
         }
 
         let packetBuilder = MIDIEventPacket
-            .Builder(maximumNumberMIDIWords: 64) // must be 64 or we get crashes!
+            .Builder(maximumNumberMIDIWords: 64) // must be 64 or we get heap overflows/crashes!
+        
+        packetBuilder.timeStamp = Int(timeStamp)
         
         words.forEach { packetBuilder.append($0) }
         
@@ -97,10 +101,12 @@ extension MIDIEventList {
     @inline(__always)
     internal init(
         protocol midiProtocol: MIDIProtocolID,
-        packetWords: [MIDI.UMPWord]
+        packetWords: [MIDI.UMPWord],
+        timeStamp: UInt64 = mach_absolute_time()
     ) throws {
         
-        let packet = try MIDIEventPacket(words: packetWords)
+        let packet = try MIDIEventPacket(words: packetWords,
+                                         timeStamp: timeStamp)
         
         self = MIDIEventList(protocol: midiProtocol,
                              numPackets: 1,
