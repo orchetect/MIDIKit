@@ -15,17 +15,23 @@ extension MIDI.IO.Manager {
     /// - Parameters:
     ///   - toInputs: Criteria for identifying a MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
+    ///   - automaticallyAddNewInputs: When new inputs appear in the system, automatically add them to the connection.
+    ///   - preventAddingManagedInputs: Prevent virtual inputs owned by the `Manager` from being added to the connection.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addOutputConnection(
         toInputs: Set<MIDI.IO.InputEndpointIDCriteria>,
-        tag: String
+        tag: String,
+        automaticallyAddNewInputs: Bool = false,
+        preventAddingManagedInputs: Bool = false
     ) throws {
         
         try eventQueue.sync {
             
             let newCS = MIDI.IO.OutputConnection(
                 toInputs: toInputs,
+                automaticallyAddNewInputs: automaticallyAddNewInputs,
+                preventAddingManagedInputs: preventAddingManagedInputs,
                 midiManager: self,
                 api: preferredAPI
             )
@@ -48,16 +54,22 @@ extension MIDI.IO.Manager {
     /// - Parameters:
     ///   - toInputs: Criteria for identifying a MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
+    ///   - automaticallyAddNewInputs: When new inputs appear in the system, automatically add them to the connection.
+    ///   - preventAddingManagedInputs: Prevent virtual inputs owned by the `Manager` from being added to the connection.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addOutputConnection(
         toInputs: [MIDI.IO.InputEndpointIDCriteria],
-        tag: String
+        tag: String,
+        automaticallyAddNewInputs: Bool = false,
+        preventAddingManagedInputs: Bool = false
     ) throws {
         
         try addOutputConnection(
             toInputs: Set(toInputs),
-            tag: tag
+            tag: tag,
+            automaticallyAddNewInputs: automaticallyAddNewInputs,
+            preventAddingManagedInputs: preventAddingManagedInputs
         )
         
     }
@@ -69,17 +81,23 @@ extension MIDI.IO.Manager {
     /// - Parameters:
     ///   - toInputs: Criteria for identifying a MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
+    ///   - automaticallyAddNewInputs: When new inputs appear in the system, automatically add them to the connection.
+    ///   - preventAddingManagedInputs: Prevent virtual inputs owned by the `Manager` from being added to the connection.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     @_disfavoredOverload
     public func addOutputConnection(
         toInputs: [MIDI.IO.InputEndpoint],
-        tag: String
+        tag: String,
+        automaticallyAddNewInputs: Bool = false,
+        preventAddingManagedInputs: Bool = false
     ) throws {
         
         try addOutputConnection(
             toInputs: toInputs.map { .uniqueID($0.uniqueID) },
-            tag: tag
+            tag: tag,
+            automaticallyAddNewInputs: automaticallyAddNewInputs,
+            preventAddingManagedInputs: preventAddingManagedInputs
         )
         
     }
