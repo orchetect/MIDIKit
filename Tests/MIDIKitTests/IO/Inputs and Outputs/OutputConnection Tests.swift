@@ -7,11 +7,16 @@
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
+import XCTestUtils
 import MIDIKit
 import CoreMIDI
 
 final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
-	
+    
+    override func setUp() {
+        wait(sec: 0.2)
+    }
+    
     @MIDI.Atomic var input1Events: [MIDI.Event] = []
     @MIDI.Atomic var input2Events: [MIDI.Event] = []
     

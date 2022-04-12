@@ -13,6 +13,10 @@ import CoreMIDI
 
 final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
 	
+    override func setUp() {
+        wait(sec: 0.2)
+    }
+    
     @MIDI.Atomic var connEvents: [MIDI.Event] = []
     
     /// Test initializing an InputConnection, adding/removing outputs, and receiving MIDI events.
