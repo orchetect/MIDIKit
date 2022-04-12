@@ -124,7 +124,194 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         input2Events = []
         
     }
+    
+    /// Test to ensure a new input appearing in the system gets added to the connection. (Allowing manager-owned virtual inputs to be added)
+    func testOutputConnection_automaticallyAddNewInputs() throws {
+        
+        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
+                                      model: "MIDIKit123",
+                                      manufacturer: "MIDIKit")
+        
+        // start midi client
+        try manager.start()
+        wait(sec: 0.1)
+        
+        input1Events = []
+        input2Events = []
+        
+        // add new connection
+        let connTag = "testOutputConnection"
+        try manager.addOutputConnection(
+            toInputs: [],
+            tag: connTag,
+            automaticallyAddNewInputs: true,
+            preventAddingManagedInputs: false
+        )
+        
+        let conn = try XCTUnwrap(manager.managedOutputConnections[connTag])
+        wait(sec: 0.5) // some time for connection to setup
+        
+        XCTAssertEqual(conn.inputsCriteria, [])
+        XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [])
+        XCTAssertEqual(conn.endpoints, [])
+        
+        // create a virtual input
+        let input1Tag = "input1"
+        try manager.addInput(
+            name: "MIDIKit IO Tests Input 1",
+            tag: input1Tag,
+            uniqueID: .none, // allow system to generate random ID
+            receiveHandler: .events { events in
+                self.input1Events.append(contentsOf: events)
+            }
+        )
+        let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
+        let input1ID = try XCTUnwrap(input1.uniqueID)
+        let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
+        
+        wait(for: conn.coreMIDIInputEndpointRefs, equals: [input1Ref], timeout: 1.0)
+        
+        // assert that input1 was automatically added to the connection
+        XCTAssertEqual(conn.inputsCriteria, [.uniqueID(input1ID)])
+        XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [input1Ref])
+        XCTAssertEqual(conn.endpoints, [input1.endpoint])
+        
+        // send an event - it should be received by the connection
+        try conn.send(event: .start())
+        wait(for: input1Events, equals: [.start()], timeout: 0.5)
+        XCTAssertEqual(input1Events, [.start()])
+        XCTAssertEqual(input2Events, [])
+        input1Events = []
+        input2Events = []
+        
+    }
+    
+    /// Test to ensure creating a new manager-owned virtual input does not get added to the connection if `preventAddingManagedInputs == true`
+    func testOutputConnection_automaticallyAddNewInputs_preventAddingManagedInputs() throws {
+        
+        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
+                                      model: "MIDIKit123",
+                                      manufacturer: "MIDIKit")
+        
+        // start midi client
+        try manager.start()
+        wait(sec: 0.1)
+        
+        input1Events = []
+        input2Events = []
+        
+        // add new connection
+        let connTag = "testOutputConnection"
+        try manager.addOutputConnection(
+            toInputs: [],
+            tag: connTag,
+            automaticallyAddNewInputs: true,
+            preventAddingManagedInputs: true
+        )
+        
+        let conn = try XCTUnwrap(manager.managedOutputConnections[connTag])
+        wait(sec: 0.5) // some time for connection to setup
+        
+        XCTAssertEqual(conn.inputsCriteria, [])
+        XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [])
+        XCTAssertEqual(conn.endpoints, [])
+        
+        // create a virtual input
+        let input1Tag = "input1"
+        try manager.addInput(
+            name: "MIDIKit IO Tests Input 1",
+            tag: input1Tag,
+            uniqueID: .none, // allow system to generate random ID
+            receiveHandler: .events { events in
+                self.input1Events.append(contentsOf: events)
+            }
+        )
+        let input1 = try XCTUnwrap(manager.managedInputs[input1Tag]) ; _ = input1
+//        let input1ID = try XCTUnwrap(input1.uniqueID)
+//        let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
+        
+        wait(sec: 0.5) // some time for connection to be notified of new input
+        
+        // assert that input1 was automatically added to the connection
+        XCTAssertEqual(conn.inputsCriteria, [])
+        XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [])
+        XCTAssertEqual(conn.endpoints, [])
+        
+        // send an event - it should not be received by the connection
+        try conn.send(event: .start())
+        wait(sec: 0.2) // wait a bit in case an event is sent
+        XCTAssertEqual(input1Events, [])
+        XCTAssertEqual(input2Events, [])
+        input1Events = []
+        input2Events = []
+        
+    }
 	
+    /// Test to ensure virtual input(s) owned by the manager do not get added to the connection when creating the connection.
+    func testOutputConnection_preventAddingManagedInputs_onInit() throws {
+        
+        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
+                                      model: "MIDIKit123",
+                                      manufacturer: "MIDIKit")
+        
+        // start midi client
+        try manager.start()
+        wait(sec: 0.1)
+        
+        input1Events = []
+        input2Events = []
+        
+        // create a virtual input
+        let input1Tag = "input1"
+        try manager.addInput(
+            name: "MIDIKit IO Tests Input 1",
+            tag: input1Tag,
+            uniqueID: .none, // allow system to generate random ID
+            receiveHandler: .events { events in
+                self.input1Events.append(contentsOf: events)
+            }
+        )
+        let input1 = try XCTUnwrap(manager.managedInputs[input1Tag]) ; _ = input1
+//        let input1ID = try XCTUnwrap(input1.uniqueID)
+//        let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
+        
+        wait(sec: 0.2)
+        
+        // add new connection, attempting to connect to input1
+        let connTag = "testOutputConnection"
+        try manager.addOutputConnection(
+            toInputs: [input1.endpoint],
+            tag: connTag,
+            automaticallyAddNewInputs: true,
+            preventAddingManagedInputs: true
+        )
+        
+        let conn = try XCTUnwrap(manager.managedOutputConnections[connTag])
+        wait(sec: 0.5) // some time for connection to setup
+        
+        // assert input1 was not added to the connection
+        XCTAssertEqual(conn.inputsCriteria, [])
+        XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [])
+        XCTAssertEqual(conn.endpoints, [])
+        
+        // send an event - it should not be received by the connection
+        try conn.send(event: .start())
+        wait(sec: 0.2) // wait a bit in case an event is sent
+        XCTAssertEqual(input1Events, [])
+        XCTAssertEqual(input2Events, [])
+        input1Events = []
+        input2Events = []
+        
+        // check that manually adding input1 is also not allowed
+        conn.add(inputs: [input1.endpoint])
+        
+        // assert input1 was not added to the connection
+        XCTAssertEqual(conn.inputsCriteria, [])
+        XCTAssertEqual(conn.coreMIDIInputEndpointRefs, [])
+        XCTAssertEqual(conn.endpoints, [])
+        
+    }
+    
 }
 
 #endif

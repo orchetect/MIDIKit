@@ -136,7 +136,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         connEvents = []
         
-        // add new connection, connecting to output1
+        // add new connection
         let connTag = "testInputConnection"
         try manager.addInputConnection(
             toOutputs: [],
@@ -193,7 +193,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         connEvents = []
         
-        // add new connection, connecting to output1
+        // add new connection
         let connTag = "testInputConnection"
         try manager.addInputConnection(
             toOutputs: [],
@@ -264,7 +264,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         wait(sec: 0.2)
         
-        // add new connection, connecting to output1
+        // add new connection, attempting to connect to output1
         let connTag = "testInputConnection"
         try manager.addInputConnection(
             toOutputs: [output1.endpoint],
@@ -280,6 +280,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
         wait(sec: 0.5) // some time for connection to setup
         
+        // assert output1 was not added to the connection
         XCTAssertEqual(conn.outputsCriteria, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
         XCTAssertEqual(conn.endpoints, [])
@@ -289,6 +290,14 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         wait(sec: 0.2) // wait a bit in case an event is sent
         XCTAssertEqual(connEvents, [])
         connEvents = []
+        
+        // check that manually adding output1 is also not allowed
+        conn.add(outputs: [output1.endpoint])
+        
+        // assert output1 was not added to the connection
+        XCTAssertEqual(conn.outputsCriteria, [])
+        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
+        XCTAssertEqual(conn.endpoints, [])
         
     }
 

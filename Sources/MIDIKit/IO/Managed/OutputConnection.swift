@@ -31,10 +31,33 @@ extension MIDI.IO {
         
         // class-specific
         
-        public private(set) var inputsCriteria: Set<MIDI.IO.InputEndpointIDCriteria>
+        public private(set) var inputsCriteria: Set<MIDI.IO.InputEndpointIDCriteria> = []
+        
+        private func setInputsCriteria(_ criteria: Set<MIDI.IO.InputEndpointIDCriteria>) {
+            
+            if preventAddingManagedInputs,
+               let midiManager = midiManager
+            {
+                let managedInputs: [MIDI.IO.InputEndpointIDCriteria] = midiManager.managedInputs
+                    .compactMap { $0.value.uniqueID }
+                    .map { .uniqueID($0) }
+                
+                inputsCriteria = criteria
+                    .filter { !managedInputs.contains($0) }
+            } else {
+                inputsCriteria = criteria
+            }
+            
+        }
         
         /// The Core MIDI input endpoint(s) reference(s).
         public private(set) var coreMIDIInputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
+        
+        /// When new inputs appear in the system, automatically add them to the connection.
+        public var automaticallyAddNewInputs: Bool
+        
+        /// Prevent virtual inputs owned by the `Manager` (`.managedInputs`) from being added to the connection.
+        public var preventAddingManagedInputs: Bool
         
         // init
         
@@ -43,17 +66,25 @@ extension MIDI.IO {
         ///
         /// - Parameters:
         ///   - toInputs: Input(s) to connect to.
+        ///   - automaticallyAddNewInputs: When new inputs appear in the system, automatically add them to the connection.
+        ///   - preventAddingManagedInputs: Prevent virtual inputs owned by the `Manager` from being added to the connection.
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
         internal init(
             toInputs: Set<MIDI.IO.InputEndpointIDCriteria>,
+            automaticallyAddNewInputs: Bool,
+            preventAddingManagedInputs: Bool,
             midiManager: MIDI.IO.Manager,
             api: MIDI.IO.APIVersion = .bestForPlatform()
         ) {
             
-            self.inputsCriteria = toInputs
             self.midiManager = midiManager
+            self.automaticallyAddNewInputs = automaticallyAddNewInputs
+            self.preventAddingManagedInputs = preventAddingManagedInputs
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+            
+            // relies on midiManager and preventAddingManagedInputs
+            setInputsCriteria(toInputs)
             
         }
         
@@ -171,11 +202,13 @@ extension MIDI.IO.OutputConnection {
     // MARK: Add Endpoints
     
     /// Add input endpoints from the connection.
+    /// This respects the state of `preventAddingManagedInputs`.
     public func add(
         inputs: [MIDI.IO.InputEndpointIDCriteria]
     ) {
         
-        inputsCriteria.formUnion(inputs)
+        let combined = inputsCriteria.union(inputs)
+        setInputsCriteria(combined)
         
         if let midiManager = midiManager {
             // this will re-generate coreMIDIInputEndpointRefs
@@ -185,6 +218,7 @@ extension MIDI.IO.OutputConnection {
     }
     
     /// Add input endpoints from the connection.
+    /// This respects the state of `preventAddingManagedInputs`.
     @_disfavoredOverload
     public func add(
         inputs: [MIDI.IO.InputEndpoint]
@@ -201,7 +235,8 @@ extension MIDI.IO.OutputConnection {
         inputs: [MIDI.IO.InputEndpointIDCriteria]
     ) {
         
-        inputsCriteria.subtract(inputs)
+        let removed = inputsCriteria.subtracting(inputs)
+        setInputsCriteria(removed)
         
         if let midiManager = midiManager {
             // this will re-generate coreMIDIInputEndpointRefs
@@ -223,12 +258,11 @@ extension MIDI.IO.OutputConnection {
     /// Remove all input endpoints from the connection.
     public func removeAllInputs() {
         
-        inputsCriteria = []
+        let inputsToDisconnect = inputsCriteria
         
-        if let midiManager = midiManager {
-            // this will re-generate coreMIDIInputEndpointRefs
-            try? refreshConnection(in: midiManager)
-        }
+        setInputsCriteria([])
+        
+        remove(inputs: Array(inputsToDisconnect))
         
     }
     
@@ -237,6 +271,16 @@ extension MIDI.IO.OutputConnection {
 extension MIDI.IO.OutputConnection {
     
     internal func notification(_ internalNotification: MIDI.IO.InternalNotification) {
+        
+        if automaticallyAddNewInputs,
+           let notif = MIDI.IO.SystemNotification(internalNotification, cache: nil),
+           case .added(parent: _,
+                       child: let child) = notif,
+           case .inputEndpoint(let newInput) = child
+        {
+            add(inputs: [newInput])
+            return
+        }
         
         switch internalNotification {
         case .setupChanged, .added, .removed:

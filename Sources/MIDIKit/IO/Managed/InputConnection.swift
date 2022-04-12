@@ -297,6 +297,7 @@ extension MIDI.IO.InputConnection {
     // MARK: Add Endpoints
     
     /// Add output endpoints to the connection.
+    /// This respects the state of `preventAddingManagedOutputs`.
     public func add(
         outputs: [MIDI.IO.OutputEndpointIDCriteria]
     ) {
@@ -312,6 +313,7 @@ extension MIDI.IO.InputConnection {
     }
     
     /// Add output endpoints to the connection.
+    /// This respects the state of `preventAddingManagedOutputs`.
     @_disfavoredOverload
     public func add(
         outputs: [MIDI.IO.OutputEndpoint]
