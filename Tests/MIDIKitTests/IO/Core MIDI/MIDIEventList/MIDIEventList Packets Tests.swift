@@ -11,8 +11,10 @@ import CoreMIDI
 
 final class MIDIEventListPackets_Tests: XCTestCase {
 	
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
 	func testSinglePacketWithOneUMP() throws {
+        
+        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        else { return }
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
         
@@ -37,8 +39,10 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         
     }
     
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     func testSinglePacketWithMultipleUMPs() throws {
+        
+        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        else { return }
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
         
@@ -67,8 +71,10 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         
     }
     
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     func testMultiplePacketsWithSingleUMPs() throws {
+        
+        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        else { return }
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
         
@@ -97,8 +103,10 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         
     }
     
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     func testMultiplePacketsWithMultipleUMPs() throws {
+        
+        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        else { return }
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
         
@@ -158,4 +166,3 @@ final class MIDIEventListPackets_Tests: XCTestCase {
 }
 
 #endif
-
