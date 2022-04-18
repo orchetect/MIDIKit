@@ -1,39 +1,51 @@
-/// ------------------------------------------------------------------------------------
-/// ------------------------------------------------------------------------------------
-/// Borrowed from [OTCore 1.1.17](https://github.com/orchetect/OTCore) under MIT license.
-/// Methods herein are unit tested in OTCore, so no unit tests are necessary in MIDIKit.
-/// ------------------------------------------------------------------------------------
-/// ------------------------------------------------------------------------------------
+/// ------------------------------------------------------------------------------------------
+/// ------------------------------------------------------------------------------------------
+/// Borrowed from [OTAtomics 1.0.0](https://github.com/orchetect/OTAtomics) under MIT license.
+/// Methods herein are unit tested in OTAtomics, so no unit tests are necessary in MIDIKit.
+/// ------------------------------------------------------------------------------------------
+/// ------------------------------------------------------------------------------------------
 
 import Foundation
 
 extension MIDI {
     
-    /// Atomic: A property wrapper that ensures thread-safe atomic access to a value.
+    /// `Atomic`: A property wrapper that ensures thread-safe atomic access to a value.
     /// Multiple read accesses can potentially read at the same time, just not during a write.
     ///
     /// By using `pthread` to do the locking, this safer than using a `DispatchQueue/barrier` as there isn't a chance of priority inversion.
     ///
     /// This is safe to use on collection types (`Array`, `Dictionary`, etc.)
+    ///
+    /// - Warning: Do not instance this wrapper on a variable declaration inside a function. Only wrap class-bound, struct-bound, or global-bound variables.
     @propertyWrapper
     public final class Atomic<T> {
         
+        @inline(__always)
         private var value: T
         
+        @inline(__always)
         private let lock: ThreadLock = RWThreadLock()
         
+        @inline(__always)
         public init(wrappedValue value: T) {
             
             self.value = value
             
         }
         
+        @inline(__always)
         public var wrappedValue: T {
             
             get {
                 self.lock.readLock()
                 defer { self.lock.unlock() }
                 return self.value
+            }
+            
+            set {
+                self.lock.writeLock()
+                value = newValue
+                self.lock.unlock()
             }
             
             // _modify { } is an internal Swift computed setter, similar to set { }
@@ -49,6 +61,7 @@ extension MIDI {
         }
         
     }
+
     
 }
 
