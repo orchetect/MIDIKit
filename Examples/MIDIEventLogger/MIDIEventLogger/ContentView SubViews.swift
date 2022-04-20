@@ -614,7 +614,7 @@ extension ContentView {
                                     VStack { Divider().padding(.leading) }
                                     
                                     ForEach(midiManager.endpoints.outputs) {
-                                        Text("🎹 " + ($0.getDisplayName() ?? $0.name))
+                                        Text("🎹 " + ($0.displayName))
                                             .tag(MIDI.IO.OutputEndpoint?.some($0))
                                     }
                                 }
