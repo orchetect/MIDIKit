@@ -33,7 +33,7 @@ extension MIDI.IO {
         
         // MARK: - Properties (Cached)
         
-        /// User-visible endpoint name.
+        /// User-visible device name.
         /// (`kMIDIPropertyName`)
         public internal(set) var name: String = ""
         
@@ -44,8 +44,9 @@ extension MIDI.IO {
         /// Update the cached properties
         internal mutating func update() {
             
-            self.name = (try? MIDI.IO.getName(of: coreMIDIObjectRef)) ?? ""
-            self.uniqueID = .init(MIDI.IO.getUniqueID(of: coreMIDIObjectRef))
+            self.name = getName() ?? ""
+            self.name = getDisplayName() ?? ""
+            self.uniqueID = getUniqueID()
             
         }
         
