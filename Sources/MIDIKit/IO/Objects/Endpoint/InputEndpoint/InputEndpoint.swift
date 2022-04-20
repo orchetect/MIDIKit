@@ -63,70 +63,11 @@ extension MIDI.IO.InputEndpoint: Identifiable {
     // default implementation provided by MIDIIOObjectProtocol
 }
 
-extension MIDI.IO.InputEndpoint {
-    
-    /// Returns `true` if the object exists in the system by querying Core MIDI.
-    public var exists: Bool {
-        
-        MIDI.IO.getSystemDestinationEndpoint(matching: uniqueID.coreMIDIUniqueID) != nil
-        
-    }
-    
-}
-
 extension MIDI.IO.InputEndpoint: CustomDebugStringConvertible {
     
     public var debugDescription: String {
         
-        "InputEndpoint(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists))"
-        
-    }
-    
-}
-
-// MARK: - Static conveniences
-
-extension Set where Element == MIDI.IO.InputEndpointIDCriteria {
-    
-    /// Returns the current input endpoints in the system.
-    public static func current() -> Self {
-        
-        Set(MIDI.IO.getSystemDestinationEndpoints.map { .uniqueID($0.uniqueID) })
-        
-    }
-    
-}
-
-extension Array where Element == MIDI.IO.InputEndpointIDCriteria {
-    
-    /// Returns the current input endpoints in the system.
-    @_disfavoredOverload
-    public static func current() -> Self {
-        
-        MIDI.IO.getSystemDestinationEndpoints.map { .uniqueID($0.uniqueID) }
-        
-    }
-    
-}
-
-extension Set where Element == MIDI.IO.InputEndpoint {
-    
-    /// Returns the current input endpoints in the system.
-    public static func current() -> Self {
-        
-        Set(MIDI.IO.getSystemDestinationEndpoints)
-        
-    }
-    
-}
-
-extension Array where Element == MIDI.IO.InputEndpoint {
-    
-    /// Returns the current input endpoints in the system.
-    @_disfavoredOverload
-    public static func current() -> Self {
-        
-        MIDI.IO.getSystemDestinationEndpoints
+        "InputEndpoint(name: \(name.quoted), uniqueID: \(uniqueID))"
         
     }
     
