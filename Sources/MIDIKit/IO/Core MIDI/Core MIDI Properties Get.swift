@@ -255,7 +255,7 @@ extension MIDI.IO {
     /// (Apple-recommended user-visible name)
     /// (`kMIDIPropertyDisplayName`)
     ///
-    /// For objects other than endpoints, the display name is the same as its `kMIDIPropertyName` value.
+    /// For objects other than endpoints, the display name is (sometimes) the same as its `kMIDIPropertyName` value.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     internal static func getDisplayName(of ref: MIDIObjectRef) throws -> String {
@@ -553,7 +553,7 @@ extension MIDI.IO {
     // --------------------------------------------------------------
     //  | | | | Presentation:
     // *|•| | |   kMIDIPropertyImage                       string (POSIX path to image file)
-    // *|•|•|•|   kMIDIPropertyDisplayName                 string
+    // *| |?|•|   kMIDIPropertyDisplayName                 string
     // --------------------------------------------------------------
     //  | | | | Audio:
     // *|•|•| |   kMIDIPropertyPanDisruptsStereo           int32 0/1

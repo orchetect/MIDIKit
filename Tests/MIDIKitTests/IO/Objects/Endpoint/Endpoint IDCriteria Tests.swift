@@ -20,6 +20,11 @@ final class EndpointIDCriteriaTests: XCTestCase {
         switch criteria {
         case .uniqueID(let uID):
             XCTAssertEqual(uID, 10000001)
+            
+        case .uniqueIDWithFallback(id: let uID,
+                                   fallbackDisplayName: _):
+            XCTAssertEqual(uID, 10000001)
+            
         default:
             XCTFail()
         }
@@ -36,6 +41,11 @@ final class EndpointIDCriteriaTests: XCTestCase {
         switch criteria {
         case .uniqueID(let uID):
             XCTAssertEqual(uID, 10000001)
+            
+        case .uniqueIDWithFallback(id: let uID,
+                                   fallbackDisplayName: _):
+            XCTAssertEqual(uID, 10000001)
+            
         default:
             XCTFail()
         }
@@ -53,6 +63,11 @@ final class EndpointIDCriteriaTests: XCTestCase {
         switch criteria {
         case .uniqueID(let uID):
             XCTAssertEqual(uID, 10000001)
+            
+        case .uniqueIDWithFallback(id: let uID,
+                                   fallbackDisplayName: _):
+            XCTAssertEqual(uID, 10000001)
+            
         default:
             XCTFail()
         }

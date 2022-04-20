@@ -7,6 +7,10 @@
 
 public protocol MIDIIOEndpointProtocol: MIDIIOObjectProtocol {
     
+    /// Display name of the endpoint.
+    /// This typically includes the model number and endpoint name.
+    var displayName: String { get }
+    
     // implemented in extension _MIDIIOEndpointProtocol
     
     /// Returns the entity the endpoint originates from. For virtual endpoints, this will return `nil`.

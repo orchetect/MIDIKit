@@ -8,14 +8,20 @@ import Foundation
 // this protocol may not be necessary, it was experimental so that the `MIDI.IO.Manager.endpoints` property could be swapped out with a different Endpoints class with Combine support
 public protocol MIDIIOEndpointsProtocol {
     
-    /// List of MIDI output endpoints in the system
-    var outputs: [MIDI.IO.OutputEndpoint] { get }
-    
-    /// List of MIDI input endpoints in the system
+    /// List of MIDI input endpoints in the system.
     var inputs: [MIDI.IO.InputEndpoint] { get }
     
+    /// List of MIDI input endpoints in the system omitting virtual endpoints owned by this `Manager` instance.
+    var inputsUnowned: [MIDI.IO.InputEndpoint] { get }
+    
+    /// List of MIDI output endpoints in the system.
+    var outputs: [MIDI.IO.OutputEndpoint] { get }
+    
+    /// List of MIDI output endpoints in the system omitting virtual endpoints owned by this `Manager` instance.
+    var outputsUnowned: [MIDI.IO.OutputEndpoint] { get }
+    
     /// Manually update the locally cached contents from the system.
-    /// This method does not need to be manually invoked, as it is handled internally when MIDI system endpoints change.
+    /// This method does not need to be manually invoked, as it is called automatically by the `Manager` when MIDI system endpoints change.
     mutating func update()
     
 }
@@ -25,9 +31,14 @@ extension MIDI.IO {
     /// Manages system MIDI endpoints information cache.
     public class Endpoints: NSObject, MIDIIOEndpointsProtocol {
         
-        public internal(set) dynamic var outputs: [OutputEndpoint] = []
+        /// Weak reference to `Manager`.
+        internal weak var manager: MIDI.IO.Manager? = nil
         
         public internal(set) dynamic var inputs: [InputEndpoint] = []
+        public internal(set) dynamic var inputsUnowned: [InputEndpoint] = []
+        
+        public internal(set) dynamic var outputs: [OutputEndpoint] = []
+        public internal(set) dynamic var outputsUnowned: [OutputEndpoint] = []
         
         internal override init() {
             
@@ -35,10 +46,38 @@ extension MIDI.IO {
             
         }
         
+        internal init(manager: Manager) {
+            
+            self.manager = manager
+            super.init()
+            
+        }
+        
         public func update() {
             
-            outputs = MIDI.IO.getSystemSourceEndpoints
             inputs = MIDI.IO.getSystemDestinationEndpoints
+            
+            if let manager = manager {
+                inputsUnowned = inputs.filter { systemEndpoint in
+                    !manager.managedInputs.contains(where: {
+                        $0.value.uniqueID == systemEndpoint.uniqueID
+                    })
+                }
+            } else {
+                inputsUnowned = inputs
+            }
+            
+            outputs = MIDI.IO.getSystemSourceEndpoints
+            
+            if let manager = manager {
+                outputsUnowned = outputs.filter { systemEndpoint in
+                    !manager.managedOutputs.contains(where: {
+                        $0.value.uniqueID == systemEndpoint.uniqueID
+                    })
+                }
+            } else {
+                outputsUnowned = outputs
+            }
             
         }
         

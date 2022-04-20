@@ -34,13 +34,16 @@ extension MIDI.IO {
         
         public internal(set) var name: String = ""
         
+        public internal(set) var displayName: String = ""
+        
         public internal(set) var uniqueID: UniqueID = 0
         
         /// Update the cached properties
         internal mutating func update() {
             
-            self.name = (try? MIDI.IO.getName(of: coreMIDIObjectRef)) ?? ""
-            self.uniqueID = .init(MIDI.IO.getUniqueID(of: coreMIDIObjectRef))
+            self.name = getName() ?? ""
+            self.displayName = getDisplayName() ?? ""
+            self.uniqueID = getUniqueID()
             
         }
         

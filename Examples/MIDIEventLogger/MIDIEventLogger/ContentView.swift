@@ -149,7 +149,7 @@ struct ContentView: View {
         
         guard let endpoint = midiInputConnectionEndpoint else { return }
         
-        let endpointName = (endpoint.getDisplayName() ?? endpoint.name).quoted
+        let endpointName = endpoint.displayName.quoted
         
         logger.debug("Setting up new input connection to \(endpointName).")
         do {
