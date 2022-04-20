@@ -125,6 +125,8 @@ extension MIDI.IO {
             
             super.init()
             
+            self.endpoints = Endpoints(manager: self)
+            
             addNetworkSessionObservers()
             
         }
