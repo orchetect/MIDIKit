@@ -76,4 +76,11 @@ extension MIDI.IO.EndpointFilter {
         
     }
     
+    /// Convenience constructor to return an instance of `owned == true` and empty criteria.
+    public static func owned() -> Self {
+        
+        .init(owned: true, criteria: [])
+        
+    }
+    
 }
