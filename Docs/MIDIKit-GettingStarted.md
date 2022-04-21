@@ -166,10 +166,10 @@ As a convenience, MIDIKit offers a way to automatically subscribe to receiving e
 
 ```swift
 try midiManager.addInputConnection(
-    toOutputs: .current(), // add all current system outputs to start with
+    toOutputs: [],
     tag: "InputConnection1",
     mode: .allEndpoints, // continually auto-add new outputs that appear
-    filter: .init(owned: true), // filter out Manager-owned virtual outputs
+    filter: .owned(), // filter out Manager-owned virtual outputs
     receiveHandler: // add your handler here...
 )
 ```
