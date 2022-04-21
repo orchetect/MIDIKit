@@ -27,20 +27,28 @@ extension MIDI.IO {
         
         public private(set) var outputsCriteria: Set<MIDI.IO.OutputEndpointIDCriteria> = []
         
-        private func setOutputsCriteria(_ criteria: Set<MIDI.IO.OutputEndpointIDCriteria>) {
+        private func setCriteria(_ criteria: Set<MIDI.IO.OutputEndpointIDCriteria>) {
             
-            if preventAddingManagedOutputs,
+            var newCriteria = criteria
+            
+            if filter.owned,
                let midiManager = midiManager
             {
                 let managedOutputs: [MIDI.IO.OutputEndpointIDCriteria] = midiManager.managedOutputs
                     .compactMap { $0.value.uniqueID }
                     .map { .uniqueID($0) }
                 
-                outputsCriteria = criteria
+                newCriteria = newCriteria
                     .filter { !managedOutputs.contains($0) }
-            } else {
-                outputsCriteria = criteria
             }
+            
+            if !filter.criteria.isEmpty {
+                newCriteria = newCriteria
+                    .filter { !filter.criteria.contains($0) }
+
+            }
+            
+            outputsCriteria = newCriteria
             
         }
         
@@ -50,11 +58,11 @@ extension MIDI.IO {
         /// The Core MIDI output endpoint(s) reference(s).
         public private(set) var coreMIDIOutputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
         
-        /// When new outputs appear in the system, automatically add them to the connection.
-        public var automaticallyAddNewOutputs: Bool
+        /// Operating mode.
+        public var mode: MIDI.IO.ConnectionMode
         
-        /// Prevent virtual outputs owned by the `Manager` (`.managedOutputs`) from being added to the connection.
-        public var preventAddingManagedOutputs: Bool
+        /// Endpoint filter.
+        public var filter: MIDI.IO.EndpointFilter<MIDI.IO.OutputEndpoint>
         
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
@@ -64,27 +72,29 @@ extension MIDI.IO {
         /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addInputConnection()`, and destroyed when calling `.remove(.inputConnection, ...)` or `.removeAll()`.
         ///
         /// - Parameters:
-        ///   - toOutputs: Output(s) to connect to.
-        ///   - automaticallyAddNewOutputs: When new outputs appear in the system, automatically add them to the connection.
-        ///   - preventAddingManagedOutputs: Prevent virtual outputs owned by the `Manager` from being added to the connection.
+        ///   - criteria: Output(s) to connect to.
+        ///   - mode: Operation mode.
+        ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
         ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
-        internal init(toOutputs: Set<MIDI.IO.OutputEndpointIDCriteria>,
-                      automaticallyAddNewOutputs: Bool,
-                      preventAddingManagedOutputs: Bool,
-                      receiveHandler: MIDI.IO.ReceiveHandler.Definition,
-                      midiManager: MIDI.IO.Manager,
-                      api: MIDI.IO.APIVersion = .bestForPlatform()) {
+        internal init(
+            criteria: Set<MIDI.IO.OutputEndpointIDCriteria>,
+            mode: MIDI.IO.ConnectionMode,
+            filter: MIDI.IO.OutputEndpointFilter,
+            receiveHandler: MIDI.IO.ReceiveHandler.Definition,
+            midiManager: MIDI.IO.Manager,
+            api: MIDI.IO.APIVersion = .bestForPlatform()
+        ) {
             
             self.midiManager = midiManager
-            self.automaticallyAddNewOutputs = automaticallyAddNewOutputs
-            self.preventAddingManagedOutputs = preventAddingManagedOutputs
+            self.mode = mode
+            self.filter = filter
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             
-            // relies on midiManager and preventAddingManagedOutputs
-            setOutputsCriteria(toOutputs)
+            // relies on midiManager, mode, and filter being set first
+            setCriteria(mode == .allEndpoints ? .current() : criteria)
             
         }
         
@@ -297,13 +307,13 @@ extension MIDI.IO.InputConnection {
     // MARK: Add Endpoints
     
     /// Add output endpoints to the connection.
-    /// This respects the state of `preventAddingManagedOutputs`.
+    /// Endpoint filters are respected.
     public func add(
         outputs: [MIDI.IO.OutputEndpointIDCriteria]
     ) {
         
         let combined = outputsCriteria.union(outputs)
-        setOutputsCriteria(combined)
+        setCriteria(combined)
         
         if let midiManager = midiManager {
             // this will re-generate coreMIDIOutputEndpointRefs and call connect()
@@ -313,7 +323,7 @@ extension MIDI.IO.InputConnection {
     }
     
     /// Add output endpoints to the connection.
-    /// This respects the state of `preventAddingManagedOutputs`.
+    /// Endpoint filters are respected.
     @_disfavoredOverload
     public func add(
         outputs: [MIDI.IO.OutputEndpoint]
@@ -331,7 +341,7 @@ extension MIDI.IO.InputConnection {
     ) {
         
         let removed = outputsCriteria.subtracting(outputs)
-        setOutputsCriteria(removed)
+        setCriteria(removed)
         
         if let midiManager = midiManager {
             let refs = outputs
@@ -363,7 +373,7 @@ extension MIDI.IO.InputConnection {
         
         let outputsToDisconnect = outputsCriteria
         
-        setOutputsCriteria([])
+        setCriteria([])
         
         remove(outputs: Array(outputsToDisconnect))
         
@@ -375,7 +385,7 @@ extension MIDI.IO.InputConnection {
     
     internal func notification(_ internalNotification: MIDI.IO.InternalNotification) {
         
-        if automaticallyAddNewOutputs,
+        if mode == .allEndpoints,
            let notif = MIDI.IO.SystemNotification(internalNotification, cache: nil),
            case .added(parent: _,
                        child: let child) = notif,

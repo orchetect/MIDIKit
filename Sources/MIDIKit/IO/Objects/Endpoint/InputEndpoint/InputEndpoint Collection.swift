@@ -37,6 +37,18 @@ extension Set where Element == MIDI.IO.InputEndpoint {
         
     }
     
+    /// Returns the endpoints as endpoint criteria.
+    public func asCriteria() -> Set<MIDI.IO.InputEndpointIDCriteria> {
+        
+        // for some reason Set(map { ... }) was not working
+        // so we have to use reduce
+        
+        reduce(into: Set<MIDI.IO.InputEndpointIDCriteria>()) {
+            $0.insert(.uniqueID($1.uniqueID))
+        }
+        
+    }
+    
 }
 
 extension Array where Element == MIDI.IO.InputEndpoint {
@@ -46,6 +58,14 @@ extension Array where Element == MIDI.IO.InputEndpoint {
     public static func current() -> Self {
         
         MIDI.IO.getSystemDestinationEndpoints
+        
+    }
+    
+    /// Returns the endpoints as endpoint criteria.
+    @_disfavoredOverload
+    public func asCriteria() -> [MIDI.IO.InputEndpointIDCriteria] {
+        
+        map { MIDI.IO.InputEndpointIDCriteria.uniqueID($0.uniqueID) }
         
     }
     

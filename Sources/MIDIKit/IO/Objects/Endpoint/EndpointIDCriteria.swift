@@ -1,5 +1,5 @@
 //
-//  Endpoint IDCriteria.swift
+//  EndpointIDCriteria.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -10,7 +10,7 @@ extension MIDI.IO {
     /// Enum describing the criteria with which to identify endpoints.
     ///
     /// It is recommended to use `uniqueID` primarily. For added resiliency, it is also possible to use `uniqueID` with fallback criteria in the event the endpoint provider does not correctly restore its unique identifier number.
-    public enum EndpointIDCriteria<T: MIDIIOObjectProtocol> {
+    public enum EndpointIDCriteria<T: MIDIIOEndpointProtocol> {
         
         /// Utilizes first endpoint matching the endpoint name.
         /// Use of this is discouraged outside of debugging, since multiple endpoints can potentially share the same name in the system.
@@ -44,7 +44,7 @@ extension MIDI.IO {
     
 }
 
-extension MIDI.IO.EndpointIDCriteria: Equatable where T : MIDIIOObjectProtocol {
+extension MIDI.IO.EndpointIDCriteria: Equatable where T : MIDIIOEndpointProtocol {
     
     public static func == (lhs: Self, rhs: Self) -> Bool {
         
@@ -75,7 +75,7 @@ extension MIDI.IO.EndpointIDCriteria: Equatable where T : MIDIIOObjectProtocol {
     
 }
 
-extension MIDI.IO.EndpointIDCriteria: Hashable where T : MIDIIOObjectProtocol {
+extension MIDI.IO.EndpointIDCriteria: Hashable where T : MIDIIOEndpointProtocol {
     
     public func hash(into hasher: inout Hasher) {
         

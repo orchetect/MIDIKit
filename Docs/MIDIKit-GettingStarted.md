@@ -162,14 +162,14 @@ try midiManager.addInputConnection(
 )
 ```
 
-As a convenience, MIDIKit offers a way to automatically subscribe to receiving events from all MIDI outputs in the system by initially adding all `.current()` system endpoints, and setting additional flags on the initializer:
+As a convenience, MIDIKit offers a way to automatically subscribe to receiving events from all MIDI outputs in the system by initially adding all `.current()` system endpoints, and setting a filter on the initializer.
 
 ```swift
 try midiManager.addInputConnection(
     toOutputs: .current(), // add all current system outputs to start with
     tag: "InputConnection1",
-    automaticallyAddNewOutputs: true, // continually auto-add new outputs that appear
-    preventAddingManagedOutputs: true, // filter out Manager-owned virtual outputs
+    mode: .allEndpoints, // continually auto-add new outputs that appear
+    filter: .init(owned: true), // filter out Manager-owned virtual outputs
     receiveHandler: // add your handler here...
 )
 ```
