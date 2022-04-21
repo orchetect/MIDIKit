@@ -54,3 +54,31 @@ extension MIDI.IO.InputEndpoint.UniqueID: CustomStringConvertible {
     }
     
 }
+
+// MARK: - Collection
+
+extension Set where Element == MIDI.IO.InputEndpoint.UniqueID {
+    
+    public func asCriteria() -> Set<MIDI.IO.InputEndpointIDCriteria> {
+        
+        // for some reason Set(map { ... }) was not working
+        // so we have to use reduce
+        
+        reduce(into: Set<MIDI.IO.InputEndpointIDCriteria>()) {
+            $0.insert(.uniqueID($1))
+        }
+        
+    }
+    
+}
+
+extension Array where Element == MIDI.IO.InputEndpoint.UniqueID {
+    
+    @_disfavoredOverload
+    public func asCriteria() -> [MIDI.IO.InputEndpointIDCriteria] {
+        
+        map { .uniqueID($0) }
+        
+    }
+    
+}

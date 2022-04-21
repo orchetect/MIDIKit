@@ -51,6 +51,30 @@ extension MIDI.IO {
     
 }
 
+extension MIDI.IO.AnyEndpoint: Equatable {
+    // default implementation provided in MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.AnyEndpoint: Hashable {
+    // default implementation provided in MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.AnyEndpoint: Identifiable {
+    // default implementation provided by MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.AnyEndpoint: CustomDebugStringConvertible {
+    
+    public var debugDescription: String {
+        
+        "AnyEndpoint(name: \(name.quoted), uniqueID: \(uniqueID))"
+        
+    }
+    
+}
+
+// MARK: - Extensions
+
 extension _MIDIIOEndpointProtocol {
     
     /// Returns the endpoint as a type-erased `AnyEndpoint`.

@@ -15,6 +15,7 @@ extension MIDIIOUniqueIDProtocol {
         
     }
     
+    /// Same as using `==` operator.
     public func isEqual(to other: Self) -> Bool {
         
         coreMIDIUniqueID == other.coreMIDIUniqueID
