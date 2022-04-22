@@ -12,7 +12,8 @@ extension MIDI.IO {
         
         case device
         case entity
-        case endpoint
+        case inputEndpoint
+        case outputEndpoint
         
     }
     

@@ -301,38 +301,38 @@ extension MIDI.IO.Object.Property {
         switch self {
         
         // MARK: Identification
-        case .name: return [.device, .entity, .endpoint]
-        case .model: return [.device, .endpoint]
-        case .manufacturer: return [.device, .endpoint]
-        case .uniqueID: return [.device, .entity, .endpoint]
+        case .name: return [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .model: return [.device, .inputEndpoint, .outputEndpoint]
+        case .manufacturer: return [.device, .inputEndpoint, .outputEndpoint]
+        case .uniqueID: return [.device, .entity, .inputEndpoint, .outputEndpoint]
         case .deviceID: return [.device, .entity]
             
         // MARK: Capabilities
-        case .supportsMMC: return [.device, .entity, .endpoint]
-        case .supportsGeneralMIDI: return [.device, .entity, .endpoint]
-        case .supportsShowControl: return [.device, .entity, .endpoint]
+        case .supportsMMC: return [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .supportsGeneralMIDI: return [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .supportsShowControl: return [.device, .entity, .inputEndpoint, .outputEndpoint]
             
         // MARK: Configuration
         case .nameConfigurationDictionary: return [.device]
-        case .maxSysExSpeed: return [.device, .entity, .endpoint]
+        case .maxSysExSpeed: return [.device, .entity, .inputEndpoint, .outputEndpoint]
         case .driverDeviceEditorApp: return [.device]
             
         // MARK: Presentation
         case .image: return [.device]
-        case .displayName: return [.device, .entity, .endpoint]
+        case .displayName: return [.inputEndpoint, .outputEndpoint]
             
         // MARK: Audio
         case .panDisruptsStereo: return [.device, .entity]
             
         // MARK: Protocols
-        case .protocolID: return [.endpoint]
+        case .protocolID: return [.inputEndpoint, .outputEndpoint]
             
         // MARK: Timing
-        case .transmitsMTC: return [.device, .entity, .endpoint]
-        case .receivesMTC: return [.device, .entity, .endpoint]
-        case .transmitsClock: return [.device, .entity, .endpoint]
-        case .receivesClock: return [.device, .entity, .endpoint]
-        case .advanceScheduleTimeMuSec: return [.device, .entity] // + .endpoint?
+        case .transmitsMTC: return [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .receivesMTC: return [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .transmitsClock: return [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .receivesClock: return [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .advanceScheduleTimeMuSec: return [.device, .entity] // + .inputEndpoint, .outputEndpoint?
         
         // MARK: Roles
         case .isMixer: return [.device, .entity]
@@ -341,23 +341,23 @@ extension MIDI.IO.Object.Property {
         case .isDrumMachine: return [.device, .entity]
             
         // MARK: Status
-        case .isOffline: return [.device, .entity, .endpoint]
-        case .isPrivate: return [.endpoint]
+        case .isOffline: return [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .isPrivate: return [.inputEndpoint, .outputEndpoint]
             
         // MARK: Drivers
-        case .driverOwner: return [.device, .entity, .endpoint]
-        case .driverVersion: return [.device, .entity, .endpoint]
+        case .driverOwner: return [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .driverVersion: return [.device, .entity, .inputEndpoint, .outputEndpoint]
             
         // MARK: Connections
         case .canRoute: return [.device, .entity]
-        case .isBroadcast: return [.endpoint]
-        case .connectionUniqueID: return [.endpoint] // ?
-        case .isEmbeddedEntity: return [.entity, .endpoint]
-        case .singleRealtimeEntity: return [.device, .endpoint] // ?
+        case .isBroadcast: return [.inputEndpoint, .outputEndpoint]
+        case .connectionUniqueID: return [.inputEndpoint, .outputEndpoint] // ?
+        case .isEmbeddedEntity: return [.entity, .inputEndpoint, .outputEndpoint]
+        case .singleRealtimeEntity: return [.device, .inputEndpoint, .outputEndpoint] // ?
         
         // MARK: Channels
-        case .receiveChannels: return [.device, .entity, .endpoint] // ?
-        case .transmitChannels: return [.device, .entity, .endpoint] // ?
+        case .receiveChannels: return [.device, .entity, .inputEndpoint, .outputEndpoint] // ?
+        case .transmitChannels: return [.device, .entity, .inputEndpoint, .outputEndpoint] // ?
         case .maxReceiveChannels: return [.device]
         case .maxTransmitChannels: return [.device]
             

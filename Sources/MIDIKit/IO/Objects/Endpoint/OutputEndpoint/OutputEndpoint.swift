@@ -14,6 +14,8 @@ extension MIDI.IO {
     /// Instead, read endpoint arrays and individual endpoint properties from `MIDI.IO.Manager.endpoints` ad-hoc when they are needed.
     public struct OutputEndpoint: _MIDIIOEndpointProtocol {
         
+        public var objectType: MIDI.IO.ObjectType { .outputEndpoint }
+        
         // MARK: CoreMIDI ref
         
         public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
