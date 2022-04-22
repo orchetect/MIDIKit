@@ -22,7 +22,7 @@ struct EmptyDetailsView: View {
 	
 }
 
-struct DetailsView: View{
+struct DetailsView: View {
 	
 	@Environment(\.hostingWindow) var hostingWindow
 	
