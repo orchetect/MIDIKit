@@ -45,7 +45,6 @@ extension MIDI.IO {
         internal mutating func update() {
             
             self.name = getName() ?? ""
-            self.name = getDisplayName() ?? ""
             self.uniqueID = getUniqueID()
             
         }
