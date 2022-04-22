@@ -27,14 +27,6 @@ internal protocol _MIDIIOEndpointProtocol: MIDIIOEndpointProtocol {
     
 }
 
-// MIDIIOObjectProtocol implementation
-
-extension _MIDIIOEndpointProtocol {
-    
-    public var objectType: MIDI.IO.ObjectType { .endpoint }
-    
-}
-
 // MIDIIOEndpointProtocol implementation
 
 extension _MIDIIOEndpointProtocol {

@@ -21,12 +21,39 @@ struct ContentView: View {
             
             List {
                 
-                Section(header: Text("MIDI Devices")) {
+                Section(header: Text("Device Tree")) {
                     
-                    ForEach(midiManager.devices.devices.sortedByName()) { item in
+                    let items: [MIDI.IO.AnyMIDIIOObject] = midiManager.devices.devices
+                        .sortedByName()
+                        .flatMap {
+                            [$0.asAnyMIDIIOObject()]
+                            + $0.entities
+                                .flatMap {
+                                    [$0.asAnyMIDIIOObject()]
+                                    + $0.inputs.asAnyMIDIIOObjects()
+                                    + $0.outputs.asAnyMIDIIOObjects()
+                                }
+                        }
+                    
+                    ForEach(items) { item in
                         let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
                         
                         NavigationLink(destination: detailsView) {
+                            switch item.objectType {
+                            case .device:
+                                // SwiftUI doesn't allow 'break' in a switch case
+                                // so just put a 0x0 pixel spacer here
+                                Spacer().frame(width: 0, height: 0, alignment: .center)
+                                
+                            case .entity:
+                                Spacer()
+                                    .frame(width: 24, height: 18, alignment: .center)
+                                
+                            case .inputEndpoint, .outputEndpoint:
+                                Spacer()
+                                    .frame(width: 48, height: 18, alignment: .center)
+                            }
+                            
                             Group {
                                 if let nsImg = item.getImageAsNSImage() {
                                     Image(nsImage: nsImg)
@@ -38,14 +65,24 @@ struct ContentView: View {
                             .frame(width: 18, height: 18, alignment: .center)
                             
                             Text("\(item.name)")
+                            if item.objectType == .inputEndpoint {
+                                Text("(In)")
+                            } else if item.objectType == .outputEndpoint {
+                                Text("(Out)")
+                            }
                         }
                     }
                     
                 }
                 
-                Section(header: Text("MIDI Output Endpoints")) {
+                Section(header: Text("Other Inputs")) {
                     
-                    ForEach(midiManager.endpoints.outputs.sortedByName()) { item in
+                    // filter out endpoints that have an entity because
+                    // they are already being displayed in the Devices tree
+                    let items = midiManager.endpoints.inputs.sortedByName()
+                        .filter { $0.getEntity() == nil }
+                    
+                    ForEach(items) { item in
                         let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
                         
                         NavigationLink(destination: detailsView) {
@@ -65,9 +102,14 @@ struct ContentView: View {
                     
                 }
                 
-                Section(header: Text("MIDI Input Endpoints")) {
+                Section(header: Text("Other Outputs")) {
                     
-                    ForEach(midiManager.endpoints.inputs.sortedByName()) { item in
+                    // filter out endpoints that have an entity because
+                    // they are already being displayed in the Devices tree
+                    let items = midiManager.endpoints.outputs.sortedByName()
+                        .filter { $0.getEntity() == nil }
+                    
+                    ForEach(items) { item in
                         let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
                         
                         NavigationLink(destination: detailsView) {

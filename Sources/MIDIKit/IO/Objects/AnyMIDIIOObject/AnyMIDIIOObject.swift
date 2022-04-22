@@ -35,6 +35,18 @@ extension MIDI.IO {
     
 }
 
+extension MIDI.IO.AnyMIDIIOObject: Equatable {
+    // default implementation provided in MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.AnyMIDIIOObject: Hashable {
+    // default implementation provided in MIDIIOObjectProtocol
+}
+
+extension MIDI.IO.AnyMIDIIOObject: Identifiable {
+    // default implementation provided by MIDIIOObjectProtocol
+}
+
 extension MIDIIOObjectProtocol {
     
     /// Return as `AnyMIDIIOObject`, a type-erased representation of a MIDIKit object conforming to `MIDIIOObjectProtocol`.

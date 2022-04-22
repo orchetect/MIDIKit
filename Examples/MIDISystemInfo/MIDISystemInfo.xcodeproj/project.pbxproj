@@ -66,7 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				E230C4A225AE7B31005DCB55 /* AppDelegate.swift */,
-				E2AC6C7925EDF8FF008A4558 /* ContentView */,
+				E230C4A425AE7B31005DCB55 /* ContentView.swift */,
 				E26B849B25EDA4F400080052 /* DetailsView.swift */,
 				E205B44325E86AA7001A07D1 /* WebKitView.swift */,
 				E293070325E90D750011904C /* HostingWindowKey.swift */,
@@ -76,14 +76,6 @@
 				E230C4AF25AE7B33005DCB55 /* MIDISystemInfo.entitlements */,
 			);
 			path = MIDISystemInfo;
-			sourceTree = "<group>";
-		};
-		E2AC6C7925EDF8FF008A4558 /* ContentView */ = {
-			isa = PBXGroup;
-			children = (
-				E230C4A425AE7B31005DCB55 /* ContentView.swift */,
-			);
-			path = ContentView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

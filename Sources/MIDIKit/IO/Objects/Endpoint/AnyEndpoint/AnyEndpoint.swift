@@ -8,6 +8,8 @@ extension MIDI.IO {
     /// Type-erased box that can contain `MIDI.IO.InputEndpoint` or `MIDI.IO.OutputEndpoint`.
     public struct AnyEndpoint: _MIDIIOEndpointProtocol {
         
+        public var objectType: MIDI.IO.ObjectType
+        
         public let endpointType: MIDI.IO.EndpointType
         
         // MARK: MIDIIOObjectProtocol
@@ -27,12 +29,15 @@ extension MIDI.IO {
             
             switch base {
             case is MIDI.IO.InputEndpoint:
+                objectType = .inputEndpoint
                 endpointType = .input
                 
             case is MIDI.IO.OutputEndpoint:
+                objectType = .outputEndpoint
                 endpointType = .output
                 
             case let otherCast as Self:
+                objectType = otherCast.objectType
                 endpointType = otherCast.endpointType
                 
             default:

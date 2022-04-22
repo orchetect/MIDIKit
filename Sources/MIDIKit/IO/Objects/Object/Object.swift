@@ -83,7 +83,8 @@ extension MIDI.IO.Object {
         switch self {
         case .device: return .device
         case .entity: return .entity
-        case .inputEndpoint, .outputEndpoint: return .endpoint
+        case .inputEndpoint: return .inputEndpoint
+        case .outputEndpoint: return .outputEndpoint
         }
         
     }
