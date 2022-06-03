@@ -2,7 +2,7 @@
 
 [![CI Build Status](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml) [![Platforms - macOS 10.12+ | iOS 10+ (beta)](https://img.shields.io/badge/platforms-macOS%2010.12%2B%20|%20iOS%2010%2B-lightgrey.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
 
-An elegant and modern Swift CoreMIDI wrapper supporting MIDI 1.0 and MIDI 2.0.
+An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MIDI 2.0.
 
 - Modular, user-friendly I/O
 - Automatic MIDI endpoint connection management and unique ID persistence
@@ -29,17 +29,16 @@ Abstractions are built as optional extensions in their own repos.
      .package(url: "https://github.com/orchetect/MIDIKit", from: "0.4.0")
      ```
   
-1. Import the library:
+2. Import the library:
   ```swift
   import MIDIKit
   ```
 
-3. Read the [Getting Started guide](https://github.com/orchetect/MIDIKit/blob/master/Docs/MIDIKit-GettingStarted.md). Additional documentation is available in the [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder.
-3. See [Examples](https://github.com/orchetect/MIDIKit/blob/master/Examples/) folder for example projects.
+3. See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a [Getting Started](https://github.com/orchetect/MIDIKit/wiki/Getting-Started.md) guide, links to examples, and troubleshooting tips.
 
 ## Documentation
 
-See [Docs](https://github.com/orchetect/MIDIKit/blob/master/Docs/) folder. Also see project [Examples](https://github.com/orchetect/MIDIKit/blob/master/Examples/) folder.
+See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a [Getting Started](https://github.com/orchetect/MIDIKit/wiki/Getting-Started.md) guide, links to examples, and troubleshooting tips.
 
 ## Author
 
