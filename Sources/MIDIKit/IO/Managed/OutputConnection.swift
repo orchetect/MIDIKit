@@ -33,9 +33,11 @@ extension MIDI.IO {
         
         public private(set) var inputsCriteria: Set<MIDI.IO.InputEndpointIDCriteria> = []
         
-        private func setCriteria(_ criteria: Set<MIDI.IO.InputEndpointIDCriteria>) {
+        /// Stores criteria after applying any filters that have been set in the `filter` property.
+        /// Passing nil will re-use existing criteria, re-applying the filters.
+        private func updateCriteria(_ criteria: Set<MIDI.IO.InputEndpointIDCriteria>? = nil) {
             
-            var newCriteria = criteria
+            var newCriteria = criteria ?? inputsCriteria
             
             if filter.owned,
                let midiManager = midiManager
@@ -62,10 +64,42 @@ extension MIDI.IO {
         public private(set) var coreMIDIInputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
         
         /// Operating mode.
-        public var mode: MIDI.IO.ConnectionMode
+        ///
+        /// Changes take effect immediately.
+        public var mode: MIDI.IO.ConnectionMode {
+            didSet {
+                guard oldValue != mode else { return }
+                guard let midiManager = midiManager else { return }
+                updateCriteriaFromMode()
+                try? refreshConnection(in: midiManager)
+            }
+        }
+        
+        /// Reads the `mode` property and applies it to the stored criteria.
+        private func updateCriteriaFromMode() {
+            
+            switch mode {
+            case .allEndpoints:
+                updateCriteria(.current())
+                
+            case .definedEndpoints:
+                updateCriteria()
+                
+            }
+            
+        }
         
         /// Endpoint filter.
-        public var filter: MIDI.IO.EndpointFilter<MIDI.IO.InputEndpoint>
+        ///
+        /// Changes take effect immediately.
+        public var filter: MIDI.IO.EndpointFilter<MIDI.IO.InputEndpoint> {
+            didSet {
+                guard oldValue != filter else { return }
+                guard let midiManager = midiManager else { return }
+                updateCriteria()
+                try? refreshConnection(in: midiManager)
+            }
+        }
         
         // init
         
@@ -74,7 +108,7 @@ extension MIDI.IO {
         ///
         /// - Parameters:
         ///   - criteria: Input(s) to connect to.
-        ///   - mode: Operation mode.
+        ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
         ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
@@ -92,7 +126,11 @@ extension MIDI.IO {
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             
             // relies on midiManager, mode, and filter being set first
-            setCriteria(mode == .allEndpoints ? .current() : criteria)
+            if mode == .allEndpoints {
+                updateCriteriaFromMode()
+            } else {
+                updateCriteria(criteria)
+            }
             
         }
         
@@ -176,10 +214,6 @@ extension MIDI.IO.OutputConnection {
         
     }
     
-}
-
-extension MIDI.IO.OutputConnection {
-    
     /// Refresh the connection.
     /// This is typically called after receiving a Core MIDI notification that system port configuration has changed or endpoints were added/removed.
     internal func refreshConnection(in manager: MIDI.IO.Manager) throws {
@@ -192,11 +226,6 @@ extension MIDI.IO.OutputConnection {
         
         for criteria in inputsCriteria {
             if criteria.locate(in: getSystemInputs) != nil { matchedEndpointCount += 1 }
-        }
-        
-        guard matchedEndpointCount > 0 else {
-            coreMIDIInputEndpointRefs = []
-            return
         }
         
         try resolveEndpoints(in: manager)
@@ -216,7 +245,7 @@ extension MIDI.IO.OutputConnection {
     ) {
         
         let combined = inputsCriteria.union(inputs)
-        setCriteria(combined)
+        updateCriteria(combined)
         
         if let midiManager = midiManager {
             // this will re-generate coreMIDIInputEndpointRefs
@@ -244,7 +273,7 @@ extension MIDI.IO.OutputConnection {
     ) {
         
         let removed = inputsCriteria.subtracting(inputs)
-        setCriteria(removed)
+        updateCriteria(removed)
         
         if let midiManager = midiManager {
             // this will re-generate coreMIDIInputEndpointRefs
@@ -267,9 +296,7 @@ extension MIDI.IO.OutputConnection {
     public func removeAllInputs() {
         
         let inputsToDisconnect = inputsCriteria
-        
-        setCriteria([])
-        
+        updateCriteria([])
         remove(inputs: Array(inputsToDisconnect))
         
     }

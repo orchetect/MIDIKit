@@ -306,6 +306,73 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
     }
     
+    /// Test to ensure virtual output(s) owned by the manager
+    /// are removed from the connection when updating mode and filter.
+    func testInputConnection_filterOwned_afterInit() throws {
+        
+        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
+                                      model: "MIDIKit123",
+                                      manufacturer: "MIDIKit")
+        
+        // start midi client
+        try manager.start()
+        wait(sec: 0.1)
+        
+        connEvents = []
+        
+        // create a virtual output
+        let output1Tag = "output1"
+        try manager.addOutput(
+            name: "MIDIKit IO Tests Source 1",
+            tag: output1Tag,
+            uniqueID: .none // allow system to generate random ID
+        )
+        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
+        let output1ID = try XCTUnwrap(output1.uniqueID)
+        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
+        
+        wait(sec: 0.2)
+        
+        // add new connection, attempting to connect to output1
+        let connTag = "testInputConnection"
+        try manager.addInputConnection(
+            toOutputs: [output1.endpoint],
+            tag: connTag,
+            receiveHandler: .events { events in
+                print(events)
+                self.connEvents.append(contentsOf: events)
+            }
+        )
+        
+        let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
+        wait(sec: 0.5) // some time for connection to setup
+        
+        // set mode and filter
+        conn.mode = .allEndpoints
+        conn.filter = .init(owned: true)
+        wait(sec: 0.5) // some time for connection to update
+        
+        // assert output1 is not present in connection targets
+        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
+        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
+        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
+        
+        // send an event - it should not be received by the connection
+        try output1.send(event: .start())
+        wait(sec: 0.2) // wait a bit in case an event is sent
+        XCTAssertFalse(connEvents.contains(.start()))
+        connEvents = []
+        
+        // check that manually adding output1 is also not allowed
+        conn.add(outputs: [output1.endpoint])
+        
+        // assert output1 was not added to the connection
+        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
+        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
+        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
+        
+    }
+    
     /// Test to ensure filter works.
     func testInputConnection_filterEndpoints_onInit() throws {
         
@@ -358,6 +425,73 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         try output1.send(event: .start())
         wait(sec: 0.2) // wait a bit in case an event is sent
         XCTAssert(!connEvents.contains(.start()))
+        connEvents = []
+        
+        // check that manually adding output1 is also not allowed
+        conn.add(outputs: [output1.endpoint])
+        
+        // assert output1 was not added to the connection
+        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
+        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
+        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
+        
+    }
+    
+    /// Test to ensure filter works after creating a connection.
+    func testInputConnection_filterEndpoints_afterInit() throws {
+        
+        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
+                                      model: "MIDIKit123",
+                                      manufacturer: "MIDIKit")
+        
+        // start midi client
+        try manager.start()
+        wait(sec: 0.1)
+        
+        connEvents = []
+        
+        // create a virtual output
+        let output1Tag = "output1"
+        try manager.addOutput(
+            name: "MIDIKit IO Tests Source 1",
+            tag: output1Tag,
+            uniqueID: .none // allow system to generate random ID
+        )
+        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
+        let output1ID = try XCTUnwrap(output1.uniqueID)
+        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
+        
+        wait(sec: 0.2)
+        
+        // add new connection, attempting to connect to output1
+        let connTag = "testInputConnection"
+        try manager.addInputConnection(
+            toOutputs: [output1.endpoint],
+            tag: connTag,
+            receiveHandler: .events { events in
+                print(events)
+                self.connEvents.append(contentsOf: events)
+            }
+        )
+        
+        let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
+        wait(sec: 0.5) // some time for connection to setup
+        
+        // set mode and filter
+        conn.mode = .allEndpoints
+        conn.filter = .init(owned: false,
+                            criteria: [.uniqueID(output1ID)])
+        wait(sec: 0.5) // some time for connection to update
+        
+        // assert output1 is not present in connection targets
+        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
+        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
+        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
+        
+        // send an event - it should not be received by the connection
+        try output1.send(event: .start())
+        wait(sec: 0.2) // wait a bit in case an event is sent
+        XCTAssertFalse(connEvents.contains(.start()))
         connEvents = []
         
         // check that manually adding output1 is also not allowed
