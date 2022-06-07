@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		E27D0E43284F378100F43247 /* VirtualInputApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E42284F378100F43247 /* VirtualInputApp.swift */; };
 		E27D0E45284F378100F43247 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E44284F378100F43247 /* ContentView.swift */; };
-		E27D0E47284F378200F43247 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E27D0E46284F378200F43247 /* Assets.xcassets */; };
-		E27D0E4A284F378200F43247 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E27D0E49284F378200F43247 /* Preview Assets.xcassets */; };
 		E27D0E55284F386A00F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E54284F386A00F43247 /* MIDIKit */; };
 /* End PBXBuildFile section */
 
@@ -18,8 +16,6 @@
 		E27D0E3F284F378100F43247 /* VirtualInput.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualInput.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27D0E42284F378100F43247 /* VirtualInputApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualInputApp.swift; sourceTree = "<group>"; };
 		E27D0E44284F378100F43247 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		E27D0E46284F378200F43247 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E27D0E49284F378200F43247 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E27D0E4B284F378200F43247 /* VirtualInput.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VirtualInput.entitlements; sourceTree = "<group>"; };
 		E27D0E52284F385800F43247 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,19 +54,9 @@
 			children = (
 				E27D0E42284F378100F43247 /* VirtualInputApp.swift */,
 				E27D0E44284F378100F43247 /* ContentView.swift */,
-				E27D0E46284F378200F43247 /* Assets.xcassets */,
 				E27D0E4B284F378200F43247 /* VirtualInput.entitlements */,
-				E27D0E48284F378200F43247 /* Preview Content */,
 			);
 			path = VirtualInput;
-			sourceTree = "<group>";
-		};
-		E27D0E48284F378200F43247 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				E27D0E49284F378200F43247 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		E27D0E51284F385800F43247 /* Packages */ = {
@@ -120,7 +106,7 @@
 				};
 			};
 			buildConfigurationList = E27D0E3A284F378100F43247 /* Build configuration list for PBXProject "VirtualInput" */;
-			compatibilityVersion = "Xcode 10.0";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -142,8 +128,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E27D0E4A284F378200F43247 /* Preview Assets.xcassets in Resources */,
-				E27D0E47284F378200F43247 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
