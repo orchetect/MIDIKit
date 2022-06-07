@@ -27,8 +27,8 @@
 		E230C4AE25AE7B33005DCB55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E230C4AF25AE7B33005DCB55 /* MIDISystemInfo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MIDISystemInfo.entitlements; sourceTree = "<group>"; };
 		E26B849B25EDA4F400080052 /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
+		E28F3CA8284F53CA00AFCF9C /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
 		E293070325E90D750011904C /* HostingWindowKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingWindowKey.swift; sourceTree = "<group>"; };
-		E2BE8483268BCA570034F62C /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MIDIKit; path = ../..; sourceTree = "<group>"; };
 		E2F71ED12758E92E006254C0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -48,7 +48,7 @@
 		E230C49625AE7B31005DCB55 = {
 			isa = PBXGroup;
 			children = (
-				E2BE8483268BCA570034F62C /* MIDIKit */,
+				E28F3CA7284F53CA00AFCF9C /* Packages */,
 				E230C4A125AE7B31005DCB55 /* MIDISystemInfo */,
 				E230C4A025AE7B31005DCB55 /* Products */,
 			);
@@ -76,6 +76,14 @@
 				E230C4AF25AE7B33005DCB55 /* MIDISystemInfo.entitlements */,
 			);
 			path = MIDISystemInfo;
+			sourceTree = "<group>";
+		};
+		E28F3CA7284F53CA00AFCF9C /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				E28F3CA8284F53CA00AFCF9C /* MIDIKit */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
