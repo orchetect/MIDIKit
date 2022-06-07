@@ -27,9 +27,11 @@ extension MIDI.IO {
         
         public private(set) var outputsCriteria: Set<MIDI.IO.OutputEndpointIDCriteria> = []
         
-        private func setCriteria(_ criteria: Set<MIDI.IO.OutputEndpointIDCriteria>) {
+        /// Stores criteria after applying any filters that have been set in the `filter` property.
+        /// Passing nil will re-use existing criteria, re-applying the filters.
+        private func updateCriteria(_ criteria: Set<MIDI.IO.OutputEndpointIDCriteria>? = nil) {
             
-            var newCriteria = criteria
+            var newCriteria = criteria ?? outputsCriteria
             
             if filter.owned,
                let midiManager = midiManager
@@ -59,10 +61,42 @@ extension MIDI.IO {
         public private(set) var coreMIDIOutputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
         
         /// Operating mode.
-        public var mode: MIDI.IO.ConnectionMode
+        ///
+        /// Changes take effect immediately.
+        public var mode: MIDI.IO.ConnectionMode {
+            didSet {
+                guard oldValue != mode else { return }
+                guard let midiManager = midiManager else { return }
+                updateCriteriaFromMode()
+                try? refreshConnection(in: midiManager)
+            }
+        }
+        
+        /// Reads the `mode` property and applies it to the stored criteria.
+        private func updateCriteriaFromMode() {
+            
+            switch mode {
+            case .allEndpoints:
+                updateCriteria(.current())
+                
+            case .definedEndpoints:
+                updateCriteria()
+                
+            }
+            
+        }
         
         /// Endpoint filter.
-        public var filter: MIDI.IO.EndpointFilter<MIDI.IO.OutputEndpoint>
+        ///
+        /// Changes take effect immediately.
+        public var filter: MIDI.IO.EndpointFilter<MIDI.IO.OutputEndpoint> {
+            didSet {
+                guard oldValue != filter else { return }
+                guard let midiManager = midiManager else { return }
+                updateCriteria()
+                try? refreshConnection(in: midiManager)
+            }
+        }
         
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
@@ -73,7 +107,7 @@ extension MIDI.IO {
         ///
         /// - Parameters:
         ///   - criteria: Output(s) to connect to.
-        ///   - mode: Operation mode.
+        ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
         ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
         ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
         ///   - midiManager: Reference to I/O Manager object.
@@ -94,14 +128,18 @@ extension MIDI.IO {
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             
             // relies on midiManager, mode, and filter being set first
-            setCriteria(mode == .allEndpoints ? .current() : criteria)
+            if mode == .allEndpoints {
+                updateCriteriaFromMode()
+            } else {
+                updateCriteria(criteria)
+            }
             
         }
         
         deinit {
             
-            _ = try? disconnect()
-            _ = try? stopListening()
+            try? disconnect()
+            try? stopListening()
             
         }
         
@@ -204,10 +242,14 @@ extension MIDI.IO.InputConnection {
     
     /// Connect to MIDI Output(s).
     ///
-    /// - Parameter manager: MIDI manager instance by reference
+    /// - Parameters:
+    ///   - manager: MIDI manager instance by reference
+    ///   - disconnectStale: Disconnects stale connections that no longer match criteria.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
-    internal func connect(in manager: MIDI.IO.Manager) throws {
+    internal func connect(
+        in manager: MIDI.IO.Manager
+    ) throws {
         
         // if not already listening, start listening
         if coreMIDIInputPortRef == nil {
@@ -221,7 +263,7 @@ extension MIDI.IO.InputConnection {
         }
         
         // if previously connected, clean the old connections. ignore errors.
-        _ = try? disconnect()
+        try? disconnect()
         
         // resolve criteria to endpoints in the system
         let getOutputEndpointRefs = outputsCriteria
@@ -233,14 +275,12 @@ extension MIDI.IO.InputConnection {
         coreMIDIOutputEndpointRefs = Set(getOutputEndpointRefs)
         
         for outputEndpointRef in getOutputEndpointRefs {
-            
             try? MIDIPortConnectSource(
                 unwrappedInputPortRef,
                 outputEndpointRef,
                 nil
             )
             .throwIfOSStatusErr()
-            
         }
         
     }
@@ -291,11 +331,6 @@ extension MIDI.IO.InputConnection {
             if criteria.locate(in: getSystemOutputs) != nil { matchedEndpointCount += 1 }
         }
         
-        guard matchedEndpointCount > 0 else {
-            coreMIDIOutputEndpointRefs = []
-            return
-        }
-        
         try connect(in: manager)
         
     }
@@ -313,7 +348,7 @@ extension MIDI.IO.InputConnection {
     ) {
         
         let combined = outputsCriteria.union(outputs)
-        setCriteria(combined)
+        updateCriteria(combined)
         
         if let midiManager = midiManager {
             // this will re-generate coreMIDIOutputEndpointRefs and call connect()
@@ -341,7 +376,7 @@ extension MIDI.IO.InputConnection {
     ) {
         
         let removed = outputsCriteria.subtracting(outputs)
-        setCriteria(removed)
+        updateCriteria(removed)
         
         if let midiManager = midiManager {
             let refs = outputs
@@ -372,9 +407,7 @@ extension MIDI.IO.InputConnection {
     public func removeAllOutputs() {
         
         let outputsToDisconnect = outputsCriteria
-        
-        setCriteria([])
-        
+        updateCriteria([])
         remove(outputs: Array(outputsToDisconnect))
         
     }
