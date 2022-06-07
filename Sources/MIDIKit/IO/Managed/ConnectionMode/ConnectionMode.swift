@@ -15,6 +15,8 @@ extension MIDI.IO {
         
         /// Automatically adds all endpoints in the system and adds any new endpoints that appear in the system at any time thereafter.
         /// (Endpoint filters are respected.)
+        /// 
+        /// Note that this mode overrides `criteria`.
         case allEndpoints
         
     }

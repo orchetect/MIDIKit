@@ -15,7 +15,7 @@ extension MIDI.IO.Manager {
     /// - Parameters:
     ///   - toInputs: Criteria for identifying a MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
-    ///   - mode: Operation mode.
+    ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
@@ -54,7 +54,7 @@ extension MIDI.IO.Manager {
     /// - Parameters:
     ///   - toInputs: Criteria for identifying a MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
-    ///   - mode: Operation mode.
+    ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
@@ -81,7 +81,7 @@ extension MIDI.IO.Manager {
     /// - Parameters:
     ///   - toInputs: Criteria for identifying a MIDI endpoint(s) in the system to connect to.
     ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
-    ///   - mode: Operation mode.
+    ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
