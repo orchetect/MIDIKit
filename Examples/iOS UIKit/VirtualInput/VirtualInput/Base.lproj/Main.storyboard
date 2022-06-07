@@ -27,7 +27,7 @@
 
 This example creates a virtual MIDI input port named "TestApp Input".
 
-Received MIDI events are looged to the console, filtering out Active Sensing and Clock events.
+Received MIDI events are logged to the console, filtering out Active Sensing and Clock events.
 
 Event values are logged in their native format.
 
