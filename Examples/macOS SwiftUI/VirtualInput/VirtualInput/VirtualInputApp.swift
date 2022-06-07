@@ -14,7 +14,7 @@ struct VirtualInputApp: App {
                                       model: "TestApp",
                                       manufacturer: "MyCompany")
     
-    let virtualOutputName = "TestApp Output"
+    let virtualInputName = "TestApp Input"
     
     init() {
         
@@ -26,14 +26,15 @@ struct VirtualInputApp: App {
         }
         
         do {
-            print("Creating virtual MIDI output.")
-            try midiManager.addOutput(
-                name: virtualOutputName,
-                tag: virtualOutputName,
-                uniqueID: .userDefaultsManaged(key: virtualOutputName)
+            print("Creating virtual MIDI input.")
+            try midiManager.addInput(
+                name: virtualInputName,
+                tag: virtualInputName,
+                uniqueID: .userDefaultsManaged(key: virtualInputName),
+                receiveHandler: .eventsLogging(filterActiveSensingAndClock: true)
             )
         } catch {
-            print("Error creating virtual MIDI output:", error.localizedDescription)
+            print("Error creating virtual MIDI input:", error.localizedDescription)
         }
         
     }
