@@ -21,11 +21,11 @@ struct MIDIEndpointSelectionView: View {
         
         Picker("MIDI In", selection: $midiInSelectedID) {
             Text("None")
-                .tag(0)
+                .tag(0 as MIDI.IO.CoreMIDIUniqueID)
             
             Divider()
             
-            if let midiInSelectedID = midiInSelectedID,
+            if midiInSelectedID != 0,
                !midiManager.endpoints.outputs.contains(where: { $0.uniqueID.coreMIDIUniqueID == midiInSelectedID }) {
                 Text("⚠️ " + midiInSelectedDisplayName)
                     .tag(midiInSelectedID)
@@ -39,11 +39,11 @@ struct MIDIEndpointSelectionView: View {
         
         Picker("MIDI Out", selection: $midiOutSelectedID) {
             Text("None")
-                .tag(0)
+                .tag(0 as MIDI.IO.CoreMIDIUniqueID)
             
             Divider()
             
-            if let midiOutSelectedID = midiOutSelectedID,
+            if midiOutSelectedID != 0,
                !midiManager.endpoints.inputs.contains(where: { $0.uniqueID.coreMIDIUniqueID == midiOutSelectedID }) {
                 Text("⚠️ " + midiOutSelectedDisplayName)
                     .tag(midiOutSelectedID)

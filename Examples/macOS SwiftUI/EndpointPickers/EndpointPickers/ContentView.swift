@@ -27,9 +27,6 @@ struct ContentView: View {
                 
                 Text("Refer to this example's README.md file for important information.")
             }
-            .font(.system(size: 14))
-            .lineLimit(4)
-            .multilineTextAlignment(.center)
             .frame(height: 40)
             
             Spacer()
@@ -61,6 +58,9 @@ struct ContentView: View {
             
             Spacer()
         }
+        .font(.system(size: 14))
+        .lineLimit(nil)
+        .multilineTextAlignment(.center)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .padding()
         

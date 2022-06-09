@@ -64,7 +64,8 @@ struct EndpointPickersApp: App {
             if $0 == 0 {
                 midiInSelectedDisplayName = ""
             } else if let found = midiManager.endpoints.outputs
-                .first(whereUniqueID: .init($0)) {
+                .first(whereUniqueID: .init($0))
+            {
                 midiInSelectedDisplayName = found.displayName
             }
             
@@ -76,7 +77,8 @@ struct EndpointPickersApp: App {
             if $0 == 0 {
                 midiOutSelectedDisplayName = ""
             } else if let found = midiManager.endpoints.inputs
-                .first(whereUniqueID: .init($0)) {
+                .first(whereUniqueID: .init($0))
+            {
                 midiOutSelectedDisplayName = found.displayName
             }
             
