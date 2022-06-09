@@ -60,7 +60,11 @@ extension MIDI.IO.Entity: Hashable {
 }
 
 extension MIDI.IO.Entity: Identifiable {
-    // default implementation provided by MIDIIOObjectProtocol
+    
+    public typealias ID = MIDI.IO.CoreMIDIObjectRef
+    
+    public var id: ID { coreMIDIObjectRef }
+    
 }
 
 
