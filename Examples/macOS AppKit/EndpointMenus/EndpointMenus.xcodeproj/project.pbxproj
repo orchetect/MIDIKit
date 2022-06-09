@@ -18,6 +18,7 @@
 		E24BA244284F1A3400AA6767 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E24BA246284F1A3400AA6767 /* EndpointMenus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EndpointMenus.entitlements; sourceTree = "<group>"; };
 		E24BA24E284F1C4400AA6767 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
+		E24CB06D285172CF00649B50 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +36,7 @@
 		E24BA231284F1A3300AA6767 = {
 			isa = PBXGroup;
 			children = (
+				E24CB06D285172CF00649B50 /* README.md */,
 				E24BA24D284F1C4400AA6767 /* Packages */,
 				E24BA23C284F1A3300AA6767 /* EndpointMenus */,
 				E24BA23B284F1A3300AA6767 /* Products */,
