@@ -13,15 +13,15 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="VirtualOutput" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="8bC-Xf-vdC">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="center" axis="vertical" distribution="equalSpacing" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="AKN-Hv-pZT">
-                                <rect key="frame" x="0.0" y="272.33333333333326" width="391.33333333333331" height="299.66666666666674"/>
+                            <stackView opaque="NO" contentMode="center" axis="vertical" distribution="equalCentering" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="AKN-Hv-pZT">
+                                <rect key="frame" x="-1.3333333333333428" y="259.66666666666663" width="391.33333333333337" height="324.66666666666663"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iVU-XE-TsM">
-                                        <rect key="frame" x="7" y="0.0" width="377.66666666666669" height="81.666666666666671"/>
+                                        <rect key="frame" x="7" y="0.0" width="377.66666666666669" height="81.333333333333329"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                             <bool key="isElement" value="YES"/>
@@ -34,21 +34,21 @@ This example creates a virtual MIDI output port named "TestApp Output".</string>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="F1v-ea-CVa">
-                                        <rect key="frame" x="118.66666666666669" y="118.33333333333331" width="154" height="36"/>
+                                        <rect key="frame" x="118.66666666666669" y="111.33333333333331" width="154" height="36"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Send Note On C3"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="qgd-Ex-xcW">
-                                        <rect key="frame" x="117.66666666666669" y="191" width="156" height="36"/>
+                                        <rect key="frame" x="117.66666666666669" y="200" width="156" height="36"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Send Note Off C3"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tfy-x2-E6m">
-                                        <rect key="frame" x="152.33333333333334" y="263.66666666666669" width="87" height="36"/>
+                                        <rect key="frame" x="152.33333333333334" y="288.66666666666669" width="87" height="36"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Send CC1"/>
@@ -62,9 +62,9 @@ This example creates a virtual MIDI output port named "TestApp Output".</string>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="AKN-Hv-pZT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="M8Z-oT-nl5"/>
-                            <constraint firstItem="AKN-Hv-pZT" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="NsG-bj-pNq"/>
-                            <constraint firstAttribute="trailing" secondItem="AKN-Hv-pZT" secondAttribute="trailing" id="ipA-bN-SYy"/>
+                            <constraint firstItem="AKN-Hv-pZT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="-1.3333333333333428" id="T5x-FE-bdW"/>
+                            <constraint firstItem="AKN-Hv-pZT" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="XxR-Ey-Put"/>
+                            <constraint firstItem="AKN-Hv-pZT" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="eqM-8Q-jHf"/>
                         </constraints>
                     </view>
                 </viewController>

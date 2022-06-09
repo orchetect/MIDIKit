@@ -2,6 +2,10 @@
 
 This example demonstrates best practises when creating MIDI input and output selection menus.
 
+## Build Note
+
+⚠️ If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
+
 ## Key Features
 
 - The menus are updated in real-time if endpoints change in the system.

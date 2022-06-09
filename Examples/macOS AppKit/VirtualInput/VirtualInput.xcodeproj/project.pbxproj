@@ -20,6 +20,7 @@
 		E24BA244284F1A3400AA6767 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E24BA246284F1A3400AA6767 /* VirtualInput.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VirtualInput.entitlements; sourceTree = "<group>"; };
 		E24BA24E284F1C4400AA6767 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
+		E29A5E972852A29F00E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,10 +38,10 @@
 		E24BA231284F1A3300AA6767 = {
 			isa = PBXGroup;
 			children = (
+				E29A5E972852A29F00E87812 /* README.md */,
 				E24BA24D284F1C4400AA6767 /* Packages */,
 				E24BA23C284F1A3300AA6767 /* VirtualInput */,
 				E24BA23B284F1A3300AA6767 /* Products */,
-				E24BA24F284F1C5B00AA6767 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,13 +70,6 @@
 				E24BA24E284F1C4400AA6767 /* MIDIKit */,
 			);
 			name = Packages;
-			sourceTree = "<group>";
-		};
-		E24BA24F284F1C5B00AA6767 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

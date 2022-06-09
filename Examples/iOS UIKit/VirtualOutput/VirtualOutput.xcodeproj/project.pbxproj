@@ -22,6 +22,7 @@
 		E27D0E29284F2A8900F43247 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E27D0E2B284F2A8900F43247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E27D0E32284F2DC700F43247 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
+		E29A5E962852A28500E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +40,7 @@
 		E27D0E11284F2A8900F43247 = {
 			isa = PBXGroup;
 			children = (
+				E29A5E962852A28500E87812 /* README.md */,
 				E27D0E31284F2DC700F43247 /* Packages */,
 				E27D0E1C284F2A8900F43247 /* VirtualOutput */,
 				E27D0E1B284F2A8900F43247 /* Products */,

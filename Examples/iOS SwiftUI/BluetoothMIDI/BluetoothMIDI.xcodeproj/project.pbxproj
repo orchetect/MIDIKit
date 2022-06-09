@@ -17,6 +17,7 @@
 		E27D0E62284F3FB600F43247 /* BluetoothMIDIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothMIDIApp.swift; sourceTree = "<group>"; };
 		E27D0E64284F3FB600F43247 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E27D0E70284F402C00F43247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E29A5E912852A13D00E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E2B5EE5A284F478700E120DC /* BluetoothMIDIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothMIDIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -34,6 +35,7 @@
 		E27D0E56284F3FB600F43247 = {
 			isa = PBXGroup;
 			children = (
+				E29A5E912852A13D00E87812 /* README.md */,
 				E27D0E61284F3FB600F43247 /* BluetoothMIDI */,
 				E27D0E60284F3FB600F43247 /* Products */,
 			);

@@ -754,7 +754,7 @@
                                         </customSpacing>
                                     </stackView>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eOS-Qv-7Gr">
-                                        <rect key="frame" x="209" y="-7" width="93" height="32"/>
+                                        <rect key="frame" x="208" y="-7" width="94" height="32"/>
                                         <buttonCell key="cell" type="push" title="Send CC1" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="p60-ht-yrX">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
