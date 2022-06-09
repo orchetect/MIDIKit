@@ -18,6 +18,7 @@
 		E27D0E64284F3FB600F43247 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E27D0E70284F402C00F43247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E27D0E72284F404400F43247 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
+		E29A5E922852A16900E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +36,7 @@
 		E27D0E56284F3FB600F43247 = {
 			isa = PBXGroup;
 			children = (
+				E29A5E922852A16900E87812 /* README.md */,
 				E27D0E71284F404400F43247 /* Packages */,
 				E27D0E61284F3FB600F43247 /* VirtualInput */,
 				E27D0E60284F3FB600F43247 /* Products */,

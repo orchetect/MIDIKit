@@ -21,6 +21,7 @@
 		E27D0E24284F2A8900F43247 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E27D0E29284F2A8900F43247 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E27D0E2B284F2A8900F43247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E29A5E942852A1A800E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E2B5EE5C284F4C6F00E120DC /* BTMIDICentralViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BTMIDICentralViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -38,6 +39,7 @@
 		E27D0E11284F2A8900F43247 = {
 			isa = PBXGroup;
 			children = (
+				E29A5E942852A1A800E87812 /* README.md */,
 				E27D0E1C284F2A8900F43247 /* BluetoothMIDI */,
 				E27D0E1B284F2A8900F43247 /* Products */,
 			);
