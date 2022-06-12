@@ -26,7 +26,7 @@ Abstractions are built as optional extensions in their own repos.
    
    - In a Swift Package, add it to the Package.swift dependencies:
      ```swift
-     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.4.0")
+     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.4.9")
      ```
   
 2. Import the library:
@@ -39,6 +39,11 @@ Abstractions are built as optional extensions in their own repos.
 ## Documentation
 
 See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a [Getting Started](https://github.com/orchetect/MIDIKit/wiki/Getting-Started) guide, links to examples, and troubleshooting tips.
+
+## System Compatibility
+
+- Xcode 12.4 / macOS 10.15.7 are minimum requirements to compile
+- When compiled, MIDIKit supports macOS 10.12+ and iOS 10.0+ (tvOS and watchOS are supported but not fully tested)
 
 ## Author
 
