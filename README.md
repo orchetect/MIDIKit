@@ -43,7 +43,7 @@ See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes
 ## System Compatibility
 
 - Xcode 12.4 / macOS 10.15.7 are minimum requirements to compile
-- When compiled, MIDIKit supports macOS 10.12+ and iOS 10.0+ (tvOS and watchOS are supported but not fully tested)
+- When compiled, MIDIKit supports macOS 10.12+ and iOS 10.0+
 
 ## Author
 
