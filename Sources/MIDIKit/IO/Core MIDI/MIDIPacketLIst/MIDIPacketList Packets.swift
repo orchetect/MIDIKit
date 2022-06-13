@@ -13,30 +13,23 @@ extension UnsafePointer where Pointee == MIDIPacketList {
     @inline(__always)
     internal func packets() -> [MIDI.Packet.PacketData] {
         
-        packetPointers().map { MIDI.Packet.PacketData($0) }
-        
-    }
-    
-    /// Internal:
-    /// Returns array of Core MIDI `MIDIPacket` pointers.
-    @inline(__always)
-    internal func packetPointers() -> [UnsafePointer<MIDIPacket>] {
+        if pointee.numPackets == 0 {
+            return []
+        }
         
         // prefer newer Core MIDI API if platform supports it
         
         if #available(macOS 10.15, iOS 13.0, macCatalyst 13.0, *) {
-            return Array(unsafeSequence())
+            return unsafeSequence().map {
+                MIDI.Packet.PacketData($0)
+            }
         } else {
-            return packetPointerSequence().pointers
+            var packetDatas: [MIDI.Packet.PacketData] = []
+            pointee.iteratePackets {
+                packetDatas.append(MIDI.Packet.PacketData($0))
+            }
+            return packetDatas
         }
-        
-    }
-    
-    /// Internal:
-    /// Returns a sequence of Core MIDI `MIDIPacket` pointers.
-    internal func packetPointerSequence() -> MIDIPacketList.PointerSequence {
-        
-        MIDIPacketList.PointerSequence(self)
         
     }
     
@@ -44,79 +37,20 @@ extension UnsafePointer where Pointee == MIDIPacketList {
 
 extension MIDIPacketList {
     
-    /// Internal:
-    /// Returns a sequence of Core MIDI `MIDIPacket` pointers.
-    internal struct PointerSequence: Sequence {
+    /// Iterates packeets in a `MIDIPacketList` and calls the closure for each packet.
+    /// This is confirmed working on Mojave.
+    /// There were numerous difficulties in reading MIDIPacketList on Mojave and earlier and this solution was stable.
+    @inline(__always)
+    fileprivate func iteratePackets(_ closure: (UnsafeMutablePointer<MIDIPacket>) -> Void) {
         
-        public typealias Element = UnsafePointer<MIDIPacket>
-        
-        internal var pointers: [UnsafePointer<MIDIPacket>] = []
-        
-        public init(_ midiPacketListPtr: UnsafePointer<MIDIPacketList>) {
-            
-            pointers.reserveCapacity(Int(midiPacketListPtr.pointee.numPackets))
-            
-            iterateMIDIPacketList(midiPacketListPtr) {
-                pointers.append($0)
+        withUnsafePointer(to: packet) { ptr in
+            var idx: UInt32 = 0
+            var p = UnsafeMutablePointer(mutating: ptr)
+            while idx < numPackets {
+                closure(p)
+                if numPackets - idx > 0 { p = MIDIPacketNext(p) }
+                idx += 1
             }
-            
-            assert(pointers.count == midiPacketListPtr.pointee.numPackets,
-                   "Packet count does not match iterated count.")
-            
-        }
-        
-        public func makeIterator() -> Iterator {
-            
-            Iterator(pointers)
-            
-        }
-        
-        public struct Iterator: IteratorProtocol {
-            
-            let pointers: [Element]
-            var idx: Array<Element>.Index
-            
-            init(_ pointers: [Element]) {
-                self.idx = pointers.startIndex
-                self.pointers = pointers
-            }
-            
-            public mutating func next() -> Element? {
-                
-                guard pointers.indices.contains(idx) else { return nil }
-                
-                defer { idx += idx.advanced(by: 1) }
-                
-                return pointers[idx]
-                
-            }
-            
-        }
-        
-    }
-    
-    /// Utility to iterate over packets in a `MIDIPacketList` and encapsulate the ugly Obj-C/Swift pointer access.
-    fileprivate static func iterateMIDIPacketList(
-        _ midiPacketListPtr: UnsafePointer<MIDIPacketList>,
-        _ closure: (UnsafePointer<MIDIPacket>) -> Void
-    ) {
-        
-        if midiPacketListPtr.pointee.numPackets == 0 {
-            return
-        }
-        
-        // when written in Obj-C, we'd cast the packet list
-        // to MIDIPacket to access the first packet
-        var midiPacket = UnsafeRawPointer(midiPacketListPtr)
-            .bindMemory(to: MIDIPacket.self, capacity: 1)
-        
-        // call closure for first packet
-        closure(midiPacket)
-        
-        // call closure for subsequent packets, if they exist
-        for _ in 1 ..< midiPacketListPtr.pointee.numPackets {
-            midiPacket = UnsafePointer(MIDIPacketNext(midiPacket))
-            closure(midiPacket)
         }
         
     }
