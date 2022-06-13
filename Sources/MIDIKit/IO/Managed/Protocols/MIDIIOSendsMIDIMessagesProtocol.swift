@@ -152,7 +152,14 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
         
         switch api {
         case .legacyCoreMIDI:
-            try send(rawMessages: events.map { $0.midi1RawBytes })
+            if events.contains(where: { $0.isSystemExclusive }) {
+                // System Exclusive events must be the only event in a MIDIPacketList
+                // so force each event to be sent in its own packet
+                try events.forEach { try send(event: $0) }
+            } else {
+                // combine events into a single MIDIPacketList
+                try send(rawMessages: events.map { $0.midi1RawBytes })
+            }
             
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
@@ -172,4 +179,3 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
     }
     
 }
-

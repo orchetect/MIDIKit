@@ -262,8 +262,10 @@ open class RoundTrip_Tests_Base: XCTestCase {
         
         receivedEvents.reserveCapacity(sourceEvents.count)
         
-        for event in sourceEvents {
-            try output.send(event: event)
+        // send several events at once to test packing
+        // multiple packets into a single MIDIPacketList / MIDIEventList
+        for eventGroup in sourceEvents.split(every: 2) {
+            try output.send(events: Array(eventGroup))
         }
         
         wait(sec: 0.5)

@@ -74,6 +74,7 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
     /// Assembles an array of `Byte` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
+    /// - Note: System Exclusive messages must each be packed in a dedicated MIDIPacketList with no other events, otherwise MIDIPacketList may fail.
     @inline(__always)
     internal init(data: [[MIDI.Byte]]) throws {
         
