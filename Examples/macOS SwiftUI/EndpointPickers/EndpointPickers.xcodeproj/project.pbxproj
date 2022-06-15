@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E2055B7A285A733B00DC1138 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2055B79285A733B00DC1138 /* MIDIHelper.swift */; };
 		E24CB06F285199E400649B50 /* MIDIEndpointSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24CB06E285199E400649B50 /* MIDIEndpointSelectionView.swift */; };
 		E27D0E43284F378100F43247 /* EndpointPickersApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E42284F378100F43247 /* EndpointPickersApp.swift */; };
 		E27D0E45284F378100F43247 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E44284F378100F43247 /* ContentView.swift */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E2055B79285A733B00DC1138 /* MIDIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
 		E24CB06B28516BDC00649B50 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E24CB06E285199E400649B50 /* MIDIEndpointSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEndpointSelectionView.swift; sourceTree = "<group>"; };
 		E27D0E3F284F378100F43247 /* EndpointPickers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EndpointPickers.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				E27D0E42284F378100F43247 /* EndpointPickersApp.swift */,
+				E2055B79285A733B00DC1138 /* MIDIHelper.swift */,
 				E27D0E44284F378100F43247 /* ContentView.swift */,
 				E24CB06E285199E400649B50 /* MIDIEndpointSelectionView.swift */,
 				E27D0E4B284F378200F43247 /* EndpointPickers.entitlements */,
@@ -145,6 +148,7 @@
 			files = (
 				E27D0E45284F378100F43247 /* ContentView.swift in Sources */,
 				E27D0E43284F378100F43247 /* EndpointPickersApp.swift in Sources */,
+				E2055B7A285A733B00DC1138 /* MIDIHelper.swift in Sources */,
 				E24CB06F285199E400649B50 /* MIDIEndpointSelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

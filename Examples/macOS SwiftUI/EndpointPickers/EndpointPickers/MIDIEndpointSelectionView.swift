@@ -7,15 +7,13 @@
 import SwiftUI
 import MIDIKit
 
-struct MIDIEndpointSelectionView: View {
+struct MIDIInSelectionView: View {
     
     @EnvironmentObject var midiManager: MIDI.IO.Manager
+    @EnvironmentObject var midiHelper: MIDIHelper
     
     @Binding var midiInSelectedID: MIDI.IO.CoreMIDIUniqueID
     @Binding var midiInSelectedDisplayName: String
-    
-    @Binding var midiOutSelectedID: MIDI.IO.CoreMIDIUniqueID
-    @Binding var midiOutSelectedDisplayName: String
     
     var body: some View {
         
@@ -23,12 +21,12 @@ struct MIDIEndpointSelectionView: View {
             Text("None")
                 .tag(0 as MIDI.IO.CoreMIDIUniqueID)
             
-            Divider()
-            
             if midiInSelectedID != 0,
-               !midiManager.endpoints.outputs.contains(where: { $0.uniqueID.coreMIDIUniqueID == midiInSelectedID }) {
+               !midiHelper.isOutputPresentInSystem(uniqueID: midiInSelectedID)
+            {
                 Text("⚠️ " + midiInSelectedDisplayName)
                     .tag(midiInSelectedID)
+                    .foregroundColor(.secondary)
             }
             
             ForEach(midiManager.endpoints.outputs) {
@@ -37,16 +35,30 @@ struct MIDIEndpointSelectionView: View {
             }
         }
         
+    }
+    
+}
+
+struct MIDIOutSelectionView: View {
+    
+    @EnvironmentObject var midiManager: MIDI.IO.Manager
+    @EnvironmentObject var midiHelper: MIDIHelper
+    
+    @Binding var midiOutSelectedID: MIDI.IO.CoreMIDIUniqueID
+    @Binding var midiOutSelectedDisplayName: String
+    
+    var body: some View {
+        
         Picker("MIDI Out", selection: $midiOutSelectedID) {
             Text("None")
                 .tag(0 as MIDI.IO.CoreMIDIUniqueID)
             
-            Divider()
-            
             if midiOutSelectedID != 0,
-               !midiManager.endpoints.inputs.contains(where: { $0.uniqueID.coreMIDIUniqueID == midiOutSelectedID }) {
+               !midiHelper.isInputPresentInSystem(uniqueID: midiOutSelectedID)
+            {
                 Text("⚠️ " + midiOutSelectedDisplayName)
                     .tag(midiOutSelectedID)
+                    .foregroundColor(.secondary)
             }
             
             ForEach(midiManager.endpoints.inputs) {

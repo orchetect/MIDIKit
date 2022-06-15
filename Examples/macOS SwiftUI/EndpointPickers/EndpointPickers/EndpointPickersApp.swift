@@ -10,41 +10,28 @@ import MIDIKit
 @main
 struct EndpointPickersApp: App {
     
-    let midiManager = MIDI.IO.Manager(clientName: "TestAppMIDIManager",
-                                      model: "TestApp",
-                                      manufacturer: "MyCompany")
+    let midiManager = MIDI.IO.Manager(
+        clientName: "TestAppMIDIManager",
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
+    
+    @ObservedObject var midiHelper = MIDIHelper()
     
     @State var midiInSelectedID: MIDI.IO.CoreMIDIUniqueID = 0
-    @State var midiInSelectedDisplayName: String = ""
+    @State var midiInSelectedDisplayName: String = "None"
     
     @State var midiOutSelectedID: MIDI.IO.CoreMIDIUniqueID = 0
-    @State var midiOutSelectedDisplayName: String = ""
+    @State var midiOutSelectedDisplayName: String = "None"
     
     init() {
-        
-        do {
-            print("Starting MIDI services.")
-            try midiManager.start()
-            
-            // set up input connection
-            try midiManager.addInputConnection(
-                toOutputs: [],
-                tag: ConnectionTags.midiIn,
-                receiveHandler: .eventsLogging(filterActiveSensingAndClock: true)
-            )
-            
-            // set up output connection
-            try midiManager.addOutputConnection(toInputs: [],
-                                                tag: ConnectionTags.midiOut)
-        } catch {
-            print("Error starting MIDI services:", error.localizedDescription)
-        }
+        midiHelper.midiManager = midiManager
+        midiHelper.initialSetup()
         
         // restore saved MIDI endpoint selections and connections
         midiRestorePersistentState()
-        midiInUpdateConnection()
-        midiOutUpdateConnection()
-        
+        midiHelper.midiInUpdateConnection(selectedUniqueID: midiInSelectedID)
+        midiHelper.midiOutUpdateConnection(selectedUniqueID: midiOutSelectedID)
     }
     
     var body: some Scene {
@@ -56,33 +43,34 @@ struct EndpointPickersApp: App {
                 midiOutSelectedID: $midiOutSelectedID,
                 midiOutSelectedDisplayName: $midiOutSelectedDisplayName
             )
-            .frame(width: 550, height: 375, alignment: .center)
             .environmentObject(midiManager)
+            .environmentObject(midiHelper)
+            .frame(minWidth: 500, minHeight: 800, alignment: .center)
         }
         
         .onChange(of: midiInSelectedID) {
             if $0 == 0 {
-                midiInSelectedDisplayName = ""
+                midiInSelectedDisplayName = "None"
             } else if let found = midiManager.endpoints.outputs
                 .first(whereUniqueID: .init($0))
             {
                 midiInSelectedDisplayName = found.displayName
             }
             
-            midiInUpdateConnection()
+            midiHelper.midiInUpdateConnection(selectedUniqueID: $0)
             midiSavePersistentState()
         }
         
         .onChange(of: midiOutSelectedID) {
             if $0 == 0 {
-                midiOutSelectedDisplayName = ""
+                midiOutSelectedDisplayName = "None"
             } else if let found = midiManager.endpoints.inputs
                 .first(whereUniqueID: .init($0))
             {
                 midiOutSelectedDisplayName = found.displayName
             }
             
-            midiOutUpdateConnection()
+            midiHelper.midiOutUpdateConnection(selectedUniqueID: $0)
             midiSavePersistentState()
         }
         
@@ -95,6 +83,11 @@ struct EndpointPickersApp: App {
 enum ConnectionTags {
     static let midiIn = "SelectedInputConnection"
     static let midiOut = "SelectedOutputConnection"
+    
+    static let midiTestIn1 = "TestIn1"
+    static let midiTestIn2 = "TestIn2"
+    static let midiTestOut1 = "TestOut1"
+    static let midiTestOut2 = "TestOut2"
 }
 
 enum UserDefaultsKeys {
@@ -138,67 +131,6 @@ extension EndpointPickersApp {
                                   forKey: UserDefaultsKeys.midiOutID)
         UserDefaults.standard.set(midiOutSelectedDisplayName,
                                   forKey: UserDefaultsKeys.midiOutDisplayName)
-    }
-    
-}
-
-// MARK: - MIDI In
-
-extension EndpointPickersApp {
-    
-    var midiInputConnection: MIDI.IO.InputConnection? {
-        midiManager.managedInputConnections[ConnectionTags.midiIn]
-    }
-    
-    /// Set the selected MIDI output manually.
-    public func midiInSetSelected(id: MIDI.IO.CoreMIDIUniqueID,
-                                  displayName: String) {
-        midiInSelectedDisplayName = displayName
-        midiInSelectedID = id
-    }
-    
-    fileprivate func midiInUpdateConnection() {
-        guard let midiInputConnection = midiInputConnection else { return }
-        
-        if midiInSelectedID == 0 {
-            midiInputConnection.removeAllOutputs()
-        } else {
-            let uID = MIDI.IO.OutputEndpoint.UniqueID(midiInSelectedID)
-            if midiInputConnection.outputsCriteria != [.uniqueID(uID)] {
-                midiInputConnection.removeAllOutputs()
-                midiInputConnection.add(outputs: [.uniqueID(uID)])
-            }
-        }
-    }
-    
-}
-
-// MARK: - MIDI Out
-
-extension EndpointPickersApp {
-    
-    var midiOutputConnection: MIDI.IO.OutputConnection? {
-        midiManager.managedOutputConnections[ConnectionTags.midiOut]
-    }
-    
-    public func midiOutSetSelected(id: MIDI.IO.CoreMIDIUniqueID,
-                                   displayName: String) {
-        midiOutSelectedDisplayName = displayName
-        midiOutSelectedID = id
-    }
-    
-    fileprivate func midiOutUpdateConnection() {
-        guard let midiOutputConnection = midiOutputConnection else { return }
-        
-        if midiOutSelectedID == 0 {
-            midiOutputConnection.removeAllInputs()
-        } else {
-            let uID = MIDI.IO.InputEndpoint.UniqueID(midiOutSelectedID)
-            if midiOutputConnection.inputsCriteria != [.uniqueID(uID)] {
-                midiOutputConnection.removeAllInputs()
-                midiOutputConnection.add(inputs: [.uniqueID(uID)])
-            }
-        }
     }
     
 }
