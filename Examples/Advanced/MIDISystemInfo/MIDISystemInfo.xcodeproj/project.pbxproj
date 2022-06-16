@@ -15,6 +15,7 @@
 		E24D200B25BE75D90095BDE5 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E24D200A25BE75D90095BDE5 /* MIDIKit */; };
 		E26B849C25EDA4F400080052 /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26B849B25EDA4F400080052 /* DetailsView.swift */; };
 		E293070425E90D750011904C /* HostingWindowKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E293070325E90D750011904C /* HostingWindowKey.swift */; };
+		E29AC90F285BEFF4009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC90E285BEFF4009D1C2C /* MIDIKit */; };
 		E2F71ED22758E92E006254C0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F71ED12758E92E006254C0 /* Log.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,7 +28,6 @@
 		E230C4AE25AE7B33005DCB55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E230C4AF25AE7B33005DCB55 /* MIDISystemInfo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MIDISystemInfo.entitlements; sourceTree = "<group>"; };
 		E26B849B25EDA4F400080052 /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
-		E28F3CA8284F53CA00AFCF9C /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
 		E293070325E90D750011904C /* HostingWindowKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingWindowKey.swift; sourceTree = "<group>"; };
 		E2F71ED12758E92E006254C0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -37,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E29AC90F285BEFF4009D1C2C /* MIDIKit in Frameworks */,
 				E24D200B25BE75D90095BDE5 /* MIDIKit in Frameworks */,
 				E24D200525BE75A90095BDE5 /* OTCore in Frameworks */,
 			);
@@ -48,7 +49,6 @@
 		E230C49625AE7B31005DCB55 = {
 			isa = PBXGroup;
 			children = (
-				E28F3CA7284F53CA00AFCF9C /* Packages */,
 				E230C4A125AE7B31005DCB55 /* MIDISystemInfo */,
 				E230C4A025AE7B31005DCB55 /* Products */,
 			);
@@ -78,14 +78,6 @@
 			path = MIDISystemInfo;
 			sourceTree = "<group>";
 		};
-		E28F3CA7284F53CA00AFCF9C /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				E28F3CA8284F53CA00AFCF9C /* MIDIKit */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -105,6 +97,7 @@
 			packageProductDependencies = (
 				E24D200425BE75A90095BDE5 /* OTCore */,
 				E24D200A25BE75D90095BDE5 /* MIDIKit */,
+				E29AC90E285BEFF4009D1C2C /* MIDIKit */,
 			);
 			productName = MIDISystemInfo;
 			productReference = E230C49F25AE7B31005DCB55 /* MIDISystemInfo.app */;
@@ -135,6 +128,7 @@
 			mainGroup = E230C49625AE7B31005DCB55;
 			packageReferences = (
 				E24D200325BE75A90095BDE5 /* XCRemoteSwiftPackageReference "OTCore" */,
+				E29AC90D285BEFF4009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
 			);
 			productRefGroup = E230C4A025AE7B31005DCB55 /* Products */;
 			projectDirPath = "";
@@ -370,7 +364,15 @@
 			repositoryURL = "https://github.com/orchetect/OTCore.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.0;
+				minimumVersion = 1.4.1;
+			};
+		};
+		E29AC90D285BEFF4009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/MIDIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.10;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -383,6 +385,11 @@
 		};
 		E24D200A25BE75D90095BDE5 /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = MIDIKit;
+		};
+		E29AC90E285BEFF4009D1C2C /* MIDIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E29AC90D285BEFF4009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;
 			productName = MIDIKit;
 		};
 /* End XCSwiftPackageProductDependency section */

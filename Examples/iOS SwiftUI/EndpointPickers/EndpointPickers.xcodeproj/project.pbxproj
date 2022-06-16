@@ -11,6 +11,7 @@
 		E27D0E63284F3FB600F43247 /* EndpointPickersApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E62284F3FB600F43247 /* EndpointPickersApp.swift */; };
 		E27D0E65284F3FB600F43247 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E64284F3FB600F43247 /* ContentView.swift */; };
 		E27D0E75284F409600F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E74284F409600F43247 /* MIDIKit */; };
+		E29AC912285BF048009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC911285BF048009D1C2C /* MIDIKit */; };
 		E2FDAE562851AAEE00F98425 /* MIDIEndpointSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDAE552851AAEE00F98425 /* MIDIEndpointSelectionView.swift */; };
 /* End PBXBuildFile section */
 
@@ -20,7 +21,6 @@
 		E27D0E62284F3FB600F43247 /* EndpointPickersApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointPickersApp.swift; sourceTree = "<group>"; };
 		E27D0E64284F3FB600F43247 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E27D0E70284F402C00F43247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		E27D0E72284F404400F43247 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
 		E2FDAE542851AA8C00F98425 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E2FDAE552851AAEE00F98425 /* MIDIEndpointSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEndpointSelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -30,6 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E29AC912285BF048009D1C2C /* MIDIKit in Frameworks */,
 				E27D0E75284F409600F43247 /* MIDIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,7 +42,6 @@
 			isa = PBXGroup;
 			children = (
 				E2FDAE542851AA8C00F98425 /* README.md */,
-				E27D0E71284F404400F43247 /* Packages */,
 				E27D0E61284F3FB600F43247 /* EndpointPickers */,
 				E27D0E60284F3FB600F43247 /* Products */,
 			);
@@ -67,14 +67,6 @@
 			path = EndpointPickers;
 			sourceTree = "<group>";
 		};
-		E27D0E71284F404400F43247 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				E27D0E72284F404400F43247 /* MIDIKit */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -93,6 +85,7 @@
 			name = EndpointPickers;
 			packageProductDependencies = (
 				E27D0E74284F409600F43247 /* MIDIKit */,
+				E29AC911285BF048009D1C2C /* MIDIKit */,
 			);
 			productName = EndpointPickers;
 			productReference = E27D0E5F284F3FB600F43247 /* EndpointPickers.app */;
@@ -122,6 +115,9 @@
 				Base,
 			);
 			mainGroup = E27D0E56284F3FB600F43247;
+			packageReferences = (
+				E29AC910285BF048009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
+			);
 			productRefGroup = E27D0E60284F3FB600F43247 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -351,9 +347,25 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		E29AC910285BF048009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/MIDIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.10;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		E27D0E74284F409600F43247 /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = MIDIKit;
+		};
+		E29AC911285BF048009D1C2C /* MIDIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E29AC910285BF048009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;
 			productName = MIDIKit;
 		};
 /* End XCSwiftPackageProductDependency section */
