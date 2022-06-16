@@ -18,7 +18,8 @@ extension MIDI.Event.Note {
         public var controller: Controller
         
         /// Value
-        public var value: UInt32
+        @ValueValidated
+        public var value: Value
         
         /// Channel Number (0x0...0xF)
         public var channel: MIDI.UInt4
@@ -27,8 +28,8 @@ extension MIDI.Event.Note {
         public var group: MIDI.UInt4 = 0x0
         
         public init(note: MIDI.UInt7,
-                    controller: CC.Controller,
-                    value: UInt32,
+                    controller: Controller,
+                    value: Value,
                     channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
@@ -41,8 +42,8 @@ extension MIDI.Event.Note {
         }
         
         public init(note: MIDI.Note,
-                    controller: CC.Controller,
-                    value: UInt32,
+                    controller: Controller,
+                    value: Value,
                     channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
@@ -72,7 +73,7 @@ extension MIDI.Event {
     @inline(__always)
     public static func noteCC(note: MIDI.UInt7,
                               controller: Note.CC.Controller,
-                              value: UInt32,
+                              value: Note.CC.Value,
                               channel: MIDI.UInt4,
                               group: MIDI.UInt4 = 0x0) -> Self {
         
@@ -98,7 +99,7 @@ extension MIDI.Event {
     @inline(__always)
     public static func noteCC(note: MIDI.Note,
                               controller: Note.CC.Controller,
-                              value: UInt32,
+                              value: Note.CC.Value,
                               channel: MIDI.UInt4,
                               group: MIDI.UInt4 = 0x0) -> Self {
         
@@ -144,7 +145,7 @@ extension MIDI.Event.Note.CC {
                                  note.uInt8Value,
                                  index)
         
-        let word2 = value
+        let word2 = value.midi2Value
         
         return [word1, word2]
         

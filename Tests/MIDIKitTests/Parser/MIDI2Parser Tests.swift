@@ -90,7 +90,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x43, 0x11, 0x3C, 0x02,
                                  0x12, 0x34, 0x56, 0x78]),
-            [.noteCC(note: 60, controller: .assignable(2), value: 0x12345678, channel: 1, group: 0x3)]
+            [.noteCC(note: 60, controller: .assignable(2), value: .midi2(0x12345678), channel: 1, group: 0x3)]
         )
         
         // note pitchbend
@@ -160,7 +160,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x43, 0x01, 0x3C, 0x02,
                                  0x12, 0x34, 0x56, 0x78]),
-            [.noteCC(note: 60, controller: .registered(.breath), value: 0x12345678, channel: 1, group: 0x3)]
+            [.noteCC(note: 60, controller: .registered(.breath), value: .midi2(0x12345678), channel: 1, group: 0x3)]
         )
         
         // note management

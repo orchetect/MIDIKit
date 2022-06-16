@@ -409,7 +409,7 @@ extension MIDI {
                 
                 let newEvent: MIDI.Event = .noteCC(note: note,
                                                    controller: cc,
-                                                   value: word2(),
+                                                   value: .midi2(word2()),
                                                    channel: channel,
                                                    group: group)
                 
