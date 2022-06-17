@@ -45,10 +45,14 @@ extension MIDI.Event.CC.Controller {
         case channelCoarseTuning(MIDI.UInt7)
         
         /// Tuning Program Change
-        case tuningProgramChange(number: Int)
+        ///
+        /// Value is Tuning Program Number (1...128, encoded as 0...127).
+        case tuningProgramChange(number: MIDI.UInt7)
         
         /// Tuning Bank Select
-        case tuningBankSelect(number: Int)
+        ///
+        /// Value is Tuning Bank Number (1...128, encoded as 0...127).
+        case tuningBankSelect(number: MIDI.UInt7)
         
         /// Modulation Depth Range
         /// (see MMA General MIDI Level 2 Specification)
@@ -68,7 +72,7 @@ extension MIDI.Event.CC.Controller {
         /// Will disable the data entry, data increment, and data decrement controllers until a new RPN or NRPN is selected.
         case null
         
-        /// Form an RPM message from a raw parameter number byte pair
+        /// Form an RPM message from a raw parameter number byte pair.
         case raw(parameter: MIDI.UInt7.Pair,
                  dataEntryMSB: MIDI.UInt7?,
                  dataEntryLSB: MIDI.UInt7?)
@@ -133,13 +137,11 @@ extension MIDI.Event.CC.Controller.RPN {
                     lsb: nil)
             
         case .tuningProgramChange(number: let number):
-            #warning("> TODO: not sure if this is correct")
-            return (msb: number.toMIDIUInt7Exactly,
+            return (msb: number,
                     lsb: nil)
             
         case .tuningBankSelect(number: let number):
-            #warning("> TODO: not sure if this is correct")
-            return (msb: number.toMIDIUInt7Exactly,
+            return (msb: number,
                     lsb: nil)
             
         case .modulationDepthRange(dataEntryMSB: let dataEntryMSB,
