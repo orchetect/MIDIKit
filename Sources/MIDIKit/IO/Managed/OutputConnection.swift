@@ -136,7 +136,7 @@ extension MIDI.IO {
         
         deinit {
             
-            _ = try? closeOutput()
+            try? closeOutput()
             
         }
         

@@ -59,7 +59,7 @@ extension MIDI.IO {
         
         deinit {
             
-            _ = try? dispose()
+            try? dispose()
             
         }
         
@@ -136,8 +136,8 @@ extension MIDI.IO.Output {
         coreMIDIOutputPortRef = newPortRef
         
         // set meta data properties; ignore errors in case of failure
-        _ = try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
-        _ = try? MIDI.IO.setManufacturer(of: newPortRef, to: manager.manufacturer)
+        try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
+        try? MIDI.IO.setManufacturer(of: newPortRef, to: manager.manufacturer)
         
         if let unwrappedUniqueID = self.uniqueID {
             // inject previously-stored unique ID into port

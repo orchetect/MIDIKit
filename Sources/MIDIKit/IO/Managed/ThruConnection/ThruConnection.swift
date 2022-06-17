@@ -75,7 +75,7 @@ extension MIDI.IO {
         
         deinit {
             
-            _ = try? dispose()
+            try? dispose()
             
         }
         
