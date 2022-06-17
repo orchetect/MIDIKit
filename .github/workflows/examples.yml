@@ -21,6 +21,23 @@ on:
     - cron: '25 12 * * *'   # once a day @ 12:25pm UTC (5:35am PST)
 
 jobs:
+  dump_contexts_to_log:
+    runs-on: macos-latest
+    steps:
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump job context
+        run: echo '${{ toJSON(job) }}'
+      - name: Dump steps context
+        run: echo '${{ toJSON(steps) }}'
+      - name: Dump runner context
+        run: echo '${{ toJSON(runner) }}'
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
+      - name: Dump matrix context
+        run: echo '${{ toJSON(matrix) }}'
+        
   iOS-UIKit:
     name: iOS UIKit
     runs-on: macos-latest
