@@ -12,7 +12,7 @@ extension MIDI.IO {
     ///
     /// To delete them all, see sister function `removeAllSystemThruConnectionsPersistentEntries(:)`.
     ///
-    /// - Parameter persistentOwnerID: reverse-DNS domain that was used when the connection was first made
+    /// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first made
     ///
     /// - Throws: `MIDI.IO.MIDIError.osStatus`
     internal static func getSystemThruConnectionsPersistentEntries(
@@ -56,11 +56,12 @@ extension MIDI.IO {
     /// Internal:
     /// Deletes all system-held Core MIDI MIDI play-thru connections matching an owner ID.
     ///
-    /// - Parameter persistentOwnerID: reverse-DNS domain that was used when the connection was first made
+    /// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first made
     ///
     /// - Throws: `MIDI.IO.MIDIError.osStatus`
     ///
     /// - Returns: Number of deleted matching connections.
+    @discardableResult
     internal static func removeAllSystemThruConnectionsPersistentEntries(
         matching persistentOwnerID: String
     ) throws -> Int {

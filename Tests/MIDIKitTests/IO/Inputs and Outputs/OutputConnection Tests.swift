@@ -17,8 +17,8 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         wait(sec: 0.2)
     }
     
-    @MIDI.Atomic var input1Events: [MIDI.Event] = []
-    @MIDI.Atomic var input2Events: [MIDI.Event] = []
+    @MIDI.Atomic private var input1Events: [MIDI.Event] = []
+    @MIDI.Atomic private var input2Events: [MIDI.Event] = []
     
 	func testOutputConnection() throws {
 		
