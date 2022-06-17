@@ -23,7 +23,7 @@ enum kEvents {
         
         static let noteCC: MIDI.Event = .noteCC(note: 60,
                                                 controller: .registered(.modWheel),
-                                                value: 1,
+                                                value: .midi2(1),
                                                 channel: 4,
                                                 group: 0)
         

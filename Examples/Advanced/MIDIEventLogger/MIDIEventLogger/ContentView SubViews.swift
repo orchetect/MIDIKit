@@ -245,7 +245,7 @@ extension ContentView {
                     Button {
                         sendEvent(.noteCC(note: 60,
                                           controller: .registered(.modWheel),
-                                          value: 0x8000_0000, // UInt32 "midpoint" value
+                                          value: .midi2(0x8000_0000), // UInt32 "midpoint" value
                                           channel: midiChannel,
                                           group: midiGroup))
                     } label: { Text("Per-Note CC (Registered)") }
@@ -253,7 +253,7 @@ extension ContentView {
                     Button {
                         sendEvent(.noteCC(note: 60,
                                           controller: .assignable(2),
-                                          value: 0x8000_0000, // UInt32 "midpoint" value
+                                          value: .midi2(0x8000_0000), // UInt32 "midpoint" value
                                           channel: midiChannel,
                                           group: midiGroup))
                     } label: { Text("Per-Note CC (Assignable)") }

@@ -12,6 +12,7 @@
 		E27D0E25284F2A8900F43247 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E27D0E23284F2A8900F43247 /* Main.storyboard */; };
 		E27D0E2A284F2A8900F43247 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E27D0E28284F2A8900F43247 /* LaunchScreen.storyboard */; };
 		E27D0E35284F2E0A00F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E34284F2E0A00F43247 /* MIDIKit */; };
+		E29AC91E285BF1F7009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC91D285BF1F7009D1C2C /* MIDIKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,7 +22,6 @@
 		E27D0E24284F2A8900F43247 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E27D0E29284F2A8900F43247 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E27D0E2B284F2A8900F43247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E27D0E32284F2DC700F43247 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
 		E29A5E952852A27700E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -30,6 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E29AC91E285BF1F7009D1C2C /* MIDIKit in Frameworks */,
 				E27D0E35284F2E0A00F43247 /* MIDIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,7 +42,6 @@
 			isa = PBXGroup;
 			children = (
 				E29A5E952852A27700E87812 /* README.md */,
-				E27D0E31284F2DC700F43247 /* Packages */,
 				E27D0E1C284F2A8900F43247 /* VirtualInput */,
 				E27D0E1B284F2A8900F43247 /* Products */,
 			);
@@ -67,14 +67,6 @@
 			path = VirtualInput;
 			sourceTree = "<group>";
 		};
-		E27D0E31284F2DC700F43247 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				E27D0E32284F2DC700F43247 /* MIDIKit */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -93,6 +85,7 @@
 			name = VirtualInput;
 			packageProductDependencies = (
 				E27D0E34284F2E0A00F43247 /* MIDIKit */,
+				E29AC91D285BF1F7009D1C2C /* MIDIKit */,
 			);
 			productName = VirtualInput;
 			productReference = E27D0E1A284F2A8900F43247 /* VirtualInput.app */;
@@ -122,6 +115,9 @@
 				Base,
 			);
 			mainGroup = E27D0E11284F2A8900F43247;
+			packageReferences = (
+				E29AC91C285BF1F7009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
+			);
 			productRefGroup = E27D0E1B284F2A8900F43247 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -368,9 +364,25 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		E29AC91C285BF1F7009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/MIDIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.10;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		E27D0E34284F2E0A00F43247 /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = MIDIKit;
+		};
+		E29AC91D285BF1F7009D1C2C /* MIDIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E29AC91C285BF1F7009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;
 			productName = MIDIKit;
 		};
 /* End XCSwiftPackageProductDependency section */

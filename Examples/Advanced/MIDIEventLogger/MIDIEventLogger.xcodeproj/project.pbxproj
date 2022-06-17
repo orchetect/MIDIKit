@@ -13,6 +13,7 @@
 		E26A25C926C5875A00FFCF40 /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E26A25C826C5875A00FFCF40 /* OTCore */; };
 		E26A25CD26C5876400FFCF40 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E26A25CC26C5876400FFCF40 /* MIDIKit */; };
 		E26A25CF26C5AD4700FFCF40 /* ContentView SubViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25CE26C5AD4700FFCF40 /* ContentView SubViews.swift */; };
+		E29AC90C285BEFB1009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC90B285BEFB1009D1C2C /* MIDIKit */; };
 		E2E8BD89279F8DF4007A1AF0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -23,7 +24,6 @@
 		E26A25BF26C5873B00FFCF40 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		E26A25C026C5873B00FFCF40 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E26A25CE26C5AD4700FFCF40 /* ContentView SubViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView SubViews.swift"; sourceTree = "<group>"; };
-		E28F3CA6284F535B00AFCF9C /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
 		E2B38F2026C63918008770A6 /* MIDIEventLogger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MIDIEventLogger.entitlements; sourceTree = "<group>"; };
 		E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -33,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E29AC90C285BEFB1009D1C2C /* MIDIKit in Frameworks */,
 				E26A25CD26C5876400FFCF40 /* MIDIKit in Frameworks */,
 				E26A25C926C5875A00FFCF40 /* OTCore in Frameworks */,
 			);
@@ -44,7 +45,6 @@
 		E26A25A326C586F600FFCF40 = {
 			isa = PBXGroup;
 			children = (
-				E28F3CA5284F535B00AFCF9C /* Packages */,
 				E26A25AE26C586F600FFCF40 /* MIDIEventLogger */,
 				E26A25AD26C586F600FFCF40 /* Products */,
 			);
@@ -72,14 +72,6 @@
 			path = MIDIEventLogger;
 			sourceTree = "<group>";
 		};
-		E28F3CA5284F535B00AFCF9C /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				E28F3CA6284F535B00AFCF9C /* MIDIKit */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -99,6 +91,7 @@
 			packageProductDependencies = (
 				E26A25C826C5875A00FFCF40 /* OTCore */,
 				E26A25CC26C5876400FFCF40 /* MIDIKit */,
+				E29AC90B285BEFB1009D1C2C /* MIDIKit */,
 			);
 			productName = MIDIEventLogger;
 			productReference = E26A25AC26C586F600FFCF40 /* MIDIEventLogger.app */;
@@ -131,6 +124,7 @@
 			mainGroup = E26A25A326C586F600FFCF40;
 			packageReferences = (
 				E26A25C726C5875A00FFCF40 /* XCRemoteSwiftPackageReference "OTCore" */,
+				E29AC90A285BEFB1009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
 			);
 			productRefGroup = E26A25AD26C586F600FFCF40 /* Products */;
 			projectDirPath = "";
@@ -372,7 +366,15 @@
 			repositoryURL = "https://github.com/orchetect/OTCore";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.0;
+				minimumVersion = 1.4.1;
+			};
+		};
+		E29AC90A285BEFB1009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/MIDIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.10;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -385,6 +387,11 @@
 		};
 		E26A25CC26C5876400FFCF40 /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = MIDIKit;
+		};
+		E29AC90B285BEFB1009D1C2C /* MIDIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E29AC90A285BEFB1009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;
 			productName = MIDIKit;
 		};
 /* End XCSwiftPackageProductDependency section */

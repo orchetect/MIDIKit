@@ -8,6 +8,8 @@ extension MIDI.Event {
     /// Unofficial Bus Select (Status `0xF5`)
     ///
     /// "Some vendors have produced boxes with a single MIDI input, and multiple MIDI outputs. The Bus Select message specifies which of the outputs further data should be sent to. This is not an official message; the vendors in question should have used a SysEx command." -- [David Van Brink's MIDI Spec](https://www.cs.cmu.edu/~music/cmsip/readings/davids-midi-spec.htm)
+    ///
+    /// - Note: May be removed in a future release of MIDIKit.
     public struct UnofficialBusSelect: Equatable, Hashable {
         
         /// Bus Number
