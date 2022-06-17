@@ -1,0 +1,142 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**/*.md'       # .md files anywhere in the repo
+      - '**/LICENSE'    # LICENSE files anywhere in the repo
+      - '**/.gitignore' # .gitignore files anywhere in the repo
+      
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '**/*.md'       # .md files anywhere in the repo
+      - '**/LICENSE'    # LICENSE files anywhere in the repo
+      - '**/.gitignore' # .gitignore files anywhere in the repo
+      
+  workflow_dispatch:
+    
+  schedule:
+    - cron: '25 12 * * *'   # once a day @ 12:25pm UTC (5:35am PST)
+    
+jobs:
+  iOS-UIKit:
+    name: iOS UIKit
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
+    - name: BluetoothMIDI - Build
+      run: xcodebuild build -project "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI"
+    
+    - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/iOS UIKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
+    - name: EventParsing - Build
+      run: xcodebuild build -project "Examples/iOS UIKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing"
+
+    - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/iOS UIKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
+    - name: VirtualInput - Build
+      run: xcodebuild build -project "Examples/iOS UIKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput"
+
+    - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/iOS UIKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
+    - name: VirtualOutput - Build
+      run: xcodebuild build -project "Examples/iOS UIKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput"
+
+  iOS-SwiftUI:
+    name: iOS SwiftUI
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
+    - name: BluetoothMIDI - Build
+      run: xcodebuild build -project "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI"
+
+    - name: EndpointPickers - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/iOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -resolvePackageDependencies
+    - name: EndpointPickers - Build
+      run: xcodebuild build -project "Examples/iOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers"
+
+    - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/iOS SwiftUI/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
+    - name: EventParsing - Build
+      run: xcodebuild build -project "Examples/iOS SwiftUI/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing"
+
+    - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/iOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
+    - name: VirtualInput - Build
+      run: xcodebuild build -project "Examples/iOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput"
+
+    - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/iOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
+    - name: VirtualOutput - Build
+      run: xcodebuild build -project "Examples/iOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput"
+
+  macOS-AppKit:
+    name: macOS AppKit
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: EndpointMenus - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/macOS AppKit/EndpointPickers/EndpointMenus.xcodeproj" -resolvePackageDependencies
+    - name: EndpointMenus - Build
+      run: xcodebuild build -project "Examples/macOS AppKit/EndpointPickers/EndpointMenus.xcodeproj" -scheme "EndpointMenus"
+
+    - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/macOS AppKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
+    - name: EventParsing - Build
+      run: xcodebuild build -project "Examples/macOS AppKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing"
+
+    - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/macOS AppKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
+    - name: VirtualInput - Build
+      run: xcodebuild build -project "Examples/macOS AppKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput"
+
+    - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/macOS AppKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
+    - name: VirtualOutput - Build
+      run: xcodebuild build -project "Examples/macOS AppKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput"
+
+  macOS-SwiftUI:
+    name: macOS SwiftUI
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: EndpointPickers - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/macOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -resolvePackageDependencies
+    - name: EndpointPickers - Build
+      run: xcodebuild build -project "Examples/macOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers"
+
+    - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/macOS SwiftUI/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
+    - name: EventParsing - Build
+      run: xcodebuild build -project "Examples/macOS SwiftUI/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing"
+
+    - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/macOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
+    - name: VirtualInput - Build
+      run: xcodebuild build -project "Examples/macOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput"
+
+    - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/macOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
+    - name: VirtualOutput - Build
+      run: xcodebuild build -project "Examples/macOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput"
+
+  Advanced:
+    name: Advanced
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: MIDIEventLogger - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -resolvePackageDependencies
+    - name: MIDIEventLogger - Build
+      run: xcodebuild build -project "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -scheme "MIDIEventLogger"
+      
+    - name: MIDISystemInfo - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/Advanced/MIDISystemInfo/MIDISystemInfo.xcodeproj" -resolvePackageDependencies
+    - name: MIDISystemInfo - Build
+      run: xcodebuild build -project "Examples/Advanced/MIDISystemInfo/MIDISystemInfo.xcodeproj" -scheme "MIDISystemInfo"

@@ -62,20 +62,6 @@ jobs:
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12"
     - name: iPhone 12 Simulator - Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12"
-
-  Examples:
-    name: Examples
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@main
-    - name: MIDIEventLogger - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -resolvePackageDependencies
-    - name: MIDIEventLogger - Build
-      run: xcodebuild build -project "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -scheme "MIDIEventLogger"
-    - name: MIDISystemInfo - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/Advanced/MIDISystemInfo/MIDISystemInfo.xcodeproj" -resolvePackageDependencies
-    - name: MIDISystemInfo - Build
-      run: xcodebuild build -project "Examples/Advanced/MIDISystemInfo/MIDISystemInfo.xcodeproj" -scheme "MIDISystemInfo"
   
 # Core MIDI is still in beta for tvOS and watchOS; can add CI tests later once it's supported
 #
