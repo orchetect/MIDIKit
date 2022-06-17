@@ -19,7 +19,9 @@ on:
     
   schedule:
     - cron: '25 12 * * *'   # once a day @ 12:25pm UTC (5:35am PST)
-    
+
+env:
+
 jobs:
   iOS-UIKit:
     name: iOS UIKit
@@ -27,7 +29,7 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: BluetoothMIDI - Set dependency branch
-      run: swift .github/workflows/setBranch.swift -go -p MIDIKit "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" ${{ env.GITHUB_REF }}
+      run: swift .github/workflows/setBranch.swift -go -p MIDIKit "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" ${{ github.base_ref }}
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
     - name: BluetoothMIDI - Build
