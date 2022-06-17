@@ -27,7 +27,7 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: BluetoothMIDI - Set dependency branch
-      run: swift .github/workflows/setBranch.swift -go -p MIDIKit "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" ${{ env.GITHUB_BASE_REF }}
+      run: swift .github/workflows/setBranch.swift -go -p MIDIKit "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" ${{ env.GITHUB_REF_NAME }}
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
     - name: BluetoothMIDI - Build
