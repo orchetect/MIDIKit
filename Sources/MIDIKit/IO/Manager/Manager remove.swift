@@ -31,14 +31,6 @@ extension MIDI.IO.Manager {
                     managedOutputConnections[tag] = nil
                 }
                 
-            case .nonPersistentThruConnection:
-                switch tagSelection {
-                case .all:
-                    managedThruConnections.removeAll()
-                case .withTag(let tag):
-                    managedThruConnections[tag] = nil
-                }
-                
             case .input:
                 switch tagSelection {
                 case .all:
@@ -55,6 +47,13 @@ extension MIDI.IO.Manager {
                     managedOutputs[tag] = nil
                 }
                 
+            case .nonPersistentThruConnection:
+                switch tagSelection {
+                case .all:
+                    managedThruConnections.removeAll()
+                case .withTag(let tag):
+                    managedThruConnections[tag] = nil
+                }
             }
             
         }

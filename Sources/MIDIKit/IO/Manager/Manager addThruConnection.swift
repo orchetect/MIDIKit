@@ -10,6 +10,11 @@ extension MIDI.IO.Manager {
     
     /// Creates a new MIDI play-through (thru) connection.
     ///
+    /// ⚠️ **Note** ⚠️
+    /// - Due to a Swift Core MIDI bug, all thru connections are created as persistent.
+    /// - If `.nonPersistent` is passed, the connection will be created as persistent with an empty ownerID of "". Use this feature with caution.
+    /// - ([Radar FB9836833](https://openradar.appspot.com/radar?id=5043482339049472))
+    ///
     /// If the connection is non-persistent, a managed thru connection will be added to the `managedThruConnections` dictionary of the `Manager` and its lifecycle will be that of the `Manager` or until removeThruConnection is called for the connection.
     ///
     /// If the connection is persistent, it is instead stored persistently by the system and references will not be directly held in the `Manager`. To access persistent connections, the `unmanagedPersistentThruConnections` property will retrieve a list of connections from the system, if any match the owner ID passed as argument.
