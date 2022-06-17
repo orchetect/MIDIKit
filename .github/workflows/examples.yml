@@ -20,8 +20,6 @@ on:
   schedule:
     - cron: '25 12 * * *'   # once a day @ 12:25pm UTC (5:35am PST)
 
-env:
-
 jobs:
   iOS-UIKit:
     name: iOS UIKit
