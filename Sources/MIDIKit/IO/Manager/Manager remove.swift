@@ -60,6 +60,18 @@ extension MIDI.IO.Manager {
         
     }
     
+    /// Removes all unmanaged persistent MIDI thru connections stored in the system matching the given owner ID.
+    ///
+    /// - Parameter ownerID: Reverse-DNS domain that was used when the connection was first made
+    ///
+    /// - Returns: Number of deleted matching connections.
+    @discardableResult
+    public func removeAllUnmanagedPersistentThruConnections(ownerID: String) -> Int {
+        
+        (try? MIDI.IO.removeAllSystemThruConnectionsPersistentEntries(matching: ownerID)) ?? 0
+        
+    }
+    
     /// Remove all managed MIDI endpoints and connections.
     ///
     /// What is unaffected, and not reset:
