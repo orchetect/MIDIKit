@@ -29,22 +29,22 @@ jobs:
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
     - name: BluetoothMIDI - Build
-      run: xcodebuild build -project "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI"
+      run: xcodebuild build -project "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "platform=iOS Simulator,name=iPhone 12"
     
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS UIKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
     - name: EventParsing - Build
-      run: xcodebuild build -project "Examples/iOS UIKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing"
+      run: xcodebuild build -project "Examples/iOS UIKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "platform=iOS Simulator,name=iPhone 12"
 
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS UIKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
     - name: VirtualInput - Build
-      run: xcodebuild build -project "Examples/iOS UIKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput"
+      run: xcodebuild build -project "Examples/iOS UIKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "platform=iOS Simulator,name=iPhone 12"
 
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS UIKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
     - name: VirtualOutput - Build
-      run: xcodebuild build -project "Examples/iOS UIKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput"
+      run: xcodebuild build -project "Examples/iOS UIKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "platform=iOS Simulator,name=iPhone 12"
 
   iOS-SwiftUI:
     name: iOS SwiftUI
@@ -54,27 +54,27 @@ jobs:
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
     - name: BluetoothMIDI - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI"
+      run: xcodebuild build -project "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "platform=iOS Simulator,name=iPhone 12"
 
     - name: EndpointPickers - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -resolvePackageDependencies
     - name: EndpointPickers - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers"
+      run: xcodebuild build -project "Examples/iOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "platform=iOS Simulator,name=iPhone 12"
 
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS SwiftUI/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
     - name: EventParsing - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing"
+      run: xcodebuild build -project "Examples/iOS SwiftUI/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "platform=iOS Simulator,name=iPhone 12"
 
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
     - name: VirtualInput - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput"
+      run: xcodebuild build -project "Examples/iOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "platform=iOS Simulator,name=iPhone 12"
 
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
     - name: VirtualOutput - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput"
+      run: xcodebuild build -project "Examples/iOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "platform=iOS Simulator,name=iPhone 12"
 
   macOS-AppKit:
     name: macOS AppKit
