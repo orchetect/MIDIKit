@@ -2,9 +2,8 @@ name: build
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main]
     paths-ignore:
-      - 'Docs/**'       # Docs folder in root of repo
       - '**/*.md'       # .md files anywhere in the repo
       - '**/LICENSE'    # LICENSE files anywhere in the repo
       - '**/.gitignore' # .gitignore files anywhere in the repo
@@ -12,7 +11,6 @@ on:
   pull_request:
     branches: [main]
     paths-ignore:
-      - 'Docs/**'       # Docs folder in root of repo
       - '**/*.md'       # .md files anywhere in the repo
       - '**/LICENSE'    # LICENSE files anywhere in the repo
       - '**/.gitignore' # .gitignore files anywhere in the repo
