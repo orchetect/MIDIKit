@@ -106,7 +106,7 @@ extension MIDIThruConnectionParams {
     }
     
     /// Internal:
-    /// Converts params from `CFData` returned from Core MIDI when getting params for a thru connection that exists in the system.
+    /// Converts params from `CFData` returned from Core MIDI when getting params for a thru connection that exists in the system via `MIDIThruConnectionGetParams`.
     internal init?(cfData: CFData) {
         
         self.init()
