@@ -60,16 +60,12 @@ extension MIDI.IO {
             // truncate arrays to 8 members or less;
             // Core MIDI thru connections can only have up to 8 outputs and 8 inputs
             
+            self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             self.outputs = Array(outputs.prefix(8))
             self.inputs = Array(inputs.prefix(8))
             self.lifecycle = lifecycle
             self.midiManager = midiManager
-            self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-            
-            // prep params
             self.parameters = params
-            self.parameters.outputs = outputs.map { $0.coreMIDIObjectRef }
-            self.parameters.inputs = inputs.map { $0.coreMIDIObjectRef }
             
         }
         
@@ -134,7 +130,7 @@ extension MIDI.IO.ThruConnection {
         //    logger.debug("MIDI: Thru Connection: Successfully formed non-persistent connection.")
         //
         //case .persistent(let ownerID):
-        //    logger.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID //\(ownerID.otcQuoted).")
+        //    logger.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID //\(ownerID.quoted).")
         //}
         
     }
@@ -143,6 +139,9 @@ extension MIDI.IO.ThruConnection {
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
+        
+        // don't dispose if it's a persistent connection
+        guard lifecycle == .nonPersistent else { return }
         
         guard let unwrappedThruConnectionRef = self.coreMIDIThruConnectionRef else { return }
         
