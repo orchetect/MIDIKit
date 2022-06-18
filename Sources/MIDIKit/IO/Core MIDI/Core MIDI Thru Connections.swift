@@ -20,7 +20,7 @@ extension MIDI.IO {
     ) throws -> [MIDI.IO.CoreMIDIThruConnectionRef] {
         
         // set up empty unmanaged data pointer
-        var getConnectionList: Unmanaged<CFData> = Unmanaged.passUnretained(Data([]) as CFData)
+        var getConnectionList: Unmanaged<CFData> = Unmanaged.passUnretained(Data() as CFData)
         
         // get CFData containing list of matching 4-byte UInt32 ID numbers
         let result = MIDIThruConnectionFind(persistentOwnerID as CFString, &getConnectionList)
@@ -86,6 +86,25 @@ extension MIDI.IO {
         }
         
         return disposeCount
+        
+    }
+    
+    /// Internal:
+    /// Returns parameters for a play-thru connection by querying Core MIDI.
+    ///
+    /// - Throws: `MIDI.IO.MIDIError.osStatus`
+    ///
+    /// - Returns: New `MIDIThruConnectionParams` instance.
+    internal static func getThruConnectionParameters(
+        ref: MIDIThruConnectionRef
+    ) throws -> MIDIThruConnectionParams? {
+        
+        var paramsData: Unmanaged<CFData> = Unmanaged.passUnretained(Data() as CFData)
+        
+        try MIDIThruConnectionGetParams(ref, &paramsData)
+            .throwIfOSStatusErr()
+        
+        return MIDIThruConnectionParams(cfData: paramsData.takeRetainedValue())
         
     }
     
