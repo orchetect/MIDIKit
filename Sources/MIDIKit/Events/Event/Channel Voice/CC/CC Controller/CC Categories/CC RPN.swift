@@ -24,6 +24,8 @@ extension MIDI.Event.CC.Controller {
     /// - note: See Recommended Practise RP-018 of the MIDI 1.0 Spec Addenda.
     public enum RPN: Equatable, Hashable {
         
+        // MIDI Spec
+        
         /// Pitch Bend Sensitivity
         case pitchBendSensitivity(semitones: MIDI.UInt7,
                                   cents: MIDI.UInt7)
@@ -72,10 +74,60 @@ extension MIDI.Event.CC.Controller {
         /// Will disable the data entry, data increment, and data decrement controllers until a new RPN or NRPN is selected.
         case null
         
-        /// Form an RPM message from a raw parameter number byte pair.
+        /// Form an RPN message from a raw parameter number byte pair.
+        ///
+        /// Note that RPNs are defined by the MIDI Association and use of undefined RPNs is discouraged. For using custom parameters, use NRPNs instead (Non-Registered Parameter Number).
         case raw(parameter: MIDI.UInt7.Pair,
                  dataEntryMSB: MIDI.UInt7?,
                  dataEntryLSB: MIDI.UInt7?)
+        
+        // 3D Sound Controllers
+        
+        /// 3D Sound Controller: Azimuth Angle
+        /// (See MMR RP-049)
+        case threeDimensionalAzimuthAngle(dataEntryMSB: MIDI.UInt7,
+                                          dataEntryLSB: MIDI.UInt7)
+        
+        /// 3D Sound Controller: Elevation Angle
+        /// (See MMR RP-049)
+        case threeDimensionalElevationAngle(dataEntryMSB: MIDI.UInt7,
+                                            dataEntryLSB: MIDI.UInt7)
+        
+        /// 3D Sound Controller: Gain
+        /// (See MMR RP-049)
+        case threeDimensionalGain(dataEntryMSB: MIDI.UInt7,
+                                  dataEntryLSB: MIDI.UInt7)
+        
+        /// 3D Sound Controller: Distance Ratio
+        /// (See MMR RP-049)
+        case threeDimensionalDistanceRatio(dataEntryMSB: MIDI.UInt7,
+                                           dataEntryLSB: MIDI.UInt7)
+        
+        /// 3D Sound Controller: Maximum Distance
+        /// (See MMR RP-049)
+        case threeDimensionalMaximumDistance(dataEntryMSB: MIDI.UInt7,
+                                             dataEntryLSB: MIDI.UInt7)
+        
+        /// 3D Sound Controller: Gain at Maximum Distance
+        /// (See MMR RP-049)
+        case threeDimensionalGainAtMaximumDistance(dataEntryMSB: MIDI.UInt7,
+                                                   dataEntryLSB: MIDI.UInt7)
+        
+        /// 3D Sound Controller: Reference Distance Ratio
+        /// (See MMR RP-049)
+        case threeDimensionalReferenceDistanceRatio(dataEntryMSB: MIDI.UInt7,
+                                                    dataEntryLSB: MIDI.UInt7)
+        
+        /// 3D Sound Controller: Pan Spread Angle
+        /// (See MMR RP-049)
+        case threeDimensionalPanSpreadAngle(dataEntryMSB: MIDI.UInt7,
+                                            dataEntryLSB: MIDI.UInt7)
+        
+        /// 3D Sound Controller: Roll Angle
+        /// (See MMR RP-049)
+        case threeDimensionalRollAngle(dataEntryMSB: MIDI.UInt7,
+                                       dataEntryLSB: MIDI.UInt7)
+        
         
     }
     
@@ -87,6 +139,8 @@ extension MIDI.Event.CC.Controller.RPN {
     public var parameter: MIDI.UInt7.Pair {
         
         switch self {
+        // MIDI Spec
+            
         case .pitchBendSensitivity:
             return .init(msb: 0x00, lsb: 0x00)
             
@@ -114,6 +168,35 @@ extension MIDI.Event.CC.Controller.RPN {
         case .raw(let param, _, _):
             return param
             
+        // 3D Sound Controllers
+            
+        case .threeDimensionalAzimuthAngle:
+            return .init(msb: 0x3D, lsb: 0x00)
+            
+        case .threeDimensionalElevationAngle:
+            return .init(msb: 0x3D, lsb: 0x01)
+            
+        case .threeDimensionalGain:
+            return .init(msb: 0x3D, lsb: 0x02)
+            
+        case .threeDimensionalDistanceRatio:
+            return .init(msb: 0x3D, lsb: 0x03)
+            
+        case .threeDimensionalMaximumDistance:
+            return .init(msb: 0x3D, lsb: 0x04)
+            
+        case .threeDimensionalGainAtMaximumDistance:
+            return .init(msb: 0x3D, lsb: 0x05)
+            
+        case .threeDimensionalReferenceDistanceRatio:
+            return .init(msb: 0x3D, lsb: 0x06)
+            
+        case .threeDimensionalPanSpreadAngle:
+            return .init(msb: 0x3D, lsb: 0x07)
+            
+        case .threeDimensionalRollAngle:
+            return .init(msb: 0x3D, lsb: 0x08)
+            
         }
         
     }
@@ -122,6 +205,8 @@ extension MIDI.Event.CC.Controller.RPN {
                                 lsb: MIDI.UInt7?) {
         
         switch self {
+        // MIDI Spec
+            
         case .pitchBendSensitivity(semitones: let semitones,
                                    cents: let cents):
             return (msb: semitones,
@@ -161,6 +246,53 @@ extension MIDI.Event.CC.Controller.RPN {
         case .raw(parameter: _,
                   dataEntryMSB: let dataEntryMSB,
                   dataEntryLSB: let dataEntryLSB):
+            return (msb: dataEntryMSB,
+                    lsb: dataEntryLSB)
+            
+        // 3D Sound Controllers
+            
+        case .threeDimensionalAzimuthAngle(dataEntryMSB: let dataEntryMSB,
+                                           dataEntryLSB: let dataEntryLSB):
+            return (msb: dataEntryMSB,
+                    lsb: dataEntryLSB)
+            
+        case .threeDimensionalElevationAngle(dataEntryMSB: let dataEntryMSB,
+                                             dataEntryLSB: let dataEntryLSB):
+            return (msb: dataEntryMSB,
+                    lsb: dataEntryLSB)
+            
+        case .threeDimensionalGain(dataEntryMSB: let dataEntryMSB,
+                                   dataEntryLSB: let dataEntryLSB):
+            return (msb: dataEntryMSB,
+                    lsb: dataEntryLSB)
+            
+        case .threeDimensionalDistanceRatio(dataEntryMSB: let dataEntryMSB,
+                                            dataEntryLSB: let dataEntryLSB):
+            return (msb: dataEntryMSB,
+                    lsb: dataEntryLSB)
+            
+        case .threeDimensionalMaximumDistance(dataEntryMSB: let dataEntryMSB,
+                                              dataEntryLSB: let dataEntryLSB):
+            return (msb: dataEntryMSB,
+                    lsb: dataEntryLSB)
+            
+        case .threeDimensionalGainAtMaximumDistance(dataEntryMSB: let dataEntryMSB,
+                                                    dataEntryLSB: let dataEntryLSB):
+            return (msb: dataEntryMSB,
+                    lsb: dataEntryLSB)
+            
+        case .threeDimensionalReferenceDistanceRatio(dataEntryMSB: let dataEntryMSB,
+                                                     dataEntryLSB: let dataEntryLSB):
+            return (msb: dataEntryMSB,
+                    lsb: dataEntryLSB)
+            
+        case .threeDimensionalPanSpreadAngle(dataEntryMSB: let dataEntryMSB,
+                                             dataEntryLSB: let dataEntryLSB):
+            return (msb: dataEntryMSB,
+                    lsb: dataEntryLSB)
+            
+        case .threeDimensionalRollAngle(dataEntryMSB: let dataEntryMSB,
+                                        dataEntryLSB: let dataEntryLSB):
             return (msb: dataEntryMSB,
                     lsb: dataEntryLSB)
             
