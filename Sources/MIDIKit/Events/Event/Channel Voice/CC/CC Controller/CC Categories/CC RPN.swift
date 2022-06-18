@@ -84,47 +84,47 @@ extension MIDI.Event.CC.Controller {
         // 3D Sound Controllers
         
         /// 3D Sound Controller: Azimuth Angle
-        /// (See MMR RP-049)
+        /// (See MMA RP-049)
         case threeDimensionalAzimuthAngle(dataEntryMSB: MIDI.UInt7,
                                           dataEntryLSB: MIDI.UInt7)
         
         /// 3D Sound Controller: Elevation Angle
-        /// (See MMR RP-049)
+        /// (See MMA RP-049)
         case threeDimensionalElevationAngle(dataEntryMSB: MIDI.UInt7,
                                             dataEntryLSB: MIDI.UInt7)
         
         /// 3D Sound Controller: Gain
-        /// (See MMR RP-049)
+        /// (See MMA RP-049)
         case threeDimensionalGain(dataEntryMSB: MIDI.UInt7,
                                   dataEntryLSB: MIDI.UInt7)
         
         /// 3D Sound Controller: Distance Ratio
-        /// (See MMR RP-049)
+        /// (See MMA RP-049)
         case threeDimensionalDistanceRatio(dataEntryMSB: MIDI.UInt7,
                                            dataEntryLSB: MIDI.UInt7)
         
         /// 3D Sound Controller: Maximum Distance
-        /// (See MMR RP-049)
+        /// (See MMA RP-049)
         case threeDimensionalMaximumDistance(dataEntryMSB: MIDI.UInt7,
                                              dataEntryLSB: MIDI.UInt7)
         
         /// 3D Sound Controller: Gain at Maximum Distance
-        /// (See MMR RP-049)
+        /// (See MMA RP-049)
         case threeDimensionalGainAtMaximumDistance(dataEntryMSB: MIDI.UInt7,
                                                    dataEntryLSB: MIDI.UInt7)
         
         /// 3D Sound Controller: Reference Distance Ratio
-        /// (See MMR RP-049)
+        /// (See MMA RP-049)
         case threeDimensionalReferenceDistanceRatio(dataEntryMSB: MIDI.UInt7,
                                                     dataEntryLSB: MIDI.UInt7)
         
         /// 3D Sound Controller: Pan Spread Angle
-        /// (See MMR RP-049)
+        /// (See MMA RP-049)
         case threeDimensionalPanSpreadAngle(dataEntryMSB: MIDI.UInt7,
                                             dataEntryLSB: MIDI.UInt7)
         
         /// 3D Sound Controller: Roll Angle
-        /// (See MMR RP-049)
+        /// (See MMA RP-049)
         case threeDimensionalRollAngle(dataEntryMSB: MIDI.UInt7,
                                        dataEntryLSB: MIDI.UInt7)
         
