@@ -20,6 +20,11 @@ final class InputsAndOutputs_ThruConnection_Tests: XCTestCase {
     
     func testNonPersistentThruConnection() throws {
         
+        try XCTSkipIf(
+            !MIDI.IO.isThruConnectionsSupportedOnCurrentPlatform,
+            "MIDI Thru Connections only function on macOS Catalina or earlier due to Core MIDI bugs on later macOS releases. Skipping unit test since it will fail on the current platform."
+        )
+        
         let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
                                       model: "MIDIKit123",
                                       manufacturer: "MIDIKit")
@@ -88,9 +93,7 @@ final class InputsAndOutputs_ThruConnection_Tests: XCTestCase {
         connEvents = []
         
         // Due to a Swift Core MIDI bug, all thru connections are created as persistent.
-        // - See for details: https://openradar.appspot.com/radar?id=5043482339049472
-        // - So having passed .nonPersistent had the effect of creating a persistent
-        //   connection with an empty ownerID.
+        // - See ThruConnection.swift for details
         let conns = try manager.unmanagedPersistentThruConnections(ownerID: "")
 
         XCTAssert(conns.isEmpty)
@@ -101,6 +104,11 @@ final class InputsAndOutputs_ThruConnection_Tests: XCTestCase {
     }
     
     func testPersistentThruConnection() throws {
+        
+        try XCTSkipIf(
+            !MIDI.IO.isThruConnectionsSupportedOnCurrentPlatform,
+            "MIDI Thru Connections only function on macOS Catalina or earlier due to Core MIDI bugs on later macOS releases. Skipping unit test since it will fail on the current platform."
+        )
         
         let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
                                       model: "MIDIKit123",
@@ -114,16 +122,6 @@ final class InputsAndOutputs_ThruConnection_Tests: XCTestCase {
         connEvents.removeAll()
         let ownerID = "com.orchetect.midikit.testNonPersistentThruConnection"
         manager.removeAllUnmanagedPersistentThruConnections(ownerID: ownerID)
-        
-//        let input1 = try XCTUnwrap(
-//            manager.endpoints.inputsUnowned
-//                .first(withDisplayName: "IAC Driver Bus 1")
-//        )
-//
-//        let output1 = try XCTUnwrap(
-//            manager.endpoints.outputsUnowned
-//                .first(withDisplayName: "CP33 Port1")
-//        )
         
         // create virtual input
         let input1Tag = "input1"
@@ -188,6 +186,11 @@ final class InputsAndOutputs_ThruConnection_Tests: XCTestCase {
     
     /// Tests getting thru connection parameters from Core MIDI after creating the thru connection and verifying they are correct.
     func testGetParams() throws {
+        
+        try XCTSkipIf(
+            !MIDI.IO.isThruConnectionsSupportedOnCurrentPlatform,
+            "MIDI Thru Connections only function on macOS Catalina or earlier due to Core MIDI bugs on later macOS releases. Skipping unit test since it will fail on the current platform."
+        )
         
         let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
                                       model: "MIDIKit123",

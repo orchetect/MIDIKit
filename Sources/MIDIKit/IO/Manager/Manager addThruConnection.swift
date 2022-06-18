@@ -11,9 +11,7 @@ extension MIDI.IO.Manager {
     /// Creates a new MIDI play-through (thru) connection.
     ///
     /// ⚠️ **Note** ⚠️
-    /// - Due to a Swift Core MIDI bug, all thru connections are created as persistent.
-    /// - If `.nonPersistent` is passed, the connection will be created as persistent with an empty ownerID of "". Use this feature with caution.
-    /// - ([Radar FB9836833](https://openradar.appspot.com/radar?id=5043482339049472))
+    /// - MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core MIDI bugs on later macOS releases. Attempting to create thru connections on macOS Big Sur or later will throw an error.
     ///
     /// If the connection is non-persistent, a managed thru connection will be added to the `managedThruConnections` dictionary of the `Manager` and its lifecycle will be that of the `Manager` or until removeThruConnection is called for the connection.
     ///
@@ -40,6 +38,10 @@ extension MIDI.IO.Manager {
         lifecycle: MIDI.IO.ThruConnection.Lifecycle = .nonPersistent,
         params: MIDI.IO.ThruConnection.Parameters = .init()
     ) throws {
+        
+        guard MIDI.IO.isThruConnectionsSupportedOnCurrentPlatform else {
+            throw MIDI.IO.MIDIError.notSupported("MIDI Thru Connections are not supported on this platform due to Core MIDI bugs.")
+        }
         
         try eventQueue.sync {
             

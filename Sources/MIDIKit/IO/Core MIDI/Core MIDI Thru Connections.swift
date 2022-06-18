@@ -7,6 +7,19 @@
 
 extension MIDI.IO {
     
+    /// Returns true if current platform supports MIDI play-thru connections.
+    ///
+    /// MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core MIDI bugs on later macOS releases.
+    internal static var isThruConnectionsSupportedOnCurrentPlatform: Bool {
+        
+        if #available(macOS 11.0, /* iOS ???, */ *) {
+            return false
+        } else {
+            return true
+        }
+        
+    }
+    
     /// Internal:
     /// Queries Core MIDI for existing persistent play-thru connections stored in the system matching the specified persistent owner ID.
     ///
