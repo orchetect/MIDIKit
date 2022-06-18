@@ -31,9 +31,9 @@ final class InputsAndOutputs_Input_Tests: XCTestCase {
 				name: "MIDIKit IO Tests Destination 1",
                 tag: tag1,
                 uniqueID: .none, // allow system to generate random ID
-				receiveHandler: .rawData({ packets in
+				receiveHandler: .rawData { packets in
 					_ = packets
-				})
+				}
 			)
 		} catch let err as MIDI.IO.MIDIError {
 			XCTFail(err.localizedDescription) ; return
@@ -54,9 +54,9 @@ final class InputsAndOutputs_Input_Tests: XCTestCase {
 				name: "MIDIKit IO Tests Destination 2",
 				tag: tag2,
                 uniqueID: .preferred(id1!), // try to use existing ID
-				receiveHandler: .rawData({ packet in
+				receiveHandler: .rawData { packet in
 					_ = packet
-				})
+				}
 			)
 		} catch let err as MIDI.IO.MIDIError {
 			XCTFail("\(err)") ; return

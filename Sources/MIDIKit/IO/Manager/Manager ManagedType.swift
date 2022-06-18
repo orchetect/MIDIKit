@@ -12,9 +12,9 @@ extension MIDI.IO.Manager {
         
         case inputConnection
         case outputConnection
-        case nonPersistentThruConnection
         case input
         case output
+        case nonPersistentThruConnection
         
     }
     

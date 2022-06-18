@@ -14,6 +14,8 @@ extension MIDI.IO {
         
         case malformed(_ verboseError: String)
         
+        case notSupported(_ verboseError: String)
+        
         // Connections
         
         case connectionError(_ verboseError: String)
@@ -55,6 +57,9 @@ extension MIDI.IO.MIDIError: CustomStringConvertible {
             return verboseError
             
         case .malformed(let verboseError):
+            return verboseError
+            
+        case .notSupported(let verboseError):
             return verboseError
             
         case .connectionError(let verboseError):

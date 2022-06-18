@@ -10,12 +10,25 @@
 // ~/Library/Preferences/ByHost/com.apple.MIDI.<UUID>.plist
 // but you can't manually modify the plist file.
 
+// TODO: Core MIDI Thru Bug
+// There is a bug in Core MIDI's Swift bridging whereby passing nil into MIDIThruConnectionCreate fails to create a non-persistent thru connection and actually creates a persistent thru connection, despite what the Core MIDI documentation states.
+// - Radar filed: https://openradar.appspot.com/radar?id=5043482339049472
+// - So having passed .nonPersistent has the effect of creating a persistent
+//   connection with an empty ownerID.
+
+// TODO: Core MIDI Thru Bug
+// A new issue seems to be present on macOS Big Sur and later where thru connections do not flow any MIDI events.
+// - https://stackoverflow.com/questions/54871326/how-is-a-coremidi-thru-connection-made-in-swift-4-2
+
 import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
     
     /// A managed MIDI thru connection created in the system by the MIDI I/O `Manager`.
+    ///
+    /// ⚠️ **Note** ⚠️
+    /// - MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core MIDI bugs on later macOS releases. Attempting to create thru connections on macOS Big Sur or later will throw an error.
     ///
     /// Core MIDI play-through connections can be non-persistent (client-owned, auto-disposed when `Manager` de-initializes) or persistent (maintained even after system reboots).
     ///
@@ -60,22 +73,18 @@ extension MIDI.IO {
             // truncate arrays to 8 members or less;
             // Core MIDI thru connections can only have up to 8 outputs and 8 inputs
             
+            self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
             self.outputs = Array(outputs.prefix(8))
             self.inputs = Array(inputs.prefix(8))
             self.lifecycle = lifecycle
             self.midiManager = midiManager
-            self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-            
-            // prep params
             self.parameters = params
-            self.parameters.outputs = outputs.map { $0.coreMIDIObjectRef }
-            self.parameters.inputs = inputs.map { $0.coreMIDIObjectRef }
             
         }
         
         deinit {
             
-            _ = try? dispose()
+            try? dispose()
             
         }
         
@@ -89,56 +98,28 @@ extension MIDI.IO.ThruConnection {
         
         var newConnection = MIDIThruConnectionRef()
         
-        var params = parameters.coreMIDIThruConnectionParams()
+        let paramsData = parameters.coreMIDIThruConnectionParams(
+            inputs: inputs,
+            outputs: outputs
+        )
+        .cfData()
         
-        // prepare params
-        let pLen = MIDIThruConnectionParamsSize(&params)
-        
-        let paramsData = withUnsafePointer(to: &params) { ptr in
-            NSData(bytes: ptr, length: pLen)
-        }
-        
-        // non-persistent/persistent
+        // nil == non-persistent, client-owned
+        // non-nil == persistent, stored in the system
         var cfPersistentOwnerID: CFString? = nil
         
         if case .persistent(ownerID: let ownerID) = lifecycle {
             cfPersistentOwnerID = ownerID as CFString
         }
         
-        switch cfPersistentOwnerID {
-        case nil:
-            // non-persistent thru connection
-            
-            // TODO: fix MIDI thru bug
-            // There is a bug in Core MIDI's Swift bridging whereby passing nil into MIDIThruConnectionCreate fails to create a non-persistent thru connection and actually creates a persistent thru connection, despite what the Core MIDI documentation states.
-            // Radar FB9836833 was filed with Apple.
-            
-            try MIDIThruConnectionCreate(
-                nil, // this doesn't work, it needs an Obj-c NULL somehow
-                paramsData,
-                &newConnection
-            )
-                .throwIfOSStatusErr()
-            
-        case .some(let id):
-            // persistent thru connection
-            try MIDIThruConnectionCreate(
-                id,
-                paramsData,
-                &newConnection
-            )
-            .throwIfOSStatusErr()
-        }
+        try MIDIThruConnectionCreate(
+            cfPersistentOwnerID,
+            paramsData,
+            &newConnection
+        )
+        .throwIfOSStatusErr()
         
         coreMIDIThruConnectionRef = newConnection
-        
-        //switch lifecycle {
-        //case .nonPersistent:
-        //    logger.debug("MIDI: Thru Connection: Successfully formed non-persistent connection.")
-        //
-        //case .persistent(let ownerID):
-        //    logger.debug("MIDI: Thru Connection: Successfully formed persistent connection with ID //\(ownerID.otcQuoted).")
-        //}
         
     }
     
@@ -146,6 +127,9 @@ extension MIDI.IO.ThruConnection {
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
+        
+        // don't dispose if it's a persistent connection
+        guard lifecycle == .nonPersistent else { return }
         
         guard let unwrappedThruConnectionRef = self.coreMIDIThruConnectionRef else { return }
         
