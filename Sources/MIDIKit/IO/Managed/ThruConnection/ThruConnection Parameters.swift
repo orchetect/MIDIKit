@@ -10,9 +10,6 @@ extension MIDI.IO.ThruConnection {
     /// Parameters for a MIDI Thru connection.
     public struct Parameters {
         
-        public var inputs: [MIDI.IO.CoreMIDIEndpointRef] = []
-        public var outputs: [MIDI.IO.CoreMIDIEndpointRef] = []
-        
         public var filterOutAllControls: Bool = false
         public var filterOutBeatClock: Bool = false
         public var filterOutMTC: Bool = false

@@ -89,14 +89,11 @@ extension MIDI.IO.ThruConnection {
         
         var newConnection = MIDIThruConnectionRef()
         
-        var params = parameters.coreMIDIThruConnectionParams()
-        
-        // prepare params
-        let pLen = MIDIThruConnectionParamsSize(&params)
-        
-        let paramsData = withUnsafePointer(to: &params) { ptr in
-            NSData(bytes: ptr, length: pLen)
-        }
+        let paramsData = parameters.coreMIDIThruConnectionParams(
+            inputs: inputs,
+            outputs: outputs
+        )
+        .cfData()
         
         // non-persistent/persistent
         var cfPersistentOwnerID: CFString? = nil

@@ -1,5 +1,5 @@
 //
-//  Core MIDI Connections.swift
+//  Core MIDI Thru Connections.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -78,7 +78,7 @@ extension MIDI.IO {
             result = MIDIThruConnectionDispose(thruConnection)
             
             if result != noErr {
-                //logger.debug("MIDI: Persistent connections: deletion of connection matching owner ID \(persistentOwnerID.otcQuoted) with number \(thruConnection) failed.")
+                //logger.debug("MIDI: Persistent connections: deletion of connection matching owner ID \(persistentOwnerID.quoted) with number \(thruConnection) failed.")
             } else {
                 disposeCount += 1
             }
@@ -86,6 +86,38 @@ extension MIDI.IO {
         }
         
         return disposeCount
+        
+    }
+    
+}
+
+extension MIDIThruConnectionParams {
+    
+    /// Internal:
+    /// Converts params to `CFData` required for passing into `MIDIThruConnectionCreate`.
+    internal func cfData() -> CFData {
+        
+        var mutableSelf = self
+        let length = MIDIThruConnectionParamsSize(&mutableSelf)
+        let nsData = Data(bytes: &mutableSelf, count: length)
+        
+        return nsData as CFData
+        
+    }
+    
+    /// Internal:
+    /// Converts params from `CFData` returned from Core MIDI when getting params for a thru connection that exists in the system.
+    internal init?(cfData: CFData) {
+        
+        self.init()
+        
+        guard (cfData as Data).count <= MemoryLayout<MIDIThruConnectionParams>.size else {
+            return nil
+        }
+        
+        _ = withUnsafeMutableBytes(of: &self) { ptr in
+            (cfData as Data).copyBytes(to: ptr)
+        }
         
     }
     
