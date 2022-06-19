@@ -1,6 +1,6 @@
 # BluetoothMIDI Example (iOS SwiftUI)
 
-This example demonstrates configuring Bluetooth MIDI connections in order to receive MIDI.
+This example demonstrates configuring Bluetooth MIDI connections in order to send and receive MIDI.
 
 ## Build Note
 
@@ -9,7 +9,6 @@ This example demonstrates configuring Bluetooth MIDI connections in order to rec
 ## Key Features
 
 - This example demonstrates the use of Apple's Bluetooth MIDI classes to allow your app to configure Bluetooth MIDI connections.
-- This example allows receiving MIDI over Bluetooth.
 
 ## App Target Entitlements
 
@@ -17,3 +16,10 @@ This example demonstrates configuring Bluetooth MIDI connections in order to rec
 - Add the **Background Modes** entitlement and enable the **Audio, AirPlay and Picture in Picture** mode.
 
 ![Background Modes](/Users/stef/Dropbox/coding/MIDIKit/Examples/iOS UIKit/BluetoothMIDI/Images/background-modes-audio.png)
+
+## Operation
+
+Once Bluetooth connectivity is implemented (see examples above), Bluetooth MIDI devices' ports simply show up as MIDI input or output endpoints in the system. Access them by getting these properties on your `Manager` instance:
+
+- `midiManager.endpoints.inputs`
+- `midiManager.endpoints.outputs`
