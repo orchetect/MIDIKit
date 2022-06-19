@@ -9,7 +9,7 @@ This example demonstrates best practises when creating MIDI input and output sel
 ## Key Features
 
 - The menus are updated in real-time if endpoints change in the system.
-  > In AppKit, this is accomplished somewhat imperatively by causing the menus to refresh/regenerate when the MIDI Manager receives a Core MIDI notification that endpoints have changed in the system.
+  > In AppKit, this is accomplished imperatively by refreshing the menus as a result of the MIDI Manager receiving a Core MIDI notification that endpoints have changed in the system.
   
 - The menus allow for a single endpoint to be selected, or None may be selected to disable the connection.
   > This is a common use case. However some use cases require the ability to select multiple endpoints. For a demonstration of how to implement that, see the EndpointLists example.

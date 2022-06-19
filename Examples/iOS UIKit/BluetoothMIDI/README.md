@@ -10,3 +10,10 @@ This example demonstrates configuring Bluetooth MIDI connections in order to rec
 
 - This example demonstrates the use of Apple's Bluetooth MIDI classes to allow your app to configure Bluetooth MIDI connections.
 - This example allows receiving MIDI over Bluetooth.
+
+## App Target Entitlements
+
+- Even though Bluetooth MIDI largely operates via Core MIDI, you still need to give your app appropriate entitlements.
+- Add the **Background Modes** entitlement and enable the **Audio, AirPlay and Picture in Picture** mode.
+
+![Background Modes](Images/background-modes-audio.png)
