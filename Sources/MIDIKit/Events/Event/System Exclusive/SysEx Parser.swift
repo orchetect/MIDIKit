@@ -12,10 +12,10 @@ extension MIDI.Event {
     ///
     /// - Throws: `MIDI.Event.ParseError` if message is malformed.
     @inline(__always)
-    public init(
-        sysEx7RawBytes rawBytes: [MIDI.Byte],
+    public static func sysEx7(
+        rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0
-    ) throws {
+    ) throws -> Self {
         
         var readPos = rawBytes.startIndex
         
@@ -93,7 +93,7 @@ extension MIDI.Event {
             try readPosAdvance(by: 1)
             let data = try readData()
             
-            self = .universalSysEx7(
+            return .universalSysEx7(
                 .init(universalType: universalType,
                       deviceID: deviceID,
                       subID1: subID1,
@@ -101,7 +101,6 @@ extension MIDI.Event {
                       data: data,
                       group: group)
             )
-            return
             
         case 0x00...0x7D:
             var readManufacturer: SysExManufacturer?
@@ -140,12 +139,11 @@ extension MIDI.Event {
                 data = try readData()
             }
             
-            self = .sysEx7(
+            return .sysEx7(
                 .init(manufacturer: manufacturer,
                       data: data,
                       group: group)
             )
-            return
             
         default:
             // malformed
@@ -160,10 +158,10 @@ extension MIDI.Event {
     ///
     /// - Throws: `MIDI.Event.ParseError` if message is malformed.
     @inline(__always)
-    public init(
-        sysEx8RawBytes rawBytes: [MIDI.Byte],
+    public static func sysEx8(
+        rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0
-    ) throws {
+    ) throws -> Self {
         
         var readPos = rawBytes.startIndex
         
@@ -222,7 +220,7 @@ extension MIDI.Event {
                 }
             }()
             
-            self = .universalSysEx8(
+            return .universalSysEx8(
                 .init(universalType: universalType,
                       deviceID: deviceID,
                       subID1: subID1,
@@ -231,7 +229,6 @@ extension MIDI.Event {
                       streamID: streamID,
                       group: group)
             )
-            return
             
         case .manufacturer(let mfr):
             var data: [MIDI.Byte] = []
@@ -243,18 +240,60 @@ extension MIDI.Event {
                 }
             }
             
-            self = .sysEx8(
+            return .sysEx8(
                 .init(manufacturer: mfr,
                       data: data,
                       streamID: streamID,
                       group: group)
             )
-            return
             
         default:
             // malformed
             throw ParseError.malformed
         }
+        
+    }
+    
+}
+
+// MARK: - API Transition (release 0.4.12)
+
+extension MIDI.Event {
+    
+    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
+    /// Message must begin with 0xF0 but terminating 0xF7 byte is optional.
+    ///
+    /// - Throws: `MIDI.Event.ParseError` if message is malformed.
+    @available(*, unavailable, renamed: "Event.sysEx7(rawBytes:group:)")
+    @inline(__always)
+    public init(
+        sysEx7RawBytes rawBytes: [MIDI.Byte],
+        group: MIDI.UInt4 = 0
+    ) throws {
+        
+        let sysEx = try Self.sysEx7(rawBytes: rawBytes,
+                                    group: group)
+        
+        self = sysEx
+        
+    }
+    
+    /// Parse a complete MIDI 2.0 System Exclusive 8 message (starting with the Stream ID byte until the end of the packet) and return a `.sysEx8()` or `.universalSysEx8()` case if successful.
+    ///
+    /// Valid rawBytes count is 1...14. (Must always contain a Stream ID, even if there are zero data bytes to follow)
+    ///
+    /// - Throws: `MIDI.Event.ParseError` if message is malformed.
+    @available(*, unavailable, renamed: "Event.sysEx8(rawBytes:group:)")
+    @inline(__always)
+    public init(
+        sysEx8RawBytes rawBytes: [MIDI.Byte],
+        group: MIDI.UInt4 = 0
+    ) throws {
+        
+        let sysEx = try Self.sysEx8(rawBytes: rawBytes,
+                                    group: group)
+        
+        self = sysEx
         
     }
     
