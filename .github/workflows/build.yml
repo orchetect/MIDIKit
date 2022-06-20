@@ -27,9 +27,9 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch:x86_64 arm64"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS"
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch:x86_64 arm64"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS"
 
   macOS-10_15:
     name: macOS 10.15 Catalina
@@ -37,9 +37,9 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch:x86_64 arm64"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS"
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,arch:x86_64 arm64"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS"
 
   macCatalyst:
     name: macCatalyst
@@ -47,9 +47,9 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,variant=Mac Catalyst,arch:x86_64 arm64"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,variant=Mac Catalyst"
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,variant=Mac Catalyst,arch:x86_64 arm64"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,variant=Mac Catalyst"
 
   iOS:
     name: iOS
