@@ -34,11 +34,11 @@ Abstractions are built as optional extensions in their own repos.
   import MIDIKit
   ```
 
-3. See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a [Getting Started](https://github.com/orchetect/MIDIKit/wiki/Getting-Started) guide, links to examples, and troubleshooting tips.
+3. See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a getting started guide, links to examples, and troubleshooting tips.
 
 ## Documentation
 
-See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a [Getting Started](https://github.com/orchetect/MIDIKit/wiki/Getting-Started) guide, links to examples, and troubleshooting tips.
+See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a getting started guide, links to examples, and troubleshooting tips.
 
 ## System Compatibility
 
