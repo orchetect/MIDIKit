@@ -71,7 +71,7 @@ extension MIDI.Event.CC.Controller {
         
         /// Null Function Number for RPN/NRPN
         ///
-        /// Will disable the data entry, data increment, and data decrement controllers until a new RPN or NRPN is selected.
+        /// The purpose of this event is to communicate the intent to disable data entry, data increment, and data decrement controllers until a new RPN or NRPN is selected.
         case null
         
         /// Form an RPN message from a raw parameter number byte pair.
@@ -135,7 +135,7 @@ extension MIDI.Event.CC.Controller {
 
 extension MIDI.Event.CC.Controller.RPN {
     
-    /// Parameter number byte pair
+    /// Returns the parameter number byte pair.
     public var parameter: MIDI.UInt7.Pair {
         
         switch self {
@@ -165,8 +165,10 @@ extension MIDI.Event.CC.Controller.RPN {
         case .null:
             return .init(msb: 0x7F, lsb: 0x7F)
             
-        case .raw(let param, _, _):
-            return param
+        case .raw(parameter: let parameter,
+                  dataEntryMSB: _,
+                  dataEntryLSB: _):
+            return parameter
             
         // 3D Sound Controllers
             
@@ -201,6 +203,7 @@ extension MIDI.Event.CC.Controller.RPN {
         
     }
     
+    /// Returns the data entry bytes, if present.
     public var dataEntryBytes: (msb: MIDI.UInt7?,
                                 lsb: MIDI.UInt7?) {
         
@@ -240,8 +243,8 @@ extension MIDI.Event.CC.Controller.RPN {
                     lsb: dataEntryLSB)
             
         case .null:
-            return (msb: 0x7F,
-                    lsb: 0x7F)
+            return (msb: nil,
+                    lsb: nil)
             
         case .raw(parameter: _,
                   dataEntryMSB: let dataEntryMSB,

@@ -54,6 +54,17 @@ final class MIDIEventCCRPN_Tests: XCTestCase {
         
     }
     
+    func testRPN_MIDI1_Null() {
+        
+        let nrpn: [MIDI.Event] = MIDI.Event.ccRPN(.null,
+                                                  channel: 0x9)
+        
+        XCTAssertEqual(nrpn.flatMap(\.midi1RawBytes),
+                       [0xB9, 0x65, 0x7F,
+                        0xB9, 0x64, 0x7F])
+        
+    }
+    
 }
 
 #endif
