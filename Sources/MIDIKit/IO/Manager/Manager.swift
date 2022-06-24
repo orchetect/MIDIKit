@@ -19,7 +19,7 @@ extension MIDI.IO {
         public internal(set) var clientName: String
         
         /// Core MIDI Client Reference.
-        public internal(set) var coreMIDIClientRef = MIDI.IO.CoreMIDIClientRef()
+        public internal(set) var coreMIDIClientRef = MIDI.IO.ClientRef()
         
         /// MIDI Model: The name of your software, which will be visible to the end-user in ports created by the manager.
         public internal(set) var model: String = ""
@@ -64,7 +64,7 @@ extension MIDI.IO {
         ///
         /// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
         /// - Throws: `MIDI.IO.MIDIError`
-        public func unmanagedPersistentThruConnections(ownerID: String) throws -> [MIDI.IO.CoreMIDIThruConnectionRef] {
+        public func unmanagedPersistentThruConnections(ownerID: String) throws -> [MIDI.IO.ThruConnectionRef] {
             
             try MIDI.IO.getSystemThruConnectionsPersistentEntries(matching: ownerID)
             

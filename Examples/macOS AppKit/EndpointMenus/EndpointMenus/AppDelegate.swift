@@ -17,10 +17,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                       model: "TestApp",
                                       manufacturer: "MyCompany")
     
-    public private(set) var midiOutMenuSelectedID: MIDI.IO.CoreMIDIUniqueID = 0
+    public private(set) var midiOutMenuSelectedID: MIDI.IO.UniqueID = 0
     public private(set) var midiOutMenuSelectedDisplayName: String = ""
     
-    public private(set) var midiInMenuSelectedID: MIDI.IO.CoreMIDIUniqueID = 0
+    public private(set) var midiInMenuSelectedID: MIDI.IO.UniqueID = 0
     public private(set) var midiInMenuSelectedDisplayName: String = ""
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -126,7 +126,7 @@ extension AppDelegate {
     }
     
     /// Set the selected MIDI output manually.
-    public func midiInMenuSetSelected(id: MIDI.IO.CoreMIDIUniqueID,
+    public func midiInMenuSetSelected(id: MIDI.IO.UniqueID,
                                       displayName: String) {
         midiInMenuSelectedID = id
         midiInMenuSelectedDisplayName = displayName
@@ -155,7 +155,7 @@ extension AppDelegate {
         // If selected endpoint doesn't exist in the system, show it in the menu as missing but still selected.
         // The MIDI Manager will auto-reconnect to it if it reappears in the system in this condition.
         if midiInMenuSelectedID != 0,
-           !sortedEndpoints.contains(where: { $0.uniqueID.coreMIDIUniqueID == midiInMenuSelectedID }) {
+           !sortedEndpoints.contains(where: { $0.uniqueID == midiInMenuSelectedID }) {
             let newMenuItem = NSMenuItem(title: "⚠️ " + midiInMenuSelectedDisplayName,
                                          action: #selector(midiInMenuItemSelected),
                                          keyEquivalent: "")
@@ -169,8 +169,8 @@ extension AppDelegate {
             let newMenuItem = NSMenuItem(title: endpoint.displayName,
                                          action: #selector(midiInMenuItemSelected),
                                          keyEquivalent: "")
-            newMenuItem.tag = Int(endpoint.uniqueID.coreMIDIUniqueID)
-            if endpoint.uniqueID.coreMIDIUniqueID == midiInMenuSelectedID {
+            newMenuItem.tag = Int(endpoint.uniqueID)
+            if endpoint.uniqueID == midiInMenuSelectedID {
                 newMenuItem.state = .on
             }
             
@@ -179,10 +179,10 @@ extension AppDelegate {
     }
     
     @objc fileprivate func midiInMenuItemSelected(_ sender: NSMenuItem?) {
-        midiInMenuSelectedID = MIDI.IO.CoreMIDIUniqueID(exactly: sender?.tag ?? 0) ?? 0
+        midiInMenuSelectedID = MIDI.IO.UniqueID(exactly: sender?.tag ?? 0) ?? 0
         
         if let foundOutput = midiManager.endpoints.outputs.first(where: {
-            $0.uniqueID.coreMIDIUniqueID == midiInMenuSelectedID
+            $0.uniqueID == midiInMenuSelectedID
         }) {
             midiInMenuSelectedDisplayName = foundOutput.displayName
         }
@@ -215,7 +215,7 @@ extension AppDelegate {
         midiManager.managedOutputConnections[ConnectionTags.midiOut]
     }
     
-    public func midiOutMenuSetSelected(id: MIDI.IO.CoreMIDIUniqueID,
+    public func midiOutMenuSetSelected(id: MIDI.IO.UniqueID,
                                        displayName: String) {
         midiOutMenuSelectedID = id
         midiOutMenuSelectedDisplayName = displayName
@@ -244,7 +244,7 @@ extension AppDelegate {
         // If selected endpoint doesn't exist in the system, show it in the menu as missing but still selected.
         // The MIDI Manager will auto-reconnect to it if it reappears in the system in this condition.
         if midiOutMenuSelectedID != 0,
-           !sortedEndpoints.contains(where: { $0.uniqueID.coreMIDIUniqueID == midiOutMenuSelectedID }) {
+           !sortedEndpoints.contains(where: { $0.uniqueID == midiOutMenuSelectedID }) {
             let newMenuItem = NSMenuItem(title: "⚠️ " + midiOutMenuSelectedDisplayName,
                                          action: #selector(midiOutMenuItemSelected),
                                          keyEquivalent: "")
@@ -258,18 +258,18 @@ extension AppDelegate {
             let newMenuItem = NSMenuItem(title: endpoint.displayName,
                                          action: #selector(midiOutMenuItemSelected),
                                          keyEquivalent: "")
-            newMenuItem.tag = Int(endpoint.uniqueID.coreMIDIUniqueID)
-            if endpoint.uniqueID.coreMIDIUniqueID == midiOutMenuSelectedID { newMenuItem.state = .on }
+            newMenuItem.tag = Int(endpoint.uniqueID)
+            if endpoint.uniqueID == midiOutMenuSelectedID { newMenuItem.state = .on }
             
             midiOutMenu.addItem(newMenuItem)
         }
     }
     
     @objc fileprivate func midiOutMenuItemSelected(_ sender: NSMenuItem?) {
-        midiOutMenuSelectedID = MIDI.IO.CoreMIDIUniqueID(exactly: sender?.tag ?? 0) ?? 0
+        midiOutMenuSelectedID = MIDI.IO.UniqueID(exactly: sender?.tag ?? 0) ?? 0
         
         if let foundInput = midiManager.endpoints.inputs.first(where: {
-            $0.uniqueID.coreMIDIUniqueID == midiOutMenuSelectedID
+            $0.uniqueID == midiOutMenuSelectedID
         }) {
             midiOutMenuSelectedDisplayName = foundInput.displayName
         }

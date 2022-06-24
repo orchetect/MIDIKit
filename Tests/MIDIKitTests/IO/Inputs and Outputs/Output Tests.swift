@@ -30,7 +30,7 @@ final class InputsAndOutputs_Output_Tests: XCTestCase {
             try manager.addOutput(
                 name: "MIDIKit IO Tests Source 1",
                 tag: tag1,
-                uniqueID: .none // allow system to generate random ID
+                uniqueID: .none // allow system to generate random ID each time, without persistence
             )
         } catch let err as MIDI.IO.MIDIError {
 			XCTFail(err.localizedDescription) ; return

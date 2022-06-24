@@ -8,49 +8,52 @@ import Foundation
 extension MIDI.IO {
     
     /// Endpoint filter rules.
-    public struct EndpointFilter<T: MIDIIOEndpointProtocol & Hashable>: Equatable, Hashable {
+    public struct EndpointFilter: Equatable, Hashable {
         
         /// Virtual endpoints owned by the MIDI I/O `Manager` instance.
         public var owned: Bool = false
         
         /// Endpoints matching the given criteria.
-        public var criteria: Set<MIDI.IO.EndpointIDCriteria<T>> = []
+        public var criteria: Set<MIDI.IO.EndpointIDCriteria> = []
         
+        /// Endpoint filter rules.
         public init(owned: Bool = false,
-                    criteria: Set<MIDI.IO.EndpointIDCriteria<T>> = []) {
+                    criteria: Set<MIDI.IO.EndpointIDCriteria> = []) {
             
             self.owned = owned
             self.criteria = criteria
             
         }
         
+        /// Endpoint filter rules.
         @_disfavoredOverload
         public init(owned: Bool = false,
-                    criteria: [MIDI.IO.EndpointIDCriteria<T>]) {
+                    criteria: [MIDI.IO.EndpointIDCriteria]) {
             
             self.owned = owned
             self.criteria = Set(criteria)
             
         }
         
+        /// Endpoint filter rules.
         @_disfavoredOverload
-        public init(owned: Bool = false,
-                    criteria: Set<T>) {
+        public init<T: MIDIIOEndpointProtocol & Hashable>(owned: Bool = false,
+                                                          criteria: Set<T>) {
             
             self.owned = owned
             
-            let ids = criteria.asAnyEndpoints().map { $0.uniqueID.coreMIDIUniqueID }
-            let typedIDs = ids.map { T.UniqueID($0) }
-            let typedCrit = typedIDs.map { MIDI.IO.EndpointIDCriteria<T>.uniqueID($0) }
-            self.criteria = Set(typedCrit)
+            let ids = criteria.asAnyEndpoints().asCriteria()
+            self.criteria = Set(ids)
             
         }
         
+        /// Endpoint filter rules.
         @_disfavoredOverload
-        public init(owned: Bool = false,
-                    criteria: [T]) {
+        public init<T: MIDIIOEndpointProtocol & Hashable>(owned: Bool = false,
+                                                          criteria: [T]) {
             
-            self.init(owned: owned, criteria: Set(criteria))
+            self.init(owned: owned,
+                      criteria: Set(criteria))
             
         }
         
@@ -58,18 +61,9 @@ extension MIDI.IO {
     
 }
 
-extension MIDI.IO {
-    
-    /// Enum describing the rules with which to filter input endpoints.
-    public typealias InputEndpointFilter = MIDI.IO.EndpointFilter<MIDI.IO.InputEndpoint>
-    
-    /// Enum describing the rules with which to filter output endpoints.
-    public typealias OutputEndpointFilter = MIDI.IO.EndpointFilter<MIDI.IO.OutputEndpoint>
-    
-}
-
 extension MIDI.IO.EndpointFilter {
     
+    /// Convenience constructor to return default endpoint filter.
     public static func `default`() -> Self {
         
         .init()
@@ -79,7 +73,8 @@ extension MIDI.IO.EndpointFilter {
     /// Convenience constructor to return an instance of `owned == true` and empty criteria.
     public static func owned() -> Self {
         
-        .init(owned: true, criteria: [])
+        .init(owned: true,
+              criteria: [])
         
     }
     

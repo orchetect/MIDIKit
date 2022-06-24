@@ -20,10 +20,10 @@ extension MIDI.IO.Manager {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addOutputConnection(
-        toInputs: Set<MIDI.IO.InputEndpointIDCriteria>,
+        toInputs: Set<MIDI.IO.EndpointIDCriteria>,
         tag: String,
         mode: MIDI.IO.ConnectionMode = .definedEndpoints,
-        filter: MIDI.IO.InputEndpointFilter = .default()
+        filter: MIDI.IO.EndpointFilter = .default()
     ) throws {
         
         try eventQueue.sync {
@@ -59,10 +59,10 @@ extension MIDI.IO.Manager {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addOutputConnection(
-        toInputs: [MIDI.IO.InputEndpointIDCriteria],
+        toInputs: [MIDI.IO.EndpointIDCriteria],
         tag: String,
         mode: MIDI.IO.ConnectionMode = .definedEndpoints,
-        filter: MIDI.IO.InputEndpointFilter = .default()
+        filter: MIDI.IO.EndpointFilter = .default()
     ) throws {
         
         try addOutputConnection(
@@ -90,11 +90,11 @@ extension MIDI.IO.Manager {
         toInputs: [MIDI.IO.InputEndpoint],
         tag: String,
         mode: MIDI.IO.ConnectionMode = .definedEndpoints,
-        filter: MIDI.IO.InputEndpointFilter = .default()
+        filter: MIDI.IO.EndpointFilter = .default()
     ) throws {
         
         try addOutputConnection(
-            toInputs: toInputs.map { .uniqueID($0.uniqueID) },
+            toInputs: toInputs.asCriteria(),
             tag: tag,
             mode: mode,
             filter: filter

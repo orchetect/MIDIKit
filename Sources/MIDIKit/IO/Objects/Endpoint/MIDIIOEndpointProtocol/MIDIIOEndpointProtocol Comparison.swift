@@ -11,7 +11,7 @@ extension MIDIIOEndpointProtocol {
     
     static public func == (lhs: Self, rhs: Self) -> Bool {
         
-        lhs.uniqueID.coreMIDIUniqueID == rhs.uniqueID.coreMIDIUniqueID
+        lhs.uniqueID == rhs.uniqueID
         
     }
     
@@ -25,7 +25,7 @@ extension MIDIIOEndpointProtocol {
     
     public func hash(into hasher: inout Hasher) {
         
-        hasher.combine(self.uniqueID.coreMIDIUniqueID)
+        hasher.combine(self.uniqueID)
         
     }
     
@@ -37,8 +37,8 @@ extension MIDIIOEndpointProtocol {
 
 extension MIDIIOEndpointProtocol {
     
-    public typealias ID = MIDI.IO.CoreMIDIUniqueID
+    public typealias ID = MIDI.IO.UniqueID
     
-    public var id: ID { uniqueID.coreMIDIUniqueID }
+    public var id: ID { uniqueID }
     
 }

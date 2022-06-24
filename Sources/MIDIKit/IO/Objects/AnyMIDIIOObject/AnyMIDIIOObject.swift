@@ -14,10 +14,9 @@ extension MIDI.IO {
         
         public let name: String
         
-        public typealias UniqueID = MIDI.IO.AnyUniqueID
-        public let uniqueID: MIDI.IO.AnyUniqueID
+        public let uniqueID: MIDI.IO.UniqueID
         
-        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef
+        public let coreMIDIObjectRef: MIDI.IO.ObjectRef
         
         // MARK: Init
         
@@ -25,7 +24,7 @@ extension MIDI.IO {
             
             self.objectType = base.objectType
             self.name = base.name
-            self.uniqueID = base.uniqueID.asAnyUniqueID
+            self.uniqueID = base.uniqueID
             
             self.coreMIDIObjectRef = base.coreMIDIObjectRef
             
@@ -45,7 +44,7 @@ extension MIDI.IO.AnyMIDIIOObject: Hashable {
 
 extension MIDI.IO.AnyMIDIIOObject: Identifiable {
     
-    public typealias ID = MIDI.IO.CoreMIDIObjectRef
+    public typealias ID = MIDI.IO.ObjectRef
     
     public var id: ID { coreMIDIObjectRef }
     

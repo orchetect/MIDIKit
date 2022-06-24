@@ -30,7 +30,7 @@ extension MIDI {
         
         /// Core MIDI packet timestamp
         @inline(__always)
-        public var timeStamp: MIDI.IO.CoreMIDITimeStamp {
+        public var timeStamp: MIDI.IO.TimeStamp {
             
             switch self {
             case .packet(let packetData):

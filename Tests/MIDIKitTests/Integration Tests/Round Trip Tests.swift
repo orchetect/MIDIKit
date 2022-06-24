@@ -62,7 +62,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
             try manager.addOutput(
                 name: "MIDIKit Round Trip Tests Output",
                 tag: outputTag,
-                uniqueID: .none // allow system to generate random ID
+                uniqueID: .none // allow system to generate random ID each time, without persistence
             )
         } catch let err as MIDI.IO.MIDIError {
             XCTFail(err.localizedDescription) ; return

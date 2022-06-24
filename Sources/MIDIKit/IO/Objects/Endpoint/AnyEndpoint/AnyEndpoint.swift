@@ -18,10 +18,9 @@ extension MIDI.IO {
         
         public let displayName: String
         
-        public typealias UniqueID = MIDI.IO.AnyUniqueID
-        public let uniqueID: UniqueID
+        public let uniqueID: MIDI.IO.UniqueID
         
-        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
+        public let coreMIDIObjectRef: MIDI.IO.EndpointRef
         
         // MARK: Init
         
@@ -48,7 +47,7 @@ extension MIDI.IO {
             self.coreMIDIObjectRef = base.coreMIDIObjectRef
             self.name = base.name
             self.displayName = base.displayName
-            self.uniqueID = .init(base.uniqueID.coreMIDIUniqueID)
+            self.uniqueID = .init(base.uniqueID)
             
         }
         

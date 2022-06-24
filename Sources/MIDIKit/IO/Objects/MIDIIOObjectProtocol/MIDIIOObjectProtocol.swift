@@ -21,13 +21,11 @@ public protocol MIDIIOObjectProtocol {
     /// Name of the object.
     var name: String { get }
     
-    associatedtype UniqueID: MIDIIOUniqueIDProtocol
-    
     /// The unique ID for the Core MIDI object.
-    var uniqueID: UniqueID { get }
+    var uniqueID: MIDI.IO.UniqueID { get }
     
     /// The Core MIDI object reference.
-    var coreMIDIObjectRef: MIDI.IO.CoreMIDIObjectRef { get }
+    var coreMIDIObjectRef: MIDI.IO.ObjectRef { get }
     
     // MARK: - MIDIIOObjectProtocol Comparison.swift
     
@@ -41,7 +39,7 @@ public protocol MIDIIOObjectProtocol {
     func getName() -> String?
     func getModel() -> String?
     func getManufacturer() -> String?
-    func getUniqueID() -> UniqueID
+    func getUniqueID() -> MIDI.IO.UniqueID
     func getDeviceManufacturerID() -> Int32
     
     // Capabilities
@@ -96,7 +94,7 @@ public protocol MIDIIOObjectProtocol {
     // Connections
     func getCanRoute() -> Bool
     func getIsBroadcast() -> Bool
-    func getConnectionUniqueID() -> MIDI.IO.CoreMIDIUniqueID
+    func getConnectionUniqueID() -> MIDI.IO.UniqueID
     func getIsEmbeddedEntity() -> Bool
     func getSingleRealtimeEntity() -> Int32
     

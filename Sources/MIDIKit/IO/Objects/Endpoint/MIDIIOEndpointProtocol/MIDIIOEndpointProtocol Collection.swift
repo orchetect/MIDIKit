@@ -39,7 +39,7 @@ extension Collection where Element : MIDIIOEndpointProtocol {
     
     /// Returns the element with matching unique ID.
     /// If not found, the first element matching the given display name is returned.
-    public func first(whereUniqueID: Element.UniqueID,
+    public func first(whereUniqueID: MIDI.IO.UniqueID,
                       fallbackDisplayName: String,
                       ignoringEmpty: Bool = false) -> Element? {
         

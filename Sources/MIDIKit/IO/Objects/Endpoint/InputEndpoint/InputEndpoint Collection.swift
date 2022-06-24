@@ -5,24 +5,24 @@
 
 // MARK: - Static conveniences
 
-extension Set where Element == MIDI.IO.InputEndpointIDCriteria {
+extension Set where Element == MIDI.IO.EndpointIDCriteria {
     
     /// Returns the current input endpoints in the system.
-    public static func current() -> Self {
+    public static func currentInputs() -> Self {
         
-        Set(MIDI.IO.getSystemDestinationEndpoints.map { .uniqueID($0.uniqueID) })
+        Set(MIDI.IO.getSystemDestinationEndpoints.asCriteria())
         
     }
     
 }
 
-extension Array where Element == MIDI.IO.InputEndpointIDCriteria {
+extension Array where Element == MIDI.IO.EndpointIDCriteria {
     
     /// Returns the current input endpoints in the system.
     @_disfavoredOverload
-    public static func current() -> Self {
+    public static func currentInputs() -> Self {
         
-        MIDI.IO.getSystemDestinationEndpoints.map { .uniqueID($0.uniqueID) }
+        MIDI.IO.getSystemDestinationEndpoints.asCriteria()
         
     }
     
@@ -31,19 +31,19 @@ extension Array where Element == MIDI.IO.InputEndpointIDCriteria {
 extension Set where Element == MIDI.IO.InputEndpoint {
     
     /// Returns the current input endpoints in the system.
-    public static func current() -> Self {
+    public static func currentInputs() -> Self {
         
         Set(MIDI.IO.getSystemDestinationEndpoints)
         
     }
     
     /// Returns the endpoints as endpoint criteria.
-    public func asCriteria() -> Set<MIDI.IO.InputEndpointIDCriteria> {
+    public func asCriteria() -> Set<MIDI.IO.EndpointIDCriteria> {
         
         // for some reason Set(map { ... }) was not working
         // so we have to use reduce
         
-        reduce(into: Set<MIDI.IO.InputEndpointIDCriteria>()) {
+        reduce(into: Set<MIDI.IO.EndpointIDCriteria>()) {
             $0.insert(.uniqueID($1.uniqueID))
         }
         
@@ -55,7 +55,7 @@ extension Array where Element == MIDI.IO.InputEndpoint {
     
     /// Returns the current input endpoints in the system.
     @_disfavoredOverload
-    public static func current() -> Self {
+    public static func currentInputs() -> Self {
         
         MIDI.IO.getSystemDestinationEndpoints
         
@@ -63,9 +63,9 @@ extension Array where Element == MIDI.IO.InputEndpoint {
     
     /// Returns the endpoints as endpoint criteria.
     @_disfavoredOverload
-    public func asCriteria() -> [MIDI.IO.InputEndpointIDCriteria] {
+    public func asCriteria() -> [MIDI.IO.EndpointIDCriteria] {
         
-        map { MIDI.IO.InputEndpointIDCriteria.uniqueID($0.uniqueID) }
+        map { .uniqueID($0.uniqueID) }
         
     }
     

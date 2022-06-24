@@ -30,7 +30,7 @@ extension MIDI.IO {
     /// - Throws: `MIDI.IO.MIDIError.osStatus`
     internal static func getSystemThruConnectionsPersistentEntries(
         matching persistentOwnerID: String
-    ) throws -> [MIDI.IO.CoreMIDIThruConnectionRef] {
+    ) throws -> [MIDI.IO.ThruConnectionRef] {
         
         // set up empty unmanaged data pointer
         var getConnectionList: Unmanaged<CFData> = Unmanaged.passUnretained(Data() as CFData)

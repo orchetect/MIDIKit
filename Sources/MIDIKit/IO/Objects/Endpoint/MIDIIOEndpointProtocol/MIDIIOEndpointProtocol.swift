@@ -46,7 +46,7 @@ extension MIDIIOEndpointProtocol {
     /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
         
-        MIDI.IO.getSystemDestinationEndpoint(matching: uniqueID.coreMIDIUniqueID) != nil
+        MIDI.IO.getSystemDestinationEndpoint(matching: uniqueID) != nil
         
     }
     

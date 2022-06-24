@@ -15,10 +15,11 @@ extension MIDI.Packet {
         
         /// Core MIDI packet timestamp
         @inline(__always)
-        let timeStamp: MIDI.IO.CoreMIDITimeStamp
+        let timeStamp: MIDI.IO.TimeStamp
         
         @inline(__always)
-        public init(bytes: [MIDI.Byte], timeStamp: MIDI.IO.CoreMIDITimeStamp) {
+        public init(bytes: [MIDI.Byte],
+                    timeStamp: MIDI.IO.TimeStamp) {
             
             self.bytes = bytes
             self.timeStamp = timeStamp
@@ -34,7 +35,7 @@ extension MIDI.Packet.PacketData {
     @inline(__always)
     internal init(_ midiPacketPtr: UnsafePointer<MIDIPacket>) {
         
-        self = Self.safePacketUnwrapper(midiPacketPtr)
+        self = Self.unwrapPacket(midiPacketPtr)
         
     }
     
@@ -42,7 +43,7 @@ extension MIDI.Packet.PacketData {
     fileprivate static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
     
     @inline(__always)
-    fileprivate static func safePacketUnwrapper(_ midiPacketPtr: UnsafePointer<MIDIPacket>) -> MIDI.Packet.PacketData {
+    fileprivate static func unwrapPacket(_ midiPacketPtr: UnsafePointer<MIDIPacket>) -> MIDI.Packet.PacketData {
         
         let packetDataCount = Int(midiPacketPtr.pointee.length)
         

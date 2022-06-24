@@ -34,9 +34,9 @@ extension Collection where Element : MIDIIOObjectProtocol {
     }
         
     /// Returns the element with matching unique ID.
-    public func first(whereUniqueID: Element.UniqueID) -> Element? {
+    public func first(whereUniqueID: MIDI.IO.UniqueID) -> Element? {
         
-        first(where: { $0.uniqueID.isEqual(to: whereUniqueID) })
+        first(where: { $0.uniqueID == whereUniqueID })
         
     }
     

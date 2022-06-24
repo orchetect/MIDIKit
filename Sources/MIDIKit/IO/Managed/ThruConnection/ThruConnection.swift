@@ -45,7 +45,7 @@ extension MIDI.IO {
         
         // class-specific
         
-        public private(set) var coreMIDIThruConnectionRef: MIDI.IO.CoreMIDIThruConnectionRef? = nil
+        public private(set) var coreMIDIThruConnectionRef: MIDI.IO.ThruConnectionRef? = nil
         public private(set) var outputs: [OutputEndpoint]
         public private(set) var inputs: [InputEndpoint]
         public private(set) var lifecycle: Lifecycle

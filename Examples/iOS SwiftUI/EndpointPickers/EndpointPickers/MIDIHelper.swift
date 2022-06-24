@@ -56,7 +56,7 @@ class MIDIHelper: ObservableObject {
         midiManager?.managedInputConnections[ConnectionTags.midiIn]
     }
     
-    public func midiInUpdateConnection(selectedUniqueID: MIDI.IO.CoreMIDIUniqueID) {
+    public func midiInUpdateConnection(selectedUniqueID: MIDI.IO.UniqueID) {
         guard let midiInputConnection = midiInputConnection else { return }
         
         if selectedUniqueID == 0 {
@@ -76,7 +76,7 @@ class MIDIHelper: ObservableObject {
         midiManager?.managedOutputConnections[ConnectionTags.midiOut]
     }
     
-    public func midiOutUpdateConnection(selectedUniqueID: MIDI.IO.CoreMIDIUniqueID) {
+    public func midiOutUpdateConnection(selectedUniqueID: MIDI.IO.UniqueID) {
         guard let midiOutputConnection = midiOutputConnection else { return }
         
         if selectedUniqueID == 0 {
@@ -158,15 +158,15 @@ class MIDIHelper: ObservableObject {
     
     // MARK: - Helpers
     
-    public func isInputPresentInSystem(uniqueID: MIDI.IO.CoreMIDIUniqueID) -> Bool {
+    public func isInputPresentInSystem(uniqueID: MIDI.IO.UniqueID) -> Bool {
         midiManager?.endpoints.inputs
-            .contains(where: { $0.uniqueID.coreMIDIUniqueID == uniqueID })
+            .contains(where: { $0.uniqueID == uniqueID })
         ?? false
     }
     
-    public func isOutputPresentInSystem(uniqueID: MIDI.IO.CoreMIDIUniqueID) -> Bool {
+    public func isOutputPresentInSystem(uniqueID: MIDI.IO.UniqueID) -> Bool {
         midiManager?.endpoints.outputs
-            .contains(where: { $0.uniqueID.coreMIDIUniqueID == uniqueID })
+            .contains(where: { $0.uniqueID == uniqueID })
         ?? false
     }
     

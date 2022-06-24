@@ -19,10 +19,10 @@ extension MIDI.Packet {
         
         /// Core MIDI packet timestamp
         @inline(__always)
-        public let timeStamp: MIDI.IO.CoreMIDITimeStamp
+        public let timeStamp: MIDI.IO.TimeStamp
         
         @inline(__always)
-        public init(bytes: [MIDI.Byte], timeStamp: MIDI.IO.CoreMIDITimeStamp) {
+        public init(bytes: [MIDI.Byte], timeStamp: MIDI.IO.TimeStamp) {
             
             self.bytes = bytes
             self.timeStamp = timeStamp
@@ -30,7 +30,7 @@ extension MIDI.Packet {
         }
         
         @inline(__always)
-        public init(words: [MIDI.UMPWord], timeStamp: MIDI.IO.CoreMIDITimeStamp) {
+        public init(words: [MIDI.UMPWord], timeStamp: MIDI.IO.TimeStamp) {
             
             self.bytes = words.umpWordsToBytes()
             self.timeStamp = timeStamp
@@ -48,7 +48,7 @@ extension MIDI.Packet.UniversalPacketData {
     @inline(__always)
     internal init(_ eventPacketPtr: UnsafePointer<MIDIEventPacket>) {
         
-        self = Self.packetUnwrapper(eventPacketPtr)
+        self = Self.unwrapPacket(eventPacketPtr)
         
     }
     
@@ -61,7 +61,7 @@ extension MIDI.Packet.UniversalPacketData {
     }
     
     @inline(__always)
-    fileprivate static func packetUnwrapper(
+    fileprivate static func unwrapPacket(
         _ eventPacketPtr: UnsafePointer<MIDIEventPacket>
     ) -> MIDI.Packet.UniversalPacketData {
         

@@ -10,7 +10,7 @@
 public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
     
     /// The Core MIDI output port ref.
-    /* public private(set) */ var coreMIDIOutputPortRef: MIDI.IO.CoreMIDIPortRef? { get }
+    /* public private(set) */ var coreMIDIOutputPortRef: MIDI.IO.PortRef? { get }
     
     /// MIDI Protocol version used for this endpoint.
     /* public private(set) */ var midiProtocol: MIDI.IO.ProtocolVersion { get }

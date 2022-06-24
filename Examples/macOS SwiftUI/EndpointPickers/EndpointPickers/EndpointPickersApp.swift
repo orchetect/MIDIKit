@@ -18,10 +18,10 @@ struct EndpointPickersApp: App {
     
     @ObservedObject var midiHelper = MIDIHelper()
     
-    @State var midiInSelectedID: MIDI.IO.CoreMIDIUniqueID = 0
+    @State var midiInSelectedID: MIDI.IO.UniqueID = 0
     @State var midiInSelectedDisplayName: String = "None"
     
-    @State var midiOutSelectedID: MIDI.IO.CoreMIDIUniqueID = 0
+    @State var midiOutSelectedID: MIDI.IO.UniqueID = 0
     @State var midiOutSelectedDisplayName: String = "None"
     
     init() {

@@ -29,7 +29,7 @@ extension MIDI.IO.Manager {
     public func addOutput(
         name: String,
         tag: String,
-        uniqueID: MIDI.IO.UniqueIDPersistence<MIDI.IO.OutputEndpoint.UniqueID>
+        uniqueID: MIDI.IO.UniqueIDPersistence
     ) throws {
         
         try eventQueue.sync {
