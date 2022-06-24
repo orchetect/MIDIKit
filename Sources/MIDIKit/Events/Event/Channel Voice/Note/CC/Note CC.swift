@@ -12,7 +12,7 @@ extension MIDI.Event.Note {
         /// Note Number
         ///
         /// If attribute is set to Pitch 7.9, then this value represents the note index.
-        public var note: MIDI.UInt7
+        public var note: MIDI.Note
         
         /// Controller
         public var controller: Controller
@@ -43,7 +43,7 @@ extension MIDI.Event.Note {
                     channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
-            self.note = note
+            self.note = MIDI.Note(note)
             self.controller = controller
             self.value = value
             self.channel = channel
@@ -67,7 +67,7 @@ extension MIDI.Event.Note {
                     channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
-            self.note = note.number
+            self.note = note
             self.controller = controller
             self.value = value
             self.channel = channel
@@ -165,7 +165,7 @@ extension MIDI.Event.Note.CC {
         
         let word1 = MIDI.UMPWord(mtAndGroup,
                                  statusByte + channel.uInt8Value,
-                                 note.uInt8Value,
+                                 note.number.uInt8Value,
                                  index)
         
         let word2 = value.midi2Value

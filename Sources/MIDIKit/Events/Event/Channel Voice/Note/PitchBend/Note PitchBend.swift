@@ -12,7 +12,7 @@ extension MIDI.Event.Note {
         /// Note Number
         ///
         /// If attribute is set to Pitch 7.9, then this value represents the note index.
-        public var note: MIDI.UInt7
+        public var note: MIDI.Note
         
         /// 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
         @ValueValidated
@@ -37,7 +37,7 @@ extension MIDI.Event.Note {
                     channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
-            self.note = note
+            self.note = MIDI.Note(note)
             self.value = value
             self.channel = channel
             self.group = group
@@ -57,7 +57,7 @@ extension MIDI.Event.Note {
                     channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
-            self.note = note.number
+            self.note = note
             self.value = value
             self.channel = channel
             self.group = group
@@ -85,7 +85,7 @@ extension MIDI.Event {
                                      group: MIDI.UInt4 = 0x0) -> Self {
         
         .notePitchBend(
-            .init(note: note,
+            .init(note: MIDI.Note(note),
                   value: value,
                   channel: channel,
                   group: group)
@@ -108,7 +108,7 @@ extension MIDI.Event {
                                      group: MIDI.UInt4 = 0x0) -> Self {
         
         .notePitchBend(
-            .init(note: note.number,
+            .init(note: note,
                   value: value,
                   channel: channel,
                   group: group)
@@ -134,7 +134,7 @@ extension MIDI.Event.Note.PitchBend {
         
         let word1 = MIDI.UMPWord(mtAndGroup,
                                  0x60 + channel.uInt8Value,
-                                 note.uInt8Value,
+                                 note.number.uInt8Value,
                                  0x00) // reserved
         
         let word2 = value.midi2Value

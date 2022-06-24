@@ -12,7 +12,7 @@ extension MIDI.Event.Note {
         /// Note Number
         ///
         /// If MIDI 2.0 attribute is set to Pitch 7.9, then this value represents the note index.
-        public var note: MIDI.UInt7
+        public var note: MIDI.Note
         
         /// Velocity
         @VelocityValidated
@@ -47,7 +47,7 @@ extension MIDI.Event.Note {
                     group: MIDI.UInt4 = 0x0,
                     midi1ZeroVelocityAsNoteOff: Bool = true) {
             
-            self.note = note
+            self.note = MIDI.Note(note)
             self.velocity = velocity
             self.channel = channel
             self.attribute = attribute
@@ -73,7 +73,7 @@ extension MIDI.Event.Note {
                     group: MIDI.UInt4 = 0x0,
                     midi1ZeroVelocityAsNoteOff: Bool = true) {
             
-            self.note = note.number
+            self.note = note
             self.velocity = velocity
             self.channel = channel
             self.attribute = attribute
@@ -192,13 +192,13 @@ extension MIDI.Event.Note.On {
             if midi1Value == 0, midi1ZeroVelocityAsNoteOff {
                 // send as Note Off event
                 return [0x80 + channel.uInt8Value,
-                        note.uInt8Value,
+                        note.number.uInt8Value,
                         velocity.midi1Value.uInt8Value]
                 
             } else {
                 // send as Note On event
                 return [0x90 + channel.uInt8Value,
-                        note.uInt8Value,
+                        note.number.uInt8Value,
                         velocity.midi1Value.uInt8Value]
             }
         }
@@ -215,7 +215,7 @@ extension MIDI.Event.Note.On {
             if midi1Velocity == 0 { midi1Velocity = 1 }
             
             return [0x90 + channel.uInt8Value,
-                    note.uInt8Value,
+                    note.number.uInt8Value,
                     midi1Velocity]
             
         case .unitInterval:
@@ -263,7 +263,7 @@ extension MIDI.Event.Note.On {
             
             let word1 = MIDI.UMPWord(mtAndGroup,
                                      0x90 + channel.uInt8Value,
-                                     note.uInt8Value,
+                                     note.number.uInt8Value,
                                      attribute.attributeType)
             
             let word2 = MIDI.UMPWord(velocity.midi2Value,

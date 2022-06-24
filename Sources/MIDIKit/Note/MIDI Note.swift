@@ -21,17 +21,15 @@ public extension MIDI {
         /// MIDI note number.
         public var number: MIDI.UInt7 = 0
         
-        /// Tuning in Hertz, for use with frequency conversion
-        public var tuning: Double = 440.0
-        
         public init() { }
         
         /// Construct from a MIDI note number.
-        /// Returns `nil` if note number is invalid.
         @_disfavoredOverload
-        public init?<T: BinaryInteger>(_ number: T) {
+        public init<T: BinaryInteger>(_ number: T) throws {
             
-            guard let uint7 = MIDI.UInt7(exactly: number) else { return nil }
+            guard let uint7 = MIDI.UInt7(exactly: number) else {
+                throw NoteError.outOfBounds
+            }
             self.number = uint7
             
         }
@@ -44,50 +42,43 @@ public extension MIDI {
         }
         
         /// Construct from a note `Name` and octave.
-        /// Returns `nil` if note and octave pair is invalid.
-        public init?(_ name: Name, octave: Int) {
+        public init(_ name: Name, octave: Int) throws {
             
-            if !setNoteNumber(name, octave: octave) { return nil }
+            try setNoteNumber(name, octave: octave)
             
         }
         
         /// Construct from a MIDI note name string.
-        /// Returns `nil` if the string cannot be parsed.
-        public init?(_ string: String) {
+        public init(_ string: String) throws {
             
-            if !setNoteNumber(from: string) { return nil }
+            try setNoteNumber(from: string)
             
         }
         
         /// Construct from a frequency in Hz and round to the nearest MIDI note.
         /// Sets the nearest note number to the frequency.
-        /// Returns `nil` if resulting note number is invalid.
-        public init?(frequency: Double) {
+        public init(frequency: Double) throws {
             
-            if !setNoteNumber(frequency: frequency) { return nil }
+            try setNoteNumber(frequency: frequency)
             
         }
         
         /// Set note number from note name and octave.
-        /// Returns `false` if note and octave pair is invalid.
-        @discardableResult
         public mutating func setNoteNumber(_ source: Name,
-                                           octave: Int) -> Bool {
+                                           octave: Int) throws {
             
             let noteNum = ((octave + 2) * 12) + source.scaleOffset
             
-            guard let uint7 = MIDI.UInt7(exactly: noteNum) else { return false }
+            guard let uInt7 = MIDI.UInt7(exactly: noteNum) else {
+                throw NoteError.outOfBounds
+            }
             
-            number = uint7
-            
-            return true
+            number = uInt7
             
         }
         
         /// Set note number from a MIDI note name string.
-        /// Returns `false` if the string cannot be parsed.
-        @discardableResult
-        public mutating func setNoteNumber(from source: String) -> Bool {
+        public mutating func setNoteNumber(from source: String) throws {
             
             var noteString = ""
             
@@ -96,8 +87,9 @@ public extension MIDI {
                 from: testCharSet,
                 options: [],
                 range: source.startIndex ..< source.index(after: source.startIndex)
-            )
-            else { return false }
+            ) else {
+                throw NoteError.malformedNoteName
+            }
             
             // test for # Sharp
             
@@ -116,7 +108,9 @@ public extension MIDI {
                 noteString = String(source[rngNote])
             }
             
-            guard let noteName = Name(noteString) else { return false }
+            guard let noteName = Name(noteString) else {
+                throw NoteError.malformedNoteName
+            }
             
             let octaveString = String(
                 source[
@@ -126,48 +120,57 @@ public extension MIDI {
             )
             
             // must convert string to int
-            guard let octave = Int(octaveString) else { return false }
+            guard let octave = Int(octaveString) else {
+                throw NoteError.outOfBounds
+            }
             
             // must be within range
-            guard -2 ... 8 ~= octave else { return false }
+            guard -2 ... 8 ~= octave else {
+                throw NoteError.outOfBounds
+            }
             
-            return setNoteNumber(noteName, octave: octave)
+            try setNoteNumber(noteName, octave: octave)
             
         }
         
-        
         /// Sets the nearest note number to the frequency in Hz.
-        /// Returns `nil` if resulting note number is invalid.
-        @discardableResult
         public mutating func setNoteNumber(frequency: Double,
-                                           tuning: Double? = nil) -> Bool {
-            
-            let tuningHz = tuning ?? self.tuning
+                                           tuning: Double = 440.0) throws {
             
             let noteNum = Self.calculateMIDINoteNumber(
-                ofFrequency: frequency,
-                tuning: tuningHz
+                frequency: frequency,
+                tuning: tuning
             )
             
-            guard let uint7 = MIDI.UInt7(exactly: noteNum) else { return false }
+            guard let uInt7 = MIDI.UInt7(exactly: noteNum) else {
+                throw NoteError.outOfBounds
+            }
             
-            number = uint7
-            
-            return true
+            number = uInt7
             
         }
         
         /// Get the MIDI note name enum case.
         public var name: Name {
+            
             Name.convert(noteNumber: number).name
+            
         }
         
         /// Get the MIDI note name enum case.
         public var octave: Int {
+            
             Name.convert(noteNumber: number).octave
+            
         }
         
         /// Get the MIDI note name string (ie: "A-2" "C#6")
+        ///
+        /// - Parameters:
+        ///   - respellSharpAsFlat: If note is sharp, respell enharmonically as a flat (ie: G♯ becomes A♭). Otherwise, sharp is always used, which is typical convention for MIDI note names.
+        ///   - unicodeAccidental: Use stylized unicode character for sharp (♯) and flat (♭).
+        ///
+        /// - Returns: MIDI note name string.
         public func stringValue(
             respellSharpAsFlat: Bool = false,
             unicodeAccidental: Bool = false
@@ -189,25 +192,10 @@ public extension MIDI {
             
         }
         
-        /// Get or set MIDI note frequency in Hz, based on `.tuning` property.
-        public var frequencyValue: Double {
+        /// Get MIDI note frequency in Hz, based on tuning.
+        public func frequencyValue(tuning: Double = 440.0) -> Double {
             
-            get {
-                Self.calculateFrequency(ofMIDINote: number.intValue,
-                                        tuning: tuning)
-            }
-            set {
-                setNoteNumber(frequency: newValue,
-                              tuning: tuning)
-            }
-            
-        }
-        
-        /// Get MIDI note frequency in Hz, based on an arbitrary tuning (ignoring `.tuning` property).
-        /// Does not set `tuning` property.
-        public func frequencyValue(tuning: Double) -> Double {
-            
-            Self.calculateFrequency(ofMIDINote: number.intValue,
+            Self.calculateFrequency(midiNote: number.intValue,
                                     tuning: tuning)
             
         }
@@ -259,13 +247,9 @@ extension MIDI.Note: Strideable {
     
     public func advanced(by n: Int) -> Self {
         
-        let val = (number.intValue + n)
-            .clamped(to:
-                         MIDI.NoteNumberRange.all.lowerBound.intValue
-                     ... MIDI.NoteNumberRange.all.upperBound.intValue
-            )
+        let clamped = MIDI.UInt7(clamping: number.intValue + n)
         
-        return Self(val) ?? .init()
+        return Self(clamped)
         
     }
     
@@ -280,24 +264,55 @@ public extension MIDI.Note {
 
 extension MIDI.Note {
     
-    /// Internal: Returns frequency in Hz calculated from a MIDI note number.
-    /// - parameter ofMIDINote: MIDI note number
+    /// Utility method that returns frequency in Hz calculated from a MIDI note number.
+    /// - parameter midiNote: MIDI note number
     /// - parameter tuning: Tuning in Hertz
-    public static func calculateFrequency(ofMIDINote: Int,
+    public static func calculateFrequency(midiNote: Int,
                                           tuning: Double = 440.0) -> Double {
         
-        pow(2.0, (Double(ofMIDINote) - 69.0) / 12.0) * tuning
+        pow(2.0, (Double(midiNote) - 69.0) / 12.0) * tuning
         
     }
     
-    /// Internal: Returns a MIDI note number calculated from frequency in Hz.
+    /// Utility method that returns a MIDI note number calculated from frequency in Hz.
     /// Note: Results may be out-of-bounds (outside of 0...127)
+    /// - parameter frequency: MIDI note number
+    /// - parameter tuning: Tuning in Hertz
+    public static func calculateMIDINoteNumber(frequency: Double,
+                                               tuning: Double = 440.0) -> Int {
+        
+        Int(round(12.0 * log2(frequency / tuning) + 69.0))
+        
+    }
+    
+}
+
+// MARK: - API Transition (release 0.5.0)
+
+extension MIDI.Note {
+    
+    /// Utility method that returns frequency in Hz calculated from a MIDI note number.
     /// - parameter ofMIDINote: MIDI note number
     /// - parameter tuning: Tuning in Hertz
-    private static func calculateMIDINoteNumber(ofFrequency: Double,
-                                                tuning: Double = 440.0) -> Int {
+    @available(*, unavailable, renamed: "calculateFrequency(midiNote:tuning:)")
+    public static func calculateFrequency(ofMIDINote: Int,
+                                          tuning: Double = 440.0) -> Double {
         
-        Int(round(12.0 * log2(ofFrequency / tuning) + 69.0))
+        Self.calculateFrequency(midiNote: ofMIDINote,
+                                tuning: tuning)
+        
+    }
+    
+    /// Utility method that returns a MIDI note number calculated from frequency in Hz.
+    /// Note: Results may be out-of-bounds (outside of 0...127)
+    /// - parameter ofFrequency: MIDI note number
+    /// - parameter tuning: Tuning in Hertz
+    @available(*, unavailable, renamed: "calculateMIDINoteNumber(frequency:tuning:)")
+    public static func calculateMIDINoteNumber(ofFrequency: Double,
+                                               tuning: Double = 440.0) -> Int {
+        
+        Self.calculateMIDINoteNumber(frequency: ofFrequency,
+                                     tuning: tuning)
         
     }
     

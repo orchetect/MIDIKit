@@ -14,7 +14,7 @@ extension MIDI.Event.Note {
         /// Note Number
         ///
         /// If MIDI 2.0 attribute is set to Pitch 7.9, then this value represents the note index.
-        public var note: MIDI.UInt7
+        public var note: MIDI.Note
         
         /// Option Flags
         public var optionFlags: Set<OptionFlag> = []
@@ -41,7 +41,7 @@ extension MIDI.Event.Note {
                     channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
-            self.note = note
+            self.note = MIDI.Note(note)
             self.optionFlags = optionFlags
             self.channel = channel
             self.group = group
@@ -64,7 +64,7 @@ extension MIDI.Event.Note {
                     channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
-            self.note = note.number
+            self.note = note
             self.optionFlags = optionFlags
             self.channel = channel
             self.group = group
@@ -144,7 +144,7 @@ extension MIDI.Event.Note.Management {
         
         let word1 = MIDI.UMPWord(mtAndGroup,
                                  0xF0 + channel.uInt8Value,
-                                 note.uInt8Value,
+                                 note.number.uInt8Value,
                                  optionFlags.byte)
         
         let word2: UInt32 = 0x00000000 // reserved

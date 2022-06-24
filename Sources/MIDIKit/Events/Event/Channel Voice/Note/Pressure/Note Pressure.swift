@@ -15,7 +15,7 @@ extension MIDI.Event.Note {
     public struct Pressure: Equatable, Hashable {
         
         /// Note Number for which pressure is applied
-        public var note: MIDI.UInt7
+        public var note: MIDI.Note
         
         /// Pressure Amount
         @AmountValidated
@@ -39,7 +39,7 @@ extension MIDI.Event.Note {
                     channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
-            self.note = note
+            self.note = MIDI.Note(note)
             self.amount = amount
             self.channel = channel
             self.group = group
@@ -58,7 +58,7 @@ extension MIDI.Event.Note {
                     channel: MIDI.UInt4,
                     group: MIDI.UInt4 = 0x0) {
             
-            self.note = note.number
+            self.note = note
             self.amount = amount
             self.channel = channel
             self.group = group
@@ -138,7 +138,7 @@ extension MIDI.Event.Note.Pressure {
     public func midi1RawBytes() -> [MIDI.Byte] {
         
         [0xA0 + channel.uInt8Value,
-         note.uInt8Value,
+         note.number.uInt8Value,
          amount.midi1Value.uInt8Value]
         
     }
@@ -168,7 +168,7 @@ extension MIDI.Event.Note.Pressure {
         case ._1_0:
             let word = MIDI.UMPWord(mtAndGroup,
                                     0xA0 + channel.uInt8Value,
-                                    note.uInt8Value,
+                                    note.number.uInt8Value,
                                     amount.midi1Value.uInt8Value)
             
             return [word]
@@ -176,7 +176,7 @@ extension MIDI.Event.Note.Pressure {
         case ._2_0:
             let word1 = MIDI.UMPWord(mtAndGroup,
                                      0xA0 + channel.uInt8Value,
-                                     note.uInt8Value,
+                                     note.number.uInt8Value,
                                      0x00) // reserved
             
             let word2 = amount.midi2Value

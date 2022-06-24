@@ -16,44 +16,37 @@ final class NoteTests: XCTestCase {
         let note = MIDI.Note()
         
         XCTAssertEqual(note.number, 0)
-        XCTAssertEqual(note.tuning, 440.0)
-        XCTAssertEqual(note.frequencyValue, 8.175798915643707)
+        XCTAssertEqual(note.frequencyValue(), 8.175798915643707)
         XCTAssertEqual(note.stringValue(), "C-2")
     }
     
-    func testInitNumber() {
+    func testInitNumber() throws {
         
         // test all common BinaryInteger inits, except MIDI.UInt7
         
-        XCTAssertEqual(MIDI.Note(Int(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(UInt(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(Int8(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(UInt8(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(Int16(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(UInt16(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(Int32(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(UInt32(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(Int64(0x60))?.number, 0x60)
-        XCTAssertEqual(MIDI.Note(UInt64(0x60))?.number, 0x60)
+        XCTAssertEqual(try MIDI.Note(Int(0x60)).number, 0x60)
+        XCTAssertEqual(try MIDI.Note(UInt(0x60)).number, 0x60)
+        XCTAssertEqual(try MIDI.Note(Int8(0x60)).number, 0x60)
+        XCTAssertEqual(try MIDI.Note(UInt8(0x60)).number, 0x60)
+        XCTAssertEqual(try MIDI.Note(Int16(0x60)).number, 0x60)
+        XCTAssertEqual(try MIDI.Note(UInt16(0x60)).number, 0x60)
+        XCTAssertEqual(try MIDI.Note(Int32(0x60)).number, 0x60)
+        XCTAssertEqual(try MIDI.Note(UInt32(0x60)).number, 0x60)
+        XCTAssertEqual(try MIDI.Note(Int64(0x60)).number, 0x60)
+        XCTAssertEqual(try MIDI.Note(UInt64(0x60)).number, 0x60)
     }
     
-    func testFrequency() {
+    func testFrequency() throws {
         // test conversion:
         // note number -> frequency -> note number
         
-        (0...127).forEach {
-            guard let freq = MIDI.Note($0)?.frequencyValue
-            else {
-                XCTFail("Failed to get note frequency for note number \($0)")
-                return
-            }
+        try (0...127).forEach {
+            let freq = try MIDI.Note($0).frequencyValue()
             
             // check rounding
-            if let num = MIDI.Note(frequency: freq)?.number.intValue,
-               num != $0
-            {
-                XCTFail("Note number conversion failed for frequency \($0)Hz")
-            }
+            let num = try MIDI.Note(frequency: freq).number.intValue
+            
+            XCTAssertEqual(num, $0, "Note number conversion failed for frequency \($0)Hz")
         }
     }
     
@@ -65,8 +58,7 @@ final class NoteTests: XCTestCase {
         // spot check
         
         XCTAssertEqual(getAllNotes[0].number, 0)
-        XCTAssertEqual(getAllNotes[0].tuning, 440.0)
-        XCTAssertEqual(getAllNotes[0].frequencyValue, 8.175798915643707)
+        XCTAssertEqual(getAllNotes[0].frequencyValue(), 8.175798915643707)
         XCTAssertEqual(getAllNotes[0].stringValue(), "C-2")
         
         XCTAssertEqual(getAllNotes[58].stringValue(), "A#2")
@@ -75,8 +67,7 @@ final class NoteTests: XCTestCase {
         XCTAssertEqual(getAllNotes[61].stringValue(), "C#3")
         
         XCTAssertEqual(getAllNotes[127].number, 127)
-        XCTAssertEqual(getAllNotes[127].tuning, 440.0)
-        XCTAssertEqual(getAllNotes[127].frequencyValue, 12543.853951415975)
+        XCTAssertEqual(getAllNotes[127].frequencyValue(), 12543.853951415975)
         XCTAssertEqual(getAllNotes[127].stringValue(), "G8")
     }
     
@@ -168,68 +159,71 @@ final class NoteTests: XCTestCase {
         
     }
     
-    func testNoteInit_String() {
+    func testNoteInit_String() throws {
         // spot check
         
-        XCTAssertEqual(MIDI.Note("B-3")?.number, nil) // out of bounds
-        XCTAssertEqual(MIDI.Note("C-2")?.number, 0)
+        XCTAssertThrowsError(try MIDI.Note("B-3").number) // out of bounds
+        XCTAssertEqual(try MIDI.Note("C-2").number, 0)
         
-        XCTAssertEqual(MIDI.Note("A#2")?.number, 58)
-        XCTAssertEqual(MIDI.Note("Bb2")?.number, 58)
-        XCTAssertEqual(MIDI.Note("B2")?.number, 59)
-        XCTAssertEqual(MIDI.Note("C3")?.number, 60)
-        XCTAssertEqual(MIDI.Note("C#3")?.number, 61)
+        XCTAssertEqual(try MIDI.Note("A#2").number, 58)
+        XCTAssertEqual(try MIDI.Note("Bb2").number, 58)
+        XCTAssertEqual(try MIDI.Note("B2").number, 59)
+        XCTAssertEqual(try MIDI.Note("C3").number, 60)
+        XCTAssertEqual(try MIDI.Note("C#3").number, 61)
         
-        XCTAssertEqual(MIDI.Note("G8")?.number, 127)
-        XCTAssertEqual(MIDI.Note("G#8")?.number, nil) // out of bounds
+        XCTAssertEqual(try MIDI.Note("G8").number, 127)
+        XCTAssertThrowsError(try MIDI.Note("G#8").number) // out of bounds
         
         // alternate accidental symbols
         
-        XCTAssertEqual(MIDI.Note("Ab2")?.number, 56)
-        XCTAssertEqual(MIDI.Note("A♭2")?.number, 56)
+        XCTAssertEqual(try MIDI.Note("Ab2").number, 56)
+        XCTAssertEqual(try MIDI.Note("A♭2").number, 56)
         
-        XCTAssertEqual(MIDI.Note("A♯2")?.number, 58)
-        XCTAssertEqual(MIDI.Note("B♭2")?.number, 58)
+        XCTAssertEqual(try MIDI.Note("A♯2").number, 58)
+        XCTAssertEqual(try MIDI.Note("B♭2").number, 58)
         
-        XCTAssertEqual(MIDI.Note("B♯2"), nil) // don't allow C across different octave
-        XCTAssertEqual(MIDI.Note("C♭3"), nil) // don't allow B across different octave
+        XCTAssertThrowsError(try MIDI.Note("B♯2")) // don't allow C across different octave
+        XCTAssertThrowsError(try MIDI.Note("C♭3")) // don't allow B across different octave
         
-        XCTAssertEqual(MIDI.Note("C♯3")?.number, 61)
-        XCTAssertEqual(MIDI.Note("D♭3")?.number, 61)
+        XCTAssertEqual(try MIDI.Note("C♯3").number, 61)
+        XCTAssertEqual(try MIDI.Note("D♭3").number, 61)
         
-        XCTAssertEqual(MIDI.Note("D♯3")?.number, 63)
-        XCTAssertEqual(MIDI.Note("E♭3")?.number, 63)
+        XCTAssertEqual(try MIDI.Note("D♯3").number, 63)
+        XCTAssertEqual(try MIDI.Note("E♭3").number, 63)
         
-        XCTAssertEqual(MIDI.Note("E♯3")?.number, 65) // F♮
-        XCTAssertEqual(MIDI.Note("F♭3")?.number, 64) // E♮
+        XCTAssertEqual(try MIDI.Note("E♯3").number, 65) // F♮
+        XCTAssertEqual(try MIDI.Note("F♭3").number, 64) // E♮
         
-        XCTAssertEqual(MIDI.Note("F♯3")?.number, 66)
-        XCTAssertEqual(MIDI.Note("G♭3")?.number, 66)
+        XCTAssertEqual(try MIDI.Note("F♯3").number, 66)
+        XCTAssertEqual(try MIDI.Note("G♭3").number, 66)
         
-        XCTAssertEqual(MIDI.Note("G♯3")?.number, 68)
-        XCTAssertEqual(MIDI.Note("A♭3")?.number, 68)
+        XCTAssertEqual(try MIDI.Note("G♯3").number, 68)
+        XCTAssertEqual(try MIDI.Note("A♭3").number, 68)
         
     }
     
-    func testNoteInit_NameAndOctave() {
+    func testNoteInit_NameAndOctave() throws {
+        
         // spot check
         
-        XCTAssertEqual(MIDI.Note(.C, octave: -2)?.number, 0)
+        XCTAssertEqual(try MIDI.Note(.C, octave: -2).number, 0)
         
-        XCTAssertEqual(MIDI.Note(.A_sharp, octave: 2)?.number, 58)
-        XCTAssertEqual(MIDI.Note(.B, octave: 2)?.number, 59)
-        XCTAssertEqual(MIDI.Note(.C, octave: 3)?.number, 60)
-        XCTAssertEqual(MIDI.Note(.C_sharp, octave: 3)?.number, 61)
+        XCTAssertEqual(try MIDI.Note(.A_sharp, octave: 2).number, 58)
+        XCTAssertEqual(try MIDI.Note(.B, octave: 2).number, 59)
+        XCTAssertEqual(try MIDI.Note(.C, octave: 3).number, 60)
+        XCTAssertEqual(try MIDI.Note(.C_sharp, octave: 3).number, 61)
         
-        XCTAssertEqual(MIDI.Note(.G, octave: 8)?.number, 127)
+        XCTAssertEqual(try MIDI.Note(.G, octave: 8).number, 127)
         
         // edge cases
         
-        XCTAssertEqual(MIDI.Note(.B, octave: -3)?.number, nil)
-        XCTAssertEqual(MIDI.Note(.G_sharp, octave: 8)?.number, nil)
+        XCTAssertThrowsError(try MIDI.Note(.B, octave: -3).number)
+        XCTAssertThrowsError(try MIDI.Note(.G_sharp, octave: 8).number)
+        
     }
     
     func testNoteName() {
+        
         XCTAssertEqual(MIDI.Note(0).name, .C)
         XCTAssertEqual(MIDI.Note(0).octave, -2)
         
@@ -241,9 +235,10 @@ final class NoteTests: XCTestCase {
         
         XCTAssertEqual(MIDI.Note(127).name, .G)
         XCTAssertEqual(MIDI.Note(127).octave, 8)
+        
     }
     
-    func testPianoKeyType_WhiteKeys() {
+    func testPianoKeyType_WhiteKeys() throws {
         
         // generate white keys
         
@@ -256,8 +251,8 @@ final class NoteTests: XCTestCase {
             }
         + whiteKeyNamesTopOctave.map { "\($0)8" }
         
-        let whiteKeyNotes: [MIDI.Note] = whiteKeyNoteNames
-            .map { MIDI.Note($0)! }
+        let whiteKeyNotes: [MIDI.Note] = try whiteKeyNoteNames
+            .map { try MIDI.Note($0) }
         
         // test white keys
         
@@ -266,7 +261,7 @@ final class NoteTests: XCTestCase {
         
     }
     
-    func testPianoKeyType_BlackKeys() {
+    func testPianoKeyType_BlackKeys() throws {
         
         // generate black keys
         
@@ -279,8 +274,8 @@ final class NoteTests: XCTestCase {
             }
         + blackKeyNamesTopOctave.map { "\($0)8" }
         
-        let blackKeyNotes: [MIDI.Note] = blackKeyNoteNames
-            .map { MIDI.Note($0)! }
+        let blackKeyNotes: [MIDI.Note] = try blackKeyNoteNames
+            .map { try MIDI.Note($0) }
         
         // test black keys
         
