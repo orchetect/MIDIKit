@@ -31,7 +31,7 @@ extension MIDI {
         /// Channel Voice Message: Per-Note Aftertouch (Polyphonic Aftertouch)
         /// (MIDI 1.0 / 2.0)
         ///
-        /// DAWs are known to use variations on the terminology:
+        /// Also known as:
         /// - Pro Tools: "Polyphonic Aftertouch"
         /// - Logic Pro: "Polyphonic Aftertouch"
         /// - Cubase: "Poly Pressure"
@@ -57,7 +57,7 @@ extension MIDI {
         
         /// Channel Voice Message: Channel Pressure (Aftertouch)
         ///
-        /// DAWs are known to use variations on the terminology:
+        /// Also known as:
         /// - Pro Tools: "Mono Aftertouch"
         /// - Logic Pro: "Aftertouch"
         /// - Cubase: "Aftertouch"

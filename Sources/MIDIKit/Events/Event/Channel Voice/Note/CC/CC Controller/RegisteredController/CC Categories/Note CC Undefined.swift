@@ -5,7 +5,8 @@
 
 extension MIDI.Event.Note.CC.Controller.Registered {
     
-    /// Undefined / Reserved
+    /// Registered Per-Note Controller: Undefined / Reserved
+    /// (MIDI 2.0)
     public enum Undefined {
         
         /// Undefined Per-Note controller number 3

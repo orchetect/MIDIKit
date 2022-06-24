@@ -130,7 +130,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
         
         switch api {
         case .legacyCoreMIDI:
-            try send(rawMessage: event.midi1RawBytes)
+            try send(rawMessage: event.midi1RawBytes())
             
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
@@ -158,7 +158,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
                 try events.forEach { try send(event: $0) }
             } else {
                 // combine events into a single MIDIPacketList
-                try send(rawMessages: events.map { $0.midi1RawBytes })
+                try send(rawMessages: events.map { $0.midi1RawBytes() })
             }
             
         case .newCoreMIDI:

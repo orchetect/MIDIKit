@@ -5,6 +5,9 @@
 
 extension MIDI.Event.Note.CC.Controller.Registered {
     
+    /// Registered Per-Note Controller
+    /// (MIDI 2.0)
+    /// 
     /// Initialize an enum case from the controller number.
     @inline(__always)
     public init(number: UInt8) {

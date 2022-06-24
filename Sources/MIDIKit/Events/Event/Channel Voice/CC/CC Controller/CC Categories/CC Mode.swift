@@ -5,6 +5,8 @@
 
 extension MIDI.Event.CC.Controller {
     
+    /// Channel Mode Messages (CC numbers 120...127)
+    /// (MIDI 1.0 / MIDI 2.0)
     public enum Mode: Equatable, Hashable {
         
         /// [Channel Mode Message] All Sound Off

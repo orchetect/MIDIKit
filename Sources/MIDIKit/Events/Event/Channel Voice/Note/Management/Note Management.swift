@@ -8,7 +8,7 @@ extension MIDI.Event.Note {
     /// Channel Voice Message: Per-Note Management
     /// (MIDI 2.0)
     ///
-    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per- Note Controllers to multiple Notes on the same Note Number.
+    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per-Note Controllers to multiple Notes on the same Note Number.
     public struct Management: Equatable, Hashable {
         
         /// Note Number
@@ -25,6 +25,17 @@ extension MIDI.Event.Note {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        /// Channel Voice Message: Per-Note Management
+        /// (MIDI 2.0)
+        ///
+        /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per-Note Controllers to multiple Notes on the same Note Number.
+        ///
+        /// - Parameters:
+        ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+        ///   - velocity: Velocity
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - attribute: MIDI 2.0 Channel Voice Attribute
+        ///   - group: UMP Group (0x0...0xF)
         public init(note: MIDI.UInt7,
                     optionFlags: Set<OptionFlag> = [],
                     channel: MIDI.UInt4,
@@ -37,6 +48,17 @@ extension MIDI.Event.Note {
             
         }
         
+        /// Channel Voice Message: Per-Note Management
+        /// (MIDI 2.0)
+        ///
+        /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per-Note Controllers to multiple Notes on the same Note Number.
+        ///
+        /// - Parameters:
+        ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+        ///   - velocity: Velocity
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - attribute: MIDI 2.0 Channel Voice Attribute
+        ///   - group: UMP Group (0x0...0xF)
         public init(note: MIDI.Note,
                     optionFlags: Set<OptionFlag> = [],
                     channel: MIDI.UInt4,
@@ -58,7 +80,7 @@ extension MIDI.Event {
     /// Channel Voice Message: Per-Note Management
     /// (MIDI 2.0)
     ///
-    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per- Note Controllers to multiple Notes on the same Note Number.
+    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per-Note Controllers to multiple Notes on the same Note Number.
     /// 
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
@@ -83,7 +105,7 @@ extension MIDI.Event {
     /// Channel Voice Message: Per-Note Management
     /// (MIDI 2.0)
     ///
-    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per- Note Controllers to multiple Notes on the same Note Number.
+    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per-Note Controllers to multiple Notes on the same Note Number.
     ///
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
@@ -109,6 +131,9 @@ extension MIDI.Event {
 
 extension MIDI.Event.Note.Management {
     
+    /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [MIDI.UMPWord] {
         
         let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
@@ -135,6 +160,8 @@ extension MIDI.Event.Note.Management {
 
 extension MIDI.Event.Note.Management {
     
+    /// Per-Note Management Option Flag
+    /// (MIDI 2.0)
     public enum OptionFlag: Equatable, Hashable {
         
         /// [D] Detach Per-Note Controllers from previously received Note(s)
@@ -157,6 +184,9 @@ extension MIDI.Event.Note.Management {
 
 extension Set where Element == MIDI.Event.Note.Management.OptionFlag {
     
+    /// Per-Note Management Option Flag
+    /// (MIDI 2.0)
+    ///
     /// Initialize flags from a raw option flags byte.
     public init(byte: MIDI.Byte) {
         

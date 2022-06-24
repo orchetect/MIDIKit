@@ -103,7 +103,7 @@ extension MIDI.Event.ChanVoice14Bit32BitValue: Equatable {
 
 extension MIDI.Event.ChanVoice14Bit32BitValue {
     
-    /// Returns value as protocol-agnostic unit interval, converting if necessary.
+    /// Returns value as MIDI protocol-agnostic unit interval, converting if necessary.
     @inline(__always)
     public var unitIntervalValue: Double {
         
@@ -124,7 +124,7 @@ extension MIDI.Event.ChanVoice14Bit32BitValue {
         
     }
     
-    /// Returns value as protocol-agnostic bipolar unit interval, converting if necessary.
+    /// Returns value as MIDI protocol-agnostic bipolar unit interval, converting if necessary.
     @inline(__always)
     public var bipolarUnitIntervalValue: Double {
         

@@ -5,6 +5,7 @@
 
 extension MIDI.Event.CC.Controller {
     
+    /// Undefined MIDI CC Controllers
     public enum Undefined {
         
         /// Undefined controller number 3

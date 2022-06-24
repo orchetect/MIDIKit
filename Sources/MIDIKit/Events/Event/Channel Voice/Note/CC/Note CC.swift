@@ -27,6 +27,16 @@ extension MIDI.Event.Note {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        /// Channel Voice Message: Per-Note Control Change (CC)
+        /// (MIDI 2.0)
+        ///
+        ///
+        /// - Parameters:
+        ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+        ///   - controller: Controller type
+        ///   - value: Value
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - group: UMP Group (0x0...0xF)
         public init(note: MIDI.UInt7,
                     controller: Controller,
                     value: Value,
@@ -41,6 +51,16 @@ extension MIDI.Event.Note {
             
         }
         
+        /// Channel Voice Message: Per-Note Control Change (CC)
+        /// (MIDI 2.0)
+        ///
+        ///
+        /// - Parameters:
+        ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+        ///   - controller: Controller type
+        ///   - value: Value
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - group: UMP Group (0x0...0xF)
         public init(note: MIDI.Note,
                     controller: Controller,
                     value: Value,
@@ -117,6 +137,9 @@ extension MIDI.Event {
 
 extension MIDI.Event.Note.CC {
     
+    /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         

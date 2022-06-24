@@ -20,7 +20,7 @@ final class MIDIEventCC_Tests: XCTestCase {
                                      value: .midi1(64),
                                      channel: 0)
             
-            XCTAssertEqual(cc.midi1RawBytes, [0xB0, ccNum.uInt8Value, 64])
+            XCTAssertEqual(cc.midi1RawBytes(), [0xB0, ccNum.uInt8Value, 64])
             
         }
         
@@ -36,7 +36,7 @@ final class MIDIEventCC_Tests: XCTestCase {
                                      value: .midi1(64),
                                      channel: 0)
             
-            XCTAssertEqual(cc.midi1RawBytes, [0xB0, ccNum.uInt8Value, 64])
+            XCTAssertEqual(cc.midi1RawBytes(), [0xB0, ccNum.uInt8Value, 64])
             
         }
         

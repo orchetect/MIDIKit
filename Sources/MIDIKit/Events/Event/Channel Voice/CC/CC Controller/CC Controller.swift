@@ -5,7 +5,8 @@
 
 extension MIDI.Event.CC {
     
-    /// MIDI Controller
+    /// MIDI Control Change Controller
+    /// (MIDI 1.0 / MIDI 2.0)
     public enum Controller: Equatable, Hashable {
         
         /// Bank Select

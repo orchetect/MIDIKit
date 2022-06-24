@@ -5,7 +5,8 @@
 
 extension MIDI.Event.Note.CC.Controller.Registered {
     
-    /// Pitch 7.25
+    /// /// Registered Per-Note Controller: Pitch 7.25
+    /// (MIDI 2.0)
     ///
     /// A Q7.25 fixed-point unsigned integer that specifies a pitch in semitones.
     ///

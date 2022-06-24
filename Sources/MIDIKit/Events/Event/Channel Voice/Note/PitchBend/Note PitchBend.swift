@@ -24,6 +24,14 @@ extension MIDI.Event.Note {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        /// Channel Voice Message: Per-Note Pitch Bend
+        /// (MIDI 2.0)
+        ///
+        /// - Parameters:
+        ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+        ///   - value: 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - group: UMP Group (0x0...0xF)
         public init(note: MIDI.UInt7,
                     value: Value,
                     channel: MIDI.UInt4,
@@ -36,6 +44,14 @@ extension MIDI.Event.Note {
             
         }
         
+        /// Channel Voice Message: Per-Note Pitch Bend
+        /// (MIDI 2.0)
+        ///
+        /// - Parameters:
+        ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+        ///   - value: 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - group: UMP Group (0x0...0xF)
         public init(note: MIDI.Note,
                     value: Value,
                     channel: MIDI.UInt4,
@@ -104,6 +120,9 @@ extension MIDI.Event {
 
 extension MIDI.Event.Note.PitchBend {
     
+    /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         

@@ -5,6 +5,7 @@
 
 extension MIDI.Event {
     
+    /// Declarative System Common MIDI Event types used in event filters.
     public enum SysCommonTypes {
         
         /// Return only System Common events.
@@ -32,7 +33,8 @@ extension MIDI.Event {
         
     }
     
-    public enum SysCommonType {
+    /// System Common MIDI Event types.
+    public enum SysCommonType: Equatable, Hashable {
         
         case timecodeQuarterFrame
         case songPositionPointer

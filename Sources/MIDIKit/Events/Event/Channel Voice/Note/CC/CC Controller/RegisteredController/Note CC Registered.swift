@@ -6,6 +6,7 @@
 extension MIDI.Event.Note.CC.Controller {
     
     /// Registered Per-Note Controller
+    /// (MIDI 2.0)
     public enum Registered: Equatable, Hashable {
         
         // Registered Per-Note CC 0 undefined

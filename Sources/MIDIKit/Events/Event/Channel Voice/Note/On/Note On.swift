@@ -30,6 +30,16 @@ extension MIDI.Event.Note {
         /// For MIDI 1.0, transmit velocity of 0 as a Note Off event.
         public var midi1ZeroVelocityAsNoteOff: Bool = true
         
+        /// Channel Voice Message: Note On
+        /// (MIDI 1.0 / 2.0)
+        ///
+        /// - Parameters:
+        ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+        ///   - velocity: Velocity
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - attribute: MIDI 2.0 Channel Voice Attribute
+        ///   - group: UMP Group (0x0...0xF)
+        ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
         public init(note: MIDI.UInt7,
                     velocity: MIDI.Event.Note.Velocity,
                     attribute: MIDI.Event.Note.Attribute = .none,
@@ -46,6 +56,16 @@ extension MIDI.Event.Note {
             
         }
         
+        /// Channel Voice Message: Note On
+        /// (MIDI 1.0 / 2.0)
+        ///
+        /// - Parameters:
+        ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
+        ///   - velocity: Velocity
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - attribute: MIDI 2.0 Channel Voice Attribute
+        ///   - group: UMP Group (0x0...0xF)
+        ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
         public init(note: MIDI.Note,
                     velocity: MIDI.Event.Note.Velocity,
                     attribute: MIDI.Event.Note.Attribute = .none,
@@ -162,6 +182,9 @@ extension MIDI.Event {
 
 extension MIDI.Event.Note.On {
     
+    /// Returns the raw MIDI 1.0 message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
@@ -185,9 +208,8 @@ extension MIDI.Event.Note.On {
             return process(midi1Value: midi1Value)
             
         case .midi2:
-            /// - remark: MIDI 2.0 Spec:
-            ///
-            /// When translating a MIDI 2.0 Note On message to the MIDI 1.0 Protocol, if the translated MIDI 1.0 value of the Velocity is zero, then the Translator shall replace the zero with a value of 1.
+            // MIDI 2.0 Spec:
+            // When translating a MIDI 2.0 Note On message to the MIDI 1.0 Protocol, if the translated MIDI 1.0 value of the Velocity is zero, then the Translator shall replace the zero with a value of 1.
             
             var midi1Velocity = velocity.midi1Value.uInt8Value
             if midi1Velocity == 0 { midi1Velocity = 1 }
@@ -216,6 +238,9 @@ extension MIDI.Event.Note.On {
         
     }
     
+    /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         
@@ -233,10 +258,9 @@ extension MIDI.Event.Note.On {
             return [word]
             
         case ._2_0:
-            /// - remark: MIDI 2.0 Spec:
-            ///
-            /// The allowable Velocity range for a MIDI 2.0 Note On message is 0x0000-0xFFFF. Unlike the MIDI 1.0 Note On message, a velocity value of zero does not function as a Note Off.
-            ///
+            // MIDI 2.0 Spec:
+            // The allowable Velocity range for a MIDI 2.0 Note On message is 0x0000-0xFFFF. Unlike the MIDI 1.0 Note On message, a velocity value of zero does not function as a Note Off.
+            
             let word1 = MIDI.UMPWord(mtAndGroup,
                                      0x90 + channel.uInt8Value,
                                      note.uInt8Value,

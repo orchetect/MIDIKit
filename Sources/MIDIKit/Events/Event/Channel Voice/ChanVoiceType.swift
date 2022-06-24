@@ -3,10 +3,9 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import Foundation
-
 extension MIDI.Event {
     
+    /// Declarative Channel Voice MIDI Event types used in event filters.
     public enum ChanVoiceTypes {
         
         /// Return only Channel Voice events.
@@ -83,7 +82,8 @@ extension MIDI.Event {
         
     }
     
-    public enum ChanVoiceType {
+    /// Channel Voice MIDI Event types.
+    public enum ChanVoiceType: Equatable, Hashable {
         
         case noteOn
         case noteOff

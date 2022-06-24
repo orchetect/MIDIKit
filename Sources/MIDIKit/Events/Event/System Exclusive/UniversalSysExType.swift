@@ -15,6 +15,9 @@ extension MIDI.Event {
         case nonRealTime = 0x7E
         
         // Note: this cannot be implemented as `init?(rawValue: UInt8)` because Xcode 12.4 won't compile (Xcode 13 compiles fine however). It seems the parameter name "rawValue:" confuses the compiler and prevents it from synthesizing its own `init?(rawValue: MIDI.UInt7)` init.
+        /// Universal System Exclusive message type.
+        ///
+        /// Initialize from raw UInt8 byte.
         public init?(rawUInt8Value: UInt8) {
             
             guard let uInt7 = MIDI.UInt7(exactly: rawUInt8Value) else { return nil }

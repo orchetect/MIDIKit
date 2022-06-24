@@ -19,7 +19,7 @@ final class MIDIEventCCRPN_Tests: XCTestCase {
                                                       dataEntryLSB: nil),
                                                  channel: 0x9)
         
-        XCTAssertEqual(rpn.flatMap(\.midi1RawBytes),
+        XCTAssertEqual(rpn.flatMap { $0.midi1RawBytes() },
                        [0xB9, 0x65, 66,
                         0xB9, 0x64, 103])
         
@@ -32,7 +32,7 @@ final class MIDIEventCCRPN_Tests: XCTestCase {
                                                       dataEntryLSB: nil),
                                                  channel: 0x9)
         
-        XCTAssertEqual(rpn.flatMap(\.midi1RawBytes),
+        XCTAssertEqual(rpn.flatMap { $0.midi1RawBytes() },
                        [0xB9, 0x65, 66,
                         0xB9, 0x64, 103,
                         0xB9, 0x06, 127])
@@ -46,7 +46,7 @@ final class MIDIEventCCRPN_Tests: XCTestCase {
                                                       dataEntryLSB: 2),
                                                  channel: 0x9)
         
-        XCTAssertEqual(rpn.flatMap(\.midi1RawBytes),
+        XCTAssertEqual(rpn.flatMap { $0.midi1RawBytes() },
                        [0xB9, 0x65, 66,
                         0xB9, 0x64, 103,
                         0xB9, 0x06, 127,
@@ -59,7 +59,7 @@ final class MIDIEventCCRPN_Tests: XCTestCase {
         let nrpn: [MIDI.Event] = MIDI.Event.ccRPN(.null,
                                                   channel: 0x9)
         
-        XCTAssertEqual(nrpn.flatMap(\.midi1RawBytes),
+        XCTAssertEqual(nrpn.flatMap { $0.midi1RawBytes() },
                        [0xB9, 0x65, 0x7F,
                         0xB9, 0x64, 0x7F])
         

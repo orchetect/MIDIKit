@@ -7,7 +7,8 @@ import Darwin
 
 extension MIDI.Event.Note.Attribute {
     
-    /// Pitch 7.9
+    /// Pitch 7.9 Note Attribute
+    /// (MIDI 2.0)
     ///
     /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
     ///
@@ -20,6 +21,17 @@ extension MIDI.Event.Note.Attribute {
         /// 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
         public var fine: MIDI.UInt9
         
+        /// Pitch 7.9 Note Attribute
+        /// (MIDI 2.0)
+        ///
+        /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
+        ///
+        /// Range: 0+(0/512) ... 127+(511/512)
+        ///
+        /// - Parameters:
+        ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
+        ///   - fine: 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
+        @inline(__always)
         public init(coarse: MIDI.UInt7,
                     fine: MIDI.UInt9) {
             
@@ -46,7 +58,11 @@ extension MIDI.Event.Note.Attribute.Pitch7_9: CustomStringConvertible {
 
 extension MIDI.Event.Note.Attribute.Pitch7_9 {
     
-    /// Initialize from UInt16 representation.
+    /// Pitch 7.9 (MIDI 2.0): Initialize from UInt16 representation as a byte pair.
+    ///
+    /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
+    ///
+    /// Range: 0+(0/512) ... 127+(511/512)
     @inline(__always)
     public init(_ bytePair: MIDI.Byte.Pair) {
         
@@ -59,7 +75,7 @@ extension MIDI.Event.Note.Attribute.Pitch7_9 {
         
     }
     
-    /// UInt16 representation.
+    /// UInt16 representation as a byte pair.
     @inline(__always)
     public var bytePair: MIDI.Byte.Pair {
         
@@ -76,6 +92,11 @@ extension MIDI.Event.Note.Attribute.Pitch7_9 {
 
 extension MIDI.Event.Note.Attribute.Pitch7_9 {
     
+    /// Pitch 7.9 (MIDI 2.0): Initialize from UInt16 representation.
+    ///
+    /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
+    ///
+    /// Range: 0+(0/512) ... 127+(511/512)
     @inline(__always)
     public init(_ uInt16Value: UInt16) {
         
@@ -98,7 +119,11 @@ extension MIDI.Event.Note.Attribute.Pitch7_9 {
 
 extension MIDI.Event.Note.Attribute.Pitch7_9 {
     
-    /// Converted from a Double value (0.0...127.998046875)
+    /// Pitch 7.9 (MIDI 2.0): Initialize by converting from a Double value (0.0...127.998046875)
+    ///
+    /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
+    ///
+    /// Range: 0+(0/512) ... 127+(511/512)
     @inline(__always)
     public init(_ double: Double) {
         
