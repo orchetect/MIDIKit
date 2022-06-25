@@ -13,7 +13,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
     func testPacketData_parsedEvents_Empty() {
         
         XCTAssertEqual(
-            MIDI.Packet.PacketData(bytes: [], timeStamp: .zero)
+            MIDI.IO.Packet.PacketData(bytes: [], timeStamp: .zero)
                 .parsedEvents(),
             []
         )
@@ -25,7 +25,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
         
@@ -182,7 +182,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         // channel voice
         
         XCTAssertEqual(
-            MIDI.Packet.PacketData(
+            MIDI.IO.Packet.PacketData(
                 bytes: [
                     0x80, 0x3C, 0x40,
                     0x90, 0x3C, 0x40
@@ -196,7 +196,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            MIDI.Packet.PacketData(
+            MIDI.IO.Packet.PacketData(
                 bytes: [
                     0xB1, 0x01, 0x7F,
                     0x96, 0x3C, 0x40,
@@ -216,7 +216,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
     func testPacketData_parsedEvents_RunningStatus_SinglePacket() {
         
         XCTAssertEqual(
-            MIDI.Packet.PacketData(
+            MIDI.IO.Packet.PacketData(
                 bytes: [
                     0x90,
                     0x3C, 0x40,
@@ -231,7 +231,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            MIDI.Packet.PacketData(
+            MIDI.IO.Packet.PacketData(
                 bytes: [
                     0x9F,
                     0x3C, 0x40,
@@ -251,9 +251,9 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
     
     func testPacketData_parsedEvents_RunningStatus_SeparatePackets_Simple() {
         
-        MIDI.MIDI1Parser.default.runningStatus = nil
+        MIDI.IO.MIDI1Parser.default.runningStatus = nil
         
-        var parsed = MIDI.Packet.PacketData(
+        var parsed = MIDI.IO.Packet.PacketData(
             bytes: [
                 0x92,
                 0x3C, 0x40
@@ -268,11 +268,11 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            MIDI.MIDI1Parser.default.runningStatus,
+            MIDI.IO.MIDI1Parser.default.runningStatus,
             0x92
         )
         
-        parsed = MIDI.Packet.PacketData(
+        parsed = MIDI.IO.Packet.PacketData(
             bytes: [
                 0x3E, 0x42
             ],
@@ -286,11 +286,11 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            MIDI.MIDI1Parser.default.runningStatus,
+            MIDI.IO.MIDI1Parser.default.runningStatus,
             0x92
         )
         
-        parsed = MIDI.Packet.PacketData(
+        parsed = MIDI.IO.Packet.PacketData(
             bytes: [
                 0x84,
                 0x01, 0x02
@@ -305,7 +305,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            MIDI.MIDI1Parser.default.runningStatus,
+            MIDI.IO.MIDI1Parser.default.runningStatus,
             0x84
         )
         
@@ -316,7 +316,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
         
@@ -373,7 +373,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
         
@@ -434,7 +434,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
         
@@ -504,7 +504,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
         
@@ -679,7 +679,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.PacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.PacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
         
@@ -729,7 +729,7 @@ final class MIDIEventMIDI1ParserTests: XCTestCase {
         
         // template method
         
-        let parser = MIDI.MIDI1Parser()
+        let parser = MIDI.IO.MIDI1Parser()
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
             parser.parsedEvents(in: bytes, umpGroup: 0)

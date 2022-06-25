@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI {
+extension MIDI.IO {
     
     /// Parser for MIDI 1.0 events.
     ///
@@ -33,7 +33,7 @@ extension MIDI {
         
         /// Parses raw packet data into an array of MIDI Events.
         public func parsedEvents(
-            in packetData: MIDI.Packet.PacketData,
+            in packetData: MIDI.IO.Packet.PacketData,
             umpGroup: MIDI.UInt4 = 0
         ) -> [MIDI.Event] {
             
@@ -382,7 +382,7 @@ extension MIDI {
         ///
         /// Bytes passed into this method should be guaranteed to be a single valid MIDI message.
         ///
-        /// - note: This is a helper method only intended to be called internally from within `MIDI.PacketData.parseEvents()`.
+        /// - note: This is a helper method only intended to be called internally from within `MIDI.IO.Packet.PacketData.parseEvents()`.
         internal static func parseSingleMessage(
             _ bytes: [MIDI.Byte],
             translateNoteOnZeroVelocityToNoteOff: Bool = true,
@@ -583,19 +583,19 @@ extension MIDI {
     
 }
 
-// MARK: - MIDI.Packet Extensions
+// MARK: - MIDI.IO.Packet Extensions
 
-extension MIDI.Packet.PacketData {
+extension MIDI.IO.Packet.PacketData {
     
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     internal func parsedEvents() -> [MIDI.Event] {
         
-        MIDI.MIDI1Parser.default.parsedEvents(in: bytes)
+        MIDI.IO.MIDI1Parser.default.parsedEvents(in: bytes)
         
     }
     
     /// Parse this instance's raw packet data into an array of MIDI Events.
-    internal func parsedEvents(using parser: MIDI.MIDI1Parser) -> [MIDI.Event] {
+    internal func parsedEvents(using parser: MIDI.IO.MIDI1Parser) -> [MIDI.Event] {
         
         parser.parsedEvents(in: self)
         
@@ -603,12 +603,12 @@ extension MIDI.Packet.PacketData {
     
 }
 
-extension MIDI.Packet {
+extension MIDI.IO.Packet {
     
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     internal func parsedMIDI1Events() -> [MIDI.Event] {
         
-        MIDI.MIDI1Parser.default.parsedEvents(in: bytes)
+        MIDI.IO.MIDI1Parser.default.parsedEvents(in: bytes)
         
     }
     

@@ -136,7 +136,7 @@ extension MIDI.Event.Note.Management {
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [MIDI.UMPWord] {
         
-        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
+        let umpMessageType: MIDI.IO.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
         
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         

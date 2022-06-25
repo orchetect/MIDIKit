@@ -129,7 +129,7 @@ extension MIDI.Event.CC {
     }
     
     @inline(__always)
-    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.Packet.UniversalPacketData.MessageType {
+    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.IO.Packet.UniversalPacketData.MessageType {
         
         switch midiProtocol {
         case ._1_0:

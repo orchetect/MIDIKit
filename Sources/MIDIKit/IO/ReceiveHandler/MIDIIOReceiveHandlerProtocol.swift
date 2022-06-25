@@ -12,7 +12,7 @@ public protocol MIDIIOReceiveHandlerProtocol {
     /// (deprecated after macOS 11 / iOS 14)
     @inline(__always)
     func packetListReceived(
-        _ packets: [MIDI.Packet.PacketData]
+        _ packets: [MIDI.IO.Packet.PacketData]
     )
     
     /// CoreMIDI `MIDIReceiveBlock`
@@ -20,7 +20,7 @@ public protocol MIDIIOReceiveHandlerProtocol {
     @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
     @inline(__always)
     func eventListReceived(
-        _ packets: [MIDI.Packet.UniversalPacketData],
+        _ packets: [MIDI.IO.Packet.UniversalPacketData],
         protocol midiProtocol: MIDI.IO.ProtocolVersion
     )
     

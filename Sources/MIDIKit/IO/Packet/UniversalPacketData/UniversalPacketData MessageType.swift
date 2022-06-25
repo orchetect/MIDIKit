@@ -1,10 +1,11 @@
 //
-//  UniversalMIDIPacket MessageType.swift
+//  UniversalPacketData MessageType.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI.Packet.UniversalPacketData {
+extension MIDI.IO.Packet.UniversalPacketData {
     
+    /// Universal MIDI Packet Message Type
     public enum MessageType: MIDI.Nibble, CaseIterable {
         
         case utility                 = 0x0
@@ -20,8 +21,9 @@ extension MIDI.Packet.UniversalPacketData {
     
 }
 
-extension MIDI.Packet.UniversalPacketData.MessageType {
+extension MIDI.IO.Packet.UniversalPacketData.MessageType {
     
+    /// Returns the number of words associated with the Universal MIDI Packet Message Type.
     @inline(__always)
     public var wordLength: Int {
         
@@ -38,8 +40,9 @@ extension MIDI.Packet.UniversalPacketData.MessageType {
     
 }
 
-extension MIDI.Packet.UniversalPacketData {
+extension MIDI.IO.Packet.UniversalPacketData {
     
+    /// Universal MIDI Packet SysEx Status Field
     public enum SysExStatusField: MIDI.Nibble, CaseIterable {
         
         /// Complete System Exclusive Message in one UMP System Exclusive.

@@ -71,7 +71,7 @@ extension MIDI.Event.SongPositionPointer {
     @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
         
-        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
+        let umpMessageType: MIDI.IO.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
         
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         

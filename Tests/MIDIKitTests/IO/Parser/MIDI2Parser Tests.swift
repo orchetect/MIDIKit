@@ -13,7 +13,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
     func testUniversalPacketData_parsedEvents_Empty() {
         
         XCTAssertEqual(
-            MIDI.Packet.UniversalPacketData(bytes: [], timeStamp: .zero)
+            MIDI.IO.Packet.UniversalPacketData(bytes: [], timeStamp: .zero)
                 .parsedEvents(),
             []
         )
@@ -25,7 +25,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
         
@@ -80,7 +80,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
         
@@ -177,7 +177,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
         
@@ -332,7 +332,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         // template method
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
         
@@ -594,10 +594,10 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         
         // template method
         
-        var parser = MIDI.MIDI2Parser()
+        var parser = MIDI.IO.MIDI2Parser()
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents(using: parser)
         }
         
@@ -627,7 +627,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         // SysEx7 multi-part
         // -----------------
         
-        parser = MIDI.MIDI2Parser()
+        parser = MIDI.IO.MIDI2Parser()
         
         // sysex start (1/2)
         XCTAssertEqual(parsedEvents(bytes: [0x32, 0x16, 0x7D, 0x01,
@@ -641,7 +641,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
                                 data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07],
                                 group: 2)])
         
-        parser = MIDI.MIDI2Parser()
+        parser = MIDI.IO.MIDI2Parser()
         
         // sysex start (1/3)
         XCTAssertEqual(parsedEvents(bytes: [0x32, 0x16, 0x7D, 0x01,
@@ -668,10 +668,10 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         
         // template method
         
-        var parser = MIDI.MIDI2Parser()
+        var parser = MIDI.IO.MIDI2Parser()
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents(using: parser)
         }
         
@@ -713,7 +713,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         // UniversalSysEx7 multi-part
         // --------------------------
         
-        parser = MIDI.MIDI2Parser()
+        parser = MIDI.IO.MIDI2Parser()
         
         // sysex start (1/2)
         XCTAssertEqual(parsedEvents(bytes: [0x32, 0x16,
@@ -732,7 +732,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
                                        0x08, 0x09, 0x0A, 0x0B],
                                 group: 2)])
         
-        parser = MIDI.MIDI2Parser()
+        parser = MIDI.IO.MIDI2Parser()
         
         // sysex start (1/3)
         XCTAssertEqual(parsedEvents(bytes: [0x32, 0x16,
@@ -764,10 +764,10 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         
         // template method
         
-        var parser = MIDI.MIDI2Parser()
+        var parser = MIDI.IO.MIDI2Parser()
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents(using: parser)
         }
         
@@ -811,7 +811,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         // SysEx8 multi-part
         // -----------------
         
-        parser = MIDI.MIDI2Parser()
+        parser = MIDI.IO.MIDI2Parser()
         
         // sysex start (1/2)
         XCTAssertEqual(parsedEvents(bytes: [0x52, 0x1E,
@@ -835,7 +835,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
                                        0x09, 0x0A, 0xE6, 0x01, 0x02],
                                 group: 2)])
         
-        parser = MIDI.MIDI2Parser()
+        parser = MIDI.IO.MIDI2Parser()
         
         // sysex start (1/3)
         XCTAssertEqual(parsedEvents(bytes: [0x52, 0x1E,
@@ -878,10 +878,10 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         
         // template method
         
-        var parser = MIDI.MIDI2Parser()
+        var parser = MIDI.IO.MIDI2Parser()
         
         func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
-            MIDI.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+            MIDI.IO.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents(using: parser)
         }
         
@@ -934,7 +934,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         // UniversalSysEx8 multi-part
         // --------------------------
         
-        parser = MIDI.MIDI2Parser()
+        parser = MIDI.IO.MIDI2Parser()
         
         // sysex start (1/2)
         XCTAssertEqual(parsedEvents(bytes: [0x52, 0x1E,
@@ -961,7 +961,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
                                                 0x10, 0x11],
                                          group: 2)])
         
-        parser = MIDI.MIDI2Parser()
+        parser = MIDI.IO.MIDI2Parser()
         
         // sysex start (1/3)
         XCTAssertEqual(parsedEvents(bytes: [0x52, 0x1E,

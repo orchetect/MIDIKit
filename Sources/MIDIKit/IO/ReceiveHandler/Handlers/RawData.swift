@@ -8,18 +8,18 @@ extension MIDI.IO.ReceiveHandler {
     /// Basic raw packet data receive handler.
     public class RawData: MIDIIOReceiveHandlerProtocol {
         
-        public typealias Handler = (_ packet: MIDI.Packet) -> Void
+        public typealias Handler = (_ packet: MIDI.IO.Packet) -> Void
         
         @inline(__always)
         public var handler: Handler
         
         @inline(__always)
         public func packetListReceived(
-            _ packets: [MIDI.Packet.PacketData]
+            _ packets: [MIDI.IO.Packet.PacketData]
         ) {
             
             for midiPacket in packets {
-                let typeErasedPacket = MIDI.Packet.packet(midiPacket)
+                let typeErasedPacket = MIDI.IO.Packet.packet(midiPacket)
                 handler(typeErasedPacket)
             }
             
@@ -28,12 +28,12 @@ extension MIDI.IO.ReceiveHandler {
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
         @inline(__always)
         public func eventListReceived(
-            _ packets: [MIDI.Packet.UniversalPacketData],
+            _ packets: [MIDI.IO.Packet.UniversalPacketData],
             protocol midiProtocol: MIDI.IO.ProtocolVersion
         ) {
             
             for midiPacket in packets {
-                let typeErasedPacket = MIDI.Packet.universalPacket(midiPacket)
+                let typeErasedPacket = MIDI.IO.Packet.universalPacket(midiPacket)
                 handler(typeErasedPacket)
             }
             

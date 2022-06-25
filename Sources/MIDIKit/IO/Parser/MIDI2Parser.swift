@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI {
+extension MIDI.IO {
     
     /// Parser for MIDI 2.0 events.
     ///
@@ -30,7 +30,7 @@ extension MIDI {
         // MARK: - Public Parser Methods
         
         /// Parses raw packet data into an array of MIDI Events.
-        public func parsedEvents(in packetData: MIDI.Packet.UniversalPacketData) -> [MIDI.Event] {
+        public func parsedEvents(in packetData: MIDI.IO.Packet.UniversalPacketData) -> [MIDI.Event] {
             
             parsedEvents(in: packetData.bytes)
             
@@ -53,7 +53,7 @@ extension MIDI {
             let byte0 = bytes[bytes.startIndex]
             let byte0Nibbles = byte0.nibbles
             
-            guard let messageType = MIDI.Packet.UniversalPacketData
+            guard let messageType = MIDI.IO.Packet.UniversalPacketData
                     .MessageType(rawValue: byte0Nibbles.high)
             else { return events }
             let group = byte0Nibbles.low
@@ -371,10 +371,10 @@ extension MIDI {
                 bytes[bytes.startIndex.advanced(by: offset)]
             }
             func word2() -> MIDI.UMPWord {
-                UMPWord(bytes[bytes.startIndex.advanced(by: 3)],
-                        bytes[bytes.startIndex.advanced(by: 4)],
-                        bytes[bytes.startIndex.advanced(by: 5)],
-                        bytes[bytes.startIndex.advanced(by: 6)])
+                MIDI.UMPWord(bytes[bytes.startIndex.advanced(by: 3)],
+                             bytes[bytes.startIndex.advanced(by: 4)],
+                             bytes[bytes.startIndex.advanced(by: 5)],
+                             bytes[bytes.startIndex.advanced(by: 6)])
             }
             func word2A() -> UInt16 {
                 (UInt16(bytes[bytes.startIndex.advanced(by: 3)]) << 8)
@@ -544,7 +544,7 @@ extension MIDI {
             
             let byte1Nibbles = bytes[bytes.startIndex].nibbles
             
-            guard let sysExStatusField = MIDI.Packet.UniversalPacketData
+            guard let sysExStatusField = MIDI.IO.Packet.UniversalPacketData
                     .SysExStatusField(rawValue: byte1Nibbles.high)
             else { return nil }
             
@@ -620,7 +620,7 @@ extension MIDI {
             
             let byte1Nibbles = bytes[bytes.startIndex].nibbles
             
-            guard let sysExStatusField = MIDI.Packet.UniversalPacketData
+            guard let sysExStatusField = MIDI.IO.Packet.UniversalPacketData
                     .SysExStatusField(rawValue: byte1Nibbles.high)
             else { return nil }
             
@@ -704,19 +704,19 @@ extension MIDI {
     
 }
 
-// MARK: - MIDI.Packet Extensions
+// MARK: - MIDI.IO.Packet Extensions
 
-extension MIDI.Packet.UniversalPacketData {
+extension MIDI.IO.Packet.UniversalPacketData {
     
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     internal func parsedEvents() -> [MIDI.Event] {
         
-        MIDI.MIDI2Parser.default.parsedEvents(in: bytes)
+        MIDI.IO.MIDI2Parser.default.parsedEvents(in: bytes)
         
     }
     
     /// Parse this instance's raw packet data into an array of MIDI Events.
-    internal func parsedEvents(using parser: MIDI.MIDI2Parser) -> [MIDI.Event] {
+    internal func parsedEvents(using parser: MIDI.IO.MIDI2Parser) -> [MIDI.Event] {
         
         parser.parsedEvents(in: self)
         
@@ -724,12 +724,12 @@ extension MIDI.Packet.UniversalPacketData {
     
 }
 
-extension MIDI.Packet {
+extension MIDI.IO.Packet {
     
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     internal func parsedMIDI2Events() -> [MIDI.Event] {
         
-        MIDI.MIDI2Parser.default.parsedEvents(in: bytes)
+        MIDI.IO.MIDI2Parser.default.parsedEvents(in: bytes)
         
     }
     

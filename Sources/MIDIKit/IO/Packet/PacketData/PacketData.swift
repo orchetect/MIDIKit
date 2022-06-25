@@ -5,7 +5,7 @@
 
 @_implementationOnly import CoreMIDI
 
-extension MIDI.Packet {
+extension MIDI.IO.Packet {
     
     /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIPacket` (MIDI 1.0).
     public struct PacketData {
@@ -30,7 +30,7 @@ extension MIDI.Packet {
     
 }
 
-extension MIDI.Packet.PacketData {
+extension MIDI.IO.Packet.PacketData {
     
     @inline(__always)
     internal init(_ midiPacketPtr: UnsafePointer<MIDIPacket>) {
@@ -43,12 +43,12 @@ extension MIDI.Packet.PacketData {
     fileprivate static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
     
     @inline(__always)
-    fileprivate static func unwrapPacket(_ midiPacketPtr: UnsafePointer<MIDIPacket>) -> MIDI.Packet.PacketData {
+    fileprivate static func unwrapPacket(_ midiPacketPtr: UnsafePointer<MIDIPacket>) -> MIDI.IO.Packet.PacketData {
         
         let packetDataCount = Int(midiPacketPtr.pointee.length)
         
         guard packetDataCount > 0 else {
-            return MIDI.Packet.PacketData(
+            return MIDI.IO.Packet.PacketData(
                 bytes: [],
                 timeStamp: midiPacketPtr.pointee.timeStamp
             )
@@ -61,7 +61,7 @@ extension MIDI.Packet.PacketData {
             count: packetDataCount
         )
         
-        return MIDI.Packet.PacketData(
+        return MIDI.IO.Packet.PacketData(
             bytes: Array<MIDI.Byte>(rawMIDIPacketDataPtr),
             timeStamp: midiPacketPtr.pointee.timeStamp
         )

@@ -110,7 +110,7 @@ extension MIDI.Event.SysEx8 {
             
         let maxDataBytesPerPacket = 13
         
-        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data128bit
+        let umpMessageType: MIDI.IO.Packet.UniversalPacketData.MessageType = .data128bit
         
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
@@ -126,7 +126,7 @@ extension MIDI.Event.SysEx8 {
         
         while rawDataPosition < data.count {
             
-            let status: MIDI.Packet.UniversalPacketData.SysExStatusField
+            let status: MIDI.IO.Packet.UniversalPacketData.SysExStatusField
             switch rawDataPosition {
             case 0:
                 status = rawDataByteCountRemaining <= maxDataBytesPerPacket ? .complete : .start

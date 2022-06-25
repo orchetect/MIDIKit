@@ -5,7 +5,7 @@
 
 @_implementationOnly import CoreMIDI
 
-extension MIDI.Packet {
+extension MIDI.IO.Packet {
     
     /// Clean consolidated data encapsulation of raw data from a CoreMIDI `MIDIEventPacket` (Universal MIDI Packet).
     public struct UniversalPacketData {
@@ -42,7 +42,7 @@ extension MIDI.Packet {
 }
 
 @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
-extension MIDI.Packet.UniversalPacketData {
+extension MIDI.IO.Packet.UniversalPacketData {
     
     /// Universal MIDI Packet
     @inline(__always)
@@ -63,12 +63,12 @@ extension MIDI.Packet.UniversalPacketData {
     @inline(__always)
     fileprivate static func unwrapPacket(
         _ eventPacketPtr: UnsafePointer<MIDIEventPacket>
-    ) -> MIDI.Packet.UniversalPacketData {
+    ) -> MIDI.IO.Packet.UniversalPacketData {
         
         let wordCollection = eventPacketPtr.words()
         
         guard wordCollection.count > 0 else {
-            return MIDI.Packet.UniversalPacketData(
+            return MIDI.IO.Packet.UniversalPacketData(
                 words: [],
                 timeStamp: eventPacketPtr.pointee.timeStamp
             )
@@ -76,7 +76,7 @@ extension MIDI.Packet.UniversalPacketData {
         
         guard wordCollection.count <= 64 else {
             assertionFailure("Received MIDIEventPacket reporting \(wordCollection.count) words.")
-            return MIDI.Packet.UniversalPacketData(
+            return MIDI.IO.Packet.UniversalPacketData(
                 words: [],
                 timeStamp: eventPacketPtr.pointee.timeStamp
             )
@@ -89,7 +89,7 @@ extension MIDI.Packet.UniversalPacketData {
             words.append(word)
         }
         
-        return MIDI.Packet.UniversalPacketData(
+        return MIDI.IO.Packet.UniversalPacketData(
             words: words,
             timeStamp: eventPacketPtr.pointee.timeStamp
         )
@@ -99,17 +99,17 @@ extension MIDI.Packet.UniversalPacketData {
     @inline(__always)
     fileprivate static func packetUnwrapper(
         _ eventPacket: MIDIEventPacket
-    ) -> MIDI.Packet.UniversalPacketData {
+    ) -> MIDI.IO.Packet.UniversalPacketData {
         
         var localEventPacket = eventPacket
         
         return withUnsafePointer(to: localEventPacket)
-        { unsafePtr -> MIDI.Packet.UniversalPacketData in
+        { unsafePtr -> MIDI.IO.Packet.UniversalPacketData in
             
             let wordCollection = MIDIEventPacket.WordCollection(&localEventPacket)
             
             guard wordCollection.count > 0 else {
-                return MIDI.Packet.UniversalPacketData(
+                return MIDI.IO.Packet.UniversalPacketData(
                     words: [],
                     timeStamp: localEventPacket.timeStamp
                 )
@@ -117,7 +117,7 @@ extension MIDI.Packet.UniversalPacketData {
             
             guard wordCollection.count <= 64 else {
                 assertionFailure("Received MIDIEventPacket reporting \(wordCollection.count) words.")
-                return MIDI.Packet.UniversalPacketData(
+                return MIDI.IO.Packet.UniversalPacketData(
                     words: [],
                     timeStamp: localEventPacket.timeStamp
                 )
@@ -130,7 +130,7 @@ extension MIDI.Packet.UniversalPacketData {
                 words.append(word)
             }
             
-            return MIDI.Packet.UniversalPacketData(
+            return MIDI.IO.Packet.UniversalPacketData(
                 words: words,
                 timeStamp: localEventPacket.timeStamp
             )

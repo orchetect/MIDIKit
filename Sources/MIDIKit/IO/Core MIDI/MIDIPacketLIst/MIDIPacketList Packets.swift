@@ -11,7 +11,7 @@ extension UnsafePointer where Pointee == MIDIPacketList {
     /// Internal:
     /// Returns array of MIDIKit `PacketData` instances.
     @inline(__always)
-    internal func packets() -> [MIDI.Packet.PacketData] {
+    internal func packets() -> [MIDI.IO.Packet.PacketData] {
         
         if pointee.numPackets == 0 {
             return []
@@ -21,12 +21,12 @@ extension UnsafePointer where Pointee == MIDIPacketList {
         
         if #available(macOS 10.15, iOS 13.0, macCatalyst 13.0, *) {
             return unsafeSequence().map {
-                MIDI.Packet.PacketData($0)
+                MIDI.IO.Packet.PacketData($0)
             }
         } else {
-            var packetDatas: [MIDI.Packet.PacketData] = []
+            var packetDatas: [MIDI.IO.Packet.PacketData] = []
             pointee.iteratePackets {
-                packetDatas.append(MIDI.Packet.PacketData($0))
+                packetDatas.append(MIDI.IO.Packet.PacketData($0))
             }
             return packetDatas
         }

@@ -1,9 +1,9 @@
 //
-//  MIDI Packet.swift
+//  Packet.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-extension MIDI {
+extension MIDI.IO {
     
     /// A type that can hold any MIDI packet type.
     public enum Packet {
