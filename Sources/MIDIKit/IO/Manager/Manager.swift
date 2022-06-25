@@ -108,7 +108,8 @@ extension MIDI.IO {
             if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
             
             // manager event queue
-            let eventQueueName = (Bundle.main.bundleIdentifier ?? "unknown") + ".midiManager." + clientNameForQueue + ".events"
+            let eventQueueName = (Bundle.main.bundleIdentifier ?? "unknown")
+                + ".midiManager." + clientNameForQueue + ".events"
             eventQueue = DispatchQueue(label: eventQueueName,
                                        qos: .userInteractive,
                                        attributes: [],
