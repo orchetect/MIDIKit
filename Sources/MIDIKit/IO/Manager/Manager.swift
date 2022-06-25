@@ -131,6 +131,7 @@ extension MIDI.IO {
         }
         
         deinit {
+            
             eventQueue.sync {
                 // Apple docs:
                 // "Don’t explicitly dispose of your client; the system automatically disposes all clients when an app terminates. However, if you call this method to dispose the last or only client owned by an app, the MIDI server may exit if there are no other clients remaining in the system"
@@ -138,6 +139,7 @@ extension MIDI.IO {
                 
                 NotificationCenter.default.removeObserver(self)
             }
+            
         }
         
         // MARK: - Helper methods
