@@ -27,11 +27,9 @@ extension MIDI.IO {
         /// MIDI Manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
         public internal(set) var manufacturer: String = ""
         
-        /// Preferred underlying Core MIDI API to use as default when creating new managed endpoints.
+        /// Preferred underlying Core MIDI API to use as default when creating new managed endpoints. This value defaults to the best API for the current platform.
         ///
         /// The preferred API will be used where possible, unless operating system requirements force the use of a specific.
-        ///
-        /// - Note: Currently, legacy API is recommended as it is more stable. (New API is experimental due to bugs in Core MIDI itself, until workarounds or resolutions can be found.)
         public var preferredAPI: MIDI.IO.APIVersion {
             didSet {
                 // prevent setting of an invalid API
