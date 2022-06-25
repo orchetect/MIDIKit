@@ -159,15 +159,11 @@ class MIDIHelper: ObservableObject {
     // MARK: - Helpers
     
     public func isInputPresentInSystem(uniqueID: MIDI.IO.UniqueID) -> Bool {
-        midiManager?.endpoints.inputs
-            .contains(where: { $0.uniqueID == uniqueID })
-        ?? false
+        midiManager?.endpoints.inputs.contains(whereUniqueID: uniqueID) ?? false
     }
     
     public func isOutputPresentInSystem(uniqueID: MIDI.IO.UniqueID) -> Bool {
-        midiManager?.endpoints.outputs
-            .contains(where: { $0.uniqueID == uniqueID })
-        ?? false
+        midiManager?.endpoints.outputs.contains(whereUniqueID: uniqueID) ?? false
     }
     
 }

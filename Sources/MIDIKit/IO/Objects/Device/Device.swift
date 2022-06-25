@@ -85,7 +85,7 @@ extension MIDI.IO.Device {
     public var exists: Bool {
         
         MIDI.IO.getSystemDevices
-            .contains(where: { $0.uniqueID == self.uniqueID })
+            .contains(whereUniqueID: self.uniqueID)
         
     }
     

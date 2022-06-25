@@ -58,10 +58,11 @@ extension MIDI.IO {
             inputs = MIDI.IO.getSystemDestinationEndpoints
             
             if let manager = manager {
-                inputsUnowned = inputs.filter { systemEndpoint in
-                    !manager.managedInputs.contains(where: {
-                        $0.value.uniqueID == systemEndpoint.uniqueID
-                    })
+                let managedInputsIDs = manager.managedInputs.values
+                    .compactMap { $0.uniqueID }
+                
+                inputsUnowned = inputs.filter {
+                    !managedInputsIDs.contains($0.uniqueID)
                 }
             } else {
                 inputsUnowned = inputs
@@ -70,10 +71,11 @@ extension MIDI.IO {
             outputs = MIDI.IO.getSystemSourceEndpoints
             
             if let manager = manager {
-                outputsUnowned = outputs.filter { systemEndpoint in
-                    !manager.managedOutputs.contains(where: {
-                        $0.value.uniqueID == systemEndpoint.uniqueID
-                    })
+                let managedOutputsIDs = manager.managedOutputs.values
+                    .compactMap { $0.uniqueID }
+                
+                outputsUnowned = outputs.filter {
+                    !managedOutputsIDs.contains($0.uniqueID)
                 }
             } else {
                 outputsUnowned = outputs

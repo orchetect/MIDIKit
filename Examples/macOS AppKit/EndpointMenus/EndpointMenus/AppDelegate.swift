@@ -155,7 +155,7 @@ extension AppDelegate {
         // If selected endpoint doesn't exist in the system, show it in the menu as missing but still selected.
         // The MIDI Manager will auto-reconnect to it if it reappears in the system in this condition.
         if midiInMenuSelectedID != 0,
-           !sortedEndpoints.contains(where: { $0.uniqueID == midiInMenuSelectedID }) {
+           !sortedEndpoints.contains(whereUniqueID: midiInMenuSelectedID) {
             let newMenuItem = NSMenuItem(title: "⚠️ " + midiInMenuSelectedDisplayName,
                                          action: #selector(midiInMenuItemSelected),
                                          keyEquivalent: "")
@@ -244,7 +244,7 @@ extension AppDelegate {
         // If selected endpoint doesn't exist in the system, show it in the menu as missing but still selected.
         // The MIDI Manager will auto-reconnect to it if it reappears in the system in this condition.
         if midiOutMenuSelectedID != 0,
-           !sortedEndpoints.contains(where: { $0.uniqueID == midiOutMenuSelectedID }) {
+           !sortedEndpoints.contains(whereUniqueID: midiOutMenuSelectedID) {
             let newMenuItem = NSMenuItem(title: "⚠️ " + midiOutMenuSelectedDisplayName,
                                          action: #selector(midiOutMenuItemSelected),
                                          keyEquivalent: "")
