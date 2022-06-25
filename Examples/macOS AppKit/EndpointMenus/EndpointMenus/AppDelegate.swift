@@ -197,10 +197,9 @@ extension AppDelegate {
         if midiInMenuSelectedID == 0 {
             midiInputConnection.removeAllOutputs()
         } else {
-            let uID = MIDI.IO.OutputEndpoint.UniqueID(midiInMenuSelectedID)
-            if midiInputConnection.outputsCriteria != [.uniqueID(uID)] {
+            if midiInputConnection.outputsCriteria != [.uniqueID(midiInMenuSelectedID)] {
                 midiInputConnection.removeAllOutputs()
-                midiInputConnection.add(outputs: [.uniqueID(uID)])
+                midiInputConnection.add(outputs: [.uniqueID(midiInMenuSelectedID)])
             }
         }
     }
@@ -284,10 +283,9 @@ extension AppDelegate {
         if midiOutMenuSelectedID == 0 {
             midiOutputConnection.removeAllInputs()
         } else {
-            let uID = MIDI.IO.InputEndpoint.UniqueID(midiOutMenuSelectedID)
-            if midiOutputConnection.inputsCriteria != [.uniqueID(uID)] {
+            if midiOutputConnection.inputsCriteria != [.uniqueID(midiOutMenuSelectedID)] {
                 midiOutputConnection.removeAllInputs()
-                midiOutputConnection.add(inputs: [.uniqueID(uID)])
+                midiOutputConnection.add(inputs: [.uniqueID(midiOutMenuSelectedID)])
             }
         }
     }
