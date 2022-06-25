@@ -119,7 +119,7 @@ extension MIDI.IO.EndpointIDCriteria: CustomStringConvertible {
 
 extension MIDI.IO.EndpointIDCriteria {
     
-    /// A MIDI endpoint.
+    /// Returns endpoint ID criteria generated from a MIDI endpoint.
     public static func endpoint<T: MIDIIOEndpointProtocol>(_ endpoint: T) -> Self {
         
         if !endpoint.displayName.isEmpty {
@@ -141,13 +141,11 @@ extension MIDI.IO.EndpointIDCriteria {
         switch self {
         case .name(let endpointName):
             return endpoints
-                .filter(name: endpointName)
-                .first
+                .first(whereName: endpointName)
             
         case .displayName(let endpointName):
             return endpoints
-                .filter(displayName: endpointName)
-                .first
+                .first(whereDisplayName: endpointName)
             
         case .uniqueID(let uniqueID):
             return endpoints

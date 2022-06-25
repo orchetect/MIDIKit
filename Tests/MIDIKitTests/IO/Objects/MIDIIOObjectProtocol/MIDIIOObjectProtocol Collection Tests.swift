@@ -28,11 +28,19 @@ final class MIDIIOObjectProtocol_Collection_Tests: XCTestCase {
                 .init(ref: 1001, name: "C", displayName: "A", uniqueID: -1001)
             ])
         
+        XCTAssertEqual(
+            elements.sortedByDisplayName(), // this works because it's an array of endpoints
+            [
+                .init(ref: 1001, name: "C", displayName: "A", uniqueID: -1001),
+                .init(ref: 1002, name: "A", displayName: "B", uniqueID: -1002),
+                .init(ref: 1000, name: "B", displayName: "C", uniqueID: -1000),
+            ])
+        
     }
     
     // MARK: - first
     
-    func testFirstWithName() {
+    func testFirstWhereName() {
         
         let elements: [MIDI.IO.InputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "C", uniqueID: -1000),
@@ -43,17 +51,17 @@ final class MIDIIOObjectProtocol_Collection_Tests: XCTestCase {
         ]
         
         XCTAssertEqual(
-            elements.first(withName: "Port A"),
+            elements.first(whereName: "Port A"),
             .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003)
         )
         
         XCTAssertNil(
-            elements.first(withName: "Port E")
+            elements.first(whereName: "Port E")
         )
         
     }
     
-    func testFirstWithNameIgnoringEmpty() {
+    func testFirstWhereNameIgnoringEmpty() {
         
         let elements: [MIDI.IO.InputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "C", uniqueID: -1000),
@@ -64,12 +72,12 @@ final class MIDIIOObjectProtocol_Collection_Tests: XCTestCase {
         ]
         
         XCTAssertEqual(
-            elements.first(withName: "", ignoringEmpty: false),
+            elements.first(whereName: "", ignoringEmpty: false),
             .init(ref: 1004, name: "", displayName: "", uniqueID: -1004)
         )
         
         XCTAssertNil(
-            elements.first(withName: "", ignoringEmpty: true)
+            elements.first(whereName: "", ignoringEmpty: true)
         )
         
     }
@@ -95,9 +103,71 @@ final class MIDIIOObjectProtocol_Collection_Tests: XCTestCase {
         
     }
     
+    // MARK: - contains
+    
+    func testContainsWhereName() {
+        
+        let elements: [MIDI.IO.InputEndpoint] = [
+            .init(ref: 1000, name: "Port B", displayName: "C", uniqueID: -1000),
+            .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003),
+            .init(ref: 1001, name: "Port C", displayName: "A", uniqueID: -1001),
+            .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
+            .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
+        ]
+        
+        XCTAssertTrue(
+            elements.contains(whereName: "Port A")
+        )
+        
+        XCTAssertFalse(
+            elements.contains(whereName: "Port E")
+        )
+        
+    }
+    
+    func testContainsWhereNameIgnoringEmpty() {
+        
+        let elements: [MIDI.IO.InputEndpoint] = [
+            .init(ref: 1000, name: "Port B", displayName: "C", uniqueID: -1000),
+            .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003),
+            .init(ref: 1001, name: "Port C", displayName: "A", uniqueID: -1001),
+            .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
+            .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
+        ]
+        
+        XCTAssertTrue(
+            elements.contains(whereName: "", ignoringEmpty: false)
+        )
+        
+        XCTAssertFalse(
+            elements.contains(whereName: "", ignoringEmpty: true)
+        )
+        
+    }
+    
+    func testContainsWhereUniqueID() {
+        
+        let elements: [MIDI.IO.InputEndpoint] = [
+            .init(ref: 1000, name: "Port B", displayName: "C", uniqueID: -1000),
+            .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003),
+            .init(ref: 1001, name: "Port C", displayName: "A", uniqueID: -1001),
+            .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
+            .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
+        ]
+        
+        XCTAssertTrue(
+            elements.contains(whereUniqueID: -1002)
+        )
+        
+        XCTAssertFalse(
+            elements.contains(whereUniqueID: -2000)
+        )
+        
+    }
+    
     // MARK: - filter
     
-    func testFilterName() {
+    func testFilterWhereName() {
         
         let elements: [MIDI.IO.InputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "1", uniqueID: -1000),
@@ -108,7 +178,7 @@ final class MIDIIOObjectProtocol_Collection_Tests: XCTestCase {
         ]
         
         XCTAssertEqual(
-            elements.filter(name: "Port A"),
+            elements.filter(whereName: "Port A"),
             [
                 .init(ref: 1003, name: "Port A", displayName: "2", uniqueID: -1003),
                 .init(ref: 1002, name: "Port A", displayName: "4", uniqueID: -1002)
@@ -116,20 +186,20 @@ final class MIDIIOObjectProtocol_Collection_Tests: XCTestCase {
         )
         
         XCTAssertEqual(
-            elements.filter(name: ""),
+            elements.filter(whereName: ""),
             [
                 .init(ref: 1004, name: "",       displayName: "5", uniqueID: -1004)
             ]
         )
         
         XCTAssertEqual(
-            elements.filter(name: "Port D"),
+            elements.filter(whereName: "Port D"),
             []
         )
         
     }
     
-    func testFilterNameIgnoringEmpty() {
+    func testFilterWhereNameIgnoringEmpty() {
         
         let elements: [MIDI.IO.InputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "1", uniqueID: -1000),
@@ -140,7 +210,7 @@ final class MIDIIOObjectProtocol_Collection_Tests: XCTestCase {
         ]
         
         XCTAssertEqual(
-            elements.filter(name: "Port A", ignoringEmpty: true),
+            elements.filter(whereName: "Port A", ignoringEmpty: true),
             [
                 .init(ref: 1003, name: "Port A", displayName: "2", uniqueID: -1003),
                 .init(ref: 1002, name: "Port A", displayName: "4", uniqueID: -1002)
@@ -148,14 +218,14 @@ final class MIDIIOObjectProtocol_Collection_Tests: XCTestCase {
         )
         
         XCTAssertEqual(
-            elements.filter(name: "", ignoringEmpty: false),
+            elements.filter(whereName: "", ignoringEmpty: false),
             [
                 .init(ref: 1004, name: "",       displayName: "5", uniqueID: -1004)
             ]
         )
         
         XCTAssertEqual(
-            elements.filter(name: "", ignoringEmpty: true),
+            elements.filter(whereName: "", ignoringEmpty: true),
             []
         )
         
