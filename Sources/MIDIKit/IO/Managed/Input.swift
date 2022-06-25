@@ -28,10 +28,10 @@ extension MIDI.IO {
         public private(set) var endpointName: String = ""
         
         /// The port's unique ID in the system.
-        public private(set) var uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil
+        public private(set) var uniqueID: MIDI.IO.UniqueID? = nil
         
         /// The Core MIDI port reference.
-        public private(set) var coreMIDIInputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
+        public private(set) var coreMIDIInputPortRef: MIDI.IO.PortRef? = nil
         
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
@@ -47,7 +47,7 @@ extension MIDI.IO {
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
         internal init(name: String,
-                      uniqueID: MIDI.IO.InputEndpoint.UniqueID? = nil,
+                      uniqueID: MIDI.IO.UniqueID? = nil,
                       receiveHandler: MIDI.IO.ReceiveHandler.Definition,
                       midiManager: MIDI.IO.Manager,
                       api: MIDI.IO.APIVersion = .bestForPlatform()) {
@@ -86,7 +86,7 @@ extension MIDI.IO.Input {
             return nil
         }
         
-        if let endpoint = MIDI.IO.getSystemDestinationEndpoint(matching: unwrappedUniqueID.coreMIDIUniqueID) {
+        if let endpoint = MIDI.IO.getSystemDestinationEndpoint(matching: unwrappedUniqueID) {
             return endpoint
         }
         
@@ -165,7 +165,7 @@ extension MIDI.IO.Input {
         if let unwrappedUniqueID = self.uniqueID {
             // inject previously-stored unique ID into port
             try MIDI.IO.setUniqueID(of: newPortRef,
-                                    to: unwrappedUniqueID.coreMIDIUniqueID)
+                                    to: unwrappedUniqueID)
         } else {
             // if managed ID is nil, either it was not supplied or it was already in use
             // so fetch the new ID from the port we just created

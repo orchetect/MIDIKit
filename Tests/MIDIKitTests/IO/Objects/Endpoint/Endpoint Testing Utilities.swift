@@ -11,10 +11,10 @@ extension MIDI.IO.InputEndpoint {
     
     /// Unit testing only:
     /// Manually mock an endpoint with custom name, display name, and unique ID.
-    internal init(ref: MIDI.IO.CoreMIDIEndpointRef,
+    internal init(ref: MIDI.IO.EndpointRef,
                   name: String,
                   displayName: String,
-                  uniqueID: UniqueID) {
+                  uniqueID: MIDI.IO.UniqueID) {
         
         self.init(ref)
         self.name = name
@@ -29,10 +29,10 @@ extension MIDI.IO.OutputEndpoint {
     
     /// Unit testing only:
     /// Manually mock an endpoint with custom name, display name, and unique ID.
-    internal init(ref: MIDI.IO.CoreMIDIEndpointRef,
+    internal init(ref: MIDI.IO.EndpointRef,
                   name: String,
                   displayName: String,
-                  uniqueID: UniqueID) {
+                  uniqueID: MIDI.IO.UniqueID) {
         
         self.init(ref)
         self.name = name

@@ -24,13 +24,13 @@ extension MIDI.IO {
         /// (`kMIDIPropertyUniqueID`)
         public internal(set) var uniqueID: UniqueID = 0
         
-        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEntityRef
+        public let coreMIDIObjectRef: MIDI.IO.EntityRef
         
         // MARK: Init
         
-        internal init(_ ref: MIDI.IO.CoreMIDIEntityRef) {
+        internal init(_ ref: MIDI.IO.EntityRef) {
             
-            assert(ref != MIDI.IO.CoreMIDIEntityRef())
+            assert(ref != MIDI.IO.EntityRef())
             
             self.coreMIDIObjectRef = ref
             update()
@@ -61,7 +61,7 @@ extension MIDI.IO.Entity: Hashable {
 
 extension MIDI.IO.Entity: Identifiable {
     
-    public typealias ID = MIDI.IO.CoreMIDIObjectRef
+    public typealias ID = MIDI.IO.ObjectRef
     
     public var id: ID { coreMIDIObjectRef }
     

@@ -22,6 +22,14 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        /// Channel Voice Message: Control Change (CC)
+        /// (MIDI 1.0 / 2.0)
+        ///
+        /// - Parameters:
+        ///   - controller: Controller type
+        ///   - value: Value
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - group: UMP Group (0x0...0xF)
         public init(controller: Controller,
                     value: Value,
                     channel: MIDI.UInt4,
@@ -34,6 +42,14 @@ extension MIDI.Event {
             
         }
         
+        /// Channel Voice Message: Control Change (CC)
+        /// (MIDI 1.0 / 2.0)
+        ///
+        /// - Parameters:
+        ///   - controller: Controller type
+        ///   - value: Value
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - group: UMP Group (0x0...0xF)
         public init(controller: MIDI.UInt7,
                     value: Value,
                     channel: MIDI.UInt4,
@@ -100,6 +116,9 @@ extension MIDI.Event {
 
 extension MIDI.Event.CC {
     
+    /// Returns the raw MIDI 1.0 message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
@@ -110,7 +129,7 @@ extension MIDI.Event.CC {
     }
     
     @inline(__always)
-    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.Packet.UniversalPacketData.MessageType {
+    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.IO.Packet.UniversalPacketData.MessageType {
         
         switch midiProtocol {
         case ._1_0:
@@ -122,6 +141,9 @@ extension MIDI.Event.CC {
         
     }
     
+    /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         

@@ -30,7 +30,7 @@ extension MIDI.IO.Manager {
     public func addInput(
         name: String,
         tag: String,
-        uniqueID: MIDI.IO.UniqueIDPersistence<MIDI.IO.InputEndpoint.UniqueID>,
+        uniqueID: MIDI.IO.UniqueIDPersistence,
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         

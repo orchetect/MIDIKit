@@ -18,13 +18,13 @@ extension MIDI.IO {
         
         public let objectType: MIDI.IO.ObjectType = .device
         
-        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIDeviceRef
+        public let coreMIDIObjectRef: MIDI.IO.DeviceRef
         
         // MARK: Init
         
-        internal init(_ ref: MIDI.IO.CoreMIDIDeviceRef) {
+        internal init(_ ref: MIDI.IO.DeviceRef) {
             
-            assert(ref != MIDI.IO.CoreMIDIDeviceRef())
+            assert(ref != MIDI.IO.DeviceRef())
             
             self.coreMIDIObjectRef = ref
             update()
@@ -62,7 +62,7 @@ extension MIDI.IO.Device: Hashable {
 
 extension MIDI.IO.Device: Identifiable {
     
-    public typealias ID = MIDI.IO.CoreMIDIObjectRef
+    public typealias ID = MIDI.IO.ObjectRef
     
     public var id: ID { coreMIDIObjectRef }
     
@@ -85,7 +85,7 @@ extension MIDI.IO.Device {
     public var exists: Bool {
         
         MIDI.IO.getSystemDevices
-            .contains(where: { $0.uniqueID == self.uniqueID })
+            .contains(whereUniqueID: self.uniqueID)
         
     }
     

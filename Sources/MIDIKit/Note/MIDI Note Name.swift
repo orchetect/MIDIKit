@@ -27,6 +27,8 @@ extension MIDI.Note {
         public static let flatAccidental: Character = "b"
         public static let flatAccidentalUnicode: Character = "♭"
         
+        /// Initialize MIDI note name from a string.
+        /// (ie: "A", "F#", "F♯", "Bb", "B♭")
         public init?(_ string: String) {
             
             guard string.count > 0 else { return nil }
@@ -171,8 +173,8 @@ extension MIDI.Note {
         /// Returns the note name as a string.
         ///
         /// - Parameters:
-        ///   - respellSharpAsFlat: if note is sharp, respell as a flat (ie: G♯ becomes A♭)
-        ///   - unicodeAccidental: for accidentals (#, b) use unicode symbols instead (♯, ♭)
+        ///   - respellSharpAsFlat: If note is sharp, respell enharmonically as a flat (ie: G♯ becomes A♭) Otherwise, sharp is always used, which is typical convention for MIDI note names.
+        ///   - unicodeAccidental: Use stylized unicode character for sharp (♯) and flat (♭).
         public func stringValue(
             respellSharpAsFlat: Bool = false,
             unicodeAccidental: Bool = false
@@ -245,10 +247,14 @@ extension MIDI.Note {
         
         /// Returns note name and octave for the MIDI note number.
         /// Returns `nil` if MIDI note number is invalid.
-        internal static func convert(noteNumber: MIDI.UInt7) -> (name: Self, octave: Int) {
+        internal static func convert(
+            noteNumber: MIDI.UInt7,
+            style: Style = .yamaha
+        ) -> (name: Self, octave: Int) {
+            
             // UInt7 is guaranteed to be a valid MIDI note number
             
-            let octave = (noteNumber.intValue / 12) - 2
+            let octave = (noteNumber.intValue / 12) + style.firstOctaveOffset
             
             switch noteNumber.intValue % 12 {
             case 9:  return (name: .A, octave: octave)
@@ -266,8 +272,9 @@ extension MIDI.Note {
             default:
                 // should never happen
                 assertionFailure("Modulus is broken.")
-                return (name: .C, octave: -2)
+                return (name: .C, octave: style.firstOctaveOffset)
             }
+            
         }
         
     }

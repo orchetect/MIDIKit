@@ -5,6 +5,8 @@
 
 extension MIDI.Event.CC.Controller.LSB {
     
+    /// Undefined MIDI CC LSB Controllers
+    /// (MIDI 1.0 / MIDI 2.0)
     public enum Undefined: Equatable, Hashable {
         
         /// LSB for Undefined controller number 3

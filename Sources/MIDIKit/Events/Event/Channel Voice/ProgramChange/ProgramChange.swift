@@ -6,8 +6,9 @@
 extension MIDI.Event {
     
     /// Channel Voice Message: Program Change
+    /// (MIDI 1.0 / 2.0)
     ///
-    /// This event can optionally contain a Bank Select message. In MIDI 1.0, these will be transmit as separate messages. In MIDI 2.0, this information is all contained within a single packet.
+    /// This event can optionally contain a Bank Select message. In MIDI 1.0, these will be transmit as separate messages. In MIDI 2.0, this information is all contained within a single packet. See the `bank` property for more info.
     ///
     /// - remark: MIDI 2.0 Spec:
     ///
@@ -18,10 +19,11 @@ extension MIDI.Event {
         public var program: MIDI.UInt7
         
         /// Bank Select
-        ///
+        /// (MIDI 1.0 / 2.0)
+        /// 
         /// When receiving a Program Change event, if a bank number is present then the Bank Select event should be processed prior to the Program Change event.
         ///
-        /// # MIDI 1.0
+        /// **MIDI 1.0**
         ///
         /// For MIDI 1.0, this results in 3 messages being transmitted in this order:
         ///  - Bank Select MSB (CC 0)
@@ -32,7 +34,7 @@ extension MIDI.Event {
         ///
         /// In some implementations, manufacturers have chosen to only use the MSB/"coarse" adjust (CC 0) switch banks since many devices don't have more than 128 banks (of 128 programs each).
         ///
-        /// # MIDI 2.0
+        /// **MIDI 2.0**
         ///
         /// For MIDI 2.0, Program Change and Bank Select information is all contained within a single UMP (Universal MIDI Packet).
         ///
@@ -45,6 +47,14 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
+        /// Channel Voice Message: Program Change
+        /// (MIDI 1.0 / 2.0)
+        ///
+        /// - Parameters:
+        ///   - program: Program Number
+        ///   - bank: Optional Bank Select operation to occur first
+        ///   - channel: Channel Number (0x0...0xF)
+        ///   - group: UMP Group (0x0...0xF)
         public init(program: MIDI.UInt7,
                     bank: Bank,
                     channel: MIDI.UInt4,
@@ -60,10 +70,11 @@ extension MIDI.Event {
     }
     
     /// Channel Voice Message: Program Change
+    /// (MIDI 1.0 / 2.0)
     ///
     /// - Parameters:
     ///   - program: Program Number
-    ///   - bank: Bank Select operation to occur first
+    ///   - bank: Optional Bank Select operation to occur first
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
     @inline(__always)
@@ -85,6 +96,9 @@ extension MIDI.Event {
 
 extension MIDI.Event.ProgramChange {
     
+    /// Returns the raw MIDI 1.0 message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
         
@@ -115,7 +129,7 @@ extension MIDI.Event.ProgramChange {
     }
     
     @inline(__always)
-    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.Packet.UniversalPacketData.MessageType {
+    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.IO.Packet.UniversalPacketData.MessageType {
         
         switch midiProtocol {
         case ._1_0:
@@ -127,6 +141,9 @@ extension MIDI.Event.ProgramChange {
         
     }
     
+    /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
         

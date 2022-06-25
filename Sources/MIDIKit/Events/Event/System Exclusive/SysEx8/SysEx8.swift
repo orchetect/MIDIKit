@@ -81,7 +81,11 @@ extension MIDI.Event {
 
 extension MIDI.Event.SysEx8 {
     
+    /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
+    ///
     /// Generates one or more 64-bit UMP packets depending on the system exclusive data length (each packet comprised of two UInt32 words).
+    /// 
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords() -> [[MIDI.UMPWord]] {
         
@@ -97,6 +101,8 @@ extension MIDI.Event.SysEx8 {
 
 extension MIDI.Event.SysEx8 {
     
+    /// Internal:
+    /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly; use the public `umpRawWords()` method instead.
     @inline(__always)
     internal static func umpRawWords(fromSysEx8Data data: [MIDI.Byte],
                                      streamID: UInt8,
@@ -104,7 +110,7 @@ extension MIDI.Event.SysEx8 {
             
         let maxDataBytesPerPacket = 13
         
-        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data128bit
+        let umpMessageType: MIDI.IO.Packet.UniversalPacketData.MessageType = .data128bit
         
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
@@ -120,7 +126,7 @@ extension MIDI.Event.SysEx8 {
         
         while rawDataPosition < data.count {
             
-            let status: MIDI.Packet.UniversalPacketData.SysExStatusField
+            let status: MIDI.IO.Packet.UniversalPacketData.SysExStatusField
             switch rawDataPosition {
             case 0:
                 status = rawDataByteCountRemaining <= maxDataBytesPerPacket ? .complete : .start

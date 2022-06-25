@@ -30,7 +30,7 @@ final class InputsAndOutputs_Input_Tests: XCTestCase {
 			try manager.addInput(
 				name: "MIDIKit IO Tests Destination 1",
                 tag: tag1,
-                uniqueID: .none, // allow system to generate random ID
+                uniqueID: .none, // allow system to generate random ID each time, without persistence
 				receiveHandler: .rawData { packets in
 					_ = packets
 				}

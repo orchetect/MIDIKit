@@ -25,18 +25,18 @@ extension MIDI.IO {
         
         // class-specific
         
-        public private(set) var outputsCriteria: Set<MIDI.IO.OutputEndpointIDCriteria> = []
+        public private(set) var outputsCriteria: Set<MIDI.IO.EndpointIDCriteria> = []
         
         /// Stores criteria after applying any filters that have been set in the `filter` property.
         /// Passing nil will re-use existing criteria, re-applying the filters.
-        private func updateCriteria(_ criteria: Set<MIDI.IO.OutputEndpointIDCriteria>? = nil) {
+        private func updateCriteria(_ criteria: Set<MIDI.IO.EndpointIDCriteria>? = nil) {
             
             var newCriteria = criteria ?? outputsCriteria
             
             if filter.owned,
                let midiManager = midiManager
             {
-                let managedOutputs: [MIDI.IO.OutputEndpointIDCriteria] = midiManager.managedOutputs
+                let managedOutputs: [MIDI.IO.EndpointIDCriteria] = midiManager.managedOutputs
                     .compactMap { $0.value.uniqueID }
                     .map { .uniqueID($0) }
                 
@@ -55,10 +55,10 @@ extension MIDI.IO {
         }
         
         /// The Core MIDI input port reference.
-        public private(set) var coreMIDIInputPortRef: MIDI.IO.CoreMIDIPortRef? = nil
+        public private(set) var coreMIDIInputPortRef: MIDI.IO.PortRef? = nil
         
         /// The Core MIDI output endpoint(s) reference(s).
-        public private(set) var coreMIDIOutputEndpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef> = []
+        public private(set) var coreMIDIOutputEndpointRefs: Set<MIDI.IO.EndpointRef> = []
         
         /// Operating mode.
         ///
@@ -77,7 +77,7 @@ extension MIDI.IO {
             
             switch mode {
             case .allEndpoints:
-                updateCriteria(.current())
+                updateCriteria(.currentOutputs())
                 
             case .definedEndpoints:
                 updateCriteria()
@@ -89,7 +89,7 @@ extension MIDI.IO {
         /// Endpoint filter.
         ///
         /// Changes take effect immediately.
-        public var filter: MIDI.IO.EndpointFilter<MIDI.IO.OutputEndpoint> {
+        public var filter: MIDI.IO.EndpointFilter {
             didSet {
                 guard oldValue != filter else { return }
                 guard let midiManager = midiManager else { return }
@@ -113,9 +113,9 @@ extension MIDI.IO {
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
         internal init(
-            criteria: Set<MIDI.IO.OutputEndpointIDCriteria>,
+            criteria: Set<MIDI.IO.EndpointIDCriteria>,
             mode: MIDI.IO.ConnectionMode,
-            filter: MIDI.IO.OutputEndpointFilter,
+            filter: MIDI.IO.EndpointFilter,
             receiveHandler: MIDI.IO.ReceiveHandler.Definition,
             midiManager: MIDI.IO.Manager,
             api: MIDI.IO.APIVersion = .bestForPlatform()
@@ -290,7 +290,7 @@ extension MIDI.IO.InputConnection {
     /// 
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func disconnect(
-        endpointRefs: Set<MIDI.IO.CoreMIDIEndpointRef>? = nil
+        endpointRefs: Set<MIDI.IO.EndpointRef>? = nil
     ) throws {
         
         guard let unwrappedInputPortRef = self.coreMIDIInputPortRef else {
@@ -344,7 +344,7 @@ extension MIDI.IO.InputConnection {
     /// Add output endpoints to the connection.
     /// Endpoint filters are respected.
     public func add(
-        outputs: [MIDI.IO.OutputEndpointIDCriteria]
+        outputs: [MIDI.IO.EndpointIDCriteria]
     ) {
         
         let combined = outputsCriteria.union(outputs)
@@ -364,7 +364,7 @@ extension MIDI.IO.InputConnection {
         outputs: [MIDI.IO.OutputEndpoint]
     ) {
         
-        add(outputs: outputs.map { .uniqueID($0.uniqueID) })
+        add(outputs: outputs.asCriteria())
         
     }
     
@@ -372,7 +372,7 @@ extension MIDI.IO.InputConnection {
     
     /// Remove output endpoints to the connection.
     public func remove(
-        outputs: [MIDI.IO.OutputEndpointIDCriteria]
+        outputs: [MIDI.IO.EndpointIDCriteria]
     ) {
         
         let removed = outputsCriteria.subtracting(outputs)
@@ -400,7 +400,7 @@ extension MIDI.IO.InputConnection {
         outputs: [MIDI.IO.OutputEndpoint]
     ) {
         
-        remove(outputs: outputs.map { .uniqueID($0.uniqueID) })
+        remove(outputs: outputs.asCriteria())
         
     }
     

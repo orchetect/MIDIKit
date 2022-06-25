@@ -62,8 +62,8 @@ extension MIDIIOObjectProtocol {
     /// (`kMIDIPropertyUniqueID`)
     ///
     /// The system assigns unique IDs to all objects.  Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
-    public func getUniqueID() -> UniqueID {
-        UniqueID(MIDI.IO.getUniqueID(of: self.coreMIDIObjectRef))
+    public func getUniqueID() -> MIDI.IO.UniqueID {
+        MIDI.IO.UniqueID(MIDI.IO.getUniqueID(of: self.coreMIDIObjectRef))
     }
     
     /// Get the user-visible System Exclusive (SysEx) identifier of a device or entity.
@@ -318,7 +318,7 @@ extension MIDIIOObjectProtocol {
     /// The value provided may be an integer. To indicate that a driver connects to multiple external objects, pass the array of big-endian SInt32 values as a CFData object.
     ///
     /// The property is nonexistent or 0 if there’s no connection.
-    public func getConnectionUniqueID() -> MIDI.IO.CoreMIDIUniqueID {
+    public func getConnectionUniqueID() -> MIDI.IO.UniqueID {
         MIDI.IO.getConnectionUniqueID(of: self.coreMIDIObjectRef)
     }
     

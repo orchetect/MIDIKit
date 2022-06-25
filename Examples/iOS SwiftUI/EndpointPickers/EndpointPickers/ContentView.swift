@@ -12,10 +12,10 @@ struct ContentView: View {
     @EnvironmentObject var midiManager: MIDI.IO.Manager
     @EnvironmentObject var midiHelper: MIDIHelper
     
-    @Binding var midiInSelectedID: MIDI.IO.CoreMIDIUniqueID
+    @Binding var midiInSelectedID: MIDI.IO.UniqueID
     @Binding var midiInSelectedDisplayName: String
     
-    @Binding var midiOutSelectedID: MIDI.IO.CoreMIDIUniqueID
+    @Binding var midiOutSelectedID: MIDI.IO.UniqueID
     @Binding var midiOutSelectedDisplayName: String
     
     var body: some View {

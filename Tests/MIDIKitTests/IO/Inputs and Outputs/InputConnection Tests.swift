@@ -37,7 +37,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests Source 1",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID
+            uniqueID: .none // allow system to generate random ID each time, without persistence
         )
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         let output1ID = try XCTUnwrap(output1.uniqueID)
@@ -71,7 +71,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests Source 2",
             tag: output2Tag,
-            uniqueID: .none // allow system to generate random ID
+            uniqueID: .none // allow system to generate random ID each time, without persistence
         )
         let output2 = try XCTUnwrap(manager.managedOutputs[output2Tag])
         let output2ID = try XCTUnwrap(output2.uniqueID)
@@ -146,7 +146,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
             toOutputs: [],
             tag: connTag,
             mode: .allEndpoints,
-            filter: .init(owned: false, criteria: .current()),
+            filter: .init(owned: false, criteria: .currentOutputs()),
             receiveHandler: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
@@ -165,7 +165,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests Source 1",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID
+            uniqueID: .none // allow system to generate random ID each time, without persistence
         )
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         let output1ID = try XCTUnwrap(output1.uniqueID)
@@ -203,7 +203,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
             toOutputs: [],
             tag: connTag,
             mode: .allEndpoints,
-            filter: .init(owned: true, criteria: .current()),
+            filter: .init(owned: true, criteria: .currentOutputs()),
             receiveHandler: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
@@ -222,7 +222,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests Source 1",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID
+            uniqueID: .none // allow system to generate random ID each time, without persistence
         )
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
 //        let output1ID = try XCTUnwrap(output1.uniqueID)
@@ -260,7 +260,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests Source 1",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID
+            uniqueID: .none // allow system to generate random ID each time, without persistence
         )
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         let output1ID = try XCTUnwrap(output1.uniqueID)
@@ -325,7 +325,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests Source 1",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID
+            uniqueID: .none // allow system to generate random ID each time, without persistence
         )
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         let output1ID = try XCTUnwrap(output1.uniqueID)
@@ -391,7 +391,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests Source 1",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID
+            uniqueID: .none // allow system to generate random ID each time, without persistence
         )
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         let output1ID = try XCTUnwrap(output1.uniqueID)
@@ -455,7 +455,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests Source 1",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID
+            uniqueID: .none // allow system to generate random ID each time, without persistence
         )
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         let output1ID = try XCTUnwrap(output1.uniqueID)

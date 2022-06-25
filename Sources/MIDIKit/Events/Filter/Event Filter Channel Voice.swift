@@ -111,10 +111,10 @@ extension Collection where Element == MIDI.Event {
             return filter {
                 switch $0 {
                 case .noteOn(let noteOn):
-                    return noteRange.contains(noteOn.note)
+                    return noteRange.contains(noteOn.note.number)
                     
                 case .noteOff(let noteOff):
-                    return noteRange.contains(noteOff.note)
+                    return noteRange.contains(noteOff.note.number)
                     
                 default:
                     return false
@@ -126,13 +126,13 @@ extension Collection where Element == MIDI.Event {
                 switch $0 {
                 case .noteOn(let noteOn):
                     for noteRange in noteRanges {
-                        if noteRange.contains(noteOn.note) { return true }
+                        if noteRange.contains(noteOn.note.number) { return true }
                     }
                     return false
                     
                 case .noteOff(let noteOff):
                     for noteRange in noteRanges {
-                        if noteRange.contains(noteOff.note) { return true }
+                        if noteRange.contains(noteOff.note.number) { return true }
                     }
                     return false
                     
@@ -189,10 +189,10 @@ extension Collection where Element == MIDI.Event {
             return filter {
                 switch $0 {
                 case .noteOn(let noteOn):
-                    return noteRange.contains(noteOn.note)
+                    return noteRange.contains(noteOn.note.number)
                     
                 case .noteOff(let noteOff):
-                    return noteRange.contains(noteOff.note)
+                    return noteRange.contains(noteOff.note.number)
                     
                 default:
                     return true
@@ -204,13 +204,13 @@ extension Collection where Element == MIDI.Event {
                 switch $0 {
                 case .noteOn(let noteOn):
                     for noteRange in noteRanges {
-                        if noteRange.contains(noteOn.note) { return true }
+                        if noteRange.contains(noteOn.note.number) { return true }
                     }
                     return false
                     
                 case .noteOff(let noteOff):
                     for noteRange in noteRanges {
-                        if noteRange.contains(noteOff.note) { return true }
+                        if noteRange.contains(noteOff.note.number) { return true }
                     }
                     return false
                     
@@ -263,10 +263,10 @@ extension Collection where Element == MIDI.Event {
             return filter {
                 switch $0 {
                 case .noteOn(let noteOn):
-                    return !noteRange.contains(noteOn.note)
+                    return !noteRange.contains(noteOn.note.number)
                     
                 case .noteOff(let noteOff):
-                    return !noteRange.contains(noteOff.note)
+                    return !noteRange.contains(noteOff.note.number)
                     
                 default:
                     return true
@@ -279,13 +279,13 @@ extension Collection where Element == MIDI.Event {
                 switch $0 {
                 case .noteOn(let noteOn):
                     for noteRange in noteRanges {
-                        if noteRange.contains(noteOn.note) { return false }
+                        if noteRange.contains(noteOn.note.number) { return false }
                     }
                     return true
                     
                 case .noteOff(let noteOff):
                     for noteRange in noteRanges {
-                        if noteRange.contains(noteOff.note) { return false }
+                        if noteRange.contains(noteOff.note.number) { return false }
                     }
                     return true
                     

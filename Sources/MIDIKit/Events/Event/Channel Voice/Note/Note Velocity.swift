@@ -5,6 +5,13 @@
 
 extension MIDI.Event.Note {
     
+    /// MIDI Note Velocity
+    /// (MIDI 1.0 / MIDI 2.0)
+    ///
+    /// - remark: MIDI 1.0 Spec:
+    ///
+    /// Note velocity is a 7-bit value when encoded for MIDI 1.0. A velocity of zero typically functions as a Note Off, although this behavior is able to be bypassed.
+    ///
     /// - remark: MIDI 2.0 Spec:
     ///
     /// The allowable Velocity range for a MIDI 2.0 Note On message is 0x0000-0xFFFF. Unlike the MIDI 1.0 Note On message, a velocity value of zero does not function as a Note Off.

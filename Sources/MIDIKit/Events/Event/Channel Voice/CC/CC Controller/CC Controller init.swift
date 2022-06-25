@@ -5,6 +5,9 @@
 
 extension MIDI.Event.CC.Controller {
     
+    /// MIDI Control Change Controller
+    /// (MIDI 1.0 / MIDI 2.0)
+    ///
     /// Initialize an enum case from the controller number.
     public init(number: MIDI.UInt7) {
         

@@ -116,7 +116,8 @@ extension MIDI.IO {
                                  to newValue: String) throws {
         
         try setString(forProperty: kMIDIPropertyName,
-                      of: ref, to: newValue)
+                      of: ref,
+                      to: newValue)
         
     }
     
@@ -134,7 +135,8 @@ extension MIDI.IO {
                                   to newValue: String) throws {
         
         try setString(forProperty: kMIDIPropertyModel,
-                      of: ref, to: newValue)
+                      of: ref,
+                      to: newValue)
         
     }
     
@@ -152,7 +154,8 @@ extension MIDI.IO {
                                          to newValue: String) throws {
         
         try setString(forProperty: kMIDIPropertyManufacturer,
-                      of: ref, to: newValue)
+                      of: ref,
+                      to: newValue)
         
     }
     
@@ -167,7 +170,8 @@ extension MIDI.IO {
                                      to newValue: MIDIUniqueID) throws {
         
         try setInteger(forProperty: kMIDIPropertyUniqueID,
-                       of: ref, to: newValue)
+                       of: ref,
+                       to: newValue)
         
     }
     

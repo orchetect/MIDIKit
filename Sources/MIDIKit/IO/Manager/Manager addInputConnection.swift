@@ -21,10 +21,10 @@ extension MIDI.IO.Manager {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addInputConnection(
-        toOutputs: Set<MIDI.IO.OutputEndpointIDCriteria>,
+        toOutputs: Set<MIDI.IO.EndpointIDCriteria>,
         tag: String,
         mode: MIDI.IO.ConnectionMode = .definedEndpoints,
-        filter: MIDI.IO.OutputEndpointFilter = .default(),
+        filter: MIDI.IO.EndpointFilter = .default(),
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         
@@ -63,10 +63,10 @@ extension MIDI.IO.Manager {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func addInputConnection(
-        toOutputs: [MIDI.IO.OutputEndpointIDCriteria],
+        toOutputs: [MIDI.IO.EndpointIDCriteria],
         tag: String,
         mode: MIDI.IO.ConnectionMode = .definedEndpoints,
-        filter: MIDI.IO.OutputEndpointFilter = .default(),
+        filter: MIDI.IO.EndpointFilter = .default(),
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         
@@ -97,12 +97,12 @@ extension MIDI.IO.Manager {
         toOutputs: [MIDI.IO.OutputEndpoint],
         tag: String,
         mode: MIDI.IO.ConnectionMode = .definedEndpoints,
-        filter: MIDI.IO.OutputEndpointFilter = .default(),
+        filter: MIDI.IO.EndpointFilter = .default(),
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
         
         try addInputConnection(
-            toOutputs: toOutputs.map { .uniqueID($0.uniqueID) },
+            toOutputs: toOutputs.asCriteria(),
             tag: tag,
             mode: mode,
             filter: filter,

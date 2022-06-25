@@ -66,6 +66,9 @@ extension MIDI.Event {
 
 extension MIDI.Event.SysEx7 {
     
+    /// Returns the raw MIDI 1.0 message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func midi1RawBytes(
         leadingF0: Bool = true,
@@ -79,7 +82,11 @@ extension MIDI.Event.SysEx7 {
         
     }
     
+    /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
+    ///
     /// Generates one or more 64-bit UMP packets depending on the system exclusive data length (each packet comprised of two UInt32 words).
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords() -> [[MIDI.UMPWord]] {
         
@@ -94,13 +101,15 @@ extension MIDI.Event.SysEx7 {
 
 extension MIDI.Event.SysEx7 {
     
+    /// Internal:
+    /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly; use the public `umpRawWords()` method instead.
     @inline(__always)
     internal static func umpRawWords(fromSysEx7Data data: [MIDI.Byte],
                                      group: MIDI.UInt4) -> [[MIDI.UMPWord]] {
         
         let maxDataBytesPerPacket = 6
         
-        let umpMessageType: MIDI.Packet.UniversalPacketData.MessageType = .data64bit
+        let umpMessageType: MIDI.IO.Packet.UniversalPacketData.MessageType = .data64bit
         
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
@@ -116,7 +125,7 @@ extension MIDI.Event.SysEx7 {
         
         while rawDataPosition < data.count {
             
-            let status: MIDI.Packet.UniversalPacketData.SysExStatusField
+            let status: MIDI.IO.Packet.UniversalPacketData.SysExStatusField
             switch rawDataPosition {
             case 0:
                 status = rawDataByteCountRemaining <= maxDataBytesPerPacket ? .complete : .start

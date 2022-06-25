@@ -56,16 +56,15 @@ class MIDIHelper: ObservableObject {
         midiManager?.managedInputConnections[ConnectionTags.midiIn]
     }
     
-    public func midiInUpdateConnection(selectedUniqueID: MIDI.IO.CoreMIDIUniqueID) {
+    public func midiInUpdateConnection(selectedUniqueID: MIDI.IO.UniqueID) {
         guard let midiInputConnection = midiInputConnection else { return }
         
         if selectedUniqueID == 0 {
             midiInputConnection.removeAllOutputs()
         } else {
-            let uID = MIDI.IO.OutputEndpoint.UniqueID(selectedUniqueID)
-            if midiInputConnection.outputsCriteria != [.uniqueID(uID)] {
+            if midiInputConnection.outputsCriteria != [.uniqueID(selectedUniqueID)] {
                 midiInputConnection.removeAllOutputs()
-                midiInputConnection.add(outputs: [.uniqueID(uID)])
+                midiInputConnection.add(outputs: [.uniqueID(selectedUniqueID)])
             }
         }
     }
@@ -76,16 +75,15 @@ class MIDIHelper: ObservableObject {
         midiManager?.managedOutputConnections[ConnectionTags.midiOut]
     }
     
-    public func midiOutUpdateConnection(selectedUniqueID: MIDI.IO.CoreMIDIUniqueID) {
+    public func midiOutUpdateConnection(selectedUniqueID: MIDI.IO.UniqueID) {
         guard let midiOutputConnection = midiOutputConnection else { return }
         
         if selectedUniqueID == 0 {
             midiOutputConnection.removeAllInputs()
         } else {
-            let uID = MIDI.IO.InputEndpoint.UniqueID(selectedUniqueID)
-            if midiOutputConnection.inputsCriteria != [.uniqueID(uID)] {
+            if midiOutputConnection.inputsCriteria != [.uniqueID(selectedUniqueID)] {
                 midiOutputConnection.removeAllInputs()
-                midiOutputConnection.add(inputs: [.uniqueID(uID)])
+                midiOutputConnection.add(inputs: [.uniqueID(selectedUniqueID)])
             }
         }
     }
@@ -158,16 +156,12 @@ class MIDIHelper: ObservableObject {
     
     // MARK: - Helpers
     
-    public func isInputPresentInSystem(uniqueID: MIDI.IO.CoreMIDIUniqueID) -> Bool {
-        midiManager?.endpoints.inputs
-            .contains(where: { $0.uniqueID.coreMIDIUniqueID == uniqueID })
-        ?? false
+    public func isInputPresentInSystem(uniqueID: MIDI.IO.UniqueID) -> Bool {
+        midiManager?.endpoints.inputs.contains(whereUniqueID: uniqueID) ?? false
     }
     
-    public func isOutputPresentInSystem(uniqueID: MIDI.IO.CoreMIDIUniqueID) -> Bool {
-        midiManager?.endpoints.outputs
-            .contains(where: { $0.uniqueID.coreMIDIUniqueID == uniqueID })
-        ?? false
+    public func isOutputPresentInSystem(uniqueID: MIDI.IO.UniqueID) -> Bool {
+        midiManager?.endpoints.outputs.contains(whereUniqueID: uniqueID) ?? false
     }
     
 }

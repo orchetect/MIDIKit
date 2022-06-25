@@ -5,7 +5,8 @@
 
 extension MIDI.Event.Note {
     
-    /// MIDI 2.0 Note Attribute
+    /// Note Attribute
+    /// (MIDI 2.0)
     public enum Attribute: Equatable, Hashable {
         
         /// None:
@@ -38,8 +39,13 @@ extension MIDI.Event.Note {
 
 extension MIDI.Event.Note.Attribute {
     
+    /// Note Attribute
+    /// (MIDI 2.0)
+    ///
+    /// Initialize from raw type and data.
     @inline(__always)
-    public init(type: MIDI.Byte, data: UInt16) {
+    public init(type: MIDI.Byte,
+                data: UInt16) {
         
         switch type {
         case 0x00:
@@ -61,8 +67,16 @@ extension MIDI.Event.Note.Attribute {
         
     }
     
-    /// Pitch 7.9:
+    /// Pitch 7.9 Note Attribute
+    /// (MIDI 2.0)
+    ///
     /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
+    ///
+    /// Range: 0+(0/512) ... 127+(511/512)
+    ///
+    /// - Parameters:
+    ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
+    ///   - fine: 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
     @inline(__always)
     public static func pitch7_9(coarse: MIDI.UInt7,
                                 fine: MIDI.UInt9) -> Self {

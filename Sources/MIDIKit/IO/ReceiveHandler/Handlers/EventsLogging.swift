@@ -17,15 +17,15 @@ extension MIDI.IO.ReceiveHandler {
         @inline(__always)
         public var handler: Handler
         
-        internal let midi1Parser = MIDI.MIDI1Parser()
-        internal let midi2Parser = MIDI.MIDI2Parser()
+        internal let midi1Parser = MIDI.IO.MIDI1Parser()
+        internal let midi2Parser = MIDI.IO.MIDI2Parser()
         
         @inline(__always)
         public var filterActiveSensingAndClock = false
         
         @inline(__always)
         public func packetListReceived(
-            _ packets: [MIDI.Packet.PacketData]
+            _ packets: [MIDI.IO.Packet.PacketData]
         ) {
             
             for midiPacket in packets {
@@ -39,7 +39,7 @@ extension MIDI.IO.ReceiveHandler {
         @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
         @inline(__always)
         public func eventListReceived(
-            _ packets: [MIDI.Packet.UniversalPacketData],
+            _ packets: [MIDI.IO.Packet.UniversalPacketData],
             protocol midiProtocol: MIDI.IO.ProtocolVersion
         ) {
             

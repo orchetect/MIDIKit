@@ -18,13 +18,13 @@ extension MIDI.IO {
         
         // MARK: CoreMIDI ref
         
-        public let coreMIDIObjectRef: MIDI.IO.CoreMIDIEndpointRef
+        public let coreMIDIObjectRef: MIDI.IO.EndpointRef
         
         // MARK: Init
         
-        internal init(_ ref: MIDI.IO.CoreMIDIEndpointRef) {
+        internal init(_ ref: MIDI.IO.EndpointRef) {
             
-            assert(ref != MIDI.IO.CoreMIDIEndpointRef(),
+            assert(ref != MIDI.IO.EndpointRef(),
                    "Encountered Core MIDI output endpoint ref value of 0 which is invalid.")
             
             self.coreMIDIObjectRef = ref

@@ -19,7 +19,7 @@ extension MIDI.IO {
         public internal(set) var clientName: String
         
         /// Core MIDI Client Reference.
-        public internal(set) var coreMIDIClientRef = MIDI.IO.CoreMIDIClientRef()
+        public internal(set) var coreMIDIClientRef = MIDI.IO.ClientRef()
         
         /// MIDI Model: The name of your software, which will be visible to the end-user in ports created by the manager.
         public internal(set) var model: String = ""
@@ -27,11 +27,9 @@ extension MIDI.IO {
         /// MIDI Manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
         public internal(set) var manufacturer: String = ""
         
-        /// Preferred underlying Core MIDI API to use as default when creating new managed endpoints.
+        /// Preferred underlying Core MIDI API to use as default when creating new managed endpoints. This value defaults to the best API for the current platform.
         ///
         /// The preferred API will be used where possible, unless operating system requirements force the use of a specific.
-        ///
-        /// - Note: Currently, legacy API is recommended as it is more stable. (New API is experimental due to bugs in Core MIDI itself, until workarounds or resolutions can be found.)
         public var preferredAPI: MIDI.IO.APIVersion {
             didSet {
                 // prevent setting of an invalid API
@@ -64,7 +62,7 @@ extension MIDI.IO {
         ///
         /// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
         /// - Throws: `MIDI.IO.MIDIError`
-        public func unmanagedPersistentThruConnections(ownerID: String) throws -> [MIDI.IO.CoreMIDIThruConnectionRef] {
+        public func unmanagedPersistentThruConnections(ownerID: String) throws -> [MIDI.IO.ThruConnectionRef] {
             
             try MIDI.IO.getSystemThruConnectionsPersistentEntries(matching: ownerID)
             
@@ -110,7 +108,8 @@ extension MIDI.IO {
             if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
             
             // manager event queue
-            let eventQueueName = (Bundle.main.bundleIdentifier ?? "unknown") + ".midiManager." + clientNameForQueue + ".events"
+            let eventQueueName = (Bundle.main.bundleIdentifier ?? "unknown")
+                + ".midiManager." + clientNameForQueue + ".events"
             eventQueue = DispatchQueue(label: eventQueueName,
                                        qos: .userInteractive,
                                        attributes: [],
@@ -132,6 +131,7 @@ extension MIDI.IO {
         }
         
         deinit {
+            
             eventQueue.sync {
                 // Apple docs:
                 // "Don’t explicitly dispose of your client; the system automatically disposes all clients when an app terminates. However, if you call this method to dispose the last or only client owned by an app, the MIDI server may exit if there are no other clients remaining in the system"
@@ -139,6 +139,7 @@ extension MIDI.IO {
                 
                 NotificationCenter.default.removeObserver(self)
             }
+            
         }
         
         // MARK: - Helper methods

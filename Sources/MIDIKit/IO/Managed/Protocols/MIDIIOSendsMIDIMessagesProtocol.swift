@@ -10,7 +10,7 @@
 public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
     
     /// The Core MIDI output port ref.
-    /* public private(set) */ var coreMIDIOutputPortRef: MIDI.IO.CoreMIDIPortRef? { get }
+    /* public private(set) */ var coreMIDIOutputPortRef: MIDI.IO.PortRef? { get }
     
     /// MIDI Protocol version used for this endpoint.
     /* public private(set) */ var midiProtocol: MIDI.IO.ProtocolVersion { get }
@@ -130,7 +130,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
         
         switch api {
         case .legacyCoreMIDI:
-            try send(rawMessage: event.midi1RawBytes)
+            try send(rawMessage: event.midi1RawBytes())
             
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
@@ -158,7 +158,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
                 try events.forEach { try send(event: $0) }
             } else {
                 // combine events into a single MIDIPacketList
-                try send(rawMessages: events.map { $0.midi1RawBytes })
+                try send(rawMessages: events.map { $0.midi1RawBytes() })
             }
             
         case .newCoreMIDI:

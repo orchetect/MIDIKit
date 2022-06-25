@@ -122,7 +122,7 @@ struct ContentView: View {
         
         if let findInputConnectionEndpoint = self
             .midiManager.endpoints.outputs
-            .filter(name: kOutputName)
+            .filter(whereName: kOutputName)
             .first
         {
             logger.debug("Found virtual endpoint: \(findInputConnectionEndpoint)")

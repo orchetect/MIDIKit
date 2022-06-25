@@ -28,7 +28,7 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
             let channelString = event.channel.value.hex.stringValue(prefix: true)
             let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "noteOn(\(event.note), vel: \(event.velocity), \(attrStr)chan: \(channelString), group: \(groupString))"
+            return "noteOn(\(event.note.number) (\(event.note.stringValue())), vel: \(event.velocity), \(attrStr)chan: \(channelString), group: \(groupString))"
             
         case .noteOff(let event):
             let attrStr: String
@@ -42,25 +42,25 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
             let channelString = event.channel.value.hex.stringValue(prefix: true)
             let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "noteOff(\(event.note), vel: \(event.velocity), \(attrStr)chan: \(channelString), group: \(groupString))"
+            return "noteOff(\(event.note.number) (\(event.note.stringValue())), \(attrStr)chan: \(channelString), group: \(groupString))"
             
         case .noteCC(let event):
             let channelString = event.channel.value.hex.stringValue(prefix: true)
             let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "noteCC(note: \(event.note), controller: \(event.controller), val: \(event.value), chan: \(channelString), group: \(groupString))"
+            return "noteCC(note: \(event.note.number) (\(event.note.stringValue())), controller: \(event.controller), val: \(event.value), chan: \(channelString), group: \(groupString))"
             
         case .notePitchBend(let event):
             let channelString = event.channel.value.hex.stringValue(prefix: true)
             let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "notePitchBend(note: \(event.note), value: \(event.value), chan: \(channelString), group: \(groupString))"
+            return "notePitchBend(note: \(event.note.number) (\(event.note.stringValue())), value: \(event.value), chan: \(channelString), group: \(groupString))"
             
         case .notePressure(let event):
             let channelString = event.channel.value.hex.stringValue(prefix: true)
             let groupString = event.group.value.hex.stringValue(prefix: true)
             
-            return "notePressure(note:\(event.note), amount: \(event.amount), chan: \(channelString), group: \(groupString))"
+            return "notePressure(note: \(event.note.number) (\(event.note.stringValue())), amount: \(event.amount), chan: \(channelString), group: \(groupString))"
             
         case .noteManagement(let event):
             let channelString = event.channel.value.hex.stringValue(prefix: true)

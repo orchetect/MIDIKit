@@ -6,6 +6,7 @@
 extension MIDI.Event.CC.Controller {
     
     /// MIDI Controller Change LSB
+    /// (MIDI 1.0 / MIDI 2.0)
     public enum LSB: Equatable, Hashable {
         
         /// LSB for Control 0 (Bank Select)
