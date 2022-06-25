@@ -54,7 +54,7 @@ class MIDIHelper: ObservableObject {
         switch event {
         case .noteOn(let payload):
             print("Note On:",
-                  "\n  Note:", payload.note.intValue,
+                  "\n  Note: \(payload.note.number.intValue) (\(payload.note.stringValue()))",
                   "\n  Velocity (MIDI1 7-bit):", payload.velocity.midi1Value,
                   "\n  Velocity (MIDI2 16-bit):", payload.velocity.midi2Value,
                   "\n  Velocity (Unit Interval):", payload.velocity.unitIntervalValue,
@@ -64,7 +64,7 @@ class MIDIHelper: ObservableObject {
             
         case .noteOff(let payload):
             print("Note Off:",
-                  "\n  Note:", payload.note.intValue,
+                  "\n  Note: \(payload.note.number.intValue) (\(payload.note.stringValue()))",
                   "\n  Velocity (MIDI1 7-bit):", payload.velocity.midi1Value,
                   "\n  Velocity (MIDI2 16-bit):", payload.velocity.midi2Value,
                   "\n  Velocity (Unit Interval):", payload.velocity.unitIntervalValue,
@@ -74,7 +74,7 @@ class MIDIHelper: ObservableObject {
             
         case .noteCC(let payload):
             print("Per-Note CC (MIDI 2.0 Only):",
-                  "\n  Note:", payload.note.intValue,
+                  "\n  Note: \(payload.note.number.intValue) (\(payload.note.stringValue()))",
                   "\n  Controller:", payload.controller,
                   "\n  Value (MIDI2 32-bit):", payload.value.midi2Value,
                   "\n  Value (Unit Interval):", payload.value.unitIntervalValue,
@@ -83,7 +83,7 @@ class MIDIHelper: ObservableObject {
             
         case .notePitchBend(let payload):
             print("Per-Note Pitch Bend (MIDI 2.0 Only):",
-                  "\n  Note:", payload.note.intValue,
+                  "\n  Note: \(payload.note.number.intValue) (\(payload.note.stringValue()))",
                   "\n  Value (MIDI2 32-bit):", payload.value.midi2Value,
                   "\n  Value (Unit Interval):", payload.value.unitIntervalValue,
                   "\n  Channel:", payload.channel.intValue.hex.stringValue(prefix: true),
@@ -91,7 +91,7 @@ class MIDIHelper: ObservableObject {
             
         case .notePressure(let payload):
             print("Per-Note Pressure (a.k.a. Polyphonic Aftertouch):",
-                  "\n  Note:", payload.note.intValue,
+                  "\n  Note: \(payload.note.number.intValue) (\(payload.note.stringValue()))",
                   "\n  Amount (MIDI1 7-bit):", payload.amount.midi1Value,
                   "\n  Amount (MIDI2 32-bit):", payload.amount.midi2Value,
                   "\n  Amount (Unit Interval):", payload.amount.unitIntervalValue,
@@ -100,7 +100,7 @@ class MIDIHelper: ObservableObject {
             
         case .noteManagement(let payload):
             print("Per-Note Management (MIDI 2.0 Only):",
-                  "\n  Note:", payload.note.intValue,
+                  "\n  Note: \(payload.note.number.intValue) (\(payload.note.stringValue()))",
                   "\n  Option Flags:", payload.optionFlags,
                   "\n  Channel:", payload.channel.intValue.hex.stringValue(prefix: true),
                   "\n  UMP Group (MIDI2):", payload.group.intValue.hex.stringValue(prefix: true))
