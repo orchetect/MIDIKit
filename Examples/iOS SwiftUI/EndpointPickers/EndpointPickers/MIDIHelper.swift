@@ -62,10 +62,9 @@ class MIDIHelper: ObservableObject {
         if selectedUniqueID == 0 {
             midiInputConnection.removeAllOutputs()
         } else {
-            let uID = MIDI.IO.OutputEndpoint.UniqueID(selectedUniqueID)
-            if midiInputConnection.outputsCriteria != [.uniqueID(uID)] {
+            if midiInputConnection.outputsCriteria != [.uniqueID(selectedUniqueID)] {
                 midiInputConnection.removeAllOutputs()
-                midiInputConnection.add(outputs: [.uniqueID(uID)])
+                midiInputConnection.add(outputs: [.uniqueID(selectedUniqueID)])
             }
         }
     }
@@ -82,10 +81,9 @@ class MIDIHelper: ObservableObject {
         if selectedUniqueID == 0 {
             midiOutputConnection.removeAllInputs()
         } else {
-            let uID = MIDI.IO.InputEndpoint.UniqueID(selectedUniqueID)
-            if midiOutputConnection.inputsCriteria != [.uniqueID(uID)] {
+            if midiOutputConnection.inputsCriteria != [.uniqueID(selectedUniqueID)] {
                 midiOutputConnection.removeAllInputs()
-                midiOutputConnection.add(inputs: [.uniqueID(uID)])
+                midiOutputConnection.add(inputs: [.uniqueID(selectedUniqueID)])
             }
         }
     }
