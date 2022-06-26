@@ -5,7 +5,7 @@
 
 extension MIDI.Byte {
     
-    /// Type that holds a pair of `MIDI.Byte`s - one MSB `Byte`, one LSB `Byte`
+    /// Type that holds a pair of `MIDI.Byte`s - one MSB `Byte`, one LSB `Byte`.
     public struct Pair: Equatable, Hashable {
         
         public let msb: MIDI.Byte
