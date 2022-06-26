@@ -214,6 +214,20 @@ class MIDIHelper: ObservableObject {
         case .systemReset(let payload):
             print("System Reset:",
                   "\n  UMP Group (MIDI2):", payload.group.intValue.hex.stringValue(prefix: true))
+            
+        case .noOp(let payload):
+            print("No-Op (MIDI 2.0 Only):",
+                  "\n  UMP Group (MIDI2):", payload.group.intValue.hex.stringValue(prefix: true))
+            
+        case .jrClock(let payload):
+            print("JR Clock - Jitter-Reduction Clock (MIDI 2.0 Only):",
+                  "\n  Time Value:", payload.time,
+                  "\n  UMP Group (MIDI2):", payload.group.intValue.hex.stringValue(prefix: true))
+            
+        case .jrTimestamp(let payload):
+            print("JR Timestamp - Jitter-Reduction Timestamp (MIDI 2.0 Only):",
+                  "\n  Time Value:", payload.time,
+                  "\n  UMP Group (MIDI2):", payload.group.intValue.hex.stringValue(prefix: true))
         }
         
     }
