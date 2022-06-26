@@ -60,8 +60,27 @@ extension MIDI.IO {
             
             switch messageType {
             case .utility: // 0x0
-                // TODO: nothing implemented here yet
-                break
+                // These messages can be standalone 32-bit UMPs or prepend other UMP messages.
+                // byte 0: [high nibble: message type, low nibble: group]
+                // byte 1: [high nibble: status, low nibble: part of data or reserved segment]
+                // bytes 2&3: [continuation of data or reserved]
+                // + [potential additional words comprising a UMP such as channel voice etc.]
+                
+                let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
+                
+                if let parsedEvent = parseMIDI2Utility(
+                    bytes: midiBytes,
+                    group: group
+                ) {
+                    events.append(parsedEvent.utilityEvent)
+                    
+                    // if bytes follow a utility UMP, it may be any non-utility UMP
+                    // so attempt to parse it like any normal UMP and add the event(s)
+                    if !parsedEvent.followingBytes.isEmpty {
+                        let followingEvent = parsedEvents(in: Array(parsedEvent.followingBytes))
+                        events.append(contentsOf: followingEvent)
+                    }
+                }
                 
             case .systemRealTimeAndCommon: // 0x1
                 // always 32 bits (4 bytes)
@@ -349,6 +368,7 @@ extension MIDI.IO {
         ///
         /// - Parameters:
         ///   - bytes: 3 UMP bytes after the first byte ([1...3])
+        ///   - channel: MIDI Channel
         ///   - group: UMP group
         internal func parseMIDI2ChannelVoice(
             bytes: Array<MIDI.Byte>.SubSequence,
@@ -700,6 +720,77 @@ extension MIDI.IO {
             
         }
         
+        /// Internal sub-parser: Parse MIDI 2.0 Utility message.
+        ///
+        /// - Parameters:
+        ///   - bytes: all bytes after the first byte ([1...])
+        ///   - group: UMP group
+        internal func parseMIDI2Utility(
+            bytes: Array<MIDI.Byte>.SubSequence,
+            group: MIDI.UInt4
+        ) -> (utilityEvent: MIDI.Event,
+              followingBytes: Array<MIDI.Byte>.SubSequence)?
+        {
+            
+            // MIDI 2.0 Spec:
+            // "The UMP Format provides a set of Utility Messages. Utility Messages include but are not limited to NOOP and timestamps, and might in the future include UMP transport-related functions."
+            // These messages can be standalone 32-bit UMPs or prepend other UMP messages.
+            
+            // byte 0: [high nibble: message type, low nibble: group]
+            // byte 1: [high nibble: status, low nibble: part of data or reserved segment]
+            // bytes 2&3: [continuation of data or reserved]
+            // + [potential additional words comprising a UMP such as channel voice etc.]
+            
+            guard bytes.count >= 3 else {
+                return nil
+            }
+            
+            let byte1Nibbles = bytes[bytes.startIndex].nibbles
+            
+            guard let utilityStatusField = MIDI.IO.Packet.UniversalPacketData
+                .UtilityStatusField(rawValue: byte1Nibbles.high)
+            else { return nil }
+            
+            let utilityEvent: MIDI.Event
+            
+            switch utilityStatusField {
+            case .noOp: // 0x0
+                // NOOP expects 20-bit data portion to be all zeros (0x00000).
+                // Technically the message is malformed if it isn't.
+                // However there probably isn't any reason why this needs to be strict
+                // since a status of 0x0 is NOOP and it carries no data
+                // so we could skip checking these bytes.
+                
+                // NOOP is always a self-contained message and never prepends other UMPs like timestamps could.
+                
+                return (.noOp(group: group), [])
+                
+            case .jrClock: // 0x1
+                let msb = bytes[bytes.startIndex.advanced(by: 1)]
+                let lsb = bytes[bytes.startIndex.advanced(by: 2)]
+                let ts = UInt16(bytePair: .init(msb: msb, lsb: lsb))
+                
+                utilityEvent = .jrClock(time: ts,
+                                        group: group)
+                
+            case .jrTimestamp: // 0x2
+                let msb = bytes[bytes.startIndex.advanced(by: 1)]
+                let lsb = bytes[bytes.startIndex.advanced(by: 2)]
+                let ts = UInt16(bytePair: .init(msb: msb, lsb: lsb))
+                
+                utilityEvent = .jrTimestamp(time: ts,
+                                            group: group)
+                
+            }
+            
+            if bytes.count > 3 {
+                let followingBytes = bytes[bytes.startIndex.advanced(by: 3)...]
+                return (utilityEvent, followingBytes)
+            } else {
+                return (utilityEvent, [])
+            }
+            
+        }
     }
     
 }

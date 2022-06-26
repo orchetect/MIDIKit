@@ -152,6 +152,19 @@ extension MIDI.Event {
         case .systemReset(let event):
             return event.group
             
+            
+        // -------------------------------
+        // MARK: MIDI 2.0 Utility Messages
+        // -------------------------------
+            
+        case .noOp(let event):
+            return event.group
+            
+        case .jrClock(let event):
+            return event.group
+            
+        case .jrTimestamp(let event):
+            return event.group
         }
         
     }

@@ -21,6 +21,7 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
             XCTAssertTrue($0.isSystemCommon)
             XCTAssertFalse($0.isSystemExclusive)
             XCTAssertFalse($0.isSystemRealTime)
+            XCTAssertFalse($0.isUtility)
         }
         
         // isSystemCommon(ofType:)
@@ -61,7 +62,7 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
     
     // MARK: - only
     
-    func testFilter_SysCommon_only() {
+    func testFilter_only() {
         
         let events = kEvents.oneOfEachEventType
         
@@ -73,7 +74,7 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
         
     }
     
-    func testFilter_SysCommon_onlyType() {
+    func testFilter_onlyType() {
         
         let events = kEvents.oneOfEachEventType
         
@@ -85,7 +86,7 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
         
     }
     
-    func testFilter_SysCommon_onlyTypes() {
+    func testFilter_onlyTypes() {
         
         let events = kEvents.oneOfEachEventType
         
@@ -108,38 +109,40 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
     
     // MARK: - keep
     
-    func testFilter_SysCommon_keepType() {
+    func testFilter_keepType() {
         
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .keepType(.tuneRequest))
         
-        let expectedEvents =
-        kEvents.ChanVoice.oneOfEachEventType
-        + [
+        var expectedEvents: [MIDI.Event] = []
+        expectedEvents += kEvents.ChanVoice.oneOfEachEventType
+        expectedEvents += [
             kEvents.SysCommon.tuneRequest
         ]
-        + kEvents.SysEx.oneOfEachEventType
-        + kEvents.SysRealTime.oneOfEachEventType
+        expectedEvents += kEvents.SysEx.oneOfEachEventType
+        expectedEvents += kEvents.SysRealTime.oneOfEachEventType
+        expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
         
     }
     
-    func testFilter_SysCommon_keepTypes() {
+    func testFilter_keepTypes() {
         
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .keepTypes([.tuneRequest, .songSelect]))
         
-        let expectedEvents =
-        kEvents.ChanVoice.oneOfEachEventType
-        + [
+        var expectedEvents: [MIDI.Event] = []
+        expectedEvents += kEvents.ChanVoice.oneOfEachEventType
+        expectedEvents += [
             kEvents.SysCommon.songSelect,
             kEvents.SysCommon.tuneRequest
         ]
-        + kEvents.SysEx.oneOfEachEventType
-        + kEvents.SysRealTime.oneOfEachEventType
+        expectedEvents += kEvents.SysEx.oneOfEachEventType
+        expectedEvents += kEvents.SysRealTime.oneOfEachEventType
+        expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
         
@@ -147,58 +150,61 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
     
     // MARK: - drop
     
-    func testFilter_SysCommon_drop() {
+    func testFilter_drop() {
         
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .drop)
         
-        let expectedEvents =
-        kEvents.ChanVoice.oneOfEachEventType
-        + []
-        + kEvents.SysEx.oneOfEachEventType
-        + kEvents.SysRealTime.oneOfEachEventType
+        var expectedEvents: [MIDI.Event] = []
+        expectedEvents += kEvents.ChanVoice.oneOfEachEventType
+        expectedEvents += []
+        expectedEvents += kEvents.SysEx.oneOfEachEventType
+        expectedEvents += kEvents.SysRealTime.oneOfEachEventType
+        expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
         
     }
     
-    func testFilter_SysCommon_dropType() {
+    func testFilter_dropType() {
         
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .dropType(.tuneRequest))
         
-        let expectedEvents =
-        kEvents.ChanVoice.oneOfEachEventType
-        + [
+        var expectedEvents: [MIDI.Event] = []
+        expectedEvents += kEvents.ChanVoice.oneOfEachEventType
+        expectedEvents += [
             kEvents.SysCommon.timecodeQuarterFrame,
             kEvents.SysCommon.songPositionPointer,
             kEvents.SysCommon.songSelect,
             kEvents.SysCommon.unofficialBusSelect
         ]
-        + kEvents.SysEx.oneOfEachEventType
-        + kEvents.SysRealTime.oneOfEachEventType
+        expectedEvents += kEvents.SysEx.oneOfEachEventType
+        expectedEvents += kEvents.SysRealTime.oneOfEachEventType
+        expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
         
     }
     
-    func testFilter_SysCommon_dropTypes() {
+    func testFilter_dropTypes() {
         
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .dropTypes([.tuneRequest, .songSelect]))
         
-        let expectedEvents =
-        kEvents.ChanVoice.oneOfEachEventType
-        + [
+        var expectedEvents: [MIDI.Event] = []
+        expectedEvents += kEvents.ChanVoice.oneOfEachEventType
+        expectedEvents += [
             kEvents.SysCommon.timecodeQuarterFrame,
             kEvents.SysCommon.songPositionPointer,
             kEvents.SysCommon.unofficialBusSelect
         ]
-        + kEvents.SysEx.oneOfEachEventType
-        + kEvents.SysRealTime.oneOfEachEventType
+        expectedEvents += kEvents.SysEx.oneOfEachEventType
+        expectedEvents += kEvents.SysRealTime.oneOfEachEventType
+        expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
         
