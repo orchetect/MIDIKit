@@ -107,8 +107,21 @@ extension MIDI.Event {
         case .systemReset(let event):
             return event.midi1RawBytes()
             
-        }
+            
+        // -------------------------------
+        // MARK: MIDI 2.0 Utility Messages
+        // -------------------------------
         
+        case .noOp:
+            return []
+            
+        case .jrClock:
+            return []
+            
+        case .jrTimestamp:
+            return []
+            
+        }
     }
     
 }
@@ -215,6 +228,20 @@ extension MIDI.Event {
             return [event.umpRawWords()]
             
         case .systemReset(let event):
+            return [event.umpRawWords()]
+            
+            
+        // -------------------------------
+        // MARK: MIDI 2.0 Utility Messages
+        // -------------------------------
+        
+        case .noOp(let event):
+            return [event.umpRawWords()]
+            
+        case .jrClock(let event):
+            return [event.umpRawWords()]
+            
+        case .jrTimestamp(let event):
             return [event.umpRawWords()]
             
         }

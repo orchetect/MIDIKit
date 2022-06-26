@@ -7,7 +7,7 @@
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
-import MIDIKit
+@testable import MIDIKit
 import CoreMIDI
 
 open class RoundTrip_Tests_Base: XCTestCase {
@@ -252,6 +252,18 @@ open class RoundTrip_Tests_Base: XCTestCase {
                                         0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
                                         0xE6])
             )
+            
+            sourceEvents.append(contentsOf: (0x0...0xF).map {
+                .noOp(group: $0)
+            })
+            
+            sourceEvents.append(contentsOf: (0x0...0xF).map {
+                .jrClock(time: 0x4321, group: $0)
+            })
+            
+            sourceEvents.append(contentsOf: (0x0...0xF).map {
+                .jrTimestamp(time: 0x4321, group: $0)
+            })
             
         }
         

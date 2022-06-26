@@ -183,6 +183,23 @@ extension MIDI.Event: CustomStringConvertible, CustomDebugStringConvertible {
         case .systemReset(let event):
             let groupString = event.group.value.hex.stringValue(prefix: true)
             return "systemReset(group: \(groupString))"
+        
+        
+        // -------------------------------
+        // MARK: MIDI 2.0 Utility Messages
+        // -------------------------------
+            
+        case .noOp(let event):
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "noOp(group: \(groupString))"
+            
+        case .jrClock(let event):
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "jrClock(\(event.time), group: \(groupString))"
+            
+        case .jrTimestamp(let event):
+            let groupString = event.group.value.hex.stringValue(prefix: true)
+            return "jrTimestamp(\(event.time), group: \(groupString))"
             
         }
         

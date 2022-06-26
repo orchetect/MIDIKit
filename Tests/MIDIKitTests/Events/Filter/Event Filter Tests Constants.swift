@@ -157,11 +157,26 @@ enum kEvents {
         
     }
     
+    enum Utility {
+        
+        static let noOp: MIDI.Event = .noOp(group: 0)
+        static let jrClock: MIDI.Event = .jrClock(time: 0x1234, group: 1)
+        static let jrTimestamp: MIDI.Event = .jrTimestamp(time: 0x1234, group: 2)
+        
+        static let oneOfEachEventType: [MIDI.Event] = [
+            Self.noOp,
+            Self.jrClock,
+            Self.jrTimestamp
+        ]
+        
+    }
+    
     static let oneOfEachEventType: [MIDI.Event] =
-        ChanVoice.oneOfEachEventType +
-        SysCommon.oneOfEachEventType +
-        SysEx.oneOfEachEventType +
-        SysRealTime.oneOfEachEventType
+    ChanVoice.oneOfEachEventType +
+    SysCommon.oneOfEachEventType +
+    SysEx.oneOfEachEventType +
+    SysRealTime.oneOfEachEventType +
+    Utility.oneOfEachEventType
     
 }
 

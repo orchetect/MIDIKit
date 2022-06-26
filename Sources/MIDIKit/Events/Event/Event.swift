@@ -200,6 +200,42 @@ extension MIDI {
         /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
         case systemReset(SystemReset)
         
+        
+        // -------------------------------
+        // MARK: MIDI 2.0 Utility Messages
+        // -------------------------------
+        
+        /// NOOP - No Operation
+        /// (MIDI 2.0 Utility Messages)
+        ///
+        /// - remark: MIDI 2.0 Spec:
+        ///
+        /// "The UMP Format provides a set of Utility Messages. Utility Messages include but are not limited to NOOP and timestamps, and might in the future include UMP transport-related functions."
+        case noOp(NoOp)
+        
+        /// JR Clock (Jitter-Reduction Clock)
+        /// (MIDI 2.0 Utility Messages)
+        ///
+        /// - remark: MIDI 2.0 Spec:
+        ///
+        /// "The JR Clock message defines the current time of the Sender.
+        ///
+        /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
+        ///
+        /// The time value is expected to wrap around every 2.09712 seconds.
+        ///
+        /// To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock messages for the Receiver, the Sender shall send a JR Clock message at least once every 250 milliseconds."
+        case jrClock(JRClock)
+        
+        /// JR Timestamp (Jitter-Reduction Timestamp)
+        /// (MIDI 2.0 Utility Messages)
+        ///
+        /// - remark: MIDI 2.0 Spec:
+        ///
+        /// "The JR Timestamp message defines the time of the following message(s). It is a complete message.
+        ///
+        /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32)."
+        case jrTimestamp(JRTimestamp)
     }
     
 }

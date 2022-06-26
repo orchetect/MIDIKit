@@ -20,7 +20,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         
     }
     
-    func testUniversalPacketData_parsedEvents_SingleEvents_MIDI1_0() {
+    func testUniversalPacketData_parsedEvents_SingleEvents_MIDI1_0_ChannelVoice() {
         
         // template method
         
@@ -75,7 +75,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         
     }
     
-    func testUniversalPacketData_parsedEvents_SingleEvents_MIDI2_0() {
+    func testUniversalPacketData_parsedEvents_SingleEvents_MIDI2_0_ChannelVoice() {
         
         // template method
         
@@ -999,6 +999,91 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
                                                 0x14, 0x15, 0x16, 0x17,
                                                 0x18, 0x19, 0x20],
                                          group: 2)])
+        
+    }
+    
+    func testUniversalPacketData_parsedEvents_SingleEvents_MIDI2_0_Utility() {
+        
+        // template method
+        
+        func parsedEvents(bytes: [MIDI.Byte]) -> [MIDI.Event] {
+            MIDI.IO.Packet.UniversalPacketData(bytes: bytes, timeStamp: .zero)
+                .parsedEvents()
+        }
+        
+        // UMP Utility Events
+        
+        // NOOP
+        XCTAssertEqual(
+            parsedEvents(bytes:
+                            [0x09, // UMP message type (0x0?), group 9 (0x?9)
+                             0x00, // status upper nibble + zero lower nibble
+                             0x00, 0x00] // noOp expects zeros
+                        ),
+            [.noOp(group: 0x9)]
+        )
+        
+        // JR Clock
+        XCTAssertEqual(
+            parsedEvents(bytes:
+                            [0x09, // UMP message type (0x0?), group 9 (0x?9)
+                             0x10, // status upper nibble + reserved lower nibble
+                             0x12, 0x34] // UInt16 time value
+                        ),
+            [.jrClock(time: 0x1234,
+                      group: 0x9)]
+        )
+        
+        // JR Timestamp
+        XCTAssertEqual(
+            parsedEvents(bytes:
+                            [0x09, // UMP message type (0x0?), group 9 (0x?9)
+                             0x20, // status upper nibble + reserved lower nibble
+                             0x12, 0x34] // UInt16 time value
+                        ),
+            [.jrTimestamp(time: 0x1234,
+                          group: 0x9)]
+        )
+        
+        // JR Timestamp + Channel Voice UMP to follow
+        XCTAssertEqual(
+            parsedEvents(bytes:
+                            [0x09, // UMP message type (0x0?), group 9 (0x?9)
+                             0x20, // status upper nibble + reserved lower nibble
+                             0x12, 0x34, // UInt16 time value
+                             
+                             0x43, 0xB1, 0x01, 0x00, // MIDI 2.0 CC message ...
+                             0x12, 0x34, 0x56, 0x78]
+                        ),
+            [.jrTimestamp(time: 0x1234, group: 0x9),
+             .cc(1, value: .midi2(0x12345678), channel: 1, group: 0x3)]
+        )
+        
+        // JR Timestamp + malformed/garbage bytes to follow
+        XCTAssertEqual(
+            parsedEvents(bytes:
+                            [0x09, // UMP message type (0x0?), group 9 (0x?9)
+                             0x20, // status upper nibble + reserved lower nibble
+                             0x12, 0x34, // UInt16 time value
+                             
+                             0x43, 0xB1, 0x01, 0x00, // start of a MIDI 2.0 CC message ...
+                             0x12, 0x34]             // but not enough bytes
+                        ),
+            [] // invalid byte alignment, nothing gets parsed
+        )
+        
+        // JR Timestamp + malformed/garbage bytes to follow
+        XCTAssertEqual(
+            parsedEvents(bytes:
+                            [0x09, // UMP message type (0x0?), group 9 (0x?9)
+                             0x20, // status upper nibble + reserved lower nibble
+                             0x12, 0x34, // UInt16 time value
+                             
+                             0xD7, 0xB1, 0x01, 0x00, // invalid status byte, not valid message,
+                             0x12, 0x34, 0x56, 0x78] // but correct byte alignment
+                        ),
+            [.jrTimestamp(time: 0x1234, group: 0x9)] // timestamp is still parsed
+        )
         
     }
     

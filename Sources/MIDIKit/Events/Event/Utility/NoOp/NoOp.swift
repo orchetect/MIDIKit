@@ -1,0 +1,72 @@
+//
+//  NoOp.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
+//
+
+extension MIDI.Event {
+    
+    /// NOOP - No Operation
+    /// (MIDI 2.0 Utility Messages)
+    ///
+    /// - remark: MIDI 2.0 Spec:
+    ///
+    /// "The UMP Format provides a set of Utility Messages. Utility Messages include but are not limited to NOOP and timestamps, and might in the future include UMP transport-related functions."
+    public struct NoOp: Equatable, Hashable {
+        
+        /// UMP Group (0x0...0xF)
+        public var group: MIDI.UInt4 = 0x0
+        
+        public init(group: MIDI.UInt4 = 0x0) {
+            
+            self.group = group
+            
+        }
+        
+    }
+    
+    /// NOOP - No Operation
+    /// (MIDI 2.0 Utility Messages)
+    ///
+    /// - remark: MIDI 2.0 Spec:
+    ///
+    /// "The UMP Format provides a set of Utility Messages. Utility Messages include but are not limited to NOOP and timestamps, and might in the future include UMP transport-related functions."
+    ///
+    /// - Parameters:
+    ///   - group: UMP Group (0x0...0xF)
+    @inline(__always)
+    public static func noOp(group: MIDI.UInt4 = 0x0) -> Self {
+        
+        .noOp(
+            .init(group: group)
+        )
+        
+    }
+    
+}
+
+extension MIDI.Event.NoOp {
+    
+    /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    @inline(__always)
+    public func umpRawWords() -> [MIDI.UMPWord] {
+        
+        let umpMessageType: MIDI.IO.Packet.UniversalPacketData.MessageType = .utility
+        
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+        
+        let utilityStatus: MIDI.IO.Packet.UniversalPacketData.UtilityStatusField = .noOp
+        
+        // MIDI 2.0 only
+        
+        let word = MIDI.UMPWord(mtAndGroup,
+                                (utilityStatus.rawValue.uInt8Value << 4) + 0x0,
+                                0x00,
+                                0x00)
+        
+        return [word]
+        
+    }
+    
+}
