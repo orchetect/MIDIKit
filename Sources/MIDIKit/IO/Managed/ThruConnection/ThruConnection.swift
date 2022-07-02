@@ -20,6 +20,8 @@
 // A new issue seems to be present on macOS Big Sur and later where thru connections do not flow any MIDI events.
 // - https://stackoverflow.com/questions/54871326/how-is-a-coremidi-thru-connection-made-in-swift-4-2
 
+#if !os(tvOS) && !os(watchOS)
+
 import Foundation
 @_implementationOnly import CoreMIDI
 
@@ -158,3 +160,5 @@ extension MIDI.IO.ThruConnection: CustomStringConvertible {
     }
     
 }
+
+#endif

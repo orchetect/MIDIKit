@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 import Foundation
 
 extension MIDIIOObjectProtocol {
@@ -106,7 +108,7 @@ extension MIDIIOObjectProtocol {
         // MARK: Protocols
         case .protocolID:
             var valueString = "-"
-            if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
+            if #available(macOS 11, iOS 14, macCatalyst 14, *) {
                 if let unwrappedProtocolID = getProtocolID() {
                     valueString = "\(unwrappedProtocolID)"
                 }
@@ -267,3 +269,5 @@ extension MIDIIOObjectProtocol {
     }
     
 }
+
+#endif

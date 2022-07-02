@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 extension Collection where Element : MIDIIOEndpointProtocol {
     
     // Note: sortedByName() is already implemented on MIDIIOEndpointProtocol
@@ -100,3 +102,5 @@ extension Collection where Element : MIDIIOEndpointProtocol {
     }
     
 }
+
+#endif

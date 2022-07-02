@@ -6,7 +6,9 @@
 import Foundation
 @_implementationOnly import CoreMIDI
 
-@available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+#if !os(tvOS) && !os(watchOS)
+
+@available(macOS 11, iOS 14, macCatalyst 14, *)
 extension UnsafePointer where Pointee == MIDIEventList {
     
     /// Internal:
@@ -18,6 +20,7 @@ extension UnsafePointer where Pointee == MIDIEventList {
             return []
         }
         
+        // unsafeSequence() is not available on tvOS or watchOS at all
         let sequencedPackets = unsafeSequence()
             .map {
                 (words: $0.sequence().map { $0 },
@@ -42,6 +45,13 @@ extension UnsafePointer where Pointee == MIDIEventList {
         return packets
         
     }
+    
+}
+
+#endif
+
+@available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
+extension UnsafePointer where Pointee == MIDIEventList {
     
     /// Internal:
     /// Parses an EventPacket's words and splits it into individual UMP messages.

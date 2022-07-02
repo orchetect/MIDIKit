@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 extension MIDI.IO {
     
     /// Type-erased representation of a MIDIKit object conforming to `MIDIIOObjectProtocol`.
@@ -71,3 +73,5 @@ extension Collection where Element : MIDIIOObjectProtocol {
     }
     
 }
+
+#endif

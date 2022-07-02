@@ -3,15 +3,17 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import Foundation
+#if !os(tvOS) && !os(watchOS)
 
-#if canImport(AppKit)
-import AppKit
-#endif
+    import Foundation
 
-#if canImport(UIKit)
-import UIKit
-#endif
+    #if canImport(AppKit)
+    import AppKit
+    #endif
+
+    #if canImport(UIKit)
+    import UIKit
+    #endif
 
 public protocol MIDIIOObjectProtocol {
     
@@ -129,3 +131,5 @@ public protocol MIDIIOObjectProtocol {
     func asAnyMIDIIOObject() -> MIDI.IO.AnyMIDIIOObject
     
 }
+
+#endif

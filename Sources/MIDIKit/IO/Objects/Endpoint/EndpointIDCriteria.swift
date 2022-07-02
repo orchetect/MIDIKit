@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
@@ -163,3 +165,5 @@ extension MIDI.IO.EndpointIDCriteria {
     }
     
 }
+
+#endif

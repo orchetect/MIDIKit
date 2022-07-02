@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 import Foundation
 @_implementationOnly import CoreMIDI
 
@@ -392,7 +394,7 @@ extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
         
     }
     
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+    @available(macOS 11, iOS 14, macCatalyst 14, *)
     internal func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         
         guard let unwrappedOutputPortRef = self.coreMIDIOutputPortRef else {
@@ -417,3 +419,5 @@ extension MIDI.IO.OutputConnection: _MIDIIOSendsMIDIMessagesProtocol {
     }
     
 }
+
+#endif

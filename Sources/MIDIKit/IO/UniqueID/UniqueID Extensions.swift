@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 // MARK: - Collection
 
 extension Set where Element == MIDI.IO.UniqueID {
@@ -30,3 +32,5 @@ extension Array where Element == MIDI.IO.UniqueID {
     }
     
 }
+
+#endif

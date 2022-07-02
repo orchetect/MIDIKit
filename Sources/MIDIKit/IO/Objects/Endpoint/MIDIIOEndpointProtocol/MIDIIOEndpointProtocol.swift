@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 // MARK: - Public Protocol
 
 public protocol MIDIIOEndpointProtocol: MIDIIOObjectProtocol {
@@ -51,3 +53,5 @@ extension MIDIIOEndpointProtocol {
     }
     
 }
+
+#endif

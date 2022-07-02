@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 // MARK: - OutputEndpoint
 
 extension MIDI.IO {
@@ -74,3 +76,5 @@ extension MIDI.IO.OutputEndpoint: CustomDebugStringConvertible {
     }
     
 }
+
+#endif

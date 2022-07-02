@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 // MARK: - sorted
 
 extension Collection where Element : MIDIIOObjectProtocol {
@@ -80,3 +82,5 @@ extension Collection where Element : MIDIIOObjectProtocol {
     }
     
 }
+
+#endif

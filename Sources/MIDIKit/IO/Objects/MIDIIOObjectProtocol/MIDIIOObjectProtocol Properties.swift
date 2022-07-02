@@ -3,16 +3,18 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-import Foundation
-@_implementationOnly import CoreMIDI
+#if !os(tvOS) && !os(watchOS)
 
-#if canImport(AppKit)
-import AppKit
-#endif
+    import Foundation
+    @_implementationOnly import CoreMIDI
 
-#if canImport(UIKit)
-import UIKit
-#endif
+    #if canImport(AppKit)
+    import AppKit
+    #endif
+
+    #if canImport(UIKit)
+    import UIKit
+    #endif
 
 // MARK: - Properties (Computed)
 
@@ -423,3 +425,5 @@ extension MIDIIOObjectProtocol {
     }
     
 }
+
+#endif

@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 extension MIDI.IO {
     
     /// Error type returned by `MIDI.IO` methods.
@@ -76,3 +78,5 @@ extension MIDI.IO.MIDIError: CustomStringConvertible {
     }
     
 }
+
+#endif

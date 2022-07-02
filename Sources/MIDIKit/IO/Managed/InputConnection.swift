@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 import Foundation
 @_implementationOnly import CoreMIDI
 
@@ -197,7 +199,7 @@ extension MIDI.IO.InputConnection {
             .throwIfOSStatusErr()
             
         case .newCoreMIDI:
-            guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
+            guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
                 throw MIDI.IO.MIDIError.internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
@@ -477,3 +479,5 @@ extension MIDI.IO.InputConnection: MIDIIOReceivesMIDIMessagesProtocol {
     // empty
     
 }
+
+#endif

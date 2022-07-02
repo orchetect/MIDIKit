@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 // MARK: - Equatable default implementation
 
 // (conforming types to MIDIIOObjectProtocol just need to conform to Equatable and this implementation will be used)
@@ -30,3 +32,5 @@ extension MIDIIOObjectProtocol {
     }
     
 }
+
+#endif

@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO.ThruConnection {
@@ -167,3 +169,5 @@ extension MIDI.IO.ThruConnection.Parameters {
     }
     
 }
+
+#endif

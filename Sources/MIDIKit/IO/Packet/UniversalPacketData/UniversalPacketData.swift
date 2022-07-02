@@ -41,7 +41,9 @@ extension MIDI.IO.Packet {
     
 }
 
-@available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+#if !os(tvOS) && !os(watchOS)
+
+@available(macOS 11, iOS 14, macCatalyst 14, *)
 extension MIDI.IO.Packet.UniversalPacketData {
     
     /// Universal MIDI Packet
@@ -139,3 +141,5 @@ extension MIDI.IO.Packet.UniversalPacketData {
     }
     
 }
+
+#endif

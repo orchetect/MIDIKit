@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 @_implementationOnly import CoreMIDI
 
 extension MIDIPacketList {
@@ -122,3 +124,5 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
     }
     
 }
+
+#endif
