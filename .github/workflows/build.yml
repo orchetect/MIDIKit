@@ -67,7 +67,7 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Apple TV - Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation)"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=tvOS Simulator,name=Any tvOS Simulator Device"
     - name: Apple TV - Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation)"
       
@@ -77,7 +77,7 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Apple Watch - Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 7 - 45mm"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=watchOS Simulator,name=Any watchOS Simulator Device"
     - name: Apple Watch - Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 7 - 45mm"
 
