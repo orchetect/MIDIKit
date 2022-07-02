@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 import Foundation
 @_implementationOnly import CoreMIDI
 
@@ -37,7 +39,7 @@ extension UnsafePointer where Pointee == MIDIPacketList {
 
 extension MIDIPacketList {
     
-    /// Iterates packeets in a `MIDIPacketList` and calls the closure for each packet.
+    /// Iterates packets in a `MIDIPacketList` and calls the closure for each packet.
     /// This is confirmed working on Mojave.
     /// There were numerous difficulties in reading MIDIPacketList on Mojave and earlier and this solution was stable.
     @inline(__always)
@@ -56,3 +58,5 @@ extension MIDIPacketList {
     }
     
 }
+
+#endif

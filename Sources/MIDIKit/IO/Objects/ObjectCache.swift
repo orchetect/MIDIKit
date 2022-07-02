@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 import Foundation
 
 extension MIDI.IO {
@@ -25,3 +27,5 @@ extension MIDI.IO {
     }
     
 }
+
+#endif

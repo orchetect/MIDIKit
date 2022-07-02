@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 // MARK: - Public Protocol
 
 public protocol MIDIIOManagedProtocol: AnyObject {
@@ -21,3 +23,5 @@ internal protocol _MIDIIOManagedProtocol: MIDIIOManagedProtocol {
     /* weak */ var midiManager: MIDI.IO.Manager? { get set }
     
 }
+
+#endif

@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 import os.log
 
 extension MIDI.IO.ReceiveHandler {
@@ -36,7 +38,7 @@ extension MIDI.IO.ReceiveHandler {
             
         }
         
-        @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        @available(macOS 11, iOS 14, macCatalyst 14, *)
         @inline(__always)
         public func eventListReceived(
             _ packets: [MIDI.IO.Packet.UniversalPacketData],
@@ -89,3 +91,5 @@ extension MIDI.IO.ReceiveHandler {
     }
     
 }
+
+#endif

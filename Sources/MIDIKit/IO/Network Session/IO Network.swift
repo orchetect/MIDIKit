@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 import Foundation
 @_implementationOnly import CoreMIDI
 
@@ -42,3 +44,5 @@ extension NSNotification.Name {
     public static let midiNetworkContactsDidChange = NSNotification.Name(MIDINetworkNotificationSessionDidChange)
     
 }
+
+#endif

@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 // MARK: - Device
 
 extension MIDI.IO {
@@ -99,3 +101,4 @@ extension MIDI.IO.Device: CustomDebugStringConvertible {
     
 }
 
+#endif

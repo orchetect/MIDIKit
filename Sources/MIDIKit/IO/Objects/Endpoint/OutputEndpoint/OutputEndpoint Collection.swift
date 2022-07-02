@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 // MARK: - Static conveniences
 
 extension Set where Element == MIDI.IO.EndpointIDCriteria {
@@ -70,3 +72,5 @@ extension Array where Element == MIDI.IO.OutputEndpoint {
     }
     
 }
+
+#endif

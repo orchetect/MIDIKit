@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if shouldTestCurrentPlatform
+#if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
 import XCTest
 @testable import MIDIKit
@@ -13,7 +13,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
 	
 	func testSinglePacketWithOneUMP() throws {
         
-        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
         else { return }
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
@@ -41,7 +41,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
     
     func testSinglePacketWithMultipleUMPs() throws {
         
-        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
         else { return }
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
@@ -73,7 +73,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
     
     func testMultiplePacketsWithSingleUMPs() throws {
         
-        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
         else { return }
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
@@ -105,7 +105,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
     
     func testMultiplePacketsWithMultipleUMPs() throws {
         
-        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
         else { return }
         
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
@@ -143,7 +143,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         
     }
     
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
     fileprivate func makeEventList(words: [[MIDI.UMPWord]],
                                    timeStamp: MIDITimeStamp) throws -> MIDIEventList {
         

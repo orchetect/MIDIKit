@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 extension MIDI.IO {
     
     /// Type-erased box that can contain `MIDI.IO.InputEndpoint` or `MIDI.IO.OutputEndpoint`.
@@ -100,3 +102,5 @@ extension Collection where Element : MIDIIOEndpointProtocol {
     }
     
 }
+
+#endif

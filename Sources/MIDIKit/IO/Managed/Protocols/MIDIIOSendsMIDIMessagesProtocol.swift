@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 @_implementationOnly import CoreMIDI
 
 // MARK: - Public Protocol
@@ -45,14 +47,14 @@ internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProto
     
     /// Internal:
     /// Send a Core MIDI `MIDIEventList`. (MIDI 1.0 and 2.0, using new Core MIDI API).
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+    @available(macOS 11, iOS 14, macCatalyst 14, *)
     func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws
     
     /// Internal:
     /// Send a MIDI message inside a Universal MIDI Packet.
     ///
     /// - Parameter rawWords: Array of `UInt32` words
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+    @available(macOS 11, iOS 14, macCatalyst 14, *)
     func send(rawWords: [MIDI.UMPWord]) throws
     
 }
@@ -97,7 +99,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
         
     }
     
-    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *)
+    @available(macOS 11, iOS 14, macCatalyst 14, *)
     @inline(__always)
     internal func send(rawWords: [MIDI.UMPWord]) throws {
         
@@ -133,7 +135,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
             try send(rawMessage: event.midi1RawBytes())
             
         case .newCoreMIDI:
-            guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
+            guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
                 throw MIDI.IO.MIDIError.internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
@@ -162,7 +164,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
             }
             
         case .newCoreMIDI:
-            guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) else {
+            guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
                 throw MIDI.IO.MIDIError.internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
@@ -179,3 +181,5 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
     }
     
 }
+
+#endif

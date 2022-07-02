@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 extension Set where Element == MIDI.IO.AnyEndpoint {
     
     /// Returns the endpoints as endpoint criteria.
@@ -30,3 +32,5 @@ extension Array where Element == MIDI.IO.AnyEndpoint {
     }
     
 }
+
+#endif

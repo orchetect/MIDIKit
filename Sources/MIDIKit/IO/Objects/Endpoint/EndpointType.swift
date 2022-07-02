@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 extension MIDI.IO {
     
     public enum EndpointType: Equatable, Hashable, CaseIterable {
@@ -13,3 +15,5 @@ extension MIDI.IO {
     }
     
 }
+
+#endif

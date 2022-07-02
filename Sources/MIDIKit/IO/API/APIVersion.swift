@@ -15,7 +15,7 @@ extension MIDI.IO {
         /// Internally using `MIDIPacketList` / `MIDIPacket`.
         case legacyCoreMIDI
         
-        /// New Core MIDI API introduced in macOS 11, iOS 14, macCatalyst 14, tvOS 14, and watchOS 7.
+        /// New Core MIDI API introduced in macOS 11, iOS 14, and macCatalyst 14.
         ///
         /// Internally using `MIDIEventList` / `MIDIEventPacket`.
         case newCoreMIDI(ProtocolVersion)
@@ -48,7 +48,7 @@ extension MIDI.IO.APIVersion {
     /// Returns the recommended API version for the current platform (operating system).
     public static func bestForPlatform() -> Self {
         
-        if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
+        if #available(macOS 11, iOS 14, macCatalyst 14, *) {
             return .newCoreMIDI(._2_0)
             
         } else {
@@ -77,7 +77,8 @@ extension MIDI.IO.APIVersion {
                 if #available(iOS 16, *) { return false }
                 return true
             #elseif os(tvOS) || os(watchOS)
-                // only new API is supported on tvOS and watchOS
+                // only new API is supported on tvOS and watchOS,
+                // and only a tiny subset is available
                 return false
             #else
                 // future or unknown/unsupported platform
@@ -85,7 +86,7 @@ extension MIDI.IO.APIVersion {
             #endif
             
         case .newCoreMIDI:
-            if #available(macOS 11, iOS 14, macCatalyst 14, tvOS 14, watchOS 7, *) {
+            if #available(macOS 11, iOS 14, macCatalyst 14, *) {
                 return true
             }
             

@@ -3,6 +3,8 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 import Foundation
 @_implementationOnly import CoreMIDI
 
@@ -158,7 +160,7 @@ extension MIDI.IO {
         internal dynamic func updateObjectsCache() {
             
             #if canImport(Combine)
-            if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13, watchOS 6, *) {
+            if #available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *) {
                 // calling this means we don't need to use @Published on local variables in order for Combine/SwiftUI to be notified that ObservableObject class property values have changed
                 objectWillChange.send()
             }
@@ -176,8 +178,10 @@ extension MIDI.IO {
 #if canImport(Combine)
 import Combine
 
-@available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13, watchOS 6, *)
+@available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
 extension MIDI.IO.Manager: ObservableObject {
     // nothing here; just add ObservableObject conformance
 }
+#endif
+
 #endif

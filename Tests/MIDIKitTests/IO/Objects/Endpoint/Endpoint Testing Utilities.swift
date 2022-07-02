@@ -3,7 +3,7 @@
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
-#if shouldTestCurrentPlatform
+#if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
 @testable import MIDIKit
 
