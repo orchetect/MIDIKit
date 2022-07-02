@@ -61,17 +61,25 @@ jobs:
     - name: iPhone 12 Simulator - Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12"
   
-# Core MIDI is still in beta for tvOS and watchOS; can add CI tests later once it's supported
-#
-#  tvOS:
-#    name: tvOS
-#    runs-on: macos-latest # this must be macos, GitHub does not offer tvOS directly but we can use xcodebuild
-#    steps:
-#    - uses: actions/checkout@main
-#    - name: Apple TV - Build
-#      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV"
-#    - name: Apple TV - Unit Tests
-#      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV"
+  tvOS:
+    name: tvOS
+    runs-on: macos-latest # this must be macos, GitHub does not offer tvOS directly but we can use xcodebuild
+    steps:
+    - uses: actions/checkout@main
+    - name: Apple TV - Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation)"
+    - name: Apple TV - Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation)"
+      
+  watchOS:
+    name: watchOS
+    runs-on: macos-latest # this must be macos, GitHub does not offer watchOS directly but we can use xcodebuild
+    steps:
+    - uses: actions/checkout@main
+    - name: Apple Watch - Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 7 - 45mm"
+    - name: Apple Watch - Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 7 - 45mm"
 
 
 # xcodebuild test reference:
