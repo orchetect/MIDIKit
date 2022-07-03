@@ -8,6 +8,7 @@ An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MID
 - Automatic MIDI endpoint connection management and unique ID persistence
 - Strongly-typed MIDI events that seamlessly interoperate between MIDI 1.0 and MIDI 2.0
 - Automatically uses appropriate Core MIDI API and defaults to MIDI 2.0 on platforms that support them
+- Supports Swift Playgrounds on iPad and macOS
 
 ## MIDIKit Extensions
 
