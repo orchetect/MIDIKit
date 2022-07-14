@@ -13,6 +13,7 @@
 		E27D0E45284F378100F43247 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E44284F378100F43247 /* ContentView.swift */; };
 		E27D0E55284F386A00F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E54284F386A00F43247 /* MIDIKit */; };
 		E29AC930285BF355009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC92F285BF355009D1C2C /* MIDIKit */; };
+		E29FF2A72880BCF7005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2A62880BCF7005E2BC2 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		E27D0E42284F378100F43247 /* EndpointPickersApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointPickersApp.swift; sourceTree = "<group>"; };
 		E27D0E44284F378100F43247 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E27D0E4B284F378200F43247 /* EndpointPickers.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EndpointPickers.entitlements; sourceTree = "<group>"; };
+		E29FF2A62880BCF7005E2BC2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				E27D0E44284F378100F43247 /* ContentView.swift */,
 				E24CB06E285199E400649B50 /* MIDIEndpointSelectionView.swift */,
 				E27D0E4B284F378200F43247 /* EndpointPickers.entitlements */,
+				E29FF2A62880BCF7005E2BC2 /* Images.xcassets */,
 			);
 			path = EndpointPickers;
 			sourceTree = "<group>";
@@ -132,6 +135,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E29FF2A72880BCF7005E2BC2 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

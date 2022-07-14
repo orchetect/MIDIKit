@@ -11,6 +11,7 @@
 		E230C4A325AE7B31005DCB55 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E230C4A225AE7B31005DCB55 /* AppDelegate.swift */; };
 		E230C4A525AE7B31005DCB55 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E230C4A425AE7B31005DCB55 /* ContentView.swift */; };
 		E230C4AD25AE7B33005DCB55 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E230C4AB25AE7B33005DCB55 /* Main.storyboard */; };
+		E24696C32880B69E00485518 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E24696C22880B69E00485518 /* Images.xcassets */; };
 		E24D200525BE75A90095BDE5 /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E24D200425BE75A90095BDE5 /* OTCore */; };
 		E24D200B25BE75D90095BDE5 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E24D200A25BE75D90095BDE5 /* MIDIKit */; };
 		E26B849C25EDA4F400080052 /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26B849B25EDA4F400080052 /* DetailsView.swift */; };
@@ -27,6 +28,7 @@
 		E230C4AC25AE7B33005DCB55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E230C4AE25AE7B33005DCB55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E230C4AF25AE7B33005DCB55 /* MIDISystemInfo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MIDISystemInfo.entitlements; sourceTree = "<group>"; };
+		E24696C22880B69E00485518 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E26B849B25EDA4F400080052 /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
 		E293070325E90D750011904C /* HostingWindowKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingWindowKey.swift; sourceTree = "<group>"; };
 		E2F71ED12758E92E006254C0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				E230C4AB25AE7B33005DCB55 /* Main.storyboard */,
 				E230C4AE25AE7B33005DCB55 /* Info.plist */,
 				E230C4AF25AE7B33005DCB55 /* MIDISystemInfo.entitlements */,
+				E24696C22880B69E00485518 /* Images.xcassets */,
 			);
 			path = MIDISystemInfo;
 			sourceTree = "<group>";
@@ -145,6 +148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E230C4AD25AE7B33005DCB55 /* Main.storyboard in Resources */,
+				E24696C32880B69E00485518 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +300,7 @@
 		E230C4C925AE7B33005DCB55 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MIDISystemInfo/MIDISystemInfo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -317,6 +322,7 @@
 		E230C4CA25AE7B33005DCB55 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MIDISystemInfo/MIDISystemInfo.entitlements;
 				CODE_SIGN_STYLE = Automatic;

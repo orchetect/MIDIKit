@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E27D0E63284F3FB600F43247 /* BluetoothMIDIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E62284F3FB600F43247 /* BluetoothMIDIApp.swift */; };
 		E27D0E65284F3FB600F43247 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E64284F3FB600F43247 /* ContentView.swift */; };
+		E29FF28B2880B730005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF28A2880B730005E2BC2 /* Images.xcassets */; };
 		E2B5EE5B284F478700E120DC /* BluetoothMIDIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B5EE5A284F478700E120DC /* BluetoothMIDIView.swift */; };
 /* End PBXBuildFile section */
 
@@ -18,6 +19,7 @@
 		E27D0E64284F3FB600F43247 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E27D0E70284F402C00F43247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E29A5E912852A13D00E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E29FF28A2880B730005E2BC2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E2B5EE5A284F478700E120DC /* BluetoothMIDIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothMIDIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -55,6 +57,7 @@
 				E27D0E62284F3FB600F43247 /* BluetoothMIDIApp.swift */,
 				E27D0E64284F3FB600F43247 /* ContentView.swift */,
 				E2B5EE5A284F478700E120DC /* BluetoothMIDIView.swift */,
+				E29FF28A2880B730005E2BC2 /* Images.xcassets */,
 				E27D0E70284F402C00F43247 /* Info.plist */,
 			);
 			path = BluetoothMIDI;
@@ -120,6 +123,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E29FF28B2880B730005E2BC2 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

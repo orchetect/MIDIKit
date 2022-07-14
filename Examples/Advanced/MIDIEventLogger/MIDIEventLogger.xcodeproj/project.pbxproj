@@ -14,6 +14,7 @@
 		E26A25CD26C5876400FFCF40 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E26A25CC26C5876400FFCF40 /* MIDIKit */; };
 		E26A25CF26C5AD4700FFCF40 /* ContentView SubViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25CE26C5AD4700FFCF40 /* ContentView SubViews.swift */; };
 		E29AC90C285BEFB1009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC90B285BEFB1009D1C2C /* MIDIKit */; };
+		E2B099132880AE3800625201 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2B099122880AE3800625201 /* Images.xcassets */; };
 		E2E8BD89279F8DF4007A1AF0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +25,7 @@
 		E26A25BF26C5873B00FFCF40 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		E26A25C026C5873B00FFCF40 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E26A25CE26C5AD4700FFCF40 /* ContentView SubViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView SubViews.swift"; sourceTree = "<group>"; };
+		E2B099122880AE3800625201 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E2B38F2026C63918008770A6 /* MIDIEventLogger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MIDIEventLogger.entitlements; sourceTree = "<group>"; };
 		E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -68,6 +70,7 @@
 				E216886026C5E5A400BF7959 /* Info.plist */,
 				E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */,
 				E2B38F2026C63918008770A6 /* MIDIEventLogger.entitlements */,
+				E2B099122880AE3800625201 /* Images.xcassets */,
 			);
 			path = MIDIEventLogger;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2E8BD89279F8DF4007A1AF0 /* Main.storyboard in Resources */,
+				E2B099132880AE3800625201 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +283,7 @@
 		E26A25BB26C586F700FFCF40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MIDIEventLogger/MIDIEventLogger.entitlements;
@@ -293,6 +298,7 @@
 				INFOPLIST_FILE = MIDIEventLogger/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -310,6 +316,7 @@
 		E26A25BC26C586F700FFCF40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MIDIEventLogger/MIDIEventLogger.entitlements;
@@ -324,6 +331,7 @@
 				INFOPLIST_FILE = MIDIEventLogger/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

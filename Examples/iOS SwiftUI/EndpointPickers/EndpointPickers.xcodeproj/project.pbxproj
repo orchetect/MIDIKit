@@ -12,6 +12,7 @@
 		E27D0E65284F3FB600F43247 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E64284F3FB600F43247 /* ContentView.swift */; };
 		E27D0E75284F409600F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E74284F409600F43247 /* MIDIKit */; };
 		E29AC912285BF048009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC911285BF048009D1C2C /* MIDIKit */; };
+		E29FF28D2880BB54005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF28C2880BB54005E2BC2 /* Images.xcassets */; };
 		E2FDAE562851AAEE00F98425 /* MIDIEndpointSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FDAE552851AAEE00F98425 /* MIDIEndpointSelectionView.swift */; };
 /* End PBXBuildFile section */
 
@@ -21,6 +22,7 @@
 		E27D0E62284F3FB600F43247 /* EndpointPickersApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointPickersApp.swift; sourceTree = "<group>"; };
 		E27D0E64284F3FB600F43247 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E27D0E70284F402C00F43247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E29FF28C2880BB54005E2BC2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E2FDAE542851AA8C00F98425 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E2FDAE552851AAEE00F98425 /* MIDIEndpointSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEndpointSelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,6 +64,7 @@
 				E21299082851D8D600957FE8 /* MIDIHelper.swift */,
 				E27D0E64284F3FB600F43247 /* ContentView.swift */,
 				E2FDAE552851AAEE00F98425 /* MIDIEndpointSelectionView.swift */,
+				E29FF28C2880BB54005E2BC2 /* Images.xcassets */,
 				E27D0E70284F402C00F43247 /* Info.plist */,
 			);
 			path = EndpointPickers;
@@ -132,6 +135,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E29FF28D2880BB54005E2BC2 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

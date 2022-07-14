@@ -13,6 +13,7 @@
 		E27D0E55284F386A00F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E54284F386A00F43247 /* MIDIKit */; };
 		E29AC909285A9A27009D1C2C /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC908285A9A27009D1C2C /* SwiftRadix */; };
 		E29AC933285BF386009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC932285BF386009D1C2C /* MIDIKit */; };
+		E29FF2A92880BD1E005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2A82880BD1E005E2BC2 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		E27D0E44284F378100F43247 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E27D0E4B284F378200F43247 /* EventParsing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EventParsing.entitlements; sourceTree = "<group>"; };
 		E29A5E992852A2C500E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E29FF2A82880BD1E005E2BC2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 				E26C0254285BF9DD00F64896 /* MIDIHelper.swift */,
 				E27D0E44284F378100F43247 /* ContentView.swift */,
 				E27D0E4B284F378200F43247 /* EventParsing.entitlements */,
+				E29FF2A82880BD1E005E2BC2 /* Images.xcassets */,
 			);
 			path = EventParsing;
 			sourceTree = "<group>";
@@ -133,6 +136,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E29FF2A92880BD1E005E2BC2 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
