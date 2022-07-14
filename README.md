@@ -1,4 +1,4 @@
-![midikit-banner](Images/midikit-banner.png)
+![MIDIKit](Images/midikit-banner.png)
 
 # MIDIKit
 
