@@ -57,7 +57,7 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: iPhone 12 Simulator - Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=iOS Simulator,name=Any iOS Device"
     - name: iPhone 12 Simulator - Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12"
   
