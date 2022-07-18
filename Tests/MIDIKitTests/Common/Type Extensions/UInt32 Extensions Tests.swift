@@ -10,9 +10,9 @@ import MIDIKit
 
 final class UInt32Extensions_Tests: XCTestCase {
     
-    fileprivate let _min      = 0x0000_0000
-    fileprivate let _midpoint = 0x8000_0000
-    fileprivate let _max      = 0xFFFF_FFFF
+    fileprivate let _min: UInt32      = 0x0000_0000
+    fileprivate let _midpoint: UInt32 = 0x8000_0000
+    fileprivate let _max: UInt32      = 0xFFFF_FFFF
     
     func testInitBipolarUnitInterval_Float() {
         
