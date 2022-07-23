@@ -267,28 +267,28 @@ extension ContentView {
                     
                     HStack {
                         Button {
-                            sendEvent(.noteManagement(60,
+                            sendEvent(.noteManagement(note: 60,
                                                       flags: [],
                                                       channel: midiChannel,
                                                       group: midiGroup))
                         } label: { Text("Note Management") }
                         
                         Button {
-                            sendEvent(.noteManagement(60,
+                            sendEvent(.noteManagement(note: 60,
                                                       flags: [.detachPerNoteControllers],
                                                       channel: midiChannel,
                                                       group: midiGroup))
                         } label: { Text("D") }
                         
                         Button {
-                            sendEvent(.noteManagement(60,
+                            sendEvent(.noteManagement(note: 60,
                                                       flags: [.resetPerNoteControllers],
                                                       channel: midiChannel,
                                                       group: midiGroup))
                         } label: { Text("S") }
                         
                         Button {
-                            sendEvent(.noteManagement(60,
+                            sendEvent(.noteManagement(note: 60,
                                                       flags: [.detachPerNoteControllers,
                                                               .resetPerNoteControllers],
                                                       channel: midiChannel,
