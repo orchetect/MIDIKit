@@ -22,7 +22,7 @@ Abstractions are built as optional extensions in their own repos.
 
 ## Getting Started
 
-1. Add MIDIKit as a dependency  using Swift Package Manager.
+1. Add MIDIKit as a dependency using Swift Package Manager.
    - In an app project or framework, in Xcode:
      - Select the menu: **File → Swift Packages → Add Package Dependency...**
      - Enter this URL: `https://github.com/orchetect/MIDIKit`
@@ -33,9 +33,9 @@ Abstractions are built as optional extensions in their own repos.
      ```
   
 2. Import the library:
-  ```swift
-  import MIDIKit
-  ```
+   ```swift
+   import MIDIKit
+   ```
 
 3. See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a getting started guide, links to examples, and troubleshooting tips.
 

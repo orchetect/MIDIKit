@@ -56,12 +56,12 @@ extension MIDI {
         case pitchBend(PitchBend)
         
         /// Channel Voice Message: Channel Pressure (Aftertouch)
+        /// (MIDI 1.0 / 2.0)
         ///
         /// Also known as:
         /// - Pro Tools: "Mono Aftertouch"
         /// - Logic Pro: "Aftertouch"
         /// - Cubase: "Aftertouch"
-        /// (MIDI 1.0 / 2.0)
         case pressure(Pressure)
         
         

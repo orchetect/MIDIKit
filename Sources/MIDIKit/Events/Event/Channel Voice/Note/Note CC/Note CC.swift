@@ -30,7 +30,6 @@ extension MIDI.Event.Note {
         /// Channel Voice Message: Per-Note Control Change (CC)
         /// (MIDI 2.0)
         ///
-        ///
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
         ///   - controller: Controller type
@@ -53,7 +52,6 @@ extension MIDI.Event.Note {
         
         /// Channel Voice Message: Per-Note Control Change (CC)
         /// (MIDI 2.0)
-        ///
         ///
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
