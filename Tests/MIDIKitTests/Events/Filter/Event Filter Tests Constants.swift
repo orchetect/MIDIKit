@@ -37,7 +37,7 @@ enum kEvents {
                                                             channel: 1,
                                                             group: 0)
         
-        static let noteManagement: MIDI.Event = .noteManagement(61,
+        static let noteManagement: MIDI.Event = .noteManagement(note: 61,
                                                                 flags: [.resetPerNoteControllers],
                                                                 channel: 4,
                                                                 group: 0)

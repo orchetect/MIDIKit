@@ -531,7 +531,7 @@ extension MIDI.IO {
                 guard let note = byte(1).toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .noteManagement(note,
+                let newEvent: MIDI.Event = .noteManagement(note: note,
                                                            flags: .init(byte: byte(2)),
                                                            channel: channel,
                                                            group: group)

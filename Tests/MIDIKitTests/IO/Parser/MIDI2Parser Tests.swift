@@ -167,7 +167,7 @@ final class MIDIEventMIDI2ParserTests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x43, 0xF1, 0x3C, 0b0000_0011,
                                  0x12, 0x34, 0x56, 0x78]),
-            [.noteManagement(60, flags: [.detachPerNoteControllers, .resetPerNoteControllers], channel: 1, group: 3)]
+            [.noteManagement(note: 60, flags: [.detachPerNoteControllers, .resetPerNoteControllers], channel: 1, group: 3)]
         )
         
     }

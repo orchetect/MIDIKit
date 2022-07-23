@@ -88,7 +88,7 @@ extension MIDI.Event {
     ///   - channel: Channel Number (0x0...0xF)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (0x0...0xF)
-    public static func noteManagement(_ note: MIDI.UInt7,
+    public static func noteManagement(note: MIDI.UInt7,
                                       flags: Set<Note.Management.OptionFlag>,
                                       channel: MIDI.UInt4,
                                       group: MIDI.UInt4 = 0x0) -> Self {
@@ -113,7 +113,7 @@ extension MIDI.Event {
     ///   - channel: Channel Number (0x0...0xF)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (0x0...0xF)
-    public static func noteManagement(_ note: MIDI.Note,
+    public static func noteManagement(note: MIDI.Note,
                                       flags: Set<Note.Management.OptionFlag>,
                                       channel: MIDI.UInt4,
                                       group: MIDI.UInt4 = 0x0) -> Self {

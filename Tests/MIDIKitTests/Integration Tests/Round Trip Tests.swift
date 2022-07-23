@@ -230,7 +230,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
             })
             
             sourceEvents.append(contentsOf: (0...127).map {
-                .noteManagement($0.toMIDIUInt7,
+                .noteManagement(note: $0.toMIDIUInt7,
                                 flags: [.resetPerNoteControllers],
                                 channel: (0...0xF).randomElement()!,
                                 group: (0...MIDI.UInt4.max).randomElement()!)
