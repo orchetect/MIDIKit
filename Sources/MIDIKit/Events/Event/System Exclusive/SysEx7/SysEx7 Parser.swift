@@ -160,8 +160,8 @@ extension MIDI.Event {
     ///
     /// - Throws: `MIDI.Event.ParseError` if message is malformed.
     @inline(__always)
-    public static func sysEx7(
-        rawHexString: some StringProtocol,
+    public static func sysEx7<S: StringProtocol>(
+        rawHexString: S,
         group: MIDI.UInt4 = 0
     ) throws -> Self {
         
