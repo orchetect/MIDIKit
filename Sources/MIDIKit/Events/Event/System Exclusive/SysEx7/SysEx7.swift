@@ -66,6 +66,34 @@ extension MIDI.Event {
 
 extension MIDI.Event.SysEx7 {
     
+    /// Returns the raw MIDI 1.0 message bytes that comprise the event as a human-readable string of hex characters.
+    ///
+    /// By default the string is returned separated by spaces (ie: `"F7 01 02 03 F0"`).
+    ///
+    /// A custom separator may be used or pass `nil` for no separator (ie: `"F7010203F0"`).
+    public func midi1RawHexString(
+        leadingF0: Bool = true,
+        trailingF7: Bool = true,
+        separator: String? = " "
+    ) -> String {
+        
+        let bytes = midi1RawBytes(leadingF0: leadingF0,
+                                  trailingF7: trailingF7)
+        
+        if let separator = separator {
+            return bytes.hex.stringValues(padTo: 2, prefixes: false)
+                .joined(separator: separator)
+        } else {
+            return bytes.hex.stringValues(padTo: 2, prefixes: false)
+                .joined()
+        }
+        
+    }
+    
+}
+
+extension MIDI.Event.SysEx7 {
+    
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.

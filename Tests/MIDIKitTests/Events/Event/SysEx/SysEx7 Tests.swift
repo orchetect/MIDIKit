@@ -188,6 +188,32 @@ final class SysEx7Tests: XCTestCase {
         
     }
     
+    func testSysEx7_midi1RawHexString() throws {
+        
+        let sysEx = MIDI.Event.SysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+        
+        XCTAssertEqual(
+            sysEx.midi1RawHexString(),
+            "F0 41 01 34 F7"
+        )
+        
+        XCTAssertEqual(
+            sysEx.midi1RawHexString(leadingF0: false, trailingF7: false),
+            "41 01 34"
+        )
+        
+        XCTAssertEqual(
+            sysEx.midi1RawHexString(separator: nil),
+            "F0410134F7"
+        )
+        
+        XCTAssertEqual(
+            sysEx.midi1RawHexString(separator: ", "),
+            "F0, 41, 01, 34, F7"
+        )
+        
+    }
+    
     func testUniversalSysEx7RawHexString_Typical() throws {
         
         // space delimiter
