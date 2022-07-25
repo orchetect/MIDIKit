@@ -124,6 +124,170 @@ final class SysEx7Tests: XCTestCase {
 		
 	}
 	
+    func testSysEx7RawHexString_Typical() throws {
+        
+        // space delimiter
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "F0 41 01 34 F7"),
+            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+        )
+        
+        // compact
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "F0410134F7"),
+            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+        )
+        
+        // variable spacing
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "F0 41 0134 F7"),
+            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+        )
+        
+        // space delimiter - no trailing F7
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "F0 41 01 34"),
+            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+        )
+        
+        // compact - no trailing F7
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "F0410134"),
+            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+        )
+        
+        // lowercase - no trailing F7
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "f0410134"),
+            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+        )
+        
+    }
+    
+    func testSysEx7RawHexString_Malformed() throws {
+        
+        // wrong leading and trailing bytes
+        XCTAssertThrowsError(
+            try MIDI.Event.sysEx7(rawHexString: "F7 41 01 34 F0")
+        )
+        
+        // missing leading byte
+        XCTAssertThrowsError(
+            try MIDI.Event.sysEx7(rawHexString: "41 01 34 F0")
+        )
+        
+        // invalid hex characters
+        XCTAssertThrowsError(
+            try MIDI.Event.sysEx7(rawHexString: "F0 41 01 ZZ F7")
+        )
+        
+        // uneven number of hex characters (should be in pairs)
+        XCTAssertThrowsError(
+            try MIDI.Event.sysEx7(rawHexString: "F0 41 01 34 F")
+        )
+        
+    }
+    
+    func testUniversalSysEx7RawHexString_Typical() throws {
+        
+        // space delimiter
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "F0 7F 01 34 56 10 11 F7"),
+            .universalSysEx7(
+                    universalType: .realTime,
+                    deviceID: 0x01,
+                    subID1: 0x34,
+                    subID2: 0x56,
+                    data: [0x10, 0x11]
+            )
+        )
+        
+        // compact
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "F07F0134561011F7"),
+            .universalSysEx7(
+                universalType: .realTime,
+                deviceID: 0x01,
+                subID1: 0x34,
+                subID2: 0x56,
+                data: [0x10, 0x11]
+            )
+        )
+        
+        // variable spacing
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "F0 7F 013456 1011 F7"),
+            .universalSysEx7(
+                universalType: .realTime,
+                deviceID: 0x01,
+                subID1: 0x34,
+                subID2: 0x56,
+                data: [0x10, 0x11]
+            )
+        )
+        
+        // space delimiter - no trailing F7
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "F0 7F 0134 56 10 11"),
+            .universalSysEx7(
+                universalType: .realTime,
+                deviceID: 0x01,
+                subID1: 0x34,
+                subID2: 0x56,
+                data: [0x10, 0x11]
+            )
+        )
+        
+        // compact - no trailing F7
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "F07F0134561011"),
+            .universalSysEx7(
+                universalType: .realTime,
+                deviceID: 0x01,
+                subID1: 0x34,
+                subID2: 0x56,
+                data: [0x10, 0x11]
+            )
+        )
+        
+        // lowercase
+        XCTAssertEqual(
+            try MIDI.Event.sysEx7(rawHexString: "f0 7f 01 34 56 10 11 f7"),
+            .universalSysEx7(
+                universalType: .realTime,
+                deviceID: 0x01,
+                subID1: 0x34,
+                subID2: 0x56,
+                data: [0x10, 0x11]
+            )
+        )
+        
+    }
+    
+    func testUniversalSysEx7RawHexString_Malformed() throws {
+        
+        // wrong leading and trailing bytes
+        XCTAssertThrowsError(
+            try MIDI.Event.sysEx7(rawHexString: "F7 7F 01 34 56 10 11 F0")
+        )
+        
+        // missing leading byte
+        XCTAssertThrowsError(
+            try MIDI.Event.sysEx7(rawHexString: "7F 01 34 56 10 11")
+        )
+        
+        // invalid hex characters
+        XCTAssertThrowsError(
+            try MIDI.Event.sysEx7(rawHexString: "F0 7F 01 34 56 ZZ 11 F7")
+        )
+        
+        // uneven number of hex characters (should be in pairs)
+        XCTAssertThrowsError(
+            try MIDI.Event.sysEx7(rawHexString: "F0 7F 01 34 56 10 11 F")
+        )
+        
+    }
+    
 	func testEquatable() throws {
 		
 		// ensure instances equate correctly

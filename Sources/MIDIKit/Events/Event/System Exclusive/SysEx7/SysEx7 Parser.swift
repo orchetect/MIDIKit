@@ -4,6 +4,7 @@
 //
 
 import Foundation
+@_implementationOnly import SwiftRadix
 
 extension MIDI.Event {
     
@@ -149,6 +150,50 @@ extension MIDI.Event {
             // malformed
             throw ParseError.malformed
         }
+        
+    }
+    
+    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message in the form of a hex string and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
+    /// Message must begin with `F0` but terminating `F7` byte is optional.
+    ///
+    /// Hex string may be formatted with (`"F7 01 02 03 F0"`) or without spaces (`"F7010203F0"`). String is case-insensitive.
+    ///
+    /// - Throws: `MIDI.Event.ParseError` if message is malformed.
+    @inline(__always)
+    public static func sysEx7(
+        rawHexString: some StringProtocol,
+        group: MIDI.UInt4 = 0
+    ) throws -> Self {
+        
+        // basic string sanitation and split into character pairs
+        let hexStrings = rawHexString
+            .removing(.whitespacesAndNewlines)
+            .split(every: 2)
+        
+        // ensure all elements are a character pair
+        guard !hexStrings.isEmpty,
+              hexStrings.last?.count == 2
+        else {
+            throw ParseError.malformed
+        }
+        
+        // map to integers
+        let conditionalBytes = hexStrings
+            .hex(as: MIDI.Byte.self)
+            .values
+        
+        // ensure values successfully converted (all valid hex strings)
+        guard conditionalBytes.allSatisfy({ $0 != nil })
+        else {
+            throw ParseError.malformed
+        }
+        
+        let bytes = conditionalBytes
+            .compactMap { $0 }
+        
+        // parse bytes as normal
+        return try sysEx7(rawBytes: bytes,
+                          group: group)
         
     }
     
