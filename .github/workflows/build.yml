@@ -31,9 +31,9 @@ jobs:
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS"
 
-  macOS-10_15:
-    name: macOS 10.15 Catalina
-    runs-on: macos-10.15
+  macOS-12:
+    name: macOS 12 Monterey
+    runs-on: macos-12
     steps:
     - uses: actions/checkout@main
     - name: Build
