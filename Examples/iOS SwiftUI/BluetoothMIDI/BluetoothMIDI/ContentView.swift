@@ -5,8 +5,11 @@
 //
 
 import SwiftUI
+import MIDIKit
 
 struct ContentView: View {
+    @EnvironmentObject var midiManager: MIDI.IO.Manager
+    
     @State var showingBluetoothMIDIOptions = false
     
     var body: some View {
@@ -17,6 +20,11 @@ struct ContentView: View {
             
             Button("Show Bluetooth MIDI Setup") {
                 showingBluetoothMIDIOptions = true
+            }
+            
+            Button("Send test MIDI Event to all MIDI Inputs") {
+                let conn = midiManager.managedOutputConnections["Broadcaster"]
+                try? conn?.send(event: .cc(.expression, value: .midi1(64), channel: 0))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)

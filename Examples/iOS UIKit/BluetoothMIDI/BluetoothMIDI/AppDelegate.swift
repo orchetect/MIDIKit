@@ -36,8 +36,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 toOutputs: [], // no need to specify if we're using .allEndpoints
                 tag: "Listener",
                 mode: .allEndpoints, // auto-connect to all outputs that may appear
-                filter: .owned(), // don't allow self-created virtual
+                filter: .owned(), // don't allow self-created virtual endpoints
                 receiveHandler: .eventsLogging(filterActiveSensingAndClock: false)
+            )
+        } catch {
+            print(
+                "Error setting up managed MIDI all-listener connection:",
+                error.localizedDescription
+            )
+        }
+        
+        // set up a broadcaster that can send events to all MIDI inputs
+        
+        do {
+            try midiManager.addOutputConnection(
+                toInputs: [], // no need to specify if we're using .allEndpoints
+                tag: "Broadcaster",
+                mode: .allEndpoints, // auto-connect to all inputs that may appear
+                filter: .owned() // don't allow self-created virtual endpoints
             )
         } catch {
             print(

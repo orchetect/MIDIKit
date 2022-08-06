@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21219" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21200"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,10 +18,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="47" translatesAutoresizingMaskIntoConstraints="NO" id="Oyh-YC-APa">
-                                <rect key="frame" x="20" y="290" width="350" height="264"/>
+                                <rect key="frame" x="20" y="252.66666666666666" width="350" height="338.66666666666674"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iVU-XE-TsM">
-                                        <rect key="frame" x="1.3333333333333428" y="0.0" width="347.66666666666663" height="182.66666666666666"/>
+                                        <rect key="frame" x="4.6666666666666572" y="0.0" width="340.66666666666674" height="182.66666666666666"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                             <bool key="isElement" value="YES"/>
@@ -36,11 +36,19 @@ Events received from all MIDI output endpoints are automatically logged to the c
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BNI-Lz-82Y">
-                                        <rect key="frame" x="59.000000000000014" y="229.66666666666663" width="232.33333333333337" height="34.333333333333314"/>
+                                        <rect key="frame" x="74.666666666666671" y="229.66666666666666" width="200.66666666666663" height="30.999999999999972"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Show Bluetooth MIDI Setup"/>
                                         <connections>
                                             <action selector="showBluetoothMIDISetup:" destination="dkx-z0-nzr" eventType="touchUpInside" id="TGq-Lc-URB"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lSD-ZB-SaT">
+                                        <rect key="frame" x="39.666666666666657" y="307.66666666666674" width="270.66666666666674" height="31"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Send test MIDI Event to all MIDI Inputs"/>
+                                        <connections>
+                                            <action selector="sendTestMIDIEvent:" destination="dkx-z0-nzr" eventType="touchUpInside" id="Woc-9n-Nyx"/>
                                         </connections>
                                     </button>
                                 </subviews>
