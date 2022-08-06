@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21179.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21219" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21169.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21200"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,23 +18,25 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="47" translatesAutoresizingMaskIntoConstraints="NO" id="Oyh-YC-APa">
-                                <rect key="frame" x="0.0" y="340.66666666666669" width="370" height="162.66666666666669"/>
+                                <rect key="frame" x="20" y="290" width="350" height="264"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iVU-XE-TsM">
-                                        <rect key="frame" x="15.333333333333343" y="0.0" width="339.66666666666663" height="81.333333333333329"/>
+                                        <rect key="frame" x="1.3333333333333428" y="0.0" width="347.66666666666663" height="182.66666666666666"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                             <bool key="isElement" value="YES"/>
                                         </accessibility>
                                         <string key="text">BluetoothMIDI Example
 
-This example demonstrates configuring Bluetooth MIDI on iOS.</string>
+This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiving events.
+
+Events received from all MIDI output endpoints are automatically logged to the console.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BNI-Lz-82Y">
-                                        <rect key="frame" x="69" y="128.33333333333331" width="232.33333333333337" height="34.333333333333343"/>
+                                        <rect key="frame" x="59.000000000000014" y="229.66666666666663" width="232.33333333333337" height="34.333333333333314"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Show Bluetooth MIDI Setup"/>
                                         <connections>
@@ -47,9 +49,9 @@ This example demonstrates configuring Bluetooth MIDI on iOS.</string>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Oyh-YC-APa" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="0Vo-r5-mmS"/>
                             <constraint firstItem="Oyh-YC-APa" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="3Bi-4b-I9c"/>
-                            <constraint firstAttribute="trailing" secondItem="Oyh-YC-APa" secondAttribute="trailing" constant="20" symbolic="YES" id="GoJ-qi-1zn"/>
-                            <constraint firstItem="Oyh-YC-APa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="wAX-ue-biM"/>
+                            <constraint firstAttribute="trailing" secondItem="Oyh-YC-APa" secondAttribute="trailing" constant="20" id="VZs-dD-gNY"/>
                         </constraints>
                     </view>
                 </viewController>

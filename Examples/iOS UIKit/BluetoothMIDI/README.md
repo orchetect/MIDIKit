@@ -1,6 +1,8 @@
 # BluetoothMIDI Example (iOS UIKit)
 
-This example demonstrates configuring Bluetooth MIDI connections in order to send and receive MIDI.
+This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiving events.
+
+Events received from all MIDI output endpoints are automatically logged to the console.
 
 ## Build Note
 
@@ -13,9 +15,17 @@ This example demonstrates configuring Bluetooth MIDI connections in order to sen
 ## App Target Entitlements
 
 - Even though Bluetooth MIDI largely operates via Core MIDI, you still need to give your app appropriate entitlements.
-- Add the **Background Modes** entitlement and enable the **Audio, AirPlay and Picture in Picture** mode.
+- Add the **Background Modes** entitlement and enable:
+  - [x] Audio, AirPlay and Picture in Picture
+  - [x] Uses Bluetooth LE accessories
+  - [x] Acts as a Bluetooth LE accessory
 
 ![Background Modes](Images/background-modes-audio.png)
+
+## Info.plist Keys
+
+- The following key is required in the info.plist file with a string containing a reason for allowing your app access to bluetooth connectivity.
+  - `NSBluetoothAlwaysUsageDescription`
 
 ## Operation
 

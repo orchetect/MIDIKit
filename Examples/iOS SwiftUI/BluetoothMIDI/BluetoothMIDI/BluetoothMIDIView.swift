@@ -15,9 +15,10 @@ struct BluetoothMIDIView: UIViewControllerRepresentable {
         BTMIDICentralViewController()
     }
     
-    func updateUIViewController(_ uiViewController: BTMIDICentralViewController, context: Context) {
-        
-    }
+    func updateUIViewController(
+        _ uiViewController: BTMIDICentralViewController,
+        context: Context
+    ) { }
     
     typealias UIViewControllerType = BTMIDICentralViewController
 }
@@ -25,7 +26,7 @@ struct BluetoothMIDIView: UIViewControllerRepresentable {
 class BTMIDICentralViewController: CABTMIDICentralViewController {
     var uiViewController: UIViewController?
     
-    public override func viewDidLayoutSubviews() {
+    override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -35,7 +36,8 @@ class BTMIDICentralViewController: CABTMIDICentralViewController {
         )
     }
     
-    @objc public func doneAction() {
+    @objc
+    public func doneAction() {
         uiViewController?.dismiss(animated: true, completion: nil)
     }
 }
