@@ -7,6 +7,8 @@ on:
       - '**/*.md'       # .md files anywhere in the repo
       - '**/LICENSE'    # LICENSE files anywhere in the repo
       - '**/.gitignore' # .gitignore files anywhere in the repo
+      - '**/*.png'      # .png image files anywhere in the repo
+      - '**/*.pdf'      # .pdf files anywhere in the repo
       
   pull_request:
     branches: [main]
@@ -14,6 +16,8 @@ on:
       - '**/*.md'       # .md files anywhere in the repo
       - '**/LICENSE'    # LICENSE files anywhere in the repo
       - '**/.gitignore' # .gitignore files anywhere in the repo
+      - '**/*.png'      # .png image files anywhere in the repo
+      - '**/*.pdf'      # .pdf files anywhere in the repo
       
   workflow_dispatch:
     
