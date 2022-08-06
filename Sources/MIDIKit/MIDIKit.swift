@@ -4,6 +4,4 @@
 //
 
 /// Namespace for MIDIKit objects and methods.
-public enum MIDI {
-    
-}
+public enum MIDI { }

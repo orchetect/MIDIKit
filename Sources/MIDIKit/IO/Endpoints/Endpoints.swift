@@ -9,7 +9,6 @@ import Foundation
 
 // this protocol may not be necessary, it was experimental so that the `MIDI.IO.Manager.endpoints` property could be swapped out with a different Endpoints class with Combine support
 public protocol MIDIIOEndpointsProtocol {
-    
     /// List of MIDI input endpoints in the system.
     var inputs: [MIDI.IO.InputEndpoint] { get }
     
@@ -25,16 +24,13 @@ public protocol MIDIIOEndpointsProtocol {
     /// Manually update the locally cached contents from the system.
     /// This method does not need to be manually invoked, as it is called automatically by the `Manager` when MIDI system endpoints change.
     mutating func update()
-    
 }
 
 extension MIDI.IO {
-    
     /// Manages system MIDI endpoints information cache.
     public class Endpoints: NSObject, MIDIIOEndpointsProtocol {
-        
         /// Weak reference to `Manager`.
-        internal weak var manager: MIDI.IO.Manager? = nil
+        internal weak var manager: MIDI.IO.Manager?
         
         public internal(set) dynamic var inputs: [InputEndpoint] = []
         public internal(set) dynamic var inputsUnowned: [InputEndpoint] = []
@@ -42,21 +38,16 @@ extension MIDI.IO {
         public internal(set) dynamic var outputs: [OutputEndpoint] = []
         public internal(set) dynamic var outputsUnowned: [OutputEndpoint] = []
         
-        internal override init() {
-            
+        override internal init() {
             super.init()
-            
         }
         
         internal init(manager: Manager) {
-            
             self.manager = manager
             super.init()
-            
         }
         
         public func update() {
-            
             inputs = MIDI.IO.getSystemDestinationEndpoints
             
             if let manager = manager {
@@ -82,11 +73,8 @@ extension MIDI.IO {
             } else {
                 outputsUnowned = outputs
             }
-            
         }
-        
     }
-    
 }
 
 #endif

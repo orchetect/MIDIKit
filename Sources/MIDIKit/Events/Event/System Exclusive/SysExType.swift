@@ -4,10 +4,8 @@
 //
 
 extension MIDI.Event {
-    
     /// Declarative System Exclusive MIDI Event types used in event filters.
     public enum SysExTypes {
-        
         /// Return only System Exclusive events.
         case only
         /// Return only System Exclusive events matching a certain event type.
@@ -30,17 +28,13 @@ extension MIDI.Event {
         case dropType(SysExType)
         /// while retaining all non-System Exclusive events matching certain event type(s).
         case dropTypes(Set<SysExType>)
-        
     }
     
     /// System Exclusive MIDI Event types.
     public enum SysExType: Equatable, Hashable {
-        
         case sysEx7
         case universalSysEx7
         case sysEx8
         case universalSysEx8
-        
     }
-    
 }

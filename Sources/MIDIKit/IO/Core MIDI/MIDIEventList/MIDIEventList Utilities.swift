@@ -8,7 +8,6 @@
 @_implementationOnly import CoreMIDI
 
 extension MIDIEventPacket {
-    
     /// Internal:
     /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
     @available(macOS 11, iOS 14, macCatalyst 14, *)
@@ -17,8 +16,7 @@ extension MIDIEventPacket {
         words: [MIDI.UMPWord],
         timeStamp: UInt64 = mach_absolute_time()
     ) throws {
-        
-        guard words.count > 0 else {
+        guard !words.isEmpty else {
             throw MIDI.IO.MIDIError.malformed(
                 "A Universal MIDI Packet cannot contain zero UInt32 words."
             )
@@ -40,18 +38,15 @@ extension MIDIEventPacket {
         
         // words
         let mutablePtr = UnsafeMutableMIDIEventPacketPointer(&packet)
-        for wordsIndex in 0..<words.count {
+        for wordsIndex in 0 ..< words.count {
             mutablePtr[mutablePtr.startIndex.advanced(by: wordsIndex)] = words[wordsIndex]
         }
         
         self = packet
-        
     }
-    
 }
 
 extension MIDIEventPacket {
-    
     // Note: this init isn't used but it works.
     // It implements Apple's built-in Core MIDI event packet builder.
     
@@ -63,8 +58,7 @@ extension MIDIEventPacket {
         wordsUsingBuilder words: [MIDI.UMPWord],
         timeStamp: UInt64 = mach_absolute_time()
     ) throws {
-
-        guard words.count > 0 else {
+        guard !words.isEmpty else {
             throw MIDI.IO.MIDIError.malformed(
                 "A Universal MIDI Packet cannot contain zero UInt32 words."
             )
@@ -85,18 +79,15 @@ extension MIDIEventPacket {
         
         let packet = try packetBuilder
             .withUnsafePointer { unsafePtr -> Result<MIDIEventPacket, Error> in
-                    .success(unsafePtr.pointee)
+                .success(unsafePtr.pointee)
             }
             .get()
         
         self = packet
-
     }
-
 }
 
 extension MIDIEventList {
-    
     /// Internal:
     /// Assembles a single Core MIDI `MIDIEventPacket` from a Universal MIDI Packet `UInt32` word array and wraps it in a Core MIDI `MIDIEventList`.
     @available(macOS 11, iOS 14, macCatalyst 14, *)
@@ -106,16 +97,17 @@ extension MIDIEventList {
         packetWords: [MIDI.UMPWord],
         timeStamp: UInt64 = mach_absolute_time()
     ) throws {
+        let packet = try MIDIEventPacket(
+            words: packetWords,
+            timeStamp: timeStamp
+        )
         
-        let packet = try MIDIEventPacket(words: packetWords,
-                                         timeStamp: timeStamp)
-        
-        self = MIDIEventList(protocol: midiProtocol,
-                             numPackets: 1,
-                             packet: packet)
-        
+        self = MIDIEventList(
+            protocol: midiProtocol,
+            numPackets: 1,
+            packet: packet
+        )
     }
-    
 }
 
 #endif

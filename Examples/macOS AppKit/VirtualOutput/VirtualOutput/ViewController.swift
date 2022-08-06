@@ -7,6 +7,4 @@
 import Cocoa
 import MIDIKit
 
-class ViewController: NSViewController {
-    
-}
+class ViewController: NSViewController { }

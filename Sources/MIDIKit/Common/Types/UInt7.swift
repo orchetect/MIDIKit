@@ -4,10 +4,8 @@
 //
 
 extension MIDI {
-    
     /// A 7-bit unsigned integer value type used in `MIDIKit`.
     public struct UInt7: MIDIKitIntegerProtocol {
-        
         // MARK: Storage
         
         public typealias Storage = UInt8
@@ -30,7 +28,8 @@ extension MIDI {
         }
         
         public init<T: BinaryFloatingPoint>(_ source: T) {
-            // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type that cannot fit UInt7.max
+            // it should be safe to cast as T.self since it's virtually impossible
+            // that we will encounter a BinaryFloatingPoint type that cannot fit UInt7.max
             if source < Self.min(T.self) {
                 Exception.underflow.raise(reason: "UInt7 integer underflowed")
             }
@@ -49,33 +48,28 @@ extension MIDI {
         
         // 0b100_0000, int 64, hex 0x40
         public static let midpoint = Self(Self.midpoint(Storage.self))
-        public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 0b100_0000 }
+        public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 0b1000000 }
         
         // 0b111_1111, int 127, hex 0x7F
-        public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 0b111_1111 }
-        public static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0b111_1111 }
+        public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 0b1111111 }
+        public static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0b1111111 }
         
         // MARK: Computed properties
         
         /// Returns the integer as a `UInt8` instance
         public var uInt8Value: UInt8 { value }
-        
     }
-    
 }
 
 extension MIDI.UInt7: ExpressibleByIntegerLiteral {
-    
     public typealias IntegerLiteralType = Storage
     
     public init(integerLiteral value: Storage) {
         self.init(value)
     }
-    
 }
 
 extension MIDI.UInt7: Strideable {
-    
     public typealias Stride = Int
     
     @inlinable
@@ -87,11 +81,9 @@ extension MIDI.UInt7: Strideable {
     public func distance(to other: Self) -> Stride {
         Stride(other) - Stride(self)
     }
-    
 }
 
 extension MIDI.UInt7: Equatable, Comparable {
-    
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.value == rhs.value
     }
@@ -99,37 +91,29 @@ extension MIDI.UInt7: Equatable, Comparable {
     public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.value < rhs.value
     }
-    
 }
 
 extension MIDI.UInt7: Hashable {
-    
     public func hash(into hasher: inout Hasher) {
         hasher.combine(value)
     }
-    
 }
 
 extension MIDI.UInt7: Codable {
-    
     enum CodingKeys: String, CodingKey {
         case value = "UInt7"
     }
-    
 }
 
 extension MIDI.UInt7: CustomStringConvertible {
-    
     public var description: String {
         "\(value)"
     }
-    
 }
 
 // MARK: - Standard library extensions
 
 extension BinaryInteger {
-    
     /// Convenience initializer for `MIDI.UInt7`.
     public var toMIDIUInt7: MIDI.UInt7 {
         MIDI.UInt7(self)
@@ -139,11 +123,9 @@ extension BinaryInteger {
     public var toMIDIUInt7Exactly: MIDI.UInt7? {
         MIDI.UInt7(exactly: self)
     }
-    
 }
 
 extension BinaryFloatingPoint {
-    
     /// Convenience initializer for `MIDI.UInt7`.
     public var toMIDIUInt7: MIDI.UInt7 {
         MIDI.UInt7(self)
@@ -153,5 +135,4 @@ extension BinaryFloatingPoint {
     public var toMIDIUInt7Exactly: MIDI.UInt7? {
         MIDI.UInt7(exactly: self)
     }
-    
 }

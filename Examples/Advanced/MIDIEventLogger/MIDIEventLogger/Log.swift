@@ -11,11 +11,9 @@ let logger = OSLogger {
 }
 
 func logIfThrowsError(_ closure: (() throws -> Void)) {
-    
     do {
         try closure()
     } catch {
         logger.error(error)
     }
-    
 }

@@ -5,18 +5,17 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-    import Foundation
+import Foundation
 
-    #if canImport(AppKit)
-    import AppKit
-    #endif
+#if canImport(AppKit)
+import AppKit
+#endif
 
-    #if canImport(UIKit)
-    import UIKit
-    #endif
+#if canImport(UIKit)
+import UIKit
+#endif
 
 public protocol MIDIIOObjectProtocol {
-    
     /// Enum describing the abstracted object type.
     var objectType: MIDI.IO.ObjectType { get }
     
@@ -33,7 +32,6 @@ public protocol MIDIIOObjectProtocol {
     
     static func == (lhs: Self, rhs: Self) -> Bool
     func hash(into hasher: inout Hasher)
-    
     
     // MARK: - MIDIIOObjectProtocol Properties.swift
     
@@ -118,18 +116,15 @@ public protocol MIDIIOObjectProtocol {
     func getReceivesProgramChanges() -> Bool
     func getTransmitsProgramChanges() -> Bool
     
-    
     // MARK: - MIDIIOObjectProtocol Properties Dictionary.swift
     
     func getPropertiesAsStrings(
         onlyIncludeRelevant: Bool
     ) -> [(key: String, value: String)]
     
-    
     // MARK: - AnyMIDIIOObject.swift
     
     func asAnyMIDIIOObject() -> MIDI.IO.AnyMIDIIOObject
-    
 }
 
 #endif

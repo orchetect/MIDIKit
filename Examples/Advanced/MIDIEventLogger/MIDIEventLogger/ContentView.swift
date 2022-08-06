@@ -10,7 +10,6 @@ import SwiftRadix
 import MIDIKit
 
 struct ContentView: View {
-    
     @EnvironmentObject var midiManager: MIDI.IO.Manager
     
     // MARK: - Constants
@@ -37,9 +36,7 @@ struct ContentView: View {
     // MARK: - Body
     
     var body: some View {
-        
         VStack(alignment: .center, spacing: 0) {
-            
             Spacer().frame(height: 10)
             
             MIDISubsystemStatusView()
@@ -47,7 +44,7 @@ struct ContentView: View {
             Spacer().frame(height: 10)
             
             SendMIDIEventsView(midiGroup: $midiGroup) {
-                sendEvent($0)   
+                sendEvent($0)
             }
             .environmentObject(midiManager)
             
@@ -56,14 +53,15 @@ struct ContentView: View {
             ReceiveMIDIEventsView()
             
             Spacer().frame(height: 18)
-            
         }
-        .frame(minWidth: Self.kMinWidth,
-               idealWidth: Self.kMinWidth,
-               maxWidth: Self.kMaxWidth,
-               minHeight: Self.kMinHeight,
-               maxHeight: Self.kMaxHeight,
-               alignment: .center)
+        .frame(
+            minWidth: Self.kMinWidth,
+            idealWidth: Self.kMinWidth,
+            maxWidth: Self.kMaxWidth,
+            minHeight: Self.kMinHeight,
+            maxHeight: Self.kMaxHeight,
+            alignment: .center
+        )
         .padding([.leading, .trailing])
         
         .onAppear {
@@ -102,9 +100,9 @@ struct ContentView: View {
         }
         
         // MARK: TODO: this works but only on macOS 11 and later
-        //.onChange(of: midiInputConnectionEndpoint) { _ in
+        // .onChange(of: midiInputConnectionEndpoint) { _ in
         //    updateInputConnection()
-        //}
+        // }
         // MARK: TODO: instead, we need a hack to update when the @State var changes:
         ZStack {
             Text({
@@ -119,20 +117,16 @@ struct ContentView: View {
     
     /// Auto-select the virtual endpoint as our input connection source.
     func setInputConnectionToVirtual() {
-        
-        if let findInputConnectionEndpoint = self
-            .midiManager.endpoints.outputs
+        if let findInputConnectionEndpoint = midiManager.endpoints.outputs
             .filter(whereName: kOutputName)
             .first
         {
             logger.debug("Found virtual endpoint: \(findInputConnectionEndpoint)")
             midiInputConnectionEndpoint = findInputConnectionEndpoint
         }
-        
     }
     
     func updateInputConnection() {
-        
         // check for existing connection and compare new selection against it
         if let ic = midiManager.managedInputConnections[kInputConnectionTag] {
             // if endpoint is the same, don't reconnect
@@ -161,25 +155,23 @@ struct ContentView: View {
         } catch {
             logger.error(error)
         }
-        
     }
     
     /// Send a MIDI event using our virtual output endpoint.
     func sendEvent(_ event: MIDI.Event) {
-        
         logIfThrowsError {
             try midiManager.managedOutputs[kOutputTag]?
                 .send(event: event)
         }
-        
     }
-    
 }
 
 struct ContentView_Previews: PreviewProvider {
-    private static let midiManager = MIDI.IO.Manager(clientName: "Preview",
-                                                     model: "",
-                                                     manufacturer: "")
+    private static let midiManager = MIDI.IO.Manager(
+        clientName: "Preview",
+        model: "",
+        manufacturer: ""
+    )
     
     static var previews: some View {
         ContentView()

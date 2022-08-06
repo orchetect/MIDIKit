@@ -4,16 +4,15 @@
 //
 
 extension MIDI.Event.Note.CC.Controller.Registered {
-    
     /// Registered Per-Note Controller
     /// (MIDI 2.0)
-    /// 
+    ///
     /// Initialize an enum case from the controller number.
     @inline(__always)
     public init(number: UInt8) {
+        // this looks scary but its heart is in the right place
         
         switch number {
-        
         case   1: self = .modWheel
         case   2: self = .breath
         case   3: self = .pitch7_25
@@ -274,9 +273,6 @@ extension MIDI.Event.Note.CC.Controller.Registered {
             // should never happen since the switch case covers all 256 values of UInt8
             assertionFailure("Unhandled MIDI Per-Note CC controller number: \(number).")
             self = .modWheel
-            
         }
-        
     }
-    
 }

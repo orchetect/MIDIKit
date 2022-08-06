@@ -4,10 +4,8 @@
 //
 
 extension MIDI.Event {
-    
     /// Declarative Channel Voice MIDI Event types used in event filters.
     public enum ChanVoiceTypes {
-        
         /// Return only Channel Voice events.
         case only
         /// Return only Channel Voice events matching a certain event type.
@@ -79,12 +77,10 @@ extension MIDI.Event {
         /// Drop any noteOn/noteOff events within certain note range(s),
         /// while retaining all non-Channel Voice events.
         case dropNotesInRanges([ClosedRange<MIDI.UInt7>])
-        
     }
     
     /// Channel Voice MIDI Event types.
     public enum ChanVoiceType: Equatable, Hashable {
-        
         case noteOn
         case noteOff
         case noteCC
@@ -95,31 +91,24 @@ extension MIDI.Event {
         case programChange
         case pressure
         case pitchBend
-        
     }
-    
 }
 
 // MARK: - Convenience Static Constructors
 
 extension MIDI.Event.ChanVoiceTypes {
-
     // MARK: Only
     
     /// Return only Control Change (CC) events matching a certain controller number.
     @_disfavoredOverload
     public static func onlyCC(_ cc: MIDI.UInt7) -> Self {
-        
         .onlyCC(.init(number: cc))
-        
     }
     
     /// Return only Control Change (CC) events matching certain controller number(s).
     @_disfavoredOverload
     public static func onlyCCs(_ ccs: [MIDI.UInt7]) -> Self {
-        
         .onlyCCs(ccs.map { .init(number: $0) })
-        
     }
     
     // MARK: Keep
@@ -128,17 +117,14 @@ extension MIDI.Event.ChanVoiceTypes {
     /// while retaining all non-Channel Voice events.
     @_disfavoredOverload
     public static func keepCC(_ cc: MIDI.UInt7) -> Self {
-        
         .keepCC(.init(number: cc))
-        
     }
+
     /// Retain only CC events with certain controller(s),
     /// while retaining all non-Channel Voice events.
     @_disfavoredOverload
     public static func keepCCs(_ ccs: [MIDI.UInt7]) -> Self {
-        
         .keepCCs(ccs.map { .init(number: $0) })
-        
     }
     
     // MARK: Drop
@@ -147,17 +133,13 @@ extension MIDI.Event.ChanVoiceTypes {
     /// while retaining all non-Channel Voice events.
     @_disfavoredOverload
     public static func dropCC(_ cc: MIDI.UInt7) -> Self {
-        
         .dropCC(.init(number: cc))
-        
     }
+
     /// Drop any Control Change (CC) events matching certain controller(s),
     /// while retaining all non-Channel Voice events.
     @_disfavoredOverload
     public static func dropCCs(_ ccs: [MIDI.UInt7]) -> Self {
-        
         .dropCCs(ccs.map { .init(number: $0) })
-        
     }
-    
 }

@@ -4,12 +4,10 @@
 //
 
 extension MIDI.IO {
-    
     /// Parser for MIDI 1.0 events.
     ///
     /// State is maintained internally. Use one parser class instance per MIDI endpoint for the lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and do not use a single global parser class instance for all MIDI endpoints.)
     public class MIDI1Parser {
-        
         // MARK: - Internal Default Instance
         
         /// Internal:
@@ -21,13 +19,11 @@ extension MIDI.IO {
         /// Interpret received Note On events with a velocity value of 0 as a Note Off event instead.
         internal var translateNoteOnZeroVelocityToNoteOff: Bool = true
         
-        internal var runningStatus: MIDI.Byte? = nil
+        internal var runningStatus: MIDI.Byte?
         
         // MARK: - Init
         
-        public init() {
-            
-        }
+        public init() { }
         
         // MARK: - Public Parser Methods
         
@@ -36,7 +32,6 @@ extension MIDI.IO {
             in packetData: MIDI.IO.Packet.PacketData,
             umpGroup: MIDI.UInt4 = 0
         ) -> [MIDI.Event] {
-            
             let result = Self.parsedEvents(
                 in: packetData.bytes,
                 runningStatus: runningStatus,
@@ -45,7 +40,6 @@ extension MIDI.IO {
             )
             runningStatus = result.runningStatus
             return result.events
-            
         }
         
         /// Parses raw packet data into an array of MIDI Events.
@@ -53,7 +47,6 @@ extension MIDI.IO {
             in bytes: [MIDI.Byte],
             umpGroup: MIDI.UInt4 = 0
         ) -> [MIDI.Event] {
-            
             let result = Self.parsedEvents(
                 in: bytes,
                 runningStatus: runningStatus,
@@ -62,7 +55,6 @@ extension MIDI.IO {
             )
             runningStatus = result.runningStatus
             return result.events
-            
         }
         
         // MARK: - Internal Parser Methods
@@ -81,13 +73,15 @@ extension MIDI.IO {
             runningStatus: MIDI.Byte? = nil,
             translateNoteOnZeroVelocityToNoteOff: Bool = true,
             umpGroup: MIDI.UInt4 = 0
-        ) -> (events: [MIDI.Event],
-              runningStatus: MIDI.Byte?)
-        {
-            
+        ) -> (
+            events: [MIDI.Event],
+            runningStatus: MIDI.Byte?
+        ) {
             guard !bytes.isEmpty else {
-                return (events: [],
-                        runningStatus: runningStatus)
+                return (
+                    events: [],
+                    runningStatus: runningStatus
+                )
             }
             
             // MIDI 1.0 Spec Parser
@@ -142,14 +136,13 @@ extension MIDI.IO {
             }
             
             while currentPos < bytes.count {
-                
                 let currentByte = bytes[currentPos]
                 
                 let currentByteHighNibble = currentByte.nibbles.high
                 
                 // look for status byte as first message byte
                 switch currentByteHighNibble {
-                case 0x8...0xE:
+                case 0x8 ... 0xE:
                     // channel voice status byte
                     
                     // update running status byte
@@ -167,8 +160,8 @@ extension MIDI.IO {
                     
                     let currentByteLowNibble = currentByte.nibbles.low
                     
-                    if !currentMessageBuffer.isEmpty
-                        && currentByteLowNibble < 0x8
+                    if !currentMessageBuffer.isEmpty,
+                       currentByteLowNibble < 0x8
                     { parseCurrentMessage() }
                     
                     switch currentByteLowNibble {
@@ -329,8 +322,8 @@ extension MIDI.IO {
                         events.append(.systemReset(group: umpGroup))
                         
                     default:
+                        // should never happen
                         assertionFailure("Unhandled MIDI System Status Byte")
-                        break // should never happen
                     }
                     
                 default:
@@ -349,7 +342,7 @@ extension MIDI.IO {
                         // This is not an error condition necessarily, just continue parsing
                         break
                         
-                    case .exact(let numberOfDataBytes):
+                    case let .exact(numberOfDataBytes):
                         currentMessageBuffer.append(currentByte)
                         
                         if currentMessageBuffer.count == 1 + numberOfDataBytes {
@@ -359,23 +352,24 @@ extension MIDI.IO {
                     case .sysExOpenEnded:
                         currentMessageBuffer.append(currentByte)
                     }
-                    
                 }
                 
                 currentPos += 1
-                
             }
             
             // handle remainder of buffer
             parseCurrentMessage()
             
             if !currentMessageBuffer.isEmpty {
-                assertionFailure("MIDI Event Parsing ended with residual data in the MIDI packet that was not parsed.")
+                assertionFailure(
+                    "MIDI Event Parsing ended with residual data in the MIDI packet that was not parsed."
+                )
             }
             
-            return (events: events,
-                    runningStatus: runningStatus)
-            
+            return (
+                events: events,
+                runningStatus: runningStatus
+            )
         }
         
         /// Parse a single MIDI Event from raw bytes.
@@ -388,7 +382,6 @@ extension MIDI.IO {
             translateNoteOnZeroVelocityToNoteOff: Bool = true,
             umpGroup: MIDI.UInt4 = 0
         ) -> [MIDI.Event] {
-            
             var events: [MIDI.Event] = []
             
             guard !bytes.isEmpty else { return events }
@@ -405,10 +398,12 @@ extension MIDI.IO {
                       let velocity = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .noteOff(note,
-                                                    velocity: .midi1(velocity),
-                                                    channel: channel,
-                                                    group: umpGroup)
+                let newEvent: MIDI.Event = .noteOff(
+                    note,
+                    velocity: .midi1(velocity),
+                    channel: channel,
+                    group: umpGroup
+                )
                 
                 events.append(newEvent)
                 
@@ -424,15 +419,19 @@ extension MIDI.IO {
                    translateNoteOnZeroVelocityToNoteOff
                 {
                     // interpret Note On with velocity 0 as a Note Off event instead
-                    newEvent = .noteOff(note,
-                                        velocity: .midi1(velocity),
-                                        channel: channel,
-                                        group: umpGroup)
+                    newEvent = .noteOff(
+                        note,
+                        velocity: .midi1(velocity),
+                        channel: channel,
+                        group: umpGroup
+                    )
                 } else {
-                    newEvent = .noteOn(note,
-                                       velocity: .midi1(velocity),
-                                       channel: channel,
-                                       group: umpGroup)
+                    newEvent = .noteOn(
+                        note,
+                        velocity: .midi1(velocity),
+                        channel: channel,
+                        group: umpGroup
+                    )
                 }
                 
                 events.append(newEvent)
@@ -443,10 +442,12 @@ extension MIDI.IO {
                       let amount = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .notePressure(note: note,
-                                                         amount: .midi1(amount),
-                                                         channel: channel,
-                                                         group: umpGroup)
+                let newEvent: MIDI.Event = .notePressure(
+                    note: note,
+                    amount: .midi1(amount),
+                    channel: channel,
+                    group: umpGroup
+                )
                 
                 events.append(newEvent)
                 
@@ -456,10 +457,12 @@ extension MIDI.IO {
                       let value = dataByte2?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .cc(cc,
-                                               value: .midi1(value),
-                                               channel: channel,
-                                               group: umpGroup)
+                let newEvent: MIDI.Event = .cc(
+                    cc,
+                    value: .midi1(value),
+                    channel: channel,
+                    group: umpGroup
+                )
                 
                 events.append(newEvent)
                 
@@ -468,9 +471,11 @@ extension MIDI.IO {
                 guard let program = dataByte1?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .programChange(program: program,
-                                                          channel: channel,
-                                                          group: umpGroup)
+                let newEvent: MIDI.Event = .programChange(
+                    program: program,
+                    channel: channel,
+                    group: umpGroup
+                )
                 
                 events.append(newEvent)
                 
@@ -479,9 +484,11 @@ extension MIDI.IO {
                 guard let amount = dataByte1?.toMIDIUInt7Exactly
                 else { return events }
                 
-                let newEvent: MIDI.Event = .pressure(amount: .midi1(amount),
-                                                     channel: channel,
-                                                     group: umpGroup)
+                let newEvent: MIDI.Event = .pressure(
+                    amount: .midi1(amount),
+                    channel: channel,
+                    group: umpGroup
+                )
                 
                 events.append(newEvent)
                 
@@ -491,12 +498,16 @@ extension MIDI.IO {
                       let unwrappedDataByte2 = dataByte2
                 else { return events }
                 
-                let uint14 = MIDI.UInt14(bytePair: .init(msb: unwrappedDataByte2,
-                                                         lsb: unwrappedDataByte1))
+                let uint14 = MIDI.UInt14(bytePair: .init(
+                    msb: unwrappedDataByte2,
+                    lsb: unwrappedDataByte1
+                ))
                 
-                let newEvent: MIDI.Event = .pitchBend(value: .midi1(uint14),
-                                                      channel: channel,
-                                                      group: umpGroup)
+                let newEvent: MIDI.Event = .pitchBend(
+                    value: .midi1(uint14),
+                    channel: channel,
+                    group: umpGroup
+                )
                 
                 events.append(newEvent)
                 
@@ -519,7 +530,10 @@ extension MIDI.IO {
                           let unwrappedDataByte2 = dataByte2
                     else { return events }
                     
-                    let uint14 = MIDI.UInt14(bytePair: .init(msb: unwrappedDataByte2, lsb: unwrappedDataByte1))
+                    let uint14 = MIDI.UInt14(bytePair: .init(
+                        msb: unwrappedDataByte2,
+                        lsb: unwrappedDataByte1
+                    ))
                     events.append(.songPositionPointer(midiBeat: uint14))
                     
                 case 0x3: // System Common - Song Select
@@ -565,51 +579,38 @@ extension MIDI.IO {
                     
                 default:
                     // should never happen
-                    //logger.debug("Unhandled System Status: \(statusByte)")
+                    // logger.debug("Unhandled System Status: \(statusByte)")
                     break
                 }
                 
             default:
                 // should never happen
-                //logger.debug("Unhandled Status: \(statusByte)")
+                // logger.debug("Unhandled Status: \(statusByte)")
                 break
             }
             
             return events
-            
         }
-        
     }
-    
 }
 
 // MARK: - MIDI.IO.Packet Extensions
 
 extension MIDI.IO.Packet.PacketData {
-    
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     internal func parsedEvents() -> [MIDI.Event] {
-        
         MIDI.IO.MIDI1Parser.default.parsedEvents(in: bytes)
-        
     }
     
     /// Parse this instance's raw packet data into an array of MIDI Events.
     internal func parsedEvents(using parser: MIDI.IO.MIDI1Parser) -> [MIDI.Event] {
-        
         parser.parsedEvents(in: self)
-        
     }
-    
 }
 
 extension MIDI.IO.Packet {
-    
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     internal func parsedMIDI1Events() -> [MIDI.Event] {
-        
         MIDI.IO.MIDI1Parser.default.parsedEvents(in: bytes)
-        
     }
-    
 }

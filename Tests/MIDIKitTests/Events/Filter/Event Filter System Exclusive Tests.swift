@@ -9,9 +9,7 @@ import XCTest
 import MIDIKit
 
 final class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
-    
     func testMetadata() {
-        
         // isSystemExclusive
         
         let events = kEvents.SysEx.oneOfEachEventType
@@ -23,13 +21,11 @@ final class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
             XCTAssertFalse($0.isSystemRealTime)
             XCTAssertFalse($0.isUtility)
         }
-        
     }
     
     // MARK: - only
     
     func testFilter_only() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysEx: .only)
@@ -37,11 +33,9 @@ final class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         let expectedEvents = kEvents.SysEx.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_onlyType() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysEx: .onlyType(.sysEx7))
@@ -49,11 +43,9 @@ final class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         let expectedEvents = [kEvents.SysEx.sysEx7]
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_onlyTypes() {
-        
         let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
@@ -70,13 +62,11 @@ final class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         filteredEvents = events.filter(sysEx: .onlyTypes([]))
         expectedEvents = []
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     // MARK: - keep
     
     func testFilter_keepType() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysEx: .keepType(.sysEx7))
@@ -91,11 +81,9 @@ final class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_keepTypes() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysEx: .keepTypes([.sysEx7, .universalSysEx7]))
@@ -111,13 +99,11 @@ final class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     // MARK: - drop
     
     func testFilter_drop() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysEx: .drop)
@@ -130,11 +116,9 @@ final class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_dropType() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysEx: .dropType(.sysEx7))
@@ -151,11 +135,9 @@ final class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_dropTypes() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysEx: .dropTypes([.sysEx7, .universalSysEx7]))
@@ -171,9 +153,7 @@ final class MIDIEventFilter_SystemExclusive_Tests: XCTestCase {
         expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
-    
 }
 
 #endif

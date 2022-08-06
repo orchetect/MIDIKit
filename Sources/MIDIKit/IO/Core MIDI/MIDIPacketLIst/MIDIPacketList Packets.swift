@@ -9,12 +9,10 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension UnsafePointer where Pointee == MIDIPacketList {
-    
     /// Internal:
     /// Returns array of MIDIKit `PacketData` instances.
     @inline(__always)
     internal func packets() -> [MIDI.IO.Packet.PacketData] {
-        
         if pointee.numPackets == 0 {
             return []
         }
@@ -32,19 +30,15 @@ extension UnsafePointer where Pointee == MIDIPacketList {
             }
             return packetDatas
         }
-        
     }
-    
 }
 
 extension MIDIPacketList {
-    
     /// Iterates packets in a `MIDIPacketList` and calls the closure for each packet.
     /// This is confirmed working on Mojave.
     /// There were numerous difficulties in reading MIDIPacketList on Mojave and earlier and this solution was stable.
     @inline(__always)
     fileprivate func iteratePackets(_ closure: (UnsafeMutablePointer<MIDIPacket>) -> Void) {
-        
         withUnsafePointer(to: packet) { ptr in
             var idx: UInt32 = 0
             var p = UnsafeMutablePointer(mutating: ptr)
@@ -54,9 +48,7 @@ extension MIDIPacketList {
                 idx += 1
             }
         }
-        
     }
-    
 }
 
 #endif

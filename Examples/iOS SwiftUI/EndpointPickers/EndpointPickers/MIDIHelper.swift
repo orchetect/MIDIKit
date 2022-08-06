@@ -8,15 +8,12 @@ import SwiftUI
 import MIDIKit
 
 class MIDIHelper: ObservableObject {
-    
     public weak var midiManager: MIDI.IO.Manager?
     
     @Published
     public private(set) var receivedEvents: [MIDI.Event] = []
     
-    public init() {
-        
-    }
+    public init() { }
     
     /// Run once after setting the local `midiManager` property.
     public func initialSetup() {
@@ -43,8 +40,10 @@ class MIDIHelper: ObservableObject {
                 }
             )
             
-            try midiManager.addOutputConnection(toInputs: [],
-                                                tag: ConnectionTags.midiOut)
+            try midiManager.addOutputConnection(
+                toInputs: [],
+                tag: ConnectionTags.midiOut
+            )
         } catch {
             print("Error creating MIDI connections:", error.localizedDescription)
         }
@@ -149,9 +148,9 @@ class MIDIHelper: ObservableObject {
     
     public var virtualsExist: Bool {
         midiTestIn1 != nil &&
-        midiTestIn2 != nil &&
-        midiTestOut1 != nil &&
-        midiTestOut2 != nil
+            midiTestIn2 != nil &&
+            midiTestOut1 != nil &&
+            midiTestOut2 != nil
     }
     
     // MARK: - Helpers
@@ -163,5 +162,4 @@ class MIDIHelper: ObservableObject {
     public func isOutputPresentInSystem(uniqueID: MIDI.IO.UniqueID) -> Bool {
         midiManager?.endpoints.outputs.contains(whereUniqueID: uniqueID) ?? false
     }
-    
 }

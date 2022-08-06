@@ -9,7 +9,6 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO.Manager {
-    
     /// Adds new a managed virtual output to the `managedOutputs` dictionary of the `Manager`.
     ///
     /// The lifecycle of the MIDI port exists for as long as the `Manager` instance exists, or until `.remove(::)` is called.
@@ -33,9 +32,7 @@ extension MIDI.IO.Manager {
         tag: String,
         uniqueID: MIDI.IO.UniqueIDPersistence
     ) throws {
-        
         try eventQueue.sync {
-            
             let newVS = MIDI.IO.Output(
                 name: name,
                 uniqueID: uniqueID.readID(),
@@ -54,11 +51,8 @@ extension MIDI.IO.Manager {
             }
             
             uniqueID.writeID(successfulID)
-            
         }
-        
     }
-    
 }
 
 #endif

@@ -6,10 +6,8 @@
 #if !os(tvOS) && !os(watchOS)
 
 extension MIDI.IO.ReceiveHandler {
-    
     /// MIDI Event receive handler.
     public class Events: MIDIIOReceiveHandlerProtocol {
-        
         public typealias Handler = (_ events: [MIDI.Event]) -> Void
         
         @inline(__always)
@@ -22,13 +20,11 @@ extension MIDI.IO.ReceiveHandler {
         public func packetListReceived(
             _ packets: [MIDI.IO.Packet.PacketData]
         ) {
-            
             for midiPacket in packets {
                 let events = midi1Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
                 handler(events)
             }
-            
         }
         
         @available(macOS 11, iOS 14, macCatalyst 14, *)
@@ -37,27 +33,22 @@ extension MIDI.IO.ReceiveHandler {
             _ packets: [MIDI.IO.Packet.UniversalPacketData],
             protocol midiProtocol: MIDI.IO.ProtocolVersion
         ) {
-            
             for midiPacket in packets {
                 let events = midi2Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
                 handler(events)
             }
-            
         }
         
         internal init(
             translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
             _ handler: @escaping Handler
         ) {
-            
-            midi1Parser.translateNoteOnZeroVelocityToNoteOff = translateMIDI1NoteOnZeroVelocityToNoteOff
+            midi1Parser.translateNoteOnZeroVelocityToNoteOff =
+                translateMIDI1NoteOnZeroVelocityToNoteOff
             self.handler = handler
-            
         }
-        
     }
-    
 }
 
 #endif

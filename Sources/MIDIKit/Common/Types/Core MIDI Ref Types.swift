@@ -4,7 +4,6 @@
 //
 
 extension MIDI.IO {
-    
     /// MIDIKit analogue for Core MIDI's `MIDIUniqueID`.
     public typealias UniqueID = Int32
     
@@ -28,19 +27,14 @@ extension MIDI.IO {
     
     /// MIDIKit analogue for Core MIDI's `MIDIThruConnectionRef`.
     public typealias ThruConnectionRef = ObjectRef
-    
 }
 
 extension MIDI.IO {
-    
     /// MIDIKit analogue for Core MIDI's `MIDITimeStamp`.
     public typealias TimeStamp = UInt64
-    
 }
 
 extension MIDI.IO {
-    
     /// MIDIKit analogue for Core MIDI's `OSStatus`.
     public typealias CoreMIDIOSStatus = Int32
-    
 }

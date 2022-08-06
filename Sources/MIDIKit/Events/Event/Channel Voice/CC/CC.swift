@@ -4,11 +4,9 @@
 //
 
 extension MIDI.Event {
-    
     /// Channel Voice Message: Control Change (CC)
     /// (MIDI 1.0 / 2.0)
     public struct CC: Equatable, Hashable {
-        
         /// Controller
         public var controller: Controller
         
@@ -30,16 +28,16 @@ extension MIDI.Event {
         ///   - value: Value
         ///   - channel: Channel Number (0x0...0xF)
         ///   - group: UMP Group (0x0...0xF)
-        public init(controller: Controller,
-                    value: Value,
-                    channel: MIDI.UInt4,
-                    group: MIDI.UInt4 = 0x0) {
-            
+        public init(
+            controller: Controller,
+            value: Value,
+            channel: MIDI.UInt4,
+            group: MIDI.UInt4 = 0x0
+        ) {
             self.controller = controller
             self.value = value
             self.channel = channel
             self.group = group
-            
         }
         
         /// Channel Voice Message: Control Change (CC)
@@ -50,24 +48,21 @@ extension MIDI.Event {
         ///   - value: Value
         ///   - channel: Channel Number (0x0...0xF)
         ///   - group: UMP Group (0x0...0xF)
-        public init(controller: MIDI.UInt7,
-                    value: Value,
-                    channel: MIDI.UInt4,
-                    group: MIDI.UInt4 = 0x0) {
-            
+        public init(
+            controller: MIDI.UInt7,
+            value: Value,
+            channel: MIDI.UInt4,
+            group: MIDI.UInt4 = 0x0
+        ) {
             self.controller = .init(number: controller)
             self.value = value
             self.channel = channel
             self.group = group
-            
         }
-        
     }
-    
 }
 
 extension MIDI.Event {
-    
     /// Channel Voice Message: Control Change (CC)
     /// (MIDI 1.0 / 2.0)
     ///
@@ -76,18 +71,20 @@ extension MIDI.Event {
     ///   - value: Value
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    public static func cc(_ controller: CC.Controller,
-                          value: CC.Value,
-                          channel: MIDI.UInt4,
-                          group: MIDI.UInt4 = 0x0) -> Self {
-        
+    public static func cc(
+        _ controller: CC.Controller,
+        value: CC.Value,
+        channel: MIDI.UInt4,
+        group: MIDI.UInt4 = 0x0
+    ) -> Self {
         .cc(
-            .init(controller: controller,
-                  value: value,
-                  channel: channel,
-                  group: group)
+            .init(
+                controller: controller,
+                value: value,
+                channel: channel,
+                group: group
+            )
         )
-        
     }
     
     /// Channel Voice Message: Control Change (CC)
@@ -98,39 +95,39 @@ extension MIDI.Event {
     ///   - value: Value
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    public static func cc(_ controller: MIDI.UInt7,
-                          value: CC.Value,
-                          channel: MIDI.UInt4,
-                          group: MIDI.UInt4 = 0x0) -> Self {
-        
+    public static func cc(
+        _ controller: MIDI.UInt7,
+        value: CC.Value,
+        channel: MIDI.UInt4,
+        group: MIDI.UInt4 = 0x0
+    ) -> Self {
         .cc(
-            .init(controller: controller,
-                  value: value,
-                  channel: channel,
-                  group: group)
+            .init(
+                controller: controller,
+                value: value,
+                channel: channel,
+                group: group
+            )
         )
-        
     }
-    
 }
 
 extension MIDI.Event.CC {
-    
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
-        
-        [0xB0 + channel.uInt8Value,
-         controller.number.uInt8Value,
-         value.midi1Value.uInt8Value]
-        
+        [
+            0xB0 + channel.uInt8Value,
+            controller.number.uInt8Value,
+            value.midi1Value.uInt8Value
+        ]
     }
     
     @inline(__always)
-    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.IO.Packet.UniversalPacketData.MessageType {
-        
+    private func umpMessageType(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> MIDI.IO.Packet
+    .UniversalPacketData.MessageType {
         switch midiProtocol {
         case ._1_0:
             return .midi1ChannelVoice
@@ -138,7 +135,6 @@ extension MIDI.Event.CC {
         case ._2_0:
             return .midi2ChannelVoice
         }
-        
     }
     
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
@@ -146,30 +142,30 @@ extension MIDI.Event.CC {
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords(protocol midiProtocol: MIDI.IO.ProtocolVersion) -> [MIDI.UMPWord] {
-        
         let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
         
         switch midiProtocol {
         case ._1_0:
-            let word = MIDI.UMPWord(mtAndGroup,
-                                    0xB0 + channel.uInt8Value,
-                                    controller.number.uInt8Value,
-                                    value.midi1Value.uInt8Value)
+            let word = MIDI.UMPWord(
+                mtAndGroup,
+                0xB0 + channel.uInt8Value,
+                controller.number.uInt8Value,
+                value.midi1Value.uInt8Value
+            )
             
             return [word]
             
         case ._2_0:
-            let word1 = MIDI.UMPWord(mtAndGroup,
-                                     0xB0 + channel.uInt8Value,
-                                     controller.number.uInt8Value,
-                                     0x00) // reserved
+            let word1 = MIDI.UMPWord(
+                mtAndGroup,
+                0xB0 + channel.uInt8Value,
+                controller.number.uInt8Value,
+                0x00
+            ) // reserved
             
             let word2 = value.midi2Value
             
             return [word1, word2]
-            
         }
-        
     }
-    
 }

@@ -9,29 +9,24 @@ import MIDIKit
 import OTCore
 
 struct ContentView: View {
-    
     // if you declare a view that creates its own @ObservedObject instance, that instance is replaced every time SwiftUI decides that it needs to discard and redraw that view.
     // it should instead be used to retain a weak reference from the view's initializer, with the original instance of the object stored in a parent scope as either a var or @StateObject but not an @ObservedObject
     
     @ObservedObject var midiManager: MIDI.IO.Manager
     
     var body: some View {
-        
         NavigationView {
-            
             List {
-                
                 Section(header: Text("Device Tree")) {
-                    
                     let items: [MIDI.IO.AnyMIDIIOObject] = midiManager.devices.devices
                         .sortedByName()
                         .flatMap {
                             [$0.asAnyMIDIIOObject()]
-                            + $0.entities
+                                + $0.entities
                                 .flatMap {
                                     [$0.asAnyMIDIIOObject()]
-                                    + $0.inputs.asAnyMIDIIOObjects()
-                                    + $0.outputs.asAnyMIDIIOObjects()
+                                        + $0.inputs.asAnyMIDIIOObjects()
+                                        + $0.outputs.asAnyMIDIIOObjects()
                                 }
                         }
                     
@@ -72,11 +67,9 @@ struct ContentView: View {
                             }
                         }
                     }
-                    
                 }
                 
                 Section(header: Text("Other Inputs")) {
-                    
                     // filter out endpoints that have an entity because
                     // they are already being displayed in the Devices tree
                     let items = midiManager.endpoints.inputs.sortedByName()
@@ -99,11 +92,9 @@ struct ContentView: View {
                             Text("\(item.name)")
                         }
                     }
-                    
                 }
                 
                 Section(header: Text("Other Outputs")) {
-                    
                     // filter out endpoints that have an entity because
                     // they are already being displayed in the Devices tree
                     let items = midiManager.endpoints.outputs.sortedByName()
@@ -126,20 +117,15 @@ struct ContentView: View {
                             Text("\(item.name)")
                         }
                     }
-                    
                 }
-                
             }
             .frame(width: 300)
             
             EmptyDetailsView()
-            
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        
     }
-    
 }
 
 struct ContentViewCatalina_Previews: PreviewProvider {

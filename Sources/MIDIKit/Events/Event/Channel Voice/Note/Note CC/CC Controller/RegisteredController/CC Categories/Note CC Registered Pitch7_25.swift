@@ -4,7 +4,6 @@
 //
 
 extension MIDI.Event.Note.CC.Controller.Registered {
-    
     /// /// Registered Per-Note Controller: Pitch 7.25
     /// (MIDI 2.0)
     ///
@@ -16,13 +15,10 @@ extension MIDI.Event.Note.CC.Controller.Registered {
     /// - 7 bits: Pitch in semitones, based on default Note Number equal temperament scale
     /// - 25 bits: Fractional Pitch above Note Number (i.e., fraction of one semitone)"
     public struct Pitch7_25 {
-        
         /// 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
         public var coarse: MIDI.UInt7
         
         /// 25-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
         public var fine: MIDI.UInt25
-        
     }
-    
 }

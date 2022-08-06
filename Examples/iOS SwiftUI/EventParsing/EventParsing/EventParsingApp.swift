@@ -9,7 +9,6 @@ import MIDIKit
 
 @main
 struct EventParsingApp: App {
-    
     let midiManager = MIDI.IO.Manager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
@@ -19,18 +18,13 @@ struct EventParsingApp: App {
     @ObservedObject var midiHelper = MIDIHelper()
     
     init() {
-        
         midiHelper.midiManager = midiManager
         midiHelper.initialSetup()
-        
     }
     
     var body: some Scene {
-        
         WindowGroup {
             ContentView()
         }
-        
     }
-    
 }

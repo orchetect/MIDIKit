@@ -9,12 +9,10 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
-    
     /// Connection Manager wrapper for Core MIDI.
     ///
     /// One `Manager` instance stored in a global lifecycle context can manage multiple MIDI ports and connections, and is usually sufficient for all of an application's MIDI needs.
     public class Manager: NSObject {
-        
         // MARK: - Properties
         
         /// MIDI Client Name.
@@ -42,19 +40,19 @@ extension MIDI.IO {
         }
         
         /// Dictionary of MIDI input connections managed by this instance.
-        public internal(set) var managedInputConnections: [String : InputConnection] = [:]
+        public internal(set) var managedInputConnections: [String: InputConnection] = [:]
         
         /// Dictionary of MIDI output connections managed by this instance.
-        public internal(set) var managedOutputConnections: [String : OutputConnection] = [:]
+        public internal(set) var managedOutputConnections: [String: OutputConnection] = [:]
         
         /// Dictionary of virtual MIDI inputs managed by this instance.
-        public internal(set) var managedInputs: [String : Input] = [:]
+        public internal(set) var managedInputs: [String: Input] = [:]
         
         /// Dictionary of virtual MIDI outputs managed by this instance.
-        public internal(set) var managedOutputs: [String : Output] = [:]
+        public internal(set) var managedOutputs: [String: Output] = [:]
         
         /// Dictionary of non-persistent MIDI thru connections managed by this instance.
-        public internal(set) var managedThruConnections: [String : ThruConnection] = [:]
+        public internal(set) var managedThruConnections: [String: ThruConnection] = [:]
         
         /// Array of persistent MIDI thru connections which persist indefinitely (even after system reboots) until explicitly removed.
         ///
@@ -64,10 +62,9 @@ extension MIDI.IO {
         ///
         /// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
         /// - Throws: `MIDI.IO.MIDIError`
-        public func unmanagedPersistentThruConnections(ownerID: String) throws -> [MIDI.IO.ThruConnectionRef] {
-            
+        public func unmanagedPersistentThruConnections(ownerID: String) throws
+        -> [MIDI.IO.ThruConnectionRef] {
             try MIDI.IO.getSystemThruConnectionsPersistentEntries(matching: ownerID)
-            
         }
         
         /// MIDI devices in the system.
@@ -77,8 +74,10 @@ extension MIDI.IO {
         public internal(set) var endpoints: MIDIIOEndpointsProtocol = Endpoints()
         
         /// Handler that is called when state has changed in the manager.
-        public var notificationHandler: ((_ notification: SystemNotification,
-                                          _ manager: Manager) -> Void)? = nil
+        public var notificationHandler: ((
+            _ notification: SystemNotification,
+            _ manager: Manager
+        ) -> Void)?
         
         // MARK: - Internal dispatch queue
         
@@ -98,10 +97,11 @@ extension MIDI.IO {
             clientName: String,
             model: String,
             manufacturer: String,
-            notificationHandler: ((_ notification: SystemNotification,
-                                   _ manager: Manager) -> Void)? = nil
+            notificationHandler: ((
+                _ notification: SystemNotification,
+                _ manager: Manager
+            ) -> Void)? = nil
         ) {
-            
             // API version
             preferredAPI = .bestForPlatform()
             
@@ -112,11 +112,13 @@ extension MIDI.IO {
             // manager event queue
             let eventQueueName = (Bundle.main.bundleIdentifier ?? "unknown")
                 + ".midiManager." + clientNameForQueue + ".events"
-            eventQueue = DispatchQueue(label: eventQueueName,
-                                       qos: .userInteractive,
-                                       attributes: [],
-                                       autoreleaseFrequency: .workItem,
-                                       target: .global(qos: .userInteractive))
+            eventQueue = DispatchQueue(
+                label: eventQueueName,
+                qos: .userInteractive,
+                attributes: [],
+                autoreleaseFrequency: .workItem,
+                target: .global(qos: .userInteractive)
+            )
             
             // assign other properties
             self.clientName = clientName
@@ -126,41 +128,40 @@ extension MIDI.IO {
             
             super.init()
             
-            self.endpoints = Endpoints(manager: self)
+            endpoints = Endpoints(manager: self)
             
             addNetworkSessionObservers()
-            
         }
         
         deinit {
-            
             eventQueue.sync {
                 // Apple docs:
                 // "Don’t explicitly dispose of your client; the system automatically disposes all clients when an app terminates. However, if you call this method to dispose the last or only client owned by an app, the MIDI server may exit if there are no other clients remaining in the system"
-                //_ = MIDIClientDispose(coreMIDIClientRef)
+                // _ = MIDIClientDispose(coreMIDIClientRef)
                 
                 NotificationCenter.default.removeObserver(self)
             }
-            
         }
         
         // MARK: - Helper methods
         
         internal func sendNotification(_ notif: SystemNotification) {
-            
             if let notificationHandler = notificationHandler {
                 DispatchQueue.main.async {
                     notificationHandler(notif, self)
                 }
             }
-            
         }
         
         /// Internal: calls `update()` on all objects caches.
         internal dynamic func updateObjectsCache() {
-            
             #if canImport(Combine)
-            if #available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *) {
+            if #available(
+                macOS 10.15,
+                macCatalyst 13,
+                iOS 13,
+                /* tvOS 13, watchOS 6, */ *
+            ) {
                 // calling this means we don't need to use @Published on local variables in order for Combine/SwiftUI to be notified that ObservableObject class property values have changed
                 objectWillChange.send()
             }
@@ -168,11 +169,8 @@ extension MIDI.IO {
             
             devices.update()
             endpoints.update()
-            
         }
-        
     }
-    
 }
 
 #if canImport(Combine)

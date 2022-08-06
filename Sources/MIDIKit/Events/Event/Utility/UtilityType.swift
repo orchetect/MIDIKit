@@ -6,10 +6,8 @@
 import Foundation
 
 extension MIDI.Event {
-    
     /// Declarative Utility MIDI Event types used in event filters.
     public enum UtilityTypes {
-        
         /// Return only Utility events.
         case only
         /// Return only Utility events matching a certain event type.
@@ -32,16 +30,12 @@ extension MIDI.Event {
         case dropType(UtilityType)
         /// while retaining all non-Utility events matching certain event type(s).
         case dropTypes(Set<UtilityType>)
-        
     }
     
     /// Utility MIDI Event types.
     public enum UtilityType: Equatable, Hashable {
-        
         case noOp
         case jrClock
         case jrTimestamp
-        
     }
-    
 }

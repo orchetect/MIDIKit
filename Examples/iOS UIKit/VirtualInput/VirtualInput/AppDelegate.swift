@@ -9,18 +9,20 @@ import MIDIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
     var window: UIWindow?
     
-    let midiManager = MIDI.IO.Manager(clientName: "TestAppMIDIManager",
-                                      model: "TestApp",
-                                      manufacturer: "MyCompany")
+    let midiManager = MIDI.IO.Manager(
+        clientName: "TestAppMIDIManager",
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
     
     let virtualInputName = "TestApp Input"
     
-    func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
         do {
             print("Starting MIDI services.")
             try midiManager.start()
@@ -41,7 +43,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         return true
-        
     }
-    
 }

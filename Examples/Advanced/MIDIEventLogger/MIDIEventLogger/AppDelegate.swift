@@ -10,14 +10,14 @@ import MIDIKit
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    
     var midiManager: MIDI.IO.Manager = {
         let newManager = MIDI.IO.Manager(
             clientName: "MIDIEventLogger",
             model: "LoggerApp",
-            manufacturer: "Orchetect") { notification, manager in
-                print("Core MIDI notification:", notification)
-            }
+            manufacturer: "Orchetect"
+        ) { notification, manager in
+            print("Core MIDI notification:", notification)
+        }
         do {
             logger.debug("Starting MIDI manager")
             try newManager.start()
@@ -26,13 +26,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         // uncomment this to test different API versions or limit to MIDI 1.0 protocol
-        //newManager.preferredAPI = .legacyCoreMIDI
+        // newManager.preferredAPI = .legacyCoreMIDI
         
         return newManager
     }()
     
     var window: NSWindow!
-    
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the SwiftUI view that provides the window contents.
@@ -43,12 +42,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
-            backing: .buffered, defer: false)
+            backing: .buffered, defer: false
+        )
         window.isReleasedWhenClosed = false
         window.center()
         window.setFrameAutosaveName("Main Window")
         window.contentView = NSHostingView(rootView: contentView)
         window.makeKeyAndOrderFront(nil)
     }
-    
 }

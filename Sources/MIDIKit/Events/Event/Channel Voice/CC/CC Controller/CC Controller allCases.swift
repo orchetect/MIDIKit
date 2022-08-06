@@ -4,11 +4,9 @@
 //
 
 extension MIDI.Event.CC.Controller: CaseIterable {
-    
     public typealias AllCases = [Self]
     
     public static var allCases: [Self] = [
-        
         .bankSelect,                    //   0
         .modWheel,                      //   1
         .breath,                        //   2
@@ -137,7 +135,5 @@ extension MIDI.Event.CC.Controller: CaseIterable {
         .mode(.omniModeOn),             // 125
         .mode(.monoModeOn),             // 126
         .mode(.polyModeOn)              // 127
-        
     ]
-    
 }

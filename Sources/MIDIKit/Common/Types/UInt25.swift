@@ -4,10 +4,8 @@
 //
 
 extension MIDI {
-    
     /// A 25-bit unsigned integer value type used in `MIDIKit`.
     public struct UInt25: MIDIKitIntegerProtocol {
-        
         // MARK: Storage
         
         public typealias Storage = UInt32
@@ -49,33 +47,28 @@ extension MIDI {
         
         // 0b1_00000000_00000000_00000000
         public static let midpoint = Self(Self.midpoint(Storage.self))
-        public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 16777216 }
+        public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 16_777_216 }
         
         // 0b1_11111111_11111111_11111111
-        public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 33554431 }
-        public static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 33554431 }
+        public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 33_554_431 }
+        public static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 33_554_431 }
         
         // MARK: Computed properties
         
         /// Returns the integer as a `UInt32` instance
         public var uInt32Value: UInt32 { value }
-        
     }
-    
 }
 
 extension MIDI.UInt25: ExpressibleByIntegerLiteral {
-    
     public typealias IntegerLiteralType = Storage
     
     public init(integerLiteral value: Storage) {
         self.init(value)
     }
-    
 }
 
 extension MIDI.UInt25: Strideable {
-    
     public typealias Stride = Int
     
     @inlinable
@@ -87,11 +80,9 @@ extension MIDI.UInt25: Strideable {
     public func distance(to other: Self) -> Stride {
         Stride(other) - Stride(self)
     }
-    
 }
 
 extension MIDI.UInt25: Equatable, Comparable {
-    
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.value == rhs.value
     }
@@ -99,37 +90,29 @@ extension MIDI.UInt25: Equatable, Comparable {
     public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.value < rhs.value
     }
-    
 }
 
 extension MIDI.UInt25: Hashable {
-    
     public func hash(into hasher: inout Hasher) {
         hasher.combine(value)
     }
-    
 }
 
 extension MIDI.UInt25: Codable {
-    
     enum CodingKeys: String, CodingKey {
         case value = "UInt25"
     }
-    
 }
 
 extension MIDI.UInt25: CustomStringConvertible {
-    
     public var description: String {
         "\(value)"
     }
-    
 }
 
 // MARK: - Standard library extensions
 
 extension BinaryInteger {
-    
     /// Convenience initializer for `MIDI.UInt25`.
     public var toMIDIUInt25: MIDI.UInt25 {
         MIDI.UInt25(self)
@@ -139,11 +122,9 @@ extension BinaryInteger {
     public var toMIDIUInt25Exactly: MIDI.UInt25? {
         MIDI.UInt25(exactly: self)
     }
-    
 }
 
 extension BinaryFloatingPoint {
-    
     /// Convenience initializer for `MIDI.UInt25`.
     public var toMIDIUInt25: MIDI.UInt25 {
         MIDI.UInt25(self)
@@ -153,5 +134,4 @@ extension BinaryFloatingPoint {
     public var toMIDIUInt25Exactly: MIDI.UInt25? {
         MIDI.UInt25(exactly: self)
     }
-    
 }

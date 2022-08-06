@@ -9,9 +9,7 @@ import XCTest
 import MIDIKit
 
 final class MIDIEventFilter_Utility_Tests: XCTestCase {
-    
     func testMetadata() {
-        
         // isUtility
         
         let events = kEvents.Utility.oneOfEachEventType
@@ -57,13 +55,11 @@ final class MIDIEventFilter_Utility_Tests: XCTestCase {
             MIDI.Event.noOp(group: 0)
                 .isUtility(ofTypes: [])
         )
-        
     }
     
     // MARK: - only
     
     func testFilter_only() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(utility: .only)
@@ -71,11 +67,9 @@ final class MIDIEventFilter_Utility_Tests: XCTestCase {
         let expectedEvents = kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_onlyType() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(utility: .onlyType(.noOp))
@@ -83,11 +77,9 @@ final class MIDIEventFilter_Utility_Tests: XCTestCase {
         let expectedEvents = [kEvents.Utility.noOp]
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_onlyTypes() {
-        
         let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
@@ -104,13 +96,11 @@ final class MIDIEventFilter_Utility_Tests: XCTestCase {
         filteredEvents = events.filter(utility: .onlyTypes([]))
         expectedEvents = []
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     // MARK: - keep
     
     func testFilter_keepType() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(utility: .keepType(.noOp))
@@ -125,11 +115,9 @@ final class MIDIEventFilter_Utility_Tests: XCTestCase {
         ]
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_keepTypes() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(utility: .keepTypes([.noOp, .jrClock]))
@@ -145,13 +133,11 @@ final class MIDIEventFilter_Utility_Tests: XCTestCase {
         ]
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     // MARK: - drop
     
     func testFilter_drop() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(utility: .drop)
@@ -163,11 +149,9 @@ final class MIDIEventFilter_Utility_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_dropType() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(utility: .dropType(.noOp))
@@ -183,11 +167,9 @@ final class MIDIEventFilter_Utility_Tests: XCTestCase {
         ]
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_dropTypes() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(utility: .dropTypes([.noOp, .jrClock]))
@@ -202,9 +184,7 @@ final class MIDIEventFilter_Utility_Tests: XCTestCase {
         ]
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
-    
 }
 
 #endif

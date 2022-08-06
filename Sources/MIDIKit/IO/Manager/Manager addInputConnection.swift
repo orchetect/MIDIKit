@@ -9,7 +9,6 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO.Manager {
-    
     /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `Manager`.
     ///
     /// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
@@ -29,9 +28,7 @@ extension MIDI.IO.Manager {
         filter: MIDI.IO.EndpointFilter = .default(),
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
-        
         try eventQueue.sync {
-            
             let newCD = MIDI.IO.InputConnection(
                 criteria: toOutputs,
                 mode: mode,
@@ -47,9 +44,7 @@ extension MIDI.IO.Manager {
             
             try newCD.listen(in: self)
             try newCD.connect(in: self)
-            
         }
-        
     }
     
     /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `Manager`.
@@ -71,7 +66,6 @@ extension MIDI.IO.Manager {
         filter: MIDI.IO.EndpointFilter = .default(),
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
-        
         try addInputConnection(
             toOutputs: Set(toOutputs),
             tag: tag,
@@ -79,7 +73,6 @@ extension MIDI.IO.Manager {
             filter: filter,
             receiveHandler: receiveHandler
         )
-        
     }
     
     /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `Manager`.
@@ -102,7 +95,6 @@ extension MIDI.IO.Manager {
         filter: MIDI.IO.EndpointFilter = .default(),
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
-        
         try addInputConnection(
             toOutputs: toOutputs.asCriteria(),
             tag: tag,
@@ -110,9 +102,7 @@ extension MIDI.IO.Manager {
             filter: filter,
             receiveHandler: receiveHandler
         )
-        
     }
-    
 }
 
 #endif

@@ -4,7 +4,6 @@
 //
 
 extension MIDI.Event {
-    
     /// JR Clock (Jitter-Reduction Clock)
     /// (MIDI 2.0 Utility Messages)
     ///
@@ -18,7 +17,6 @@ extension MIDI.Event {
     ///
     /// To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock messages for the Receiver, the Sender shall send a JR Clock message at least once every 250 milliseconds."
     public struct JRClock: Equatable, Hashable {
-        
         /// 16-Bit Time Value
         ///
         /// - remark: MIDI 2.0 Spec:
@@ -45,14 +43,13 @@ extension MIDI.Event {
         /// The time value is expected to wrap around every 2.09712 seconds.
         ///
         /// To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock messages for the Receiver, the Sender shall send a JR Clock message at least once every 250 milliseconds."
-        public init(time: UInt16,
-                    group: MIDI.UInt4 = 0x0) {
-            
+        public init(
+            time: UInt16,
+            group: MIDI.UInt4 = 0x0
+        ) {
             self.time = time
             self.group = group
-            
         }
-        
     }
     
     /// JR Clock (Jitter-Reduction Clock)
@@ -68,26 +65,25 @@ extension MIDI.Event {
     ///
     /// To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock messages for the Receiver, the Sender shall send a JR Clock message at least once every 250 milliseconds."
     @inline(__always)
-    public static func jrClock(time: UInt16,
-                               group: MIDI.UInt4 = 0x0) -> Self {
-        
+    public static func jrClock(
+        time: UInt16,
+        group: MIDI.UInt4 = 0x0
+    ) -> Self {
         .jrClock(
-            .init(time: time,
-                  group: group)
+            .init(
+                time: time,
+                group: group
+            )
         )
-        
     }
-    
 }
 
 extension MIDI.Event.JRClock {
-    
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
-        
         let umpMessageType: MIDI.IO.Packet.UniversalPacketData.MessageType = .utility
         
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
@@ -98,13 +94,13 @@ extension MIDI.Event.JRClock {
         
         let timeBytes = MIDI.Byte.Pair(time)
         
-        let word = MIDI.UMPWord(mtAndGroup,
-                                (utilityStatus.rawValue.uInt8Value << 4) + 0x0,
-                                timeBytes.msb,
-                                timeBytes.lsb)
+        let word = MIDI.UMPWord(
+            mtAndGroup,
+            (utilityStatus.rawValue.uInt8Value << 4) + 0x0,
+            timeBytes.msb,
+            timeBytes.lsb
+        )
         
         return [word]
-        
     }
-    
 }

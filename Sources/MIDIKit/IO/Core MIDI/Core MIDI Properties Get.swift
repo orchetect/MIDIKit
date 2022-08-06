@@ -8,7 +8,6 @@
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
-    
     // MARK: - Property Readers
     
     /// Internal:
@@ -19,10 +18,11 @@ extension MIDI.IO {
     ///   - deep: Returns nested results for all children if `True`.
     ///
     /// - Throws: `MIDI.IO.MIDIError`
-    internal static func getProperties(of ref: MIDIObjectRef,
-                                       deep: Bool = false) throws -> CFPropertyList {
-        
-        var props: Unmanaged<CFPropertyList>? = nil
+    internal static func getProperties(
+        of ref: MIDIObjectRef,
+        deep: Bool = false
+    ) throws -> CFPropertyList {
+        var props: Unmanaged<CFPropertyList>?
         let result = MIDIObjectGetProperties(ref, &props, deep)
         
         guard result == noErr else {
@@ -42,7 +42,6 @@ extension MIDI.IO {
         //  -- https://stackoverflow.com/a/27171498/2805570
         
         return unwrappedProps
-        
     }
     
     /// Internal:
@@ -53,10 +52,11 @@ extension MIDI.IO {
     ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
     ///
     /// - Throws: `MIDI.IO.MIDIError`
-    internal static func getDictionary(forProperty: CFString,
-                                       of ref: MIDIObjectRef) throws -> NSDictionary {
-        
-        var dict: Unmanaged<CFDictionary>? = nil
+    internal static func getDictionary(
+        forProperty: CFString,
+        of ref: MIDIObjectRef
+    ) throws -> NSDictionary {
+        var dict: Unmanaged<CFDictionary>?
         let result = MIDIObjectGetDictionaryProperty(ref, forProperty, &dict)
         
         guard result == noErr else {
@@ -76,7 +76,6 @@ extension MIDI.IO {
         //  -- https://stackoverflow.com/a/27171498/2805570
         
         return unwrappedDict as NSDictionary
-        
     }
     
     /// Internal:
@@ -87,9 +86,10 @@ extension MIDI.IO {
     ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
     ///
     /// - Throws: `MIDI.IO.MIDIError`
-    internal static func getString(forProperty: CFString,
-                                   of ref: MIDIObjectRef) throws -> String {
-        
+    internal static func getString(
+        forProperty: CFString,
+        of ref: MIDIObjectRef
+    ) throws -> String {
         var val: Unmanaged<CFString>?
         let result = MIDIObjectGetStringProperty(ref, forProperty, &val)
         
@@ -110,28 +110,25 @@ extension MIDI.IO {
         //  -- https://stackoverflow.com/a/27171498/2805570
         
         return unwrappedVal as String
-        
     }
     
     /// Internal:
     /// Get an integer value from a `MIDIObjectRef` property key.
     ///
     /// - Parameter forProperty: a `CoreMIDI.Property*` property constant
-    internal static func getInteger(forProperty: CFString,
-                                    of ref: MIDIObjectRef) -> Int32 {
-        
+    internal static func getInteger(
+        forProperty: CFString,
+        of ref: MIDIObjectRef
+    ) -> Int32 {
         var val: Int32 = 0
         _ = MIDIObjectGetIntegerProperty(ref, forProperty, &val)
         return val
-        
     }
-    
 }
 
 // MARK: - Property Getters
 
 extension MIDI.IO {
-    
     // MARK: Identification
     
     /// Get user-visible endpoint name.
@@ -215,7 +212,9 @@ extension MIDI.IO {
     ///
     /// - requires: macOS 10.15, macCatalyst 13.0, iOS 13.0
     @available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *)
-    internal static func getNameConfigurationDictionary(of ref: MIDIObjectRef) throws -> NSDictionary {
+    internal static func getNameConfigurationDictionary(
+        of ref: MIDIObjectRef
+    ) throws -> NSDictionary {
         try getDictionary(forProperty: kMIDIPropertyNameConfigurationDictionary, of: ref)
     }
     
@@ -520,7 +519,6 @@ extension MIDI.IO {
         getInteger(forProperty: kMIDIPropertyTransmitsProgramChanges, of: ref) == 1
     }
     
-    
     // MARK: - Full Property* List
     // Up-to-date as of Feb 2021
     
@@ -610,7 +608,6 @@ extension MIDI.IO {
     //  | | | | Program Changes:
     // *|•|•| |   kMIDIPropertyReceivesProgramChanges      int32 0/1
     // *|•|•| |   kMIDIPropertyTransmitsProgramChanges     int32 0/1
-    
 }
 
 #endif

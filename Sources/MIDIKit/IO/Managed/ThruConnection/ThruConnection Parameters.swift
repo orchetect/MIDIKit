@@ -8,10 +8,8 @@
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO.ThruConnection {
-    
     /// Parameters for a MIDI Thru connection.
     public struct Parameters {
-        
         public var filterOutAllControls: Bool = false
         public var filterOutBeatClock: Bool = false
         public var filterOutMTC: Bool = false
@@ -19,33 +17,25 @@ extension MIDI.IO.ThruConnection {
         public var filterOutTuneRequest: Bool = false
         
         public init() { }
-        
     }
-    
 }
 
 extension MIDI.IO.ThruConnection.Parameters {
-    
     internal init(_ coreMIDIParams: MIDIThruConnectionParams) {
-        
         filterOutAllControls = coreMIDIParams.filterOutAllControls != 0
         filterOutBeatClock = coreMIDIParams.filterOutBeatClock != 0
         filterOutMTC = coreMIDIParams.filterOutMTC != 0
         filterOutSysEx = coreMIDIParams.filterOutSysEx != 0
         filterOutTuneRequest = coreMIDIParams.filterOutTuneRequest != 0
-        
     }
-    
 }
 
 extension MIDI.IO.ThruConnection.Parameters {
-    
     /// Builds Core MIDI `MIDIThruConnectionParams` from local properties.
     internal func coreMIDIThruConnectionParams(
         inputs: [MIDI.IO.InputEndpoint],
         outputs: [MIDI.IO.OutputEndpoint]
     ) -> MIDIThruConnectionParams {
-        
         var params = MIDIThruConnectionParams()
         
         MIDIThruConnectionParamsInitialize(&params) // fill with defaults
@@ -74,32 +64,48 @@ extension MIDI.IO.ThruConnection.Parameters {
         
         params.numSources = UInt32(outputs.count)
         
-        for srcEP in 0..<outputs.count {
+        for srcEP in 0 ..< outputs.count {
             switch srcEP {
             case 0:
-                params.sources.0 = .init(endpointRef: outputs[srcEP].coreMIDIObjectRef,
-                                         uniqueID: outputs[srcEP].uniqueID)
+                params.sources.0 = .init(
+                    endpointRef: outputs[srcEP].coreMIDIObjectRef,
+                    uniqueID: outputs[srcEP].uniqueID
+                )
             case 1:
-                params.sources.1 = .init(endpointRef: outputs[srcEP].coreMIDIObjectRef,
-                                         uniqueID: outputs[srcEP].uniqueID)
+                params.sources.1 = .init(
+                    endpointRef: outputs[srcEP].coreMIDIObjectRef,
+                    uniqueID: outputs[srcEP].uniqueID
+                )
             case 2:
-                params.sources.2 = .init(endpointRef: outputs[srcEP].coreMIDIObjectRef,
-                                         uniqueID: outputs[srcEP].uniqueID)
+                params.sources.2 = .init(
+                    endpointRef: outputs[srcEP].coreMIDIObjectRef,
+                    uniqueID: outputs[srcEP].uniqueID
+                )
             case 3:
-                params.sources.3 = .init(endpointRef: outputs[srcEP].coreMIDIObjectRef,
-                                         uniqueID: outputs[srcEP].uniqueID)
+                params.sources.3 = .init(
+                    endpointRef: outputs[srcEP].coreMIDIObjectRef,
+                    uniqueID: outputs[srcEP].uniqueID
+                )
             case 4:
-                params.sources.4 = .init(endpointRef: outputs[srcEP].coreMIDIObjectRef,
-                                         uniqueID: outputs[srcEP].uniqueID)
+                params.sources.4 = .init(
+                    endpointRef: outputs[srcEP].coreMIDIObjectRef,
+                    uniqueID: outputs[srcEP].uniqueID
+                )
             case 5:
-                params.sources.5 = .init(endpointRef: outputs[srcEP].coreMIDIObjectRef,
-                                         uniqueID: outputs[srcEP].uniqueID)
+                params.sources.5 = .init(
+                    endpointRef: outputs[srcEP].coreMIDIObjectRef,
+                    uniqueID: outputs[srcEP].uniqueID
+                )
             case 6:
-                params.sources.6 = .init(endpointRef: outputs[srcEP].coreMIDIObjectRef,
-                                         uniqueID: outputs[srcEP].uniqueID)
+                params.sources.6 = .init(
+                    endpointRef: outputs[srcEP].coreMIDIObjectRef,
+                    uniqueID: outputs[srcEP].uniqueID
+                )
             case 7:
-                params.sources.7 = .init(endpointRef: outputs[srcEP].coreMIDIObjectRef,
-                                         uniqueID: outputs[srcEP].uniqueID)
+                params.sources.7 = .init(
+                    endpointRef: outputs[srcEP].coreMIDIObjectRef,
+                    uniqueID: outputs[srcEP].uniqueID
+                )
             default:
                 break // ignore more than 8 endpoints
             }
@@ -109,39 +115,55 @@ extension MIDI.IO.ThruConnection.Parameters {
         
         params.numDestinations = UInt32(inputs.count)
         
-        for destEP in 0..<inputs.count {
+        for destEP in 0 ..< inputs.count {
             switch destEP {
             case 0:
-                params.destinations.0 = .init(endpointRef: inputs[destEP].coreMIDIObjectRef,
-                                              uniqueID: inputs[destEP].uniqueID)
+                params.destinations.0 = .init(
+                    endpointRef: inputs[destEP].coreMIDIObjectRef,
+                    uniqueID: inputs[destEP].uniqueID
+                )
                 
             case 1:
-                params.destinations.1 = .init(endpointRef: inputs[destEP].coreMIDIObjectRef,
-                                              uniqueID: inputs[destEP].uniqueID)
+                params.destinations.1 = .init(
+                    endpointRef: inputs[destEP].coreMIDIObjectRef,
+                    uniqueID: inputs[destEP].uniqueID
+                )
                 
             case 2:
-                params.destinations.2 = .init(endpointRef: inputs[destEP].coreMIDIObjectRef,
-                                              uniqueID: inputs[destEP].uniqueID)
+                params.destinations.2 = .init(
+                    endpointRef: inputs[destEP].coreMIDIObjectRef,
+                    uniqueID: inputs[destEP].uniqueID
+                )
                 
             case 3:
-                params.destinations.3 = .init(endpointRef: inputs[destEP].coreMIDIObjectRef,
-                                              uniqueID: inputs[destEP].uniqueID)
+                params.destinations.3 = .init(
+                    endpointRef: inputs[destEP].coreMIDIObjectRef,
+                    uniqueID: inputs[destEP].uniqueID
+                )
                 
             case 4:
-                params.destinations.4 = .init(endpointRef: inputs[destEP].coreMIDIObjectRef,
-                                              uniqueID: inputs[destEP].uniqueID)
+                params.destinations.4 = .init(
+                    endpointRef: inputs[destEP].coreMIDIObjectRef,
+                    uniqueID: inputs[destEP].uniqueID
+                )
                 
             case 5:
-                params.destinations.5 = .init(endpointRef: inputs[destEP].coreMIDIObjectRef,
-                                              uniqueID: inputs[destEP].uniqueID)
+                params.destinations.5 = .init(
+                    endpointRef: inputs[destEP].coreMIDIObjectRef,
+                    uniqueID: inputs[destEP].uniqueID
+                )
                 
             case 6:
-                params.destinations.6 = .init(endpointRef: inputs[destEP].coreMIDIObjectRef,
-                                              uniqueID: inputs[destEP].uniqueID)
+                params.destinations.6 = .init(
+                    endpointRef: inputs[destEP].coreMIDIObjectRef,
+                    uniqueID: inputs[destEP].uniqueID
+                )
                 
             case 7:
-                params.destinations.7 = .init(endpointRef: inputs[destEP].coreMIDIObjectRef,
-                                              uniqueID: inputs[destEP].uniqueID)
+                params.destinations.7 = .init(
+                    endpointRef: inputs[destEP].coreMIDIObjectRef,
+                    uniqueID: inputs[destEP].uniqueID
+                )
             default:
                 break // ignore more than 8 endpoints
             }
@@ -165,9 +187,7 @@ extension MIDI.IO.ThruConnection.Parameters {
         params.filterOutTuneRequest = filterOutTuneRequest ? 1 : 0
         
         return params
-        
     }
-    
 }
 
 #endif

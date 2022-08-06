@@ -10,12 +10,10 @@ import Foundation
 
 @available(macOS 11, iOS 14, macCatalyst 14, *)
 extension UnsafePointer where Pointee == MIDIEventList {
-    
     /// Internal:
     /// Returns array of MIDIKit `UniversalPacketData` instances.
     @inline(__always)
     internal func packets() -> [MIDI.IO.Packet.UniversalPacketData] {
-        
         if pointee.numPackets == 0 {
             return []
         }
@@ -23,8 +21,10 @@ extension UnsafePointer where Pointee == MIDIEventList {
         // unsafeSequence() is not available on tvOS or watchOS at all
         let sequencedPackets = unsafeSequence()
             .map {
-                (words: $0.sequence().map { $0 },
-                 timeStamp: $0.pointee.timeStamp)
+                (
+                    words: $0.sequence().map { $0 },
+                    timeStamp: $0.pointee.timeStamp
+                )
             }
         
         var packets: [MIDI.IO.Packet.UniversalPacketData] = []
@@ -36,28 +36,26 @@ extension UnsafePointer where Pointee == MIDIEventList {
         
         for sequencedPacket in sequencedPackets {
             for umpWords in parse(packetWords: sequencedPacket.words) {
-                let ump = MIDI.IO.Packet.UniversalPacketData(words: umpWords,
-                                                          timeStamp: sequencedPacket.timeStamp)
+                let ump = MIDI.IO.Packet.UniversalPacketData(
+                    words: umpWords,
+                    timeStamp: sequencedPacket.timeStamp
+                )
                 packets.append(ump)
             }
         }
         
         return packets
-        
     }
-    
 }
 
 #endif
 
 @available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
 extension UnsafePointer where Pointee == MIDIEventList {
-    
     /// Internal:
     /// Parses an EventPacket's words and splits it into individual UMP messages.
     @inline(__always)
     fileprivate func parse(packetWords: [MIDI.UMPWord]) -> [[MIDI.UMPWord]] {
-        
         guard !packetWords.isEmpty else { return [] }
         
         var results: [[MIDI.UMPWord]] = []
@@ -72,7 +70,7 @@ extension UnsafePointer where Pointee == MIDIEventList {
             guard let mt = MIDI.Nibble(exactly: packetWords[curWord] >> 28),
                   let mtype = MIDI.IO.Packet.UniversalPacketData.MessageType(rawValue: mt),
                   wordsRemain() >= mtype.wordLength
-            else { curWord = packetWords.count ; continue }
+            else { curWord = packetWords.count; continue }
             
             let expectedWordCount = mtype.wordLength
             
@@ -84,7 +82,5 @@ extension UnsafePointer where Pointee == MIDIEventList {
         }
         
         return results
-        
     }
-
 }

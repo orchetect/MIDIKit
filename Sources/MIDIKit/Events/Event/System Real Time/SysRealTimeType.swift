@@ -4,10 +4,8 @@
 //
 
 extension MIDI.Event {
-    
     /// Declarative System Real Time MIDI Event types used in event filters.
     public enum SysRealTimeTypes {
-        
         /// Return only System Real Time events.
         case only
         /// Return only System Real Time events matching a certain event type.
@@ -30,19 +28,15 @@ extension MIDI.Event {
         case dropType(SysRealTimeType)
         /// while retaining all non-System Real Time events matching certain event type(s).
         case dropTypes(Set<SysRealTimeType>)
-        
     }
     
     /// System Real Time MIDI Event types.
     public enum SysRealTimeType: Equatable, Hashable {
-        
         case timingClock
         case start
         case `continue`
         case stop
         case activeSensing
         case systemReset
-        
     }
-    
 }

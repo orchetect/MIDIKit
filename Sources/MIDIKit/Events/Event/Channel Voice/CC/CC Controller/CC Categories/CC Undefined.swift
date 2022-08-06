@@ -4,10 +4,8 @@
 //
 
 extension MIDI.Event.CC.Controller {
-    
     /// Undefined MIDI CC Controllers
     public enum Undefined {
-        
         /// Undefined controller number 3
         /// (Int: 3, Hex: 0x03)
         case cc3
@@ -163,19 +161,15 @@ extension MIDI.Event.CC.Controller {
         /// Undefined controller number 119
         /// (Int: 119, Hex: 0x77)
         case cc119
-        
     }
-    
 }
 
 extension MIDI.Event.CC.Controller.Undefined {
-    
     /// Returns the controller number.
     @inlinable
     public var controller: MIDI.UInt7 {
-        
+        // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
         switch self {
-        
         case .cc3   : return 3
         case .cc9   : return 9
         case .cc14  : return 14
@@ -215,20 +209,15 @@ extension MIDI.Event.CC.Controller.Undefined {
         case .cc117 : return 117
         case .cc118 : return 118
         case .cc119 : return 119
-            
         }
-        
+        // swiftformat:enable spaceInsideParens spaceInsideBrackets spacearoundoperators
     }
-    
 }
 
 extension MIDI.Event.CC.Controller.Undefined {
-    
     /// Returns the controller name as a human-readable String.
     @inlinable
     public var name: String {
-        
         "Undefined CC\(controller)"
-        
     }
 }

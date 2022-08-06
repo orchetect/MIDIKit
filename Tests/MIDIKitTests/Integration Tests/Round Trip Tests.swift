@@ -11,23 +11,25 @@ import XCTest
 import CoreMIDI
 
 open class RoundTrip_Tests_Base: XCTestCase {
+    // swiftformat:options --wrapcollections preserve
     
-    fileprivate var manager: MIDI.IO.Manager! = nil
+    fileprivate var manager: MIDI.IO.Manager!
     
     fileprivate let outputTag = "1"
     fileprivate let inputConnectionTag = "2"
     
     fileprivate var receivedEvents: [MIDI.Event] = []
     
-    open override func setUp() {
-        
+    override open func setUp() {
         print("RoundTrip_Tests setUp() starting")
         
         wait(sec: 0.5)
         
-        manager = .init(clientName: "MIDIKit_IO_RoundTrip_Input_Tests",
-                        model: "MIDIKit123",
-                        manufacturer: "MIDIKit")
+        manager = .init(
+            clientName: "MIDIKit_IO_RoundTrip_Input_Tests",
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         
@@ -49,11 +51,9 @@ open class RoundTrip_Tests_Base: XCTestCase {
         wait(sec: 0.5)
         
         print("RoundTrip_Tests setUp() done")
-        
     }
     
     func createPorts() {
-        
         print("RoundTrip_Tests createPorts() starting")
         
         // add new output endpoint
@@ -65,9 +65,9 @@ open class RoundTrip_Tests_Base: XCTestCase {
                 uniqueID: .none // allow system to generate random ID each time, without persistence
             )
         } catch let err as MIDI.IO.MIDIError {
-            XCTFail(err.localizedDescription) ; return
+            XCTFail(err.localizedDescription); return
         } catch {
-            XCTFail(error.localizedDescription) ; return
+            XCTFail(error.localizedDescription); return
         }
         
         guard let output = manager.managedOutputs[outputTag] else {
@@ -90,23 +90,21 @@ open class RoundTrip_Tests_Base: XCTestCase {
                 tag: inputConnectionTag,
                 receiveHandler: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false)
                     { events in
-                    self.receivedEvents.append(contentsOf: events)
-                }
+                        self.receivedEvents.append(contentsOf: events)
+                    }
             )
         } catch let err as MIDI.IO.MIDIError {
-            XCTFail("\(err)") ; return
+            XCTFail("\(err)"); return
         } catch {
-            XCTFail(error.localizedDescription) ; return
+            XCTFail(error.localizedDescription); return
         }
         
         XCTAssertNotNil(manager.managedInputConnections[inputConnectionTag])
         
         print("RoundTrip_Tests createPorts() done")
-        
     }
     
-    open override func tearDown() {
-        
+    override open func tearDown() {
         print("RoundTrip_Tests tearDown starting")
         
         // remove endpoints
@@ -121,13 +119,11 @@ open class RoundTrip_Tests_Base: XCTestCase {
         wait(sec: 0.3)
         
         print("RoundTrip_Tests tearDown done")
-        
     }
     
     // ------------------------------------------------------------
     
     func runRapidMIDIEvents() throws {
-        
         print("RoundTrip_Tests runRapidMIDIEvents() starting")
         
         guard let output = manager.managedOutputs[outputTag] else {
@@ -139,132 +135,162 @@ open class RoundTrip_Tests_Base: XCTestCase {
         
         var sourceEvents: [MIDI.Event] = []
         
-        sourceEvents.append(contentsOf: (0...127).map {
-            .noteOn($0.toMIDIUInt7,
-                    velocity: .midi1((1...0x7F).randomElement()!),
-                    channel: (0...0xF).randomElement()!)
+        sourceEvents.append(contentsOf: (0 ... 127).map {
+            .noteOn(
+                $0.toMIDIUInt7,
+                velocity: .midi1((1 ... 0x7F).randomElement()!),
+                channel: (0 ... 0xF).randomElement()!
+            )
         })
         
-        sourceEvents.append(contentsOf: (0...127).map {
-            .noteOff($0.toMIDIUInt7,
-                     velocity: .midi1((0...0x7F).randomElement()!),
-                     channel: (0...0xF).randomElement()!)
+        sourceEvents.append(contentsOf: (0 ... 127).map {
+            .noteOff(
+                $0.toMIDIUInt7,
+                velocity: .midi1((0 ... 0x7F).randomElement()!),
+                channel: (0 ... 0xF).randomElement()!
+            )
         })
         
-        sourceEvents.append(contentsOf: (0...127).map {
-            .cc($0.toMIDIUInt7,
-                value: .midi1((0...0x7F).randomElement()!),
-                channel: (0...0xF).randomElement()!)
+        sourceEvents.append(contentsOf: (0 ... 127).map {
+            .cc(
+                $0.toMIDIUInt7,
+                value: .midi1((0 ... 0x7F).randomElement()!),
+                channel: (0 ... 0xF).randomElement()!
+            )
         })
         
-        sourceEvents.append(contentsOf: (0...127).map {
-            .notePressure(note: $0.toMIDIUInt7,
-                          amount: .midi1(20),
-                          channel: (0...0xF).randomElement()!)
+        sourceEvents.append(contentsOf: (0 ... 127).map {
+            .notePressure(
+                note: $0.toMIDIUInt7,
+                amount: .midi1(20),
+                channel: (0 ... 0xF).randomElement()!
+            )
         })
         
-        sourceEvents.append(contentsOf: (0...127).map {
-            .programChange(program: $0.toMIDIUInt7,
-                           channel: (0...0xF).randomElement()!)
+        sourceEvents.append(contentsOf: (0 ... 127).map {
+            .programChange(
+                program: $0.toMIDIUInt7,
+                channel: (0 ... 0xF).randomElement()!
+            )
         })
         
-        sourceEvents.append(contentsOf: (0...100).map { _ in
-            .pitchBend(value: .midi1((0...16383).randomElement()!.toMIDIUInt14),
-                       channel: (0...0xF).randomElement()!)
+        sourceEvents.append(contentsOf: (0 ... 100).map { _ in
+            .pitchBend(
+                value: .midi1((0 ... 16383).randomElement()!.toMIDIUInt14),
+                channel: (0 ... 0xF).randomElement()!
+            )
         })
         
-        sourceEvents.append(contentsOf: (0...127).map {
-            .pressure(amount: .midi1($0.toMIDIUInt7),
-                      channel: (0...0xF).randomElement()!)
+        sourceEvents.append(contentsOf: (0 ... 127).map {
+            .pressure(
+                amount: .midi1($0.toMIDIUInt7),
+                channel: (0 ... 0xF).randomElement()!
+            )
         })
         
         sourceEvents.append(
-            .sysEx7(manufacturer: .educational(),
-                    data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-                           0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
-                           0x0D])
+            .sysEx7(
+                manufacturer: .educational(),
+                data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                       0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                       0x0D]
+            )
         )
         
         sourceEvents.append(
-            .universalSysEx7(universalType: .realTime,
-                             deviceID: 0x01,
-                             subID1: 0x02,
-                             subID2: 0x03,
-                             data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-                                    0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
-                                    0x0D])
+            .universalSysEx7(
+                universalType: .realTime,
+                deviceID: 0x01,
+                subID1: 0x02,
+                subID2: 0x03,
+                data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                       0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                       0x0D]
+            )
         )
         
         // add MIDI 2.0-only events if applicable
         if output.api == .newCoreMIDI(._2_0) {
-            
-            sourceEvents.append(contentsOf: (0...127).map {
-                .noteOn($0.toMIDIUInt7,
-                        velocity: .midi1((1...0x7F).randomElement()!),
-                        attribute: .pitch7_9(coarse: 123, fine: 456),
-                        channel: (0...0xF).randomElement()!,
-                        group: (0...MIDI.UInt4.max).randomElement()!)
+            sourceEvents.append(contentsOf: (0 ... 127).map {
+                .noteOn(
+                    $0.toMIDIUInt7,
+                    velocity: .midi1((1 ... 0x7F).randomElement()!),
+                    attribute: .pitch7_9(coarse: 123, fine: 456),
+                    channel: (0 ... 0xF).randomElement()!,
+                    group: (0 ... MIDI.UInt4.max).randomElement()!
+                )
             })
             
-            sourceEvents.append(contentsOf: (0...127).map {
-                .noteOff($0.toMIDIUInt7,
-                         velocity: .midi1((0...0x7F).randomElement()!),
-                         attribute: .profileSpecific(data: 0x1234),
-                         channel: (0...0xF).randomElement()!,
-                         group: (0...MIDI.UInt4.max).randomElement()!)
+            sourceEvents.append(contentsOf: (0 ... 127).map {
+                .noteOff(
+                    $0.toMIDIUInt7,
+                    velocity: .midi1((0 ... 0x7F).randomElement()!),
+                    attribute: .profileSpecific(data: 0x1234),
+                    channel: (0 ... 0xF).randomElement()!,
+                    group: (0 ... MIDI.UInt4.max).randomElement()!
+                )
             })
             
-            sourceEvents.append(contentsOf: (0...127).map {
-                .noteCC(note: $0.toMIDIUInt7,
-                        controller: .registered(.expression),
-                        value: .midi2((0...UInt32.max).randomElement()!),
-                        channel: (0...0xF).randomElement()!,
-                        group: (0...MIDI.UInt4.max).randomElement()!)
+            sourceEvents.append(contentsOf: (0 ... 127).map {
+                .noteCC(
+                    note: $0.toMIDIUInt7,
+                    controller: .registered(.expression),
+                    value: .midi2((0 ... UInt32.max).randomElement()!),
+                    channel: (0 ... 0xF).randomElement()!,
+                    group: (0 ... MIDI.UInt4.max).randomElement()!
+                )
             })
             
-            sourceEvents.append(contentsOf: (0...127).map {
-                .notePitchBend(note: $0.toMIDIUInt7,
-                               value: .midi2((0...UInt32.max).randomElement()!),
-                               channel: (0...0xF).randomElement()!,
-                               group: (0...MIDI.UInt4.max).randomElement()!)
+            sourceEvents.append(contentsOf: (0 ... 127).map {
+                .notePitchBend(
+                    note: $0.toMIDIUInt7,
+                    value: .midi2((0 ... UInt32.max).randomElement()!),
+                    channel: (0 ... 0xF).randomElement()!,
+                    group: (0 ... MIDI.UInt4.max).randomElement()!
+                )
             })
             
-            sourceEvents.append(contentsOf: (0...127).map {
-                .noteManagement(note: $0.toMIDIUInt7,
-                                flags: [.resetPerNoteControllers],
-                                channel: (0...0xF).randomElement()!,
-                                group: (0...MIDI.UInt4.max).randomElement()!)
+            sourceEvents.append(contentsOf: (0 ... 127).map {
+                .noteManagement(
+                    note: $0.toMIDIUInt7,
+                    flags: [.resetPerNoteControllers],
+                    channel: (0 ... 0xF).randomElement()!,
+                    group: (0 ... MIDI.UInt4.max).randomElement()!
+                )
             })
             
             sourceEvents.append(
-                .sysEx8(manufacturer: .educational(),
-                        data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-                               0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
-                               0xE6])
+                .sysEx8(
+                    manufacturer: .educational(),
+                    data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                           0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                           0xE6]
+                )
             )
             
             sourceEvents.append(
-                .universalSysEx8(universalType: .realTime,
-                                 deviceID: 0x01,
-                                 subID1: 0x02,
-                                 subID2: 0x03,
-                                 data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-                                        0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
-                                        0xE6])
+                .universalSysEx8(
+                    universalType: .realTime,
+                    deviceID: 0x01,
+                    subID1: 0x02,
+                    subID2: 0x03,
+                    data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+                           0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
+                           0xE6]
+                )
             )
             
-            sourceEvents.append(contentsOf: (0x0...0xF).map {
+            sourceEvents.append(contentsOf: (0x0 ... 0xF).map {
                 .noOp(group: $0)
             })
             
-            sourceEvents.append(contentsOf: (0x0...0xF).map {
+            sourceEvents.append(contentsOf: (0x0 ... 0xF).map {
                 .jrClock(time: 0x4321, group: $0)
             })
             
-            sourceEvents.append(contentsOf: (0x0...0xF).map {
+            sourceEvents.append(contentsOf: (0x0 ... 0xF).map {
                 .jrTimestamp(time: 0x4321, group: $0)
             })
-            
         }
         
         sourceEvents.shuffle()
@@ -310,51 +336,37 @@ open class RoundTrip_Tests_Base: XCTestCase {
         }
         
         print("RoundTrip_Tests runRapidMIDIEvents() done")
-        
     }
-    
 }
 
 final class RoundTrip_OldCoreMIDIAPI_Tests: RoundTrip_Tests_Base {
-    
     func testRapidMIDIEvents_OldCoreMIDIAPI() throws {
-        
         manager.preferredAPI = .legacyCoreMIDI
         wait(sec: 0.5)
         createPorts()
         wait(sec: 0.5)
         try runRapidMIDIEvents()
-        
     }
-    
 }
 
 final class RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests: RoundTrip_Tests_Base {
-    
     func testRapidMIDIEvents_NewCoreMIDIAPI_1_0_Protocol() throws {
-        
         manager.preferredAPI = .newCoreMIDI(._1_0)
         wait(sec: 0.5)
         createPorts()
         wait(sec: 0.5)
         try runRapidMIDIEvents()
-        
     }
-    
 }
 
 final class RoundTrip_NewCoreMIDIAPI_2_0_Protocol_Tests: RoundTrip_Tests_Base {
-    
     func testRapidMIDIEvents_NewCoreMIDIAPI_2_0_Protocol() throws {
-
         manager.preferredAPI = .newCoreMIDI(._2_0)
         wait(sec: 0.5)
         createPorts()
         wait(sec: 0.5)
         try runRapidMIDIEvents()
-
     }
-    
 }
 
 #endif

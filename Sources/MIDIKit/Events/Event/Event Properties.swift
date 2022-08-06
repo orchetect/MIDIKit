@@ -4,169 +4,156 @@
 //
 
 extension MIDI.Event {
-    
     /// Returns the event's channel, if one is associated with it.
     @inline(__always)
     public var channel: MIDI.UInt4? {
-        
         switch self {
-        
         // -------------------
         // MARK: Channel Voice
         // -------------------
         
-        case .noteOn(let event):
+        case let .noteOn(event):
             return event.channel
             
-        case .noteOff(let event):
+        case let .noteOff(event):
             return event.channel
             
-        case .noteCC(let event):
+        case let .noteCC(event):
             return event.channel
             
-        case .notePitchBend(let event):
+        case let .notePitchBend(event):
             return event.channel
             
-        case .notePressure(let event):
+        case let .notePressure(event):
             return event.channel
             
-        case .noteManagement(let event):
+        case let .noteManagement(event):
             return event.channel
             
-        case .cc(let event):
+        case let .cc(event):
             return event.channel
             
-        case .programChange(let event):
+        case let .programChange(event):
             return event.channel
             
-        case .pressure(let event):
+        case let .pressure(event):
             return event.channel
             
-        case .pitchBend(let event):
+        case let .pitchBend(event):
             return event.channel
             
         default:
             return nil
-            
         }
-        
     }
     
     /// Returns the event's UMP group.
     @inline(__always)
     public var group: MIDI.UInt4 {
-        
         switch self {
-        
         // -------------------
         // MARK: Channel Voice
         // -------------------
         
-        case .noteOn(let event):
+        case let .noteOn(event):
             return event.group
             
-        case .noteOff(let event):
+        case let .noteOff(event):
             return event.group
             
-        case .noteCC(let event):
+        case let .noteCC(event):
             return event.group
             
-        case .notePitchBend(let event):
+        case let .notePitchBend(event):
             return event.group
             
-        case .notePressure(let event):
+        case let .notePressure(event):
             return event.group
             
-        case .noteManagement(let event):
+        case let .noteManagement(event):
             return event.group
             
-        case .cc(let event):
+        case let .cc(event):
             return event.group
             
-        case .programChange(let event):
+        case let .programChange(event):
             return event.group
             
-        case .pressure(let event):
+        case let .pressure(event):
             return event.group
             
-        case .pitchBend(let event):
+        case let .pitchBend(event):
             return event.group
-            
             
         // ----------------------
         // MARK: System Exclusive
         // ----------------------
         
-        case .sysEx7(let event):
+        case let .sysEx7(event):
             return event.group
             
-        case .universalSysEx7(let event):
+        case let .universalSysEx7(event):
             return event.group
             
-        case .sysEx8(let event):
+        case let .sysEx8(event):
             return event.group
             
-        case .universalSysEx8(let event):
+        case let .universalSysEx8(event):
             return event.group
-            
             
         // -------------------
         // MARK: System Common
         // -------------------
         
-        case .timecodeQuarterFrame(let event):
+        case let .timecodeQuarterFrame(event):
             return event.group
             
-        case .songPositionPointer(let event):
+        case let .songPositionPointer(event):
             return event.group
             
-        case .songSelect(let event):
+        case let .songSelect(event):
             return event.group
             
-        case .unofficialBusSelect(let event):
+        case let .unofficialBusSelect(event):
             return event.group
             
-        case .tuneRequest(let event):
+        case let .tuneRequest(event):
             return event.group
-            
             
         // ----------------------
         // MARK: System Real Time
         // ----------------------
         
-        case .timingClock(let event):
+        case let .timingClock(event):
             return event.group
             
-        case .start(let event):
+        case let .start(event):
             return event.group
             
-        case .continue(let event):
+        case let .continue(event):
             return event.group
             
-        case .stop(let event):
+        case let .stop(event):
             return event.group
             
-        case .activeSensing(let event):
+        case let .activeSensing(event):
             return event.group
             
-        case .systemReset(let event):
+        case let .systemReset(event):
             return event.group
-            
             
         // -------------------------------
         // MARK: MIDI 2.0 Utility Messages
         // -------------------------------
             
-        case .noOp(let event):
+        case let .noOp(event):
             return event.group
             
-        case .jrClock(let event):
+        case let .jrClock(event):
             return event.group
             
-        case .jrTimestamp(let event):
+        case let .jrTimestamp(event):
             return event.group
         }
-        
     }
-    
 }

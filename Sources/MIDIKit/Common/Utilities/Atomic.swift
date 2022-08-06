@@ -8,18 +8,16 @@
 import Foundation
 
 extension MIDI {
-    
     /// `Atomic`: A property wrapper that ensures thread-safe atomic access to a value.
     /// Multiple read accesses can potentially read at the same time, just not during a write.
     ///
     /// By using `pthread` to do the locking, this safer than using a `DispatchQueue/barrier` as there isn't a chance of priority inversion.
     ///
-    /// This is safe to use on collection types (`Array`, `Dictionary`, etc.)
+    /// This is safe to use on collection types (`Array`, `Dictionary`, etc.).
     ///
     /// - Warning: Do not instance this wrapper on a variable declaration inside a function. Only wrap class-bound, struct-bound, or global-bound variables.
     @propertyWrapper
     public final class Atomic<T> {
-        
         @inline(__always)
         private var value: T
         
@@ -28,24 +26,21 @@ extension MIDI {
         
         @inline(__always)
         public init(wrappedValue value: T) {
-            
             self.value = value
-            
         }
         
         @inline(__always)
         public var wrappedValue: T {
-            
             get {
-                self.lock.readLock()
+                lock.readLock()
                 defer { self.lock.unlock() }
-                return self.value
+                return value
             }
             
             set {
-                self.lock.writeLock()
+                lock.writeLock()
                 value = newValue
-                self.lock.unlock()
+                lock.unlock()
             }
             
             // _modify { } is an internal Swift computed setter, similar to set { }
@@ -57,17 +52,12 @@ extension MIDI {
                 yield &value
                 self.lock.unlock()
             }
-            
         }
-        
     }
-
-    
 }
 
 /// Defines a basic signature to which all locks will conform. Provides the basis for atomic access to stuff.
-fileprivate protocol ThreadLock {
-    
+private protocol ThreadLock {
     init()
     
     /// Lock a resource for writing. So only one thing can write, and nothing else can read or write.
@@ -78,11 +68,9 @@ fileprivate protocol ThreadLock {
     
     /// Unlock a resource
     func unlock()
-    
 }
 
-fileprivate final class RWThreadLock: ThreadLock {
-    
+private final class RWThreadLock: ThreadLock {
     private var lock = pthread_rwlock_t()
     
     init() {
@@ -106,5 +94,4 @@ fileprivate final class RWThreadLock: ThreadLock {
     func unlock() {
         pthread_rwlock_unlock(&lock)
     }
-    
 }

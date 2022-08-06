@@ -4,13 +4,11 @@
 //
 
 extension MIDI.Event.Note.CC.Controller.Registered {
-    
     /// Returns the controller number.
     @inline(__always)
     public var number: UInt8 {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
-        
         case .modWheel                      : return 1
         case .breath                        : return 2
         case .pitch7_25                     : return 3
@@ -38,10 +36,8 @@ extension MIDI.Event.Note.CC.Controller.Registered {
         case .effects4Depth                 : return 94
         case .effects5Depth                 : return 95
             
-        case .undefined(let cc)             : return cc.controller
-            
+        case let .undefined(cc)             : return cc.controller
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
-    
 }

@@ -7,7 +7,6 @@ import Foundation
 @_implementationOnly import SwiftRadix
 
 extension MIDI.Event {
-    
     /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
     /// Message must begin with 0xF0 but terminating 0xF7 byte is optional.
     ///
@@ -17,7 +16,6 @@ extension MIDI.Event {
         rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0
     ) throws -> Self {
-        
         var readPos = rawBytes.startIndex
         
         func readPosAdvance(by: Int) throws {
@@ -35,9 +33,9 @@ extension MIDI.Event {
             let bytesRemaining = actualEndIndex - readPos
             dataBytes.reserveCapacity(bytesRemaining)
             
-            for idx in readPos...actualEndIndex {
+            for idx in readPos ... actualEndIndex {
                 let byte = rawBytes[idx]
-                if byte == 0xF7 && idx == actualEndIndex {
+                if byte == 0xF7, idx == actualEndIndex {
                     // ignore if final byte is 0xF7
                 } else if byte < 0x80 {
                     dataBytes.append(byte)
@@ -95,15 +93,17 @@ extension MIDI.Event {
             let data = try readData()
             
             return .universalSysEx7(
-                .init(universalType: universalType,
-                      deviceID: deviceID,
-                      subID1: subID1,
-                      subID2: subID2,
-                      data: data,
-                      group: group)
+                .init(
+                    universalType: universalType,
+                    deviceID: deviceID,
+                    subID1: subID1,
+                    subID2: subID2,
+                    data: data,
+                    group: group
+                )
             )
             
-        case 0x00...0x7D:
+        case 0x00 ... 0x7D:
             var readManufacturer: SysExManufacturer?
             
             switch idByte1 {
@@ -121,7 +121,7 @@ extension MIDI.Event {
                 
                 readManufacturer = .threeByte(byte2: idByte2, byte3: idByte3)
                 
-            case 0x01...0x7D:
+            case 0x01 ... 0x7D:
                 // 1-byte ID
                 readManufacturer = .oneByte(idByte1)
                 
@@ -141,16 +141,17 @@ extension MIDI.Event {
             }
             
             return .sysEx7(
-                .init(manufacturer: manufacturer,
-                      data: data,
-                      group: group)
+                .init(
+                    manufacturer: manufacturer,
+                    data: data,
+                    group: group
+                )
             )
             
         default:
             // malformed
             throw ParseError.malformed
         }
-        
     }
     
     /// Parse a complete raw MIDI 1.0 System Exclusive 7 message in the form of a hex string and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
@@ -164,7 +165,6 @@ extension MIDI.Event {
         rawHexString: S,
         group: MIDI.UInt4 = 0
     ) throws -> Self {
-        
         // basic string sanitation and split into character pairs
         let hexStrings = rawHexString
             .removing(.whitespacesAndNewlines)
@@ -192,17 +192,16 @@ extension MIDI.Event {
             .compactMap { $0 }
         
         // parse bytes as normal
-        return try sysEx7(rawBytes: bytes,
-                          group: group)
-        
+        return try sysEx7(
+            rawBytes: bytes,
+            group: group
+        )
     }
-    
 }
 
 // MARK: - API Transition (release 0.4.12)
 
 extension MIDI.Event {
-    
     /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
     /// Message must begin with 0xF0 but terminating 0xF7 byte is optional.
     ///
@@ -213,12 +212,11 @@ extension MIDI.Event {
         sysEx7RawBytes rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0
     ) throws {
-        
-        let sysEx = try Self.sysEx7(rawBytes: rawBytes,
-                                    group: group)
+        let sysEx = try Self.sysEx7(
+            rawBytes: rawBytes,
+            group: group
+        )
         
         self = sysEx
-        
     }
-    
 }

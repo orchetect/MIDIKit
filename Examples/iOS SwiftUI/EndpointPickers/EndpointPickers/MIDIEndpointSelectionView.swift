@@ -8,7 +8,6 @@ import SwiftUI
 import MIDIKit
 
 struct MIDIEndpointSelectionView: View {
-    
     @EnvironmentObject var midiManager: MIDI.IO.Manager
     @EnvironmentObject var midiHelper: MIDIHelper
     
@@ -19,7 +18,6 @@ struct MIDIEndpointSelectionView: View {
     @Binding var midiOutSelectedDisplayName: String
     
     var body: some View {
-        
         Picker("MIDI In", selection: $midiInSelectedID) {
             Text("None")
                 .tag(0 as MIDI.IO.UniqueID)
@@ -55,7 +53,5 @@ struct MIDIEndpointSelectionView: View {
                     .tag($0.uniqueID)
             }
         }
-        
     }
-    
 }

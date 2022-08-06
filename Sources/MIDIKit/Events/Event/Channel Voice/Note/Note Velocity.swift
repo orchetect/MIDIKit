@@ -4,7 +4,6 @@
 //
 
 extension MIDI.Event.Note {
-    
     /// MIDI Note Velocity
     /// (MIDI 1.0 / MIDI 2.0)
     ///
@@ -19,5 +18,4 @@ extension MIDI.Event.Note {
     public typealias Velocity = MIDI.Event.ChanVoice7Bit16BitValue
     
     public typealias VelocityValidated = MIDI.Event.ChanVoice7Bit16BitValue.Validated
-    
 }

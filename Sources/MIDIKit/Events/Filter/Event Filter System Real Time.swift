@@ -6,11 +6,9 @@
 // MARK: - Metadata properties
 
 extension MIDI.Event {
-    
     /// Returns true if the event is a System Real Time message.
     @inlinable
     public var isSystemRealTime: Bool {
-        
         switch self {
         case .timingClock,
              .start,
@@ -23,13 +21,12 @@ extension MIDI.Event {
         default:
             return false
         }
-        
     }
     
     /// Returns true if the event is a System Real Time message of a specific type.
     @inlinable
     public func isSystemRealTime(ofType sysRealTimeType: SysRealTimeType) -> Bool {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
         case .timingClock   : return sysRealTimeType == .timingClock
         case .start         : return sysRealTimeType == .start
@@ -39,49 +36,43 @@ extension MIDI.Event {
         case .systemReset   : return sysRealTimeType == .systemReset
         default             : return false
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
     
     /// Returns true if the event is a System Real Time message of a specific type.
     @inlinable
     public func isSystemRealTime(ofTypes sysRealTimeTypes: Set<SysRealTimeType>) -> Bool {
-        
         for eventType in sysRealTimeTypes {
-            if self.isSystemRealTime(ofType: eventType) { return true }
+            if isSystemRealTime(ofType: eventType) { return true }
         }
         
         return false
-        
     }
-    
 }
-
 
 // MARK: - Filter
 
 extension Collection where Element == MIDI.Event {
-    
     /// Filter System Real Time events.
     @inlinable
     public func filter(sysRealTime types: MIDI.Event.SysRealTimeTypes) -> [Element] {
-        
         switch types {
         case .only:
             return filter { $0.isSystemRealTime }
             
-        case .onlyType(let specificType):
+        case let .onlyType(specificType):
             return filter { $0.isSystemRealTime(ofType: specificType) }
             
-        case .onlyTypes(let specificTypes):
+        case let .onlyTypes(specificTypes):
             return filter { $0.isSystemRealTime(ofTypes: specificTypes) }
             
-        case .keepType(let specificType):
+        case let .keepType(specificType):
             return filter {
                 guard $0.isSystemRealTime else { return true }
                 return $0.isSystemRealTime(ofType: specificType)
             }
             
-        case .keepTypes(let specificTypes):
+        case let .keepTypes(specificTypes):
             return filter {
                 guard $0.isSystemRealTime else { return true }
                 return $0.isSystemRealTime(ofTypes: specificTypes)
@@ -90,20 +81,17 @@ extension Collection where Element == MIDI.Event {
         case .drop:
             return filter { !$0.isSystemRealTime }
             
-        case .dropType(let specificType):
+        case let .dropType(specificType):
             return filter {
                 guard $0.isSystemRealTime else { return true }
                 return !$0.isSystemRealTime(ofType: specificType)
             }
             
-        case .dropTypes(let specificTypes):
+        case let .dropTypes(specificTypes):
             return filter {
                 guard $0.isSystemRealTime else { return true }
                 return !$0.isSystemRealTime(ofTypes: specificTypes)
             }
-            
         }
-        
     }
-    
 }

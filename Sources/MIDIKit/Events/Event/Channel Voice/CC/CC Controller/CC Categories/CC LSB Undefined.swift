@@ -4,11 +4,9 @@
 //
 
 extension MIDI.Event.CC.Controller.LSB {
-    
     /// Undefined MIDI CC LSB Controllers
     /// (MIDI 1.0 / MIDI 2.0)
     public enum Undefined: Equatable, Hashable {
-        
         /// LSB for Undefined controller number 3
         /// (Int: 35, Hex: 0x23)
         case cc3
@@ -72,19 +70,15 @@ extension MIDI.Event.CC.Controller.LSB {
         /// LSB for Undefined controller number 31
         /// (Int: 63, Hex: 0x3F)
         case cc31
-        
     }
-    
 }
 
 extension MIDI.Event.CC.Controller.LSB.Undefined {
-    
     /// Returns the controller number.
     @inlinable
     public var controller: MIDI.UInt7 {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
-        
         case .cc3  : return 35
         case .cc9  : return 41
         case .cc14 : return 46
@@ -101,17 +95,15 @@ extension MIDI.Event.CC.Controller.LSB.Undefined {
         case .cc29 : return 61
         case .cc30 : return 62
         case .cc31 : return 63
-            
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
     
     /// Returns the LSB's corresponding MSB controller number.
     @inlinable
     public var msbController: MIDI.UInt7 {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
-        
         case .cc3  : return 3
         case .cc9  : return 9
         case .cc14 : return 14
@@ -128,20 +120,15 @@ extension MIDI.Event.CC.Controller.LSB.Undefined {
         case .cc29 : return 29
         case .cc30 : return 30
         case .cc31 : return 31
-            
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
-    
 }
 
 extension MIDI.Event.CC.Controller.LSB.Undefined {
-    
     /// Returns the controller name as a human-readable String.
     @inlinable
     public var name: String {
-        
         "Undefined CC\(msbController) LSB"
-        
     }
 }

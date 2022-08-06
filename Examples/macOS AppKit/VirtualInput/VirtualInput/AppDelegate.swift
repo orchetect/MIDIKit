@@ -9,15 +9,15 @@ import MIDIKit
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    
-    let midiManager = MIDI.IO.Manager(clientName: "TestAppMIDIManager",
-                                      model: "TestApp",
-                                      manufacturer: "MyCompany")
+    let midiManager = MIDI.IO.Manager(
+        clientName: "TestAppMIDIManager",
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
     
     let virtualInputName = "TestApp Input"
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        
         do {
             print("Starting MIDI services.")
             try midiManager.start()
@@ -36,7 +36,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             print("Error creating virtual MIDI input:", error.localizedDescription)
         }
-        
     }
-    
 }

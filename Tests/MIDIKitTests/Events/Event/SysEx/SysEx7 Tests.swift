@@ -10,122 +10,116 @@ import MIDIKit
 import SwiftRadix
 
 final class SysEx7Tests: XCTestCase {
-	
-	func testSysEx7RawBytes_Typical() throws {
-		
+    func testSysEx7RawBytes_Typical() throws {
         let sourceRawBytes: [MIDI.Byte] = [0xF0, 0x41, 0x01, 0x34, 0xF7]
 		
         let event = try MIDI.Event.sysEx7(rawBytes: sourceRawBytes)
-        guard case .sysEx7(let innerEvent) = event
-        else { XCTFail() ; return }
+        guard case let .sysEx7(innerEvent) = event
+        else { XCTFail(); return }
         
         XCTAssertEqual(innerEvent.manufacturer, .oneByte(0x41))
         XCTAssertEqual(innerEvent.data, [0x01, 0x34])
         XCTAssertEqual(innerEvent.group, 0)
 		
-		XCTAssertEqual(event.midi1RawBytes(), sourceRawBytes)
-        XCTAssertEqual(event.umpRawWords(protocol: ._2_0),
-                       [[0x30034101, 0x34000000]])
-		
-	}
+        XCTAssertEqual(event.midi1RawBytes(), sourceRawBytes)
+        XCTAssertEqual(
+            event.umpRawWords(protocol: ._2_0),
+            [[0x3003_4101, 0x3400_0000]]
+        )
+    }
 	
-	func testSysEx7RawBytes_EmptyMessageBytes_WithMfr_WithEndByte() throws {
-		
+    func testSysEx7RawBytes_EmptyMessageBytes_WithMfr_WithEndByte() throws {
         let sourceRawBytes: [MIDI.Byte] = [0xF0, 0x41, 0xF7]
 		
         let event = try MIDI.Event.sysEx7(rawBytes: sourceRawBytes)
-        guard case .sysEx7(let innerEvent) = event
-        else { XCTFail() ; return }
+        guard case let .sysEx7(innerEvent) = event
+        else { XCTFail(); return }
 		
         XCTAssertEqual(innerEvent.manufacturer, .oneByte(0x41))
         XCTAssertEqual(innerEvent.data, [])
         XCTAssertEqual(innerEvent.group, 0)
         
-		XCTAssertEqual(event.midi1RawBytes(), sourceRawBytes)
-        XCTAssertEqual(event.umpRawWords(protocol: ._2_0),
-                       [[0x30014100, 0x00000000]])
-        
-	}
+        XCTAssertEqual(event.midi1RawBytes(), sourceRawBytes)
+        XCTAssertEqual(
+            event.umpRawWords(protocol: ._2_0),
+            [[0x3001_4100, 0x0000_0000]]
+        )
+    }
     
     func testSysEx7RawBytes_EmptyMessageBytes_WithMfr() throws {
-        
         let sourceRawBytes: [MIDI.Byte] = [0xF0, 0x41]
         
         let event = try MIDI.Event.sysEx7(rawBytes: sourceRawBytes)
-        guard case .sysEx7(let innerEvent) = event
-        else { XCTFail() ; return }
+        guard case let .sysEx7(innerEvent) = event
+        else { XCTFail(); return }
         
         XCTAssertEqual(innerEvent.manufacturer, .oneByte(0x41))
         XCTAssertEqual(innerEvent.data, [])
         XCTAssertEqual(innerEvent.group, 0)
         
         XCTAssertEqual(event.midi1RawBytes(), [0xF0, 0x41, 0xF7])
-        XCTAssertEqual(event.umpRawWords(protocol: ._2_0),
-                       [[0x30014100, 0x00000000]])
-        
+        XCTAssertEqual(
+            event.umpRawWords(protocol: ._2_0),
+            [[0x3001_4100, 0x0000_0000]]
+        )
     }
     
     func testSysEx7RawBytes_EmptyMessageBytes_WithEndByte() {
-        
         let sourceRawBytes: [MIDI.Byte] = [0xF0, 0xF7]
         
         XCTAssertThrowsError(
             try MIDI.Event.sysEx7(rawBytes: sourceRawBytes)
         )
-        
     }
 	
-	func testSysEx7RawBytes_MaxSize() {
-        
+    func testSysEx7RawBytes_MaxSize() {
         // valid - maximum byte length (256 bytes)
         XCTAssertNoThrow(
             try MIDI.Event.sysEx7(
                 rawBytes: [0xF0, 0x41]
-                    + [MIDI.Byte](repeating: 0x20, count: 256-3)
-                    + [0xF7])
+                    + [MIDI.Byte](repeating: 0x20, count: 256 - 3)
+                    + [0xF7]
+            )
         )
         
         // valid - length is larger than default 256 bytes (257 bytes)
         XCTAssertNoThrow(
             try MIDI.Event.sysEx7(
                 rawBytes: [0xF0, 0x41]
-                    + [MIDI.Byte](repeating: 0x20, count: 256-2)
-                    + [0xF7])
+                    + [MIDI.Byte](repeating: 0x20, count: 256 - 2)
+                    + [0xF7]
+            )
         )
-        
     }
 	
-	func testSysEx7RawBytes_Malformed() {
-		
-		// empty raw bytes - invalid
-		XCTAssertThrowsError(
+    func testSysEx7RawBytes_Malformed() {
+        // empty raw bytes - invalid
+        XCTAssertThrowsError(
             try MIDI.Event.sysEx7(rawBytes: [])
-		)
+        )
 		
-		// start byte only - invalid
-		XCTAssertThrowsError(
+        // start byte only - invalid
+        XCTAssertThrowsError(
             try MIDI.Event.sysEx7(rawBytes: [0xF0])
-		)
+        )
 		
-		// end byte only - invalid
-		XCTAssertThrowsError(
+        // end byte only - invalid
+        XCTAssertThrowsError(
             try MIDI.Event.sysEx7(rawBytes: [0xF7])
-		)
+        )
 		
-		// start and end bytes only - invalid
-		XCTAssertThrowsError(
+        // start and end bytes only - invalid
+        XCTAssertThrowsError(
             try MIDI.Event.sysEx7(rawBytes: [0xF0, 0xF7])
-		)
+        )
 		
-		// correct start byte, valid length, but incorrect end byte
-		XCTAssertThrowsError(
+        // correct start byte, valid length, but incorrect end byte
+        XCTAssertThrowsError(
             try MIDI.Event.sysEx7(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF6])
-		)
-		
-	}
+        )
+    }
 	
     func testSysEx7RawHexString_Typical() throws {
-        
         // space delimiter
         XCTAssertEqual(
             try MIDI.Event.sysEx7(rawHexString: "F0 41 01 34 F7"),
@@ -161,11 +155,9 @@ final class SysEx7Tests: XCTestCase {
             try MIDI.Event.sysEx7(rawHexString: "f0410134"),
             .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
         )
-        
     }
     
     func testSysEx7RawHexString_Malformed() throws {
-        
         // wrong leading and trailing bytes
         XCTAssertThrowsError(
             try MIDI.Event.sysEx7(rawHexString: "F7 41 01 34 F0")
@@ -185,11 +177,9 @@ final class SysEx7Tests: XCTestCase {
         XCTAssertThrowsError(
             try MIDI.Event.sysEx7(rawHexString: "F0 41 01 34 F")
         )
-        
     }
     
     func testSysEx7_midi1RawHexString() throws {
-        
         let sysEx = MIDI.Event.SysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
         
         XCTAssertEqual(
@@ -211,20 +201,18 @@ final class SysEx7Tests: XCTestCase {
             sysEx.midi1RawHexString(separator: ", "),
             "F0, 41, 01, 34, F7"
         )
-        
     }
     
     func testUniversalSysEx7RawHexString_Typical() throws {
-        
         // space delimiter
         XCTAssertEqual(
             try MIDI.Event.sysEx7(rawHexString: "F0 7F 01 34 56 10 11 F7"),
             .universalSysEx7(
-                    universalType: .realTime,
-                    deviceID: 0x01,
-                    subID1: 0x34,
-                    subID2: 0x56,
-                    data: [0x10, 0x11]
+                universalType: .realTime,
+                deviceID: 0x01,
+                subID1: 0x34,
+                subID2: 0x56,
+                data: [0x10, 0x11]
             )
         )
         
@@ -287,11 +275,9 @@ final class SysEx7Tests: XCTestCase {
                 data: [0x10, 0x11]
             )
         )
-        
     }
     
     func testUniversalSysEx7RawHexString_Malformed() throws {
-        
         // wrong leading and trailing bytes
         XCTAssertThrowsError(
             try MIDI.Event.sysEx7(rawHexString: "F7 7F 01 34 56 10 11 F0")
@@ -311,43 +297,37 @@ final class SysEx7Tests: XCTestCase {
         XCTAssertThrowsError(
             try MIDI.Event.sysEx7(rawHexString: "F0 7F 01 34 56 10 11 F")
         )
-        
     }
     
-	func testEquatable() throws {
-		
-		// ensure instances equate correctly
-		
-        let event1A = try MIDI.Event.sysEx7(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
-        let event1B = try MIDI.Event.sysEx7(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
-		
-        let event2 = try MIDI.Event.sysEx7(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
-		
-		XCTAssert(event1A == event1B)
-		
-		XCTAssert(event1A != event2)
-		
-	}
-	
-	func testHashable() throws {
-		
-		// ensure instances hash correctly
+    func testEquatable() throws {
+        // ensure instances equate correctly
 		
         let event1A = try MIDI.Event.sysEx7(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
         let event1B = try MIDI.Event.sysEx7(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
 		
         let event2 = try MIDI.Event.sysEx7(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
 		
-		let set1: Set<MIDI.Event> = [event1A, event1B]
+        XCTAssert(event1A == event1B)
 		
-		let set2: Set<MIDI.Event> = [event1A, event2]
-		
-		XCTAssertEqual(set1.count, 1)
-		
-		XCTAssertEqual(set2.count, 2)
-		
-	}
+        XCTAssert(event1A != event2)
+    }
 	
+    func testHashable() throws {
+        // ensure instances hash correctly
+		
+        let event1A = try MIDI.Event.sysEx7(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+        let event1B = try MIDI.Event.sysEx7(rawBytes: [0xF0, 0x41, 0x01, 0x34, 0xF7])
+		
+        let event2 = try MIDI.Event.sysEx7(rawBytes: [0xF0, 0x41, 0x01, 0x64, 0xF7])
+		
+        let set1: Set<MIDI.Event> = [event1A, event1B]
+		
+        let set2: Set<MIDI.Event> = [event1A, event2]
+		
+        XCTAssertEqual(set1.count, 1)
+		
+        XCTAssertEqual(set2.count, 2)
+    }
 }
 
 #endif

@@ -4,11 +4,9 @@
 //
 
 extension MIDI.Event.Note {
-    
     /// Channel Voice Message: Per-Note Control Change (CC)
     /// (MIDI 2.0)
     public struct CC: Equatable, Hashable {
-        
         /// Note Number
         ///
         /// If attribute is set to Pitch 7.9, then this value represents the note index.
@@ -36,18 +34,18 @@ extension MIDI.Event.Note {
         ///   - value: Value
         ///   - channel: Channel Number (0x0...0xF)
         ///   - group: UMP Group (0x0...0xF)
-        public init(note: MIDI.UInt7,
-                    controller: Controller,
-                    value: Value,
-                    channel: MIDI.UInt4,
-                    group: MIDI.UInt4 = 0x0) {
-            
+        public init(
+            note: MIDI.UInt7,
+            controller: Controller,
+            value: Value,
+            channel: MIDI.UInt4,
+            group: MIDI.UInt4 = 0x0
+        ) {
             self.note = MIDI.Note(note)
             self.controller = controller
             self.value = value
             self.channel = channel
             self.group = group
-            
         }
         
         /// Channel Voice Message: Per-Note Control Change (CC)
@@ -59,26 +57,23 @@ extension MIDI.Event.Note {
         ///   - value: Value
         ///   - channel: Channel Number (0x0...0xF)
         ///   - group: UMP Group (0x0...0xF)
-        public init(note: MIDI.Note,
-                    controller: Controller,
-                    value: Value,
-                    channel: MIDI.UInt4,
-                    group: MIDI.UInt4 = 0x0) {
-            
+        public init(
+            note: MIDI.Note,
+            controller: Controller,
+            value: Value,
+            channel: MIDI.UInt4,
+            group: MIDI.UInt4 = 0x0
+        ) {
             self.note = note
             self.controller = controller
             self.value = value
             self.channel = channel
             self.group = group
-            
         }
-        
     }
-    
 }
 
 extension MIDI.Event {
-    
     /// Channel Voice Message: Per-Note Control Change (CC)
     /// (MIDI 2.0)
     ///
@@ -89,20 +84,22 @@ extension MIDI.Event {
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
     @inline(__always)
-    public static func noteCC(note: MIDI.UInt7,
-                              controller: Note.CC.Controller,
-                              value: Note.CC.Value,
-                              channel: MIDI.UInt4,
-                              group: MIDI.UInt4 = 0x0) -> Self {
-        
+    public static func noteCC(
+        note: MIDI.UInt7,
+        controller: Note.CC.Controller,
+        value: Note.CC.Value,
+        channel: MIDI.UInt4,
+        group: MIDI.UInt4 = 0x0
+    ) -> Self {
         .noteCC(
-            .init(note: note,
-                  controller: controller,
-                  value: value,
-                  channel: channel,
-                  group: group)
+            .init(
+                note: note,
+                controller: controller,
+                value: value,
+                channel: channel,
+                group: group
+            )
         )
-        
     }
     
     /// Channel Voice Message: Per-Note Control Change (CC)
@@ -115,32 +112,31 @@ extension MIDI.Event {
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
     @inline(__always)
-    public static func noteCC(note: MIDI.Note,
-                              controller: Note.CC.Controller,
-                              value: Note.CC.Value,
-                              channel: MIDI.UInt4,
-                              group: MIDI.UInt4 = 0x0) -> Self {
-        
+    public static func noteCC(
+        note: MIDI.Note,
+        controller: Note.CC.Controller,
+        value: Note.CC.Value,
+        channel: MIDI.UInt4,
+        group: MIDI.UInt4 = 0x0
+    ) -> Self {
         .noteCC(
-            .init(note: note.number,
-                  controller: controller,
-                  value: value,
-                  channel: channel,
-                  group: group)
+            .init(
+                note: note.number,
+                controller: controller,
+                value: value,
+                channel: channel,
+                group: group
+            )
         )
-        
     }
-    
 }
 
 extension MIDI.Event.Note.CC {
-    
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
-        
         let umpMessageType: MIDI.IO.Packet.UniversalPacketData.MessageType = .midi2ChannelVoice
         
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
@@ -151,25 +147,24 @@ extension MIDI.Event.Note.CC {
         let index: MIDI.Byte
         
         switch controller {
-        case .assignable(let ccNum):
+        case let .assignable(ccNum):
             statusByte = 0x10
             index = ccNum
             
-        case .registered(let ccNum):
+        case let .registered(ccNum):
             statusByte = 0x00
             index = ccNum.number
-            
         }
         
-        let word1 = MIDI.UMPWord(mtAndGroup,
-                                 statusByte + channel.uInt8Value,
-                                 note.number.uInt8Value,
-                                 index)
+        let word1 = MIDI.UMPWord(
+            mtAndGroup,
+            statusByte + channel.uInt8Value,
+            note.number.uInt8Value,
+            index
+        )
         
         let word2 = value.midi2Value
         
         return [word1, word2]
-        
     }
-    
 }

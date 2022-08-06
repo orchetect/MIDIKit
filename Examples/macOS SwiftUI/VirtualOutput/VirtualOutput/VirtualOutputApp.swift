@@ -9,15 +9,15 @@ import MIDIKit
 
 @main
 struct VirtualOutputApp: App {
-    
-    let midiManager = MIDI.IO.Manager(clientName: "TestAppMIDIManager",
-                                      model: "TestApp",
-                                      manufacturer: "MyCompany")
+    let midiManager = MIDI.IO.Manager(
+        clientName: "TestAppMIDIManager",
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
     
     let virtualOutputName = "TestApp Output"
     
     init() {
-        
         do {
             print("Starting MIDI services.")
             try midiManager.start()
@@ -35,17 +35,13 @@ struct VirtualOutputApp: App {
         } catch {
             print("Error creating virtual MIDI output:", error.localizedDescription)
         }
-        
     }
     
     var body: some Scene {
-        
         WindowGroup {
             ContentView()
                 .frame(width: 500, height: 350, alignment: .center)
                 .environmentObject(midiManager)
         }
-        
     }
-    
 }

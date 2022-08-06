@@ -8,10 +8,8 @@
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
-    
     /// An enumeration representing `CoreMIDI.MIDIServices` `OSStatus` error codes, with verbose descriptions.
     public enum MIDIOSStatus: Hashable {
-        
         /// `CoreMIDI.kMIDIInvalidClient`:
         /// An invalid `MIDIClientRef` was passed.
         case invalidClient
@@ -91,18 +89,15 @@ extension MIDI.IO {
         
         /// Other `OSStatus`
         case other(MIDI.IO.CoreMIDIOSStatus)
-        
     }
-    
 }
 
 extension MIDI.IO.MIDIOSStatus {
-    
     /// Returns the corresponding Core MIDI `OSStatus` raw value.
     ///
     /// Core MIDI headers note: "These are the OSStatus error constants that are unique to Core MIDI. Note that Core MIDI functions may return other codes that are not listed here."
     public var rawValue: MIDI.IO.CoreMIDIOSStatus {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
         case .invalidClient      : return kMIDIInvalidClient     // -10830
         case .invalidPort        : return kMIDIInvalidPort       // -10831
@@ -122,14 +117,14 @@ extension MIDI.IO.MIDIOSStatus {
         case .unknownError       : return kMIDIUnknownError      // -10845
         case .ioError            : return 7 // no Core MIDI constant exists
         case .internalError      : return -50 // no Core MIDI constant exists
-        case .other(let val)     : return val
+        case let .other(val)     : return val
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
     
     /// Initializes from the corresponding Core MIDI `OSStatus` raw value.
     public init(rawValue: MIDI.IO.CoreMIDIOSStatus) {
-        
+        // swiftformat:disable spacearoundoperators
         switch rawValue {
         case kMIDIInvalidClient      : self = .invalidClient
         case kMIDIInvalidPort        : self = .invalidPort
@@ -151,21 +146,16 @@ extension MIDI.IO.MIDIOSStatus {
         case -50                     : self = .internalError
         default                      : self = .other(rawValue)
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
-    
 }
 
 extension MIDI.IO.MIDIOSStatus: CustomStringConvertible {
-    
     public var localizedDescription: String {
-        
         description
-        
     }
     
     public var description: String {
-        
         switch self {
         case .invalidClient:
             return "An invalid MIDIClientRef was passed. (kMIDIInvalidClient)"
@@ -221,41 +211,30 @@ extension MIDI.IO.MIDIOSStatus: CustomStringConvertible {
         case .internalError:
             return "Internal OSStatus error -50."
             
-        case .other(let osStatus):
+        case let .other(osStatus):
             return "Unknown OSStatus error: \(osStatus)"
-            
         }
-        
     }
-    
 }
 
 extension MIDI.IO {
-    
     /// Throws an error of type `MIDI.IO.MIDIError` if `OSStatus` return value is != `noErr`
     internal static func throwIfErr(_ closure: () -> OSStatus) throws {
-        
         let result = closure()
         
         guard result == noErr else {
             throw MIDIError.osStatus(result)
         }
-        
     }
-    
 }
 
 extension OSStatus /* aka Int32 */ {
-    
     /// Throws an error of type `MIDI.IO.MIDIError` if self as `OSStatus` is != `noErr`
     internal func throwIfOSStatusErr() throws {
-        
         guard self == noErr else {
             throw MIDI.IO.MIDIError.osStatus(self)
         }
-        
     }
-    
 }
 
 #endif

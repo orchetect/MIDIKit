@@ -4,7 +4,6 @@
 //
 
 extension MIDI.Event {
-    
     /// System Exclusive: Manufacturer-specific (8-bit)
     /// (MIDI 2.0 only)
     ///
@@ -12,7 +11,6 @@ extension MIDI.Event {
     ///
     /// - "System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs."
     public struct SysEx8: Equatable, Hashable {
-        
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
         
@@ -29,28 +27,27 @@ extension MIDI.Event {
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
-        public init(manufacturer: SysExManufacturer,
-                    data: [MIDI.Byte],
-                    group: MIDI.UInt4 = 0x0) {
-            
+        public init(
+            manufacturer: SysExManufacturer,
+            data: [MIDI.Byte],
+            group: MIDI.UInt4 = 0x0
+        ) {
             self.manufacturer = manufacturer
             self.data = data
             self.group = group
-            
         }
         
-        internal init(manufacturer: SysExManufacturer,
-                      data: [MIDI.Byte],
-                      streamID: UInt8,
-                      group: MIDI.UInt4 = 0x0) {
-            
+        internal init(
+            manufacturer: SysExManufacturer,
+            data: [MIDI.Byte],
+            streamID: UInt8,
+            group: MIDI.UInt4 = 0x0
+        ) {
             self.manufacturer = manufacturer
             self.data = data
             self.streamID = streamID
             self.group = group
-            
         }
-        
     }
     
     /// System Exclusive: Manufacturer-specific (8-bit)
@@ -65,49 +62,48 @@ extension MIDI.Event {
     ///   - data: Data bytes (8-bit)
     ///   - group: UMP Group (0x0...0xF)
     @inline(__always)
-    public static func sysEx8(manufacturer: SysExManufacturer,
-                              data: [MIDI.Byte],
-                              group: MIDI.UInt4 = 0x0) -> Self {
-        
+    public static func sysEx8(
+        manufacturer: SysExManufacturer,
+        data: [MIDI.Byte],
+        group: MIDI.UInt4 = 0x0
+    ) -> Self {
         .sysEx8(
-            .init(manufacturer: manufacturer,
-                  data: data,
-                  group: group)
+            .init(
+                manufacturer: manufacturer,
+                data: data,
+                group: group
+            )
         )
-        
     }
-    
 }
 
 extension MIDI.Event.SysEx8 {
-    
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// Generates one or more 64-bit UMP packets depending on the system exclusive data length (each packet comprised of two UInt32 words).
-    /// 
+    ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords() -> [[MIDI.UMPWord]] {
-        
         let rawData = manufacturer.sysEx8RawBytes() + data
         
-        return Self.umpRawWords(fromSysEx8Data: rawData,
-                                streamID: streamID,
-                                group: group)
-        
+        return Self.umpRawWords(
+            fromSysEx8Data: rawData,
+            streamID: streamID,
+            group: group
+        )
     }
-    
 }
 
 extension MIDI.Event.SysEx8 {
-    
     /// Internal:
     /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly; use the public `umpRawWords()` method instead.
     @inline(__always)
-    internal static func umpRawWords(fromSysEx8Data data: [MIDI.Byte],
-                                     streamID: UInt8,
-                                     group: MIDI.UInt4) -> [[MIDI.UMPWord]] {
-            
+    internal static func umpRawWords(
+        fromSysEx8Data data: [MIDI.Byte],
+        streamID: UInt8,
+        group: MIDI.UInt4
+    ) -> [[MIDI.UMPWord]] {
         let maxDataBytesPerPacket = 13
         
         let umpMessageType: MIDI.IO.Packet.UniversalPacketData.MessageType = .data128bit
@@ -125,7 +121,6 @@ extension MIDI.Event.SysEx8 {
         var packets: [[MIDI.UMPWord]] = []
         
         while rawDataPosition < data.count {
-            
             let status: MIDI.IO.Packet.UniversalPacketData.SysExStatusField
             switch rawDataPosition {
             case 0:
@@ -139,35 +134,40 @@ extension MIDI.Event.SysEx8 {
             
             let statusByte = status.rawValue.uInt8Value << 4
             
-            let packetDataBytes = rawDataByteCountRemaining.clamped(to: 0...maxDataBytesPerPacket)
+            let packetDataBytes = rawDataByteCountRemaining.clamped(to: 0 ... maxDataBytesPerPacket)
             
-            let word1 = MIDI.UMPWord(mtAndGroup,
-                                     statusByte + UInt8(packetDataBytes + 1), // incl. streamID byte
-                                     streamID,
-                                     rawDataOrNull(rawDataPosition + 0))
+            let word1 = MIDI.UMPWord(
+                mtAndGroup,
+                statusByte + UInt8(packetDataBytes + 1), // incl. streamID byte
+                streamID,
+                rawDataOrNull(rawDataPosition + 0)
+            )
             
-            let word2 = MIDI.UMPWord(rawDataOrNull(rawDataPosition + 1),
-                                     rawDataOrNull(rawDataPosition + 2),
-                                     rawDataOrNull(rawDataPosition + 3),
-                                     rawDataOrNull(rawDataPosition + 4))
+            let word2 = MIDI.UMPWord(
+                rawDataOrNull(rawDataPosition + 1),
+                rawDataOrNull(rawDataPosition + 2),
+                rawDataOrNull(rawDataPosition + 3),
+                rawDataOrNull(rawDataPosition + 4)
+            )
             
-            let word3 = MIDI.UMPWord(rawDataOrNull(rawDataPosition + 5),
-                                     rawDataOrNull(rawDataPosition + 6),
-                                     rawDataOrNull(rawDataPosition + 7),
-                                     rawDataOrNull(rawDataPosition + 8))
+            let word3 = MIDI.UMPWord(
+                rawDataOrNull(rawDataPosition + 5),
+                rawDataOrNull(rawDataPosition + 6),
+                rawDataOrNull(rawDataPosition + 7),
+                rawDataOrNull(rawDataPosition + 8)
+            )
             
-            let word4 = MIDI.UMPWord(rawDataOrNull(rawDataPosition + 9),
-                                     rawDataOrNull(rawDataPosition + 10),
-                                     rawDataOrNull(rawDataPosition + 11),
-                                     rawDataOrNull(rawDataPosition + 12))
+            let word4 = MIDI.UMPWord(
+                rawDataOrNull(rawDataPosition + 9),
+                rawDataOrNull(rawDataPosition + 10),
+                rawDataOrNull(rawDataPosition + 11),
+                rawDataOrNull(rawDataPosition + 12)
+            )
             
             packets.append([word1, word2, word3, word4])
             rawDataPosition += packetDataBytes
-            
         }
         
         return packets
-        
     }
-    
 }

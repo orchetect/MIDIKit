@@ -14,9 +14,13 @@ struct ContentView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
-            Text("This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiving events.")
+            Text(
+                "This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiving events."
+            )
             
-            Text("Events received from all MIDI output endpoints are automatically logged to the console.")
+            Text(
+                "Events received from all MIDI output endpoints are automatically logged to the console."
+            )
             
             Button("Show Bluetooth MIDI Setup") {
                 showingBluetoothMIDIOptions = true

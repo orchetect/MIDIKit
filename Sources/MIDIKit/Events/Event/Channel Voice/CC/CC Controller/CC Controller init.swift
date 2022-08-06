@@ -4,15 +4,12 @@
 //
 
 extension MIDI.Event.CC.Controller {
-    
     /// MIDI Control Change Controller
     /// (MIDI 1.0 / MIDI 2.0)
     ///
     /// Initialize an enum case from the controller number.
     public init(number: MIDI.UInt7) {
-        
         switch number {
-        
         case   0: self = .bankSelect
         case   1: self = .modWheel
         case   2: self = .breath
@@ -146,9 +143,6 @@ extension MIDI.Event.CC.Controller {
             // should never happen since the switch case covers all 128 values of MIDI.UInt7
             assertionFailure("Unhandled MIDI CC controller number: \(number).")
             self = .modWheel
-            
         }
-        
     }
-    
 }

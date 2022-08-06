@@ -4,11 +4,9 @@
 //
 
 extension MIDI.Event.Note {
-    
     /// Note Attribute
     /// (MIDI 2.0)
     public enum Attribute: Equatable, Hashable {
-        
         /// None:
         /// When sending, Attribute Value will be 0x0000 and receiver should ignore Attribute Value.
         case none
@@ -32,21 +30,19 @@ extension MIDI.Event.Note {
         /// A Profile might define another Attribute Type that is defined for more specific use by that one Profile only.
         /// The application of an Attribute Type value might be defined by MMA/AMEI in a MIDI-CI Profile specification. For example, a drum Profile might define an Attribute Type as “Strike Position” with the Attribute Data value declaring the position from center of drum/cymbal to outer edge. An orchestral string Profile might define Attribute values to be used as Articulation choice such as Arco, Pizzicato, Spiccato, Tremolo, etc. Such cases generally require assigning 1 of the 256 available Attribute Types for use by that Profile. Some Profiles might be able to share some common Attribute types.
         case undefined(attributeType: MIDI.Byte, data: UInt16)
-        
     }
-    
 }
 
 extension MIDI.Event.Note.Attribute {
-    
     /// Note Attribute
     /// (MIDI 2.0)
     ///
     /// Initialize from raw type and data.
     @inline(__always)
-    public init(type: MIDI.Byte,
-                data: UInt16) {
-        
+    public init(
+        type: MIDI.Byte,
+        data: UInt16
+    ) {
         switch type {
         case 0x00:
             self = .none
@@ -62,9 +58,7 @@ extension MIDI.Event.Note.Attribute {
             
         default:
             self = .undefined(attributeType: type, data: data)
-            
         }
-        
     }
     
     /// Pitch 7.9 Note Attribute
@@ -78,49 +72,41 @@ extension MIDI.Event.Note.Attribute {
     ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
     ///   - fine: 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
     @inline(__always)
-    public static func pitch7_9(coarse: MIDI.UInt7,
-                                fine: MIDI.UInt9) -> Self {
-        
+    public static func pitch7_9(
+        coarse: MIDI.UInt7,
+        fine: MIDI.UInt9
+    ) -> Self {
         .pitch7_9(.init(coarse: coarse, fine: fine))
-        
     }
-    
 }
 
 extension MIDI.Event.Note.Attribute: CustomStringConvertible {
-    
     public var description: String {
-        
         switch self {
         case .none:
             return "none"
             
-        case .manufacturerSpecific(let data):
+        case let .manufacturerSpecific(data):
             return "manufacturerSpecific(\(data))"
             
-        case .profileSpecific(let data):
+        case let .profileSpecific(data):
             return "profileSpecific(\(data))"
             
-        case .pitch7_9(let p79):
+        case let .pitch7_9(p79):
             return "\(p79)"
             
-        case .undefined(attributeType: let attributeType, let data):
+        case let .undefined(attributeType: attributeType, data):
             let attrString = attributeType.hex.stringValue(padTo: 2, prefix: true)
             let dataString = data.hex.stringValue(padTo: 4, prefix: true)
             return "undefined(\(attrString), data: \(dataString))"
-            
         }
-        
     }
-    
 }
 
 extension MIDI.Event.Note.Attribute {
-    
     /// Attribute Type Byte
     @inline(__always)
     public var attributeType: MIDI.Byte {
-        
         switch self {
         case .none:
             return 0x00
@@ -136,33 +122,27 @@ extension MIDI.Event.Note.Attribute {
             
         case .undefined(attributeType: let attributeType, data: _):
             return attributeType
-            
         }
-        
     }
     
     /// Attribute Data
     @inline(__always)
     public var attributeData: UInt16 {
-        
         switch self {
         case .none:
             return 0x0000
             
-        case .manufacturerSpecific(let data):
+        case let .manufacturerSpecific(data):
             return data
             
-        case .profileSpecific(let data):
+        case let .profileSpecific(data):
             return data
             
-        case .pitch7_9(let pitch):
+        case let .pitch7_9(pitch):
             return pitch.uInt16Value
             
         case .undefined(attributeType: _, data: let data):
             return data
-            
         }
-        
     }
-    
 }

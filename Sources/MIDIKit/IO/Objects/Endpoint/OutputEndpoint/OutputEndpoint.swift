@@ -8,14 +8,12 @@
 // MARK: - OutputEndpoint
 
 extension MIDI.IO {
-    
     /// A MIDI output endpoint in the system, wrapping a Core MIDI `MIDIEndpointRef`.
     ///
     /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
     ///
     /// Instead, read endpoint arrays and individual endpoint properties from `MIDI.IO.Manager.endpoints` ad-hoc when they are needed.
     public struct OutputEndpoint: _MIDIIOEndpointProtocol {
-        
         public var objectType: MIDI.IO.ObjectType { .outputEndpoint }
         
         // MARK: CoreMIDI ref
@@ -25,13 +23,13 @@ extension MIDI.IO {
         // MARK: Init
         
         internal init(_ ref: MIDI.IO.EndpointRef) {
+            assert(
+                ref != MIDI.IO.EndpointRef(),
+                "Encountered Core MIDI output endpoint ref value of 0 which is invalid."
+            )
             
-            assert(ref != MIDI.IO.EndpointRef(),
-                   "Encountered Core MIDI output endpoint ref value of 0 which is invalid.")
-            
-            self.coreMIDIObjectRef = ref
+            coreMIDIObjectRef = ref
             update()
-            
         }
         
         // MARK: - Properties (Cached)
@@ -44,15 +42,11 @@ extension MIDI.IO {
         
         /// Update the cached properties
         internal mutating func update() {
-            
-            self.name = getName() ?? ""
-            self.displayName = getDisplayName() ?? ""
-            self.uniqueID = getUniqueID()
-            
+            name = getName() ?? ""
+            displayName = getDisplayName() ?? ""
+            uniqueID = getUniqueID()
         }
-        
     }
-    
 }
 
 extension MIDI.IO.OutputEndpoint: Equatable {
@@ -68,13 +62,9 @@ extension MIDI.IO.OutputEndpoint: Identifiable {
 }
 
 extension MIDI.IO.OutputEndpoint: CustomDebugStringConvertible {
-    
     public var debugDescription: String {
-        
         "OutputEndpoint(name: \(name.quoted), uniqueID: \(uniqueID))"
-        
     }
-    
 }
 
 #endif

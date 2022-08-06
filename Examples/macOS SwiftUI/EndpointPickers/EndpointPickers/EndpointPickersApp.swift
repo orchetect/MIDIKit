@@ -9,7 +9,6 @@ import MIDIKit
 
 @main
 struct EndpointPickersApp: App {
-    
     let midiManager = MIDI.IO.Manager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
@@ -35,7 +34,6 @@ struct EndpointPickersApp: App {
     }
     
     var body: some Scene {
-        
         WindowGroup {
             ContentView(
                 midiInSelectedID: $midiInSelectedID,
@@ -48,34 +46,32 @@ struct EndpointPickersApp: App {
             .frame(minWidth: 500, minHeight: 800, alignment: .center)
         }
         
-        .onChange(of: midiInSelectedID) {
-            if $0 == 0 {
-                midiInSelectedDisplayName = "None"
-            } else if let found = midiManager.endpoints.outputs
-                .first(whereUniqueID: .init($0))
-            {
-                midiInSelectedDisplayName = found.displayName
-            }
+            .onChange(of: midiInSelectedID) {
+                if $0 == 0 {
+                    midiInSelectedDisplayName = "None"
+                } else if let found = midiManager.endpoints.outputs
+                    .first(whereUniqueID: .init($0))
+                {
+                    midiInSelectedDisplayName = found.displayName
+                }
             
-            midiHelper.midiInUpdateConnection(selectedUniqueID: $0)
-            midiSavePersistentState()
-        }
-        
-        .onChange(of: midiOutSelectedID) {
-            if $0 == 0 {
-                midiOutSelectedDisplayName = "None"
-            } else if let found = midiManager.endpoints.inputs
-                .first(whereUniqueID: .init($0))
-            {
-                midiOutSelectedDisplayName = found.displayName
+                midiHelper.midiInUpdateConnection(selectedUniqueID: $0)
+                midiSavePersistentState()
             }
-            
-            midiHelper.midiOutUpdateConnection(selectedUniqueID: $0)
-            midiSavePersistentState()
-        }
         
+            .onChange(of: midiOutSelectedID) {
+                if $0 == 0 {
+                    midiOutSelectedDisplayName = "None"
+                } else if let found = midiManager.endpoints.inputs
+                    .first(whereUniqueID: .init($0))
+                {
+                    midiOutSelectedDisplayName = found.displayName
+                }
+            
+                midiHelper.midiOutUpdateConnection(selectedUniqueID: $0)
+                midiSavePersistentState()
+            }
     }
-    
 }
 
 // MARK: - String Constants
@@ -99,38 +95,49 @@ enum UserDefaultsKeys {
 }
 
 extension EndpointPickersApp {
-    
     /// This should only be run once at app startup.
     private mutating func midiRestorePersistentState() {
-        
         print("Restoring saved MIDI connections.")
         
         let inName = UserDefaults.standard.string(forKey: UserDefaultsKeys.midiInDisplayName) ?? ""
         _midiInSelectedDisplayName = State(wrappedValue: inName)
         
-        let inID = Int32(exactly: UserDefaults.standard.integer(forKey: UserDefaultsKeys.midiInID)) ?? 0
+        let inID = Int32(
+            exactly: UserDefaults.standard.integer(forKey: UserDefaultsKeys.midiInID)
+        ) ??
+            0
         _midiInSelectedID = State(wrappedValue: inID)
         
-        let outName = UserDefaults.standard.string(forKey: UserDefaultsKeys.midiOutDisplayName) ?? ""
+        let outName = UserDefaults.standard
+            .string(forKey: UserDefaultsKeys.midiOutDisplayName) ?? ""
         _midiOutSelectedDisplayName = State(wrappedValue: outName)
         
-        let outID = Int32(exactly: UserDefaults.standard.integer(forKey: UserDefaultsKeys.midiOutID)) ?? 0
+        let outID = Int32(
+            exactly: UserDefaults.standard
+                .integer(forKey: UserDefaultsKeys.midiOutID)
+        ) ?? 0
         _midiOutSelectedID = State(wrappedValue: outID)
-        
     }
     
     public func midiSavePersistentState() {
         // save endpoint selection to UserDefaults
         
-        UserDefaults.standard.set(midiInSelectedID,
-                                  forKey: UserDefaultsKeys.midiInID)
-        UserDefaults.standard.set(midiInSelectedDisplayName,
-                                  forKey: UserDefaultsKeys.midiInDisplayName)
+        UserDefaults.standard.set(
+            midiInSelectedID,
+            forKey: UserDefaultsKeys.midiInID
+        )
+        UserDefaults.standard.set(
+            midiInSelectedDisplayName,
+            forKey: UserDefaultsKeys.midiInDisplayName
+        )
         
-        UserDefaults.standard.set(midiOutSelectedID,
-                                  forKey: UserDefaultsKeys.midiOutID)
-        UserDefaults.standard.set(midiOutSelectedDisplayName,
-                                  forKey: UserDefaultsKeys.midiOutDisplayName)
+        UserDefaults.standard.set(
+            midiOutSelectedID,
+            forKey: UserDefaultsKeys.midiOutID
+        )
+        UserDefaults.standard.set(
+            midiOutSelectedDisplayName,
+            forKey: UserDefaultsKeys.midiOutDisplayName
+        )
     }
-    
 }

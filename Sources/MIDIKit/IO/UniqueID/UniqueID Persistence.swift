@@ -6,10 +6,8 @@
 import Foundation
 
 extension MIDI.IO {
-    
     /// Defines persistence behavior of a MIDI unique ID in the system.
     public enum UniqueIDPersistence {
-        
         /// The unique ID will be randomly generated every time it is created in the system.
         case none
         
@@ -32,28 +30,26 @@ extension MIDI.IO {
         ///
         /// In the event a collision with an existing MIDI endpoint unique ID in the system, a new random ID will be generated until there are no collisions.
         /// The ID will then be passed into the `storeHandler` closure in order to store the updated ID.
-        case manualStorage(readHandler: () -> MIDI.IO.UniqueID?,
-                           storeHandler: (MIDI.IO.UniqueID?) -> ())
-        
+        case manualStorage(
+            readHandler: () -> MIDI.IO.UniqueID?,
+            storeHandler: (MIDI.IO.UniqueID?) -> Void
+        )
     }
-    
 }
 
 // MARK: - Read/Write Methods
 
 extension MIDI.IO.UniqueIDPersistence {
-    
     /// Reads the unique ID from the persistent storage, if applicable.
     public func readID() -> MIDI.IO.UniqueID? {
-        
         switch self {
         case .none:
             return nil
             
-        case .preferred(uniqueID: let uniqueID):
+        case let .preferred(uniqueID: uniqueID):
             return uniqueID
             
-        case .userDefaultsManaged(key: let key):
+        case let .userDefaultsManaged(key: key):
             // test to see if key does not exist first
             // otherwise just calling integer(forKey:) returns 0 if key does not exist
             guard UserDefaults.standard.object(forKey: key) != nil
@@ -72,14 +68,11 @@ extension MIDI.IO.UniqueIDPersistence {
             }
             
             return nil
-            
         }
-        
     }
     
     /// Writes the unique ID to the persistent storage, if applicable.
     public func writeID(_ newValue: MIDI.IO.UniqueID?) {
-        
         switch self {
         case .none:
             return // no storage
@@ -87,14 +80,11 @@ extension MIDI.IO.UniqueIDPersistence {
         case .preferred(uniqueID: _):
             return // no storage
         
-        case .userDefaultsManaged(key: let key):
+        case let .userDefaultsManaged(key: key):
             UserDefaults.standard.setValue(newValue, forKey: key)
             
         case .manualStorage(readHandler: _, storeHandler: let storeHandler):
             storeHandler(newValue)
-            
         }
-        
     }
-    
 }

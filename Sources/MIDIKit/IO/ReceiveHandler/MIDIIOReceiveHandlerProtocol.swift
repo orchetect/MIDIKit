@@ -7,7 +7,6 @@
 ///
 /// For operating system backwards compatibility, both `MIDIReadBlock` (old Core MIDI API) and `MIDIReceiveBlock` (new Core MIDI API) must be handled.
 public protocol MIDIIOReceiveHandlerProtocol {
-    
     /// CoreMIDI `MIDIReadBlock`
     /// (deprecated after macOS 11 / iOS 14)
     @inline(__always)
@@ -23,5 +22,4 @@ public protocol MIDIIOReceiveHandlerProtocol {
         _ packets: [MIDI.IO.Packet.UniversalPacketData],
         protocol midiProtocol: MIDI.IO.ProtocolVersion
     )
-    
 }

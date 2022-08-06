@@ -9,7 +9,6 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO.Manager {
-    
     /// Creates a new MIDI play-through (thru) connection.
     ///
     /// ⚠️ **Note** ⚠️
@@ -40,13 +39,13 @@ extension MIDI.IO.Manager {
         lifecycle: MIDI.IO.ThruConnection.Lifecycle = .nonPersistent,
         params: MIDI.IO.ThruConnection.Parameters = .init()
     ) throws {
-        
         guard MIDI.IO.isThruConnectionsSupportedOnCurrentPlatform else {
-            throw MIDI.IO.MIDIError.notSupported("MIDI Thru Connections are not supported on this platform due to Core MIDI bugs.")
+            throw MIDI.IO.MIDIError.notSupported(
+                "MIDI Thru Connections are not supported on this platform due to Core MIDI bugs."
+            )
         }
         
         try eventQueue.sync {
-            
             let newCT = MIDI.IO.ThruConnection(
                 outputs: outputs,
                 inputs: inputs,
@@ -69,11 +68,8 @@ extension MIDI.IO.Manager {
             // access the `unmanagedPersistentThruConnections(ownerID:)` method.
             
             try newCT.create(in: self)
-            
         }
-        
     }
-    
 }
 
 #endif

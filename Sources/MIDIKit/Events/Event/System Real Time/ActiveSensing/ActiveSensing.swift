@@ -4,7 +4,6 @@
 //
 
 extension MIDI.Event {
-    
     /// System Real Time: Active Sensing
     /// (MIDI 1.0)
     ///
@@ -14,16 +13,12 @@ extension MIDI.Event {
     ///
     /// - note: Use of Active Sensing in modern MIDI devices is uncommon and the use of this standard has been deprecated as of MIDI 2.0.
     public struct ActiveSensing: Equatable, Hashable {
-        
         /// UMP Group (0x0...0xF)
         public var group: MIDI.UInt4 = 0x0
         
         public init(group: MIDI.UInt4 = 0x0) {
-            
             self.group = group
-            
         }
-        
     }
     
     /// System Real Time: Active Sensing
@@ -39,25 +34,19 @@ extension MIDI.Event {
     ///   - group: UMP Group (0x0...0xF)
     @inline(__always)
     public static func activeSensing(group: MIDI.UInt4 = 0x0) -> Self {
-        
         .activeSensing(
             .init(group: group)
         )
-        
     }
-    
 }
 
 extension MIDI.Event.ActiveSensing {
-    
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func midi1RawBytes() -> [MIDI.Byte] {
-        
         [0xFE]
-        
     }
     
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
@@ -65,18 +54,18 @@ extension MIDI.Event.ActiveSensing {
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     @inline(__always)
     public func umpRawWords() -> [MIDI.UMPWord] {
-        
-        let umpMessageType: MIDI.IO.Packet.UniversalPacketData.MessageType = .systemRealTimeAndCommon
+        let umpMessageType: MIDI.IO.Packet.UniversalPacketData
+            .MessageType = .systemRealTimeAndCommon
         
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
         
-        let word = MIDI.UMPWord(mtAndGroup,
-                                0xFE,
-                                0x00, // pad empty bytes to fill 4 bytes
-                                0x00) // pad empty bytes to fill 4 bytes
+        let word = MIDI.UMPWord(
+            mtAndGroup,
+            0xFE,
+            0x00, // pad empty bytes to fill 4 bytes
+            0x00
+        ) // pad empty bytes to fill 4 bytes
         
         return [word]
-        
     }
-    
 }

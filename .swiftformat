@@ -26,7 +26,7 @@
 --header ignore
 --hexgrouping 4,8
 --hexliteralcase uppercase
---ifdef indent
+--ifdef no-indent
 --importgrouping alpha
 --indent 4
 --indentcase false

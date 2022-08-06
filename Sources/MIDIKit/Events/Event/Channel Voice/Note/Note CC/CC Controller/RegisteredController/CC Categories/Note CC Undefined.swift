@@ -4,11 +4,9 @@
 //
 
 extension MIDI.Event.Note.CC.Controller.Registered {
-    
     /// Registered Per-Note Controller: Undefined / Reserved
     /// (MIDI 2.0)
     public enum Undefined {
-        
         /// Undefined Per-Note controller number 3
         /// (Int: 0, Hex: 0x00)
         case cc0
@@ -944,19 +942,17 @@ extension MIDI.Event.Note.CC.Controller.Registered {
         /// Undefined Per-Note controller number 255
         /// (Int: 255, Hex: 0xFF)
         case cc255
-        
     }
-    
 }
 
 extension MIDI.Event.Note.CC.Controller.Registered.Undefined {
-    
     /// Returns the controller number.
     @inline(__always)
     public var controller: UInt8 {
+        // this looks scary but its heart is in the right place
         
+        // swiftformat:disable spacearoundoperators
         switch self {
-        
         case .cc0   : return 0
         case .cc4   : return 4
         case .cc5   : return 5
@@ -1191,20 +1187,15 @@ extension MIDI.Event.Note.CC.Controller.Registered.Undefined {
         case .cc253 : return 253
         case .cc254 : return 254
         case .cc255 : return 255
-            
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
-    
 }
 
 extension MIDI.Event.Note.CC.Controller.Registered.Undefined {
-    
     /// Returns the controller name as a human-readable String.
     @inlinable
     public var name: String {
-        
         "Undefined Per-Note CC\(controller)"
-        
     }
 }

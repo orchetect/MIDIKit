@@ -3,7 +3,6 @@
 import PackageDescription
 
 let package = Package(
-    
     name: "MIDIKit",
     
     platforms: [
@@ -14,7 +13,8 @@ let package = Package(
         .library(
             name: "MIDIKit",
             type: .static,
-            targets: ["MIDIKit"])
+            targets: ["MIDIKit"]
+        )
     ],
     
     dependencies: [
@@ -43,7 +43,6 @@ let package = Package(
     ],
     
     swiftLanguageVersions: [.v5]
-    
 )
 
 func addShouldTestFlag() {

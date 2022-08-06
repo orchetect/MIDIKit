@@ -4,10 +4,8 @@
 //
 
 extension MIDI {
-    
     /// A 9-bit unsigned integer value type used in `MIDIKit`.
     public struct UInt9: MIDIKitIntegerProtocol {
-        
         // MARK: Storage
         
         public typealias Storage = UInt16
@@ -30,7 +28,8 @@ extension MIDI {
         }
         
         public init<T: BinaryFloatingPoint>(_ source: T) {
-            // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type that cannot fit UInt9.max
+            // it should be safe to cast as T.self since it's virtually impossible
+            // that we will encounter a BinaryFloatingPoint type that cannot fit UInt9.max
             if source < Self.min(T.self) {
                 Exception.underflow.raise(reason: "UInt9 integer underflowed")
             }
@@ -58,23 +57,18 @@ extension MIDI {
         
         /// Returns the integer as a `UInt16` instance
         public var uInt16Value: UInt16 { value }
-        
     }
-    
 }
 
 extension MIDI.UInt9: ExpressibleByIntegerLiteral {
-    
     public typealias IntegerLiteralType = Storage
     
     public init(integerLiteral value: Storage) {
         self.init(value)
     }
-    
 }
 
 extension MIDI.UInt9: Strideable {
-    
     public typealias Stride = Int
     
     @inlinable
@@ -86,11 +80,9 @@ extension MIDI.UInt9: Strideable {
     public func distance(to other: Self) -> Stride {
         Stride(other) - Stride(self)
     }
-    
 }
 
 extension MIDI.UInt9: Equatable, Comparable {
-    
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.value == rhs.value
     }
@@ -98,37 +90,29 @@ extension MIDI.UInt9: Equatable, Comparable {
     public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.value < rhs.value
     }
-    
 }
 
 extension MIDI.UInt9: Hashable {
-    
     public func hash(into hasher: inout Hasher) {
         hasher.combine(value)
     }
-    
 }
 
 extension MIDI.UInt9: Codable {
-    
     enum CodingKeys: String, CodingKey {
         case value = "UInt9"
     }
-    
 }
 
 extension MIDI.UInt9: CustomStringConvertible {
-    
     public var description: String {
         "\(value)"
     }
-    
 }
 
 // MARK: - Standard library extensions
 
 extension BinaryInteger {
-    
     /// Convenience initializer for `MIDI.UInt9`.
     public var toMIDIUInt9: MIDI.UInt9 {
         MIDI.UInt9(self)
@@ -138,11 +122,9 @@ extension BinaryInteger {
     public var toMIDIUInt9Exactly: MIDI.UInt9? {
         MIDI.UInt9(exactly: self)
     }
-    
 }
 
 extension BinaryFloatingPoint {
-    
     /// Convenience initializer for `MIDI.UInt9`.
     public var toMIDIUInt9: MIDI.UInt9 {
         MIDI.UInt9(self)
@@ -152,5 +134,4 @@ extension BinaryFloatingPoint {
     public var toMIDIUInt9Exactly: MIDI.UInt9? {
         MIDI.UInt9(exactly: self)
     }
-    
 }

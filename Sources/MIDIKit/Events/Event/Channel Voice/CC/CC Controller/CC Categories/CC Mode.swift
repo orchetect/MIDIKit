@@ -4,11 +4,9 @@
 //
 
 extension MIDI.Event.CC.Controller {
-    
     /// Channel Mode Messages (CC numbers 120...127)
     /// (MIDI 1.0 / MIDI 2.0)
     public enum Mode: Equatable, Hashable {
-        
         /// [Channel Mode Message] All Sound Off
         /// (Int: 120, Hex: 0x78)
         case allSoundOff
@@ -41,19 +39,15 @@ extension MIDI.Event.CC.Controller {
         /// [Channel Mode Message] Poly Mode On (+ mono off, + all notes off)
         /// (Int: 127, Hex: 0x7F)
         case polyModeOn
-        
     }
-    
 }
 
 extension MIDI.Event.CC.Controller.Mode {
-    
     /// Returns the controller number.
     @inlinable
     public var controller: MIDI.UInt7 {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
-        
         case .allSoundOff         : return 120
         case .resetAllControllers : return 121
         case .localControl        : return 122
@@ -62,21 +56,17 @@ extension MIDI.Event.CC.Controller.Mode {
         case .omniModeOn          : return 125
         case .monoModeOn          : return 126
         case .polyModeOn          : return 127
-            
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
-    
 }
 
 extension MIDI.Event.CC.Controller.Mode {
-    
     /// Returns the controller name as a human-readable String.
     @inlinable
     public var name: String {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
-        
         case .allSoundOff         : return "All Sound Off"
         case .resetAllControllers : return "Reset All Controllers"
         case .localControl        : return "Local Control"
@@ -85,9 +75,7 @@ extension MIDI.Event.CC.Controller.Mode {
         case .omniModeOn          : return "Omni Mode On"
         case .monoModeOn          : return "Mono Mode On"
         case .polyModeOn          : return "Poly Mode On"
-            
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
-    
 }

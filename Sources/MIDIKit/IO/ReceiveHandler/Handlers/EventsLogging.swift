@@ -8,12 +8,10 @@
 import os.log
 
 extension MIDI.IO.ReceiveHandler {
-    
     /// MIDI Event logging handler (event description strings).
     /// If `handler` is nil, all events are logged to the console (but only in DEBUG builds, not in RELEASE builds).
     /// If `handler` is provided, the event description string is supplied as a parameter and not automatically logged.
     public class EventsLogging: MIDIIOReceiveHandlerProtocol {
-        
         public typealias Handler = (_ eventString: String) -> Void
         
         @inline(__always)
@@ -29,13 +27,11 @@ extension MIDI.IO.ReceiveHandler {
         public func packetListReceived(
             _ packets: [MIDI.IO.Packet.PacketData]
         ) {
-            
             for midiPacket in packets {
                 let events = midi1Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
                 logEvents(events)
             }
-            
         }
         
         @available(macOS 11, iOS 14, macCatalyst 14, *)
@@ -44,13 +40,11 @@ extension MIDI.IO.ReceiveHandler {
             _ packets: [MIDI.IO.Packet.UniversalPacketData],
             protocol midiProtocol: MIDI.IO.ProtocolVersion
         ) {
-            
             for midiPacket in packets {
                 let events = midi2Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
                 logEvents(events)
             }
-            
         }
         
         internal init(
@@ -58,22 +52,21 @@ extension MIDI.IO.ReceiveHandler {
             log: OSLog = .default,
             _ handler: Handler? = nil
         ) {
-            
             self.filterActiveSensingAndClock = filterActiveSensingAndClock
             
             self.handler = handler ?? { packetBytesString in
                 #if DEBUG
-                os_log("%{public}@",
-                       log: log,
-                       type: .debug,
-                       packetBytesString)
+                os_log(
+                    "%{public}@",
+                    log: log,
+                    type: .debug,
+                    packetBytesString
+                )
                 #endif
             }
-            
         }
         
         internal func logEvents(_ events: [MIDI.Event]) {
-            
             var events = events
             
             if filterActiveSensingAndClock {
@@ -85,11 +78,8 @@ extension MIDI.IO.ReceiveHandler {
                 .joined(separator: ", ")
             
             handler(stringOutput)
-            
         }
-        
     }
-    
 }
 
 #endif

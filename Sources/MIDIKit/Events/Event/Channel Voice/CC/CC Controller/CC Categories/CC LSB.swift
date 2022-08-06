@@ -4,11 +4,9 @@
 //
 
 extension MIDI.Event.CC.Controller {
-    
     /// MIDI Controller Change LSB
     /// (MIDI 1.0 / MIDI 2.0)
     public enum LSB: Equatable, Hashable {
-        
         /// LSB for Control 0 (Bank Select)
         /// (Int: 32, Hex: 0x20)
         case bankSelect
@@ -84,17 +82,14 @@ extension MIDI.Event.CC.Controller {
         /// LSBs for Undefined controller numbers
         /// (Includes undefined controllers 20...31, corresponding to undefined LSBs of 52...63)
         case undefined(LSB.Undefined)
-        
     }
-    
 }
 
 extension MIDI.Event.CC.Controller.LSB {
-    
     /// Returns the controller number.
     @inlinable
     public var controller: MIDI.UInt7 {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
         case .bankSelect      : return 32
         case .modWheel        : return 33
@@ -113,21 +108,18 @@ extension MIDI.Event.CC.Controller.LSB {
         case .generalPurpose3 : return 50
         case .generalPurpose4 : return 51
             
-        case .undefined(let undefinedCC):
+        case let .undefined(undefinedCC):
             return undefinedCC.controller
-            
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
-    
 }
 
 extension MIDI.Event.CC.Controller.LSB {
-    
     /// Returns the controller name as a human-readable String.
     @inlinable
     public var name: String {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
         case .bankSelect      : return "Bank Select LSB"
         case .modWheel        : return "Mod Wheel LSB"
@@ -146,11 +138,9 @@ extension MIDI.Event.CC.Controller.LSB {
         case .generalPurpose3 : return "General Purpose 3 LSB"
         case .generalPurpose4 : return "General Purpose 4 LSB"
             
-        case .undefined(let undefinedCC):
+        case let .undefined(undefinedCC):
             return undefinedCC.name
-            
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
-    
 }

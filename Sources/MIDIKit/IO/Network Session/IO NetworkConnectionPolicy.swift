@@ -9,15 +9,12 @@ import Foundation
 // MARK: - NetworkConnectionPolicy
 
 extension MIDI.IO {
-    
     public enum NetworkConnectionPolicy: UInt, Equatable {
-        
         case noOne
         case hostsInContactList
         case anyone
         
         internal init(_ coreMIDIPolicy: MIDINetworkConnectionPolicy) {
-            
             switch coreMIDIPolicy {
             case .noOne:
                 self = .noOne
@@ -31,11 +28,9 @@ extension MIDI.IO {
             @unknown default:
                 self = .noOne
             }
-            
         }
         
         internal var coreMIDIPolicy: MIDINetworkConnectionPolicy {
-            
             switch self {
             case .noOne:
                 return .noOne
@@ -46,9 +41,6 @@ extension MIDI.IO {
             case .anyone:
                 return .anyone
             }
-            
         }
-        
     }
-    
 }

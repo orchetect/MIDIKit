@@ -8,18 +8,15 @@
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
-    
     /// Returns true if current platform supports MIDI play-thru connections.
     ///
     /// MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core MIDI bugs on later macOS releases.
     internal static var isThruConnectionsSupportedOnCurrentPlatform: Bool {
-        
         if #available(macOS 11.0, /* iOS ???, */ *) {
             return false
         } else {
             return true
         }
-        
     }
     
     /// Internal:
@@ -33,7 +30,6 @@ extension MIDI.IO {
     internal static func getSystemThruConnectionsPersistentEntries(
         matching persistentOwnerID: String
     ) throws -> [MIDI.IO.ThruConnectionRef] {
-        
         // set up empty unmanaged data pointer
         var getConnectionList: Unmanaged<CFData> = Unmanaged.passUnretained(Data() as CFData)
         
@@ -65,7 +61,6 @@ extension MIDI.IO {
         }
         
         return thruConnectionArray
-        
     }
     
     /// Internal:
@@ -80,7 +75,6 @@ extension MIDI.IO {
     internal static func removeAllSystemThruConnectionsPersistentEntries(
         matching persistentOwnerID: String
     ) throws -> Int {
-        
         let getList = try getSystemThruConnectionsPersistentEntries(matching: persistentOwnerID)
         
         var disposeCount = 0
@@ -89,19 +83,16 @@ extension MIDI.IO {
         
         // iterate through persistent connection list
         for thruConnection in getList {
-            
             result = MIDIThruConnectionDispose(thruConnection)
             
             if result != noErr {
-                //logger.debug("MIDI: Persistent connections: deletion of connection matching owner ID \(persistentOwnerID.quoted) with number \(thruConnection) failed.")
+                // logger.debug("MIDI: Persistent connections: deletion of connection matching owner ID \(persistentOwnerID.quoted) with number \(thruConnection) failed.")
             } else {
                 disposeCount += 1
             }
-            
         }
         
         return disposeCount
-        
     }
     
     /// Internal:
@@ -113,36 +104,29 @@ extension MIDI.IO {
     internal static func getThruConnectionParameters(
         ref: MIDIThruConnectionRef
     ) throws -> MIDIThruConnectionParams? {
-        
         var paramsData: Unmanaged<CFData> = Unmanaged.passUnretained(Data() as CFData)
         
         try MIDIThruConnectionGetParams(ref, &paramsData)
             .throwIfOSStatusErr()
         
         return MIDIThruConnectionParams(cfData: paramsData.takeRetainedValue())
-        
     }
-    
 }
 
 extension MIDIThruConnectionParams {
-    
     /// Internal:
     /// Converts params to `CFData` required for passing into `MIDIThruConnectionCreate`.
     internal func cfData() -> CFData {
-        
         var mutableSelf = self
         let length = MIDIThruConnectionParamsSize(&mutableSelf)
         let nsData = Data(bytes: &mutableSelf, count: length)
         
         return nsData as CFData
-        
     }
     
     /// Internal:
     /// Converts params from `CFData` returned from Core MIDI when getting params for a thru connection that exists in the system via `MIDIThruConnectionGetParams`.
     internal init?(cfData: CFData) {
-        
         self.init()
         
         guard (cfData as Data).count <= MemoryLayout<MIDIThruConnectionParams>.size else {
@@ -152,9 +136,7 @@ extension MIDIThruConnectionParams {
         _ = withUnsafeMutableBytes(of: &self) { ptr in
             (cfData as Data).copyBytes(to: ptr)
         }
-        
     }
-    
 }
 
 #endif

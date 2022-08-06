@@ -6,10 +6,8 @@
 #if !os(tvOS) && !os(watchOS)
 
 extension MIDI.IO {
-    
     /// Type-erased representation of a MIDIKit object conforming to `MIDIIOObjectProtocol`.
     public struct AnyMIDIIOObject: MIDIIOObjectProtocol {
-        
         // MARK: MIDIIOObjectProtocol
         
         public let objectType: MIDI.IO.ObjectType
@@ -23,17 +21,13 @@ extension MIDI.IO {
         // MARK: Init
         
         internal init<O: MIDIIOObjectProtocol>(_ base: O) {
+            objectType = base.objectType
+            name = base.name
+            uniqueID = base.uniqueID
             
-            self.objectType = base.objectType
-            self.name = base.name
-            self.uniqueID = base.uniqueID
-            
-            self.coreMIDIObjectRef = base.coreMIDIObjectRef
-            
+            coreMIDIObjectRef = base.coreMIDIObjectRef
         }
-        
     }
-    
 }
 
 extension MIDI.IO.AnyMIDIIOObject: Equatable {
@@ -45,33 +39,23 @@ extension MIDI.IO.AnyMIDIIOObject: Hashable {
 }
 
 extension MIDI.IO.AnyMIDIIOObject: Identifiable {
-    
     public typealias ID = MIDI.IO.ObjectRef
     
     public var id: ID { coreMIDIObjectRef }
-    
 }
 
 extension MIDIIOObjectProtocol {
-    
     /// Return as `AnyMIDIIOObject`, a type-erased representation of a MIDIKit object conforming to `MIDIIOObjectProtocol`.
     public func asAnyMIDIIOObject() -> MIDI.IO.AnyMIDIIOObject {
-        
         .init(self)
-        
     }
-    
 }
 
-extension Collection where Element : MIDIIOObjectProtocol {
-    
+extension Collection where Element: MIDIIOObjectProtocol {
     /// Return as [`AnyMIDIIOObject`], type-erased representations of MIDIKit objects conforming to `MIDIIOObjectProtocol`.
     public func asAnyMIDIIOObjects() -> [MIDI.IO.AnyMIDIIOObject] {
-        
         map { $0.asAnyMIDIIOObject() }
-        
     }
-    
 }
 
 #endif

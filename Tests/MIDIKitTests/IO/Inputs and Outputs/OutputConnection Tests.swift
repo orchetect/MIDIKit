@@ -12,7 +12,6 @@ import MIDIKit
 import CoreMIDI
 
 final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
-    
     override func setUp() {
         wait(sec: 0.2)
     }
@@ -20,15 +19,16 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
     @MIDI.Atomic private var input1Events: [MIDI.Event] = []
     @MIDI.Atomic private var input2Events: [MIDI.Event] = []
     
-	func testOutputConnection() throws {
-		
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+    func testOutputConnection() throws {
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
-		// start midi client
-		try manager.start()
-		wait(sec: 0.1)
+        // start midi client
+        try manager.start()
+        wait(sec: 0.1)
 		
         input1Events = []
         input2Events = []
@@ -38,7 +38,8 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .none, // allow system to generate random ID each time, without persistence
+            uniqueID: .none,
+            // allow system to generate random ID each time, without persistence
             receiveHandler: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
@@ -74,7 +75,8 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 2",
             tag: input2Tag,
-            uniqueID: .none, // allow system to generate random ID each time, without persistence
+            uniqueID: .none,
+            // allow system to generate random ID each time, without persistence
             receiveHandler: .events { events in
                 self.input2Events.append(contentsOf: events)
             }
@@ -127,15 +129,15 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         XCTAssertEqual(input2Events, [])
         input1Events = []
         input2Events = []
-        
     }
     
     /// Test to ensure a new input appearing in the system gets added to the connection. (Allowing manager-owned virtual inputs to be added)
     func testOutputConnection_allEndpoints() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -165,7 +167,8 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .none, // allow system to generate random ID each time, without persistence
+            uniqueID: .none,
+            // allow system to generate random ID each time, without persistence
             receiveHandler: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
@@ -188,15 +191,15 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         XCTAssertEqual(input2Events, [])
         input1Events = []
         input2Events = []
-        
     }
     
     /// Test to ensure creating a new manager-owned virtual input does not get added to the connection if `filter.owned == true`
     func testOutputConnection_allEndpoints_filterOwned() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -226,12 +229,13 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .none, // allow system to generate random ID each time, without persistence
+            uniqueID: .none,
+            // allow system to generate random ID each time, without persistence
             receiveHandler: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
         )
-        let input1 = try XCTUnwrap(manager.managedInputs[input1Tag]) ; _ = input1
+        let input1 = try XCTUnwrap(manager.managedInputs[input1Tag]); _ = input1
 //        let input1ID = try XCTUnwrap(input1.uniqueID)
 //        let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
         
@@ -249,15 +253,15 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         XCTAssertEqual(input2Events, [])
         input1Events = []
         input2Events = []
-        
     }
 	
     /// Test to ensure virtual input(s) owned by the manager do not get added to the connection when creating the connection.
     func testOutputConnection_filterOwned_onInit() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -271,7 +275,8 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .none, // allow system to generate random ID each time, without persistence
+            uniqueID: .none,
+            // allow system to generate random ID each time, without persistence
             receiveHandler: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
@@ -288,8 +293,10 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
             toInputs: [input1.endpoint],
             tag: connTag,
             mode: .allEndpoints,
-            filter: .init(owned: true,
-                          criteria: manager.endpoints.inputsUnowned)
+            filter: .init(
+                owned: true,
+                criteria: manager.endpoints.inputsUnowned
+            )
         )
         
         let conn = try XCTUnwrap(manager.managedOutputConnections[connTag])
@@ -315,16 +322,16 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         XCTAssertEqual(conn.inputsCriteria.filter { $0 == .uniqueID(input1ID) }, [])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs.filter { $0 == input1Ref }, [])
         XCTAssertEqual(conn.endpoints.filter { $0 == input1.endpoint }, [])
-        
     }
     
     /// Test to ensure virtual input(s) owned by the manager
     /// are removed from the connection when updating mode and filter.
     func testOutputConnection_filterOwned_afterInit() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -338,7 +345,8 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .none, // allow system to generate random ID each time, without persistence
+            uniqueID: .none,
+            // allow system to generate random ID each time, without persistence
             receiveHandler: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
@@ -361,8 +369,10 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         
         // set mode and filter
         conn.mode = .allEndpoints
-        conn.filter = .init(owned: true,
-                            criteria: manager.endpoints.inputsUnowned)
+        conn.filter = .init(
+            owned: true,
+            criteria: manager.endpoints.inputsUnowned
+        )
         wait(sec: 0.5) // some time for connection to update
         
         // assert input1 is not present in connection targets
@@ -385,15 +395,15 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         XCTAssertEqual(conn.inputsCriteria.filter { $0 == .uniqueID(input1ID) }, [])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs.filter { $0 == input1Ref }, [])
         XCTAssertEqual(conn.endpoints.filter { $0 == input1.endpoint }, [])
-        
     }
     
     /// Test to ensure filter works.
     func testOutputConnection_filterEndpoints_onInit() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -407,7 +417,8 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .none, // allow system to generate random ID each time, without persistence
+            uniqueID: .none,
+            // allow system to generate random ID each time, without persistence
             receiveHandler: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
@@ -424,8 +435,10 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
             toInputs: [input1.endpoint],
             tag: connTag,
             mode: .allEndpoints,
-            filter: .init(owned: false,
-                          criteria: [.uniqueID(input1ID)])
+            filter: .init(
+                owned: false,
+                criteria: [.uniqueID(input1ID)]
+            )
         )
         
         let conn = try XCTUnwrap(manager.managedOutputConnections[connTag])
@@ -451,15 +464,15 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         XCTAssertEqual(conn.inputsCriteria.filter { $0 == .uniqueID(input1ID) }, [])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs.filter { $0 == input1Ref }, [])
         XCTAssertEqual(conn.endpoints.filter { $0 == input1.endpoint }, [])
-        
     }
     
     /// Test to ensure filter works after creating a connection.
     func testOutputConnection_filterEndpoints_afterInit() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -473,7 +486,8 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .none, // allow system to generate random ID each time, without persistence
+            uniqueID: .none,
+            // allow system to generate random ID each time, without persistence
             receiveHandler: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
@@ -496,8 +510,10 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         
         // set mode and filter
         conn.mode = .allEndpoints
-        conn.filter = .init(owned: false,
-                            criteria: [.uniqueID(input1ID)])
+        conn.filter = .init(
+            owned: false,
+            criteria: [.uniqueID(input1ID)]
+        )
         
         // assert input1 was not added to the connection
         XCTAssertEqual(conn.inputsCriteria.filter { $0 == .uniqueID(input1ID) }, [])
@@ -519,9 +535,7 @@ final class InputsAndOutputs_OutputConnection_Tests: XCTestCase {
         XCTAssertEqual(conn.inputsCriteria.filter { $0 == .uniqueID(input1ID) }, [])
         XCTAssertEqual(conn.coreMIDIInputEndpointRefs.filter { $0 == input1Ref }, [])
         XCTAssertEqual(conn.endpoints.filter { $0 == input1.endpoint }, [])
-        
     }
-    
 }
 
 #endif

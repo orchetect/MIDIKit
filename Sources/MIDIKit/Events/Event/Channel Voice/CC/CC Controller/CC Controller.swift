@@ -4,11 +4,9 @@
 //
 
 extension MIDI.Event.CC {
-    
     /// MIDI Control Change Controller
     /// (MIDI 1.0 / MIDI 2.0)
     public enum Controller: Equatable, Hashable {
-        
         /// Bank Select
         /// (Int: 0, Hex: 0x00)
         case bankSelect
@@ -272,7 +270,5 @@ extension MIDI.Event.CC {
         /// Undefined controller number
         /// (Includes: 9, 14, 15, 20...31, 85...87, 89, 90, 102...119)
         case undefined(Undefined)
-        
     }
-    
 }

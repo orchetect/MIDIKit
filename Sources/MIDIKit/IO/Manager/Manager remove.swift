@@ -9,19 +9,18 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO.Manager {
-    
     /// Remove a managed MIDI endpoint or connection.
-    public func remove(_ type: ManagedType,
-                       _ tagSelection: TagSelection) {
-        
+    public func remove(
+        _ type: ManagedType,
+        _ tagSelection: TagSelection
+    ) {
         eventQueue.sync {
-            
             switch type {
             case .inputConnection:
                 switch tagSelection {
                 case .all:
                     managedInputConnections.removeAll()
-                case .withTag(let tag):
+                case let .withTag(tag):
                     managedInputConnections[tag] = nil
                 }
                 
@@ -29,7 +28,7 @@ extension MIDI.IO.Manager {
                 switch tagSelection {
                 case .all:
                     managedOutputConnections.removeAll()
-                case .withTag(let tag):
+                case let .withTag(tag):
                     managedOutputConnections[tag] = nil
                 }
                 
@@ -37,7 +36,7 @@ extension MIDI.IO.Manager {
                 switch tagSelection {
                 case .all:
                     managedInputs.removeAll()
-                case .withTag(let tag):
+                case let .withTag(tag):
                     managedInputs[tag] = nil
                 }
                 
@@ -45,7 +44,7 @@ extension MIDI.IO.Manager {
                 switch tagSelection {
                 case .all:
                     managedOutputs.removeAll()
-                case .withTag(let tag):
+                case let .withTag(tag):
                     managedOutputs[tag] = nil
                 }
                 
@@ -53,13 +52,11 @@ extension MIDI.IO.Manager {
                 switch tagSelection {
                 case .all:
                     managedThruConnections.removeAll()
-                case .withTag(let tag):
+                case let .withTag(tag):
                     managedThruConnections[tag] = nil
                 }
             }
-            
         }
-        
     }
     
     /// Removes all unmanaged persistent MIDI thru connections stored in the system matching the given owner ID.
@@ -69,9 +66,7 @@ extension MIDI.IO.Manager {
     /// - Returns: Number of deleted matching connections.
     @discardableResult
     public func removeAllUnmanagedPersistentThruConnections(ownerID: String) -> Int {
-        
         (try? MIDI.IO.removeAllSystemThruConnectionsPersistentEntries(matching: ownerID)) ?? 0
-        
     }
     
     /// Remove all managed MIDI endpoints and connections.
@@ -83,16 +78,13 @@ extension MIDI.IO.Manager {
     /// - `model` property
     /// - `manufacturer` property
     public func removeAll() {
-        
         // `self.remove(...)` internally uses operationQueue.sync{}
         // so don't need to wrap this with it here
         
         for managedEndpointType in ManagedType.allCases {
             remove(managedEndpointType, .all)
         }
-        
     }
-    
 }
 
 #endif

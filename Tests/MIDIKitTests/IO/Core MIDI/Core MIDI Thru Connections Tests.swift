@@ -10,22 +10,24 @@ import XCTest
 import CoreMIDI
 
 final class CoreMIDIThruConnectionsTests_Tests: XCTestCase {
-    
     func testParameters_CFData() throws {
-        
         // set up original parameters
         
         var params = MIDI.IO.ThruConnection.Parameters()
         
-        let input = MIDI.IO.InputEndpoint(ref: 1234567,
-                                          name: "TestInput",
-                                          displayName: "TestInput",
-                                          uniqueID: 987654321)
+        let input = MIDI.IO.InputEndpoint(
+            ref: 1_234_567,
+            name: "TestInput",
+            displayName: "TestInput",
+            uniqueID: 987_654_321
+        )
         
-        let output = MIDI.IO.OutputEndpoint(ref: 1234568,
-                                            name: "TestOutput",
-                                            displayName: "TestOutput",
-                                            uniqueID: 987654322)
+        let output = MIDI.IO.OutputEndpoint(
+            ref: 1_234_568,
+            name: "TestOutput",
+            displayName: "TestOutput",
+            uniqueID: 987_654_322
+        )
         
         params.filterOutAllControls = false
         params.filterOutBeatClock = true
@@ -41,11 +43,11 @@ final class CoreMIDIThruConnectionsTests_Tests: XCTestCase {
         )
         
         XCTAssertEqual(params1.numDestinations, 1)
-        XCTAssertEqual(params1.destinations.0.endpointRef, 1234567)
-        XCTAssertEqual(params1.destinations.0.uniqueID, 987654321)
+        XCTAssertEqual(params1.destinations.0.endpointRef, 1_234_567)
+        XCTAssertEqual(params1.destinations.0.uniqueID, 987_654_321)
         XCTAssertEqual(params1.numSources, 1)
-        XCTAssertEqual(params1.sources.0.endpointRef, 1234568)
-        XCTAssertEqual(params1.sources.0.uniqueID, 987654322)
+        XCTAssertEqual(params1.sources.0.endpointRef, 1_234_568)
+        XCTAssertEqual(params1.sources.0.uniqueID, 987_654_322)
         
         XCTAssertEqual(params1.filterOutAllControls, 0)
         XCTAssertEqual(params1.filterOutBeatClock, 1)
@@ -60,22 +62,20 @@ final class CoreMIDIThruConnectionsTests_Tests: XCTestCase {
         let params2 = try XCTUnwrap(MIDIThruConnectionParams(cfData: cfData))
         
         XCTAssertEqual(params2.numDestinations, 1)
-        XCTAssertEqual(params2.destinations.0.endpointRef, 1234567)
-        XCTAssertEqual(params2.destinations.0.uniqueID, 987654321)
+        XCTAssertEqual(params2.destinations.0.endpointRef, 1_234_567)
+        XCTAssertEqual(params2.destinations.0.uniqueID, 987_654_321)
         XCTAssertEqual(params2.numSources, 1)
-        XCTAssertEqual(params2.sources.0.endpointRef, 1234568)
-        XCTAssertEqual(params2.sources.0.uniqueID, 987654322)
+        XCTAssertEqual(params2.sources.0.endpointRef, 1_234_568)
+        XCTAssertEqual(params2.sources.0.uniqueID, 987_654_322)
         
         XCTAssertEqual(params2.filterOutAllControls, 0)
         XCTAssertEqual(params2.filterOutBeatClock, 1)
         XCTAssertEqual(params2.filterOutMTC, 1)
         XCTAssertEqual(params2.filterOutSysEx, 0)
         XCTAssertEqual(params2.filterOutTuneRequest, 1)
-        
     }
     
     func testMIDIThruConnectionParams_initCFData_MaxByteSize() {
-        
         let cfData = Data(
             repeating: 0xFF,
             count: MemoryLayout<MIDIThruConnectionParams>.size
@@ -84,11 +84,9 @@ final class CoreMIDIThruConnectionsTests_Tests: XCTestCase {
         let params = MIDIThruConnectionParams(cfData: cfData)
         
         XCTAssertNotNil(params)
-        
     }
     
     func testMIDIThruConnectionParams_initCFData_TooManyBytes() {
-        
         let cfData = Data(
             repeating: 0xFF,
             count: MemoryLayout<MIDIThruConnectionParams>.size + 1
@@ -97,9 +95,7 @@ final class CoreMIDIThruConnectionsTests_Tests: XCTestCase {
         let params = MIDIThruConnectionParams(cfData: cfData)
         
         XCTAssertNil(params)
-        
     }
-    
 }
 
 #endif

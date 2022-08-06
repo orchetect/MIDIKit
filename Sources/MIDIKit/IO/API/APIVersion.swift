@@ -6,10 +6,8 @@
 import Darwin
 
 extension MIDI.IO {
-    
     /// Enum describing which underlying Core MIDI API is being used internally.
     public enum APIVersion: Equatable, Hashable {
-        
         /// Legacy Core MIDI API first introduced in early versions of OSX.
         ///
         /// Internally using `MIDIPacketList` / `MIDIPacket`.
@@ -19,51 +17,40 @@ extension MIDI.IO {
         ///
         /// Internally using `MIDIEventList` / `MIDIEventPacket`.
         case newCoreMIDI(ProtocolVersion)
-        
     }
-    
 }
 
 extension MIDI.IO.APIVersion {
-    
     /// MIDI protocol version.
     @inline(__always)
     public var midiProtocol: MIDI.IO.ProtocolVersion {
-        
         switch self {
         case .legacyCoreMIDI:
             return ._1_0
             
-        case .newCoreMIDI(let protocolVersion):
+        case let .newCoreMIDI(protocolVersion):
             return protocolVersion
-            
         }
-        
     }
-    
 }
 
 extension MIDI.IO.APIVersion {
-    
     /// Returns the recommended API version for the current platform (operating system).
     public static func bestForPlatform() -> Self {
-        
         if #available(macOS 11, iOS 14, macCatalyst 14, *) {
             return .newCoreMIDI(._2_0)
             
         } else {
             return .legacyCoreMIDI
         }
-        
     }
-    
 }
 
 extension MIDI.IO.APIVersion {
+    // swiftformat:options --ifdef indent
     
     /// Returns true if API version can be used on the current platform (operating system).
     public var isValidOnCurrentPlatform: Bool {
-        
         switch self {
         case .legacyCoreMIDI:
             #if os(macOS)
@@ -92,15 +79,11 @@ extension MIDI.IO.APIVersion {
             
             return false
         }
-        
     }
-    
 }
 
 extension MIDI.IO.APIVersion: CustomStringConvertible {
-    
     public var description: String {
-        
         switch self {
         case .legacyCoreMIDI:
             return "Legacy Core MIDI API"
@@ -108,7 +91,5 @@ extension MIDI.IO.APIVersion: CustomStringConvertible {
         case .newCoreMIDI:
             return "New Core MIDI API (\(midiProtocol))"
         }
-        
     }
-    
 }

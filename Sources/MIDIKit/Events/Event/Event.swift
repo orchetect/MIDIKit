@@ -4,10 +4,8 @@
 //
 
 extension MIDI {
-    
     /// MIDI Event
     public enum Event: Equatable, Hashable {
-        
         // -------------------
         // MARK: Channel Voice
         // -------------------
@@ -64,7 +62,6 @@ extension MIDI {
         /// - Cubase: "Aftertouch"
         case pressure(Pressure)
         
-        
         // ----------------------
         // MARK: System Exclusive
         // ----------------------
@@ -100,7 +97,6 @@ extension MIDI {
         ///
         /// - `deviceID` of 0x7F indicates "All Devices".
         case universalSysEx8(UniversalSysEx8)
-        
         
         // -------------------
         // MARK: System Common
@@ -144,7 +140,6 @@ extension MIDI {
         ///
         /// "Used with analog synthesizers to request that all oscillators be tuned."
         case tuneRequest(TuneRequest)
-        
         
         // ----------------------
         // MARK: System Real Time
@@ -200,7 +195,6 @@ extension MIDI {
         /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
         case systemReset(SystemReset)
         
-        
         // -------------------------------
         // MARK: MIDI 2.0 Utility Messages
         // -------------------------------
@@ -237,5 +231,4 @@ extension MIDI {
         /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32)."
         case jrTimestamp(JRTimestamp)
     }
-    
 }

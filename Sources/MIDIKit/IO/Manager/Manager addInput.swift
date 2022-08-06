@@ -9,7 +9,6 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO.Manager {
-    
     /// Adds a new managed virtual input to the `managedInputs` dictionary of the `Manager` and creates the MIDI port in the system.
     ///
     /// The lifecycle of the MIDI port exists for as long as the `Manager` instance exists, or until `.remove(::)` is called.
@@ -35,9 +34,7 @@ extension MIDI.IO.Manager {
         uniqueID: MIDI.IO.UniqueIDPersistence,
         receiveHandler: MIDI.IO.ReceiveHandler.Definition
     ) throws {
-        
         try eventQueue.sync {
-            
             let newVD = MIDI.IO.Input(
                 name: name,
                 uniqueID: uniqueID.readID(),
@@ -57,11 +54,8 @@ extension MIDI.IO.Manager {
             }
             
             uniqueID.writeID(successfulID)
-            
         }
-        
     }
-    
 }
 
 #endif

@@ -4,13 +4,11 @@
 //
 
 extension MIDI.Event.CC.Controller {
-    
     /// Returns the controller number.
     @inlinable
     public var number: MIDI.UInt7 {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
-        
         case .bankSelect                    : return 0
         case .modWheel                      : return 1
         case .breath                        : return 2
@@ -28,7 +26,7 @@ extension MIDI.Event.CC.Controller {
         case .generalPurpose3               : return 18
         case .generalPurpose4               : return 19
             
-        case .lsb(let lsb)                  : return lsb.controller
+        case let .lsb(lsb)                  : return lsb.controller
             
         case .sustainPedal                  : return 64
         case .portamento                    : return 65
@@ -64,22 +62,16 @@ extension MIDI.Event.CC.Controller {
         case .rpnLSB                        : return 100
         case .rpnMSB                        : return 101
             
-        case .mode(let mode)                : return mode.controller
+        case let .mode(mode)                : return mode.controller
             
-        case .undefined(let cc)             : return cc.controller
-            
+        case let .undefined(cc)             : return cc.controller
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
-    
 }
 
 extension MIDI.Event.CC.Controller: CustomStringConvertible {
-    
     public var description: String {
-        
         "\(number.value)"
-        
     }
-    
 }

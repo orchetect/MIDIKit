@@ -9,9 +9,7 @@ import XCTest
 import MIDIKit
 
 final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
-    
     func testMetadata() {
-        
         // isSystemCommon
         
         let events = kEvents.SysCommon.oneOfEachEventType
@@ -57,13 +55,11 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
             MIDI.Event.tuneRequest(group: 0)
                 .isSystemCommon(ofTypes: [])
         )
-        
     }
     
     // MARK: - only
     
     func testFilter_only() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .only)
@@ -71,11 +67,9 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
         let expectedEvents = kEvents.SysCommon.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_onlyType() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .onlyType(.tuneRequest))
@@ -83,11 +77,9 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
         let expectedEvents = [kEvents.SysCommon.tuneRequest]
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_onlyTypes() {
-        
         let events = kEvents.oneOfEachEventType
         
         var filteredEvents: [MIDI.Event]
@@ -104,13 +96,11 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
         filteredEvents = events.filter(sysCommon: .onlyTypes([]))
         expectedEvents = []
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     // MARK: - keep
     
     func testFilter_keepType() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .keepType(.tuneRequest))
@@ -125,11 +115,9 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
         expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_keepTypes() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .keepTypes([.tuneRequest, .songSelect]))
@@ -145,13 +133,11 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
         expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     // MARK: - drop
     
     func testFilter_drop() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .drop)
@@ -164,11 +150,9 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
         expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_dropType() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .dropType(.tuneRequest))
@@ -186,11 +170,9 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
         expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
     
     func testFilter_dropTypes() {
-        
         let events = kEvents.oneOfEachEventType
         
         let filteredEvents = events.filter(sysCommon: .dropTypes([.tuneRequest, .songSelect]))
@@ -207,9 +189,7 @@ final class MIDIEventFilter_SystemCommon_Tests: XCTestCase {
         expectedEvents += kEvents.Utility.oneOfEachEventType
         
         XCTAssertEqual(filteredEvents, expectedEvents)
-        
     }
-    
 }
 
 #endif

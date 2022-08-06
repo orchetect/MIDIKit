@@ -9,14 +9,12 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
-    
     /// A managed virtual MIDI input endpoint created in the system by the MIDI I/O `Manager`.
     ///
     /// - Note: Avoid storing or caching this object unless it is unavoidable. Instead, whenever possible access it via the `Manager`'s `managedInputs` collection. The `Manager` owns this object and maintains its lifecycle.
     ///
     /// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the endpoint (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.input, ...)` or `.removeAll` on the `Manager` to destroy the managed input.)
     public class Input: _MIDIIOManagedProtocol {
-        
         // _MIDIIOManagedProtocol
         internal weak var midiManager: MIDI.IO.Manager?
         
@@ -30,10 +28,10 @@ extension MIDI.IO {
         public private(set) var endpointName: String = ""
         
         /// The port's unique ID in the system.
-        public private(set) var uniqueID: MIDI.IO.UniqueID? = nil
+        public private(set) var uniqueID: MIDI.IO.UniqueID?
         
         /// The Core MIDI port reference.
-        public private(set) var coreMIDIInputPortRef: MIDI.IO.PortRef? = nil
+        public private(set) var coreMIDIInputPortRef: MIDI.IO.PortRef?
         
         internal var receiveHandler: MIDI.IO.ReceiveHandler
         
@@ -48,43 +46,35 @@ extension MIDI.IO {
         ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
         ///   - midiManager: Reference to I/O Manager object.
         ///   - api: Core MIDI API version.
-        internal init(name: String,
-                      uniqueID: MIDI.IO.UniqueID? = nil,
-                      receiveHandler: MIDI.IO.ReceiveHandler.Definition,
-                      midiManager: MIDI.IO.Manager,
-                      api: MIDI.IO.APIVersion = .bestForPlatform()) {
-            
-            self.endpointName = name
+        internal init(
+            name: String,
+            uniqueID: MIDI.IO.UniqueID? = nil,
+            receiveHandler: MIDI.IO.ReceiveHandler.Definition,
+            midiManager: MIDI.IO.Manager,
+            api: MIDI.IO.APIVersion = .bestForPlatform()
+        ) {
+            endpointName = name
             self.uniqueID = uniqueID
             self.receiveHandler = receiveHandler.createReceiveHandler()
             self.midiManager = midiManager
             self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-            
         }
         
         deinit {
-            
             try? dispose()
-            
         }
-        
     }
-    
 }
 
 extension MIDI.IO.Input {
-    
     /// Returns the input's endpoint in the system.
     public var endpoint: MIDI.IO.InputEndpoint {
-        
         .init(coreMIDIInputPortRef ?? 0)
-        
     }
     
     /// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
     internal var uniqueIDExistsInSystem: MIDIEndpointRef? {
-        
-        guard let unwrappedUniqueID = self.uniqueID else {
+        guard let unwrappedUniqueID = uniqueID else {
             return nil
         }
         
@@ -93,15 +83,11 @@ extension MIDI.IO.Input {
         }
         
         return nil
-        
     }
-    
 }
 
 extension MIDI.IO.Input {
-    
     internal func create(in manager: MIDI.IO.Manager) throws {
-        
         if uniqueIDExistsInSystem != nil {
             // if uniqueID is already in use, set it to nil here
             // so MIDIDestinationCreateWithBlock can return a new unused ID;
@@ -140,7 +126,7 @@ extension MIDI.IO.Input {
             try MIDIDestinationCreateWithProtocol(
                 manager.coreMIDIClientRef,
                 endpointName as CFString,
-                self.api.midiProtocol.coreMIDIProtocol,
+                api.midiProtocol.coreMIDIProtocol,
                 &newPortRef,
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
@@ -149,13 +135,14 @@ extension MIDI.IO.Input {
                     let midiProtocol = MIDI.IO.ProtocolVersion(eventListPtr.pointee.protocol)
                     
                     strongSelf.midiManager?.eventQueue.async {
-                        strongSelf.receiveHandler.eventListReceived(packets,
-                                                                    protocol: midiProtocol)
+                        strongSelf.receiveHandler.eventListReceived(
+                            packets,
+                            protocol: midiProtocol
+                        )
                     }
                 }
             )
             .throwIfOSStatusErr()
-            
         }
         
         coreMIDIInputPortRef = newPortRef
@@ -164,53 +151,45 @@ extension MIDI.IO.Input {
         try? MIDI.IO.setModel(of: newPortRef, to: manager.model)
         try? MIDI.IO.setManufacturer(of: newPortRef, to: manager.manufacturer)
         
-        if let unwrappedUniqueID = self.uniqueID {
+        if let unwrappedUniqueID = uniqueID {
             // inject previously-stored unique ID into port
-            try MIDI.IO.setUniqueID(of: newPortRef,
-                                    to: unwrappedUniqueID)
+            try MIDI.IO.setUniqueID(
+                of: newPortRef,
+                to: unwrappedUniqueID
+            )
         } else {
             // if managed ID is nil, either it was not supplied or it was already in use
             // so fetch the new ID from the port we just created
             uniqueID = .init(MIDI.IO.getUniqueID(of: newPortRef))
         }
-        
     }
     
     /// Disposes of the the virtual port if it's already been created in the system via the `create()` method.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
-        
-        guard let unwrappedPortRef = self.coreMIDIInputPortRef else { return }
+        guard let unwrappedPortRef = coreMIDIInputPortRef else { return }
         
         defer { self.coreMIDIInputPortRef = nil }
         
         try MIDIEndpointDispose(unwrappedPortRef)
             .throwIfOSStatusErr()
-        
     }
-    
 }
 
 extension MIDI.IO.Input: CustomStringConvertible {
-    
     public var description: String {
-        
-        var uniqueIDString: String = "nil"
+        var uniqueIDString = "nil"
         if let unwrappedUniqueID = uniqueID {
             uniqueIDString = "\(unwrappedUniqueID)"
         }
         
         return "Input(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"
-        
     }
-    
 }
 
 extension MIDI.IO.Output: MIDIIOReceivesMIDIMessagesProtocol {
-    
     // empty
-    
 }
 
 #endif

@@ -5,7 +5,6 @@
 
 /// Specialized integer types representing non-standard bit-width values in `MIDIKit`.
 public protocol MIDIKitIntegerProtocol {
-    
     // Storage
     
     associatedtype Storage: BinaryInteger
@@ -55,11 +54,9 @@ public protocol MIDIKitIntegerProtocol {
     
     /// Returns the integer as an `Int` instance
     var intValue: Int { get }
-    
 }
 
 extension MIDIKitIntegerProtocol {
-    
     public init?<T: BinaryInteger>(exactly source: T) {
         if source < Self.min(Int.self) { return nil }
         if source > Self.max(Int.self) { return nil }
@@ -67,13 +64,19 @@ extension MIDIKitIntegerProtocol {
     }
     
     public init<T: BinaryInteger>(clamping source: T) {
-        let clamped = Storage(Int(source).clamped(to: Self.min(Int.self)...Self.max(Int.self)))
+        let clamped = Storage(
+            Int(source)
+                .clamped(to: Self.min(Int.self) ... Self.max(Int.self))
+        )
         self.init(clamped)
     }
     
     public init?<T: BinaryFloatingPoint>(exactly source: T) {
-        // it should be safe to cast as T.self since it's virtually impossible that we will encounter a BinaryFloatingPoint type less than the largest MIDIKitIntegerProtocol concrete type we're using (UInt14).
-        // the smallest floating point number in the Swift standard library is Float16 which can hold UInt14.max fine.
+        // it should be safe to cast as T.self since it's virtually impossible
+        // that we will encounter a BinaryFloatingPoint type less than the
+        // largest MIDIKitIntegerProtocol concrete type we're using (UInt14).
+        // the smallest floating point number in the Swift standard library
+        // is Float16 which can hold UInt14.max fine.
         if source < Self.min(T.self) { return nil }
         if source > Self.max(T.self) { return nil }
         self.init(source)
@@ -83,13 +86,11 @@ extension MIDIKitIntegerProtocol {
     public static var max: Self { Self(Self.max(Storage.self)) }
     
     public var intValue: Int { Int(value) }
-    
 }
 
 // MARK: - Operators
 
 extension MIDIKitIntegerProtocol {
-    
     @_disfavoredOverload
     public static func + (lhs: Self, rhs: Self) -> Self {
         Self(lhs.value + rhs.value)
@@ -126,6 +127,7 @@ extension MIDIKitIntegerProtocol {
     public static func -= (lhs: inout Self, rhs: Self) {
         lhs = Self(lhs.value - rhs.value)
     }
+
     @_disfavoredOverload
     public static func *= (lhs: inout Self, rhs: Self) {
         lhs = Self(lhs.value * rhs.value)
@@ -135,11 +137,9 @@ extension MIDIKitIntegerProtocol {
     public static func /= (lhs: inout Self, rhs: Self) {
         lhs = Self(lhs.value / rhs.value)
     }
-    
 }
 
 extension MIDIKitIntegerProtocol {
-    
     public static func + (lhs: Self, rhs: Storage) -> Self {
         Self(lhs.value + rhs)
     }
@@ -177,11 +177,9 @@ extension MIDIKitIntegerProtocol {
     public static func /= (lhs: inout Self, rhs: Storage) {
         lhs = Self(lhs.value / rhs)
     }
-    
 }
 
 extension MIDIKitIntegerProtocol {
-    
     public static func + (lhs: Storage, rhs: Self) -> Storage {
         lhs + rhs.value
     }
@@ -219,11 +217,9 @@ extension MIDIKitIntegerProtocol {
     public static func /= (lhs: inout Storage, rhs: Self) {
         lhs /= rhs.value
     }
-    
 }
 
 extension BinaryInteger {
-    
     /// Creates a new instance from the given integer.
     public init<T: MIDIKitIntegerProtocol>(_ source: T) {
         self.init(source.value)
@@ -233,5 +229,4 @@ extension BinaryInteger {
     public init?<T: MIDIKitIntegerProtocol>(exactly source: T) {
         self.init(exactly: source.value)
     }
-    
 }

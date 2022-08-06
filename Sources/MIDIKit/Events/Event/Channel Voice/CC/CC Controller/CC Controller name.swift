@@ -4,13 +4,11 @@
 //
 
 extension MIDI.Event.CC.Controller {
-    
     /// Returns the controller name as a human-readable String.
     @inlinable
     public var name: String {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
-        
         case .bankSelect                    : return "Bank Select"
         case .modWheel                      : return "Mod Wheel"
         case .breath                        : return "Breath Controller"
@@ -28,7 +26,7 @@ extension MIDI.Event.CC.Controller {
         case .generalPurpose3               : return "General Purpose 3"
         case .generalPurpose4               : return "General Purpose 4"
             
-        case .lsb(let lsb)                  : return lsb.name
+        case let .lsb(lsb)                  : return lsb.name
             
         case .sustainPedal                  : return "Sustain Pedal"
         case .portamento                    : return "Portamento"
@@ -64,12 +62,10 @@ extension MIDI.Event.CC.Controller {
         case .rpnLSB                        : return "RPN LSB"
         case .rpnMSB                        : return "RPN MSB"
             
-        case .mode(let mode)                : return mode.name
+        case let .mode(mode)                : return mode.name
             
-        case .undefined(let cc)             : return cc.name
-            
+        case let .undefined(cc)             : return cc.name
         }
-        
+        // enable:disable spacearoundoperators
     }
-    
 }

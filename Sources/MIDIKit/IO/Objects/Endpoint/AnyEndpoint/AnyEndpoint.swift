@@ -6,10 +6,8 @@
 #if !os(tvOS) && !os(watchOS)
 
 extension MIDI.IO {
-    
     /// Type-erased box that can contain `MIDI.IO.InputEndpoint` or `MIDI.IO.OutputEndpoint`.
     public struct AnyEndpoint: _MIDIIOEndpointProtocol {
-        
         public var objectType: MIDI.IO.ObjectType
         
         public let endpointType: MIDI.IO.EndpointType
@@ -27,7 +25,6 @@ extension MIDI.IO {
         // MARK: Init
         
         internal init<E: _MIDIIOEndpointProtocol>(_ base: E) {
-            
             switch base {
             case is MIDI.IO.InputEndpoint:
                 objectType = .inputEndpoint
@@ -43,18 +40,14 @@ extension MIDI.IO {
                 
             default:
                 preconditionFailure("Unexpected MIDIIOEndpointProtocol type: \(base)")
-                
             }
             
-            self.coreMIDIObjectRef = base.coreMIDIObjectRef
-            self.name = base.name
-            self.displayName = base.displayName
-            self.uniqueID = .init(base.uniqueID)
-            
+            coreMIDIObjectRef = base.coreMIDIObjectRef
+            name = base.name
+            displayName = base.displayName
+            uniqueID = .init(base.uniqueID)
         }
-        
     }
-    
 }
 
 extension MIDI.IO.AnyEndpoint: Equatable {
@@ -70,37 +63,25 @@ extension MIDI.IO.AnyEndpoint: Identifiable {
 }
 
 extension MIDI.IO.AnyEndpoint: CustomDebugStringConvertible {
-    
     public var debugDescription: String {
-        
         "AnyEndpoint(name: \(name.quoted), uniqueID: \(uniqueID))"
-        
     }
-    
 }
 
 // MARK: - Extensions
 
 extension _MIDIIOEndpointProtocol {
-    
     /// Returns the endpoint as a type-erased `AnyEndpoint`.
     public func asAnyEndpoint() -> MIDI.IO.AnyEndpoint {
-        
         .init(self)
-        
     }
-    
 }
 
-extension Collection where Element : MIDIIOEndpointProtocol {
-    
+extension Collection where Element: MIDIIOEndpointProtocol {
     /// Returns the collection as a collection of type-erased `AnyEndpoint` endpoints.
     public func asAnyEndpoints() -> [MIDI.IO.AnyEndpoint] {
-        
         map { $0.asAnyEndpoint() }
-        
     }
-    
 }
 
 #endif

@@ -4,13 +4,11 @@
 //
 
 extension MIDI.Event.Note.CC.Controller.Registered {
-    
     /// Returns the controller name as a human-readable String.
     @inlinable
     public var name: String {
-        
+        // swiftformat:disable spacearoundoperators
         switch self {
-        
         case .modWheel                      : return "Mod Wheel"
         case .breath                        : return "Breath Controller"
         case .pitch7_25                     : return "Pitch 7.25"
@@ -38,10 +36,8 @@ extension MIDI.Event.Note.CC.Controller.Registered {
         case .effects4Depth                 : return "Effects 4 Depth"
         case .effects5Depth                 : return "Effects 5 Depth"
             
-        case .undefined(let cc)             : return cc.name
-            
+        case let .undefined(cc)             : return cc.name
         }
-        
+        // swiftformat:enable spacearoundoperators
     }
-    
 }

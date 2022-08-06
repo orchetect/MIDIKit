@@ -5,21 +5,20 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-    import Foundation
-    @_implementationOnly import CoreMIDI
+import Foundation
+@_implementationOnly import CoreMIDI
 
-    #if canImport(AppKit)
-    import AppKit
-    #endif
+#if canImport(AppKit)
+import AppKit
+#endif
 
-    #if canImport(UIKit)
-    import UIKit
-    #endif
+#if canImport(UIKit)
+import UIKit
+#endif
 
 // MARK: - Properties (Computed)
 
 extension MIDIIOObjectProtocol {
-    
     // MARK: Identification
     
     /// Get user-visible endpoint name.
@@ -31,7 +30,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func getName() -> String? {
-        try? MIDI.IO.getName(of: self.coreMIDIObjectRef)
+        try? MIDI.IO.getName(of: coreMIDIObjectRef)
     }
     
     /// Get model name.
@@ -44,7 +43,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func getModel() -> String? {
-        try? MIDI.IO.getModel(of: self.coreMIDIObjectRef)
+        try? MIDI.IO.getModel(of: coreMIDIObjectRef)
     }
     
     /// Get manufacturer name.
@@ -57,7 +56,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func getManufacturer() -> String? {
-        try? MIDI.IO.getManufacturer(of: self.coreMIDIObjectRef)
+        try? MIDI.IO.getManufacturer(of: coreMIDIObjectRef)
     }
     
     /// Get unique ID.
@@ -65,7 +64,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// The system assigns unique IDs to all objects.  Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
     public func getUniqueID() -> MIDI.IO.UniqueID {
-        MIDI.IO.UniqueID(MIDI.IO.getUniqueID(of: self.coreMIDIObjectRef))
+        MIDI.IO.UniqueID(MIDI.IO.getUniqueID(of: coreMIDIObjectRef))
     }
     
     /// Get the user-visible System Exclusive (SysEx) identifier of a device or entity.
@@ -73,7 +72,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// MIDI drivers can set this property on their devices or entities. Studio setup editors can allow the user to set this property on external devices.
     public func getDeviceManufacturerID() -> Int32 {
-        MIDI.IO.getDeviceManufacturerID(of: self.coreMIDIObjectRef)
+        MIDI.IO.getDeviceManufacturerID(of: coreMIDIObjectRef)
     }
     
     // MARK: Capabilities
@@ -81,19 +80,19 @@ extension MIDIIOObjectProtocol {
     /// Get a Boolean value that indicates whether the device or entity implements the MIDI Machine Control portion of the MIDI specification.
     /// (`kMIDIPropertySupportsMMC`)
     public func getSupportsMMC() -> Bool {
-        MIDI.IO.getSupportsMMC(of: self.coreMIDIObjectRef)
+        MIDI.IO.getSupportsMMC(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity implements the General MIDI specification.
     /// (`kMIDIPropertySupportsGeneralMIDI`)
     public func getSupportsGeneralMIDI() -> Bool {
-        MIDI.IO.getSupportsGeneralMIDI(of: self.coreMIDIObjectRef)
+        MIDI.IO.getSupportsGeneralMIDI(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device implements the MIDI Show Control specification.
     /// (`kMIDIPropertySupportsShowControl`)
     public func getSupportsShowControl() -> Bool {
-        MIDI.IO.getSupportsShowControl(of: self.coreMIDIObjectRef)
+        MIDI.IO.getSupportsShowControl(of: coreMIDIObjectRef)
     }
     
     // MARK: Configuration
@@ -104,7 +103,7 @@ extension MIDIIOObjectProtocol {
     /// - requires: macOS 10.15, macCatalyst 13.0, iOS 13.0
     @available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *)
     public func getNameConfigurationDictionary() -> NSDictionary? {
-        try? MIDI.IO.getNameConfigurationDictionary(of: self.coreMIDIObjectRef)
+        try? MIDI.IO.getNameConfigurationDictionary(of: coreMIDIObjectRef)
     }
     
     /// Get the maximum rate, in bytes per second, at which the system may reliably send System Exclusive (SysEx) messages to this object.
@@ -112,7 +111,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// The owning driver may set an integer value for this property.
     public func getMaxSysExSpeed() -> Int32 {
-        MIDI.IO.getMaxSysExSpeed(of: self.coreMIDIObjectRef)
+        MIDI.IO.getMaxSysExSpeed(of: coreMIDIObjectRef)
     }
     
     /// Get the full path to an app on the system that configures driver-owned devices.
@@ -122,7 +121,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func getDriverDeviceEditorApp() -> URL? {
-        try? MIDI.IO.getDriverDeviceEditorApp(of: self.coreMIDIObjectRef)
+        try? MIDI.IO.getDriverDeviceEditorApp(of: coreMIDIObjectRef)
     }
     
     // MARK: Presentation
@@ -136,7 +135,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func getImageFileURL() -> URL? {
-        try? MIDI.IO.getImage(of: self.coreMIDIObjectRef)
+        try? MIDI.IO.getImage(of: coreMIDIObjectRef)
     }
     
     #if canImport(AppKit) && os(macOS)
@@ -164,7 +163,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func getDisplayName() -> String? {
-        try? MIDI.IO.getDisplayName(of: self.coreMIDIObjectRef)
+        try? MIDI.IO.getDisplayName(of: coreMIDIObjectRef)
     }
     
     // MARK: Audio
@@ -172,7 +171,7 @@ extension MIDIIOObjectProtocol {
     /// Get a Boolean value that indicates whether the MIDI pan messages sent to the device or entity cause undesirable effects when playing stereo sounds.
     /// (`kMIDIPropertyPanDisruptsStereo`)
     public func getPanDisruptsStereo() -> Bool {
-        MIDI.IO.getPanDisruptsStereo(of: self.coreMIDIObjectRef)
+        MIDI.IO.getPanDisruptsStereo(of: coreMIDIObjectRef)
     }
     
     // MARK: Protocols
@@ -187,7 +186,7 @@ extension MIDIIOObjectProtocol {
     /// - requires: macOS 11.0, macCatalyst 14.0, iOS 14.0
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
     public func getProtocolID() -> MIDI.IO.ProtocolVersion? {
-        guard let proto = MIDI.IO.getProtocolID(of: self.coreMIDIObjectRef) else { return nil }
+        guard let proto = MIDI.IO.getProtocolID(of: coreMIDIObjectRef) else { return nil }
         return .init(proto)
     }
     
@@ -196,25 +195,25 @@ extension MIDIIOObjectProtocol {
     /// Get a Boolean value that indicates whether the device or entity transmits MIDI Time Code messages.
     /// (`kMIDIPropertyTransmitsMTC`)
     public func getTransmitsMTC() -> Bool {
-        MIDI.IO.getTransmitsMTC(of: self.coreMIDIObjectRef)
+        MIDI.IO.getTransmitsMTC(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity responds to MIDI Time Code messages.
     /// (`kMIDIPropertyReceivesMTC`)
     public func getReceivesMTC() -> Bool {
-        MIDI.IO.getReceivesMTC(of: self.coreMIDIObjectRef)
+        MIDI.IO.getReceivesMTC(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity transmits MIDI beat clock messages.
     /// (`kMIDIPropertyTransmitsClock`)
     public func getTransmitsClock() -> Bool {
-        MIDI.IO.getTransmitsClock(of: self.coreMIDIObjectRef)
+        MIDI.IO.getTransmitsClock(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity responds to MIDI beat clock messages.
     /// (`kMIDIPropertyReceivesClock`)
     public func getReceivesClock() -> Bool {
-        MIDI.IO.getReceivesClock(of: self.coreMIDIObjectRef)
+        MIDI.IO.getReceivesClock(of: coreMIDIObjectRef)
     }
     
     /// Get the recommended number of microseconds in advance that clients should schedule output.
@@ -228,7 +227,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func getAdvanceScheduleTimeMuSec() -> String? {
-        try? MIDI.IO.getAdvanceScheduleTimeMuSec(of: self.coreMIDIObjectRef)
+        try? MIDI.IO.getAdvanceScheduleTimeMuSec(of: coreMIDIObjectRef)
     }
     
     // MARK: Roles
@@ -236,25 +235,25 @@ extension MIDIIOObjectProtocol {
     /// Get a Boolean value that indicates whether the device or entity mixes external audio signals.
     /// (`kMIDIPropertyIsMixer`)
     public func getIsMixer() -> Bool {
-        MIDI.IO.getIsMixer(of: self.coreMIDIObjectRef)
+        MIDI.IO.getIsMixer(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity plays audio samples in response to MIDI note messages.
     /// (`kMIDIPropertyIsSampler`)
     public func getIsSampler() -> Bool {
-        MIDI.IO.getIsSampler(of: self.coreMIDIObjectRef)
+        MIDI.IO.getIsSampler(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity primarily acts as a MIDI-controlled audio effect.
     /// (`kMIDIPropertyIsEffectUnit`)
     public func getIsEffectUnit() -> Bool {
-        MIDI.IO.getIsEffectUnit(of: self.coreMIDIObjectRef)
+        MIDI.IO.getIsEffectUnit(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity’s samples aren’t transposable, as with a drum kit.
     /// (`kMIDIPropertyIsDrumMachine`)
     public func getIsDrumMachine() -> Bool {
-        MIDI.IO.getIsDrumMachine(of: self.coreMIDIObjectRef)
+        MIDI.IO.getIsDrumMachine(of: coreMIDIObjectRef)
     }
     
     // MARK: Status
@@ -266,7 +265,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// (`kMIDIPropertyOffline`)
     public func getIsOffline() -> Bool {
-        MIDI.IO.getIsOffline(of: self.coreMIDIObjectRef)
+        MIDI.IO.getIsOffline(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the system hides an endpoint from other clients.
@@ -275,7 +274,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// (`kMIDIPropertyPrivate`)
     public func getIsPrivate() -> Bool {
-        MIDI.IO.getIsPrivate(of: self.coreMIDIObjectRef)
+        MIDI.IO.getIsPrivate(of: coreMIDIObjectRef)
     }
     
     // MARK: Drivers
@@ -287,13 +286,13 @@ extension MIDIIOObjectProtocol {
     ///
     /// - Throws: `MIDI.IO.MIDIError`
     public func getDriverOwner() -> String? {
-        try? MIDI.IO.getDriverOwner(of: self.coreMIDIObjectRef)
+        try? MIDI.IO.getDriverOwner(of: coreMIDIObjectRef)
     }
     
     /// Get the version of the driver that owns a device, entity, or endpoint.
     /// (`kMIDIPropertyDriverVersion`)
     public func getDriverVersion() -> Int32 {
-        MIDI.IO.getDriverVersion(of: self.coreMIDIObjectRef)
+        MIDI.IO.getDriverVersion(of: coreMIDIObjectRef)
     }
     
     // MARK: Connections
@@ -303,7 +302,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// Don’t set this property value on driver-owned devices.
     public func getCanRoute() -> Bool {
-        MIDI.IO.getCanRoute(of: self.coreMIDIObjectRef)
+        MIDI.IO.getCanRoute(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the endpoint broadcasts messages to all of the other endpoints in the device.
@@ -311,7 +310,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// Only the owning driver may set this property.
     public func getIsBroadcast() -> Bool {
-        MIDI.IO.getIsBroadcast(of: self.coreMIDIObjectRef)
+        MIDI.IO.getIsBroadcast(of: coreMIDIObjectRef)
     }
     
     /// Get the unique identifier of an external device attached to this connection.
@@ -321,19 +320,19 @@ extension MIDIIOObjectProtocol {
     ///
     /// The property is nonexistent or 0 if there’s no connection.
     public func getConnectionUniqueID() -> MIDI.IO.UniqueID {
-        MIDI.IO.getConnectionUniqueID(of: self.coreMIDIObjectRef)
+        MIDI.IO.getConnectionUniqueID(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether this entity or endpoint has external MIDI connections.
     /// (`kMIDIPropertyIsEmbeddedEntity`)
     public func getIsEmbeddedEntity() -> Bool {
-        MIDI.IO.getIsEmbeddedEntity(of: self.coreMIDIObjectRef)
+        MIDI.IO.getIsEmbeddedEntity(of: coreMIDIObjectRef)
     }
     
     /// Get the 0-based index of the entity on which incoming real-time messages from the device appear to have originated.
     /// (`kMIDIPropertySingleRealtimeEntity`)
     public func getSingleRealtimeEntity() -> Int32 {
-        MIDI.IO.getSingleRealtimeEntity(of: self.coreMIDIObjectRef)
+        MIDI.IO.getSingleRealtimeEntity(of: coreMIDIObjectRef)
     }
     
     // MARK: Channels
@@ -347,19 +346,19 @@ extension MIDIIOObjectProtocol {
     /// - Virtual destinations can set this property on their endpoints.
     ///
     public func getReceiveChannels() -> Int32 {
-        MIDI.IO.getReceiveChannels(of: self.coreMIDIObjectRef)
+        MIDI.IO.getReceiveChannels(of: coreMIDIObjectRef)
     }
     
     /// Get the bitmap of channels on which the object transmits messages.
     /// (`kMIDIPropertyTransmitChannels`)
     public func getTransmitChannels() -> Int32 {
-        MIDI.IO.getTransmitChannels(of: self.coreMIDIObjectRef)
+        MIDI.IO.getTransmitChannels(of: coreMIDIObjectRef)
     }
     
     /// Get the bitmap of channels on which the object transmits messages.
     /// (`kMIDIPropertyMaxReceiveChannels`)
     public func getMaxReceiveChannels() -> Int32 {
-        MIDI.IO.getMaxReceiveChannels(of: self.coreMIDIObjectRef)
+        MIDI.IO.getMaxReceiveChannels(of: coreMIDIObjectRef)
     }
     
     /// Get the maximum number of MIDI channels on which a device may simultaneously transmit channel messages.
@@ -367,7 +366,7 @@ extension MIDIIOObjectProtocol {
     ///
     /// Common values are 0, 1, or 16.
     public func getMaxTransmitChannels() -> Int32 {
-        MIDI.IO.getMaxTransmitChannels(of: self.coreMIDIObjectRef)
+        MIDI.IO.getMaxTransmitChannels(of: coreMIDIObjectRef)
     }
     
     // MARK: Banks
@@ -375,25 +374,25 @@ extension MIDIIOObjectProtocol {
     /// Get a Boolean value that indicates whether the device or entity responds to MIDI bank select LSB messages.
     /// (`kMIDIPropertyReceivesBankSelectLSB`)
     public func getReceivesBankSelectLSB() -> Bool {
-        MIDI.IO.getReceivesBankSelectLSB(of: self.coreMIDIObjectRef)
+        MIDI.IO.getReceivesBankSelectLSB(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity responds to MIDI bank select MSB messages.
     /// (`kMIDIPropertyReceivesBankSelectMSB`)
     public func getReceivesBankSelectMSB() -> Bool {
-        MIDI.IO.getReceivesBankSelectMSB(of: self.coreMIDIObjectRef)
+        MIDI.IO.getReceivesBankSelectMSB(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity transmits MIDI bank select LSB messages.
     /// (`kMIDIPropertyTransmitsBankSelectLSB`)
     public func getTransmitsBankSelectLSB() -> Bool {
-        MIDI.IO.getTransmitsBankSelectLSB(of: self.coreMIDIObjectRef)
+        MIDI.IO.getTransmitsBankSelectLSB(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity transmits MIDI bank select MSB messages.
     /// (`kMIDIPropertyTransmitsBankSelectMSB`)
     public func getTransmitsBankSelectMSB() -> Bool {
-        MIDI.IO.getTransmitsBankSelectMSB(of: self.coreMIDIObjectRef)
+        MIDI.IO.getTransmitsBankSelectMSB(of: coreMIDIObjectRef)
     }
     
     // MARK: Notes
@@ -401,13 +400,13 @@ extension MIDIIOObjectProtocol {
     /// Get a Boolean value that indicates whether the device or entity responds to MIDI Note On messages.
     /// (`kMIDIPropertyReceivesNotes`)
     public func getReceivesNotes() -> Bool {
-        MIDI.IO.getReceivesNotes(of: self.coreMIDIObjectRef)
+        MIDI.IO.getReceivesNotes(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity transmits MIDI note messages.
     /// (`kMIDIPropertyTransmitsNotes`)
     public func getTransmitsNotes() -> Bool {
-        MIDI.IO.getTransmitsNotes(of: self.coreMIDIObjectRef)
+        MIDI.IO.getTransmitsNotes(of: coreMIDIObjectRef)
     }
     
     // MARK: Program Changes
@@ -415,15 +414,14 @@ extension MIDIIOObjectProtocol {
     /// Get a Boolean value that indicates whether the device or entity responds to MIDI Program Change messages.
     /// (`kMIDIPropertyReceivesProgramChanges`)
     public func getReceivesProgramChanges() -> Bool {
-        MIDI.IO.getReceivesProgramChanges(of: self.coreMIDIObjectRef)
+        MIDI.IO.getReceivesProgramChanges(of: coreMIDIObjectRef)
     }
     
     /// Get a Boolean value that indicates whether the device or entity transmits MIDI Program Change messages.
     /// (`kMIDIPropertyTransmitsProgramChanges`)
     public func getTransmitsProgramChanges() -> Bool {
-        MIDI.IO.getTransmitsProgramChanges(of: self.coreMIDIObjectRef)
+        MIDI.IO.getTransmitsProgramChanges(of: coreMIDIObjectRef)
     }
-    
 }
 
 #endif

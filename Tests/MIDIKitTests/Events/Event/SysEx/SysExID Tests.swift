@@ -9,9 +9,9 @@ import XCTest
 import MIDIKit
 
 final class SysExIDTests: XCTestCase {
+    // swiftformat:options --wrapcollections preserve
     
     func testInit_SysEx7_OneByte() {
-        
         // valid conditions
         
         // min/max valid
@@ -49,11 +49,9 @@ final class SysExIDTests: XCTestCase {
         XCTAssertNil(
             MIDI.Event.SysExID(sysEx7RawBytes: [0xFF])
         )
-        
     }
     
     func testInit_SysEx7_ThreeByte() {
-        
         // valid conditions
         
         // min/max valid
@@ -78,11 +76,9 @@ final class SysExIDTests: XCTestCase {
         XCTAssertNil(
             MIDI.Event.SysExID(sysEx7RawBytes: [0x00, 0x80, 0x80])
         )
-        
     }
     
     func testInit_SysEx8_OneByte() {
-        
         // valid conditions
         
         // min/max valid
@@ -120,11 +116,9 @@ final class SysExIDTests: XCTestCase {
         XCTAssertNil(
             MIDI.Event.SysExID(sysEx8RawBytes: [0x00, 0xFF])
         )
-        
     }
     
     func testInit_SysEx8_ThreeByte() {
-        
         // valid conditions
         
         // min/max valid
@@ -143,11 +137,9 @@ final class SysExIDTests: XCTestCase {
         XCTAssertNil(
             MIDI.Event.SysExID(sysEx8RawBytes: [0x80, 0x80])
         )
-        
     }
     
     func testManufacturer_sysEx7RawBytes() {
-        
         XCTAssertEqual(
             MIDI.Event.SysExID.manufacturer(.oneByte(0x01)).sysEx7RawBytes(),
             [0x01]
@@ -159,14 +151,13 @@ final class SysExIDTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            MIDI.Event.SysExID.manufacturer(.threeByte(byte2: 0x7F, byte3: 0x7F)).sysEx7RawBytes(),
+            MIDI.Event.SysExID.manufacturer(.threeByte(byte2: 0x7F, byte3: 0x7F))
+                .sysEx7RawBytes(),
             [0x00, 0x7F, 0x7F]
         )
-        
     }
     
     func testManufacturer_sysEx8RawBytes() {
-        
         XCTAssertEqual(
             MIDI.Event.SysExID.manufacturer(.oneByte(0x01)).sysEx8RawBytes(),
             [0x00, 0x01]
@@ -178,14 +169,13 @@ final class SysExIDTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            MIDI.Event.SysExID.manufacturer(.threeByte(byte2: 0x7F, byte3: 0x7F)).sysEx8RawBytes(),
+            MIDI.Event.SysExID.manufacturer(.threeByte(byte2: 0x7F, byte3: 0x7F))
+                .sysEx8RawBytes(),
             [0xFF, 0x7F]
         )
-        
     }
     
     func testUniversal_sysEx7RawBytes() {
-        
         XCTAssertEqual(
             MIDI.Event.SysExID.universal(.nonRealTime).sysEx7RawBytes(),
             [0x7E]
@@ -195,11 +185,9 @@ final class SysExIDTests: XCTestCase {
             MIDI.Event.SysExID.universal(.realTime).sysEx7RawBytes(),
             [0x7F]
         )
-        
     }
     
     func testUniversal_sysEx8RawBytes() {
-        
         XCTAssertEqual(
             MIDI.Event.SysExID.universal(.nonRealTime).sysEx8RawBytes(),
             [0x00, 0x7E]
@@ -209,9 +197,7 @@ final class SysExIDTests: XCTestCase {
             MIDI.Event.SysExID.universal(.realTime).sysEx8RawBytes(),
             [0x00, 0x7F]
         )
-        
     }
-    
 }
 
 #endif

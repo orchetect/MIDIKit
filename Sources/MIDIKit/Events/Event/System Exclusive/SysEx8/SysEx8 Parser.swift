@@ -6,7 +6,6 @@
 import Foundation
 
 extension MIDI.Event {
-    
     /// Parse a complete MIDI 2.0 System Exclusive 8 message (starting with the Stream ID byte until the end of the packet) and return a `.sysEx8()` or `.universalSysEx8()` case if successful.
     ///
     /// Valid rawBytes count is 1...14. (Must always contain a Stream ID, even if there are zero data bytes to follow)
@@ -17,7 +16,6 @@ extension MIDI.Event {
         rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0
     ) throws -> Self {
-        
         var readPos = rawBytes.startIndex
         
         func readPosAdvance(by: Int) throws {
@@ -54,7 +52,7 @@ extension MIDI.Event {
         let sysExID = SysExID(sysEx8RawBytes: [idByte1, idByte2])
         
         switch sysExID {
-        case .universal(let universalType):
+        case let .universal(universalType):
             try readPosAdvance(by: 1)
             guard let deviceID = MIDI.UInt7(exactly: rawBytes[readPos])
             else { throw ParseError.malformed }
@@ -68,7 +66,7 @@ extension MIDI.Event {
             else { throw ParseError.malformed }
             
             let data: [MIDI.Byte] = {
-                if nil != (try? readPosAdvance(by: 1)) {
+                if (try? readPosAdvance(by: 1)) != nil {
                     return readData()
                 } else {
                     return []
@@ -76,45 +74,46 @@ extension MIDI.Event {
             }()
             
             return .universalSysEx8(
-                .init(universalType: universalType,
-                      deviceID: deviceID,
-                      subID1: subID1,
-                      subID2: subID2,
-                      data: data,
-                      streamID: streamID,
-                      group: group)
+                .init(
+                    universalType: universalType,
+                    deviceID: deviceID,
+                    subID1: subID1,
+                    subID2: subID2,
+                    data: data,
+                    streamID: streamID,
+                    group: group
+                )
             )
             
-        case .manufacturer(let mfr):
+        case let .manufacturer(mfr):
             var data: [MIDI.Byte] = []
             
             let actualEndIndex = rawBytes.endIndex.advanced(by: -1)
             if readPos < actualEndIndex {
-                if nil != (try? readPosAdvance(by: 1)) {
+                if (try? readPosAdvance(by: 1)) != nil {
                     data = readData()
                 }
             }
             
             return .sysEx8(
-                .init(manufacturer: mfr,
-                      data: data,
-                      streamID: streamID,
-                      group: group)
+                .init(
+                    manufacturer: mfr,
+                    data: data,
+                    streamID: streamID,
+                    group: group
+                )
             )
             
         default:
             // malformed
             throw ParseError.malformed
         }
-        
     }
-    
 }
 
 // MARK: - API Transition (release 0.4.12)
 
 extension MIDI.Event {
-    
     /// Parse a complete MIDI 2.0 System Exclusive 8 message (starting with the Stream ID byte until the end of the packet) and return a `.sysEx8()` or `.universalSysEx8()` case if successful.
     ///
     /// Valid rawBytes count is 1...14. (Must always contain a Stream ID, even if there are zero data bytes to follow)
@@ -126,12 +125,11 @@ extension MIDI.Event {
         sysEx8RawBytes rawBytes: [MIDI.Byte],
         group: MIDI.UInt4 = 0
     ) throws {
-        
-        let sysEx = try Self.sysEx8(rawBytes: rawBytes,
-                                    group: group)
+        let sysEx = try Self.sysEx8(
+            rawBytes: rawBytes,
+            group: group
+        )
         
         self = sysEx
-        
     }
-    
 }

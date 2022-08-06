@@ -11,10 +11,8 @@ import Foundation
 // MARK: - Property
 
 extension MIDI.IO.Object {
-    
     /// MIDI object property keys, analogous to Core MIDI property keys.
     public enum Property: CaseIterable, Hashable {
-        
         // MARK: Identification
         case name
         case model
@@ -89,20 +87,15 @@ extension MIDI.IO.Object {
         // MARK: Program Changes
         case receivesProgramChanges
         case transmitsProgramChanges
-        
     }
-    
 }
 
 // MARK: - Property Keys
 
 extension MIDI.IO.Object.Property {
-    
     /// Returns the Core MIDI `CFString` property name constant.
     public var coreMIDICFString: CFString {
-        
         switch self {
-            
         // MARK: Identification
         case .name: return kMIDIPropertyName
         case .model: return kMIDIPropertyModel
@@ -188,28 +181,26 @@ extension MIDI.IO.Object.Property {
         // MARK: Program Changes
         case .receivesProgramChanges: return kMIDIPropertyReceivesProgramChanges
         case .transmitsProgramChanges: return kMIDIPropertyTransmitsProgramChanges
-            
         }
-        
     }
     
     /// Returns the Core MIDI `CFString` property name constant.
     public init?(_ coreMIDICFString: CFString) {
-        
         if #available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *),
-           coreMIDICFString == kMIDIPropertyNameConfigurationDictionary {
+           coreMIDICFString == kMIDIPropertyNameConfigurationDictionary
+        {
             self = .nameConfigurationDictionary
             return
         }
         
         if #available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *),
-           coreMIDICFString == kMIDIPropertyProtocolID {
+           coreMIDICFString == kMIDIPropertyProtocolID
+        {
             self = .protocolID
             return
         }
         
         switch coreMIDICFString {
-            
         // MARK: Identification
         case kMIDIPropertyName: self = .name
         case kMIDIPropertyModel: self = .model
@@ -223,7 +214,7 @@ extension MIDI.IO.Object.Property {
         case kMIDIPropertySupportsShowControl: self = .supportsShowControl
             
         // MARK: Configuration
-        //case kMIDIPropertyNameConfigurationDictionary: self = .nameConfigurationDictionary // -- has OS requirements, handled separately
+        // case kMIDIPropertyNameConfigurationDictionary: self = .nameConfigurationDictionary // -- has OS requirements, handled separately
         case kMIDIPropertyMaxSysExSpeed: self = .maxSysExSpeed
         case kMIDIPropertyDriverDeviceEditorApp: self = .driverDeviceEditorApp
             
@@ -235,7 +226,7 @@ extension MIDI.IO.Object.Property {
         case kMIDIPropertyPanDisruptsStereo: self = .panDisruptsStereo
             
         // MARK: Protocols
-        //case kMIDIPropertyProtocolID: self = .protocolID // -- has OS requirements, handled separately
+        // case kMIDIPropertyProtocolID: self = .protocolID // -- has OS requirements, handled separately
             
         // MARK: Timing
         case kMIDIPropertyTransmitsMTC: self = .transmitsMTC
@@ -288,20 +279,15 @@ extension MIDI.IO.Object.Property {
         default:
             return nil
         }
-        
     }
-    
 }
 
 // MARK: - Relevant Objects
 
 extension MIDI.IO.Object.Property {
-    
     /// Internal: returns relevant `MIDI.IO.ObjectType` object types associated with the property.
     internal var relevantObjects: Set<MIDI.IO.ObjectType> {
-        
         switch self {
-        
         // MARK: Identification
         case .name: return [.device, .entity, .inputEndpoint, .outputEndpoint]
         case .model: return [.device, .inputEndpoint, .outputEndpoint]
@@ -334,7 +320,10 @@ extension MIDI.IO.Object.Property {
         case .receivesMTC: return [.device, .entity, .inputEndpoint, .outputEndpoint]
         case .transmitsClock: return [.device, .entity, .inputEndpoint, .outputEndpoint]
         case .receivesClock: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .advanceScheduleTimeMuSec: return [.device, .entity] // + .inputEndpoint, .outputEndpoint?
+        case .advanceScheduleTimeMuSec: return [
+                .device,
+                .entity
+            ] // + .inputEndpoint, .outputEndpoint?
         
         // MARK: Roles
         case .isMixer: return [.device, .entity]
@@ -376,25 +365,18 @@ extension MIDI.IO.Object.Property {
         // MARK: Program Changes
         case .receivesProgramChanges: return [.device, .entity]
         case .transmitsProgramChanges: return [.device, .entity]
-            
         }
-        
     }
-    
 }
 
 extension MIDI.IO.ObjectType {
-    
     /// Internal: returns relevant `MIDI.IO.Object.Property`s associated with the object type.
     internal var relevantProperties: [MIDI.IO.Object.Property] {
-        
         MIDI.IO.Object.Property.allCases
             .filter {
                 $0.relevantObjects.contains(self)
             }
-        
     }
-    
 }
 
 #endif

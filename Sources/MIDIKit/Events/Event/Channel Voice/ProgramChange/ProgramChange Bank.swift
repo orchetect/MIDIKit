@@ -4,7 +4,6 @@
 //
 
 extension MIDI.Event.ProgramChange {
-    
     /// Bank Select
     /// (MIDI 1.0 / MIDI 2.0)
     ///
@@ -27,7 +26,6 @@ extension MIDI.Event.ProgramChange {
     ///
     /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a 14-bit number (0...16383). They correlate exactly to MIDI 1.0 bank numbers.
     public enum Bank: Equatable, Hashable {
-        
         /// No Bank Select operation will occur; only a Program Change event will happen.
         /// (MIDI 1.0 / 2.0)
         case noBankSelect
@@ -52,16 +50,13 @@ extension MIDI.Event.ProgramChange {
         ///
         /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a 14-bit number (0...16383). They correlate exactly to MIDI 1.0 bank numbers.
         case bankSelect(MIDI.UInt14)
-        
     }
-    
 }
 
 extension MIDI.Event.ProgramChange.Bank {
-    
     /// Transmit a Bank Select operation prior to Program Change event.
     /// (MIDI 1.0 / 2.0)
-    /// 
+    ///
     /// **MIDI 1.0**
     ///
     /// For MIDI 1.0, this results in 3 messages being transmitted in this order:
@@ -78,13 +73,12 @@ extension MIDI.Event.ProgramChange.Bank {
     /// For MIDI 2.0, Program Change and Bank Select information is all contained within a single UMP (Universal MIDI Packet).
     ///
     /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a 14-bit number (0...16383). They correlate exactly to MIDI 1.0 bank numbers.
-    public static func bankSelect(msb: MIDI.UInt7,
-                                  lsb: MIDI.UInt7) -> Self {
-        
+    public static func bankSelect(
+        msb: MIDI.UInt7,
+        lsb: MIDI.UInt7
+    ) -> Self {
         let uInt7Pair = MIDI.UInt7.Pair(msb: msb, lsb: lsb)
         
         return .bankSelect(MIDI.UInt14(uInt7Pair: uInt7Pair))
-        
     }
-    
 }

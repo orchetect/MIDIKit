@@ -9,18 +9,20 @@ import MIDIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
     var window: UIWindow?
     
-    let midiManager = MIDI.IO.Manager(clientName: "TestAppMIDIManager",
-                                      model: "TestApp",
-                                      manufacturer: "MyCompany")
+    let midiManager = MIDI.IO.Manager(
+        clientName: "TestAppMIDIManager",
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
     
     let virtualOutputName = "TestApp Output"
     
-    func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
         do {
             print("Starting MIDI services.")
             try midiManager.start()
@@ -40,43 +42,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         return true
-        
     }
     
-    @IBAction func sendNoteOn(_ sender: Any) {
-        
+    @IBAction
+    func sendNoteOn(_ sender: Any) {
         guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
         
         try? output.send(
-            event: .noteOn(60,
-                           velocity: .midi1(127),
-                           channel: 0)
+            event: .noteOn(
+                60,
+                velocity: .midi1(127),
+                channel: 0
+            )
         )
-        
     }
     
-    @IBAction func sendNoteOff(_ sender: Any) {
-        
+    @IBAction
+    func sendNoteOff(_ sender: Any) {
         guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
         
         try? output.send(
-            event: .noteOff(60,
-                            velocity: .midi1(0),
-                            channel: 0)
+            event: .noteOff(
+                60,
+                velocity: .midi1(0),
+                channel: 0
+            )
         )
-        
     }
     
-    @IBAction func sendCC1(_ sender: Any) {
-        
+    @IBAction
+    func sendCC1(_ sender: Any) {
         guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
         
         try? output.send(
-            event: .cc(1,
-                       value: .midi1(64),
-                       channel: 0)
+            event: .cc(
+                1,
+                value: .midi1(64),
+                channel: 0
+            )
         )
-        
     }
-    
 }

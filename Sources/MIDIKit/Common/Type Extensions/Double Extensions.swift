@@ -6,8 +6,7 @@
 import Foundation
 
 extension Double {
-    
-    /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint)
+    /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint).
     ///
     /// Example:
     ///
@@ -18,12 +17,10 @@ extension Double {
     ///     init(bipolarUnitInterval:  1.0) == 1.0
     @_disfavoredOverload
     public init<T: BinaryFloatingPoint>(bipolarUnitInterval: T) {
-        
         self = Double((bipolarUnitInterval / 2.0) + 0.5)
-        
     }
     
-    /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint)
+    /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint).
     ///
     /// Example:
     ///
@@ -33,16 +30,11 @@ extension Double {
     ///     init(bipolarUnitInterval:  0.5) == 0.75
     ///     init(bipolarUnitInterval:  1.0) == 1.0
     public init(bipolarUnitInterval: Double) {
-        
         self = (bipolarUnitInterval / 2.0) + 0.5
-        
     }
     
-    /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral midpoint)
+    /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral midpoint).
     public var bipolarUnitIntervalValue: Double {
-        
-        2 * (self.clamped(to: 0.0...1.0) - 0.5)
-        
+        2 * (clamped(to: 0.0 ... 1.0) - 0.5)
     }
-    
 }

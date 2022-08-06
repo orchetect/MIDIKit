@@ -12,11 +12,9 @@ import MIDIKit
 import CoreMIDI
 
 final class Manager_SystemNotification_Tests: XCTestCase {
-    
     fileprivate var notifications: [MIDI.IO.SystemNotification] = []
     
     func testSystemNotification_Add_Remove() throws {
-        
         // allow time for cleanup from previous unit tests, in case
         // MIDI endpoints are still being disposed of by Core MIDI
         wait(sec: 0.5)
@@ -27,7 +25,8 @@ final class Manager_SystemNotification_Tests: XCTestCase {
             manufacturer: "MIDIKit",
             notificationHandler: { notification, manager in
                 self.notifications.append(notification)
-            })
+            }
+        )
             
         // start midi client
         try manager.start()
@@ -51,10 +50,12 @@ final class Manager_SystemNotification_Tests: XCTestCase {
         var addedNotifFound = false
         notifications.forEach { notif in
             switch notif {
-            case .added(parent: _,
-                        child: let child):
+            case .added(
+                parent: _,
+                child: let child
+            ):
                 switch child {
-                case .outputEndpoint(let endpoint):
+                case let .outputEndpoint(endpoint):
                     if endpoint.name == "MIDIKit IO Tests Source 1" {
                         addedNotifFound = true
                     }
@@ -77,10 +78,12 @@ final class Manager_SystemNotification_Tests: XCTestCase {
         var removedNotifFound = false
         notifications.forEach { notif in
             switch notif {
-            case .removed(parent: _,
-                          child: let child):
+            case .removed(
+                parent: _,
+                child: let child
+            ):
                 switch child {
-                case .outputEndpoint(let endpoint):
+                case let .outputEndpoint(endpoint):
                     if endpoint.name == "MIDIKit IO Tests Source 1" {
                         removedNotifFound = true
                     }
@@ -91,9 +94,7 @@ final class Manager_SystemNotification_Tests: XCTestCase {
             }
         }
         XCTAssertTrue(removedNotifFound)
-        
     }
-    
 }
 
 #endif

@@ -9,9 +9,7 @@ import XCTest
 import MIDIKit
 
 final class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
-    
     func testMetadata() {
-        
         // isChannelVoice
         
         let events = kEvents.ChanVoice.oneOfEachEventType
@@ -57,52 +55,82 @@ final class MIDIEventFilter_ChannelVoice_Tests: XCTestCase {
             MIDI.Event.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofTypes: [])
         )
-        
     }
     
     // MARK: - Convenience Static Constructors
     
     func testOnlyCC_ControllerNumber() {
+        let events = [
+            kEvents.ChanVoice.cc,
+            kEvents.ChanVoice.noteOn
+        ]
         
-        let events = [kEvents.ChanVoice.cc,
-                      kEvents.ChanVoice.noteOn]
+        XCTAssertEqual(
+            events.filter(chanVoice: .onlyCC(2)),
+            []
+        )
+        XCTAssertEqual(
+            events.filter(chanVoice: .onlyCC(11)),
+            [kEvents.ChanVoice.cc]
+        )
         
-        XCTAssertEqual(events.filter(chanVoice: .onlyCC(2)),
-                       [])
-        XCTAssertEqual(events.filter(chanVoice: .onlyCC(11)),
-                       [kEvents.ChanVoice.cc])
+        XCTAssertEqual(
+            events.filter(chanVoice: .onlyCCs([2])),
+            []
+        )
+        XCTAssertEqual(
+            events.filter(chanVoice: .onlyCCs([11])),
+            [kEvents.ChanVoice.cc]
+        )
         
-        XCTAssertEqual(events.filter(chanVoice: .onlyCCs([2])),
-                       [])
-        XCTAssertEqual(events.filter(chanVoice: .onlyCCs([11])),
-                       [kEvents.ChanVoice.cc])
+        XCTAssertEqual(
+            events.filter(chanVoice: .keepCC(2)),
+            [kEvents.ChanVoice.noteOn]
+        )
+        XCTAssertEqual(
+            events.filter(chanVoice: .keepCC(11)),
+            [
+                kEvents.ChanVoice.cc,
+                kEvents.ChanVoice.noteOn
+            ]
+        )
         
-        XCTAssertEqual(events.filter(chanVoice: .keepCC(2)),
-                       [kEvents.ChanVoice.noteOn])
-        XCTAssertEqual(events.filter(chanVoice: .keepCC(11)),
-                       [kEvents.ChanVoice.cc,
-                        kEvents.ChanVoice.noteOn])
+        XCTAssertEqual(
+            events.filter(chanVoice: .keepCCs([2])),
+            [kEvents.ChanVoice.noteOn]
+        )
+        XCTAssertEqual(
+            events.filter(chanVoice: .keepCCs([11])),
+            [
+                kEvents.ChanVoice.cc,
+                kEvents.ChanVoice.noteOn
+            ]
+        )
         
-        XCTAssertEqual(events.filter(chanVoice: .keepCCs([2])),
-                       [kEvents.ChanVoice.noteOn])
-        XCTAssertEqual(events.filter(chanVoice: .keepCCs([11])),
-                       [kEvents.ChanVoice.cc,
-                        kEvents.ChanVoice.noteOn])
+        XCTAssertEqual(
+            events.filter(chanVoice: .dropCC(2)),
+            [
+                kEvents.ChanVoice.cc,
+                kEvents.ChanVoice.noteOn
+            ]
+        )
+        XCTAssertEqual(
+            events.filter(chanVoice: .dropCC(11)),
+            [kEvents.ChanVoice.noteOn]
+        )
         
-        XCTAssertEqual(events.filter(chanVoice: .dropCC(2)),
-                       [kEvents.ChanVoice.cc,
-                        kEvents.ChanVoice.noteOn])
-        XCTAssertEqual(events.filter(chanVoice: .dropCC(11)),
-                       [kEvents.ChanVoice.noteOn])
-        
-        XCTAssertEqual(events.filter(chanVoice: .dropCCs([2])),
-                       [kEvents.ChanVoice.cc,
-                        kEvents.ChanVoice.noteOn])
-        XCTAssertEqual(events.filter(chanVoice: .dropCCs([11])),
-                       [kEvents.ChanVoice.noteOn])
-        
+        XCTAssertEqual(
+            events.filter(chanVoice: .dropCCs([2])),
+            [
+                kEvents.ChanVoice.cc,
+                kEvents.ChanVoice.noteOn
+            ]
+        )
+        XCTAssertEqual(
+            events.filter(chanVoice: .dropCCs([11])),
+            [kEvents.ChanVoice.noteOn]
+        )
     }
-    
 }
 
 #endif

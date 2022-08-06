@@ -6,6 +6,4 @@
 
 import Cocoa
 
-class ViewController: NSViewController {
-    
-}
+class ViewController: NSViewController { }

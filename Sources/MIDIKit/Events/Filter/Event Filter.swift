@@ -4,10 +4,8 @@
 //
 
 extension MIDI.Event {
-    
     /// A MIDI event filter definition.
     public enum Filter {
-        
         case chanVoice(MIDI.Event.ChanVoiceTypes)
         case sysEx(MIDI.Event.SysExTypes)
         case sysCommon(MIDI.Event.SysCommonTypes)
@@ -16,40 +14,33 @@ extension MIDI.Event {
         
         case group(MIDI.UInt4)
         case groups([MIDI.UInt4])
-        
     }
-    
 }
 
 extension MIDI.Event.Filter {
-    
     /// Process MIDI events using this filter.
     public func apply(to events: [MIDI.Event]) -> [MIDI.Event] {
-        
         switch self {
-        case .chanVoice(let types):
+        case let .chanVoice(types):
             return events.filter(chanVoice: types)
             
-        case .sysEx(let types):
+        case let .sysEx(types):
             return events.filter(sysEx: types)
             
-        case .sysCommon(let types):
+        case let .sysCommon(types):
             return events.filter(sysCommon: types)
             
-        case .sysRealTime(let types):
+        case let .sysRealTime(types):
             return events.filter(sysRealTime: types)
             
-        case .utility(let types):
+        case let .utility(types):
             return events.filter(utility: types)
             
-        case .group(let group):
+        case let .group(group):
             return events.filter(group: group)
             
-        case .groups(let groups):
+        case let .groups(groups):
             return events.filter(groups: groups)
-            
         }
-        
     }
-    
 }

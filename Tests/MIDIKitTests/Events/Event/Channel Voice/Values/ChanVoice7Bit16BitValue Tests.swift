@@ -9,44 +9,40 @@ import XCTest
 import MIDIKit
 
 final class ChanVoice7Bit16BitValueTests: XCTestCase {
+    // swiftformat:options --wrapcollections preserve
+    // swiftformat:disable spaceInsideParens spaceInsideBrackets
+    // swiftformat:options --maxwidth none
     
     typealias Value = MIDI.Event.ChanVoice7Bit16BitValue
     
     func testEquatable_unitInterval() {
-        
         XCTAssert(Value.unitInterval(0.00) == Value.unitInterval(0.00)) // min
         XCTAssert(Value.unitInterval(0.25) == Value.unitInterval(0.25))
         XCTAssert(Value.unitInterval(0.50) == Value.unitInterval(0.50)) // midpoint
         XCTAssert(Value.unitInterval(0.75) == Value.unitInterval(0.75))
         XCTAssert(Value.unitInterval(1.00) == Value.unitInterval(1.00)) // max
         XCTAssert(Value.unitInterval(0.00) != Value.unitInterval(0.50))
-        
     }
     
     func testEquatable_midi1() {
-        
         XCTAssert(Value.midi1(  0) == Value.midi1(  0)) // min
         XCTAssert(Value.midi1( 32) == Value.midi1( 32))
         XCTAssert(Value.midi1( 64) == Value.midi1( 64)) // midpoint
         XCTAssert(Value.midi1( 96) == Value.midi1( 96))
         XCTAssert(Value.midi1(127) == Value.midi1(127)) // max
         XCTAssert(Value.midi1(  0) != Value.midi1( 64))
-        
     }
     
     func testEquatable_midi2() {
-        
         XCTAssert(Value.midi2(0x0000) == Value.midi2(0x0000)) // min
         XCTAssert(Value.midi2(0x4000) == Value.midi2(0x4000))
         XCTAssert(Value.midi2(0x8000) == Value.midi2(0x8000)) // midpoint
         XCTAssert(Value.midi2(0xC000) == Value.midi2(0xC000))
         XCTAssert(Value.midi2(0xFFFF) == Value.midi2(0xFFFF)) // max
         XCTAssert(Value.midi2(0x0000) != Value.midi2(0x8000))
-        
     }
     
     func testEquatable_unitInterval_Converted() {
-        
         // unitInterval <--> midi1
         XCTAssert(Value.unitInterval(0.00) == Value.midi1(  0)) // min
         XCTAssert(Value.unitInterval(0.25) == Value.midi1( 32))
@@ -70,11 +66,9 @@ final class ChanVoice7Bit16BitValueTests: XCTestCase {
         XCTAssert(Value.midi1( 96) == Value.midi2(0xC104))
         XCTAssert(Value.midi1(127) == Value.midi2(0xFFFF)) // max
         XCTAssert(Value.midi1(  0) != Value.midi2(0x8000))
-        
     }
     
     func testUnitInterval_Values() {
-        
         XCTAssertEqual(Value.unitInterval(0.00).unitIntervalValue, 0.00) // min
         XCTAssertEqual(Value.unitInterval(0.25).unitIntervalValue, 0.25)
         XCTAssertEqual(Value.unitInterval(0.50).unitIntervalValue, 0.50) // midpoint
@@ -92,11 +86,9 @@ final class ChanVoice7Bit16BitValueTests: XCTestCase {
         XCTAssertEqual(Value.unitInterval(0.50).midi2Value, 0x8000) // midpoint
         XCTAssertEqual(Value.unitInterval(0.75).midi2Value, 0xBFFF)
         XCTAssertEqual(Value.unitInterval(1.00).midi2Value, 0xFFFF) // max
-        
     }
     
     func testMIDI1_Values() {
-        
         XCTAssertEqual(Value.midi1(  0).unitIntervalValue, 0.00) // min
         XCTAssertEqual(Value.midi1( 32).unitIntervalValue, 0.25)
         XCTAssertEqual(Value.midi1( 64).unitIntervalValue, 0.50) // midpoint
@@ -114,11 +106,9 @@ final class ChanVoice7Bit16BitValueTests: XCTestCase {
         XCTAssertEqual(Value.midi1( 64).midi2Value, 0x8000) // midpoint
         XCTAssertEqual(Value.midi1( 96).midi2Value, 0xC104)
         XCTAssertEqual(Value.midi1(127).midi2Value, 0xFFFF) // max
-        
     }
     
     func testMIDI2_Values() {
-        
         XCTAssertEqual(Value.midi2(0x0000).unitIntervalValue, 0.00) // min
         XCTAssertEqual(Value.midi2(0x4000).unitIntervalValue, 0.25)
         XCTAssertEqual(Value.midi2(0x8000).unitIntervalValue, 0.50) // midpoint
@@ -136,9 +126,7 @@ final class ChanVoice7Bit16BitValueTests: XCTestCase {
         XCTAssertEqual(Value.midi2(0x8000).midi2Value, 0x8000) // midpoint
         XCTAssertEqual(Value.midi2(0xC000).midi2Value, 0xC000)
         XCTAssertEqual(Value.midi2(0xFFFF).midi2Value, 0xFFFF) // max
-        
     }
-    
 }
 
 #endif

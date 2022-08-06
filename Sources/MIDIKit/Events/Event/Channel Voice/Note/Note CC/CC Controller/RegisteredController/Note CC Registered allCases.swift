@@ -4,11 +4,10 @@
 //
 
 extension MIDI.Event.Note.CC.Controller.Registered: CaseIterable {
-    
     public typealias AllCases = [Self]
     
+    // this looks scary but its heart is in the right place
     public static var allCases: [Self] = [
-        
         .modWheel,                      //   1
         .breath,                        //   2
         .pitch7_25,                     //   3
@@ -264,7 +263,5 @@ extension MIDI.Event.Note.CC.Controller.Registered: CaseIterable {
         .undefined(.cc253),             // 253
         .undefined(.cc254),             // 254
         .undefined(.cc255)              // 255
-        
     ]
-    
 }

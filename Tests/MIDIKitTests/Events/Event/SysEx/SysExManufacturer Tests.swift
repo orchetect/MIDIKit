@@ -9,9 +9,7 @@ import XCTest
 import MIDIKit
 
 final class SysExManufacturerTests: XCTestCase {
-    
     func testOneByte() {
-        
         // valid conditions
         
         // min/max valid
@@ -36,11 +34,9 @@ final class SysExManufacturerTests: XCTestCase {
         XCTAssertFalse(
             MIDI.Event.SysExManufacturer.oneByte(0x7F).isValid
         )
-        
     }
     
     func testThreeByte() {
-        
         // valid conditions
         
         // min/max valid
@@ -56,11 +52,9 @@ final class SysExManufacturerTests: XCTestCase {
         XCTAssertTrue(
             MIDI.Event.SysExManufacturer.threeByte(byte2: 0x7F, byte3: 0x7F).isValid
         )
-        
     }
     
     func testName() {
-        
         // spot-check: manufacturer name lookup
         // test first and last manufacturer in each section
         
@@ -122,9 +116,7 @@ final class SysExManufacturerTests: XCTestCase {
             MIDI.Event.SysExManufacturer.threeByte(byte2: 0x40, byte3: 0x07).name,
             "Slik Corporation"
         )
-        
     }
-    
 }
 
 #endif

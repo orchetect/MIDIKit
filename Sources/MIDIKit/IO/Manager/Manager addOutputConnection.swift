@@ -9,7 +9,6 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO.Manager {
-    
     /// Adds a new managed connected output to the `managedOutputConnections` dictionary of the `Manager`.
     ///
     /// This connects to one or more inputs in the system and outputs MIDI events to them. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
@@ -27,9 +26,7 @@ extension MIDI.IO.Manager {
         mode: MIDI.IO.ConnectionMode = .definedEndpoints,
         filter: MIDI.IO.EndpointFilter = .default()
     ) throws {
-        
         try eventQueue.sync {
-            
             let newCS = MIDI.IO.OutputConnection(
                 criteria: toInputs,
                 mode: mode,
@@ -44,9 +41,7 @@ extension MIDI.IO.Manager {
             
             try newCS.setupOutput(in: self)
             try newCS.resolveEndpoints(in: self)
-            
         }
-        
     }
     
     /// Adds a new managed connected output to the `managedOutputConnections` dictionary of the `Manager`.
@@ -66,14 +61,12 @@ extension MIDI.IO.Manager {
         mode: MIDI.IO.ConnectionMode = .definedEndpoints,
         filter: MIDI.IO.EndpointFilter = .default()
     ) throws {
-        
         try addOutputConnection(
             toInputs: Set(toInputs),
             tag: tag,
             mode: mode,
             filter: filter
         )
-        
     }
     
     /// Adds a new managed connected output to the `managedOutputConnections` dictionary of the `Manager`.
@@ -94,16 +87,13 @@ extension MIDI.IO.Manager {
         mode: MIDI.IO.ConnectionMode = .definedEndpoints,
         filter: MIDI.IO.EndpointFilter = .default()
     ) throws {
-        
         try addOutputConnection(
             toInputs: toInputs.asCriteria(),
             tag: tag,
             mode: mode,
             filter: filter
         )
-        
     }
-    
 }
 
 #endif

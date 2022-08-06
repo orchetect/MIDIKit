@@ -12,7 +12,6 @@ import MIDIKit
 import CoreMIDI
 
 final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
-	
     override func setUp() {
         wait(sec: 0.2)
     }
@@ -20,15 +19,16 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
     @MIDI.Atomic private var connEvents: [MIDI.Event] = []
     
     /// Test initializing an InputConnection, adding/removing outputs, and receiving MIDI events.
-	func testInputConnection() throws {
-		
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+    func testInputConnection() throws {
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
-		wait(sec: 0.1)
+        wait(sec: 0.1)
 		
         connEvents = []
         
@@ -79,7 +79,11 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         // connect to 2nd virtual output
         conn.add(outputs: [output2.endpoint])
-        wait(for: conn.coreMIDIOutputEndpointRefs, equals: [output1Ref, output2Ref], timeout: 1.0)
+        wait(
+            for: conn.coreMIDIOutputEndpointRefs,
+            equals: [output1Ref, output2Ref],
+            timeout: 1.0
+        )
         XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID), .uniqueID(output2ID)])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref, output2Ref])
         XCTAssertEqual(Set(conn.endpoints), [output1.endpoint, output2.endpoint])
@@ -124,15 +128,15 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         wait(sec: 0.2) // wait a bit in case an event is sent
         XCTAssertEqual(connEvents, [])
         connEvents = []
-        
-	}
+    }
     
     /// Test to ensure a new output appearing in the system gets added to the connection. (Allowing manager-owned virtual outputs to be added)
     func testInputConnection_allEndpoints() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -181,15 +185,15 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         try output1.send(event: .start())
         wait(for: connEvents, equals: [.start()], timeout: 0.5)
         connEvents = []
-        
     }
     
     /// Test to ensure creating a new manager-owned virtual output does not get added to the connection if `filter.owned == true`
     func testInputConnection_allEndpoints_filterOwned() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -239,15 +243,15 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         wait(sec: 0.2) // wait a bit in case an event is sent
         XCTAssertEqual(connEvents, [])
         connEvents = []
-        
     }
     
     /// Test to ensure virtual output(s) owned by the manager do not get added to the connection when creating the connection.
     func testInputConnection_filterOwned_onInit() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -274,8 +278,10 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
             toOutputs: [output1.endpoint],
             tag: connTag,
             mode: .allEndpoints,
-            filter: .init(owned: true,
-                          criteria: manager.endpoints.outputsUnowned),
+            filter: .init(
+                owned: true,
+                criteria: manager.endpoints.outputsUnowned
+            ),
             receiveHandler: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
@@ -303,16 +309,16 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
         XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
-        
     }
     
     /// Test to ensure virtual output(s) owned by the manager
     /// are removed from the connection when updating mode and filter.
     func testInputConnection_filterOwned_afterInit() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -370,15 +376,15 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
         XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
-        
     }
     
     /// Test to ensure filter works.
     func testInputConnection_filterEndpoints_onInit() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -405,8 +411,10 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
             toOutputs: [output1.endpoint],
             tag: connTag,
             mode: .allEndpoints,
-            filter: .init(owned: false,
-                          criteria: [.uniqueID(output1ID)]),
+            filter: .init(
+                owned: false,
+                criteria: [.uniqueID(output1ID)]
+            ),
             receiveHandler: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
@@ -434,15 +442,15 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
         XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
-        
     }
     
     /// Test to ensure filter works after creating a connection.
     func testInputConnection_filterEndpoints_afterInit() throws {
-        
-        let manager = MIDI.IO.Manager(clientName: UUID().uuidString,
-                                      model: "MIDIKit123",
-                                      manufacturer: "MIDIKit")
+        let manager = MIDI.IO.Manager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
         
         // start midi client
         try manager.start()
@@ -479,8 +487,10 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         
         // set mode and filter
         conn.mode = .allEndpoints
-        conn.filter = .init(owned: false,
-                            criteria: [.uniqueID(output1ID)])
+        conn.filter = .init(
+            owned: false,
+            criteria: [.uniqueID(output1ID)]
+        )
         wait(sec: 0.5) // some time for connection to update
         
         // assert output1 is not present in connection targets
@@ -501,9 +511,7 @@ final class InputsAndOutputs_InputConnection_Tests: XCTestCase {
         XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
         XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
-        
     }
-
 }
 
 #endif

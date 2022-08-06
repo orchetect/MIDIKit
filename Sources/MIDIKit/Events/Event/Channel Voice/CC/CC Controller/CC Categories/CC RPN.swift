@@ -4,7 +4,6 @@
 //
 
 extension MIDI.Event.CC.Controller {
-    
     /// Cases describing MIDI CC RPNs (Registered Parameter Numbers)
     ///
     /// - remark: As per MIDI 1.0 spec:
@@ -23,12 +22,13 @@ extension MIDI.Event.CC.Controller {
     ///
     /// - note: See Recommended Practise RP-018 of the MIDI 1.0 Spec Addenda.
     public enum RPN: Equatable, Hashable {
-        
         // MIDI Spec
         
         /// Pitch Bend Sensitivity
-        case pitchBendSensitivity(semitones: MIDI.UInt7,
-                                  cents: MIDI.UInt7)
+        case pitchBendSensitivity(
+            semitones: MIDI.UInt7,
+            cents: MIDI.UInt7
+        )
         
         /// Channel Fine Tuning
         /// (formerly Fine Tuning - see MMA RP-022)
@@ -61,13 +61,17 @@ extension MIDI.Event.CC.Controller {
         ///
         /// For GM2, defined in GM2 Specification.
         /// For other systems, defined by manufacturer.
-        case modulationDepthRange(dataEntryMSB: MIDI.UInt7?,
-                                  dataEntryLSB: MIDI.UInt7?)
+        case modulationDepthRange(
+            dataEntryMSB: MIDI.UInt7?,
+            dataEntryLSB: MIDI.UInt7?
+        )
         
         /// MPE Configuration Message
         /// (see MPE Specification)
-        case mpeConfigurationMessage(dataEntryMSB: MIDI.UInt7?,
-                                     dataEntryLSB: MIDI.UInt7?)
+        case mpeConfigurationMessage(
+            dataEntryMSB: MIDI.UInt7?,
+            dataEntryLSB: MIDI.UInt7?
+        )
         
         /// Null Function Number for RPN/NRPN
         ///
@@ -77,67 +81,82 @@ extension MIDI.Event.CC.Controller {
         /// Form an RPN message from a raw parameter number byte pair.
         ///
         /// Note that RPNs are defined by the MIDI Association and use of undefined RPNs is discouraged. For using custom parameters, use NRPNs instead (Non-Registered Parameter Number).
-        case raw(parameter: MIDI.UInt7.Pair,
-                 dataEntryMSB: MIDI.UInt7?,
-                 dataEntryLSB: MIDI.UInt7?)
+        case raw(
+            parameter: MIDI.UInt7.Pair,
+            dataEntryMSB: MIDI.UInt7?,
+            dataEntryLSB: MIDI.UInt7?
+        )
         
         // 3D Sound Controllers
         
         /// 3D Sound Controller: Azimuth Angle
         /// (See MMA RP-049)
-        case threeDimensionalAzimuthAngle(dataEntryMSB: MIDI.UInt7,
-                                          dataEntryLSB: MIDI.UInt7)
+        case threeDimensionalAzimuthAngle(
+            dataEntryMSB: MIDI.UInt7,
+            dataEntryLSB: MIDI.UInt7
+        )
         
         /// 3D Sound Controller: Elevation Angle
         /// (See MMA RP-049)
-        case threeDimensionalElevationAngle(dataEntryMSB: MIDI.UInt7,
-                                            dataEntryLSB: MIDI.UInt7)
+        case threeDimensionalElevationAngle(
+            dataEntryMSB: MIDI.UInt7,
+            dataEntryLSB: MIDI.UInt7
+        )
         
         /// 3D Sound Controller: Gain
         /// (See MMA RP-049)
-        case threeDimensionalGain(dataEntryMSB: MIDI.UInt7,
-                                  dataEntryLSB: MIDI.UInt7)
+        case threeDimensionalGain(
+            dataEntryMSB: MIDI.UInt7,
+            dataEntryLSB: MIDI.UInt7
+        )
         
         /// 3D Sound Controller: Distance Ratio
         /// (See MMA RP-049)
-        case threeDimensionalDistanceRatio(dataEntryMSB: MIDI.UInt7,
-                                           dataEntryLSB: MIDI.UInt7)
+        case threeDimensionalDistanceRatio(
+            dataEntryMSB: MIDI.UInt7,
+            dataEntryLSB: MIDI.UInt7
+        )
         
         /// 3D Sound Controller: Maximum Distance
         /// (See MMA RP-049)
-        case threeDimensionalMaximumDistance(dataEntryMSB: MIDI.UInt7,
-                                             dataEntryLSB: MIDI.UInt7)
+        case threeDimensionalMaximumDistance(
+            dataEntryMSB: MIDI.UInt7,
+            dataEntryLSB: MIDI.UInt7
+        )
         
         /// 3D Sound Controller: Gain at Maximum Distance
         /// (See MMA RP-049)
-        case threeDimensionalGainAtMaximumDistance(dataEntryMSB: MIDI.UInt7,
-                                                   dataEntryLSB: MIDI.UInt7)
+        case threeDimensionalGainAtMaximumDistance(
+            dataEntryMSB: MIDI.UInt7,
+            dataEntryLSB: MIDI.UInt7
+        )
         
         /// 3D Sound Controller: Reference Distance Ratio
         /// (See MMA RP-049)
-        case threeDimensionalReferenceDistanceRatio(dataEntryMSB: MIDI.UInt7,
-                                                    dataEntryLSB: MIDI.UInt7)
+        case threeDimensionalReferenceDistanceRatio(
+            dataEntryMSB: MIDI.UInt7,
+            dataEntryLSB: MIDI.UInt7
+        )
         
         /// 3D Sound Controller: Pan Spread Angle
         /// (See MMA RP-049)
-        case threeDimensionalPanSpreadAngle(dataEntryMSB: MIDI.UInt7,
-                                            dataEntryLSB: MIDI.UInt7)
+        case threeDimensionalPanSpreadAngle(
+            dataEntryMSB: MIDI.UInt7,
+            dataEntryLSB: MIDI.UInt7
+        )
         
         /// 3D Sound Controller: Roll Angle
         /// (See MMA RP-049)
-        case threeDimensionalRollAngle(dataEntryMSB: MIDI.UInt7,
-                                       dataEntryLSB: MIDI.UInt7)
-        
-        
+        case threeDimensionalRollAngle(
+            dataEntryMSB: MIDI.UInt7,
+            dataEntryLSB: MIDI.UInt7
+        )
     }
-    
 }
 
 extension MIDI.Event.CC.Controller.RPN {
-    
     /// Returns the parameter number byte pair.
     public var parameter: MIDI.UInt7.Pair {
-        
         switch self {
         // MIDI Spec
             
@@ -165,9 +184,11 @@ extension MIDI.Event.CC.Controller.RPN {
         case .null:
             return .init(msb: 0x7F, lsb: 0x7F)
             
-        case .raw(parameter: let parameter,
-                  dataEntryMSB: _,
-                  dataEntryLSB: _):
+        case .raw(
+            parameter: let parameter,
+            dataEntryMSB: _,
+            dataEntryLSB: _
+        ):
             return parameter
             
         // 3D Sound Controllers
@@ -198,163 +219,226 @@ extension MIDI.Event.CC.Controller.RPN {
             
         case .threeDimensionalRollAngle:
             return .init(msb: 0x3D, lsb: 0x08)
-            
         }
-        
     }
     
     /// Returns the data entry bytes, if present.
-    public var dataEntryBytes: (msb: MIDI.UInt7?,
-                                lsb: MIDI.UInt7?) {
-        
+    public var dataEntryBytes: (
+        msb: MIDI.UInt7?,
+        lsb: MIDI.UInt7?
+    ) {
         switch self {
         // MIDI Spec
             
-        case .pitchBendSensitivity(semitones: let semitones,
-                                   cents: let cents):
-            return (msb: semitones,
-                    lsb: cents)
+        case let .pitchBendSensitivity(
+            semitones: semitones,
+            cents: cents
+        ):
+            return (
+                msb: semitones,
+                lsb: cents
+            )
             
-        case .channelFineTuning(let value):
+        case let .channelFineTuning(value):
             let uInt7Pair = value.midiUInt7Pair
-            return (msb: uInt7Pair.msb,
-                    lsb: uInt7Pair.lsb)
+            return (
+                msb: uInt7Pair.msb,
+                lsb: uInt7Pair.lsb
+            )
             
-        case .channelCoarseTuning(let value):
-            return (msb: value,
-                    lsb: nil)
+        case let .channelCoarseTuning(value):
+            return (
+                msb: value,
+                lsb: nil
+            )
             
-        case .tuningProgramChange(number: let number):
-            return (msb: number,
-                    lsb: nil)
+        case let .tuningProgramChange(number: number):
+            return (
+                msb: number,
+                lsb: nil
+            )
             
-        case .tuningBankSelect(number: let number):
-            return (msb: number,
-                    lsb: nil)
+        case let .tuningBankSelect(number: number):
+            return (
+                msb: number,
+                lsb: nil
+            )
             
-        case .modulationDepthRange(dataEntryMSB: let dataEntryMSB,
-                                   dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case let .modulationDepthRange(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
-        case .mpeConfigurationMessage(dataEntryMSB: let dataEntryMSB,
-                                      dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case let .mpeConfigurationMessage(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
         case .null:
-            return (msb: nil,
-                    lsb: nil)
+            return (
+                msb: nil,
+                lsb: nil
+            )
             
-        case .raw(parameter: _,
-                  dataEntryMSB: let dataEntryMSB,
-                  dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case .raw(
+            parameter: _,
+            dataEntryMSB: let dataEntryMSB,
+            dataEntryLSB: let dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
         // 3D Sound Controllers
             
-        case .threeDimensionalAzimuthAngle(dataEntryMSB: let dataEntryMSB,
-                                           dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case let .threeDimensionalAzimuthAngle(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
-        case .threeDimensionalElevationAngle(dataEntryMSB: let dataEntryMSB,
-                                             dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case let .threeDimensionalElevationAngle(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
-        case .threeDimensionalGain(dataEntryMSB: let dataEntryMSB,
-                                   dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case let .threeDimensionalGain(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
-        case .threeDimensionalDistanceRatio(dataEntryMSB: let dataEntryMSB,
-                                            dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case let .threeDimensionalDistanceRatio(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
-        case .threeDimensionalMaximumDistance(dataEntryMSB: let dataEntryMSB,
-                                              dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case let .threeDimensionalMaximumDistance(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
-        case .threeDimensionalGainAtMaximumDistance(dataEntryMSB: let dataEntryMSB,
-                                                    dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case let .threeDimensionalGainAtMaximumDistance(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
-        case .threeDimensionalReferenceDistanceRatio(dataEntryMSB: let dataEntryMSB,
-                                                     dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case let .threeDimensionalReferenceDistanceRatio(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
-        case .threeDimensionalPanSpreadAngle(dataEntryMSB: let dataEntryMSB,
-                                             dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
+        case let .threeDimensionalPanSpreadAngle(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
             
-        case .threeDimensionalRollAngle(dataEntryMSB: let dataEntryMSB,
-                                        dataEntryLSB: let dataEntryLSB):
-            return (msb: dataEntryMSB,
-                    lsb: dataEntryLSB)
-            
+        case let .threeDimensionalRollAngle(
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        ):
+            return (
+                msb: dataEntryMSB,
+                lsb: dataEntryLSB
+            )
         }
-        
     }
-    
 }
 
 extension MIDI.Event.CC.Controller.RPN {
-    
     /// Returns the RPN message consisting of 2-4 MIDI Events.
-    public func events(channel: MIDI.UInt4,
-                       group: MIDI.UInt4 = 0) -> [MIDI.Event] {
-        
+    public func events(
+        channel: MIDI.UInt4,
+        group: MIDI.UInt4 = 0
+    ) -> [MIDI.Event] {
         var rpnEvents: [MIDI.Event] = [
-            .cc(.rpnMSB,
+            .cc(
+                .rpnMSB,
                 value: .midi1(parameter.msb),
                 channel: channel,
-                group: group),
-            
-            .cc(.rpnLSB,
+                group: group
+            ),
+            .cc(
+                .rpnLSB,
                 value: .midi1(parameter.lsb),
                 channel: channel,
-                group: group)
+                group: group
+            )
         ]
         
-        let dataEntryBytes = self.dataEntryBytes
+        let dataEntryBytes = dataEntryBytes
         
         if let dataEntryMSB = dataEntryBytes.msb {
-            rpnEvents.append(.cc(.dataEntry,
-                                 value: .midi1(dataEntryMSB),
-                                 channel: channel,
-                                 group: group))
+            rpnEvents.append(.cc(
+                .dataEntry,
+                value: .midi1(dataEntryMSB),
+                channel: channel,
+                group: group
+            ))
         }
         
         if let dataEntryLSB = dataEntryBytes.lsb {
-            rpnEvents.append(.cc(.lsb(for: .dataEntry),
-                                 value: .midi1(dataEntryLSB),
-                                 channel: channel,
-                                 group: group))
+            rpnEvents.append(.cc(
+                .lsb(for: .dataEntry),
+                value: .midi1(dataEntryLSB),
+                channel: channel,
+                group: group
+            ))
         }
         
         return rpnEvents
-        
     }
-    
 }
 
 extension MIDI.Event {
-    
     /// Creates an RPN message, consisting of multiple MIDI Events.
-    public static func ccRPN(_ rpn: CC.Controller.RPN,
-                             channel: MIDI.UInt4,
-                             group: MIDI.UInt4 = 0) -> [MIDI.Event] {
-        
-        rpn.events(channel: channel,
-                   group: group)
-        
+    public static func ccRPN(
+        _ rpn: CC.Controller.RPN,
+        channel: MIDI.UInt4,
+        group: MIDI.UInt4 = 0
+    ) -> [MIDI.Event] {
+        rpn.events(
+            channel: channel,
+            group: group
+        )
     }
-
 }

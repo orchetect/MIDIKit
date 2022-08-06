@@ -6,7 +6,6 @@
 @_implementationOnly import CoreMIDI
 
 extension MIDI.IO {
-    
     /// Size of Core MIDI `MIDIPacketList` struct memory.
     @inline(__always) @usableFromInline
     internal static let kSizeOfMIDIPacketList = MemoryLayout<MIDIPacketList>.size
@@ -31,16 +30,16 @@ extension MIDI.IO {
     ///
     /// To determine the size of the header, add the size of the `timestamp` and `length` portions.
     @inline(__always) @usableFromInline
-    internal static let kSizeOfMIDIPacketHeader = MemoryLayout<MIDITimeStamp>.size + MemoryLayout<UInt16>.size
+    internal static let kSizeOfMIDIPacketHeader = MemoryLayout<MIDITimeStamp>.size
+        + MemoryLayout<UInt16>.size
     
     /// Size of both Core MIDI `MIDIPacketList` header and `MIDIPacket` header.
     @inline(__always) @usableFromInline
-    internal static let kSizeOfMIDIPacketCombinedHeaders = kSizeOfMIDIPacketListHeader + kSizeOfMIDIPacketHeader
-    
+    internal static let kSizeOfMIDIPacketCombinedHeaders = kSizeOfMIDIPacketListHeader
+        + kSizeOfMIDIPacketHeader
 }
 
 extension MIDI.IO {
-    
     /// Size of Core MIDI `MIDIEventList` struct memory.
     @inline(__always) @usableFromInline
     internal static let kSizeOfMIDIEventList = MemoryLayout<MIDIEventList>.size
@@ -48,5 +47,4 @@ extension MIDI.IO {
     /// Size of Core MIDI `MIDIEventPacket` struct memory.
     @inline(__always) @usableFromInline
     internal static let kSizeOfMIDIEventPacket = MemoryLayout<MIDIEventPacket>.size
-    
 }

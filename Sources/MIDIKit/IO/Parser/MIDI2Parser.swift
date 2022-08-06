@@ -4,12 +4,10 @@
 //
 
 extension MIDI.IO {
-    
     /// Parser for MIDI 2.0 events.
     ///
     /// State is maintained internally. Use one parser class instance per MIDI endpoint for the lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and do not use a single global parser class instance for all MIDI endpoints.)
     public class MIDI2Parser {
-        
         // MARK: - Internal Default Instance
         
         /// Internal:
@@ -19,28 +17,25 @@ extension MIDI.IO {
         // MARK: - Parser State
         
         private var sysEx7MultiPartUMPBuffer: [MIDI.Byte] = []
-        private var sysEx8MultiPartUMPBuffer: [UInt8 : [MIDI.Byte]] = [:]
+        private var sysEx8MultiPartUMPBuffer: [UInt8: [MIDI.Byte]] = [:]
         
         // MARK: - Init
         
-        public init() {
-            
-        }
+        public init() { }
         
         // MARK: - Public Parser Methods
         
         /// Parses raw packet data into an array of MIDI Events.
-        public func parsedEvents(in packetData: MIDI.IO.Packet.UniversalPacketData) -> [MIDI.Event] {
-            
+        public func parsedEvents(
+            in packetData: MIDI.IO.Packet.UniversalPacketData
+        ) -> [MIDI.Event] {
             parsedEvents(in: packetData.bytes)
-            
         }
         
         /// Parses raw packet data into an array of MIDI Events.
         public func parsedEvents(
             in bytes: [MIDI.Byte]
         ) -> [MIDI.Event] {
-            
             // UMP packet will never be empty and will always be 4-byte aligned (UInt32 words)
             guard !bytes.isEmpty,
                   bytes.count % 4 == 0
@@ -54,7 +49,7 @@ extension MIDI.IO {
             let byte0Nibbles = byte0.nibbles
             
             guard let messageType = MIDI.IO.Packet.UniversalPacketData
-                    .MessageType(rawValue: byte0Nibbles.high)
+                .MessageType(rawValue: byte0Nibbles.high)
             else { return events }
             let group = byte0Nibbles.low
             
@@ -159,11 +154,9 @@ extension MIDI.IO {
                 ) {
                     events.append(parsedEvent)
                 }
-                
             }
             
             return events
-            
         }
         
         // MARK: - Internal Parser Methods
@@ -177,14 +170,13 @@ extension MIDI.IO {
             bytes: Array<MIDI.Byte>.SubSequence,
             group: MIDI.UInt4
         ) -> MIDI.Event? {
-            
             // ensure packet is 32-bits (4 bytes / 1 UInt32 word) wide
             // (first byte is stripped when bytes are passed into this function so we expect 3 bytes here)
             guard bytes.count == 3 else { return nil }
             
             let statusByte = bytes[bytes.startIndex]
-            //let dataByte1: MIDI.Byte = bytes[bytes.startIndex.advanced(by: 1)]
-            //let dataByte2: MIDI.Byte = bytes[bytes.startIndex.advanced(by: 2)]
+            // let dataByte1: MIDI.Byte = bytes[bytes.startIndex.advanced(by: 1)]
+            // let dataByte2: MIDI.Byte = bytes[bytes.startIndex.advanced(by: 2)]
             func dataByte1() -> MIDI.Byte { bytes[bytes.startIndex.advanced(by: 1)] }
             func dataByte2() -> MIDI.Byte { bytes[bytes.startIndex.advanced(by: 2)] }
             
@@ -249,10 +241,9 @@ extension MIDI.IO {
                 
             default:
                 // should never happen
-                //logger.debug("Unhandled System Status: \(statusByte)")
+                // logger.debug("Unhandled System Status: \(statusByte)")
                 return nil
             }
-            
         }
         
         /// Internal sub-parser: Parse MIDI 1.0 Channel Voice UMP message.
@@ -265,7 +256,6 @@ extension MIDI.IO {
             channel: MIDI.UInt4,
             group: MIDI.UInt4
         ) -> MIDI.Event? {
-            
             // ensure packet is 32-bits (4 bytes / 1 UInt32 word) wide
             // (first byte is stripped when bytes are passed into this function so we expect 3 bytes here)
             guard bytes.count == 3 else { return nil }
@@ -280,10 +270,12 @@ extension MIDI.IO {
                       let velocity = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .noteOff(note,
-                                                    velocity: .midi1(velocity),
-                                                    channel: channel,
-                                                    group: group)
+                let newEvent: MIDI.Event = .noteOff(
+                    note,
+                    velocity: .midi1(velocity),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -292,10 +284,12 @@ extension MIDI.IO {
                       let velocity = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .noteOn(note,
-                                                   velocity: .midi1(velocity),
-                                                   channel: channel,
-                                                   group: group)
+                let newEvent: MIDI.Event = .noteOn(
+                    note,
+                    velocity: .midi1(velocity),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -304,10 +298,12 @@ extension MIDI.IO {
                       let amount = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .notePressure(note: note,
-                                                         amount: .midi1(amount),
-                                                         channel: channel,
-                                                         group: group)
+                let newEvent: MIDI.Event = .notePressure(
+                    note: note,
+                    amount: .midi1(amount),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -316,10 +312,12 @@ extension MIDI.IO {
                       let value = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .cc(cc,
-                                               value: .midi1(value),
-                                               channel: channel,
-                                               group: group)
+                let newEvent: MIDI.Event = .cc(
+                    cc,
+                    value: .midi1(value),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -327,9 +325,11 @@ extension MIDI.IO {
                 guard let program = dataByte1.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .programChange(program: program,
-                                                          channel: channel,
-                                                          group: group)
+                let newEvent: MIDI.Event = .programChange(
+                    program: program,
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -337,9 +337,11 @@ extension MIDI.IO {
                 guard let amount = dataByte1.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .pressure(amount: .midi1(amount),
-                                                     channel: channel,
-                                                     group: group)
+                let newEvent: MIDI.Event = .pressure(
+                    amount: .midi1(amount),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -348,20 +350,22 @@ extension MIDI.IO {
                       let unwrappedDataByte2 = dataByte2.toMIDIUInt7Exactly
                 else { return nil }
                 
-                let uint14 = MIDI.UInt14(uInt7Pair: .init(msb: unwrappedDataByte2,
-                                                          lsb: unwrappedDataByte1))
+                let uint14 = MIDI.UInt14(uInt7Pair: .init(
+                    msb: unwrappedDataByte2,
+                    lsb: unwrappedDataByte1
+                ))
                 
-                let newEvent: MIDI.Event = .pitchBend(value: .midi1(uint14),
-                                                      channel: channel,
-                                                      group: group)
+                let newEvent: MIDI.Event = .pitchBend(
+                    value: .midi1(uint14),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
             default:
                 return nil
-                
             }
-            
         }
         
         /// Internal sub-parser: Parse MIDI 2.0 Channel Voice UMP message.
@@ -375,7 +379,6 @@ extension MIDI.IO {
             channel: MIDI.UInt4,
             group: MIDI.UInt4
         ) -> MIDI.Event? {
-            
             // ensure packet is 64-bits (8 bytes / 2 UInt32 words) wide
             // (first byte is stripped when bytes are passed into this function so we expect 7 bytes here)
             guard bytes.count == 7 else { return nil }
@@ -391,18 +394,20 @@ extension MIDI.IO {
                 bytes[bytes.startIndex.advanced(by: offset)]
             }
             func word2() -> MIDI.UMPWord {
-                MIDI.UMPWord(bytes[bytes.startIndex.advanced(by: 3)],
-                             bytes[bytes.startIndex.advanced(by: 4)],
-                             bytes[bytes.startIndex.advanced(by: 5)],
-                             bytes[bytes.startIndex.advanced(by: 6)])
+                MIDI.UMPWord(
+                    bytes[bytes.startIndex.advanced(by: 3)],
+                    bytes[bytes.startIndex.advanced(by: 4)],
+                    bytes[bytes.startIndex.advanced(by: 5)],
+                    bytes[bytes.startIndex.advanced(by: 6)]
+                )
             }
             func word2A() -> UInt16 {
                 (UInt16(bytes[bytes.startIndex.advanced(by: 3)]) << 8)
-                + UInt16(bytes[bytes.startIndex.advanced(by: 4)])
+                    + UInt16(bytes[bytes.startIndex.advanced(by: 4)])
             }
             func word2B() -> UInt16 {
                 (UInt16(bytes[bytes.startIndex.advanced(by: 5)]) << 8)
-                + UInt16(bytes[bytes.startIndex.advanced(by: 6)])
+                    + UInt16(bytes[bytes.startIndex.advanced(by: 6)])
             }
             
             switch statusNibble {
@@ -427,11 +432,13 @@ extension MIDI.IO {
                     cc = .assignable(index)
                 }
                 
-                let newEvent: MIDI.Event = .noteCC(note: note,
-                                                   controller: cc,
-                                                   value: .midi2(word2()),
-                                                   channel: channel,
-                                                   group: group)
+                let newEvent: MIDI.Event = .noteCC(
+                    note: note,
+                    controller: cc,
+                    value: .midi2(word2()),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -439,10 +446,12 @@ extension MIDI.IO {
                 guard let note = byte(1).toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .notePitchBend(note: note,
-                                                          value: .midi2(word2()),
-                                                          channel: channel,
-                                                          group: group)
+                let newEvent: MIDI.Event = .notePitchBend(
+                    note: note,
+                    value: .midi2(word2()),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -450,11 +459,13 @@ extension MIDI.IO {
                 guard let note = byte(1).toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .noteOff(note,
-                                                    velocity: .midi2(word2A()),
-                                                    attribute: .init(type: byte(2), data: word2B()),
-                                                    channel: channel,
-                                                    group: group)
+                let newEvent: MIDI.Event = .noteOff(
+                    note,
+                    velocity: .midi2(word2A()),
+                    attribute: .init(type: byte(2), data: word2B()),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -462,12 +473,14 @@ extension MIDI.IO {
                 guard let note = byte(1).toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .noteOn(note,
-                                                   velocity: .midi2(word2A()),
-                                                   attribute: .init(type: byte(2), data: word2B()),
-                                                   channel: channel,
-                                                   group: group,
-                                                   midi1ZeroVelocityAsNoteOff: false)
+                let newEvent: MIDI.Event = .noteOn(
+                    note,
+                    velocity: .midi2(word2A()),
+                    attribute: .init(type: byte(2), data: word2B()),
+                    channel: channel,
+                    group: group,
+                    midi1ZeroVelocityAsNoteOff: false
+                )
                 
                 return newEvent
                 
@@ -475,10 +488,12 @@ extension MIDI.IO {
                 guard let note = byte(1).toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .notePressure(note: note,
-                                                         amount: .midi2(word2()),
-                                                         channel: channel,
-                                                         group: group)
+                let newEvent: MIDI.Event = .notePressure(
+                    note: note,
+                    amount: .midi2(word2()),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -486,10 +501,12 @@ extension MIDI.IO {
                 guard let index = byte(1).toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .cc(index,
-                                               value: .midi2(word2()),
-                                               channel: channel,
-                                               group: group)
+                let newEvent: MIDI.Event = .cc(
+                    index,
+                    value: .midi2(word2()),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -506,24 +523,30 @@ extension MIDI.IO {
                     ? .bankSelect(.init(uInt7Pair: .init(msb: bankMSB, lsb: bankLSB)))
                     : .noBankSelect
                  
-                let newEvent: MIDI.Event = .programChange(program: program,
-                                                          bank: bank,
-                                                          channel: channel,
-                                                          group: group)
+                let newEvent: MIDI.Event = .programChange(
+                    program: program,
+                    bank: bank,
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
             case 0xD: // channel pressure
-                let newEvent: MIDI.Event = .pressure(amount: .midi2(word2()),
-                                                     channel: channel,
-                                                     group: group)
+                let newEvent: MIDI.Event = .pressure(
+                    amount: .midi2(word2()),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
             case 0xE: // pitch bend
-                let newEvent: MIDI.Event = .pitchBend(value: .midi2(word2()),
-                                                      channel: channel,
-                                                      group: group)
+                let newEvent: MIDI.Event = .pitchBend(
+                    value: .midi2(word2()),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
@@ -531,18 +554,18 @@ extension MIDI.IO {
                 guard let note = byte(1).toMIDIUInt7Exactly
                 else { return nil }
                 
-                let newEvent: MIDI.Event = .noteManagement(note: note,
-                                                           flags: .init(byte: byte(2)),
-                                                           channel: channel,
-                                                           group: group)
+                let newEvent: MIDI.Event = .noteManagement(
+                    note: note,
+                    flags: .init(byte: byte(2)),
+                    channel: channel,
+                    group: group
+                )
                 
                 return newEvent
                 
             default:
                 return nil
-                
             }
-            
         }
         
         /// Internal sub-parser: Parse SysEx7 UMP message.
@@ -554,7 +577,6 @@ extension MIDI.IO {
             bytes: Array<MIDI.Byte>.SubSequence,
             group: MIDI.UInt4
         ) -> MIDI.Event? {
-            
             // MIDI 2.0 Spec:
             // "The MIDI 1.0 Protocol bracketing method with 0xF0 Start and 0xF7 End Status bytes is not used in the UMP Format. Instead, the SysEx payload is carried in one or more 64-bit UMPs, discarding the 0xF0 and 0xF7 bytes. The standard ID Number (Manufacturer ID, Special ID 0x7D, or Universal System Exclusive ID), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable) are included in the initial data bytes, just as they are in MIDI 1.0 Protocol message equivalents."
             
@@ -565,16 +587,16 @@ extension MIDI.IO {
             let byte1Nibbles = bytes[bytes.startIndex].nibbles
             
             guard let sysExStatusField = MIDI.IO.Packet.UniversalPacketData
-                    .SysExStatusField(rawValue: byte1Nibbles.high)
+                .SysExStatusField(rawValue: byte1Nibbles.high)
             else { return nil }
             
             let numberOfBytes = byte1Nibbles.low.intValue
-            guard (0...6).contains(numberOfBytes) else { return nil }
+            guard (0 ... 6).contains(numberOfBytes) else { return nil }
             
             let payloadBytes = bytes[
                 bytes.startIndex.advanced(by: 1)
-                ..<
-                bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                    ..<
+                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
             ]
             
             switch sysExStatusField {
@@ -616,9 +638,7 @@ extension MIDI.IO {
                 else { return nil }
                 
                 return parsedSysEx
-                
             }
-            
         }
         
         /// Internal sub-parser: Parse SysEx8 UMP message.
@@ -630,7 +650,6 @@ extension MIDI.IO {
             bytes: Array<MIDI.Byte>.SubSequence,
             group: MIDI.UInt4
         ) -> MIDI.Event? {
-            
             // MIDI 2.0 Spec:
             // "System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs with Message Type 0x5."
             
@@ -641,18 +660,18 @@ extension MIDI.IO {
             let byte1Nibbles = bytes[bytes.startIndex].nibbles
             
             guard let sysExStatusField = MIDI.IO.Packet.UniversalPacketData
-                    .SysExStatusField(rawValue: byte1Nibbles.high)
+                .SysExStatusField(rawValue: byte1Nibbles.high)
             else { return nil }
             
             let numberOfBytes = byte1Nibbles.low.intValue
-            guard (1...14).contains(numberOfBytes) else { return nil }
+            guard (1 ... 14).contains(numberOfBytes) else { return nil }
             
             switch sysExStatusField {
             case .complete:
                 let payloadBytes = bytes[
                     bytes.startIndex.advanced(by: 1)
-                    ..<
-                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                        ..<
+                        bytes.startIndex.advanced(by: 1 + numberOfBytes)
                 ]
                 
                 guard let parsedSysEx = try? MIDI.Event.sysEx8(
@@ -665,10 +684,11 @@ extension MIDI.IO {
                 
             case .start:
                 let streamID = bytes[bytes.startIndex.advanced(by: 1)]
+                // include stream ID because MIDI.Event.sysEx8() expects it to be the first byte
                 let payloadBytes = bytes[
-                    bytes.startIndex.advanced(by: 1) // include stream ID because MIDI.Event.sysEx8() expects it to be the first byte
-                    ..<
-                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                    bytes.startIndex.advanced(by: 1)
+                        ..<
+                        bytes.startIndex.advanced(by: 1 + numberOfBytes)
                 ]
                 
                 sysEx8MultiPartUMPBuffer[streamID] = Array(payloadBytes)
@@ -683,8 +703,8 @@ extension MIDI.IO {
                 
                 let payloadBytes = bytes[
                     bytes.startIndex.advanced(by: 2)
-                    ..<
-                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                        ..<
+                        bytes.startIndex.advanced(by: 1 + numberOfBytes)
                 ]
                 
                 sysEx8MultiPartUMPBuffer[streamID]?.append(contentsOf: payloadBytes)
@@ -699,8 +719,8 @@ extension MIDI.IO {
                 
                 let payloadBytes = bytes[
                     bytes.startIndex.advanced(by: 2)
-                    ..<
-                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                        ..<
+                        bytes.startIndex.advanced(by: 1 + numberOfBytes)
                 ]
                 
                 // reset buffer
@@ -715,9 +735,7 @@ extension MIDI.IO {
                 else { return nil }
                 
                 return parsedSysEx
-                
             }
-            
         }
         
         /// Internal sub-parser: Parse MIDI 2.0 Utility message.
@@ -728,10 +746,10 @@ extension MIDI.IO {
         internal func parseMIDI2Utility(
             bytes: Array<MIDI.Byte>.SubSequence,
             group: MIDI.UInt4
-        ) -> (utilityEvent: MIDI.Event,
-              followingBytes: Array<MIDI.Byte>.SubSequence)?
-        {
-            
+        ) -> (
+            utilityEvent: MIDI.Event,
+            followingBytes: Array<MIDI.Byte>.SubSequence
+        )? {
             // MIDI 2.0 Spec:
             // "The UMP Format provides a set of Utility Messages. Utility Messages include but are not limited to NOOP and timestamps, and might in the future include UMP transport-related functions."
             // These messages can be standalone 32-bit UMPs or prepend other UMP messages.
@@ -770,17 +788,20 @@ extension MIDI.IO {
                 let lsb = bytes[bytes.startIndex.advanced(by: 2)]
                 let ts = UInt16(bytePair: .init(msb: msb, lsb: lsb))
                 
-                utilityEvent = .jrClock(time: ts,
-                                        group: group)
+                utilityEvent = .jrClock(
+                    time: ts,
+                    group: group
+                )
                 
             case .jrTimestamp: // 0x2
                 let msb = bytes[bytes.startIndex.advanced(by: 1)]
                 let lsb = bytes[bytes.startIndex.advanced(by: 2)]
                 let ts = UInt16(bytePair: .init(msb: msb, lsb: lsb))
                 
-                utilityEvent = .jrTimestamp(time: ts,
-                                            group: group)
-                
+                utilityEvent = .jrTimestamp(
+                    time: ts,
+                    group: group
+                )
             }
             
             if bytes.count > 3 {
@@ -789,39 +810,27 @@ extension MIDI.IO {
             } else {
                 return (utilityEvent, [])
             }
-            
         }
     }
-    
 }
 
 // MARK: - MIDI.IO.Packet Extensions
 
 extension MIDI.IO.Packet.UniversalPacketData {
-    
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     internal func parsedEvents() -> [MIDI.Event] {
-        
         MIDI.IO.MIDI2Parser.default.parsedEvents(in: bytes)
-        
     }
     
     /// Parse this instance's raw packet data into an array of MIDI Events.
     internal func parsedEvents(using parser: MIDI.IO.MIDI2Parser) -> [MIDI.Event] {
-        
         parser.parsedEvents(in: self)
-        
     }
-    
 }
 
 extension MIDI.IO.Packet {
-    
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
     internal func parsedMIDI2Events() -> [MIDI.Event] {
-        
         MIDI.IO.MIDI2Parser.default.parsedEvents(in: bytes)
-        
     }
-    
 }
