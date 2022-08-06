@@ -12,16 +12,6 @@ Events received from all MIDI output endpoints are automatically logged to the c
 
 - This example demonstrates the use of Apple's Bluetooth MIDI classes to allow your app to configure Bluetooth MIDI connections.
 
-## App Target Entitlements
-
-- Even though Bluetooth MIDI largely operates via Core MIDI, you still need to give your app appropriate entitlements.
-- Add the **Background Modes** entitlement and enable:
-  - [x] Audio, AirPlay and Picture in Picture
-  - [x] Uses Bluetooth LE accessories
-  - [x] Acts as a Bluetooth LE accessory
-
-![Background Modes](Images/background-modes-audio.png)
-
 ## Info.plist Keys
 
 - The following key is required in the info.plist file with a string containing a reason for allowing your app access to bluetooth connectivity.
