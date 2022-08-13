@@ -29,12 +29,12 @@ extension ContentView {
 
 extension ContentView {
     struct SendMIDIEventsView: View {
-        @EnvironmentObject var midiManager: MIDI.IO.Manager
+        @EnvironmentObject var midiManager: MIDIManager
         
-        @Binding var midiGroup: MIDI.UInt4
-        var sendEvent: (MIDI.Event) -> Void
+        @Binding var midiGroup: UInt4
+        var sendEvent: (MIDIEvent) -> Void
         
-        @State var midiChannel: MIDI.UInt4 = 0
+        @State var midiChannel: UInt4 = 0
         
         var body: some View {
             GroupBox(label: Text("Send MIDI Events")) {
@@ -46,7 +46,7 @@ extension ContentView {
                                 let groupNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
                                 
                                 Text("\(groupNum) (\(groupNumHex))")
-                                    .tag(MIDI.UInt4($0))
+                                    .tag(UInt4($0))
                             }
                         }
                         .frame(maxWidth: 200)
@@ -69,7 +69,7 @@ extension ContentView {
                                         )
                                         
                                         Text("\(channelNum) (\(channelNumHex))")
-                                            .tag(MIDI.UInt4($0))
+                                            .tag(UInt4($0))
                                     }
                                 }
                                 .frame(maxWidth: 200)
@@ -114,11 +114,11 @@ extension ContentView {
     }
     
     struct SendMIDIEventsChannelVoiceView: View {
-        @Binding var midiGroup: MIDI.UInt4
-        @Binding var midiChannel: MIDI.UInt4
-        var sendEvent: (MIDI.Event) -> Void
+        @Binding var midiGroup: UInt4
+        @Binding var midiChannel: UInt4
+        var sendEvent: (MIDIEvent) -> Void
         
-        @State var chanVoiceCC: MIDI.Event.CC.Controller = .modWheel
+        @State var chanVoiceCC: MIDIEvent.CC.Controller = .modWheel
         
         var body: some View {
             GroupBox(label: Text("MIDI 1.0 and MIDI 2.0")) {
@@ -161,7 +161,7 @@ extension ContentView {
                         } label: { Text("CC") }
                         
                         Picker("", selection: $chanVoiceCC) {
-                            ForEach(MIDI.Event.CC.Controller.allCases, id: \.self) {
+                            ForEach(MIDIEvent.CC.Controller.allCases, id: \.self) {
                                 let ccInt = $0.number.intValue
                                 let ccName = "\($0.name)"
                                 let ccHex = ccInt.hex.stringValue(padTo: 2, prefix: true)
@@ -216,11 +216,11 @@ extension ContentView {
     }
     
     struct SendMIDIEventsMIDI2ChannelVoiceView: View {
-        @Binding var midiGroup: MIDI.UInt4
-        @Binding var midiChannel: MIDI.UInt4
-        var sendEvent: (MIDI.Event) -> Void
+        @Binding var midiGroup: UInt4
+        @Binding var midiChannel: UInt4
+        var sendEvent: (MIDIEvent) -> Void
         
-        @State var chanVoiceCC: MIDI.Event.CC.Controller = .modWheel
+        @State var chanVoiceCC: MIDIEvent.CC.Controller = .modWheel
         
         var body: some View {
             GroupBox(label: Text("MIDI 2.0")) {
@@ -322,8 +322,8 @@ extension ContentView {
     }
     
     struct SendMIDIEventsSystemExclusiveView: View {
-        @Binding var midiGroup: MIDI.UInt4
-        var sendEvent: (MIDI.Event) -> Void
+        @Binding var midiGroup: UInt4
+        var sendEvent: (MIDIEvent) -> Void
         
         var body: some View {
             GroupBox(label: Text("System Exclusive")) {
@@ -597,8 +597,8 @@ extension ContentView {
     }
     
     struct SendMIDIEventsSystemCommonView: View {
-        @Binding var midiGroup: MIDI.UInt4
-        var sendEvent: (MIDI.Event) -> Void
+        @Binding var midiGroup: UInt4
+        var sendEvent: (MIDIEvent) -> Void
         
         var body: some View {
             GroupBox(label: Text("System Common")) {
@@ -642,8 +642,8 @@ extension ContentView {
     }
     
     struct SendMIDIEventsSystemRealTimeView: View {
-        @Binding var midiGroup: MIDI.UInt4
-        var sendEvent: (MIDI.Event) -> Void
+        @Binding var midiGroup: UInt4
+        var sendEvent: (MIDIEvent) -> Void
         
         var body: some View {
             GroupBox(label: Text("System Real Time")) {
@@ -700,13 +700,13 @@ extension ContentView {
                             GroupBox(label: Text("Source: Connection")) {
                                 Picker("", selection: $midiInputConnectionEndpoint) {
                                     Text("None")
-                                        .tag(MIDI.IO.OutputEndpoint?.none)
+                                        .tag(MIDIOutputEndpoint?.none)
                                     
                                     VStack { Divider().padding(.leading) }
                                     
                                     ForEach(midiManager.endpoints.outputs) {
                                         Text("🎹 " + ($0.displayName))
-                                            .tag(MIDI.IO.OutputEndpoint?.some($0))
+                                            .tag(MIDIOutputEndpoint?.some($0))
                                     }
                                 }
                                 .padding()

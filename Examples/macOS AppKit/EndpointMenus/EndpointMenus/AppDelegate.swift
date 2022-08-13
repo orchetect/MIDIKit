@@ -12,16 +12,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var midiInMenu: NSMenu!
     @IBOutlet var midiOutMenu: NSMenu!
     
-    let midiManager = MIDI.IO.Manager(
+    let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    public private(set) var midiOutMenuSelectedID: MIDI.IO.UniqueID = 0
+    public private(set) var midiOutMenuSelectedID: MIDIUniqueID = 0
     public private(set) var midiOutMenuSelectedDisplayName: String = ""
     
-    public private(set) var midiInMenuSelectedID: MIDI.IO.UniqueID = 0
+    public private(set) var midiInMenuSelectedID: MIDIUniqueID = 0
     public private(set) var midiInMenuSelectedDisplayName: String = ""
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             // set up MIDI subsystem notification handler
             midiManager.notificationHandler = { [weak self] notification, manager in
-                self?.didReceiveMIDISystemNotification(notification)
+                self?.didReceiveMIDIIONotification(notification)
             }
             
             // set up input connection
@@ -114,7 +114,7 @@ extension AppDelegate {
         )
     }
     
-    private func didReceiveMIDISystemNotification(_ notification: MIDI.IO.SystemNotification) {
+    private func didReceiveMIDIIONotification(_ notification: MIDIIONotification) {
         switch notification {
         case .added, .removed, .propertyChanged:
             midiOutMenuRefresh()
@@ -128,13 +128,13 @@ extension AppDelegate {
 // MARK: - MIDI In Menu
 
 extension AppDelegate {
-    var midiInputConnection: MIDI.IO.InputConnection? {
+    var midiInputConnection: MIDIInputConnection? {
         midiManager.managedInputConnections[ConnectionTags.midiIn]
     }
     
     /// Set the selected MIDI output manually.
     public func midiInMenuSetSelected(
-        id: MIDI.IO.UniqueID,
+        id: MIDIUniqueID,
         displayName: String
     ) {
         midiInMenuSelectedID = id
@@ -196,7 +196,7 @@ extension AppDelegate {
     
     @objc
     private func midiInMenuItemSelected(_ sender: NSMenuItem?) {
-        midiInMenuSelectedID = MIDI.IO.UniqueID(exactly: sender?.tag ?? 0) ?? 0
+        midiInMenuSelectedID = MIDIUniqueID(exactly: sender?.tag ?? 0) ?? 0
         
         if let foundOutput = midiManager.endpoints.outputs.first(where: {
             $0.uniqueID == midiInMenuSelectedID
@@ -225,12 +225,12 @@ extension AppDelegate {
 // MARK: - MIDI Out Menu
 
 extension AppDelegate {
-    var midiOutputConnection: MIDI.IO.OutputConnection? {
+    var midiOutputConnection: MIDIOutputConnection? {
         midiManager.managedOutputConnections[ConnectionTags.midiOut]
     }
     
     public func midiOutMenuSetSelected(
-        id: MIDI.IO.UniqueID,
+        id: MIDIUniqueID,
         displayName: String
     ) {
         midiOutMenuSelectedID = id
@@ -290,7 +290,7 @@ extension AppDelegate {
     
     @objc
     private func midiOutMenuItemSelected(_ sender: NSMenuItem?) {
-        midiOutMenuSelectedID = MIDI.IO.UniqueID(exactly: sender?.tag ?? 0) ?? 0
+        midiOutMenuSelectedID = MIDIUniqueID(exactly: sender?.tag ?? 0) ?? 0
         
         if let foundInput = midiManager.endpoints.inputs.first(where: {
             $0.uniqueID == midiOutMenuSelectedID

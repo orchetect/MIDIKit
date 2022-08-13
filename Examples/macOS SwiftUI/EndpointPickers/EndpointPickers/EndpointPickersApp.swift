@@ -9,7 +9,7 @@ import MIDIKit
 
 @main
 struct EndpointPickersApp: App {
-    let midiManager = MIDI.IO.Manager(
+    let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
@@ -17,10 +17,10 @@ struct EndpointPickersApp: App {
     
     @ObservedObject var midiHelper = MIDIHelper()
     
-    @State var midiInSelectedID: MIDI.IO.UniqueID = 0
+    @State var midiInSelectedID: MIDIUniqueID = 0
     @State var midiInSelectedDisplayName: String = "None"
     
-    @State var midiOutSelectedID: MIDI.IO.UniqueID = 0
+    @State var midiOutSelectedID: MIDIUniqueID = 0
     @State var midiOutSelectedDisplayName: String = "None"
     
     init() {

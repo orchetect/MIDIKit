@@ -13,12 +13,12 @@ import CoreMIDI
 open class RoundTrip_Tests_Base: XCTestCase {
     // swiftformat:options --wrapcollections preserve
     
-    fileprivate var manager: MIDI.IO.Manager!
+    fileprivate var manager: MIDIManager!
     
     fileprivate let outputTag = "1"
     fileprivate let inputConnectionTag = "2"
     
-    fileprivate var receivedEvents: [MIDI.Event] = []
+    fileprivate var receivedEvents: [MIDIEvent] = []
     
     override open func setUp() {
         print("RoundTrip_Tests setUp() starting")
@@ -64,7 +64,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                 tag: outputTag,
                 uniqueID: .none // allow system to generate random ID each time, without persistence
             )
-        } catch let err as MIDI.IO.MIDIError {
+        } catch let err as MIDIIOError {
             XCTFail(err.localizedDescription); return
         } catch {
             XCTFail(error.localizedDescription); return
@@ -93,7 +93,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                         self.receivedEvents.append(contentsOf: events)
                     }
             )
-        } catch let err as MIDI.IO.MIDIError {
+        } catch let err as MIDIIOError {
             XCTFail("\(err)"); return
         } catch {
             XCTFail(error.localizedDescription); return
@@ -133,11 +133,11 @@ open class RoundTrip_Tests_Base: XCTestCase {
         
         // generate events list
         
-        var sourceEvents: [MIDI.Event] = []
+        var sourceEvents: [MIDIEvent] = []
         
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .noteOn(
-                $0.toMIDIUInt7,
+                $0.toUInt7,
                 velocity: .midi1((1 ... 0x7F).randomElement()!),
                 channel: (0 ... 0xF).randomElement()!
             )
@@ -145,7 +145,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
         
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .noteOff(
-                $0.toMIDIUInt7,
+                $0.toUInt7,
                 velocity: .midi1((0 ... 0x7F).randomElement()!),
                 channel: (0 ... 0xF).randomElement()!
             )
@@ -153,7 +153,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
         
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .cc(
-                $0.toMIDIUInt7,
+                $0.toUInt7,
                 value: .midi1((0 ... 0x7F).randomElement()!),
                 channel: (0 ... 0xF).randomElement()!
             )
@@ -161,7 +161,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
         
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .notePressure(
-                note: $0.toMIDIUInt7,
+                note: $0.toUInt7,
                 amount: .midi1(20),
                 channel: (0 ... 0xF).randomElement()!
             )
@@ -169,21 +169,21 @@ open class RoundTrip_Tests_Base: XCTestCase {
         
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .programChange(
-                program: $0.toMIDIUInt7,
+                program: $0.toUInt7,
                 channel: (0 ... 0xF).randomElement()!
             )
         })
         
         sourceEvents.append(contentsOf: (0 ... 100).map { _ in
             .pitchBend(
-                value: .midi1((0 ... 16383).randomElement()!.toMIDIUInt14),
+                value: .midi1((0 ... 16383).randomElement()!.toUInt14),
                 channel: (0 ... 0xF).randomElement()!
             )
         })
         
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .pressure(
-                amount: .midi1($0.toMIDIUInt7),
+                amount: .midi1($0.toUInt7),
                 channel: (0 ... 0xF).randomElement()!
             )
         })
@@ -213,49 +213,49 @@ open class RoundTrip_Tests_Base: XCTestCase {
         if output.api == .newCoreMIDI(._2_0) {
             sourceEvents.append(contentsOf: (0 ... 127).map {
                 .noteOn(
-                    $0.toMIDIUInt7,
+                    $0.toUInt7,
                     velocity: .midi1((1 ... 0x7F).randomElement()!),
                     attribute: .pitch7_9(coarse: 123, fine: 456),
                     channel: (0 ... 0xF).randomElement()!,
-                    group: (0 ... MIDI.UInt4.max).randomElement()!
+                    group: (0 ... UInt4.max).randomElement()!
                 )
             })
             
             sourceEvents.append(contentsOf: (0 ... 127).map {
                 .noteOff(
-                    $0.toMIDIUInt7,
+                    $0.toUInt7,
                     velocity: .midi1((0 ... 0x7F).randomElement()!),
                     attribute: .profileSpecific(data: 0x1234),
                     channel: (0 ... 0xF).randomElement()!,
-                    group: (0 ... MIDI.UInt4.max).randomElement()!
+                    group: (0 ... UInt4.max).randomElement()!
                 )
             })
             
             sourceEvents.append(contentsOf: (0 ... 127).map {
                 .noteCC(
-                    note: $0.toMIDIUInt7,
+                    note: $0.toUInt7,
                     controller: .registered(.expression),
                     value: .midi2((0 ... UInt32.max).randomElement()!),
                     channel: (0 ... 0xF).randomElement()!,
-                    group: (0 ... MIDI.UInt4.max).randomElement()!
+                    group: (0 ... UInt4.max).randomElement()!
                 )
             })
             
             sourceEvents.append(contentsOf: (0 ... 127).map {
                 .notePitchBend(
-                    note: $0.toMIDIUInt7,
+                    note: $0.toUInt7,
                     value: .midi2((0 ... UInt32.max).randomElement()!),
                     channel: (0 ... 0xF).randomElement()!,
-                    group: (0 ... MIDI.UInt4.max).randomElement()!
+                    group: (0 ... UInt4.max).randomElement()!
                 )
             })
             
             sourceEvents.append(contentsOf: (0 ... 127).map {
                 .noteManagement(
-                    note: $0.toMIDIUInt7,
+                    note: $0.toUInt7,
                     flags: [.resetPerNoteControllers],
                     channel: (0 ... 0xF).randomElement()!,
-                    group: (0 ... MIDI.UInt4.max).randomElement()!
+                    group: (0 ... UInt4.max).randomElement()!
                 )
             })
             

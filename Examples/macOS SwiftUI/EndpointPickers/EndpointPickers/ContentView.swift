@@ -8,13 +8,13 @@ import SwiftUI
 import MIDIKit
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: MIDI.IO.Manager
+    @EnvironmentObject var midiManager: MIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
-    @Binding var midiInSelectedID: MIDI.IO.UniqueID
+    @Binding var midiInSelectedID: MIDIUniqueID
     @Binding var midiInSelectedDisplayName: String
     
-    @Binding var midiOutSelectedID: MIDI.IO.UniqueID
+    @Binding var midiOutSelectedID: MIDIUniqueID
     @Binding var midiOutSelectedDisplayName: String
     
     var body: some View {
@@ -133,16 +133,16 @@ struct ContentView: View {
         .padding()
     }
     
-    func sendToConnection(event: MIDI.Event) {
+    func sendToConnection(event: MIDIEvent) {
         try? midiHelper.midiOutputConnection?.send(event: event)
     }
     
-    func sendToVirtuals(event: MIDI.Event) {
+    func sendToVirtuals(event: MIDIEvent) {
         try? midiHelper.midiTestOut1?.send(event: event)
         try? midiHelper.midiTestOut2?.send(event: event)
     }
     
-    func color(for event: MIDI.Event) -> Color? {
+    func color(for event: MIDIEvent) -> Color? {
         switch event {
         case .noteOn: return .green
         case .noteOff: return .red

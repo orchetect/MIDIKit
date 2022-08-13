@@ -8,7 +8,7 @@ import SwiftUI
 import MIDIKit
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: MIDI.IO.Manager
+    @EnvironmentObject var midiManager: MIDIManager
     
     @State var showingBluetoothMIDIOptions = false
     

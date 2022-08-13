@@ -12,7 +12,7 @@ import SwiftRadix
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
-    let midiManager = MIDI.IO.Manager(
+    let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    private func handleMIDI(event: MIDI.Event) {
+    private func handleMIDI(event: MIDIEvent) {
         switch event {
         case let .noteOn(payload):
             print(

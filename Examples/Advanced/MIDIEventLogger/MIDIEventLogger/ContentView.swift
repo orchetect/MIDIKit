@@ -10,7 +10,7 @@ import SwiftRadix
 import MIDIKit
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: MIDI.IO.Manager
+    @EnvironmentObject var midiManager: MIDIManager
     
     // MARK: - Constants
     
@@ -29,9 +29,9 @@ struct ContentView: View {
     
     // MARK: - UI State
     
-    @State var midiGroup: MIDI.UInt4 = 0
+    @State var midiGroup: UInt4 = 0
     
-    @State var midiInputConnectionEndpoint: MIDI.IO.OutputEndpoint? = nil
+    @State var midiInputConnectionEndpoint: MIDIOutputEndpoint? = nil
     
     // MARK: - Body
     
@@ -158,7 +158,7 @@ struct ContentView: View {
     }
     
     /// Send a MIDI event using our virtual output endpoint.
-    func sendEvent(_ event: MIDI.Event) {
+    func sendEvent(_ event: MIDIEvent) {
         logIfThrowsError {
             try midiManager.managedOutputs[kOutputTag]?
                 .send(event: event)
@@ -167,7 +167,7 @@ struct ContentView: View {
 }
 
 struct ContentView_Previews: PreviewProvider {
-    private static let midiManager = MIDI.IO.Manager(
+    private static let midiManager = MIDIManager(
         clientName: "Preview",
         model: "",
         manufacturer: ""

@@ -10,8 +10,8 @@ import MIDIKit
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var midiManager: MIDI.IO.Manager = {
-        let newManager = MIDI.IO.Manager(
+    var midiManager: MIDIManager = {
+        let newManager = MIDIManager(
             clientName: "MIDIEventLogger",
             model: "LoggerApp",
             manufacturer: "Orchetect"

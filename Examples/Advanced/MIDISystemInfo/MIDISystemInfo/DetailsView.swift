@@ -21,7 +21,7 @@ struct EmptyDetailsView: View {
 struct DetailsView: View {
     @Environment(\.hostingWindow) var hostingWindow
 	
-    var object: MIDI.IO.AnyMIDIIOObject?
+    var object: AnyMIDIIOObject?
 	
     @State private var webViewHeight: CGFloat = .zero
 	
@@ -29,7 +29,7 @@ struct DetailsView: View {
 	
     @State private var showAll: Bool = false
 	
-    func generateHTML(_ endpoint: MIDI.IO.AnyMIDIIOObject) -> String {
+    func generateHTML(_ endpoint: AnyMIDIIOObject) -> String {
         let flatProperties = endpoint.getPropertiesAsStrings(onlyIncludeRelevant: !showAll)
 		
         let htmlStart = """

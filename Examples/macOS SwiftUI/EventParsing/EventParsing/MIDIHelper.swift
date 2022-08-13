@@ -9,7 +9,7 @@ import MIDIKit
 import SwiftRadix
 
 class MIDIHelper: ObservableObject {
-    public weak var midiManager: MIDI.IO.Manager?
+    public weak var midiManager: MIDIManager?
     
     let virtualInputName = "TestApp Input"
     
@@ -44,7 +44,7 @@ class MIDIHelper: ObservableObject {
         }
     }
     
-    private func handleMIDI(event: MIDI.Event) {
+    private func handleMIDI(event: MIDIEvent) {
         switch event {
         case let .noteOn(payload):
             print(

@@ -9,7 +9,7 @@ import MIDIKit
 
 @main
 struct VirtualOutputApp: App {
-    let midiManager = MIDI.IO.Manager(
+    let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"

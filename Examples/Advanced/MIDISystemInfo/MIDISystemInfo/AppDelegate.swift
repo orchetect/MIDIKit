@@ -12,14 +12,14 @@ import MIDIKit
 class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow!
 	
-    fileprivate(set) var midiManager: MIDI.IO.Manager?
+    fileprivate(set) var midiManager: MIDIManager?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // set up midi manager
         
         midiManager = {
             let newManager =
-                MIDI.IO.Manager(
+                MIDIManager(
                     clientName: "MIDISystemInfo",
                     model: "TestApp",
                     manufacturer: "Orchetect"
