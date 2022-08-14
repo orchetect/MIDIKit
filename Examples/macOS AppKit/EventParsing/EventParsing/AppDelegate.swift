@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             try midiManager.addInput(
                 name: virtualInputName,
                 tag: virtualInputName,
-                uniqueID: .userDefaults(key: virtualInputName),
+                uniqueID: .managed(userDefaultsKey: virtualInputName),
                 receiveHandler: .events() { [weak self] events in
                     events.forEach { self?.handleMIDI(event: $0) }
                 }

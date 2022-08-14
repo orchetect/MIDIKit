@@ -34,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             try midiManager.addOutput(
                 name: virtualOutputName,
                 tag: virtualOutputName,
-                uniqueID: .userDefaults(key: virtualOutputName)
+                uniqueID: .managed(userDefaultsKey: virtualOutputName)
             )
         } catch {
             print("Error creating virtual MIDI output:", error.localizedDescription)

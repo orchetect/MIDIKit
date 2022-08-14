@@ -18,13 +18,16 @@ public enum MIDIIdentifierPersistence {
     /// In the event a collision with an existing unique ID in the system, a new random ID will be generated until there are no collisions.
     case unmanaged(MIDIIdentifier)
         
-    /// The MIDI endpoint's unique ID is managed automatically and persistently stored in `UserDefaults`.
+    /// The MIDI endpoint's unique ID is managed automatically and persistently stored in `UserDefaults`. The `standard` suite is used by default unless specified.
     ///
     /// If a unique ID does not yet exist for this object, one will be generated randomly.
     ///
     /// In the event a collision with an existing MIDI endpoint unique ID in the system, a new random ID will be generated until there are no collisions.
     /// The ID will then be cached in `UserDefaults` using the key string provided - if the key exists, it will be overwritten.
-    case userDefaults(key: String, suite: UserDefaults = .standard)
+    case managed(
+        userDefaultsKey: String,
+        suite: UserDefaults = .standard
+    )
         
     /// Supply handlers to facilitate persistently reading and storing the MIDI endpoint's unique ID.
     ///
@@ -50,7 +53,7 @@ extension MIDIIdentifierPersistence {
         case let .unmanaged(uniqueID: uniqueID):
             return uniqueID
             
-        case let .userDefaults(key: key, suite: suite):
+        case let .managed(userDefaultsKey: key, suite: suite):
             // test to see if key does not exist first
             // otherwise just calling integer(forKey:) returns 0 if key does not exist
             guard suite.object(forKey: key) != nil
@@ -81,7 +84,7 @@ extension MIDIIdentifierPersistence {
         case .unmanaged(uniqueID: _):
             return // no storage
         
-        case let .userDefaults(key: key, suite: suite):
+        case let .managed(userDefaultsKey: key, suite: suite):
             suite.setValue(newValue, forKey: key)
             
         case .manualStorage(readHandler: _, storeHandler: let storeHandler):

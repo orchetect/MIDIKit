@@ -72,7 +72,7 @@ struct ContentView: View {
                     try midiManager.addInput(
                         name: kInputName,
                         tag: kInputTag,
-                        uniqueID: .userDefaults(key: kInputTag),
+                        uniqueID: .managed(userDefaultsKey: kInputTag),
                         receiveHandler: .eventsLogging()
                     )
                 }
@@ -83,7 +83,7 @@ struct ContentView: View {
                     try midiManager.addOutput(
                         name: kOutputName,
                         tag: kOutputTag,
-                        uniqueID: .userDefaults(key: kOutputTag)
+                        uniqueID: .managed(userDefaultsKey: kOutputTag)
                     )
                 }
             } catch {

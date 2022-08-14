@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try midiManager.addInput(
                 name: virtualInputName,
                 tag: virtualInputName,
-                uniqueID: .userDefaults(key: virtualInputName),
+                uniqueID: .managed(userDefaultsKey: virtualInputName),
                 receiveHandler: .eventsLogging(filterActiveSensingAndClock: true)
             )
         } catch {
