@@ -1,6 +1,7 @@
 //
 //  SysEx8 Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform
@@ -14,8 +15,8 @@ final class SysEx8_Tests: XCTestCase {
     
     func testSysEx8_SingleUMP() throws {
         let sourceRawBytes: [Byte] = [0x00, // stream ID
-                                           0x00, 0x7D, // sysEx ID
-                                           0x01, 0x34, 0xE6] // data bytes
+                                      0x00, 0x7D, // sysEx ID
+                                      0x01, 0x34, 0xE6] // data bytes
 		
         let event = try MIDIEvent.sysEx8(rawBytes: sourceRawBytes)
         guard case let .sysEx8(innerEvent) = event
@@ -248,8 +249,8 @@ final class SysEx8_Tests: XCTestCase {
         // invalid sysEx ID
         XCTAssertThrowsError(
             try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
-                                             0x00, 0x80, // sysEx ID -- invalid
-                                             0x01, 0x34, 0xE6]) // data bytes
+                                            0x00, 0x80, // sysEx ID -- invalid
+                                            0x01, 0x34, 0xE6]) // data bytes
         )
     }
 	
@@ -257,15 +258,15 @@ final class SysEx8_Tests: XCTestCase {
         // ensure instances equate correctly
 		
         let event1A = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
-                                                       0x00, 0x41, // sysEx ID
-                                                       0x01, 0x34, 0xE6]) // data bytes)
+                                                      0x00, 0x41, // sysEx ID
+                                                      0x01, 0x34, 0xE6]) // data bytes)
         let event1B = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
-                                                       0x00, 0x41, // sysEx ID
-                                                       0x01, 0x34, 0xE6]) // data bytes)
+                                                      0x00, 0x41, // sysEx ID
+                                                      0x01, 0x34, 0xE6]) // data bytes)
         
         let event2 = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
-                                                      0x00, 0x42, // sysEx ID
-                                                      0x01, 0x34, 0xE5]) // data bytes)
+                                                     0x00, 0x42, // sysEx ID
+                                                     0x01, 0x34, 0xE5]) // data bytes)
         
         XCTAssert(event1A == event1B)
 		
@@ -276,15 +277,15 @@ final class SysEx8_Tests: XCTestCase {
         // ensure instances hash correctly
         
         let event1A = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
-                                                       0x00, 0x41, // sysEx ID
-                                                       0x01, 0x34, 0xE6]) // data bytes)
+                                                      0x00, 0x41, // sysEx ID
+                                                      0x01, 0x34, 0xE6]) // data bytes)
         let event1B = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
-                                                       0x00, 0x41, // sysEx ID
-                                                       0x01, 0x34, 0xE6]) // data bytes)
+                                                      0x00, 0x41, // sysEx ID
+                                                      0x01, 0x34, 0xE6]) // data bytes)
         
         let event2 = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
-                                                      0x00, 0x42, // sysEx ID
-                                                      0x01, 0x34, 0xE5]) // data bytes)
+                                                     0x00, 0x42, // sysEx ID
+                                                     0x01, 0x34, 0xE5]) // data bytes)
         
         let set1: Set<MIDIEvent> = [event1A, event1B]
 		

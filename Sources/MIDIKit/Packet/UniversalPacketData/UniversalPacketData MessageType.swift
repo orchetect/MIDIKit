@@ -1,6 +1,7 @@
 //
 //  UniversalPacketData MessageType.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension UniversalMIDIPacketData {

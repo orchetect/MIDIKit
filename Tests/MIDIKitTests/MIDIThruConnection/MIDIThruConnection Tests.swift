@@ -1,6 +1,7 @@
 //
 //  MIDIThruConnection Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 // iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets

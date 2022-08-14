@@ -1,6 +1,7 @@
 //
 //  ChanVoice Value Conversions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 // MARK: - 7-Bit <--> 16-Bit

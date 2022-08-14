@@ -1,6 +1,7 @@
 //
-//  Note CC Controller Name.swift
+//  Note CC Registered name.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.Note.CC.Controller.Registered {

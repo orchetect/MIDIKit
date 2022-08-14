@@ -1,6 +1,7 @@
 //
-//  BytePair.swift
+//  Byte Pair.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 /// Type that holds a pair of `Byte`s - one MSB `Byte`, one LSB `Byte`.

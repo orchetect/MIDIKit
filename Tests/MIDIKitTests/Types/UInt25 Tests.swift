@@ -1,6 +1,7 @@
 //
 //  UInt25 Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform
@@ -35,13 +36,13 @@ final class UInt25_Tests: XCTestCase {
         // removed Obj-C helper calls that enabled catching exceptions
         // so that MIDIKit could be pure Swift
         
-        //_XCTAssertThrows {
+        // _XCTAssertThrows {
         //    _ = UInt25(0 - 1)
-        //}
+        // }
         //
-        //_XCTAssertThrows { [self] in
+        // _XCTAssertThrows { [self] in
         //    _ = UInt25(_max + 1)
-        //}
+        // }
     }
 	
     func testInit_BinaryInteger_Exactly() {
@@ -88,15 +89,15 @@ final class UInt25_Tests: XCTestCase {
         // removed Obj-C helper calls that enabled catching exceptions
         // so that MIDIKit could be pure Swift
         
-        //_XCTAssertThrows {
+        // _XCTAssertThrows {
         //    _ = UInt25(Double(0 - 1))
         //    _ = UInt25(Float(0 - 1))
-        //}
+        // }
 
-        //_XCTAssertThrows { [self] in
+        // _XCTAssertThrows { [self] in
         //    _ = UInt25(Double(_max + 1))
         //    _ = UInt25(Float(_max + 1))
-        //}
+        // }
     }
     
     func testInit_BinaryFloatingPoint_Exactly() {

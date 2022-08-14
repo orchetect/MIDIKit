@@ -1,6 +1,7 @@
 //
 //  MIDIManager Public Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
@@ -11,7 +12,6 @@ import MIDIKit
 import CoreMIDI
 
 final class MIDIManager_Public_Tests: XCTestCase {
-    
     // Note: this file does not contain any tests. It is a scratchpad.
     
     let manager = MIDIManager(

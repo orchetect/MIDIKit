@@ -1,6 +1,7 @@
 //
 //  MIDIEventFilterGroup.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 /// An object that stores zero or more MIDI event filters in series, with a method to filter MIDI events through the stored filters.

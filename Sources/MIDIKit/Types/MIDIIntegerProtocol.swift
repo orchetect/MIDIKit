@@ -1,6 +1,7 @@
 //
 //  MIDIIntegerProtocol.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 /// Specialized integer types representing non-standard bit-width values in `MIDIKit`.

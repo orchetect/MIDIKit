@@ -1,6 +1,7 @@
 //
 //  UInt25.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 /// A 25-bit unsigned integer value type used in `MIDIKit`.

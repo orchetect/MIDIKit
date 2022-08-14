@@ -1,6 +1,7 @@
 //
+//  MIDINote Cakewalk Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  MIT License
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform

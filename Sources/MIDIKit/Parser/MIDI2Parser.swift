@@ -1,6 +1,7 @@
 //
 //  MIDI2Parser.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 /// Parser for MIDI 2.0 events.
