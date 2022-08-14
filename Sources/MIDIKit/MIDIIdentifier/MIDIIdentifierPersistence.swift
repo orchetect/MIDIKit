@@ -9,8 +9,8 @@ import Foundation
 /// Defines persistence behavior of a MIDI unique ID in the system.
 public enum MIDIIdentifierPersistence {
     /// Ad-Hoc identifier generation.
-    /// The unique ID will be randomly generated every time it is created in the system with no persistent storage provided.
-    /// This is default Core MIDI behavior when no persistently-stored identifier is provided.
+    /// The unique ID will be randomly generated every time the endpoint is created in the system -- with no persistent storage provided.
+    /// This is default Core MIDI behavior when no identifier is provided.
     ///
     /// ⚠️ This is generally not recommended and is provided mainly for testing purposes.
     ///
