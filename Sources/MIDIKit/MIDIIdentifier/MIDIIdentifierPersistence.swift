@@ -14,7 +14,7 @@ public enum MIDIIdentifierPersistence {
     ///
     /// ⚠️ This is generally not recommended and is provided mainly for testing purposes.
     ///
-    /// Use `.managedUserDefaults(key:)` where possible, or provide your own storage with `manualStorage(::)`
+    /// Use `.userDefaultsManaged(key:)` where possible, or provide your own storage with `manualStorage(::)`
     case adHoc
     
     /// Unmanaged.
@@ -32,7 +32,7 @@ public enum MIDIIdentifierPersistence {
     ///
     /// In the event a collision with an existing MIDI endpoint unique ID in the system, a new random ID will be generated until there are no collisions.
     /// The ID will then be cached in `UserDefaults` using the key string provided - if the key exists, it will be overwritten.
-    case managedUserDefaults(
+    case userDefaultsManaged(
         key: String,
         suite: UserDefaults = .standard
     )
@@ -62,7 +62,7 @@ extension MIDIIdentifierPersistence {
         case let .unmanaged(uniqueID: uniqueID):
             return uniqueID
             
-        case let .managedUserDefaults(key: key, suite: suite):
+        case let .userDefaultsManaged(key: key, suite: suite):
             // test to see if key does not exist first
             // otherwise just calling integer(forKey:) returns 0 if key does not exist
             guard suite.object(forKey: key) != nil
@@ -93,7 +93,7 @@ extension MIDIIdentifierPersistence {
         case .unmanaged(uniqueID: _):
             return // no storage
         
-        case let .managedUserDefaults(key: key, suite: suite):
+        case let .userDefaultsManaged(key: key, suite: suite):
             suite.setValue(newValue, forKey: key)
             
         case .managedStorage(readHandler: _, storeHandler: let storeHandler):

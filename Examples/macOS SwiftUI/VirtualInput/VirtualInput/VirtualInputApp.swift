@@ -30,7 +30,7 @@ struct VirtualInputApp: App {
             try midiManager.addInput(
                 name: virtualInputName,
                 tag: virtualInputName,
-                uniqueID: ..managedUserDefaults(key: virtualInputName),
+                uniqueID: .userDefaultsManaged(key: virtualInputName),
                 receiveHandler: .eventsLogging(filterActiveSensingAndClock: true)
             )
         } catch {

@@ -30,7 +30,7 @@ struct VirtualOutputApp: App {
             try midiManager.addOutput(
                 name: virtualOutputName,
                 tag: virtualOutputName,
-                uniqueID: ..managedUserDefaults(key: virtualOutputName)
+                uniqueID: .userDefaultsManaged(key: virtualOutputName)
             )
         } catch {
             print("Error creating virtual MIDI output:", error.localizedDescription)
