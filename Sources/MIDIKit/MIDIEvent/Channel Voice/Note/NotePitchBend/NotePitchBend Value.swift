@@ -1,5 +1,5 @@
 //
-//  Note PitchBend Value.swift
+//  NotePitchBend Value.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //

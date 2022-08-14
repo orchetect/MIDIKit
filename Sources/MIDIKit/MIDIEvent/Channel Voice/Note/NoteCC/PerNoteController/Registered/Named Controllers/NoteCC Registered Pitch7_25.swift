@@ -1,5 +1,5 @@
 //
-//  Note CC Registered Pitch7_25.swift
+//  NoteCC Registered Pitch7_25.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //

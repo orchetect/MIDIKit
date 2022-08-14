@@ -1,5 +1,5 @@
 //
-//  Note CC Registered Operators.swift
+//  NoteCC Registered Operators.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
