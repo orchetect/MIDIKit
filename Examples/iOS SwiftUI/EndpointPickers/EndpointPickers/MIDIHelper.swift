@@ -55,7 +55,7 @@ class MIDIHelper: ObservableObject {
         midiManager?.managedInputConnections[ConnectionTags.midiIn]
     }
     
-    public func midiInUpdateConnection(selectedUniqueID: MIDIUniqueID) {
+    public func midiInUpdateConnection(selectedUniqueID: MIDIIdentifier) {
         guard let midiInputConnection = midiInputConnection else { return }
         
         if selectedUniqueID == 0 {
@@ -74,7 +74,7 @@ class MIDIHelper: ObservableObject {
         midiManager?.managedOutputConnections[ConnectionTags.midiOut]
     }
     
-    public func midiOutUpdateConnection(selectedUniqueID: MIDIUniqueID) {
+    public func midiOutUpdateConnection(selectedUniqueID: MIDIIdentifier) {
         guard let midiOutputConnection = midiOutputConnection else { return }
         
         if selectedUniqueID == 0 {
@@ -109,7 +109,7 @@ class MIDIHelper: ObservableObject {
         try? midiManager?.addInput(
             name: "Test In 1",
             tag: ConnectionTags.midiTestIn1,
-            uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestIn1),
+            uniqueID: .userDefaults(key: ConnectionTags.midiTestIn1),
             receiveHandler: .events() { [weak self] events in
                 DispatchQueue.main.async {
                     self?.receivedEvents.append(contentsOf: events)
@@ -120,7 +120,7 @@ class MIDIHelper: ObservableObject {
         try? midiManager?.addInput(
             name: "Test In 2",
             tag: ConnectionTags.midiTestIn2,
-            uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestIn2),
+            uniqueID: .userDefaults(key: ConnectionTags.midiTestIn2),
             receiveHandler: .events() { [weak self] events in
                 DispatchQueue.main.async {
                     self?.receivedEvents.append(contentsOf: events)
@@ -131,13 +131,13 @@ class MIDIHelper: ObservableObject {
         try? midiManager?.addOutput(
             name: "Test Out 1",
             tag: ConnectionTags.midiTestOut1,
-            uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestOut1)
+            uniqueID: .userDefaults(key: ConnectionTags.midiTestOut1)
         )
         
         try? midiManager?.addOutput(
             name: "Test Out 2",
             tag: ConnectionTags.midiTestOut2,
-            uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestOut2)
+            uniqueID: .userDefaults(key: ConnectionTags.midiTestOut2)
         )
     }
     
@@ -155,11 +155,11 @@ class MIDIHelper: ObservableObject {
     
     // MARK: - Helpers
     
-    public func isInputPresentInSystem(uniqueID: MIDIUniqueID) -> Bool {
+    public func isInputPresentInSystem(uniqueID: MIDIIdentifier) -> Bool {
         midiManager?.endpoints.inputs.contains(whereUniqueID: uniqueID) ?? false
     }
     
-    public func isOutputPresentInSystem(uniqueID: MIDIUniqueID) -> Bool {
+    public func isOutputPresentInSystem(uniqueID: MIDIIdentifier) -> Bool {
         midiManager?.endpoints.outputs.contains(whereUniqueID: uniqueID) ?? false
     }
 }

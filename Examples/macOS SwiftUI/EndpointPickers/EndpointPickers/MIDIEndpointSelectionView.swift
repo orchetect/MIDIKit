@@ -11,13 +11,13 @@ struct MIDIInSelectionView: View {
     @EnvironmentObject var midiManager: MIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
-    @Binding var midiInSelectedID: MIDIUniqueID
+    @Binding var midiInSelectedID: MIDIIdentifier
     @Binding var midiInSelectedDisplayName: String
     
     var body: some View {
         Picker("MIDI In", selection: $midiInSelectedID) {
             Text("None")
-                .tag(0 as MIDIUniqueID)
+                .tag(0 as MIDIIdentifier)
             
             if midiInSelectedID != 0,
                !midiHelper.isOutputPresentInSystem(uniqueID: midiInSelectedID)
@@ -39,13 +39,13 @@ struct MIDIOutSelectionView: View {
     @EnvironmentObject var midiManager: MIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
-    @Binding var midiOutSelectedID: MIDIUniqueID
+    @Binding var midiOutSelectedID: MIDIIdentifier
     @Binding var midiOutSelectedDisplayName: String
     
     var body: some View {
         Picker("MIDI Out", selection: $midiOutSelectedID) {
             Text("None")
-                .tag(0 as MIDIUniqueID)
+                .tag(0 as MIDIIdentifier)
             
             if midiOutSelectedID != 0,
                !midiHelper.isInputPresentInSystem(uniqueID: midiOutSelectedID)

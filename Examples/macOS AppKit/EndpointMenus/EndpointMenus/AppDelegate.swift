@@ -18,10 +18,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         manufacturer: "MyCompany"
     )
     
-    public private(set) var midiOutMenuSelectedID: MIDIUniqueID = 0
+    public private(set) var midiOutMenuSelectedID: MIDIIdentifier = 0
     public private(set) var midiOutMenuSelectedDisplayName: String = ""
     
-    public private(set) var midiInMenuSelectedID: MIDIUniqueID = 0
+    public private(set) var midiInMenuSelectedID: MIDIIdentifier = 0
     public private(set) var midiInMenuSelectedDisplayName: String = ""
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -84,16 +84,20 @@ extension AppDelegate {
     private func midiRestorePersistentState() {
         // restore endpoint selection saved to UserDefaults
         midiInMenuSetSelected(
-            id: .init(exactly: UserDefaults.standard.integer(forKey: UserDefaultsKeys.midiInID)) ??
-                0,
-            displayName: UserDefaults.standard
-                .string(forKey: UserDefaultsKeys.midiInDisplayName) ?? ""
+            id: .init(
+                exactly: UserDefaults.standard.integer(forKey: UserDefaultsKeys.midiInID)
+            ) ?? 0,
+            displayName: UserDefaults.standard.string(
+                forKey: UserDefaultsKeys.midiInDisplayName
+            ) ?? ""
         )
         midiOutMenuSetSelected(
-            id: .init(exactly: UserDefaults.standard.integer(forKey: UserDefaultsKeys.midiOutID)) ??
-                0,
-            displayName: UserDefaults.standard
-                .string(forKey: UserDefaultsKeys.midiOutDisplayName) ?? ""
+            id: .init(
+                exactly: UserDefaults.standard.integer(forKey: UserDefaultsKeys.midiOutID)
+            ) ?? 0,
+            displayName: UserDefaults.standard.string(
+                forKey: UserDefaultsKeys.midiOutDisplayName
+            ) ?? ""
         )
     }
     
@@ -101,13 +105,19 @@ extension AppDelegate {
     private func midiSavePersistentState() {
         // save endpoint selection to UserDefaults
         
-        UserDefaults.standard.set(midiInMenuSelectedID, forKey: UserDefaultsKeys.midiInID)
+        UserDefaults.standard.set(
+            midiInMenuSelectedID,
+            forKey: UserDefaultsKeys.midiInID
+        )
         UserDefaults.standard.set(
             midiInMenuSelectedDisplayName,
             forKey: UserDefaultsKeys.midiInDisplayName
         )
         
-        UserDefaults.standard.set(midiOutMenuSelectedID, forKey: UserDefaultsKeys.midiOutID)
+        UserDefaults.standard.set(
+            midiOutMenuSelectedID,
+            forKey: UserDefaultsKeys.midiOutID
+        )
         UserDefaults.standard.set(
             midiOutMenuSelectedDisplayName,
             forKey: UserDefaultsKeys.midiOutDisplayName
@@ -134,7 +144,7 @@ extension AppDelegate {
     
     /// Set the selected MIDI output manually.
     public func midiInMenuSetSelected(
-        id: MIDIUniqueID,
+        id: MIDIIdentifier,
         displayName: String
     ) {
         midiInMenuSelectedID = id
@@ -196,7 +206,7 @@ extension AppDelegate {
     
     @objc
     private func midiInMenuItemSelected(_ sender: NSMenuItem?) {
-        midiInMenuSelectedID = MIDIUniqueID(exactly: sender?.tag ?? 0) ?? 0
+        midiInMenuSelectedID = MIDIIdentifier(exactly: sender?.tag ?? 0) ?? 0
         
         if let foundOutput = midiManager.endpoints.outputs.first(where: {
             $0.uniqueID == midiInMenuSelectedID
@@ -230,7 +240,7 @@ extension AppDelegate {
     }
     
     public func midiOutMenuSetSelected(
-        id: MIDIUniqueID,
+        id: MIDIIdentifier,
         displayName: String
     ) {
         midiOutMenuSelectedID = id
@@ -290,7 +300,7 @@ extension AppDelegate {
     
     @objc
     private func midiOutMenuItemSelected(_ sender: NSMenuItem?) {
-        midiOutMenuSelectedID = MIDIUniqueID(exactly: sender?.tag ?? 0) ?? 0
+        midiOutMenuSelectedID = MIDIIdentifier(exactly: sender?.tag ?? 0) ?? 0
         
         if let foundInput = midiManager.endpoints.inputs.first(where: {
             $0.uniqueID == midiOutMenuSelectedID

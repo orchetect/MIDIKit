@@ -34,7 +34,7 @@ class MIDIHelper: ObservableObject {
             try midiManager.addInput(
                 name: virtualInputName,
                 tag: virtualInputName,
-                uniqueID: .userDefaultsManaged(key: virtualInputName),
+                uniqueID: .userDefaults(key: virtualInputName),
                 receiveHandler: .events() { [weak self] events in
                     events.forEach { self?.handleMIDI(event: $0) }
                 }

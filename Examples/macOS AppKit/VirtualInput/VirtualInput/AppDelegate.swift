@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             try midiManager.addInput(
                 name: virtualInputName,
                 tag: virtualInputName,
-                uniqueID: .userDefaultsManaged(key: virtualInputName),
+                uniqueID: .userDefaults(key: virtualInputName),
                 receiveHandler: .eventsLogging(filterActiveSensingAndClock: true)
             )
         } catch {

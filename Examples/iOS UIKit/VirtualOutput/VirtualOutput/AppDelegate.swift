@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try midiManager.addOutput(
                 name: virtualOutputName,
                 tag: virtualOutputName,
-                uniqueID: .userDefaultsManaged(key: virtualOutputName)
+                uniqueID: .userDefaults(key: virtualOutputName)
             )
         } catch {
             print("Error creating virtual MIDI output:", error.localizedDescription)
