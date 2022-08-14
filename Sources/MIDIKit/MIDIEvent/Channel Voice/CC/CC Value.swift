@@ -7,5 +7,5 @@
 extension MIDIEvent.CC {
     public typealias Value = MIDIEvent.ChanVoice7Bit32BitValue
     
-    public typealias ValueValidated = MIDIEvent.ChanVoice7Bit32BitValue.Validated
+    public typealias ValueValidated = Value.Validated
 }

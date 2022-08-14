@@ -9,11 +9,11 @@
 import XCTest
 import MIDIKit
 
-final class MIDIEventCC_Tests: XCTestCase {
+final class MIDIEvent_CC_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets
     
-    typealias CC = MIDIEvent.Note.CC
+    typealias CC = MIDIEvent.NoteCC
     
     func testCCNum() {
         for ccNum: UInt7 in 0 ... 127 {

@@ -9,7 +9,7 @@
 import XCTest
 import MIDIKit
 
-final class MIDIEventCCNRPN_Tests: XCTestCase {
+final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets
     

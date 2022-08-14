@@ -418,7 +418,7 @@ public class MIDI2Parser {
                 
             let index = byte(2)
                 
-            let cc: MIDIEvent.Note.CC.Controller
+            let cc: MIDIEvent.NoteCC.PerNoteController
             switch statusNibble {
             case 0x0:
                 cc = .registered(.init(number: index))

@@ -12,19 +12,19 @@ public enum MIDIEvent: Equatable, Hashable {
         
     /// Channel Voice Message: Note On
     /// (MIDI 1.0 / 2.0)
-    case noteOn(Note.On)
+    case noteOn(NoteOn)
         
     /// Channel Voice Message: Note Off
     /// (MIDI 1.0 / 2.0)
-    case noteOff(Note.Off)
+    case noteOff(NoteOff)
         
     /// Channel Voice Message: Per-Note Control Change (CC)
     /// (MIDI 2.0)
-    case noteCC(Note.CC)
+    case noteCC(NoteCC)
         
     /// Channel Voice Message: Per-Note Pitch Bend
     /// (MIDI 2.0)
-    case notePitchBend(Note.PitchBend)
+    case notePitchBend(NotePitchBend)
         
     /// Channel Voice Message: Per-Note Aftertouch (Polyphonic Aftertouch)
     /// (MIDI 1.0 / 2.0)
@@ -33,13 +33,13 @@ public enum MIDIEvent: Equatable, Hashable {
     /// - Pro Tools: "Polyphonic Aftertouch"
     /// - Logic Pro: "Polyphonic Aftertouch"
     /// - Cubase: "Poly Pressure"
-    case notePressure(Note.Pressure)
+    case notePressure(NotePressure)
         
     /// Channel Voice Message: Per-Note Management
     /// (MIDI 2.0)
     ///
     /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per- Note Controllers to multiple Notes on the same Note Number.
-    case noteManagement(Note.Management)
+    case noteManagement(NoteManagement)
         
     /// Channel Voice Message: Channel Control Change (CC)
     /// (MIDI 1.0 / 2.0)
