@@ -18,7 +18,7 @@ internal func getSystemDevices() -> [MIDIDevice] {
     for i in 0 ..< devCount {
         let device = MIDIGetDevice(i)
             
-        devices.append(.init(device))
+        devices.append(MIDIDevice(from: device))
     }
         
     return devices
@@ -35,7 +35,7 @@ internal func getSystemEntities(for device: CoreMIDI.MIDIDeviceRef) -> [MIDIEnti
     for i in 0 ..< entityCount {
         let entity = MIDIDeviceGetEntity(device, i)
             
-        entities.append(.init(entity))
+        entities.append(MIDIEntity(from: entity))
     }
         
     return entities

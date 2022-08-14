@@ -37,7 +37,7 @@ extension MIDIManager {
         
         _ = session
         // do nothing for now.
-        // could update some cached network MIDI session info in the Manager in future?
+        // could update some cached network MIDI session info in the MIDIManager in future?
     }
     
     @objc
@@ -48,7 +48,7 @@ extension MIDIManager {
         
         _ = session
         // do nothing for now.
-        // could update some cached network MIDI session info in the Manager in future?
+        // could update some cached network MIDI session info in the MIDIManager in future?
     }
 }
 

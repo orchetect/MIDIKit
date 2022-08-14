@@ -17,10 +17,10 @@ struct EndpointPickersApp: App {
     
     @ObservedObject var midiHelper = MIDIHelper()
     
-    @State var midiInSelectedID: MIDIIdentifier = 0
+    @State var midiInSelectedID: MIDIIdentifier = .invalidMIDIIdentifier
     @State var midiInSelectedDisplayName: String = "None"
     
-    @State var midiOutSelectedID: MIDIIdentifier = 0
+    @State var midiOutSelectedID: MIDIIdentifier = .invalidMIDIIdentifier
     @State var midiOutSelectedDisplayName: String = "None"
     
     init() {
@@ -46,7 +46,7 @@ struct EndpointPickersApp: App {
         }
         
             .onChange(of: midiInSelectedID) {
-                if $0 == 0 {
+                if $0 == .invalidMIDIIdentifier {
                     midiInSelectedDisplayName = "None"
                 } else if let found = midiManager.endpoints.outputs
                     .first(whereUniqueID: .init($0))
@@ -59,7 +59,7 @@ struct EndpointPickersApp: App {
             }
         
             .onChange(of: midiOutSelectedID) {
-                if $0 == 0 {
+                if $0 == .invalidMIDIIdentifier {
                     midiOutSelectedDisplayName = "None"
                 } else if let found = midiManager.endpoints.inputs
                     .first(whereUniqueID: .init($0))
@@ -103,8 +103,7 @@ extension EndpointPickersApp {
         
         let inID = Int32(
             exactly: UserDefaults.standard.integer(forKey: UserDefaultsKeys.midiInID)
-        ) ??
-            0
+        ) ?? .invalidMIDIIdentifier
         _midiInSelectedID = State(wrappedValue: inID)
         
         let outName = UserDefaults.standard
@@ -114,7 +113,7 @@ extension EndpointPickersApp {
         let outID = Int32(
             exactly: UserDefaults.standard
                 .integer(forKey: UserDefaultsKeys.midiOutID)
-        ) ?? 0
+        ) ?? .invalidMIDIIdentifier
         _midiOutSelectedID = State(wrappedValue: outID)
     }
     

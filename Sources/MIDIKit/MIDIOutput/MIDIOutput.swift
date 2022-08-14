@@ -8,11 +8,11 @@
 import Foundation
 @_implementationOnly import CoreMIDI
 
-/// A managed virtual MIDI output endpoint created in the system by the MIDI I/O `Manager`.
+/// A managed virtual MIDI output endpoint created in the system by the MIDI I/O `MIDIManager`.
 ///
-/// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `Manager`'s `managedOutputs` collection.
+/// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `MIDIManager`'s `managedOutputs` collection.
 ///
-/// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the endpoint (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.output, ...)` or `.removeAll` on the `Manager` to destroy the managed output.)
+/// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the endpoint (which is either at such time the `MIDIManager` is de-initialized, or when calling `.remove(.output, ...)` or `.removeAll` on the `MIDIManager` to destroy the managed output.)
 public class MIDIOutput: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
@@ -37,12 +37,12 @@ public class MIDIOutput: _MIDIIOManagedProtocol {
     // init
         
     /// Internal init.
-    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addOutput()`, and destroyed when calling `.remove(.output, ...)` or `.removeAll()`.
+    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `MIDIManager` instance when calling `.addOutput()`, and destroyed when calling `.remove(.output, ...)` or `.removeAll()`.
     ///
     /// - Parameters:
     ///   - name: The port name as displayed in the system.
     ///   - uniqueID: The port's unique ID in the system.
-    ///   - midiManager: Reference to I/O Manager object.
+    ///   - midiManager: Reference to parent `MIDIManager` object.
     ///   - api: Core MIDI API version.
     internal init(
         name: String,
@@ -64,7 +64,7 @@ public class MIDIOutput: _MIDIIOManagedProtocol {
 extension MIDIOutput {
     /// Returns the output's endpoint in the system.
     public var endpoint: MIDIOutputEndpoint {
-        .init(coreMIDIOutputPortRef ?? 0)
+        .init(from: coreMIDIOutputPortRef ?? 0)
     }
     
     /// Queries the system and returns the endpoint ref if the endpoint exists (by matching port name and unique ID)

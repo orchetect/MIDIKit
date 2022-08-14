@@ -9,16 +9,16 @@ import Foundation
 
 /// Endpoint filter rules.
 public struct MIDIEndpointFilter: Equatable, Hashable {
-    /// Virtual endpoints owned by the MIDI I/O `Manager` instance.
+    /// Virtual endpoints owned by the MIDI I/O `MIDIManager` instance.
     public var owned: Bool = false
         
     /// Endpoints matching the given criteria.
-    public var criteria: Set<MIDIEndpointIDCriteria> = []
+    public var criteria: Set<MIDIEndpointIdentity> = []
         
     /// Endpoint filter rules.
     public init(
         owned: Bool = false,
-        criteria: Set<MIDIEndpointIDCriteria> = []
+        criteria: Set<MIDIEndpointIdentity> = []
     ) {
         self.owned = owned
         self.criteria = criteria
@@ -28,7 +28,7 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
     @_disfavoredOverload
     public init(
         owned: Bool = false,
-        criteria: [MIDIEndpointIDCriteria]
+        criteria: [MIDIEndpointIdentity]
     ) {
         self.owned = owned
         self.criteria = Set(criteria)
@@ -36,19 +36,19 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
         
     /// Endpoint filter rules.
     @_disfavoredOverload
-    public init<T: MIDIEndpointProtocol & Hashable>(
+    public init<T: MIDIEndpoint & Hashable>(
         owned: Bool = false,
         criteria: Set<T>
     ) {
         self.owned = owned
             
-        let ids = criteria.asAnyEndpoints().asCriteria()
+        let ids = criteria.asAnyEndpoints().asIdentities()
         self.criteria = Set(ids)
     }
         
     /// Endpoint filter rules.
     @_disfavoredOverload
-    public init<T: MIDIEndpointProtocol & Hashable>(
+    public init<T: MIDIEndpoint & Hashable>(
         owned: Bool = false,
         criteria: [T]
     ) {

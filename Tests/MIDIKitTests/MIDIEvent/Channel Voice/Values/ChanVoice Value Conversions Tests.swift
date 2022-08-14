@@ -8,7 +8,7 @@
 import XCTest
 @testable import MIDIKit
 
-final class ChanVoiceValueConversionsTests: XCTestCase {
+final class ChanVoiceValue_Conversions_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets
     // swiftformat:options --maxwidth none

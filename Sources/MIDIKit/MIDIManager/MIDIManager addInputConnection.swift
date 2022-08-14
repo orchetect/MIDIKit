@@ -9,20 +9,20 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDIManager {
-    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `Manager`.
+    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `MIDIManager`.
     ///
     /// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Parameters:
-    ///   - toOutputs: Criteria for identifying MIDI endpoint(s) in the system to connect to.
-    ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
+    ///   - toOutputs: Criteria for identifying target MIDI endpoint(s). These may be added or removed later.
+    ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
     ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///   - receiveHandler: Event handler for received MIDI packets.
     ///
     /// - Throws: `MIDIIOError`
     public func addInputConnection(
-        toOutputs: Set<MIDIEndpointIDCriteria>,
+        toOutputs: Set<MIDIEndpointIdentity>,
         tag: String,
         mode: MIDIConnectionMode = .definedEndpoints,
         filter: MIDIEndpointFilter = .default(),
@@ -47,20 +47,20 @@ extension MIDIManager {
         }
     }
     
-    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `Manager`.
+    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `MIDIManager`.
     ///
     /// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Parameters:
-    ///   - toOutputs: Criteria for identifying MIDI endpoint(s) in the system to connect to.
-    ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
+    ///   - toOutputs: Criteria for identifying target MIDI endpoint(s). These may be added or removed later.
+    ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
     ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///   - receiveHandler: Event handler for received MIDI packets.
     ///
     /// - Throws: `MIDIIOError`
     public func addInputConnection(
-        toOutputs: [MIDIEndpointIDCriteria],
+        toOutputs: [MIDIEndpointIdentity],
         tag: String,
         mode: MIDIConnectionMode = .definedEndpoints,
         filter: MIDIEndpointFilter = .default(),
@@ -75,13 +75,13 @@ extension MIDIManager {
         )
     }
     
-    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `Manager`.
+    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `MIDIManager`.
     ///
     /// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Parameters:
-    ///   - toOutputs: Criteria for identifying MIDI endpoint(s) in the system to connect to.
-    ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
+    ///   - toOutputs: Target MIDI endpoint(s). These may be added or removed later.
+    ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
     ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///   - receiveHandler: Event handler for received MIDI packets.
@@ -96,7 +96,7 @@ extension MIDIManager {
         receiveHandler: MIDIIOReceiveHandler.Definition
     ) throws {
         try addInputConnection(
-            toOutputs: toOutputs.asCriteria(),
+            toOutputs: toOutputs.asIdentities(),
             tag: tag,
             mode: mode,
             filter: filter,

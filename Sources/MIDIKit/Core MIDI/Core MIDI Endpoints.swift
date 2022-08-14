@@ -20,7 +20,7 @@ internal func getSystemSourceEndpoints() -> [MIDIOutputEndpoint] {
     for i in 0 ..< srcCount {
         let endpoint = MIDIGetSource(i)
             
-        endpoints.append(.init(endpoint))
+        endpoints.append(MIDIOutputEndpoint(from: endpoint))
     }
         
     return endpoints
@@ -39,7 +39,7 @@ internal func getSystemDestinationEndpoints() -> [MIDIInputEndpoint] {
     for i in 0 ..< destCount {
         let endpoint = MIDIGetDestination(i)
             
-        endpoints.append(.init(endpoint))
+        endpoints.append(MIDIInputEndpoint(from: endpoint))
     }
         
     return endpoints
@@ -125,7 +125,7 @@ internal func getSystemEntity(
         )
     }
         
-    return MIDIEntity(ent)
+    return MIDIEntity(from: ent)
 }
 
 #endif

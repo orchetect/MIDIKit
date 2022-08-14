@@ -11,6 +11,9 @@ import MIDIKit
 import CoreMIDI
 
 final class MIDIManager_Public_Tests: XCTestCase {
+    
+    // Note: this file does not contain any tests. It is a scratchpad.
+    
     let manager = MIDIManager(
         clientName: UUID().uuidString,
         model: "MIDIKit123",

@@ -18,7 +18,7 @@ class MIDIHelper: ObservableObject {
     /// Run once after setting the local `midiManager` property.
     public func initialSetup() {
         guard let midiManager = midiManager else {
-            print("MIDI Manager is missing.")
+            print("MIDIManager is missing.")
             return
         }
         
@@ -58,7 +58,7 @@ class MIDIHelper: ObservableObject {
     public func midiInUpdateConnection(selectedUniqueID: MIDIIdentifier) {
         guard let midiInputConnection = midiInputConnection else { return }
         
-        if selectedUniqueID == 0 {
+        if selectedUniqueID == .invalidMIDIIdentifier {
             midiInputConnection.removeAllOutputs()
         } else {
             if midiInputConnection.outputsCriteria != [.uniqueID(selectedUniqueID)] {
@@ -77,7 +77,7 @@ class MIDIHelper: ObservableObject {
     public func midiOutUpdateConnection(selectedUniqueID: MIDIIdentifier) {
         guard let midiOutputConnection = midiOutputConnection else { return }
         
-        if selectedUniqueID == 0 {
+        if selectedUniqueID == .invalidMIDIIdentifier {
             midiOutputConnection.removeAllInputs()
         } else {
             if midiOutputConnection.inputsCriteria != [.uniqueID(selectedUniqueID)] {

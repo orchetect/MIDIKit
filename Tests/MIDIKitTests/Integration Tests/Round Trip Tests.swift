@@ -36,7 +36,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
         do {
             try manager.start()
         } catch {
-            XCTFail("Could not start MIDI Manager. \(error.localizedDescription)")
+            XCTFail("Could not start MIDIManager. \(error.localizedDescription)")
             return
         }
         

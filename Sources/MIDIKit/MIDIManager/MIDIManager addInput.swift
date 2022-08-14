@@ -1,5 +1,5 @@
 //
-//  Manager addInput.swift
+//  MIDIManager addInput.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -9,9 +9,9 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDIManager {
-    /// Adds a new managed virtual input to the `managedInputs` dictionary of the `Manager` and creates the MIDI port in the system.
+    /// Adds a new managed virtual input to the `managedInputs` dictionary of the `MIDIManager` and creates the MIDI port in the system.
     ///
-    /// The lifecycle of the MIDI port exists for as long as the `Manager` instance exists, or until `.remove(::)` is called.
+    /// The lifecycle of the MIDI port exists for as long as the `MIDIManager` instance exists, or until `.remove(::)` is called.
     ///
     /// A note on `uniqueID`:
     ///
@@ -23,7 +23,7 @@ extension MIDIManager {
     ///
     /// - Parameters:
     ///   - name: Name of the endpoint as seen in the system.
-    ///   - tag: Internal unique tag to reference the managed item in the `Manager`.
+    ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
     ///   - uniqueID: System-global unique identifier for the port.
     ///   - receiveHandler: Event handler for received MIDI packets.
     ///

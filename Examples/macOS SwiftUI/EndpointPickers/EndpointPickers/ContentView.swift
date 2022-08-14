@@ -71,7 +71,7 @@ struct ContentView: View {
                     }
                 }
                 .disabled(
-                    midiOutSelectedID == 0 ||
+                    midiOutSelectedID == .invalidMIDIIdentifier ||
                         !midiHelper.isInputPresentInSystem(uniqueID: midiOutSelectedID)
                 )
             }

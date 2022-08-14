@@ -25,16 +25,16 @@
 import Foundation
 @_implementationOnly import CoreMIDI
 
-/// A managed MIDI thru connection created in the system by the MIDI I/O `Manager`.
+/// A managed MIDI thru connection created in the system by the MIDI I/O `MIDIManager`.
 ///
 /// ⚠️ **Note** ⚠️
 /// - MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core MIDI bugs on later macOS releases. Attempting to create thru connections on macOS Big Sur or later will throw an error.
 ///
-/// Core MIDI play-through connections can be non-persistent (client-owned, auto-disposed when `Manager` de-initializes) or persistent (maintained even after system reboots).
+/// Core MIDI play-through connections can be non-persistent (client-owned, auto-disposed when `MIDIManager` de-initializes) or persistent (maintained even after system reboots).
 ///
-/// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing non-persistent thru connections using the `Manager`'s `managedThruConnections` collection.
+/// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing non-persistent thru connections using the `MIDIManager`'s `managedThruConnections` collection.
 ///
-/// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed thru connection (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.nonPersistentThruConnection, ...)` or `.removeAll` on the `Manager` to destroy the managed thru connection.)
+/// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed thru connection (which is either at such time the `MIDIManager` is de-initialized, or when calling `.remove(.nonPersistentThruConnection, ...)` or `.removeAll` on the `MIDIManager` to destroy the managed thru connection.)
 public class MIDIThruConnection: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
@@ -53,14 +53,14 @@ public class MIDIThruConnection: _MIDIIOManagedProtocol {
     // init
         
     /// Internal init.
-    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addThruConnection()`, and destroyed when calling `.remove(.nonPersistentThruConnection, ...)` or `.removeAll()`.
+    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `MIDIManager` instance when calling `.addThruConnection()`, and destroyed when calling `.remove(.nonPersistentThruConnection, ...)` or `.removeAll()`.
     ///
     /// - Parameters:
     ///   - outputs: One or more output endpoints, maximum of 8.
     ///   - inputs: One or more input endpoints, maximum of 8.
     ///   - lifecycle: Non-persistent or persistent.
     ///   - params: Optionally supply custom parameters for the connection.
-    ///   - midiManager: Reference to I/O Manager object.
+    ///   - midiManager: Reference to parent `MIDIManager` object.
     ///   - api: Core MIDI API version.
     internal init(
         outputs: [MIDIOutputEndpoint],

@@ -8,11 +8,11 @@
 import Foundation
 @_implementationOnly import CoreMIDI
 
-/// A managed virtual MIDI input endpoint created in the system by the MIDI I/O `Manager`.
+/// A managed virtual MIDI input endpoint created in the system by the MIDI I/O `MIDIManager`.
 ///
-/// - Note: Avoid storing or caching this object unless it is unavoidable. Instead, whenever possible access it via the `Manager`'s `managedInputs` collection. The `Manager` owns this object and maintains its lifecycle.
+/// - Note: Avoid storing or caching this object unless it is unavoidable. Instead, whenever possible access it via the `MIDIManager`'s `managedInputs` collection. The `MIDIManager` owns this object and maintains its lifecycle.
 ///
-/// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the endpoint (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.input, ...)` or `.removeAll` on the `Manager` to destroy the managed input.)
+/// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the endpoint (which is either at such time the `MIDIManager` is de-initialized, or when calling `.remove(.input, ...)` or `.removeAll` on the `MIDIManager` to destroy the managed input.)
 public class MIDIInput: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
@@ -37,13 +37,13 @@ public class MIDIInput: _MIDIIOManagedProtocol {
     // init
         
     /// Internal init.
-    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addInput()`, and destroyed when calling `.remove(.input, ...)` or `.removeAll()`.
+    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `MIDIManager` instance when calling `.addInput()`, and destroyed when calling `.remove(.input, ...)` or `.removeAll()`.
     ///
     /// - Parameters:
     ///   - name: The port name as displayed in the system.
     ///   - uniqueID: The port's unique ID in the system.
     ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
-    ///   - midiManager: Reference to I/O Manager object.
+    ///   - midiManager: Reference to parent `MIDIManager` object.
     ///   - api: Core MIDI API version.
     internal init(
         name: String,
@@ -67,7 +67,7 @@ public class MIDIInput: _MIDIIOManagedProtocol {
 extension MIDIInput {
     /// Returns the input's endpoint in the system.
     public var endpoint: MIDIInputEndpoint {
-        .init(coreMIDIInputPortRef ?? 0)
+        .init(from: coreMIDIInputPortRef ?? 0)
     }
     
     /// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)

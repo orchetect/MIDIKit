@@ -73,7 +73,7 @@ extension MIDIManager {
     ///
     /// What is unaffected, and not reset:
     /// - Persistent thru connections stored in the system.
-    /// - Notification handler attached to the `Manager`.
+    /// - Notification handler attached to the `MIDIManager`.
     /// - `clientName` property
     /// - `model` property
     /// - `manufacturer` property

@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Property
 
-extension MIDIIOObject {
+extension AnyMIDIIOObject {
     /// MIDI object property keys, analogous to Core MIDI property keys.
     public enum Property: CaseIterable, Hashable {
         // MARK: Identification
@@ -92,7 +92,7 @@ extension MIDIIOObject {
 
 // MARK: - Property Keys
 
-extension MIDIIOObject.Property {
+extension AnyMIDIIOObject.Property {
     /// Returns the Core MIDI `CFString` property name constant.
     public var coreMIDICFString: CFString {
         switch self {
@@ -284,7 +284,7 @@ extension MIDIIOObject.Property {
 
 // MARK: - Relevant Objects
 
-extension MIDIIOObject.Property {
+extension AnyMIDIIOObject.Property {
     /// Internal: returns relevant `MIDIIOObjectType` object types associated with the property.
     internal var relevantObjects: Set<MIDIIOObjectType> {
         switch self {
@@ -371,8 +371,8 @@ extension MIDIIOObject.Property {
 
 extension MIDIIOObjectType {
     /// Internal: returns relevant `MIDIIOObject.Property`s associated with the object type.
-    internal var relevantProperties: [MIDIIOObject.Property] {
-        MIDIIOObject.Property.allCases.filter {
+    internal var relevantProperties: [AnyMIDIIOObject.Property] {
+        AnyMIDIIOObject.Property.allCases.filter {
             $0.relevantObjects.contains(self)
         }
     }

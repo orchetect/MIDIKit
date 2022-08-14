@@ -8,12 +8,12 @@
 import Foundation
 @_implementationOnly import CoreMIDI
 
-/// A managed MIDI input connection created in the system by the MIDI I/O `Manager`.
+/// A managed MIDI input connection created in the system by the MIDI I/O `MIDIManager`.
 /// This connects to one or more outputs in the system and subscribes to receive their MIDI events.
 ///
-/// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `Manager`'s `managedInputConnections` collection.
+/// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `MIDIManager`'s `managedInputConnections` collection.
 ///
-/// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed input connection (which is either at such time the `Manager` is de-initialized, or when calling `.remove(.inputConnection, ...)` or `.removeAll` on the `Manager` to destroy the managed input connection.)
+/// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed input connection (which is either at such time the `MIDIManager` is de-initialized, or when calling `.remove(.inputConnection, ...)` or `.removeAll` on the `MIDIManager` to destroy the managed input connection.)
 public class MIDIInputConnection: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
@@ -24,17 +24,17 @@ public class MIDIInputConnection: _MIDIIOManagedProtocol {
         
     // class-specific
         
-    public private(set) var outputsCriteria: Set<MIDIEndpointIDCriteria> = []
+    public private(set) var outputsCriteria: Set<MIDIEndpointIdentity> = []
         
     /// Stores criteria after applying any filters that have been set in the `filter` property.
     /// Passing nil will re-use existing criteria, re-applying the filters.
-    private func updateCriteria(_ criteria: Set<MIDIEndpointIDCriteria>? = nil) {
+    private func updateCriteria(_ criteria: Set<MIDIEndpointIdentity>? = nil) {
         var newCriteria = criteria ?? outputsCriteria
             
         if filter.owned,
            let midiManager = midiManager
         {
-            let managedOutputs: [MIDIEndpointIDCriteria] = midiManager.managedOutputs
+            let managedOutputs: [MIDIEndpointIdentity] = midiManager.managedOutputs
                 .compactMap { $0.value.uniqueID }
                 .map { .uniqueID($0) }
                 
@@ -96,17 +96,17 @@ public class MIDIInputConnection: _MIDIIOManagedProtocol {
     // init
         
     /// Internal init.
-    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `Manager` instance when calling `.addInputConnection()`, and destroyed when calling `.remove(.inputConnection, ...)` or `.removeAll()`.
+    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `MIDIManager` instance when calling `.addInputConnection()`, and destroyed when calling `.remove(.inputConnection, ...)` or `.removeAll()`.
     ///
     /// - Parameters:
     ///   - criteria: Output(s) to connect to.
     ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
-    ///   - midiManager: Reference to I/O Manager object.
+    ///   - midiManager: Reference to parent `MIDIManager` object.
     ///   - api: Core MIDI API version.
     internal init(
-        criteria: Set<MIDIEndpointIDCriteria>,
+        criteria: Set<MIDIEndpointIdentity>,
         mode: MIDIConnectionMode,
         filter: MIDIEndpointFilter,
         receiveHandler: MIDIIOReceiveHandler.Definition,
@@ -136,7 +136,7 @@ public class MIDIInputConnection: _MIDIIOManagedProtocol {
 extension MIDIInputConnection {
     /// Returns the output endpoint(s) this connection is connected to.
     public var endpoints: [MIDIOutputEndpoint] {
-        coreMIDIOutputEndpointRefs.map { MIDIOutputEndpoint($0) }
+        coreMIDIOutputEndpointRefs.map { MIDIOutputEndpoint(from: $0) }
     }
 }
 
@@ -312,7 +312,7 @@ extension MIDIInputConnection {
     /// Add output endpoints to the connection.
     /// Endpoint filters are respected.
     public func add(
-        outputs: [MIDIEndpointIDCriteria]
+        outputs: [MIDIEndpointIdentity]
     ) {
         let combined = outputsCriteria.union(outputs)
         updateCriteria(combined)
@@ -329,14 +329,14 @@ extension MIDIInputConnection {
     public func add(
         outputs: [MIDIOutputEndpoint]
     ) {
-        add(outputs: outputs.asCriteria())
+        add(outputs: outputs.asIdentities())
     }
     
     // MARK: Remove Endpoints
     
     /// Remove output endpoints to the connection.
     public func remove(
-        outputs: [MIDIEndpointIDCriteria]
+        outputs: [MIDIEndpointIdentity]
     ) {
         let removed = outputsCriteria.subtracting(outputs)
         updateCriteria(removed)
@@ -361,7 +361,7 @@ extension MIDIInputConnection {
     public func remove(
         outputs: [MIDIOutputEndpoint]
     ) {
-        remove(outputs: outputs.asCriteria())
+        remove(outputs: outputs.asIdentities())
     }
     
     public func removeAllOutputs() {

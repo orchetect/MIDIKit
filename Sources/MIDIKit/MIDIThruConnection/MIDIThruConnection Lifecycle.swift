@@ -10,7 +10,7 @@ import Foundation
 extension MIDIThruConnection {
     /// ThruConnection lifecycle type.
     public enum Lifecycle: Hashable {
-        /// The play-through connection exists as long as the `Manager` exists.
+        /// The play-through connection exists as long as the `MIDIManager` exists.
         case nonPersistent
         
         /// The play-through connection is stored in the system and persists indefinitely (even after system reboots) until explicitly removed.

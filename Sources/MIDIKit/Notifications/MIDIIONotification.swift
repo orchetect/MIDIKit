@@ -17,20 +17,20 @@ public enum MIDIIONotification: Equatable, Hashable {
         
     /// The system added a device, entity, or endpoint.
     case added(
-        parent: MIDIIOObject?,
-        child: MIDIIOObject
+        parent: AnyMIDIIOObject?,
+        child: AnyMIDIIOObject
     )
         
     /// The system removed a device, entity, or endpoint.
     case removed(
-        parent: MIDIIOObject?,
-        child: MIDIIOObject
+        parent: AnyMIDIIOObject?,
+        child: AnyMIDIIOObject
     )
         
     /// An object’s property value changed.
     case propertyChanged(
-        object: MIDIIOObject,
-        property: MIDIIOObject.Property
+        object: AnyMIDIIOObject,
+        property: AnyMIDIIOObject.Property
     )
         
     /// The system created or disposed of a persistent MIDI Thru connection.
@@ -74,11 +74,11 @@ extension MIDIIONotification {
             childType
         ):
             
-            let parent = MIDIIOObject(
+            let parent = AnyMIDIIOObject(
                 coreMIDIObjectRef: parentRef,
                 coreMIDIObjectType: parentType
             )
-            guard let child = MIDIIOObject(
+            guard let child = AnyMIDIIOObject(
                 coreMIDIObjectRef: childRef,
                 coreMIDIObjectType: childType
             )
@@ -99,12 +99,12 @@ extension MIDIIONotification {
             // we need to rely on data cache to get more information
             // since a Core MIDI 'removed' notification happens after the object is gone
             
-            let parent = MIDIIOObject(
+            let parent = AnyMIDIIOObject(
                 coreMIDIObjectRef: parentRef,
                 coreMIDIObjectType: parentType,
                 using: cache
             )
-            guard let child = MIDIIOObject(
+            guard let child = AnyMIDIIOObject(
                 coreMIDIObjectRef: childRef,
                 coreMIDIObjectType: childType,
                 using: cache
@@ -123,11 +123,11 @@ extension MIDIIONotification {
         ):
             
             // specific notification
-            guard let obj = MIDIIOObject(
+            guard let obj = AnyMIDIIOObject(
                 coreMIDIObjectRef: forRef,
                 coreMIDIObjectType: forRefType
             ),
-                let property = MIDIIOObject.Property(propertyName as CFString)
+                let property = AnyMIDIIOObject.Property(propertyName as CFString)
             else { return nil }
             
             self = .propertyChanged(
@@ -145,7 +145,7 @@ extension MIDIIONotification {
             deviceRef,
             error
         ):
-            let device = MIDIDevice(deviceRef)
+            let device = MIDIDevice(from: deviceRef)
             self = .ioError(
                 device: device,
                 error: error

@@ -22,7 +22,7 @@ struct MIDIEndpointSelectionView: View {
             Text("None")
                 .tag(0 as MIDIIdentifier)
             
-            if midiInSelectedID != 0,
+            if midiInSelectedID != .invalidMIDIIdentifier,
                !midiHelper.isOutputPresentInSystem(uniqueID: midiInSelectedID)
             {
                 Text("⚠️ " + midiInSelectedDisplayName)
@@ -40,7 +40,7 @@ struct MIDIEndpointSelectionView: View {
             Text("None")
                 .tag(0 as MIDIIdentifier)
             
-            if midiOutSelectedID != 0,
+            if midiOutSelectedID != .invalidMIDIIdentifier,
                !midiHelper.isInputPresentInSystem(uniqueID: midiOutSelectedID)
             {
                 Text("⚠️ " + midiOutSelectedDisplayName)

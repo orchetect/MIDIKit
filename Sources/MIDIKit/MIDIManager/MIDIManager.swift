@@ -1,5 +1,5 @@
 //
-//  Manager.swift
+//  MIDIManager.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //
 
@@ -8,9 +8,9 @@
 import Foundation
 @_implementationOnly import CoreMIDI
 
-/// Connection Manager wrapper for Core MIDI.
+/// Central MIDI Port and Connection Manager and MIDI system data provider.
 ///
-/// One `Manager` instance stored in a global lifecycle context can manage multiple MIDI ports and connections, and is usually sufficient for all of an application's MIDI needs.
+/// One `MIDIManager` instance stored in a global lifecycle context can manage multiple MIDI ports and connections, and is usually sufficient for all of an application's MIDI needs.
 public class MIDIManager: NSObject {
     // MARK: - Properties
         
@@ -109,7 +109,7 @@ public class MIDIManager: NSObject {
         if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
             
         // manager event queue
-        let eventQueueName = (Bundle.main.bundleIdentifier ?? "unknown")
+        let eventQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
             + ".midiManager." + clientNameForQueue + ".events"
         eventQueue = DispatchQueue(
             label: eventQueueName,

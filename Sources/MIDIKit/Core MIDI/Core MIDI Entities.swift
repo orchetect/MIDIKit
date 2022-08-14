@@ -21,7 +21,7 @@ internal func getSystemDevice(
         
     guard dev != MIDIDeviceRef() else { return nil }
         
-    return MIDIDevice(dev)
+    return MIDIDevice(from: dev)
 }
     
 /// Internal:
@@ -37,7 +37,7 @@ internal func getSystemSources(
     for i in 0 ..< srcCount {
         let endpoint = MIDIEntityGetSource(entity, i)
             
-        endpoints.append(.init(endpoint))
+        endpoints.append(MIDIOutputEndpoint(from: endpoint))
     }
         
     return endpoints
@@ -56,7 +56,7 @@ internal func getSystemDestinations(
     for i in 0 ..< srcCount {
         let endpoint = MIDIEntityGetDestination(entity, i)
             
-        endpoints.append(.init(endpoint))
+        endpoints.append(MIDIInputEndpoint(from: endpoint))
     }
         
     return endpoints

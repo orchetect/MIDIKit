@@ -1,6 +1,6 @@
 //
-//  MIDINote Cakewalk Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  MIT License
 //
 
 #if shouldTestCurrentPlatform
