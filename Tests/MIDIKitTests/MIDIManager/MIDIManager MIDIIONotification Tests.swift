@@ -42,7 +42,7 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests Source 1",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID each time, without persistence
+            uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
         
         wait(for: notifications.count >= 3, timeout: 0.5)

@@ -31,7 +31,7 @@ final class MIDIOutput_Tests: XCTestCase {
             try manager.addOutput(
                 name: "MIDIKit IO Tests Source 1",
                 tag: tag1,
-                uniqueID: .none // allow system to generate random ID each time, without persistence
+                uniqueID: .adHoc // allow system to generate random ID each time, without persistence
             )
         } catch let err as MIDIIOError {
             XCTFail(err.localizedDescription); return

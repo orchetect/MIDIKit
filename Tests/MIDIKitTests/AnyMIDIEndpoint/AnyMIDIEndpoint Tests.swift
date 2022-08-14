@@ -30,7 +30,7 @@ final class AnyMIDIEndpoint_Tests: XCTestCase {
         try manager.addInput(
             name: kInputName,
             tag: kInputTag,
-            uniqueID: .none,
+            uniqueID: .adHoc,
             receiveHandler: .rawDataLogging()
         )
         
@@ -39,7 +39,7 @@ final class AnyMIDIEndpoint_Tests: XCTestCase {
         try manager.addOutput(
             name: kOutputName,
             tag: kOutputTag,
-            uniqueID: .none
+            uniqueID: .adHoc
         )
         
         // have to give Core MIDI a bit of time to create the ports (async)

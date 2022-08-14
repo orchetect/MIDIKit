@@ -42,7 +42,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests thruConnection In",
             tag: input1Tag,
-            uniqueID: .none,
+            uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiveHandler: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
                 self.connEvents.append(contentsOf: events)
@@ -57,7 +57,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests thruConnection Out",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID each time, without persistence
+            uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         // let output1ID = try XCTUnwrap(output1.uniqueID)
@@ -131,7 +131,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests thruConnection In",
             tag: input1Tag,
-            uniqueID: .none,
+            uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiveHandler: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
                 self.connEvents.append(contentsOf: events)
@@ -148,7 +148,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests thruConnection Out",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID each time, without persistence
+            uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         // let output1ID = try XCTUnwrap(output1.uniqueID)
@@ -219,7 +219,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests thruConnection In",
             tag: input1Tag,
-            uniqueID: .none,
+            uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiveHandler: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
                 self.connEvents.append(contentsOf: events)
@@ -234,7 +234,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         try manager.addOutput(
             name: "MIDIKit IO Tests thruConnection Out",
             tag: output1Tag,
-            uniqueID: .none // allow system to generate random ID each time, without persistence
+            uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         let output1ID = try XCTUnwrap(output1.uniqueID)

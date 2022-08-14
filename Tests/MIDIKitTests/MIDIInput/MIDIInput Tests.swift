@@ -31,7 +31,7 @@ final class MIDIInput_Tests: XCTestCase {
             try manager.addInput(
                 name: "MIDIKit IO Tests Destination 1",
                 tag: tag1,
-                uniqueID: .none,
+                uniqueID: .adHoc,
                 // allow system to generate random ID each time, without persistence
                 receiveHandler: .rawData { packets in
                     _ = packets
