@@ -8,7 +8,7 @@
 
 @_implementationOnly import CoreMIDI
 
-/// Enum describing criterium with which to identify a MIDI endpoint.
+/// Criterium with which to identify a MIDI endpoint.
 ///
 /// It is recommended to use `uniqueID` primarily. For added resiliency, it is also possible to use `uniqueID` with fallback criteria in the event the endpoint provider does not correctly restore its unique identifier number.
 public enum MIDIEndpointIdentity {

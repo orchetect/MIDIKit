@@ -17,7 +17,7 @@ import UIKit
 #endif
 
 public protocol MIDIIOObject {
-    /// Enum describing the abstracted object type.
+    /// The MIDI I/O object type.
     var objectType: MIDIIOObjectType { get }
     
     /// Name of the object.

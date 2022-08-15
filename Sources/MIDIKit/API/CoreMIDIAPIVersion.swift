@@ -6,7 +6,7 @@
 
 import Darwin
 
-/// Enum describing which underlying Core MIDI API is being used internally.
+/// Describes the Core MIDI API used internally in all MIDIKit I/O operations.
 public enum CoreMIDIAPIVersion: Equatable, Hashable {
     /// Legacy Core MIDI API first introduced in early versions of OSX.
     ///

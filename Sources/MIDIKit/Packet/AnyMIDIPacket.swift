@@ -4,7 +4,7 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-/// A type that can hold any MIDI packet type.
+/// A box that can hold any MIDI packet type.
 public enum AnyMIDIPacket {
     /// MIDI 1.0 MIDI Packet
     case packet(MIDIPacketData)

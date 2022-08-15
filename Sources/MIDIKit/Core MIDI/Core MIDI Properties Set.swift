@@ -78,7 +78,7 @@ internal func setData(
 /// Set a dictionary value for a `MIDIObjectRef` property key.
 ///
 /// - Parameters:
-///   - forProperty: A `CoreMIDI.Property*` property constant
+///   - forProperty: A `CoreMIDI.Property` constant
 ///   - ref: `MIDIObjectRef`
 ///   - dictionary: New dictionary value
 ///

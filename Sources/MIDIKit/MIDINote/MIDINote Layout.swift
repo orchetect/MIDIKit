@@ -6,6 +6,7 @@
 
 import Foundation
 
+/// A closed range representing a span of MIDI note numbers.
 public typealias MIDINoteNumberRange = ClosedRange<UInt7>
 
 extension MIDINoteNumberRange {
@@ -18,6 +19,7 @@ extension MIDINoteNumberRange {
     public static let eightyEightKeys: Self = 21 ... 108
 }
 
+/// A closed range representing a span of MIDI notes.
 public typealias MIDINoteRange = ClosedRange<MIDINote>
 
 extension MIDINoteRange {

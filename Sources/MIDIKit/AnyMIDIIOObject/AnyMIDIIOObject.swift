@@ -10,7 +10,7 @@ import Foundation
 @_implementationOnly import CoreMIDI
 import SwiftUI
 
-/// Enum containing strongly-typed system MIDI objects.
+/// Box to contain an instance of a strongly-typed system MIDI object.
 ///
 /// Allows for simple switch case unwrapping when object type needs to be erased, such as `MIDIManager`'s handler for Core MIDI system notifications.
 public enum AnyMIDIIOObject {

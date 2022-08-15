@@ -6,7 +6,7 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-/// Error type returned by `MIDI.IO` methods.
+/// Error type returned by MIDIKit I/O operations.
 public enum MIDIIOError: Error, Hashable {
     // General
     

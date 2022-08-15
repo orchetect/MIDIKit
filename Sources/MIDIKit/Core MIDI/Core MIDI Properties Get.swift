@@ -48,7 +48,7 @@ internal func getProperties(
 /// Returns dictionary data for the given property.
 ///
 /// - Parameters:
-///   - forProperty: a `CoreMIDI.Property*` property constant
+///   - forProperty: a `CoreMIDI.Property` constant
 ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
 ///
 /// - Throws: `MIDIIOError`
@@ -82,7 +82,7 @@ internal func getDictionary(
 /// Get a string value from a `MIDIObjectRef` property key.
 ///
 /// - Parameters:
-///   - forProperty: a `CoreMIDI.Property*` property constant
+///   - forProperty: a `CoreMIDI.Property` constant
 ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
 ///
 /// - Throws: `MIDIIOError`
@@ -115,7 +115,7 @@ internal func getString(
 /// Internal:
 /// Get an integer value from a `MIDIObjectRef` property key.
 ///
-/// - Parameter forProperty: a `CoreMIDI.Property*` property constant
+/// - Parameter forProperty: a `CoreMIDI.Property` constant
 internal func getInteger(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef

@@ -9,6 +9,7 @@
 @_implementationOnly import CoreMIDI
 
 /// MIDIKit analogue for Core MIDI's `MIDIUniqueID`.
+/// Most commonly used to uniquely identify MIDI endpoints in the system.
 public typealias MIDIIdentifier = Int32
 
 extension MIDIIdentifier {
