@@ -58,21 +58,25 @@ The inverse is also true when converting from a unit interval to a MIDI 1.0 or M
 
 ## Topics
 
-### Common Types
+### Essential MIDI Value Types
 
-- ``Byte``
-- ``BytePair``
 - ``UInt4``
 - ``UInt7``
 - ``UInt7Pair``
 - ``UInt14``
 
-### Additional Value Types
+### Raw Data Types
 
+- ``Byte``
+- ``BytePair``
 - ``Nibble``
+- ``UMPWord``
 - ``UInt9``
 - ``UInt25``
 
-### Internal Value Types
+### Underlying MIDI Event Value Types
 
-- ``UMPWord``
+- ``MIDIEvent/ChanVoice7Bit16BitValue``
+- ``MIDIEvent/ChanVoice7Bit32BitValue``
+- ``MIDIEvent/ChanVoice14Bit32BitValue``
+- ``MIDIEvent/ChanVoice32BitValue``

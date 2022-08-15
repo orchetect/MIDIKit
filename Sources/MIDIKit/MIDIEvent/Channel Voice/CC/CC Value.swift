@@ -5,7 +5,9 @@
 //
 
 extension MIDIEvent.CC {
+    /// Channel Voice 7-Bit (MIDI 1.0) / 32-Bit (MIDI 2.0) Value.
     public typealias Value = MIDIEvent.ChanVoice7Bit32BitValue
     
+    /// Channel Voice 7-Bit (MIDI 1.0) / 32-Bit (MIDI 2.0) Value.
     public typealias ValueValidated = Value.Validated
 }

@@ -20,13 +20,6 @@ MIDI events are constructed as enum cases containing event payload data. Various
 
 - <doc:MIDIEvent-Event-Filtering>
 
-### Underlying Value Types
-
-- ``ChanVoice7Bit16BitValue``
-- ``ChanVoice7Bit32BitValue``
-- ``ChanVoice14Bit32BitValue``
-- ``ChanVoice32BitValue``
-
 ### Raw Data Encoding
 
 - ``midi1RawBytes()``

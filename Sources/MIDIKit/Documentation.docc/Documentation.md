@@ -10,7 +10,7 @@ An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MID
 - Automatically uses appropriate Core MIDI API and defaults to MIDI 2.0 on platforms that support them
 - Supports Swift Playgrounds on iPad and macOS
 
-See <doc:Getting-Started> for essential information on getting the most from MIDIKit.
+See <doc:MIDIKit-Getting-Started> for essential information on getting the most from MIDIKit.
 
 ## Extensions
 
@@ -20,19 +20,19 @@ Additional functionality can be added to MIDIKit by way of <doc:MIDIKit-Extensio
 
 ### Introduction
 
-- <doc:Getting-Started>
-- <doc:Combine-and-SwiftUI-Features>
-- <doc:MIDI-Over-Bluetooth>
-- <doc:MIDI-Over-Network>
+- <doc:MIDIKit-Getting-Started>
+- <doc:MIDIKit-Combine-and-SwiftUI-Features>
+- <doc:MIDIKit-MIDI-Over-Bluetooth>
+- <doc:MIDIKit-MIDI-Over-Network>
 - <doc:MIDIKit-Extensions>
 
 ### Manager
 
 - ``MIDIManager``
-- <doc:Creating-Ports>
-- <doc:Creating-Managed-Connections>
-- <doc:Removing-Ports-and-Managed-Connections>
-- ``MIDIIONotification``
+- <doc:MIDIManager-Creating-Ports>
+- <doc:MIDIManager-Creating-Managed-Connections>
+- <doc:MIDIManager-Removing-Ports-and-Managed-Connections>
+- <doc:MIDIManager-Receiving-Notifications>
 
 ### Devices & Entities
 

@@ -22,8 +22,8 @@ Follow the steps in the ``MIDIManager`` documentation to create an instance of t
 
 ## 3. Set up Bluetooth and Network MIDI if Needed
 
-- <doc:MIDI-Over-Bluetooth> connectivity for your iOS app
-- <doc:MIDI-Over-Network> on macOS or iOS
+- <doc:MIDIKit-MIDI-Over-Bluetooth> connectivity for your iOS app
+- <doc:MIDIKit-MIDI-Over-Network> on macOS or iOS
 
 ## 4. Learn how MIDIKit Value Types Work
 
@@ -35,9 +35,9 @@ Learn how MIDIKit's <doc:MIDI-Value-Types> work.
 
 From here, you have laid the necessary groundwork to set up ports and connections.
 
-- <doc:Creating-Ports>
-- <doc:Creating-Managed-Connections> to one or more existing MIDI ports in the system
-- <doc:Removing-Ports-and-Managed-Connections>
+- <doc:MIDIManager-Creating-Ports>
+- <doc:MIDIManager-Creating-Managed-Connections> to one or more existing MIDI ports in the system
+- <doc:MIDIManager-Removing-Ports-and-Managed-Connections>
 - Learn about powerful <doc:Event-Filters>
 - Explore the [Example Projects](https://github.com/orchetect/MIDIKit/blob/main/Examples/)
   - Creating virtual ports and managed connections

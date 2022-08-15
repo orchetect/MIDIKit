@@ -5,7 +5,7 @@
 //
 
 extension MIDIEvent {
-    /// MIDI Note Velocity
+    /// MIDI Note Velocity.
     /// (MIDI 1.0 / MIDI 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
@@ -18,7 +18,7 @@ extension MIDIEvent {
     /// When translating a MIDI 2.0 Note On message to the MIDI 1.0 Protocol, if the translated MIDI 1.0 value of the Velocity is zero, then the Translator shall replace the zero with a value of 1.
     public typealias NoteVelocity = MIDIEvent.ChanVoice7Bit16BitValue
     
-    /// MIDI Note Velocity
+    /// MIDI Note Velocity.
     /// (MIDI 1.0 / MIDI 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:

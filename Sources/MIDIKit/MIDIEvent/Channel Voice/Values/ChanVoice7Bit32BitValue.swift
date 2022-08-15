@@ -5,7 +5,7 @@
 //
 
 extension MIDIEvent {
-    /// Channel Voice 7-Bit (MIDI 1.0) / 32-Bit (MIDI 2.0) Value
+    /// Channel Voice 7-Bit (MIDI 1.0) / 32-Bit (MIDI 2.0) Value.
     public enum ChanVoice7Bit32BitValue: Hashable {
         /// Protocol-agnostic unit interval (0.0...1.0)
         /// Scaled automatically depending on MIDI protocol (1.0/2.0) in use.
