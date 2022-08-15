@@ -7,10 +7,11 @@
 An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MIDI 2.0.
 
 - Modular, user-friendly I/O
-- Automatic MIDI endpoint connection management and unique ID persistence
+- Automatic MIDI endpoint connection management and identity persistence
 - Strongly-typed MIDI events that seamlessly interoperate between MIDI 1.0 and MIDI 2.0
-- Automatically uses appropriate Core MIDI API and defaults to MIDI 2.0 on platforms that support them
+- Automatically uses appropriate Core MIDI API and defaults to MIDI 2.0 on platforms that support it
 - Supports Swift Playgrounds on iPad and macOS
+- Full documentation available in Xcode Documentation browser, including helpful guides and getting started information
 
 ## MIDIKit Extensions
 
@@ -23,13 +24,13 @@ Abstractions are built as optional extensions in their own repos.
 ## Getting Started
 
 1. Add MIDIKit as a dependency using Swift Package Manager.
-   - In an app project or framework, in Xcode:
+   - In a project or framework:
      - Select the menu: **File → Swift Packages → Add Package Dependency...**
      - Enter this URL: `https://github.com/orchetect/MIDIKit`
    
-   - In a Swift Package, add it to the Package.swift dependencies:
+   - In a Swift Package:
      ```swift
-     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.5.0")
+     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.6.0")
      ```
   
 2. Import the library:
@@ -37,16 +38,14 @@ Abstractions are built as optional extensions in their own repos.
    import MIDIKit
    ```
 
-3. See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a getting started guide, links to examples, and troubleshooting tips.
-
 ## Documentation
 
-See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a getting started guide, links to examples, and troubleshooting tips.
+See the bundled DocC documentation for MIDIKit in Xcode which includes a getting started guide, links to examples, and troubleshooting tips.
 
 ## System Compatibility
 
 - Xcode 12.4 / macOS 10.15.7 are minimum requirements to compile
-- When compiled, MIDIKit supports macOS 10.12+ and iOS 10.0+
+- Once compiled, MIDIKit supports macOS 10.12+ and iOS 10.0+. tvOS and watchOS are not supported (as there is no Core MIDI implementation) but MIDIKit will build successfully on those platforms in the event it is included as a dependency in multi-platform projects.
 
 ## Author
 
