@@ -19,7 +19,7 @@ extension MIDIManager {
     ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
     ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
-    ///   - receiveHandler: Event handler for received MIDI packets.
+    ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///
     /// - Throws: `MIDIIOError`
     public func addInputConnection(
@@ -27,14 +27,14 @@ extension MIDIManager {
         tag: String,
         mode: MIDIConnectionMode = .definedEndpoints,
         filter: MIDIEndpointFilter = .default(),
-        receiveHandler: MIDIIOReceiveHandler.Definition
+        receiver: MIDIReceiver
     ) throws {
         try eventQueue.sync {
             let newCD = MIDIInputConnection(
                 criteria: toOutputs,
                 mode: mode,
                 filter: filter,
-                receiveHandler: receiveHandler,
+                receiver: receiver,
                 midiManager: self,
                 api: preferredAPI
             )
@@ -57,7 +57,7 @@ extension MIDIManager {
     ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
     ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
-    ///   - receiveHandler: Event handler for received MIDI packets.
+    ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///
     /// - Throws: `MIDIIOError`
     public func addInputConnection(
@@ -65,14 +65,14 @@ extension MIDIManager {
         tag: String,
         mode: MIDIConnectionMode = .definedEndpoints,
         filter: MIDIEndpointFilter = .default(),
-        receiveHandler: MIDIIOReceiveHandler.Definition
+        receiver: MIDIReceiver
     ) throws {
         try addInputConnection(
             toOutputs: Set(toOutputs),
             tag: tag,
             mode: mode,
             filter: filter,
-            receiveHandler: receiveHandler
+            receiver: receiver
         )
     }
     
@@ -85,7 +85,7 @@ extension MIDIManager {
     ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
     ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
-    ///   - receiveHandler: Event handler for received MIDI packets.
+    ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///
     /// - Throws: `MIDIIOError`
     @_disfavoredOverload
@@ -94,14 +94,14 @@ extension MIDIManager {
         tag: String,
         mode: MIDIConnectionMode = .definedEndpoints,
         filter: MIDIEndpointFilter = .default(),
-        receiveHandler: MIDIIOReceiveHandler.Definition
+        receiver: MIDIReceiver
     ) throws {
         try addInputConnection(
             toOutputs: toOutputs.asIdentities(),
             tag: tag,
             mode: mode,
             filter: filter,
-            receiveHandler: receiveHandler
+            receiver: receiver
         )
     }
 }

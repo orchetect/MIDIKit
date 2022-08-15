@@ -35,7 +35,7 @@ class MIDIHelper: ObservableObject {
                 name: virtualInputName,
                 tag: virtualInputName,
                 uniqueID: .userDefaultsManaged(key: virtualInputName),
-                receiveHandler: .events() { [weak self] events in
+                receiver: .events() { [weak self] events in
                     events.forEach { self?.handleMIDI(event: $0) }
                 }
             )

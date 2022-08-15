@@ -32,7 +32,7 @@ struct BluetoothMIDIApp: App {
                 tag: "Listener",
                 mode: .allEndpoints, // auto-connect to all outputs that may appear
                 filter: .owned(), // don't allow self-created virtual endpoints
-                receiveHandler: .eventsLogging(filterActiveSensingAndClock: false)
+                receiver: .eventsLogging(filterActiveSensingAndClock: false)
             )
         } catch {
             print(

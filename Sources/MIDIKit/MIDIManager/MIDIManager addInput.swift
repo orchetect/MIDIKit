@@ -26,20 +26,20 @@ extension MIDIManager {
     ///   - name: Name of the endpoint as seen in the system.
     ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
     ///   - uniqueID: System-global unique identifier for the port.
-    ///   - receiveHandler: Event handler for received MIDI packets.
+    ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///
     /// - Throws: `MIDIIOError`
     public func addInput(
         name: String,
         tag: String,
         uniqueID: MIDIIdentifierPersistence,
-        receiveHandler: MIDIIOReceiveHandler.Definition
+        receiver: MIDIReceiver
     ) throws {
         try eventQueue.sync {
             let newVD = MIDIInput(
                 name: name,
                 uniqueID: uniqueID.readID(),
-                receiveHandler: receiveHandler,
+                receiver: receiver,
                 midiManager: self,
                 api: preferredAPI
             )

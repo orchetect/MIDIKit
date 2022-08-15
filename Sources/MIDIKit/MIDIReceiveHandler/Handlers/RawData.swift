@@ -6,13 +6,16 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-extension MIDIIOReceiveHandler {
+extension MIDIReceiver {
+    public typealias RawDataHandler = (_ packet: AnyMIDIPacket) -> Void
+}
+
+extension MIDIReceiveHandler {
     /// Basic raw packet data receive handler.
-    public final class RawData: MIDIIOReceiveHandlerProtocol {
-        public typealias Handler = (_ packet: AnyMIDIPacket) -> Void
-    
+    /// This handler is provided for debugging and data introspection but is discouraged for manually parsing MIDI packets. It is recommended to use a MIDI event handler instead.
+    class RawData: MIDIReceiveHandlerProtocol {
         @inline(__always)
-        public var handler: Handler
+        public var handler: MIDIReceiver.RawDataHandler
     
         @inline(__always)
         public func packetListReceived(
@@ -37,7 +40,7 @@ extension MIDIIOReceiveHandler {
         }
     
         internal init(
-            _ handler: @escaping Handler
+            _ handler: @escaping MIDIReceiver.RawDataHandler
         ) {
             self.handler = handler
         }

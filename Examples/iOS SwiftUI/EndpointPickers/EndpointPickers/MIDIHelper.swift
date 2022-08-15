@@ -33,7 +33,7 @@ class MIDIHelper: ObservableObject {
             try midiManager.addInputConnection(
                 toOutputs: [],
                 tag: ConnectionTags.midiIn,
-                receiveHandler: .events() { [weak self] events in
+                receiver: .events() { [weak self] events in
                     DispatchQueue.main.async {
                         self?.receivedEvents.append(contentsOf: events)
                     }
@@ -110,7 +110,7 @@ class MIDIHelper: ObservableObject {
             name: "Test In 1",
             tag: ConnectionTags.midiTestIn1,
             uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestIn1),
-            receiveHandler: .events() { [weak self] events in
+            receiver: .events() { [weak self] events in
                 DispatchQueue.main.async {
                     self?.receivedEvents.append(contentsOf: events)
                 }
@@ -121,7 +121,7 @@ class MIDIHelper: ObservableObject {
             name: "Test In 2",
             tag: ConnectionTags.midiTestIn2,
             uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestIn2),
-            receiveHandler: .events() { [weak self] events in
+            receiver: .events() { [weak self] events in
                 DispatchQueue.main.async {
                     self?.receivedEvents.append(contentsOf: events)
                 }

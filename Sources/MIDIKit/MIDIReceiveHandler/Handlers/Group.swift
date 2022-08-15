@@ -6,11 +6,11 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-extension MIDIIOReceiveHandler {
-    /// `ReceiveHandler` group.
-    /// Can contain one or more `ReceiveHandler` in series.
-    public final class Group: MIDIIOReceiveHandlerProtocol {
-        public var receiveHandlers: [MIDIIOReceiveHandler] = []
+extension MIDIReceiveHandler {
+    /// `MIDIReceiver` group.
+    /// Can contain one or more `MIDIReceiveHandler` in series.
+    class Group: MIDIReceiveHandlerProtocol {
+        public var receiveHandlers: [MIDIReceiveHandler] = []
     
         @inline(__always)
         public func packetListReceived(
@@ -32,7 +32,7 @@ extension MIDIIOReceiveHandler {
             }
         }
     
-        internal init(_ receiveHandlers: [MIDIIOReceiveHandler]) {
+        internal init(_ receiveHandlers: [MIDIReceiveHandler]) {
             self.receiveHandlers = receiveHandlers
         }
     }

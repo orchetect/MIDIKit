@@ -92,7 +92,8 @@ public final class MIDIInputConnection: _MIDIIOManagedProtocol {
         }
     }
     
-    internal var receiveHandler: MIDIIOReceiveHandler
+    /// Receive handler for inbound MIDI events.
+    internal var receiveHandler: MIDIReceiveHandler
     
     // init
     
@@ -103,21 +104,21 @@ public final class MIDIInputConnection: _MIDIIOManagedProtocol {
     ///   - criteria: Output(s) to connect to.
     ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
-    ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
+    ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///   - midiManager: Reference to parent `MIDIManager` object.
     ///   - api: Core MIDI API version.
     internal init(
         criteria: Set<MIDIEndpointIdentity>,
         mode: MIDIConnectionMode,
         filter: MIDIEndpointFilter,
-        receiveHandler: MIDIIOReceiveHandler.Definition,
+        receiver: MIDIReceiver,
         midiManager: MIDIManager,
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
         self.midiManager = midiManager
         self.mode = mode
         self.filter = filter
-        self.receiveHandler = receiveHandler.createReceiveHandler()
+        self.receiveHandler = receiver.createReceiveHandler()
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
     
         // relies on midiManager, mode, and filter being set first
@@ -131,6 +132,13 @@ public final class MIDIInputConnection: _MIDIIOManagedProtocol {
     deinit {
         try? disconnect()
         try? stopListening()
+    }
+}
+
+extension MIDIInputConnection {
+    /// Sets a new receiver.
+    public func setReceiver(_ receiver: MIDIReceiver) {
+        self.receiveHandler = receiver.createReceiveHandler()
     }
 }
 

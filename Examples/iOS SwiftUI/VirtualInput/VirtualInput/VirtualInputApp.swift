@@ -31,7 +31,7 @@ struct VirtualInputApp: App {
                 name: virtualInputName,
                 tag: virtualInputName,
                 uniqueID: .userDefaultsManaged(key: virtualInputName),
-                receiveHandler: .eventsLogging(filterActiveSensingAndClock: true)
+                receiver: .eventsLogging(filterActiveSensingAndClock: true)
             )
         } catch {
             print("Error creating virtual MIDI input:", error.localizedDescription)

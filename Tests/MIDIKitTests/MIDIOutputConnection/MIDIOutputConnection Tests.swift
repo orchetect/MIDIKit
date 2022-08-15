@@ -41,7 +41,7 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
         )
@@ -78,7 +78,7 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             tag: input2Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 self.input2Events.append(contentsOf: events)
             }
         )
@@ -170,7 +170,7 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
         )
@@ -232,7 +232,7 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
         )
@@ -278,7 +278,7 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
         )
@@ -348,7 +348,7 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
         )
@@ -420,7 +420,7 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
         )
@@ -489,7 +489,7 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 self.input1Events.append(contentsOf: events)
             }
         )

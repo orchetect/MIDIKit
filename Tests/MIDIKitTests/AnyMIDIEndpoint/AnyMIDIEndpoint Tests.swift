@@ -31,7 +31,7 @@ final class AnyMIDIEndpoint_Tests: XCTestCase {
             name: kInputName,
             tag: kInputTag,
             uniqueID: .adHoc,
-            receiveHandler: .rawDataLogging()
+            receiver: .rawDataLogging()
         )
     
         let kOutputName = "MIDIKit Test Output"

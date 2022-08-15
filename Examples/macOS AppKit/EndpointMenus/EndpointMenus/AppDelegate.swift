@@ -38,7 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             try midiManager.addInputConnection(
                 toOutputs: [],
                 tag: ConnectionTags.midiIn,
-                receiveHandler: .eventsLogging(filterActiveSensingAndClock: true)
+                receiver: .eventsLogging(filterActiveSensingAndClock: true)
             )
     
             // set up output connection

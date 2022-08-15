@@ -33,7 +33,7 @@ final class MIDIInput_Tests: XCTestCase {
                 tag: tag1,
                 uniqueID: .adHoc,
                 // allow system to generate random ID each time, without persistence
-                receiveHandler: .rawData { packets in
+                receiver: .rawData { packets in
                     _ = packets
                 }
             )
@@ -56,7 +56,7 @@ final class MIDIInput_Tests: XCTestCase {
                 name: "MIDIKit IO Tests Destination 2",
                 tag: tag2,
                 uniqueID: .unmanaged(id1!), // try to use existing ID
-                receiveHandler: .rawData { packet in
+                receiver: .rawData { packet in
                     _ = packet
                 }
             )

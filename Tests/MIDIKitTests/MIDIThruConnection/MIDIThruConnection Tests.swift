@@ -44,7 +44,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
+            receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
                 self.connEvents.append(contentsOf: events)
             }
         )
@@ -133,7 +133,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
+            receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
                 self.connEvents.append(contentsOf: events)
             }
         )
@@ -221,7 +221,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiveHandler: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
+            receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
                 self.connEvents.append(contentsOf: events)
             }
         )

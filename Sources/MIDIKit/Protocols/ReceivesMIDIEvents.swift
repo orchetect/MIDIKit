@@ -4,7 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-public protocol ReceivesMIDIEvents {
+/// Protocol that objects can adopt so MIDIKit knows they are capable of receiving MIDI events.
+public protocol ReceivesMIDIEvents: AnyObject {
     /// Process MIDI events.
     func midiIn(event: MIDIEvent)
     

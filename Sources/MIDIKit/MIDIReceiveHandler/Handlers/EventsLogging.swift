@@ -1,24 +1,27 @@
 //
-//  RawDataLogging.swift
+//  EventsLogging.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
 
-@_implementationOnly import SwiftRadix
 import os.log
 
-extension MIDIIOReceiveHandler {
-    /// Raw data logging handler (hex byte strings).
-    ///
-    /// If `handler` is nil, all raw packet data is logged to the console (but only in DEBUG builds, not in RELEASE builds).
-    /// If `handler` is provided, the hex byte string is supplied as a parameter and not automatically logged.
-    public final class RawDataLogging: MIDIIOReceiveHandlerProtocol {
-        public typealias Handler = (_ packetBytesString: String) -> Void
-    
+extension MIDIReceiver {
+    public typealias EventsLoggingHandler = (_ eventString: String) -> Void
+}
+
+extension MIDIReceiveHandler {
+    /// MIDI Event logging handler (event description strings).
+    /// If `handler` is nil, all events are logged to the console (but only in `DEBUG` preprocessor flag builds).
+    /// If `handler` is provided, the event description string is supplied as a parameter and not automatically logged.
+    class EventsLogging: MIDIReceiveHandlerProtocol {
         @inline(__always)
-        public var handler: Handler
+        public var handler: MIDIReceiver.EventsLoggingHandler
+    
+        internal let midi1Parser = MIDI1Parser()
+        internal let midi2Parser = MIDI2Parser()
     
         @inline(__always)
         public var filterActiveSensingAndClock = false
@@ -28,7 +31,9 @@ extension MIDIIOReceiveHandler {
             _ packets: [MIDIPacketData]
         ) {
             for midiPacket in packets {
-                handleBytes(midiPacket.bytes)
+                let events = midi1Parser.parsedEvents(in: midiPacket)
+                guard !events.isEmpty else { continue }
+                logEvents(events)
             }
         }
     
@@ -39,14 +44,16 @@ extension MIDIIOReceiveHandler {
             protocol midiProtocol: MIDIProtocolVersion
         ) {
             for midiPacket in packets {
-                handleBytes(midiPacket.bytes)
+                let events = midi2Parser.parsedEvents(in: midiPacket)
+                guard !events.isEmpty else { continue }
+                logEvents(events)
             }
         }
     
         internal init(
             filterActiveSensingAndClock: Bool = false,
             log: OSLog = .default,
-            _ handler: Handler? = nil
+            _ handler: MIDIReceiver.EventsLoggingHandler? = nil
         ) {
             self.filterActiveSensingAndClock = filterActiveSensingAndClock
     
@@ -62,17 +69,16 @@ extension MIDIIOReceiveHandler {
             }
         }
     
-        internal func handleBytes(_ bytes: [Byte]) {
+        internal func logEvents(_ events: [MIDIEvent]) {
+            var events = events
+    
             if filterActiveSensingAndClock {
-                guard bytes.first != 0xF8, // midi clock pulse
-                      bytes.first != 0xFE  // active sensing
-                else { return }
+                events = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
             }
     
-            let stringOutput =
-                bytes.hex
-                    .stringValues(padTo: 2, prefixes: false)
-                    .joined(separator: " ")
+            let stringOutput: String = events
+                .map { "\($0)" }
+                .joined(separator: ", ")
     
             handler(stringOutput)
         }

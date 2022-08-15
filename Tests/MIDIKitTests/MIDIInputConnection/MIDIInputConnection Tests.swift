@@ -49,7 +49,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         try manager.addInputConnection(
             toOutputs: [.uniqueID(output1ID)],
             tag: connTag,
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
             }
@@ -152,7 +152,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: connTag,
             mode: .allEndpoints,
             filter: .init(owned: false, criteria: .currentOutputs()),
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
             }
@@ -209,7 +209,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: connTag,
             mode: .allEndpoints,
             filter: .init(owned: true, criteria: .currentOutputs()),
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
             }
@@ -283,7 +283,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
                 owned: true,
                 criteria: manager.endpoints.outputsUnowned
             ),
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
             }
@@ -345,7 +345,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         try manager.addInputConnection(
             toOutputs: [output1.endpoint],
             tag: connTag,
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
             }
@@ -416,7 +416,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
                 owned: false,
                 criteria: [.uniqueID(output1ID)]
             ),
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
             }
@@ -477,7 +477,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         try manager.addInputConnection(
             toOutputs: [output1.endpoint],
             tag: connTag,
-            receiveHandler: .events { events in
+            receiver: .events { events in
                 print(events)
                 self.connEvents.append(contentsOf: events)
             }

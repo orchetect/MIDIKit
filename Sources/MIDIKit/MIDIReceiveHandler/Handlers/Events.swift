@@ -6,13 +6,15 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-extension MIDIIOReceiveHandler {
+extension MIDIReceiver {
+    public typealias EventsHandler = (_ events: [MIDIEvent]) -> Void
+}
+
+extension MIDIReceiveHandler {
     /// MIDI Event receive handler.
-    public final class Events: MIDIIOReceiveHandlerProtocol {
-        public typealias Handler = (_ events: [MIDIEvent]) -> Void
-    
+    class Events: MIDIReceiveHandlerProtocol {
         @inline(__always)
-        public var handler: Handler
+        public var handler: MIDIReceiver.EventsHandler
     
         internal let midi1Parser = MIDI1Parser()
         internal let midi2Parser = MIDI2Parser()
@@ -43,7 +45,7 @@ extension MIDIIOReceiveHandler {
     
         internal init(
             translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
-            _ handler: @escaping Handler
+            _ handler: @escaping MIDIReceiver.EventsHandler
         ) {
             midi1Parser.translateNoteOnZeroVelocityToNoteOff =
                 translateMIDI1NoteOnZeroVelocityToNoteOff

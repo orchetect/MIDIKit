@@ -73,7 +73,7 @@ struct ContentView: View {
                         name: kInputName,
                         tag: kInputTag,
                         uniqueID: .userDefaultsManaged(key: kInputTag),
-                        receiveHandler: .eventsLogging()
+                        receiver: .eventsLogging()
                     )
                 }
     
@@ -150,7 +150,7 @@ struct ContentView: View {
             try midiManager.addInputConnection(
                 toOutputs: [.uniqueID(endpoint.uniqueID)],
                 tag: kInputConnectionTag,
-                receiveHandler: .eventsLogging()
+                receiver: .eventsLogging()
             )
         } catch {
             logger.error(error)

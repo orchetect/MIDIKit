@@ -33,7 +33,8 @@ public final class MIDIInput: _MIDIIOManagedProtocol {
     /// The Core MIDI port reference.
     public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
     
-    internal var receiveHandler: MIDIIOReceiveHandler
+    /// Receive handler for inbound MIDI events.
+    internal var receiveHandler: MIDIReceiveHandler
     
     // init
     
@@ -43,25 +44,32 @@ public final class MIDIInput: _MIDIIOManagedProtocol {
     /// - Parameters:
     ///   - name: The port name as displayed in the system.
     ///   - uniqueID: The port's unique ID in the system.
-    ///   - receiveHandler: Receive handler to use for incoming MIDI messages.
+    ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///   - midiManager: Reference to parent `MIDIManager` object.
     ///   - api: Core MIDI API version.
     internal init(
         name: String,
         uniqueID: MIDIUniqueID? = nil,
-        receiveHandler: MIDIIOReceiveHandler.Definition,
+        receiver: MIDIReceiver,
         midiManager: MIDIManager,
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
         endpointName = name
         self.uniqueID = uniqueID
-        self.receiveHandler = receiveHandler.createReceiveHandler()
+        self.receiveHandler = receiver.createReceiveHandler()
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
     }
     
     deinit {
         try? dispose()
+    }
+}
+
+extension MIDIInput {
+    /// Sets a new receiver.
+    public func setReceiver(_ receiver: MIDIReceiver) {
+        self.receiveHandler = receiver.createReceiveHandler()
     }
 }
 
@@ -76,11 +84,11 @@ extension MIDIInput {
         guard let unwrappedUniqueID = uniqueID else {
             return nil
         }
-    
+        
         if let endpoint = getSystemDestinationEndpoint(matching: unwrappedUniqueID) {
             return endpoint
         }
-    
+        
         return nil
     }
 }
