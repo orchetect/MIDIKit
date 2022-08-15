@@ -8,7 +8,7 @@
 
 extension MIDIIOReceiveHandler {
     /// MIDI Event receive handler.
-    public class Events: MIDIIOReceiveHandlerProtocol {
+    public final class Events: MIDIIOReceiveHandlerProtocol {
         public typealias Handler = (_ events: [MIDIEvent]) -> Void
         
         @inline(__always)

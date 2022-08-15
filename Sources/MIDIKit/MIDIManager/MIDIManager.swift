@@ -12,7 +12,7 @@ import Foundation
 /// Central MIDI Port and Connection Manager and MIDI system data provider.
 ///
 /// One `MIDIManager` instance stored in a global lifecycle context can manage multiple MIDI ports and connections, and is usually sufficient for all of an application's MIDI needs.
-public class MIDIManager: NSObject {
+public final class MIDIManager: NSObject {
     // MARK: - Properties
         
     /// MIDI Client Name.

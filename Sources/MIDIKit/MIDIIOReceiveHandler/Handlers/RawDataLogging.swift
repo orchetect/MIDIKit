@@ -14,7 +14,7 @@ extension MIDIIOReceiveHandler {
     ///
     /// If `handler` is nil, all raw packet data is logged to the console (but only in DEBUG builds, not in RELEASE builds).
     /// If `handler` is provided, the hex byte string is supplied as a parameter and not automatically logged.
-    public class RawDataLogging: MIDIIOReceiveHandlerProtocol {
+    public final class RawDataLogging: MIDIIOReceiveHandlerProtocol {
         public typealias Handler = (_ packetBytesString: String) -> Void
         
         @inline(__always)

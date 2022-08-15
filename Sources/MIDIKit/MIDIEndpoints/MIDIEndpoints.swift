@@ -28,7 +28,7 @@ public protocol MIDIIOEndpointsProtocol {
 }
 
 /// Manages system MIDI endpoints information cache.
-public class MIDIEndpoints: NSObject, MIDIIOEndpointsProtocol {
+public final class MIDIEndpoints: NSObject, MIDIIOEndpointsProtocol {
     /// Weak reference to `MIDIManager`.
     internal weak var manager: MIDIManager?
         

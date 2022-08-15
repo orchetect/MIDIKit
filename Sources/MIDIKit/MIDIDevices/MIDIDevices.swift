@@ -21,7 +21,7 @@ public protocol MIDIIODevicesProtocol {
 /// Manages system MIDI devices information cache.
 ///
 /// Do not instance this class directly. Instead, access the `devices` property of your global `MIDIManager` instance.
-public class MIDIDevices: NSObject, MIDIIODevicesProtocol {
+public final class MIDIDevices: NSObject, MIDIIODevicesProtocol {
     public internal(set) dynamic var devices: [MIDIDevice] = []
         
     override internal init() {

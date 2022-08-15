@@ -15,7 +15,7 @@ import Foundation
 /// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `MIDIManager`'s `managedInputConnections` collection.
 ///
 /// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed input connection (which is either at such time the `MIDIManager` is de-initialized, or when calling `.remove(.inputConnection, ...)` or `.removeAll` on the `MIDIManager` to destroy the managed input connection.)
-public class MIDIInputConnection: _MIDIIOManagedProtocol {
+public final class MIDIInputConnection: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
         

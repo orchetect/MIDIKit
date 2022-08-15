@@ -9,7 +9,7 @@
 extension MIDIIOReceiveHandler {
     /// `ReceiveHandler` group.
     /// Can contain one or more `ReceiveHandler` in series.
-    public class Group: MIDIIOReceiveHandlerProtocol {
+    public final class Group: MIDIIOReceiveHandlerProtocol {
         public var receiveHandlers: [MIDIIOReceiveHandler] = []
         
         @inline(__always)

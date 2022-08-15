@@ -10,7 +10,7 @@
 
 // MARK: - ReceiveHandler
 
-public class MIDIIOReceiveHandler: MIDIIOReceiveHandlerProtocol {
+public final class MIDIIOReceiveHandler: MIDIIOReceiveHandlerProtocol {
     public typealias Handler = (_ packets: [AnyMIDIPacket]) -> Void
         
     @inline(__always)

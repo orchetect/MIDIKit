@@ -13,7 +13,7 @@ import Dispatch
 /// The timer will fire at intervals of a `rate` in Hz, starting immediately from the time at which `start()` is called.
 ///
 /// All timer methods are safe and can be called in any order without worrying about `DispatchSourceTimer`-related peculiarities (start/suspend balancing or cancelling without resuming).
-public class SafeDispatchTimer {
+public final class SafeDispatchTimer {
     internal var timer: DispatchSourceTimer
     internal weak var queue: DispatchQueue?
         

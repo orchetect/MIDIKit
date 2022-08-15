@@ -7,7 +7,7 @@
 /// Parser for MIDI 2.0 events.
 ///
 /// State is maintained internally. Use one parser class instance per MIDI endpoint for the lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and do not use a single global parser class instance for all MIDI endpoints.)
-public class MIDI2Parser {
+public final class MIDI2Parser {
     // MARK: - Internal Default Instance
         
     /// Internal:

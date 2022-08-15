@@ -12,7 +12,7 @@ extension MIDIIOReceiveHandler {
     /// MIDI Event logging handler (event description strings).
     /// If `handler` is nil, all events are logged to the console (but only in `DEBUG` preprocessor flag builds).
     /// If `handler` is provided, the event description string is supplied as a parameter and not automatically logged.
-    public class EventsLogging: MIDIIOReceiveHandlerProtocol {
+    public final class EventsLogging: MIDIIOReceiveHandlerProtocol {
         public typealias Handler = (_ eventString: String) -> Void
         
         @inline(__always)

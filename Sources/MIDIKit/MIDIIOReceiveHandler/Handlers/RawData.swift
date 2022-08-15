@@ -8,7 +8,7 @@
 
 extension MIDIIOReceiveHandler {
     /// Basic raw packet data receive handler.
-    public class RawData: MIDIIOReceiveHandlerProtocol {
+    public final class RawData: MIDIIOReceiveHandlerProtocol {
         public typealias Handler = (_ packet: AnyMIDIPacket) -> Void
         
         @inline(__always)
