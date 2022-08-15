@@ -165,7 +165,7 @@ extension AppDelegate {
                 action: #selector(midiInMenuItemSelected),
                 keyEquivalent: ""
             )
-            newMenuItem.tag = .invalidMIDIIdentifier
+            newMenuItem.tag = Int(MIDIIdentifier.invalidMIDIIdentifier)
             newMenuItem.state = midiInMenuSelectedID == .invalidMIDIIdentifier ? .on : .off
             midiInMenu.addItem(newMenuItem)
         }
@@ -207,7 +207,7 @@ extension AppDelegate {
     @objc
     private func midiInMenuItemSelected(_ sender: NSMenuItem?) {
         midiInMenuSelectedID = MIDIIdentifier(
-            exactly: sender?.tag ?? .invalidMIDIIdentifier
+            exactly: sender?.tag ?? 0
         ) ?? .invalidMIDIIdentifier
     
         if let foundOutput = midiManager.endpoints.outputs.first(where: {
@@ -263,7 +263,7 @@ extension AppDelegate {
                 action: #selector(midiOutMenuItemSelected),
                 keyEquivalent: ""
             )
-            newMenuItem.tag = .invalidMIDIIdentifier
+            newMenuItem.tag = Int(MIDIIdentifier.invalidMIDIIdentifier)
             newMenuItem.state = midiOutMenuSelectedID == .invalidMIDIIdentifier ? .on : .off
             midiOutMenu.addItem(newMenuItem)
         }
@@ -303,7 +303,7 @@ extension AppDelegate {
     @objc
     private func midiOutMenuItemSelected(_ sender: NSMenuItem?) {
         midiOutMenuSelectedID = MIDIIdentifier(
-            exactly: sender?.tag ?? .invalidMIDIIdentifier
+            exactly: sender?.tag ?? 0
         ) ?? .invalidMIDIIdentifier
     
         if let foundInput = midiManager.endpoints.inputs.first(where: {
