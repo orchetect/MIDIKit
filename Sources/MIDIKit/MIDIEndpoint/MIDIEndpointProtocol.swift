@@ -1,5 +1,5 @@
 //
-//  MIDIEndpoint.swift
+//  MIDIEndpointProtocol.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -8,12 +8,12 @@
 
 // MARK: - Public Protocol
 
-public protocol MIDIEndpoint: MIDIIOObject {
+public protocol MIDIEndpointProtocol: MIDIIOObject {
     /// Display name of the endpoint.
     /// This typically includes the model number and endpoint name.
     var displayName: String { get }
     
-    // implemented in extension _MIDIEndpoint
+    // implemented in extension _MIDIEndpointProtocol
     
     /// Returns the entity the endpoint originates from. For virtual endpoints, this will return `nil`.
     func getEntity() -> MIDIEntity?
@@ -24,11 +24,11 @@ public protocol MIDIEndpoint: MIDIIOObject {
 
 // MARK: - Internal Protocol
 
-internal protocol _MIDIEndpoint: MIDIEndpoint { }
+internal protocol _MIDIEndpointProtocol: MIDIEndpointProtocol { }
 
-// MIDIEndpoint implementation
+// MIDIEndpointProtocol implementation
 
-extension _MIDIEndpoint {
+extension _MIDIEndpointProtocol {
     public func getEntity() -> MIDIEntity? {
         try? getSystemEntity(for: coreMIDIObjectRef)
     }
@@ -36,7 +36,7 @@ extension _MIDIEndpoint {
 
 // MARK: - Additional properties
 
-extension MIDIEndpoint {
+extension MIDIEndpointProtocol {
     /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
         getSystemDestinationEndpoint(matching: uniqueID) != nil
