@@ -36,8 +36,8 @@ Learn how MIDIKit's <doc:MIDI-Value-Types> work.
 From here, you have laid the necessary groundwork to set up ports and connections.
 
 - <doc:MIDIManager-Creating-Ports>
-- <doc:MIDIManager-Creating-Managed-Connections> to one or more existing MIDI ports in the system
-- <doc:MIDIManager-Removing-Ports-and-Managed-Connections>
+- <doc:MIDIManager-Creating-Connections> to one or more existing MIDI ports in the system
+- <doc:MIDIManager-Removing-Ports-and-Connections>
 - Learn about powerful <doc:Event-Filters>
 - Explore the [Example Projects](https://github.com/orchetect/MIDIKit/blob/main/Examples/)
   - Creating virtual ports and managed connections
