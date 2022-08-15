@@ -42,7 +42,7 @@ public enum MIDIReceiver {
     /// Pass to a receiver object instance.
     /// MIDI Event receive handler that holds a reference to a receiver object that conforms to the `ReceivesMIDIEvents` protocol.
     /// The object reference may be held strongly or weakly.
-    case receiver(
+    case object(
         ReceivesMIDIEvents,
         held: ReceiverRefStorage,
         translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true
@@ -99,7 +99,7 @@ extension MIDIReceiver {
                 )
             )
             
-        case let .receiver(
+        case let .object(
             object,
             storageType,
             translateMIDI1NoteOnZeroVelocityToNoteOff
