@@ -199,25 +199,3 @@ extension MIDIEvent {
         )
     }
 }
-
-// MARK: - API Transition (release 0.4.12)
-
-extension MIDIEvent {
-    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
-    /// Message must begin with 0xF0 but terminating 0xF7 byte is optional.
-    ///
-    /// - Throws: `MIDIEvent.ParseError` if message is malformed.
-    @available(*, unavailable, renamed: "Event.sysEx7(rawBytes:group:)")
-    @inline(__always)
-    public init(
-        sysEx7RawBytes rawBytes: [Byte],
-        group: UInt4 = 0
-    ) throws {
-        let sysEx = try Self.sysEx7(
-            rawBytes: rawBytes,
-            group: group
-        )
-    
-        self = sysEx
-    }
-}

@@ -298,36 +298,3 @@ extension MIDINote {
         Int(round(12.0 * log2(frequency / tuning) + 69.0))
     }
 }
-
-// MARK: - API Transition (release 0.5.0)
-
-extension MIDINote {
-    /// Utility method that returns frequency in Hz calculated from a MIDI note number.
-    /// - parameter ofMIDINote: MIDI note number
-    /// - parameter tuning: Tuning in Hertz
-    @available(*, unavailable, renamed: "calculateFrequency(midiNote:tuning:)")
-    public static func calculateFrequency(
-        ofMIDINote: Int,
-        tuning: Double = 440.0
-    ) -> Double {
-        Self.calculateFrequency(
-            midiNote: ofMIDINote,
-            tuning: tuning
-        )
-    }
-    
-    /// Utility method that returns a MIDI note number calculated from frequency in Hz.
-    /// Note: Results may be out-of-bounds (outside of 0...127)
-    /// - parameter ofFrequency: MIDI note number
-    /// - parameter tuning: Tuning in Hertz
-    @available(*, unavailable, renamed: "calculateMIDINoteNumber(frequency:tuning:)")
-    public static func calculateMIDINoteNumber(
-        ofFrequency: Double,
-        tuning: Double = 440.0
-    ) -> Int {
-        Self.calculateMIDINoteNumber(
-            frequency: ofFrequency,
-            tuning: tuning
-        )
-    }
-}

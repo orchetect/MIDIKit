@@ -111,26 +111,3 @@ extension MIDIEvent {
         }
     }
 }
-
-// MARK: - API Transition (release 0.4.12)
-
-extension MIDIEvent {
-    /// Parse a complete MIDI 2.0 System Exclusive 8 message (starting with the Stream ID byte until the end of the packet) and return a `.sysEx8()` or `.universalSysEx8()` case if successful.
-    ///
-    /// Valid rawBytes count is 1...14. (Must always contain a Stream ID, even if there are zero data bytes to follow)
-    ///
-    /// - Throws: `MIDIEvent.ParseError` if message is malformed.
-    @available(*, unavailable, renamed: "Event.sysEx8(rawBytes:group:)")
-    @inline(__always)
-    public init(
-        sysEx8RawBytes rawBytes: [Byte],
-        group: UInt4 = 0
-    ) throws {
-        let sysEx = try Self.sysEx8(
-            rawBytes: rawBytes,
-            group: group
-        )
-    
-        self = sysEx
-    }
-}

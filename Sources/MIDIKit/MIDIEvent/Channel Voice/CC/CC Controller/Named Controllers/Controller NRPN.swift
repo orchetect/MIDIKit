@@ -132,31 +132,3 @@ extension MIDIEvent {
     }
 }
 
-// MARK: - API Transition (release 0.4.12)
-
-extension MIDIEvent {
-    /// Creates an NRPN message, consisting of multiple MIDI Events.
-    @available(
-        *,
-        unavailable,
-        renamed: "ccNRPN(_:channel:group:)",
-        message: "NRPN API has been unified with RPN API. Please use the .raw() enum case in place of parameter: dataEntryMSB: dataEntryLSB: parameters."
-    )
-    public static func ccNRPN(
-        parameter: UInt7Pair,
-        dataEntryMSB: UInt7?,
-        dataEntryLSB: UInt7?,
-        channel: UInt4,
-        group: UInt4 = 0
-    ) -> [MIDIEvent] {
-        CC.Controller.NRPN.raw(
-            parameter: parameter,
-            dataEntryMSB: dataEntryMSB,
-            dataEntryLSB: dataEntryLSB
-        )
-        .events(
-            channel: channel,
-            group: group
-        )
-    }
-}
