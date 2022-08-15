@@ -2,7 +2,7 @@
 --allman false
 --assetliterals visual-width
 --beforemarks 
---binarygrouping 4,8
+--binarygrouping 8,8
 --categorymark "MARK: %c"
 --classthreshold 0
 --closingparen balanced
