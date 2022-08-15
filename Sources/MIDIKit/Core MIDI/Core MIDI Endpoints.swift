@@ -14,16 +14,16 @@
 /// List of MIDI endpoints in the system (computed property)
 internal func getSystemSourceEndpoints() -> [MIDIOutputEndpoint] {
     let srcCount = MIDIGetNumberOfSources()
-        
+    
     var endpoints: [MIDIOutputEndpoint] = []
     endpoints.reserveCapacity(srcCount)
-        
+    
     for i in 0 ..< srcCount {
         let endpoint = MIDIGetSource(i)
-            
+    
         endpoints.append(MIDIOutputEndpoint(from: endpoint))
     }
-        
+    
     return endpoints
 }
     
@@ -33,16 +33,16 @@ internal func getSystemSourceEndpoints() -> [MIDIOutputEndpoint] {
 /// Dictionary of destination names & endpoint unique IDs (computed property)
 internal func getSystemDestinationEndpoints() -> [MIDIInputEndpoint] {
     let destCount = MIDIGetNumberOfDestinations()
-        
+    
     var endpoints: [MIDIInputEndpoint] = []
     endpoints.reserveCapacity(destCount)
-        
+    
     for i in 0 ..< destCount {
         let endpoint = MIDIGetDestination(i)
-            
+    
         endpoints.append(MIDIInputEndpoint(from: endpoint))
     }
-        
+    
     return endpoints
 }
 
@@ -54,12 +54,12 @@ internal func getSystemSourceEndpoints(
     matching name: String
 ) -> [CoreMIDI.MIDIEndpointRef] {
     var refs: [MIDIEndpointRef] = []
-        
+    
     for i in 0 ..< MIDIGetNumberOfSources() {
         let endpoint = MIDIGetSource(i)
         if (try? getName(of: endpoint)) == name { refs.append(endpoint) }
     }
-        
+    
     return refs
 }
     
@@ -74,7 +74,7 @@ internal func getSystemSourceEndpoint(
         let endpoint = MIDIGetSource(i)
         if getUniqueID(of: endpoint) == uniqueID { return endpoint }
     }
-        
+    
     return nil
 }
 
@@ -86,12 +86,12 @@ internal func getSystemDestinationEndpoints(
     matching name: String
 ) -> [CoreMIDI.MIDIEndpointRef] {
     var refs: [MIDIEndpointRef] = []
-        
+    
     for i in 0 ..< MIDIGetNumberOfDestinations() {
         let endpoint = MIDIGetDestination(i)
         if (try? getName(of: endpoint)) == name { refs.append(endpoint) }
     }
-        
+    
     return refs
 }
     
@@ -106,7 +106,7 @@ internal func getSystemDestinationEndpoint(
         let endpoint = MIDIGetDestination(i)
         if getUniqueID(of: endpoint) == uniqueID { return endpoint }
     }
-        
+    
     return nil
 }
 
@@ -116,16 +116,16 @@ internal func getSystemEntity(
     for endpoint: MIDIEndpointRef
 ) throws -> MIDIEntity {
     var ent = MIDIEntityRef()
-        
+    
     try MIDIEndpointGetEntity(endpoint, &ent)
         .throwIfOSStatusErr()
-        
+    
     guard ent != MIDIEntityRef() else {
         throw MIDIIOError.internalInconsistency(
             "Error getting entity ID for endpoint ref \(endpoint)"
         )
     }
-        
+    
     return MIDIEntity(from: ent)
 }
 

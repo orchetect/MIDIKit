@@ -40,7 +40,7 @@ extension MIDINote {
     public var isSharp: Bool {
         let octaveMod = number % 12
         return [1, 3, 6, 8, 10].contains(octaveMod)
-        
+    
         // this also works, but the math above may be slightly more performant,
         // since the `name` property would have to call `Name.convert(noteNumber:)`
         //

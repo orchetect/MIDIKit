@@ -13,71 +13,71 @@ public enum MIDIOSStatus: Hashable {
     /// `CoreMIDI.kMIDIInvalidClient`:
     /// An invalid `MIDIClientRef` was passed.
     case invalidClient
-        
+    
     /// `CoreMIDI.kMIDIInvalidPort`:
     /// An invalid `MIDIPortRef` was passed.
     case invalidPort
-        
+    
     /// `CoreMIDI.kMIDIWrongEndpointType`:
     /// A source endpoint was passed to a function expecting a destination, or vice versa.
     case wrongEndpointType
-        
+    
     /// `CoreMIDI.kMIDINoConnection`:
     /// Attempt to close a non-existent connection.
     case noConnection
-        
+    
     /// `CoreMIDI.kMIDIUnknownEndpoint`:
     /// An invalid `MIDIEndpointRef` was passed.
     case unknownEndpoint
-        
+    
     /// `CoreMIDI.kMIDIUnknownProperty`:
     /// Attempt to query a property not set on the object.
     case unknownProperty
-        
+    
     /// `CoreMIDI.kMIDIWrongPropertyType`:
     /// Attempt to set a property with a value not of the correct type.
     case wrongPropertyType
-        
+    
     /// `CoreMIDI.kMIDINoCurrentSetup`:
     /// Internal error; there is no current MIDI setup object.
     case noCurrentSetup
-        
+    
     /// `CoreMIDI.kMIDIMessageSendErr`:
     /// Communication with MIDIServer failed.
     case messageSendErr
-        
+    
     /// `CoreMIDI.kMIDIServerStartErr`:
     /// Unable to start MIDIServer.
     case serverStartErr
-        
+    
     /// `CoreMIDI.kMIDISetupFormatErr`:
     /// Unable to read the saved state.
     case setupFormatErr
-        
+    
     /// `CoreMIDI.kMIDIWrongThread`:
     /// A driver is calling a non-I/O function in the server from a thread other than the server's main thread.
     case wrongThread
-        
+    
     /// `CoreMIDI.kMIDIObjectNotFound`:
     /// The requested object does not exist.
     case objectNotFound
-        
+    
     /// `CoreMIDI.kMIDIIDNotUnique`:
     /// Attempt to set a non-unique `kMIDIPropertyUniqueID` on an object.
     case idNotUnique
-        
+    
     /// `CoreMIDI.kMIDINotPermitted`:
     /// The process does not have privileges for the requested operation.
     case notPermitted
-        
+    
     /// `CoreMIDI.kMIDIUnknownError`:
     /// Internal error; unable to perform the requested operation.
     case unknownError
-        
+    
     /// `kMIDIMsgIOError`:
     /// IO Error
     case ioError
-        
+    
     /// Error -50:
     /// Various underlying issues could produce this error.
     ///
@@ -86,7 +86,7 @@ public enum MIDIOSStatus: Hashable {
     /// - an uninitialized variable being passed,
     /// - or if the MIDI server has an issue getting a process ID back internally.
     case internalError
-        
+    
     /// Other `OSStatus`
     case other(CoreMIDIOSStatus)
 }
@@ -158,58 +158,58 @@ extension MIDIOSStatus: CustomStringConvertible {
         switch self {
         case .invalidClient:
             return "An invalid MIDIClientRef was passed. (kMIDIInvalidClient)"
-            
+    
         case .invalidPort:
             return "An invalid MIDIPortRef was passed. (kMIDIInvalidPort)"
-            
+    
         case .wrongEndpointType:
             return "A source endpoint was passed to a function expecting a destination, or vice versa. (kMIDIWrongEndpointType)"
-            
+    
         case .noConnection:
             return "Attempt to close a non-existent connection. (kMIDINoConnection)"
-            
+    
         case .unknownEndpoint:
             return "An invalid MIDIEndpointRef was passed. (kMIDIUnknownEndpoint)"
-            
+    
         case .unknownProperty:
             return "Attempt to query a property not set on the object. (kMIDIUnknownProperty)"
-            
+    
         case .wrongPropertyType:
             return "Attempt to set a property with a value not of the correct type. (kMIDIWrongPropertyType)"
-            
+    
         case .noCurrentSetup:
             return "Internal error; there is no current MIDI setup object. (kMIDINoCurrentSetup)"
-            
+    
         case .messageSendErr:
             return "Communication with MIDIServer failed. (kMIDIMessageSendErr)"
-            
+    
         case .serverStartErr:
             return "Unable to start MIDIServer. (kMIDIServerStartErr)"
-            
+    
         case .setupFormatErr:
             return "Unable to read the saved state. (kMIDISetupFormatErr)"
-            
+    
         case .wrongThread:
             return "A driver is calling a non-I/O function in the server from a thread other than the server's main thread. (kMIDIWrongThread)"
-            
+    
         case .objectNotFound:
             return "The requested object does not exist. (kMIDIObjectNotFound)"
-            
+    
         case .idNotUnique:
             return "Attempt to set a non-unique kMIDIPropertyUniqueID on an object. (kMIDIIDNotUnique)"
-            
+    
         case .notPermitted:
             return "The process does not have privileges for the requested operation. (kMIDINotPermitted)"
-            
+    
         case .unknownError:
             return "Internal error; unable to perform the requested operation. (kMIDIUnknownError)"
-            
+    
         case .ioError:
             return "I/O Error. (kMIDIMsgIOError)"
-            
+    
         case .internalError:
             return "Internal OSStatus error -50."
-            
+    
         case let .other(osStatus):
             return "Unknown OSStatus error: \(osStatus)"
         }
@@ -219,7 +219,7 @@ extension MIDIOSStatus: CustomStringConvertible {
 /// Throws an error of type `MIDIIOError` if `OSStatus` return value is != `noErr`
 internal func throwIfErr(_ closure: () -> OSStatus) throws {
     let result = closure()
-        
+    
     guard result == noErr else {
         throw MIDIIOError.osStatus(result)
     }

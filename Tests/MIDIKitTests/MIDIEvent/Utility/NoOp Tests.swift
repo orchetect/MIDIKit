@@ -17,7 +17,7 @@ final class MIDIEventNoOp_Tests: XCTestCase {
     func testNoOp() {
         for grp: UInt4 in 0x0 ... 0xF {
             let event: MIDIEvent = .noOp(group: grp)
-            
+    
             XCTAssertEqual(
                 event.umpRawWords(protocol: ._2_0),
                 [[

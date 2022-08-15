@@ -21,14 +21,14 @@ class MIDIHelper: ObservableObject {
             print("MIDIManager is missing.")
             return
         }
-        
+    
         do {
             print("Starting MIDI services.")
             try midiManager.start()
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         do {
             print("Creating virtual MIDI input.")
             try midiManager.addInput(
@@ -63,7 +63,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .noteOff(payload):
             print(
                 "Note Off:",
@@ -81,7 +81,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .noteCC(payload):
             print(
                 "Per-Note CC (MIDI 2.0 Only):",
@@ -97,7 +97,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .notePitchBend(payload):
             print(
                 "Per-Note Pitch Bend (MIDI 2.0 Only):",
@@ -111,7 +111,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .notePressure(payload):
             print(
                 "Per-Note Pressure (a.k.a. Polyphonic Aftertouch):",
@@ -127,7 +127,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .noteManagement(payload):
             print(
                 "Per-Note Management (MIDI 2.0 Only):",
@@ -139,7 +139,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .cc(payload):
             print(
                 "Control Change (CC):",
@@ -156,7 +156,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .programChange(payload):
             print(
                 "Program Change:",
@@ -169,7 +169,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .pitchBend(payload):
             print(
                 "Channel Pitch Bend:",
@@ -184,7 +184,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .pressure(payload):
             print(
                 "Channel Pressure (a.k.a. Aftertouch):",
@@ -199,7 +199,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .sysEx7(payload):
             print(
                 "System Exclusive 7:",
@@ -210,7 +210,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .universalSysEx7(payload):
             print(
                 "Universal System Exclusive 7:",
@@ -227,7 +227,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .sysEx8(payload):
             print(
                 "System Exclusive 8 (MIDI 2.0 Only):",
@@ -238,7 +238,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .universalSysEx8(payload):
             print(
                 "Universal System Exclusive 8 (MIDI 2.0 Only):",
@@ -255,7 +255,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .timecodeQuarterFrame(payload):
             print(
                 "Timecode Quarter-Frame:",
@@ -264,7 +264,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .songPositionPointer(payload):
             print(
                 "Song Position Pointer:",
@@ -273,7 +273,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .songSelect(payload):
             print(
                 "Song Select:",
@@ -282,7 +282,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .unofficialBusSelect(payload):
             print(
                 "Unofficial Bus Select (May be removed in a future MIDIKit release):",
@@ -291,63 +291,63 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .tuneRequest(payload):
             print(
                 "Tune Request:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .timingClock(payload):
             print(
                 "Timing Clock:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .start(payload):
             print(
                 "Start:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .continue(payload):
             print(
                 "Continue:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .stop(payload):
             print(
                 "Stop:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .activeSensing(payload):
             print(
                 "Active Sensing (Deprecated in MIDI 2.0):",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .systemReset(payload):
             print(
                 "System Reset:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .noOp(payload):
             print(
                 "No-Op (MIDI 2.0 Only):",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .jrClock(payload):
             print(
                 "JR Clock - Jitter-Reduction Clock (MIDI 2.0 Only):",
@@ -356,7 +356,7 @@ class MIDIHelper: ObservableObject {
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-            
+    
         case let .jrTimestamp(payload):
             print(
                 "JR Timestamp - Jitter-Reduction Timestamp (MIDI 2.0 Only):",

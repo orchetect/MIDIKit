@@ -22,10 +22,10 @@ struct BluetoothMIDIApp: App {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         // set up a listener that automatically connects to all MIDI outputs
         // and prints the events to the console
-        
+    
         do {
             try midiManager.addInputConnection(
                 toOutputs: [], // no need to specify if we're using .allEndpoints
@@ -40,9 +40,9 @@ struct BluetoothMIDIApp: App {
                 error.localizedDescription
             )
         }
-        
+    
         // set up a broadcaster that can send events to all MIDI inputs
-        
+    
         do {
             try midiManager.addOutputConnection(
                 toInputs: [], // no need to specify if we're using .allEndpoints

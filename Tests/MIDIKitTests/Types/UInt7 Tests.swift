@@ -78,13 +78,13 @@ final class UInt7_Tests: XCTestCase {
         XCTAssertEqual(UInt7(Double(0)).intValue, 0)
         XCTAssertEqual(UInt7(Double(1)).intValue, 1)
         XCTAssertEqual(UInt7(Double(5.9)).intValue, 5)
-        
+    
         XCTAssertEqual(UInt7(Float(0)).intValue, 0)
         XCTAssertEqual(UInt7(Float(1)).intValue, 1)
         XCTAssertEqual(UInt7(Float(5.9)).intValue, 5)
-        
+    
         // overflow
-        
+    
         // TODO: need to find a pure Swift way to test exceptions
         // removed Obj-C helper calls that enabled catching exceptions
         // so that MIDIKit could be pure Swift
@@ -102,17 +102,17 @@ final class UInt7_Tests: XCTestCase {
     
     func testInit_BinaryFloatingPoint_Exactly() {
         // typical
-        
+    
         XCTAssertEqual(UInt7(exactly: 0.0), 0)
-        
+    
         XCTAssertEqual(UInt7(exactly: 1.0), 1)
-        
+    
         XCTAssertEqual(UInt7(exactly: Double(_max))?.intValue, _max)
-        
+    
         // overflow
-        
+    
         XCTAssertNil(UInt7(exactly: -1.0))
-        
+    
         XCTAssertNil(UInt7(exactly: Double(_max) + 1.0))
     }
 	
@@ -132,12 +132,12 @@ final class UInt7_Tests: XCTestCase {
     func testStrideable() {
         let min = UInt7(_min)
         let max = UInt7(_max)
-        
+    
         let strideBy1 = stride(from: min, through: max, by: 1)
         XCTAssertEqual(strideBy1.underestimatedCount, _max + 1)
         XCTAssertTrue(strideBy1.starts(with: [min]))
         XCTAssertEqual(strideBy1.suffix(1), [max])
-        
+    
         let range = min ... max
         XCTAssertEqual(range.count, _max + 1)
         XCTAssertEqual(range.lowerBound, min)
@@ -204,22 +204,22 @@ final class UInt7_Tests: XCTestCase {
     func testBinaryInteger_UInt7Exactly() {
         XCTAssertEqual(0b0000000.toUInt7Exactly, 0b0000000)
         XCTAssertEqual(0b1111111.toUInt7Exactly, 0b1111111)
-        
+    
         XCTAssertEqual(Int8(10).toUInt7Exactly, 10)
         XCTAssertEqual(UInt8(10).toUInt7Exactly, 10)
-        
+    
         XCTAssertEqual(Int16(10).toUInt7Exactly, 10)
         XCTAssertEqual(UInt16(10).toUInt7Exactly, 10)
-        
+    
         // nil (overflow)
-        
+    
         XCTAssertNil(0b1000_0000.toUInt7Exactly)
     }
     
     func testBinaryInteger_Init_UInt7() {
         XCTAssertEqual(Int(10.toUInt7), 10)
         XCTAssertEqual(Int(exactly: 10.toUInt7), 10)
-        
+    
         // no BinaryInteger-conforming type in the Swift standard library
         // is smaller than 8 bits, so we can't really test .init(exactly:)
         // producing nil because it always succeeds (?)
@@ -232,19 +232,19 @@ final class UInt7_Tests: XCTestCase {
         XCTAssertEqual(1.toUInt7 + 1, 2.toUInt7)
         XCTAssertEqual(1 + 1.toUInt7, 2.toUInt7)
         XCTAssertEqual(1.toUInt7 + 1.toUInt7, 2)
-        
+    
         XCTAssertEqual(2.toUInt7 - 1, 1.toUInt7)
         XCTAssertEqual(2 - 1.toUInt7, 1.toUInt7)
         XCTAssertEqual(2.toUInt7 - 1.toUInt7, 1)
-        
+    
         XCTAssertEqual(2.toUInt7 * 2, 4.toUInt7)
         XCTAssertEqual(2 * 2.toUInt7, 4.toUInt7)
         XCTAssertEqual(2.toUInt7 * 2.toUInt7, 4)
-        
+    
         XCTAssertEqual(8.toUInt7 / 2, 4.toUInt7)
         XCTAssertEqual(8 / 2.toUInt7, 4.toUInt7)
         XCTAssertEqual(8.toUInt7 / 2.toUInt7, 4)
-        
+    
         XCTAssertEqual(8.toUInt7 % 3, 2.toUInt7)
         XCTAssertEqual(8 % 3.toUInt7, 2.toUInt7)
         XCTAssertEqual(8.toUInt7 % 3.toUInt7, 2)
@@ -252,16 +252,16 @@ final class UInt7_Tests: XCTestCase {
     
     func testAssignmentOperators() {
         var val = UInt7(2)
-        
+    
         val += 5
         XCTAssertEqual(val, 7)
-        
+    
         val -= 5
         XCTAssertEqual(val, 2)
-        
+    
         val *= 3
         XCTAssertEqual(val, 6)
-        
+    
         val /= 3
         XCTAssertEqual(val, 2)
     }

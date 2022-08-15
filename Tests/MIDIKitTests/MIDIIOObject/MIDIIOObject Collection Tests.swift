@@ -22,7 +22,7 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
             .init(ref: 1001, name: "C", displayName: "A", uniqueID: -1001),
             .init(ref: 1002, name: "A", displayName: "B", uniqueID: -1002)
         ]
-        
+    
         XCTAssertEqual(
             elements.sortedByName(),
             [
@@ -31,7 +31,7 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
                 .init(ref: 1001, name: "C", displayName: "A", uniqueID: -1001)
             ]
         )
-        
+    
         XCTAssertEqual(
             elements.sortedByDisplayName(), // this works because it's an array of endpoints
             [
@@ -52,12 +52,12 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
             .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
         ]
-        
+    
         XCTAssertEqual(
             elements.first(whereName: "Port A"),
             .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003)
         )
-        
+    
         XCTAssertNil(
             elements.first(whereName: "Port E")
         )
@@ -71,12 +71,12 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
             .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
         ]
-        
+    
         XCTAssertEqual(
             elements.first(whereName: "", ignoringEmpty: false),
             .init(ref: 1004, name: "", displayName: "", uniqueID: -1004)
         )
-        
+    
         XCTAssertNil(
             elements.first(whereName: "", ignoringEmpty: true)
         )
@@ -90,12 +90,12 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
             .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
         ]
-        
+    
         XCTAssertEqual(
             elements.first(whereUniqueID: -1002),
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002)
         )
-        
+    
         XCTAssertNil(
             elements.first(whereUniqueID: -2000)
         )
@@ -111,11 +111,11 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
             .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
         ]
-        
+    
         XCTAssertTrue(
             elements.contains(whereName: "Port A")
         )
-        
+    
         XCTAssertFalse(
             elements.contains(whereName: "Port E")
         )
@@ -129,11 +129,11 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
             .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
         ]
-        
+    
         XCTAssertTrue(
             elements.contains(whereName: "", ignoringEmpty: false)
         )
-        
+    
         XCTAssertFalse(
             elements.contains(whereName: "", ignoringEmpty: true)
         )
@@ -147,11 +147,11 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
             .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
         ]
-        
+    
         XCTAssertTrue(
             elements.contains(whereUniqueID: -1002)
         )
-        
+    
         XCTAssertFalse(
             elements.contains(whereUniqueID: -2000)
         )
@@ -167,7 +167,7 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "4", uniqueID: -1002),
             .init(ref: 1004, name: "",       displayName: "5", uniqueID: -1004)
         ]
-        
+    
         XCTAssertEqual(
             elements.filter(whereName: "Port A"),
             [
@@ -175,14 +175,14 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
                 .init(ref: 1002, name: "Port A", displayName: "4", uniqueID: -1002)
             ]
         )
-        
+    
         XCTAssertEqual(
             elements.filter(whereName: ""),
             [
                 .init(ref: 1004, name: "",       displayName: "5", uniqueID: -1004)
             ]
         )
-        
+    
         XCTAssertEqual(
             elements.filter(whereName: "Port D"),
             []
@@ -197,7 +197,7 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "4", uniqueID: -1002),
             .init(ref: 1004, name: "",       displayName: "5", uniqueID: -1004)
         ]
-        
+    
         XCTAssertEqual(
             elements.filter(whereName: "Port A", ignoringEmpty: true),
             [
@@ -205,14 +205,14 @@ final class MIDIIOObject_Collection_Tests: XCTestCase {
                 .init(ref: 1002, name: "Port A", displayName: "4", uniqueID: -1002)
             ]
         )
-        
+    
         XCTAssertEqual(
             elements.filter(whereName: "", ignoringEmpty: false),
             [
                 .init(ref: 1004, name: "",       displayName: "5", uniqueID: -1004)
             ]
         )
-        
+    
         XCTAssertEqual(
             elements.filter(whereName: "", ignoringEmpty: true),
             []

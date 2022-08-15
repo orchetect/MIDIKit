@@ -11,7 +11,7 @@ extension MIDINote {
     public enum NoteError: Error {
         /// Operation resulted in a MIDI note that is out of bounds (invalid).
         case outOfBounds
-        
+    
         /// An unexpected or malformed note name was encountered and could not be parsed.
         case malformedNoteName
     }
@@ -26,7 +26,7 @@ extension MIDINote.NoteError: CustomStringConvertible {
         switch self {
         case .outOfBounds:
             return "Operation resulted in a MIDI note that is out of bounds (invalid)."
-            
+    
         case .malformedNoteName:
             return "An unexpected or malformed note name was encountered and could not be parsed."
         }

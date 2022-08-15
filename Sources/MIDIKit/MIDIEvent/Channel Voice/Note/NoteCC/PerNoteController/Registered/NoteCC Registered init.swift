@@ -12,7 +12,7 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
     @inline(__always)
     public init(number: UInt8) {
         // this looks scary but its heart is in the right place
-        
+    
         switch number {
         case   1: self = .modWheel
         case   2: self = .breath
@@ -269,7 +269,7 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
         case 253: self = .undefined(.cc253)
         case 254: self = .undefined(.cc254)
         case 255: self = .undefined(.cc255)
-            
+    
         default:
             // should never happen since the switch case covers all 256 values of UInt8
             assertionFailure("Unhandled MIDI Per-Note CC controller number: \(number).")

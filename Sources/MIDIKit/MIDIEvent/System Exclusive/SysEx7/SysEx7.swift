@@ -16,13 +16,13 @@ extension MIDIEvent {
     public struct SysEx7: Equatable, Hashable {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
-        
+    
         /// Data bytes (7-bit) (excluding leading 0xF0, trailing 0xF7 and manufacturer bytes)
         public var data: [Byte]
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         public init(
             manufacturer: MIDIEvent.SysExManufacturer,
             data: [Byte],
@@ -78,7 +78,7 @@ extension MIDIEvent.SysEx7 {
             leadingF0: leadingF0,
             trailingF7: trailingF7
         )
-        
+    
         if let separator = separator {
             return bytes.hex.stringValues(padTo: 2, prefixes: false)
                 .joined(separator: separator)
@@ -112,7 +112,7 @@ extension MIDIEvent.SysEx7 {
     @inline(__always)
     public func umpRawWords() -> [[UMPWord]] {
         let rawData = manufacturer.sysEx7RawBytes() + data
-        
+    
         return Self.umpRawWords(
             fromSysEx7Data: rawData,
             group: group
@@ -129,21 +129,21 @@ extension MIDIEvent.SysEx7 {
         group: UInt4
     ) -> [[UMPWord]] {
         let maxDataBytesPerPacket = 6
-        
+    
         let umpMessageType: UniversalMIDIPacketData.MessageType = .data64bit
-        
+    
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
+    
         func rawDataOrNull(_ offset: Int) -> Byte {
             guard data.count > offset else { return 0x00 }
             return data[data.startIndex.advanced(by: offset)]
         }
-        
+    
         var rawDataByteCountRemaining: Int { data.count - rawDataPosition }
-        
+    
         var rawDataPosition = 0
         var packets: [[UMPWord]] = []
-        
+    
         while rawDataPosition < data.count {
             let status: UniversalMIDIPacketData.SysExStatusField
             switch rawDataPosition {
@@ -155,29 +155,29 @@ extension MIDIEvent.SysEx7 {
                 assertionFailure("Unexpected raw data position index.")
                 return []
             }
-            
+    
             let statusByte = status.rawValue.uInt8Value << 4
-            
+    
             let packetDataBytes = rawDataByteCountRemaining.clamped(to: 0 ... maxDataBytesPerPacket)
-            
+    
             let word1 = UMPWord(
                 mtAndGroup,
                 statusByte + UInt8(packetDataBytes),
                 rawDataOrNull(rawDataPosition + 0),
                 rawDataOrNull(rawDataPosition + 1)
             )
-            
+    
             let word2 = UMPWord(
                 rawDataOrNull(rawDataPosition + 2),
                 rawDataOrNull(rawDataPosition + 3),
                 rawDataOrNull(rawDataPosition + 4),
                 rawDataOrNull(rawDataPosition + 5)
             )
-            
+    
             packets.append([word1, word2])
             rawDataPosition += packetDataBytes
         }
-        
+    
         return packets
     }
 }

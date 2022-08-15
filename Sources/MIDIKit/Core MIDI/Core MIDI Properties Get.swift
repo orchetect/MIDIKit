@@ -24,23 +24,23 @@ internal func getProperties(
 ) throws -> CFPropertyList {
     var props: Unmanaged<CFPropertyList>?
     let result = MIDIObjectGetProperties(ref, &props, deep)
-        
+    
     guard result == noErr else {
         props?.release()
         throw MIDIIOError.osStatus(result)
     }
-        
+    
     guard let unwrappedProps = props?.takeRetainedValue() else {
         props?.release()
         throw MIDIIOError.readError(
             "Got nil while reading MIDIEndpointRef property list."
         )
     }
-        
+    
     // "takeRetainedValue() is the right choice here because it is the caller's responsibility to release the string.
     //  This is different from the usual Core Foundation memory management rules, but documented in the MIDI Services Reference"
     //  -- https://stackoverflow.com/a/27171498/2805570
-        
+    
     return unwrappedProps
 }
     
@@ -58,23 +58,23 @@ internal func getDictionary(
 ) throws -> NSDictionary {
     var dict: Unmanaged<CFDictionary>?
     let result = MIDIObjectGetDictionaryProperty(ref, forProperty, &dict)
-        
+    
     guard result == noErr else {
         dict?.release()
         throw MIDIIOError.osStatus(result)
     }
-        
+    
     guard let unwrappedDict = dict?.takeRetainedValue() else {
         dict?.release()
         throw MIDIIOError.readError(
             "Got nil while reading MIDIEndpointRef property list."
         )
     }
-        
+    
     // "takeRetainedValue() is the right choice here because it is the caller's responsibility to release the string.
     //  This is different from the usual Core Foundation memory management rules, but documented in the MIDI Services Reference"
     //  -- https://stackoverflow.com/a/27171498/2805570
-        
+    
     return unwrappedDict as NSDictionary
 }
     
@@ -92,23 +92,23 @@ internal func getString(
 ) throws -> String {
     var val: Unmanaged<CFString>?
     let result = MIDIObjectGetStringProperty(ref, forProperty, &val)
-        
+    
     guard result == noErr else {
         val?.release()
         throw MIDIIOError.osStatus(result)
     }
-        
+    
     guard let unwrappedVal = val?.takeRetainedValue() else {
         val?.release()
         throw MIDIIOError.readError(
             "Got nil while reading MIDIEndpointRef property value \((forProperty as String).quoted)"
         )
     }
-        
+    
     // "takeRetainedValue() is the right choice here because it is the caller's responsibility to release the string.
     //  This is different from the usual Core Foundation memory management rules, but documented in the MIDI Services Reference"
     //  -- https://stackoverflow.com/a/27171498/2805570
-        
+    
     return unwrappedVal as String
 }
     

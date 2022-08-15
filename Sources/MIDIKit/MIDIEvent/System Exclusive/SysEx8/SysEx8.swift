@@ -14,20 +14,20 @@ extension MIDIEvent {
     public struct SysEx8: Equatable, Hashable {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
-        
+    
         /// Data bytes (8-bit) (excluding leading 0xF0, trailing 0xF7 and stream ID)
         ///
         /// - remark: MIDI 2.0 Spec:
         ///
         /// System Exclusive 8 initial data bytes are the same as those found in MIDI 1.0 Protocol System Exclusive messages. These bytes are Manufacturer ID (including Special ID 0x7D, or Universal System Exclusive IDs), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable).
         public var data: [Byte]
-        
+    
         /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of an 8-bit Stream ID field.
         internal var streamID: UInt8 = 0x00
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         public init(
             manufacturer: SysExManufacturer,
             data: [Byte],
@@ -37,7 +37,7 @@ extension MIDIEvent {
             self.data = data
             self.group = group
         }
-        
+    
         internal init(
             manufacturer: SysExManufacturer,
             data: [Byte],
@@ -87,7 +87,7 @@ extension MIDIEvent.SysEx8 {
     @inline(__always)
     public func umpRawWords() -> [[UMPWord]] {
         let rawData = manufacturer.sysEx8RawBytes() + data
-        
+    
         return Self.umpRawWords(
             fromSysEx8Data: rawData,
             streamID: streamID,
@@ -106,21 +106,21 @@ extension MIDIEvent.SysEx8 {
         group: UInt4
     ) -> [[UMPWord]] {
         let maxDataBytesPerPacket = 13
-        
+    
         let umpMessageType: UniversalMIDIPacketData.MessageType = .data128bit
-        
+    
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
+    
         func rawDataOrNull(_ offset: Int) -> Byte {
             guard data.count > offset else { return 0x00 }
             return data[data.startIndex.advanced(by: offset)]
         }
-        
+    
         var rawDataByteCountRemaining: Int { data.count - rawDataPosition }
-        
+    
         var rawDataPosition = 0
         var packets: [[UMPWord]] = []
-        
+    
         while rawDataPosition < data.count {
             let status: UniversalMIDIPacketData.SysExStatusField
             switch rawDataPosition {
@@ -132,43 +132,43 @@ extension MIDIEvent.SysEx8 {
                 assertionFailure("Unexpected raw data position index.")
                 return []
             }
-            
+    
             let statusByte = status.rawValue.uInt8Value << 4
-            
+    
             let packetDataBytes = rawDataByteCountRemaining.clamped(to: 0 ... maxDataBytesPerPacket)
-            
+    
             let word1 = UMPWord(
                 mtAndGroup,
                 statusByte + UInt8(packetDataBytes + 1), // incl. streamID byte
                 streamID,
                 rawDataOrNull(rawDataPosition + 0)
             )
-            
+    
             let word2 = UMPWord(
                 rawDataOrNull(rawDataPosition + 1),
                 rawDataOrNull(rawDataPosition + 2),
                 rawDataOrNull(rawDataPosition + 3),
                 rawDataOrNull(rawDataPosition + 4)
             )
-            
+    
             let word3 = UMPWord(
                 rawDataOrNull(rawDataPosition + 5),
                 rawDataOrNull(rawDataPosition + 6),
                 rawDataOrNull(rawDataPosition + 7),
                 rawDataOrNull(rawDataPosition + 8)
             )
-            
+    
             let word4 = UMPWord(
                 rawDataOrNull(rawDataPosition + 9),
                 rawDataOrNull(rawDataPosition + 10),
                 rawDataOrNull(rawDataPosition + 11),
                 rawDataOrNull(rawDataPosition + 12)
             )
-            
+    
             packets.append([word1, word2, word3, word4])
             rawDataPosition += packetDataBytes
         }
-        
+    
         return packets
     }
 }

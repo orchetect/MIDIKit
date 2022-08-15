@@ -26,9 +26,9 @@ extension MIDIEvent.CC.Controller {
         case .generalPurpose2               : return 17
         case .generalPurpose3               : return 18
         case .generalPurpose4               : return 19
-            
+    
         case let .lsb(lsb)                  : return lsb.controller
-            
+    
         case .sustainPedal                  : return 64
         case .portamento                    : return 65
         case .sostenutoPedal                : return 66
@@ -62,9 +62,9 @@ extension MIDIEvent.CC.Controller {
         case .nrpnMSB                       : return 99
         case .rpnLSB                        : return 100
         case .rpnMSB                        : return 101
-            
+    
         case let .mode(mode)                : return mode.controller
-            
+    
         case let .undefined(cc)             : return cc.controller
         }
         // swiftformat:enable spacearoundoperators

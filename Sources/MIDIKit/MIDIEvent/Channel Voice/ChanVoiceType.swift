@@ -25,7 +25,7 @@ extension MIDIEvent {
         case onlyNotesInRange(ClosedRange<UInt7>)
         /// Return only noteOn/noteOff events within certain note number range(s).
         case onlyNotesInRanges([ClosedRange<UInt7>])
-        
+    
         /// Retain Channel Voice events only with a certain type,
         /// while retaining all non-Channel Voice events.
         case keepType(ChanVoiceType)
@@ -50,7 +50,7 @@ extension MIDIEvent {
         /// Retains only noteOn/noteOff events within certain note ranges(s),
         /// while retaining all non-Channel Voice events.
         case keepNotesInRanges([ClosedRange<UInt7>])
-        
+    
         /// Drop all Channel Voice events,
         /// while retaining all non-Channel Voice events.
         case drop

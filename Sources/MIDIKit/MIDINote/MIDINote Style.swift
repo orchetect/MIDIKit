@@ -13,12 +13,12 @@ extension MIDINote {
         ///
         /// Yamaha traditionally chose "C3" to represent MIDI note 60 (Middle C).
         case yamaha
-        
+    
         /// Roland (Middle C == C4)
         ///
         /// In 1982 Roland documentation writers chose "C4" to represent MIDI note 60 (Middle C).
         case roland
-        
+    
         /// Cakewalk (Middle C == C5)
         ///
         /// Cakewalk originally chose "C5" to represent MIDI note 60 (Middle C).
@@ -34,10 +34,10 @@ extension MIDINote.Style {
         switch self {
         case .yamaha:
             return -2
-            
+    
         case .roland:
             return -1
-            
+    
         case .cakewalk:
             return 0
         }
@@ -53,10 +53,10 @@ extension MIDINote.Style: CustomStringConvertible {
         switch self {
         case .yamaha:
             return "Yamaha (Middle C == C3)"
-            
+    
         case .roland:
             return "Roland (Middle C == C4)"
-            
+    
         case .cakewalk:
             return "Cakewalk (Middle C == C5)"
         }

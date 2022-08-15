@@ -13,14 +13,14 @@ extension MIDIEvent {
         case onlyType(SysExType)
         /// Return only System Exclusive events matching certain event type(s).
         case onlyTypes(Set<SysExType>)
-        
+    
         /// Retain System Exclusive events only with a certain type,
         /// while retaining all non-System Exclusive events.
         case keepType(SysExType)
         /// Retain System Exclusive events only with certain type(s),
         /// while retaining all non-System Exclusive events.
         case keepTypes(Set<SysExType>)
-        
+    
         /// Drop all System Exclusive events,
         /// while retaining all non-System Exclusive events.
         case drop

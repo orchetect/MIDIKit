@@ -12,20 +12,20 @@ extension MIDIEvent {
         ///
         /// If MIDI 2.0 attribute is set to Pitch 7.9, then this value represents the note index.
         public var note: MIDINote
-        
+    
         /// Velocity
         @MIDIEvent.NoteVelocityValidated
         public var velocity: MIDIEvent.NoteVelocity
-        
+    
         /// MIDI 2.0 Channel Voice Attribute
         public var attribute: NoteAttribute = .none
-        
+    
         /// Channel Number (0x0...0xF)
         public var channel: UInt4
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         /// Channel Voice Message: Note Off
         /// (MIDI 1.0 / 2.0)
         ///
@@ -48,7 +48,7 @@ extension MIDIEvent {
             self.attribute = attribute
             self.group = group
         }
-        
+    
         /// Channel Voice Message: Note Off
         /// (MIDI 1.0 / 2.0)
         ///
@@ -152,7 +152,7 @@ extension MIDIEvent.NoteOff {
         switch midiProtocol {
         case ._1_0:
             return .midi1ChannelVoice
-            
+    
         case ._2_0:
             return .midi2ChannelVoice
         }
@@ -166,7 +166,7 @@ extension MIDIEvent.NoteOff {
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {
         let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
-        
+    
         switch midiProtocol {
         case ._1_0:
             let word = UMPWord(
@@ -175,9 +175,9 @@ extension MIDIEvent.NoteOff {
                 note.number.uInt8Value,
                 velocity.midi1Value.uInt8Value
             )
-            
+    
             return [word]
-            
+    
         case ._2_0:
             let word1 = UMPWord(
                 mtAndGroup,
@@ -185,12 +185,12 @@ extension MIDIEvent.NoteOff {
                 note.number.uInt8Value,
                 attribute.attributeType
             )
-            
+    
             let word2 = UMPWord(
                 velocity.midi2Value,
                 attribute.attributeData
             )
-            
+    
             return [word1, word2]
         }
     }

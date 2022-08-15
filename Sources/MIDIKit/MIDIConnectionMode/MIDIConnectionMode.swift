@@ -10,7 +10,7 @@
 public enum MIDIConnectionMode: Equatable, Hashable {
     /// Specific endpoint criteria.
     case definedEndpoints
-        
+    
     /// Automatically adds all endpoints in the system and adds any new endpoints that appear in the system at any time thereafter.
     /// (Endpoint filters are respected.)
     ///

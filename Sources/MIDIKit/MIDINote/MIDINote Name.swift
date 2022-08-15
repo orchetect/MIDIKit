@@ -19,13 +19,13 @@ extension MIDINote {
         case F_sharp
         case G
         case G_sharp
-        
+    
         public static let sharpAccidental: Character = "#"
         public static let sharpAccidentalUnicode: Character = "♯"
-        
+    
         public static let flatAccidental: Character = "b"
         public static let flatAccidentalUnicode: Character = "♭"
-        
+    
         /// Initialize MIDI note name from a string.
         /// (ie: "A", "F#", "F♯", "Bb", "B♭")
         public init?(_ string: String) {
@@ -33,7 +33,7 @@ extension MIDINote {
             let accidental: Character? = string.count > 1
                 ? string[string.index(after: string.startIndex)]
                 : nil
-            
+    
             switch string[string.startIndex].uppercased() {
             case "A":
                 if let accidental = accidental {
@@ -41,18 +41,18 @@ extension MIDINote {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
                         self = .A_sharp
-                        
+    
                     case Self.flatAccidental,
                          Self.flatAccidentalUnicode:
                         self = .G_sharp
-                        
+    
                     default:
                         return nil
                     }
                 } else {
                     self = .A
                 }
-                
+    
             case "B":
                 if let accidental = accidental {
                     switch accidental {
@@ -64,110 +64,110 @@ extension MIDINote {
                     case Self.flatAccidental,
                          Self.flatAccidentalUnicode:
                         self = .A_sharp
-                        
+    
                     default:
                         return nil
                     }
                 } else {
                     self = .B
                 }
-                
+    
             case "C":
                 if let accidental = accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
                         self = .C_sharp
-                    
+    
                     // don't allow C♯ to become B, as octave number would change
                     // case Self.flatAccidental,
                     //    Self.flatAccidentalUnicode:
                     //    self = .B // B♮
-                        
+    
                     default:
                         return nil
                     }
                 } else {
                     self = .C
                 }
-                
+    
             case "D":
                 if let accidental = accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
                         self = .D_sharp
-                        
+    
                     case Self.flatAccidental,
                          Self.flatAccidentalUnicode:
                         self = .C_sharp
-                        
+    
                     default:
                         return nil
                     }
                 } else {
                     self = .D
                 }
-                
+    
             case "E":
                 if let accidental = accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
                         self = .F // F♮
-                    
+    
                     case Self.flatAccidental,
                          Self.flatAccidentalUnicode:
                         self = .D_sharp
-                        
+    
                     default:
                         return nil
                     }
                 } else {
                     self = .E
                 }
-                
+    
             case "F":
                 if let accidental = accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
                         self = .F_sharp
-                        
+    
                     case Self.flatAccidental,
                          Self.flatAccidentalUnicode:
                         self = .E // E♮
-                        
+    
                     default:
                         return nil
                     }
                 } else {
                     self = .F
                 }
-                
+    
             case "G":
                 if let accidental = accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
                         self = .G_sharp
-                        
+    
                     case Self.flatAccidental,
                          Self.flatAccidentalUnicode:
                         self = .F_sharp
-                        
+    
                     default:
                         return nil
                     }
                 } else {
                     self = .G
                 }
-                
+    
             default:
                 return nil
             }
         }
-        
+    
         /// Returns the note name as a string.
         ///
         /// - Parameters:
@@ -183,7 +183,7 @@ extension MIDINote {
             let sharp = unicodeAccidental
                 ? Self.sharpAccidentalUnicode
                 : Self.sharpAccidental
-            
+    
             // swiftformat:disable spacearoundoperators
             switch self {
             case .A       : return "A"
@@ -200,7 +200,7 @@ extension MIDINote {
             case .G_sharp : return respellSharpAsFlat ? "A\(flat)" : "G\(sharp)"
             }
         }
-        
+    
         /// Semitone offset originating from note C, ascending.
         public var scaleOffset: Int {
             // swiftformat:disable spacearoundoperators
@@ -220,7 +220,7 @@ extension MIDINote {
             }
             // swiftformat:enable spacearoundoperators
         }
-        
+    
         /// Returns `true` if note is sharp (has a ♯ accidental). On a piano keyboard, this would be a black key.
         public var isSharp: Bool {
             switch self {
@@ -232,7 +232,7 @@ extension MIDINote {
                  .F,
                  .G:
                 return false
-                
+    
             case .A_sharp,
                  .C_sharp,
                  .D_sharp,
@@ -241,7 +241,7 @@ extension MIDINote {
                 return true
             }
         }
-        
+    
         /// Returns note name and octave for the MIDI note number.
         /// Returns `nil` if MIDI note number is invalid.
         internal static func convert(
@@ -249,9 +249,9 @@ extension MIDINote {
             style: Style = .yamaha
         ) -> (name: Self, octave: Int) {
             // UInt7 is guaranteed to be a valid MIDI note number
-            
+    
             let octave = (noteNumber.intValue / 12) + style.firstOctaveOffset
-            
+    
             // swiftformat:disable spacearoundoperators
             switch noteNumber.intValue % 12 {
             case 9:  return (name: .A, octave: octave)

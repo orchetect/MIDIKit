@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         do {
             print("Creating virtual MIDI input.")
             try midiManager.addInput(

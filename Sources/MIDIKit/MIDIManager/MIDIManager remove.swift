@@ -24,7 +24,7 @@ extension MIDIManager {
                 case let .withTag(tag):
                     managedInputConnections[tag] = nil
                 }
-                
+    
             case .outputConnection:
                 switch tagSelection {
                 case .all:
@@ -32,7 +32,7 @@ extension MIDIManager {
                 case let .withTag(tag):
                     managedOutputConnections[tag] = nil
                 }
-                
+    
             case .input:
                 switch tagSelection {
                 case .all:
@@ -40,7 +40,7 @@ extension MIDIManager {
                 case let .withTag(tag):
                     managedInputs[tag] = nil
                 }
-                
+    
             case .output:
                 switch tagSelection {
                 case .all:
@@ -48,7 +48,7 @@ extension MIDIManager {
                 case let .withTag(tag):
                     managedOutputs[tag] = nil
                 }
-                
+    
             case .nonPersistentThruConnection:
                 switch tagSelection {
                 case .all:
@@ -81,7 +81,7 @@ extension MIDIManager {
     public func removeAll() {
         // `self.remove(...)` internally uses operationQueue.sync{}
         // so don't need to wrap this with it here
-        
+    
         for managedEndpointType in ManagedType.allCases {
             remove(managedEndpointType, .all)
         }

@@ -10,17 +10,17 @@ extension MIDIEvent {
     public struct CC: Equatable, Hashable {
         /// Controller
         public var controller: Controller
-        
+    
         /// Value
         @ValueValidated
         public var value: Value
-        
+    
         /// Channel Number (0x0...0xF)
         public var channel: UInt4
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         /// Channel Voice Message: Control Change (CC)
         /// (MIDI 1.0 / 2.0)
         ///
@@ -40,7 +40,7 @@ extension MIDIEvent {
             self.channel = channel
             self.group = group
         }
-        
+    
         /// Channel Voice Message: Control Change (CC)
         /// (MIDI 1.0 / 2.0)
         ///
@@ -133,7 +133,7 @@ extension MIDIEvent.CC {
         switch midiProtocol {
         case ._1_0:
             return .midi1ChannelVoice
-            
+    
         case ._2_0:
             return .midi2ChannelVoice
         }
@@ -147,7 +147,7 @@ extension MIDIEvent.CC {
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {
         let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
-        
+    
         switch midiProtocol {
         case ._1_0:
             let word = UMPWord(
@@ -156,9 +156,9 @@ extension MIDIEvent.CC {
                 controller.number.uInt8Value,
                 value.midi1Value.uInt8Value
             )
-            
+    
             return [word]
-            
+    
         case ._2_0:
             let word1 = UMPWord(
                 mtAndGroup,
@@ -166,9 +166,9 @@ extension MIDIEvent.CC {
                 controller.number.uInt8Value,
                 0x00
             ) // reserved
-            
+    
             let word2 = value.midi2Value
-            
+    
             return [word1, word2]
         }
     }

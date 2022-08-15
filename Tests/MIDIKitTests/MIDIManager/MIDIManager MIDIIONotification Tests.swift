@@ -19,7 +19,7 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
         // allow time for cleanup from previous unit tests, in case
         // MIDI endpoints are still being disposed of by Core MIDI
         wait(sec: 0.5)
-        
+    
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -28,15 +28,15 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
                 self.notifications.append(notification)
             }
         )
-            
+    
         // start midi client
         try manager.start()
-        
+    
         wait(sec: 0.5)
         XCTAssertEqual(notifications, [])
-        
+    
         notifications = []
-        
+    
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -44,10 +44,10 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        
+    
         wait(for: notifications.count >= 3, timeout: 0.5)
         wait(sec: 0.1)
-        
+    
         var addedNotifFound = false
         notifications.forEach { notif in
             switch notif {
@@ -67,15 +67,15 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
             }
         }
         XCTAssertTrue(addedNotifFound)
-        
+    
         notifications = []
-        
+    
         // remove output
         manager.remove(.output, .withTag(output1Tag))
-        
+    
         wait(for: notifications.count >= 2, timeout: 0.5)
         wait(sec: 0.1)
-        
+    
         var removedNotifFound = false
         notifications.forEach { notif in
             switch notif {

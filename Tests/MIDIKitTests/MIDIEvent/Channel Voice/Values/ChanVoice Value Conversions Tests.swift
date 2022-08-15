@@ -40,7 +40,7 @@ final class ChanVoiceValue_Conversions_Tests: XCTestCase {
         for value: UInt7 in 0x00 ... 0x7F {
             let scaled7BitTo16Bit = MIDIEvent.scaled16Bit(from7Bit: value)
             let scaled16BitBackTo7Bit = MIDIEvent.scaled7Bit(from16Bit: scaled7BitTo16Bit)
-            
+    
             XCTAssertEqual(value, scaled16BitBackTo7Bit)
         }
     }
@@ -71,7 +71,7 @@ final class ChanVoiceValue_Conversions_Tests: XCTestCase {
         for value: UInt7 in 0x00 ... 0x7F {
             let scaled7BitTo32Bit = MIDIEvent.scaled32Bit(from7Bit: value)
             let scaled32BitBackTo7Bit = MIDIEvent.scaled7Bit(from32Bit: scaled7BitTo32Bit)
-            
+    
             XCTAssertEqual(value, scaled32BitBackTo7Bit)
         }
     }
@@ -98,7 +98,7 @@ final class ChanVoiceValue_Conversions_Tests: XCTestCase {
         for value: UInt14 in 0x0000 ... 0x3FFF {
             let scaled14BitTo32Bit = MIDIEvent.scaled32Bit(from14Bit: value)
             let scaled32BitBackTo14Bit = MIDIEvent.scaled14Bit(from32Bit: scaled14BitTo32Bit)
-            
+    
             XCTAssertEqual(value, scaled32BitBackTo14Bit)
         }
     }
@@ -126,7 +126,7 @@ final class ChanVoiceValue_Conversions_Tests: XCTestCase {
             let scaled7BitToUnitInterval = MIDIEvent.scaledUnitInterval(from7Bit: value)
             let scaledUnitIntervalBackTo7Bit = MIDIEvent
                 .scaled7Bit(fromUnitInterval: scaled7BitToUnitInterval)
-            
+    
             XCTAssertEqual(value, scaledUnitIntervalBackTo7Bit)
         }
     }
@@ -156,7 +156,7 @@ final class ChanVoiceValue_Conversions_Tests: XCTestCase {
             let scaled14BitToUnitInterval = MIDIEvent.scaledUnitInterval(from14Bit: value)
             let scaledUnitIntervalBackTo14Bit = MIDIEvent
                 .scaled14Bit(fromUnitInterval: scaled14BitToUnitInterval)
-            
+    
             XCTAssertEqual(value, scaledUnitIntervalBackTo14Bit)
         }
     }
@@ -184,7 +184,7 @@ final class ChanVoiceValue_Conversions_Tests: XCTestCase {
             let scaled16BitToUnitInterval = MIDIEvent.scaledUnitInterval(from16Bit: value)
             let scaledUnitIntervalBackTo16Bit = MIDIEvent
                 .scaled16Bit(fromUnitInterval: scaled16BitToUnitInterval)
-            
+    
             XCTAssertEqual(value, scaledUnitIntervalBackTo16Bit)
         }
     }
@@ -210,19 +210,19 @@ final class ChanVoiceValue_Conversions_Tests: XCTestCase {
     func testScaled_32Bit_UnitInterval_RoundTrip() {
         // UInt32 is too large to test every value in a reasonable amount of time,
         // but for our needs it should be sufficient to test a few sufficiently large sample sizes
-        
+    
         let ranges: [ClosedRange<UInt32>] = [
             0x0000_0000 ... 0x0000_FFFF, // min/lower range
             0x7FFF_0000 ... 0x8000_FFFF, // midpoint/middle range
             0xFFFF_0000 ... 0xFFFF_FFFF  // max/upper range
         ]
-        
+    
         for range in ranges {
             for value: UInt32 in range {
                 let scaled32BitToUnitInterval = MIDIEvent.scaledUnitInterval(from32Bit: value)
                 let scaledUnitIntervalBackTo32Bit = MIDIEvent
                     .scaled32Bit(fromUnitInterval: scaled32BitToUnitInterval)
-                
+    
                 XCTAssertEqual(value, scaledUnitIntervalBackTo32Bit)
             }
         }

@@ -40,17 +40,17 @@ extension MIDIManager {
                 midiManager: self,
                 api: preferredAPI
             )
-            
+    
             managedOutputs[tag] = newVS
-            
+    
             try newVS.create(in: self)
-            
+    
             guard let successfulID = newVS.uniqueID else {
                 throw MIDIIOError.connectionError(
                     "Could not read virtual MIDI endpoint unique ID."
                 )
             }
-            
+    
             uniqueID.writeID(successfulID)
         }
     }

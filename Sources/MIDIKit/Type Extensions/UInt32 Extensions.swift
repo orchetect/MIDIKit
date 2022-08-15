@@ -20,7 +20,7 @@ extension UInt32 {
     @_disfavoredOverload
     public init<T: BinaryFloatingPoint>(bipolarUnitInterval: T) {
         let bipolarUnitInterval = bipolarUnitInterval.clamped(to: (-1.0) ... (1.0))
-        
+    
         if bipolarUnitInterval > 0.0 {
             let scaled = Self(Double(bipolarUnitInterval) * 0x7FFF_FFFF)
             self = 0x8000_0000 + scaled
@@ -42,7 +42,7 @@ extension UInt32 {
     ///     init(bipolarUnitInterval:  1.0) == 0xFFFFFFFF == .max
     public init(bipolarUnitInterval: Double) {
         let bipolarUnitInterval = bipolarUnitInterval.clamped(to: (-1.0) ... (1.0))
-        
+    
         if bipolarUnitInterval > 0.0 {
             let scaled = Self(bipolarUnitInterval * 0x7FFF_FFFF)
             self = 0x8000_0000 + scaled

@@ -9,16 +9,16 @@
 /// Formed as from two bytes (MSB, LSB) as `(MSB << 7) + LSB` where MSB and LSB are 7-bit values.
 public struct UInt14: MIDIIntegerProtocol {
     // MARK: Storage
-        
+    
     public typealias Storage = UInt16
     public internal(set) var value: Storage
-        
+    
     // MARK: Inits
-        
+    
     public init() {
         value = 0
     }
-        
+    
     public init<T: BinaryInteger>(_ source: T) {
         if source < Self.min(Storage.self) {
             Exception.underflow.raise(reason: "UInt14 integer underflowed")
@@ -28,7 +28,7 @@ public struct UInt14: MIDIIntegerProtocol {
         }
         value = Storage(source)
     }
-        
+    
     public init<T: BinaryFloatingPoint>(_ source: T) {
         // it should be safe to cast as T.self since it's virtually impossible
         // that we will encounter a BinaryFloatingPoint type that cannot fit UInt14.max
@@ -40,7 +40,7 @@ public struct UInt14: MIDIIntegerProtocol {
         }
         value = Storage(source)
     }
-        
+    
     /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint)
     /// (`-1.0...0.0...1.0` == `0...8192...16383`).
     ///
@@ -53,14 +53,14 @@ public struct UInt14: MIDIIntegerProtocol {
     ///     init(bipolarUnitInterval:  1.0) == 16383 == .max
     public init<T: BinaryFloatingPoint>(bipolarUnitInterval: T) {
         let bipolarUnitInterval = bipolarUnitInterval.clamped(to: (-1.0) ... (1.0))
-            
+    
         if bipolarUnitInterval > 0.0 {
             value = 8192 + Storage(bipolarUnitInterval * 8191)
         } else {
             value = 8192 - Storage(abs(bipolarUnitInterval) * 8192)
         }
     }
-        
+    
     /// Initialize the raw 14-bit value from two 7-bit value bytes.
     /// The top bit of each byte (0b1000_0000) will be truncated (set to 0).
     public init(bytePair: BytePair) {
@@ -68,37 +68,37 @@ public struct UInt14: MIDIIntegerProtocol {
         let lsb = Storage(bytePair.lsb & 0b1111111)
         value = msb + lsb
     }
-        
+    
     /// Initialize the raw 14-bit value from two 7-bit value bytes.
     public init(uInt7Pair: UInt7Pair) {
         let msb = Storage(uInt7Pair.msb.value) << 7
         let lsb = Storage(uInt7Pair.lsb.value)
         value = msb + lsb
     }
-        
+    
     // MARK: Constants
-        
+    
     public static let bitWidth: Int = 14
-        
+    
     public static func min<T: BinaryInteger>(_ ofType: T.Type) -> T { 0 }
     public static func min<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0 }
-        
+    
     // (0x40 << 7) + 0x00
     // 0b1000000_0000000, int 8192, hex 0x2000
     /// Neutral midpoint
     public static let midpoint = Self(Self.midpoint(Storage.self))
     public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 8192 }
-        
+    
     // (0x7F << 7) + 0x7F
     // 0b1111111_1111111, int 16383, hex 0x3FFF
     public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 16383 }
     public static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 16383 }
-        
+    
     // MARK: Computed properties
-        
+    
     /// Returns the integer as a `UInt16` instance.
     public var uInt16Value: UInt16 { value }
-        
+    
     /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral midpoint at 8192).
     /// (`0...8192...16383` == `-1.0...0.0...1.0`)
     public var bipolarUnitIntervalValue: Double {
@@ -109,14 +109,14 @@ public struct UInt14: MIDIIntegerProtocol {
             return (Double(value) - 8192) / 8192
         }
     }
-        
+    
     /// Returns the raw 14-bit value as two 7-bit value bytes.
     public var bytePair: BytePair {
         let msb = (value & 0b11_1111_1000_0000) >> 7
         let lsb = value & 0b1111111
         return .init(msb: Byte(msb), lsb: Byte(lsb))
     }
-        
+    
     /// Returns the raw 14-bit value as two 7-bit value bytes.
     public var midiUInt7Pair: UInt7Pair {
         let msb = (value & 0b11_1111_1000_0000) >> 7

@@ -10,21 +10,21 @@
 public struct UniversalMIDIPacketData {
 //    /// Universal MIDI Packet Words
 //    public let words: [UInt32]
-        
+    
     /// Flat array of raw bytes
     @inline(__always)
     public var bytes: [Byte]
-        
+    
     /// Core MIDI packet timestamp
     @inline(__always)
     public let timeStamp: CoreMIDITimeStamp
-        
+    
     @inline(__always)
     public init(bytes: [Byte], timeStamp: CoreMIDITimeStamp) {
         self.bytes = bytes
         self.timeStamp = timeStamp
     }
-        
+    
     @inline(__always)
     public init(words: [UMPWord], timeStamp: CoreMIDITimeStamp) {
         bytes = words.umpWordsToBytes()
@@ -53,14 +53,14 @@ extension UniversalMIDIPacketData {
         _ eventPacketPtr: UnsafePointer<MIDIEventPacket>
     ) -> UniversalMIDIPacketData {
         let wordCollection = eventPacketPtr.words()
-        
+    
         guard !wordCollection.isEmpty else {
             return UniversalMIDIPacketData(
                 words: [],
                 timeStamp: eventPacketPtr.pointee.timeStamp
             )
         }
-        
+    
         guard wordCollection.count <= 64 else {
             assertionFailure(
                 "Received MIDIEventPacket reporting \(wordCollection.count) words."
@@ -70,14 +70,14 @@ extension UniversalMIDIPacketData {
                 timeStamp: eventPacketPtr.pointee.timeStamp
             )
         }
-        
+    
         var words: [UMPWord] = []
         words.reserveCapacity(wordCollection.count)
-        
+    
         for word in wordCollection {
             words.append(word)
         }
-        
+    
         return UniversalMIDIPacketData(
             words: words,
             timeStamp: eventPacketPtr.pointee.timeStamp
@@ -89,17 +89,17 @@ extension UniversalMIDIPacketData {
         _ eventPacket: MIDIEventPacket
     ) -> UniversalMIDIPacketData {
         var localEventPacket = eventPacket
-        
+    
         return withUnsafePointer(to: localEventPacket) { unsafePtr -> UniversalMIDIPacketData in
             let wordCollection = MIDIEventPacket.WordCollection(&localEventPacket)
-            
+    
             guard !wordCollection.isEmpty else {
                 return UniversalMIDIPacketData(
                     words: [],
                     timeStamp: localEventPacket.timeStamp
                 )
             }
-            
+    
             guard wordCollection.count <= 64 else {
                 assertionFailure(
                     "Received MIDIEventPacket reporting \(wordCollection.count) words."
@@ -109,14 +109,14 @@ extension UniversalMIDIPacketData {
                     timeStamp: localEventPacket.timeStamp
                 )
             }
-            
+    
             var words: [UMPWord] = []
             words.reserveCapacity(wordCollection.count)
-            
+    
             for word in wordCollection {
                 words.append(word)
             }
-            
+    
             return UniversalMIDIPacketData(
                 words: words,
                 timeStamp: localEventPacket.timeStamp

@@ -10,14 +10,14 @@ extension MIDIEvent {
         /// Protocol-agnostic unit interval (0.0...1.0)
         /// Scaled automatically depending on MIDI protocol (1.0/2.0) in use.
         case unitInterval(Double)
-        
+    
         /// Protocol-agnostic bipolar unit interval (-1.0...0.0...1.0)
         /// Scaled automatically depending on MIDI protocol (1.0/2.0) in use.
         case bipolarUnitInterval(Double)
-        
+    
         /// MIDI 1.0 14-bit Value (0x0000...0x3FFF)
         case midi1(UInt14)
-        
+    
         /// MIDI 2.0 32-bit Channel Voice Note Velocity (0x00000000...0xFFFFFFFF)
         case midi2(UInt32)
     }
@@ -30,58 +30,58 @@ extension MIDIEvent.ChanVoice14Bit32BitValue: Equatable {
             switch rhs {
             case let .unitInterval(rhsInterval):
                 return lhsInterval == rhsInterval
-                
+    
             case let .bipolarUnitInterval(rhsInterval):
                 return lhs.bipolarUnitIntervalValue == rhsInterval
-                
+    
             case let .midi1(rhsUInt14):
                 return lhs.midi1Value == rhsUInt14
-                
+    
             case let .midi2(rhsUInt32):
                 return lhs.midi2Value == rhsUInt32
             }
-            
+    
         case let .bipolarUnitInterval(lhsInterval):
             switch rhs {
             case let .unitInterval(rhsInterval):
                 return lhs.unitIntervalValue == rhsInterval
-                
+    
             case let .bipolarUnitInterval(rhsInterval):
                 return lhsInterval == rhsInterval
-                
+    
             case let .midi1(rhsUInt14):
                 return lhs.midi1Value == rhsUInt14
-                
+    
             case let .midi2(rhsUInt32):
                 return lhs.midi2Value == rhsUInt32
             }
-            
+    
         case let .midi1(lhsUInt14):
             switch rhs {
             case .unitInterval:
                 return lhsUInt14 == rhs.midi1Value
-                
+    
             case .bipolarUnitInterval:
                 return lhsUInt14 == rhs.midi1Value
-                
+    
             case let .midi1(rhsUInt14):
                 return lhsUInt14 == rhsUInt14
-                
+    
             case let .midi2(rhsUInt32):
                 return lhs.midi2Value == rhsUInt32
             }
-            
+    
         case let .midi2(lhsUInt32):
             switch rhs {
             case .unitInterval:
                 return lhsUInt32 == rhs.midi2Value
-                
+    
             case .bipolarUnitInterval:
                 return lhsUInt32 == rhs.midi2Value
-                
+    
             case let .midi1(rhsUInt14):
                 return lhs.midi1Value == rhsUInt14
-                
+    
             case let .midi2(rhsUInt32):
                 return lhsUInt32 == rhsUInt32
             }
@@ -96,13 +96,13 @@ extension MIDIEvent.ChanVoice14Bit32BitValue {
         switch self {
         case let .unitInterval(interval):
             return interval.clamped(to: 0.0 ... 1.0)
-            
+    
         case let .bipolarUnitInterval(interval):
             return MIDIEvent.scaledUnitInterval(fromBipolarUnitInterval: interval)
-            
+    
         case let .midi1(uInt14):
             return MIDIEvent.scaledUnitInterval(from14Bit: uInt14)
-            
+    
         case let .midi2(uInt32):
             return MIDIEvent.scaledUnitInterval(from32Bit: uInt32)
         }
@@ -114,13 +114,13 @@ extension MIDIEvent.ChanVoice14Bit32BitValue {
         switch self {
         case let .unitInterval(interval):
             return interval.bipolarUnitIntervalValue
-            
+    
         case let .bipolarUnitInterval(interval):
             return interval
-            
+    
         case let .midi1(uInt14):
             return uInt14.bipolarUnitIntervalValue
-            
+    
         case let .midi2(uInt32):
             return uInt32.bipolarUnitIntervalValue
         }
@@ -132,13 +132,13 @@ extension MIDIEvent.ChanVoice14Bit32BitValue {
         switch self {
         case let .unitInterval(interval):
             return MIDIEvent.scaled14Bit(fromUnitInterval: interval)
-            
+    
         case let .bipolarUnitInterval(interval):
             return MIDIEvent.scaled14Bit(fromBipolarUnitInterval: interval)
-            
+    
         case let .midi1(uInt14):
             return uInt14
-            
+    
         case let .midi2(uInt32):
             return MIDIEvent.scaled14Bit(from32Bit: uInt32)
         }
@@ -150,13 +150,13 @@ extension MIDIEvent.ChanVoice14Bit32BitValue {
         switch self {
         case let .unitInterval(interval):
             return MIDIEvent.scaled32Bit(fromUnitInterval: interval)
-            
+    
         case let .bipolarUnitInterval(interval):
             return MIDIEvent.scaled32Bit(fromBipolarUnitInterval: interval)
-            
+    
         case let .midi1(uInt14):
             return MIDIEvent.scaled32Bit(from14Bit: uInt14)
-            
+    
         case let .midi2(uInt32):
             return uInt32
         }
@@ -167,10 +167,10 @@ extension MIDIEvent.ChanVoice14Bit32BitValue {
     @propertyWrapper
     public struct Validated: Equatable, Hashable {
         public typealias Value = MIDIEvent.ChanVoice14Bit32BitValue
-        
+    
         @inline(__always)
         private var value: Value
-        
+    
         @inline(__always)
         public var wrappedValue: Value {
             get {
@@ -192,7 +192,7 @@ extension MIDIEvent.ChanVoice14Bit32BitValue {
                 }
             }
         }
-        
+    
         @inline(__always)
         public init(wrappedValue: Value) {
             value = wrappedValue

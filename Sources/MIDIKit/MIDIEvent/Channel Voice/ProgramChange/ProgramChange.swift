@@ -16,7 +16,7 @@ extension MIDIEvent {
     public struct ProgramChange: Equatable, Hashable {
         /// Program Number
         public var program: UInt7
-        
+    
         /// Bank Select
         /// (MIDI 1.0 / 2.0)
         ///
@@ -39,13 +39,13 @@ extension MIDIEvent {
         ///
         /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a 14-bit number (0...16383). They correlate exactly to MIDI 1.0 bank numbers.
         public var bank: Bank
-        
+    
         /// Channel Number (0x0...0xF)
         public var channel: UInt4
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         /// Channel Voice Message: Program Change
         /// (MIDI 1.0 / 2.0)
         ///
@@ -103,17 +103,17 @@ extension MIDIEvent.ProgramChange {
             0xC0 + channel.uInt8Value,
             program.uInt8Value
         ]
-        
+    
         switch bank {
         case .noBankSelect:
             return programChangeMessage
-            
+    
         case let .bankSelect(bankNumber):
             // Assemble 3 messages in order:
             // - Bank Select MSB (CC 0)
             // - Bank Select LSB (CC 32)
             // - Program Change
-            
+    
             return [
                 0xB0 + channel.uInt8Value,
                 0x00,
@@ -135,7 +135,7 @@ extension MIDIEvent.ProgramChange {
         switch midiProtocol {
         case ._1_0:
             return .midi1ChannelVoice
-            
+    
         case ._2_0:
             return .midi2ChannelVoice
         }
@@ -149,7 +149,7 @@ extension MIDIEvent.ProgramChange {
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {
         let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
-        
+    
         switch midiProtocol {
         case ._1_0:
             let word = UMPWord(
@@ -158,41 +158,41 @@ extension MIDIEvent.ProgramChange {
                 program.uInt8Value,
                 0x00
             ) // pad an empty byte to fill 4 bytes
-            
+    
             return [word]
-            
+    
         case ._2_0:
             let optionFlags: Byte
             let bankMSB: Byte
             let bankLSB: Byte
-            
+    
             switch bank {
             case .noBankSelect:
                 optionFlags = 0b0000_0000
                 bankMSB = 0x00
                 bankLSB = 0x00
-                
+    
             case let .bankSelect(bankUInt14):
                 optionFlags = 0b0000_0001
                 let bytePair = bankUInt14.bytePair
                 bankMSB = bytePair.msb
                 bankLSB = bytePair.lsb
             }
-            
+    
             let word1 = UMPWord(
                 mtAndGroup,
                 0xC0 + channel.uInt8Value,
                 0x00, // reserved
                 optionFlags
             )
-            
+    
             let word2 = UMPWord(
                 program.uInt8Value,
                 0x00, // reserved
                 bankMSB,
                 bankLSB
             )
-            
+    
             return [word1, word2]
         }
     }

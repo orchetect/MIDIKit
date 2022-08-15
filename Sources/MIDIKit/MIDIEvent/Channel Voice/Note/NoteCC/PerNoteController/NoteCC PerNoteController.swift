@@ -10,7 +10,7 @@ extension MIDIEvent.NoteCC {
     public enum PerNoteController: Equatable, Hashable {
         /// Registered Per-Note Controller
         case registered(Registered)
-        
+    
         /// Assignable Per-Note Controller (Non-Registered)
         case assignable(Assignable)
     }
@@ -21,7 +21,7 @@ extension MIDIEvent.NoteCC.PerNoteController: CustomStringConvertible {
         switch self {
         case let .registered(cc):
             return "registered(\(cc.number))"
-            
+    
         case let .assignable(cc):
             return "assignable(\(cc))"
         }
@@ -35,7 +35,7 @@ extension MIDIEvent.NoteCC.PerNoteController {
         switch self {
         case let .registered(cc):
             return cc.number
-            
+    
         case let .assignable(cc):
             return cc
         }

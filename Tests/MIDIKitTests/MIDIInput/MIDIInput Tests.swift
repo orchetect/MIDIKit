@@ -18,7 +18,7 @@ final class MIDIInput_Tests: XCTestCase {
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-        
+    
         // start midi client
         try manager.start()
         wait(sec: 0.1)
@@ -46,7 +46,7 @@ final class MIDIInput_Tests: XCTestCase {
         XCTAssertNotNil(manager.managedInputs[tag1])
         let id1 = manager.managedInputs[tag1]?.uniqueID
         XCTAssertNotNil(id1)
-        
+    
         // unique ID collision
 		
         let tag2 = "2"
@@ -68,7 +68,7 @@ final class MIDIInput_Tests: XCTestCase {
 		
         XCTAssertNotNil(manager.managedInputs[tag2])
         let id2 = manager.managedInputs[tag2]?.uniqueID
-        
+    
         // ensure ids are different
         XCTAssertNotEqual(id1, id2)
 		

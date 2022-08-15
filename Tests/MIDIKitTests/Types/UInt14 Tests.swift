@@ -16,26 +16,26 @@ final class UInt14_Tests: XCTestCase {
     
     func testInit_BinaryInteger() {
         // default
-        
+    
         XCTAssertEqual(UInt14().value, 0)
-        
+    
         // different integer types
-        
+    
         XCTAssertEqual(UInt14(0), 0)
         XCTAssertEqual(UInt14(UInt8(0)), 0)
         XCTAssertEqual(UInt14(UInt16(0)), 0)
-        
+    
         // values
-        
+    
         XCTAssertEqual(UInt14(1), 1)
         XCTAssertEqual(UInt14(2), 2)
-        
+    
         // overflow
-        
+    
         // TODO: need to find a pure Swift way to test exceptions
         // removed Obj-C helper calls that enabled catching exceptions
         // so that MIDIKit could be pure Swift
-        
+    
         // _XCTAssertThrows { [self] in
         //    _ = UInt14(_min - 1)
         // }
@@ -47,29 +47,29 @@ final class UInt14_Tests: XCTestCase {
     
     func testInit_BinaryInteger_Exactly() {
         // typical
-        
+    
         XCTAssertEqual(UInt14(exactly: 0), 0)
-        
+    
         XCTAssertEqual(UInt14(exactly: 1), 1)
-        
+    
         XCTAssertEqual(UInt14(exactly: _max)?.intValue, _max)
-        
+    
         // overflow
-        
+    
         XCTAssertNil(UInt14(exactly: -1))
-        
+    
         XCTAssertNil(UInt14(exactly: _max + 1))
     }
     
     func testInit_BinaryInteger_Clamping() {
         // within range
-        
+    
         XCTAssertEqual(UInt14(clamping: 0), 0)
         XCTAssertEqual(UInt14(clamping: 1), 1)
         XCTAssertEqual(UInt14(clamping: _max).intValue, _max)
-        
+    
         // overflow
-        
+    
         XCTAssertEqual(UInt14(clamping: -1).intValue, 0)
         XCTAssertEqual(UInt14(clamping: _max + 1).intValue, _max)
     }
@@ -78,17 +78,17 @@ final class UInt14_Tests: XCTestCase {
         XCTAssertEqual(UInt14(Double(0)).intValue, 0)
         XCTAssertEqual(UInt14(Double(1)).intValue, 1)
         XCTAssertEqual(UInt14(Double(5.9)).intValue, 5)
-        
+    
         XCTAssertEqual(UInt14(Float(0)).intValue, 0)
         XCTAssertEqual(UInt14(Float(1)).intValue, 1)
         XCTAssertEqual(UInt14(Float(5.9)).intValue, 5)
-        
+    
         // overflow
-        
+    
         // TODO: need to find a pure Swift way to test exceptions
         // removed Obj-C helper calls that enabled catching exceptions
         // so that MIDIKit could be pure Swift
-        
+    
         // _XCTAssertThrows {
         //    _ = UInt14(Double(0 - 1))
         //    _ = UInt14(Float(0 - 1))
@@ -102,17 +102,17 @@ final class UInt14_Tests: XCTestCase {
     
     func testInit_BinaryFloatingPoint_Exactly() {
         // typical
-        
+    
         XCTAssertEqual(UInt14(exactly: 0.0), 0)
-        
+    
         XCTAssertEqual(UInt14(exactly: 1.0), 1)
-        
+    
         XCTAssertEqual(UInt14(exactly: Double(_max))?.intValue, _max)
-        
+    
         // overflow
-        
+    
         XCTAssertNil(UInt14(exactly: -1.0))
-        
+    
         XCTAssertNil(UInt14(exactly: Double(_max) + 1.0))
     }
     
@@ -170,12 +170,12 @@ final class UInt14_Tests: XCTestCase {
     func testStrideable() {
         let min = UInt14(_min)
         let max = UInt14(_max)
-        
+    
         let strideBy1 = stride(from: min, through: max, by: 1)
         XCTAssertEqual(strideBy1.underestimatedCount, _max + 1)
         XCTAssertTrue(strideBy1.starts(with: [min]))
         XCTAssertEqual(strideBy1.suffix(1), [max])
-        
+    
         let range = min ... max
         XCTAssertEqual(range.count, _max + 1)
         XCTAssertEqual(range.lowerBound, min)
@@ -193,10 +193,10 @@ final class UInt14_Tests: XCTestCase {
     func testBytePair() {
         XCTAssertEqual(UInt14(_min).bytePair.msb, 0x00)
         XCTAssertEqual(UInt14(_min).bytePair.lsb, 0x00)
-        
+    
         XCTAssertEqual(UInt14(_midpoint).bytePair.msb, 0x40)
         XCTAssertEqual(UInt14(_midpoint).bytePair.lsb, 0x00)
-        
+    
         XCTAssertEqual(UInt14(_max).bytePair.msb, 0x7F)
         XCTAssertEqual(UInt14(_max).bytePair.lsb, 0x7F)
     }
@@ -204,10 +204,10 @@ final class UInt14_Tests: XCTestCase {
     func testUInt7Pair() {
         XCTAssertEqual(UInt14(_min).midiUInt7Pair.msb, 0x00)
         XCTAssertEqual(UInt14(_min).midiUInt7Pair.lsb, 0x00)
-        
+    
         XCTAssertEqual(UInt14(_midpoint).midiUInt7Pair.msb, 0x40)
         XCTAssertEqual(UInt14(_midpoint).midiUInt7Pair.lsb, 0x00)
-        
+    
         XCTAssertEqual(UInt14(_max).midiUInt7Pair.msb, 0x7F)
         XCTAssertEqual(UInt14(_max).midiUInt7Pair.lsb, 0x7F)
     }
@@ -216,7 +216,7 @@ final class UInt14_Tests: XCTestCase {
         XCTAssertTrue(UInt14(0) == UInt14(0))
         XCTAssertTrue(UInt14(1) == UInt14(1))
         XCTAssertTrue(UInt14(_max) == UInt14(_max))
-        
+    
         XCTAssertTrue(UInt14(0) != UInt14(1))
     }
     
@@ -224,14 +224,14 @@ final class UInt14_Tests: XCTestCase {
         XCTAssertFalse(UInt14(0) > UInt14(0))
         XCTAssertFalse(UInt14(1) > UInt14(1))
         XCTAssertFalse(UInt14(_max) > UInt14(_max))
-        
+    
         XCTAssertTrue(UInt14(0) < UInt14(1))
         XCTAssertTrue(UInt14(1) > UInt14(0))
     }
     
     func testHashable() {
         let set = Set<UInt14>([0, 1, 1, 2])
-        
+    
         XCTAssertEqual(set.count, 3)
         XCTAssertTrue(set == [0, 1, 2])
     }
@@ -239,21 +239,21 @@ final class UInt14_Tests: XCTestCase {
     func testCodable() {
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
-        
+    
         // encode
-        
+    
         let encoded = try? encoder.encode(UInt14(_max))
-        
+    
         let encodedString = String(data: encoded!, encoding: .utf8)
-        
+    
         XCTAssertEqual(encodedString, #"{"UInt14":16383}"#)
-        
+    
         // decode
-        
+    
         let decoded = try? decoder.decode(UInt14.self, from: encoded!)
-        
+    
         // assert value is identical to source
-        
+    
         XCTAssertEqual(decoded, UInt14(_max))
     }
     
@@ -261,10 +261,10 @@ final class UInt14_Tests: XCTestCase {
     
     func testBinaryInteger_UInt14() {
         XCTAssertEqual(10.toUInt14, 10)
-        
+    
         XCTAssertEqual(Int8(10).toUInt14, 10)
         XCTAssertEqual(UInt8(10).toUInt14, 10)
-        
+    
         XCTAssertEqual(Int16(10).toUInt14, 10)
         XCTAssertEqual(UInt16(10).toUInt14, 10)
     }
@@ -272,22 +272,22 @@ final class UInt14_Tests: XCTestCase {
     func testBinaryInteger_UInt14Exactly() {
         XCTAssertEqual(0b00_0000_0000_0000.toUInt14Exactly, 0b00_0000_0000_0000)
         XCTAssertEqual(0b11_1111_1111_1111.toUInt14Exactly, 0b11_1111_1111_1111)
-        
+    
         XCTAssertEqual(Int8(10).toUInt14Exactly, 10)
         XCTAssertEqual(UInt8(10).toUInt14Exactly, 10)
-        
+    
         XCTAssertEqual(Int16(10).toUInt14Exactly, 10)
         XCTAssertEqual(UInt16(10).toUInt14Exactly, 10)
-        
+    
         // nil (overflow)
-        
+    
         XCTAssertNil(0b100_0000_0000_0000.toUInt14Exactly)
     }
     
     func testBinaryInteger_Init_UInt14() {
         XCTAssertEqual(Int(10.toUInt14), 10)
         XCTAssertEqual(Int(exactly: 10.toUInt14), 10)
-        
+    
         XCTAssertEqual(Int(exactly: 0b11_1111_1111_1111.toUInt14), 0b11_1111_1111_1111)
         XCTAssertNil(UInt8(exactly: 0b11_1111_1111_1111.toUInt14))
     }
@@ -298,19 +298,19 @@ final class UInt14_Tests: XCTestCase {
         XCTAssertEqual(1.toUInt14 + 1, 2.toUInt14)
         XCTAssertEqual(1 + 1.toUInt14, 2.toUInt14)
         XCTAssertEqual(1.toUInt14 + 1.toUInt14, 2)
-        
+    
         XCTAssertEqual(2.toUInt14 - 1, 1.toUInt14)
         XCTAssertEqual(2 - 1.toUInt14, 1.toUInt14)
         XCTAssertEqual(2.toUInt14 - 1.toUInt14, 1)
-        
+    
         XCTAssertEqual(2.toUInt14 * 2, 4.toUInt14)
         XCTAssertEqual(2 * 2.toUInt14, 4.toUInt14)
         XCTAssertEqual(2.toUInt14 * 2.toUInt14, 4)
-        
+    
         XCTAssertEqual(8.toUInt14 / 2, 4.toUInt14)
         XCTAssertEqual(8 / 2.toUInt14, 4.toUInt14)
         XCTAssertEqual(8.toUInt14 / 2.toUInt14, 4)
-        
+    
         XCTAssertEqual(8.toUInt14 % 3, 2.toUInt14)
         XCTAssertEqual(8 % 3.toUInt14, 2.toUInt14)
         XCTAssertEqual(8.toUInt14 % 3.toUInt14, 2)
@@ -318,16 +318,16 @@ final class UInt14_Tests: XCTestCase {
     
     func testAssignmentOperators() {
         var val = UInt14(2)
-        
+    
         val += 5
         XCTAssertEqual(val, 7)
-        
+    
         val -= 5
         XCTAssertEqual(val, 2)
-        
+    
         val *= 3
         XCTAssertEqual(val, 6)
-        
+    
         val /= 3
         XCTAssertEqual(val, 2)
     }

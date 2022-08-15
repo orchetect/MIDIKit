@@ -18,7 +18,7 @@ final class MIDIOutput_Tests: XCTestCase {
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-        
+    
         // start midi client
         try manager.start()
         wait(sec: 0.1)
@@ -42,7 +42,7 @@ final class MIDIOutput_Tests: XCTestCase {
         XCTAssertNotNil(manager.managedOutputs[tag1])
         let id1 = manager.managedOutputs[tag1]?.uniqueID
         XCTAssertNotNil(id1)
-        
+    
         // send a midi message
 		
         XCTAssertNoThrow(
@@ -53,7 +53,7 @@ final class MIDIOutput_Tests: XCTestCase {
             try manager.managedOutputs[tag1]?
                 .send(events: [.systemReset(group: 0)])
         )
-        
+    
         // unique ID collision
 		
         let tag2 = "2"

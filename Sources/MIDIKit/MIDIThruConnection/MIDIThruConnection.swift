@@ -39,20 +39,20 @@ import Foundation
 public final class MIDIThruConnection: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
-        
+    
     // MIDIIOManagedProtocol
     public private(set) var api: CoreMIDIAPIVersion
-        
+    
     // class-specific
-        
+    
     public private(set) var coreMIDIThruConnectionRef: CoreMIDIThruConnectionRef?
     public private(set) var outputs: [MIDIOutputEndpoint]
     public private(set) var inputs: [MIDIInputEndpoint]
     public private(set) var lifecycle: Lifecycle
     public private(set) var parameters: Parameters
-        
+    
     // init
-        
+    
     /// Internal init.
     /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `MIDIManager` instance when calling `.addThruConnection()`, and destroyed when calling `.remove(.nonPersistentThruConnection, ...)` or `.removeAll()`.
     ///
@@ -73,7 +73,7 @@ public final class MIDIThruConnection: _MIDIIOManagedProtocol {
     ) {
         // truncate arrays to 8 members or less;
         // Core MIDI thru connections can only have up to 8 outputs and 8 inputs
-            
+    
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
         self.outputs = Array(outputs.prefix(8))
         self.inputs = Array(inputs.prefix(8))
@@ -81,7 +81,7 @@ public final class MIDIThruConnection: _MIDIIOManagedProtocol {
         self.midiManager = midiManager
         parameters = params
     }
-        
+    
     deinit {
         try? dispose()
     }
@@ -90,28 +90,28 @@ public final class MIDIThruConnection: _MIDIIOManagedProtocol {
 extension MIDIThruConnection {
     internal func create(in manager: MIDIManager) throws {
         var newConnection = MIDIThruConnectionRef()
-        
+    
         let paramsData = parameters.coreMIDIThruConnectionParams(
             inputs: inputs,
             outputs: outputs
         )
         .cfData()
-        
+    
         // nil == non-persistent, client-owned
         // non-nil == persistent, stored in the system
         var cfPersistentOwnerID: CFString?
-        
+    
         if case let .persistent(ownerID: ownerID) = lifecycle {
             cfPersistentOwnerID = ownerID as CFString
         }
-        
+    
         try MIDIThruConnectionCreate(
             cfPersistentOwnerID,
             paramsData,
             &newConnection
         )
         .throwIfOSStatusErr()
-        
+    
         coreMIDIThruConnectionRef = newConnection
     }
     
@@ -121,13 +121,13 @@ extension MIDIThruConnection {
     internal func dispose() throws {
         // don't dispose if it's a persistent connection
         guard lifecycle == .nonPersistent else { return }
-        
+    
         guard let unwrappedThruConnectionRef = coreMIDIThruConnectionRef else { return }
-        
+    
         defer {
             self.coreMIDIThruConnectionRef = nil
         }
-        
+    
         try MIDIThruConnectionDispose(unwrappedThruConnectionRef)
             .throwIfOSStatusErr()
     }
@@ -139,7 +139,7 @@ extension MIDIThruConnection: CustomStringConvertible {
         if let unwrappedThruConnectionRef = coreMIDIThruConnectionRef {
             thruConnectionRefString = "\(unwrappedThruConnectionRef)"
         }
-        
+    
         return "MIDIThruConnection(ref: \(thruConnectionRefString), outputs: \(outputs), inputs: \(inputs), \(lifecycle)"
     }
 }

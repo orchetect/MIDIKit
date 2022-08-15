@@ -21,7 +21,7 @@ final class MIDIManager_Tests: XCTestCase {
 	
     func testMIDIO_Manager_defaults() throws {
         // just check defaults without calling .start() on the manager
-        
+    
         XCTAssertEqual(manager.clientName, Self.clientName)
         XCTAssertEqual(manager.model, "MIDIKit123")
         XCTAssertEqual(manager.manufacturer, "MIDIKit")
@@ -43,26 +43,26 @@ final class MIDIManager_Tests: XCTestCase {
 	
     func testMIDIIOManagedProtocol() {
         // we just want to test the API
-        
+    
         // public protocol
-        
+    
         class Foo: MIDIIOManagedProtocol {
             var api: CoreMIDIAPIVersion = .legacyCoreMIDI
         }
-        
+    
         let foo = Foo()
-        
+    
         _ = foo.api
-        
+    
         // internal protocol
-        
+    
         class Bar: _MIDIIOManagedProtocol {
             var midiManager: MIDIManager?
             var api: CoreMIDIAPIVersion = .legacyCoreMIDI
         }
-        
+    
         let bar = Bar()
-        
+    
         _ = bar.api
         _ = bar.midiManager
     }

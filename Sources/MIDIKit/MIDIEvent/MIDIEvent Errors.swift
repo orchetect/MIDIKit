@@ -7,9 +7,9 @@
 extension MIDIEvent {
     public enum ParseError: Error {
         case rawBytesEmpty
-        
+    
         case malformed
-        
+    
         case invalidType
     }
 }

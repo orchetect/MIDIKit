@@ -28,10 +28,10 @@ extension MIDIEvent {
         ///
         /// To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock messages for the Receiver, the Sender shall send a JR Clock message at least once every 250 milliseconds."
         public var time: UInt16
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         /// JR Clock (Jitter-Reduction Clock)
         /// (MIDI 2.0 Utility Messages)
         ///
@@ -86,22 +86,22 @@ extension MIDIEvent.JRClock {
     @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: UniversalMIDIPacketData.MessageType = .utility
-        
+    
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
+    
         let utilityStatus: UniversalMIDIPacketData.UtilityStatusField = .jrClock
-        
+    
         // MIDI 2.0 only
-        
+    
         let timeBytes = BytePair(time)
-        
+    
         let word = UMPWord(
             mtAndGroup,
             (utilityStatus.rawValue.uInt8Value << 4) + 0x0,
             timeBytes.msb,
             timeBytes.lsb
         )
-        
+    
         return [word]
     }
 }

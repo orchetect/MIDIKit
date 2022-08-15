@@ -10,7 +10,7 @@
 public enum MIDIProtocolVersion: Equatable, Hashable {
     /// MIDI 1.0
     case _1_0
-        
+    
     /// MIDI 2.0
     case _2_0
 }
@@ -23,10 +23,10 @@ extension MIDIProtocolVersion {
         switch coreMIDIProtocol {
         case ._1_0:
             self = ._1_0
-            
+    
         case ._2_0:
             self = ._2_0
-            
+    
         @unknown default:
             self = ._2_0
         }
@@ -39,7 +39,7 @@ extension MIDIProtocolVersion {
         switch self {
         case ._1_0:
             return ._1_0
-            
+    
         case ._2_0:
             return ._2_0
         }
@@ -51,7 +51,7 @@ extension MIDIProtocolVersion: CustomStringConvertible {
         switch self {
         case ._1_0:
             return "MIDI 1.0"
-            
+    
         case ._2_0:
             return "MIDI 2.0"
         }

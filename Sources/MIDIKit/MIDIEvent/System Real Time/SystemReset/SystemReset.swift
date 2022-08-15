@@ -14,7 +14,7 @@ extension MIDIEvent {
     public struct SystemReset: Equatable, Hashable {
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         public init(group: UInt4 = 0x0) {
             self.group = group
         }
@@ -53,16 +53,16 @@ extension MIDIEvent.SystemReset {
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: UniversalMIDIPacketData
             .MessageType = .systemRealTimeAndCommon
-        
+    
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
+    
         let word = UMPWord(
             mtAndGroup,
             0xFF,
             0x00, // pad empty bytes to fill 4 bytes
             0x00
         ) // pad empty bytes to fill 4 bytes
-        
+    
         return [word]
     }
 }

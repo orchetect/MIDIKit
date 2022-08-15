@@ -49,19 +49,19 @@ public struct AnyMIDIEndpoint: _MIDIEndpoint {
         case is MIDIInputEndpoint:
             objectType = .inputEndpoint
             endpointType = .input
-            
+    
         case is MIDIOutputEndpoint:
             objectType = .outputEndpoint
             endpointType = .output
-            
+    
         case let otherCast as Self:
             objectType = otherCast.objectType
             endpointType = otherCast.endpointType
-            
+    
         default:
             preconditionFailure("Unexpected MIDIEndpoint type: \(base)")
         }
-        
+    
         coreMIDIObjectRef = base.coreMIDIObjectRef
         name = base.name
         displayName = base.displayName

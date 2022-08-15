@@ -26,9 +26,9 @@ extension MIDIEvent.CC.Controller {
         case .generalPurpose2               : return "General Purpose 2"
         case .generalPurpose3               : return "General Purpose 3"
         case .generalPurpose4               : return "General Purpose 4"
-            
+    
         case let .lsb(lsb)                  : return lsb.name
-            
+    
         case .sustainPedal                  : return "Sustain Pedal"
         case .portamento                    : return "Portamento"
         case .sostenutoPedal                : return "Sostenuto Pedal"
@@ -62,9 +62,9 @@ extension MIDIEvent.CC.Controller {
         case .nrpnMSB                       : return "NRPN MSB"
         case .rpnLSB                        : return "RPN LSB"
         case .rpnMSB                        : return "RPN MSB"
-            
+    
         case let .mode(mode)                : return mode.name
-            
+    
         case let .undefined(cc)             : return cc.name
         }
         // enable:disable spacearoundoperators

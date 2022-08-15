@@ -18,19 +18,19 @@ public enum MIDIEndpointIdentity {
     ///
     /// The best method is to use `.uniqueID()`.
     case name(String)
-        
+    
     /// Utilizes first endpoint matching the display name. (Convenience, not recommended.)
     ///
     /// ⚠️ Use of this is discouraged outside of debugging, since multiple endpoints can potentially share the same display name in the system.
     ///
     /// The best method is to use `.uniqueID()`.
     case displayName(String)
-        
+    
     /// Endpoint matching the unique ID. (Recommended)
     ///
     /// This is typically the primary piece of criterium that should be used to persistently identify a unique endpoint in the system.
     case uniqueID(MIDIIdentifier)
-        
+    
     /// Endpoint matching the unique ID primarily, with fallback display name criterium.
     ///
     /// Priority is given to the endpoint matching the given unique ID. If an endpoint is not found with that ID, the first endpoint matching the display name is used.
@@ -50,15 +50,15 @@ extension MIDIEndpointIdentity: Equatable {
         case let .name(lhsName):
             guard case let .name(rhsName) = rhs else { return false }
             return lhsName == rhsName
-            
+    
         case let .displayName(lhsDisplayName):
             guard case let .displayName(rhsDisplayName) = rhs else { return false }
             return lhsDisplayName == rhsDisplayName
-            
+    
         case let .uniqueID(lhsUniqueID):
             guard case let .uniqueID(rhsUniqueID) = rhs else { return false }
             return lhsUniqueID == rhsUniqueID
-            
+    
         case let .uniqueIDWithFallback(
             id: lhsUniqueID,
             fallbackDisplayName: lhsFallbackDisplayName
@@ -68,7 +68,7 @@ extension MIDIEndpointIdentity: Equatable {
                 fallbackDisplayName: rhsFallbackDisplayName
             ) = rhs
             else { return false }
-            
+    
             return lhsUniqueID == rhsUniqueID
                 && lhsFallbackDisplayName == rhsFallbackDisplayName
         }
@@ -81,15 +81,15 @@ extension MIDIEndpointIdentity: Hashable {
         case let .name(name):
             hasher.combine("name")
             hasher.combine(name)
-            
+    
         case let .displayName(displayName):
             hasher.combine("displayName")
             hasher.combine(displayName)
-            
+    
         case let .uniqueID(uniqueID):
             hasher.combine("uniqueID")
             uniqueID.hash(into: &hasher)
-            
+    
         case let .uniqueIDWithFallback(
             id: uniqueID,
             fallbackDisplayName: fallbackDisplayName
@@ -106,13 +106,13 @@ extension MIDIEndpointIdentity: CustomStringConvertible {
         switch self {
         case let .name(endpointName):
             return "Endpoint Name: \(endpointName.quoted)"
-            
+    
         case let .displayName(displayName):
             return "Endpoint Display Name: \(displayName.quoted))"
-            
+    
         case let .uniqueID(uniqueID):
             return "UniqueID: \(uniqueID)"
-            
+    
         case let .uniqueIDWithFallback(
             id: uniqueID,
             fallbackDisplayName: fallbackDisplayName
@@ -143,13 +143,13 @@ extension MIDIEndpointIdentity {
         switch self {
         case let .name(endpointName):
             return endpoints.first(whereName: endpointName)
-            
+    
         case let .displayName(endpointName):
             return endpoints.first(whereDisplayName: endpointName)
-            
+    
         case let .uniqueID(uniqueID):
             return endpoints.first(whereUniqueID: uniqueID)
-            
+    
         case let .uniqueIDWithFallback(
             id: uniqueID,
             fallbackDisplayName: fallbackDisplayName

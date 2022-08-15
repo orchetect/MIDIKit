@@ -35,11 +35,11 @@ extension MIDIManager {
                 midiManager: self,
                 api: preferredAPI
             )
-            
+    
             // store the connection object in the manager,
             // even if subsequent operations fail
             managedOutputConnections[tag] = newCS
-            
+    
             try newCS.setupOutput(in: self)
             try newCS.resolveEndpoints(in: self)
         }

@@ -26,10 +26,10 @@ internal enum Exception {
         switch self {
         case .overflow:
             raiseException(.decimalNumberOverflowException, reason: reason)
-            
+    
         case .underflow:
             raiseException(.decimalNumberUnderflowException, reason: reason)
-            
+    
         case .divisionByZero:
             raiseException(.decimalNumberDivideByZeroException, reason: reason)
         }

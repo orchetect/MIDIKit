@@ -34,7 +34,7 @@ public struct MIDIEntity: MIDIIOObject {
     
     internal init(from ref: CoreMIDIEntityRef) {
         assert(ref != CoreMIDIEntityRef())
-        
+    
         coreMIDIObjectRef = ref
         update()
     }
@@ -46,7 +46,7 @@ public struct MIDIEntity: MIDIIOObject {
         if let name = getName() {
             self.name = name
         }
-        
+    
         let uniqueID = getUniqueID()
         if uniqueID != .invalidMIDIIdentifier {
             self.uniqueID = uniqueID

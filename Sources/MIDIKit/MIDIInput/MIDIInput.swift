@@ -17,26 +17,26 @@ import Foundation
 public final class MIDIInput: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
-        
+    
     // MIDIIOManagedProtocol
     public private(set) var api: CoreMIDIAPIVersion
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
-        
+    
     // class-specific
-        
+    
     /// The port name as displayed in the system.
     public private(set) var endpointName: String = ""
-        
+    
     /// The port's unique ID in the system.
     public private(set) var uniqueID: MIDIIdentifier?
-        
+    
     /// The Core MIDI port reference.
     public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
-        
+    
     internal var receiveHandler: MIDIIOReceiveHandler
-        
+    
     // init
-        
+    
     /// Internal init.
     /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `MIDIManager` instance when calling `.addInput()`, and destroyed when calling `.remove(.input, ...)` or `.removeAll()`.
     ///
@@ -59,7 +59,7 @@ public final class MIDIInput: _MIDIIOManagedProtocol {
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
     }
-        
+    
     deinit {
         try? dispose()
     }
@@ -76,11 +76,11 @@ extension MIDIInput {
         guard let unwrappedUniqueID = uniqueID else {
             return nil
         }
-        
+    
         if let endpoint = getSystemDestinationEndpoint(matching: unwrappedUniqueID) {
             return endpoint
         }
-        
+    
         return nil
     }
 }
@@ -93,9 +93,9 @@ extension MIDIInput {
             // this should prevent errors thrown due to ID collisions in the system
             uniqueID = nil
         }
-        
+    
         var newPortRef = MIDIPortRef()
-        
+    
         switch api {
         case .legacyCoreMIDI:
             // MIDIDestinationCreateWithBlock is deprecated after macOS 11 / iOS 14
@@ -105,23 +105,23 @@ extension MIDIInput {
                 &newPortRef,
                 { [weak self] packetListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
-                    
+    
                     let packets = packetListPtr.packets()
-                    
+    
                     strongSelf.midiManager?.eventQueue.async {
                         strongSelf.receiveHandler.packetListReceived(packets)
                     }
                 }
             )
             .throwIfOSStatusErr()
-            
+    
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
                 throw MIDIIOError.internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
             }
-            
+    
             try MIDIDestinationCreateWithProtocol(
                 manager.coreMIDIClientRef,
                 endpointName as CFString,
@@ -129,10 +129,10 @@ extension MIDIInput {
                 &newPortRef,
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
-                    
+    
                     let packets = eventListPtr.packets()
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
-                    
+    
                     strongSelf.midiManager?.eventQueue.async {
                         strongSelf.receiveHandler.eventListReceived(
                             packets,
@@ -143,13 +143,13 @@ extension MIDIInput {
             )
             .throwIfOSStatusErr()
         }
-        
+    
         coreMIDIInputPortRef = newPortRef
-        
+    
         // set meta data properties; ignore errors in case of failure
         try? setModel(of: newPortRef, to: manager.model)
         try? setManufacturer(of: newPortRef, to: manager.manufacturer)
-        
+    
         if let unwrappedUniqueID = uniqueID {
             // inject previously-stored unique ID into port
             try setUniqueID(
@@ -168,9 +168,9 @@ extension MIDIInput {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         guard let unwrappedPortRef = coreMIDIInputPortRef else { return }
-        
+    
         defer { self.coreMIDIInputPortRef = nil }
-        
+    
         try MIDIEndpointDispose(unwrappedPortRef)
             .throwIfOSStatusErr()
     }
@@ -182,7 +182,7 @@ extension MIDIInput: CustomStringConvertible {
         if let unwrappedUniqueID = uniqueID {
             uniqueIDString = "\(unwrappedUniqueID)"
         }
-        
+    
         return "MIDIInput(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"
     }
 }

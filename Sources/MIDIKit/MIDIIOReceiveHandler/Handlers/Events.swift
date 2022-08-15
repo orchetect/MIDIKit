@@ -10,13 +10,13 @@ extension MIDIIOReceiveHandler {
     /// MIDI Event receive handler.
     public final class Events: MIDIIOReceiveHandlerProtocol {
         public typealias Handler = (_ events: [MIDIEvent]) -> Void
-        
+    
         @inline(__always)
         public var handler: Handler
-        
+    
         internal let midi1Parser = MIDI1Parser()
         internal let midi2Parser = MIDI2Parser()
-        
+    
         @inline(__always)
         public func packetListReceived(
             _ packets: [MIDIPacketData]
@@ -27,7 +27,7 @@ extension MIDIIOReceiveHandler {
                 handler(events)
             }
         }
-        
+    
         @available(macOS 11, iOS 14, macCatalyst 14, *)
         @inline(__always)
         public func eventListReceived(
@@ -40,7 +40,7 @@ extension MIDIIOReceiveHandler {
                 handler(events)
             }
         }
-        
+    
         internal init(
             translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
             _ handler: @escaping Handler

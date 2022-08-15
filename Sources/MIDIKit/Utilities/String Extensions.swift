@@ -33,7 +33,7 @@ extension StringProtocol {
         let mergedCharacterSet = characterSets.isEmpty
             ? characterSet
             : characterSets.reduce(into: characterSet) { $0.formUnion($1) }
-        
+    
         return unicodeScalars
             .filter { mergedCharacterSet.contains($0) }
             .map { "\($0)" }
@@ -67,7 +67,7 @@ extension StringProtocol {
         let mergedCharacterSet = characterSets.isEmpty
             ? characterSet
             : characterSets.reduce(into: characterSet) { $0.formUnion($1) }
-        
+    
         return components(separatedBy: mergedCharacterSet)
             .joined()
     }

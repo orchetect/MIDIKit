@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         do {
             print("Creating virtual MIDI output.")
             try midiManager.addOutput(
@@ -40,14 +40,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Error creating virtual MIDI output:", error.localizedDescription)
         }
-        
+    
         return true
     }
     
     @IBAction
     func sendNoteOn(_ sender: Any) {
         guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-        
+    
         try? output.send(
             event: .noteOn(
                 60,
@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     @IBAction
     func sendNoteOff(_ sender: Any) {
         guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-        
+    
         try? output.send(
             event: .noteOff(
                 60,
@@ -73,7 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     @IBAction
     func sendCC1(_ sender: Any) {
         guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-        
+    
         try? output.send(
             event: .cc(
                 1,

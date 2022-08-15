@@ -16,15 +16,15 @@ internal func getSystemObjectType(
 ) -> CoreMIDI.MIDIObjectType? {
     var obj: CoreMIDI.MIDIObjectRef = .init()
     var objType: CoreMIDI.MIDIObjectType = .other
-        
+    
     let result = MIDIObjectFindByUniqueID(
         uniqueID,
         &obj,
         &objType
     )
-        
+    
     guard result != kMIDIObjectNotFound else { return nil }
-        
+    
     return objType
 }
 

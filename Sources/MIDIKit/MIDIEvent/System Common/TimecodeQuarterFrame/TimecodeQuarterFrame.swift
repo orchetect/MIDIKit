@@ -14,10 +14,10 @@ extension MIDIEvent {
     public struct TimecodeQuarterFrame: Equatable, Hashable {
         /// Data Byte containing quarter-frame bits
         public var dataByte: UInt7
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         public init(
             dataByte: UInt7,
             group: UInt4 = 0x0
@@ -67,16 +67,16 @@ extension MIDIEvent.TimecodeQuarterFrame {
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: UniversalMIDIPacketData
             .MessageType = .systemRealTimeAndCommon
-        
+    
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
+    
         let word = UMPWord(
             mtAndGroup,
             0xF1,
             dataByte.uInt8Value,
             0x00
         ) // pad an empty byte to fill 4 bytes
-        
+    
         return [word]
     }
 }

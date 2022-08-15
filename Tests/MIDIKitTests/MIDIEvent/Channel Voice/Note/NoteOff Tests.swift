@@ -25,7 +25,7 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
                 attribute: .none,
                 channel: 0x1
             )
-            
+    
             XCTAssertEqual(
                 cc.midi1RawBytes(),
                 [0x81, noteNum.uInt8Value, 64]
@@ -42,7 +42,7 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
                 channel: 0x1,
                 group: 0x9
             )
-            
+    
             XCTAssertEqual(
                 cc.umpRawWords(protocol: ._1_0),
                 [[
@@ -66,7 +66,7 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
                 channel: 0x1,
                 group: 0x9
             )
-            
+    
             XCTAssertEqual(
                 cc.umpRawWords(protocol: ._2_0),
                 [[
@@ -99,7 +99,7 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
                 channel: 0x1,
                 group: 0x9
             )
-            
+    
             XCTAssertEqual(
                 cc.umpRawWords(protocol: ._2_0),
                 [[

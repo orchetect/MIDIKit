@@ -14,10 +14,10 @@ extension MIDIEvent {
     public struct SongPositionPointer: Equatable, Hashable {
         /// The number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start.
         public var midiBeat: UInt14
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         public init(
             midiBeat: UInt14,
             group: UInt4 = 0x0
@@ -68,18 +68,18 @@ extension MIDIEvent.SongPositionPointer {
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: UniversalMIDIPacketData
             .MessageType = .systemRealTimeAndCommon
-        
+    
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
+    
         let bytePair = midiBeat.bytePair
-        
+    
         let word = UMPWord(
             mtAndGroup,
             0xF2,
             bytePair.lsb,
             bytePair.msb
         )
-        
+    
         return [word]
     }
 }

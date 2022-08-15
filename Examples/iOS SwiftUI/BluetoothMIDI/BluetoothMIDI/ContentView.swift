@@ -17,15 +17,15 @@ struct ContentView: View {
             Text(
                 "This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiving events."
             )
-            
+    
             Text(
                 "Events received from all MIDI output endpoints are automatically logged to the console."
             )
-            
+    
             Button("Show Bluetooth MIDI Setup") {
                 showingBluetoothMIDIOptions = true
             }
-            
+    
             Button("Send test MIDI Event to all MIDI Inputs") {
                 let conn = midiManager.managedOutputConnections["Broadcaster"]
                 try? conn?.send(event: .cc(.expression, value: .midi1(64), channel: 0))
@@ -36,7 +36,7 @@ struct ContentView: View {
         .lineLimit(4)
         .multilineTextAlignment(.center)
         .padding()
-        
+    
         .sheet(isPresented: $showingBluetoothMIDIOptions) {
             BluetoothMIDIView()
         }

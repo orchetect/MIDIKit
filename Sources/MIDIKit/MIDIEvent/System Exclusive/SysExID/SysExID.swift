@@ -18,7 +18,7 @@ extension MIDIEvent.SysExID: CustomStringConvertible {
         switch self {
         case let .universal(universalType):
             return "universal(\(universalType))"
-            
+    
         case let .manufacturer(mfr):
             return "manufacturer(\(mfr))"
         }
@@ -31,14 +31,14 @@ extension MIDIEvent.SysExID {
             self = .manufacturer(mfr)
             return
         }
-        
+    
         if sysEx7RawBytes.count == 1,
            let ustype = MIDIEvent.UniversalSysExType(rawUInt8Value: sysEx7RawBytes[0])
         {
             self = .universal(ustype)
             return
         }
-        
+    
         return nil
     }
     
@@ -47,7 +47,7 @@ extension MIDIEvent.SysExID {
             self = .manufacturer(mfr)
             return
         }
-        
+    
         if sysEx8RawBytes.count == 2,
            sysEx8RawBytes[0] == 0x00,
            let ustype = MIDIEvent.UniversalSysExType(rawUInt8Value: sysEx8RawBytes[1])
@@ -55,7 +55,7 @@ extension MIDIEvent.SysExID {
             self = .universal(ustype)
             return
         }
-        
+    
         return nil
     }
 }
@@ -67,7 +67,7 @@ extension MIDIEvent.SysExID {
         switch self {
         case let .manufacturer(mfr):
             return mfr.sysEx7RawBytes()
-            
+    
         case let .universal(uSysEx):
             return [uSysEx.rawValue.uInt8Value]
         }
@@ -79,7 +79,7 @@ extension MIDIEvent.SysExID {
         switch self {
         case let .manufacturer(mfr):
             return mfr.sysEx8RawBytes()
-            
+    
         case let .universal(uSysEx):
             return [0x00, uSysEx.rawValue.uInt8Value]
         }

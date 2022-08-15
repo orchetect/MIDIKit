@@ -17,7 +17,7 @@ extension MIDIEvent {
              .unofficialBusSelect,
              .tuneRequest:
             return true
-            
+    
         default:
             return false
         }
@@ -44,7 +44,7 @@ extension MIDIEvent {
         for eventType in sysCommonTypes {
             if isSystemCommon(ofType: eventType) { return true }
         }
-        
+    
         return false
     }
 }
@@ -58,34 +58,34 @@ extension Collection where Element == MIDIEvent {
         switch types {
         case .only:
             return filter { $0.isSystemCommon }
-            
+    
         case let .onlyType(specificType):
             return filter { $0.isSystemCommon(ofType: specificType) }
-            
+    
         case let .onlyTypes(specificTypes):
             return filter { $0.isSystemCommon(ofTypes: specificTypes) }
-            
+    
         case let .keepType(specificType):
             return filter {
                 guard $0.isSystemCommon else { return true }
                 return $0.isSystemCommon(ofType: specificType)
             }
-            
+    
         case let .keepTypes(specificTypes):
             return filter {
                 guard $0.isSystemCommon else { return true }
                 return $0.isSystemCommon(ofTypes: specificTypes)
             }
-            
+    
         case .drop:
             return filter { !$0.isSystemCommon }
-            
+    
         case let .dropType(specificType):
             return filter {
                 guard $0.isSystemCommon else { return true }
                 return !$0.isSystemCommon(ofType: specificType)
             }
-            
+    
         case let .dropTypes(specificTypes):
             return filter {
                 guard $0.isSystemCommon else { return true }

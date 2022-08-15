@@ -13,7 +13,7 @@ extension MIDIThruConnection {
     public enum Lifecycle: Hashable {
         /// The play-through connection exists as long as the `MIDIManager` exists.
         case nonPersistent
-        
+    
         /// The play-through connection is stored in the system and persists indefinitely (even after system reboots) until explicitly removed.
         ///
         /// - `ownerID`: Reverse-DNS domain string; usually the application's bundle ID.
@@ -26,7 +26,7 @@ extension MIDIThruConnection.Lifecycle: CustomStringConvertible {
         switch self {
         case .nonPersistent:
             return "nonPersistent"
-            
+    
         case let .persistent(ownerID):
             return "persistent(\(ownerID)"
         }

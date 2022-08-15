@@ -18,7 +18,7 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
     public struct Pitch7_25 {
         /// 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
         public var coarse: UInt7
-        
+    
         /// 25-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
         public var fine: UInt25
     }

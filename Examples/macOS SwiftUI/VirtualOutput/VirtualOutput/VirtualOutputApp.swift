@@ -24,7 +24,7 @@ struct VirtualOutputApp: App {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         do {
             print("Creating virtual MIDI output.")
             try midiManager.addOutput(

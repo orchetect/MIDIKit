@@ -19,15 +19,15 @@ import Foundation
 public final class ThreadSafeAccess<T> {
     @inline(__always)
     private var value: T
-        
+    
     @inline(__always)
     private let lock: ThreadLock = RWThreadLock()
-        
+    
     @inline(__always)
     public init(wrappedValue value: T) {
         self.value = value
     }
-        
+    
     @inline(__always)
     public var wrappedValue: T {
         get {
@@ -35,13 +35,13 @@ public final class ThreadSafeAccess<T> {
             defer { self.lock.unlock() }
             return value
         }
-            
+    
         set {
             lock.writeLock()
             value = newValue
             lock.unlock()
         }
-            
+    
         // _modify { } is an internal Swift computed setter, similar to set { }
         // however it gives in-place exclusive mutable access
         // which allows get-then-set operations such as collection subscripts

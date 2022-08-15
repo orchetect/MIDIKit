@@ -12,7 +12,7 @@ public enum CoreMIDIAPIVersion: Equatable, Hashable {
     ///
     /// Internally using `MIDIPacketList` / `MIDIPacket`.
     case legacyCoreMIDI
-        
+    
     /// New Core MIDI API introduced in macOS 11, iOS 14, and macCatalyst 14.
     ///
     /// Internally using `MIDIEventList` / `MIDIEventPacket`.
@@ -26,7 +26,7 @@ extension CoreMIDIAPIVersion {
         switch self {
         case .legacyCoreMIDI:
             return ._1_0
-            
+    
         case let .newCoreMIDI(protocolVersion):
             return protocolVersion
         }
@@ -38,7 +38,7 @@ extension CoreMIDIAPIVersion {
     public static func bestForPlatform() -> Self {
         if #available(macOS 11, iOS 14, macCatalyst 14, *) {
             return .newCoreMIDI(._2_0)
-            
+    
         } else {
             return .legacyCoreMIDI
         }
@@ -70,12 +70,12 @@ extension CoreMIDIAPIVersion {
                 // future or unknown/unsupported platform
                 return false
             #endif
-            
+    
         case .newCoreMIDI:
             if #available(macOS 11, iOS 14, macCatalyst 14, *) {
                 return true
             }
-            
+    
             return false
         }
     }
@@ -86,7 +86,7 @@ extension CoreMIDIAPIVersion: CustomStringConvertible {
         switch self {
         case .legacyCoreMIDI:
             return "Legacy Core MIDI API"
-            
+    
         case .newCoreMIDI:
             return "New Core MIDI API (\(midiProtocol))"
         }

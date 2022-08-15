@@ -13,10 +13,10 @@ extension MIDIEvent {
     public struct UnofficialBusSelect: Equatable, Hashable {
         /// Bus Number
         public var bus: UInt7 = 0
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         public init(
             bus: UInt7 = 0,
             group: UInt4 = 0x0
@@ -63,16 +63,16 @@ extension MIDIEvent.UnofficialBusSelect {
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: UniversalMIDIPacketData
             .MessageType = .systemRealTimeAndCommon
-        
+    
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
+    
         let word = UMPWord(
             mtAndGroup,
             0xF5,
             bus.uInt8Value,
             0x00
         ) // pad empty bytes to fill 4 bytes
-        
+    
         return [word]
     }
 }

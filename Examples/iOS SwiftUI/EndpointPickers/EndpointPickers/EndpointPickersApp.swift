@@ -26,7 +26,7 @@ struct EndpointPickersApp: App {
     init() {
         midiHelper.midiManager = midiManager
         midiHelper.initialSetup()
-        
+    
         // restore saved MIDI endpoint selections and connections
         midiRestorePersistentState()
         midiHelper.midiInUpdateConnection(selectedUniqueID: midiInSelectedID)
@@ -44,7 +44,7 @@ struct EndpointPickersApp: App {
             .environmentObject(midiManager)
             .environmentObject(midiHelper)
         }
-        
+    
             .onChange(of: midiInSelectedID) {
                 if $0 == .invalidMIDIIdentifier {
                     midiInSelectedDisplayName = "None"
@@ -53,11 +53,11 @@ struct EndpointPickersApp: App {
                 {
                     midiInSelectedDisplayName = found.displayName
                 }
-            
+    
                 midiHelper.midiInUpdateConnection(selectedUniqueID: $0)
                 midiSavePersistentState()
             }
-        
+    
             .onChange(of: midiOutSelectedID) {
                 if $0 == .invalidMIDIIdentifier {
                     midiOutSelectedDisplayName = "None"
@@ -66,7 +66,7 @@ struct EndpointPickersApp: App {
                 {
                     midiOutSelectedDisplayName = found.displayName
                 }
-            
+    
                 midiHelper.midiOutUpdateConnection(selectedUniqueID: $0)
                 midiSavePersistentState()
             }
@@ -97,19 +97,19 @@ extension EndpointPickersApp {
     /// This should only be run once at app startup.
     private mutating func midiRestorePersistentState() {
         print("Restoring saved MIDI connections.")
-        
+    
         let inName = UserDefaults.standard.string(forKey: UserDefaultsKeys.midiInDisplayName) ?? ""
         _midiInSelectedDisplayName = State(wrappedValue: inName)
-        
+    
         let inID = Int32(
             exactly: UserDefaults.standard.integer(forKey: UserDefaultsKeys.midiInID)
         ) ?? .invalidMIDIIdentifier
         _midiInSelectedID = State(wrappedValue: inID)
-        
+    
         let outName = UserDefaults.standard
             .string(forKey: UserDefaultsKeys.midiOutDisplayName) ?? ""
         _midiOutSelectedDisplayName = State(wrappedValue: outName)
-        
+    
         let outID = Int32(
             exactly: UserDefaults.standard
                 .integer(forKey: UserDefaultsKeys.midiOutID)
@@ -119,7 +119,7 @@ extension EndpointPickersApp {
     
     public func midiSavePersistentState() {
         // save endpoint selection to UserDefaults
-        
+    
         UserDefaults.standard.set(
             midiInSelectedID,
             forKey: UserDefaultsKeys.midiInID
@@ -128,7 +128,7 @@ extension EndpointPickersApp {
             midiInSelectedDisplayName,
             forKey: UserDefaultsKeys.midiInDisplayName
         )
-        
+    
         UserDefaults.standard.set(
             midiOutSelectedID,
             forKey: UserDefaultsKeys.midiOutID

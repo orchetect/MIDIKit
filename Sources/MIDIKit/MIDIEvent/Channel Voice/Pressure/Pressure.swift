@@ -16,13 +16,13 @@ extension MIDIEvent {
         /// Pressure Amount
         @AmountValidated
         public var amount: Amount
-        
+    
         /// Channel Number (0x0...0xF)
         public var channel: UInt4
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         public init(
             amount: Amount,
             channel: UInt4,
@@ -81,7 +81,7 @@ extension MIDIEvent.Pressure {
         switch midiProtocol {
         case ._1_0:
             return .midi1ChannelVoice
-            
+    
         case ._2_0:
             return .midi2ChannelVoice
         }
@@ -95,7 +95,7 @@ extension MIDIEvent.Pressure {
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {
         let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
-        
+    
         switch midiProtocol {
         case ._1_0:
             let word = UMPWord(
@@ -104,9 +104,9 @@ extension MIDIEvent.Pressure {
                 amount.midi1Value.uInt8Value,
                 0x00
             ) // pad an empty byte to fill 4 bytes
-            
+    
             return [word]
-            
+    
         case ._2_0:
             let word1 = UMPWord(
                 mtAndGroup,
@@ -114,9 +114,9 @@ extension MIDIEvent.Pressure {
                 0x00, // reserved
                 0x00
             ) // reserved
-            
+    
             let word2 = amount.midi2Value
-            
+    
             return [word1, word2]
         }
     }

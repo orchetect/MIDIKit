@@ -118,11 +118,11 @@ extension AnyMIDIIOObject {
         using cache: MIDIIOObjectCache? = nil
     ) {
         guard coreMIDIObjectRef != 0 else { return nil }
-        
+    
         switch coreMIDIObjectType {
         case .other:
             return nil
-            
+    
         case .device, .externalDevice:
             if let cache = cache,
                let getCachedDevice = cache.devices
@@ -132,10 +132,10 @@ extension AnyMIDIIOObject {
             } else {
                 self = .device(MIDIDevice(from: coreMIDIObjectRef))
             }
-            
+    
         case .entity, .externalEntity:
             self = .entity(MIDIEntity(from: coreMIDIObjectRef))
-            
+    
         case .source, .externalSource:
             if let cache = cache,
                let getCachedEndpoint = cache.outputEndpoints
@@ -145,7 +145,7 @@ extension AnyMIDIIOObject {
             } else {
                 self = .outputEndpoint(MIDIOutputEndpoint(from: coreMIDIObjectRef))
             }
-            
+    
         case .destination, .externalDestination:
             if let cache = cache,
                let getCachedEndpoint = cache.inputEndpoints
@@ -155,7 +155,7 @@ extension AnyMIDIIOObject {
             } else {
                 self = .inputEndpoint(MIDIInputEndpoint(from: coreMIDIObjectRef))
             }
-            
+    
         @unknown default:
             return nil
         }
@@ -169,13 +169,13 @@ extension AnyMIDIIOObject: CustomStringConvertible {
         switch self {
         case let .device(device):
             return "\(device)"
-            
+    
         case let .entity(entity):
             return "\(entity)"
-            
+    
         case let .inputEndpoint(endpoint):
             return "\(endpoint)"
-            
+    
         case let .outputEndpoint(endpoint):
             return "\(endpoint)"
         }

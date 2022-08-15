@@ -20,7 +20,7 @@ final class MIDIEventJRClock_Tests: XCTestCase {
                 time: 0x1234,
                 group: grp
             )
-            
+    
             XCTAssertEqual(
                 event.umpRawWords(protocol: ._2_0),
                 [[

@@ -139,7 +139,7 @@ extension MIDIEvent.CC.Controller {
         case 125: self = .mode(.omniModeOn)
         case 126: self = .mode(.monoModeOn)
         case 127: self = .mode(.polyModeOn)
-            
+    
         default:
             // should never happen since the switch case covers all 128 values of UInt7
             assertionFailure("Unhandled MIDI CC controller number: \(number).")

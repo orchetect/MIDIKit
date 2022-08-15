@@ -7,16 +7,16 @@
 /// A 7-bit unsigned integer value type used in `MIDIKit`.
 public struct UInt7: MIDIIntegerProtocol {
     // MARK: Storage
-        
+    
     public typealias Storage = UInt8
     public internal(set) var value: Storage
-        
+    
     // MARK: Inits
-        
+    
     public init() {
         value = 0
     }
-        
+    
     public init<T: BinaryInteger>(_ source: T) {
         if source < Self.min(Storage.self) {
             Exception.underflow.raise(reason: "UInt7 integer underflowed")
@@ -26,7 +26,7 @@ public struct UInt7: MIDIIntegerProtocol {
         }
         value = Storage(source)
     }
-        
+    
     public init<T: BinaryFloatingPoint>(_ source: T) {
         // it should be safe to cast as T.self since it's virtually impossible
         // that we will encounter a BinaryFloatingPoint type that cannot fit UInt7.max
@@ -38,24 +38,24 @@ public struct UInt7: MIDIIntegerProtocol {
         }
         value = Storage(source)
     }
-        
+    
     // MARK: Constants
-        
+    
     public static let bitWidth: Int = 7
-        
+    
     public static func min<T: BinaryInteger>(_ ofType: T.Type) -> T { 0 }
     public static func min<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0 }
-        
+    
     // 0b100_0000, int 64, hex 0x40
     public static let midpoint = Self(Self.midpoint(Storage.self))
     public static func midpoint<T: BinaryInteger>(_ ofType: T.Type) -> T { 0b1000000 }
-        
+    
     // 0b111_1111, int 127, hex 0x7F
     public static func max<T: BinaryInteger>(_ ofType: T.Type) -> T { 0b1111111 }
     public static func max<T: BinaryFloatingPoint>(_ ofType: T.Type) -> T { 0b1111111 }
-        
+    
     // MARK: Computed properties
-        
+    
     /// Returns the integer as a `UInt8` instance
     public var uInt8Value: UInt8 { value }
 }

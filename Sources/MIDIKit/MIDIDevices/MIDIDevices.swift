@@ -23,11 +23,11 @@ public protocol MIDIIODevicesProtocol {
 /// Do not instance this class directly. Instead, access the `devices` property of your global `MIDIManager` instance.
 public final class MIDIDevices: NSObject, MIDIIODevicesProtocol {
     public internal(set) dynamic var devices: [MIDIDevice] = []
-        
+    
     override internal init() {
         super.init()
     }
-        
+    
     /// Manually update the locally cached contents from the system.
     public func update() {
         devices = getSystemDevices()

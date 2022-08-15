@@ -24,7 +24,7 @@ final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
             ),
             channel: 0x9
         )
-        
+    
         XCTAssertEqual(
             nrpn.flatMap { $0.midi1RawBytes() },
             [0xB9, 0x63, 66,
@@ -41,7 +41,7 @@ final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
             ),
             channel: 0x9
         )
-        
+    
         XCTAssertEqual(
             nrpn.flatMap { $0.midi1RawBytes() },
             [0xB9, 0x63, 66,
@@ -59,7 +59,7 @@ final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
             ),
             channel: 0x9
         )
-        
+    
         XCTAssertEqual(
             nrpn.flatMap { $0.midi1RawBytes() },
             [0xB9, 0x63, 66,
@@ -74,7 +74,7 @@ final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
             .null,
             channel: 0x9
         )
-        
+    
         XCTAssertEqual(
             nrpn.flatMap { $0.midi1RawBytes() },
             [0xB9, 0x63, 0x7F,

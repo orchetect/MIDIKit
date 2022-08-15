@@ -12,20 +12,20 @@ extension MIDIEvent {
         ///
         /// If attribute is set to Pitch 7.9, then this value represents the note index.
         public var note: MIDINote
-        
+    
         /// Controller
         public var controller: PerNoteController
-        
+    
         /// Value
         @ValueValidated
         public var value: Value
-        
+    
         /// Channel Number (0x0...0xF)
         public var channel: UInt4
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         /// Channel Voice Message: Per-Note Control Change (CC)
         /// (MIDI 2.0)
         ///
@@ -48,7 +48,7 @@ extension MIDIEvent {
             self.channel = channel
             self.group = group
         }
-        
+    
         /// Channel Voice Message: Per-Note Control Change (CC)
         /// (MIDI 2.0)
         ///
@@ -139,33 +139,33 @@ extension MIDIEvent.NoteCC {
     @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: UniversalMIDIPacketData.MessageType = .midi2ChannelVoice
-        
+    
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
+    
         // MIDI 2.0 only
-        
+    
         let statusByte: Byte
         let index: Byte
-        
+    
         switch controller {
         case let .assignable(ccNum):
             statusByte = 0x10
             index = ccNum
-            
+    
         case let .registered(ccNum):
             statusByte = 0x00
             index = ccNum.number
         }
-        
+    
         let word1 = UMPWord(
             mtAndGroup,
             statusByte + channel.uInt8Value,
             note.number.uInt8Value,
             index
         )
-        
+    
         let word2 = value.midi2Value
-        
+    
         return [word1, word2]
     }
 }

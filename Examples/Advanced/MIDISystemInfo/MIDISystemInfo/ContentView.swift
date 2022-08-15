@@ -29,26 +29,26 @@ struct ContentView: View {
                                         + $0.outputs.asAnyMIDIIOObjects()
                                 }
                         }
-                    
+    
                     ForEach(items) { item in
                         let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
-                        
+    
                         NavigationLink(destination: detailsView) {
                             switch item.objectType {
                             case .device:
                                 // SwiftUI doesn't allow 'break' in a switch case
                                 // so just put a 0x0 pixel spacer here
                                 Spacer().frame(width: 0, height: 0, alignment: .center)
-                                
+    
                             case .entity:
                                 Spacer()
                                     .frame(width: 24, height: 18, alignment: .center)
-                                
+    
                             case .inputEndpoint, .outputEndpoint:
                                 Spacer()
                                     .frame(width: 48, height: 18, alignment: .center)
                             }
-                            
+    
                             Group {
                                 if let nsImg = item.getImageAsNSImage() {
                                     Image(nsImage: nsImg)
@@ -58,7 +58,7 @@ struct ContentView: View {
                                 }
                             }
                             .frame(width: 18, height: 18, alignment: .center)
-                            
+    
                             Text("\(item.name)")
                             if item.objectType == .inputEndpoint {
                                 Text("(In)")
@@ -68,16 +68,16 @@ struct ContentView: View {
                         }
                     }
                 }
-                
+    
                 Section(header: Text("Other Inputs")) {
                     // filter out endpoints that have an entity because
                     // they are already being displayed in the Devices tree
                     let items = midiManager.endpoints.inputs.sortedByName()
                         .filter { $0.getEntity() == nil }
-                    
+    
                     ForEach(items) { item in
                         let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
-                        
+    
                         NavigationLink(destination: detailsView) {
                             Group {
                                 if let nsImg = item.getImageAsNSImage() {
@@ -88,21 +88,21 @@ struct ContentView: View {
                                 }
                             }
                             .frame(width: 18, height: 18, alignment: .center)
-                            
+    
                             Text("\(item.name)")
                         }
                     }
                 }
-                
+    
                 Section(header: Text("Other Outputs")) {
                     // filter out endpoints that have an entity because
                     // they are already being displayed in the Devices tree
                     let items = midiManager.endpoints.outputs.sortedByName()
                         .filter { $0.getEntity() == nil }
-                    
+    
                     ForEach(items) { item in
                         let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
-                        
+    
                         NavigationLink(destination: detailsView) {
                             Group {
                                 if let nsImg = item.getImageAsNSImage() {
@@ -113,14 +113,14 @@ struct ContentView: View {
                                 }
                             }
                             .frame(width: 18, height: 18, alignment: .center)
-                            
+    
                             Text("\(item.name)")
                         }
                     }
                 }
             }
             .frame(width: 300)
-            
+    
             EmptyDetailsView()
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())

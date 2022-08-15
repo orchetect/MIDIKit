@@ -16,7 +16,7 @@ extension MIDIEvent {
              .sysEx8,
              .universalSysEx8:
             return true
-            
+    
         default:
             return false
         }
@@ -42,7 +42,7 @@ extension MIDIEvent {
         for eventType in sysExTypes {
             if isSystemExclusive(ofType: eventType) { return true }
         }
-        
+    
         return false
     }
 }
@@ -56,34 +56,34 @@ extension Collection where Element == MIDIEvent {
         switch types {
         case .only:
             return filter { $0.isSystemExclusive }
-            
+    
         case let .onlyType(specificType):
             return filter { $0.isSystemExclusive(ofType: specificType) }
-            
+    
         case let .onlyTypes(specificTypes):
             return filter { $0.isSystemExclusive(ofTypes: specificTypes) }
-            
+    
         case let .keepType(specificType):
             return filter {
                 guard $0.isSystemExclusive else { return true }
                 return $0.isSystemExclusive(ofType: specificType)
             }
-            
+    
         case let .keepTypes(specificTypes):
             return filter {
                 guard $0.isSystemExclusive else { return true }
                 return $0.isSystemExclusive(ofTypes: specificTypes)
             }
-            
+    
         case .drop:
             return filter { !$0.isSystemExclusive }
-            
+    
         case let .dropType(specificType):
             return filter {
                 guard $0.isSystemExclusive else { return true }
                 return !$0.isSystemExclusive(ofType: specificType)
             }
-            
+    
         case let .dropTypes(specificTypes):
             return filter {
                 guard $0.isSystemExclusive else { return true }

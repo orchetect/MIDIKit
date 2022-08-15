@@ -30,7 +30,7 @@ extension Collection where Element: MIDIIOObject {
             ? first(where: { $0.name == name && !$0.name.isEmpty })
             : first(where: { $0.name == name })
     }
-        
+    
     /// Returns the MIDI object with matching unique ID.
     public func first(whereUniqueID uniqueID: MIDIIdentifier) -> Element? {
         first(where: { $0.uniqueID == uniqueID })

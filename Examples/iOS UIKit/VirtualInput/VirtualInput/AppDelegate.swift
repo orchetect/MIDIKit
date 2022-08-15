@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         do {
             print("Creating virtual MIDI input.")
             try midiManager.addInput(
@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Error creating virtual MIDI input:", error.localizedDescription)
         }
-        
+    
         return true
     }
 }

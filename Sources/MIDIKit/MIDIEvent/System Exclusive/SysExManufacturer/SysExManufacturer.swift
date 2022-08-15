@@ -40,30 +40,30 @@ extension MIDIEvent.SysExManufacturer {
             case 0x00:
                 // 0x00 is invalid if no bytes follow
                 return nil
-                
+    
             case 0x01 ... 0x7D:
                 self = .oneByte(sysEx7RawBytes[0].toUInt7)
                 return
-                
+    
             case 0x7E, 0x7F:
                 // reserved for Universal Sys Ex, not valid manufacturer IDs
                 return nil
-                
+    
             default: // 0x80...
                 // top bit set is invalid; malformed
                 return nil
             }
-            
+    
         case 3:
             guard sysEx7RawBytes[0] == 0x00 else { return nil }
-            
+    
             guard let byte2 = UInt7(exactly: sysEx7RawBytes[1]),
                   let byte3 = UInt7(exactly: sysEx7RawBytes[2])
             else { return nil }
-            
+    
             self = .threeByte(byte2: byte2, byte3: byte3)
             return
-            
+    
         default:
             return nil
         }
@@ -72,24 +72,24 @@ extension MIDIEvent.SysExManufacturer {
     /// Initialize from a MIDI 2.0 SysEx8 ID (two bytes).
     public init?(sysEx8RawBytes: [Byte]) {
         guard sysEx8RawBytes.count == 2 else { return nil }
-        
+    
         switch sysEx8RawBytes[0] {
         case 0x00: // "one byte" ID
             // 0x00 is not valid for one-byte ID
             guard sysEx8RawBytes[1] > 0x00 else { return nil }
-            
+    
             // 0x7E and 0x7F are reserved for Universal SysEx
             guard sysEx8RawBytes[1] < 0x7E else { return nil }
-            
+    
             guard let byte = UInt7(exactly: sysEx8RawBytes[1]) else { return nil }
             self = .oneByte(byte)
             return
-            
+    
         case 0x80...: // "three byte" ID
             let byte2 = (sysEx8RawBytes[0] & 0b0111_1111).toUInt7
             guard let byte3 = UInt7(exactly: sysEx8RawBytes[1]) else { return nil }
             self = .threeByte(byte2: byte2, byte3: byte3)
-            
+    
         default:
             return nil
         }
@@ -103,7 +103,7 @@ extension MIDIEvent.SysExManufacturer {
         switch self {
         case let .oneByte(byte):
             return [byte.uInt8Value]
-            
+    
         case let .threeByte(byte2: byte2, byte3: byte3):
             return [0x00, byte2.uInt8Value, byte3.uInt8Value]
         }
@@ -115,7 +115,7 @@ extension MIDIEvent.SysExManufacturer {
         switch self {
         case let .oneByte(byte):
             return [0x00, byte.uInt8Value]
-            
+    
         case let .threeByte(byte2: byte2, byte3: byte3):
             return [
                 0b1000_0000 + byte2.uInt8Value,
@@ -136,7 +136,7 @@ extension MIDIEvent.SysExManufacturer {
         switch self {
         case let .oneByte(byte):
             return (0x01 ... 0x7D).contains(byte)
-            
+    
         case let .threeByte(byte2: byte2, byte3: byte3):
             // both can't be 0x00, at least one has to be non-zero.
             // all other scenarios are valid
@@ -787,7 +787,7 @@ extension MIDIEvent.SysExManufacturer {
         [0x00, 0x21, 0x59]: "Robkoo Information & Technologies Co., Ltd.",
         
         // MARK: Japanese Group
-        
+    
         [0x40]: "Kawai Musical Instruments MFG. CO. Ltd",
         [0x41]: "Roland Corporation",
         [0x42]: "Korg Inc.",

@@ -30,7 +30,7 @@ extension MIDIEvent.ProgramChange {
         /// No Bank Select operation will occur; only a Program Change event will happen.
         /// (MIDI 1.0 / 2.0)
         case noBankSelect
-        
+    
         /// Transmit a Bank Select operation prior to Program Change event.
         /// (MIDI 1.0 / 2.0)
         ///
@@ -79,7 +79,7 @@ extension MIDIEvent.ProgramChange.Bank {
         lsb: UInt7
     ) -> Self {
         let uInt7Pair = UInt7Pair(msb: msb, lsb: lsb)
-        
+    
         return .bankSelect(UInt14(uInt7Pair: uInt7Pair))
     }
 }

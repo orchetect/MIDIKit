@@ -17,9 +17,9 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIPacketList {
         if pointee.numPackets == 0 {
             return []
         }
-        
+    
         // prefer newer Core MIDI API if platform supports it
-        
+    
         if #available(macOS 10.15, iOS 13.0, macCatalyst 13.0, *) {
             return unsafeSequence().map {
                 MIDIPacketData($0)

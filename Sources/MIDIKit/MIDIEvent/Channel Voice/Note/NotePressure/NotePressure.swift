@@ -15,17 +15,17 @@ extension MIDIEvent {
     public struct NotePressure: Equatable, Hashable {
         /// Note Number for which pressure is applied
         public var note: MIDINote
-        
+    
         /// Pressure Amount
         @AmountValidated
         public var amount: Amount
-        
+    
         /// Channel Number (0x0...0xF)
         public var channel: UInt4
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         /// Channel Voice Message: Polyphonic Aftertouch
         /// (MIDI 1.0 / 2.0)
         ///
@@ -44,7 +44,7 @@ extension MIDIEvent {
             self.channel = channel
             self.group = group
         }
-        
+    
         /// Channel Voice Message: Polyphonic Aftertouch
         /// (MIDI 1.0 / 2.0)
         ///
@@ -148,7 +148,7 @@ extension MIDIEvent.NotePressure {
         switch midiProtocol {
         case ._1_0:
             return .midi1ChannelVoice
-            
+    
         case ._2_0:
             return .midi2ChannelVoice
         }
@@ -162,7 +162,7 @@ extension MIDIEvent.NotePressure {
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {
         let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
-        
+    
         switch midiProtocol {
         case ._1_0:
             let word = UMPWord(
@@ -171,9 +171,9 @@ extension MIDIEvent.NotePressure {
                 note.number.uInt8Value,
                 amount.midi1Value.uInt8Value
             )
-            
+    
             return [word]
-            
+    
         case ._2_0:
             let word1 = UMPWord(
                 mtAndGroup,
@@ -181,9 +181,9 @@ extension MIDIEvent.NotePressure {
                 note.number.uInt8Value,
                 0x00
             ) // reserved
-            
+    
             let word2 = amount.midi2Value
-            
+    
             return [word1, word2]
         }
     }

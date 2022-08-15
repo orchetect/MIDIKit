@@ -23,20 +23,20 @@ final class MIDIThruConnection_Tests: XCTestCase {
             !isThruConnectionsSupportedOnCurrentPlatform,
             "MIDI Thru Connections only function on macOS Catalina or earlier due to Core MIDI bugs on later macOS releases. Skipping unit test since it will fail on the current platform."
         )
-        
+    
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-        
+    
         // start midi client
         try manager.start()
         wait(sec: 0.1)
-        
+    
         // initial state
         connEvents.removeAll()
-        
+    
         // create virtual input
         let input1Tag = "input1"
         try manager.addInput(
@@ -51,7 +51,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
         // let input1ID = try XCTUnwrap(input1.uniqueID)
         // let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
-        
+    
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -62,11 +62,11 @@ final class MIDIThruConnection_Tests: XCTestCase {
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         // let output1ID = try XCTUnwrap(output1.uniqueID)
         // let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
-        
+    
         wait(sec: 0.2)
-        
+    
         // add new connection
-        
+    
         let connTag = "testThruConnection"
         try manager.addThruConnection(
             outputs: [output1.endpoint],
@@ -74,33 +74,33 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: connTag,
             lifecycle: .nonPersistent
         )
-        
+    
         XCTAssertNotNil(manager.managedThruConnections[connTag])
         XCTAssert(manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
-        
+    
         wait(sec: 0.2)
-        
+    
         // send an event - it should be received by the input
         try output1.send(event: .start())
         wait(for: connEvents, equals: [.start()], timeout: 1.0)
         connEvents = []
 
         manager.remove(.nonPersistentThruConnection, .withTag(connTag))
-        
+    
         XCTAssertNil(manager.managedThruConnections[connTag])
-        
+    
         // send an event - it should not be received by the input
         try output1.send(event: .start())
         wait(sec: 0.2) // wait a bit in case an event is sent
         XCTAssertEqual(connEvents, [])
         connEvents = []
-        
+    
         // Due to a Swift Core MIDI bug, all thru connections are created as persistent.
         // - See ThruConnection.swift for details
         let conns = try manager.unmanagedPersistentThruConnections(ownerID: "")
 
         XCTAssert(conns.isEmpty)
-        
+    
         // as a failsafe, clean up any persistent connections with an empty owner ID
         manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
     }
@@ -110,22 +110,22 @@ final class MIDIThruConnection_Tests: XCTestCase {
             !isThruConnectionsSupportedOnCurrentPlatform,
             "MIDI Thru Connections only function on macOS Catalina or earlier due to Core MIDI bugs on later macOS releases. Skipping unit test since it will fail on the current platform."
         )
-        
+    
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-        
+    
         // start midi client
         try manager.start()
         wait(sec: 0.1)
-        
+    
         // initial state
         connEvents.removeAll()
         let ownerID = "com.orchetect.midikit.testNonPersistentThruConnection"
         manager.removeAllUnmanagedPersistentThruConnections(ownerID: ownerID)
-        
+    
         // create virtual input
         let input1Tag = "input1"
         try manager.addInput(
@@ -140,9 +140,9 @@ final class MIDIThruConnection_Tests: XCTestCase {
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
         // let input1ID = try XCTUnwrap(input1.uniqueID)
         // let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
-        
+    
         wait(sec: 0.2)
-        
+    
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -153,11 +153,11 @@ final class MIDIThruConnection_Tests: XCTestCase {
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         // let output1ID = try XCTUnwrap(output1.uniqueID)
         // let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
-        
+    
         wait(sec: 0.2)
-        
+    
         // add new connection
-        
+    
         let connTag = "testThruConnection"
         try manager.addThruConnection(
             outputs: [output1.endpoint],
@@ -165,7 +165,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: connTag,
             lifecycle: .persistent(ownerID: ownerID)
         )
-        
+    
         wait(sec: 0.2)
 
         XCTAssertEqual(
@@ -184,9 +184,9 @@ final class MIDIThruConnection_Tests: XCTestCase {
             try manager.unmanagedPersistentThruConnections(ownerID: ownerID).count,
             0
         )
-        
+    
         XCTAssertEqual(manager.managedThruConnections.count, 0)
-        
+    
         // send an event - it should not be received by the input
         try output1.send(event: .start())
         wait(sec: 0.2) // wait a bit in case an event is sent
@@ -200,20 +200,20 @@ final class MIDIThruConnection_Tests: XCTestCase {
             !isThruConnectionsSupportedOnCurrentPlatform,
             "MIDI Thru Connections only function on macOS Catalina or earlier due to Core MIDI bugs on later macOS releases. Skipping unit test since it will fail on the current platform."
         )
-        
+    
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-        
+    
         // start midi client
         try manager.start()
         wait(sec: 0.1)
-        
+    
         // initial state
         connEvents.removeAll()
-        
+    
         // create virtual input
         let input1Tag = "input1"
         try manager.addInput(
@@ -228,7 +228,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
         let input1ID = try XCTUnwrap(input1.uniqueID)
         let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
-        
+    
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -239,11 +239,11 @@ final class MIDIThruConnection_Tests: XCTestCase {
         let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
         let output1ID = try XCTUnwrap(output1.uniqueID)
         let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
-        
+    
         wait(sec: 0.2)
-        
+    
         // add new connection
-        
+    
         let connTag = "testThruConnection"
         try manager.addThruConnection(
             outputs: [output1.endpoint],
@@ -251,26 +251,26 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: connTag,
             lifecycle: .nonPersistent
         )
-        
+    
         XCTAssertNotNil(manager.managedThruConnections[connTag])
         XCTAssert(manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
-        
+    
         wait(sec: 0.2)
-        
+    
         let connRef = manager.managedThruConnections[connTag]!.coreMIDIThruConnectionRef!
         let getParams = try XCTUnwrap(try getThruConnectionParameters(ref: connRef))
-        
+    
         XCTAssertEqual(getParams.numSources, 1)
         XCTAssertEqual(getParams.sources.0.endpointRef, output1Ref)
         XCTAssertEqual(getParams.sources.0.uniqueID, output1ID)
         XCTAssertEqual(getParams.numDestinations, 1)
         XCTAssertEqual(getParams.destinations.0.endpointRef, input1Ref)
         XCTAssertEqual(getParams.destinations.0.uniqueID, input1ID)
-        
+    
         manager.remove(.nonPersistentThruConnection, .withTag(connTag))
-        
+    
         XCTAssertNil(manager.managedThruConnections[connTag])
-        
+    
         // as a failsafe, clean up any persistent connections with an empty owner ID
         manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
     }

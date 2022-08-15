@@ -43,7 +43,7 @@ public struct MIDIInputEndpoint: _MIDIEndpoint {
             ref != CoreMIDIEndpointRef(),
             "Encountered Core MIDI input endpoint ref value of 0 which is invalid."
         )
-            
+    
         coreMIDIObjectRef = ref
         update()
     }
@@ -55,11 +55,11 @@ public struct MIDIInputEndpoint: _MIDIEndpoint {
         if let name = getName() {
             self.name = name
         }
-        
+    
         if let displayName = getDisplayName() {
             self.displayName = displayName
         }
-        
+    
         let uniqueID = getUniqueID()
         if uniqueID != .invalidMIDIIdentifier {
             self.uniqueID = uniqueID

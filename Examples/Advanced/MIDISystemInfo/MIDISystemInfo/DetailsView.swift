@@ -20,96 +20,96 @@ struct EmptyDetailsView: View {
 
 struct DetailsView: View {
     @Environment(\.hostingWindow) var hostingWindow
-	
+    
     var object: AnyMIDIIOObject?
-	
+    
     @State private var webViewHeight: CGFloat = .zero
-	
+    
     @State private var webview: WKWebView = .init()
-	
+    
     @State private var showAll: Bool = false
-	
+    
     func generateHTML(_ endpoint: AnyMIDIIOObject) -> String {
         let flatProperties = endpoint.getPropertiesAsStrings(onlyIncludeRelevant: !showAll)
-		
+        
         let htmlStart = """
             <HTML>
             <HEAD>
-            	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-            	<style>
-            	body {
-            		font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-            			"Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-            			"Droid Sans", "Helvetica Neue", sans-serif;
-            		font-weight: regular;
-            		font-size: 15px;
-            		background: #FFFFFF;
-            		color: #000000;
-            	}
-            	@media (prefers-color-scheme: dark) {
-            		body {
-            		background: #262423;
-            		color: #FFFFFF;
-            		}
-            	}
-            	table {
-            		table-layout: fixed;
-            		width: 100%;
-            		font-size: 14px;
-            	}
-            	th.props {
-            		width: 250px;
-            	}
-            	th.values {
-            		overflow-wrap: break-word;
-            		word-wrap: break-word;
-            		word-break: break-word;
-            		-ms-word-break: break-all;
-            	}
-            	th {
-            		font-weight: bold, semibold;
-            	}
-            	th, td {
-            		text-align: left;
-            		padding: 3px;
-            	}
-            	</style>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+                <style>
+                body {
+                    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                        "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+                        "Droid Sans", "Helvetica Neue", sans-serif;
+                    font-weight: regular;
+                    font-size: 15px;
+                    background: #FFFFFF;
+                    color: #000000;
+                }
+                @media (prefers-color-scheme: dark) {
+                    body {
+                    background: #262423;
+                    color: #FFFFFF;
+                    }
+                }
+                table {
+                    table-layout: fixed;
+                    width: 100%;
+                    font-size: 14px;
+                }
+                th.props {
+                    width: 250px;
+                }
+                th.values {
+                    overflow-wrap: break-word;
+                    word-wrap: break-word;
+                    word-break: break-word;
+                    -ms-word-break: break-all;
+                }
+                th {
+                    font-weight: bold, semibold;
+                }
+                th, td {
+                    text-align: left;
+                    padding: 3px;
+                }
+                </style>
             </HEAD>
             <BODY>
             """
-		
+        
         let htmlEnd = #"</BODY></HTML>"#
-		
+        
         var htmlBody = """
             <h2>\(endpoint.name)</h2>
             <br>
             <table>
-            	<thead>
-            		<tr>
-            			<th class="props">Property</th>
-            			<th class="values">Value</th>
-            		</tr>
-            	</thead>
+                <thead>
+                    <tr>
+                        <th class="props">Property</th>
+                        <th class="values">Value</th>
+                    </tr>
+                </thead>
             """
-		
+        
         for (key, value) in flatProperties {
             htmlBody += """
                   <tr>
-                	<td>\(key)</td>
-                	<td>\(value)</td>
+                    <td>\(key)</td>
+                    <td>\(value)</td>
                   </tr>
                 """
         }
-		
+        
         htmlBody += """
             </table>
             """
-		
+        
         let htmlString = "\(htmlStart)\(htmlBody)\(htmlEnd)"
-		
+        
         return htmlString
     }
-	
+    
     var body: some View {
         if let unwrappedObject = object {
             WebKitView(
@@ -117,7 +117,7 @@ struct DetailsView: View {
                 webview: $webview,
                 html: generateHTML(unwrappedObject)
             )
-			
+            
             Group {
                 if showAll {
                     Button("Show Relevant Properties") {
@@ -130,7 +130,7 @@ struct DetailsView: View {
                 }
             }
             .padding(.all, 10)
-			
+            
         } else {
             EmptyDetailsView()
         }

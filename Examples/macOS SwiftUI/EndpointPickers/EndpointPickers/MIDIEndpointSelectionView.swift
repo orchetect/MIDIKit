@@ -18,7 +18,7 @@ struct MIDIInSelectionView: View {
         Picker("MIDI In", selection: $midiInSelectedID) {
             Text("None")
                 .tag(0 as MIDIIdentifier)
-            
+    
             if midiInSelectedID != .invalidMIDIIdentifier,
                !midiHelper.isOutputPresentInSystem(uniqueID: midiInSelectedID)
             {
@@ -26,7 +26,7 @@ struct MIDIInSelectionView: View {
                     .tag(midiInSelectedID)
                     .foregroundColor(.secondary)
             }
-            
+    
             ForEach(midiManager.endpoints.outputs) {
                 Text($0.displayName)
                     .tag($0.uniqueID)
@@ -46,7 +46,7 @@ struct MIDIOutSelectionView: View {
         Picker("MIDI Out", selection: $midiOutSelectedID) {
             Text("None")
                 .tag(0 as MIDIIdentifier)
-            
+    
             if midiOutSelectedID != .invalidMIDIIdentifier,
                !midiHelper.isInputPresentInSystem(uniqueID: midiOutSelectedID)
             {
@@ -54,7 +54,7 @@ struct MIDIOutSelectionView: View {
                     .tag(midiOutSelectedID)
                     .foregroundColor(.secondary)
             }
-            
+    
             ForEach(midiManager.endpoints.inputs) {
                 Text($0.displayName)
                     .tag($0.uniqueID)

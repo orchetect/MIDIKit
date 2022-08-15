@@ -9,21 +9,21 @@
 /// Error type returned by `MIDI.IO` methods.
 public enum MIDIIOError: Error, Hashable {
     // General
-        
+    
     case internalInconsistency(_ verboseError: String)
-        
+    
     case malformed(_ verboseError: String)
-        
+    
     case notSupported(_ verboseError: String)
-        
+    
     // Connections
-        
+    
     case connectionError(_ verboseError: String)
-        
+    
     case readError(_ verboseError: String)
-        
+    
     // Core MIDI.OSStatus
-        
+    
     case osStatus(MIDIOSStatus)
 }
 
@@ -44,19 +44,19 @@ extension MIDIIOError: CustomStringConvertible {
         switch self {
         case let .internalInconsistency(verboseError):
             return verboseError
-            
+    
         case let .malformed(verboseError):
             return verboseError
-            
+    
         case let .notSupported(verboseError):
             return verboseError
-            
+    
         case let .connectionError(verboseError):
             return verboseError
-            
+    
         case let .readError(verboseError):
             return verboseError
-            
+    
         case let .osStatus(midiOSStatus):
             return midiOSStatus.description
         }

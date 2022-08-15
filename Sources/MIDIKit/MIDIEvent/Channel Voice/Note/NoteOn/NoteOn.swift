@@ -12,23 +12,23 @@ extension MIDIEvent {
         ///
         /// If MIDI 2.0 attribute is set to Pitch 7.9, then this value represents the note index.
         public var note: MIDINote
-        
+    
         /// Velocity
         @MIDIEvent.NoteVelocityValidated
         public var velocity: MIDIEvent.NoteVelocity
-        
+    
         /// MIDI 2.0 Channel Voice Attribute
         public var attribute: NoteAttribute = .none
-        
+    
         /// Channel Number (0x0...0xF)
         public var channel: UInt4
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         /// For MIDI 1.0, transmit velocity of 0 as a Note Off event.
         public var midi1ZeroVelocityAsNoteOff: Bool = true
-        
+    
         /// Channel Voice Message: Note On
         /// (MIDI 1.0 / 2.0)
         ///
@@ -54,7 +54,7 @@ extension MIDIEvent {
             self.group = group
             self.midi1ZeroVelocityAsNoteOff = midi1ZeroVelocityAsNoteOff
         }
-        
+    
         /// Channel Voice Message: Note On
         /// (MIDI 1.0 / 2.0)
         ///
@@ -86,7 +86,7 @@ extension MIDIEvent {
 extension MIDIEvent.NoteOn: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         // ensure midi1ZeroVelocityAsNoteOff is not factored into Equatable
-        
+    
         lhs.note == rhs.note &&
             lhs.velocity == rhs.velocity &&
             lhs.attribute == rhs.attribute &&
@@ -98,7 +98,7 @@ extension MIDIEvent.NoteOn: Equatable {
 extension MIDIEvent.NoteOn: Hashable {
     public func hash(into hasher: inout Hasher) {
         // ensure midi1ZeroVelocityAsNoteOff is not factored into Hashable
-        
+    
         hasher.combine(note)
         hasher.combine(velocity)
         hasher.combine(attribute)
@@ -185,7 +185,7 @@ extension MIDIEvent.NoteOn {
                     note.number.uInt8Value,
                     velocity.midi1Value.uInt8Value
                 ]
-                
+    
             } else {
                 // send as Note On event
                 return [
@@ -195,24 +195,24 @@ extension MIDIEvent.NoteOn {
                 ]
             }
         }
-        
+    
         switch velocity {
         case let .midi1(midi1Value):
             return process(midi1Value: midi1Value)
-            
+    
         case .midi2:
             // MIDI 2.0 Spec:
             // When translating a MIDI 2.0 Note On message to the MIDI 1.0 Protocol, if the translated MIDI 1.0 value of the Velocity is zero, then the Translator shall replace the zero with a value of 1.
-            
+    
             var midi1Velocity = velocity.midi1Value.uInt8Value
             if midi1Velocity == 0 { midi1Velocity = 1 }
-            
+    
             return [
                 0x90 + channel.uInt8Value,
                 note.number.uInt8Value,
                 midi1Velocity
             ]
-            
+    
         case .unitInterval:
             return process(midi1Value: velocity.midi1Value)
         }
@@ -225,7 +225,7 @@ extension MIDIEvent.NoteOn {
         switch midiProtocol {
         case ._1_0:
             return .midi1ChannelVoice
-            
+    
         case ._2_0:
             return .midi2ChannelVoice
         }
@@ -239,36 +239,36 @@ extension MIDIEvent.NoteOn {
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {
         let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
-        
+    
         switch midiProtocol {
         case ._1_0:
             let midi1Bytes = midi1RawBytes() // always 3 bytes
-            
+    
             let word = UMPWord(
                 mtAndGroup,
                 midi1Bytes[0],
                 midi1Bytes[1],
                 midi1Bytes[2]
             )
-            
+    
             return [word]
-            
+    
         case ._2_0:
             // MIDI 2.0 Spec:
             // The allowable Velocity range for a MIDI 2.0 Note On message is 0x0000-0xFFFF. Unlike the MIDI 1.0 Note On message, a velocity value of zero does not function as a Note Off.
-            
+    
             let word1 = UMPWord(
                 mtAndGroup,
                 0x90 + channel.uInt8Value,
                 note.number.uInt8Value,
                 attribute.attributeType
             )
-            
+    
             let word2 = UMPWord(
                 velocity.midi2Value,
                 attribute.attributeData
             )
-            
+    
             return [word1, word2]
         }
     }

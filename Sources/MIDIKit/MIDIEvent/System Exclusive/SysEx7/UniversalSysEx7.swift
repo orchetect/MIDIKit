@@ -15,23 +15,23 @@ extension MIDIEvent {
         /// Universal SysEx type:
         /// realtime or non-realtime
         public var universalType: UniversalSysExType
-        
+    
         /// Device ID:
         /// `0x7F` indicates "All Devices"
         public var deviceID: UInt7
-        
+    
         /// Sub ID #1
         public var subID1: UInt7
-        
+    
         /// Sub ID #2
         public var subID2: UInt7
-        
+    
         /// Data bytes (7-bit) (excluding leading 0xF0, trailing 0xF7, universal type and ID bytes)
         public var data: [Byte]
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         public init(
             universalType: MIDIEvent.UniversalSysExType,
             deviceID: UInt7,
@@ -116,7 +116,7 @@ extension MIDIEvent.UniversalSysEx7 {
                 subID2.uInt8Value
             ]
             + data
-        
+    
         return MIDIEvent.SysEx7.umpRawWords(
             fromSysEx7Data: rawData,
             group: group

@@ -19,50 +19,50 @@ extension MIDIManager {
         try eventQueue.sync {
             // if start() was already called, return
             guard coreMIDIClientRef == MIDIClientRef() else { return }
-            
+    
             try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef)
                 { [weak self] notificationPtr in
                     guard let self = self else { return }
                     self.internalNotificationHandler(notificationPtr)
                 }
                 .throwIfOSStatusErr()
-            
+    
             // initial cache of endpoints
-            
+    
             updateObjectsCache()
         }
     }
     
     internal func internalNotificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
         let internalNotification = MIDIIOInternalNotification(pointer)
-        
+    
         let cache = MIDIIOObjectCache(from: self)
-        
+    
         switch internalNotification {
         case .setupChanged,
              .added,
              .removed,
              .propertyChanged:
-            
+    
             updateObjectsCache()
-            
+    
         default:
             break
         }
-        
+    
         if let notification = MIDIIONotification(
             internalNotification,
             cache: cache
         ) {
             sendNotification(notification)
         }
-        
+    
         // propagate notification to managed objects
-        
+    
         for outputConnection in managedOutputConnections.values {
             outputConnection.notification(internalNotification)
         }
-        
+    
         for inputConnection in managedInputConnections.values {
             inputConnection.notification(internalNotification)
         }

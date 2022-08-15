@@ -16,10 +16,10 @@ extension MIDIEvent.NoteAttribute {
     public struct Pitch7_9: Equatable, Hashable {
         /// 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
         public var coarse: UInt7
-        
+    
         /// 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
         public var fine: UInt9
-        
+    
         /// Pitch 7.9 Note Attribute
         /// (MIDI 2.0)
         ///
@@ -58,7 +58,7 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     @inline(__always)
     public init(_ bytePair: BytePair) {
         coarse = UInt7((bytePair.msb & 0b1111_1110) >> 1)
-        
+    
         fine = UInt9(
             UInt9.Storage(bytePair.lsb)
                 + (UInt9.Storage(bytePair.msb & 0b1) << 8)
@@ -70,7 +70,7 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     public var bytePair: BytePair {
         let msb = Byte(coarse.value << 1) + Byte((fine.value & 0b1_0000_0000) >> 8)
         let lsb = Byte(fine.value & 0b1111_1111)
-        
+    
         return .init(msb: msb, lsb: lsb)
     }
 }
@@ -107,9 +107,9 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     @inline(__always)
     public init(_ double: Double) {
         let double = double.clamped(to: 0.0 ... 127.998046875)
-        
+    
         let truncated = trunc(double)
-        
+    
         coarse = UInt7(truncated)
         fine = UInt9(round((double - truncated) * 0b10_0000_0000))
     }

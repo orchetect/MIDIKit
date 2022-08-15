@@ -9,10 +9,10 @@ extension MIDIEvent {
     public enum UniversalSysExType: UInt7, Equatable, Hashable {
         /// Real Time System Exclusive ID number (`0x7F`).
         case realTime = 0x7F
-        
+    
         /// Non-Real Time System Exclusive ID number (`0x7E`).
         case nonRealTime = 0x7E
-        
+    
         // Note: this cannot be implemented as `init?(rawValue: UInt8)` because
         // Xcode 12.4 won't compile (Xcode 13 compiles fine however).
         // It seems the parameter name "rawValue:" confuses the compiler
@@ -22,7 +22,7 @@ extension MIDIEvent {
         /// Initialize from raw UInt8 byte.
         public init?(rawUInt8Value: UInt8) {
             guard let uInt7 = UInt7(exactly: rawUInt8Value) else { return nil }
-            
+    
             self.init(rawValue: uInt7)
         }
     }

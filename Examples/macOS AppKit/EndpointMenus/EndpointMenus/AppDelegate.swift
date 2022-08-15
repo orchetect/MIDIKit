@@ -28,19 +28,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             print("Starting MIDI services.")
             try midiManager.start()
-            
+    
             // set up MIDI subsystem notification handler
             midiManager.notificationHandler = { [weak self] notification, manager in
                 self?.didReceiveMIDIIONotification(notification)
             }
-            
+    
             // set up input connection
             try midiManager.addInputConnection(
                 toOutputs: [],
                 tag: ConnectionTags.midiIn,
                 receiveHandler: .eventsLogging(filterActiveSensingAndClock: true)
             )
-            
+    
             // set up output connection
             try midiManager.addOutputConnection(
                 toInputs: [],
@@ -49,7 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         // restore endpoint selection saved to persistent storage
         midiRestorePersistentState()
     }
@@ -71,7 +71,7 @@ extension AppDelegate {
     private enum UserDefaultsKeys {
         static let midiInID = "SelectedMIDIInID"
         static let midiInDisplayName = "SelectedMIDIInDisplayName"
-        
+    
         static let midiOutID = "SelectedMIDIOutID"
         static let midiOutDisplayName = "SelectedMIDIOutDisplayName"
     }
@@ -104,7 +104,7 @@ extension AppDelegate {
     /// Call this only once on app quit.
     private func midiSavePersistentState() {
         // save endpoint selection to UserDefaults
-        
+    
         UserDefaults.standard.set(
             midiInMenuSelectedID,
             forKey: UserDefaultsKeys.midiInID
@@ -113,7 +113,7 @@ extension AppDelegate {
             midiInMenuSelectedDisplayName,
             forKey: UserDefaultsKeys.midiInDisplayName
         )
-        
+    
         UserDefaults.standard.set(
             midiOutMenuSelectedID,
             forKey: UserDefaultsKeys.midiOutID
@@ -155,9 +155,9 @@ extension AppDelegate {
     
     private func midiInMenuRefresh() {
         midiInMenu.items.removeAll()
-        
+    
         let sortedEndpoints = midiManager.endpoints.outputs.sortedByDisplayName()
-        
+    
         // None menu item
         do {
             let newMenuItem = NSMenuItem(
@@ -169,10 +169,10 @@ extension AppDelegate {
             newMenuItem.state = midiInMenuSelectedID == .invalidMIDIIdentifier ? .on : .off
             midiInMenu.addItem(newMenuItem)
         }
-        
+    
         // ---------------
         midiInMenu.addItem(.separator())
-        
+    
         // If selected endpoint doesn't exist in the system, show it in the menu as missing but still selected.
         // The MIDIManager will auto-reconnect to it if it reappears in the system in this condition.
         if midiInMenuSelectedID != .invalidMIDIIdentifier,
@@ -187,7 +187,7 @@ extension AppDelegate {
             newMenuItem.state = .on
             midiInMenu.addItem(newMenuItem)
         }
-        
+    
         // Add endpoints to the menu
         for endpoint in sortedEndpoints {
             let newMenuItem = NSMenuItem(
@@ -199,7 +199,7 @@ extension AppDelegate {
             if endpoint.uniqueID == midiInMenuSelectedID {
                 newMenuItem.state = .on
             }
-            
+    
             midiInMenu.addItem(newMenuItem)
         }
     }
@@ -209,20 +209,20 @@ extension AppDelegate {
         midiInMenuSelectedID = MIDIIdentifier(
             exactly: sender?.tag ?? .invalidMIDIIdentifier
         ) ?? .invalidMIDIIdentifier
-        
+    
         if let foundOutput = midiManager.endpoints.outputs.first(where: {
             $0.uniqueID == midiInMenuSelectedID
         }) {
             midiInMenuSelectedDisplayName = foundOutput.displayName
         }
-        
+    
         midiInMenuRefresh()
         midiInMenuUpdateConnection()
     }
     
     private func midiInMenuUpdateConnection() {
         guard let midiInputConnection = midiInputConnection else { return }
-        
+    
         if midiInMenuSelectedID == .invalidMIDIIdentifier {
             midiInputConnection.removeAllOutputs()
         } else {
@@ -253,9 +253,9 @@ extension AppDelegate {
     
     private func midiOutMenuRefresh() {
         midiOutMenu.items.removeAll()
-        
+    
         let sortedEndpoints = midiManager.endpoints.inputs.sortedByDisplayName()
-        
+    
         // None menu item
         do {
             let newMenuItem = NSMenuItem(
@@ -267,10 +267,10 @@ extension AppDelegate {
             newMenuItem.state = midiOutMenuSelectedID == .invalidMIDIIdentifier ? .on : .off
             midiOutMenu.addItem(newMenuItem)
         }
-        
+    
         // ---------------
         midiOutMenu.addItem(.separator())
-        
+    
         // If selected endpoint doesn't exist in the system, show it in the menu as missing but still selected.
         // The MIDIManager will auto-reconnect to it if it reappears in the system in this condition.
         if midiOutMenuSelectedID != .invalidMIDIIdentifier,
@@ -285,7 +285,7 @@ extension AppDelegate {
             newMenuItem.state = .on
             midiOutMenu.addItem(newMenuItem)
         }
-        
+    
         // Add endpoints to the menu
         for endpoint in sortedEndpoints {
             let newMenuItem = NSMenuItem(
@@ -295,7 +295,7 @@ extension AppDelegate {
             )
             newMenuItem.tag = Int(endpoint.uniqueID)
             if endpoint.uniqueID == midiOutMenuSelectedID { newMenuItem.state = .on }
-            
+    
             midiOutMenu.addItem(newMenuItem)
         }
     }
@@ -305,20 +305,20 @@ extension AppDelegate {
         midiOutMenuSelectedID = MIDIIdentifier(
             exactly: sender?.tag ?? .invalidMIDIIdentifier
         ) ?? .invalidMIDIIdentifier
-        
+    
         if let foundInput = midiManager.endpoints.inputs.first(where: {
             $0.uniqueID == midiOutMenuSelectedID
         }) {
             midiOutMenuSelectedDisplayName = foundInput.displayName
         }
-        
+    
         midiOutMenuRefresh()
         midiOutMenuUpdateConnection()
     }
     
     private func midiOutMenuUpdateConnection() {
         guard let midiOutputConnection = midiOutputConnection else { return }
-        
+    
         if midiOutMenuSelectedID == .invalidMIDIIdentifier {
             midiOutputConnection.removeAllInputs()
         } else {

@@ -38,23 +38,23 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
         let bufferSize = data.count + kSizeOfMIDIPacketCombinedHeaders
-        
+    
         // the discussion section of MIDIPacketListAdd states that "The maximum
         // size of a packet list is 65536 bytes." Checking for that limit here.
         //        if bufferSize > 65_536 {
         //            logger.default("MIDI: assemblePacketList(data:) Error: Data array is too large (\(bufferSize) bytes), requires a buffer larger than 65536")
         //            return nil
         //        }
-        
+    
         let timeTag: UInt64 = mach_absolute_time()
-        
+    
         let packetListPointer: UnsafeMutablePointer<MIDIPacketList> = .allocate(capacity: 1)
-        
+    
         // prepare packet
         var currentPacket: UnsafeMutablePointer<MIDIPacket> = MIDIPacketListInit(
             packetListPointer
         )
-        
+    
         // returns NULL if there was not room in the packet list for the event (?)
         currentPacket = MIDIPacketListAdd(
             packetListPointer,
@@ -64,7 +64,7 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
             data.count,
             data
         )
-        
+    
         self = packetListPointer
     }
     
@@ -80,23 +80,23 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         let bufferSize = data
             .reduce(0) { $0 + $1.count + kSizeOfMIDIPacketHeader }
             + kSizeOfMIDIPacketListHeader
-        
+    
         // MIDIPacketListAdd's discussion section states that "The maximum size of a packet list is 65536 bytes."
         guard bufferSize <= 65536 else {
             throw MIDIIOError.malformed(
                 "Data array is too large (\(bufferSize) bytes). Maximum size is 65536 bytes."
             )
         }
-        
+    
         // As per Apple docs, timeTag must not be 0 when a packet is sent with `MIDIReceived()`. It must be a proper timeTag.
         let timeTag: UInt64 = mach_absolute_time()
-        
+    
         let packetListPointer: UnsafeMutablePointer<MIDIPacketList> = .allocate(capacity: 1)
-        
+    
         // prepare packet
         var currentPacket: UnsafeMutablePointer<MIDIPacket>! =
             MIDIPacketListInit(packetListPointer)
-        
+    
         for dataBlock in 0 ..< data.count {
             // returns NULL if there was not room in the packet list for the event
             currentPacket = MIDIPacketListAdd(
@@ -107,14 +107,14 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
                 data[dataBlock].count,
                 data[dataBlock]
             )
-            
+    
             guard currentPacket != nil else {
                 throw MIDIIOError.malformed(
                     "Error adding MIDI packet to packet list."
                 )
             }
         }
-        
+    
         self = packetListPointer
     }
 }

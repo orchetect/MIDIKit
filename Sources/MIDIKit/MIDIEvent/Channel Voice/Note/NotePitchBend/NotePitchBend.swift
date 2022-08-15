@@ -12,17 +12,17 @@ extension MIDIEvent {
         ///
         /// If attribute is set to Pitch 7.9, then this value represents the note index.
         public var note: MIDINote
-        
+    
         /// 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
         @ValueValidated
         public var value: Value
-        
+    
         /// Channel Number (0x0...0xF)
         public var channel: UInt4
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         /// Channel Voice Message: Per-Note Pitch Bend
         /// (MIDI 2.0)
         ///
@@ -42,7 +42,7 @@ extension MIDIEvent {
             self.channel = channel
             self.group = group
         }
-        
+    
         /// Channel Voice Message: Per-Note Pitch Bend
         /// (MIDI 2.0)
         ///
@@ -124,20 +124,20 @@ extension MIDIEvent.NotePitchBend {
     @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: UniversalMIDIPacketData.MessageType = .midi2ChannelVoice
-        
+    
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
+    
         // MIDI 2.0 only
-        
+    
         let word1 = UMPWord(
             mtAndGroup,
             0x60 + channel.uInt8Value,
             note.number.uInt8Value,
             0x00
         ) // reserved
-        
+    
         let word2 = value.midi2Value
-        
+    
         return [word1, word2]
     }
 }

@@ -10,13 +10,13 @@ extension MIDIEvent {
         /// Value
         @ValueValidated
         public var value: Value
-        
+    
         /// Channel Number (0x0...0xF)
         public var channel: UInt4
-        
+    
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         public init(
             value: Value,
             channel: UInt4,
@@ -57,7 +57,7 @@ extension MIDIEvent.PitchBend {
     @inline(__always)
     public func midi1RawBytes() -> [Byte] {
         let bytePair = value.midi1Value.bytePair
-        
+    
         return [
             0xE0 + channel.uInt8Value,
             bytePair.lsb,
@@ -72,7 +72,7 @@ extension MIDIEvent.PitchBend {
         switch midiProtocol {
         case ._1_0:
             return .midi1ChannelVoice
-            
+    
         case ._2_0:
             return .midi2ChannelVoice
         }
@@ -86,20 +86,20 @@ extension MIDIEvent.PitchBend {
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {
         let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
-        
+    
         switch midiProtocol {
         case ._1_0:
             let bytePair = value.midi1Value.bytePair
-            
+    
             let word = UMPWord(
                 mtAndGroup,
                 0xE0 + channel.uInt8Value,
                 bytePair.lsb,
                 bytePair.msb
             )
-            
+    
             return [word]
-            
+    
         case ._2_0:
             let word1 = UMPWord(
                 mtAndGroup,
@@ -107,9 +107,9 @@ extension MIDIEvent.PitchBend {
                 0x00, // reserved
                 0x00
             ) // reserved
-            
+    
             let word2 = value.midi2Value
-            
+    
             return [word1, word2]
         }
     }

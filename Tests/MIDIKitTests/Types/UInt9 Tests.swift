@@ -35,7 +35,7 @@ final class UInt9_Tests: XCTestCase {
         // TODO: need to find a pure Swift way to test exceptions
         // removed Obj-C helper calls that enabled catching exceptions
         // so that MIDIKit could be pure Swift
-        
+    
         // _XCTAssertThrows { [self] in
         //    _ = UInt9(_min - 1)
         // }
@@ -78,17 +78,17 @@ final class UInt9_Tests: XCTestCase {
         XCTAssertEqual(UInt9(Double(0)).intValue, 0)
         XCTAssertEqual(UInt9(Double(1)).intValue, 1)
         XCTAssertEqual(UInt9(Double(5.9)).intValue, 5)
-        
+    
         XCTAssertEqual(UInt9(Float(0)).intValue, 0)
         XCTAssertEqual(UInt9(Float(1)).intValue, 1)
         XCTAssertEqual(UInt9(Float(5.9)).intValue, 5)
-        
+    
         // overflow
-        
+    
         // TODO: need to find a pure Swift way to test exceptions
         // removed Obj-C helper calls that enabled catching exceptions
         // so that MIDIKit could be pure Swift
-        
+    
         // _XCTAssertThrows {
         //    _ = UInt9(Double(0 - 1))
         //    _ = UInt9(Float(0 - 1))
@@ -102,17 +102,17 @@ final class UInt9_Tests: XCTestCase {
     
     func testInit_BinaryFloatingPoint_Exactly() {
         // typical
-        
+    
         XCTAssertEqual(UInt9(exactly: 0.0), 0)
-        
+    
         XCTAssertEqual(UInt9(exactly: 1.0), 1)
-        
+    
         XCTAssertEqual(UInt9(exactly: Double(_max))?.intValue, _max)
-        
+    
         // overflow
-        
+    
         XCTAssertNil(UInt9(exactly: -1.0))
-        
+    
         XCTAssertNil(UInt9(exactly: Double(_max) + 1.0))
     }
 	
@@ -132,12 +132,12 @@ final class UInt9_Tests: XCTestCase {
     func testStrideable() {
         let min = UInt9(_min)
         let max = UInt9(_max)
-        
+    
         let strideBy1 = stride(from: min, through: max, by: 1)
         XCTAssertEqual(strideBy1.underestimatedCount, _max + 1)
         XCTAssertTrue(strideBy1.starts(with: [min]))
         XCTAssertEqual(strideBy1.suffix(1), [max])
-        
+    
         let range = min ... max
         XCTAssertEqual(range.count, _max + 1)
         XCTAssertEqual(range.lowerBound, min)
@@ -204,22 +204,22 @@ final class UInt9_Tests: XCTestCase {
     func testBinaryInteger_UInt9Exactly() {
         XCTAssertEqual(0b0_0000_0000.toUInt9Exactly, 0b0_0000_0000)
         XCTAssertEqual(0b1_1111_1111.toUInt9Exactly, 0b1_1111_1111)
-        
+    
         XCTAssertEqual(Int8(10).toUInt9Exactly, 10)
         XCTAssertEqual(UInt8(10).toUInt9Exactly, 10)
-        
+    
         XCTAssertEqual(Int16(10).toUInt9Exactly, 10)
         XCTAssertEqual(UInt16(10).toUInt9Exactly, 10)
-        
+    
         // nil (overflow)
-        
+    
         XCTAssertNil(0b10_0000_0000.toUInt9Exactly)
     }
     
     func testBinaryInteger_Init_UInt9() {
         XCTAssertEqual(Int(10.toUInt9), 10)
         XCTAssertEqual(Int(exactly: 10.toUInt9), 10)
-        
+    
         XCTAssertEqual(Int(exactly: 0b1_1111_1111.toUInt9), 0b1_1111_1111)
         XCTAssertNil(UInt8(exactly: 0b1_1111_1111.toUInt9))
     }
@@ -230,19 +230,19 @@ final class UInt9_Tests: XCTestCase {
         XCTAssertEqual(1.toUInt9 + 1, 2.toUInt9)
         XCTAssertEqual(1 + 1.toUInt9, 2.toUInt9)
         XCTAssertEqual(1.toUInt9 + 1.toUInt9, 2)
-        
+    
         XCTAssertEqual(2.toUInt9 - 1, 1.toUInt9)
         XCTAssertEqual(2 - 1.toUInt9, 1.toUInt9)
         XCTAssertEqual(2.toUInt9 - 1.toUInt9, 1)
-        
+    
         XCTAssertEqual(2.toUInt9 * 2, 4.toUInt9)
         XCTAssertEqual(2 * 2.toUInt9, 4.toUInt9)
         XCTAssertEqual(2.toUInt9 * 2.toUInt9, 4)
-        
+    
         XCTAssertEqual(8.toUInt9 / 2, 4.toUInt9)
         XCTAssertEqual(8 / 2.toUInt9, 4.toUInt9)
         XCTAssertEqual(8.toUInt9 / 2.toUInt9, 4)
-        
+    
         XCTAssertEqual(8.toUInt9 % 3, 2.toUInt9)
         XCTAssertEqual(8 % 3.toUInt9, 2.toUInt9)
         XCTAssertEqual(8.toUInt9 % 3.toUInt9, 2)
@@ -250,16 +250,16 @@ final class UInt9_Tests: XCTestCase {
     
     func testAssignmentOperators() {
         var val = UInt9(2)
-        
+    
         val += 5
         XCTAssertEqual(val, 7)
-        
+    
         val -= 5
         XCTAssertEqual(val, 2)
-        
+    
         val *= 3
         XCTAssertEqual(val, 6)
-        
+    
         val /= 3
         XCTAssertEqual(val, 2)
     }

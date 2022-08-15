@@ -18,7 +18,7 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
         if pointee.numPackets == 0 {
             return []
         }
-        
+    
         // Core MIDI's unsafeSequence() is not available on tvOS or watchOS at all
         let sequencedPackets = unsafeSequence().map {
             (
@@ -26,14 +26,14 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
                 timeStamp: $0.pointee.timeStamp
             )
         }
-        
+    
         var packets: [UniversalMIDIPacketData] = []
-        
+    
         // using unsafeSequence() does not guarantee that each packet
         // only contains one UMP, it may contain multiple UMPs.
         // our solution is to manually parse the words and split them
         // into individual UMPs.
-        
+    
         for sequencedPacket in sequencedPackets {
             for umpWords in parse(packetWords: sequencedPacket.words) {
                 let ump = UniversalMIDIPacketData(
@@ -43,7 +43,7 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
                 packets.append(ump)
             }
         }
-        
+    
         return packets
     }
 }
@@ -57,13 +57,13 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
     @inline(__always)
     fileprivate func parse(packetWords: [UMPWord]) -> [[UMPWord]] {
         guard !packetWords.isEmpty else { return [] }
-        
+    
         var results: [[UMPWord]] = []
-        
+    
         var curWord = 0
-        
+    
         let wordsRemain = { packetWords.count - curWord }
-        
+    
         // iterate through words, chunking into UMPs based on
         // expected number of words for the UMP Message Type
         while curWord < packetWords.count {
@@ -71,16 +71,16 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
                   let mtype = UniversalMIDIPacketData.MessageType(rawValue: mt),
                   wordsRemain() >= mtype.wordLength
             else { curWord = packetWords.count; continue }
-            
+    
             let expectedWordCount = mtype.wordLength
-            
+    
             let umpWords = packetWords[curWord ..< curWord + expectedWordCount]
-            
+    
             results.append(Array(umpWords))
-            
+    
             curWord += expectedWordCount
         }
-        
+    
         return results
     }
 }

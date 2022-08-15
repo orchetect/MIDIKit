@@ -16,14 +16,14 @@ enum kEvents {
             channel: 2,
             group: 0
         )
-        
+    
         static let noteOff: MIDIEvent = .noteOff(
             61,
             velocity: .unitInterval(0.0),
             channel: 3,
             group: 0
         )
-        
+    
         static let noteCC: MIDIEvent = .noteCC(
             note: 60,
             controller: .registered(.modWheel),
@@ -31,53 +31,53 @@ enum kEvents {
             channel: 4,
             group: 0
         )
-        
+    
         static let notePitchBend: MIDIEvent = .notePitchBend(
             note: 61,
             value: .midi2(0x8000_0000),
             channel: 4,
             group: 0
         )
-        
+    
         static let notePressure: MIDIEvent = .notePressure(
             note: 60,
             amount: .midi1(102),
             channel: 1,
             group: 0
         )
-        
+    
         static let noteManagement: MIDIEvent = .noteManagement(
             note: 61,
             flags: [.resetPerNoteControllers],
             channel: 4,
             group: 0
         )
-        
+    
         static let cc: MIDIEvent = .cc(
             11,
             value: .midi1(127),
             channel: 0,
             group: 0
         )
-        
+    
         static let programChange: MIDIEvent = .programChange(
             program: 1,
             channel: 1,
             group: 0
         )
-        
+    
         static let pitchBend: MIDIEvent = .pitchBend(
             value: .bipolarUnitInterval(0.0),
             channel: 1,
             group: 0
         )
-        
+    
         static let pressure: MIDIEvent = .pressure(
             amount: .midi1(1),
             channel: 1,
             group: 0
         )
-        
+    
         // ancillary events
         static let cc1: MIDIEvent = .cc(
             1,
@@ -85,7 +85,7 @@ enum kEvents {
             channel: 0,
             group: 0
         )
-        
+    
         static let oneOfEachEventType: [MIDIEvent] = [
             Self.noteOn,
             Self.noteOff,
@@ -109,7 +109,7 @@ enum kEvents {
         static let songSelect: MIDIEvent = .songSelect(number: 4, group: 0)
         static let unofficialBusSelect: MIDIEvent = .unofficialBusSelect(bus: 2, group: 0)
         static let tuneRequest: MIDIEvent = .tuneRequest(group: 0)
-        
+    
         static let oneOfEachEventType: [MIDIEvent] = [
             Self.timecodeQuarterFrame,
             Self.songPositionPointer,
@@ -133,7 +133,7 @@ enum kEvents {
             data: [0x20],
             group: 0
         )
-        
+    
         static let sysEx8: MIDIEvent = .sysEx8(
             manufacturer: .educational(),
             data: [0xE6],
@@ -147,7 +147,7 @@ enum kEvents {
             data: [0xE6],
             group: 0
         )
-        
+    
         static let oneOfEachEventType: [MIDIEvent] = [
             Self.sysEx7,
             Self.universalSysEx7,
@@ -163,7 +163,7 @@ enum kEvents {
         static let stop: MIDIEvent = .stop(group: 0)
         static let activeSensing: MIDIEvent = .activeSensing(group: 0)
         static let systemReset: MIDIEvent = .systemReset(group: 0)
-        
+    
         static let oneOfEachEventType: [MIDIEvent] = [
             Self.timingClock,
             Self.start,
@@ -178,7 +178,7 @@ enum kEvents {
         static let noOp: MIDIEvent = .noOp(group: 0)
         static let jrClock: MIDIEvent = .jrClock(time: 0x1234, group: 1)
         static let jrTimestamp: MIDIEvent = .jrTimestamp(time: 0x1234, group: 2)
-        
+    
         static let oneOfEachEventType: [MIDIEvent] = [
             Self.noOp,
             Self.jrClock,

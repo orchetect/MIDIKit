@@ -31,42 +31,42 @@ public protocol MIDIIOEndpointsProtocol {
 public final class MIDIEndpoints: NSObject, MIDIIOEndpointsProtocol {
     /// Weak reference to `MIDIManager`.
     internal weak var manager: MIDIManager?
-        
+    
     public internal(set) dynamic var inputs: [MIDIInputEndpoint] = []
     public internal(set) dynamic var inputsUnowned: [MIDIInputEndpoint] = []
-        
+    
     public internal(set) dynamic var outputs: [MIDIOutputEndpoint] = []
     public internal(set) dynamic var outputsUnowned: [MIDIOutputEndpoint] = []
-        
+    
     override internal init() {
         super.init()
     }
-        
+    
     internal init(manager: MIDIManager) {
         self.manager = manager
         super.init()
     }
-        
+    
     public func update() {
         inputs = getSystemDestinationEndpoints()
-            
+    
         if let manager = manager {
             let managedInputsIDs = manager.managedInputs.values
                 .compactMap { $0.uniqueID }
-                
+    
             inputsUnowned = inputs.filter {
                 !managedInputsIDs.contains($0.uniqueID)
             }
         } else {
             inputsUnowned = inputs
         }
-            
+    
         outputs = getSystemSourceEndpoints()
-            
+    
         if let manager = manager {
             let managedOutputsIDs = manager.managedOutputs.values
                 .compactMap { $0.uniqueID }
-                
+    
             outputsUnowned = outputs.filter {
                 !managedOutputsIDs.contains($0.uniqueID)
             }

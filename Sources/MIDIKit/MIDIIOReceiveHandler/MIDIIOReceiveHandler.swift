@@ -12,17 +12,17 @@
 
 public final class MIDIIOReceiveHandler: MIDIIOReceiveHandlerProtocol {
     public typealias Handler = (_ packets: [AnyMIDIPacket]) -> Void
-        
+    
     @inline(__always)
     public var handler: MIDIIOReceiveHandlerProtocol
-        
+    
     @inline(__always)
     public func packetListReceived(
         _ packets: [MIDIPacketData]
     ) {
         handler.packetListReceived(packets)
     }
-        
+    
     @available(macOS 11, iOS 14, macCatalyst 14, *)
     @inline(__always)
     public func eventListReceived(
@@ -31,7 +31,7 @@ public final class MIDIIOReceiveHandler: MIDIIOReceiveHandlerProtocol {
     ) {
         handler.eventListReceived(packets, protocol: midiProtocol)
     }
-        
+    
     public init(_ handler: MIDIIOReceiveHandlerProtocol) {
         self.handler = handler
     }
@@ -42,19 +42,19 @@ public final class MIDIIOReceiveHandler: MIDIIOReceiveHandlerProtocol {
 extension MIDIIOReceiveHandler {
     public enum Definition {
         case group([Definition])
-        
+    
         case events(
             translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
             Events.Handler
         )
-        
+    
         case eventsLogging(
             filterActiveSensingAndClock: Bool = false,
             _ handler: EventsLogging.Handler? = nil
         )
-        
+    
         case rawData(RawData.Handler)
-        
+    
         case rawDataLogging(
             filterActiveSensingAndClock: Bool = false,
             _ handler: RawDataLogging.Handler? = nil
@@ -68,7 +68,7 @@ extension MIDIIOReceiveHandler.Definition {
         case let .group(definitions):
             let handlers = definitions.map { $0.createReceiveHandler() }
             return .init(MIDIIOReceiveHandler.Group(handlers))
-            
+    
         case let .events(
             translateMIDI1NoteOnZeroVelocityToNoteOff,
             handler
@@ -79,7 +79,7 @@ extension MIDIIOReceiveHandler.Definition {
                     handler
                 )
             )
-            
+    
         case let .eventsLogging(
             filterActiveSensingAndClock,
             handler
@@ -90,10 +90,10 @@ extension MIDIIOReceiveHandler.Definition {
                     handler
                 )
             )
-            
+    
         case let .rawData(handler):
             return .init(MIDIIOReceiveHandler.RawData(handler))
-            
+    
         case let .rawDataLogging(filterActiveSensingAndClock, handler):
             return .init(
                 MIDIIOReceiveHandler.RawDataLogging(

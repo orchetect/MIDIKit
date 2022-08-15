@@ -21,7 +21,7 @@ final class SysEx8_Tests: XCTestCase {
         let event = try MIDIEvent.sysEx8(rawBytes: sourceRawBytes)
         guard case let .sysEx8(innerEvent) = event
         else { XCTFail(); return }
-        
+    
         XCTAssertEqual(innerEvent.manufacturer, .oneByte(0x7D))
         XCTAssertEqual(innerEvent.data, [0x01, 0x34, 0xE6])
         XCTAssertEqual(innerEvent.group, 0)
@@ -46,17 +46,17 @@ final class SysEx8_Tests: XCTestCase {
                    0x0A, 0x0B, 0x0C, 0xE6],
             group: 0
         )
-        
+    
         guard case let .sysEx8(innerEvent) = event
         else { XCTFail(); return }
-        
+    
         XCTAssertEqual(innerEvent.manufacturer, .threeByte(byte2: 0x00, byte3: 0x66))
         XCTAssertEqual(innerEvent.data, [0x01, 0x02, 0x03, 0x01,
                                          0x02, 0x03, 0x04, 0x05,
                                          0x06, 0x07, 0x08, 0x09,
                                          0x0A, 0x0B, 0x0C, 0xE6])
         XCTAssertEqual(innerEvent.group, 0)
-        
+    
         XCTAssertEqual(
             event.umpRawWords(protocol: ._2_0),
             [
@@ -85,10 +85,10 @@ final class SysEx8_Tests: XCTestCase {
                    0xE6],
             group: 0
         )
-        
+    
         guard case let .sysEx8(innerEvent) = event
         else { XCTFail(); return }
-        
+    
         XCTAssertEqual(innerEvent.manufacturer, .threeByte(byte2: 0x21, byte3: 0x09))
         XCTAssertEqual(innerEvent.data, [0x01, 0x02, 0x03, 0x01,
                                          0x02, 0x03, 0x04, 0x05,
@@ -99,7 +99,7 @@ final class SysEx8_Tests: XCTestCase {
                                          0x16, 0x17, 0x18, 0x19,
                                          0xE6])
         XCTAssertEqual(innerEvent.group, 0)
-        
+    
         XCTAssertEqual(
             event.umpRawWords(protocol: ._2_0),
             [
@@ -128,10 +128,10 @@ final class SysEx8_Tests: XCTestCase {
             data: [0x01, 0x02, 0x03, 0x04,
                    0x05, 0x06, 0x07, 0xE6]
         )
-        
+    
         guard case let .universalSysEx8(innerEvent) = event
         else { XCTFail(); return }
-        
+    
         XCTAssertEqual(innerEvent.universalType, .realTime)
         XCTAssertEqual(innerEvent.deviceID, 0x01)
         XCTAssertEqual(innerEvent.subID1, 0x02)
@@ -139,7 +139,7 @@ final class SysEx8_Tests: XCTestCase {
         XCTAssertEqual(innerEvent.data, [0x01, 0x02, 0x03, 0x04,
                                          0x05, 0x06, 0x07, 0xE6])
         XCTAssertEqual(innerEvent.group, 0)
-        
+    
         XCTAssertEqual(
             event.umpRawWords(protocol: ._2_0),
             [
@@ -161,10 +161,10 @@ final class SysEx8_Tests: XCTestCase {
                    0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
                    0xE6]
         )
-        
+    
         guard case let .universalSysEx8(innerEvent) = event
         else { XCTFail(); return }
-        
+    
         XCTAssertEqual(innerEvent.universalType, .realTime)
         XCTAssertEqual(innerEvent.deviceID, 0x01)
         XCTAssertEqual(innerEvent.subID1, 0x02)
@@ -173,7 +173,7 @@ final class SysEx8_Tests: XCTestCase {
                                          0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
                                          0xE6])
         XCTAssertEqual(innerEvent.group, 0)
-        
+    
         XCTAssertEqual(
             event.umpRawWords(protocol: ._2_0),
             [
@@ -201,10 +201,10 @@ final class SysEx8_Tests: XCTestCase {
                    0x13, 0x14, 0x15, 0x16, 0x17, 0x18,
                    0x19, 0xE6]
         )
-        
+    
         guard case let .universalSysEx8(innerEvent) = event
         else { XCTFail(); return }
-        
+    
         XCTAssertEqual(innerEvent.universalType, .nonRealTime)
         XCTAssertEqual(innerEvent.deviceID, 0x01)
         XCTAssertEqual(innerEvent.subID1, 0x02)
@@ -215,7 +215,7 @@ final class SysEx8_Tests: XCTestCase {
                                          0x13, 0x14, 0x15, 0x16, 0x17, 0x18,
                                          0x19, 0xE6])
         XCTAssertEqual(innerEvent.group, 0)
-        
+    
         XCTAssertEqual(
             event.umpRawWords(protocol: ._2_0),
             [
@@ -263,11 +263,11 @@ final class SysEx8_Tests: XCTestCase {
         let event1B = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
                                                       0x00, 0x41, // sysEx ID
                                                       0x01, 0x34, 0xE6]) // data bytes)
-        
+    
         let event2 = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
                                                      0x00, 0x42, // sysEx ID
                                                      0x01, 0x34, 0xE5]) // data bytes)
-        
+    
         XCTAssert(event1A == event1B)
 		
         XCTAssert(event1A != event2)
@@ -275,18 +275,18 @@ final class SysEx8_Tests: XCTestCase {
 	
     func testHashable() throws {
         // ensure instances hash correctly
-        
+    
         let event1A = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
                                                       0x00, 0x41, // sysEx ID
                                                       0x01, 0x34, 0xE6]) // data bytes)
         let event1B = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
                                                       0x00, 0x41, // sysEx ID
                                                       0x01, 0x34, 0xE6]) // data bytes)
-        
+    
         let event2 = try MIDIEvent.sysEx8(rawBytes: [0x00, // stream ID
                                                      0x00, 0x42, // sysEx ID
                                                      0x01, 0x34, 0xE5]) // data bytes)
-        
+    
         let set1: Set<MIDIEvent> = [event1A, event1B]
 		
         let set2: Set<MIDIEvent> = [event1A, event2]

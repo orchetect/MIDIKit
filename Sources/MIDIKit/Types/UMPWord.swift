@@ -41,19 +41,19 @@ extension Collection where Element == UMPWord {
     internal func umpWordsToBytes() -> [Byte] {
         var bytes: [Byte] = []
         bytes.reserveCapacity(4 * count)
-        
+    
         forEach { word in
             let byte1 = Byte((word & 0xFF00_0000) >> 24)
             let byte2 = Byte((word & 0x00FF_0000) >> 16)
             let byte3 = Byte((word & 0x0000_FF00) >> 8)
             let byte4 = Byte(word & 0x0000_00FF)
-            
+    
             bytes.append(byte1)
             bytes.append(byte2)
             bytes.append(byte3)
             bytes.append(byte4)
         }
-        
+    
         return bytes
     }
 }

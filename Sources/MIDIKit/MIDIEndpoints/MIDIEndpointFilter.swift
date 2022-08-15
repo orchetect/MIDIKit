@@ -12,10 +12,10 @@ import Foundation
 public struct MIDIEndpointFilter: Equatable, Hashable {
     /// Virtual endpoints owned by the MIDI I/O `MIDIManager` instance.
     public var owned: Bool = false
-        
+    
     /// Endpoints matching the given criteria.
     public var criteria: Set<MIDIEndpointIdentity> = []
-        
+    
     /// Endpoint filter rules.
     public init(
         owned: Bool = false,
@@ -24,7 +24,7 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
         self.owned = owned
         self.criteria = criteria
     }
-        
+    
     /// Endpoint filter rules.
     @_disfavoredOverload
     public init(
@@ -34,7 +34,7 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
         self.owned = owned
         self.criteria = Set(criteria)
     }
-        
+    
     /// Endpoint filter rules.
     @_disfavoredOverload
     public init<T: MIDIEndpoint & Hashable>(
@@ -42,11 +42,11 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
         criteria: Set<T>
     ) {
         self.owned = owned
-            
+    
         let ids = criteria.asAnyEndpoints().asIdentities()
         self.criteria = Set(ids)
     }
-        
+    
     /// Endpoint filter rules.
     @_disfavoredOverload
     public init<T: MIDIEndpoint & Hashable>(

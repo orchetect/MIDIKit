@@ -13,7 +13,7 @@ internal struct MIDIIOObjectCache {
     var devices: [MIDIDevice]
     var inputEndpoints: [MIDIInputEndpoint]
     var outputEndpoints: [MIDIOutputEndpoint]
-        
+    
     init(from manager: MIDIManager) {
         devices = manager.devices.devices
         inputEndpoints = manager.endpoints.inputs

@@ -22,7 +22,7 @@ final class MIDIEvent_CC_Tests: XCTestCase {
                 value: .midi1(64),
                 channel: 0
             )
-            
+    
             XCTAssertEqual(
                 cc.midi1RawBytes(),
                 [0xB0, ccNum.uInt8Value, 64]
@@ -33,13 +33,13 @@ final class MIDIEvent_CC_Tests: XCTestCase {
     func testCCEnum() {
         for ccNum: UInt7 in 0 ... 127 {
             let controller = MIDIEvent.CC.Controller(number: ccNum)
-            
+    
             let cc: MIDIEvent = .cc(
                 controller,
                 value: .midi1(64),
                 channel: 0
             )
-            
+    
             XCTAssertEqual(
                 cc.midi1RawBytes(),
                 [0xB0, ccNum.uInt8Value, 64]

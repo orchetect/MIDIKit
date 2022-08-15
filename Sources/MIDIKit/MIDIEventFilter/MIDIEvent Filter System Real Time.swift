@@ -18,7 +18,7 @@ extension MIDIEvent {
              .activeSensing,
              .systemReset:
             return true
-            
+    
         default:
             return false
         }
@@ -46,7 +46,7 @@ extension MIDIEvent {
         for eventType in sysRealTimeTypes {
             if isSystemRealTime(ofType: eventType) { return true }
         }
-        
+    
         return false
     }
 }
@@ -60,34 +60,34 @@ extension Collection where Element == MIDIEvent {
         switch types {
         case .only:
             return filter { $0.isSystemRealTime }
-            
+    
         case let .onlyType(specificType):
             return filter { $0.isSystemRealTime(ofType: specificType) }
-            
+    
         case let .onlyTypes(specificTypes):
             return filter { $0.isSystemRealTime(ofTypes: specificTypes) }
-            
+    
         case let .keepType(specificType):
             return filter {
                 guard $0.isSystemRealTime else { return true }
                 return $0.isSystemRealTime(ofType: specificType)
             }
-            
+    
         case let .keepTypes(specificTypes):
             return filter {
                 guard $0.isSystemRealTime else { return true }
                 return $0.isSystemRealTime(ofTypes: specificTypes)
             }
-            
+    
         case .drop:
             return filter { !$0.isSystemRealTime }
-            
+    
         case let .dropType(specificType):
             return filter {
                 guard $0.isSystemRealTime else { return true }
                 return !$0.isSystemRealTime(ofType: specificType)
             }
-            
+    
         case let .dropTypes(specificTypes):
             return filter {
                 guard $0.isSystemRealTime else { return true }

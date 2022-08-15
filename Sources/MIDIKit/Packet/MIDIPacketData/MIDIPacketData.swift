@@ -10,11 +10,11 @@
 public struct MIDIPacketData {
     @inline(__always)
     let bytes: [Byte]
-        
+    
     /// Core MIDI packet timestamp
     @inline(__always)
     let timeStamp: CoreMIDITimeStamp
-        
+    
     @inline(__always)
     public init(
         bytes: [Byte],
@@ -39,21 +39,21 @@ extension MIDIPacketData {
         _ midiPacketPtr: UnsafePointer<MIDIPacket>
     ) -> MIDIPacketData {
         let packetDataCount = Int(midiPacketPtr.pointee.length)
-        
+    
         guard packetDataCount > 0 else {
             return MIDIPacketData(
                 bytes: [],
                 timeStamp: midiPacketPtr.pointee.timeStamp
             )
         }
-        
+    
         // Access the raw memory instead of using the .pointee
         // This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
         let rawMIDIPacketDataPtr = UnsafeRawBufferPointer(
             start: UnsafeRawPointer(midiPacketPtr) + midiPacketDataOffset,
             count: packetDataCount
         )
-        
+    
         return MIDIPacketData(
             bytes: [Byte](rawMIDIPacketDataPtr),
             timeStamp: midiPacketPtr.pointee.timeStamp

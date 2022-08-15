@@ -30,12 +30,12 @@ extension ContentView {
 extension ContentView {
     struct SendMIDIEventsView: View {
         @EnvironmentObject var midiManager: MIDIManager
-        
+    
         @Binding var midiGroup: UInt4
         var sendEvent: (MIDIEvent) -> Void
-        
+    
         @State var midiChannel: UInt4 = 0
-        
+    
         var body: some View {
             GroupBox(label: Text("Send MIDI Events")) {
                 VStack(alignment: .center, spacing: 8) {
@@ -44,19 +44,19 @@ extension ContentView {
                             ForEach(0 ..< 15 + 1, id: \.self) {
                                 let groupNum = $0 + 1
                                 let groupNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
-                                
+    
                                 Text("\(groupNum) (\(groupNumHex))")
                                     .tag(UInt4($0))
                             }
                         }
                         .frame(maxWidth: 200)
-                        
+    
                         if midiManager.preferredAPI == .legacyCoreMIDI {
                             Text("(Universal MIDI Packet not usable with old API)")
                         }
                     }
                     .disabled(midiManager.preferredAPI == .legacyCoreMIDI)
-                    
+    
                     HStack(alignment: .top) {
                         GroupBox(label: Text("Channel Voice")) {
                             VStack {
@@ -67,16 +67,16 @@ extension ContentView {
                                             padTo: 1,
                                             prefix: true
                                         )
-                                        
+    
                                         Text("\(channelNum) (\(channelNumHex))")
                                             .tag(UInt4($0))
                                     }
                                 }
                                 .frame(maxWidth: 200)
-                                
+    
                                 Spacer()
                                     .frame(height: 10)
-                                
+    
                                 HStack {
                                     SendMIDIEventsChannelVoiceView(
                                         midiGroup: $midiGroup,
@@ -94,7 +94,7 @@ extension ContentView {
                             }
                             .frame(width: 280 + 280 + 40, height: 270)
                         }
-                        
+    
                         SendMIDIEventsSystemExclusiveView(midiGroup: $midiGroup) {
                             sendEvent($0)
                         }
@@ -117,9 +117,9 @@ extension ContentView {
         @Binding var midiGroup: UInt4
         @Binding var midiChannel: UInt4
         var sendEvent: (MIDIEvent) -> Void
-        
+    
         @State var chanVoiceCC: MIDIEvent.CC.Controller = .modWheel
-        
+    
         var body: some View {
             GroupBox(label: Text("MIDI 1.0 and MIDI 2.0")) {
                 VStack(alignment: .center, spacing: 8) {
@@ -131,7 +131,7 @@ extension ContentView {
                             group: midiGroup
                         ))
                     } label: { Text("Note On") }
-                    
+    
                     Button {
                         sendEvent(.noteOff(
                             60,
@@ -140,7 +140,7 @@ extension ContentView {
                             group: midiGroup
                         ))
                     } label: { Text("Note Off") }
-                    
+    
                     Button {
                         sendEvent(.notePressure(
                             note: 60,
@@ -149,7 +149,7 @@ extension ContentView {
                             group: midiGroup
                         ))
                     } label: { Text("Note Pressure") }
-                    
+    
                     HStack(alignment: .center, spacing: 4) {
                         Button {
                             sendEvent(.cc(
@@ -159,20 +159,20 @@ extension ContentView {
                                 group: midiGroup
                             ))
                         } label: { Text("CC") }
-                        
+    
                         Picker("", selection: $chanVoiceCC) {
                             ForEach(MIDIEvent.CC.Controller.allCases, id: \.self) {
                                 let ccInt = $0.number.intValue
                                 let ccName = "\($0.name)"
                                 let ccHex = ccInt.hex.stringValue(padTo: 2, prefix: true)
-                                
+    
                                 Text("\(ccInt) - \(ccName) (\(ccHex))")
                                     .tag($0)
                             }
                         }
                         .frame(width: 200)
                     }
-                    
+    
                     HStack {
                         Button {
                             sendEvent(.programChange(
@@ -182,7 +182,7 @@ extension ContentView {
                                 group: midiGroup
                             ))
                         } label: { Text("Program Change") }
-                        
+    
                         Button {
                             sendEvent(.programChange(
                                 program: 10,
@@ -192,7 +192,7 @@ extension ContentView {
                             ))
                         } label: { Text("with Bank Select") }
                     }
-                    
+    
                     Button {
                         sendEvent(.pressure(
                             amount: .midi1(64),
@@ -200,7 +200,7 @@ extension ContentView {
                             group: midiGroup
                         ))
                     } label: { Text("Channel Pressure") }
-                    
+    
                     Button {
                         sendEvent(.pitchBend(
                             value: .midi1(.midpoint),
@@ -219,9 +219,9 @@ extension ContentView {
         @Binding var midiGroup: UInt4
         @Binding var midiChannel: UInt4
         var sendEvent: (MIDIEvent) -> Void
-        
+    
         @State var chanVoiceCC: MIDIEvent.CC.Controller = .modWheel
-        
+    
         var body: some View {
             GroupBox(label: Text("MIDI 2.0")) {
                 VStack(alignment: .center, spacing: 8) {
@@ -234,7 +234,7 @@ extension ContentView {
                             group: midiGroup
                         ))
                     } label: { Text("Note On with Attribute") }
-                    
+    
                     Button {
                         sendEvent(.noteOff(
                             60,
@@ -244,7 +244,7 @@ extension ContentView {
                             group: midiGroup
                         ))
                     } label: { Text("Note Off with Attribute") }
-                    
+    
                     Button {
                         sendEvent(.noteCC(
                             note: 60,
@@ -254,7 +254,7 @@ extension ContentView {
                             group: midiGroup
                         ))
                     } label: { Text("Per-Note CC (Registered)") }
-                    
+    
                     Button {
                         sendEvent(.noteCC(
                             note: 60,
@@ -264,7 +264,7 @@ extension ContentView {
                             group: midiGroup
                         ))
                     } label: { Text("Per-Note CC (Assignable)") }
-                    
+    
                     Button {
                         sendEvent(.notePitchBend(
                             note: 60,
@@ -273,7 +273,7 @@ extension ContentView {
                             group: midiGroup
                         ))
                     } label: { Text("Per-Note PitchBend") }
-                    
+    
                     HStack {
                         Button {
                             sendEvent(.noteManagement(
@@ -283,7 +283,7 @@ extension ContentView {
                                 group: midiGroup
                             ))
                         } label: { Text("Note Management") }
-                        
+    
                         Button {
                             sendEvent(.noteManagement(
                                 note: 60,
@@ -292,7 +292,7 @@ extension ContentView {
                                 group: midiGroup
                             ))
                         } label: { Text("D") }
-                        
+    
                         Button {
                             sendEvent(.noteManagement(
                                 note: 60,
@@ -301,7 +301,7 @@ extension ContentView {
                                 group: midiGroup
                             ))
                         } label: { Text("S") }
-                        
+    
                         Button {
                             sendEvent(.noteManagement(
                                 note: 60,
@@ -324,14 +324,14 @@ extension ContentView {
     struct SendMIDIEventsSystemExclusiveView: View {
         @Binding var midiGroup: UInt4
         var sendEvent: (MIDIEvent) -> Void
-        
+    
         var body: some View {
             GroupBox(label: Text("System Exclusive")) {
                 VStack(alignment: .center, spacing: 8) {
                     GroupBox(label: Text("SysEx7")) {
                         HStack {
                             Text("Bytes:")
-                            
+    
                             Button {
                                 sendEvent(.sysEx7(
                                     manufacturer: .educational(),
@@ -339,7 +339,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("0") }
-                            
+    
                             Button {
                                 sendEvent(.sysEx7(
                                     manufacturer: .educational(),
@@ -347,7 +347,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("2") }
-                            
+    
                             Button {
                                 sendEvent(.sysEx7(
                                     manufacturer: .educational(),
@@ -355,7 +355,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("5") }
-                            
+    
                             Button {
                                 sendEvent(.sysEx7(
                                     manufacturer: .educational(),
@@ -371,7 +371,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("7") }
-                            
+    
                             Button {
                                 sendEvent(.sysEx7(
                                     manufacturer: .educational(),
@@ -396,11 +396,11 @@ extension ContentView {
                         }
                         .frame(width: 220)
                     }
-                    
+    
                     GroupBox(label: Text("Universal SysEx7")) {
                         HStack {
                             Text("Bytes:")
-                            
+    
                             Button {
                                 sendEvent(.universalSysEx7(
                                     universalType: .realTime,
@@ -411,7 +411,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("0") }
-                            
+    
                             Button {
                                 sendEvent(.universalSysEx7(
                                     universalType: .nonRealTime,
@@ -422,7 +422,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("2") }
-                            
+    
                             Button {
                                 sendEvent(.universalSysEx7(
                                     universalType: .realTime,
@@ -433,7 +433,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("4") }
-                            
+    
                             Button {
                                 sendEvent(.universalSysEx7(
                                     universalType: .nonRealTime,
@@ -458,11 +458,11 @@ extension ContentView {
                         }
                         .frame(width: 220)
                     }
-                    
+    
                     GroupBox(label: Text("SysEx8 (MIDI 2.0)")) {
                         HStack {
                             Text("Bytes:")
-                            
+    
                             Button {
                                 sendEvent(.sysEx8(
                                     manufacturer: .educational(),
@@ -470,7 +470,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("0") }
-                            
+    
                             Button {
                                 sendEvent(.sysEx8(
                                     manufacturer: .educational(),
@@ -478,7 +478,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("2") }
-                            
+    
                             Button {
                                 sendEvent(.sysEx8(
                                     manufacturer: .educational(),
@@ -486,7 +486,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("5") }
-                            
+    
                             Button {
                                 sendEvent(.sysEx8(
                                     manufacturer: .educational(),
@@ -502,7 +502,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("7") }
-                            
+    
                             Button {
                                 sendEvent(.sysEx8(
                                     manufacturer: .educational(),
@@ -527,11 +527,11 @@ extension ContentView {
                         }
                         .frame(width: 220)
                     }
-                    
+    
                     GroupBox(label: Text("Universal SysEx8 (MIDI 2.0)")) {
                         HStack {
                             Text("Bytes:")
-                            
+    
                             Button {
                                 sendEvent(.universalSysEx8(
                                     universalType: .realTime,
@@ -542,7 +542,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("0") }
-                            
+    
                             Button {
                                 sendEvent(.universalSysEx8(
                                     universalType: .nonRealTime,
@@ -553,7 +553,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("2") }
-                            
+    
                             Button {
                                 sendEvent(.universalSysEx8(
                                     universalType: .realTime,
@@ -564,7 +564,7 @@ extension ContentView {
                                     group: midiGroup
                                 ))
                             } label: { Text("4") }
-                            
+    
                             Button {
                                 sendEvent(.universalSysEx8(
                                     universalType: .nonRealTime,
@@ -599,7 +599,7 @@ extension ContentView {
     struct SendMIDIEventsSystemCommonView: View {
         @Binding var midiGroup: UInt4
         var sendEvent: (MIDIEvent) -> Void
-        
+    
         var body: some View {
             GroupBox(label: Text("System Common")) {
                 VStack(alignment: .center, spacing: 8) {
@@ -609,28 +609,28 @@ extension ContentView {
                             group: midiGroup
                         ))
                     } label: { Text("Timecode Quarter-Frame") }
-                    
+    
                     Button {
                         sendEvent(.songPositionPointer(
                             midiBeat: 8,
                             group: midiGroup
                         ))
                     } label: { Text("Song Position Pointer") }
-                    
+    
                     Button {
                         sendEvent(.songSelect(
                             number: 4,
                             group: midiGroup
                         ))
                     } label: { Text("Song Select") }
-                    
+    
                     Button {
                         sendEvent(.unofficialBusSelect(
                             bus: 2,
                             group: midiGroup
                         ))
                     } label: { Text("Bus Select (Unofficial)") }
-                    
+    
                     Button {
                         sendEvent(.tuneRequest(group: midiGroup))
                     } label: { Text("Tune Request") }
@@ -644,30 +644,30 @@ extension ContentView {
     struct SendMIDIEventsSystemRealTimeView: View {
         @Binding var midiGroup: UInt4
         var sendEvent: (MIDIEvent) -> Void
-        
+    
         var body: some View {
             GroupBox(label: Text("System Real Time")) {
                 VStack(alignment: .center, spacing: 8) {
                     Button {
                         sendEvent(.timingClock(group: midiGroup))
                     } label: { Text("Timing Clock") }
-                    
+    
                     Button {
                         sendEvent(.start(group: midiGroup))
                     } label: { Text("Start") }
-                    
+    
                     Button {
                         sendEvent(.continue(group: midiGroup))
                     } label: { Text("Continue") }
-                    
+    
                     Button {
                         sendEvent(.stop(group: midiGroup))
                     } label: { Text("Stop") }
-                    
+    
                     Button {
                         sendEvent(.activeSensing(group: midiGroup))
                     } label: { Text("Active Sensing") }
-                    
+    
                     Button {
                         sendEvent(.systemReset(group: midiGroup))
                     } label: { Text("System Reset") }
@@ -696,14 +696,14 @@ extension ContentView {
                                         alignment: .center
                                     )
                             }
-                            
+    
                             GroupBox(label: Text("Source: Connection")) {
                                 Picker("", selection: $midiInputConnectionEndpoint) {
                                     Text("None")
                                         .tag(MIDIOutputEndpoint?.none)
-                                    
+    
                                     VStack { Divider().padding(.leading) }
-                                    
+    
                                     ForEach(midiManager.endpoints.outputs) {
                                         Text("🎹 " + ($0.displayName))
                                             .tag(MIDIOutputEndpoint?.some($0))
@@ -721,7 +721,7 @@ extension ContentView {
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     }
                     .frame(height: 80)
-                    
+    
                     Text("MIDI Events received will be logged to the console in a debug build.")
                         .lineLimit(nil)
                         .multilineTextAlignment(.center)

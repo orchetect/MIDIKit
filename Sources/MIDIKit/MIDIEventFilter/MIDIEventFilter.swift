@@ -11,7 +11,7 @@ public enum MIDIEventFilter {
     case sysCommon(MIDIEvent.SysCommonTypes)
     case sysRealTime(MIDIEvent.SysRealTimeTypes)
     case utility(MIDIEvent.UtilityTypes)
-        
+    
     case group(UInt4)
     case groups([UInt4])
 }
@@ -22,22 +22,22 @@ extension MIDIEventFilter {
         switch self {
         case let .chanVoice(types):
             return events.filter(chanVoice: types)
-            
+    
         case let .sysEx(types):
             return events.filter(sysEx: types)
-            
+    
         case let .sysCommon(types):
             return events.filter(sysCommon: types)
-            
+    
         case let .sysRealTime(types):
             return events.filter(sysRealTime: types)
-            
+    
         case let .utility(types):
             return events.filter(utility: types)
-            
+    
         case let .group(group):
             return events.filter(group: group)
-            
+    
         case let .groups(groups):
             return events.filter(groups: groups)
         }

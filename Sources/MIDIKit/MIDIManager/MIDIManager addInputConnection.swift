@@ -38,11 +38,11 @@ extension MIDIManager {
                 midiManager: self,
                 api: preferredAPI
             )
-            
+    
             // store the connection object in the manager,
             // even if subsequent connection fails
             managedInputConnections[tag] = newCD
-            
+    
             try newCD.listen(in: self)
             try newCD.connect(in: self)
         }

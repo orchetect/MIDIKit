@@ -26,7 +26,7 @@ public enum MIDIIdentifierPersistence {
     ///
     /// In the event a collision with an existing unique ID in the system, a new random ID will be generated until there are no collisions.
     case unmanaged(MIDIIdentifier)
-        
+    
     /// Managed with UserDefaults backing (recommended).
     /// The MIDI endpoint's unique ID is managed automatically and persistently stored in `UserDefaults`. The `standard` suite is used by default unless specified.
     ///
@@ -60,28 +60,28 @@ extension MIDIIdentifierPersistence {
         switch self {
         case .adHoc:
             return nil
-            
+    
         case let .unmanaged(uniqueID: uniqueID):
             return uniqueID
-            
+    
         case let .userDefaultsManaged(key: key, suite: suite):
             // test to see if key does not exist first
             // otherwise just calling integer(forKey:) returns 0 if key does not exist
             guard suite.object(forKey: key) != nil
             else { return nil }
-            
+    
             let readInt = suite.integer(forKey: key)
-            
+    
             guard let int32Exactly = Int32(exactly: readInt)
             else { return nil }
-            
+    
             return MIDIIdentifier(int32Exactly)
-            
+    
         case .managedStorage(readHandler: let readHandler, storeHandler: _):
             if let readInt = readHandler() {
                 return MIDIIdentifier(readInt)
             }
-            
+    
             return nil
         }
     }
@@ -91,13 +91,13 @@ extension MIDIIdentifierPersistence {
         switch self {
         case .adHoc:
             return // no storage
-        
+    
         case .unmanaged(uniqueID: _):
             return // no storage
-        
+    
         case let .userDefaultsManaged(key: key, suite: suite):
             suite.setValue(newValue, forKey: key)
-            
+    
         case .managedStorage(readHandler: _, storeHandler: let storeHandler):
             storeHandler(newValue)
         }

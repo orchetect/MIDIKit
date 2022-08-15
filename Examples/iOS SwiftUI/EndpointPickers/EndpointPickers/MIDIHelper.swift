@@ -21,14 +21,14 @@ class MIDIHelper: ObservableObject {
             print("MIDIManager is missing.")
             return
         }
-        
+    
         do {
             print("Starting MIDI services.")
             try midiManager.start()
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         do {
             try midiManager.addInputConnection(
                 toOutputs: [],
@@ -39,7 +39,7 @@ class MIDIHelper: ObservableObject {
                     }
                 }
             )
-            
+    
             try midiManager.addOutputConnection(
                 toInputs: [],
                 tag: ConnectionTags.midiOut
@@ -57,7 +57,7 @@ class MIDIHelper: ObservableObject {
     
     public func midiInUpdateConnection(selectedUniqueID: MIDIIdentifier) {
         guard let midiInputConnection = midiInputConnection else { return }
-        
+    
         if selectedUniqueID == .invalidMIDIIdentifier {
             midiInputConnection.removeAllOutputs()
         } else {
@@ -76,7 +76,7 @@ class MIDIHelper: ObservableObject {
     
     public func midiOutUpdateConnection(selectedUniqueID: MIDIIdentifier) {
         guard let midiOutputConnection = midiOutputConnection else { return }
-        
+    
         if selectedUniqueID == .invalidMIDIIdentifier {
             midiOutputConnection.removeAllInputs()
         } else {
@@ -116,7 +116,7 @@ class MIDIHelper: ObservableObject {
                 }
             }
         )
-        
+    
         try? midiManager?.addInput(
             name: "Test In 2",
             tag: ConnectionTags.midiTestIn2,
@@ -127,13 +127,13 @@ class MIDIHelper: ObservableObject {
                 }
             }
         )
-        
+    
         try? midiManager?.addOutput(
             name: "Test Out 1",
             tag: ConnectionTags.midiTestOut1,
             uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestOut1)
         )
-        
+    
         try? midiManager?.addOutput(
             name: "Test Out 2",
             tag: ConnectionTags.midiTestOut2,

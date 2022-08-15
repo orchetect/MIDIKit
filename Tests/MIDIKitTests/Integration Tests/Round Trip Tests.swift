@@ -23,42 +23,42 @@ open class RoundTrip_Tests_Base: XCTestCase {
     
     override open func setUp() {
         print("RoundTrip_Tests setUp() starting")
-        
+    
         wait(sec: 0.5)
-        
+    
         manager = .init(
             clientName: "MIDIKit_IO_RoundTrip_Input_Tests",
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-        
+    
         // start midi client
-        
+    
         do {
             try manager.start()
         } catch {
             XCTFail("Could not start MIDIManager. \(error.localizedDescription)")
             return
         }
-        
+    
         wait(sec: 0.3)
-        
+    
         createPorts()
-        
+    
         // reset local results
-        
+    
         receivedEvents = []
-        
+    
         wait(sec: 0.5)
-        
+    
         print("RoundTrip_Tests setUp() done")
     }
     
     func createPorts() {
         print("RoundTrip_Tests createPorts() starting")
-        
+    
         // add new output endpoint
-        
+    
         do {
             try manager.addOutput(
                 name: "MIDIKit Round Trip Tests Output",
@@ -70,21 +70,21 @@ open class RoundTrip_Tests_Base: XCTestCase {
         } catch {
             XCTFail(error.localizedDescription); return
         }
-        
+    
         guard let output = manager.managedOutputs[outputTag] else {
             XCTFail("Could not reference managed output.")
             return
         }
-        
+    
         guard let outputID = output.uniqueID else {
             XCTFail("Could not reference managed output.")
             return
         }
-        
+    
         wait(sec: 0.2)
-        
+    
         // output connection
-        
+    
         do {
             try manager.addInputConnection(
                 toOutputs: [.uniqueID(outputID)],
@@ -99,26 +99,26 @@ open class RoundTrip_Tests_Base: XCTestCase {
         } catch {
             XCTFail(error.localizedDescription); return
         }
-        
+    
         XCTAssertNotNil(manager.managedInputConnections[inputConnectionTag])
-        
+    
         print("RoundTrip_Tests createPorts() done")
     }
     
     override open func tearDown() {
         print("RoundTrip_Tests tearDown starting")
-        
+    
         // remove endpoints
-        
+    
         manager.remove(.output, .withTag(outputTag))
         XCTAssertNil(manager.managedOutputs[outputTag])
-        
+    
         manager.remove(.inputConnection, .withTag(inputConnectionTag))
         XCTAssertNil(manager.managedInputConnections[inputConnectionTag])
-        
+    
         manager = nil
         wait(sec: 0.3)
-        
+    
         print("RoundTrip_Tests tearDown done")
     }
     
@@ -126,16 +126,16 @@ open class RoundTrip_Tests_Base: XCTestCase {
     
     func runRapidMIDIEvents() throws {
         print("RoundTrip_Tests runRapidMIDIEvents() starting")
-        
+    
         guard let output = manager.managedOutputs[outputTag] else {
             XCTFail("Could not reference managed output.")
             return
         }
-        
+    
         // generate events list
-        
+    
         var sourceEvents: [MIDIEvent] = []
-        
+    
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .noteOn(
                 $0.toUInt7,
@@ -143,7 +143,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                 channel: (0 ... 0xF).randomElement()!
             )
         })
-        
+    
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .noteOff(
                 $0.toUInt7,
@@ -151,7 +151,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                 channel: (0 ... 0xF).randomElement()!
             )
         })
-        
+    
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .cc(
                 $0.toUInt7,
@@ -159,7 +159,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                 channel: (0 ... 0xF).randomElement()!
             )
         })
-        
+    
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .notePressure(
                 note: $0.toUInt7,
@@ -167,28 +167,28 @@ open class RoundTrip_Tests_Base: XCTestCase {
                 channel: (0 ... 0xF).randomElement()!
             )
         })
-        
+    
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .programChange(
                 program: $0.toUInt7,
                 channel: (0 ... 0xF).randomElement()!
             )
         })
-        
+    
         sourceEvents.append(contentsOf: (0 ... 100).map { _ in
             .pitchBend(
                 value: .midi1((0 ... 16383).randomElement()!.toUInt14),
                 channel: (0 ... 0xF).randomElement()!
             )
         })
-        
+    
         sourceEvents.append(contentsOf: (0 ... 127).map {
             .pressure(
                 amount: .midi1($0.toUInt7),
                 channel: (0 ... 0xF).randomElement()!
             )
         })
-        
+    
         sourceEvents.append(
             .sysEx7(
                 manufacturer: .educational(),
@@ -197,7 +197,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                        0x0D]
             )
         )
-        
+    
         sourceEvents.append(
             .universalSysEx7(
                 universalType: .realTime,
@@ -209,7 +209,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                        0x0D]
             )
         )
-        
+    
         // add MIDI 2.0-only events if applicable
         if output.api == .newCoreMIDI(._2_0) {
             sourceEvents.append(contentsOf: (0 ... 127).map {
@@ -221,7 +221,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                     group: (0 ... UInt4.max).randomElement()!
                 )
             })
-            
+    
             sourceEvents.append(contentsOf: (0 ... 127).map {
                 .noteOff(
                     $0.toUInt7,
@@ -231,7 +231,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                     group: (0 ... UInt4.max).randomElement()!
                 )
             })
-            
+    
             sourceEvents.append(contentsOf: (0 ... 127).map {
                 .noteCC(
                     note: $0.toUInt7,
@@ -241,7 +241,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                     group: (0 ... UInt4.max).randomElement()!
                 )
             })
-            
+    
             sourceEvents.append(contentsOf: (0 ... 127).map {
                 .notePitchBend(
                     note: $0.toUInt7,
@@ -250,7 +250,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                     group: (0 ... UInt4.max).randomElement()!
                 )
             })
-            
+    
             sourceEvents.append(contentsOf: (0 ... 127).map {
                 .noteManagement(
                     note: $0.toUInt7,
@@ -259,7 +259,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                     group: (0 ... UInt4.max).randomElement()!
                 )
             })
-            
+    
             sourceEvents.append(
                 .sysEx8(
                     manufacturer: .educational(),
@@ -268,7 +268,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                            0xE6]
                 )
             )
-            
+    
             sourceEvents.append(
                 .universalSysEx8(
                     universalType: .realTime,
@@ -280,45 +280,45 @@ open class RoundTrip_Tests_Base: XCTestCase {
                            0xE6]
                 )
             )
-            
+    
             sourceEvents.append(contentsOf: (0x0 ... 0xF).map {
                 .noOp(group: $0)
             })
-            
+    
             sourceEvents.append(contentsOf: (0x0 ... 0xF).map {
                 .jrClock(time: 0x4321, group: $0)
             })
-            
+    
             sourceEvents.append(contentsOf: (0x0 ... 0xF).map {
                 .jrTimestamp(time: 0x4321, group: $0)
             })
         }
-        
+    
         sourceEvents.shuffle()
-        
+    
         // rapidly transmit events from output to input connection
         // to ensure rigor
-        
+    
         receivedEvents.reserveCapacity(sourceEvents.count)
-        
+    
         // send several events at once to test packing
         // multiple packets into a single MIDIPacketList / MIDIEventList
         for eventGroup in sourceEvents.split(every: 2) {
             try output.send(events: Array(eventGroup))
         }
-        
+    
         wait(sec: 0.5)
-        
+    
         // ensure all events are received correctly
-        
+    
         XCTAssertEqual(sourceEvents.count, receivedEvents.count)
-        
+    
         let isEventsEqual = sourceEvents == receivedEvents
-        
+    
         if !isEventsEqual {
             XCTFail("Source events and received events are not equal.")
             print("Sent \(sourceEvents.count) events, received \(receivedEvents.count) events.")
-            
+    
             // itemize which source event(s) are missing from the received events, if any.
             // this may reveal events that failed silently, were eaten by Core MIDI, or could not be parsed by the receiver.
             sourceEvents.forEach {
@@ -326,7 +326,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                     print("Missing from received events:", $0)
                 }
             }
-            
+    
             // itemize which received events do not exist in source event(s), if any.
             // this may catch any potentially malformed events.
             receivedEvents.forEach {
@@ -335,7 +335,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
                 }
             }
         }
-        
+    
         print("RoundTrip_Tests runRapidMIDIEvents() done")
     }
 }

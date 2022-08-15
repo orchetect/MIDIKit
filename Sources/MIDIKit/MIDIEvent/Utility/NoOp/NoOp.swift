@@ -14,7 +14,7 @@ extension MIDIEvent {
     public struct NoOp: Equatable, Hashable {
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
-        
+    
         public init(group: UInt4 = 0x0) {
             self.group = group
         }
@@ -44,20 +44,20 @@ extension MIDIEvent.NoOp {
     @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: UniversalMIDIPacketData.MessageType = .utility
-        
+    
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
-        
+    
         let utilityStatus: UniversalMIDIPacketData.UtilityStatusField = .noOp
-        
+    
         // MIDI 2.0 only
-        
+    
         let word = UMPWord(
             mtAndGroup,
             (utilityStatus.rawValue.uInt8Value << 4) + 0x0,
             0x00,
             0x00
         )
-        
+    
         return [word]
     }
 }

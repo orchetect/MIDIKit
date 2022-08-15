@@ -35,7 +35,7 @@ final class UInt25_Tests: XCTestCase {
         // TODO: need to find a pure Swift way to test exceptions
         // removed Obj-C helper calls that enabled catching exceptions
         // so that MIDIKit could be pure Swift
-        
+    
         // _XCTAssertThrows {
         //    _ = UInt25(0 - 1)
         // }
@@ -78,17 +78,17 @@ final class UInt25_Tests: XCTestCase {
         XCTAssertEqual(UInt25(Double(0)).intValue, 0)
         XCTAssertEqual(UInt25(Double(1)).intValue, 1)
         XCTAssertEqual(UInt25(Double(5.9)).intValue, 5)
-        
+    
         XCTAssertEqual(UInt25(Float(0)).intValue, 0)
         XCTAssertEqual(UInt25(Float(1)).intValue, 1)
         XCTAssertEqual(UInt25(Float(5.9)).intValue, 5)
-        
+    
         // overflow
-        
+    
         // TODO: need to find a pure Swift way to test exceptions
         // removed Obj-C helper calls that enabled catching exceptions
         // so that MIDIKit could be pure Swift
-        
+    
         // _XCTAssertThrows {
         //    _ = UInt25(Double(0 - 1))
         //    _ = UInt25(Float(0 - 1))
@@ -102,17 +102,17 @@ final class UInt25_Tests: XCTestCase {
     
     func testInit_BinaryFloatingPoint_Exactly() {
         // typical
-        
+    
         XCTAssertEqual(UInt25(exactly: 0.0), 0)
-        
+    
         XCTAssertEqual(UInt25(exactly: 1.0), 1)
-        
+    
         XCTAssertEqual(UInt25(exactly: Double(_max))?.intValue, _max)
-        
+    
         // overflow
-        
+    
         XCTAssertNil(UInt25(exactly: -1.0))
-        
+    
         XCTAssertNil(UInt25(exactly: Double(_max) + 1.0))
     }
 	
@@ -132,14 +132,14 @@ final class UInt25_Tests: XCTestCase {
     func testStrideable() {
         let min = UInt25(_min)
         let max = UInt25(_max)
-        
+    
         let strideBy1 = stride(from: min, through: max, by: 1)
         _ = strideBy1
         // skip this, it takes way too long to compute ...
         // XCTAssertEqual(strideBy1.underestimatedCount, _max + 1)
         // XCTAssertTrue(strideBy1.starts(with: [min]))
         // XCTAssertEqual(strideBy1.suffix(1), [max])
-        
+    
         let range = min ... max
         XCTAssertEqual(range.count, _max + 1)
         XCTAssertEqual(range.lowerBound, min)
@@ -212,22 +212,22 @@ final class UInt25_Tests: XCTestCase {
             0b1_1111_1111_1111_1111_1111_1111.toUInt25Exactly,
             0b1_1111_1111_1111_1111_1111_1111
         )
-        
+    
         XCTAssertEqual(Int8(10).toUInt25Exactly, 10)
         XCTAssertEqual(UInt8(10).toUInt25Exactly, 10)
-        
+    
         XCTAssertEqual(Int16(10).toUInt25Exactly, 10)
         XCTAssertEqual(UInt16(10).toUInt25Exactly, 10)
-        
+    
         // nil (overflow)
-        
+    
         XCTAssertNil(0b10_0000_0000_0000_0000_0000_0000.toUInt25Exactly)
     }
     
     func testBinaryInteger_Init_UInt25() {
         XCTAssertEqual(Int(10.toUInt25), 10)
         XCTAssertEqual(Int(exactly: 10.toUInt25), 10)
-        
+    
         XCTAssertEqual(
             Int(exactly: 0b1_1111_1111_1111_1111_1111_1111.toUInt25),
             0b1_1111_1111_1111_1111_1111_1111
@@ -241,19 +241,19 @@ final class UInt25_Tests: XCTestCase {
         XCTAssertEqual(1.toUInt25 + 1, 2.toUInt25)
         XCTAssertEqual(1 + 1.toUInt25, 2.toUInt25)
         XCTAssertEqual(1.toUInt25 + 1.toUInt25, 2)
-        
+    
         XCTAssertEqual(2.toUInt25 - 1, 1.toUInt25)
         XCTAssertEqual(2 - 1.toUInt25, 1.toUInt25)
         XCTAssertEqual(2.toUInt25 - 1.toUInt25, 1)
-        
+    
         XCTAssertEqual(2.toUInt25 * 2, 4.toUInt25)
         XCTAssertEqual(2 * 2.toUInt25, 4.toUInt25)
         XCTAssertEqual(2.toUInt25 * 2.toUInt25, 4)
-        
+    
         XCTAssertEqual(8.toUInt25 / 2, 4.toUInt25)
         XCTAssertEqual(8 / 2.toUInt25, 4.toUInt25)
         XCTAssertEqual(8.toUInt25 / 2.toUInt25, 4)
-        
+    
         XCTAssertEqual(8.toUInt25 % 3, 2.toUInt25)
         XCTAssertEqual(8 % 3.toUInt25, 2.toUInt25)
         XCTAssertEqual(8.toUInt25 % 3.toUInt25, 2)
@@ -261,16 +261,16 @@ final class UInt25_Tests: XCTestCase {
     
     func testAssignmentOperators() {
         var val = UInt25(2)
-        
+    
         val += 5
         XCTAssertEqual(val, 7)
-        
+    
         val -= 5
         XCTAssertEqual(val, 2)
-        
+    
         val *= 3
         XCTAssertEqual(val, 6)
-        
+    
         val /= 3
         XCTAssertEqual(val, 2)
     }

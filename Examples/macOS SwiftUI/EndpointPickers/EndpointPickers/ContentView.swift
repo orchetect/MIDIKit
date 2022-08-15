@@ -23,12 +23,12 @@ struct ContentView: View {
                 Text(
                     "This example demonstrates maintaining menus with MIDI endpoints in the system, allowing a single selection for each menu."
                 )
-                
+    
                 Text("Refer to this example's README.md file for important information.")
             }
             .font(.system(size: 14))
             .padding(5)
-            
+    
             GroupBox(label: Text("MIDI In Connection")) {
                 MIDIInSelectionView(
                     midiInSelectedID: $midiInSelectedID,
@@ -37,14 +37,14 @@ struct ContentView: View {
                 .padding([.leading, .trailing], 60)
             }
             .padding(5)
-            
+    
             GroupBox(label: Text("MIDI Out Connection")) {
                 MIDIOutSelectionView(
                     midiOutSelectedID: $midiOutSelectedID,
                     midiOutSelectedDisplayName: $midiOutSelectedDisplayName
                 )
                 .padding([.leading, .trailing], 60)
-                
+    
                 HStack {
                     Button("Send Note On C3") {
                         sendToConnection(event: .noteOn(
@@ -53,7 +53,7 @@ struct ContentView: View {
                             channel: 0
                         ))
                     }
-                    
+    
                     Button("Send Note Off C3") {
                         sendToConnection(event: .noteOff(
                             60,
@@ -61,7 +61,7 @@ struct ContentView: View {
                             channel: 0
                         ))
                     }
-                    
+    
                     Button("Send CC1") {
                         sendToConnection(event: .cc(
                             1,
@@ -76,21 +76,21 @@ struct ContentView: View {
                 )
             }
             .padding(5)
-            
+    
             GroupBox(label: Text("Virtual Endpoints")) {
                 HStack {
                     Button("Create Test Virtual Endpoints") {
                         midiHelper.createVirtualInputs()
                     }
                     .disabled(midiHelper.virtualsExist)
-                    
+    
                     Button("Destroy Test Virtual Endpoints") {
                         midiHelper.destroyVirtualInputs()
                     }
                     .disabled(!midiHelper.virtualsExist)
                 }
                 .frame(maxWidth: .infinity)
-                
+    
                 HStack {
                     Button("Send Note On C3") {
                         sendToVirtuals(event: .noteOn(
@@ -99,7 +99,7 @@ struct ContentView: View {
                             channel: 0
                         ))
                     }
-                    
+    
                     Button("Send Note Off C3") {
                         sendToVirtuals(event: .noteOff(
                             60,
@@ -107,7 +107,7 @@ struct ContentView: View {
                             channel: 0
                         ))
                     }
-                    
+    
                     Button("Send CC1") {
                         sendToVirtuals(event: .cc(
                             1,
@@ -120,7 +120,7 @@ struct ContentView: View {
                 .disabled(!midiHelper.virtualsExist)
             }
             .padding(5)
-            
+    
             GroupBox(label: Text("Received Events")) {
                 List(midiHelper.receivedEvents.reversed(), id: \.self) {
                     Text($0.description)

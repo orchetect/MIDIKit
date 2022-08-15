@@ -112,7 +112,7 @@ extension MIDIEvent {
     @inline(__always)
     internal static func scaled7Bit(fromUnitInterval source: Double) -> UInt7 {
         let source = source.clamped(to: 0.0 ... 1.0)
-        
+    
         if source <= 0.5 {
             return UInt7(source * 0x80)
         } else {
@@ -142,7 +142,7 @@ extension MIDIEvent {
     @inline(__always)
     internal static func scaled14Bit(fromUnitInterval source: Double) -> UInt14 {
         let source = source.clamped(to: 0.0 ... 1.0)
-        
+    
         if source <= 0.5 {
             return UInt14(source * 0x4000)
         } else {
@@ -172,7 +172,7 @@ extension MIDIEvent {
     @inline(__always)
     internal static func scaled16Bit(fromUnitInterval source: Double) -> UInt16 {
         let source = source.clamped(to: 0.0 ... 1.0)
-        
+    
         if source <= 0.5 {
             return UInt16(source * 0x10000)
         } else {
@@ -202,7 +202,7 @@ extension MIDIEvent {
     @inline(__always)
     internal static func scaled32Bit(fromUnitInterval source: Double) -> UInt32 {
         let source = source.clamped(to: 0.0 ... 1.0)
-        
+    
         if source <= 0.5 {
             return UInt32(source * 0x1_0000_0000)
         } else {

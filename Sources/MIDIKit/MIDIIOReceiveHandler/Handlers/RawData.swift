@@ -10,10 +10,10 @@ extension MIDIIOReceiveHandler {
     /// Basic raw packet data receive handler.
     public final class RawData: MIDIIOReceiveHandlerProtocol {
         public typealias Handler = (_ packet: AnyMIDIPacket) -> Void
-        
+    
         @inline(__always)
         public var handler: Handler
-        
+    
         @inline(__always)
         public func packetListReceived(
             _ packets: [MIDIPacketData]
@@ -23,7 +23,7 @@ extension MIDIIOReceiveHandler {
                 handler(typeErasedPacket)
             }
         }
-        
+    
         @available(macOS 11, iOS 14, macCatalyst 14, *)
         @inline(__always)
         public func eventListReceived(
@@ -35,7 +35,7 @@ extension MIDIIOReceiveHandler {
                 handler(typeErasedPacket)
             }
         }
-        
+    
         internal init(
             _ handler: @escaping Handler
         ) {

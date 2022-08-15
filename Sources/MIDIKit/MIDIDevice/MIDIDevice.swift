@@ -36,7 +36,7 @@ public struct MIDIDevice: MIDIIOObject {
     
     internal init(from ref: CoreMIDIDeviceRef) {
         assert(ref != CoreMIDIDeviceRef())
-        
+    
         coreMIDIObjectRef = ref
         update()
     }
@@ -48,7 +48,7 @@ public struct MIDIDevice: MIDIIOObject {
         if let name = getName() {
             self.name = name
         }
-        
+    
         let uniqueID = getUniqueID()
         if uniqueID != .invalidMIDIIdentifier {
             self.uniqueID = uniqueID

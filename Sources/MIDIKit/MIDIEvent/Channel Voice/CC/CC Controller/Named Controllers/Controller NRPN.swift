@@ -21,7 +21,7 @@ extension MIDIEvent.CC.Controller {
             dataEntryMSB: UInt7?,
             dataEntryLSB: UInt7?
         )
-        
+    
         /// Null Function Number for RPN/NRPN
         ///
         /// The purpose of this event is to communicate the intent to disable data entry, data increment, and data decrement controllers until a new RPN or NRPN is selected.
@@ -39,7 +39,7 @@ extension MIDIEvent.CC.Controller.NRPN {
             dataEntryLSB: _
         ):
             return parameter
-            
+    
         case .null:
             return .init(
                 msb: 0x7F,
@@ -63,7 +63,7 @@ extension MIDIEvent.CC.Controller.NRPN {
                 msb: dataEntryMSB,
                 lsb: dataEntryLSB
             )
-            
+    
         case .null:
             return (
                 msb: nil,
@@ -94,9 +94,9 @@ extension MIDIEvent.CC.Controller.NRPN {
                 group: group
             )
         ]
-        
+    
         let dataEntryBytes = dataEntryBytes
-        
+    
         if let dataEntryMSB = dataEntryBytes.msb {
             nrpnEvents.append(.cc(
                 .dataEntry,
@@ -105,7 +105,7 @@ extension MIDIEvent.CC.Controller.NRPN {
                 group: group
             ))
         }
-        
+    
         if let dataEntryLSB = dataEntryBytes.lsb {
             nrpnEvents.append(.cc(
                 .lsb(for: .dataEntry),
@@ -114,7 +114,7 @@ extension MIDIEvent.CC.Controller.NRPN {
                 group: group
             ))
         }
-        
+    
         return nrpnEvents
     }
 }

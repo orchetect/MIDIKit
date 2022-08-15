@@ -13,7 +13,7 @@ extension Byte {
     public var nibbles: (high: Nibble, low: Nibble) {
         let high = (self & 0b1111_0000) >> 4
         let low = self & 0b1111
-        
+    
         return (high: Nibble(high), low: Nibble(low))
     }
     

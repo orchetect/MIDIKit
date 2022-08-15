@@ -13,14 +13,14 @@ extension MIDIEvent {
         case onlyType(SysRealTimeType)
         /// Return only System Real Time events matching certain event type(s).
         case onlyTypes(Set<SysRealTimeType>)
-        
+    
         /// Retain System Real Time events only with a certain type,
         /// while retaining all non-System Real Time events.
         case keepType(SysRealTimeType)
         /// Retain System Real Time events only with certain type(s),
         /// while retaining all non-System Real Time events.
         case keepTypes(Set<SysRealTimeType>)
-        
+    
         /// Drop all System Real Time events,
         /// while retaining all non-System Real Time events.
         case drop

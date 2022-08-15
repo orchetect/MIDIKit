@@ -13,7 +13,7 @@ extension UniversalMIDIPacketData {
         case data64bit               = 0x3
         case midi2ChannelVoice       = 0x4
         case data128bit              = 0x5
-        
+    
         // 0x6...0xF are reserved as of MIDI 2.0 spec
     }
 }
@@ -40,17 +40,17 @@ extension UniversalMIDIPacketData {
     public enum SysExStatusField: Nibble, CaseIterable {
         /// Complete System Exclusive Message in one UMP System Exclusive.
         case complete = 0x0
-        
+    
         /// System Exclusive Start UMP.
         case start = 0x1
-        
+    
         /// System Exclusive Continue UMP.
         /// There might be multiple Continue UMPs in a single message.
         case `continue` = 0x2
-        
+    
         /// System Exclusive End UMP.
         case end = 0x3
-        
+    
         // 0x4... are unused/reserved
     }
 }
@@ -60,7 +60,7 @@ extension UniversalMIDIPacketData {
     public enum UtilityStatusField: Nibble, CaseIterable {
         /// NOOP (No Operation)
         case noOp = 0x0
-        
+    
         /// JR Clock (Jitter-Reduction Clock)
         ///
         /// - remark: MIDI 2.0 Spec:
@@ -73,7 +73,7 @@ extension UniversalMIDIPacketData {
         ///
         /// To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock messages for the Receiver, the Sender shall send a JR Clock message at least once every 250 milliseconds."
         case jrClock = 0x1
-        
+    
         /// JR Timestamp (Jitter-Reduction Timestamp)
         ///
         /// - remark: MIDI 2.0 Spec:
@@ -82,7 +82,7 @@ extension UniversalMIDIPacketData {
         ///
         /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32)."
         case jrTimestamp = 0x2
-        
+    
         // 0x3... are unused/reserved
     }
 }

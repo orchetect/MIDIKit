@@ -16,13 +16,13 @@ extension MIDIIOReceiveHandler {
     /// If `handler` is provided, the hex byte string is supplied as a parameter and not automatically logged.
     public final class RawDataLogging: MIDIIOReceiveHandlerProtocol {
         public typealias Handler = (_ packetBytesString: String) -> Void
-        
+    
         @inline(__always)
         public var handler: Handler
-        
+    
         @inline(__always)
         public var filterActiveSensingAndClock = false
-        
+    
         @inline(__always)
         public func packetListReceived(
             _ packets: [MIDIPacketData]
@@ -31,7 +31,7 @@ extension MIDIIOReceiveHandler {
                 handleBytes(midiPacket.bytes)
             }
         }
-        
+    
         @available(macOS 11, iOS 14, macCatalyst 14, *)
         @inline(__always)
         public func eventListReceived(
@@ -42,14 +42,14 @@ extension MIDIIOReceiveHandler {
                 handleBytes(midiPacket.bytes)
             }
         }
-        
+    
         internal init(
             filterActiveSensingAndClock: Bool = false,
             log: OSLog = .default,
             _ handler: Handler? = nil
         ) {
             self.filterActiveSensingAndClock = filterActiveSensingAndClock
-            
+    
             self.handler = handler ?? { packetBytesString in
                 #if DEBUG
                 os_log(
@@ -61,19 +61,19 @@ extension MIDIIOReceiveHandler {
                 #endif
             }
         }
-        
+    
         internal func handleBytes(_ bytes: [Byte]) {
             if filterActiveSensingAndClock {
                 guard bytes.first != 0xF8, // midi clock pulse
                       bytes.first != 0xFE  // active sensing
                 else { return }
             }
-            
+    
             let stringOutput =
                 bytes.hex
                     .stringValues(padTo: 2, prefixes: false)
                     .joined(separator: " ")
-            
+    
             handler(stringOutput)
         }
     }

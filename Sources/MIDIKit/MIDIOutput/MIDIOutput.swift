@@ -17,26 +17,26 @@ import Foundation
 public final class MIDIOutput: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
-        
+    
     // MIDIIOManagedProtocol
     public private(set) var api: CoreMIDIAPIVersion
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
-        
+    
     // MIDIIOSendsMIDIMessagesProtocol
-        
+    
     /// The Core MIDI output port reference.
     public private(set) var coreMIDIOutputPortRef: CoreMIDIPortRef?
-        
+    
     // class-specific
-        
+    
     /// The port name as displayed in the system.
     public private(set) var endpointName: String = ""
-        
+    
     /// The port's unique ID in the system.
     public private(set) var uniqueID: MIDIIdentifier?
-        
+    
     // init
-        
+    
     /// Internal init.
     /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `MIDIManager` instance when calling `.addOutput()`, and destroyed when calling `.remove(.output, ...)` or `.removeAll()`.
     ///
@@ -56,7 +56,7 @@ public final class MIDIOutput: _MIDIIOManagedProtocol {
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
     }
-        
+    
     deinit {
         try? dispose()
     }
@@ -73,11 +73,11 @@ extension MIDIOutput {
         guard let unwrappedUniqueID = uniqueID else {
             return nil
         }
-        
+    
         if let endpoint = getSystemSourceEndpoint(matching: unwrappedUniqueID) {
             return endpoint
         }
-        
+    
         return nil
     }
 }
@@ -90,9 +90,9 @@ extension MIDIOutput {
             // this should prevent errors thrown due to ID collisions in the system
             uniqueID = nil
         }
-        
+    
         var newPortRef = MIDIPortRef()
-        
+    
         switch api {
         case .legacyCoreMIDI:
             // MIDISourceCreate is deprecated after macOS 11 / iOS 14
@@ -102,14 +102,14 @@ extension MIDIOutput {
                 &newPortRef
             )
             .throwIfOSStatusErr()
-            
+    
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
                 throw MIDIIOError.internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
             }
-            
+    
             try MIDISourceCreateWithProtocol(
                 manager.coreMIDIClientRef,
                 endpointName as CFString,
@@ -118,13 +118,13 @@ extension MIDIOutput {
             )
             .throwIfOSStatusErr()
         }
-        
+    
         coreMIDIOutputPortRef = newPortRef
-        
+    
         // set meta data properties; ignore errors in case of failure
         try? setModel(of: newPortRef, to: manager.model)
         try? setManufacturer(of: newPortRef, to: manager.manufacturer)
-        
+    
         if let unwrappedUniqueID = uniqueID {
             // inject previously-stored unique ID into port
             try setUniqueID(
@@ -143,9 +143,9 @@ extension MIDIOutput {
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {
         guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else { return }
-        
+    
         defer { self.coreMIDIOutputPortRef = nil }
-        
+    
         try MIDIEndpointDispose(unwrappedOutputPortRef)
             .throwIfOSStatusErr()
     }
@@ -157,7 +157,7 @@ extension MIDIOutput: CustomStringConvertible {
         if let unwrappedUniqueID = uniqueID {
             uniqueIDString = "\(unwrappedUniqueID)"
         }
-        
+    
         return "MIDIOutput(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"
     }
 }
@@ -173,7 +173,7 @@ extension MIDIOutput: _MIDIIOSendsMIDIMessagesProtocol {
                 "Port reference is nil."
             )
         }
-        
+    
         try MIDIReceived(unwrappedOutputPortRef, packetList)
             .throwIfOSStatusErr()
     }
@@ -185,7 +185,7 @@ extension MIDIOutput: _MIDIIOSendsMIDIMessagesProtocol {
                 "Port reference is nil."
             )
         }
-        
+    
         try MIDIReceivedEventList(unwrappedOutputPortRef, eventList)
             .throwIfOSStatusErr()
     }

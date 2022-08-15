@@ -15,7 +15,7 @@ final class Endpoint_Hashable_Tests: XCTestCase {
             .init(from: 123),
             .init(from: 123)
         ]
-        
+    
         XCTAssertEqual(same.count, 1)
     }
     
@@ -24,7 +24,7 @@ final class Endpoint_Hashable_Tests: XCTestCase {
             .init(from: 123),
             .init(from: 456)
         ]
-        
+    
         // even with different ref IDs, since these don't actually currently
         // exist in the system, their Unique IDs will both be 0 and thus equal
         XCTAssertEqual(same.count, 1)
@@ -45,7 +45,7 @@ final class Endpoint_Hashable_Tests: XCTestCase {
                 uniqueID: 12_345_678
             )
         ]
-        
+    
         XCTAssertEqual(same.count, 1)
     }
     
@@ -64,7 +64,7 @@ final class Endpoint_Hashable_Tests: XCTestCase {
                 uniqueID: 987_654_321
             )
         ]
-        
+    
         XCTAssertEqual(same.count, 2)
     }
     
@@ -73,7 +73,7 @@ final class Endpoint_Hashable_Tests: XCTestCase {
             .init(from: 123),
             .init(from: 123)
         ]
-        
+    
         XCTAssertEqual(same.count, 1)
     }
     
@@ -82,7 +82,7 @@ final class Endpoint_Hashable_Tests: XCTestCase {
             .init(from: 123),
             .init(from: 456)
         ]
-        
+    
         // even with different ref IDs, since these don't actually currently
         // exist in the system, their Unique IDs will both be 0 and thus equal
         XCTAssertEqual(same.count, 1)
@@ -103,7 +103,7 @@ final class Endpoint_Hashable_Tests: XCTestCase {
                 uniqueID: 12_345_678
             )
         ]
-        
+    
         XCTAssertEqual(same.count, 1)
     }
     
@@ -122,7 +122,7 @@ final class Endpoint_Hashable_Tests: XCTestCase {
                 uniqueID: 987_654_321
             )
         ]
-        
+    
         XCTAssertEqual(same.count, 2)
     }
 }

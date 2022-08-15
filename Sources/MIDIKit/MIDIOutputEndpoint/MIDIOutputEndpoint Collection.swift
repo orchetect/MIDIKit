@@ -33,7 +33,7 @@ extension Set where Element == MIDIOutputEndpoint {
     public func asIdentities() -> Set<MIDIEndpointIdentity> {
         // for some reason Set(map { ... }) was not working
         // so we have to use reduce
-        
+    
         reduce(into: Set<MIDIEndpointIdentity>()) {
             $0.insert(.uniqueID($1.uniqueID))
         }
