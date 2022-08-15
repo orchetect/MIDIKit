@@ -86,7 +86,7 @@ try output?.send(event: .cc(11, value: .midi1(64), channel: 0x2))
 
 ## Topics
 
-### Creating Ports
+### MIDIManager Methods
 
 - ``MIDIManager/addInput(name:tag:uniqueID:receiver:)``
 - ``MIDIManager/addOutput(name:tag:uniqueID:)``

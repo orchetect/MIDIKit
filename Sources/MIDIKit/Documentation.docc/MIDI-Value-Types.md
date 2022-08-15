@@ -58,12 +58,14 @@ The inverse is also true when converting from a unit interval to a MIDI 1.0 or M
 
 ## Topics
 
-### Essential MIDI Value Types
+### Novel Primitives
 
 - ``UInt4``
 - ``UInt7``
 - ``UInt7Pair``
 - ``UInt14``
+- ``UInt9``
+- ``UInt25``
 
 ### Raw Data Types
 
@@ -71,10 +73,8 @@ The inverse is also true when converting from a unit interval to a MIDI 1.0 or M
 - ``BytePair``
 - ``Nibble``
 - ``UMPWord``
-- ``UInt9``
-- ``UInt25``
 
-### Underlying MIDI Event Value Types
+### Base MIDI Event Value Types
 
 - ``MIDIEvent/ChanVoice7Bit16BitValue``
 - ``MIDIEvent/ChanVoice7Bit32BitValue``

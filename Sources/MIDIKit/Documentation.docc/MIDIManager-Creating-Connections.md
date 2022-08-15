@@ -1,4 +1,4 @@
-# Creating Managed Connections
+# Creating Connections
 
 Managed connections are smart MIDI connections owned and maintained by the ``MIDIManager``. They form connections to one or more endpoints and automatically reconnect if the target endpoints disappear and reappear in the system.
 
@@ -93,6 +93,6 @@ conn?.remove(inputs: [.uniqueID(uID)])
 
 ## Topics
 
-### Creating Managed Connections
+### MIDIManager Methods
 
 - ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-7ldjl``

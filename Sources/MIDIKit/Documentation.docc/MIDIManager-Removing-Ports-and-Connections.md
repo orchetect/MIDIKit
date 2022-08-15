@@ -1,4 +1,4 @@
-# Removing Ports and Managed Connections
+# Removing Ports and Connections
 
 ## Remove Individual Virtual Port or Connection
 
@@ -38,7 +38,7 @@ midiManager.removeAll()
 
 ## Topics
 
-### Manager Methods
+### MIDIManager Methods
 
 - ``MIDIManager/remove(_:_:)``
 - ``MIDIManager/removeAll()``

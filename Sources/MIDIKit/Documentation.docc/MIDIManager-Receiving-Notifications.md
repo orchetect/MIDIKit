@@ -10,7 +10,10 @@ However, a handler closure is provided on the ``MIDIManager`` instance in order 
 
 ## Topics
 
-### Core MIDI System Notifications
+### MIDIManager Properties
 
 - ``MIDIManager/notificationHandler``
+
+### Types
+
 - ``MIDIIONotification``

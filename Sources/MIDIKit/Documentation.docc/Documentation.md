@@ -30,26 +30,17 @@ Additional functionality can be added to MIDIKit by way of <doc:MIDIKit-Extensio
 
 - ``MIDIManager``
 - <doc:MIDIManager-Creating-Ports>
-- <doc:MIDIManager-Creating-Managed-Connections>
-- <doc:MIDIManager-Removing-Ports-and-Managed-Connections>
+- <doc:MIDIManager-Creating-Connections>
+- <doc:MIDIManager-Removing-Ports-and-Connections>
 - <doc:MIDIManager-Receiving-Notifications>
 
 ### Devices & Entities
 
-- ``MIDIManager/devices``
-- ``MIDIDevice``
-- ``MIDIEntity``
+- <doc:Devices>
 
 ### Endpoints
 
-- ``MIDIManager/endpoints``
-- ``MIDIInputEndpoint``
-- ``MIDIOutputEndpoint``
-- ``AnyMIDIEndpoint``
-- ``MIDIEndpointFilter``
-- ``MIDIEndpointIdentity``
-- ``MIDIIdentifier``
-- ``MIDIIdentifierPersistence``
+- <doc:Endpoints>
 
 ### Events
 
@@ -61,9 +52,7 @@ Additional functionality can be added to MIDIKit by way of <doc:MIDIKit-Extensio
 ### Value Types
 
 - <doc:MIDI-Value-Types>
-- ``MIDINote``
-- ``MIDINoteRange``
-- ``MIDINoteNumberRange``
+- <doc:MIDI-Note>
 
 ### Internals
 
