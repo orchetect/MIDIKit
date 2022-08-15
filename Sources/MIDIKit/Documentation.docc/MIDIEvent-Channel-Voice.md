@@ -17,7 +17,6 @@
 - ``MIDIEvent/cc(_:value:channel:group:)-6hij3``
 
 - ``MIDIEvent/ccRPN(_:channel:group:)``
-- ``MIDIEvent/ccNRPN(parameter:dataEntryMSB:dataEntryLSB:channel:group:)``
 - ``MIDIEvent/ccNRPN(_:channel:group:)``
 
 - ``MIDIEvent/pitchBend(value:channel:group:)``

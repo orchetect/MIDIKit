@@ -86,7 +86,6 @@ extension MIDIEvent.CC.Controller.NRPN {
                 channel: channel,
                 group: group
             ),
-            
             .cc(
                 .nrpnLSB,
                 value: .midi1(parameter.lsb),
@@ -150,15 +149,14 @@ extension MIDIEvent {
         channel: UInt4,
         group: UInt4 = 0
     ) -> [MIDIEvent] {
-        CC.Controller.NRPN
-            .raw(
-                parameter: parameter,
-                dataEntryMSB: dataEntryMSB,
-                dataEntryLSB: dataEntryLSB
-            )
-            .events(
-                channel: channel,
-                group: group
-            )
+        CC.Controller.NRPN.raw(
+            parameter: parameter,
+            dataEntryMSB: dataEntryMSB,
+            dataEntryLSB: dataEntryLSB
+        )
+        .events(
+            channel: channel,
+            group: group
+        )
     }
 }
