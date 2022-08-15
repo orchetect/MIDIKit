@@ -12,7 +12,7 @@
 ///
 /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
 ///
-/// Instead, read `Device` arrays and individual `Device` properties from `MIDIManager.devices` ad-hoc when they are needed.
+/// Instead, read device arrays and individual device properties from ``MIDIManager/devices`` ad-hoc when they are needed.
 public struct MIDIDevice: MIDIIOObject {
     // MARK: MIDIIOObject
     
