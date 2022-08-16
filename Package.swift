@@ -15,21 +15,21 @@ let package = Package(
             type: .static,
             targets: ["MIDIKit"]
         ),
-        .library(
-            name: "MIDIKitCommon",
-            type: .static,
-            targets: ["MIDIKitCommon"]
-        ),
-        .library(
-            name: "MIDIKitEvents",
-            type: .static,
-            targets: ["MIDIKitEvents"]
-        ),
-        .library(
-            name: "MIDIKitInternals",
-            type: .static,
-            targets: ["MIDIKitInternals"]
-        ),
+//        .library(
+//            name: "MIDIKitCommon",
+//            type: .static,
+//            targets: ["MIDIKitCommon"]
+//        ),
+//        .library(
+//            name: "MIDIKitEvents",
+//            type: .static,
+//            targets: ["MIDIKitEvents"]
+//        ),
+//        .library(
+//            name: "MIDIKitInternals",
+//            type: .static,
+//            targets: ["MIDIKitInternals"]
+//        ),
     ],
     
     dependencies: [
