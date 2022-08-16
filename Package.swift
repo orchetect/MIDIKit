@@ -14,7 +14,22 @@ let package = Package(
             name: "MIDIKit",
             type: .static,
             targets: ["MIDIKit"]
-        )
+        ),
+        .library(
+            name: "MIDIKitCommon",
+            type: .static,
+            targets: ["MIDIKitCommon"]
+        ),
+        .library(
+            name: "MIDIKitEvents",
+            type: .static,
+            targets: ["MIDIKitEvents"]
+        ),
+        .library(
+            name: "MIDIKitInternals",
+            type: .static,
+            targets: ["MIDIKitInternals"]
+        ),
     ],
     
     dependencies: [
@@ -34,14 +49,12 @@ let package = Package(
                 .target(name: "MIDIKitIO")
             ]
         ),
-        
         .target(
             name: "MIDIKitInternals",
             dependencies: [
                 .product(name: "SwiftRadix", package: "SwiftRadix")
             ]
         ),
-        
         .target(
             name: "MIDIKitCommon",
             dependencies: [
@@ -49,7 +62,6 @@ let package = Package(
                 .target(name: "MIDIKitInternals")
             ]
         ),
-        
         .target(
             name: "MIDIKitEvents",
             dependencies: [
@@ -57,7 +69,6 @@ let package = Package(
                 .target(name: "MIDIKitCommon")
             ]
         ),
-        
         .target(
             name: "MIDIKitIO",
             dependencies: [
@@ -69,7 +80,6 @@ let package = Package(
         ),
         
         // test targets
-        
         .testTarget(
             name: "MIDIKitTests",
             dependencies: [
@@ -78,16 +88,14 @@ let package = Package(
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         ),
-        
-            .testTarget(
-                name: "MIDIKitCommonTests",
-                dependencies: [
-                    .target(name: "MIDIKitCommon"),
-                    .product(name: "SwiftRadix", package: "SwiftRadix"),
-                    .product(name: "XCTestUtils", package: "XCTestUtils")
-                ]
-            ),
-        
+        .testTarget(
+            name: "MIDIKitCommonTests",
+            dependencies: [
+                .target(name: "MIDIKitCommon"),
+                .product(name: "SwiftRadix", package: "SwiftRadix"),
+                .product(name: "XCTestUtils", package: "XCTestUtils")
+            ]
+        ),
         .testTarget(
             name: "MIDIKitEventsTests",
             dependencies: [
@@ -96,7 +104,6 @@ let package = Package(
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         ),
-        
         .testTarget(
             name: "MIDIKitIOTests",
             dependencies: [
