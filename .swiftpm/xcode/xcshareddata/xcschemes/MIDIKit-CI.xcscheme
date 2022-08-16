@@ -78,6 +78,36 @@
                </Test>
             </SkippedTests>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MIDIKitCommonTests"
+               BuildableName = "MIDIKitCommonTests"
+               BlueprintName = "MIDIKitCommonTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MIDIKitEventsTests"
+               BuildableName = "MIDIKitEventsTests"
+               BlueprintName = "MIDIKitEventsTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MIDIKitIOTests"
+               BuildableName = "MIDIKitIOTests"
+               BlueprintName = "MIDIKitIOTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

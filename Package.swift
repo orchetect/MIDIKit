@@ -28,14 +28,79 @@ let package = Package(
         .target(
             name: "MIDIKit",
             dependencies: [
+                .product(name: "SwiftRadix", package: "SwiftRadix"),
+                .target(name: "MIDIKitCommon"),
+                .target(name: "MIDIKitEvents"),
+                .target(name: "MIDIKitIO")
+            ]
+        ),
+        
+        .target(
+            name: "MIDIKitInternals",
+            dependencies: [
                 .product(name: "SwiftRadix", package: "SwiftRadix")
             ]
         ),
+        
+        .target(
+            name: "MIDIKitCommon",
+            dependencies: [
+                .product(name: "SwiftRadix", package: "SwiftRadix"),
+                .target(name: "MIDIKitInternals")
+            ]
+        ),
+        
+        .target(
+            name: "MIDIKitEvents",
+            dependencies: [
+                .product(name: "SwiftRadix", package: "SwiftRadix"),
+                .target(name: "MIDIKitCommon")
+            ]
+        ),
+        
+        .target(
+            name: "MIDIKitIO",
+            dependencies: [
+                .product(name: "SwiftRadix", package: "SwiftRadix"),
+                .target(name: "MIDIKitInternals"),
+                .target(name: "MIDIKitCommon"),
+                .target(name: "MIDIKitEvents")
+            ]
+        ),
+        
+        // test targets
         
         .testTarget(
             name: "MIDIKitTests",
             dependencies: [
                 .target(name: "MIDIKit"),
+                .product(name: "SwiftRadix", package: "SwiftRadix"),
+                .product(name: "XCTestUtils", package: "XCTestUtils")
+            ]
+        ),
+        
+            .testTarget(
+                name: "MIDIKitCommonTests",
+                dependencies: [
+                    .target(name: "MIDIKitCommon"),
+                    .product(name: "SwiftRadix", package: "SwiftRadix"),
+                    .product(name: "XCTestUtils", package: "XCTestUtils")
+                ]
+            ),
+        
+        .testTarget(
+            name: "MIDIKitEventsTests",
+            dependencies: [
+                .target(name: "MIDIKitEvents"),
+                .product(name: "SwiftRadix", package: "SwiftRadix"),
+                .product(name: "XCTestUtils", package: "XCTestUtils")
+            ]
+        ),
+        
+        .testTarget(
+            name: "MIDIKitIOTests",
+            dependencies: [
+                .target(name: "MIDIKitIO"),
                 .product(name: "SwiftRadix", package: "SwiftRadix"),
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
@@ -45,25 +110,31 @@ let package = Package(
     swiftLanguageVersions: [.v5]
 )
 
-func addShouldTestFlag() {
+func addShouldTestFlag(toTarget targetName: String) {
     // swiftSettings may be nil so we can't directly append to it
     
     var swiftSettings = package.targets
-        .first(where: { $0.name == "MIDIKitTests" })?
+        .first(where: { $0.name == targetName })?
         .swiftSettings ?? []
     
     swiftSettings.append(.define("shouldTestCurrentPlatform"))
     
     package.targets
-        .first(where: { $0.name == "MIDIKitTests" })?
+        .first(where: { $0.name == targetName })?
         .swiftSettings = swiftSettings
+}
+
+func addShouldTestFlags() {
+    addShouldTestFlag(toTarget: "MIDIKitTests")
+    addShouldTestFlag(toTarget: "MIDIKitEventsTests")
+    addShouldTestFlag(toTarget: "MIDIKitIOTests")
 }
 
 // Swift version in Xcode 12.5.1 which introduced watchOS testing
 #if os(watchOS) && swift(>=5.4.2)
-addShouldTestFlag()
+addShouldTestFlags()
 #elseif os(watchOS)
 // don't add flag
 #else
-addShouldTestFlag()
+addShouldTestFlags()
 #endif

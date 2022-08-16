@@ -68,13 +68,13 @@ All cleanup is done automatically in MIDIKit and no specific methods are require
 
 ### Create Managed Connections
 
-- ``addInputConnection(toOutputs:tag:mode:filter:receiver:)-7ldjl``
-- ``addInputConnection(toOutputs:tag:mode:filter:receiver:)-6mfbz``
-- ``addInputConnection(toOutputs:tag:mode:filter:receiver:)-3s9lj``
+- ``addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``
+- ``addInputConnection(toOutputs:tag:mode:filter:receiver:)-5r30y``
+- ``addInputConnection(toOutputs:tag:mode:filter:receiver:)-100f9``
 
-- ``addOutputConnection(toInputs:tag:mode:filter:)-4gen6``
-- ``addOutputConnection(toInputs:tag:mode:filter:)-2lx0j``
-- ``addOutputConnection(toInputs:tag:mode:filter:)-8hq8w``
+- ``addOutputConnection(toInputs:tag:mode:filter:)-3a56s``
+- ``addOutputConnection(toInputs:tag:mode:filter:)-3mw``
+- ``addOutputConnection(toInputs:tag:mode:filter:)-1pqwx``
 
 ### Accessing Created Ports and Managed Connections
 

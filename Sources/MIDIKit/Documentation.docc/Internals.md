@@ -64,11 +64,3 @@
 ### Value Type Protocols
 
 - ``MIDIIntegerProtocol``
-
-### Utility Property Wrappers
-
-- ``ThreadSafeAccess``
-
-### Support Objects
-
-- ``SafeDispatchTimer``

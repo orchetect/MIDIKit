@@ -5,3 +5,7 @@
 //
 
 // Welcome to MIDIKit :)
+
+@_exported import MIDIKitCommon
+@_exported import MIDIKitEvents
+@_exported import MIDIKitIO

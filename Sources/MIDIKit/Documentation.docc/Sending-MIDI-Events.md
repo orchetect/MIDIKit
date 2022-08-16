@@ -9,7 +9,7 @@ In order to send MIDI events, there are two primary ways:
 or:
 
 - Form a managed Output Connection that can connect to one or more existing MIDI inputs in the system.
-(``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-4gen6``)
+(``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``)
 
 ### Send events from a created Output
 
