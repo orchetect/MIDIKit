@@ -13,7 +13,7 @@ import TimecodeKit
 
 final class MTC_Receiver_Receiver_Tests: XCTestCase {
     func testMTC_Receiver_Default() {
-        let mtcRec = MIDI.MTCReceiver(name: "test")
+        let mtcRec = MTCReceiver(name: "test")
         
         // check if defaults are nominal
         
@@ -32,7 +32,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
     }
     
     func testMTC_Receiver_Init_Arguments() {
-        let mtcRec = MIDI.MTCReceiver(
+        let mtcRec = MTCReceiver(
             name: "test",
             initialLocalFrameRate: ._48,
             syncPolicy: .init(
@@ -57,7 +57,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // test full frame MTC messages and check that properties get updated
         
         // init with no local frame rate
-        let mtcRec = MIDI.MTCReceiver(name: "test")
+        let mtcRec = MTCReceiver(name: "test")
         
         // 01:02:03:04 @ MTC 24fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps)
@@ -90,7 +90,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = MIDI.MTCReceiver(name: "test", initialLocalFrameRate: ._24)
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
         
         // 01:02:03:04 @ MTC 24fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps)
@@ -134,7 +134,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = MIDI.MTCReceiver(name: "test", initialLocalFrameRate: ._29_97)
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._29_97)
         
         // 01:02:03:04 @ MTC 24fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps)
@@ -160,7 +160,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = MIDI.MTCReceiver(name: "test", initialLocalFrameRate: ._24)
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
         
         XCTAssertEqual(mtcRec.state, .idle)
         
@@ -238,10 +238,10 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         var _mType: MTCMessageType?
         var _direction: MTCDirection?
         var _displayNeedsUpdate: Bool?
-        var _state: MIDI.MTCReceiver.State?
+        var _state: MTCReceiver.State?
         
         // init with local frame rate
-        let mtcRec = MIDI.MTCReceiver(name: "test", initialLocalFrameRate: ._24)
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
             { timecode, messageType, direction, displayNeedsUpdate in
                 _timecode = timecode
                 _mType = messageType
@@ -287,10 +287,10 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         var _mType: MTCMessageType?
         var _direction: MTCDirection?
         var _displayNeedsUpdate: Bool?
-        var _state: MIDI.MTCReceiver.State?
+        var _state: MTCReceiver.State?
         
         // init with local frame rate
-        let mtcRec = MIDI.MTCReceiver(name: "test", initialLocalFrameRate: ._24)
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
             { timecode, messageType, direction, displayNeedsUpdate in
                 _timecode = timecode
                 _mType = messageType

@@ -161,9 +161,11 @@ func addShouldTestFlag(toTarget targetName: String) {
 
 func addShouldTestFlags() {
     addShouldTestFlag(toTarget: "MIDIKitTests")
-    addShouldTestFlag(toTarget: "MIDIKitCommonTests")
-    addShouldTestFlag(toTarget: "MIDIKitEventsTests")
+    addShouldTestFlag(toTarget: "MIDIKitCoreTests")
     addShouldTestFlag(toTarget: "MIDIKitIOTests")
+    addShouldTestFlag(toTarget: "MIDIKitControlSurfacesTests")
+    addShouldTestFlag(toTarget: "MIDIKitSMFTests")
+    addShouldTestFlag(toTarget: "MIDIKitSyncTests")
 }
 
 // Swift version in Xcode 12.5.1 which introduced watchOS testing

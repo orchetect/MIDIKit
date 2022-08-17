@@ -12,7 +12,7 @@ import TimecodeKit
 
 final class MTC_Receiver_SyncPolicy_Tests: XCTestCase {
     func testMTC_Receiver_SyncPolicy_init() {
-        var sp: MIDI.MTCReceiver.SyncPolicy
+        var sp: MTCReceiver.SyncPolicy
         
         // with defaults
         
@@ -44,7 +44,7 @@ final class MTC_Receiver_SyncPolicy_Tests: XCTestCase {
     }
     
     func testMTC_Receiver_SyncPolicy_Durations() {
-        var sp: MIDI.MTCReceiver.SyncPolicy
+        var sp: MTCReceiver.SyncPolicy
         
         sp = .init(lockFrames: 30, dropOutFrames: 30)
         

@@ -14,7 +14,7 @@ final class StressTests: XCTestCase {
     func testThreadingMTCGenerator() {
         // MARK: - Generator
         
-        let mtcGen = MIDI.MTCGenerator { midiMessage in
+        let mtcGen = MTCGenerator { midiMessage in
             _ = midiMessage
         }
         
@@ -59,7 +59,7 @@ final class StressTests: XCTestCase {
         // (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = MIDI.MTCReceiver(name: "test", initialLocalFrameRate: ._24)
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
             { timecode, messageType, direction, displayNeedsUpdate in
                 _ = timecode
                 _ = messageType
