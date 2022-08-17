@@ -15,11 +15,11 @@ An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MID
 
 ## MIDIKit Extensions
 
-Abstractions are built as optional extensions in their own repos.
+Extensions are available as optional package product imports.
 
-- [MIDIKitControlSurfaces](https://github.com/orchetect/MIDIKitControlSurfaces): MIDIKit extension for Control Surfaces (HUI, etc.)
-- [MIDIKitSync](https://github.com/orchetect/MIDIKitSync): MIDIKit extension for sync (MTC, etc.)
-- [MIDIKitSMF](https://github.com/orchetect/MIDIKitSMF): MIDIKit extension for reading/writing Standard MIDI Files (SMF)
+- MIDIKitControlSurfaces: Control Surface protocols (HUI, etc.)
+- MIDIKitSync: Synchronization protocols (MTC, etc.)
+- MIDIKitSMF: Reading/writing Standard MIDI Files (SMF)
 
 ## Getting Started
 

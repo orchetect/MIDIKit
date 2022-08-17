@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import MIDIKitEvents
+import MIDIKitCore
 @_implementationOnly import OTCore
 
 // MARK: - CC

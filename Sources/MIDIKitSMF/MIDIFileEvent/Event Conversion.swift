@@ -4,7 +4,7 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKitEvents
+import MIDIKitCore
 
 extension MIDIEvent {
     /// Convert the MIDIKit I/O event case (`MIDIEvent`) to a MIDIKitSMF event case (`MIDIFileEvent`).

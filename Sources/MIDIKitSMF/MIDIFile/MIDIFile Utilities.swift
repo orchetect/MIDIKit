@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import MIDIKitEvents
+import MIDIKitCore
 
 extension MIDIFile {
     // MARK: - Utilities math and number conversion

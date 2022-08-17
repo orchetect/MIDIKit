@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import MIDIKitEvents
+import MIDIKitCore
 
 /// Protocol describing a MIDI event payload for use in `MIDIFileEvent` cases.
 public protocol MIDIFileEventPayload {

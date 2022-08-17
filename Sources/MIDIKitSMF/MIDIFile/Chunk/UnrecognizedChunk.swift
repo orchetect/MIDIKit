@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import MIDIKitEvents
+import MIDIKitCore
 import struct SwiftASCII.ASCIIString
 
 extension MIDIFile.Chunk {

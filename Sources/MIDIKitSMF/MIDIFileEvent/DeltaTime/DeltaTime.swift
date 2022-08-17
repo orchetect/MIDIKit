@@ -5,7 +5,7 @@
 //
 
 import Darwin
-import MIDIKitEvents
+import MIDIKitCore
 
 // MARK: - DeltaTime
 

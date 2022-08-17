@@ -4,7 +4,7 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKitEvents
+import MIDIKitCore
 @_implementationOnly import OTCore
 
 extension MIDIFile: CustomStringConvertible,

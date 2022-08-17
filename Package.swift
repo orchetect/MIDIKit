@@ -17,9 +17,9 @@ let package = Package(
             targets: ["MIDIKit"]
         ),
         .library(
-            name: "MIDIKitEvents",
+            name: "MIDIKitCore",
             type: .static,
-            targets: ["MIDIKitEvents"]
+            targets: ["MIDIKitCore"]
         ),
         .library(
             name: "MIDIKitControlSurfaces",
@@ -51,8 +51,7 @@ let package = Package(
         .target(
             name: "MIDIKit",
             dependencies: [
-                .target(name: "MIDIKitCommon"),
-                .target(name: "MIDIKitEvents"),
+                .target(name: "MIDIKitCore"),
                 .target(name: "MIDIKitIO")
             ]
         ),
@@ -61,23 +60,16 @@ let package = Package(
             dependencies: []
         ),
         .target(
-            name: "MIDIKitCommon",
+            name: "MIDIKitCore",
             dependencies: [
                 .target(name: "MIDIKitInternals")
-            ]
-        ),
-        .target(
-            name: "MIDIKitEvents",
-            dependencies: [
-                .target(name: "MIDIKitCommon")
             ]
         ),
         .target(
             name: "MIDIKitIO",
             dependencies: [
                 .target(name: "MIDIKitInternals"),
-                .target(name: "MIDIKitCommon"),
-                .target(name: "MIDIKitEvents")
+                .target(name: "MIDIKitCore")
             ]
         ),
         
@@ -91,7 +83,7 @@ let package = Package(
         .target(
             name: "MIDIKitSMF",
             dependencies: [
-                .target(name: "MIDIKitEvents"),
+                .target(name: "MIDIKitCore"),
                 "OTCore",
                 "SwiftASCII",
                 "TimecodeKit"
@@ -114,16 +106,9 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "MIDIKitCommonTests",
+            name: "MIDIKitCoreTests",
             dependencies: [
-                .target(name: "MIDIKitCommon"),
-                .product(name: "XCTestUtils", package: "XCTestUtils")
-            ]
-        ),
-        .testTarget(
-            name: "MIDIKitEventsTests",
-            dependencies: [
-                .target(name: "MIDIKitEvents"),
+                .target(name: "MIDIKitCore"),
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         ),

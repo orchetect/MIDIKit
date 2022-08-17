@@ -4,5 +4,4 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-@_exported import MIDIKitCommon
-@_exported import MIDIKitEvents
+@_exported import MIDIKitCore

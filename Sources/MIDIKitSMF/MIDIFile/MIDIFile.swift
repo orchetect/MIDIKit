@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import MIDIKitEvents
+import MIDIKitCore
 
 private let fileManager = FileManager.default
 

@@ -5,7 +5,7 @@
 //
 
 import TimecodeKit
-import MIDIKitEvents
+import MIDIKitCore
 import struct SwiftASCII.ASCIIString
 
 /// MIDI File Track Event.
