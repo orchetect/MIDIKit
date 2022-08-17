@@ -16,24 +16,33 @@ let package = Package(
             type: .static,
             targets: ["MIDIKit"]
         ),
-//        .library(
-//            name: "MIDIKitCommon",
-//            type: .static,
-//            targets: ["MIDIKitCommon"]
-//        ),
-//        .library(
-//            name: "MIDIKitEvents",
-//            type: .static,
-//            targets: ["MIDIKitEvents"]
-//        ),
-//        .library(
-//            name: "MIDIKitInternals",
-//            type: .static,
-//            targets: ["MIDIKitInternals"]
-//        ),
+        .library(
+            name: "MIDIKitEvents",
+            type: .static,
+            targets: ["MIDIKitEvents"]
+        ),
+        .library(
+            name: "MIDIKitControlSurfaces",
+            type: .static,
+            targets: ["MIDIKitControlSurfaces"]
+        ),
+        .library(
+            name: "MIDIKitSMF",
+            type: .static,
+            targets: ["MIDIKitSMF"]
+        ),
+        .library(
+            name: "MIDIKitSync",
+            type: .static,
+            targets: ["MIDIKitSync"]
+        )
     ],
     
     dependencies: [
+        .package(url: "https://github.com/orchetect/SwiftASCII", from: "1.1.3"),
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.2.10"),
+        .package(url: "https://github.com/orchetect/OTCore", from: "1.4.1"),
+        
         // testing-only:
         .package(url: "https://github.com/orchetect/XCTestUtils", from: "1.0.1")
     ],
@@ -49,8 +58,7 @@ let package = Package(
         ),
         .target(
             name: "MIDIKitInternals",
-            dependencies: [
-            ]
+            dependencies: []
         ),
         .target(
             name: "MIDIKitCommon",
@@ -70,6 +78,30 @@ let package = Package(
                 .target(name: "MIDIKitInternals"),
                 .target(name: "MIDIKitCommon"),
                 .target(name: "MIDIKitEvents")
+            ]
+        ),
+        
+        // extensions
+        .target(
+            name: "MIDIKitControlSurfaces",
+            dependencies: [
+                .target(name: "MIDIKit")
+            ]
+        ),
+        .target(
+            name: "MIDIKitSMF",
+            dependencies: [
+                .target(name: "MIDIKitEvents"),
+                "OTCore",
+                "SwiftASCII",
+                "TimecodeKit"
+            ]
+        ),
+        .target(
+            name: "MIDIKitSync",
+            dependencies: [
+                .target(name: "MIDIKit"),
+                "TimecodeKit"
             ]
         ),
         
@@ -99,6 +131,29 @@ let package = Package(
             name: "MIDIKitIOTests",
             dependencies: [
                 .target(name: "MIDIKitIO"),
+                .product(name: "XCTestUtils", package: "XCTestUtils")
+            ]
+        ),
+        
+        // extensions test targets
+        .testTarget(
+            name: "MIDIKitControlSurfacesTests",
+            dependencies: [
+                .target(name: "MIDIKitControlSurfaces"),
+                .product(name: "XCTestUtils", package: "XCTestUtils")
+            ]
+        ),
+        .testTarget(
+            name: "MIDIKitSMFTests",
+            dependencies: [
+                .target(name: "MIDIKitSMF"),
+                .product(name: "XCTestUtils", package: "XCTestUtils")
+            ]
+        ),
+        .testTarget(
+            name: "MIDIKitSyncTests",
+            dependencies: [
+                .target(name: "MIDIKitSync"),
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         )

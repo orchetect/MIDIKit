@@ -14,13 +14,13 @@ final class MIDIKit_Tests: XCTestCase {
     // no tests in this file, this is the module root test file
 	
     func testEmpty() {
-//        _ = MIDI.Event.noteOn(60, velocity: .midi1(64), channel: 0)
-//        _ = MIDI.Event.Note.On(note: 60, velocity: .midi1(64), channel: 0)
-//        _ = MIDI.Event.Note.On(note: 60, velocity: .midi1(64), channel: 0)
+//        _ = MIDIEvent.noteOn(60, velocity: .midi1(64), channel: 0)
+//        _ = MIDIEvent.Note.On(note: 60, velocity: .midi1(64), channel: 0)
+//        _ = MIDIEvent.Note.On(note: 60, velocity: .midi1(64), channel: 0)
 //            .midi1RawBytes()
-//        _ = MIDI.Event.doesntExist(60, velocity: .midi1(0))
+//        _ = MIDIEvent.doesntExist(60, velocity: .midi1(0))
 //
-//        var events: [MIDI.Event] = []
+//        var events: [MIDIEvent] = []
 //
 //        events = [
 //            .noteOn(60, velocity: .midi1(64), channel: 0)

@@ -1,0 +1,39 @@
+# ``MIDIKitSMF``
+
+Standard MIDI File extension for `MIDIKit`.
+
+## Overview
+
+This extension adds abstractions for reading and writing Standard MIDI Files.
+
+Standard MIDI File 1.0 is supported, with support for the MIDI 2.0 version coming in a future update.
+
+See <doc:Getting-Started> for a quick guide on getting the most out of MIDIKitSMF.
+
+Refer to MIDIKit's own package documentation for information on using MIDI I/O and events.
+
+## Topics
+
+### Introduction
+
+- <doc:Getting-Started>
+
+### Working with MIDI Files
+
+- ``MIDIFile``
+- ``MIDIFileEvent``
+- ``MIDIFileEvent/DeltaTime``
+- ``MIDINote``
+
+### Protocols
+
+- ``MIDIFileChunk``
+
+### MIDIKit Protocols Adopted
+
+- ``SendsMIDIEvents``
+- ``ReceivesMIDIEvents``
+
+### Internals
+
+- <doc:Internals>

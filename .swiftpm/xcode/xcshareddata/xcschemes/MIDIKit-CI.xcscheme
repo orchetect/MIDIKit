@@ -108,6 +108,36 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MIDIKitControlSurfacesTests"
+               BuildableName = "MIDIKitControlSurfacesTests"
+               BlueprintName = "MIDIKitControlSurfacesTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MIDIKitSMFTests"
+               BuildableName = "MIDIKitSMFTests"
+               BlueprintName = "MIDIKitSMFTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MIDIKitSyncTests"
+               BuildableName = "MIDIKitSyncTests"
+               BlueprintName = "MIDIKitSyncTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
