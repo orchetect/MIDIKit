@@ -6,41 +6,38 @@
 
 import Foundation
 import MIDIKitCore
-import struct SwiftASCII.ASCIIString
 
 extension MIDIFile.Chunk {
     public struct UnrecognizedChunk: MIDIFileChunk, Equatable {
-        static let disallowedIdentifiers: [ASCIIString] = [
+        static let disallowedIdentifiers: [String] = [
             Header().identifier,
             Track().identifier
         ]
         
-        public let identifier: ASCIIString
+        public let identifier: String
 
         /// Contains the raw bytes of the chunk's data portion
         /// (NOT including the 4-character identifier or the length integer.)
         public var rawData: Data
 
-        public init(id: ASCIIString, rawData: Data? = nil) {
+        public init(id: String, rawData: Data? = nil) {
             // identifier validation
 
             if Self.disallowedIdentifiers.contains(id) {
                 // don't allow non-track chunks to use SMF header or track identifier
                 identifier = "----"
-            } else if id.stringValue.count < 4 {
+            } else if id.count < 4 {
                 identifier =
-                    id.stringValue
-                        .appending(String(
-                            repeating: "-",
-                            count: 4 - id.stringValue.count
-                        ))
-                        .asciiStringLossy
+                    id.appending(String(
+                        repeating: "-",
+                        count: 4 - id.count
+                    ))
+                    .convertToASCII()
 
-            } else if id.stringValue.count > 4 {
+            } else if id.count > 4 {
                 identifier =
-                    id.stringValue
-                        .prefix(4)
-                        .asciiStringLossy
+                    id.prefix(4)
+                    .convertToASCII()
 
             } else {
                 identifier = id
@@ -72,11 +69,11 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
             )
         }
         
-        let chunkTypeString = ASCIIString(exactly: readChunkType) ?? "????"
+        let chunkTypeString = readChunkType.asciiDataToString() ?? "????"
         
         guard !Self.disallowedIdentifiers.contains(chunkTypeString) else {
             throw MIDIFile.DecodeError.malformed(
-                "Chunk type matches known identifier  \(chunkTypeString.stringValue.quoted). Forming an unrecognized chunk using this identifier is not allowed."
+                "Chunk type matches known identifier \(chunkTypeString.quoted). Forming an unrecognized chunk using this identifier is not allowed."
             )
         }
         
@@ -102,7 +99,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         var data = Data()
         
         // 4-byte chunk identifier
-        data += identifier.rawData
+        data += identifier.toASCIIData()
         
         // chunk data length (32-bit 4 byte big endian integer)
         if let trackLength = UInt32(exactly: bodyData.count) {
@@ -122,12 +119,12 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
 }
 
 extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible,
-                                            CustomDebugStringConvertible {
+CustomDebugStringConvertible {
     public var description: String {
         var outputString = ""
 
         outputString += "UnrecognizedChunk(".newLined
-        outputString += "  identifier: \(identifier.stringValue)".newLined
+        outputString += "  identifier: \(identifier)".newLined
         outputString += "  data: \(rawData.count) bytes".newLined
         outputString += ")"
 
@@ -145,7 +142,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible,
         var outputString = ""
 
         outputString += "UnrecognizedChunk(".newLined
-        outputString += "  identifier: \(identifier.stringValue)".newLined
+        outputString += "  identifier: \(identifier)".newLined
         outputString += "  data: \(rawData.count) bytes".newLined
         outputString += "    ("
         outputString += rawDataBlock

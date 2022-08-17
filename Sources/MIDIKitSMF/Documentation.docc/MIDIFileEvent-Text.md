@@ -12,7 +12,3 @@ Several text event types are possible. Specialize the text `type` when construct
 
 - ``MIDIFileEvent/text(delta:event:)``
 - ``MIDIFileEvent/Text``
-
-### Types
-
-- ``ASCIIString``

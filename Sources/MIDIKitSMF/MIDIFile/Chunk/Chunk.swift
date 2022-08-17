@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-import struct SwiftASCII.ASCIIString
 
 extension MIDIFile {
     public enum Chunk: Equatable {
@@ -20,7 +19,7 @@ extension MIDIFile.Chunk {
         .track(.init(events: events))
     }
     
-    public static func other(id: ASCIIString, rawData: Data? = nil) -> Self {
+    public static func other(id: String, rawData: Data? = nil) -> Self {
         .other(.init(id: id, rawData: rawData))
     }
 }

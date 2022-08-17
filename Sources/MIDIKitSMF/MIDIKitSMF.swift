@@ -6,4 +6,3 @@
 
 @_exported import MIDIKitCore
 @_exported import TimecodeKit
-@_exported import struct SwiftASCII.ASCIIString

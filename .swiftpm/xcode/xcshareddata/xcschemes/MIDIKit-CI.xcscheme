@@ -82,19 +82,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MIDIKitCommonTests"
-               BuildableName = "MIDIKitCommonTests"
-               BlueprintName = "MIDIKitCommonTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MIDIKitEventsTests"
-               BuildableName = "MIDIKitEventsTests"
-               BlueprintName = "MIDIKitEventsTests"
+               BlueprintIdentifier = "MIDIKitCoreTests"
+               BuildableName = "MIDIKitCoreTests"
+               BlueprintName = "MIDIKitCoreTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>

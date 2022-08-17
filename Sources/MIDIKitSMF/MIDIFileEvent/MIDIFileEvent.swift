@@ -6,7 +6,6 @@
 
 import TimecodeKit
 import MIDIKitCore
-import struct SwiftASCII.ASCIIString
 
 /// MIDI File Track Event.
 public enum MIDIFileEvent: Equatable, Hashable {
@@ -332,7 +331,7 @@ extension MIDIFileEvent {
     public static func text(
         delta: DeltaTime = .none,
         type: Text.EventType,
-        string: ASCIIString
+        string: String
     ) -> Self {
         .text(
             delta: delta,

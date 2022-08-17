@@ -7,10 +7,6 @@
 - ``MIDIFileEventType``
 - ``MIDIFileEventPayload``
 
-### ASCII String
-
-- ``ASCIIString``
-
 ### MIDIKit MIDI Note Related
 
 - ``MIDIKitSMF/MIDIEvent``

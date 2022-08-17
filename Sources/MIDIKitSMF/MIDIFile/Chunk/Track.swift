@@ -7,14 +7,13 @@
 import Foundation
 import MIDIKitCore
 @_implementationOnly import OTCore
-import struct SwiftASCII.ASCIIString
 
 // MARK: - Track
 
 extension MIDIFile.Chunk {
     /// `MTrk` chunk type.
     public struct Track: Equatable {
-        public static let staticIdentifier: ASCIIString = "MTrk"
+        public static let staticIdentifier: String = "MTrk"
         
         internal static let chunkEnd: [Byte] = [0xFF, 0x2F, 0x00]
         
@@ -31,7 +30,7 @@ extension MIDIFile.Chunk {
 }
 
 extension MIDIFile.Chunk.Track: MIDIFileChunk {
-    public var identifier: ASCIIString { Self.staticIdentifier }
+    public var identifier: String { Self.staticIdentifier }
 }
 
 extension MIDIFile.Chunk.Track {
@@ -53,11 +52,11 @@ extension MIDIFile.Chunk.Track {
             )
         }
         
-        let chunkTypeString = ASCIIString(exactly: readChunkType) ?? "????"
+        let chunkTypeString = readChunkType.asciiDataToString() ?? "????"
         
         guard chunkTypeString == Self.staticIdentifier else {
             throw MIDIFile.DecodeError.malformed(
-                "Chunk header does not contain track header identifier. Found \(chunkTypeString.stringValue.quoted) instead."
+                "Chunk header does not contain track header identifier. Found \(chunkTypeString.quoted) instead."
             )
         }
         
@@ -220,7 +219,7 @@ extension MIDIFile.Chunk.Track {
         var data = Data()
         
         // 4-byte chunk identifier
-        data += identifier.rawData
+        data += identifier.toASCIIData()
         
         // chunk data length (32-bit 4 byte big endian integer)
         if let trackLength = UInt32(exactly: bodyData.count) {

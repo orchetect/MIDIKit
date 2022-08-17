@@ -7,7 +7,6 @@
 import Foundation
 import MIDIKitCore
 @_implementationOnly import OTCore
-import struct SwiftASCII.ASCIIString
 
 extension MIDIFile {
     func encode() throws -> Data {

@@ -7,7 +7,6 @@
 import Foundation
 import MIDIKitCore
 @_implementationOnly import OTCore
-import struct SwiftASCII.ASCIIString
 
 // [Standard MIDI File Spec 1.0]:
 //
@@ -57,7 +56,7 @@ import struct SwiftASCII.ASCIIString
 extension MIDIFile.Chunk {
     /// `MThd` chunk type.
     public struct Header: Equatable {
-        public static let staticIdentifier: ASCIIString = "MThd"
+        public static let staticIdentifier: String = "MThd"
         
         public var format: MIDIFile.Format = .multipleTracksSynchronous
         
@@ -76,7 +75,7 @@ extension MIDIFile.Chunk {
 }
 
 extension MIDIFile.Chunk.Header: MIDIFileChunk {
-    public var identifier: ASCIIString { Self.staticIdentifier }
+    public var identifier: String { Self.staticIdentifier }
 }
 
 extension MIDIFile.Chunk.Header {
@@ -93,7 +92,7 @@ extension MIDIFile.Chunk.Header {
         
         // Header descriptor
         
-        guard dataReader.read(bytes: 4)?.bytes == Self.staticIdentifier.rawData.bytes else {
+        guard dataReader.read(bytes: 4)?.bytes == Self.staticIdentifier.toASCIIBytes() else {
             throw MIDIFile.DecodeError.malformed(
                 "Header is not correct. File may not be a MIDI file."
             )
@@ -172,7 +171,7 @@ extension MIDIFile.Chunk.Header {
         var data = Data()
         
         // Header descriptor
-        data += identifier.rawData
+        data += identifier.toASCIIData()
         
         // Header length (after this point - format, track count and delta-time values)
         // 0x06 is assuming three 2-byte values are following

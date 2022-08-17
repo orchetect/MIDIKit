@@ -7,7 +7,6 @@
 import Foundation
 import MIDIKitCore
 @_implementationOnly import OTCore
-import struct SwiftASCII.ASCIIString
 
 extension MIDIFile {
     mutating func decode(rawData data: Data) throws {
@@ -64,7 +63,7 @@ extension MIDIFile {
                 )
             }
 
-            let chunkTypeString = ASCIIString(exactly: chunkType) ?? "????"
+            let chunkTypeString = chunkType.asciiDataToString() ?? "????"
             
             let newChunk: Chunk
             

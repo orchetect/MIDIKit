@@ -39,7 +39,6 @@ let package = Package(
     ],
     
     dependencies: [
-        .package(url: "https://github.com/orchetect/SwiftASCII", from: "1.1.3"),
         .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.2.10"),
         .package(url: "https://github.com/orchetect/OTCore", from: "1.4.1"),
         
@@ -85,7 +84,6 @@ let package = Package(
             dependencies: [
                 .target(name: "MIDIKitCore"),
                 "OTCore",
-                "SwiftASCII",
                 "TimecodeKit"
             ]
         ),

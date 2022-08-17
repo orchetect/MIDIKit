@@ -6,8 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
-import struct SwiftASCII.ASCIIString
 
 // MARK: - Text
 
@@ -21,15 +19,15 @@ extension MIDIFileEvent {
         /// ASCII text only. If extended characters or encodings are used, it will be converted to ASCII before encoding into the MIDI file.
         ///
         /// (Arbitrary limit imposed: truncates at 65,536 characters long.)
-        public var text: ASCIIString = "" {
+        public var text: String = "" {
             didSet {
                 if oldValue != text { text_Validate() }
             }
         }
 
         private mutating func text_Validate() {
-            if text.stringValue.count > 65536 {
-                text = ASCIIString(String(text.stringValue.prefix(65536)))
+            if text.count > 65536 {
+                text = text.prefix(65536).convertToASCII()
             }
         }
 
@@ -39,7 +37,7 @@ extension MIDIFileEvent {
 
         public init(
             type: EventType,
-            string: ASCIIString
+            string: String
         ) {
             textType = type
             text = string
@@ -49,39 +47,39 @@ extension MIDIFileEvent {
 
         // MARK: - Init (types)
 
-        public init(copyright: ASCIIString) {
+        public init(copyright: String) {
             self.init(type: .copyright, string: copyright)
         }
 
-        public init(marker: ASCIIString) {
+        public init(marker: String) {
             self.init(type: .marker, string: marker)
         }
 
-        public init(cuePoint: ASCIIString) {
+        public init(cuePoint: String) {
             self.init(type: .cuePoint, string: cuePoint)
         }
 
-        public init(trackOrSequenceName: ASCIIString) {
+        public init(trackOrSequenceName: String) {
             self.init(type: .trackOrSequenceName, string: trackOrSequenceName)
         }
 
-        public init(instrumentName: ASCIIString) {
+        public init(instrumentName: String) {
             self.init(type: .instrumentName, string: instrumentName)
         }
 
-        public init(text: ASCIIString) {
+        public init(text: String) {
             self.init(type: .text, string: text)
         }
 
-        public init(programName: ASCIIString) {
+        public init(programName: String) {
             self.init(type: .programName, string: programName)
         }
 
-        public init(deviceName: ASCIIString) {
+        public init(deviceName: String) {
             self.init(type: .deviceName, string: deviceName)
         }
 
-        public init(lyric: ASCIIString) {
+        public init(lyric: String) {
             self.init(type: .lyric, string: lyric)
         }
     }
@@ -100,7 +98,7 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
     public var midi1SMFRawBytes: [Byte] {
         // FF 01 length text
         
-        let stringData = text.rawData.bytes
+        let stringData = text.data(using: .nonLossyASCII) ?? Data()
         
         return MIDIFile.kTextEventHeaders[textType]! +
             // length
@@ -149,23 +147,23 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
 
         let byteSlice = Array(rawBytes[(2 + length.byteLength) ..< expectedFullLength]).data
 
-        let formedText: ASCIIString
+        let formedText: String
 
         if let getText = byteSlice
             .toString(using: .nonLossyASCII)?
-            .asciiStringLossy
+            .convertToASCII()
         {
             formedText = getText
 
         } else if let getText = byteSlice
             .toString(using: .ascii)?
-            .asciiStringLossy
+            .convertToASCII()
         {
             formedText = getText
 
         } else if let getText = byteSlice
             .toString(using: .utf8)?
-            .asciiStringLossy
+            .convertToASCII()
         {
             formedText = getText
 
@@ -187,7 +185,7 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
     }
     
     public var smfDescription: String {
-        "\(textType): " + text.stringValue.quoted
+        "\(textType): " + text.quoted
     }
     
     public var smfDebugDescription: String {
