@@ -7,7 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 import os.log
-@_implementationOnly import SwiftRadix
+import Foundation
 
 extension MIDIReceiver {
     public typealias RawDataLoggingHandler = (_ packetBytesString: String) -> Void
@@ -71,10 +71,8 @@ extension MIDIReceiveHandler {
                 else { return }
             }
     
-            let stringOutput =
-                bytes.hex
-                    .stringValues(padTo: 2, prefixes: false)
-                    .joined(separator: " ")
+            let stringOutput = bytes
+                .hexString(padEachTo: 2, prefixes: false)
     
             handler(stringOutput)
         }

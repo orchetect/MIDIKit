@@ -4,7 +4,7 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-@_implementationOnly import SwiftRadix
+import Foundation
 
 extension MIDIEvent {
     /// Type representing a Manufacturer System Exclusive ID
@@ -156,7 +156,7 @@ extension MIDIEvent.SysExManufacturer {
 
 extension MIDIEvent.SysExManufacturer: CustomStringConvertible {
     public var description: String {
-        sysEx7RawBytes().hex.stringValue(padTo: 2, prefix: true)
+        sysEx7RawBytes().hexString(padEachTo: 2, prefixes: true)
     }
 }
 

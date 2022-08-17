@@ -8,7 +8,6 @@
 
 import XCTest
 import MIDIKitEvents
-import SwiftRadix
 
 final class SysEx7_Tests: XCTestCase {
     func testSysEx7RawBytes_Typical() throws {

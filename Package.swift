@@ -1,4 +1,5 @@
 // swift-tools-version:5.5
+// (be sure to update the .swift-version file when this Swift version changes)
 
 import PackageDescription
 
@@ -33,8 +34,6 @@ let package = Package(
     ],
     
     dependencies: [
-        .package(url: "https://github.com/orchetect/SwiftRadix", from: "1.2.0"),
-        
         // testing-only:
         .package(url: "https://github.com/orchetect/XCTestUtils", from: "1.0.1")
     ],
@@ -43,7 +42,6 @@ let package = Package(
         .target(
             name: "MIDIKit",
             dependencies: [
-                .product(name: "SwiftRadix", package: "SwiftRadix"),
                 .target(name: "MIDIKitCommon"),
                 .target(name: "MIDIKitEvents"),
                 .target(name: "MIDIKitIO")
@@ -52,27 +50,23 @@ let package = Package(
         .target(
             name: "MIDIKitInternals",
             dependencies: [
-                .product(name: "SwiftRadix", package: "SwiftRadix")
             ]
         ),
         .target(
             name: "MIDIKitCommon",
             dependencies: [
-                .product(name: "SwiftRadix", package: "SwiftRadix"),
                 .target(name: "MIDIKitInternals")
             ]
         ),
         .target(
             name: "MIDIKitEvents",
             dependencies: [
-                .product(name: "SwiftRadix", package: "SwiftRadix"),
                 .target(name: "MIDIKitCommon")
             ]
         ),
         .target(
             name: "MIDIKitIO",
             dependencies: [
-                .product(name: "SwiftRadix", package: "SwiftRadix"),
                 .target(name: "MIDIKitInternals"),
                 .target(name: "MIDIKitCommon"),
                 .target(name: "MIDIKitEvents")
@@ -84,7 +78,6 @@ let package = Package(
             name: "MIDIKitTests",
             dependencies: [
                 .target(name: "MIDIKit"),
-                .product(name: "SwiftRadix", package: "SwiftRadix"),
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         ),
@@ -92,7 +85,6 @@ let package = Package(
             name: "MIDIKitCommonTests",
             dependencies: [
                 .target(name: "MIDIKitCommon"),
-                .product(name: "SwiftRadix", package: "SwiftRadix"),
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         ),
@@ -100,7 +92,6 @@ let package = Package(
             name: "MIDIKitEventsTests",
             dependencies: [
                 .target(name: "MIDIKitEvents"),
-                .product(name: "SwiftRadix", package: "SwiftRadix"),
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         ),
@@ -108,7 +99,6 @@ let package = Package(
             name: "MIDIKitIOTests",
             dependencies: [
                 .target(name: "MIDIKitIO"),
-                .product(name: "SwiftRadix", package: "SwiftRadix"),
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         )
@@ -133,6 +123,7 @@ func addShouldTestFlag(toTarget targetName: String) {
 
 func addShouldTestFlags() {
     addShouldTestFlag(toTarget: "MIDIKitTests")
+    addShouldTestFlag(toTarget: "MIDIKitCommonTests")
     addShouldTestFlag(toTarget: "MIDIKitEventsTests")
     addShouldTestFlag(toTarget: "MIDIKitIOTests")
 }

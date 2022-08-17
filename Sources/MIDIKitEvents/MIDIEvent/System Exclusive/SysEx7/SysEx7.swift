@@ -80,11 +80,9 @@ extension MIDIEvent.SysEx7 {
         )
     
         if let separator = separator {
-            return bytes.hex.stringValues(padTo: 2, prefixes: false)
-                .joined(separator: separator)
+            return bytes.hexString(padEachTo: 2, prefixes: false, separator: separator)
         } else {
-            return bytes.hex.stringValues(padTo: 2, prefixes: false)
-                .joined()
+            return bytes.hexString(padEachTo: 2, prefixes: false, separator: "")
         }
     }
 }

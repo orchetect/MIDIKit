@@ -257,8 +257,7 @@ extension MIDIIOObject {
     
         // MARK: Channels
         case .receiveChannels:
-            let valueString = getReceiveChannels().binary
-                .stringValue(padToEvery: 8, splitEvery: 8, prefix: true)
+            let valueString = getReceiveChannels().binaryString(padTo: 8)
     
             return (
                 key: "Receive Channels",
@@ -266,8 +265,7 @@ extension MIDIIOObject {
             )
     
         case .transmitChannels:
-            let valueString = getTransmitChannels().binary
-                .stringValue(padToEvery: 8, splitEvery: 8, prefix: true)
+            let valueString = getTransmitChannels().binaryString(padTo: 8)
     
             return (
                 key: "Transmit Channels",

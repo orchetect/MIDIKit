@@ -5,7 +5,6 @@
 //
 
 import Foundation
-@_implementationOnly import SwiftRadix
 
 extension MIDIEvent {
     /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
@@ -180,8 +179,7 @@ extension MIDIEvent {
     
         // map to integers
         let conditionalBytes = hexStrings
-            .hex(as: Byte.self)
-            .values
+            .map { Byte($0, radix: 16) }
     
         // ensure values successfully converted (all valid hex strings)
         guard conditionalBytes.allSatisfy({ $0 != nil })

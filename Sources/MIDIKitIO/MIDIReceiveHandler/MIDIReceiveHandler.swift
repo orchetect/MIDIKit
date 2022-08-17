@@ -6,7 +6,7 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-@_implementationOnly import SwiftRadix
+import Foundation
 
 // MARK: - ReceiveHandler
 

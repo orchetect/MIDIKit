@@ -97,8 +97,8 @@ extension MIDIEvent.NoteAttribute: CustomStringConvertible {
             return "\(p79)"
     
         case let .undefined(attributeType: attributeType, data):
-            let attrString = attributeType.hex.stringValue(padTo: 2, prefix: true)
-            let dataString = data.hex.stringValue(padTo: 4, prefix: true)
+            let attrString = attributeType.hexString(padTo: 2, prefix: true)
+            let dataString = data.hexString(padTo: 4, prefix: true)
             return "undefined(\(attrString), data: \(dataString))"
         }
     }
