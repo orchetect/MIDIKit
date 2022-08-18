@@ -23,15 +23,15 @@ final class MIDIEvent_NoteAttribute_Pitch7_9_Tests: XCTestCase {
     // MARK: - BytePair
     
     func testInit_BytePair() {
-        let pitchA = Pitch7_9(BytePair(msb: 0b0000_0000, lsb: 0b0000_0000))
+        let pitchA = Pitch7_9(BytePair(msb: 0b00000000, lsb: 0b00000000))
         XCTAssertEqual(pitchA.coarse, 0)
         XCTAssertEqual(pitchA.fine, 0)
     
-        let pitchB = Pitch7_9(BytePair(msb: 0b0000_0010, lsb: 0b0000_0001))
+        let pitchB = Pitch7_9(BytePair(msb: 0b00000010, lsb: 0b00000001))
         XCTAssertEqual(pitchB.coarse, 1)
         XCTAssertEqual(pitchB.fine, 1)
     
-        let pitchC = Pitch7_9(BytePair(msb: 0b1111_1111, lsb: 0b1111_1111))
+        let pitchC = Pitch7_9(BytePair(msb: 0b11111111, lsb: 0b11111111))
         XCTAssertEqual(pitchC.coarse, 127)
         XCTAssertEqual(pitchC.fine, 511)
     }
@@ -39,32 +39,32 @@ final class MIDIEvent_NoteAttribute_Pitch7_9_Tests: XCTestCase {
     func testBytePair() {
         XCTAssertEqual(
             Pitch7_9(coarse: 0, fine: 0).bytePair,
-            .init(msb: 0b0000_0000, lsb: 0b0000_0000)
+            .init(msb: 0b00000000, lsb: 0b00000000)
         )
     
         XCTAssertEqual(
             Pitch7_9(coarse: 1, fine: 1).bytePair,
-            .init(msb: 0b0000_0010, lsb: 0b0000_0001)
+            .init(msb: 0b00000010, lsb: 0b00000001)
         )
     
         XCTAssertEqual(
             Pitch7_9(coarse: 127, fine: 511).bytePair,
-            .init(msb: 0b1111_1111, lsb: 0b1111_1111)
+            .init(msb: 0b11111111, lsb: 0b11111111)
         )
     }
     
     // MARK: - UInt16
     
     func testInit_UInt16() {
-        let pitchA = Pitch7_9(UInt16(0b0000_0000_0000_0000))
+        let pitchA = Pitch7_9(UInt16(0b00000000_00000000))
         XCTAssertEqual(pitchA.coarse, 0)
         XCTAssertEqual(pitchA.fine, 0)
     
-        let pitchB = Pitch7_9(UInt16(0b0000_0010_0000_0001))
+        let pitchB = Pitch7_9(UInt16(0b00000010_00000001))
         XCTAssertEqual(pitchB.coarse, 1)
         XCTAssertEqual(pitchB.fine, 1)
     
-        let pitchC = Pitch7_9(UInt16(0b1111_1111_1111_1111))
+        let pitchC = Pitch7_9(UInt16(0b11111111_11111111))
         XCTAssertEqual(pitchC.coarse, 127)
         XCTAssertEqual(pitchC.fine, 511)
     }
@@ -72,17 +72,17 @@ final class MIDIEvent_NoteAttribute_Pitch7_9_Tests: XCTestCase {
     func testUInt16() {
         XCTAssertEqual(
             Pitch7_9(coarse:   0, fine:   0).uInt16Value,
-            0b0000_0000_0000_0000
+            0b00000000_00000000
         )
     
         XCTAssertEqual(
             Pitch7_9(coarse:   1, fine:   1).uInt16Value,
-            0b0000_0010_0000_0001
+            0b00000010_00000001
         )
     
         XCTAssertEqual(
             Pitch7_9(coarse: 127, fine: 511).uInt16Value,
-            0b1111_1111_1111_1111
+            0b11111111_11111111
         )
     }
     

@@ -1,6 +1,6 @@
 //
-//  MIDI File Constants.swift
-//  MIDIKitSMF • https://github.com/orchetect/MIDIKitSMF
+//  MIDIFile Constants.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 

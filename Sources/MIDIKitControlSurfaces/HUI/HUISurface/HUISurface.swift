@@ -1,6 +1,6 @@
 //
-//  Surface.swift
-//  MIDIKitControlSurfaces • https://github.com/orchetect/MIDIKitControlSurfaces
+//  HUISurface.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 

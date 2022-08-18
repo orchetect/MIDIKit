@@ -114,14 +114,14 @@ public struct UInt14: MIDIIntegerProtocol {
     
     /// Returns the raw 14-bit value as two 7-bit value bytes.
     public var bytePair: BytePair {
-        let msb = (value & 0b11_1111_1000_0000) >> 7
+        let msb = (value & 0b111111_10000000) >> 7
         let lsb = value & 0b1111111
         return .init(msb: Byte(msb), lsb: Byte(lsb))
     }
     
     /// Returns the raw 14-bit value as two 7-bit value bytes.
     public var midiUInt7Pair: UInt7Pair {
-        let msb = (value & 0b11_1111_1000_0000) >> 7
+        let msb = (value & 0b111111_10000000) >> 7
         let lsb = value & 0b1111111
         return .init(msb: UInt7(msb), lsb: UInt7(lsb))
     }

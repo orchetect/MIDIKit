@@ -1,6 +1,6 @@
 //
 //  Event Conversion Tests.swift
-//  MIDIKitSMF • https://github.com/orchetect/MIDIKitSMF
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 

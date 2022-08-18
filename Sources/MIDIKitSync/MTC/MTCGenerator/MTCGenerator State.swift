@@ -1,6 +1,6 @@
 //
-//  MTC Generator State.swift
-//  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
+//  MTCGenerator State.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 

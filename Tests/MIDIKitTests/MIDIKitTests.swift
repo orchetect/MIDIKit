@@ -43,7 +43,7 @@ final class MIDIKit_Tests: XCTestCase {
 //
 //        let i: [MIDIIdentifier] = []
 //        _ = i.asCriteria()
-//        
+//
 //        let p: MIDIIdentifierPersistence = .none
     }
 }

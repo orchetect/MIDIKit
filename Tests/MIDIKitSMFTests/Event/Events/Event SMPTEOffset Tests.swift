@@ -1,6 +1,6 @@
 //
 //  Event SMPTEOffset Tests.swift
-//  MIDIKitSMF • https://github.com/orchetect/MIDIKitSMF
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
@@ -16,7 +16,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
     
     func testInit_midi1SMFRawBytes() throws {
         let bytes: [Byte] = [0xFF, 0x54, 0x05,
-                                  0b00100001, 2, 3, 4, 5]
+                             0b00100001, 2, 3, 4, 5]
         
         let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: bytes)
         
@@ -47,7 +47,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
     func testFrameRates() throws {
         do {
             let rawData: [Byte] = [0xFF, 0x54, 0x05,
-                                        0b00000001, 2, 3, 4, 5]
+                                   0b00000001, 2, 3, 4, 5]
             
             let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
@@ -56,7 +56,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
         
         do {
             let rawData: [Byte] = [0xFF, 0x54, 0x05,
-                                        0b00100001, 2, 3, 4, 5]
+                                   0b00100001, 2, 3, 4, 5]
             
             let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
@@ -65,7 +65,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
         
         do {
             let rawData: [Byte] = [0xFF, 0x54, 0x05,
-                                        0b01000001, 2, 3, 4, 5]
+                                   0b01000001, 2, 3, 4, 5]
             
             let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
@@ -74,7 +74,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
         
         do {
             let rawData: [Byte] = [0xFF, 0x54, 0x05,
-                                        0b01100001, 2, 3, 4, 5]
+                                   0b01100001, 2, 3, 4, 5]
             
             let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             

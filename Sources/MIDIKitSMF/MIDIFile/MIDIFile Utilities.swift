@@ -1,6 +1,6 @@
 //
-//  MIDI File Utilities.swift
-//  MIDIKitSMF • https://github.com/orchetect/MIDIKitSMF
+//  MIDIFile Utilities.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 

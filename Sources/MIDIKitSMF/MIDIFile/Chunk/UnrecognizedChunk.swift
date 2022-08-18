@@ -1,6 +1,6 @@
 //
 //  UnrecognizedChunk.swift
-//  MIDIKitSMF • https://github.com/orchetect/MIDIKitSMF
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
@@ -61,8 +61,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         
         // track header
         
-        let (id, dataBody) = try stream.withDataReader
-        { dataReader -> (String, D.SubSequence) in
+        let (id, dataBody) = try stream.withDataReader { dataReader -> (String, D.SubSequence) in
             let readChunkType = try dataReader.read(bytes: 4)
             
             guard let chunkLengthInt32 = (try? dataReader.read(bytes: 4))?

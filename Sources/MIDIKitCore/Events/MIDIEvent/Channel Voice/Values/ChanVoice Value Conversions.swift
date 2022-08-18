@@ -71,7 +71,7 @@ extension MIDIEvent {
             return bitShiftedValue
         }
         // use bit repeat bits from extended 14-bit value
-        var repeatValue = UInt32(source) & 0b1_1111_1111_1111
+        var repeatValue = UInt32(source) & 0b11111_11111111
         repeatValue <<= 5 // ((32 - 14) - 13)
         while (repeatValue != 0) {
             bitShiftedValue |= repeatValue

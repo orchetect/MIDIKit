@@ -28,20 +28,28 @@ extension Data {
     /// Converts ASCII data to `String`.
     /// Returns `nil` if data is not valid ASCII.
     public func asciiDataToString() -> String? {
-        String(data: self,
-               encoding: .nonLossyASCII)
+        String(
+            data: self,
+            encoding: .nonLossyASCII
+        )
     }
     
     /// Converts ASCII data to `String`.
     /// Attempts to lossily convert the data if it is not valid ASCII.
     public func asciiDataToStringLossy() -> String {
-        String(data: self,
-               encoding: .nonLossyASCII)
-        ?? String(data: self,
-                  encoding: .ascii)
-        ?? String(data: self,
-                  encoding: .utf8)
-        ?? String(repeating: "?", count: count)
+        String(
+            data: self,
+            encoding: .nonLossyASCII
+        )
+            ?? String(
+                data: self,
+                encoding: .ascii
+            )
+            ?? String(
+                data: self,
+                encoding: .utf8
+            )
+            ?? String(repeating: "?", count: count)
     }
 }
 
@@ -49,20 +57,28 @@ extension DataProtocol {
     /// Converts ASCII data to `String`.
     /// Returns `nil` if data is not valid ASCII.
     public func asciiDataToString() -> String? {
-        String(data: Data(self),
-               encoding: .nonLossyASCII)
+        String(
+            data: Data(self),
+            encoding: .nonLossyASCII
+        )
     }
     
     /// Converts ASCII data to `String`.
     /// Attempts to lossily convert the data if it is not valid ASCII.
     public func asciiDataToStringLossy() -> String {
         let data = Data(self)
-        return String(data: data,
-               encoding: .nonLossyASCII)
-        ?? String(data: data,
-                  encoding: .ascii)
-        ?? String(data: data,
-                  encoding: .utf8)
-        ?? String(repeating: "?", count: count)
+        return String(
+            data: data,
+            encoding: .nonLossyASCII
+        )
+            ?? String(
+                data: data,
+                encoding: .ascii
+            )
+            ?? String(
+                data: data,
+                encoding: .utf8
+            )
+            ?? String(repeating: "?", count: count)
     }
 }

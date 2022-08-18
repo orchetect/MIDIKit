@@ -86,7 +86,7 @@ extension MIDIEvent.SysExManufacturer {
             return
     
         case 0x80...: // "three byte" ID
-            let byte2 = (sysEx8RawBytes[0] & 0b0111_1111).toUInt7
+            let byte2 = (sysEx8RawBytes[0] & 0b01111111).toUInt7
             guard let byte3 = UInt7(exactly: sysEx8RawBytes[1]) else { return nil }
             self = .threeByte(byte2: byte2, byte3: byte3)
     
@@ -116,7 +116,7 @@ extension MIDIEvent.SysExManufacturer {
     
         case let .threeByte(byte2: byte2, byte3: byte3):
             return [
-                0b1000_0000 + byte2.uInt8Value,
+                0b10000000 + byte2.uInt8Value,
                 byte3.uInt8Value
             ]
         }

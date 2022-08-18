@@ -30,7 +30,7 @@ extension MIDIEvent.NoteAttribute {
         /// - Parameters:
         ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
         ///   - fine: 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
-            public init(
+        public init(
             coarse: UInt7,
             fine: UInt9
         ) {
@@ -55,7 +55,7 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     ///
     /// Range: 0+(0/512) ... 127+(511/512)
     public init(_ bytePair: BytePair) {
-        coarse = UInt7((bytePair.msb & 0b1111_1110) >> 1)
+        coarse = UInt7((bytePair.msb & 0b11111110) >> 1)
     
         fine = UInt9(
             UInt9.Storage(bytePair.lsb)
@@ -65,8 +65,8 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     
     /// UInt16 representation as a byte pair.
     public var bytePair: BytePair {
-        let msb = Byte(coarse.value << 1) + Byte((fine.value & 0b1_0000_0000) >> 8)
-        let lsb = Byte(fine.value & 0b1111_1111)
+        let msb = Byte(coarse.value << 1) + Byte((fine.value & 0b1_00000000) >> 8)
+        let lsb = Byte(fine.value & 0b11111111)
     
         return .init(msb: msb, lsb: lsb)
     }
@@ -81,8 +81,8 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     ///
     /// Range: 0+(0/512) ... 127+(511/512)
     public init(_ uInt16Value: UInt16) {
-        coarse = ((uInt16Value & 0b1111_1110_0000_0000) >> 9).toUInt7
-        fine =    (uInt16Value & 0b0000_0001_1111_1111).toUInt9
+        coarse = ((uInt16Value & 0b11111110_00000000) >> 9).toUInt7
+        fine =    (uInt16Value & 0b00000001_11111111).toUInt9
     }
     
     /// UInt16 representation.
@@ -105,11 +105,11 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
         let truncated = trunc(double)
     
         coarse = UInt7(truncated)
-        fine = UInt9(round((double - truncated) * 0b10_0000_0000))
+        fine = UInt9(round((double - truncated) * 0b10_00000000))
     }
     
     /// Converted to a Double value (0.0...127.998046875)
     public var doubleValue: Double {
-        Double(coarse.value) + (Double(fine.value) / 0b10_0000_0000)
+        Double(coarse.value) + (Double(fine.value) / 0b10_00000000)
     }
 }

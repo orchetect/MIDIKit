@@ -1,6 +1,6 @@
 //
 //  Track.swift
-//  MIDIKitSMF • https://github.com/orchetect/MIDIKitSMF
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
@@ -34,7 +34,9 @@ extension MIDIFile.Chunk.Track: MIDIFileChunk {
 
 extension MIDIFile.Chunk.Track {
     /// Init from MIDI file buffer.
-    public init<D: MutableDataProtocol>(midi1SMFRawBytesStream stream: D) throws where D.SubSequence : MutableDataProtocol {
+    public init<D: MutableDataProtocol>(midi1SMFRawBytesStream stream: D) throws
+        where D.SubSequence: MutableDataProtocol
+    {
         guard stream.count >= 8 else {
             throw MIDIFile.DecodeError.malformed(
                 "There was a problem reading chunk header. Encountered end of file early."
@@ -168,7 +170,8 @@ extension MIDIFile.Chunk.Track {
             
                 if let foundEvent = foundEvent {
                     // inject delta time into event
-                    let newEventDelta: MIDIFileEvent.DeltaTime = .ticks(UInt32(eventDeltaTime.value))
+                    let newEventDelta: MIDIFileEvent
+                        .DeltaTime = .ticks(UInt32(eventDeltaTime.value))
                 
                     // offset buffer length if runningStatusByte is present
                     let chunkBufferLength = runningStatusByte != nil
@@ -182,7 +185,8 @@ extension MIDIFile.Chunk.Track {
                     // store event in running status
                     let newEventBytes: D = foundEvent.newEvent.midi1SMFRawBytes()
                     if !newEventBytes.isEmpty {
-                        let testForRunningStatusByte: D.Element = (foundEvent.newEvent.midi1SMFRawBytes() as D).first!
+                        let testForRunningStatusByte: D
+                            .Element = (foundEvent.newEvent.midi1SMFRawBytes() as D).first!
                         
                         if (0x80 ... 0xEF).contains(testForRunningStatusByte) {
                             runningStatus = foundEvent.newEvent

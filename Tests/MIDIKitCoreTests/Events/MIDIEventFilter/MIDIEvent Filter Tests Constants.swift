@@ -102,7 +102,7 @@ enum kEvents {
     
     enum SysCommon {
         static let timecodeQuarterFrame: MIDIEvent = .timecodeQuarterFrame(
-            dataByte: 0b0000_0000,
+            dataByte: 0b00000000,
             group: 0
         )
         static let songPositionPointer: MIDIEvent = .songPositionPointer(midiBeat: 8, group: 0)

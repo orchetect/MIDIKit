@@ -77,7 +77,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 velocity: .midi1(127),
                 attribute: .pitch7_9(
                     coarse: 0b1101100,
-                    fine: 0b1_1001_1110
+                    fine: 0b1_10011110
                 ),
                 channel: 0x1,
                 group: 0x9,
@@ -96,8 +96,8 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                     UMPWord(
                         0xFF,
                         0xFF,
-                        0b1101_1001,
-                        0b1001_1110
+                        0b11011001,
+                        0b10011110
                     )
                 ]]
             )

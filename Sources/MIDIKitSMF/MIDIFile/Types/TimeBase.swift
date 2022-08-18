@@ -1,6 +1,6 @@
 //
 //  TimeBase.swift
-//  MIDIKitSMF • https://github.com/orchetect/MIDIKitSMF
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
@@ -82,7 +82,7 @@ extension MIDIFile.TimeBase {
 }
 
 extension MIDIFile.TimeBase: CustomStringConvertible,
-                             CustomDebugStringConvertible {
+CustomDebugStringConvertible {
     public var description: String {
         switch self {
         case let .musical(ticksPerQuarterNote):

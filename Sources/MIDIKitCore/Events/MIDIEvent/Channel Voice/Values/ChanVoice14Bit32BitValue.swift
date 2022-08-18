@@ -164,9 +164,9 @@ extension MIDIEvent.ChanVoice14Bit32BitValue {
     public struct Validated: Equatable, Hashable {
         public typealias Value = MIDIEvent.ChanVoice14Bit32BitValue
     
-            private var value: Value
+        private var value: Value
     
-            public var wrappedValue: Value {
+        public var wrappedValue: Value {
             get {
                 value
             }
@@ -187,7 +187,7 @@ extension MIDIEvent.ChanVoice14Bit32BitValue {
             }
         }
     
-            public init(wrappedValue: Value) {
+        public init(wrappedValue: Value) {
             value = wrappedValue
         }
     }

@@ -118,7 +118,7 @@ public final class MIDIInputConnection: _MIDIIOManagedProtocol {
         self.midiManager = midiManager
         self.mode = mode
         self.filter = filter
-        self.receiveHandler = receiver.createReceiveHandler()
+        receiveHandler = receiver.createReceiveHandler()
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
     
         // relies on midiManager, mode, and filter being set first
@@ -138,7 +138,7 @@ public final class MIDIInputConnection: _MIDIIOManagedProtocol {
 extension MIDIInputConnection {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: MIDIReceiver) {
-        self.receiveHandler = receiver.createReceiveHandler()
+        receiveHandler = receiver.createReceiveHandler()
     }
 }
 

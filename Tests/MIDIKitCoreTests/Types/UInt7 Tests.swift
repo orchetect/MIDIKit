@@ -213,7 +213,7 @@ final class UInt7_Tests: XCTestCase {
     
         // nil (overflow)
     
-        XCTAssertNil(0b1000_0000.toUInt7Exactly)
+        XCTAssertNil(0b10000000.toUInt7Exactly)
     }
     
     func testBinaryInteger_Init_UInt7() {

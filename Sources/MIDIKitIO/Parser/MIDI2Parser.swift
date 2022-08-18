@@ -516,7 +516,7 @@ public final class MIDI2Parser {
             else { return nil }
     
             let optionFlags = byte(2)
-            let useBankSelect = (optionFlags & 0b0000_0001) == 0b1
+            let useBankSelect = (optionFlags & 0b00000001) == 0b1
     
             let bank: MIDIEvent.ProgramChange.Bank = useBankSelect
                 ? .bankSelect(.init(uInt7Pair: .init(msb: bankMSB, lsb: bankLSB)))

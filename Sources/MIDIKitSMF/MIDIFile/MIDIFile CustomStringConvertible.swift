@@ -1,13 +1,13 @@
 //
-//  MIDI File CustomStringConvertible.swift
-//  MIDIKitSMF • https://github.com/orchetect/MIDIKitSMF
+//  MIDIFile CustomStringConvertible.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
 extension MIDIFile: CustomStringConvertible,
-                    CustomDebugStringConvertible {
+CustomDebugStringConvertible {
     public var description: String {
         var outputString = ""
 

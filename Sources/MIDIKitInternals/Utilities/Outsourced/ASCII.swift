@@ -11,7 +11,7 @@ import Foundation
 
 extension StringProtocol {
     public func convertToASCII() -> String {
-        if allSatisfy ({ $0.isASCII }) { return String(self) }
+        if allSatisfy({ $0.isASCII }) { return String(self) }
         return asciiStringLossy
     }
     

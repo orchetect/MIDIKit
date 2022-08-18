@@ -1,7 +1,7 @@
 /// ----------------------------------------------
 /// ----------------------------------------------
 /// OTCore/Extensions/Swift/Collections.swift
-/// 
+///
 /// Borrowed from OTCore 1.4.1 under MIT license.
 /// https://github.com/orchetect/OTCore
 /// Methods herein are unit tested at their source

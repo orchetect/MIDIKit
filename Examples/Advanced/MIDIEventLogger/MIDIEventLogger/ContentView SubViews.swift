@@ -229,7 +229,7 @@ extension ContentView {
                         sendEvent(.noteOn(
                             60,
                             velocity: .unitInterval(0.5),
-                            attribute: .pitch7_9(coarse: 2, fine: 0b1_0000_0000),
+                            attribute: .pitch7_9(coarse: 2, fine: 0b1_00000000),
                             channel: midiChannel,
                             group: midiGroup
                         ))
@@ -239,7 +239,7 @@ extension ContentView {
                         sendEvent(.noteOff(
                             60,
                             velocity: .unitInterval(0.0),
-                            attribute: .pitch7_9(coarse: 2, fine: 0b1_0000_0000),
+                            attribute: .pitch7_9(coarse: 2, fine: 0b1_00000000),
                             channel: midiChannel,
                             group: midiGroup
                         ))

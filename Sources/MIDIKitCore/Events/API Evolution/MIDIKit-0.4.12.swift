@@ -12,9 +12,9 @@ extension MIDIEvent {
     /// Creates an NRPN message, consisting of multiple MIDI Events.
     @available(
         *,
-         unavailable,
-         renamed: "ccNRPN(_:channel:group:)",
-         message: "NRPN API has been unified with RPN API. Please use the .raw() enum case in place of parameter: dataEntryMSB: dataEntryLSB: parameters."
+        unavailable,
+        renamed: "ccNRPN(_:channel:group:)",
+        message: "NRPN API has been unified with RPN API. Please use the .raw() enum case in place of parameter: dataEntryMSB: dataEntryLSB: parameters."
     )
     public static func ccNRPN(
         parameter: UInt7Pair,

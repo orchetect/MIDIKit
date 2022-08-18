@@ -17,13 +17,13 @@ extension MIDIEvent {
         // conversion initializers from MIDI 1 value types
     
         /// Returns `.midi2()` case converting from a MIDI 1.0 7-Bit value.
-            public static func midi1(sevenBit: UInt7) -> Self {
+        public static func midi1(sevenBit: UInt7) -> Self {
             let scaled = MIDIEvent.scaled32Bit(from7Bit: sevenBit)
             return .midi2(scaled)
         }
     
         /// Returns `.midi2()` case converting from a MIDI 1.0 14-Bit value.
-            public static func midi1(fourteenBit: UInt14) -> Self {
+        public static func midi1(fourteenBit: UInt14) -> Self {
             let scaled = MIDIEvent.scaled32Bit(from14Bit: fourteenBit)
             return .midi2(scaled)
         }
@@ -105,9 +105,9 @@ extension MIDIEvent.ChanVoice32BitValue {
     public struct Validated: Equatable, Hashable {
         public typealias Value = MIDIEvent.ChanVoice32BitValue
     
-            private var value: Value
+        private var value: Value
     
-            public var wrappedValue: Value {
+        public var wrappedValue: Value {
             get {
                 value
             }
@@ -122,7 +122,7 @@ extension MIDIEvent.ChanVoice32BitValue {
             }
         }
     
-            public init(wrappedValue: Value) {
+        public init(wrappedValue: Value) {
             value = wrappedValue
         }
     }

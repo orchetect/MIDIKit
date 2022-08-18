@@ -10,7 +10,7 @@ public typealias Byte = UInt8
 extension Byte {
     /// Returns a `Byte` as its 4-bit nibbles: high `(& 0xF0 >> 4)` and low `(& 0x0F)`.
     public var nibbles: (high: Nibble, low: Nibble) {
-        let high = (self & 0b1111_0000) >> 4
+        let high = (self & 0b11110000) >> 4
         let low = self & 0b1111
     
         return (high: Nibble(high), low: Nibble(low))

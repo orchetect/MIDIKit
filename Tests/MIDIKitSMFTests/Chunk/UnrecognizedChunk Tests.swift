@@ -1,6 +1,6 @@
 //
 //  UnrecognizedChunk Tests.swift
-//  MIDIKitSMF • https://github.com/orchetect/MIDIKitSMF
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
@@ -15,7 +15,7 @@ final class Chunk_UnrecognizedChunk_Tests: XCTestCase {
     // swiftformat:options --maxwidth none
     
     func testEmptyData() throws {
-        let id: String = "ABCD"
+        let id = "ABCD"
         
         let track = MIDIFile.Chunk.UnrecognizedChunk(id: id)
         
@@ -45,7 +45,7 @@ final class Chunk_UnrecognizedChunk_Tests: XCTestCase {
     func testWithData() throws {
         let data: [Byte] = [0x12, 0x34, 0x56, 0x78]
         
-        let id: String = "ABCD"
+        let id = "ABCD"
         
         let track = MIDIFile.Chunk.UnrecognizedChunk(
             id: id,

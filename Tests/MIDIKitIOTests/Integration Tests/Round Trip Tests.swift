@@ -89,10 +89,9 @@ open class RoundTrip_Tests_Base: XCTestCase {
             try manager.addInputConnection(
                 toOutputs: [.uniqueID(outputID)],
                 tag: inputConnectionTag,
-                receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false)
-                    { events in
-                        self.receivedEvents.append(contentsOf: events)
-                    }
+                receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
+                    self.receivedEvents.append(contentsOf: events)
+                }
             )
         } catch let err as MIDIIOError {
             XCTFail("\(err)"); return

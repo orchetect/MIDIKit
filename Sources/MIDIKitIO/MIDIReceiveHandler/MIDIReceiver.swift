@@ -104,7 +104,7 @@ extension MIDIReceiver {
             storageType,
             translateMIDI1NoteOnZeroVelocityToNoteOff
         ):
-            switch storageType{
+            switch storageType {
             case .strongly:
                 return .init(
                     MIDIReceiveHandler.StrongEventsReceiver(

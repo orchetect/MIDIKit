@@ -1,7 +1,7 @@
 /// ----------------------------------------------
 /// ----------------------------------------------
 /// OTCore/Protocols/Protocols.swift
-/// 
+///
 /// Borrowed from OTCore 1.4.2 under MIT license.
 /// https://github.com/orchetect/OTCore
 /// Methods herein are unit tested at their source

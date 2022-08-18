@@ -213,7 +213,6 @@ public enum MIDI {
         public typealias TimeStamp = UInt64
         public typealias CoreMIDIOSStatus = Int32
         
-        
         // MARK: Manager
         
         public class Manager {
@@ -314,9 +313,11 @@ public enum MIDI {
         
         @available(
             *, unavailable,
-             message: "setMIDINetworkSession() is now a top-level global method."
+            message: "setMIDINetworkSession() is now a top-level global method."
         )
-        public static func setMIDINetworkSession(policy: MIDIIONetworkConnectionPolicy?) { fatalError() }
+        public static func setMIDINetworkSession(policy: MIDIIONetworkConnectionPolicy?) {
+            fatalError()
+        }
         
         // MARK: UniqueIDPersistence -> MIDIIdentifierPersistence
         
@@ -349,7 +350,6 @@ public enum MIDI {
         public var wrappedValue: T { fatalError() }
     }
 }
-
 
 // MARK: MIDIUniqueID -> MIDIIdentifier
 
@@ -425,4 +425,3 @@ extension BinaryInteger {
     @available(*, unavailable, renamed: "toUInt25Exactly")
     public var toMIDIUInt25Exactly: UInt25? { fatalError() }
 }
-

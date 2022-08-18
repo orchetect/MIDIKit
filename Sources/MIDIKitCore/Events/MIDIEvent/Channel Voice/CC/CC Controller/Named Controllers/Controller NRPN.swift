@@ -131,4 +131,3 @@ extension MIDIEvent {
         )
     }
 }
-

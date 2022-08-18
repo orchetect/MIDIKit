@@ -10,9 +10,9 @@ import XCTest
 import MIDIKitCore
 
 final class UInt9_Tests: XCTestCase {
-    fileprivate let _min      = 0b0_0000_0000 // int   0, hex 0x000
-    fileprivate let _midpoint = 0b1_0000_0000 // int 256, hex 0x0FF
-    fileprivate let _max      = 0b1_1111_1111 // int 511, hex 0x1FF
+    fileprivate let _min      = 0b0_00000000 // int   0, hex 0x000
+    fileprivate let _midpoint = 0b1_00000000 // int 256, hex 0x0FF
+    fileprivate let _max      = 0b1_11111111 // int 511, hex 0x1FF
 	
     func testInit_BinaryInteger() {
         // default
@@ -202,8 +202,8 @@ final class UInt9_Tests: XCTestCase {
     }
 	
     func testBinaryInteger_UInt9Exactly() {
-        XCTAssertEqual(0b0_0000_0000.toUInt9Exactly, 0b0_0000_0000)
-        XCTAssertEqual(0b1_1111_1111.toUInt9Exactly, 0b1_1111_1111)
+        XCTAssertEqual(0b0_00000000.toUInt9Exactly, 0b0_00000000)
+        XCTAssertEqual(0b1_11111111.toUInt9Exactly, 0b1_11111111)
     
         XCTAssertEqual(Int8(10).toUInt9Exactly, 10)
         XCTAssertEqual(UInt8(10).toUInt9Exactly, 10)
@@ -213,15 +213,15 @@ final class UInt9_Tests: XCTestCase {
     
         // nil (overflow)
     
-        XCTAssertNil(0b10_0000_0000.toUInt9Exactly)
+        XCTAssertNil(0b10_00000000.toUInt9Exactly)
     }
     
     func testBinaryInteger_Init_UInt9() {
         XCTAssertEqual(Int(10.toUInt9), 10)
         XCTAssertEqual(Int(exactly: 10.toUInt9), 10)
     
-        XCTAssertEqual(Int(exactly: 0b1_1111_1111.toUInt9), 0b1_1111_1111)
-        XCTAssertNil(UInt8(exactly: 0b1_1111_1111.toUInt9))
+        XCTAssertEqual(Int(exactly: 0b1_11111111.toUInt9), 0b1_11111111)
+        XCTAssertNil(UInt8(exactly: 0b1_11111111.toUInt9))
     }
     
     // MARK: - Operators

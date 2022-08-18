@@ -164,12 +164,12 @@ extension MIDIEvent.ProgramChange {
     
             switch bank {
             case .noBankSelect:
-                optionFlags = 0b0000_0000
+                optionFlags = 0b00000000
                 bankMSB = 0x00
                 bankLSB = 0x00
     
             case let .bankSelect(bankUInt14):
-                optionFlags = 0b0000_0001
+                optionFlags = 0b00000001
                 let bytePair = bankUInt14.bytePair
                 bankMSB = bytePair.msb
                 bankLSB = bytePair.lsb

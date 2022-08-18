@@ -10,9 +10,9 @@ import XCTest
 import MIDIKitCore
 
 final class UInt25_Tests: XCTestCase {
-    fileprivate let _min      = 0b0_0000_0000_0000_0000_0000_0000 // int        0, hex 0x0000000
-    fileprivate let _midpoint = 0b1_0000_0000_0000_0000_0000_0000 // int 16777216, hex 0x1000000
-    fileprivate let _max      = 0b1_1111_1111_1111_1111_1111_1111 // int 33554431, hex 0x1FFFFFF
+    fileprivate let _min      = 0b0_00000000_00000000_00000000 // int        0, hex 0x0000000
+    fileprivate let _midpoint = 0b1_00000000_00000000_00000000 // int 16777216, hex 0x1000000
+    fileprivate let _max      = 0b1_11111111_11111111_11111111 // int 33554431, hex 0x1FFFFFF
 	
     func testInit_BinaryInteger() {
         // default
@@ -205,12 +205,12 @@ final class UInt25_Tests: XCTestCase {
 	
     func testBinaryInteger_UInt25Exactly() {
         XCTAssertEqual(
-            0b0_0000_0000_0000_0000_0000_0000.toUInt25Exactly,
-            0b0_0000_0000_0000_0000_0000_0000
+            0b0_00000000_00000000_00000000.toUInt25Exactly,
+            0b0_00000000_00000000_00000000
         )
         XCTAssertEqual(
-            0b1_1111_1111_1111_1111_1111_1111.toUInt25Exactly,
-            0b1_1111_1111_1111_1111_1111_1111
+            0b1_11111111_11111111_11111111.toUInt25Exactly,
+            0b1_11111111_11111111_11111111
         )
     
         XCTAssertEqual(Int8(10).toUInt25Exactly, 10)
@@ -221,7 +221,7 @@ final class UInt25_Tests: XCTestCase {
     
         // nil (overflow)
     
-        XCTAssertNil(0b10_0000_0000_0000_0000_0000_0000.toUInt25Exactly)
+        XCTAssertNil(0b10_00000000_00000000_00000000.toUInt25Exactly)
     }
     
     func testBinaryInteger_Init_UInt25() {
@@ -229,10 +229,10 @@ final class UInt25_Tests: XCTestCase {
         XCTAssertEqual(Int(exactly: 10.toUInt25), 10)
     
         XCTAssertEqual(
-            Int(exactly: 0b1_1111_1111_1111_1111_1111_1111.toUInt25),
-            0b1_1111_1111_1111_1111_1111_1111
+            Int(exactly: 0b1_11111111_11111111_11111111.toUInt25),
+            0b1_11111111_11111111_11111111
         )
-        XCTAssertNil(UInt8(exactly: 0b1_1111_1111.toUInt25))
+        XCTAssertNil(UInt8(exactly: 0b1_11111111.toUInt25))
     }
     
     // MARK: - Operators

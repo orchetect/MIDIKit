@@ -1,6 +1,6 @@
 //
 //  Timespec.swift
-//  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
@@ -102,7 +102,7 @@ extension timespec /* : Equatable */ {
     @_disfavoredOverload
     internal static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.tv_sec == rhs.tv_sec &&
-        lhs.tv_nsec == rhs.tv_nsec
+            lhs.tv_nsec == rhs.tv_nsec
     }
     
     @_disfavoredOverload

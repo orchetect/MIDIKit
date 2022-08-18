@@ -182,25 +182,25 @@ extension Set where Element == MIDIEvent.NoteManagement.OptionFlag {
     public init(byte: Byte) {
         self.init()
     
-        if byte & 0b0000_0001 == 1 {
+        if byte & 0b00000001 == 1 {
             insert(.resetPerNoteControllers)
         }
     
-        if (byte & 0b0000_0010) >> 1 == 1 {
+        if (byte & 0b00000010) >> 1 == 1 {
             insert(.detachPerNoteControllers)
         }
     }
     
     /// Returns the flags as a raw option flags byte.
     public var byte: Byte {
-        var byte: Byte = 0b0000_0000
+        var byte: Byte = 0b00000000
     
         if contains(.resetPerNoteControllers) {
-            byte |= 0b0000_0001
+            byte |= 0b00000001
         }
     
         if contains(.detachPerNoteControllers) {
-            byte |= 0b0000_0010
+            byte |= 0b00000010
         }
     
         return byte
