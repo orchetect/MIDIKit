@@ -8,7 +8,6 @@
 
 extension MIDIEvent {
     /// Returns true if the event is a System Common message.
-    @inlinable
     public var isSystemCommon: Bool {
         switch self {
         case .timecodeQuarterFrame,
@@ -24,7 +23,6 @@ extension MIDIEvent {
     }
     
     /// Returns true if the event is a System Common message of a specific type.
-    @inlinable
     public func isSystemCommon(ofType sysCommonType: SysCommonType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -39,7 +37,6 @@ extension MIDIEvent {
     }
     
     /// Returns true if the event is a System Common message of a specific type.
-    @inlinable
     public func isSystemCommon(ofTypes sysCommonTypes: Set<SysCommonType>) -> Bool {
         for eventType in sysCommonTypes {
             if isSystemCommon(ofType: eventType) { return true }
@@ -53,7 +50,6 @@ extension MIDIEvent {
 
 extension Collection where Element == MIDIEvent {
     /// Filter System Common events.
-    @inlinable
     public func filter(sysCommon types: MIDIEvent.SysCommonTypes) -> [Element] {
         switch types {
         case .only:

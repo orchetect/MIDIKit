@@ -8,5 +8,5 @@ import Foundation
 
 public protocol HUIParameterProtocol {
     /// HUI zone and port constant for the parameter
-    @inlinable var zoneAndPort: HUIZoneAndPort { get }
+    var zoneAndPort: HUIZoneAndPort { get }
 }

@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - SequenceNumber
 
@@ -39,48 +38,54 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.SequenceNumber: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .sequenceNumber
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        // 3-byte preamble
-        guard rawBytes.starts(with: MIDIFile.kEventHeaders[.sequenceNumber]!) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Event does not start with expected bytes."
-            )
-        }
+        try rawBytes.withDataReader { dataReader in
+            // 3-byte preamble
+            guard try dataReader.read(bytes: 3).elementsEqual(
+                MIDIFile.kEventHeaders[Self.smfEventType]!
+            ) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Event does not start with expected bytes."
+                )
+            }
         
-        guard let readSequenceNumber = rawBytes[3 ... 4].data.toUInt16(from: .bigEndian) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Could not read sequence number as integer."
-            )
-        }
+            guard let readSequenceNumber = (try? dataReader.read(bytes: 2))?
+                .data.toUInt16(from: .bigEndian)
+            else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Could not read sequence number as integer."
+                )
+            }
         
-        guard readSequenceNumber.isContained(in: 0x0 ... 0x7FFF) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Sequence number is out of bounds: \(readSequenceNumber)"
-            )
-        }
+            guard (0x0 ... 0x7FFF).contains(readSequenceNumber) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Sequence number is out of bounds: \(readSequenceNumber)"
+                )
+            }
         
-        sequence = readSequenceNumber
+            sequence = readSequenceNumber
+        }
     }
     
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 00 02 ssss
         // ssss is UIn16 big-endian sequence number
         
-        MIDIFile.kEventHeaders[.sequenceNumber]! + sequence.toData(.bigEndian)
+        D(MIDIFile.kEventHeaders[.sequenceNumber]! + sequence.toData(.bigEndian))
     }
     
     static let midi1SMFFixedRawBytesLength = 5
     
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        let requiredData = rawBuffer.prefix(midi1SMFFixedRawBytesLength).bytes
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(

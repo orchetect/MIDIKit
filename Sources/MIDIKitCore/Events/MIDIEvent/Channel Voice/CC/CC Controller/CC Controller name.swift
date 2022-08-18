@@ -6,7 +6,6 @@
 
 extension MIDIEvent.CC.Controller {
     /// Returns the controller name as a human-readable String.
-    @inlinable
     public var name: String {
         // swiftformat:disable spacearoundoperators
         switch self {

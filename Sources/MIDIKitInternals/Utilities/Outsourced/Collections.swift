@@ -1,9 +1,13 @@
-/// ------------------------------------------------------------------------------------
-/// ------------------------------------------------------------------------------------
-/// Borrowed from [OTCore 1.4.1](https://github.com/orchetect/OTCore) under MIT license.
-/// Methods herein are unit tested in OTCore, so no unit tests are necessary in MIDIKit.
-/// ------------------------------------------------------------------------------------
-/// ------------------------------------------------------------------------------------
+/// ----------------------------------------------
+/// ----------------------------------------------
+/// OTCore/Extensions/Swift/Collections.swift
+/// 
+/// Borrowed from OTCore 1.4.1 under MIT license.
+/// https://github.com/orchetect/OTCore
+/// Methods herein are unit tested at their source
+/// so no unit tests are necessary.
+/// ----------------------------------------------
+/// ----------------------------------------------
 
 import Foundation
 

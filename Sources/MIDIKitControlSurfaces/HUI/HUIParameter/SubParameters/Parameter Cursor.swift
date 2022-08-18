@@ -21,7 +21,6 @@ extension HUIParameter {
 }
 
 extension HUIParameter.Cursor: HUIParameterProtocol {
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x0D

@@ -11,7 +11,6 @@ extension MIDIEvent {
     /// Message must begin with 0xF0 but terminating 0xF7 byte is optional.
     ///
     /// - Throws: `MIDIEvent.ParseError` if message is malformed.
-    @inline(__always)
     public static func sysEx7(
         rawBytes: [Byte],
         group: UInt4 = 0
@@ -160,7 +159,6 @@ extension MIDIEvent {
     /// Hex string may be formatted with (`"F7 01 02 03 F0"`) or without spaces (`"F7010203F0"`). String is case-insensitive.
     ///
     /// - Throws: `MIDIEvent.ParseError` if message is malformed.
-    @inline(__always)
     public static func sysEx7<S: StringProtocol>(
         rawHexString: S,
         group: UInt4 = 0

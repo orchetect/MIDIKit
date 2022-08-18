@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - timeBase
 

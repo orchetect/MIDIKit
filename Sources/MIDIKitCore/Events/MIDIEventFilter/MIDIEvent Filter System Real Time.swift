@@ -8,7 +8,6 @@
 
 extension MIDIEvent {
     /// Returns true if the event is a System Real Time message.
-    @inlinable
     public var isSystemRealTime: Bool {
         switch self {
         case .timingClock,
@@ -25,7 +24,6 @@ extension MIDIEvent {
     }
     
     /// Returns true if the event is a System Real Time message of a specific type.
-    @inlinable
     public func isSystemRealTime(ofType sysRealTimeType: SysRealTimeType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -41,7 +39,6 @@ extension MIDIEvent {
     }
     
     /// Returns true if the event is a System Real Time message of a specific type.
-    @inlinable
     public func isSystemRealTime(ofTypes sysRealTimeTypes: Set<SysRealTimeType>) -> Bool {
         for eventType in sysRealTimeTypes {
             if isSystemRealTime(ofType: eventType) { return true }
@@ -55,7 +52,6 @@ extension MIDIEvent {
 
 extension Collection where Element == MIDIEvent {
     /// Filter System Real Time events.
-    @inlinable
     public func filter(sysRealTime types: MIDIEvent.SysRealTimeTypes) -> [Element] {
         switch types {
         case .only:

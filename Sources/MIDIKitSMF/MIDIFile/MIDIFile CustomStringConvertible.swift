@@ -5,7 +5,6 @@
 //
 
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 extension MIDIFile: CustomStringConvertible,
                     CustomDebugStringConvertible {
@@ -20,7 +19,7 @@ extension MIDIFile: CustomStringConvertible,
         chunks.enumerated().forEach {
             // indent each line with additional spaces
             outputString += "Chunk #\($0.offset + 1): \($0.element.description)"
-                .split(separator: Character.newLine)
+                .split(separator: "\n")
                 .reduce("") { $0 + "    \($1)".newLined }
         }
 
@@ -40,7 +39,7 @@ extension MIDIFile: CustomStringConvertible,
         chunks.enumerated().forEach {
             // indent each line with additional spaces
             outputString += "#\($0.offset + 1): \($0.element.debugDescription)"
-                .split(separator: Character.newLine)
+                .split(separator: "\n")
                 .reduce("") { $0 + "    \($1)".newLined }
         }
 

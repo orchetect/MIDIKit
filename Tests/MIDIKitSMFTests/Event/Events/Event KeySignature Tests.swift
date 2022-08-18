@@ -25,7 +25,7 @@ final class Event_KeySignature_Tests: XCTestCase {
     func testMIDI1SMFRawBytes_A() {
         let event = MIDIFileEvent.KeySignature(flatsOrSharps: 4, majorKey: true)
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xFF, 0x59, 0x02, 4, 0x00])
     }
@@ -42,7 +42,7 @@ final class Event_KeySignature_Tests: XCTestCase {
     func testMIDI1SMFRawBytes_B() {
         let event = MIDIFileEvent.KeySignature(flatsOrSharps: -3, majorKey: false)
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xFF, 0x59, 0x02, 0xFD, 0x01])
     }

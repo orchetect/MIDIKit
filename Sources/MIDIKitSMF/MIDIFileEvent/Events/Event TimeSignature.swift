@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - TimeSignature
 
@@ -50,35 +49,34 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .timeSignature
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        // 3-byte preamble
-        guard rawBytes.starts(with: MIDIFile.kEventHeaders[.timeSignature]!) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Event does not start with expected bytes."
-            )
+        try rawBytes.withDataReader { dataReader in
+            // 3-byte preamble
+            guard try dataReader.read(bytes: 3).elementsEqual(
+                MIDIFile.kEventHeaders[Self.smfEventType]!
+            ) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Event does not start with expected bytes."
+                )
+            }
+            
+            numerator = try dataReader.readByte()
+            denominator = try dataReader.readByte()
+            midiClocksBetweenMetronomeClicks = try dataReader.readByte()
+            numberOf32ndNotesInAQuarterNote = try dataReader.readByte()
         }
-        
-        let readNumerator = rawBytes[3]
-        let readDenominator = rawBytes[4]
-        let readMidiClocksBetweenMetronomeClicks = rawBytes[5]
-        let readNumberOf32ndNotesInAQuarterNote = rawBytes[6]
-        
-        numerator = readNumerator
-        denominator = readDenominator
-        midiClocksBetweenMetronomeClicks = readMidiClocksBetweenMetronomeClicks
-        numberOf32ndNotesInAQuarterNote = readNumberOf32ndNotesInAQuarterNote
     }
     
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 58 04 nn dd cc bb
         
-        var data: [Byte] = []
+        var data = D()
         
         data += MIDIFile.kEventHeaders[.timeSignature]!
         
@@ -96,10 +94,10 @@ extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
     
     static let midi1SMFFixedRawBytesLength = 7
 
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        let requiredData = rawBuffer.prefix(midi1SMFFixedRawBytesLength).bytes
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
 
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(

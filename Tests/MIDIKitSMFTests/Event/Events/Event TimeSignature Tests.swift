@@ -36,7 +36,7 @@ final class Event_TimeSignature_Tests: XCTestCase {
             denominator: 1
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xFF, 0x58, 0x04, // header

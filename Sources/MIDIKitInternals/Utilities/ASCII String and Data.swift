@@ -1,5 +1,5 @@
 //
-//  String Data.swift
+//  ASCII String and Data.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -40,6 +40,28 @@ extension Data {
         ?? String(data: self,
                   encoding: .ascii)
         ?? String(data: self,
+                  encoding: .utf8)
+        ?? String(repeating: "?", count: count)
+    }
+}
+
+extension DataProtocol {
+    /// Converts ASCII data to `String`.
+    /// Returns `nil` if data is not valid ASCII.
+    public func asciiDataToString() -> String? {
+        String(data: Data(self),
+               encoding: .nonLossyASCII)
+    }
+    
+    /// Converts ASCII data to `String`.
+    /// Attempts to lossily convert the data if it is not valid ASCII.
+    public func asciiDataToStringLossy() -> String {
+        let data = Data(self)
+        return String(data: data,
+               encoding: .nonLossyASCII)
+        ?? String(data: data,
+                  encoding: .ascii)
+        ?? String(data: data,
                   encoding: .utf8)
         ?? String(repeating: "?", count: count)
     }

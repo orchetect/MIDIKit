@@ -11,7 +11,6 @@
 extension MIDIPacketList {
     /// Internal:
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a Core MIDI `MIDIPacketList`.
-    @inline(__always)
     internal init(data: [Byte]) {
         let packetList = UnsafeMutablePointer<MIDIPacketList>(data: data)
         self = packetList.pointee
@@ -20,7 +19,6 @@ extension MIDIPacketList {
     
     /// Internal:
     /// Assembles an array of `Byte` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
-    @inline(__always)
     internal init(data: [[Byte]]) throws {
         let packetList = try UnsafeMutablePointer<MIDIPacketList>(data: data)
         self = packetList.pointee
@@ -33,7 +31,6 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a Core MIDI `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
-    @inline(__always)
     internal init(data: [Byte]) {
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
@@ -73,7 +70,6 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
     ///
     /// - Note: You must deallocate the pointer when finished with it.
     /// - Note: System Exclusive messages must each be packed in a dedicated MIDIPacketList with no other events, otherwise MIDIPacketList may fail.
-    @inline(__always)
     internal init(data: [[Byte]]) throws {
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.

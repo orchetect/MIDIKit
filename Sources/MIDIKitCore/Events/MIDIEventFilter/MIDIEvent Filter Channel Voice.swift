@@ -8,7 +8,6 @@
 
 extension MIDIEvent {
     /// Returns true if the event is a Channel Voice message.
-    @inlinable
     public var isChannelVoice: Bool {
         switch self {
         case .noteOn,
@@ -29,7 +28,6 @@ extension MIDIEvent {
     }
     
     /// Returns true if the event is a Channel Voice message of a specific type.
-    @inlinable
     public func isChannelVoice(ofType chanVoiceType: ChanVoiceType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -49,7 +47,6 @@ extension MIDIEvent {
     }
     
     /// Returns true if the event is a Channel Voice message of a specific type.
-    @inlinable
     public func isChannelVoice(ofTypes chanVoiceTypes: Set<ChanVoiceType>) -> Bool {
         for eventType in chanVoiceTypes {
             if isChannelVoice(ofType: eventType) { return true }
@@ -63,7 +60,6 @@ extension MIDIEvent {
 
 extension Collection where Element == MIDIEvent {
     /// Filter Channel Voice events.
-    @inlinable
     public func filter(chanVoice types: MIDIEvent.ChanVoiceTypes) -> [Element] {
         switch types {
         case .only:

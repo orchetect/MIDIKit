@@ -19,7 +19,6 @@ extension HUIParameter {
 }
 
 extension HUIParameter.AutoMode: HUIParameterProtocol {
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x18

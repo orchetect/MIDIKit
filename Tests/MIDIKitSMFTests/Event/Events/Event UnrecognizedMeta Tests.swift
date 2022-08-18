@@ -31,7 +31,7 @@ final class Event_UnrecognizedMeta_Tests: XCTestCase {
             data: []
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xFF, 0x30, // unknown/undefined meta type 0x30
@@ -58,7 +58,7 @@ final class Event_UnrecognizedMeta_Tests: XCTestCase {
             data: [0x12]
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xFF, 0x30, // unknown/undefined meta type 0x30
@@ -89,7 +89,7 @@ final class Event_UnrecognizedMeta_Tests: XCTestCase {
             data: data
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(
             bytes,
@@ -121,7 +121,7 @@ final class Event_UnrecognizedMeta_Tests: XCTestCase {
             data: data
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(
             bytes,

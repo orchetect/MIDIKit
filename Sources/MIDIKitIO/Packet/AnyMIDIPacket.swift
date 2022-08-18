@@ -13,7 +13,6 @@ public enum AnyMIDIPacket {
     case universalPacket(UniversalMIDIPacketData)
     
     /// Flat array of raw bytes
-    @inline(__always)
     public var bytes: [Byte] {
         switch self {
         case let .packet(packetData):
@@ -25,7 +24,6 @@ public enum AnyMIDIPacket {
     }
     
     /// Core MIDI packet timestamp
-    @inline(__always)
     public var timeStamp: CoreMIDITimeStamp {
         switch self {
         case let .packet(packetData):

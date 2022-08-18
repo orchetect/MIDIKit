@@ -84,7 +84,6 @@ extension MIDIEvent {
     ///   - value: Value
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func noteCC(
         note: UInt7,
         controller: NoteCC.PerNoteController,
@@ -112,7 +111,6 @@ extension MIDIEvent {
     ///   - value: Value
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func noteCC(
         note: MIDINote,
         controller: NoteCC.PerNoteController,
@@ -136,7 +134,6 @@ extension MIDIEvent.NoteCC {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .midi2ChannelVoice
     

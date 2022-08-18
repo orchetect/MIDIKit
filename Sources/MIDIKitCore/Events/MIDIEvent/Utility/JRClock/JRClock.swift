@@ -65,7 +65,6 @@ extension MIDIEvent {
     /// The time value is expected to wrap around every 2.09712 seconds.
     ///
     /// To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock messages for the Receiver, the Sender shall send a JR Clock message at least once every 250 milliseconds."
-    @inline(__always)
     public static func jrClock(
         time: UInt16,
         group: UInt4 = 0x0
@@ -83,7 +82,6 @@ extension MIDIEvent.JRClock {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .utility
     

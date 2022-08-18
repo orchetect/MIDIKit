@@ -30,7 +30,6 @@ extension MIDIEvent.NoteCC.PerNoteController: CustomStringConvertible {
 
 extension MIDIEvent.NoteCC.PerNoteController {
     /// Returns the controller number.
-    @inline(__always)
     public var number: UInt8 {
         switch self {
         case let .registered(cc):

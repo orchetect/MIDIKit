@@ -19,14 +19,11 @@ extension MIDIReceiveHandler {
     /// If `handler` is `nil`, all raw packet data is logged to the console (but only in `DEBUG` preprocessor flag builds).
     /// If `handler` is provided, the hex byte string is supplied as a parameter and not automatically logged.
     class RawDataLogging: MIDIReceiveHandlerProtocol {
-        @inline(__always)
-        public var handler: MIDIReceiver.RawDataLoggingHandler
+            public var handler: MIDIReceiver.RawDataLoggingHandler
     
-        @inline(__always)
-        public var filterActiveSensingAndClock = false
+            public var filterActiveSensingAndClock = false
     
-        @inline(__always)
-        public func packetListReceived(
+            public func packetListReceived(
             _ packets: [MIDIPacketData]
         ) {
             for midiPacket in packets {
@@ -35,8 +32,7 @@ extension MIDIReceiveHandler {
         }
     
         @available(macOS 11, iOS 14, macCatalyst 14, *)
-        @inline(__always)
-        public func eventListReceived(
+            public func eventListReceived(
             _ packets: [UniversalMIDIPacketData],
             protocol midiProtocol: MIDIProtocolVersion
         ) {

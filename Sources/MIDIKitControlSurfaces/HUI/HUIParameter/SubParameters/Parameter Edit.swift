@@ -19,7 +19,6 @@ extension HUIParameter {
 }
 
 extension HUIParameter.Edit: HUIParameterProtocol {
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x1A

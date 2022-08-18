@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 import TimecodeKit
 
 // MARK: - SMPTEOffset
@@ -91,11 +90,11 @@ extension MIDIFileEvent {
         /// Returns a `Timecode` struct using values contains in `self`.
         public var components: Timecode.Components {
             TCC(
-                h: hours.int,
-                m: minutes.int,
-                s: seconds.int,
-                f: frames.int,
-                sf: subframes.int
+                h: Int(hours),
+                m: Int(minutes),
+                s: Int(seconds),
+                f: Int(frames),
+                sf: Int(subframes)
             )
         }
         
@@ -136,11 +135,11 @@ extension MIDIFileEvent {
             
             frameRate = smpteTCAndRate.smpteFR
             
-            hours = smpteTC.hours.uInt8Exactly ?? 0
-            minutes = smpteTC.minutes.uInt8Exactly ?? 0
-            seconds = smpteTC.seconds.uInt8Exactly ?? 0
-            frames = smpteTC.frames.uInt8Exactly ?? 0
-            subframes = smpteTC.subFrames.uInt8Exactly ?? 0
+            hours =     UInt8(exactly: smpteTC.hours) ?? 0
+            minutes =   UInt8(exactly: smpteTC.minutes) ?? 0
+            seconds =   UInt8(exactly: smpteTC.seconds) ?? 0
+            frames =    UInt8(exactly: smpteTC.frames) ?? 0
+            subframes = UInt8(exactly: smpteTC.subFrames) ?? 0
         }
         
         // TODO: add an init from Timecode struct that can convert/scale timecode and subframes to 100 subframe divisor
@@ -150,76 +149,81 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .smpteOffset
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        // 3-byte preamble
-        guard rawBytes.starts(with: MIDIFile.kEventHeaders[.smpteOffset]!) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Event does not start with expected bytes."
-            )
+        try rawBytes.withDataReader { dataReader in
+            // 3-byte preamble
+            guard try dataReader.read(bytes: 3).elementsEqual(
+                MIDIFile.kEventHeaders[Self.smfEventType]!
+            ) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Event does not start with expected bytes."
+                )
+            }
+        
+            let readHoursByte = try dataReader.readByte()
+            let readFrameRateBits = (readHoursByte & 0b1100000) >> 5
+            let readHours = readHoursByte & 0b0011111
+        
+            let readMinutes = try dataReader.readByte()
+            let readSeconds = try dataReader.readByte()
+            let readFrames = try dataReader.readByte()
+            let readSubframes = try dataReader.readByte()
+        
+            guard let readFrameRate = MIDIFile.SMPTEOffsetFrameRate(rawValue: readFrameRateBits)
+            else {
+                // this should never happen, but trap error any way
+                throw MIDIFile.DecodeError.malformed(
+                    "Could not form frame rate from Hours byte."
+                )
+            }
+        
+            guard (0 ... 23).contains(readHours) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Hours is out of bounds: \(readHours)"
+                )
+            }
+        
+            guard (0 ... 59).contains(readMinutes) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Minutes is out of bounds: \(readMinutes)"
+                )
+            }
+        
+            guard (0 ... 59).contains(readSeconds) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Seconds value is out of bounds: \(readSeconds)"
+                )
+            }
+        
+            guard (0 ... 30).contains(readFrames) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Frames value is out of bounds: \(readFrames)"
+                )
+            }
+        
+            guard (0 ... 99).contains(readSubframes) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Subframes value is out of bounds: \(readSubframes)"
+                )
+            }
+        
+            frameRate = readFrameRate
+        
+            hours = readHours
+            minutes = readMinutes
+            seconds = readSeconds
+            frames = readFrames
+            subframes = readSubframes
         }
-        
-        let readHoursByte = rawBytes[3]
-        let readFrameRateBits = (readHoursByte & 0b1100000) >> 5
-        let readHours = readHoursByte & 0b0011111
-        
-        let readMinutes = rawBytes[4]
-        let readSeconds = rawBytes[5]
-        let readFrames = rawBytes[6]
-        let readSubframes = rawBytes[7]
-        
-        guard let readFrameRate = MIDIFile.SMPTEOffsetFrameRate(rawValue: readFrameRateBits) else {
-            // this should never happen, but trap error any way
-            throw MIDIFile.DecodeError.malformed(
-                "Could not form frame rate from Hours byte."
-            )
-        }
-        
-        guard readHours.isContained(in: 0 ... 23) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Hours is out of bounds: \(readHours)"
-            )
-        }
-        
-        guard readMinutes.isContained(in: 0 ... 59) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Minutes is out of bounds: \(readMinutes)"
-            )
-        }
-        
-        guard readSeconds.isContained(in: 0 ... 59) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Seconds value is out of bounds: \(readSeconds)"
-            )
-        }
-        
-        guard readFrames.isContained(in: 0 ... 30) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Frames value is out of bounds: \(readFrames)"
-            )
-        }
-        
-        guard readSubframes.isContained(in: 0 ... 99) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Subframes value is out of bounds: \(readSubframes)"
-            )
-        }
-        
-        frameRate = readFrameRate
-        
-        hours = readHours
-        minutes = readMinutes
-        seconds = readSeconds
-        frames = readFrames
-        subframes = readSubframes
     }
     
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 54 05 hr mn se fr ff
         //
         // 05 is length
@@ -231,7 +235,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
         //
         // ff is a byte specifying the number of fractional frames, in 100ths of a frame (even in SMPTE-based tracks using a different frame subdivision, defined in the MThd chunk).
         
-        var data: [Byte] = []
+        var data = D()
         
         data += MIDIFile.kEventHeaders[.smpteOffset]! // start bytes
         data += [(frameRate.rawValue << 5) + hours] // hour & frame rate
@@ -245,10 +249,10 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
     
     static let midi1SMFFixedRawBytesLength = 8
     
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        let requiredData = rawBuffer.prefix(midi1SMFFixedRawBytesLength).bytes
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
@@ -301,8 +305,8 @@ extension Timecode {
         if scaledTC?.subFramesBase != ._100SubFrames,
            let nonNilscaledTC = scaledTC
         {
-            let originalSF = nonNilscaledTC.subFrames.double
-            let originalSFD = nonNilscaledTC.subFramesBase.rawValue.double
+            let originalSF = Double(nonNilscaledTC.subFrames)
+            let originalSFD = Double(nonNilscaledTC.subFramesBase.rawValue)
             
             let scaledSubFrames =
                 Int((originalSF / originalSFD) * 100)

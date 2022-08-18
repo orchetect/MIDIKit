@@ -13,7 +13,6 @@ import Foundation
 extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
     /// Internal:
     /// Returns array of MIDIKit `UniversalPacketData` instances.
-    @inline(__always)
     internal func packets() -> [UniversalMIDIPacketData] {
         if pointee.numPackets == 0 {
             return []
@@ -54,7 +53,6 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
 extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
     /// Internal:
     /// Parses an EventPacket's words and splits it into individual UMP messages.
-    @inline(__always)
     fileprivate func parse(packetWords: [UMPWord]) -> [[UMPWord]] {
         guard !packetWords.isEmpty else { return [] }
     

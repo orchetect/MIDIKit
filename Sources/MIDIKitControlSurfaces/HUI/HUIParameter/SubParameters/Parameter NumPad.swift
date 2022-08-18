@@ -32,7 +32,6 @@ extension HUIParameter {
 }
 
 extension HUIParameter.NumPad: HUIParameterProtocol {
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x13

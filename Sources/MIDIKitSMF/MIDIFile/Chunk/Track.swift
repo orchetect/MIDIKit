@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - Track
 
@@ -35,8 +34,8 @@ extension MIDIFile.Chunk.Track: MIDIFileChunk {
 
 extension MIDIFile.Chunk.Track {
     /// Init from MIDI file buffer.
-    public init(midi1SMFRawBytesStream rawBuffer: [Byte]) throws {
-        guard rawBuffer.count >= 8 else {
+    public init<D: MutableDataProtocol>(midi1SMFRawBytesStream stream: D) throws where D.SubSequence : MutableDataProtocol {
+        guard stream.count >= 8 else {
             throw MIDIFile.DecodeError.malformed(
                 "There was a problem reading chunk header. Encountered end of file early."
             )
@@ -44,171 +43,193 @@ extension MIDIFile.Chunk.Track {
         
         // track header
         
-        let readChunkType = rawBuffer[0 ... 3].data
+        let remainingData: D.SubSequence = try stream.withDataReader { dataReader in
+            let chunkTypeString = try dataReader.read(bytes: 4)
+                .asciiDataToString() ?? "????"
         
-        guard let chunkLength = rawBuffer[4 ... 7].data.toUInt32(from: .bigEndian)?.int else {
-            throw MIDIFile.DecodeError.malformed(
-                "There was a problem reading chunk length."
-            )
+            guard let chunkLengthInt32 = (try? dataReader.read(bytes: 4))?
+                .data.toUInt32(from: .bigEndian)
+            else {
+                throw MIDIFile.DecodeError.malformed(
+                    "There was a problem reading chunk length."
+                )
+            }
+            let chunkLength = Int(chunkLengthInt32)
+            
+            guard chunkTypeString == Self.staticIdentifier else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Chunk header does not contain track header identifier. Found \(chunkTypeString.quoted) instead."
+                )
+            }
+        
+            guard dataReader.remainingByteCount >= chunkLength else {
+                throw MIDIFile.DecodeError.malformed(
+                    "There was a problem reading track data blob. Encountered end of data early."
+                )
+            }
+            
+            guard let readChunk = try? dataReader.read(bytes: chunkLength) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "There was a problem reading track data blob. Encountered end of data early."
+                )
+            }
+            return readChunk
         }
         
-        let chunkTypeString = readChunkType.asciiDataToString() ?? "????"
-        
-        guard chunkTypeString == Self.staticIdentifier else {
-            throw MIDIFile.DecodeError.malformed(
-                "Chunk header does not contain track header identifier. Found \(chunkTypeString.quoted) instead."
-            )
-        }
-        
-        guard rawBuffer.count >= 8 + chunkLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "There was a problem reading track data blob. Encountered end of data early."
-            )
-        }
-        
-        try self.init(midi1SMFRawBytes: Array(rawBuffer[8 ..< (8 + chunkLength)]))
+        try self.init(midi1SMFRawBytes: remainingData)
     }
     
     /// Init from raw data block, excluding the header identifier and length
-    internal init(midi1SMFRawBytes rawData: [Byte]) throws {
+    internal init<D: MutableDataProtocol>(midi1SMFRawBytes rawData: D) throws {
         // chunk data
         
-        var chunkDataReader = DataReader(rawData.data)
+        try rawData.withDataReader { dataReader in
+            // events
         
-        // events
+            var eventsCounted = 0
+            var endOfChunk = false
+            var newEvents: [MIDIFileEvent] = []
         
-        var eventsCounted = 0
-        var endOfChunk = false
-        var newEvents: [MIDIFileEvent] = []
+            // running status
         
-        // running status
+            var runningStatus: MIDIFileEventPayload?
         
-        var runningStatus: MIDIFileEventPayload?
-        
-        while !endOfChunk {
-            eventsCounted += 1
+            while !endOfChunk {
+                eventsCounted += 1
             
-            // delta time
+                // delta time
             
-            guard let eventDeltaTimeRead = chunkDataReader.nonAdvancingRead(bytes: 4)?.bytes else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Encountered end of file early."
-                )
-            }
+                guard let eventDeltaTimeRead = try? dataReader.nonAdvancingRead(bytes: 4)
+                else {
+                    throw MIDIFile.DecodeError.malformed(
+                        "Encountered end of file early."
+                    )
+                }
             
-            guard let eventDeltaTime = MIDIFile
-                .decodeVariableLengthValue(from: eventDeltaTimeRead)
-            else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Delta time variable length value could not be read and may be malformed."
-                )
-            }
+                guard let eventDeltaTime = MIDIFile
+                    .decodeVariableLengthValue(from: eventDeltaTimeRead)
+                else {
+                    throw MIDIFile.DecodeError.malformed(
+                        "Delta time variable length value could not be read and may be malformed."
+                    )
+                }
             
-            chunkDataReader.advanceBy(eventDeltaTime.byteLength)
+                dataReader.advanceBy(eventDeltaTime.byteLength)
             
-            // event
+                // event
             
-            guard var readBuffer = chunkDataReader.nonAdvancingRead() else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Encountered end of file early."
-                )
-            }
+                guard var readBuffer = try? dataReader.nonAdvancingRead()
+                else {
+                    throw MIDIFile.DecodeError.malformed(
+                        "Encountered end of file early."
+                    )
+                }
             
-            // first check for end of track
+                // first check for end of track
             
-            if readBuffer.count == Self.chunkEnd.count,
-               readBuffer.bytes == Self.chunkEnd
-            {
-                endOfChunk = true
-                break
-            }
-            
-            // check for running status
-            
-            var runningStatusByte: Byte?
-            
-            if let testForRunningStatusByte = readBuffer[safe: readBuffer.startIndex] {
-                if testForRunningStatusByte.isContained(in: 0x00 ... 0x7F),
-                   let getRunningStatusByte = runningStatus?.midi1SMFRawBytes[safe: 0]
+                if readBuffer.count == Self.chunkEnd.count,
+                   readBuffer.elementsEqual(Self.chunkEnd)
                 {
-                    runningStatusByte = getRunningStatusByte
+                    endOfChunk = true
+                    break
                 }
-            }
             
-            // if running status byte is present, inject it into the byte buffer
-            if let runningStatusByte = runningStatusByte {
-                readBuffer.insert(runningStatusByte, at: readBuffer.startIndex)
-            }
+                // check for running status
             
-            // iterate through all known event initializers
+                var runningStatusByte: Byte?
             
-            var foundEvent: (newEvent: MIDIFileEventPayload, bufferLength: Int)?
-            
-            for eventDef in MIDIFile.Chunk.Track.eventDecodeOrder.concreteTypes {
-                if let success = try? eventDef.initFrom(midi1SMFRawBytesStream: readBuffer) {
-                    foundEvent = success
-                    break // break for-loop lazily
-                }
-            }
-            
-            if let foundEvent = foundEvent {
-                // inject delta time into event
-                let newEventDelta: MIDIFileEvent.DeltaTime = .ticks(eventDeltaTime.value.uInt32)
-                
-                // offset buffer length if runningStatusByte is present
-                let chunkBufferLength = runningStatusByte != nil
-                    ? foundEvent.bufferLength - 1
-                    : foundEvent.bufferLength
-                
-                // add new event to new track
-                newEvents += foundEvent.newEvent.smfWrappedEvent(delta: newEventDelta)
-                chunkDataReader.advanceBy(chunkBufferLength)
-                
-                // store event in running status
-                if let testForRunningStatusByte = foundEvent.newEvent.midi1SMFRawBytes[safe: 0] {
-                    if testForRunningStatusByte.isContained(in: 0x80 ... 0xEF) {
-                        runningStatus = foundEvent.newEvent
-                    } else if testForRunningStatusByte.isContained(in: 0xF0 ... 0xF7) {
-                        runningStatus = nil
-                    }
-                }
-                
-            } else {
-                // throw an error since no events could be decoded and there are still bytes remaining in the chunk
-                
-                let byteOffsetString = chunkDataReader.readPosition
-                    .hexString(padTo: 1, prefix: true)
-                
-                let sampleBytes = (1 ... 8)
-                    .reduce([Byte]()) {
-                        // read as many bytes as possible, up to range.count
-                        if let getByte = chunkDataReader.nonAdvancingRead(bytes: $1) {
-                            return getByte.bytes
+                if !readBuffer.isEmpty {
+                    let testForRunningStatusByte = readBuffer[readBuffer.startIndex]
+                    if (0x00 ... 0x7F).contains(testForRunningStatusByte) {
+                        if let bytes: D = runningStatus?.midi1SMFRawBytes(),
+                           !bytes.isEmpty
+                        {
+                            let getRunningStatusByte: D.Element = bytes[bytes.startIndex]
+                            runningStatusByte = getRunningStatusByte
                         }
-                        return $0
                     }
-                    .hexString(padEachTo: 2, prefixes: true)
+                }
+            
+                // if running status byte is present, inject it into the byte buffer
+                if let runningStatusByte = runningStatusByte {
+                    readBuffer.insert(runningStatusByte, at: readBuffer.startIndex)
+                }
+            
+                // iterate through all known event initializers
+            
+                var foundEvent: (newEvent: MIDIFileEventPayload, bufferLength: Int)?
+            
+                for eventDef in MIDIFile.Chunk.Track.eventDecodeOrder.concreteTypes {
+                    if let success = try? eventDef.initFrom(midi1SMFRawBytesStream: readBuffer) {
+                        foundEvent = success
+                        break // break for-loop lazily
+                    }
+                }
+            
+                if let foundEvent = foundEvent {
+                    // inject delta time into event
+                    let newEventDelta: MIDIFileEvent.DeltaTime = .ticks(UInt32(eventDeltaTime.value))
                 
-                throw MIDIFile.DecodeError.malformed(
-                    "Unexpected data encountered before end of track at track data byte offset \(byteOffsetString) (\(sampleBytes) ...)."
-                )
+                    // offset buffer length if runningStatusByte is present
+                    let chunkBufferLength = runningStatusByte != nil
+                        ? foundEvent.bufferLength - 1
+                        : foundEvent.bufferLength
+                
+                    // add new event to new track
+                    newEvents.append(foundEvent.newEvent.smfWrappedEvent(delta: newEventDelta))
+                    dataReader.advanceBy(chunkBufferLength)
+                
+                    // store event in running status
+                    let newEventBytes: D = foundEvent.newEvent.midi1SMFRawBytes()
+                    if !newEventBytes.isEmpty {
+                        let testForRunningStatusByte: D.Element = (foundEvent.newEvent.midi1SMFRawBytes() as D).first!
+                        
+                        if (0x80 ... 0xEF).contains(testForRunningStatusByte) {
+                            runningStatus = foundEvent.newEvent
+                        } else if (0xF0 ... 0xF7).contains(testForRunningStatusByte) {
+                            runningStatus = nil
+                        }
+                    }
+                
+                } else {
+                    // throw an error since no events could be decoded and there are still bytes remaining in the chunk
+                
+                    let byteOffsetString = dataReader.readOffset
+                        .hexString(padTo: 1, prefix: true)
+                
+                    let sampleBytes = (1 ... 8)
+                        .reduce([Byte]()) {
+                            // read as many bytes as possible, up to range.count
+                            if let getBytes = try? dataReader.nonAdvancingRead(bytes: $1) {
+                                return Array(getBytes)
+                            }
+                            return $0
+                        }
+                        .hexString(padEachTo: 2, prefixes: true)
+                
+                    throw MIDIFile.DecodeError.malformed(
+                        "Unexpected data encountered before end of track at track data byte offset \(byteOffsetString) (\(sampleBytes) ...)."
+                    )
+                }
             }
-        }
         
-        events = newEvents
+            events = newEvents
+        }
     }
 }
 
 extension MIDIFile.Chunk.Track {
-    func midi1SMFRawBytes(using timeBase: MIDIFile.TimeBase) throws -> Data {
+    func midi1SMFRawBytes<D: MutableDataProtocol>(
+        using timeBase: MIDIFile.TimeBase
+    ) throws -> D {
         // assemble chunk body without header or length
         
-        var bodyData = Data()
+        var bodyData = D()
         
         for event in events {
             let unwrapped = event.smfUnwrappedEvent
             bodyData.append(deltaTime: unwrapped.delta.ticksValue(using: timeBase))
-            bodyData += unwrapped.event.midi1SMFRawBytes
+            bodyData.append(contentsOf: unwrapped.event.midi1SMFRawBytes() as D)
         }
         
         bodyData.append(deltaTime: 0)
@@ -216,7 +237,7 @@ extension MIDIFile.Chunk.Track {
         
         // assemble full chunk data with header and length
         
-        var data = Data()
+        var data = D()
         
         // 4-byte chunk identifier
         data += identifier.toASCIIData()

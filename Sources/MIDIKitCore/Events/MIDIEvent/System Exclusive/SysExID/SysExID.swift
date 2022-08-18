@@ -62,7 +62,6 @@ extension MIDIEvent.SysExID {
 
 extension MIDIEvent.SysExID {
     /// Returns the Manufacturer byte(s) formatted for MIDI 1.0 SysEx7, as one byte (7-bit) or three bytes (21-bit).
-    @inline(__always)
     public func sysEx7RawBytes() -> [Byte] {
         switch self {
         case let .manufacturer(mfr):
@@ -74,7 +73,6 @@ extension MIDIEvent.SysExID {
     }
     
     /// Returns the Manufacturer byte(s) formatted for MIDI 2.0 SysEx8, as two bytes (16-bit).
-    @inline(__always)
     public func sysEx8RawBytes() -> [Byte] {
         switch self {
         case let .manufacturer(mfr):

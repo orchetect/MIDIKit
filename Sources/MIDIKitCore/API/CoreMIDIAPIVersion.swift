@@ -19,7 +19,6 @@ public enum CoreMIDIAPIVersion: Equatable, Hashable {
 
 extension CoreMIDIAPIVersion {
     /// MIDI protocol version.
-    @inline(__always)
     public var midiProtocol: MIDIProtocolVersion {
         switch self {
         case .legacyCoreMIDI:

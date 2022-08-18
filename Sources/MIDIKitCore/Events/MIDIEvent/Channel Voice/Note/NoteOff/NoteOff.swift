@@ -84,7 +84,6 @@ extension MIDIEvent {
     ///   - channel: Channel Number (0x0...0xF)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func noteOff(
         _ note: UInt7,
         velocity: NoteVelocity,
@@ -112,7 +111,6 @@ extension MIDIEvent {
     ///   - channel: Channel Number (0x0...0xF)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func noteOff(
         _ note: MIDINote,
         velocity: NoteVelocity,
@@ -136,7 +134,6 @@ extension MIDIEvent.NoteOff {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func midi1RawBytes() -> [Byte] {
         [
             0x80 + channel.uInt8Value,
@@ -145,7 +142,6 @@ extension MIDIEvent.NoteOff {
         ]
     }
     
-    @inline(__always)
     private func umpMessageType(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> MIDIUMPMessageType {
@@ -161,7 +157,6 @@ extension MIDIEvent.NoteOff {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {

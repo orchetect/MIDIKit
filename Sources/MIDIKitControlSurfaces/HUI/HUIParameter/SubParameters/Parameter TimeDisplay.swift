@@ -28,7 +28,6 @@ extension HUIParameter {
 }
 
 extension HUIParameter.TimeDisplay: HUIParameterProtocol {
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x16

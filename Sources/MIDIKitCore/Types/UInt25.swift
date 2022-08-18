@@ -72,12 +72,10 @@ extension UInt25: ExpressibleByIntegerLiteral {
 extension UInt25: Strideable {
     public typealias Stride = Int
     
-    @inlinable
     public func advanced(by n: Stride) -> Self {
         self + Self(n)
     }
     
-    @inlinable
     public func distance(to other: Self) -> Stride {
         Stride(other) - Stride(self)
     }

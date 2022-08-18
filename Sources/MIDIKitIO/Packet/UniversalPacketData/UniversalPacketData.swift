@@ -12,20 +12,16 @@ public struct UniversalMIDIPacketData {
 //    public let words: [UInt32]
     
     /// Flat array of raw bytes
-    @inline(__always)
     public var bytes: [Byte]
     
     /// Core MIDI packet timestamp
-    @inline(__always)
     public let timeStamp: CoreMIDITimeStamp
     
-    @inline(__always)
     public init(bytes: [Byte], timeStamp: CoreMIDITimeStamp) {
         self.bytes = bytes
         self.timeStamp = timeStamp
     }
     
-    @inline(__always)
     public init(words: [UMPWord], timeStamp: CoreMIDITimeStamp) {
         bytes = words.umpWordsToBytes()
         self.timeStamp = timeStamp
@@ -37,18 +33,15 @@ public struct UniversalMIDIPacketData {
 @available(macOS 11, iOS 14, macCatalyst 14, *)
 extension UniversalMIDIPacketData {
     /// Universal MIDI Packet
-    @inline(__always)
     internal init(_ eventPacketPtr: UnsafePointer<MIDIEventPacket>) {
         self = Self.unwrapPacket(eventPacketPtr)
     }
     
     /// Universal MIDI Packet
-    @inline(__always)
     internal init(_ eventPacket: MIDIEventPacket) {
         self = Self.packetUnwrapper(eventPacket)
     }
     
-    @inline(__always)
     fileprivate static func unwrapPacket(
         _ eventPacketPtr: UnsafePointer<MIDIEventPacket>
     ) -> UniversalMIDIPacketData {
@@ -84,7 +77,6 @@ extension UniversalMIDIPacketData {
         )
     }
     
-    @inline(__always)
     fileprivate static func packetUnwrapper(
         _ eventPacket: MIDIEventPacket
     ) -> UniversalMIDIPacketData {

@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // [Standard MIDI File Spec 1.0]:
 //
@@ -88,73 +87,77 @@ extension MIDIFile.Chunk.Header {
             )
         }
         
-        var dataReader = DataReader(midi1SMFRawBytes)
+        try midi1SMFRawBytes.withDataReader { dataReader in
+            // Header descriptor
         
-        // Header descriptor
+            guard try dataReader.read(bytes: 4).bytes == Self.staticIdentifier.toASCIIBytes()
+            else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Header is not correct. File may not be a MIDI file."
+                )
+            }
         
-        guard dataReader.read(bytes: 4)?.bytes == Self.staticIdentifier.toASCIIBytes() else {
-            throw MIDIFile.DecodeError.malformed(
-                "Header is not correct. File may not be a MIDI file."
-            )
-        }
+            guard let headerLengthUInt32 = (try? dataReader.read(bytes: 4))?
+                .toInt32(from: .bigEndian)
+            else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Could not read MIDI file header length."
+                )
+            }
+            let headerLength = Int(headerLengthUInt32)
         
-        guard let headerLength = dataReader.read(bytes: 4)?
-            .toInt32(from: .bigEndian)?
-            .int
-        else {
-            throw MIDIFile.DecodeError.malformed(
-                "Could not read MIDI file header length."
-            )
-        }
+            guard headerLength == 6 else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Encountered unexpected header length header length."
+                )
+            }
         
-        guard headerLength == 6 else {
-            throw MIDIFile.DecodeError.malformed(
-                "Encountered unexpected header length header length."
-            )
-        }
+            // MIDI Format Type specification - 0, 1, or 2 (2 bytes: big endian)
         
-        // MIDI Format Type specification - 0, 1, or 2 (2 bytes: big endian)
+            guard let midiFileFormatRawValue = (try? dataReader.read(bytes: 2))?
+                .toUInt16(from: .bigEndian),
+                (0 ... 2).contains(midiFileFormatRawValue),
+                let midiFileFormat = MIDIFile
+                    .Format(rawValue: UInt8(exactly: midiFileFormatRawValue) ?? 255)
+            else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Could not read MIDI file format."
+                )
+            }
         
-        guard let midiFileFormatRawValue = dataReader.read(bytes: 2)?.toUInt16(from: .bigEndian),
-              (0 ... 2).contains(midiFileFormatRawValue),
-              let midiFileFormat = MIDIFile
-                  .Format(rawValue: midiFileFormatRawValue.uInt8Exactly ?? 255)
-        else {
-            throw MIDIFile.DecodeError.malformed(
-                "Could not read MIDI file format."
-            )
-        }
+            format = midiFileFormat
         
-        format = midiFileFormat
+            guard let numberOfTracks = (try? dataReader.read(bytes: 2))?
+                .toUInt16(from: .bigEndian)
+            else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Could not read number of tracks; end of file encountered."
+                )
+            }
         
-        guard let numberOfTracks = dataReader.read(bytes: 2)?.toUInt16(from: .bigEndian) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Could not read number of tracks; end of file encountered."
-            )
-        }
+            guard let timeDivision = try? dataReader.read(bytes: 2) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Could not read division info; end of file encountered."
+                )
+            }
         
-        guard let timeDivision = dataReader.read(bytes: 2) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Could not read division info; end of file encountered."
-            )
-        }
+            guard let timeBase = MIDIFile.TimeBase(rawBytes: timeDivision.bytes) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Could not decode timebase."
+                )
+            }
         
-        guard let timeBase = MIDIFile.TimeBase(rawBytes: timeDivision.bytes) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Could not decode timebase."
-            )
-        }
+            self.timeBase = timeBase
         
-        self.timeBase = timeBase
-        
-        // technically Format 0 can only have one track,
-        // so header must always state a track count of 1 in that event
-        if midiFileFormat == .singleTrack,
-           numberOfTracks != 1
-        {
-            throw MIDIFile.DecodeError.malformed(
-                "MIDI file is Format 0 which can only contain a single track, but header reports a track count of \(numberOfTracks)."
-            )
+            // technically Format 0 can only have one track,
+            // so header must always state a track count of 1 in that event
+            if midiFileFormat == .singleTrack,
+               numberOfTracks != 1
+            {
+                throw MIDIFile.DecodeError.malformed(
+                    "MIDI file is Format 0 which can only contain a single track, but header reports a track count of \(numberOfTracks)."
+                )
+            }
         }
     }
 }
@@ -178,7 +181,7 @@ extension MIDIFile.Chunk.Header {
         data += [0x00, 0x00, 0x00, 0x06]
         
         // MIDI Format specification - 0, 1, or 2 (2 bytes: big endian)
-        data += format.rawValue.uInt16.toData(.bigEndian)
+        data += UInt16(format.rawValue).toData(.bigEndian)
         
         // Track count as 16-bit number (2 bytes: big endian)
         if format == .singleTrack {
@@ -188,11 +191,11 @@ extension MIDIFile.Chunk.Header {
                 )
             }
             
-            data += 1.uInt16.toData(.bigEndian) // only 1 track allowed
+            data += UInt16(1).toData(.bigEndian) // only 1 track allowed
             
         } else {
             // For format 1 or 2 files, track count can be any value. There is no limitation as far as the file format is concerned, though sequencer software will generally impose a practical limit.
-            data += withChunkCount.uInt16.toData(.bigEndian)
+            data += UInt16(withChunkCount).toData(.bigEndian)
         }
         
         // Time division: ticks per quarter note

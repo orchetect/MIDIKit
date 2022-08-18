@@ -23,7 +23,6 @@ extension HUIParameter {
 }
 
 extension HUIParameter.ControlRoom: HUIParameterProtocol {
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x11

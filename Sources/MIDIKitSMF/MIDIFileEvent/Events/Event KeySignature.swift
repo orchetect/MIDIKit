@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
+import MIDIKitInternals
 
 // MARK: - KeySignature
 
@@ -47,59 +47,65 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .keySignature
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        // 3-byte preamble
-        guard rawBytes.starts(with: MIDIFile.kEventHeaders[.keySignature]!) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Event does not start with expected bytes."
-            )
+        try rawBytes.withDataReader { dataReader in
+            // 3-byte preamble
+            guard try dataReader.read(bytes: 3).elementsEqual(
+                MIDIFile.kEventHeaders[Self.smfEventType]!
+            ) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Event does not start with expected bytes."
+                )
+            }
+        
+            // flats/sharps - two's complement signed Int8
+            let readFlatsOrSharps = Int8(bitPattern: try dataReader.readByte())
+            // major/minor key - 1 or 0
+            let readMajMinKey = try dataReader.readByte()
+        
+            guard (-7 ... 7).contains(readFlatsOrSharps) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Illegal value found when reading Key Signature event sharps/flats byte. Got \(readFlatsOrSharps) but value must be between -7...7."
+                )
+            }
+        
+            guard (0 ... 1).contains(readMajMinKey) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Illegal value found when reading Key Signature event major/minor key byte. Got \(readFlatsOrSharps) but value must be between 0...1."
+                )
+            }
+        
+            flatsOrSharps = readFlatsOrSharps
+            majorKey = readMajMinKey == 0
         }
-        
-        // flats/sharps - two's complement signed Int8
-        let readFlatsOrSharps = Int8(bitPattern: rawBytes[3])
-        // major/minor key - 1 or 0
-        let readMajorKey = rawBytes[4]
-        
-        guard readFlatsOrSharps.isContained(in: -7 ... 7) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Illegal value found when reading Key Signature event sharps/flats byte. Got \(readFlatsOrSharps.int) but value must be between -7...7."
-            )
-        }
-        
-        guard readMajorKey.isContained(in: 0 ... 1) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Illegal value found when reading Key Signature event major/minor key byte. Got \(readFlatsOrSharps) but value must be between 0...1."
-            )
-        }
-        
-        flatsOrSharps = readFlatsOrSharps
-        majorKey = !readMajorKey.boolValue
     }
     
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 59 02(length) sf mi
         // sf is a byte specifying the number of flats (-ve) or sharps (+ve) that identifies the key signature (-7 = 7 flats, -1 = 1 flat, 0 = key of C, 1 = 1 sharp, etc).
         // mi is a byte specifying a major (0) or minor (1) key.
         
-        MIDIFile.kEventHeaders[.keySignature]! +
-            // flats/sharps - two's complement signed Int8
-            [flatsOrSharps.twosComplement] +
-            // major/minor key - 1 or 0
-            [majorKey ? 0x00 : 0x01]
+        D(
+            MIDIFile.kEventHeaders[.keySignature]! +
+                // flats/sharps - two's complement signed Int8
+                [flatsOrSharps.twosComplement] +
+                // major/minor key - 1 or 0
+                [majorKey ? 0x00 : 0x01]
+        )
     }
     
     static let midi1SMFFixedRawBytesLength = 5
 
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        let requiredData = rawBuffer.prefix(midi1SMFFixedRawBytesLength).bytes
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
 
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(

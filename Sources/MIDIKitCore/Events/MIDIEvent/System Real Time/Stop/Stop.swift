@@ -29,7 +29,6 @@ extension MIDIEvent {
     ///
     /// - Parameters:
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func stop(group: UInt4 = 0x0) -> Self {
         .stop(
             .init(group: group)
@@ -41,7 +40,6 @@ extension MIDIEvent.Stop {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func midi1RawBytes() -> [Byte] {
         [0xFC]
     }
@@ -49,7 +47,6 @@ extension MIDIEvent.Stop {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .systemRealTimeAndCommon
     

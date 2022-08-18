@@ -47,7 +47,6 @@ extension MIDIEvent {
     ///   - manufacturer: SysEx Manufacturer ID
     ///   - data: Data bytes (7-bit)
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func sysEx7(
         manufacturer: SysExManufacturer,
         data: [Byte],
@@ -91,7 +90,6 @@ extension MIDIEvent.SysEx7 {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func midi1RawBytes(
         leadingF0: Bool = true,
         trailingF7: Bool = true
@@ -107,7 +105,6 @@ extension MIDIEvent.SysEx7 {
     /// Generates one or more 64-bit UMP packets depending on the system exclusive data length (each packet comprised of two UInt32 words).
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords() -> [[UMPWord]] {
         let rawData = manufacturer.sysEx7RawBytes() + data
     
@@ -121,7 +118,6 @@ extension MIDIEvent.SysEx7 {
 extension MIDIEvent.SysEx7 {
     /// Internal:
     /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly; use the public `umpRawWords()` method instead.
-    @inline(__always)
     internal static func umpRawWords(
         fromSysEx7Data data: [Byte],
         group: UInt4

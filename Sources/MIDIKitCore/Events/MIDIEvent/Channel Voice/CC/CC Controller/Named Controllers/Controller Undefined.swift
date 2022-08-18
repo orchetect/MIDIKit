@@ -167,7 +167,6 @@ extension MIDIEvent.CC.Controller {
 
 extension MIDIEvent.CC.Controller.Undefined {
     /// Returns the controller number.
-    @inlinable
     public var controller: UInt7 {
         // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
         switch self {
@@ -217,7 +216,6 @@ extension MIDIEvent.CC.Controller.Undefined {
 
 extension MIDIEvent.CC.Controller.Undefined {
     /// Returns the controller name as a human-readable String.
-    @inlinable
     public var name: String {
         "Undefined CC\(controller)"
     }

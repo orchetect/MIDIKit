@@ -1,11 +1,12 @@
-/// -----------------------------------------------------------------------------
-/// -----------------------------------------------------------------------------
-/// Borrowed from [SwiftASCII 1.1.3](https://github.com/orchetect/SwiftASCII)
-/// under MIT license.
-/// Methods herein are unit tested in SwiftASCII, so no unit tests are necessary.
-/// -----------------------------------------------------------------------------
-/// -----------------------------------------------------------------------------
-///
+/// -------------------------------------------------
+/// -------------------------------------------------
+/// Borrowed from SwiftASCII 1.1.3 under MIT license.
+/// https://github.com/orchetect/SwiftASCII
+/// Methods herein are unit tested at their source
+/// so no unit tests are necessary.
+/// -------------------------------------------------
+/// -------------------------------------------------
+
 import Foundation
 
 extension StringProtocol {

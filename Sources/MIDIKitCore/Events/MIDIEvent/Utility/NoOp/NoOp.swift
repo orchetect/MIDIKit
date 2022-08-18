@@ -29,7 +29,6 @@ extension MIDIEvent {
     ///
     /// - Parameters:
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func noOp(group: UInt4 = 0x0) -> Self {
         .noOp(
             .init(group: group)
@@ -41,7 +40,6 @@ extension MIDIEvent.NoOp {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .utility
     

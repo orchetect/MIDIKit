@@ -8,7 +8,6 @@
 
 import XCTest
 @testable import MIDIKitSMF
-import OTCore
 import TimecodeKit
 
 final class Event_SMPTEOffset_Tests: XCTestCase {
@@ -39,7 +38,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             frRate: ._25fps
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xFF, 0x54, 0x05,
                                0b00100001, 2, 3, 4, 5])

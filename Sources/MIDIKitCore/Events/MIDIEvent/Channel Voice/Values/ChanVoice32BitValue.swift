@@ -17,15 +17,13 @@ extension MIDIEvent {
         // conversion initializers from MIDI 1 value types
     
         /// Returns `.midi2()` case converting from a MIDI 1.0 7-Bit value.
-        @inline(__always)
-        public static func midi1(sevenBit: UInt7) -> Self {
+            public static func midi1(sevenBit: UInt7) -> Self {
             let scaled = MIDIEvent.scaled32Bit(from7Bit: sevenBit)
             return .midi2(scaled)
         }
     
         /// Returns `.midi2()` case converting from a MIDI 1.0 14-Bit value.
-        @inline(__always)
-        public static func midi1(fourteenBit: UInt14) -> Self {
+            public static func midi1(fourteenBit: UInt14) -> Self {
             let scaled = MIDIEvent.scaled32Bit(from14Bit: fourteenBit)
             return .midi2(scaled)
         }
@@ -58,7 +56,6 @@ extension MIDIEvent.ChanVoice32BitValue: Equatable {
 
 extension MIDIEvent.ChanVoice32BitValue {
     /// Returns value as protocol-agnostic unit interval, converting if necessary.
-    @inline(__always)
     public var unitIntervalValue: Double {
         switch self {
         case let .unitInterval(interval):
@@ -70,7 +67,6 @@ extension MIDIEvent.ChanVoice32BitValue {
     }
     
     /// Returns value as a MIDI 1.0 7-bit value, converting if necessary.
-    @inline(__always)
     public var midi1_7BitValue: UInt7 {
         switch self {
         case let .unitInterval(interval):
@@ -82,7 +78,6 @@ extension MIDIEvent.ChanVoice32BitValue {
     }
     
     /// Returns value as a MIDI 1.0 14-bit value, converting if necessary.
-    @inline(__always)
     public var midi1_14BitValue: UInt14 {
         switch self {
         case let .unitInterval(interval):
@@ -94,7 +89,6 @@ extension MIDIEvent.ChanVoice32BitValue {
     }
     
     /// Returns value as a MIDI 2.0 32-bit value, converting if necessary.
-    @inline(__always)
     public var midi2Value: UInt32 {
         switch self {
         case let .unitInterval(interval):
@@ -111,11 +105,9 @@ extension MIDIEvent.ChanVoice32BitValue {
     public struct Validated: Equatable, Hashable {
         public typealias Value = MIDIEvent.ChanVoice32BitValue
     
-        @inline(__always)
-        private var value: Value
+            private var value: Value
     
-        @inline(__always)
-        public var wrappedValue: Value {
+            public var wrappedValue: Value {
             get {
                 value
             }
@@ -130,8 +122,7 @@ extension MIDIEvent.ChanVoice32BitValue {
             }
         }
     
-        @inline(__always)
-        public init(wrappedValue: Value) {
+            public init(wrappedValue: Value) {
             value = wrappedValue
         }
     }

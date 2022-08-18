@@ -30,8 +30,7 @@ extension MIDIEvent.NoteAttribute {
         /// - Parameters:
         ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
         ///   - fine: 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
-        @inline(__always)
-        public init(
+            public init(
             coarse: UInt7,
             fine: UInt9
         ) {
@@ -55,7 +54,6 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
     ///
     /// Range: 0+(0/512) ... 127+(511/512)
-    @inline(__always)
     public init(_ bytePair: BytePair) {
         coarse = UInt7((bytePair.msb & 0b1111_1110) >> 1)
     
@@ -66,7 +64,6 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     }
     
     /// UInt16 representation as a byte pair.
-    @inline(__always)
     public var bytePair: BytePair {
         let msb = Byte(coarse.value << 1) + Byte((fine.value & 0b1_0000_0000) >> 8)
         let lsb = Byte(fine.value & 0b1111_1111)
@@ -83,14 +80,12 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
     ///
     /// Range: 0+(0/512) ... 127+(511/512)
-    @inline(__always)
     public init(_ uInt16Value: UInt16) {
         coarse = ((uInt16Value & 0b1111_1110_0000_0000) >> 9).toUInt7
         fine =    (uInt16Value & 0b0000_0001_1111_1111).toUInt9
     }
     
     /// UInt16 representation.
-    @inline(__always)
     public var uInt16Value: UInt16 {
         (UInt16(coarse.value) << 9) + fine.value
     }
@@ -104,7 +99,6 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
     ///
     /// Range: 0+(0/512) ... 127+(511/512)
-    @inline(__always)
     public init(_ double: Double) {
         let double = double.clamped(to: 0.0 ... 127.998046875)
     
@@ -115,7 +109,6 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     }
     
     /// Converted to a Double value (0.0...127.998046875)
-    @inline(__always)
     public var doubleValue: Double {
         Double(coarse.value) + (Double(fine.value) / 0b10_0000_0000)
     }

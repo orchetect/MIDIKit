@@ -14,17 +14,18 @@ public protocol MIDIFileEventPayload {
     
     /// Initialize from raw event bytes.
     /// Returns nil if data is malformed or cannot otherwise be used to construct the event.
-    init(midi1SMFRawBytes: [Byte]) throws
+    init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws
     
     /// Raw data for the event.
-    var midi1SMFRawBytes: [Byte] { get }
-    
+    func midi1SMFRawBytes<D: MutableDataProtocol>() -> D
+   
     /// Returns the new event and MIDI file buffer length (number of bytes).
-    typealias InitFromMIDI1SMFRawBytesStreamResult = (newEvent: Self, bufferLength: Int)
+    typealias StreamDecodeResult = (newEvent: Self, bufferLength: Int)
     
     /// If it is possible to initialize a new instance of this event from the head of the data buffer, a new instance will be returned along with the byte length traversed from the buffer.
-    static func initFrom(midi1SMFRawBytesStream rawBuffer: Data) throws
-        -> InitFromMIDI1SMFRawBytesStreamResult
+    static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult
     
     /// Description for the event in a MIDI file context.
     var smfDescription: String { get }

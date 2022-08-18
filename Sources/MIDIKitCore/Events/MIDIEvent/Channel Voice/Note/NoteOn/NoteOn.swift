@@ -118,7 +118,6 @@ extension MIDIEvent {
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (0x0...0xF)
     ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
-    @inline(__always)
     public static func noteOn(
         _ note: UInt7,
         velocity: NoteVelocity,
@@ -149,7 +148,6 @@ extension MIDIEvent {
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (0x0...0xF)
     ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
-    @inline(__always)
     public static func noteOn(
         _ note: MIDINote,
         velocity: NoteVelocity,
@@ -175,7 +173,6 @@ extension MIDIEvent.NoteOn {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func midi1RawBytes() -> [Byte] {
         func process(midi1Value: UInt7) -> [Byte] {
             if midi1Value == 0, midi1ZeroVelocityAsNoteOff {
@@ -218,7 +215,6 @@ extension MIDIEvent.NoteOn {
         }
     }
     
-    @inline(__always)
     private func umpMessageType(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> MIDIUMPMessageType {
@@ -234,7 +230,6 @@ extension MIDIEvent.NoteOn {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {

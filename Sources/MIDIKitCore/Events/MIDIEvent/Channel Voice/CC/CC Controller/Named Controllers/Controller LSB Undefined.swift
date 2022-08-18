@@ -76,7 +76,6 @@ extension MIDIEvent.CC.Controller.LSB {
 
 extension MIDIEvent.CC.Controller.LSB.Undefined {
     /// Returns the controller number.
-    @inlinable
     public var controller: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -101,7 +100,6 @@ extension MIDIEvent.CC.Controller.LSB.Undefined {
     }
     
     /// Returns the LSB's corresponding MSB controller number.
-    @inlinable
     public var msbController: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -128,7 +126,6 @@ extension MIDIEvent.CC.Controller.LSB.Undefined {
 
 extension MIDIEvent.CC.Controller.LSB.Undefined {
     /// Returns the controller name as a human-readable String.
-    @inlinable
     public var name: String {
         "Undefined CC\(msbController) LSB"
     }

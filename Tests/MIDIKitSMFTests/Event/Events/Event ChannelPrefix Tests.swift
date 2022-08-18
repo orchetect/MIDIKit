@@ -24,7 +24,7 @@ final class Event_ChannelPrefix_Tests: XCTestCase {
     func testMIDI1SMFRawBytes() {
         let event = MIDIFileEvent.ChannelPrefix(channel: 2)
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xFF, 0x20, 0x01, 0x02])
     }

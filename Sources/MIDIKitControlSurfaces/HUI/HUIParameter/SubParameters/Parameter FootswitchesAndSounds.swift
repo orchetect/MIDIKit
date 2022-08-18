@@ -17,7 +17,6 @@ extension HUIParameter {
 }
 
 extension HUIParameter.FootswitchesAndSounds: HUIParameterProtocol {
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x1D

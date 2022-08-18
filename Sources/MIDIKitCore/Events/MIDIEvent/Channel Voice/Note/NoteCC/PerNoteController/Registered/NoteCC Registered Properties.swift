@@ -6,7 +6,6 @@
 
 extension MIDIEvent.NoteCC.PerNoteController.Registered {
     /// Returns the controller number.
-    @inline(__always)
     public var number: UInt8 {
         // swiftformat:disable spacearoundoperators
         switch self {

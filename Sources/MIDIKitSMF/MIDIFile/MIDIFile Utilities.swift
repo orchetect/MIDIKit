@@ -24,30 +24,33 @@ extension MIDIFile {
             .reversed()
     }
 
-    /// Returns variable length value encoded byte array
-    static func encodeVariableLengthValue<T: BinaryInteger>(_ number: T) -> [Byte] {
-        var result: [Byte] = []
+    /// Returns variable length value encoded byte array.
+    static func encodeVariableLengthValue<
+        T: BinaryInteger,
+        D: MutableDataProtocol
+    >(_ number: T) -> D {
+        var result = D()
         var count = 0
 
         var parseNum = number
 
-        if parseNum < 1 { return [0x00] }
+        if parseNum < 1 { return D([0x00]) }
 
         while parseNum > 0 {
             if (result.count - 1) < count {
                 // increase size of array as needed
-                result.insert(0x00, at: 0)
+                result.insert(0x00, at: result.startIndex)
             }
 
             // Get lowest 7 bits of current data
-            result[0] = Byte(parseNum & 0x7F)
+            result[result.startIndex] = D.Element(parseNum & 0x7F)
 
             // shift by 7 bits
             parseNum = parseNum >> 7
 
             if count > 0 { // not least significant byte?
                 // set a flag on the byte
-                result[0] = result[0] | 0x80
+                result[result.startIndex] = result[result.startIndex] | 0x80
             }
 
             count += 1 // count up for next byte
@@ -59,7 +62,7 @@ extension MIDIFile {
     /// Returns the decoded value and the number of bytes read from the bytes array if successful.
     /// Returns nil if bytes is empty or variable length value could not be read in the expected format (ie: malformed or unexpected data)
     /// Currently returns nil if value overflows a 28-bit unsigned value.
-    static func decodeVariableLengthValue(from bytes: [Byte]) -> (
+    static func decodeVariableLengthValue<D: DataProtocol>(from bytes: D) -> (
         value: Int,
         byteLength: Int
     )? {
@@ -71,7 +74,7 @@ extension MIDIFile {
     /// Returns the decoded value and the number of bytes read from the bytes array if successful.
     /// Returns nil if bytes is empty or variable length value could not be read in the expected format (ie: malformed or unexpected data)
     /// Currently returns nil if value overflows a 28-bit unsigned value.
-    static func decodeVariableLengthValue(from bytes: inout [Byte]) -> (
+    static func decodeVariableLengthValue<D: DataProtocol>(from bytes: inout D) -> (
         value: Int,
         byteLength: Int
     )? {
@@ -82,14 +85,18 @@ extension MIDIFile {
         var count = 0
 
         if bytes.count < 1 { return nil }
-
+        
+        func countAsIndex() -> D.Index {
+            bytes.index(bytes.startIndex, offsetBy: count)
+        }
+        
         // while flag bit is set
         while count < bytes.count,
-              bytes[count] & 0x80 > 0,
+              bytes[countAsIndex()] & 0x80 > 0,
               count <= 4
         {
             result = result << 7
-            result = result | (Int(bytes[count]) & 0x7F)
+            result = result | (Int(bytes[countAsIndex()]) & 0x7F)
 
             // validation check: if we overflow, return nil - input data may be malformed
             if result > uInt28Max { return nil }
@@ -104,7 +111,7 @@ extension MIDIFile {
         
         // get last byte (the one without the flag bit set)
         result = result << 7
-        result = result | (Int(bytes[count]) & 0x7F)
+        result = result | (Int(bytes[countAsIndex()]) & 0x7F)
         
         // validation check: if we overflow, return nil - input data may be malformed
         if result > uInt28Max { return nil }
@@ -113,11 +120,11 @@ extension MIDIFile {
     }
 }
 
-extension Data {
+extension MutableDataProtocol {
     mutating func append(deltaTime ticks: UInt32) {
         // Variable length delta timestamp representing the number of ticks that have elapsed
         // According to the Standard MIDI File Spec 1.0, the entire delta-time should be at most 4 bytes long.
-
-        append(contentsOf: MIDIFile.encodeVariableLengthValue(ticks))
+        
+        append(contentsOf: MIDIFile.encodeVariableLengthValue(ticks) as Self)
     }
 }

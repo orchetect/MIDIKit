@@ -25,7 +25,6 @@ extension HUIParameter {
 }
 
 extension HUIParameter.ParameterEdit: HUIParameterProtocol {
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         case .insertOrParam:  return (0x1C, 0x0)

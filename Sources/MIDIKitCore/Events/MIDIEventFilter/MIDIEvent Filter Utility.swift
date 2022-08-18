@@ -8,7 +8,6 @@
 
 extension MIDIEvent {
     /// Returns true if the event is a Utility message.
-    @inlinable
     public var isUtility: Bool {
         switch self {
         case .noOp,
@@ -22,7 +21,6 @@ extension MIDIEvent {
     }
     
     /// Returns true if the event is a Utility message of a specific type.
-    @inlinable
     public func isUtility(ofType utilityType: UtilityType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -35,7 +33,6 @@ extension MIDIEvent {
     }
     
     /// Returns true if the event is a Utility message of a specific type.
-    @inlinable
     public func isUtility(ofTypes utilityTypes: Set<UtilityType>) -> Bool {
         for eventType in utilityTypes {
             if isUtility(ofType: eventType) { return true }
@@ -49,7 +46,6 @@ extension MIDIEvent {
 
 extension Collection where Element == MIDIEvent {
     /// Filter Utility events.
-    @inlinable
     public func filter(utility types: MIDIEvent.UtilityTypes) -> [Element] {
         switch types {
         case .only:

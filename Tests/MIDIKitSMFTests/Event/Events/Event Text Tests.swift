@@ -28,7 +28,7 @@ final class Event_Text_Tests: XCTestCase {
     func testMIDI1SMFRawBytes_EmptyString() {
         let event = MIDIFileEvent.Text(type: .text, string: "")
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xFF, 0x01, // header
@@ -52,7 +52,7 @@ final class Event_Text_Tests: XCTestCase {
     func testMIDI1SMFRawBytes_WithString() {
         let event = MIDIFileEvent.Text(type: .text, string: "abcd")
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xFF, 0x01, // header
@@ -83,7 +83,7 @@ final class Event_Text_Tests: XCTestCase {
             ]
             
             let event1 = MIDIFileEvent.Text(type: eventType, string: "a")
-            XCTAssertEqual(event1.midi1SMFRawBytes, bytes)
+            XCTAssertEqual(event1.midi1SMFRawBytes(), bytes)
             
             let event2 = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
             XCTAssertEqual(event1, event2)

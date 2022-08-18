@@ -39,7 +39,6 @@ extension MIDIEvent.NoteAttribute {
     /// (MIDI 2.0)
     ///
     /// Initialize from raw type and data.
-    @inline(__always)
     public init(
         type: Byte,
         data: UInt16
@@ -72,7 +71,6 @@ extension MIDIEvent.NoteAttribute {
     /// - Parameters:
     ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
     ///   - fine: 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
-    @inline(__always)
     public static func pitch7_9(
         coarse: UInt7,
         fine: UInt9
@@ -106,7 +104,6 @@ extension MIDIEvent.NoteAttribute: CustomStringConvertible {
 
 extension MIDIEvent.NoteAttribute {
     /// Attribute Type Byte
-    @inline(__always)
     public var attributeType: Byte {
         switch self {
         case .none:
@@ -127,7 +124,6 @@ extension MIDIEvent.NoteAttribute {
     }
     
     /// Attribute Data
-    @inline(__always)
     public var attributeData: UInt16 {
         switch self {
         case .none:

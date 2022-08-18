@@ -28,7 +28,7 @@ final class Event_Pressure_Tests: XCTestCase {
             channel: 0
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xD0, 0x40])
     }
@@ -48,7 +48,7 @@ final class Event_Pressure_Tests: XCTestCase {
             channel: 1
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xD1, 0x7F])
     }

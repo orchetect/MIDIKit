@@ -34,7 +34,6 @@ extension MIDIEvent {
     ///   - value: 14-bit Value (0...16383) where midpoint is 8192
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func pitchBend(
         value: PitchBend.Value,
         channel: UInt4,
@@ -54,7 +53,6 @@ extension MIDIEvent.PitchBend {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func midi1RawBytes() -> [Byte] {
         let bytePair = value.midi1Value.bytePair
     
@@ -65,7 +63,6 @@ extension MIDIEvent.PitchBend {
         ]
     }
     
-    @inline(__always)
     private func umpMessageType(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> MIDIUMPMessageType {
@@ -81,7 +78,6 @@ extension MIDIEvent.PitchBend {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {

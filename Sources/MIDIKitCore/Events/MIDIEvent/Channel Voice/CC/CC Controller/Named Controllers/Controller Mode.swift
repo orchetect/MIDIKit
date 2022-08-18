@@ -45,7 +45,6 @@ extension MIDIEvent.CC.Controller {
 
 extension MIDIEvent.CC.Controller.Mode {
     /// Returns the controller number.
-    @inlinable
     public var controller: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -64,7 +63,6 @@ extension MIDIEvent.CC.Controller.Mode {
 
 extension MIDIEvent.CC.Controller.Mode {
     /// Returns the controller name as a human-readable String.
-    @inlinable
     public var name: String {
         // swiftformat:disable spacearoundoperators
         switch self {

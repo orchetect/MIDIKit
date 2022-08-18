@@ -27,7 +27,7 @@ final class Event_Tempo_Tests: XCTestCase {
     func testMIDI1SMFRawBytes_A() {
         let event = MIDIFileEvent.Tempo(bpm: 120.0)
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xFF, 0x51, 0x03, // header
@@ -49,7 +49,7 @@ final class Event_Tempo_Tests: XCTestCase {
     func testMIDI1SMFRawBytes_B() {
         let event = MIDIFileEvent.Tempo(bpm: 60.0)
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xFF, 0x51, 0x03, // header

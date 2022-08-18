@@ -78,7 +78,6 @@ extension MIDIEvent {
     ///   - subID2: Sub ID #2
     ///   - data: Data bytes (8-bit)
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func universalSysEx8(
         universalType: UniversalSysExType,
         deviceID: UInt7,
@@ -104,7 +103,6 @@ extension MIDIEvent.UniversalSysEx8 {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords() -> [[UMPWord]] {
         let rawData =
             [

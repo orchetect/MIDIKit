@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 extension MIDIFile {
     func encode() throws -> Data {
@@ -29,10 +28,10 @@ extension MIDIFile {
         for chunk in chunks {
             switch chunk {
             case let .track(track):
-                data += try track.midi1SMFRawBytes(using: timeBase)
+                data.append(try track.midi1SMFRawBytes(using: timeBase))
 
             case let .other(unrecognizedChunk):
-                data += try unrecognizedChunk.midi1SMFRawBytes(using: timeBase)
+                data.append(try unrecognizedChunk.midi1SMFRawBytes(using: timeBase))
             }
         }
 

@@ -24,7 +24,7 @@ final class Event_PortPrefix_Tests: XCTestCase {
     func testMIDI1SMFRawBytes() {
         let event = MIDIFileEvent.PortPrefix(port: 2)
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xFF, 0x21, 0x01, 0x02])
     }

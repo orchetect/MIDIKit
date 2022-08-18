@@ -37,7 +37,6 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - number: Song Number
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func songSelect(
         number: UInt7,
         group: UInt4 = 0x0
@@ -55,7 +54,6 @@ extension MIDIEvent.SongSelect {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func midi1RawBytes() -> [Byte] {
         [0xF3, number.uInt8Value]
     }
@@ -63,7 +61,6 @@ extension MIDIEvent.SongSelect {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .systemRealTimeAndCommon
     

@@ -28,7 +28,7 @@ final class Event_PitchBend_Tests: XCTestCase {
             channel: 0
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [Byte] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xE0, 0x00, 0x40])
     }
@@ -48,7 +48,7 @@ final class Event_PitchBend_Tests: XCTestCase {
             channel: 1
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [Byte] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xE1, 0x7F, 0x7F])
     }

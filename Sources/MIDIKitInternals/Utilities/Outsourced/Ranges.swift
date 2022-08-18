@@ -1,9 +1,13 @@
-/// ------------------------------------------------------------------------------------
-/// ------------------------------------------------------------------------------------
-/// Borrowed from [OTCore 1.4.1](https://github.com/orchetect/OTCore) under MIT license.
-/// Methods herein are unit tested in OTCore, so no unit tests are necessary in MIDIKit.
-/// ------------------------------------------------------------------------------------
-/// ------------------------------------------------------------------------------------
+/// ----------------------------------------------
+/// ----------------------------------------------
+/// OTCore/Extensions/Swift/Ranges.swift
+///
+/// Borrowed from OTCore 1.4.1 under MIT license.
+/// https://github.com/orchetect/OTCore
+/// Methods herein are unit tested at their source
+/// so no unit tests are necessary.
+/// ----------------------------------------------
+/// ----------------------------------------------
 
 import Foundation
 
@@ -14,7 +18,7 @@ extension Comparable {
     // ie: 5.0.clamped(to: 7.0...10.0)
     // ie: "a".clamped(to: "b"..."h")
     /// Returns the value clamped to the passed range.
-    @inlinable @_disfavoredOverload
+    @_disfavoredOverload
     public func clamped(to limits: ClosedRange<Self>) -> Self {
         min(max(self, limits.lowerBound), limits.upperBound)
     }
@@ -23,7 +27,7 @@ extension Comparable {
     // ie: 5.0.clamped(to: 300.00...)
     // ie: "a".clamped(to: "b"...)
     /// Returns the value clamped to the passed range.
-    @inlinable @_disfavoredOverload
+    @_disfavoredOverload
     public func clamped(to limits: PartialRangeFrom<Self>) -> Self {
         max(self, limits.lowerBound)
     }
@@ -32,7 +36,7 @@ extension Comparable {
     // ie: 400.0.clamped(to: ...300.0)
     // ie: "k".clamped(to: ..."h")
     /// Returns the value clamped to the passed range.
-    @inlinable @_disfavoredOverload
+    @_disfavoredOverload
     public func clamped(to limits: PartialRangeThrough<Self>) -> Self {
         min(self, limits.upperBound)
     }
@@ -47,7 +51,7 @@ extension Strideable {
     // ie: 400.clamped(to: ..<300)
     // won't work for String
     /// Returns the value clamped to the passed range.
-    @inlinable @_disfavoredOverload
+    @_disfavoredOverload
     public func clamped(to limits: PartialRangeUpTo<Self>) -> Self {
         // advanced(by:) requires Strideable, not available on just Comparable
         min(self, limits.upperBound.advanced(by: -1))
@@ -58,7 +62,7 @@ extension Strideable where Self.Stride: SignedInteger {
     // ie: 5.clamped(to: 7..<10)
     // won't work for String
     /// Returns the value clamped to the passed range.
-    @inlinable @_disfavoredOverload
+    @_disfavoredOverload
     public func clamped(to limits: Range<Self>) -> Self {
         // index(before:) only available on SignedInteger
         min(

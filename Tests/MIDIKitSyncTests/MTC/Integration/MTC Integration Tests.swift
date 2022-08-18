@@ -9,7 +9,6 @@
 import XCTest
 @testable import MIDIKitSync
 import TimecodeKit
-import OTCore
 
 final class MTC_Integration_Integration_Tests: XCTestCase {
     func testMTC_Integration_EncoderDecoder_24fps() {

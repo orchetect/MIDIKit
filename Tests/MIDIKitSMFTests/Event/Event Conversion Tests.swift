@@ -8,7 +8,6 @@
 
 import XCTest
 import MIDIKitSMF
-import OTCore
 
 final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     func testMIDI_Event_NoteOn_smfEvent() throws {

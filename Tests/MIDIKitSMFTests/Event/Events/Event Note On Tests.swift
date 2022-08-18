@@ -30,7 +30,7 @@ final class Event_NoteOn_Tests: XCTestCase {
             channel: 0
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0x90, 0x01, 0x40])
     }
@@ -52,7 +52,7 @@ final class Event_NoteOn_Tests: XCTestCase {
             channel: 1
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0x91, 0x3C, 0x7F])
     }
@@ -76,7 +76,7 @@ final class Event_NoteOn_Tests: XCTestCase {
             channel: 0
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0x80, 0x3C, 0x00]) // interpreted as Note Off
     }
@@ -89,7 +89,7 @@ final class Event_NoteOn_Tests: XCTestCase {
             midi1ZeroVelocityAsNoteOff: false
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0x90, 0x3C, 0x00])
     }

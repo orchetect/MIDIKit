@@ -10,14 +10,12 @@ public struct BytePair: Equatable, Hashable {
     public let lsb: Byte
     
     /// Initialize from two UInt8 bytes.
-    @inline(__always)
     public init(msb: Byte, lsb: Byte) {
         self.msb = msb
         self.lsb = lsb
     }
     
     /// Initialize from a UInt16 value.
-    @inline(__always)
     public init(_ uInt16: UInt16) {
         msb = Byte((uInt16 & 0xFF00) >> 8)
         lsb = Byte((uInt16 & 0xFF))

@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - ChannelPrefix
 
@@ -31,23 +30,27 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .channelPrefix
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        // 3-byte preamble
-        guard rawBytes.starts(with: MIDIFile.kEventHeaders[.channelPrefix]!) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Event does not start with expected bytes."
-            )
+        let readChannel: UInt8 = try rawBytes.withDataReader { dataReader in
+            // 3-byte preamble
+            guard try dataReader.read(bytes: 3).elementsEqual(
+                MIDIFile.kEventHeaders[Self.smfEventType]!
+            ) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Event does not start with expected bytes."
+                )
+            }
+            
+            return try dataReader.readByte()
         }
         
-        let readChannel = rawBytes[3]
-        
-        guard readChannel.isContained(in: 0x0 ... 0xF) else {
+        guard (0x0 ... 0xF).contains(readChannel) else {
             throw MIDIFile.DecodeError.malformed(
                 "Channel number is out of bounds: \(readChannel)"
             )
@@ -62,19 +65,19 @@ extension MIDIFileEvent.ChannelPrefix: MIDIFileEventPayload {
         self.channel = channel
     }
     
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 20 01 cc
         // cc is channel number (0...15)
         
-        MIDIFile.kEventHeaders[.channelPrefix]! + [channel.uInt8Value]
+        D(MIDIFile.kEventHeaders[.channelPrefix]! + [channel.uInt8Value])
     }
     
     static let midi1SMFFixedRawBytesLength = 4
 
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        let requiredData = rawBuffer.prefix(midi1SMFFixedRawBytesLength).bytes
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
 
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(

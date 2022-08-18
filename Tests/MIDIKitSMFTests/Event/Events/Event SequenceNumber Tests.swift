@@ -24,7 +24,7 @@ final class Event_SequenceNumber_Tests: XCTestCase {
     func testMIDI1SMFRawBytes_A() {
         let event = MIDIFileEvent.SequenceNumber(sequence: 0x00)
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xFF, 0x00, 0x02, 0x00, 0x00])
     }
@@ -40,7 +40,7 @@ final class Event_SequenceNumber_Tests: XCTestCase {
     func testMIDI1SMFRawBytes_B() {
         let event = MIDIFileEvent.SequenceNumber(sequence: 0x7FFF)
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xFF, 0x00, 0x02, 0x7F, 0xFF])
     }

@@ -39,7 +39,6 @@ extension MIDIEvent {
     ///
     /// - Throws: `MIDIEvent.ParseError` if message is malformed.
     @available(*, unavailable, renamed: "Event.sysEx7(rawBytes:group:)")
-    @inline(__always)
     public init(
         sysEx7RawBytes rawBytes: [Byte],
         group: UInt4 = 0
@@ -58,7 +57,6 @@ extension MIDIEvent {
     ///
     /// - Throws: `MIDIEvent.ParseError` if message is malformed.
     @available(*, unavailable, renamed: "Event.sysEx8(rawBytes:group:)")
-    @inline(__always)
     public init(
         sysEx8RawBytes rawBytes: [Byte],
         group: UInt4 = 0

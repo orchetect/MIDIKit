@@ -152,7 +152,7 @@ final class Event_SysEx_Tests: XCTestCase {
             data: []
         )
         
-        let bytes = sysEx.midi1SMFRawBytes
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xF0,  // start byte
@@ -168,7 +168,7 @@ final class Event_SysEx_Tests: XCTestCase {
             data: [0x12, 0x34]
         )
         
-        let bytes = sysEx.midi1SMFRawBytes
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xF0,  // start byte
@@ -188,7 +188,7 @@ final class Event_SysEx_Tests: XCTestCase {
             data: data
         )
         
-        let bytes = sysEx.midi1SMFRawBytes
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
         XCTAssertEqual(
             bytes,
@@ -213,7 +213,7 @@ final class Event_SysEx_Tests: XCTestCase {
             data: []
         )
         
-        let bytes = sysEx.midi1SMFRawBytes
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xF0,  // start byte
@@ -235,7 +235,7 @@ final class Event_SysEx_Tests: XCTestCase {
             data: [0x12, 0x34]
         )
         
-        let bytes = sysEx.midi1SMFRawBytes
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xF0,  // start byte
@@ -261,7 +261,7 @@ final class Event_SysEx_Tests: XCTestCase {
             data: data
         )
         
-        let bytes = sysEx.midi1SMFRawBytes
+        let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
         XCTAssertEqual(
             bytes,

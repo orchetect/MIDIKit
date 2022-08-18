@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - CC
 
@@ -17,31 +16,39 @@ extension MIDIFileEvent {
 extension MIDIEvent.CC: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .cc
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
-
-        let readStatus = (rawBytes[0] & 0xF0) >> 4
-        let readChannel = rawBytes[0] & 0x0F
-        let readCCNum = rawBytes[1]
-        let readValue = rawBytes[2]
-
+        
+        let (
+            readStatus, readChannel, readCCNum, readValue
+        ) = try rawBytes.withDataReader { dataReader -> (UInt8, UInt8, UInt8, UInt8) in
+            let byte0 = try dataReader.readByte()
+            
+            return (
+                readStatus: (byte0 & 0xF0) >> 4,
+                readChannel: byte0 & 0x0F,
+                readNoteNum: try dataReader.readByte(),
+                readPressure: try dataReader.readByte()
+            )
+        }
+        
         guard readStatus == 0xB else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid status nibble: \(readStatus.hexString(padTo: 1, prefix: true))."
             )
         }
 
-        guard readCCNum.isContained(in: 0 ... 127) else {
+        guard (0 ... 127).contains(readCCNum) else {
             throw MIDIFile.DecodeError.malformed(
                 "CC number is out of bounds: \(readCCNum)"
             )
         }
 
-        guard readValue.isContained(in: 0 ... 127) else {
+        guard (0 ... 127).contains(readValue) else {
             throw MIDIFile.DecodeError.malformed(
                 "CC value is out of bounds: \(readValue)"
             )
@@ -61,6 +68,7 @@ extension MIDIEvent.CC: MIDIFileEventPayload {
             value: .midi1(value),
             channel: channel
         )
+        
         guard case let .cc(unwrapped) = newEvent else {
             throw MIDIFile.DecodeError.malformed(
                 "Could not unwrap enum case."
@@ -70,18 +78,18 @@ extension MIDIEvent.CC: MIDIFileEventPayload {
         self = unwrapped
     }
 
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // Bn controller value
         
-        midi1RawBytes()
+        D(midi1RawBytes())
     }
 
     static let midi1SMFFixedRawBytesLength = 3
 
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        let requiredData = rawBuffer.prefix(midi1SMFFixedRawBytesLength).bytes
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
 
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(

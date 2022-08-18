@@ -1,9 +1,13 @@
-/// ------------------------------------------------------------------------------------------
-/// ------------------------------------------------------------------------------------------
-/// Borrowed from [OTAtomics 1.0.0](https://github.com/orchetect/OTAtomics) under MIT license.
-/// Methods herein are unit tested in OTAtomics, so no unit tests are necessary in MIDIKit.
-/// ------------------------------------------------------------------------------------------
-/// ------------------------------------------------------------------------------------------
+/// ------------------------------------------------
+/// ------------------------------------------------
+/// OTAtomics/OTAtomicsThreadSafe.swift
+///
+/// Borrowed from OTAtomics 1.0.0 under MIT license.
+/// https://github.com/orchetect/OTAtomics
+/// Methods herein are unit tested at their source
+/// so no unit tests are necessary.
+/// ------------------------------------------------
+/// ------------------------------------------------
 
 import Foundation
 
@@ -17,18 +21,14 @@ import Foundation
 /// - Warning: Do not instance this wrapper on a variable declaration inside a function. Only wrap class-bound, struct-bound, or global-bound variables.
 @propertyWrapper
 public final class ThreadSafeAccess<T> {
-    @inline(__always)
     private var value: T
     
-    @inline(__always)
     private let lock: ThreadLock = RWThreadLock()
     
-    @inline(__always)
     public init(wrappedValue value: T) {
         self.value = value
     }
     
-    @inline(__always)
     public var wrappedValue: T {
         get {
             lock.readLock()

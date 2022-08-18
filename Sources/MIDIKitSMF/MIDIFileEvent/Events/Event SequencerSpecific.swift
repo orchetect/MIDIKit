@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - SequencerSpecific
 
@@ -27,42 +26,45 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .sequencerSpecific
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count >= 3 else {
             throw MIDIFile.DecodeError.malformed(
                 "Too few bytes."
             )
         }
         
-        // 2-byte preamble
-        guard rawBytes.starts(with: MIDIFile.kEventHeaders[.sequencerSpecific]!) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Event does not start with expected bytes."
-            )
+        try rawBytes.withDataReader { dataReader in
+            // 2-byte preamble
+            guard try dataReader.read(bytes: 2).elementsEqual(
+                MIDIFile.kEventHeaders[Self.smfEventType]!
+            ) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Event does not start with expected bytes."
+                )
+            }
+        
+            guard let length = MIDIFile
+                .decodeVariableLengthValue(from: try dataReader.nonAdvancingRead())
+            else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Could not extract variable length."
+                )
+            }
+            dataReader.advanceBy(length.byteLength)
+            
+            guard dataReader.remainingByteCount >= length.value else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Fewer bytes are available (\(dataReader.remainingByteCount) than are expected (\(length.value))."
+                )
+            }
+            
+            let readData = try dataReader.read(bytes: length.value)
+            
+            data = readData.data.bytes
         }
-        
-        guard let length = MIDIFile.decodeVariableLengthValue(from: Array(rawBytes[2...])) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Could not extract variable length."
-            )
-        }
-        
-        let expectedFullLength = 2 + length.byteLength + length.value
-        
-        guard rawBytes.count >= expectedFullLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "Fewer bytes are available (\(rawBytes.count)) than are expected (\(expectedFullLength))."
-            )
-        }
-        
-        let beginIndex = rawBytes.startIndex.advanced(by: 2 + length.byteLength)
-        let stopIndex = beginIndex.advanced(by: length.value)
-        let readData = Array(rawBytes[beginIndex ..< stopIndex])
-        
-        data = readData
     }
     
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 7F length data
         
         MIDIFile.kEventHeaders[.sequencerSpecific]! +
@@ -72,20 +74,20 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
             data
     }
     
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        guard rawBuffer.count >= 3 else {
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        guard stream.count >= 3 else {
             throw MIDIFile.DecodeError.malformed(
                 "Byte length too short."
             )
         }
         
-        let newInstance = try Self(midi1SMFRawBytes: rawBuffer.bytes)
+        let newInstance = try Self(midi1SMFRawBytes: stream)
         
         // TODO: this is brittle but it may work
         
-        let length = newInstance.midi1SMFRawBytes.count
+        let length = (newInstance.midi1SMFRawBytes() as Data).count
         
         return (
             newEvent: newInstance,
@@ -100,8 +102,7 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
     public var smfDebugDescription: String {
         let byteDump = data
             .hexString(padEachTo: 2, prefixes: true, separator: ", ")
-            .wrapped(with: .brackets)
         
-        return "SequencerSpecific(\(data.count) bytes: \(byteDump)"
+        return "SequencerSpecific(\(data.count) bytes: [\(byteDump)]"
     }
 }

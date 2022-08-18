@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - Channel Pressure
 
@@ -17,61 +16,66 @@ extension MIDIFileEvent {
 extension MIDIEvent.Pressure: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .pressure
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        let readStatus = (rawBytes[0] & 0xF0) >> 4
-        let readChannel = rawBytes[0] & 0x0F
-        let readValue = rawBytes[1]
+        self = try rawBytes.withDataReader { dataReader in
+            let byte0 = try dataReader.readByte()
+            let readStatus = (byte0 & 0xF0) >> 4
+            let readChannel = byte0 & 0x0F
+            
+            let readValue = try dataReader.readByte()
+            
+            guard readStatus == 0xD else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Invalid status nibble: \(readStatus.hexString(padTo: 1, prefix: true))."
+                )
+            }
         
-        guard readStatus == 0xD else {
-            throw MIDIFile.DecodeError.malformed(
-                "Invalid status nibble: \(readStatus.hexString(padTo: 1, prefix: true))."
+            guard (0 ... 127).contains(readValue) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Channel Pressure value is out of bounds: \(readValue)"
+                )
+            }
+        
+            guard let channel = readChannel.toUInt4Exactly,
+                  let pressure = readValue.toUInt7Exactly
+            else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Value(s) out of bounds."
+                )
+            }
+        
+            let newEvent = MIDIEvent.pressure(
+                amount: .midi1(pressure),
+                channel: channel
             )
-        }
+            
+            guard case let .pressure(unwrapped) = newEvent else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Could not unwrap enum case."
+                )
+            }
         
-        guard readValue.isContained(in: 0 ... 127) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Channel Pressure value is out of bounds: \(readValue)"
-            )
+            return unwrapped
         }
-        
-        guard let channel = readChannel.toUInt4Exactly,
-              let pressure = readValue.toUInt7Exactly
-        else {
-            throw MIDIFile.DecodeError.malformed(
-                "Value(s) out of bounds."
-            )
-        }
-        
-        let newEvent = MIDIEvent.pressure(
-            amount: .midi1(pressure),
-            channel: channel
-        )
-        guard case let .pressure(unwrapped) = newEvent else {
-            throw MIDIFile.DecodeError.malformed(
-                "Could not unwrap enum case."
-            )
-        }
-        
-        self = unwrapped
     }
     
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // Dn value
-        midi1RawBytes()
+        D(midi1RawBytes())
     }
     
     static let midi1SMFFixedRawBytesLength = 2
 
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        let requiredData = rawBuffer.prefix(midi1SMFFixedRawBytesLength).bytes
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
 
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(

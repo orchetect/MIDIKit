@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - NoteOff
 
@@ -17,17 +16,25 @@ extension MIDIFileEvent {
 extension MIDIEvent.NoteOff: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .noteOff
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        let readStatus = (rawBytes[0] & 0xF0) >> 4
-        let readChannel = rawBytes[0] & 0x0F
-        let readNoteNum = rawBytes[1]
-        let readVelocity = rawBytes[2]
+        let (
+            readStatus, readChannel, readNoteNum, readVelocity
+        ) = try rawBytes.withDataReader { dataReader -> (UInt8, UInt8, UInt8, UInt8) in
+            let byte0 = try dataReader.readByte()
+            
+            return (
+                readStatus: (byte0 & 0xF0) >> 4,
+                readChannel: byte0 & 0x0F,
+                readNoteNum: try dataReader.readByte(),
+                readPressure: try dataReader.readByte()
+            )
+        }
         
         guard readStatus == 0x8 else {
             throw MIDIFile.DecodeError.malformed(
@@ -35,13 +42,13 @@ extension MIDIEvent.NoteOff: MIDIFileEventPayload {
             )
         }
         
-        guard readNoteNum.isContained(in: 0 ... 127) else {
+        guard (0 ... 127).contains(readNoteNum) else {
             throw MIDIFile.DecodeError.malformed(
                 "Note number is out of bounds: \(readNoteNum)"
             )
         }
         
-        guard readVelocity.isContained(in: 0 ... 127) else {
+        guard (0 ... 127).contains(readVelocity) else {
             throw MIDIFile.DecodeError.malformed(
                 "Note velocity is out of bounds: \(readVelocity)"
             )
@@ -70,18 +77,18 @@ extension MIDIEvent.NoteOff: MIDIFileEventPayload {
         self = unwrapped
     }
     
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // 8n note velocity
         
-        midi1RawBytes()
+        D(midi1RawBytes())
     }
     
     static let midi1SMFFixedRawBytesLength = 3
     
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        let requiredData = rawBuffer.prefix(midi1SMFFixedRawBytesLength).bytes
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(

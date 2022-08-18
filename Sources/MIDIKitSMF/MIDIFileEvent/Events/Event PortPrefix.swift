@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - MIDIPortPrefix
 
@@ -30,50 +29,54 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.PortPrefix: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .portPrefix
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        // 3-byte preamble
-        guard rawBytes.starts(with: MIDIFile.kEventHeaders[.portPrefix]!) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Event does not start with expected bytes."
-            )
+        try rawBytes.withDataReader { dataReader in
+            // 3-byte preamble
+            guard try dataReader.read(bytes: 3).elementsEqual(
+                MIDIFile.kEventHeaders[Self.smfEventType]!
+            ) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Event does not start with expected bytes."
+                )
+            }
+        
+            let readPortNumber = try dataReader.readByte()
+        
+            guard (0x0 ... 0x7F).contains(readPortNumber) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Port number is out of bounds: \(readPortNumber)"
+                )
+            }
+        
+            guard let portNumber = readPortNumber.toUInt7Exactly else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Value(s) out of bounds."
+                )
+            }
+        
+            port = portNumber
         }
-        
-        let readPortNumber = rawBytes[3]
-        
-        guard readPortNumber.isContained(in: 0x0 ... 0x7F) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Port number is out of bounds: \(readPortNumber)"
-            )
-        }
-        
-        guard let portNumber = readPortNumber.toUInt7Exactly else {
-            throw MIDIFile.DecodeError.malformed(
-                "Value(s) out of bounds."
-            )
-        }
-        
-        port = portNumber
     }
     
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 21 01 pp
         // pp is port number (0...127 assumably)
         
-        MIDIFile.kEventHeaders[.portPrefix]! + [port.uInt8Value]
+        D(MIDIFile.kEventHeaders[.portPrefix]! + [port.uInt8Value])
     }
     
     static let midi1SMFFixedRawBytesLength = 4
     
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        let requiredData = rawBuffer.prefix(midi1SMFFixedRawBytesLength).bytes
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(

@@ -12,7 +12,6 @@ extension CoreMIDI.MIDIEventPacket {
     /// Internal:
     /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    @inline(__always)
     internal init(
         words: [UMPWord],
         timeStamp: UInt64 = mach_absolute_time()
@@ -54,7 +53,6 @@ extension CoreMIDI.MIDIEventPacket {
     /// Internal:
     /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    @inline(__always)
     internal init(
         wordsUsingBuilder words: [UMPWord],
         timeStamp: UInt64 = mach_absolute_time()
@@ -93,7 +91,6 @@ extension CoreMIDI.MIDIEventList {
     /// Internal:
     /// Assembles a single Core MIDI `MIDIEventPacket` from a Universal MIDI Packet `UInt32` word array and wraps it in a Core MIDI `MIDIEventList`.
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    @inline(__always)
     internal init(
         protocol midiProtocol: CoreMIDI.MIDIProtocolID,
         packetWords: [UMPWord],

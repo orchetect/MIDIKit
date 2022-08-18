@@ -37,7 +37,6 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - midiBeat: MIDI beat number elapsed from the start
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func songPositionPointer(
         midiBeat: UInt14,
         group: UInt4 = 0x0
@@ -55,7 +54,6 @@ extension MIDIEvent.SongPositionPointer {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func midi1RawBytes() -> [Byte] {
         let bytePair = midiBeat.bytePair
         return [0xF2, bytePair.lsb, bytePair.msb]
@@ -64,7 +62,6 @@ extension MIDIEvent.SongPositionPointer {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .systemRealTimeAndCommon
     

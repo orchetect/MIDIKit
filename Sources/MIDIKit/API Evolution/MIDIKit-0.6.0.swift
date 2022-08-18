@@ -64,7 +64,6 @@ public enum MIDI {
         
         // MARK: Static constructors
         
-        @inline(__always)
         public static func noteOn(
             _ note: UInt7,
             velocity: MIDIEvent.NoteVelocity,
@@ -74,7 +73,6 @@ public enum MIDI {
             midi1ZeroVelocityAsNoteOff: Bool = true
         ) -> Self { fatalError() }
         
-        @inline(__always)
         public static func noteOn(
             _ note: MIDINote,
             velocity: MIDIEvent.NoteVelocity,

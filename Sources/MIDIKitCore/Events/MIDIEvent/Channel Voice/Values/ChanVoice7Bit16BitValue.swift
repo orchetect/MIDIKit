@@ -65,7 +65,6 @@ extension MIDIEvent.ChanVoice7Bit16BitValue: Equatable {
 
 extension MIDIEvent.ChanVoice7Bit16BitValue {
     /// Returns value as protocol-agnostic unit interval, converting if necessary.
-    @inline(__always)
     public var unitIntervalValue: Double {
         switch self {
         case let .unitInterval(interval):
@@ -80,7 +79,6 @@ extension MIDIEvent.ChanVoice7Bit16BitValue {
     }
     
     /// Returns value as a MIDI 1.0 7-bit value, converting if necessary.
-    @inline(__always)
     public var midi1Value: UInt7 {
         switch self {
         case let .unitInterval(interval):
@@ -95,7 +93,6 @@ extension MIDIEvent.ChanVoice7Bit16BitValue {
     }
     
     /// Returns value as a MIDI 2.0 16-bit value, converting if necessary.
-    @inline(__always)
     public var midi2Value: UInt16 {
         switch self {
         case let .unitInterval(interval):
@@ -115,11 +112,9 @@ extension MIDIEvent.ChanVoice7Bit16BitValue {
     public struct Validated: Equatable, Hashable {
         public typealias Value = MIDIEvent.ChanVoice7Bit16BitValue
     
-        @inline(__always)
-        private var value: Value
+            private var value: Value
     
-        @inline(__always)
-        public var wrappedValue: Value {
+            public var wrappedValue: Value {
             get {
                 value
             }
@@ -137,8 +132,7 @@ extension MIDIEvent.ChanVoice7Bit16BitValue {
             }
         }
     
-        @inline(__always)
-        public init(wrappedValue: Value) {
+            public init(wrappedValue: Value) {
             value = wrappedValue
         }
     }

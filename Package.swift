@@ -40,7 +40,6 @@ let package = Package(
     
     dependencies: [
         .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.2.10"),
-        .package(url: "https://github.com/orchetect/OTCore", from: "1.4.1"),
         
         // testing-only:
         .package(url: "https://github.com/orchetect/XCTestUtils", from: "1.0.1")
@@ -83,7 +82,6 @@ let package = Package(
             name: "MIDIKitSMF",
             dependencies: [
                 .target(name: "MIDIKitCore"),
-                "OTCore",
                 "TimecodeKit"
             ]
         ),

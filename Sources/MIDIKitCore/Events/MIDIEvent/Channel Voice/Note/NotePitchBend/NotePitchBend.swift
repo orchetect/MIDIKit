@@ -74,7 +74,6 @@ extension MIDIEvent {
     ///   - value: 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func notePitchBend(
         note: UInt7,
         value: NotePitchBend.Value,
@@ -99,7 +98,6 @@ extension MIDIEvent {
     ///   - value: 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func notePitchBend(
         note: MIDINote,
         value: NotePitchBend.Value,
@@ -121,7 +119,6 @@ extension MIDIEvent.NotePitchBend {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .midi2ChannelVoice
     

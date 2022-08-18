@@ -21,7 +21,6 @@ extension HUIParameter {
 }
 
 extension HUIParameter.ChannelParameter: HUIParameterProtocol {
-    @inlinable
     public var port: HUIPort {
         switch self {
         // Zones 0x00 - 0x07
@@ -37,7 +36,6 @@ extension HUIParameter.ChannelParameter: HUIParameterProtocol {
         }
     }
     
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         // note: zone (channel number) will be provided when accessed from `HUIParameter.zoneAndPort`
         

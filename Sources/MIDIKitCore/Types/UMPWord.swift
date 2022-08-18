@@ -9,7 +9,7 @@ public typealias UMPWord = UInt32
 
 extension UMPWord {
     /// Internal: Pack a `UInt32` with four 8-bit bytes.
-    @inline(__always) @_disfavoredOverload
+    @_disfavoredOverload
     public init(
         _ byte0: Byte,
         _ byte1: Byte,
@@ -24,7 +24,7 @@ extension UMPWord {
     }
     
     /// Internal: Pack a `UInt32` with two `UInt16`.
-    @inline(__always) @_disfavoredOverload
+    @_disfavoredOverload
     public init(
         _ byte0and1: UInt16,
         _ byte2and3: UInt16
@@ -37,7 +37,6 @@ extension UMPWord {
 
 extension Collection where Element == UMPWord {
     /// Internal: Flattens an array of `UInt32` UMP words into an array of bytes.
-    @inline(__always)
     public func umpWordsToBytes() -> [Byte] {
         var bytes: [Byte] = []
         bytes.reserveCapacity(4 * count)

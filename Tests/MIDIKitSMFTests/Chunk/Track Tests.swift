@@ -31,15 +31,15 @@ final class Chunk_Track_Tests: XCTestCase {
         
         // generate raw bytes
         
-        let generatedBytes = try track.midi1SMFRawBytes(
+        let generatedData: Data = try track.midi1SMFRawBytes(
             using: .musical(ticksPerQuarterNote: 960)
-        ).bytes
+        )
         
-        XCTAssertEqual(generatedBytes, bytes)
+        XCTAssertEqual(generatedData.bytes, bytes)
         
         // parse raw bytes
         
-        let parsedTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedBytes)
+        let parsedTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
         
         XCTAssertEqual(parsedTrack, parsedTrack)
     }
@@ -67,15 +67,15 @@ final class Chunk_Track_Tests: XCTestCase {
         
         // generate raw bytes
         
-        let generatedBytes = try track.midi1SMFRawBytes(
+        let generatedData: Data = try track.midi1SMFRawBytes(
             using: .musical(ticksPerQuarterNote: 960)
-        ).bytes
+        )
         
-        XCTAssertEqual(generatedBytes, bytes)
+        XCTAssertEqual(generatedData.bytes, bytes)
         
         // parse raw bytes
         
-        let parsedTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedBytes)
+        let parsedTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
         
         XCTAssertEqual(parsedTrack, parsedTrack)
     }

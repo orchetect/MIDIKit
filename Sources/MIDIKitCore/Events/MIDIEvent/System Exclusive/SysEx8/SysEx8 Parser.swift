@@ -12,7 +12,6 @@ extension MIDIEvent {
     /// Valid rawBytes count is 1...14. (Must always contain a Stream ID, even if there are zero data bytes to follow)
     ///
     /// - Throws: `MIDIEvent.ParseError` if message is malformed.
-    @inline(__always)
     public static func sysEx8(
         rawBytes: [Byte],
         group: UInt4 = 0

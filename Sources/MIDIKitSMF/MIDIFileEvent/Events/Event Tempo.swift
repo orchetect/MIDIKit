@@ -6,7 +6,6 @@
 
 import Foundation
 import MIDIKitCore
-@_implementationOnly import OTCore
 
 // MARK: - Tempo
 
@@ -57,32 +56,40 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.Tempo: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .tempo
     
-    public init(midi1SMFRawBytes rawBytes: [Byte]) throws {
+    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
             )
         }
         
-        // 3-byte preamble
-        guard rawBytes.starts(with: MIDIFile.kEventHeaders[.tempo]!) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Event does not start with expected bytes."
-            )
+        try rawBytes.withDataReader { dataReader in
+            // 3-byte preamble
+            guard try dataReader.read(bytes: 3).elementsEqual(
+                MIDIFile.kEventHeaders[Self.smfEventType]!
+            ) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Event does not start with expected bytes."
+                )
+            }
+            
+            let byte3 = try UInt32(dataReader.readByte())
+            let byte4 = try UInt32(dataReader.readByte())
+            let byte5 = try UInt32(dataReader.readByte())
+            
+            let readUInt32 = (byte3 << 16)
+                + (byte4 << 8)
+                + byte5
+        
+            microseconds = readUInt32
         }
-        
-        let readUInt32 = (UInt32(rawBytes[3]) << 16)
-            + (UInt32(rawBytes[4]) << 8)
-            + UInt32(rawBytes[5])
-        
-        microseconds = readUInt32
     }
     
-    public var midi1SMFRawBytes: [Byte] {
+    public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 51 03 xx xx xx
         // xx xx xx = 3-byte (24-bit) microseconds per MIDI quarter-note
         
-        var data: [Byte] = []
+        var data = D()
         
         data += MIDIFile.kEventHeaders[.tempo]!
         
@@ -95,10 +102,10 @@ extension MIDIFileEvent.Tempo: MIDIFileEventPayload {
     
     static let midi1SMFFixedRawBytesLength = 6
     
-    public static func initFrom(
-        midi1SMFRawBytesStream rawBuffer: Data
-    ) throws -> InitFromMIDI1SMFRawBytesStreamResult {
-        let requiredData = rawBuffer.prefix(midi1SMFFixedRawBytesLength).bytes
+    public static func initFrom<D: DataProtocol>(
+        midi1SMFRawBytesStream stream: D
+    ) throws -> StreamDecodeResult {
+        let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
         guard requiredData.count == midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
@@ -119,7 +126,7 @@ extension MIDIFileEvent.Tempo: MIDIFileEventPayload {
     }
     
     public var smfDebugDescription: String {
-        "Tempo(\(bpm.stringValueHighPrecision)bpm)"
+        "Tempo(\(bpm)bpm)"
     }
 }
 

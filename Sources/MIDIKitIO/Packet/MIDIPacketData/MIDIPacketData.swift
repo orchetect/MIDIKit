@@ -8,14 +8,11 @@
 
 /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIPacket` (MIDI 1.0).
 public struct MIDIPacketData {
-    @inline(__always)
     let bytes: [Byte]
     
     /// Core MIDI packet timestamp
-    @inline(__always)
     let timeStamp: CoreMIDITimeStamp
     
-    @inline(__always)
     public init(
         bytes: [Byte],
         timeStamp: CoreMIDITimeStamp
@@ -26,15 +23,12 @@ public struct MIDIPacketData {
 }
 
 extension MIDIPacketData {
-    @inline(__always)
     internal init(_ midiPacketPtr: UnsafePointer<MIDIPacket>) {
         self = Self.unwrapPacket(midiPacketPtr)
     }
     
-    @inline(__always)
     fileprivate static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
     
-    @inline(__always)
     fileprivate static func unwrapPacket(
         _ midiPacketPtr: UnsafePointer<MIDIPacket>
     ) -> MIDIPacketData {

@@ -948,7 +948,6 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
 
 extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined {
     /// Returns the controller number.
-    @inline(__always)
     public var controller: UInt8 {
         // this looks scary but its heart is in the right place
     
@@ -1195,7 +1194,6 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined {
 
 extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined {
     /// Returns the controller name as a human-readable String.
-    @inlinable
     public var name: String {
         "Undefined Per-Note CC\(controller)"
     }

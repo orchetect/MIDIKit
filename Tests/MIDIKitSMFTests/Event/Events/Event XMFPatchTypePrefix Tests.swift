@@ -28,7 +28,7 @@ final class Event_XMFPatchTypePrefix_Tests: XCTestCase {
     func testMIDI1SMFRawBytes_A() {
         let event = MIDIFileEvent.XMFPatchTypePrefix(patchSet: .generalMIDI1)
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xFF, 0x60, // header
@@ -52,7 +52,7 @@ final class Event_XMFPatchTypePrefix_Tests: XCTestCase {
     func testMIDI1SMFRawBytes_B() {
         let event = MIDIFileEvent.XMFPatchTypePrefix(patchSet: .generalMIDI2)
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [
             0xFF, 0x60, // header

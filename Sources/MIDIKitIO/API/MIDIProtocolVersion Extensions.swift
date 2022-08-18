@@ -9,7 +9,6 @@
 extension MIDIProtocolVersion {
     /// Initializes from the corresponding Core MIDI `MIDIProtocolID`.
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-    @inline(__always)
     internal init(_ coreMIDIProtocol: CoreMIDI.MIDIProtocolID) {
         switch coreMIDIProtocol {
         case ._1_0:
@@ -25,7 +24,6 @@ extension MIDIProtocolVersion {
     
     /// Returns the corresponding Core MIDI `MIDIProtocolID`.
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-    @inline(__always)
     internal var coreMIDIProtocol: CoreMIDI.MIDIProtocolID {
         switch self {
         case ._1_0:

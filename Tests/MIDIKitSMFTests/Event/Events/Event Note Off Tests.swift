@@ -30,7 +30,7 @@ final class Event_NoteOff_Tests: XCTestCase {
             channel: 0
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0x80, 0x01, 0x40])
     }
@@ -52,7 +52,7 @@ final class Event_NoteOff_Tests: XCTestCase {
             channel: 1
         )
         
-        let bytes = event.midi1SMFRawBytes
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0x81, 0x3C, 0x7F])
     }

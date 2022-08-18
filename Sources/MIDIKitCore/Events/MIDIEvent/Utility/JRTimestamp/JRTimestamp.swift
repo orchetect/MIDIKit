@@ -51,7 +51,6 @@ extension MIDIEvent {
     /// "The JR Timestamp message defines the time of the following message(s). It is a complete message.
     ///
     /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32)."
-    @inline(__always)
     public static func jrTimestamp(
         time: UInt16,
         group: UInt4 = 0x0
@@ -69,7 +68,6 @@ extension MIDIEvent.JRTimestamp {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .utility
     

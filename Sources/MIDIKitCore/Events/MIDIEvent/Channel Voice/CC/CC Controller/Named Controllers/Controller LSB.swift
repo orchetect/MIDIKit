@@ -88,7 +88,6 @@ extension MIDIEvent.CC.Controller {
 
 extension MIDIEvent.CC.Controller.LSB {
     /// Returns the controller number.
-    @inlinable
     public var controller: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -118,7 +117,6 @@ extension MIDIEvent.CC.Controller.LSB {
 
 extension MIDIEvent.CC.Controller.LSB {
     /// Returns the controller name as a human-readable String.
-    @inlinable
     public var name: String {
         // swiftformat:disable spacearoundoperators
         switch self {

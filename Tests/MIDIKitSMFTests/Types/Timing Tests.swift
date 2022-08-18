@@ -7,7 +7,6 @@
 #if shouldTestCurrentPlatform
 
 @testable import MIDIKitSMF
-import OTCore
 import XCTest
 
 final class TimeBase_Tests: XCTestCase {

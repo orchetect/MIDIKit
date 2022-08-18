@@ -18,7 +18,6 @@ extension HUIParameter {
 }
 
 extension HUIParameter.BankMove: HUIParameterProtocol {
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x0A

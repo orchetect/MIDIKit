@@ -75,7 +75,6 @@ extension MIDIEvent {
     ///   - bank: Optional Bank Select operation to occur first
     ///   - channel: Channel Number (0x0...0xF)
     ///   - group: UMP Group (0x0...0xF)
-    @inline(__always)
     public static func programChange(
         program: UInt7,
         bank: ProgramChange.Bank = .noBankSelect,
@@ -97,7 +96,6 @@ extension MIDIEvent.ProgramChange {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func midi1RawBytes() -> [Byte] {
         let programChangeMessage = [
             0xC0 + channel.uInt8Value,
@@ -128,7 +126,6 @@ extension MIDIEvent.ProgramChange {
         }
     }
     
-    @inline(__always)
     private func umpMessageType(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> MIDIUMPMessageType {
@@ -144,7 +141,6 @@ extension MIDIEvent.ProgramChange {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    @inline(__always)
     public func umpRawWords(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {

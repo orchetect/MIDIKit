@@ -98,7 +98,6 @@ extension MIDIEvent.SysExManufacturer {
 
 extension MIDIEvent.SysExManufacturer {
     /// Returns the Manufacturer byte(s) formatted for MIDI 1.0 SysEx7, as one byte (7-bit) or three bytes (21-bit).
-    @inline(__always)
     public func sysEx7RawBytes() -> [Byte] {
         switch self {
         case let .oneByte(byte):
@@ -110,7 +109,6 @@ extension MIDIEvent.SysExManufacturer {
     }
     
     /// Returns the Manufacturer byte(s) formatted for MIDI 2.0 SysEx8, as two bytes (16-bit).
-    @inline(__always)
     public func sysEx8RawBytes() -> [Byte] {
         switch self {
         case let .oneByte(byte):
@@ -131,7 +129,6 @@ extension MIDIEvent.SysExManufacturer {
     /// This does not test whether the ID belongs to a registered manufacturer. Rather, it simply reports if the bytes are legal.
     ///
     /// Use the `.name` property to return the manufacturer's name associated with the ID, or `nil` if the ID is not registered.
-    @inline(__always)
     public var isValid: Bool {
         switch self {
         case let .oneByte(byte):
@@ -164,7 +161,6 @@ extension MIDIEvent.SysExManufacturer {
     /// Returns a new instance containing the Educational Use ID.
     ///
     /// - note: Reserved for use only in educational institutions or for unit testing; not public release.
-    @inline(__always)
     public static func educational() -> Self {
         .oneByte(0x7D)
     }

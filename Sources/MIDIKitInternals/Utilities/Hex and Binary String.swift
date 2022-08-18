@@ -1,12 +1,12 @@
 //
-//  String Formatting.swift
+//  Hex and Binary String.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-// MARK: - Hex Strings
+// MARK: - Hex String
 
 extension BinaryInteger {
     /// Returns an integer as a hex string.
@@ -49,7 +49,7 @@ extension Collection where Element: BinaryInteger {
     }
 }
 
-// MARK: - Binary Strings
+// MARK: - Binary String
 
 extension BinaryInteger {
     /// Returns an integer as a binary string.

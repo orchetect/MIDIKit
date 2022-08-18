@@ -306,7 +306,6 @@ extension HUIParameter: CaseIterable {
 }
 
 extension HUIParameter: HUIParameterProtocol {
-    @inlinable
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         case let .channelStrip(channelStrip, channelParameter):

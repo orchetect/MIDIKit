@@ -59,7 +59,6 @@ internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProto
 // MARK: - Implementation
 
 extension _MIDIIOSendsMIDIMessagesProtocol {
-    @inline(__always)
     internal func send(rawMessage: [Byte]) throws {
         switch api {
         case .legacyCoreMIDI:
@@ -76,7 +75,6 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
         }
     }
     
-    @inline(__always)
     internal func send(rawMessages: [[Byte]]) throws {
         switch api {
         case .legacyCoreMIDI:
@@ -94,7 +92,6 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
     }
     
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    @inline(__always)
     internal func send(rawWords: [UMPWord]) throws {
         switch api {
         case .legacyCoreMIDI:
@@ -116,7 +113,6 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
 }
 
 extension _MIDIIOSendsMIDIMessagesProtocol {
-    @inline(__always)
     public func send(event: MIDIEvent) throws {
         switch api {
         case .legacyCoreMIDI:
@@ -135,7 +131,6 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
         }
     }
     
-    @inline(__always)
     public func send(events: [MIDIEvent]) throws {
         switch api {
         case .legacyCoreMIDI:

@@ -52,8 +52,8 @@ extension MIDIFile.Chunk {
 
 extension MIDIFile.Chunk.UnrecognizedChunk {
     /// Init from MIDI file buffer.
-    public init(midi1SMFRawBytesStream rawBuffer: [Byte]) throws {
-        guard rawBuffer.count >= 8 else {
+    public init<D: DataProtocol>(midi1SMFRawBytesStream stream: D) throws {
+        guard stream.count >= 8 else {
             throw MIDIFile.DecodeError.malformed(
                 "There was a problem reading chunk header. Encountered end of file early."
             )
@@ -61,31 +61,39 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         
         // track header
         
-        let readChunkType = rawBuffer[0 ... 3].data
-        
-        guard let chunkLength = rawBuffer[4 ... 7].data.toUInt32(from: .bigEndian)?.int else {
-            throw MIDIFile.DecodeError.malformed(
-                "There was a problem reading chunk length."
-            )
-        }
-        
-        let chunkTypeString = readChunkType.asciiDataToString() ?? "????"
-        
-        guard !Self.disallowedIdentifiers.contains(chunkTypeString) else {
-            throw MIDIFile.DecodeError.malformed(
-                "Chunk type matches known identifier \(chunkTypeString.quoted). Forming an unrecognized chunk using this identifier is not allowed."
-            )
-        }
-        
-        guard rawBuffer.count >= 8 + chunkLength else {
-            throw MIDIFile.DecodeError.malformed(
-                "There was a problem reading chunk data blob. Encountered end of data early."
-            )
+        let (id, dataBody) = try stream.withDataReader
+        { dataReader -> (String, D.SubSequence) in
+            let readChunkType = try dataReader.read(bytes: 4)
+            
+            guard let chunkLengthInt32 = (try? dataReader.read(bytes: 4))?
+                .data.toUInt32(from: .bigEndian)
+            else {
+                throw MIDIFile.DecodeError.malformed(
+                    "There was a problem reading chunk length."
+                )
+            }
+            let chunkLength = Int(chunkLengthInt32)
+            
+            let chunkTypeString = readChunkType.asciiDataToString() ?? "????"
+            
+            guard !Self.disallowedIdentifiers.contains(chunkTypeString) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "Chunk type matches known identifier \(chunkTypeString.quoted). Forming an unrecognized chunk using this identifier is not allowed."
+                )
+            }
+            
+            guard let dataBody = try? dataReader.read(bytes: chunkLength) else {
+                throw MIDIFile.DecodeError.malformed(
+                    "There was a problem reading chunk data blob. Encountered end of data early."
+                )
+            }
+            
+            return (id: chunkTypeString, dataBody)
         }
         
         self.init(
-            id: chunkTypeString,
-            rawData: Data(rawBuffer[8 ..< (8 + chunkLength)])
+            id: id,
+            rawData: dataBody.data
         )
     }
     
@@ -136,7 +144,7 @@ CustomDebugStringConvertible {
             .hexString(padEachTo: 2, prefixes: false)
             .split(every: 3 * 16) // 16 bytes wide
             .reduce("") {
-                $0 + "      " + $1.trimmed
+                $0 + "      " + $1.trimmingCharacters(in: .whitespacesAndNewlines)
             }
 
         var outputString = ""

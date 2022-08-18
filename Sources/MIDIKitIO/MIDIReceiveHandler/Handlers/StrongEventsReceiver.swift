@@ -14,8 +14,7 @@ extension MIDIReceiveHandler {
         internal let midi1Parser = MIDI1Parser()
         internal let midi2Parser = MIDI2Parser()
     
-        @inline(__always)
-        public func packetListReceived(
+            public func packetListReceived(
             _ packets: [MIDIPacketData]
         ) {
             for midiPacket in packets {
@@ -26,8 +25,7 @@ extension MIDIReceiveHandler {
         }
     
         @available(macOS 11, iOS 14, macCatalyst 14, *)
-        @inline(__always)
-        public func eventListReceived(
+            public func eventListReceived(
             _ packets: [UniversalMIDIPacketData],
             protocol midiProtocol: MIDIProtocolVersion
         ) {
