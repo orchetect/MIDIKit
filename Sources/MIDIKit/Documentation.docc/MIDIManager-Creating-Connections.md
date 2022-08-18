@@ -96,3 +96,5 @@ conn?.remove(inputs: [.uniqueID(uID)])
 ### MIDIManager Methods
 
 - ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``
+- ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``
+- ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:)``

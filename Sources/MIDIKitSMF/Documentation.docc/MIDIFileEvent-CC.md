@@ -4,8 +4,8 @@
 
 ### Constructors
 
-- ``MIDIFileEvent/cc(delta:controller:value:channel:)-4nwk9``
-- ``MIDIFileEvent/cc(delta:controller:value:channel:)-2v11y``
+- ``MIDIFileEvent/cc(delta:controller:value:channel:)-145k9``
+- ``MIDIFileEvent/cc(delta:controller:value:channel:)-3m14a``
 
 ### Switch Case Unwrapping
 

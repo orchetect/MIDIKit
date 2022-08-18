@@ -4,17 +4,17 @@
 
 ### Constructors (MIDI 1.0 and 2.0)
 
-- ``MIDIEvent/noteOn(_:velocity:attribute:channel:group:midi1ZeroVelocityAsNoteOff:)-1zz25``
-- ``MIDIEvent/noteOn(_:velocity:attribute:channel:group:midi1ZeroVelocityAsNoteOff:)-83mzo``
+- ``MIDIEvent/noteOn(_:velocity:attribute:channel:group:midi1ZeroVelocityAsNoteOff:)-5hwd6``
+- ``MIDIEvent/noteOn(_:velocity:attribute:channel:group:midi1ZeroVelocityAsNoteOff:)-3aq0d``
 
-- ``MIDIEvent/noteOff(_:velocity:attribute:channel:group:)-99pb7``
-- ``MIDIEvent/noteOff(_:velocity:attribute:channel:group:)-t3yx``
+- ``MIDIEvent/noteOff(_:velocity:attribute:channel:group:)-9ntbn``
+- ``MIDIEvent/noteOff(_:velocity:attribute:channel:group:)-40eu2``
 
-- ``MIDIEvent/notePressure(note:amount:channel:group:)-7q8mc``
-- ``MIDIEvent/notePressure(note:amount:channel:group:)-6uezo``
+- ``MIDIEvent/notePressure(note:amount:channel:group:)-8m6c8``
+- ``MIDIEvent/notePressure(note:amount:channel:group:)-9knkb``
 
-- ``MIDIEvent/cc(_:value:channel:group:)-5ypxv``
-- ``MIDIEvent/cc(_:value:channel:group:)-2dx27``
+- ``MIDIEvent/cc(_:value:channel:group:)-1r3oe``
+- ``MIDIEvent/cc(_:value:channel:group:)-7k06z``
 
 - ``MIDIEvent/ccRPN(_:channel:group:)``
 - ``MIDIEvent/ccNRPN(_:channel:group:)``
@@ -27,14 +27,14 @@
 
 ### Constructors (MIDI 2.0)
 
-- ``MIDIEvent/noteCC(note:controller:value:channel:group:)-62or1``
-- ``MIDIEvent/noteCC(note:controller:value:channel:group:)-5k3pz``
+- ``MIDIEvent/noteCC(note:controller:value:channel:group:)-91ea3``
+- ``MIDIEvent/noteCC(note:controller:value:channel:group:)-8vd58``
 
-- ``MIDIEvent/notePitchBend(note:value:channel:group:)-8ujeh``
-- ``MIDIEvent/notePitchBend(note:value:channel:group:)-40d5a``
+- ``MIDIEvent/notePitchBend(note:value:channel:group:)-5qoa8``
+- ``MIDIEvent/notePitchBend(note:value:channel:group:)-5qk4i``
 
-- ``MIDIEvent/noteManagement(note:flags:channel:group:)-1nxtm``
-- ``MIDIEvent/noteManagement(note:flags:channel:group:)-8cvpr``
+- ``MIDIEvent/noteManagement(note:flags:channel:group:)-9f1cj``
+- ``MIDIEvent/noteManagement(note:flags:channel:group:)-3o4c8``
 
 ### Switch Case Unwrapping (MIDI 1.0 and 2.0)
 

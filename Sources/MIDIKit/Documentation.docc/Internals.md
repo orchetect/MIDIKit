@@ -24,6 +24,9 @@
 
 - ``MIDIPacketData``
 - ``UniversalMIDIPacketData``
+- ``MIDIUMPMessageType``
+- ``MIDIUMPSysExStatusField``
+- ``MIDIUMPUtilityStatusField``
 - ``AnyMIDIPacket``
 - ``MIDI1Parser``
 - ``MIDI2Parser``

@@ -4,8 +4,8 @@
 
 ### Constructors
 
-- ``MIDIFileEvent/noteOff(delta:note:velocity:channel:)-64o16``
-- ``MIDIFileEvent/noteOff(delta:note:velocity:channel:)-51j9b``
+- ``MIDIFileEvent/noteOff(delta:note:velocity:channel:)-6eth4``
+- ``MIDIFileEvent/noteOff(delta:note:velocity:channel:)-3m9r7``
 
 ### Switch Case Unwrapping
 
