@@ -8,7 +8,6 @@
 
 import XCTest
 @testable import MIDIKitSMF
-import OTCore
 
 final class Chunk_Track_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
