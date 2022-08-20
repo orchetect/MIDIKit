@@ -1,5 +1,5 @@
 //
-//  MIDIEvent Filter System Real Time Tests.swift
+//  MIDIEvent Filter System Real-Time Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //

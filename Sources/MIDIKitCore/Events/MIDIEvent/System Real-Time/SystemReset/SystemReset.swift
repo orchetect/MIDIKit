@@ -1,17 +1,17 @@
 //
-//  Stop.swift
+//  SystemReset.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
-    /// System Real Time: Stop
+    /// System Real-Time: System Reset
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
-    /// "Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately."
-    public struct Stop: Equatable, Hashable {
+    /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
+    public struct SystemReset: Equatable, Hashable {
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
     
@@ -20,28 +20,28 @@ extension MIDIEvent {
         }
     }
     
-    /// System Real Time: Stop
+    /// System Real-Time: System Reset
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
-    /// "Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately."
+    /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
     ///
     /// - Parameters:
     ///   - group: UMP Group (0x0...0xF)
-    public static func stop(group: UInt4 = 0x0) -> Self {
-        .stop(
+    public static func systemReset(group: UInt4 = 0x0) -> Self {
+        .systemReset(
             .init(group: group)
         )
     }
 }
 
-extension MIDIEvent.Stop {
+extension MIDIEvent.SystemReset {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
-        [0xFC]
+        [0xFF]
     }
     
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
@@ -54,7 +54,7 @@ extension MIDIEvent.Stop {
     
         let word = UMPWord(
             mtAndGroup,
-            0xFC,
+            0xFF,
             0x00, // pad empty bytes to fill 4 bytes
             0x00
         ) // pad empty bytes to fill 4 bytes

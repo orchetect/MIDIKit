@@ -128,49 +128,49 @@ final class MIDI1Parser_Tests: XCTestCase {
             []
         )
     
-        // System Real Time - timing clock
+        // System Real-Time - timing clock
         XCTAssertEqual(
             parsedEvents(bytes: [0xF8]),
             [.timingClock(group: 0)]
         )
     
-        // System Real Time - (undefined)
+        // System Real-Time - (undefined)
         XCTAssertEqual(
             parsedEvents(bytes: [0xF9]),
             []
         )
     
-        // System Real Time - start
+        // System Real-Time - start
         XCTAssertEqual(
             parsedEvents(bytes: [0xFA]),
             [.start(group: 0)]
         )
     
-        // System Real Time - continue
+        // System Real-Time - continue
         XCTAssertEqual(
             parsedEvents(bytes: [0xFB]),
             [.continue(group: 0)]
         )
     
-        // System Real Time - stop
+        // System Real-Time - stop
         XCTAssertEqual(
             parsedEvents(bytes: [0xFC]),
             [.stop(group: 0)]
         )
     
-        // System Real Time - (undefined)
+        // System Real-Time - (undefined)
         XCTAssertEqual(
             parsedEvents(bytes: [0xFD]),
             []
         )
     
-        // System Real Time - active sensing
+        // System Real-Time - active sensing
         XCTAssertEqual(
             parsedEvents(bytes: [0xFE]),
             [.activeSensing(group: 0)]
         )
     
-        // System Real Time - system reset
+        // System Real-Time - system reset
         XCTAssertEqual(
             parsedEvents(bytes: [0xFF]),
             [.systemReset(group: 0)]
@@ -327,11 +327,11 @@ final class MIDI1Parser_Tests: XCTestCase {
         // tests
     
         // preface:
-        // MIDI 1.0 Spec: "Real Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+        // MIDI 1.0 Spec: "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
     
         // ------------------------------------------------
     
-        // test: real time message byte in between status and data byte(s) of a CV message
+        // test: real-time message byte in between status and data byte(s) of a CV message
         // result: should produce the CV message and the real-time message
     
         systemRealTimeMessages.forEach { realTimeMessage in
@@ -382,10 +382,10 @@ final class MIDI1Parser_Tests: XCTestCase {
     
         // tests
     
-        // premise: test that real time system messages reset Running Status
+        // premise: test that real-time system messages reset Running Status
     
-        // test: full CV message, real time system message, CV running status data bytes only
-        // result: should produce two CV messages and a real time message
+        // test: full CV message, real-time system message, CV running status data bytes only
+        // result: should produce two CV messages and a real-time message
     
         systemRealTimeMessages.forEach { realTimeMessage in
     
@@ -406,7 +406,7 @@ final class MIDI1Parser_Tests: XCTestCase {
                     + [.noteOn(61, velocity: .midi1(65), channel: 0)]
             )
     
-            // system real time events are not a SysEx terminator
+            // system real-time events are not a SysEx terminator
             XCTAssertEqual(
                 parsedEvents(
                     bytes: [0xF0, 0x41, 0x01, 0x34,
@@ -661,35 +661,35 @@ final class MIDI1Parser_Tests: XCTestCase {
         // on its own without context, it's meaningless/invalid
         XCTAssertEqual(parsedEvents(bytes: [0xF7]), [])
     
-        // System Real Time - Timing Clock
+        // System Real-Time - Timing Clock
         // [0xF8]
         // single status byte message, not relevant to check in this test
     
-        // Real Time - Undefined
+        // Real-Time - Undefined
         // [0xF9]
         // (undefined, not relevant to check in this test)
     
-        // System Real Time - Start
+        // System Real-Time - Start
         // [0xFA]
         // single status byte message, not relevant to check in this test
     
-        // System Real Time - Continue
+        // System Real-Time - Continue
         // [0xFB]
         // single status byte message, not relevant to check in this test
     
-        // System Real Time - Stop
+        // System Real-Time - Stop
         // [0xFC]
         // single status byte message, not relevant to check in this test
     
-        // System Real Time - Undefined
+        // System Real-Time - Undefined
         // [0xFD]
         // (undefined, not relevant to check in this test)
     
-        // System Real Time - Active Sensing
+        // System Real-Time - Active Sensing
         // [0xFE]
         // single status byte message, not relevant to check in this test
     
-        // System Real Time - System Reset
+        // System Real-Time - System Reset
         // [0xFF]
         // single status byte message, not relevant to check in this test
     }
@@ -729,7 +729,7 @@ final class MIDI1Parser_Tests: XCTestCase {
              .noteOn(60, velocity: .midi1(64), channel: 0, group: 0)]
         )
     
-        // system real time events are not a SysEx terminator, as the parser does not look ahead and assumes the SysEx could continue to receive data bytes
+        // system real-time events are not a SysEx terminator, as the parser does not look ahead and assumes the SysEx could continue to receive data bytes
         XCTAssertEqual(
             parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34,
                                  0xFE]),

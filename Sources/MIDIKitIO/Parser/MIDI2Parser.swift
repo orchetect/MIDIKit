@@ -214,22 +214,22 @@ public final class MIDI2Parser {
             // on its own, 0xF7 is ignored
             return nil
     
-        case 0xF8: // System Real Time - Timing Clock
+        case 0xF8: // System Real-Time - Timing Clock
             return .timingClock(group: group)
     
-        case 0xF9: // Real Time - undefined
+        case 0xF9: // Real-Time - undefined
             return nil
     
-        case 0xFA: // System Real Time - Start
+        case 0xFA: // System Real-Time - Start
             return .start(group: group)
     
-        case 0xFB: // System Real Time - Continue
+        case 0xFB: // System Real-Time - Continue
             return .continue(group: group)
     
-        case 0xFC: // System Real Time - Stop
+        case 0xFC: // System Real-Time - Stop
             return .stop(group: group)
     
-        case 0xFD: // Real Time - undefined
+        case 0xFD: // Real-Time - undefined
             return nil
     
         case 0xFE:

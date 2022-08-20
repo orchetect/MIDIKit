@@ -123,7 +123,7 @@ public enum MIDIEvent: Equatable, Hashable {
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
-    /// "Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real Time messages (MIDI Sync)."
+    /// "Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real-Time messages (MIDI Sync)."
     case songSelect(SongSelect)
     
     /// Unofficial Bus Select (Status `0xF5`)
@@ -142,26 +142,26 @@ public enum MIDIEvent: Equatable, Hashable {
     case tuneRequest(TuneRequest)
     
     // ----------------------
-    // MARK: System Real Time
+    // MARK: System Real-Time
     // ----------------------
     
-    /// System Real Time: Timing Clock
+    /// System Real-Time: Timing Clock
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
-    /// "Clock-based MIDI systems are synchronized with this message, which is sent at a rate of 24 per quarter note. If Timing Clocks (`0xF8`) are sent during idle time they should be sent at the current tempo setting of the transmitter even while it is not playing. Receivers which are synchronized to incoming Real Time messages (MIDI Sync mode) can thus phase lock their internal clocks while waiting for a Start (`0xFA`) or Continue (`0xFB`) command."
+    /// "Clock-based MIDI systems are synchronized with this message, which is sent at a rate of 24 per quarter note. If Timing Clocks (`0xF8`) are sent during idle time they should be sent at the current tempo setting of the transmitter even while it is not playing. Receivers which are synchronized to incoming Real-Time messages (MIDI Sync mode) can thus phase lock their internal clocks while waiting for a Start (`0xFA`) or Continue (`0xFB`) command."
     case timingClock(TimingClock)
     
-    /// System Real Time: Start
+    /// System Real-Time: Start
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
-    /// "Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real Time messages (MIDI Sync mode) to start at the beginning of the song or sequence."
+    /// "Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real-Time messages (MIDI Sync mode) to start at the beginning of the song or sequence."
     case start(Start)
     
-    /// System Real Time: Continue
+    /// System Real-Time: Continue
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
@@ -169,7 +169,7 @@ public enum MIDIEvent: Equatable, Hashable {
     /// "Continue (`0xFB`) is sent when a CONTINUE button is hit. A sequence will continue from its current location upon receipt of the next Timing Clock (`0xF8`)."
     case `continue`(Continue)
     
-    /// System Real Time: Stop
+    /// System Real-Time: Stop
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
@@ -177,7 +177,7 @@ public enum MIDIEvent: Equatable, Hashable {
     /// "Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately."
     case stop(Stop)
     
-    /// System Real Time: Active Sensing
+    /// System Real-Time: Active Sensing
     /// (MIDI 1.0)
     ///
     /// - remark: MIDI 1.0 Spec:
@@ -187,7 +187,7 @@ public enum MIDIEvent: Equatable, Hashable {
     /// - note: Use of Active Sensing in modern MIDI devices is uncommon and the use of this standard has been deprecated as of MIDI 2.0.
     case activeSensing(ActiveSensing)
     
-    /// System Real Time: System Reset
+    /// System Real-Time: System Reset
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:

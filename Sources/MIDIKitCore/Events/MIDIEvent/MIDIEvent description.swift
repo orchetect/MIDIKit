@@ -151,7 +151,7 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             return "tuneRequest(group: \(groupString))"
     
         // ----------------------
-        // MARK: System Real Time
+        // MARK: System Real-Time
         // ----------------------
     
         case let .timingClock(event):

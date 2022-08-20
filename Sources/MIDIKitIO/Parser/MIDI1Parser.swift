@@ -229,22 +229,22 @@ public final class MIDI1Parser {
                     currentMessageBuffer.append(currentByte)
     
                 case 0x8:
-                    // System Real Time - Timing Clock
+                    // System Real-Time - Timing Clock
                     // [0xF8]
     
                     // MIDI 1.0 Spec:
-                    //   "Real Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
                     events.append(.timingClock(group: umpGroup))
     
                 case 0x9:
-                    // System Real Time - Undefined
+                    // System Real-Time - Undefined
                     // [0xF9]
     
                     // MIDI 1.0 Spec:
-                    //   "Real Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -252,11 +252,11 @@ public final class MIDI1Parser {
                     break
     
                 case 0xA:
-                    // System Real Time - Start
+                    // System Real-Time - Start
                     // [0xFA]
     
                     // MIDI 1.0 Spec:
-                    //   "Real Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -264,11 +264,11 @@ public final class MIDI1Parser {
                     events.append(.start(group: umpGroup))
     
                 case 0xB:
-                    // System Real Time - Continue
+                    // System Real-Time - Continue
                     // [0xFB]
     
                     // MIDI 1.0 Spec:
-                    // "Real Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    // "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
                     // "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -276,11 +276,11 @@ public final class MIDI1Parser {
                     events.append(.continue(group: umpGroup))
     
                 case 0xC:
-                    // System Real Time - Stop
+                    // System Real-Time - Stop
                     // [0xFC]
     
                     // MIDI 1.0 Spec:
-                    //   "Real Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -288,21 +288,21 @@ public final class MIDI1Parser {
                     events.append(.stop(group: umpGroup))
     
                 case 0xD:
-                    // System Real Time - Undefined
+                    // System Real-Time - Undefined
                     // [0xFD]
     
                     // MIDI 1.0 Spec:
-                    //   "Real Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     break
     
                 case 0xE:
-                    // System Real Time - Active Sensing
+                    // System Real-Time - Active Sensing
                     // [0xFE]
     
                     // MIDI 1.0 Spec:
-                    //   "Real Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -310,11 +310,11 @@ public final class MIDI1Parser {
                     events.append(.activeSensing(group: umpGroup))
     
                 case 0xF:
-                    // System Real Time - System Reset
+                    // System Real-Time - System Reset
                     // [0xFF]
     
                     // MIDI 1.0 Spec:
-                    // "Real Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    // "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
                     // "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -553,22 +553,22 @@ public final class MIDI1Parser {
                 // on its own, 0xF7 is ignored
                 break
     
-            case 0x8: // System Real Time - Timing Clock
+            case 0x8: // System Real-Time - Timing Clock
                 events.append(.timingClock(group: umpGroup))
     
-            case 0x9: // Real Time - undefined
+            case 0x9: // Real-Time - undefined
                 break
     
-            case 0xA: // System Real Time - Start
+            case 0xA: // System Real-Time - Start
                 events.append(.start(group: umpGroup))
     
-            case 0xB: // System Real Time - Continue
+            case 0xB: // System Real-Time - Continue
                 events.append(.continue(group: umpGroup))
     
-            case 0xC: // System Real Time - Stop
+            case 0xC: // System Real-Time - Stop
                 events.append(.stop(group: umpGroup))
     
-            case 0xD: // Real Time - undefined
+            case 0xD: // Real-Time - undefined
                 break
     
             case 0xE:

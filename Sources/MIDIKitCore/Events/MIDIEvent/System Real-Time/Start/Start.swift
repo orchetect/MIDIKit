@@ -1,17 +1,17 @@
 //
-//  SystemReset.swift
+//  Start.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
-    /// System Real Time: System Reset
+    /// System Real-Time: Start
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
-    /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
-    public struct SystemReset: Equatable, Hashable {
+    /// "Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real-Time messages (MIDI Sync mode) to start at the beginning of the song or sequence."
+    public struct Start: Equatable, Hashable {
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
     
@@ -20,28 +20,28 @@ extension MIDIEvent {
         }
     }
     
-    /// System Real Time: System Reset
+    /// System Real-Time: Start
     /// (MIDI 1.0 / 2.0)
     ///
     /// - remark: MIDI 1.0 Spec:
     ///
-    /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
+    /// "Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real-Time messages (MIDI Sync mode) to start at the beginning of the song or sequence."
     ///
     /// - Parameters:
     ///   - group: UMP Group (0x0...0xF)
-    public static func systemReset(group: UInt4 = 0x0) -> Self {
-        .systemReset(
+    public static func start(group: UInt4 = 0x0) -> Self {
+        .start(
             .init(group: group)
         )
     }
 }
 
-extension MIDIEvent.SystemReset {
+extension MIDIEvent.Start {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
-        [0xFF]
+        [0xFA]
     }
     
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
@@ -54,7 +54,7 @@ extension MIDIEvent.SystemReset {
     
         let word = UMPWord(
             mtAndGroup,
-            0xFF,
+            0xFA,
             0x00, // pad empty bytes to fill 4 bytes
             0x00
         ) // pad empty bytes to fill 4 bytes

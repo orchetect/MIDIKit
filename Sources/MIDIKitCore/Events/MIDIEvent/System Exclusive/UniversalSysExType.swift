@@ -7,10 +7,10 @@
 extension MIDIEvent {
     /// Universal System Exclusive message type.
     public enum UniversalSysExType: UInt7, Equatable, Hashable {
-        /// Real Time System Exclusive ID number (`0x7F`).
+        /// Real-Time System Exclusive ID number (`0x7F`).
         case realTime = 0x7F
     
-        /// Non-Real Time System Exclusive ID number (`0x7E`).
+        /// Non- Real-Time System Exclusive ID number (`0x7E`).
         case nonRealTime = 0x7E
     
         // Note: this cannot be implemented as `init?(rawValue: UInt8)` because

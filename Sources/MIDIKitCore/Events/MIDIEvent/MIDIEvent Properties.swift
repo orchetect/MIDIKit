@@ -120,7 +120,7 @@ extension MIDIEvent {
             return event.group
     
         // ----------------------
-        // MARK: System Real Time
+        // MARK: System Real-Time
         // ----------------------
     
         case let .timingClock(event):

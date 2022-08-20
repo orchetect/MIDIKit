@@ -287,49 +287,49 @@ final class MIDI2Parser_Tests: XCTestCase {
             []
         )
     
-        // System Real Time - timing clock
+        // System Real-Time - timing clock
         XCTAssertEqual(
             parsedEvents(bytes: [0x1B, 0xF8, 0x00, 0x00]),
             [.timingClock(group: 0xB)]
         )
     
-        // System Real Time - (undefined)
+        // System Real-Time - (undefined)
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xF9, 0x00, 0x00]),
             []
         )
     
-        // System Real Time - start
+        // System Real-Time - start
         XCTAssertEqual(
             parsedEvents(bytes: [0x1C, 0xFA, 0x00, 0x00]),
             [.start(group: 0xC)]
         )
     
-        // System Real Time - continue
+        // System Real-Time - continue
         XCTAssertEqual(
             parsedEvents(bytes: [0x1D, 0xFB, 0x00, 0x00]),
             [.continue(group: 0xD)]
         )
     
-        // System Real Time - stop
+        // System Real-Time - stop
         XCTAssertEqual(
             parsedEvents(bytes: [0x1E, 0xFC, 0x00, 0x00]),
             [.stop(group: 0xE)]
         )
     
-        // System Real Time - (undefined)
+        // System Real-Time - (undefined)
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFD, 0x00, 0x00]),
             []
         )
     
-        // System Real Time - active sensing
+        // System Real-Time - active sensing
         XCTAssertEqual(
             parsedEvents(bytes: [0x1F, 0xFE, 0x00, 0x00]),
             [.activeSensing(group: 0xF)]
         )
     
-        // System Real Time - system reset
+        // System Real-Time - system reset
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFF, 0x00, 0x00]),
             [.systemReset(group: 0x0)]
@@ -546,7 +546,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         // - also, 0xF0 and 0xF7 bytes must be omitted in UMP SysEx packets
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF7, 0x01, 0x00]), [])
     
-        // System Real Time - Timing Clock
+        // System Real-Time - Timing Clock
         // [msgtype+group, 0xF8, 0x00, 0x00]
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xF8, 0x00, 0x00]),
@@ -566,7 +566,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             [.timingClock(group: 0x0)]
         )
     
-        // Real Time - Undefined
+        // Real-Time - Undefined
         // [msgtype+group, 0xF9, 0x00, 0x00]
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF9, 0x00, 0x00]), [])
         // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
@@ -574,7 +574,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF9, 0x00, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF9, 0x80, 0x80]), [])
     
-        // System Real Time - Start
+        // System Real-Time - Start
         // [msgtype+group, 0xFA, 0x00, 0x00]
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFA, 0x00, 0x00]),
@@ -594,7 +594,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             [.start(group: 0x0)]
         )
     
-        // System Real Time - Continue
+        // System Real-Time - Continue
         // [msgtype+group, 0xFB, 0x00, 0x00]
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFB, 0x00, 0x00]),
@@ -614,7 +614,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             [.continue(group: 0x0)]
         )
     
-        // System Real Time - Stop
+        // System Real-Time - Stop
         // [msgtype+group, 0xFC, 0x00, 0x00]
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFC, 0x00, 0x00]),
@@ -634,7 +634,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             [.stop(group: 0x0)]
         )
     
-        // System Real Time - Undefined
+        // System Real-Time - Undefined
         // [msgtype+group, 0xFD, 0x00, 0x00]
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xFD, 0x00, 0x00]), [])
         // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
@@ -642,7 +642,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xFD, 0x00, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xFD, 0x80, 0x80]), [])
     
-        // System Real Time - Active Sensing
+        // System Real-Time - Active Sensing
         // [msgtype+group, 0xFE, 0x00, 0x00]
         // - in MIDI2.0/UMP spec are not used and discouraged, but are allowed
         XCTAssertEqual(
@@ -663,7 +663,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             [.activeSensing(group: 0x0)]
         )
     
-        // System Real Time - System Reset
+        // System Real-Time - System Reset
         // [msgtype+group, 0xFF, 0x00, 0x00]
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFF, 0x00, 0x00]),

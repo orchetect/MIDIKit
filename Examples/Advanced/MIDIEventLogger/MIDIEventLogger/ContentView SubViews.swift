@@ -646,7 +646,7 @@ extension ContentView {
         var sendEvent: (MIDIEvent) -> Void
     
         var body: some View {
-            GroupBox(label: Text("System Real Time")) {
+            GroupBox(label: Text("System Real-Time")) {
                 VStack(alignment: .center, spacing: 8) {
                     Button {
                         sendEvent(.timingClock(group: midiGroup))

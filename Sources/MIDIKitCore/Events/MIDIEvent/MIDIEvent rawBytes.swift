@@ -80,7 +80,7 @@ extension MIDIEvent {
             return event.midi1RawBytes()
     
         // ----------------------
-        // MARK: System Real Time
+        // MARK: System Real-Time
         // ----------------------
     
         case let .timingClock(event):
@@ -193,7 +193,7 @@ extension MIDIEvent {
             return [event.umpRawWords()]
     
         // ----------------------
-        // MARK: System Real Time
+        // MARK: System Real-Time
         // ----------------------
     
         case let .timingClock(event):
