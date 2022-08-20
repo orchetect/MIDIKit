@@ -25,7 +25,7 @@ extension MIDIEvent {
         public var subID2: UInt7
     
         /// Data bytes (8-bit) (excluding leading 0xF0, trailing 0xF7, universal type and ID bytes)
-        public var data: [Byte]
+        public var data: [UInt8]
     
         /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of an 8-bit Stream ID field.
         internal var streamID: UInt8 = 0x00
@@ -38,7 +38,7 @@ extension MIDIEvent {
             deviceID: UInt7,
             subID1: UInt7,
             subID2: UInt7,
-            data: [Byte],
+            data: [UInt8],
             group: UInt4 = 0x0
         ) {
             self.universalType = universalType
@@ -54,7 +54,7 @@ extension MIDIEvent {
             deviceID: UInt7,
             subID1: UInt7,
             subID2: UInt7,
-            data: [Byte],
+            data: [UInt8],
             streamID: UInt8,
             group: UInt4 = 0x0
         ) {
@@ -83,7 +83,7 @@ extension MIDIEvent {
         deviceID: UInt7,
         subID1: UInt7,
         subID2: UInt7,
-        data: [Byte],
+        data: [UInt8],
         group: UInt4 = 0x0
     ) -> Self {
         .universalSysEx8(
@@ -107,7 +107,7 @@ extension MIDIEvent.UniversalSysEx8 {
         let rawData =
             [
                 0x00,
-                Byte(universalType.rawValue),
+                UInt8(universalType.rawValue),
                 deviceID.uInt8Value,
                 subID1.uInt8Value,
                 subID2.uInt8Value

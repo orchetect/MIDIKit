@@ -10,14 +10,14 @@ import MIDIKitCore
 extension MIDIFile {
     // MARK: - Utilities math and number conversion
 
-    static func uint16To2BytesBigEndian(_ number: UInt16) -> [Byte] {
+    static func uint16To2BytesBigEndian(_ number: UInt16) -> [UInt8] {
         var val = number
 
         return Array(NSData(bytes: &val, length: 2) as Data)
             .reversed()
     }
 
-    static func uint32To4BytesBigEndian(_ number: UInt32) -> [Byte] {
+    static func uint32To4BytesBigEndian(_ number: UInt32) -> [UInt8] {
         var val = number
 
         return Array(NSData(bytes: &val, length: 4) as Data)

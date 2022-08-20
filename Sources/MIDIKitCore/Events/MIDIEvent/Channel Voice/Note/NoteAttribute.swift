@@ -30,7 +30,7 @@ extension MIDIEvent {
         ///
         /// A Profile might define another Attribute Type that is defined for more specific use by that one Profile only.
         /// The application of an Attribute Type value might be defined by MMA/AMEI in a MIDI-CI Profile specification. For example, a drum Profile might define an Attribute Type as “Strike Position” with the Attribute Data value declaring the position from center of drum/cymbal to outer edge. An orchestral string Profile might define Attribute values to be used as Articulation choice such as Arco, Pizzicato, Spiccato, Tremolo, etc. Such cases generally require assigning 1 of the 256 available Attribute Types for use by that Profile. Some Profiles might be able to share some common Attribute types.
-        case undefined(attributeType: Byte, data: UInt16)
+        case undefined(attributeType: UInt8, data: UInt16)
     }
 }
 
@@ -40,7 +40,7 @@ extension MIDIEvent.NoteAttribute {
     ///
     /// Initialize from raw type and data.
     public init(
-        type: Byte,
+        type: UInt8,
         data: UInt16
     ) {
         switch type {
@@ -104,7 +104,7 @@ extension MIDIEvent.NoteAttribute: CustomStringConvertible {
 
 extension MIDIEvent.NoteAttribute {
     /// Attribute Type Byte
-    public var attributeType: Byte {
+    public var attributeType: UInt8 {
         switch self {
         case .none:
             return 0x00

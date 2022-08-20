@@ -19,7 +19,7 @@ extension MIDIFile {
     /// - 25fps: 0xE7
     /// - 29fps: 0xE3
     /// - 30fps: 0xE2
-    public enum FrameRate: Byte, CaseIterable, Equatable, Hashable {
+    public enum FrameRate: UInt8, CaseIterable, Equatable, Hashable {
         case _24fps    = 0b1101000 // 0xE8, assuming top bit of 1
         case _25fps    = 0b1100111 // 0xE7, assuming top bit of 1
         case _2997dfps = 0b1100011 // 0xE3, assuming top bit of 1

@@ -173,8 +173,8 @@ extension MIDIEvent.NoteOn {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    public func midi1RawBytes() -> [Byte] {
-        func process(midi1Value: UInt7) -> [Byte] {
+    public func midi1RawBytes() -> [UInt8] {
+        func process(midi1Value: UInt7) -> [UInt8] {
             if midi1Value == 0, midi1ZeroVelocityAsNoteOff {
                 // send as Note Off event
                 return [

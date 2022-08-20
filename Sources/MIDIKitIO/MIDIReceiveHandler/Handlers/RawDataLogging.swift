@@ -60,7 +60,7 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal func handleBytes(_ bytes: [Byte]) {
+        internal func handleBytes(_ bytes: [UInt8]) {
             if filterActiveSensingAndClock {
                 guard bytes.first != 0xF8, // midi clock pulse
                       bytes.first != 0xFE  // active sensing

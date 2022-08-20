@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+import MIDIKitCore
+
 /// HUI Core Event.
 /// Represents raw HUI messages with essential abstractions.
 public enum HUICoreEvent: Hashable {
@@ -37,7 +39,7 @@ public enum HUICoreEvent: Hashable {
     )
         
     case `switch`(
-        zone: Byte,
+        zone: UInt8,
         port: UInt4,
         state: Bool
     )

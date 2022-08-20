@@ -11,15 +11,15 @@
 extension MIDIPacketList {
     /// Internal:
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a Core MIDI `MIDIPacketList`.
-    internal init(data: [Byte]) {
+    internal init(data: [UInt8]) {
         let packetList = UnsafeMutablePointer<MIDIPacketList>(data: data)
         self = packetList.pointee
         packetList.deallocate()
     }
     
     /// Internal:
-    /// Assembles an array of `Byte` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
-    internal init(data: [[Byte]]) throws {
+    /// Assembles an array of `UInt8` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
+    internal init(data: [[UInt8]]) throws {
         let packetList = try UnsafeMutablePointer<MIDIPacketList>(data: data)
         self = packetList.pointee
         packetList.deallocate()
@@ -31,7 +31,7 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a Core MIDI `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
-    internal init(data: [Byte]) {
+    internal init(data: [UInt8]) {
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
         let bufferSize = data.count + kSizeOfMIDIPacketCombinedHeaders
@@ -66,11 +66,11 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
     }
     
     /// Internal:
-    /// Assembles an array of `Byte` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
+    /// Assembles an array of `UInt8` arrays into Core MIDI `MIDIPacket`s and wraps them in a `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
     /// - Note: System Exclusive messages must each be packed in a dedicated MIDIPacketList with no other events, otherwise MIDIPacketList may fail.
-    internal init(data: [[Byte]]) throws {
+    internal init(data: [[UInt8]]) throws {
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
         let bufferSize = data

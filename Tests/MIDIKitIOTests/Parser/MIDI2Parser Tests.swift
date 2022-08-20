@@ -24,7 +24,7 @@ final class MIDI2Parser_Tests: XCTestCase {
     func testUniversalPacketData_parsedEvents_SingleEvents_MIDI1_0_ChannelVoice() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
@@ -77,7 +77,7 @@ final class MIDI2Parser_Tests: XCTestCase {
     func testUniversalPacketData_parsedEvents_SingleEvents_MIDI2_0_ChannelVoice() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
@@ -201,7 +201,7 @@ final class MIDI2Parser_Tests: XCTestCase {
     func testUniversalPacketData_parsedEvents_SingleEvents_System() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
@@ -354,7 +354,7 @@ final class MIDI2Parser_Tests: XCTestCase {
     func testUniversalPacketData_parsedEvents_Malformed() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
@@ -364,7 +364,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         // UMP MIDI 1.0 events
     
         // data bytes (< 0x80) in the place of a MIDI 1.0 status byte are meaningless/malformed
-        for byte: Byte in 0x00 ... 0x7F {
+        for byte: UInt8 in 0x00 ... 0x7F {
             XCTAssertEqual(parsedEvents(bytes: [0x20, byte, 0x00, 0x00]), []) // nulls
             XCTAssertEqual(parsedEvents(bytes: [0x20, byte, 0x40, 0x40]), []) // arbitrary data
         }
@@ -689,7 +689,7 @@ final class MIDI2Parser_Tests: XCTestCase {
     
         var parser = MIDI2Parser()
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents(using: parser)
         }
@@ -787,7 +787,7 @@ final class MIDI2Parser_Tests: XCTestCase {
     
         var parser = MIDI2Parser()
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents(using: parser)
         }
@@ -907,7 +907,7 @@ final class MIDI2Parser_Tests: XCTestCase {
     
         var parser = MIDI2Parser()
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents(using: parser)
         }
@@ -1045,7 +1045,7 @@ final class MIDI2Parser_Tests: XCTestCase {
     
         var parser = MIDI2Parser()
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents(using: parser)
         }
@@ -1195,7 +1195,7 @@ final class MIDI2Parser_Tests: XCTestCase {
     func testUniversalPacketData_parsedEvents_SingleEvents_MIDI2_0_Utility() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }

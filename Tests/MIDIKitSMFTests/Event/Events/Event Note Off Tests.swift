@@ -14,7 +14,7 @@ final class Event_NoteOff_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes_A() throws {
-        let bytes: [Byte] = [0x80, 0x01, 0x40]
+        let bytes: [UInt8] = [0x80, 0x01, 0x40]
         
         let event = try MIDIFileEvent.NoteOff(midi1SMFRawBytes: bytes)
         
@@ -36,7 +36,7 @@ final class Event_NoteOff_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_B() throws {
-        let bytes: [Byte] = [0x81, 0x3C, 0x7F]
+        let bytes: [UInt8] = [0x81, 0x3C, 0x7F]
         
         let event = try MIDIFileEvent.NoteOff(midi1SMFRawBytes: bytes)
         

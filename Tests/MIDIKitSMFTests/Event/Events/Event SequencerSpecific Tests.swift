@@ -14,7 +14,7 @@ final class Event_SequencerSpecific_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes_Empty() throws {
-        let bytes: [Byte] = [0xFF, 0x7F, 0x00]
+        let bytes: [UInt8] = [0xFF, 0x7F, 0x00]
         
         let event = try MIDIFileEvent.SequencerSpecific(midi1SMFRawBytes: bytes)
         
@@ -30,7 +30,7 @@ final class Event_SequencerSpecific_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_OneByte() throws {
-        let bytes: [Byte] = [0xFF, 0x7F, 0x01, 0x34]
+        let bytes: [UInt8] = [0xFF, 0x7F, 0x01, 0x34]
         
         let event = try MIDIFileEvent.SequencerSpecific(midi1SMFRawBytes: bytes)
         
@@ -46,9 +46,9 @@ final class Event_SequencerSpecific_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_127Bytes() throws {
-        let data: [Byte] = .init(repeating: 0x12, count: 127)
+        let data: [UInt8] = .init(repeating: 0x12, count: 127)
         
-        let bytes: [Byte] =
+        let bytes: [UInt8] =
             [0xFF, 0x7F, // header
              0x7F]       // length: 127 bytes to follow
             + data       // data
@@ -59,7 +59,7 @@ final class Event_SequencerSpecific_Tests: XCTestCase {
     }
     
     func testMIDI1SMFRawBytes_127Bytes() {
-        let data: [Byte] = .init(repeating: 0x12, count: 127)
+        let data: [UInt8] = .init(repeating: 0x12, count: 127)
         
         let event = MIDIFileEvent.SequencerSpecific(data: data)
         
@@ -74,9 +74,9 @@ final class Event_SequencerSpecific_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_128Bytes() throws {
-        let data: [Byte] = .init(repeating: 0x12, count: 128)
+        let data: [UInt8] = .init(repeating: 0x12, count: 128)
         
-        let bytes: [Byte] =
+        let bytes: [UInt8] =
             [0xFF, 0x7F, // header
              0x81, 0x00] // length: 128 bytes to follow
             + data       // data
@@ -87,7 +87,7 @@ final class Event_SequencerSpecific_Tests: XCTestCase {
     }
     
     func testMIDI1SMFRawBytes_128Bytes() {
-        let data: [Byte] = .init(repeating: 0x12, count: 128)
+        let data: [UInt8] = .init(repeating: 0x12, count: 128)
         
         let event = MIDIFileEvent.SequencerSpecific(data: data)
         

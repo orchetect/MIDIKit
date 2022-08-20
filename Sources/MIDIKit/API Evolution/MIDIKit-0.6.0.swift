@@ -23,8 +23,12 @@ public enum MIDI {
     public typealias UInt14 = MIDIKit.UInt14
     public typealias UInt25 = MIDIKit.UInt25
     
-    public typealias Byte = MIDIKit.Byte
-    public typealias Nibble = MIDIKit.Nibble
+    @available(*, unavailable, renamed: "UInt8")
+    public typealias Byte = UInt8
+    
+    @available(*, unavailable, renamed: "UInt4")
+    public typealias Nibble = UInt4
+    
     public typealias UMPWord = MIDIKit.UMPWord
     
     // MARK: Event

@@ -14,7 +14,7 @@ final class Event_ProgramChange_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes_A() throws {
-        let bytes: [Byte] = [0xC0, 0x40]
+        let bytes: [UInt8] = [0xC0, 0x40]
         
         let event = try MIDIFileEvent.ProgramChange(midi1SMFRawBytes: bytes)
         
@@ -35,7 +35,7 @@ final class Event_ProgramChange_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_B() throws {
-        let bytes: [Byte] = [0xC1, 0x7F]
+        let bytes: [UInt8] = [0xC1, 0x7F]
         
         let event = try MIDIFileEvent.ProgramChange(midi1SMFRawBytes: bytes)
         

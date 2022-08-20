@@ -14,7 +14,7 @@ final class Event_TimeSignature_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes() throws {
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0xFF, 0x58, 0x04, // header
             0x02, // numerator
             0x01, // denominator

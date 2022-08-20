@@ -54,7 +54,7 @@ extension MIDIFile.TimeBase {
         self.init(rawBytes: Array(rawData.bytes.prefix(2)))
     }
     
-    public init?(rawBytes bytes: [Byte]) {
+    public init?(rawBytes bytes: [UInt8]) {
         guard bytes.count == 2 else {
             return nil
         }

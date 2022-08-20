@@ -14,7 +14,7 @@ final class SysEx8_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets
     
     func testSysEx8_SingleUMP() throws {
-        let sourceRawBytes: [Byte] = [0x00, // stream ID
+        let sourceRawBytes: [UInt8] = [0x00, // stream ID
                                       0x00, 0x7D, // sysEx ID
                                       0x01, 0x34, 0xE6] // data bytes
 		

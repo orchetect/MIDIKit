@@ -11,10 +11,10 @@ extension UMPWord {
     /// Internal: Pack a `UInt32` with four 8-bit bytes.
     @_disfavoredOverload
     public init(
-        _ byte0: Byte,
-        _ byte1: Byte,
-        _ byte2: Byte,
-        _ byte3: Byte
+        _ byte0: UInt8,
+        _ byte1: UInt8,
+        _ byte2: UInt8,
+        _ byte3: UInt8
     ) {
         self =
             (Self(byte0) << 24) +
@@ -37,15 +37,15 @@ extension UMPWord {
 
 extension Collection where Element == UMPWord {
     /// Internal: Flattens an array of `UInt32` UMP words into an array of bytes.
-    public func umpWordsToBytes() -> [Byte] {
-        var bytes: [Byte] = []
+    public func umpWordsToBytes() -> [UInt8] {
+        var bytes: [UInt8] = []
         bytes.reserveCapacity(4 * count)
     
         forEach { word in
-            let byte1 = Byte((word & 0xFF00_0000) >> 24)
-            let byte2 = Byte((word & 0x00FF_0000) >> 16)
-            let byte3 = Byte((word & 0x0000_FF00) >> 8)
-            let byte4 = Byte(word & 0x0000_00FF)
+            let byte1 = UInt8((word & 0xFF00_0000) >> 24)
+            let byte2 = UInt8((word & 0x00FF_0000) >> 16)
+            let byte3 = UInt8((word & 0x0000_FF00) >> 8)
+            let byte4 = UInt8(word & 0x0000_00FF)
     
             bytes.append(byte1)
             bytes.append(byte2)

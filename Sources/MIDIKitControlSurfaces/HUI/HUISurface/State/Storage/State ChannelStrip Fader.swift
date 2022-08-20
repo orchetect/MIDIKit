@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import MIDIKitCore
 
 extension HUISurface.State.ChannelStrip {
     /// State storage representing the state/values of a channel strip fader

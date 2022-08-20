@@ -16,8 +16,8 @@ public final class MIDI2Parser {
     
     // MARK: - Parser State
     
-    private var sysEx7MultiPartUMPBuffer: [Byte] = []
-    private var sysEx8MultiPartUMPBuffer: [UInt8: [Byte]] = [:]
+    private var sysEx7MultiPartUMPBuffer: [UInt8] = []
+    private var sysEx8MultiPartUMPBuffer: [UInt8: [UInt8]] = [:]
     
     // MARK: - Init
     
@@ -34,7 +34,7 @@ public final class MIDI2Parser {
     
     /// Parses raw packet data into an array of MIDI Events.
     public func parsedEvents(
-        in bytes: [Byte]
+        in bytes: [UInt8]
     ) -> [MIDIEvent] {
         // UMP packet will never be empty and will always be 4-byte aligned (UInt32 words)
         guard !bytes.isEmpty,
@@ -166,7 +166,7 @@ public final class MIDI2Parser {
     ///   - bytes: 3 UMP bytes after the first byte ([1...3])
     ///   - group: UMP group
     internal func parseSystemRealTimeAndCommon(
-        bytes: Array<Byte>.SubSequence,
+        bytes: Array<UInt8>.SubSequence,
         group: UInt4
     ) -> MIDIEvent? {
         // ensure packet is 32-bits (4 bytes / 1 UInt32 word) wide
@@ -174,10 +174,10 @@ public final class MIDI2Parser {
         guard bytes.count == 3 else { return nil }
     
         let statusByte = bytes[bytes.startIndex]
-        // let dataByte1: Byte = bytes[bytes.startIndex.advanced(by: 1)]
-        // let dataByte2: Byte = bytes[bytes.startIndex.advanced(by: 2)]
-        func dataByte1() -> Byte { bytes[bytes.startIndex.advanced(by: 1)] }
-        func dataByte2() -> Byte { bytes[bytes.startIndex.advanced(by: 2)] }
+        // let dataByte1: UInt8 = bytes[bytes.startIndex.advanced(by: 1)]
+        // let dataByte2: UInt8 = bytes[bytes.startIndex.advanced(by: 2)]
+        func dataByte1() -> UInt8 { bytes[bytes.startIndex.advanced(by: 1)] }
+        func dataByte2() -> UInt8 { bytes[bytes.startIndex.advanced(by: 2)] }
     
         switch statusByte {
         case 0xF0: // System Common - SysEx Start
@@ -251,7 +251,7 @@ public final class MIDI2Parser {
     ///   - bytes: 3 UMP bytes after the first byte ([1...3])
     ///   - group: UMP group
     internal func parseMIDI1ChannelVoice(
-        bytes: Array<Byte>.SubSequence,
+        bytes: Array<UInt8>.SubSequence,
         channel: UInt4,
         group: UInt4
     ) -> MIDIEvent? {
@@ -260,8 +260,8 @@ public final class MIDI2Parser {
         guard bytes.count == 3 else { return nil }
     
         let statusNibble = bytes[bytes.startIndex].nibbles.high
-        let dataByte1: Byte = bytes[bytes.startIndex.advanced(by: 1)]
-        let dataByte2: Byte = bytes[bytes.startIndex.advanced(by: 2)]
+        let dataByte1: UInt8 = bytes[bytes.startIndex.advanced(by: 1)]
+        let dataByte2: UInt8 = bytes[bytes.startIndex.advanced(by: 2)]
     
         switch statusNibble {
         case 0x8: // note off
@@ -374,7 +374,7 @@ public final class MIDI2Parser {
     ///   - channel: MIDI Channel
     ///   - group: UMP group
     internal func parseMIDI2ChannelVoice(
-        bytes: Array<Byte>.SubSequence,
+        bytes: Array<UInt8>.SubSequence,
         channel: UInt4,
         group: UInt4
     ) -> MIDIEvent? {
@@ -389,7 +389,7 @@ public final class MIDI2Parser {
         let statusNibble = bytes[bytes.startIndex].nibbles.high
     
         // helper methods
-        func byte(_ offset: Int) -> Byte {
+        func byte(_ offset: Int) -> UInt8 {
             bytes[bytes.startIndex.advanced(by: offset)]
         }
         func word2() -> UMPWord {
@@ -573,7 +573,7 @@ public final class MIDI2Parser {
     ///   - bytes: 7 UMP bytes after the first byte ([1...7])
     ///   - group: UMP group
     internal func parseData64Bit(
-        bytes: Array<Byte>.SubSequence,
+        bytes: Array<UInt8>.SubSequence,
         group: UInt4
     ) -> MIDIEvent? {
         // MIDI 2.0 Spec:
@@ -645,7 +645,7 @@ public final class MIDI2Parser {
     ///   - bytes: 15 UMP bytes after the first byte ([1...15])
     ///   - group: UMP group
     internal func parseData128Bit(
-        bytes: Array<Byte>.SubSequence,
+        bytes: Array<UInt8>.SubSequence,
         group: UInt4
     ) -> MIDIEvent? {
         // MIDI 2.0 Spec:
@@ -741,11 +741,11 @@ public final class MIDI2Parser {
     ///   - bytes: all bytes after the first byte ([1...])
     ///   - group: UMP group
     internal func parseMIDI2Utility(
-        bytes: Array<Byte>.SubSequence,
+        bytes: Array<UInt8>.SubSequence,
         group: UInt4
     ) -> (
         utilityEvent: MIDIEvent,
-        followingBytes: Array<Byte>.SubSequence
+        followingBytes: Array<UInt8>.SubSequence
     )? {
         // MIDI 2.0 Spec:
         // "The UMP Format provides a set of Utility Messages. Utility Messages include but are not limited to NOOP and timestamps, and might in the future include UMP transport-related functions."

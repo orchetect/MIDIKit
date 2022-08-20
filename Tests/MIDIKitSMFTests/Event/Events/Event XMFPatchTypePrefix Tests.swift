@@ -14,7 +14,7 @@ final class Event_XMFPatchTypePrefix_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes_A() throws {
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
             0x01        // param
@@ -38,7 +38,7 @@ final class Event_XMFPatchTypePrefix_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_B() throws {
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
             0x02        // param
@@ -64,7 +64,7 @@ final class Event_XMFPatchTypePrefix_Tests: XCTestCase {
     // MARK: - Edge Cases
     
     func testUndefinedParam() {
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
             0x20        // param (undefined)

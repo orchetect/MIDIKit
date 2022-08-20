@@ -14,7 +14,7 @@ final class Event_PitchBend_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes_A() throws {
-        let bytes: [Byte] = [0xE0, 0x00, 0x40]
+        let bytes: [UInt8] = [0xE0, 0x00, 0x40]
         
         let event = try MIDIFileEvent.PitchBend(midi1SMFRawBytes: bytes)
         
@@ -28,13 +28,13 @@ final class Event_PitchBend_Tests: XCTestCase {
             channel: 0
         )
         
-        let bytes: [Byte] = event.midi1SMFRawBytes()
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xE0, 0x00, 0x40])
     }
     
     func testInit_midi1SMFRawBytes_B() throws {
-        let bytes: [Byte] = [0xE1, 0x7F, 0x7F]
+        let bytes: [UInt8] = [0xE1, 0x7F, 0x7F]
         
         let event = try MIDIFileEvent.PitchBend(midi1SMFRawBytes: bytes)
         
@@ -48,7 +48,7 @@ final class Event_PitchBend_Tests: XCTestCase {
             channel: 1
         )
         
-        let bytes: [Byte] = event.midi1SMFRawBytes()
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0xE1, 0x7F, 0x7F])
     }

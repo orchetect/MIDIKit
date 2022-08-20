@@ -14,7 +14,7 @@ final class Event_SequenceNumber_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes_A() throws {
-        let bytes: [Byte] = [0xFF, 0x00, 0x02, 0x00, 0x00]
+        let bytes: [UInt8] = [0xFF, 0x00, 0x02, 0x00, 0x00]
         
         let event = try MIDIFileEvent.SequenceNumber(midi1SMFRawBytes: bytes)
         
@@ -30,7 +30,7 @@ final class Event_SequenceNumber_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_B() throws {
-        let bytes: [Byte] = [0xFF, 0x00, 0x02, 0x7F, 0xFF]
+        let bytes: [UInt8] = [0xFF, 0x00, 0x02, 0x7F, 0xFF]
         
         let event = try MIDIFileEvent.SequenceNumber(midi1SMFRawBytes: bytes)
         

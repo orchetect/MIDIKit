@@ -13,7 +13,7 @@ public class HUIParser {
         
     private var timeDisplay: [String] = []
     private var largeDisplay: [String] = []
-    private var faderMSB: [Byte] = []
+    private var faderMSB: [UInt8] = []
     private var switchesZoneSelect: UInt8?
         
     // MARK: handlers
@@ -45,7 +45,7 @@ public class HUIParser {
         // Even though some control surface models have a 9th master fader
         // such as EMAGIC Logic Control and Mackie Control Universal,
         // when running in HUI mode, the master fader is disabled.
-        faderMSB = [Byte](repeating: 0, count: 8)
+        faderMSB = [UInt8](repeating: 0, count: 8)
             
         switchesZoneSelect = nil
     }
@@ -95,7 +95,7 @@ extension HUIParser: ReceivesMIDIEvents {
 // MARK: Parser
 
 extension HUIParser {
-    private func parse(sysExContent data: [Byte]) {
+    private func parse(sysExContent data: [UInt8]) {
         guard data.count >= 2 else { return }
         
         // check for SysEx header

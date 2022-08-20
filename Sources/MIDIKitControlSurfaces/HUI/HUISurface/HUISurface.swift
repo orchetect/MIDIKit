@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import MIDIKitCore
 
 /// Object representing a single HUI control surface device.
 /// (Human User Interface) for Digital Audio Workstations.

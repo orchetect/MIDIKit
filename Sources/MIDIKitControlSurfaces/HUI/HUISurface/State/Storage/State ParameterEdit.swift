@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import MIDIKitCore
 
 extension HUISurface.State {
     /// State storage representing the Parameter Edit section

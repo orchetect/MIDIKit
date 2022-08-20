@@ -11,7 +11,7 @@ import MIDIKitCore
 
 final class SysEx7_Tests: XCTestCase {
     func testSysEx7RawBytes_Typical() throws {
-        let sourceRawBytes: [Byte] = [0xF0, 0x41, 0x01, 0x34, 0xF7]
+        let sourceRawBytes: [UInt8] = [0xF0, 0x41, 0x01, 0x34, 0xF7]
 		
         let event = try MIDIEvent.sysEx7(rawBytes: sourceRawBytes)
         guard case let .sysEx7(innerEvent) = event
@@ -29,7 +29,7 @@ final class SysEx7_Tests: XCTestCase {
     }
 	
     func testSysEx7RawBytes_EmptyMessageBytes_WithMfr_WithEndByte() throws {
-        let sourceRawBytes: [Byte] = [0xF0, 0x41, 0xF7]
+        let sourceRawBytes: [UInt8] = [0xF0, 0x41, 0xF7]
 		
         let event = try MIDIEvent.sysEx7(rawBytes: sourceRawBytes)
         guard case let .sysEx7(innerEvent) = event
@@ -47,7 +47,7 @@ final class SysEx7_Tests: XCTestCase {
     }
     
     func testSysEx7RawBytes_EmptyMessageBytes_WithMfr() throws {
-        let sourceRawBytes: [Byte] = [0xF0, 0x41]
+        let sourceRawBytes: [UInt8] = [0xF0, 0x41]
     
         let event = try MIDIEvent.sysEx7(rawBytes: sourceRawBytes)
         guard case let .sysEx7(innerEvent) = event
@@ -65,7 +65,7 @@ final class SysEx7_Tests: XCTestCase {
     }
     
     func testSysEx7RawBytes_EmptyMessageBytes_WithEndByte() {
-        let sourceRawBytes: [Byte] = [0xF0, 0xF7]
+        let sourceRawBytes: [UInt8] = [0xF0, 0xF7]
     
         XCTAssertThrowsError(
             try MIDIEvent.sysEx7(rawBytes: sourceRawBytes)
@@ -77,7 +77,7 @@ final class SysEx7_Tests: XCTestCase {
         XCTAssertNoThrow(
             try MIDIEvent.sysEx7(
                 rawBytes: [0xF0, 0x41]
-                    + [Byte](repeating: 0x20, count: 256 - 3)
+                    + [UInt8](repeating: 0x20, count: 256 - 3)
                     + [0xF7]
             )
         )
@@ -86,7 +86,7 @@ final class SysEx7_Tests: XCTestCase {
         XCTAssertNoThrow(
             try MIDIEvent.sysEx7(
                 rawBytes: [0xF0, 0x41]
-                    + [Byte](repeating: 0x20, count: 256 - 2)
+                    + [UInt8](repeating: 0x20, count: 256 - 2)
                     + [0xF7]
             )
         )

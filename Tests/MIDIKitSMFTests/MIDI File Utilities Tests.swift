@@ -50,7 +50,7 @@ final class MIDIFileUtilities_Tests: XCTestCase {
         //   2. one or more trailing bytes existing in the input buffer
         // the outcome should be the same in either case.
         
-        let trailingBytesCases: [[Byte]] = [[], [0x80], [0x12, 0x23]]
+        let trailingBytesCases: [[UInt8]] = [[], [0x80], [0x12, 0x23]]
         
         trailingBytesCases.forEach { trailingBytes in
             

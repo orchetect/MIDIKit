@@ -20,7 +20,7 @@ extension MIDIEvent {
         /// - remark: MIDI 2.0 Spec:
         ///
         /// System Exclusive 8 initial data bytes are the same as those found in MIDI 1.0 Protocol System Exclusive messages. These bytes are Manufacturer ID (including Special ID 0x7D, or Universal System Exclusive IDs), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable).
-        public var data: [Byte]
+        public var data: [UInt8]
     
         /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of an 8-bit Stream ID field.
         internal var streamID: UInt8 = 0x00
@@ -30,7 +30,7 @@ extension MIDIEvent {
     
         public init(
             manufacturer: SysExManufacturer,
-            data: [Byte],
+            data: [UInt8],
             group: UInt4 = 0x0
         ) {
             self.manufacturer = manufacturer
@@ -40,7 +40,7 @@ extension MIDIEvent {
     
         internal init(
             manufacturer: SysExManufacturer,
-            data: [Byte],
+            data: [UInt8],
             streamID: UInt8,
             group: UInt4 = 0x0
         ) {
@@ -64,7 +64,7 @@ extension MIDIEvent {
     ///   - group: UMP Group (0x0...0xF)
     public static func sysEx8(
         manufacturer: SysExManufacturer,
-        data: [Byte],
+        data: [UInt8],
         group: UInt4 = 0x0
     ) -> Self {
         .sysEx8(
@@ -98,7 +98,7 @@ extension MIDIEvent.SysEx8 {
     /// Internal:
     /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly; use the public `umpRawWords()` method instead.
     internal static func umpRawWords(
-        fromSysEx8Data data: [Byte],
+        fromSysEx8Data data: [UInt8],
         streamID: UInt8,
         group: UInt4
     ) -> [[UMPWord]] {
@@ -108,7 +108,7 @@ extension MIDIEvent.SysEx8 {
     
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
     
-        func rawDataOrNull(_ offset: Int) -> Byte {
+        func rawDataOrNull(_ offset: Int) -> UInt8 {
             guard data.count > offset else { return 0x00 }
             return data[data.startIndex.advanced(by: offset)]
         }

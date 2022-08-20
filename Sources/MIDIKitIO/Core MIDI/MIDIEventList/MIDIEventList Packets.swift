@@ -65,7 +65,7 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
         // iterate through words, chunking into UMPs based on
         // expected number of words for the UMP Message Type
         while curWord < packetWords.count {
-            guard let mt = Nibble(exactly: packetWords[curWord] >> 28),
+            guard let mt = UInt4(exactly: packetWords[curWord] >> 28),
                   let mtype = MIDIUMPMessageType(rawValue: mt),
                   wordsRemain() >= mtype.wordLength
             else { curWord = packetWords.count; continue }

@@ -14,7 +14,7 @@ final class Event_PortPrefix_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes() throws {
-        let bytes: [Byte] = [0xFF, 0x21, 0x01, 0x02]
+        let bytes: [UInt8] = [0xFF, 0x21, 0x01, 0x02]
         
         let event = try MIDIFileEvent.PortPrefix(midi1SMFRawBytes: bytes)
         

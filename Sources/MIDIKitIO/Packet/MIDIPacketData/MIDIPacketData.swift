@@ -8,13 +8,13 @@
 
 /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIPacket` (MIDI 1.0).
 public struct MIDIPacketData {
-    let bytes: [Byte]
+    let bytes: [UInt8]
     
     /// Core MIDI packet timestamp
     let timeStamp: CoreMIDITimeStamp
     
     public init(
-        bytes: [Byte],
+        bytes: [UInt8],
         timeStamp: CoreMIDITimeStamp
     ) {
         self.bytes = bytes
@@ -49,7 +49,7 @@ extension MIDIPacketData {
         )
     
         return MIDIPacketData(
-            bytes: [Byte](rawMIDIPacketDataPtr),
+            bytes: [UInt8](rawMIDIPacketDataPtr),
             timeStamp: midiPacketPtr.pointee.timeStamp
         )
     }

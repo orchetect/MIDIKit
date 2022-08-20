@@ -21,7 +21,7 @@ final class Chunk_Track_Tests: XCTestCase {
         
         XCTAssertEqual(track.events, events)
         
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0x4D, 0x54, 0x72, 0x6B, // MTrk
             0x00, 0x00, 0x00, 0x04, // length: 4 bytes to follow
             0x00,                   // delta time prior to chunk end
@@ -53,7 +53,7 @@ final class Chunk_Track_Tests: XCTestCase {
         
         XCTAssertEqual(track.events, events)
         
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0x4D, 0x54, 0x72, 0x6B, // MTrk
             0x00, 0x00, 0x00, 0x0D, // length: 13 bytes to follow
             0x00,                   // delta time

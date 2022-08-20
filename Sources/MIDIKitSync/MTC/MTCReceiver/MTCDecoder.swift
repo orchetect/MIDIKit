@@ -198,7 +198,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
         deviceID: UInt7,
         subID1: UInt7,
         subID2: UInt7,
-        data: [Byte]
+        data: [UInt8]
     ) {
         guard universalType == .realTime, // 0x7F
               deviceID      == 0x7F,
@@ -266,7 +266,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
     /// ----------------------
     /// Since it takes eight quarter-frames for a complete time code message, the complete SMPTE time is updated every two frames.
     /// A quarter-frame message consists of a status byte of 0xF1, followed by a single 7-bit data value: 3 bits to identify the piece, and 4 bits of partial time code.
-    internal func processQF(dataByte: Byte) {
+    internal func processQF(dataByte: UInt8) {
         // Verbose debugging - careful when enabling this!
         // -----------------------------------------------
         // print("F1",

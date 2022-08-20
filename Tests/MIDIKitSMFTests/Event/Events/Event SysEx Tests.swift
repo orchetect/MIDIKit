@@ -181,7 +181,7 @@ final class Event_SysEx_Tests: XCTestCase {
     }
     
     func testSysEx_midi1SMFRawBytes_128Bytes() {
-        let data: [Byte] = .init(repeating: 0x12, count: 128 - 2)
+        let data: [UInt8] = .init(repeating: 0x12, count: 128 - 2)
         
         let sysEx = MIDIFileEvent.SysEx(
             manufacturer: .oneByte(0x7D),
@@ -251,7 +251,7 @@ final class Event_SysEx_Tests: XCTestCase {
     }
     
     func testUniversalSysEx_midi1SMFRawBytes_128Bytes() {
-        let data: [Byte] = .init(repeating: 0x12, count: 128 - 5)
+        let data: [UInt8] = .init(repeating: 0x12, count: 128 - 5)
         
         let sysEx = MIDIFileEvent.UniversalSysEx(
             universalType: .nonRealTime,

@@ -14,7 +14,7 @@ final class Event_ChannelPrefix_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes() throws {
-        let bytes: [Byte] = [0xFF, 0x20, 0x01, 0x02]
+        let bytes: [UInt8] = [0xFF, 0x20, 0x01, 0x02]
         
         let event = try MIDIFileEvent.ChannelPrefix(midi1SMFRawBytes: bytes)
         

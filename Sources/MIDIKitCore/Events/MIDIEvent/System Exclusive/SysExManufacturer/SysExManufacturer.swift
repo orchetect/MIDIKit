@@ -33,7 +33,7 @@ extension MIDIEvent {
 
 extension MIDIEvent.SysExManufacturer {
     /// Initialize from a MIDI 1.0 SysEx7 ID (one or three bytes).
-    public init?(sysEx7RawBytes: [Byte]) {
+    public init?(sysEx7RawBytes: [UInt8]) {
         switch sysEx7RawBytes.count {
         case 1:
             switch sysEx7RawBytes[0] {
@@ -70,7 +70,7 @@ extension MIDIEvent.SysExManufacturer {
     }
     
     /// Initialize from a MIDI 2.0 SysEx8 ID (two bytes).
-    public init?(sysEx8RawBytes: [Byte]) {
+    public init?(sysEx8RawBytes: [UInt8]) {
         guard sysEx8RawBytes.count == 2 else { return nil }
     
         switch sysEx8RawBytes[0] {
@@ -98,7 +98,7 @@ extension MIDIEvent.SysExManufacturer {
 
 extension MIDIEvent.SysExManufacturer {
     /// Returns the Manufacturer byte(s) formatted for MIDI 1.0 SysEx7, as one byte (7-bit) or three bytes (21-bit).
-    public func sysEx7RawBytes() -> [Byte] {
+    public func sysEx7RawBytes() -> [UInt8] {
         switch self {
         case let .oneByte(byte):
             return [byte.uInt8Value]
@@ -109,7 +109,7 @@ extension MIDIEvent.SysExManufacturer {
     }
     
     /// Returns the Manufacturer byte(s) formatted for MIDI 2.0 SysEx8, as two bytes (16-bit).
-    public func sysEx8RawBytes() -> [Byte] {
+    public func sysEx8RawBytes() -> [UInt8] {
         switch self {
         case let .oneByte(byte):
             return [0x00, byte.uInt8Value]
@@ -173,7 +173,7 @@ extension MIDIEvent.SysExManufacturer {
     /// Lookup table for Manufacturer MIDI SysEx (system exclusive) IDs assigned by the MIDI Manufacturers Association.
     ///
     /// (IDs can be either 1 or 3 bytes long.)
-    static let kSysExIDs: [[Byte]: String] = [
+    static let kSysExIDs: [[UInt8]: String] = [
         // MARK: Special IDs
 
         [0x7D]: "-", // used for Educational Use or for unit testing, not public release

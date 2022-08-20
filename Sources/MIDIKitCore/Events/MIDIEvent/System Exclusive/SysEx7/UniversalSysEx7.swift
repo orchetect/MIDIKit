@@ -27,7 +27,7 @@ extension MIDIEvent {
         public var subID2: UInt7
     
         /// Data bytes (7-bit) (excluding leading 0xF0, trailing 0xF7, universal type and ID bytes)
-        public var data: [Byte]
+        public var data: [UInt8]
     
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
@@ -37,7 +37,7 @@ extension MIDIEvent {
             deviceID: UInt7,
             subID1: UInt7,
             subID2: UInt7,
-            data: [Byte],
+            data: [UInt8],
             group: UInt4 = 0x0
         ) {
             self.universalType = universalType
@@ -66,7 +66,7 @@ extension MIDIEvent {
         deviceID: UInt7,
         subID1: UInt7,
         subID2: UInt7,
-        data: [Byte],
+        data: [UInt8],
         group: UInt4 = 0x0
     ) -> Self {
         .universalSysEx7(
@@ -89,10 +89,10 @@ extension MIDIEvent.UniversalSysEx7 {
     public func midi1RawBytes(
         leadingF0: Bool = true,
         trailingF7: Bool = true
-    ) -> [Byte] {
+    ) -> [UInt8] {
         (leadingF0 ? [0xF0] : [])
             + [
-                Byte(universalType.rawValue),
+                UInt8(universalType.rawValue),
                 deviceID.uInt8Value,
                 subID1.uInt8Value,
                 subID2.uInt8Value
@@ -107,7 +107,7 @@ extension MIDIEvent.UniversalSysEx7 {
     public func umpRawWords() -> [[UMPWord]] {
         let rawData =
             [
-                Byte(universalType.rawValue),
+                UInt8(universalType.rawValue),
                 deviceID.uInt8Value,
                 subID1.uInt8Value,
                 subID2.uInt8Value

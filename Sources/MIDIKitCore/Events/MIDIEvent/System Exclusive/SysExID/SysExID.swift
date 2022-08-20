@@ -26,7 +26,7 @@ extension MIDIEvent.SysExID: CustomStringConvertible {
 }
 
 extension MIDIEvent.SysExID {
-    public init?(sysEx7RawBytes: [Byte]) {
+    public init?(sysEx7RawBytes: [UInt8]) {
         if let mfr = MIDIEvent.SysExManufacturer(sysEx7RawBytes: sysEx7RawBytes) {
             self = .manufacturer(mfr)
             return
@@ -42,7 +42,7 @@ extension MIDIEvent.SysExID {
         return nil
     }
     
-    public init?(sysEx8RawBytes: [Byte]) {
+    public init?(sysEx8RawBytes: [UInt8]) {
         if let mfr = MIDIEvent.SysExManufacturer(sysEx8RawBytes: sysEx8RawBytes) {
             self = .manufacturer(mfr)
             return
@@ -62,7 +62,7 @@ extension MIDIEvent.SysExID {
 
 extension MIDIEvent.SysExID {
     /// Returns the Manufacturer byte(s) formatted for MIDI 1.0 SysEx7, as one byte (7-bit) or three bytes (21-bit).
-    public func sysEx7RawBytes() -> [Byte] {
+    public func sysEx7RawBytes() -> [UInt8] {
         switch self {
         case let .manufacturer(mfr):
             return mfr.sysEx7RawBytes()
@@ -73,7 +73,7 @@ extension MIDIEvent.SysExID {
     }
     
     /// Returns the Manufacturer byte(s) formatted for MIDI 2.0 SysEx8, as two bytes (16-bit).
-    public func sysEx8RawBytes() -> [Byte] {
+    public func sysEx8RawBytes() -> [UInt8] {
         switch self {
         case let .manufacturer(mfr):
             return mfr.sysEx8RawBytes()

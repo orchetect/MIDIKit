@@ -14,7 +14,7 @@ final class Event_UnrecognizedMeta_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes_EmptyData() throws {
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0xFF, 0x30, // unknown/undefined meta type 0x30
             0x00        // length: 0 bytes to follow
         ]
@@ -40,7 +40,7 @@ final class Event_UnrecognizedMeta_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_WithData() throws {
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0xFF, 0x30, // unknown/undefined meta type 0x30
             0x01,       // length: 1 bytes to follow
             0x12        // data byte
@@ -68,9 +68,9 @@ final class Event_UnrecognizedMeta_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_127Bytes() throws {
-        let data: [Byte] = .init(repeating: 0x12, count: 127)
+        let data: [UInt8] = .init(repeating: 0x12, count: 127)
         
-        let bytes: [Byte] =
+        let bytes: [UInt8] =
             [0xFF, 0x30, // unknown/undefined meta type 0x30
              0x7F]       // length: 127 bytes to follow
             + data       // data
@@ -82,7 +82,7 @@ final class Event_UnrecognizedMeta_Tests: XCTestCase {
     }
     
     func testMIDI1SMFRawBytes_127Bytes() {
-        let data: [Byte] = .init(repeating: 0x12, count: 127)
+        let data: [UInt8] = .init(repeating: 0x12, count: 127)
         
         let event = MIDIFileEvent.UnrecognizedMeta(
             metaType: 0x30,
@@ -100,9 +100,9 @@ final class Event_UnrecognizedMeta_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_128Bytes() throws {
-        let data: [Byte] = .init(repeating: 0x12, count: 128)
+        let data: [UInt8] = .init(repeating: 0x12, count: 128)
         
-        let bytes: [Byte] =
+        let bytes: [UInt8] =
             [0xFF, 0x30, // unknown/undefined meta type 0x30
              0x81, 0x00] // length: 128 bytes to follow
             + data       // data
@@ -114,7 +114,7 @@ final class Event_UnrecognizedMeta_Tests: XCTestCase {
     }
     
     func testMIDI1SMFRawBytes_128Bytes() {
-        let data: [Byte] = .init(repeating: 0x12, count: 128)
+        let data: [UInt8] = .init(repeating: 0x12, count: 128)
         
         let event = MIDIFileEvent.UnrecognizedMeta(
             metaType: 0x30,

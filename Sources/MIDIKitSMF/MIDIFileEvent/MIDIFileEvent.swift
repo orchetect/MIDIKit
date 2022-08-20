@@ -264,7 +264,7 @@ extension MIDIFileEvent {
     
     public static func sequencerSpecific(
         delta: DeltaTime = .none,
-        data: [Byte]
+        data: [UInt8]
     ) -> Self {
         .sequencerSpecific(
             delta: delta,
@@ -307,7 +307,7 @@ extension MIDIFileEvent {
     public static func sysEx(
         delta: DeltaTime = .none,
         manufacturer: MIDIEvent.SysExManufacturer,
-        data: [Byte]
+        data: [UInt8]
     ) -> Self {
         .sysEx(
             delta: delta,
@@ -359,7 +359,7 @@ extension MIDIFileEvent {
     public static func unrecognizedMeta(
         delta: DeltaTime = .none,
         metaType: UInt8,
-        data: [Byte]
+        data: [UInt8]
     ) -> Self {
         .unrecognizedMeta(
             delta: delta,
@@ -376,7 +376,7 @@ extension MIDIFileEvent {
         deviceID: UInt7,
         subID1: UInt7,
         subID2: UInt7,
-        data: [Byte]
+        data: [UInt8]
     ) -> Self {
         .universalSysEx(
             delta: delta,

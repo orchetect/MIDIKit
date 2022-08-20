@@ -69,9 +69,7 @@ The inverse is also true when converting from a unit interval to a MIDI 1.0 or M
 
 ### Raw Data Types
 
-- ``Byte``
 - ``BytePair``
-- ``Nibble``
 - ``UMPWord``
 
 ### Base MIDI Event Value Types

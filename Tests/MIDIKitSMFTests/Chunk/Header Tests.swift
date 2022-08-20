@@ -23,7 +23,7 @@ final class Chunk_Header_Tests: XCTestCase {
         XCTAssertEqual(header.format, .singleTrack)
         XCTAssertEqual(header.timeBase, .musical(ticksPerQuarterNote: 720))
         
-        let rawData: [Byte] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                0x00, 0x00, 0x00, 0x06, // length
                                0x00, 0x00, // format
                                0x00, 0x01, // track count
@@ -33,7 +33,7 @@ final class Chunk_Header_Tests: XCTestCase {
     }
     
     func testInit_Type0_rawData() throws {
-        let rawData: [Byte] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                0x00, 0x00, 0x00, 0x06, // length
                                0x00, 0x00, // format
                                0x00, 0x01, // track count
@@ -54,7 +54,7 @@ final class Chunk_Header_Tests: XCTestCase {
         XCTAssertEqual(header.format, .multipleTracksSynchronous)
         XCTAssertEqual(header.timeBase, .musical(ticksPerQuarterNote: 720))
         
-        let rawData: [Byte] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                0x00, 0x00, 0x00, 0x06, // length
                                0x00, 0x01, // format
                                0x00, 0x02, // track count
@@ -64,7 +64,7 @@ final class Chunk_Header_Tests: XCTestCase {
     }
     
     func testInit_Type1_rawData() throws {
-        let rawData: [Byte] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                0x00, 0x00, 0x00, 0x06, // length
                                0x00, 0x01, // format
                                0x00, 0x02, // track count
@@ -85,7 +85,7 @@ final class Chunk_Header_Tests: XCTestCase {
         XCTAssertEqual(header.format, .multipleTracksAsynchronous)
         XCTAssertEqual(header.timeBase, .musical(ticksPerQuarterNote: 720))
         
-        let rawData: [Byte] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                0x00, 0x00, 0x00, 0x06, // length
                                0x00, 0x02, // format
                                0x00, 0x02, // track count
@@ -95,7 +95,7 @@ final class Chunk_Header_Tests: XCTestCase {
     }
     
     func testInit_Type2_rawData() throws {
-        let rawData: [Byte] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                0x00, 0x00, 0x00, 0x06, // length
                                0x00, 0x02, // format
                                0x00, 0x02, // track count
@@ -110,7 +110,7 @@ final class Chunk_Header_Tests: XCTestCase {
     // MARK: - Edge Cases
     
     func testInit_LengthIntTooShort() {
-        let rawData: [Byte] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                0x00, 0x00, 0x00, 0x05, // length (wrong)
                                0x00, 0x00, // format
                                0x00, 0x01, // track count
@@ -121,7 +121,7 @@ final class Chunk_Header_Tests: XCTestCase {
     }
     
     func testInit_LengthIntTooLong() {
-        let rawData: [Byte] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                0x00, 0x00, 0x00, 0x07, // length (wrong)
                                0x00, 0x00, // format
                                0x00, 0x01, // track count
@@ -132,7 +132,7 @@ final class Chunk_Header_Tests: XCTestCase {
     }
     
     func testInit_LengthTooShort() {
-        let rawData: [Byte] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                0x00, 0x00, 0x00, 0x06, // length
                                0x00, 0x00, // format
                                0x00, 0x01, // track count
@@ -146,7 +146,7 @@ final class Chunk_Header_Tests: XCTestCase {
     func testInit_MoreBytesThanExpected() {
         // valid header chunk, with an additional unexpected subsequent byte
         
-        let rawData: [Byte] = [0x4D, 0x54, 0x68, 0x64, // MThd header
+        let rawData: [UInt8] = [0x4D, 0x54, 0x68, 0x64, // MThd header
                                0x00, 0x00, 0x00, 0x06, // length
                                0x00, 0x00, // format
                                0x00, 0x01, // track count

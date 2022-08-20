@@ -5,7 +5,7 @@
 //
 
 /// Universal MIDI Packet Message Type
-public enum MIDIUMPMessageType: Nibble, CaseIterable {
+public enum MIDIUMPMessageType: UInt4, CaseIterable {
     case utility                 = 0x0
     case systemRealTimeAndCommon = 0x1
     case midi1ChannelVoice       = 0x2
@@ -33,7 +33,7 @@ extension MIDIUMPMessageType {
 }
 
 /// Universal MIDI Packet SysEx Status Field
-public enum MIDIUMPSysExStatusField: Nibble, CaseIterable {
+public enum MIDIUMPSysExStatusField: UInt4, CaseIterable {
     /// Complete System Exclusive Message in one UMP System Exclusive.
     case complete = 0x0
     
@@ -51,7 +51,7 @@ public enum MIDIUMPSysExStatusField: Nibble, CaseIterable {
 }
 
 /// Universal MIDI Packet SysEx Status Field
-public enum MIDIUMPUtilityStatusField: Nibble, CaseIterable {
+public enum MIDIUMPUtilityStatusField: UInt4, CaseIterable {
     /// NOOP (No Operation)
     case noOp = 0x0
     

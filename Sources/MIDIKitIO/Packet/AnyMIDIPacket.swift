@@ -13,7 +13,7 @@ public enum AnyMIDIPacket {
     case universalPacket(UniversalMIDIPacketData)
     
     /// Flat array of raw bytes
-    public var bytes: [Byte] {
+    public var bytes: [UInt8] {
         switch self {
         case let .packet(packetData):
             return packetData.bytes

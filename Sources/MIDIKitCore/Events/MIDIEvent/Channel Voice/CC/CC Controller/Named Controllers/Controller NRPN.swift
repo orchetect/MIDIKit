@@ -13,7 +13,7 @@ extension MIDIEvent.CC.Controller {
         /// Form an RPN message from a raw parameter number byte pair.
         ///
         /// - parameters:
-        ///   - parameter: Byte pair.
+        ///   - parameter: UInt8 pair.
         ///   - dataEntryMSB: Optional data entry MSB byte to follow.
         ///   - dataEntryMSB: Optional data entry LSB byte to follow.
         case raw(

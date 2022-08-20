@@ -54,7 +54,7 @@ extension MIDIEvent.SongPositionPointer {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
-    public func midi1RawBytes() -> [Byte] {
+    public func midi1RawBytes() -> [UInt8] {
         let bytePair = midiBeat.bytePair
         return [0xF2, bytePair.lsb, bytePair.msb]
     }

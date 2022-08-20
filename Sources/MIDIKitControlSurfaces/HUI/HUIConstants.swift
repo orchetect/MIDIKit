@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+import MIDIKitCore
+
 // MARK: - HUI System Constants
 
 public enum HUIConstants { }
@@ -21,32 +23,32 @@ extension HUIConstants {
         // [0xF0, 0x00, 0x00, 0x66, 0x05, 0x00]
         public enum kSysEx {
             public static let kManufacturer: MIDIEvent.SysExManufacturer = .threeByte(byte2: 0x00, byte3: 0x66) // Mackie
-            public static let kSubID1: Byte = 0x05 // product ID?
-            public static let kSubID2: Byte = 0x00
+            public static let kSubID1: UInt8 = 0x05 // product ID?
+            public static let kSubID2: UInt8 = 0x00
         }
         
         public enum kDisplayType {
             /// 4-character channel name displays, and Select-Assign displays
-            public static let smallByte: Byte = 0x10
+            public static let smallByte: UInt8 = 0x10
             /// Main time display (can be switched between modes, such as timecode, bars/beats, etc.)
-            public static let timeDisplayByte: Byte = 0x11
+            public static let timeDisplayByte: UInt8 = 0x11
             /// Main 40x2 character display
-            public static let largeByte: Byte = 0x12
+            public static let largeByte: UInt8 = 0x12
         }
         
         // Status 0xA is normally MIDI poly aftertouch, but HUI hijacks it.
-        public static let kLevelMetersStatus: Byte = 0xA0
+        public static let kLevelMetersStatus: UInt8 = 0xA0
         
         // MARK: Control events
         
         // Status 0xB is normally channel voice control change, but HUI hijacks it.
         // HUI only ever uses first channel, so the status byte will always be exactly 0xB0.
         // HUI also uses running status for back-to-back 0xB status messages.
-        public static let kControlStatus: Byte = 0xB0
+        public static let kControlStatus: UInt8 = 0xB0
         
         public enum kControlDataByte1 {
-            public static let zoneSelectByte: Byte = 0x0C
-            public static let portOnOffByte: Byte = 0x2C
+            public static let zoneSelectByte: UInt8 = 0x0C
+            public static let portOnOffByte: UInt8 = 0x2C
         }
         
         public enum kChannelStripElement: UInt4, Equatable, Hashable {
@@ -60,8 +62,8 @@ extension HUIConstants {
             case rec    = 0x7
         }
         
-        public static let kSysExStartByte: Byte = 0xF0
-        public static let kSysExEndByte: Byte = 0xF7
+        public static let kSysExStartByte: UInt8 = 0xF0
+        public static let kSysExEndByte: UInt8 = 0xF7
     }
 }
 
@@ -178,7 +180,7 @@ extension HUIConstants {
 // MARK: - HUI Zones and Ports tables
 
 /// Raw HUI zone byte.
-public typealias HUIZone = Byte
+public typealias HUIZone = UInt8
 
 /// Raw HUI port nibble.
 public typealias HUIPort = UInt4

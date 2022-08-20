@@ -19,7 +19,7 @@ public final class MIDI1Parser {
     /// Interpret received Note On events with a velocity value of 0 as a Note Off event instead.
     internal var translateNoteOnZeroVelocityToNoteOff: Bool = true
     
-    internal var runningStatus: Byte?
+    internal var runningStatus: UInt8?
     
     // MARK: - Init
     
@@ -44,7 +44,7 @@ public final class MIDI1Parser {
     
     /// Parses raw packet data into an array of MIDI Events.
     public func parsedEvents(
-        in bytes: [Byte],
+        in bytes: [UInt8],
         umpGroup: UInt4 = 0
     ) -> [MIDIEvent] {
         let result = Self.parsedEvents(
@@ -69,13 +69,13 @@ public final class MIDI1Parser {
     ///
     /// Persisted status data is normally the role of the parser class, but this method gives access to an abstracted parsing method by way of injecting and emitting persistent state (ie: running status).
     internal static func parsedEvents(
-        in bytes: [Byte],
-        runningStatus: Byte? = nil,
+        in bytes: [UInt8],
+        runningStatus: UInt8? = nil,
         translateNoteOnZeroVelocityToNoteOff: Bool = true,
         umpGroup: UInt4 = 0
     ) -> (
         events: [MIDIEvent],
-        runningStatus: Byte?
+        runningStatus: UInt8?
     ) {
         guard !bytes.isEmpty else {
             return (
@@ -88,13 +88,13 @@ public final class MIDI1Parser {
     
         var events: [MIDIEvent] = []
     
-        var runningStatus: Byte? = runningStatus
-        var currentMessageBuffer: [Byte] = []
+        var runningStatus: UInt8? = runningStatus
+        var currentMessageBuffer: [UInt8] = []
         var currentPos = 0
     
         var expectedDataBytes: ExpectedDataBytes = .none
     
-        func setExpectedBytes(fromNibble: Nibble?) {
+        func setExpectedBytes(fromNibble: UInt4?) {
             switch fromNibble {
             case 0x8:
                 expectedDataBytes = .exact(2)
@@ -378,7 +378,7 @@ public final class MIDI1Parser {
     ///
     /// - note: This is a helper method only intended to be called internally from within `MIDIPacketData.parseEvents()`.
     internal static func parseSingleMessage(
-        _ bytes: [Byte],
+        _ bytes: [UInt8],
         translateNoteOnZeroVelocityToNoteOff: Bool = true,
         umpGroup: UInt4 = 0
     ) -> [MIDIEvent] {
@@ -388,8 +388,8 @@ public final class MIDI1Parser {
     
         let statusByte = bytes[0]
     
-        let dataByte1: Byte? = bytes.count > 1 ? bytes[1] : nil
-        let dataByte2: Byte? = bytes.count > 2 ? bytes[2] : nil
+        let dataByte1: UInt8? = bytes.count > 1 ? bytes[1] : nil
+        let dataByte2: UInt8? = bytes.count > 2 ? bytes[2] : nil
     
         switch statusByte.nibbles.high {
         case 0x8: // note off

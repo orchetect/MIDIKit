@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import MIDIKitCore
 
 /// HUI Parameter
 public enum HUIParameter: Equatable, Hashable {
@@ -423,7 +424,7 @@ extension HUIParameter {
     /// Construct from a HUI zone and port pair.
     /// Returns `nil` if the pair is undefined.
     public init?(
-        zone: Byte,
+        zone: UInt8,
         port: UInt4
     ) {
         guard let parameter = HUIParameter.allCases

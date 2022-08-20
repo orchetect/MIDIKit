@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+import MIDIKitCore
+
 extension HUISurface.Event {
     /// A discrete component of a the param edit section and it state/value.
     public enum ParamEditComponent: Equatable, Hashable {

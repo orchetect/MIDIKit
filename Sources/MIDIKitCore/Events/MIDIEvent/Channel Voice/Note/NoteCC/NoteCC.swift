@@ -141,8 +141,8 @@ extension MIDIEvent.NoteCC {
     
         // MIDI 2.0 only
     
-        let statusByte: Byte
-        let index: Byte
+        let statusByte: UInt8
+        let index: UInt8
     
         switch controller {
         case let .assignable(ccNum):

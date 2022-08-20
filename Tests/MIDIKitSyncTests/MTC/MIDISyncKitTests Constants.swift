@@ -27,28 +27,13 @@ extension kRawMIDI {
         // rr == 10: 29.97d frames/s (SMPTE drop-frame timecode)
         // rr == 11: 30 frames/s
         
-        static var _00_00_00_00_at_24fps: [Byte] {
-            var msg: [Byte]
+        static var _00_00_00_00_at_24fps: [UInt8] {
+            var msg: [UInt8]
             
-            let hh: Byte = 0b00000000 // 24fps, 1 hours
-            let mm: Byte = 0
-            let ss: Byte = 0
-            let ff: Byte = 0
-            
-            msg = [0xF0, 0x7F, 0x7F, 0x01, 0x01, // preamble
-                   hh, mm, ss, ff,               // timecode info
-                   0xF7]                         // sysex end
-            
-            return msg
-        }
-        
-        static var _01_02_03_04_at_24fps: [Byte] {
-            var msg: [Byte]
-            
-            let hh: Byte = 0b00000001 // 24fps, 1 hours
-            let mm: Byte = 2
-            let ss: Byte = 3
-            let ff: Byte = 4
+            let hh: UInt8 = 0b00000000 // 24fps, 1 hours
+            let mm: UInt8 = 0
+            let ss: UInt8 = 0
+            let ff: UInt8 = 0
             
             msg = [0xF0, 0x7F, 0x7F, 0x01, 0x01, // preamble
                    hh, mm, ss, ff,               // timecode info
@@ -57,13 +42,28 @@ extension kRawMIDI {
             return msg
         }
         
-        static var _02_11_17_20_at_25fps: [Byte] {
-            var msg: [Byte]
+        static var _01_02_03_04_at_24fps: [UInt8] {
+            var msg: [UInt8]
             
-            let hh: Byte = 0b00100010 // 25fps, 2 hours
-            let mm: Byte = 11
-            let ss: Byte = 17
-            let ff: Byte = 20
+            let hh: UInt8 = 0b00000001 // 24fps, 1 hours
+            let mm: UInt8 = 2
+            let ss: UInt8 = 3
+            let ff: UInt8 = 4
+            
+            msg = [0xF0, 0x7F, 0x7F, 0x01, 0x01, // preamble
+                   hh, mm, ss, ff,               // timecode info
+                   0xF7]                         // sysex end
+            
+            return msg
+        }
+        
+        static var _02_11_17_20_at_25fps: [UInt8] {
+            var msg: [UInt8]
+            
+            let hh: UInt8 = 0b00100010 // 25fps, 2 hours
+            let mm: UInt8 = 11
+            let ss: UInt8 = 17
+            let ff: UInt8 = 20
             
             msg = [0xF0, 0x7F, 0x7F, 0x01, 0x01, // preamble
                    hh, mm, ss, ff,               // timecode info
@@ -78,10 +78,10 @@ extension kRawMIDI {
 enum kMIDIEvent {
     enum MTC_FullFrame {
         static var _00_00_00_00_at_24fps: MIDIEvent {
-            let hh: Byte = 0b00000000 // 24fps, 1 hours
-            let mm: Byte = 0
-            let ss: Byte = 0
-            let ff: Byte = 0
+            let hh: UInt8 = 0b00000000 // 24fps, 1 hours
+            let mm: UInt8 = 0
+            let ss: UInt8 = 0
+            let ff: UInt8 = 0
             
             let msg = MIDIEvent.universalSysEx7(
                 universalType: .realTime,
@@ -95,10 +95,10 @@ enum kMIDIEvent {
         }
         
         static var _01_02_03_04_at_24fps: MIDIEvent {
-            let hh: Byte = 0b00000001 // 24fps, 1 hours
-            let mm: Byte = 2
-            let ss: Byte = 3
-            let ff: Byte = 4
+            let hh: UInt8 = 0b00000001 // 24fps, 1 hours
+            let mm: UInt8 = 2
+            let ss: UInt8 = 3
+            let ff: UInt8 = 4
             
             let msg = MIDIEvent.universalSysEx7(
                 universalType: .realTime,
@@ -112,10 +112,10 @@ enum kMIDIEvent {
         }
         
         static var _02_11_17_20_at_25fps: MIDIEvent {
-            let hh: Byte = 0b00100010 // 25fps, 2 hours
-            let mm: Byte = 11
-            let ss: Byte = 17
-            let ff: Byte = 20
+            let hh: UInt8 = 0b00100010 // 25fps, 2 hours
+            let mm: UInt8 = 11
+            let ss: UInt8 = 17
+            let ff: UInt8 = 20
             
             let msg = MIDIEvent.universalSysEx7(
                 universalType: .realTime,

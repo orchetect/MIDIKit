@@ -249,10 +249,10 @@ public class MTCEncoder: SendsMIDIEvents {
             subID1: 0x01,
             subID2: 0x01,
             data: [
-                (Byte(newComponents.h) & 0b00011111) + (mtcFrameRate.bitValue << 5),
-                Byte(newComponents.m),
-                Byte(newComponents.s),
-                Byte(newComponents.f)
+                (UInt8(newComponents.h) & 0b00011111) + (mtcFrameRate.bitValue << 5),
+                UInt8(newComponents.m),
+                UInt8(newComponents.s),
+                UInt8(newComponents.f)
             ]
         )
             
@@ -280,25 +280,25 @@ public class MTCEncoder: SendsMIDIEvents {
         // 6        0110 hhhh   Hours lsbits
         // 7        0111 0rrh   Rate and hours msbit
             
-        var dataByte: Byte = mtcQuarterFrame << 4
+        var dataByte: UInt8 = mtcQuarterFrame << 4
             
         switch mtcQuarterFrame {
         case 0b000: // QF 0
-            dataByte += (Byte(mtcComponents.f) & 0b00001111)
+            dataByte += (UInt8(mtcComponents.f) & 0b00001111)
         case 0b001: // QF 1
-            dataByte += (Byte(mtcComponents.f) & 0b00010000) >> 4
+            dataByte += (UInt8(mtcComponents.f) & 0b00010000) >> 4
         case 0b010: // QF 2
-            dataByte += (Byte(mtcComponents.s) & 0b00001111)
+            dataByte += (UInt8(mtcComponents.s) & 0b00001111)
         case 0b011: // QF 3
-            dataByte += (Byte(mtcComponents.s) & 0b00110000) >> 4
+            dataByte += (UInt8(mtcComponents.s) & 0b00110000) >> 4
         case 0b100: // QF 4
-            dataByte += (Byte(mtcComponents.m) & 0b00001111)
+            dataByte += (UInt8(mtcComponents.m) & 0b00001111)
         case 0b101: // QF 5
-            dataByte += (Byte(mtcComponents.m) & 0b00110000) >> 4
+            dataByte += (UInt8(mtcComponents.m) & 0b00110000) >> 4
         case 0b110: // QF 6
-            dataByte += (Byte(mtcComponents.h) & 0b00001111)
+            dataByte += (UInt8(mtcComponents.h) & 0b00001111)
         case 0b111: // QF 7
-            dataByte += ((Byte(mtcComponents.h) & 0b00010000) >> 4)
+            dataByte += ((UInt8(mtcComponents.h) & 0b00010000) >> 4)
                 + (mtcFrameRate.bitValue << 1)
         default:
             break // will never happen

@@ -12,7 +12,7 @@ enum kMIDIFile {
     // swiftformat:options --maxwidth none
     
     /// Example Digital Performer 8 MIDI file export containing marker and cue point events.
-    static let DP8Markers: [Byte] = [
+    static let DP8Markers: [UInt8] = [
         0x4D, 0x54, 0x68, 0x64, // MThd
         0x00, 0x00, 0x00, 0x06, // 6 header bytes
         0x00, 0x01, // type 1 file

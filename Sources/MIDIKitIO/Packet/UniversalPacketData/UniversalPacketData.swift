@@ -12,12 +12,12 @@ public struct UniversalMIDIPacketData {
 //    public let words: [UInt32]
     
     /// Flat array of raw bytes
-    public var bytes: [Byte]
+    public var bytes: [UInt8]
     
     /// Core MIDI packet timestamp
     public let timeStamp: CoreMIDITimeStamp
     
-    public init(bytes: [Byte], timeStamp: CoreMIDITimeStamp) {
+    public init(bytes: [UInt8], timeStamp: CoreMIDITimeStamp) {
         self.bytes = bytes
         self.timeStamp = timeStamp
     }

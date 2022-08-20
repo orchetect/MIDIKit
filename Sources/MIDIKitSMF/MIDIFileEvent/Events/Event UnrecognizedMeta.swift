@@ -23,13 +23,13 @@ extension MIDIFileEvent {
         
         /// Data bytes.
         /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
-        public var data: [Byte] = []
+        public var data: [UInt8] = []
         
         // MARK: - Init
         
         public init(
             metaType: UInt8,
-            data: [Byte]
+            data: [UInt8]
         ) {
             self.metaType = metaType
             self.data = data

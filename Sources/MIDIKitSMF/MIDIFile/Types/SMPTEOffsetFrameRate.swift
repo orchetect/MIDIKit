@@ -10,7 +10,7 @@ import MIDIKitCore
 
 extension MIDIFile {
     /// For use in SMPTE Offset track events
-    public enum SMPTEOffsetFrameRate: Byte, CaseIterable, Equatable, Hashable {
+    public enum SMPTEOffsetFrameRate: UInt8, CaseIterable, Equatable, Hashable {
         case _24fps    = 0b00 // 0 decimal
         case _25fps    = 0b01 // 1 decimal
         case _2997dfps = 0b10 // 2 decimal

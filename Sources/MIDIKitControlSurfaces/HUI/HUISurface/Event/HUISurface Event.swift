@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+import MIDIKitCore
+
 extension HUISurface {
     /// HUI Surface Event
     public enum Event: Hashable {
@@ -90,7 +92,7 @@ extension HUISurface {
         
         /// Unhandled/unrecognized switch
         case unhandledSwitch(
-            zone: Byte,
+            zone: UInt8,
             port: UInt4,
             state: Bool
         )

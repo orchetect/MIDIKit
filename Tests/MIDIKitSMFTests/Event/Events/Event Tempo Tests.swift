@@ -14,7 +14,7 @@ final class Event_Tempo_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes_A() throws {
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0xFF, 0x51, 0x03, // header
             0x07, 0xA1, 0x20  // 24-bit tempo encoding
         ]
@@ -36,7 +36,7 @@ final class Event_Tempo_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_B() throws {
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0xFF, 0x51, 0x03, // header
             0x0F, 0x42, 0x40  // 24-bit tempo encoding
         ]

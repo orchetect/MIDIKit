@@ -24,7 +24,7 @@ final class MIDI1Parser_Tests: XCTestCase {
     func testPacketData_parsedEvents_SingleEvents() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
@@ -308,12 +308,12 @@ final class MIDI1Parser_Tests: XCTestCase {
     func testPacketData_parsedEvents_MidstreamRealTimeMessages_SinglePacket() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
     
-        let systemRealTimeMessages: [Byte : [MIDIEvent]] = [
+        let systemRealTimeMessages: [UInt8 : [MIDIEvent]] = [
             0xF8: [.timingClock(group: 0)],
             0xF9: [], // undefined
             0xFA: [.start(group: 0)],
@@ -364,12 +364,12 @@ final class MIDI1Parser_Tests: XCTestCase {
     func testPacketData_parsedEvents_RunningStatus_SystemRealTime() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
     
-        let systemRealTimeMessages: [Byte : [MIDIEvent]] = [
+        let systemRealTimeMessages: [UInt8 : [MIDIEvent]] = [
             0xF8: [.timingClock(group: 0)],
             0xF9: [], // undefined
             0xFA: [.start(group: 0)],
@@ -424,12 +424,12 @@ final class MIDI1Parser_Tests: XCTestCase {
     func testPacketData_parsedEvents_RunningStatus_SystemCommon() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
     
-        let systemCommonMessages: [[Byte] : [MIDIEvent]] = [
+        let systemCommonMessages: [[UInt8] : [MIDIEvent]] = [
             // 0xF0 - SysEx Start, not applicable to check in this test
             [0xF1, 0x00]       : [.timecodeQuarterFrame(dataByte: 0x00, group: 0)],
             [0xF2, 0x08, 0x00] : [.songPositionPointer(midiBeat: 8, group: 0)],
@@ -490,7 +490,7 @@ final class MIDI1Parser_Tests: XCTestCase {
     func testPacketData_parsedEvents_Malformed() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
@@ -498,7 +498,7 @@ final class MIDI1Parser_Tests: XCTestCase {
         // tests
     
         // data bytes (< 0x80) are meaningless without a status byte or Running Status
-        for byte: Byte in 0x00...0x7F {
+        for byte: UInt8 in 0x00...0x7F {
             XCTAssertEqual(parsedEvents(bytes: [byte]), [])
         }
     
@@ -697,7 +697,7 @@ final class MIDI1Parser_Tests: XCTestCase {
     func testPacketData_parsedEvents_SysEx() {
         // template method
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
                 .parsedEvents()
         }
@@ -759,7 +759,7 @@ final class MIDI1Parser_Tests: XCTestCase {
     
         let parser = MIDI1Parser()
     
-        func parsedEvents(bytes: [Byte]) -> [MIDIEvent] {
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             parser.parsedEvents(in: bytes, umpGroup: 0)
         }
     

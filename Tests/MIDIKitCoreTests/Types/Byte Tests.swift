@@ -11,7 +11,7 @@ import MIDIKitCore
 
 final class Byte_Tests: XCTestCase {
     func testNibbles() {
-        let byte = Byte(0x12)
+        let byte = UInt8(0x12)
     
         let nibbles = byte.nibbles
     
@@ -20,7 +20,7 @@ final class Byte_Tests: XCTestCase {
     }
     
     func testInit_Nibbles() {
-        let byte = Byte(high: 0x1, low: 0x2)
+        let byte = UInt8(high: 0x1, low: 0x2)
     
         XCTAssertEqual(byte, 0x12)
     }

@@ -21,7 +21,7 @@ final class Chunk_UnrecognizedChunk_Tests: XCTestCase {
         
         XCTAssertEqual(track.identifier, id)
         
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0x41, 0x42, 0x43, 0x44, // ABCD
             0x00, 0x00, 0x00, 0x00 // length: 0 bytes to follow
         ]
@@ -43,7 +43,7 @@ final class Chunk_UnrecognizedChunk_Tests: XCTestCase {
     }
     
     func testWithData() throws {
-        let data: [Byte] = [0x12, 0x34, 0x56, 0x78]
+        let data: [UInt8] = [0x12, 0x34, 0x56, 0x78]
         
         let id = "ABCD"
         
@@ -54,7 +54,7 @@ final class Chunk_UnrecognizedChunk_Tests: XCTestCase {
         
         XCTAssertEqual(track.identifier, id)
         
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0x41, 0x42, 0x43, 0x44, // ABCD
             0x00, 0x00, 0x00, 0x04 // length: 4 bytes to follow
         ] + data  // data bytes

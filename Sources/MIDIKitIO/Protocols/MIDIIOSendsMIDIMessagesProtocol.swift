@@ -31,13 +31,13 @@ internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProto
     /// Send a MIDI Message, automatically assembling it into a `MIDIPacketList`.
     ///
     /// - Parameter rawMessage: MIDI message
-    func send(rawMessage: [Byte]) throws
+    func send(rawMessage: [UInt8]) throws
     
     /// Internal:
     /// Send one or more MIDI message(s), automatically assembling it into a `MIDIPacketList`.
     ///
     /// - Parameter rawMessages: Array of MIDI messages
-    func send(rawMessages: [[Byte]]) throws
+    func send(rawMessages: [[UInt8]]) throws
     
     /// Internal:
     /// Send a Core MIDI `MIDIPacketList`. (MIDI 1.0, using old Core MIDI API).
@@ -59,7 +59,7 @@ internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProto
 // MARK: - Implementation
 
 extension _MIDIIOSendsMIDIMessagesProtocol {
-    internal func send(rawMessage: [Byte]) throws {
+    internal func send(rawMessage: [UInt8]) throws {
         switch api {
         case .legacyCoreMIDI:
             var packetList = MIDIPacketList(data: rawMessage)
@@ -75,7 +75,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
         }
     }
     
-    internal func send(rawMessages: [[Byte]]) throws {
+    internal func send(rawMessages: [[UInt8]]) throws {
         switch api {
         case .legacyCoreMIDI:
             var packetList = try MIDIPacketList(data: rawMessages)

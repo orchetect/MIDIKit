@@ -179,7 +179,7 @@ extension Set where Element == MIDIEvent.NoteManagement.OptionFlag {
     /// (MIDI 2.0)
     ///
     /// Initialize flags from a raw option flags byte.
-    public init(byte: Byte) {
+    public init(byte: UInt8) {
         self.init()
     
         if byte & 0b00000001 == 1 {
@@ -192,8 +192,8 @@ extension Set where Element == MIDIEvent.NoteManagement.OptionFlag {
     }
     
     /// Returns the flags as a raw option flags byte.
-    public var byte: Byte {
-        var byte: Byte = 0b00000000
+    public var byte: UInt8 {
+        var byte: UInt8 = 0b00000000
     
         if contains(.resetPerNoteControllers) {
             byte |= 0b00000001

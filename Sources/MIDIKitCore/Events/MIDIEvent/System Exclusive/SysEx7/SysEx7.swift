@@ -18,14 +18,14 @@ extension MIDIEvent {
         public var manufacturer: SysExManufacturer
     
         /// Data bytes (7-bit) (excluding leading 0xF0, trailing 0xF7 and manufacturer bytes)
-        public var data: [Byte]
+        public var data: [UInt8]
     
         /// UMP Group (0x0...0xF)
         public var group: UInt4 = 0x0
     
         public init(
             manufacturer: MIDIEvent.SysExManufacturer,
-            data: [Byte],
+            data: [UInt8],
             group: UInt4 = 0x0
         ) {
             self.manufacturer = manufacturer
@@ -49,7 +49,7 @@ extension MIDIEvent {
     ///   - group: UMP Group (0x0...0xF)
     public static func sysEx7(
         manufacturer: SysExManufacturer,
-        data: [Byte],
+        data: [UInt8],
         group: UInt4 = 0x0
     ) -> Self {
         .sysEx7(
@@ -93,7 +93,7 @@ extension MIDIEvent.SysEx7 {
     public func midi1RawBytes(
         leadingF0: Bool = true,
         trailingF7: Bool = true
-    ) -> [Byte] {
+    ) -> [UInt8] {
         (leadingF0 ? [0xF0] : [])
             + manufacturer.sysEx7RawBytes()
             + data
@@ -119,7 +119,7 @@ extension MIDIEvent.SysEx7 {
     /// Internal:
     /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly; use the public `umpRawWords()` method instead.
     internal static func umpRawWords(
-        fromSysEx7Data data: [Byte],
+        fromSysEx7Data data: [UInt8],
         group: UInt4
     ) -> [[UMPWord]] {
         let maxDataBytesPerPacket = 6
@@ -128,7 +128,7 @@ extension MIDIEvent.SysEx7 {
     
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
     
-        func rawDataOrNull(_ offset: Int) -> Byte {
+        func rawDataOrNull(_ offset: Int) -> UInt8 {
             guard data.count > offset else { return 0x00 }
             return data[data.startIndex.advanced(by: offset)]
         }

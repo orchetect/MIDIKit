@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import MIDIKitCore
 
 // MARK: - Main Update Method
 
@@ -188,7 +189,7 @@ extension HUISurface.State {
     }
     
     private mutating func updateState_Switch(
-        zone: Byte,
+        zone: UInt8,
         port: UInt4,
         state: Bool
     ) -> HUISurface.Event? {

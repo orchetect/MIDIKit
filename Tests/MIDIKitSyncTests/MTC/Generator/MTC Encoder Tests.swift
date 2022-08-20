@@ -1368,7 +1368,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             )
             
             mtcEnc.mtcQuarterFrame = 7
-            let dataByte: Byte
+            let dataByte: UInt8
             switch $0.mtcFrameRate {
             case .mtc24:    dataByte = 0b01110000
             case .mtc25:    dataByte = 0b01110010

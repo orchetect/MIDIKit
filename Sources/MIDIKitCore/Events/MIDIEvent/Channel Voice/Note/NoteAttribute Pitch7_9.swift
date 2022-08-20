@@ -65,8 +65,8 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     
     /// UInt16 representation as a byte pair.
     public var bytePair: BytePair {
-        let msb = Byte(coarse.value << 1) + Byte((fine.value & 0b1_00000000) >> 8)
-        let lsb = Byte(fine.value & 0b11111111)
+        let msb = UInt8(coarse.value << 1) + UInt8((fine.value & 0b1_00000000) >> 8)
+        let lsb = UInt8(fine.value & 0b11111111)
     
         return .init(msb: msb, lsb: lsb)
     }

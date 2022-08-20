@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+import MIDIKitCore
+
 extension HUISurface.Event {
     /// A discrete component of a HUI channel strip and its state/value.
     public enum ChannelStripComponent: Equatable, Hashable {

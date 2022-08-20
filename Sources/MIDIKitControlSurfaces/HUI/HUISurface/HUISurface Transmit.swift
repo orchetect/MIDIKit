@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import MIDIKitCore
 
 extension HUISurface {
     /// HUI ping message transmit to host.
@@ -19,12 +20,12 @@ extension HUISurface {
     ///   - port: HUI port number
     ///   - state: State of switch or action
     internal func transmitSwitch(
-        zone: Byte,
+        zone: UInt8,
         port: UInt4,
         state: Bool
     ) {
         // set on off byte
-        var portByte: Byte = port.uInt8Value
+        var portByte: UInt8 = port.uInt8Value
         
         if state == true {
             portByte += 0x40

@@ -13,11 +13,11 @@ extension MIDIFileEvent {
     public struct SequencerSpecific: Equatable, Hashable {
         /// Data bytes.
         /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
-        public var data: [Byte] = []
+        public var data: [UInt8] = []
         
         // MARK: - Init
         
-        public init(data: [Byte]) {
+        public init(data: [UInt8]) {
             self.data = data
         }
     }

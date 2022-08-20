@@ -14,7 +14,7 @@ final class Event_Text_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     func testInit_midi1SMFRawBytes_EmptyString() throws {
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0xFF, 0x01, // header
             0x00        // length: 0 bytes
         ]
@@ -37,7 +37,7 @@ final class Event_Text_Tests: XCTestCase {
     }
     
     func testInit_midi1SMFRawBytes_WithString() throws {
-        let bytes: [Byte] = [
+        let bytes: [UInt8] = [
             0xFF, 0x01, // header
             0x04,       // length: 4 bytes
             0x61, 0x62, 0x63, 0x64 // string characters
@@ -74,9 +74,9 @@ final class Event_Text_Tests: XCTestCase {
     func testTextTypes() throws {
         func textTypeTest(
             eventType: MIDIFileEvent.Text.EventType,
-            eventID: Byte
+            eventID: UInt8
         ) throws {
-            let bytes: [Byte] = [
+            let bytes: [UInt8] = [
                 0xFF, eventID, // header
                 0x01,          // length: 1 bytes
                 0x61           // string characters
@@ -89,7 +89,7 @@ final class Event_Text_Tests: XCTestCase {
             XCTAssertEqual(event1, event2)
         }
         
-        let textTypes: [MIDIFileEvent.Text.EventType: Byte] = [
+        let textTypes: [MIDIFileEvent.Text.EventType: UInt8] = [
             .text                : 0x01,
             .copyright           : 0x02,
             .trackOrSequenceName : 0x03,

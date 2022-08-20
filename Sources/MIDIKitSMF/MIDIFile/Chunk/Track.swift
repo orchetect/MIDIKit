@@ -14,7 +14,7 @@ extension MIDIFile.Chunk {
     public struct Track: Equatable {
         public static let staticIdentifier: String = "MTrk"
         
-        internal static let chunkEnd: [Byte] = [0xFF, 0x2F, 0x00]
+        internal static let chunkEnd: [UInt8] = [0xFF, 0x2F, 0x00]
         
         /// Storage for events in the track.
         public var events: [MIDIFileEvent] = []
@@ -138,7 +138,7 @@ extension MIDIFile.Chunk.Track {
             
                 // check for running status
             
-                var runningStatusByte: Byte?
+                var runningStatusByte: UInt8?
             
                 if !readBuffer.isEmpty {
                     let testForRunningStatusByte = readBuffer[readBuffer.startIndex]
@@ -202,7 +202,7 @@ extension MIDIFile.Chunk.Track {
                         .hexString(padTo: 1, prefix: true)
                 
                     let sampleBytes = (1 ... 8)
-                        .reduce([Byte]()) {
+                        .reduce([UInt8]()) {
                             // read as many bytes as possible, up to range.count
                             if let getBytes = try? dataReader.nonAdvancingRead(bytes: $1) {
                                 return Array(getBytes)

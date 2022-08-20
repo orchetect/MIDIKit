@@ -13,7 +13,7 @@ extension MIDIEvent {
     ///
     /// - Throws: `MIDIEvent.ParseError` if message is malformed.
     public static func sysEx8(
-        rawBytes: [Byte],
+        rawBytes: [UInt8],
         group: UInt4 = 0
     ) throws -> Self {
         var readPos = rawBytes.startIndex
@@ -26,7 +26,7 @@ extension MIDIEvent {
             readPos = newPos
         }
     
-        func readData() -> [Byte] {
+        func readData() -> [UInt8] {
             Array(rawBytes[readPos...])
         }
     
@@ -65,7 +65,7 @@ extension MIDIEvent {
             guard let subID2 = UInt7(exactly: rawBytes[readPos])
             else { throw ParseError.malformed }
     
-            let data: [Byte] = {
+            let data: [UInt8] = {
                 if (try? readPosAdvance(by: 1)) != nil {
                     return readData()
                 } else {
@@ -86,7 +86,7 @@ extension MIDIEvent {
             )
     
         case let .manufacturer(mfr):
-            var data: [Byte] = []
+            var data: [UInt8] = []
     
             let actualEndIndex = rawBytes.endIndex.advanced(by: -1)
             if readPos < actualEndIndex {
