@@ -20,20 +20,6 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MIDIKitTests"
-               BuildableName = "MIDIKitTests"
-               BlueprintName = "MIDIKitTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -43,27 +29,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MIDIKitTests"
-               BuildableName = "MIDIKitTests"
-               BlueprintName = "MIDIKitTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests">
-               </Test>
-               <Test
-                  Identifier = "RoundTrip_NewCoreMIDIAPI_2_0_Protocol_Tests">
-               </Test>
-               <Test
-                  Identifier = "RoundTrip_OldCoreMIDIAPI_Tests">
-               </Test>
-            </SkippedTests>
-         </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
