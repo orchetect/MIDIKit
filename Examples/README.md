@@ -6,4 +6,4 @@ Examples are provided for each supported platform, as optimal implementation det
 
 ## Build Note
 
-⚠️ If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
+> **Note:** If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
