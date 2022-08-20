@@ -4,8 +4,6 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-@_implementationOnly import CoreMIDI
-
 /// MIDI protocol version.
 public enum MIDIProtocolVersion: Equatable, Hashable {
     /// MIDI 1.0

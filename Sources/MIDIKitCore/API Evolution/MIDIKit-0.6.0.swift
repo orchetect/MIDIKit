@@ -11,17 +11,17 @@ import Foundation
 // NOTE: This is not by any means exhaustive, as nearly every symbol had namespace changes from 0.5.x -> 0.6.0 but the most common symbols are covered here to help guide code migration.
 
 @available(
-    *, unavailable,
+    *, deprecated,
     message: "💡 The MIDI namespace has been removed as of MIDIKit 0.6.0. First-generation nested symbols have adopted a MIDI prefix instead. For example: MIDI.Event has become MIDIEvent, MIDI.IO.Manager has become MIDIManager."
 )
 public enum MIDI {
     // MARK: Types
     
-    public typealias UInt4 = MIDIKit.UInt4
-    public typealias UInt7 = MIDIKit.UInt7
-    public typealias UInt9 = MIDIKit.UInt9
-    public typealias UInt14 = MIDIKit.UInt14
-    public typealias UInt25 = MIDIKit.UInt25
+    public typealias UInt4 = MIDIKitCore.UInt4
+    public typealias UInt7 = MIDIKitCore.UInt7
+    public typealias UInt9 = MIDIKitCore.UInt9
+    public typealias UInt14 = MIDIKitCore.UInt14
+    public typealias UInt25 = MIDIKitCore.UInt25
     
     @available(*, unavailable, renamed: "UInt8")
     public typealias Byte = UInt8
@@ -29,7 +29,7 @@ public enum MIDI {
     @available(*, unavailable, renamed: "UInt4")
     public typealias Nibble = UInt4
     
-    public typealias UMPWord = MIDIKit.UMPWord
+    public typealias UMPWord = MIDIKitCore.UMPWord
     
     // MARK: Event
     @available(
@@ -197,146 +197,6 @@ public enum MIDI {
         public enum JRTimestamp { }
     }
     
-    // MARK: -
-    
-    @available(
-        *, unavailable,
-        message: "The `MIDI.IO` namespace has been removed and first-generation nested types have been renamed `MIDIManager`, `MIDIInputEndpoint`, etc."
-    )
-    public enum IO {
-        // MARK: Core MIDI Aliased Types
-        
-        public typealias UniqueID = MIDIKit.MIDIIdentifier
-        public typealias ObjectRef = UInt32
-        public typealias ClientRef = MIDIKit.CoreMIDIObjectRef
-        public typealias DeviceRef = MIDIKit.CoreMIDIObjectRef
-        public typealias EntityRef = MIDIKit.CoreMIDIObjectRef
-        public typealias PortRef = MIDIKit.CoreMIDIObjectRef
-        public typealias EndpointRef = MIDIKit.CoreMIDIObjectRef
-        public typealias ThruConnectionRef = MIDIKit.CoreMIDIObjectRef
-        public typealias TimeStamp = UInt64
-        public typealias CoreMIDIOSStatus = Int32
-        
-        // MARK: Manager
-        
-        public class Manager {
-            @available(*, unavailable)
-            public init(
-                clientName: String,
-                model: String,
-                manufacturer: String,
-                notificationHandler: ((
-                    _ notification: MIDIIONotification,
-                    _ manager: MIDIManager
-                ) -> Void)? = nil
-            ) { fatalError() }
-        
-            public func addInput(
-                name: String,
-                tag: String,
-                uniqueID: MIDIIdentifierPersistence,
-                receiver: MIDIReceiver
-            ) throws { fatalError() }
-            
-            // MARK: - Add Methods
-            
-            public func addInputConnection(
-                toOutputs: Set<MIDIEndpointIdentity>,
-                tag: String,
-                mode: MIDIConnectionMode = .definedEndpoints,
-                filter: MIDIEndpointFilter = .default(),
-                receiver: MIDIReceiver
-            ) throws { fatalError() }
-            
-            public func addInputConnection(
-                toOutputs: [MIDIEndpointIdentity],
-                tag: String,
-                mode: MIDIConnectionMode = .definedEndpoints,
-                filter: MIDIEndpointFilter = .default(),
-                receiver: MIDIReceiver
-            ) throws { fatalError() }
-            
-            @_disfavoredOverload
-            public func addInputConnection(
-                toOutputs: [MIDIOutputEndpoint],
-                tag: String,
-                mode: MIDIConnectionMode = .definedEndpoints,
-                filter: MIDIEndpointFilter = .default(),
-                receiver: MIDIReceiver
-            ) throws { fatalError() }
-            
-            public func addOutput(
-                name: String,
-                tag: String,
-                uniqueID: MIDIIdentifierPersistence
-            ) throws { fatalError() }
-            
-            public func addOutputConnection(
-                toInputs: Set<MIDIEndpointIdentity>,
-                tag: String,
-                mode: MIDIConnectionMode = .definedEndpoints,
-                filter: MIDIEndpointFilter = .default()
-            ) throws { fatalError() }
-            
-            public func addOutputConnection(
-                toInputs: [MIDIEndpointIdentity],
-                tag: String,
-                mode: MIDIConnectionMode = .definedEndpoints,
-                filter: MIDIEndpointFilter = .default()
-            ) throws { fatalError() }
-            
-            @_disfavoredOverload
-            public func addOutputConnection(
-                toInputs: [MIDIInputEndpoint],
-                tag: String,
-                mode: MIDIConnectionMode = .definedEndpoints,
-                filter: MIDIEndpointFilter = .default()
-            ) throws { fatalError() }
-            
-            public func addThruConnection(
-                outputs: [MIDIOutputEndpoint],
-                inputs: [MIDIInputEndpoint],
-                tag: String,
-                lifecycle: MIDIThruConnection.Lifecycle = .nonPersistent,
-                params: MIDIThruConnection.Parameters = .init()
-            ) throws { fatalError() }
-            
-            // MARK: - Remove Methods
-            
-            public func remove(
-                _ type: MIDIManager.ManagedType,
-                _ tagSelection: MIDIManager.TagSelection
-            ) { fatalError() }
-            
-            // MARK: State
-            
-            public func start() throws { fatalError() }
-        }
-        
-        // MARK: Network Session
-        
-        @available(
-            *, unavailable,
-            message: "setMIDINetworkSession() is now a top-level global method."
-        )
-        public static func setMIDINetworkSession(policy: MIDIIONetworkConnectionPolicy?) {
-            fatalError()
-        }
-        
-        // MARK: UniqueIDPersistence -> MIDIIdentifierPersistence
-        
-        @available(*, unavailable, message: "Renamed to MIDIIdentifierPersistence")
-        public enum UniqueIDPersistence {
-            case none
-            case preferred(MIDI.IO.UniqueID)
-            case userDefaultsManaged(key: String)
-            case manualStorage(
-                readHandler: () -> MIDI.IO.UniqueID?,
-                storeHandler: (MIDI.IO.UniqueID?) -> Void
-            )
-        }
-    }
-    
     // MARK: Note
     
     @available(*, unavailable, message: "Renamed to MIDINote")
@@ -347,45 +207,12 @@ public enum MIDI {
     
     // MARK: Utilities - Atomic
     
-    @available(*, unavailable, message: "Renamed to top-level @ThreadSafeAccess")
+    @available(*, unavailable, message: "Renamed to top-level @ThreadSafeAccess in MIDIKitInternals target")
     @propertyWrapper
     public final class Atomic<T> {
         public init(wrappedValue value: T) { fatalError() }
         public var wrappedValue: T { fatalError() }
     }
-}
-
-// MARK: MIDIUniqueID -> MIDIIdentifier
-
-extension Set where Element == MIDIIdentifier {
-    @available(*, unavailable, renamed: "asIdentities")
-    public func asCriteria() -> Set<MIDIEndpointIdentity> { fatalError() }
-}
-
-extension Array where Element == MIDIIdentifier {
-    @available(*, unavailable, renamed: "asIdentities")
-    public func asCriteria() -> [MIDIEndpointIdentity] { fatalError() }
-}
-
-// MARK: UniqueIDPersistence -> MIDIIdentifierPersistence
-
-extension MIDIIdentifierPersistence {
-    @available(*, unavailable, renamed: "adHoc")
-    @_disfavoredOverload
-    public static let none: Self = { fatalError() }()
-    
-    @available(*, unavailable, renamed: "unmanaged")
-    @_disfavoredOverload
-    public static func preferred(_: MIDI.IO.UniqueID) -> Self { fatalError() }
-    
-    // case userDefaultsManaged was not renamed
-    
-    @available(*, unavailable, renamed: "managedStorage")
-    @_disfavoredOverload
-    public static func manualStorage(
-        readHandler: () -> MIDI.IO.UniqueID?,
-        storeHandler: (MIDI.IO.UniqueID?) -> Void
-    ) -> Self { fatalError() }
 }
 
 // MARK: Category Extensions for Type conversion

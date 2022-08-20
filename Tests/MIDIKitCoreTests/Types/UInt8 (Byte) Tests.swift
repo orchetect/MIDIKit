@@ -1,5 +1,5 @@
 //
-//  Byte Tests.swift
+//  UInt8 (Byte) Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //

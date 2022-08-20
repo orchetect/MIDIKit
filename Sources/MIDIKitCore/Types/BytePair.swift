@@ -4,7 +4,7 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-/// Type that holds a pair of `UInt8`s - one MSB `UInt8`, one LSB `UInt8`.
+/// Type that holds a pair of `UInt8`s representing MSB and LSB bytes.
 public struct BytePair: Equatable, Hashable {
     public let msb: UInt8
     public let lsb: UInt8
