@@ -8,7 +8,7 @@
 
 extension MIDIReceiveHandler {
     /// MIDI Event receive handler that holds a strong reference to a receiver object that conforms to the `ReceivesMIDIEvents` protocol.
-    class StrongEventsReceiver: MIDIReceiveHandlerProtocol {
+    class StrongEventsReceiver: MIDIIOReceiveHandlerProtocol {
         public let receiver: ReceivesMIDIEvents
     
         internal let midi1Parser = MIDI1Parser()

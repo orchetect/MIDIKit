@@ -18,7 +18,7 @@ extension MIDIReceiveHandler {
     ///
     /// If `handler` is `nil`, all raw packet data is logged to the console (but only in `DEBUG` preprocessor flag builds).
     /// If `handler` is provided, the hex byte string is supplied as a parameter and not automatically logged.
-    class RawDataLogging: MIDIReceiveHandlerProtocol {
+    class RawDataLogging: MIDIIOReceiveHandlerProtocol {
         public var handler: MIDIReceiver.RawDataLoggingHandler
     
         public var filterActiveSensingAndClock = false

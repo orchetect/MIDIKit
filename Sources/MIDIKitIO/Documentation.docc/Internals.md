@@ -56,13 +56,13 @@
 - ``MIDIIOObjectType``
 - ``AnyMIDIIOObject``
 
-- ``MIDIEndpointProtocol``
+- ``MIDIIOEndpointProtocol``
 - ``MIDIIODevicesProtocol``
 - ``MIDIIOEndpointsProtocol``
 - ``MIDIIOManagedProtocol``
 - ``MIDIIOReceivesMIDIMessagesProtocol``
 - ``MIDIIOSendsMIDIMessagesProtocol``
-- ``MIDIReceiveHandlerProtocol``
+- ``MIDIIOReceiveHandlerProtocol``
 
 ### Value Type Protocols
 

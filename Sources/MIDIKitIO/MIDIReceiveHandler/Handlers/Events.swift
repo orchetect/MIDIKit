@@ -12,7 +12,7 @@ extension MIDIReceiver {
 
 extension MIDIReceiveHandler {
     /// MIDI Event receive handler.
-    class Events: MIDIReceiveHandlerProtocol {
+    class Events: MIDIIOReceiveHandlerProtocol {
         public var handler: MIDIReceiver.EventsHandler
     
         internal let midi1Parser = MIDI1Parser()

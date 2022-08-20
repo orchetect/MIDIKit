@@ -8,7 +8,7 @@
 
 extension MIDIReceiveHandler {
     /// MIDI Event receive handler that holds a weak reference to a receiver object.
-    class WeakEventsReceiver: MIDIReceiveHandlerProtocol {
+    class WeakEventsReceiver: MIDIIOReceiveHandlerProtocol {
         public weak var receiver: ReceivesMIDIEvents?
     
         internal let midi1Parser = MIDI1Parser()

@@ -16,7 +16,7 @@ extension MIDIReceiveHandler {
     /// MIDI Event logging handler (event description strings).
     /// If `handler` is nil, all events are logged to the console (but only in `DEBUG` preprocessor flag builds).
     /// If `handler` is provided, the event description string is supplied as a parameter and not automatically logged.
-    class EventsLogging: MIDIReceiveHandlerProtocol {
+    class EventsLogging: MIDIIOReceiveHandlerProtocol {
         public var handler: MIDIReceiver.EventsLoggingHandler
     
         internal let midi1Parser = MIDI1Parser()
