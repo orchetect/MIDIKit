@@ -50,7 +50,10 @@ let package = Package(
             name: "MIDIKit",
             dependencies: [
                 .target(name: "MIDIKitCore"),
-                .target(name: "MIDIKitIO")
+                .target(name: "MIDIKitIO"),
+                .target(name: "MIDIKitControlSurfaces"),
+                .target(name: "MIDIKitSMF"),
+                .target(name: "MIDIKitSync")
             ]
         ),
         .target(
