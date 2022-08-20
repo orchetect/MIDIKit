@@ -4,7 +4,7 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitCore
 
 public enum MTCMessageType {
     /// MTC Full-Frame Message

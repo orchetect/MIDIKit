@@ -5,7 +5,7 @@
 //
 
 import Darwin
-import MIDIKit
+import MIDIKitCore
 
 /// HUI MIDI Message Parser
 public class HUIParser {

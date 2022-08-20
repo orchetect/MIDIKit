@@ -75,7 +75,7 @@ let package = Package(
         .target(
             name: "MIDIKitControlSurfaces",
             dependencies: [
-                .target(name: "MIDIKit")
+                .target(name: "MIDIKitCore")
             ]
         ),
         .target(
@@ -88,7 +88,7 @@ let package = Package(
         .target(
             name: "MIDIKitSync",
             dependencies: [
-                .target(name: "MIDIKit"),
+                .target(name: "MIDIKitCore"),
                 "TimecodeKit"
             ]
         ),

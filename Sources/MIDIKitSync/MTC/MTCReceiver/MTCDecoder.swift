@@ -23,7 +23,7 @@
 // - Logic Pro X (as of 10.4.1) does not send any full frame messages.
 //
 
-import MIDIKit
+import MIDIKitCore
 import TimecodeKit
 
 /// MTC (MIDI Timecode) stream decoder object.

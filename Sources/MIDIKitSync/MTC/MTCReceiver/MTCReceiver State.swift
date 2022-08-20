@@ -5,7 +5,7 @@
 //
 
 import Dispatch
-import MIDIKit
+import MIDIKitCore
 import TimecodeKit
 
 // MARK: - State

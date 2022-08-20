@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import MIDIKit
+import MIDIKitCore
 import MIDIKitInternals
 import TimecodeKit
 
