@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 import Foundation
 import MIDIKitCore
 
@@ -172,14 +174,16 @@ extension MIDIIdentifierPersistence {
     
     @available(*, unavailable, renamed: "unmanaged")
     @_disfavoredOverload
-    public static func preferred(_: MIDI.IO.UniqueID) -> Self { fatalError() }
+    public static func preferred(_: MIDIIdentifier) -> Self { fatalError() }
     
     // case userDefaultsManaged was not renamed
     
     @available(*, unavailable, renamed: "managedStorage")
     @_disfavoredOverload
     public static func manualStorage(
-        readHandler: () -> MIDI.IO.UniqueID?,
-        storeHandler: (MIDI.IO.UniqueID?) -> Void
+        readHandler: () -> MIDIIdentifier?,
+        storeHandler: (MIDIIdentifier?) -> Void
     ) -> Self { fatalError() }
 }
+
+#endif

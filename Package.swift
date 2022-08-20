@@ -7,7 +7,10 @@ let package = Package(
     name: "MIDIKit",
     
     platforms: [
-        .macOS(.v10_12), .iOS(.v10)
+        .macOS(.v10_12),
+        .iOS(.v10),
+        .tvOS(.v10), // builds but no MIDI features
+        .watchOS(.v3) // builds but no MIDI features
     ],
     
     products: [
