@@ -14,7 +14,13 @@ let package = Package(
         .library(
             name: "MIDIKit",
             type: .static,
-            targets: ["MIDIKit"]
+            targets: [
+                "MIDIKitCore",
+                "MIDIKitIO",
+                "MIDIKitControlSurfaces",
+                "MIDIKitSMF",
+                "MIDIKitSync"
+            ]
         ),
         .library(
             name: "MIDIKitCore",
@@ -47,16 +53,6 @@ let package = Package(
     
     targets: [
         .target(
-            name: "MIDIKit",
-            dependencies: [
-                .target(name: "MIDIKitCore"),
-                .target(name: "MIDIKitIO"),
-                .target(name: "MIDIKitControlSurfaces"),
-                .target(name: "MIDIKitSMF"),
-                .target(name: "MIDIKitSync")
-            ]
-        ),
-        .target(
             name: "MIDIKitInternals",
             dependencies: []
         ),
@@ -73,8 +69,6 @@ let package = Package(
                 .target(name: "MIDIKitCore")
             ]
         ),
-        
-        // extensions
         .target(
             name: "MIDIKitControlSurfaces",
             dependencies: [
@@ -98,13 +92,6 @@ let package = Package(
         
         // test targets
         .testTarget(
-            name: "MIDIKitTests",
-            dependencies: [
-                .target(name: "MIDIKit"),
-                .product(name: "XCTestUtils", package: "XCTestUtils")
-            ]
-        ),
-        .testTarget(
             name: "MIDIKitCoreTests",
             dependencies: [
                 .target(name: "MIDIKitCore"),
@@ -118,8 +105,6 @@ let package = Package(
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         ),
-        
-        // extensions test targets
         .testTarget(
             name: "MIDIKitControlSurfacesTests",
             dependencies: [
@@ -161,7 +146,6 @@ func addShouldTestFlag(toTarget targetName: String) {
 }
 
 func addShouldTestFlags() {
-    addShouldTestFlag(toTarget: "MIDIKitTests")
     addShouldTestFlag(toTarget: "MIDIKitCoreTests")
     addShouldTestFlag(toTarget: "MIDIKitIOTests")
     addShouldTestFlag(toTarget: "MIDIKitControlSurfacesTests")
