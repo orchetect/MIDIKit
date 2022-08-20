@@ -1,4 +1,4 @@
-# MIDI Value Types
+# MIDIKit Value Types
 
 To increase type safety and enforce value validation, novel value types have been implemented in MIDIKit.
 
@@ -58,18 +58,18 @@ The inverse is also true when converting from a unit interval to a MIDI 1.0 or M
 
 ## Topics
 
-### Novel Primitives
+### Core Value Types
 
+- ``BytePair``
 - ``UInt4``
 - ``UInt7``
 - ``UInt7Pair``
 - ``UInt14``
+
+### Additional Value Types
+
 - ``UInt9``
 - ``UInt25``
-
-### Raw Data Types
-
-- ``BytePair``
 - ``UMPWord``
 
 ### Base MIDI Event Value Types

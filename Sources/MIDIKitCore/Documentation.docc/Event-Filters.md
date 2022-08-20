@@ -5,7 +5,7 @@
 - [Channel Voice](#Channel-Voice)
 - [System Common](#System-Common)
 - [System Exclusive](#System-Exclusive)
-- [System Real Time](#System-Real-Time)
+- [System Real-Time](#System-Real-Time)
 - [UMP Group](#UMP-Group) (MIDI 2.0 Only)
 
 ## Summary
@@ -25,7 +25,7 @@ Filters may be chained easily:
 ```swift
 // - removes Active Sensing,
 // - removes all channel voice except CC 1, 11, or 64 events on "channel 1"
-// - retains all other Sys Common, Sys Exclusive, and Sys Real Time events
+// - retains all other Sys Common, Sys Exclusive, and Sys Real-Time events
 let filteredEvents = events
     .filter(sysRealTime: .dropTypes([.activeSensing]))
     .filter(chanVoice: .keepChannel(0x0))
@@ -42,18 +42,18 @@ There are three main categories of Channel Voice event filters:
 
 Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 
-- `noteOn`
-- `noteOff`
-- `noteCC` (MIDI 2.0 Only)
-- `notePitchBend` (MIDI 2.0 Only)
-- `notePressure`
-- `noteManagement` (MIDI 2.0 Only)
-- `cc`
-- `programChange`
-- `pressure`
-- `pitchBend`
+- ``MIDIEvent/ChanVoiceType/noteOn``
+- ``MIDIEvent/ChanVoiceType/noteOff``
+- ``MIDIEvent/ChanVoiceType/noteCC`` (MIDI 2.0 Only)
+- ``MIDIEvent/ChanVoiceType/notePitchBend`` (MIDI 2.0 Only)
+- ``MIDIEvent/ChanVoiceType/notePressure``
+- ``MIDIEvent/ChanVoiceType/noteManagement`` (MIDI 2.0 Only)
+- ``MIDIEvent/ChanVoiceType/cc``
+- ``MIDIEvent/ChanVoiceType/programChange``
+- ``MIDIEvent/ChanVoiceType/pressure``
+- ``MIDIEvent/ChanVoiceType/pitchBend``
 
-### "Only"
+### Only
 
 `.filter(chanVoice: .only*)` methods:
 
@@ -88,7 +88,7 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 .filter(chanVoice: .onlyNotesInRanges([20...40, 60...80]))
 ```
 
-### "Keep"
+### Keep
 
 `.filter(chanVoice: .keep*)` methods:
 
@@ -123,7 +123,7 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 .filter(chanVoice: .keepNotesInRanges([20...40, 60...80]))
 ```
 
-### "Drop"
+### Drop
 
 `.filter(chanVoice: .drop*)` methods:
 
@@ -166,7 +166,15 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 
 ## System Common
 
-### "Only"
+System Common filter type(s) (``MIDIEvent/SysCommonType``) available:
+
+- ``MIDIEvent/SysCommonType/songPositionPointer``
+- ``MIDIEvent/SysCommonType/songSelect``
+- ``MIDIEvent/SysCommonType/timecodeQuarterFrame``
+- ``MIDIEvent/SysCommonType/tuneRequest``
+- ``MIDIEvent/SysCommonType/unofficialBusSelect``
+
+### Only
 
 ```swift
 .filter(sysCommon: .only)
@@ -174,14 +182,14 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 .filter(sysCommon: .onlyTypes([.songSelect, .tuneRequest]))
 ```
 
-### "Keep"
+### Keep
 
 ```swift
 .filter(sysCommon: .keepType(.songSelect))
 .filter(sysCommon: .keepTypes([.songSelect, .tuneRequest]))
 ```
 
-### "Drop"
+### Drop
 
 ```swift
 .filter(sysCommon: .drop)
@@ -191,7 +199,14 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 
 ## System Exclusive
 
-### "Only"
+System Exclusive filter type(s) (``MIDIEvent/SysExType``) available:
+
+- ``MIDIEvent/SysExType/sysEx7``
+- ``MIDIEvent/SysExType/universalSysEx7``
+- ``MIDIEvent/SysExType/sysEx8`` (MIDI 2.0 Only)
+- ``MIDIEvent/SysExType/universalSysEx8`` (MIDI 2.0 Only)
+
+### Only
 
 ```swift
 .filter(sysEx: .only)
@@ -199,14 +214,14 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 .filter(sysEx: .onlyTypes([.sysEx, .universalSysEx]))
 ```
 
-### "Keep"
+### Keep
 
 ```swift
 .filter(sysEx: .keepType(.sysEx))
 .filter(sysEx: .keepTypes([.sysEx, .universalSysEx]))
 ```
 
-### "Drop"
+### Drop
 
 ```swift
 .filter(sysEx: .drop)
@@ -214,9 +229,18 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 .filter(sysEx: .dropTypes([.sysEx, .universalSysEx]))
 ```
 
-## System Real Time
+## System Real-Time
 
-### "Only"
+System Real-Time filter type(s) (``MIDIEvent/SysRealTimeType``) available:
+
+- ``MIDIEvent/SysRealTimeType/activeSensing`` (deprecated in MIDI 2.0)
+- ``MIDIEvent/SysRealTimeType/continue``
+- ``MIDIEvent/SysRealTimeType/start``
+- ``MIDIEvent/SysRealTimeType/stop``
+- ``MIDIEvent/SysRealTimeType/systemReset``
+- ``MIDIEvent/SysRealTimeType/timingClock``
+
+### Only
 
 ```swift
 .filter(sysRealTime: .only)
@@ -224,14 +248,14 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 .filter(sysRealTime: .onlyTypes([.start, .stop, .continue]))
 ```
 
-### "Keep"
+### Keep
 
 ```swift
 .filter(sysRealTime: .keepType(.timingClock))
 .filter(sysRealTime: .keepTypes([.start, .stop, .continue]))
 ```
 
-### "Drop"
+### Drop
 
 ```swift
 .filter(sysRealTime: .drop)

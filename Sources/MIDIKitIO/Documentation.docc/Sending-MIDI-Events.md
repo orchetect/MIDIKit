@@ -2,14 +2,11 @@
 
 ## Overview
 
-In order to send MIDI events, there are two primary ways:
-- Create a virtual Output.
-  (``MIDIManager/addOutput(name:tag:uniqueID:)``)
+In order to begin sending MIDI events, there are two primary mechanisms:
 
-or:
+- term ``MIDIManager/addOutput(name:tag:uniqueID:)``: Create a virtual Output.
 
-- Form a managed Output Connection that can connect to one or more existing MIDI inputs in the system.
-(``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``)
+- term ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``: Form a managed Output Connection that can connect to one or more existing MIDI inputs in the system.
 
 ### Send events from a created Output
 

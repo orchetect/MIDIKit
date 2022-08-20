@@ -13,13 +13,13 @@ An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MID
 - Supports Swift Playgrounds on iPad and macOS
 - Full documentation available in Xcode Documentation browser, including helpful guides and getting started information
 
-## MIDIKit Extensions
+## Abstractions
 
-Extensions are available as optional package product imports.
+Over and above I/O and events, MIDI extension abstractions can be found in MIDIKit:
 
-- MIDIKitControlSurfaces: Control Surface protocols (HUI, etc.)
-- MIDIKitSync: Synchronization protocols (MTC, etc.)
-- MIDIKitSMF: Reading/writing Standard MIDI Files (SMF)
+- Reading/writing Standard MIDI Files (SMF)
+- Control Surface protocols (HUI, etc.)
+- Synchronization protocols (MTC, etc.)
 
 ## Getting Started
 
@@ -40,7 +40,7 @@ Extensions are available as optional package product imports.
 
 ## Documentation
 
-See the bundled DocC documentation for MIDIKit in Xcode which includes a getting started guide, links to examples, and troubleshooting tips.
+Refer to the bundled DocC documentation for MIDIKit by selecting the **Build → Build Documentation** menu in Xcode. This includes a getting started guide, links to examples, and troubleshooting tips.
 
 ## System Compatibility
 

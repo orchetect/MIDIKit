@@ -60,7 +60,7 @@ conn?.add(outputs: [.uniqueID(uID)])
 conn?.remove(outputs: [.uniqueID(uID)])
 ```
 
-For simple and powerful event filtering API, see <doc:Event-Filters>.
+For simple and powerful event filtering API, see the Event Filters topic in MIDIKitCore's docs.
 
 ## Managed Output Connections
 

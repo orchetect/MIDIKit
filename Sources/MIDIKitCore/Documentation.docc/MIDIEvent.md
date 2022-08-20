@@ -1,4 +1,4 @@
-# ``MIDIKit/MIDIEvent``
+# ``MIDIKitCore/MIDIEvent``
 
 MIDI events are constructed as enum cases containing event payload data. Various static constructors are available for each event type.
 

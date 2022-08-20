@@ -1,4 +1,4 @@
-# ``MIDIKit/MIDIManager``
+# ``MIDIKitIO/MIDIManager``
 
 @Metadata {
     @DocumentationExtension(mergeBehavior: append)
@@ -25,16 +25,15 @@ let midiManager = MIDIManager(
 )
 ```
 
-> Typically a single `MIDIManager` instance can handle all MIDI I/O needs for an entire application. It is fully encapsulated however, and it is possible to have more than one instance but even very large and demanding MIDI applications should still only require a single instance.
+> Tip: Typically a single `MIDIManager` instance can handle all MIDI I/O needs for an entire application. It is fully encapsulated however, and it is possible to have more than one instance but even very large and demanding MIDI applications should still only require a single instance.
 
 ## 2. Start the Manager
 
 Once the manager instance is created, you must call ``MIDIManager/start()`` before you can create and connections or ports. Subsequent calls to ``MIDIManager/start()`` have no effect after it is first successfully called.
 
-Typically you should only start the manager once, usually at app launch or when MIDI services are first required in your application. The Manager will dispose of itself and all of its ports and connections upon deinit.
+Typically you should only start the manager once, usually at app launch or when MIDI services are first required in your application. The Manager will dispose of itself and all of its ports and connections upon `deinit`.
 
-> ⚠️
-> DO NOT destroy and create new Managers during the lifecycle of your application. This is not harmful but it is unnecessary.
+> Important: Do not destroy and create new `MIDIManager`s during the lifecycle of your application. This is not harmful but it is unnecessary.
 
 ```swift
 do {

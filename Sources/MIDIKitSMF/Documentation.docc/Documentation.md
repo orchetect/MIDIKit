@@ -1,6 +1,8 @@
 # ``MIDIKitSMF``
 
-Standard MIDI File extension for `MIDIKit`.
+Standard MIDI File extension for MIDIKit.
+
+![MIDIKit](midikitsmf-banner.png)
 
 ## Overview
 
@@ -29,7 +31,7 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 
 - ``MIDIFileChunk``
 
-### MIDIKit Protocols Adopted
+### MIDIKit Protocol Conformances
 
 - ``SendsMIDIEvents``
 - ``ReceivesMIDIEvents``
@@ -37,3 +39,4 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 ### Internals
 
 - <doc:Internals>
+- <doc:Internals-From-MIDIKitCore>

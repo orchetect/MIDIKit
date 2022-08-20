@@ -14,3 +14,9 @@
 - ``MIDIKitSMF/MIDIEventFilterGroup``
 - ``MIDIKitSMF/MIDINoteRange``
 - ``MIDIKitSMF/MIDINoteNumberRange``
+
+### Timecode Related
+
+- ``TCC``
+- ``TimecodeInterval``
+- ``TimecodeTransformer``
