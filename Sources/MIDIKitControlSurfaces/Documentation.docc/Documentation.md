@@ -20,6 +20,11 @@ MIDI control surface protocol abstractions (HUI, etc.) extension for MIDIKit.
 
 - ``MCU``
 
+### MIDIKit Protocol Conformances
+
+- ``SendsMIDIEvents``
+- ``ReceivesMIDIEvents``
+
 ### Internals
 
 - <doc:Internals>
