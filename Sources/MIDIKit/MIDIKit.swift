@@ -6,5 +6,19 @@
 
 // Welcome to MIDIKit :)
 
+// MIDIKitCore
 @_exported import MIDIKitCore
+
+// MIDIKitIO
 @_exported import MIDIKitIO
+
+// MIDIKitControlSurfaces
+@_exported import MIDIKitControlSurfaces
+
+// MIDIKitSMF
+@_exported import MIDIKitSMF
+@_exported import TimecodeKit // must re-export target's exports here
+
+// MIDIKitSync
+@_exported import MIDIKitSync
+@_exported import TimecodeKit // must re-export target's exports here
