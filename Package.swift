@@ -17,13 +17,7 @@ let package = Package(
         .library(
             name: "MIDIKit",
             type: .static,
-            targets: [
-                "MIDIKitCore",
-                "MIDIKitIO",
-                "MIDIKitControlSurfaces",
-                "MIDIKitSMF",
-                "MIDIKitSync"
-            ]
+            targets: ["MIDIKit"]
         ),
         .library(
             name: "MIDIKitCore",
@@ -48,13 +42,23 @@ let package = Package(
     ],
     
     dependencies: [
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.3.0"),
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.3.1"),
         
         // testing-only:
         .package(url: "https://github.com/orchetect/XCTestUtils", from: "1.0.1")
     ],
     
     targets: [
+        .target(
+            name: "MIDIKit",
+            dependencies: [
+                .target(name: "MIDIKitCore"),
+                .target(name: "MIDIKitIO"),
+                .target(name: "MIDIKitControlSurfaces"),
+                .target(name: "MIDIKitSMF"),
+                .target(name: "MIDIKitSync")
+            ]
+        ),
         .target(
             name: "MIDIKitInternals",
             dependencies: []
