@@ -6,7 +6,6 @@
 
 import SwiftUI
 import OTCore
-import SwiftRadix
 import MIDIKit
 
 // MARK: - MIDISubsystemStatusView
@@ -43,7 +42,7 @@ extension ContentView {
                         Picker("UMP Group", selection: $midiGroup) {
                             ForEach(0 ..< 15 + 1, id: \.self) {
                                 let groupNum = $0 + 1
-                                let groupNumHex = $0.hex.stringValue(padTo: 1, prefix: true)
+                                let groupNumHex = $0.hexString(padTo: 1, prefix: true)
     
                                 Text("\(groupNum) (\(groupNumHex))")
                                     .tag(UInt4($0))
@@ -63,7 +62,7 @@ extension ContentView {
                                 Picker("Channel", selection: $midiChannel) {
                                     ForEach(0 ..< 15 + 1, id: \.self) {
                                         let channelNum = $0 + 1
-                                        let channelNumHex = $0.hex.stringValue(
+                                        let channelNumHex = $0.hexString(
                                             padTo: 1,
                                             prefix: true
                                         )
@@ -164,7 +163,7 @@ extension ContentView {
                             ForEach(MIDIEvent.CC.Controller.allCases, id: \.self) {
                                 let ccInt = $0.number.intValue
                                 let ccName = "\($0.name)"
-                                let ccHex = ccInt.hex.stringValue(padTo: 2, prefix: true)
+                                let ccHex = ccInt.hexString(padTo: 2, prefix: true)
     
                                 Text("\(ccInt) - \(ccName) (\(ccHex))")
                                     .tag($0)
