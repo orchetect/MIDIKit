@@ -106,7 +106,7 @@ extension MIDIEvent.SysEx8 {
     
         let umpMessageType: MIDIUMPMessageType = .data128bit
     
-        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group.uInt8Value
     
         func rawDataOrNull(_ offset: Int) -> UInt8 {
             guard data.count > offset else { return 0x00 }

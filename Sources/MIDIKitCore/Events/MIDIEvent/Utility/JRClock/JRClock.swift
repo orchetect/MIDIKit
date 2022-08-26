@@ -85,7 +85,7 @@ extension MIDIEvent.JRClock {
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .utility
     
-        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group.uInt8Value
     
         let utilityStatus: MIDIUMPUtilityStatusField = .jrClock
     

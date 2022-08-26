@@ -17,7 +17,7 @@ final class UInt14_Tests: XCTestCase {
     func testInit_BinaryInteger() {
         // default
     
-        XCTAssertEqual(UInt14().value, 0)
+        XCTAssertEqual(UInt14().intValue, 0)
     
         // different integer types
     

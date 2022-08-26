@@ -6,18 +6,18 @@
 
 extension MIDIEvent.CC.Controller {
     public static func == <T: BinaryInteger>(lhs: Self, rhs: T) -> Bool {
-        lhs.number.value == rhs
+        lhs.number == rhs
     }
     
     public static func != <T: BinaryInteger>(lhs: Self, rhs: T) -> Bool {
-        lhs.number.value != rhs
+        lhs.number != rhs
     }
     
     public static func == <T: BinaryInteger>(lhs: T, rhs: Self) -> Bool {
-        lhs == rhs.number.value
+        lhs == rhs.number
     }
     
     public static func != <T: BinaryInteger>(lhs: T, rhs: Self) -> Bool {
-        lhs != rhs.number.value
+        lhs != rhs.number
     }
 }

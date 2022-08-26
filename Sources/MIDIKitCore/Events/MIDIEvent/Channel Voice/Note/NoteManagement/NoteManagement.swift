@@ -135,7 +135,7 @@ extension MIDIEvent.NoteManagement {
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .midi2ChannelVoice
     
-        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group.uInt8Value
     
         // MIDI 2.0 only
     

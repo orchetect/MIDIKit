@@ -54,7 +54,7 @@ extension MIDIEvent.ActiveSensing {
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .systemRealTimeAndCommon
     
-        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group
+        let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group.uInt8Value
     
         let word = UMPWord(
             mtAndGroup,

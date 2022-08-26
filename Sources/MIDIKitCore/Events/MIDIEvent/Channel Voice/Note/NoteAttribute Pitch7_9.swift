@@ -65,8 +65,9 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     
     /// UInt16 representation as a byte pair.
     public var bytePair: BytePair {
-        let msb = UInt8(coarse.value << 1) + UInt8((fine.value & 0b1_00000000) >> 8)
-        let lsb = UInt8(fine.value & 0b11111111)
+        let msb = UInt8(coarse.uInt8Value << 1)
+            + UInt8((fine.uInt16Value & 0b1_00000000) >> 8)
+        let lsb = UInt8(fine.uInt16Value & 0b11111111)
     
         return .init(msb: msb, lsb: lsb)
     }
@@ -87,7 +88,7 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     
     /// UInt16 representation.
     public var uInt16Value: UInt16 {
-        (UInt16(coarse.value) << 9) + fine.value
+        (UInt16(coarse.uInt8Value) << 9) + fine.uInt16Value
     }
 }
 
@@ -110,6 +111,6 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     
     /// Converted to a Double value (0.0...127.998046875)
     public var doubleValue: Double {
-        Double(coarse.value) + (Double(fine.value) / 0b10_00000000)
+        Double(coarse.uInt8Value) + (Double(fine.uInt16Value) / 0b10_00000000)
     }
 }

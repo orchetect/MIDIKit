@@ -72,6 +72,6 @@ extension MIDIEvent.CC.Controller {
 
 extension MIDIEvent.CC.Controller: CustomStringConvertible {
     public var description: String {
-        "\(number.value)"
+        "\(number)"
     }
 }

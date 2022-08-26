@@ -4,7 +4,7 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-/// a.k.a. 8-bit MIDI byte
+/// a.k.a. 8-bit MIDI byte.
 extension UInt8 {
     /// Returns a `UInt8` as its 4-bit nibbles: high `(& 0xF0 >> 4)` and low `(& 0x0F)`.
     public var nibbles: (high: UInt4, low: UInt4) {

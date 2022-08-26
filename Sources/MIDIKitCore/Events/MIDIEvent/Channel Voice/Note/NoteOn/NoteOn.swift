@@ -233,7 +233,7 @@ extension MIDIEvent.NoteOn {
     public func umpRawWords(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {
-        let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
+        let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group.uInt8Value
     
         switch midiProtocol {
         case ._1_0:
