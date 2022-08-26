@@ -1,14 +1,16 @@
 # ``MIDIKitSync``
 
-MIDI synchronization protocol abstractions (MTC, etc.) extension for MIDIKit.
+MIDI synchronization protocol abstractions (MTC, etc.) for MIDIKit.
 
 ![MIDIKit](midikitsync-banner.png)
+
+![Layer Diagram](midikitsync-diagram.svg)
 
 ## Topics
 
 ### Introduction
 
-- <doc:Getting-Started>
+- <doc:MIDIKitSync-Getting-Started>
 
 ### MTC Abstractions
 

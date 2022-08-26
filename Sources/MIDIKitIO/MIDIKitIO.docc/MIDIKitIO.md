@@ -4,6 +4,8 @@ Core MIDI I/O wrapper layer offering ``MIDIManager`` class to create virtual por
 
 ![MIDIKit](midikit-banner.png)
 
+![Layer Diagram](midikitio-diagram.svg)
+
 MIDIKitIO adds an I/O layer on top of MIDIKitCore's MIDI events, providing the essentials to send and receive MIDI events on Apple platforms.
 
 To add additional functionality, import extension modules or import the MIDIKit umbrella library which imports all of MIDIKit events, I/O, and extensions.
@@ -12,7 +14,7 @@ To add additional functionality, import extension modules or import the MIDIKit 
 
 ### Introduction
 
-- <doc:Getting-Started>
+- <doc:MIDIKitIO-Getting-Started>
 
 ### Manager
 
