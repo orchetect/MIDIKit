@@ -26,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E24FF24E28B9841E000A2055 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E275EAAF2679A444008E396D /* MTCRecContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MTCRecContentView.swift; sourceTree = "<group>"; };
 		E275EAB32679A493008E396D /* MTCGenContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MTCGenContentView.swift; sourceTree = "<group>"; };
 		E27E3F9F25A6E5C700F4B78E /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
@@ -85,6 +86,7 @@
 				E2F71ED32758ED1E006254C0 /* Log.swift */,
 				E2FAC4E6257884E100A6DD31 /* Main.storyboard */,
 				E2FAC4E9257884E100A6DD31 /* Info.plist */,
+				E24FF24E28B9841E000A2055 /* Assets.xcassets */,
 				E2FAC4EA257884E100A6DD31 /* MTCExample.entitlements */,
 				E2FAC4E3257884E100A6DD31 /* Preview Content */,
 			);
@@ -171,6 +173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2FAC4E8257884E100A6DD31 /* Main.storyboard in Resources */,
+				E24FF24F28B9841E000A2055 /* Assets.xcassets in Resources */,
 				E2FAC4E5257884E100A6DD31 /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -326,7 +329,9 @@
 		E2FAC504257884E100A6DD31 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = MTCExample/MTCExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -352,7 +357,9 @@
 		E2FAC505257884E100A6DD31 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = MTCExample/MTCExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
