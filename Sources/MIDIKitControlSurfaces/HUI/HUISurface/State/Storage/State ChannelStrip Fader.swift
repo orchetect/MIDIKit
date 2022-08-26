@@ -31,7 +31,7 @@ extension HUISurface.State.ChannelStrip {
         
         /// Returns `.level` expressed as a unit interval between 0.0...1.0
         public var levelUnitInterval: Double {
-            Double(level.value) / Double(Self.levelMax)
+            Double(level) / Double(Self.levelMax)
         }
     }
 }

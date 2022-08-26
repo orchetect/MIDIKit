@@ -300,7 +300,7 @@ extension HUIParser {
                 
             default:
                 let cmd = data.hexString(padEachTo: 2, prefixes: true)
-                let stateNibble = dataByte2.nibbles.high.value.hexString(prefix: true)
+                let stateNibble = dataByte2.nibbles.high.hexString(prefix: true)
                 
                 if let zone = switchesZoneSelect {
                     if let guess = HUIParameter(
