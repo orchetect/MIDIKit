@@ -6,14 +6,15 @@
 
 import Combine
 import SwiftUI
+import MIDIKitIO
 import MIDIKitSync
 import TimecodeKit
 import OTCore
 
 struct MTCRecContentView: View {
-    weak var midiManager: MIDI.IO.Manager?
+    weak var midiManager: MIDIManager?
     
-    init(midiManager: MIDI.IO.Manager?) {
+    init(midiManager: MIDIManager?) {
         // normally in SwiftUI we would pass midiManager in as an EnvironmentObject
         // but that only works on macOS 11.0+ and for sake of backwards compatibility
         // we will do it old-school weak delegate storage pattern
@@ -22,15 +23,15 @@ struct MTCRecContentView: View {
     
     // MARK: - MIDI state
     
-    @State var mtcRec: MIDI.MTC.Receiver = .init(name: "dummy - will be set in .onAppear{} below")
+    @State var mtcRec: MTCReceiver = .init(name: "dummy - will be set in .onAppear{} below")
     
     // MARK: - UI state
     
     @State var receiverTC = "--:--:--:--"
     
-    @State var receiverFR: MIDI.MTC.MTCFrameRate? = nil
+    @State var receiverFR: MTCFrameRate? = nil
     
-    @State var receiverState: MIDI.MTC.Receiver.State = .idle {
+    @State var receiverState: MTCReceiver.State = .idle {
         // Note: be aware didSet will trigger here on a @State var when the variable is imperatively set in code, but not when altered by a $receiverState binding in SwiftUI
         didSet {
             logger.default("MTC Receiver state:", receiverState)
@@ -161,9 +162,10 @@ struct MTCRecContentView: View {
             .padding(.bottom, 10)
         }
         .background(receiverState.stateColor)
+        
         .onAppear {
             // set up new MTC receiver and configure it
-            mtcRec = MIDI.MTC.Receiver(
+            mtcRec = MTCReceiver(
                 name: "main",
                 initialLocalFrameRate: ._24,
                 syncPolicy: .init(
@@ -198,7 +200,7 @@ struct MTCRecContentView: View {
                         interval: .seconds(1),
                         tolerance: .zero,
                         options: .init(
-                            qos: .userInteractive,
+                            qos: .userInitiated,
                             flags: [],
                             group: nil
                         )
@@ -223,13 +225,13 @@ struct MTCRecContentView: View {
             
             // create MTC reader MIDI endpoint
             do {
-                let udKey = "\(midiSources.MTCRec.tag) - Unique ID"
+                let udKey = "\(kMIDISources.MTCRec.tag) - Unique ID"
                 
                 try midiManager?.addInput(
-                    name: midiSources.MTCRec.name,
-                    tag: midiSources.MTCRec.tag,
+                    name: kMIDISources.MTCRec.name,
+                    tag: kMIDISources.MTCRec.tag,
                     uniqueID: .userDefaultsManaged(key: udKey),
-                    receiveHandler: .events { [weak mtcRec] midiEvents in
+                    receiver: .events { [weak mtcRec] midiEvents in
                         mtcRec?.midiIn(events: midiEvents)
                     }
                 )
@@ -237,6 +239,7 @@ struct MTCRecContentView: View {
                 logger.error(error)
             }
         }
+        
         .onChange(of: localFrameRate) { _ in
             if mtcRec.localFrameRate != localFrameRate {
                 logger.default(
@@ -249,7 +252,7 @@ struct MTCRecContentView: View {
     }
 }
 
-extension MIDI.MTC.Receiver.State {
+extension MTCReceiver.State {
     var stateColor: Color {
         switch self {
         case .idle: return Color.clear

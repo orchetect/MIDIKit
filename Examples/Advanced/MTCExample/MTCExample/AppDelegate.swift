@@ -6,13 +6,14 @@
 
 import Cocoa
 import SwiftUI
+import MIDIKitIO
 import MIDIKitSync
 import TimecodeKit
 import OTCore
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    let midiManager: MIDI.IO.Manager = .init(
+    let midiManager: MIDIManager = .init(
         clientName: "MTCExample",
         model: "TestApp",
         manufacturer: "Orchetect",

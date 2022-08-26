@@ -4,7 +4,7 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-enum midiSources {
+enum kMIDISources {
     enum MTCGen {
         static let name = "MIDIKit MTC Gen"
         static let tag = "MTCGen"

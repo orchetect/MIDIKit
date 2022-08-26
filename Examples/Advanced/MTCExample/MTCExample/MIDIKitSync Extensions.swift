@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitSync
 
-extension MIDI.MTC.Encoder.FullFrameBehavior {
+extension MTCEncoder.FullFrameBehavior {
     public var nameForUI: String {
         switch self {
         case .always:

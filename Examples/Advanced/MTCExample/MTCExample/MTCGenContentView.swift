@@ -6,15 +6,16 @@
 
 import Combine
 import SwiftUI
+import MIDIKitIO
 import MIDIKitSync
 import TimecodeKit
 import OTCore
 import SwiftRadix
 
 struct MTCGenContentView: View {
-    weak var midiManager: MIDI.IO.Manager?
+    weak var midiManager: MIDIManager?
     
-    init(midiManager: MIDI.IO.Manager?) {
+    init(midiManager: MIDIManager?) {
         // normally in SwiftUI we would pass midiManager in as an EnvironmentObject
         // but that only works on macOS 11.0+ and for sake of backwards compatibility
         // we will do it old-school weak delegate storage pattern
@@ -23,11 +24,11 @@ struct MTCGenContentView: View {
     
     // MARK: - MIDI state
     
-    @State var mtcGen: MIDI.MTC.Generator = .init()
+    @State var mtcGen: MTCGenerator = .init()
     
     @State var localFrameRate: Timecode.FrameRate = ._24
     
-    @State var locateBehavior: MIDI.MTC.Encoder.FullFrameBehavior = .ifDifferent
+    @State var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
     
     // MARK: - UI state
     
@@ -199,7 +200,7 @@ struct MTCGenContentView: View {
             
             Picker("Locate Behavior", selection: $locateBehavior) {
                 ForEach(
-                    MIDI.MTC.Encoder.FullFrameBehavior.allCases,
+                    MTCEncoder.FullFrameBehavior.allCases,
                     id: \.self
                 ) { locateBehaviorType in
                     Text(locateBehaviorType.nameForUI)
@@ -227,11 +228,11 @@ struct MTCGenContentView: View {
         .onAppear {
             // create MTC generator MIDI endpoint
             do {
-                let udKey = "\(midiSources.MTCGen.tag) - Unique ID"
+                let udKey = "\(kMIDISources.MTCGen.tag) - Unique ID"
                 
                 try midiManager?.addOutput(
-                    name: midiSources.MTCGen.name,
-                    tag: midiSources.MTCGen.tag,
+                    name: kMIDISources.MTCGen.name,
+                    tag: kMIDISources.MTCGen.tag,
                     uniqueID: .userDefaultsManaged(key: udKey)
                 )
             } catch {
@@ -239,11 +240,11 @@ struct MTCGenContentView: View {
             }
             
             // set up new MTC receiver and configure it
-            mtcGen = MIDI.MTC.Generator(
+            mtcGen = MTCGenerator(
                 name: "main",
                 midiOutHandler: { midiEvents in
                     try? midiManager?
-                        .managedOutputs[midiSources.MTCGen.tag]?
+                        .managedOutputs[kMIDISources.MTCGen.tag]?
                         .send(events: midiEvents)
                     
                     // NOTE: normally you should not run any UI updates from this handler; this is only being done here for sake of demonstration purposes
