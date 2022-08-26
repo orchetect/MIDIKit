@@ -9,7 +9,7 @@ import MIDIKitControlSurfaces
 
 extension HUISurfaceView {
     struct FaderView: View {
-        @EnvironmentObject var huiSurface: MIDI.HUI.Surface
+        @EnvironmentObject var huiSurface: HUISurface
 
         static let faderHeight: CGFloat = 200
         static let faderWidth: CGFloat = 5
@@ -45,7 +45,7 @@ extension HUISurfaceView {
                                         isPressed = true
                                         return
                                     }
-                                    #warning("> TODO: finish this")
+                                    // TODO: finish SwiftUI HUI fader
                                 }
                                 .onEnded { _ in
                                     releasedAction()

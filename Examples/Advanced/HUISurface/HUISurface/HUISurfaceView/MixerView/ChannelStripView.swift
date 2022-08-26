@@ -13,7 +13,7 @@ extension HUISurfaceView {
 
 extension HUISurfaceView {
     struct ChannelStripView: View {
-        @EnvironmentObject var huiSurface: MIDI.HUI.Surface
+        @EnvironmentObject var huiSurface: HUISurface
         
         let channel: Int
         

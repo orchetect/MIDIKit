@@ -69,16 +69,16 @@ struct MomentaryButton: View, MomentaryButtonProtocol {
 }
 
 struct HUIButton: View, MomentaryButtonProtocol {
-    @EnvironmentObject var huiSurface: MIDI.HUI.Surface
+    @EnvironmentObject var huiSurface: HUISurface
 
     let title: String
     var fontSize: CGFloat?
     var width: CGFloat?
-    private let param: MIDI.HUI.Parameter.Wrapper
+    private let param: HUIParameter.Wrapper
     
     init(
         _ title: String = "",
-        _ param: MIDI.HUI.Parameter,
+        _ param: HUIParameter,
         width: CGFloat? = MomentaryButton.kDefaultWidth,
         fontSize: CGFloat? = nil
     ) {
@@ -103,17 +103,17 @@ struct HUIButton: View, MomentaryButtonProtocol {
 }
 
 struct HUIStateButton: View, MomentaryButtonProtocol  {
-    @EnvironmentObject var huiSurface: MIDI.HUI.Surface
+    @EnvironmentObject var huiSurface: HUISurface
 
     let title: String
     var fontSize: CGFloat?
     var width: CGFloat?
-    private let param: MIDI.HUI.Parameter.Wrapper
+    private let param: HUIParameter.Wrapper
     let ledColor: Color
 
     init(
         _ title: String = "",
-        _ param: MIDI.HUI.Parameter,
+        _ param: HUIParameter,
         _ ledColor: HUISwitchColor,
         width: CGFloat? = MomentaryButton.kDefaultWidth,
         fontSize: CGFloat? = nil
@@ -157,7 +157,7 @@ extension HUIStateButton {
 }
 
 struct HUINumPadButton: View, MomentaryButtonProtocol {
-    @EnvironmentObject var huiSurface: MIDI.HUI.Surface
+    @EnvironmentObject var huiSurface: HUISurface
     
     static let kDefaultSize: CGFloat = 40
     
@@ -167,11 +167,11 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
     var spacing: CGFloat?
     let widthScale: CGFloat
     let heightScale: CGFloat
-    private let param: MIDI.HUI.Parameter.Wrapper
+    private let param: HUIParameter.Wrapper
     
     init(
         _ title: String = "",
-        _ param: MIDI.HUI.Parameter,
+        _ param: HUIParameter,
         width: CGFloat? = kDefaultSize,
         spacing: CGFloat? = nil,
         widthScale: CGFloat = 1.0,

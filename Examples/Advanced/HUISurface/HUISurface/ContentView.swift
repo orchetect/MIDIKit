@@ -4,18 +4,19 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+import MIDIKitIO
 import MIDIKitControlSurfaces
 import SwiftUI
 
 struct ContentView: View {
-    private let midiManager = MIDI.IO.Manager(
+    private let midiManager = MIDIManager(
         clientName: "HUISurface",
         model: "HUISurface",
         manufacturer: "Orchetect",
         notificationHandler: nil
     )
 
-    @ObservedObject private var huiSurface: MIDI.HUI.Surface
+    @ObservedObject private var huiSurface: HUISurface
     
     static let kHUIInputName = "MIDIKit HUI Input"
     static let kHUIOutputName = "MIDIKit HUI Output"
@@ -23,7 +24,7 @@ struct ContentView: View {
     init() {
         // set up HUI Surface object
 
-        huiSurface = MIDI.HUI.Surface()
+        huiSurface = HUISurface()
 
         huiSurface.huiEventHandler = { event in
             // Logger.debug(event)
@@ -53,7 +54,7 @@ struct ContentView: View {
                 name: Self.kHUIInputName,
                 tag: Self.kHUIInputName,
                 uniqueID: .userDefaultsManaged(key: Self.kHUIInputName),
-                receiveHandler: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false)
+                receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false)
                     { [weak huiSurface] midiEvents in
                         // since handler callbacks from MIDI are on a CoreMIDI thread, parse the MIDI on the main thread because SwiftUI state in this app will be updated as a result
                         DispatchQueue.main.async {

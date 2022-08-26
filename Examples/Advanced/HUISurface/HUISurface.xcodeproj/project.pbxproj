@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E21628E426E2DFF30022B66F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21628E326E2DFF30022B66F /* Logger.swift */; };
+		E24FF24528B97D8F000A2055 /* MIDIKitControlSurfaces in Frameworks */ = {isa = PBXBuildFile; productRef = E24FF24428B97D8F000A2055 /* MIDIKitControlSurfaces */; };
+		E24FF24828B97DBF000A2055 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E24FF24728B97DBF000A2055 /* MIDIKitIO */; };
 		E283F0932740AF7E0037F199 /* RightSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0922740AF7E0037F199 /* RightSideView.swift */; };
 		E283F0952740B5A60037F199 /* LeftSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0942740B5A60037F199 /* LeftSideView.swift */; };
 		E283F0972740C8770037F199 /* Labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0962740C8770037F199 /* Labels.swift */; };
@@ -66,7 +68,6 @@
 		E284EBD026AE01F00016AA0F /* MixerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerView.swift; sourceTree = "<group>"; };
 		E284EBD126AE01F00016AA0F /* TopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		E284EBD726AE02090016AA0F /* HUI Parameter Wrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HUI Parameter Wrapper.swift"; sourceTree = "<group>"; };
-		E284EBDB26AE03C20016AA0F /* MIDIKitControlSurfaces */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MIDIKitControlSurfaces; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +75,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E24FF24528B97D8F000A2055 /* MIDIKitControlSurfaces in Frameworks */,
+				E24FF24828B97DBF000A2055 /* MIDIKitIO in Frameworks */,
 				E284EBDF26AE03D00016AA0F /* MIDIKitControlSurfaces in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -127,7 +130,6 @@
 		E284EBA926AE018F0016AA0F = {
 			isa = PBXGroup;
 			children = (
-				E284EBDB26AE03C20016AA0F /* MIDIKitControlSurfaces */,
 				E284EBB426AE018F0016AA0F /* HUISurface */,
 				E284EBB326AE018F0016AA0F /* Products */,
 			);
@@ -207,6 +209,8 @@
 			name = HUISurface;
 			packageProductDependencies = (
 				E284EBDE26AE03D00016AA0F /* MIDIKitControlSurfaces */,
+				E24FF24428B97D8F000A2055 /* MIDIKitControlSurfaces */,
+				E24FF24728B97DBF000A2055 /* MIDIKitIO */,
 			);
 			productName = HUISurface;
 			productReference = E284EBB226AE018F0016AA0F /* HUISurface.app */;
@@ -235,6 +239,9 @@
 				Base,
 			);
 			mainGroup = E284EBA926AE018F0016AA0F;
+			packageReferences = (
+				E24FF24328B97D8F000A2055 /* XCRemoteSwiftPackageReference "MIDIKit" */,
+			);
 			productRefGroup = E284EBB326AE018F0016AA0F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -354,7 +361,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -410,7 +417,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -427,6 +434,7 @@
 				CODE_SIGN_ENTITLEMENTS = HUISurface/HUISurface.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"HUISurface/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
@@ -434,11 +442,12 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				INFOPLIST_FILE = HUISurface/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HUISurface;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.orchetect.HUISurface;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -454,6 +463,7 @@
 				CODE_SIGN_ENTITLEMENTS = HUISurface/HUISurface.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"HUISurface/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
@@ -461,11 +471,12 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
 				INFOPLIST_FILE = HUISurface/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HUISurface;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.orchetect.HUISurface;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -496,7 +507,28 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		E24FF24328B97D8F000A2055 /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/MIDIKit";
+			requirement = {
+				branch = 0.6.0;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		E24FF24428B97D8F000A2055 /* MIDIKitControlSurfaces */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E24FF24328B97D8F000A2055 /* XCRemoteSwiftPackageReference "MIDIKit" */;
+			productName = MIDIKitControlSurfaces;
+		};
+		E24FF24728B97DBF000A2055 /* MIDIKitIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E24FF24328B97D8F000A2055 /* XCRemoteSwiftPackageReference "MIDIKit" */;
+			productName = MIDIKitIO;
+		};
 		E284EBDE26AE03D00016AA0F /* MIDIKitControlSurfaces */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MIDIKitControlSurfaces;

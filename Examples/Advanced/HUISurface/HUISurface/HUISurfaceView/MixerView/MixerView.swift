@@ -5,7 +5,6 @@
 //
 
 import SwiftUI
-import MIDIKitControlSurfaces
 
 extension HUISurfaceView {
     func MixerView() -> some View {
