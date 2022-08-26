@@ -170,24 +170,13 @@ final class UInt25_Tests: XCTestCase {
         XCTAssertTrue(set == [0, 1, 2])
     }
 	
-    func testCodable() {
+    func testCodable() throws {
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
-		
-        // encode
-		
-        let encoded = try? encoder.encode(UInt25(_max))
-		
-        let encodedString = String(data: encoded!, encoding: .utf8)
-		
-        XCTAssertEqual(encodedString, #"{"UInt25":33554431}"#)
-		
-        // decode
-		
-        let decoded = try? decoder.decode(UInt25.self, from: encoded!)
-		
-        // assert value is identical to source
-		
+        
+        let encoded = try encoder.encode(UInt25(_max))
+        let decoded = try decoder.decode(UInt25.self, from: encoded)
+        
         XCTAssertEqual(decoded, UInt25(_max))
     }
 	

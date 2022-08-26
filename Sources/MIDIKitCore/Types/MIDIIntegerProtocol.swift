@@ -127,7 +127,22 @@ extension _MIDIIntegerProtocol /*: Hashable */ {
 // MARK: - Codable
 
 extension UInt4 /*: Codable */ {
-    // synthesized
+    public func encode(to encoder: Encoder) throws {
+        var e = encoder.singleValueContainer()
+        try e.encode(storage)
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let d = try decoder.singleValueContainer()
+        let decoded = try d.decode(Storage.self)
+        guard let new = Self(exactly: decoded) else {
+            throw DecodingError.dataCorrupted(
+                .init(codingPath: decoder.codingPath,
+                      debugDescription: "Encoded value is not a valid \(Self.integerName).")
+            )
+        }
+        self = new
+    }
 }
 
 // MARK: - CustomStringConvertible
@@ -220,8 +235,12 @@ extension _MIDIIntegerProtocol /*: Numeric */ {
     }
     
     public init?<T>(exactly source: T) where T: BinaryInteger {
-        guard let exact = Storage(exactly: source) else { return nil }
-        self.init(exact)
+        if source < Self.min(as: Storage.self) ||
+            source > Self.max(as: Storage.self)
+        {
+            return nil
+        }
+        self.init(unchecked: Storage(source))
     }
     
     public static func * (lhs: Self, rhs: Self) -> Self {

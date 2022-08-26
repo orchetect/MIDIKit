@@ -168,24 +168,13 @@ final class UInt9_Tests: XCTestCase {
         XCTAssertTrue(set == [0, 1, 2])
     }
 	
-    func testCodable() {
+    func testCodable() throws {
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
-		
-        // encode
-		
-        let encoded = try? encoder.encode(UInt9(_max))
-		
-        let encodedString = String(data: encoded!, encoding: .utf8)
-		
-        XCTAssertEqual(encodedString, #"{"UInt9":511}"#)
-		
-        // decode
-		
-        let decoded = try? decoder.decode(UInt9.self, from: encoded!)
-		
-        // assert value is identical to source
-		
+        
+        let encoded = try encoder.encode(UInt9(_max))
+        let decoded = try decoder.decode(UInt9.self, from: encoded)
+        
         XCTAssertEqual(decoded, UInt9(_max))
     }
 	
