@@ -177,7 +177,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         let asyncDoneExp = expectation(description: "Async test completed")
         
         // elevate thread priority for latency-sensitive tests
-        DispatchQueue.global(qos: .userInteractive).async { [self] in
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
             // init with local frame rate
             let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
         

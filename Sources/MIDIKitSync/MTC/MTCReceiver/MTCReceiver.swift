@@ -138,7 +138,7 @@ public class MTCReceiver {
             
         queue = DispatchQueue(
             label: (Bundle.main.bundleIdentifier ?? "midikit") + ".mtcreceiver." + name,
-            qos: .userInteractive
+            qos: .userInitiated
         )
             
         // set up decoder reset timer

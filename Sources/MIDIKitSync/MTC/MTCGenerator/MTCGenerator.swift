@@ -87,7 +87,7 @@ public class MTCGenerator: SendsMIDIEvents {
             
         queue = DispatchQueue(
             label: "midikit.mtcgenerator.\(name)",
-            qos: .userInteractive
+            qos: .userInitiated
         )
             
         // timer
@@ -313,7 +313,7 @@ public class MTCGenerator: SendsMIDIEvents {
             
         queue.asyncAfter(
             deadline: .init(uptimeNanoseconds: nsecsDeadline),
-            qos: .userInteractive
+            qos: .userInitiated
         ) {
             guard self.shouldStart else { return }
                 

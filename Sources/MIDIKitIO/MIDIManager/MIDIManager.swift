@@ -114,10 +114,10 @@ public final class MIDIManager: NSObject {
             + ".midiManager." + clientNameForQueue + ".events"
         eventQueue = DispatchQueue(
             label: eventQueueName,
-            qos: .userInteractive,
+            qos: .userInitiated,
             attributes: [],
             autoreleaseFrequency: .workItem,
-            target: .global(qos: .userInteractive)
+            target: .global(qos: .userInitiated)
         )
     
         // assign other properties
