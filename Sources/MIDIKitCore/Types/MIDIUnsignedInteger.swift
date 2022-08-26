@@ -7,11 +7,25 @@
 import Foundation
 import MIDIKitInternals
 
+// Protocol inheritance tree (not exhaustive):
+//
+// UnsignedInteger
+//   -> BinaryInteger
+//      -> CustomStringConvertible
+//      -> Hashable
+//      -> Numeric
+//         -> AdditiveArithmetic
+//            -> Equatable
+//         -> ExpressibleByIntegerLiteral
+//      -> Strideable
+//         -> Comparable
+
 /// Specialized integer types representing non-standard bit-width values in `MIDIKit`.
-public protocol MIDIUnsignedInteger: BinaryInteger, UnsignedInteger, Numeric, AdditiveArithmetic, Equatable, Comparable, Hashable, Codable, ExpressibleByIntegerLiteral, Strideable
+public protocol MIDIUnsignedInteger: UnsignedInteger, Codable
 where Magnitude == Storage.Magnitude,
       Words == Storage.Words,
       IntegerLiteralType == Storage,
+      IntegerLiteralType: Codable,
       Stride == Int
 {
     /// Backing storage type for the integer.
@@ -32,7 +46,7 @@ where Magnitude == Storage.Magnitude,
     static var max: Self { get }
 }
 
-protocol _MIDIIntegerProtocol: MIDIUnsignedInteger {
+protocol _MIDIUnsignedInteger: MIDIUnsignedInteger {
     /// Internal: Type name for use in debugging and exceptions.
     static var integerName: StaticString { get }
     
@@ -49,7 +63,7 @@ protocol _MIDIIntegerProtocol: MIDIUnsignedInteger {
     static func max<T: BinaryFloatingPoint>(as ofType: T.Type) -> T
 }
 
-extension _MIDIIntegerProtocol {
+extension _MIDIUnsignedInteger {
     public init<T: BinaryInteger>(_ source: T) {
         if source < Self.min(as: Storage.self) {
             Exception.underflow.raise(reason: "\(Self.integerName) integer underflowed")
@@ -102,7 +116,7 @@ extension _MIDIIntegerProtocol {
 
 // MARK: - Equatable
 
-extension _MIDIIntegerProtocol /*: Equatable */ {
+extension _MIDIUnsignedInteger /*: Equatable */ {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.storage == rhs.storage
     }
@@ -110,7 +124,7 @@ extension _MIDIIntegerProtocol /*: Equatable */ {
 
 // MARK: - Comparable
 
-extension _MIDIIntegerProtocol /*: Comparable */ {
+extension _MIDIUnsignedInteger /*: Comparable */ {
     public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.storage < rhs.storage
     }
@@ -118,7 +132,7 @@ extension _MIDIIntegerProtocol /*: Comparable */ {
 
 // MARK: - Hashable
 
-extension _MIDIIntegerProtocol /*: Hashable */ {
+extension _MIDIUnsignedInteger /*: Hashable */ {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(storage)
     }
@@ -126,7 +140,7 @@ extension _MIDIIntegerProtocol /*: Hashable */ {
 
 // MARK: - Codable
 
-extension UInt4 /*: Codable */ {
+extension _MIDIUnsignedInteger /*: Codable */ {
     public func encode(to encoder: Encoder) throws {
         var e = encoder.singleValueContainer()
         try e.encode(storage)
@@ -147,7 +161,7 @@ extension UInt4 /*: Codable */ {
 
 // MARK: - CustomStringConvertible
 
-extension UInt4: CustomStringConvertible, CustomDebugStringConvertible {
+extension _MIDIUnsignedInteger {//: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         storage.description
     }
@@ -159,7 +173,7 @@ extension UInt4: CustomStringConvertible, CustomDebugStringConvertible {
 
 // MARK: - ExpressibleByIntegerLiteral
 
-extension _MIDIIntegerProtocol /*: ExpressibleByIntegerLiteral */ {
+extension MIDIUnsignedInteger /*: ExpressibleByIntegerLiteral */ {
     //public typealias IntegerLiteralType = Storage
     // IntegerLiteralType is already expressed as same-type constraint on MIDIUnsignedInteger
     
@@ -170,7 +184,7 @@ extension _MIDIIntegerProtocol /*: ExpressibleByIntegerLiteral */ {
 
 // MARK: - Strideable
 
-extension _MIDIIntegerProtocol /*: Strideable */ {
+extension MIDIUnsignedInteger /*: Strideable */ {
     //public typealias Stride = Int
     // Stride is already expressed as same-type constraint on MIDIUnsignedInteger
     
@@ -183,9 +197,9 @@ extension _MIDIIntegerProtocol /*: Strideable */ {
     }
 }
 
-// MARK: - MIDIUnsignedInteger Default Implementation
+// MARK: - _MIDIUnsignedInteger Default Implementation
 
-extension _MIDIIntegerProtocol {
+extension _MIDIUnsignedInteger {
     static func min<T: BinaryInteger>(as ofType: T.Type) -> T { 0 }
     static func min<T: BinaryFloatingPoint>(as ofType: T.Type) -> T { 0 }
     
@@ -201,14 +215,14 @@ extension _MIDIIntegerProtocol {
 
 // MARK: - MIDIUnsignedInteger Conveniences
 
-extension _MIDIIntegerProtocol {
-    /// Returns the integer as an `Int` instance
+extension _MIDIUnsignedInteger {
+    /// Returns the integer converted to an `Int` instance (convenience).
     public var intValue: Int { Int(storage) }
 }
 
 // MARK: - FixedWidthInteger
 
-extension _MIDIIntegerProtocol /*: FixedWidthInteger */ {
+extension _MIDIUnsignedInteger /*: FixedWidthInteger */ {
     public static var min: Self { Self(Self.min(as: Storage.self)) }
     
     public static var max: Self { Self(Self.max(as: Storage.self)) }
@@ -226,7 +240,7 @@ extension _MIDIIntegerProtocol /*: FixedWidthInteger */ {
 
 // MARK: - Numeric
 
-extension _MIDIIntegerProtocol /*: Numeric */ {
+extension _MIDIUnsignedInteger /*: Numeric */ {
     // public typealias Magnitude = Storage.Magnitude
     // Magnitude is already expressed as same-type constraint on MIDIUnsignedInteger
     
@@ -254,7 +268,7 @@ extension _MIDIIntegerProtocol /*: Numeric */ {
 
 // MARK: - AdditiveArithmetic
 
-extension _MIDIIntegerProtocol /*: AdditiveArithmetic */ {
+extension _MIDIUnsignedInteger /*: AdditiveArithmetic */ {
     // static let zero synthesized by AdditiveArithmetic
     
     public static func + (lhs: Self, rhs: Self) -> Self {
@@ -272,7 +286,7 @@ extension _MIDIIntegerProtocol /*: AdditiveArithmetic */ {
 
 // MARK: - BinaryInteger
 
-extension _MIDIIntegerProtocol /*: BinaryInteger */ {
+extension _MIDIUnsignedInteger /*: BinaryInteger */ {
     // public typealias Words = Storage.Words
     // Words is already expressed as same-type constraint on MIDIUnsignedInteger
     

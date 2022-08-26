@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitInternals
 
 /// A 25-bit unsigned integer value type used in `MIDIKit`.
-public struct UInt25: _MIDIIntegerProtocol {
+public struct UInt25: _MIDIUnsignedInteger {
     public typealias Storage = UInt32
     var storage: Storage
 }

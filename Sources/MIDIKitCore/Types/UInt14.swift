@@ -10,7 +10,7 @@ import MIDIKitInternals
 /// A 14-bit unsigned integer value type used in `MIDIKit`.
 ///
 /// Formed as from two bytes (MSB, LSB) as `(MSB << 7) + LSB` where MSB and LSB are 7-bit values.
-public struct UInt14: _MIDIIntegerProtocol {
+public struct UInt14: _MIDIUnsignedInteger {
     public typealias Storage = UInt16
     var storage: Storage
 }
