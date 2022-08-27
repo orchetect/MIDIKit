@@ -23,29 +23,24 @@ Over and above I/O and events, MIDI extension abstractions can be found in MIDIK
 
 ## Getting Started
 
-1. Add MIDIKit as a dependency using Swift Package Manager.
-   - In a project or framework:
-     - Select the menu: **File → Swift Packages → Add Package Dependency...**
-     - Enter this URL: `https://github.com/orchetect/MIDIKit`
-   
-   - In a Swift Package:
-     ```swift
-     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.6.0")
-     ```
-  
-2. Import the library:
-   ```swift
-   import MIDIKit
-   ```
+The library is available as a Swift Package Manager (SPM) package.
+
+Use the URL `https://github.com/orchetect/MIDIKit` when adding the library to a project or Swift package.
+
+See the [getting started guide](https://orchetect.github.io/MIDIKit/documentation/midikit/midikit-getting-started) for a detailed walkthrough of how to get the most out of MIDIKit.
 
 ## Documentation
 
-Refer to the bundled DocC documentation for MIDIKit by selecting the **Product → Build Documentation** menu in Xcode. This includes a getting started guide, links to examples, and troubleshooting tips.
+See the [online documentation](https://orchetect.github.io/MIDIKit/) or view it in Xcode's documentation browser by selecting the **Product → Build Documentation** menu.
+
+This includes a getting started guide, links to examples, and troubleshooting tips.
 
 ## System Compatibility
 
-- Xcode 12.4 / macOS 10.15.7 are minimum requirements to compile
-- Once compiled, MIDIKit supports macOS 10.12+ and iOS 10.0+. tvOS and watchOS are not supported (as there is no Core MIDI implementation) but MIDIKit will build successfully on those platforms in the event it is included as a dependency in multi-platform projects.
+- Xcode 13.0 / macOS 11.3 are minimum requirements to compile
+- Once compiled, MIDIKit supports macOS 10.12+ and iOS 10.0+.
+
+  tvOS and watchOS are not supported (as there is no Core MIDI implementation) but MIDIKit will build successfully on those platforms in the event it is included as a dependency in multi-platform projects.
 
 ## Author
 
