@@ -9,11 +9,11 @@
 
 ### MIDIKit MIDI Note Related
 
-- ``MIDIKitSMF/MIDIEvent``
-- ``MIDIKitSMF/MIDIEventFilter``
-- ``MIDIKitSMF/MIDIEventFilterGroup``
-- ``MIDIKitSMF/MIDINoteRange``
-- ``MIDIKitSMF/MIDINoteNumberRange``
+- ``MIDIEvent``
+- ``MIDIEventFilter``
+- ``MIDIEventFilterGroup``
+- ``MIDINoteRange``
+- ``MIDINoteNumberRange``
 
 ### Timecode Related
 

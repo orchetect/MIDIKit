@@ -12,10 +12,6 @@ To add additional functionality, import extension modules or import the MIDIKit 
 
 ## Topics
 
-### Introduction
-
-- <doc:MIDIKitIO-Getting-Started>
-
 ### Manager
 
 - ``MIDIManager``
@@ -23,27 +19,27 @@ To add additional functionality, import extension modules or import the MIDIKit 
 - <doc:MIDIManager-Creating-Connections>
 - <doc:MIDIManager-Removing-Ports-and-Connections>
 - <doc:MIDIManager-Receiving-Notifications>
-- <doc:MIDIKit-Combine-and-SwiftUI-Features>
+- <doc:MIDIKitIO-Combine-and-SwiftUI-Features>
 
 ### Devices & Entities
 
-- <doc:Devices>
+- <doc:MIDIKitIO-Devices>
 
 ### Endpoints
 
-- <doc:Endpoints>
+- <doc:MIDIKitIO-Endpoints>
 
 ### Events
 
-- <doc:Sending-MIDI-Events>
-- <doc:Receiving-MIDI-Events>
+- <doc:MIDIKitIO-Sending-MIDI-Events>
+- <doc:MIDIKitIO-Receiving-MIDI-Events>
 
 ### Extending Connectivity
 
-- <doc:MIDI-Over-Bluetooth>
-- <doc:MIDI-Over-Network>
+- <doc:MIDIKitIO-MIDI-Over-Bluetooth>
+- <doc:MIDIKitIO-MIDI-Over-Network>
 
 ### Internals
 
-- <doc:Internals>
+- <doc:MIDIKitIO-Internals>
 - <doc:Internals-From-MIDIKitCore>

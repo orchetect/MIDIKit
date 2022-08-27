@@ -29,5 +29,5 @@ MIDI control surface protocol abstractions (HUI, etc.) for MIDIKit.
 
 ### Internals
 
-- <doc:Internals>
+- <doc:MIDIKitControlSurfaces-Internals>
 - <doc:Internals-From-MIDIKitCore>

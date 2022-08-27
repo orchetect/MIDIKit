@@ -18,7 +18,7 @@ Devices represent physical devices that contain entity(ies) which in turn contai
 
 etc.
 
-In most use cases, it is not necessary work with devices and entities. A single pair of endpoint collections (inputs and outputs) may be accessed directly which contains all endpoints that exist in the system. See <doc:Endpoints> for more information.  
+In most use cases, it is not necessary work with devices and entities. A single pair of endpoint collections (inputs and outputs) may be accessed directly which contains all endpoints that exist in the system. See <doc:MIDIKitIO-Endpoints> for more information.  
 
 ## Topics
 

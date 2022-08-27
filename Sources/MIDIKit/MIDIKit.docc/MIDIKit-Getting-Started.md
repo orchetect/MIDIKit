@@ -32,14 +32,14 @@ Follow the steps in the ``MIDIManager`` documentation to create an instance of t
 
 ## 3. Set up Bluetooth and Network MIDI if Needed
 
-- See <doc:MIDI-Over-Bluetooth> for Bluetooth MIDI connectivity for your iOS app
-- See <doc:MIDI-Over-Network> for network MIDI connectivity on macOS or iOS
+- See <doc:MIDIKitIO-MIDI-Over-Bluetooth> for Bluetooth MIDI connectivity for your iOS app
+- See <doc:MIDIKitIO-MIDI-Over-Network> for network MIDI connectivity on macOS or iOS
 
 ## 4. Learn how MIDIKit Value Types Work
 
 MIDIKit was built to use smart hybrid MIDI event value types, simplifying the learning curve to adopting MIDI 2.0 and allowing for a form of value type-erasure. This results in the ability to use MIDI 1.0 values, MIDI 2.0 values, unit intervals or any combination of those - seamlessly regardless whether your platform supports MIDI 1.0 or MIDI 2.0.
 
-Learn how MIDIKit's value types work in **MIDIKitCore** docs.
+Learn how MIDIKit's value types work: <doc:MIDIKitCore-Value-Types>
 
 ## 5. Next Steps
 
@@ -55,7 +55,7 @@ From here, you have laid the necessary groundwork to set up ports and connection
   - Parsing and filtering received MIDI events
   - Working with Bluetooth MIDI
   - Working with Bluetooth MIDI
-- Explore modules included in MIDIKit: **MIDIKitControlSurfaces**, **MIDIKitSMF**, **MIDIKitSync**
+- Explore modules included in MIDIKit: ``MIDIKitControlSurfaces``, ``MIDIKitSMF``, ``MIDIKitSync``
 
 ## 6. Additional Features
 

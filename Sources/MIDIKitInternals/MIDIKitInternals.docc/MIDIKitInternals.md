@@ -10,4 +10,4 @@ Internal helper methods used by MIDIKit.
 
 ### Internals
 
-- <doc:Internals>
+- <doc:MIDIKitInternals-Internals>

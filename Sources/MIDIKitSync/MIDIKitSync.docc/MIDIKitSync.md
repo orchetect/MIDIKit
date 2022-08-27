@@ -35,5 +35,5 @@ MIDI synchronization protocol abstractions (MTC, etc.) for MIDIKit.
 
 ### Internals
 
-- <doc:Internals>
+- <doc:MIDIKitSync-Internals>
 - <doc:Internals-From-MIDIKitCore>

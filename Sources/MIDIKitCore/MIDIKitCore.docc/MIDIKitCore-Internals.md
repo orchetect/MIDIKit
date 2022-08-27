@@ -12,3 +12,7 @@
 ### Value Type Protocols
 
 - ``MIDIUnsignedInteger``
+
+### Deprecated
+
+- ``MIDI``

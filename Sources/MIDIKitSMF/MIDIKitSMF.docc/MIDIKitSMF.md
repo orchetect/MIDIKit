@@ -40,5 +40,5 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 
 ### Internals
 
-- <doc:Internals>
+- <doc:MIDIKitSMF-Internals>
 - <doc:Internals-From-MIDIKitCore>

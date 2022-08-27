@@ -12,7 +12,7 @@ See the Getting Started guide in **MIDIKitIO** docs for essential information on
 
 ## MIDIKitCore Contents
 
-- <doc:Value-Types>
+- <doc:MIDIKitCore-Value-Types>
 - ``MIDIEvent``
 
 ## Topics
@@ -20,15 +20,15 @@ See the Getting Started guide in **MIDIKitIO** docs for essential information on
 ### Events
 
 - ``MIDIEvent``
-- <doc:Event-Filters>
+- <doc:MIDIKitCore-Event-Filters>
 
 ### MIDI Note
 
-- <doc:MIDI-Note>
+- <doc:MIDIKitCore-MIDI-Note>
 
 ### Core Value Types
 
-- <doc:Value-Types>
+- <doc:MIDIKitCore-Value-Types>
 
 ### MIDIKitIO-Interop Protocols
 
@@ -37,4 +37,4 @@ See the Getting Started guide in **MIDIKitIO** docs for essential information on
 
 ### Internals
 
-- <doc:Internals>
+- <doc:MIDIKitCore-Internals>
