@@ -6,6 +6,8 @@ MIDIKit umbrella import that includes all MIDIKit modules.
 
 ![Layer Diagram](midikit-diagram.svg)
 
+See <doc:MIDIKit-Getting-Started> for essential information on using MIDIKit.
+
 For more detailed documentation on each area of MIDIKit, see the appropriate submodule's documentation.
 
 ## Topics
@@ -21,4 +23,3 @@ For more detailed documentation on each area of MIDIKit, see the appropriate sub
 - <doc:MIDIKitSMF>
 - <doc:MIDIKitSync>
 - <doc:MIDIKitControlSurfaces>
-

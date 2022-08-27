@@ -8,22 +8,76 @@ This is a basic guide intended to give the most essential information on getting
 
 There are many more features and aspects to the library that can be discovered through additional documentation and example projects.
 
+## Table of Contents
+
+1. [Import the Library](#1-Import-the-Library)
+2. [Set up the Manager](#2-Set-up-the-Manager)
+3. [Set up Bluetooth and Network MIDI if Needed](#3-Set-up-Bluetooth-and-Network-MIDI-if-Needed)
+4. [Learn how MIDIKit Value Types Work](#4-Learn-how-MIDIKit-Value-Types-Work)
+5. [Next Steps](#5-Next-Steps)
+6. [Additional Features](#6-Additional-Features)
+
 ## 1. Import the Library
 
-- To import the whole library:
+MIDIKit is modular and allows for flexible configuration of imports.
 
-  Add `MIDIKit` to your project, and import it.
+**Everything**
+
+To import the whole library:
+
+- Add the `MIDIKit` package product to your project, and import it.
 
   ```swift
   import MIDIKit
+  // implicitly imports -> MIDIKitCore
+  // implicitly imports -> MIDIKitIO
+  // implicitly imports -> MIDIKitSMF
+  // implicitly imports -> MIDIKitSync
+  // implicitly imports -> MIDIKitControlSurfaces
   ```
 
-- If only MIDI I/O and MIDI Events are needed:
-  
-  Add `MIDIKitIO` to your project, and import it.
+**Essentials**
+
+If only MIDI I/O and MIDI Events are needed:
+
+- Add the `MIDIKitIO` package product to your project, and import it.
 
   ```swift
   import MIDIKitIO
+  // implicitly imports -> MIDIKitCore
+  ```
+
+**Bare Bones**
+
+If only core types and MIDI event definitions are needed, without I/O:
+
+- Add the `MIDIKitCore` package product to your project, and import it.
+
+  ```swift
+  import MIDIKitCore
+  ```
+
+**Area of Specialty**
+
+If only a specific extension is needed along with I/O:
+
+- Add the extension product (ie: `MIDIKitSync`) product along with the I/O product `MIDIKitIO` to your project, and import them.
+
+  ```swift
+  import MIDIKitIO
+  // implicitly imports -> MIDIKitCore
+  import MIDIKitSync
+  ```
+
+**Just MIDI Files**
+
+If you are only working with Standard MIDI Files and do not require I/O or any extensions:
+
+- Add the `MIDIKitSMF` package product to your project, and import it.
+
+  ```swift
+  import MIDIKitSMF
+  // implicitly imports -> MIDIKitCore
   ```
 
 ## 2. Set up the Manager
@@ -48,14 +102,13 @@ From here, you have laid the necessary groundwork to set up ports and connection
 - <doc:MIDIManager-Creating-Ports>
 - <doc:MIDIManager-Creating-Connections> to one or more existing MIDI ports in the system
 - <doc:MIDIManager-Removing-Ports-and-Connections>
-- Learn about powerful Event Filters in **MIDIKitCore** docs
+- Learn about powerful <doc:MIDIKitCore-Event-Filters>
 - Explore the [Example Projects](https://github.com/orchetect/MIDIKit/blob/main/Examples/)
   - Creating virtual ports and managed connections
   - Creating MIDI endpoint selection menus & controls and persisting user selections
   - Parsing and filtering received MIDI events
   - Working with Bluetooth MIDI
-  - Working with Bluetooth MIDI
-- Explore modules included in MIDIKit: ``MIDIKitControlSurfaces``, ``MIDIKitSMF``, ``MIDIKitSync``
+- Explore modules included in MIDIKit: <doc:MIDIKitSMF>, <doc:MIDIKitSync>, <doc:MIDIKitControlSurfaces>.
 
 ## 6. Additional Features
 
@@ -73,5 +126,5 @@ See the [example projects](https://github.com/orchetect/MIDIKit/blob/main/Exampl
 ## Troubleshooting
 
 - term **Example projects build but do not run**: Ensure the project's scheme is selected in Xcode first.
-- term **Error -50**: This usually happens while trying to interact with the Manager before it's been started, or if your project is sandboxed or targets iOS and the appropriate app entitlements have not been added.
+- term **Error -50**: This usually happens while trying to interact with the ``MIDIManager`` before it's been started, or if your project is sandboxed or targets iOS and the appropriate app entitlements have not been added.
 - term **Errors building for React Native**: [See this thread](https://github.com/orchetect/MIDIKit/issues/91) if you are having build errors.
