@@ -185,7 +185,7 @@ extension AnyMIDIIOObject: CustomStringConvertible {
 // MARK: - Collection Methods
 
 extension Collection where Element: MIDIIOObject {
-    /// Return as `[AnyMIDIIOObject]`, type-erased representations of MIDIKit objects conforming to `MIDIIOObject`.
+    /// Return as `[` ``AnyMIDIIOObject`` `]`, type-erased representations of MIDIKit objects conforming to ``MIDIIOObject``.
     public func asAnyMIDIIOObjects() -> [AnyMIDIIOObject] {
         map { $0.asAnyMIDIIOObject() }
     }

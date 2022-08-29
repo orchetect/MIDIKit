@@ -29,7 +29,7 @@ public protocol MIDIIOObject {
     /// The Core MIDI object reference.
     var coreMIDIObjectRef: CoreMIDIObjectRef { get }
     
-    /// Return as `AnyMIDIIOObject`, a type-erased representation of a MIDIKit object conforming to `MIDIIOObject`.
+    /// Return as ``AnyMIDIIOObject``, a type-erased representation of a MIDIKit object conforming to ``MIDIIOObject``.
     func asAnyMIDIIOObject() -> AnyMIDIIOObject
     
     // MARK: - MIDIIOObject Comparison.swift
