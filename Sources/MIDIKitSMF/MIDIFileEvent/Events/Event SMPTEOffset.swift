@@ -10,11 +10,19 @@ import TimecodeKit
 
 // MARK: - SMPTEOffset
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
     /// Specify the SMPTE time at which the track is to start.
     /// This optional event, if present, should occur at the start of a track,
     /// at `time == 0`, and prior to any MIDI events.
-    /// Defaults to 00:00:00:00 @ 24fps.
+    /// Defaults to `00:00:00:00 @ 24fps`.
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
@@ -145,6 +153,60 @@ extension MIDIFileEvent {
         // TODO: add an init from Timecode struct that can convert/scale timecode and subframes to 100 subframe divisor
     }
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// Specify the SMPTE time at which the track is to start.
+    /// This optional event, if present, should occur at the start of a track,
+    /// at `time == 0`, and prior to any MIDI events.
+    /// Defaults to `00:00:00:00 @ 24fps`.
+    ///
+    /// > Standard MIDI File 1.0 Spec:
+    /// >
+    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE-based tracks which specify a different frame subdivision for delta-times.
+    public static func smpteOffset(
+        delta: DeltaTime = .none,
+        hr: UInt8,
+        min: UInt8,
+        sec: UInt8,
+        fr: UInt8,
+        subFr: UInt8,
+        frRate: MIDIFile.SMPTEOffsetFrameRate = ._30fps
+    ) -> Self {
+        .smpteOffset(
+            delta: delta,
+            event: .init(
+                hr: hr,
+                min: min,
+                sec: sec,
+                fr: fr,
+                subFr: subFr,
+                frRate: frRate
+            )
+        )
+    }
+    
+    /// Specify the SMPTE time at which the track is to start.
+    /// This optional event, if present, should occur at the start of a track,
+    /// at `time == 0`, and prior to any MIDI events.
+    /// Defaults to `00:00:00:00 @ 24fps`.
+    ///
+    /// > Standard MIDI File 1.0 Spec:
+    /// >
+    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE-based tracks which specify a different frame subdivision for delta-times.
+    public static func smpteOffset(
+        delta: DeltaTime = .none,
+        scaling: Timecode
+    ) -> Self {
+        .smpteOffset(
+            delta: delta,
+            event: .init(scaling: scaling)
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .smpteOffset
@@ -288,7 +350,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
 // MARK: - Helpers
 
 extension Timecode {
-    /// Determines the best corresponding MIDI File SMPTE Offset frame rate to represent `self` and converts the timecode to that frame rate, and converts the subframes to be scaled to a 100 subframe divisor if needed.
+    /// Determines the best corresponding MIDI File SMPTE Offset frame rate to represent this timecode, converts the timecode to that frame rate, and converts the subframes to be scaled to a 100 subframe divisor if needed.
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
@@ -326,7 +388,7 @@ extension Timecode {
 }
 
 extension Timecode.FrameRate {
-    /// Returns the best corresponding MIDI File SMPTE Offset frame rate to represent `self`.
+    /// Returns the best corresponding MIDI File SMPTE Offset frame rate to represent the timecode framerate.
     public var midiFileSMPTEOffsetRate: MIDIFile.SMPTEOffsetFrameRate {
         switch self {
         case ._23_976: return ._24fps // as output from Pro Tools

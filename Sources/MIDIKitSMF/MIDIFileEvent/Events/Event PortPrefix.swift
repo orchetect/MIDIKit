@@ -9,13 +9,21 @@ import MIDIKitCore
 
 // MARK: - MIDIPortPrefix
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
     /// MIDI Port Prefix event.
     ///
     /// Specifies out of which MIDI Port (ie, buss) the MIDI events in the MIDI track go.
-    /// The data byte pp, is the port number, where 0 would be the first MIDI buss in the system.
+    /// The data byte is the port number, where 0 would be the first MIDI buss in the system.
     public struct PortPrefix: Equatable, Hashable {
-        /// Port number (0...127)
+        /// Port number (`0 ... 127`)
         public var port: UInt7 = 0
         
         // MARK: - Init
@@ -25,6 +33,26 @@ extension MIDIFileEvent {
         }
     }
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// MIDI Port Prefix event.
+    ///
+    /// Specifies out of which MIDI Port (ie, buss) the MIDI events in the MIDI track go.
+    /// The data byte is the port number, where 0 would be the first MIDI buss in the system.
+    public static func portPrefix(
+        delta: DeltaTime = .none,
+        port: UInt7
+    ) -> Self {
+        .portPrefix(
+            delta: delta,
+            event: .init(port: port)
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIFileEvent.PortPrefix: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .portPrefix

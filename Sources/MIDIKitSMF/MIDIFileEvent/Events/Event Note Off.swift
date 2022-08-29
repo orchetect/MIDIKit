@@ -9,9 +9,58 @@ import MIDIKitCore
 
 // MARK: - NoteOff
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
+    /// Channel Voice Message: Note Off
     public typealias NoteOff = MIDIEvent.NoteOff
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// Channel Voice Message: Note Off
+    public static func noteOff(
+        delta: DeltaTime = .none,
+        note: MIDINote,
+        velocity: MIDIEvent.NoteVelocity,
+        channel: UInt4 = 0
+    ) -> Self {
+        .noteOff(
+            delta: delta,
+            event: .init(
+                note: note,
+                velocity: velocity,
+                channel: channel
+            )
+        )
+    }
+    
+    /// Channel Voice Message: Note Off
+    public static func noteOff(
+        delta: DeltaTime = .none,
+        note: UInt7,
+        velocity: MIDIEvent.NoteVelocity,
+        channel: UInt4 = 0
+    ) -> Self {
+        .noteOff(
+            delta: delta,
+            event: .init(
+                note: note,
+                velocity: velocity,
+                channel: channel
+            )
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIEvent.NoteOff: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .noteOff

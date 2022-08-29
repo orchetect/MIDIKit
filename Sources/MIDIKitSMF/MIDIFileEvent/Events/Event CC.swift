@@ -9,9 +9,58 @@ import MIDIKitCore
 
 // MARK: - CC
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
+    /// Channel Voice Message: Control Change (CC)
     public typealias CC = MIDIEvent.CC
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// Channel Voice Message: Control Change (CC)
+    public static func cc(
+        delta: DeltaTime = .none,
+        controller: MIDIEvent.CC.Controller,
+        value: MIDIEvent.CC.Value,
+        channel: UInt4 = 0
+    ) -> Self {
+        .cc(
+            delta: delta,
+            event: .init(
+                controller: controller,
+                value: value,
+                channel: channel
+            )
+        )
+    }
+    
+    /// Channel Voice Message: Control Change (CC)
+    public static func cc(
+        delta: DeltaTime = .none,
+        controller: UInt7,
+        value: MIDIEvent.CC.Value,
+        channel: UInt4 = 0
+    ) -> Self {
+        .cc(
+            delta: delta,
+            event: .init(
+                controller: controller,
+                value: value,
+                channel: channel
+            )
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIEvent.CC: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .cc

@@ -4,532 +4,139 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-import TimecodeKit
 import MIDIKitCore
 
 /// MIDI File Track Event.
 public enum MIDIFileEvent: Equatable, Hashable {
-    case cc(delta: DeltaTime, event: CC)
-    case channelPrefix(delta: DeltaTime, event: ChannelPrefix)
-    case keySignature(delta: DeltaTime, event: KeySignature)
-    case noteOff(delta: DeltaTime, event: NoteOff)
-    case noteOn(delta: DeltaTime, event: NoteOn)
-    case notePressure(delta: DeltaTime, event: NotePressure)
-    case pitchBend(delta: DeltaTime, event: PitchBend)
-    case portPrefix(delta: DeltaTime, event: PortPrefix)
-    case pressure(delta: DeltaTime, event: Pressure)
-    case programChange(delta: DeltaTime, event: ProgramChange)
-    case sequenceNumber(delta: DeltaTime, event: SequenceNumber)
-    case sequencerSpecific(delta: DeltaTime, event: SequencerSpecific)
-    case smpteOffset(delta: DeltaTime, event: SMPTEOffset)
-    case sysEx(delta: DeltaTime, event: SysEx)
-    case universalSysEx(delta: DeltaTime, event: UniversalSysEx)
-    case tempo(delta: DeltaTime, event: Tempo)
-    case text(delta: DeltaTime, event: Text)
-    case timeSignature(delta: DeltaTime, event: TimeSignature)
-    case unrecognizedMeta(delta: DeltaTime, event: UnrecognizedMeta)
-    case xmfPatchTypePrefix(delta: DeltaTime, event: XMFPatchTypePrefix)
-}
-
-extension MIDIFileEvent {
-    public static func cc(
-        delta: DeltaTime = .none,
-        controller: MIDIEvent.CC.Controller,
-        value: MIDIEvent.CC.Value,
-        channel: UInt4 = 0
-    ) -> Self {
-        .cc(
-            delta: delta,
-            event: .init(
-                controller: controller,
-                value: value,
-                channel: channel
-            )
-        )
-    }
+    // ------------------------------------
+    // NOTE: When revising these documentation blocks, they are duplicated in:
+    //   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+    //   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+    //   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+    //   - DocC documentation for each MIDIFileEvent type
+    // ------------------------------------
     
-    public static func cc(
-        delta: DeltaTime = .none,
-        controller: UInt7,
-        value: MIDIEvent.CC.Value,
-        channel: UInt4 = 0
-    ) -> Self {
-        .cc(
-            delta: delta,
-            event: .init(
-                controller: controller,
-                value: value,
-                channel: channel
-            )
-        )
-    }
+    /// Channel Voice Message: Control Change (CC)
+    case cc(delta: DeltaTime, event: CC)
     
     /// MIDI Channel Prefix event.
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
     /// > The MIDI channel (`0 ... 15`) contained in this event may be used to associate a MIDI channel with all events which follow, including System Exclusive and meta-events. This channel is "effective" until the next normal MIDI event (which contains a channel) or the next MIDI Channel Prefix meta-event. If MIDI channels refer to "tracks", this message may help jam several tracks into a format 0 file, keeping their non-MIDI data associated with a track. This capability is also present in Yamaha's ESEQ file format.
-    public static func channelPrefix(
-        delta: DeltaTime = .none,
-        channel: UInt4
-    ) -> Self {
-        .channelPrefix(
-            delta: delta,
-            event: .init(channel: channel)
-        )
-    }
+    case channelPrefix(delta: DeltaTime, event: ChannelPrefix)
     
-    public static func keySignature(
-        delta: DeltaTime = .none,
-        flatsOrSharps: Int8,
-        majorKey: Bool
-    ) -> Self {
-        .keySignature(
-            delta: delta,
-            event: .init(
-                flatsOrSharps: flatsOrSharps,
-                majorKey: majorKey
-            )
-        )
-    }
+    /// Key Signature event.
+    ///
+    /// For a format 1 MIDI file, Key Signature Meta events should only occur within the first `MTrk` chunk.
+    ///
+    /// If there are no key signature events in a MIDI file, C major is assumed.
+    case keySignature(delta: DeltaTime, event: KeySignature)
     
-    public static func noteOff(
-        delta: DeltaTime = .none,
-        note: MIDINote,
-        velocity: MIDIEvent.NoteVelocity,
-        channel: UInt4 = 0
-    ) -> Self {
-        .noteOff(
-            delta: delta,
-            event: .init(
-                note: note,
-                velocity: velocity,
-                channel: channel
-            )
-        )
-    }
+    /// Channel Voice Message: Note Off
+    case noteOff(delta: DeltaTime, event: NoteOff)
     
-    public static func noteOff(
-        delta: DeltaTime = .none,
-        note: UInt7,
-        velocity: MIDIEvent.NoteVelocity,
-        channel: UInt4 = 0
-    ) -> Self {
-        .noteOff(
-            delta: delta,
-            event: .init(
-                note: note,
-                velocity: velocity,
-                channel: channel
-            )
-        )
-    }
+    /// Channel Voice Message: Note On
+    case noteOn(delta: DeltaTime, event: NoteOn)
     
-    public static func noteOn(
-        delta: DeltaTime = .none,
-        note: MIDINote,
-        velocity: MIDIEvent.NoteVelocity,
-        channel: UInt4 = 0
-    ) -> Self {
-        .noteOn(
-            delta: delta,
-            event: .init(
-                note: note,
-                velocity: velocity,
-                channel: channel
-            )
-        )
-    }
+    /// Channel Voice Message: Note Pressure (Polyphonic Aftertouch)
+    ///
+    /// Also known as:
+    /// - Pro Tools: "Polyphonic Aftertouch"
+    /// - Logic Pro: "Polyphonic Aftertouch"
+    /// - Cubase: "Poly Pressure"
+    case notePressure(delta: DeltaTime, event: NotePressure)
     
-    public static func noteOn(
-        delta: DeltaTime = .none,
-        note: UInt7,
-        velocity: MIDIEvent.NoteVelocity,
-        channel: UInt4 = 0
-    ) -> Self {
-        .noteOn(
-            delta: delta,
-            event: .init(
-                note: note,
-                velocity: velocity,
-                channel: channel
-            )
-        )
-    }
+    /// Channel Voice Message: Pitch Bend
+    case pitchBend(delta: DeltaTime, event: PitchBend)
     
-    public static func notePressure(
-        delta: DeltaTime = .none,
-        note: MIDINote,
-        amount: MIDIEvent.NotePressure.Amount,
-        channel: UInt4 = 0
-    ) -> Self {
-        .notePressure(
-            delta: delta,
-            event: .init(
-                note: note,
-                amount: amount,
-                channel: channel
-            )
-        )
-    }
+    /// MIDI Port Prefix event.
+    ///
+    /// Specifies out of which MIDI Port (ie, buss) the MIDI events in the MIDI track go.
+    /// The data byte is the port number, where 0 would be the first MIDI buss in the system.
+    case portPrefix(delta: DeltaTime, event: PortPrefix)
     
-    public static func notePressure(
-        delta: DeltaTime = .none,
-        note: UInt7,
-        amount: MIDIEvent.NotePressure.Amount,
-        channel: UInt4 = 0
-    ) -> Self {
-        .notePressure(
-            delta: delta,
-            event: .init(
-                note: note,
-                amount: amount,
-                channel: channel
-            )
-        )
-    }
+    /// Channel Voice Message: Channel Pressure (Aftertouch)
+    ///
+    /// Also known as:
+    /// - Pro Tools: "Mono Aftertouch"
+    /// - Logic Pro: "Aftertouch"
+    /// - Cubase: "Aftertouch"
+    case pressure(delta: DeltaTime, event: Pressure)
     
-    public static func pitchBend(
-        delta: DeltaTime = .none,
-        lsb: UInt8,
-        msb: UInt8,
-        channel: UInt4 = 0
-    ) -> Self {
-        let value = MIDIEvent.PitchBend.Value.midi1(.init(bytePair: .init(msb: msb, lsb: lsb)))
-        return .pitchBend(
-            delta: delta,
-            event: .init(value: value, channel: channel)
-        )
-    }
+    /// Channel Voice Message: Program Change
+    ///
+    /// > Note: When decoding, bank information is not decoded as part of the Program Change event but will be decoded as individual CC messages. This may be addressed in a future release of MIDIKit.
+    case programChange(delta: DeltaTime, event: ProgramChange)
     
-    public static func pitchBend(
-        delta: DeltaTime = .none,
-        value: MIDIEvent.PitchBend.Value,
-        channel: UInt4 = 0
-    ) -> Self {
-        .pitchBend(
-            delta: delta,
-            event: .init(value: value, channel: channel)
-        )
-    }
+    /// Sequence Number event.
+    ///
+    /// - For MIDI file type 0/1, this should only be on the first track. This is used to identify each track. If omitted, the sequences are numbered sequentially in the order the tracks appear.
+    ///
+    /// - For MIDI file type 2, each track can contain a sequence number event.
+    case sequenceNumber(delta: DeltaTime, event: SequenceNumber)
     
-    public static func portPrefix(
-        delta: DeltaTime = .none,
-        port: UInt7
-    ) -> Self {
-        .portPrefix(
-            delta: delta,
-            event: .init(port: port)
-        )
-    }
+    /// Sequencer-specific data.
+    /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
+    case sequencerSpecific(delta: DeltaTime, event: SequencerSpecific)
     
-    public static func pressure(
-        delta: DeltaTime = .none,
-        amount: MIDIEvent.Pressure.Amount,
-        channel: UInt4 = 0
-    ) -> Self {
-        .pressure(
-            delta: delta,
-            event: .init(
-                amount: amount,
-                channel: channel
-            )
-        )
-    }
+    /// Specify the SMPTE time at which the track is to start.
+    /// This optional event, if present, should occur at the start of a track,
+    /// at `time == 0`, and prior to any MIDI events.
+    /// Defaults to `00:00:00:00 @ 24fps`.
+    ///
+    /// > Standard MIDI File 1.0 Spec:
+    /// >
+    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE-based tracks which specify a different frame subdivision for delta-times.
+    case smpteOffset(delta: DeltaTime, event: SMPTEOffset)
     
-    public static func programChange(
-        delta: DeltaTime = .none,
-        program: UInt7,
-        channel: UInt4 = 0
-    ) -> Self {
-        .programChange(
-            delta: delta,
-            event: .init(
-                program: program,
-                bank: .noBankSelect,
-                channel: channel
-            )
-        )
-    }
+    /// System Exclusive: Manufacturer-specific (7-bit)
+    case sysEx(delta: DeltaTime, event: SysEx)
     
-    public static func sequenceNumber(
-        delta: DeltaTime = .none,
-        sequence: UInt16
-    ) -> Self {
-        .sequenceNumber(
-            delta: delta,
-            event: .init(sequence: sequence)
-        )
-    }
+    /// Universal System Exclusive (7-bit)
+    ///
+    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
+    ///
+    /// - `deviceID` of `0x7F` indicates "All Devices".
+    case universalSysEx(delta: DeltaTime, event: UniversalSysEx)
     
-    public static func sequencerSpecific(
-        delta: DeltaTime = .none,
-        data: [UInt8]
-    ) -> Self {
-        .sequencerSpecific(
-            delta: delta,
-            event: .init(data: data)
-        )
-    }
+    /// Tempo event.
+    /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
+    /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
+    case tempo(delta: DeltaTime, event: Tempo)
     
-    public static func smpteOffset(
-        delta: DeltaTime = .none,
-        hr: UInt8,
-        min: UInt8,
-        sec: UInt8,
-        fr: UInt8,
-        subFr: UInt8,
-        frRate: MIDIFile.SMPTEOffsetFrameRate = ._30fps
-    ) -> Self {
-        .smpteOffset(
-            delta: delta,
-            event: .init(
-                hr: hr,
-                min: min,
-                sec: sec,
-                fr: fr,
-                subFr: subFr,
-                frRate: frRate
-            )
-        )
-    }
+    /// Text event.
+    /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text, program name, device name, or lyric.
+    ///
+    /// Text is restricted to ASCII format only. If extended characters or encodings are used, it will be converted to ASCII lossily before encoding into the MIDI file.
+    case text(delta: DeltaTime, event: Text)
     
-    public static func smpteOffset(
-        delta: DeltaTime = .none,
-        scaling: Timecode
-    ) -> Self {
-        .smpteOffset(
-            delta: delta,
-            event: .init(scaling: scaling)
-        )
-    }
+    /// Time Signature event.
+    /// For a format 1 MIDI file, Time Signature meta events should only occur within the first `MTrk` chunk.
+    /// If there are no Time Signature events in a MIDI file, 4/4 is assumed.
+    case timeSignature(delta: DeltaTime, event: TimeSignature)
     
-    public static func sysEx(
-        delta: DeltaTime = .none,
-        manufacturer: MIDIEvent.SysExManufacturer,
-        data: [UInt8]
-    ) -> Self {
-        .sysEx(
-            delta: delta,
-            event: .init(
-                manufacturer: manufacturer,
-                data: data
-            )
-        )
-    }
+    /// Unrecognized Meta Event.
+    ///
+    /// > Note: This is not designed to be instanced, but is instead a placeholder for unrecognized or malformed data while parsing the contents of a MIDI file. In then allows for manual parsing or introspection of the unrecognized data.
+    ///
+    /// > Standard MIDI File 1.0 Spec:
+    /// >
+    /// > All meta-events begin with `0xFF`, then have an event type byte (which is always less than 128), and then have the length of the data stored as a variable-length quantity, and then the data itself. If there is no data, the length is `0`. As with chunks, future meta-events may be designed which may not be known to existing programs, so programs must properly ignore meta-events which they do not recognize, and indeed, should expect to see them. Programs must never ignore the length of a meta-event which they do recognize, and they shouldn't be surprised if it's bigger than they expected. If so, they must ignore everything past what they know about. However, they must not add anything of their own to the end of a meta-event.
+    /// >
+    /// > SysEx events and meta-events cancel any running status which was in effect. Running status does not apply to and may not be used for these messages.
+    case unrecognizedMeta(delta: DeltaTime, event: UnrecognizedMeta)
     
-    public static func tempo(
-        delta: DeltaTime = .none,
-        bpm: Double
-    ) -> Self {
-        .tempo(
-            delta: delta,
-            event: .init(bpm: bpm)
-        )
-    }
-    
-    public static func text(
-        delta: DeltaTime = .none,
-        type: Text.EventType,
-        string: String
-    ) -> Self {
-        .text(
-            delta: delta,
-            event: .init(
-                type: type,
-                string: string
-            )
-        )
-    }
-    
-    public static func timeSignature(
-        delta: DeltaTime = .none,
-        numerator: UInt8,
-        denominator: UInt8
-    ) -> Self {
-        .timeSignature(
-            delta: delta,
-            event: .init(
-                numerator: numerator,
-                denominator: denominator
-            )
-        )
-    }
-    
-    public static func unrecognizedMeta(
-        delta: DeltaTime = .none,
-        metaType: UInt8,
-        data: [UInt8]
-    ) -> Self {
-        .unrecognizedMeta(
-            delta: delta,
-            event: .init(
-                metaType: metaType,
-                data: data
-            )
-        )
-    }
-    
-    public static func universalSysEx(
-        delta: DeltaTime = .none,
-        universalType: MIDIEvent.UniversalSysExType,
-        deviceID: UInt7,
-        subID1: UInt7,
-        subID2: UInt7,
-        data: [UInt8]
-    ) -> Self {
-        .universalSysEx(
-            delta: delta,
-            event: .init(
-                universalType: universalType,
-                deviceID: deviceID,
-                subID1: subID1,
-                subID2: subID2,
-                data: data
-            )
-        )
-    }
-    
-    public static func xmfPatchTypePrefix(
-        delta: DeltaTime = .none,
-        patchSet: XMFPatchTypePrefix.PatchSet
-    ) -> Self {
-        .xmfPatchTypePrefix(
-            delta: delta,
-            event: .init(patchSet: patchSet)
-        )
-    }
-}
-
-extension MIDIFileEvent {
-    public var eventType: MIDIFileEventType {
-        switch self {
-        case .cc: return .cc
-        case .channelPrefix: return .channelPrefix
-        case .keySignature: return .keySignature
-        case .noteOff: return .noteOff
-        case .noteOn: return .noteOn
-        case .notePressure: return .notePressure
-        case .pitchBend: return .pitchBend
-        case .portPrefix: return .portPrefix
-        case .pressure: return .pressure
-        case .programChange: return .programChange
-        case .sequenceNumber: return .sequenceNumber
-        case .sequencerSpecific: return .sequencerSpecific
-        case .smpteOffset: return .smpteOffset
-        case .sysEx: return .sysEx
-        case .tempo: return .tempo
-        case .text: return .text
-        case .timeSignature: return .timeSignature
-        case .universalSysEx: return .universalSysEx
-        case .unrecognizedMeta: return .unrecognizedMeta
-        case .xmfPatchTypePrefix: return .xmfPatchTypePrefix
-        }
-    }
-}
-
-extension MIDIFileEvent {
-    public var concreteType: MIDIFileEventPayload.Type {
-        switch self {
-        case .cc: return CC.self
-        case .channelPrefix: return ChannelPrefix.self
-        case .keySignature: return KeySignature.self
-        case .noteOff: return NoteOff.self
-        case .noteOn: return NoteOn.self
-        case .notePressure: return NotePressure.self
-        case .pitchBend: return PitchBend.self
-        case .portPrefix: return PortPrefix.self
-        case .pressure: return Pressure.self
-        case .programChange: return ProgramChange.self
-        case .sequenceNumber: return SequenceNumber.self
-        case .sequencerSpecific: return SequencerSpecific.self
-        case .smpteOffset: return SMPTEOffset.self
-        case .sysEx: return SysEx.self
-        case .tempo: return Tempo.self
-        case .text: return Text.self
-        case .timeSignature: return TimeSignature.self
-        case .universalSysEx: return UniversalSysEx.self
-        case .unrecognizedMeta: return UnrecognizedMeta.self
-        case .xmfPatchTypePrefix: return XMFPatchTypePrefix.self
-        }
-    }
-}
-
-extension MIDIFileEvent {
-    /// Unwraps the enum case and returns the `MIDIFileEvent` contained within, typed as `MIDIFileEvent` protocol.
-    public var smfUnwrappedEvent: (delta: DeltaTime, event: MIDIFileEventPayload) {
-        switch self {
-        case let .cc(delta, event): return (delta: delta, event: event)
-        case let .channelPrefix(delta, event): return (delta: delta, event: event)
-        case let .keySignature(delta, event): return (delta: delta, event: event)
-        case let .noteOff(delta, event): return (delta: delta, event: event)
-        case let .noteOn(delta, event): return (delta: delta, event: event)
-        case let .notePressure(delta, event): return (delta: delta, event: event)
-        case let .pitchBend(delta, event): return (delta: delta, event: event)
-        case let .portPrefix(delta, event): return (delta: delta, event: event)
-        case let .pressure(delta, event): return (delta: delta, event: event)
-        case let .programChange(delta, event): return (delta: delta, event: event)
-        case let .sequenceNumber(delta, event): return (delta: delta, event: event)
-        case let .sequencerSpecific(delta, event): return (delta: delta, event: event)
-        case let .smpteOffset(delta, event): return (delta: delta, event: event)
-        case let .sysEx(delta, event): return (delta: delta, event: event)
-        case let .tempo(delta, event): return (delta: delta, event: event)
-        case let .text(delta, event): return (delta: delta, event: event)
-        case let .timeSignature(delta, event): return (delta: delta, event: event)
-        case let .universalSysEx(delta, event): return (delta: delta, event: event)
-        case let .unrecognizedMeta(delta, event): return (delta: delta, event: event)
-        case let .xmfPatchTypePrefix(delta, event): return (delta: delta, event: event)
-        }
-    }
-}
-
-extension MIDIFileEventPayload {
-    /// Wraps the concrete struct in its corresponding `MIDIFileEvent` enum case wrapper.
-    public func smfWrappedEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent {
-        switch self {
-        case let event as MIDIFileEvent.CC:
-            return .cc(delta: delta, event: event)
-        case let event as MIDIFileEvent.ChannelPrefix:
-            return .channelPrefix(delta: delta, event: event)
-        case let event as MIDIFileEvent.KeySignature:
-            return .keySignature(delta: delta, event: event)
-        case let event as MIDIFileEvent.NoteOff:
-            return .noteOff(delta: delta, event: event)
-        case let event as MIDIFileEvent.NoteOn:
-            return .noteOn(delta: delta, event: event)
-        case let event as MIDIFileEvent.NotePressure:
-            return .notePressure(delta: delta, event: event)
-        case let event as MIDIFileEvent.PitchBend:
-            return .pitchBend(delta: delta, event: event)
-        case let event as MIDIFileEvent.PortPrefix:
-            return .portPrefix(delta: delta, event: event)
-        case let event as MIDIFileEvent.Pressure:
-            return .pressure(delta: delta, event: event)
-        case let event as MIDIFileEvent.ProgramChange:
-            return .programChange(delta: delta, event: event)
-        case let event as MIDIFileEvent.SequenceNumber:
-            return .sequenceNumber(delta: delta, event: event)
-        case let event as MIDIFileEvent.SequencerSpecific:
-            return .sequencerSpecific(delta: delta, event: event)
-        case let event as MIDIFileEvent.SMPTEOffset:
-            return .smpteOffset(delta: delta, event: event)
-        case let event as MIDIFileEvent.SysEx:
-            return .sysEx(delta: delta, event: event)
-        case let event as MIDIFileEvent.Tempo:
-            return .tempo(delta: delta, event: event)
-        case let event as MIDIFileEvent.Text:
-            return .text(delta: delta, event: event)
-        case let event as MIDIFileEvent.TimeSignature:
-            return .timeSignature(delta: delta, event: event)
-        case let event as MIDIFileEvent.UniversalSysEx:
-            return .universalSysEx(delta: delta, event: event)
-        case let event as MIDIFileEvent.UnrecognizedMeta:
-            return .unrecognizedMeta(delta: delta, event: event)
-        case let event as MIDIFileEvent.XMFPatchTypePrefix:
-            return .xmfPatchTypePrefix(delta: delta, event: event)
-            
-        default:
-            fatalError()
-        }
-    }
+    /// XMF Patch Type Prefix event.
+    ///
+    /// > Standard MIDI File 1.0 Spec:
+    /// >
+    /// > XMF Type 0 and Type 1 files contain Standard MIDI Files (SMF). Each SMF Track in such XMF files may be designated to use either standard General MIDI 1 or General MIDI 2 instruments supplied by the player, or custom DLS instruments supplied via the XMF file. This document defines a new SMF Meta-Event to be used for this purpose.
+    /// >
+    /// > In a Type 0 or Type 1 XMF File, this meta-event specifies how to interpret subsequent Program Change and Bank Select messages appearing in the same SMF Track: as General MIDI 1, General MIDI 2, or DLS. In the absence of an initial XMF Patch Type Prefix Meta-Event, General MIDI 1 (instrument set and system behavior) is chosen by default.
+    /// >
+    /// > In a Type 0 or Type 1 XMF File, no SMF Track may be reassigned to a different instrument set (GM1, GM2, or DLS) at any time. Therefore, this meta-event should only be processed if it appears as the first message in an SMF Track; if it appears anywhere else in an SMF Track, it must be ignored.
+    /// >
+    /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
+    case xmfPatchTypePrefix(delta: DeltaTime, event: XMFPatchTypePrefix)
 }

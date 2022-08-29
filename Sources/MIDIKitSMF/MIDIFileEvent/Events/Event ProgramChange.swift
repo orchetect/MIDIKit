@@ -9,9 +9,44 @@ import MIDIKitCore
 
 // MARK: - ProgramChange
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
+    /// Channel Voice Message: Program Change
+    ///
+    /// > Note: When decoding, bank information is not decoded as part of the Program Change event but will be decoded as individual CC messages. This may be addressed in a future release of MIDIKit.
     public typealias ProgramChange = MIDIEvent.ProgramChange
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// Channel Voice Message: Program Change
+    ///
+    /// > Note: When decoding, bank information is not decoded as part of the Program Change event but will be decoded as individual CC messages. This may be addressed in a future release of MIDIKit.
+    public static func programChange(
+        delta: DeltaTime = .none,
+        program: UInt7,
+        channel: UInt4 = 0
+    ) -> Self {
+        .programChange(
+            delta: delta,
+            event: .init(
+                program: program,
+                bank: .noBankSelect,
+                channel: channel
+            )
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .programChange
@@ -49,7 +84,9 @@ extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
                     "Value(s) out of bounds."
                 )
             }
-        
+            
+            // TODO: Should this attempt to decode bank messages that may follow?
+            
             let newEvent = MIDIEvent.programChange(
                 program: programNumber,
                 channel: channel

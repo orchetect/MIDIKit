@@ -9,9 +9,49 @@ import MIDIKitCore
 
 // MARK: - Channel Pressure
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
+    /// Channel Voice Message: Channel Pressure (Aftertouch)
+    ///
+    /// Also known as:
+    /// - Pro Tools: "Mono Aftertouch"
+    /// - Logic Pro: "Aftertouch"
+    /// - Cubase: "Aftertouch"
     public typealias Pressure = MIDIEvent.Pressure
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// Channel Voice Message: Channel Pressure (Aftertouch)
+    ///
+    /// Also known as:
+    /// - Pro Tools: "Mono Aftertouch"
+    /// - Logic Pro: "Aftertouch"
+    /// - Cubase: "Aftertouch"
+    public static func pressure(
+        delta: DeltaTime = .none,
+        amount: MIDIEvent.Pressure.Amount,
+        channel: UInt4 = 0
+    ) -> Self {
+        .pressure(
+            delta: delta,
+            event: .init(
+                amount: amount,
+                channel: channel
+            )
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIEvent.Pressure: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .pressure

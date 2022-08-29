@@ -9,6 +9,14 @@ import MIDIKitCore
 
 // MARK: - Tempo
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
     /// Tempo event.
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
@@ -52,6 +60,25 @@ extension MIDIFileEvent {
         }
     }
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// Tempo event.
+    /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
+    /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
+    public static func tempo(
+        delta: DeltaTime = .none,
+        bpm: Double
+    ) -> Self {
+        .tempo(
+            delta: delta,
+            event: .init(bpm: bpm)
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIFileEvent.Tempo: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .tempo

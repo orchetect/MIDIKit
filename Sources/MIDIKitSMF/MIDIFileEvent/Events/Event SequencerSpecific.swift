@@ -9,7 +9,17 @@ import MIDIKitCore
 
 // MARK: - SequencerSpecific
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
+    /// Sequencer-specific data.
+    /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
     public struct SequencerSpecific: Equatable, Hashable {
         /// Data bytes.
         /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
@@ -22,6 +32,24 @@ extension MIDIFileEvent {
         }
     }
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// Sequencer-specific data.
+    /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
+    public static func sequencerSpecific(
+        delta: DeltaTime = .none,
+        data: [UInt8]
+    ) -> Self {
+        .sequencerSpecific(
+            delta: delta,
+            event: .init(data: data)
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .sequencerSpecific

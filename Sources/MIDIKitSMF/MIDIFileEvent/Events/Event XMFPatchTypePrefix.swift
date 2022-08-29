@@ -9,6 +9,14 @@ import MIDIKitCore
 
 // MARK: - XMFPatchTypePrefix
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
     /// XMF Patch Type Prefix event.
     ///
@@ -19,8 +27,8 @@ extension MIDIFileEvent {
     /// > In a Type 0 or Type 1 XMF File, this meta-event specifies how to interpret subsequent Program Change and Bank Select messages appearing in the same SMF Track: as General MIDI 1, General MIDI 2, or DLS. In the absence of an initial XMF Patch Type Prefix Meta-Event, General MIDI 1 (instrument set and system behavior) is chosen by default.
     /// >
     /// > In a Type 0 or Type 1 XMF File, no SMF Track may be reassigned to a different instrument set (GM1, GM2, or DLS) at any time. Therefore, this meta-event should only be processed if it appears as the first message in an SMF Track; if it appears anywhere else in an SMF Track, it must be ignored.
-    ///
-    /// - Note: See RP-032.
+    /// >
+    /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
     public struct XMFPatchTypePrefix: Equatable, Hashable {
         /// Patch type.
         /// (0: GM1, 1: GM2, 2: DLS instruments, supplied in the XMF file)
@@ -28,11 +36,38 @@ extension MIDIFileEvent {
         
         // MARK: - Init
         
-        public init(patchSet: MIDIFileEvent.XMFPatchTypePrefix.PatchSet) {
+        public init(patchSet: PatchSet) {
             self.patchSet = patchSet
         }
     }
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// XMF Patch Type Prefix event.
+    ///
+    /// > Standard MIDI File 1.0 Spec:
+    /// >
+    /// > XMF Type 0 and Type 1 files contain Standard MIDI Files (SMF). Each SMF Track in such XMF files may be designated to use either standard General MIDI 1 or General MIDI 2 instruments supplied by the player, or custom DLS instruments supplied via the XMF file. This document defines a new SMF Meta-Event to be used for this purpose.
+    /// >
+    /// > In a Type 0 or Type 1 XMF File, this meta-event specifies how to interpret subsequent Program Change and Bank Select messages appearing in the same SMF Track: as General MIDI 1, General MIDI 2, or DLS. In the absence of an initial XMF Patch Type Prefix Meta-Event, General MIDI 1 (instrument set and system behavior) is chosen by default.
+    /// >
+    /// > In a Type 0 or Type 1 XMF File, no SMF Track may be reassigned to a different instrument set (GM1, GM2, or DLS) at any time. Therefore, this meta-event should only be processed if it appears as the first message in an SMF Track; if it appears anywhere else in an SMF Track, it must be ignored.
+    /// >
+    /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
+    public static func xmfPatchTypePrefix(
+        delta: DeltaTime = .none,
+        patchSet: XMFPatchTypePrefix.PatchSet
+    ) -> Self {
+        .xmfPatchTypePrefix(
+            delta: delta,
+            event: .init(patchSet: patchSet)
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .xmfPatchTypePrefix
@@ -112,6 +147,7 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
 }
 
 extension MIDIFileEvent.XMFPatchTypePrefix {
+    /// XMF Patch Set.
     public enum PatchSet: UInt8, CaseIterable, Equatable, Hashable, CustomStringConvertible {
         /// General MIDI 1.
         ///

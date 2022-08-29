@@ -9,9 +9,73 @@ import MIDIKitCore
 
 // MARK: - PolyphonicPressure
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
+    /// Channel Voice Message: Note Pressure (Polyphonic Aftertouch)
+    ///
+    /// Also known as:
+    /// - Pro Tools: "Polyphonic Aftertouch"
+    /// - Logic Pro: "Polyphonic Aftertouch"
+    /// - Cubase: "Poly Pressure"
     public typealias NotePressure = MIDIEvent.NotePressure
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// Channel Voice Message: Note Pressure (Polyphonic Aftertouch)
+    ///
+    /// Also known as:
+    /// - Pro Tools: "Polyphonic Aftertouch"
+    /// - Logic Pro: "Polyphonic Aftertouch"
+    /// - Cubase: "Poly Pressure"
+    public static func notePressure(
+        delta: DeltaTime = .none,
+        note: MIDINote,
+        amount: MIDIEvent.NotePressure.Amount,
+        channel: UInt4 = 0
+    ) -> Self {
+        .notePressure(
+            delta: delta,
+            event: .init(
+                note: note,
+                amount: amount,
+                channel: channel
+            )
+        )
+    }
+    
+    /// Channel Voice Message: Note Pressure (Polyphonic Aftertouch)
+    ///
+    /// Also known as:
+    /// - Pro Tools: "Polyphonic Aftertouch"
+    /// - Logic Pro: "Polyphonic Aftertouch"
+    /// - Cubase: "Poly Pressure"
+    public static func notePressure(
+        delta: DeltaTime = .none,
+        note: UInt7,
+        amount: MIDIEvent.NotePressure.Amount,
+        channel: UInt4 = 0
+    ) -> Self {
+        .notePressure(
+            delta: delta,
+            event: .init(
+                note: note,
+                amount: amount,
+                channel: channel
+            )
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIEvent.NotePressure: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .notePressure

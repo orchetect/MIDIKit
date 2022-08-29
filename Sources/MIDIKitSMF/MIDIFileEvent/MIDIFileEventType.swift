@@ -33,25 +33,25 @@ public enum MIDIFileEventType: String, CaseIterable, Equatable, Hashable {
 extension MIDIFileEventType {
     public var concreteType: MIDIFileEventPayload.Type {
         switch self {
-        case .cc: return MIDIFileEvent.CC.self
-        case .channelPrefix: return MIDIFileEvent.ChannelPrefix.self
-        case .keySignature: return MIDIFileEvent.KeySignature.self
-        case .noteOff: return MIDIFileEvent.NoteOff.self
-        case .noteOn: return MIDIFileEvent.NoteOn.self
-        case .notePressure: return MIDIFileEvent.NotePressure.self
-        case .pitchBend: return MIDIFileEvent.PitchBend.self
-        case .portPrefix: return MIDIFileEvent.PortPrefix.self
-        case .pressure: return MIDIFileEvent.Pressure.self
-        case .programChange: return MIDIFileEvent.ProgramChange.self
-        case .sequenceNumber: return MIDIFileEvent.SequenceNumber.self
-        case .sequencerSpecific: return MIDIFileEvent.SequencerSpecific.self
-        case .smpteOffset: return MIDIFileEvent.SMPTEOffset.self
-        case .sysEx: return MIDIFileEvent.SysEx.self
-        case .tempo: return MIDIFileEvent.Tempo.self
-        case .text: return MIDIFileEvent.Text.self
-        case .timeSignature: return MIDIFileEvent.TimeSignature.self
-        case .universalSysEx: return MIDIFileEvent.UniversalSysEx.self
-        case .unrecognizedMeta: return MIDIFileEvent.UnrecognizedMeta.self
+        case .cc:                 return MIDIFileEvent.CC.self
+        case .channelPrefix:      return MIDIFileEvent.ChannelPrefix.self
+        case .keySignature:       return MIDIFileEvent.KeySignature.self
+        case .noteOff:            return MIDIFileEvent.NoteOff.self
+        case .noteOn:             return MIDIFileEvent.NoteOn.self
+        case .notePressure:       return MIDIFileEvent.NotePressure.self
+        case .pitchBend:          return MIDIFileEvent.PitchBend.self
+        case .portPrefix:         return MIDIFileEvent.PortPrefix.self
+        case .pressure:           return MIDIFileEvent.Pressure.self
+        case .programChange:      return MIDIFileEvent.ProgramChange.self
+        case .sequenceNumber:     return MIDIFileEvent.SequenceNumber.self
+        case .sequencerSpecific:  return MIDIFileEvent.SequencerSpecific.self
+        case .smpteOffset:        return MIDIFileEvent.SMPTEOffset.self
+        case .sysEx:              return MIDIFileEvent.SysEx.self
+        case .tempo:              return MIDIFileEvent.Tempo.self
+        case .text:               return MIDIFileEvent.Text.self
+        case .timeSignature:      return MIDIFileEvent.TimeSignature.self
+        case .universalSysEx:     return MIDIFileEvent.UniversalSysEx.self
+        case .unrecognizedMeta:   return MIDIFileEvent.UnrecognizedMeta.self
         case .xmfPatchTypePrefix: return MIDIFileEvent.XMFPatchTypePrefix.self
         }
     }

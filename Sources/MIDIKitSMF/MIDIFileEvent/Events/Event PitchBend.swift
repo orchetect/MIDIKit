@@ -9,9 +9,50 @@ import MIDIKitCore
 
 // MARK: - PitchBend
 
+// ------------------------------------
+// NOTE: When revising these documentation blocks, they are duplicated in:
+//   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
+//   - MIDIFileEvent static constructors (`static func keySignature(...)`, etc.)
+//   - MIDIFileEvent concrete payload structs (`KeySignature`, etc.)
+//   - DocC documentation for each MIDIFileEvent type
+// ------------------------------------
+
 extension MIDIFileEvent {
+    /// Channel Voice Message: Pitch Bend
     public typealias PitchBend = MIDIEvent.PitchBend
 }
+
+// MARK: - Static Constructors
+
+extension MIDIFileEvent {
+    /// Channel Voice Message: Pitch Bend
+    public static func pitchBend(
+        delta: DeltaTime = .none,
+        lsb: UInt8,
+        msb: UInt8,
+        channel: UInt4 = 0
+    ) -> Self {
+        let value = MIDIEvent.PitchBend.Value.midi1(.init(bytePair: .init(msb: msb, lsb: lsb)))
+        return .pitchBend(
+            delta: delta,
+            event: .init(value: value, channel: channel)
+        )
+    }
+    
+    /// Channel Voice Message: Pitch Bend
+    public static func pitchBend(
+        delta: DeltaTime = .none,
+        value: MIDIEvent.PitchBend.Value,
+        channel: UInt4 = 0
+    ) -> Self {
+        .pitchBend(
+            delta: delta,
+            event: .init(value: value, channel: channel)
+        )
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIEvent.PitchBend: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .pitchBend
