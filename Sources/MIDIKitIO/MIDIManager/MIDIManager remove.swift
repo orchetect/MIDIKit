@@ -74,10 +74,10 @@ extension MIDIManager {
     ///
     /// What is unaffected, and not reset:
     /// - Persistent thru connections stored in the system.
-    /// - Notification handler attached to the `MIDIManager`.
-    /// - `clientName` property
-    /// - `model` property
-    /// - `manufacturer` property
+    /// - Notification handler attached to the ``MIDIManager``.
+    /// - ``clientName`` property
+    /// - ``model`` property
+    /// - ``manufacturer`` property
     public func removeAll() {
         // `self.remove(...)` internally uses operationQueue.sync{}
         // so don't need to wrap this with it here

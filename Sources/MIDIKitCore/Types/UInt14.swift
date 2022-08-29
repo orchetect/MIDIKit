@@ -37,24 +37,24 @@ extension UInt14 {
 // MARK: - Standard library extensions
 
 extension BinaryInteger {
-    /// Convenience initializer for `UInt14`.
+    /// Convenience initializer for ``UInt14/init(_:)``.
     public var toUInt14: UInt14 {
         UInt14(self)
     }
     
-    /// Convenience initializer for `UInt14(exactly:)`.
+    /// Convenience initializer for ``UInt14/init(exactly:)``.
     public var toUInt14Exactly: UInt14? {
         UInt14(exactly: self)
     }
 }
 
 extension BinaryFloatingPoint {
-    /// Convenience initializer for `UInt14`.
+    /// Convenience initializer for ``UInt14/init(_:)``.
     public var toUInt14: UInt14 {
         UInt14(self)
     }
     
-    /// Convenience initializer for `UInt14(exactly:)`.
+    /// Convenience initializer for ``UInt14/init(exactly:)``.
     public var toUInt14Exactly: UInt14? {
         UInt14(exactly: self)
     }
@@ -72,7 +72,7 @@ extension UInt14 {
     // MARK: - Inits
     
     /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint)
-    /// (`-1.0...0.0...1.0` == `0...8192...16383`).
+    /// (`-1.0 ... 0.0 ... 1.0` == `0 ... 8192 ... 16383`).
     ///
     /// Example:
     ///
@@ -92,7 +92,7 @@ extension UInt14 {
     }
     
     /// Initialize the raw 14-bit value from two 7-bit value bytes.
-    /// The top bit of each byte (0b1000_0000) will be truncated (set to 0).
+    /// The top bit of each byte (`0b1000_0000`) will be truncated (set to 0).
     public init(bytePair: BytePair) {
         let msb = Storage(bytePair.msb & 0b1111111) << 7
         let lsb = Storage(bytePair.lsb & 0b1111111)
@@ -112,7 +112,7 @@ extension UInt14 {
     public var uInt16Value: UInt16 { storage }
     
     /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral midpoint at 8192).
-    /// (`0...8192...16383` == `-1.0...0.0...1.0`)
+    /// (`0 ... 8192 ... 16383` == `-1.0 ... 0.0 ... 1.0`)
     public var bipolarUnitIntervalValue: Double {
         // account for non-symmetry and round up. (This is how MIDI 1.0 Spec pitchbend works)
         if storage > 8192 {

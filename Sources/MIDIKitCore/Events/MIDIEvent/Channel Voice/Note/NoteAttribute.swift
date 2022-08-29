@@ -9,7 +9,7 @@ extension MIDIEvent {
     /// (MIDI 2.0)
     public enum NoteAttribute: Equatable, Hashable {
         /// None:
-        /// When sending, Attribute Value will be 0x0000 and receiver should ignore Attribute Value.
+        /// When sending, Attribute Value will be `0x0000` and receiver should ignore Attribute Value.
         case none
     
         /// Manufacturer Specific:
@@ -24,11 +24,11 @@ extension MIDIEvent {
         /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
         case pitch7_9(Pitch7_9)
     
-        /// Undefined (0x04...0xFF)
+        /// Undefined (`0x04 ... 0xFF`)
         ///
-        /// - remark: MIDI 2.0 Spec:
-        ///
-        /// A Profile might define another Attribute Type that is defined for more specific use by that one Profile only.
+        /// > MIDI 2.0 Spec:
+        /// >
+        /// > A Profile might define another Attribute Type that is defined for more specific use by that one Profile only.
         /// The application of an Attribute Type value might be defined by MMA/AMEI in a MIDI-CI Profile specification. For example, a drum Profile might define an Attribute Type as “Strike Position” with the Attribute Data value declaring the position from center of drum/cymbal to outer edge. An orchestral string Profile might define Attribute values to be used as Articulation choice such as Arco, Pizzicato, Spiccato, Tremolo, etc. Such cases generally require assigning 1 of the 256 available Attribute Types for use by that Profile. Some Profiles might be able to share some common Attribute types.
         case undefined(attributeType: UInt8, data: UInt16)
     }
@@ -66,7 +66,7 @@ extension MIDIEvent.NoteAttribute {
     ///
     /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
     ///
-    /// Range: 0+(0/512) ... 127+(511/512)
+    /// Range: `0+(0/512) ... 127+(511/512)`
     ///
     /// - Parameters:
     ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.

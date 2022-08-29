@@ -123,7 +123,7 @@ extension MIDIFile {
 extension MutableDataProtocol {
     mutating func append(deltaTime ticks: UInt32) {
         // Variable length delta timestamp representing the number of ticks that have elapsed
-        // According to the Standard MIDI File Spec 1.0, the entire delta-time should be at most 4 bytes long.
+        // According to the Standard MIDI File 1.0 Spec, the entire delta-time should be at most 4 bytes long.
         
         append(contentsOf: MIDIFile.encodeVariableLengthValue(ticks) as Self)
     }

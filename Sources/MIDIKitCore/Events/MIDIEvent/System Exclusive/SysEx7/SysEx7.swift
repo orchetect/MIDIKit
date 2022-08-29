@@ -8,11 +8,11 @@ extension MIDIEvent {
     /// System Exclusive: Manufacturer-specific (7-bit)
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// - "Receivers should ignore non-universal Exclusive messages with ID numbers that do not correspond to their own ID."
-    ///
-    /// - "Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > - Receivers should ignore non-universal Exclusive messages with ID numbers that do not correspond to their own ID.
+    /// >
+    /// > - Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification.
     public struct SysEx7: Equatable, Hashable {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
@@ -20,7 +20,7 @@ extension MIDIEvent {
         /// Data bytes (7-bit) (excluding leading 0xF0, trailing 0xF7 and manufacturer bytes)
         public var data: [UInt8]
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(
@@ -37,16 +37,16 @@ extension MIDIEvent {
     /// System Exclusive: Manufacturer-specific (7-bit)
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "Receivers should ignore non-universal Exclusive messages with ID numbers that do not correspond to their own ID."
-    ///
-    /// "Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > Receivers should ignore non-universal Exclusive messages with ID numbers that do not correspond to their own ID.
+    /// >
+    /// > Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification.
     ///
     /// - Parameters:
     ///   - manufacturer: SysEx Manufacturer ID
     ///   - data: Data bytes (7-bit)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func sysEx7(
         manufacturer: SysExManufacturer,
         data: [UInt8],

@@ -32,9 +32,10 @@ import TimecodeKit
 ///
 /// This object is not affected by or reliant on timing at all and simply processes events as they are received. For inbound MTC sync, use the `MTCReceiver` wrapper object which adds additional abstraction for managing MTC sync state.
 ///
-/// - Note:
-/// - A running MTC data stream (during playback) only updates the frame number every 2 frames, so this data stream should not be relied on for deriving exact frame position, but rather as a mechanism for displaying running timecode to the user on screen or synchronizing playback to the incoming MTC data stream.
-/// - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate timecodes when scrubbing or locating to different times, but will be limited to the base frame rates supported by MTC.
+/// > Note:
+/// >
+/// > - A running MTC data stream (during playback) only updates the frame number every 2 frames, so this data stream should not be relied on for deriving exact frame position, but rather as a mechanism for displaying running timecode to the user on screen or synchronizing playback to the incoming MTC data stream.
+/// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate timecodes when scrubbing or locating to different times, but will be limited to the base frame rates supported by MTC.
 public class MTCDecoder {
     // MARK: - Public properties
         

@@ -8,11 +8,11 @@ extension MIDIEvent {
     /// System Real-Time: System Reset
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed.
     public struct SystemReset: Equatable, Hashable {
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(group: UInt4 = 0x0) {
@@ -23,12 +23,12 @@ extension MIDIEvent {
     /// System Real-Time: System Reset
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed.
     ///
     /// - Parameters:
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func systemReset(group: UInt4 = 0x0) -> Self {
         .systemReset(
             .init(group: group)

@@ -9,24 +9,24 @@ import Foundation
 extension MIDIEvent {
     /// Type representing a Manufacturer System Exclusive ID
     ///
-    /// - remark: MIDI 1.0 Spec:
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > - To avoid conflicts with non-compatible Exclusive messages, a specific ID number is granted to manufacturers of MIDI instruments by the MMA or JMSC.
+    /// >
+    /// > - `[0x00]` and `[0x00 0x00 0x00]` are not to be used. Special ID `0x7D` is reserved for non-commercial use (e.g. schools, research, etc.) and is not to be used on any product released to the public. Since Non-Commercial codes would not be seen or used by an ordinary user, there is no standard format.
+    /// >
+    /// > - Special IDs `0x7E` and `0x7F` are the Universal System Exclusive IDs.
     ///
-    /// - "To avoid conflicts with non-compatible Exclusive messages, a specific ID number is granted to manufacturers of MIDI instruments by the MMA or JMSC."
-    ///
-    /// - "`[0x00]` and `[0x00 0x00 0x00]` are not to be used. Special ID `0x7D` is reserved for non-commercial use (e.g. schools, research, etc.) and is not to be used on any product released to the public. Since Non-Commercial codes would not be seen or used by an ordinary user, there is no standard format."
-    ///
-    /// - "Special IDs `0x7E` and `0x7F` are the Universal System Exclusive IDs."
-    ///
-    /// For these special IDs, use MIDIKit's `UniversalSysEx7` type instead of `SysEx7`.
+    /// For these special IDs, use MIDIKit's ``UniversalSysEx7`` type instead of ``SysEx7``.
     public enum SysExManufacturer: Equatable, Hashable {
-        /// Valid range: `0x01...0x7D`
+        /// Valid range: `0x01 ... 0x7D`
         ///
         /// 0x00 is reserved to prefix a 2-byte ID (3 total bytes)
         case oneByte(UInt7)
 
-        /// Valid range for bytes 2 & 3: `0x00...0x7F`
+        /// Valid range for bytes 2 & 3: `0x00 ... 0x7F`
         ///
-        /// Byte 1 is always 0x00.
+        /// Byte 1 is always `0x00`.
         case threeByte(byte2: UInt7, byte3: UInt7)
     }
 }
@@ -128,7 +128,7 @@ extension MIDIEvent.SysExManufacturer {
     ///
     /// This does not test whether the ID belongs to a registered manufacturer. Rather, it simply reports if the bytes are legal.
     ///
-    /// Use the `.name` property to return the manufacturer's name associated with the ID, or `nil` if the ID is not registered.
+    /// Use the ``name`` property to return the manufacturer's name associated with the ID, or `nil` if the ID is not registered.
     public var isValid: Bool {
         switch self {
         case let .oneByte(byte):
@@ -160,7 +160,7 @@ extension MIDIEvent.SysExManufacturer: CustomStringConvertible {
 extension MIDIEvent.SysExManufacturer {
     /// Returns a new instance containing the Educational Use ID.
     ///
-    /// - note: Reserved for use only in educational institutions or for unit testing; not public release.
+    /// - Note: Reserved for use only in educational institutions or for unit testing; not public release.
     public static func educational() -> Self {
         .oneByte(0x7D)
     }

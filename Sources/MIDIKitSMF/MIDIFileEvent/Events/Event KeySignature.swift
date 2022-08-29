@@ -71,13 +71,13 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
         
             guard (-7 ... 7).contains(readFlatsOrSharps) else {
                 throw MIDIFile.DecodeError.malformed(
-                    "Illegal value found when reading Key Signature event sharps/flats byte. Got \(readFlatsOrSharps) but value must be between -7...7."
+                    "Illegal value found when reading Key Signature event sharps/flats byte. Got \(readFlatsOrSharps) but value must be between -7 ... 7."
                 )
             }
         
             guard (0 ... 1).contains(readMajMinKey) else {
                 throw MIDIFile.DecodeError.malformed(
-                    "Illegal value found when reading Key Signature event major/minor key byte. Got \(readFlatsOrSharps) but value must be between 0...1."
+                    "Illegal value found when reading Key Signature event major/minor key byte. Got \(readFlatsOrSharps) but value must be between 0 ... 1."
                 )
             }
         

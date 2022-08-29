@@ -60,7 +60,7 @@ extension MIDIEvent.CC {
         /// (Int: 13, Hex: 0x0D)
         case effectControl2
     
-        // CC 14...15 undefined
+        // CC 14 ... 15 undefined
     
         /// General Purpose Controller 1
         /// (Int: 16, Hex: 0x10)
@@ -78,16 +78,16 @@ extension MIDIEvent.CC {
         /// (Int: 19, Hex: 0x13)
         case generalPurpose4
     
-        // CC 20...31 undefined
+        // CC 20 ... 31 undefined
     
-        /// LSB CCs for controllers 0...31, corresponding to 32...63
-        /// (Int: 32...63, Hex: 0x20...0x3F)
+        /// LSB CCs for controllers `0 ... 31`, corresponding to `32 ... 63`
+        /// (Int: `32 ... 63`, Hex: `0x20 ... 0x3F`)
         case lsb(for: LSB)
     
         /// Sustain Pedal (Damper Pedal)
         /// (Int: 64, Hex: 0x40)
         ///
-        /// Values: 0...63 off, 64...127 on.
+        /// Values: `0 ... 63` off, `64 ... 127` on.
         ///
         /// However, some hardware and synths respond variably to continuous values 0-127.
         case sustainPedal
@@ -95,13 +95,13 @@ extension MIDIEvent.CC {
         /// Portamento
         /// (Int: 65, Hex: 0x41)
         ///
-        /// Values: 0...63 = Off, 64...127 = On.
+        /// Values: `0 ... 63` off, `64 ... 127` on.
         case portamento
     
         /// Sostenuto Pedal
         /// (Int: 66, Hex: 0x42)
         ///
-        /// Values: 0...63 = Off, 64...127 = On.
+        /// Values: `0 ... 63` off, `64 ... 127` on.
         ///
         /// However, some hardware and synths support variably to continuous values 0-127.
         case sostenutoPedal
@@ -109,7 +109,7 @@ extension MIDIEvent.CC {
         /// Soft Pedal
         /// (Int: 67, Hex: 0x43)
         ///
-        /// Values: 0...63 = Off, 64...127 = On.
+        /// Values: `0 ... 63` off, `64 ... 127` on.
         ///
         /// However, some hardware and synths support variably to continuous values 0-127.
         case softPedal
@@ -117,13 +117,13 @@ extension MIDIEvent.CC {
         /// Legato Footswitch
         /// (Int: 68, Hex: 0x44)
         ///
-        /// Values: 0...63 = Normal, 64...127 = Legato.
+        /// Values: `0 ... 63` = Normal, `64 ... 127` = Legato.
         case legatoFootswitch
     
         /// Hold 2
         /// (Int: 69, Hex: 0x45)
         ///
-        /// Values: 0...63 = Off, 64...127 = On.
+        /// Values: `0 ... 63` off, `64 ... 127` on.
         case hold2
     
         /// Sound Controller 1 (default: Sound Variation)
@@ -195,7 +195,7 @@ extension MIDIEvent.CC {
         /// (Int: 84, Hex: 0x54)
         case portamentoControl
     
-        // CC 85...87 undefined
+        // CC 85 ... 87 undefined
     
         /// High Resolution Velocity Prefix
         /// (Int: 88, Hex: 0x58)
@@ -203,7 +203,7 @@ extension MIDIEvent.CC {
         /// Defined in Addenda CA-031 of MIDI 1.0
         case highResolutionVelocityPrefix
     
-        // CC 89...90 undefined
+        // CC 89 ... 90 undefined
     
         /// Effects 1 Depth
         /// (default: Reverb Send Level - see MMA RP-023)
@@ -265,11 +265,11 @@ extension MIDIEvent.CC {
         case rpnMSB
     
         /// Channel Mode Message
-        /// (Includes: 120...127)
+        /// (Includes: `120 ... 127`)
         case mode(Mode)
     
         /// Undefined controller number
-        /// (Includes: 9, 14, 15, 20...31, 85...87, 89, 90, 102...119)
+        /// (Includes: 9, 14, 15, 20 ... 31, 85 ... 87, 89, 90, 102 ... 119)
         case undefined(Undefined)
     }
 }

@@ -498,7 +498,7 @@ final class MIDI1Parser_Tests: XCTestCase {
         // tests
     
         // data bytes (< 0x80) are meaningless without a status byte or Running Status
-        for byte: UInt8 in 0x00...0x7F {
+        for byte: UInt8 in 0x00 ... 0x7F {
             XCTAssertEqual(parsedEvents(bytes: [byte]), [])
         }
     

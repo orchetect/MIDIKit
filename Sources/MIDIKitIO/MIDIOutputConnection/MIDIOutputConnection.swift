@@ -9,13 +9,13 @@
 import Foundation
 @_implementationOnly import CoreMIDI
 
-/// A managed MIDI output connection created in the system by the MIDI I/O `MIDIManager`.
+/// A managed MIDI output connection created in the system by the MIDI I/O ``MIDIManager``.
 ///
 /// This connects to one or more inputs in the system and outputs MIDI events to them. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
 ///
-/// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `MIDIManager`'s `managedOutputConnections` collection.
-///
-/// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed output connection (which is either at such time the `MIDIManager` is de-initialized, or when calling `.remove(.outputConnection, ...)` or `.removeAll` on the `MIDIManager` to destroy the managed output connection.)
+/// > Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the ``MIDIManager/managedOutputConnections`` collection. The ``MIDIManager`` owns this object and maintains its lifecycle.
+/// >
+/// > Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed output connection (which is either at such time the ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with ``MIDIManager/ManagedType/outputConnection`` or ``MIDIManager/removeAll()`` to destroy the managed connection.)
 public final class MIDIOutputConnection: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
@@ -141,9 +141,9 @@ extension MIDIOutputConnection {
 extension MIDIOutputConnection {
     /// Set up a single "invisible" output port which can send events to all inputs.
     ///
-    /// - Parameter manager: MIDI manager instance by reference
+    /// - Parameter manager: ``MIDIManager`` instance by reference
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     internal func setupOutput(in manager: MIDIManager) throws {
         guard coreMIDIOutputPortRef == nil else {
             // if we already set the output port up, it's not really an error condition
@@ -176,9 +176,9 @@ extension MIDIOutputConnection {
     
     /// Resolve MIDI Input(s) criteria to concrete reference IDs and cache them.
     ///
-    /// - Parameter manager: MIDI manager instance by reference
+    /// - Parameter manager: ``MIDIManager`` instance by reference
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     internal func resolveEndpoints(in manager: MIDIManager) throws {
         // resolve criteria to endpoints in the system
         let getInputEndpointRefs = inputsCriteria

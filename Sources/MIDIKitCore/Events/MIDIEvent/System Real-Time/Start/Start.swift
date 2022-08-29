@@ -8,11 +8,11 @@ extension MIDIEvent {
     /// System Real-Time: Start
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real-Time messages (MIDI Sync mode) to start at the beginning of the song or sequence."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real-Time messages (MIDI Sync mode) to start at the beginning of the song or sequence.
     public struct Start: Equatable, Hashable {
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(group: UInt4 = 0x0) {
@@ -23,12 +23,12 @@ extension MIDIEvent {
     /// System Real-Time: Start
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real-Time messages (MIDI Sync mode) to start at the beginning of the song or sequence."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is pressed. This message commands all receivers which are synchronized to incoming Real-Time messages (MIDI Sync mode) to start at the beginning of the song or sequence.
     ///
     /// - Parameters:
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func start(group: UInt4 = 0x0) -> Self {
         .start(
             .init(group: group)

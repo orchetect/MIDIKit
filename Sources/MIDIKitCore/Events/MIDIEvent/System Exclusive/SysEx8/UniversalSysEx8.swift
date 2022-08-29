@@ -8,7 +8,7 @@ extension MIDIEvent {
     /// Universal System Exclusive (8-bit)
     /// (MIDI 2.0 only)
     ///
-    /// - `deviceID` of 0x7F indicates "All Devices".
+    /// - `deviceID` of `0x7F` indicates "All Devices".
     public struct UniversalSysEx8: Equatable, Hashable {
         /// Universal SysEx type:
         /// realtime or non-realtime
@@ -30,7 +30,7 @@ extension MIDIEvent {
         /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of an 8-bit Stream ID field.
         internal var streamID: UInt8 = 0x00
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(
@@ -77,7 +77,7 @@ extension MIDIEvent {
     ///   - subID1: Sub ID #1
     ///   - subID2: Sub ID #2
     ///   - data: Data bytes (8-bit)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func universalSysEx8(
         universalType: UniversalSysExType,
         deviceID: UInt7,

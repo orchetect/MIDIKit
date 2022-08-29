@@ -9,12 +9,13 @@
 import Foundation
 @_implementationOnly import CoreMIDI
 
-/// A managed MIDI input connection created in the system by the MIDI I/O `MIDIManager`.
-/// This connects to one or more outputs in the system and subscribes to receive their MIDI events.
+/// A managed MIDI input connection created in the system by the MIDI I/O ``MIDIManager``.
 ///
-/// - Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the `MIDIManager`'s `managedInputConnections` collection.
+/// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial outputs and then outputs can be added or removed later.
 ///
-/// Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed input connection (which is either at such time the `MIDIManager` is de-initialized, or when calling `.remove(.inputConnection, ...)` or `.removeAll` on the `MIDIManager` to destroy the managed input connection.)
+/// > Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible call it by accessing the ``MIDIManager/managedInputConnections`` collection. The ``MIDIManager`` owns this object and maintains its lifecycle.
+/// >
+/// > Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed input connection (which is either at such time the ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with ``MIDIManager/ManagedType/inputConnection`` or ``MIDIManager/removeAll()`` to destroy the managed connection.)
 public final class MIDIInputConnection: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
@@ -98,7 +99,7 @@ public final class MIDIInputConnection: _MIDIIOManagedProtocol {
     // init
     
     /// Internal init.
-    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `MIDIManager` instance when calling `.addInputConnection()`, and destroyed when calling `.remove(.inputConnection, ...)` or `.removeAll()`.
+    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O ``MIDIManager`` instance when calling ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``, and destroyed when calling ``MIDIManager/remove(_:_:)`` with ``MIDIManager/ManagedType/inputConnection`` or ``MIDIManager/removeAll()``.
     ///
     /// - Parameters:
     ///   - criteria: Output(s) to connect to.
@@ -152,9 +153,9 @@ extension MIDIInputConnection {
 extension MIDIInputConnection {
     /// Create a MIDI Input port with which to subsequently connect to MIDI Output(s).
     ///
-    /// - Parameter manager: MIDI manager instance by reference
+    /// - Parameter manager: `MIDIManager` instance by reference
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     internal func listen(in manager: MIDIManager) throws {
         guard coreMIDIInputPortRef == nil else {
             // if we're already listening, it's not really an error condition
@@ -230,10 +231,10 @@ extension MIDIInputConnection {
     /// Connect to MIDI Output(s).
     ///
     /// - Parameters:
-    ///   - manager: MIDI manager instance by reference
+    ///   - manager: `MIDIManager` instance by reference.
     ///   - disconnectStale: Disconnects stale connections that no longer match criteria.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     internal func connect(
         in manager: MIDIManager
     ) throws {

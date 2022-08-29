@@ -13,13 +13,13 @@ public enum MIDIUMPMessageType: UInt4, CaseIterable {
     case midi2ChannelVoice       = 0x4
     case data128bit              = 0x5
     
-    // 0x6...0xF are reserved as of MIDI 2.0 spec
+    // 0x6 ... 0xF are reserved as of MIDI 2.0 spec
 }
 
 extension MIDIUMPMessageType {
     /// Returns the number of words associated with the Universal MIDI Packet Message Type.
     ///
-    /// - Note: MIDI 2.0 Utility (`.utility`) messages themselves are always 1 word, however they may be followed by additional words that comprise another UMP message since utility messages can be timestamps that prepend non-utility UMP messages. (For example, a 64-bit channel voice UMP may be prepended by a 32-bit timestamp UMP to form a 96-bit timestamped message.) See the MIDI 2.0 Spec for details.
+    /// - Note: MIDI 2.0 Utility (``utility``) messages themselves are always 1 word, however they may be followed by additional words that comprise another UMP message since utility messages can be timestamps that prepend non-utility UMP messages. (For example, a 64-bit channel voice UMP may be prepended by a 32-bit timestamp UMP to form a 96-bit timestamped message.) See the MIDI 2.0 Spec for details.
     public var wordLength: Int {
         switch self {
         case .utility: return 1
@@ -57,24 +57,24 @@ public enum MIDIUMPUtilityStatusField: UInt4, CaseIterable {
     
     /// JR Clock (Jitter-Reduction Clock)
     ///
-    /// - remark: MIDI 2.0 Spec:
-    ///
-    /// "The JR Clock message defines the current time of the Sender.
-    ///
-    /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
-    ///
-    /// The time value is expected to wrap around every 2.09712 seconds.
-    ///
-    /// To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock messages for the Receiver, the Sender shall send a JR Clock message at least once every 250 milliseconds."
+    /// > MIDI 2.0 Spec:
+    /// >
+    /// > The JR Clock message defines the current time of the Sender.
+    /// >
+    /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
+    /// >
+    /// > The time value is expected to wrap around every 2.09712 seconds.
+    /// >
+    /// > To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock messages for the Receiver, the Sender shall send a JR Clock message at least once every 250 milliseconds.
     case jrClock = 0x1
     
     /// JR Timestamp (Jitter-Reduction Timestamp)
     ///
-    /// - remark: MIDI 2.0 Spec:
-    ///
-    /// "The JR Timestamp message defines the time of the following message(s). It is a complete message.
-    ///
-    /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32)."
+    /// > MIDI 2.0 Spec:
+    /// >
+    /// > The JR Timestamp message defines the time of the following message(s). It is a complete message.
+    /// >
+    /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
     case jrTimestamp = 0x2
     
     // 0x3... are unused/reserved

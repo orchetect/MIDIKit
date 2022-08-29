@@ -12,7 +12,7 @@ import TimecodeKit
 ///
 /// Takes timecode values and produces a stream of MIDI events.
 ///
-/// This object is not affected by or reliant on timing at all and simply processes events as they are received. For outbound MTC sync, use the `MTCGenerator` wrapper object which adds additional abstraction for generating MTC sync.
+/// > Tip: This object is not affected by or reliant on timing at all and simply processes events as they are received. For outbound MTC sync, use the ``MTCGenerator`` wrapper object which adds additional abstraction for generating MTC sync.
 public class MTCEncoder: SendsMIDIEvents {
     // MARK: - Public properties
         
@@ -64,11 +64,12 @@ public class MTCEncoder: SendsMIDIEvents {
         
     // MARK: - Internal properties
         
-    /// Last internal MTC quarter-frame formed. (0...7)
+    /// Last internal MTC quarter-frame formed. (`0 ... 7`)
     @ThreadSafeAccess
     public internal(set) var mtcQuarterFrame: UInt8 = 0
         
-    /// Internal: flag indicating whether the quarter-frame output stream has already started since the last `locate(to:)` (or since initializing the class if `locate(to:)` has not yet been called).
+    /// Internal:
+    /// Flag indicating whether the quarter-frame output stream has already started since the last ``locate(to:transmitFullFrame:)`` (or since initializing the class if ``locate(to:transmitFullFrame:)`` has not yet been called).
     @ThreadSafeAccess
     internal var mtcQuarterFrameStreamHasStartedSinceLastLocate = false
         
@@ -90,7 +91,7 @@ public class MTCEncoder: SendsMIDIEvents {
     // MARK: - methods
         
     /// Locates to a new timecode.
-    /// Subframes will be stripped if != 0 since MTC full-frame message resolution is 1 frame.
+    /// Subframes will be stripped if `!= 0` since MTC full-frame message resolution is 1 frame.
     ///
     /// - Parameters:
     ///   - timecode: Timecode; frame rate is derived as well.
@@ -107,11 +108,11 @@ public class MTCEncoder: SendsMIDIEvents {
     }
         
     /// Locates to a new timecode.
-    /// Subframes will be stripped if != 0 since MTC full-frame message resolution is 1 frame.
+    /// Subframes will be stripped if `!= 0` since MTC full-frame message resolution is 1 frame.
     ///
     /// - Parameters:
-    ///   - components: Timecode components
-    ///   - frameRate: Frame rate
+    ///   - components: Timecode components.
+    ///   - frameRate: Frame rate.
     ///   - triggerFullFrame: Triggers the MIDI handler to send a full-frame message.
     public func locate(
         to components: Timecode.Components,
@@ -162,7 +163,7 @@ public class MTCEncoder: SendsMIDIEvents {
         
     /// Advances to the next quarter-frame and triggers a quarter-frame MIDI message sent to the MIDI handler.
     ///
-    /// - Note: If it is the first time `increment()` is being called since the last call to `locate(to:)` (or since initializing the class), this method will transmit the current quarter-frame without incrementing.
+    /// - Note: If it is the first time ``increment()`` is being called since the last call to ``locate(to:transmitFullFrame:)`` (or since initializing the class), this method will transmit the current quarter-frame without incrementing.
     ///
     /// Used when playhead is moving later in time.
     public func increment() {
@@ -188,7 +189,7 @@ public class MTCEncoder: SendsMIDIEvents {
         
     /// Decrements to the previous quarter-frame and triggers a quarter-frame MIDI message sent to the MIDI handler.
     ///
-    /// - Note: If it is the first time `decrement()` is being called since the last call to `locate(to:)` (or since initializing the class), this method will transmit the current quarter-frame without decrementing.
+    /// - Note: If it is the first time ``decrement()`` is being called since the last call to ``locate(to:transmitFullFrame:)`` (or since initializing the class), this method will transmit the current quarter-frame without decrementing.
     ///
     /// Used when playhead is moving earlier in time.
     public func decrement() {

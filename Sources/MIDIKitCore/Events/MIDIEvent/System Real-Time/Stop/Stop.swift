@@ -8,11 +8,11 @@ extension MIDIEvent {
     /// System Real-Time: Stop
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately.
     public struct Stop: Equatable, Hashable {
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(group: UInt4 = 0x0) {
@@ -23,12 +23,12 @@ extension MIDIEvent {
     /// System Real-Time: Stop
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately.
     ///
     /// - Parameters:
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func stop(group: UInt4 = 0x0) -> Self {
         .stop(
             .init(group: group)

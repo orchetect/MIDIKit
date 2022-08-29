@@ -7,18 +7,18 @@
 extension MIDIEvent {
     /// Channel Voice 14-Bit (MIDI 1.0) / 32-Bit (MIDI 2.0) Value
     public enum ChanVoice14Bit32BitValue: Hashable {
-        /// Protocol-agnostic unit interval (0.0...1.0)
+        /// Protocol-agnostic unit interval  (`0.0 ... 1.0`)
         /// Scaled automatically depending on MIDI protocol (1.0/2.0) in use.
         case unitInterval(Double)
     
-        /// Protocol-agnostic bipolar unit interval (-1.0...0.0...1.0)
+        /// Protocol-agnostic bipolar unit interval (`-1.0 ... 0.0 ... 1.0`)
         /// Scaled automatically depending on MIDI protocol (1.0/2.0) in use.
         case bipolarUnitInterval(Double)
     
-        /// MIDI 1.0 14-bit Value (0x0000...0x3FFF)
+        /// MIDI 1.0 14-bit Value (`0x0000 ... 0x3FFF`)
         case midi1(UInt14)
     
-        /// MIDI 2.0 32-bit Channel Voice Note Velocity (0x00000000...0xFFFFFFFF)
+        /// MIDI 2.0 32-bit Channel Voice Note Velocity (`0x00000000 ... 0xFFFFFFFF`)
         case midi2(UInt32)
     }
 }

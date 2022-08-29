@@ -16,7 +16,7 @@
 ///   - ref: `MIDIObjectRef`
 ///   - string: New string value
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func setString(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
@@ -38,7 +38,7 @@ internal func setString(
 ///   - ref: `MIDIObjectRef`
 ///   - integer: New integer value
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func setInteger(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
@@ -60,7 +60,7 @@ internal func setInteger(
 ///   - ref: `MIDIObjectRef`
 ///   - data: New data value
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func setData(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
@@ -82,7 +82,7 @@ internal func setData(
 ///   - ref: `MIDIObjectRef`
 ///   - dictionary: New dictionary value
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func setDictionary(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
@@ -108,7 +108,7 @@ internal func setDictionary(
 ///
 /// A studio setup editor may allow the user to set the names of both driver-owned and external devices.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func setName(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: String
@@ -129,7 +129,7 @@ internal func setName(
 /// - Studio setup editors may allow the user to set this property on external devices.
 /// - Creators of virtual endpoints may set this property on their endpoints.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func setModel(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: String
@@ -150,7 +150,7 @@ internal func setModel(
 /// - Studio setup editors may allow the user to set this property on external devices.
 /// - Creators of virtual endpoints may set this property on their endpoints.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func setManufacturer(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: String
@@ -168,7 +168,7 @@ internal func setManufacturer(
 ///
 /// The system assigns unique IDs to all objects. Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func setUniqueID(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: CoreMIDI.MIDIUniqueID

@@ -8,14 +8,14 @@ extension MIDIEvent {
     /// System Common: Timecode Quarter-Frame
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "For device synchronization, MIDI Time Code uses two basic types of messages, described as Quarter Frame and Full. There is also a third, optional message for encoding SMPTE user bits. The Quarter Frame message communicates the Frame, Seconds, Minutes and Hours Count in an 8-message sequence. There is also an MTC FULL FRAME message which is a MIDI System Exclusive Message."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > For device synchronization, MIDI Time Code uses two basic types of messages, described as Quarter Frame and Full. There is also a third, optional message for encoding SMPTE user bits. The Quarter Frame message communicates the Frame, Seconds, Minutes and Hours Count in an 8-message sequence. There is also an MTC FULL FRAME message which is a MIDI System Exclusive Message.
     public struct TimecodeQuarterFrame: Equatable, Hashable {
         /// Data Byte containing quarter-frame bits
         public var dataByte: UInt7
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(
@@ -30,13 +30,13 @@ extension MIDIEvent {
     /// System Common: Timecode Quarter-Frame
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "For device synchronization, MIDI Time Code uses two basic types of messages, described as Quarter Frame and Full. There is also a third, optional message for encoding SMPTE user bits. The Quarter Frame message communicates the Frame, Seconds, Minutes and Hours Count in an 8-message sequence. There is also an MTC FULL FRAME message which is a MIDI System Exclusive Message."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > For device synchronization, MIDI Time Code uses two basic types of messages, described as Quarter Frame and Full. There is also a third, optional message for encoding SMPTE user bits. The Quarter Frame message communicates the Frame, Seconds, Minutes and Hours Count in an 8-message sequence. There is also an MTC FULL FRAME message which is a MIDI System Exclusive Message.
     ///
     /// - Parameters:
     ///   - dataByte: Data Byte containing quarter-frame bits
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func timecodeQuarterFrame(
         dataByte: UInt7,
         group: UInt4 = 0x0

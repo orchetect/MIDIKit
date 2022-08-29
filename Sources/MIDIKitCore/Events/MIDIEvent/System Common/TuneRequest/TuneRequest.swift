@@ -8,11 +8,11 @@ extension MIDIEvent {
     /// System Common: Tune Request
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI Spec:
-    ///
-    /// "Used with analog synthesizers to request that all oscillators be tuned."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > Used with analog synthesizers to request that all oscillators be tuned.
     public struct TuneRequest: Equatable, Hashable {
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(group: UInt4 = 0x0) {
@@ -23,12 +23,12 @@ extension MIDIEvent {
     /// System Common: Tune Request
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI Spec:
-    ///
-    /// "Used with analog synthesizers to request that all oscillators be tuned."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > Used with analog synthesizers to request that all oscillators be tuned.
     ///
     /// - Parameters:
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func tuneRequest(group: UInt4 = 0x0) -> Self {
         .tuneRequest(
             .init(group: group)

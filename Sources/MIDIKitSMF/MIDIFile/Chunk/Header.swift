@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-// [Standard MIDI File Spec 1.0]:
+// [Standard MIDI File 1.0 Spec]:
 //
 // Header Chunks
 //

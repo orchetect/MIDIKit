@@ -16,12 +16,12 @@ extension HUISurface {
     
     /// Transmit switch state to host.
     /// - Parameters:
-    ///   - zone: HUI zone number
-    ///   - port: HUI port number
-    ///   - state: State of switch or action
+    ///   - zone: HUI zone number.
+    ///   - port: HUI port number.
+    ///   - state: State of switch or action.
     internal func transmitSwitch(
-        zone: UInt8,
-        port: UInt4,
+        zone: HUIZone,
+        port: HUIPort,
         state: Bool
     ) {
         // set on off byte
@@ -52,9 +52,9 @@ extension HUISurface {
     }
     
     /// Transmit fader level to host.
-    /// - parameters:
-    ///   - level: 0...16383
-    ///   - channel: 0...7
+    /// - Parameters:
+    ///   - level: `0 ... 16383`
+    ///   - channel: `0 ... 7`
     public func transmitFader(
         level: UInt14,
         channel: Int
@@ -74,9 +74,9 @@ extension HUISurface {
     }
     
     /// Transmit fader touch/release message to host.
-    /// - parameters:
-    ///   - isTouched: `true` sends touch message, `false` sends release message
-    ///   - channel: 0...7
+    /// - Parameters:
+    ///   - isTouched: `true` sends touch message, `false` sends release message.
+    ///   - channel: `0 ... 7`
     public func transmitFader(
         isTouched: Bool,
         channel: Int

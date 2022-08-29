@@ -10,10 +10,10 @@ import Foundation
 public typealias MIDINoteNumberRange = ClosedRange<UInt7>
 
 extension MIDINoteNumberRange {
-    /// All 128 notes (0...127)
+    /// All 128 notes (`0 ... 127`)
     public static let all: Self = 0 ... 127
     
-    /// 88-key piano keyboard note range: (12...108)
+    /// 88-key piano keyboard note range: (`12 ... 108`)
     public static let eightyEightKeys: Self = 21 ... 108
 }
 
@@ -21,12 +21,12 @@ extension MIDINoteNumberRange {
 public typealias MIDINoteRange = ClosedRange<MIDINote>
 
 extension MIDINoteRange {
-    /// All 128 notes (0...127)
+    /// All 128 notes (`0 ... 127`)
     public static func all(style: MIDINote.Style = .yamaha) -> Self {
         MIDINote(0, style: style) ... MIDINote(127, style: style)
     }
     
-    /// 88-key piano keyboard note range: (12...108)
+    /// 88-key piano keyboard note range: (`12 ... 108`)
     public static func eightyEightKeys(style: MIDINote.Style = .yamaha) -> Self {
         MIDINote(21, style: style) ... MIDINote(108, style: style)
     }

@@ -81,7 +81,7 @@ extension MIDIEvent.CC.Controller {
         // CC 52 ... 63 undefined
     
         /// LSBs for Undefined controller numbers
-        /// (Includes undefined controllers 20...31, corresponding to undefined LSBs of 52...63)
+        /// (Includes undefined controllers `20 ... 31`, corresponding to undefined LSBs of `52 ... 63`)
         case undefined(LSB.Undefined)
     }
 }
@@ -91,22 +91,22 @@ extension MIDIEvent.CC.Controller.LSB {
     public var controller: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .bankSelect      : return 32
-        case .modWheel        : return 33
-        case .breath          : return 34
-        case .footController  : return 36
-        case .portamentoTime  : return 37
-        case .dataEntry       : return 38
-        case .channelVolume   : return 39
-        case .balance         : return 40
-        case .pan             : return 42
-        case .expression      : return 43
-        case .effectControl1  : return 44
-        case .effectControl2  : return 45
-        case .generalPurpose1 : return 48
-        case .generalPurpose2 : return 49
-        case .generalPurpose3 : return 50
-        case .generalPurpose4 : return 51
+        case .bankSelect:      return 32
+        case .modWheel:        return 33
+        case .breath:          return 34
+        case .footController:  return 36
+        case .portamentoTime:  return 37
+        case .dataEntry:       return 38
+        case .channelVolume:   return 39
+        case .balance:         return 40
+        case .pan:             return 42
+        case .expression:      return 43
+        case .effectControl1:  return 44
+        case .effectControl2:  return 45
+        case .generalPurpose1: return 48
+        case .generalPurpose2: return 49
+        case .generalPurpose3: return 50
+        case .generalPurpose4: return 51
     
         case let .undefined(undefinedCC):
             return undefinedCC.controller
@@ -120,22 +120,22 @@ extension MIDIEvent.CC.Controller.LSB {
     public var name: String {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .bankSelect      : return "Bank Select LSB"
-        case .modWheel        : return "Mod Wheel LSB"
-        case .breath          : return "Breath Controller LSB"
-        case .footController  : return "Foot Controller LSB"
-        case .portamentoTime  : return "PortamentoTime LSB"
-        case .dataEntry       : return "Data Entry LSB"
-        case .channelVolume   : return "Volume LSB"
-        case .balance         : return "Balance LSB"
-        case .pan             : return "Pan LSB"
-        case .expression      : return "Expression LSB"
-        case .effectControl1  : return "Effect Control 1 LSB"
-        case .effectControl2  : return "Effect Control 2 LSB"
-        case .generalPurpose1 : return "General Purpose 1 LSB"
-        case .generalPurpose2 : return "General Purpose 2 LSB"
-        case .generalPurpose3 : return "General Purpose 3 LSB"
-        case .generalPurpose4 : return "General Purpose 4 LSB"
+        case .bankSelect:      return "Bank Select LSB"
+        case .modWheel:        return "Mod Wheel LSB"
+        case .breath:          return "Breath Controller LSB"
+        case .footController:  return "Foot Controller LSB"
+        case .portamentoTime:  return "PortamentoTime LSB"
+        case .dataEntry:       return "Data Entry LSB"
+        case .channelVolume:   return "Volume LSB"
+        case .balance:         return "Balance LSB"
+        case .pan:             return "Pan LSB"
+        case .expression:      return "Expression LSB"
+        case .effectControl1:  return "Effect Control 1 LSB"
+        case .effectControl2:  return "Effect Control 2 LSB"
+        case .generalPurpose1: return "General Purpose 1 LSB"
+        case .generalPurpose2: return "General Purpose 2 LSB"
+        case .generalPurpose3: return "General Purpose 3 LSB"
+        case .generalPurpose4: return "General Purpose 4 LSB"
     
         case let .undefined(undefinedCC):
             return undefinedCC.name

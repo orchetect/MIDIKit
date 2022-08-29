@@ -61,7 +61,7 @@ public final class MIDIManager: NSObject {
     /// - Warning: Be careful when creating persistent thru connections, as they can become stale and orphaned if the endpoints used to create them cease to be relevant at any point in time.
     ///
     /// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func unmanagedPersistentThruConnections(ownerID: String) throws
     -> [CoreMIDIThruConnectionRef] {
         try getSystemThruConnectionsPersistentEntries(matching: ownerID)

@@ -8,24 +8,24 @@ extension MIDIEvent {
     /// System Exclusive: Manufacturer-specific (8-bit)
     /// (MIDI 2.0 only)
     ///
-    /// - remark: MIDI 2.0 Spec:
-    ///
-    /// - "System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs."
+    /// > MIDI 2.0 Spec:
+    /// >
+    /// > System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs.
     public struct SysEx8: Equatable, Hashable {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
     
         /// Data bytes (8-bit) (excluding leading 0xF0, trailing 0xF7 and stream ID)
         ///
-        /// - remark: MIDI 2.0 Spec:
-        ///
-        /// System Exclusive 8 initial data bytes are the same as those found in MIDI 1.0 Protocol System Exclusive messages. These bytes are Manufacturer ID (including Special ID 0x7D, or Universal System Exclusive IDs), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable).
+        /// > MIDI 2.0 Spec:
+        /// >
+        /// > System Exclusive 8 initial data bytes are the same as those found in MIDI 1.0 Protocol System Exclusive messages. These bytes are Manufacturer ID (including Special ID 0x7D, or Universal System Exclusive IDs), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable).
         public var data: [UInt8]
     
         /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of an 8-bit Stream ID field.
         internal var streamID: UInt8 = 0x00
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(
@@ -54,14 +54,14 @@ extension MIDIEvent {
     /// System Exclusive: Manufacturer-specific (8-bit)
     /// (MIDI 2.0 only)
     ///
-    /// - remark: MIDI 2.0 Spec:
-    ///
-    /// - "System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs."
+    /// > MIDI 2.0 Spec:
+    /// >
+    /// > System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs.
     ///
     /// - Parameters:
     ///   - manufacturer: SysEx Manufacturer ID
     ///   - data: Data bytes (8-bit)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func sysEx8(
         manufacturer: SysExManufacturer,
         data: [UInt8],
@@ -96,7 +96,7 @@ extension MIDIEvent.SysEx8 {
 
 extension MIDIEvent.SysEx8 {
     /// Internal:
-    /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly; use the public `umpRawWords()` method instead.
+    /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly; use the public ``umpRawWords()`` method instead.
     internal static func umpRawWords(
         fromSysEx8Data data: [UInt8],
         streamID: UInt8,

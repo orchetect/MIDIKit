@@ -15,10 +15,10 @@ extension MIDIEvent {
         @ValueValidated
         public var value: Value
     
-        /// Channel Number (0x0...0xF)
+        /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         /// Channel Voice Message: Control Change (CC)
@@ -27,8 +27,8 @@ extension MIDIEvent {
         /// - Parameters:
         ///   - controller: Controller type
         ///   - value: Value
-        ///   - channel: Channel Number (0x0...0xF)
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             controller: Controller,
             value: Value,
@@ -47,8 +47,8 @@ extension MIDIEvent {
         /// - Parameters:
         ///   - controller: Controller type
         ///   - value: Value
-        ///   - channel: Channel Number (0x0...0xF)
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             controller: UInt7,
             value: Value,
@@ -70,8 +70,8 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - controller: Controller type
     ///   - value: Value
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func cc(
         _ controller: CC.Controller,
         value: CC.Value,
@@ -94,8 +94,8 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - controller: Controller number
     ///   - value: Value
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func cc(
         _ controller: UInt7,
         value: CC.Value,

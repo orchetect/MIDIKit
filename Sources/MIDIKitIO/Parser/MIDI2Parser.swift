@@ -163,8 +163,8 @@ public final class MIDI2Parser {
     /// Internal sub-parser: Parse System RealTime/Common UMP message.
     ///
     /// - Parameters:
-    ///   - bytes: 3 UMP bytes after the first byte ([1...3])
-    ///   - group: UMP group
+    ///   - bytes: 3 UMP bytes after the first byte (subscript range [1...3]).
+    ///   - group: UMP group.
     internal func parseSystemRealTimeAndCommon(
         bytes: Array<UInt8>.SubSequence,
         group: UInt4
@@ -248,8 +248,8 @@ public final class MIDI2Parser {
     /// Internal sub-parser: Parse MIDI 1.0 Channel Voice UMP message.
     ///
     /// - Parameters:
-    ///   - bytes: 3 UMP bytes after the first byte ([1...3])
-    ///   - group: UMP group
+    ///   - bytes: 3 UMP bytes after the first byte (subscript range `[1...3]`).
+    ///   - group: UMP group.
     internal func parseMIDI1ChannelVoice(
         bytes: Array<UInt8>.SubSequence,
         channel: UInt4,
@@ -370,9 +370,9 @@ public final class MIDI2Parser {
     /// Internal sub-parser: Parse MIDI 2.0 Channel Voice UMP message.
     ///
     /// - Parameters:
-    ///   - bytes: 3 UMP bytes after the first byte ([1...3])
-    ///   - channel: MIDI Channel
-    ///   - group: UMP group
+    ///   - bytes: 3 UMP bytes after the first byte (subscript range `[1...3]`).
+    ///   - channel: MIDI Channel.
+    ///   - group: UMP group.
     internal func parseMIDI2ChannelVoice(
         bytes: Array<UInt8>.SubSequence,
         channel: UInt4,
@@ -570,8 +570,8 @@ public final class MIDI2Parser {
     /// Internal sub-parser: Parse SysEx7 UMP message.
     ///
     /// - Parameters:
-    ///   - bytes: 7 UMP bytes after the first byte ([1...7])
-    ///   - group: UMP group
+    ///   - bytes: 7 UMP bytes after the first byte (subscript range `[1...7]`).
+    ///   - group: UMP group.
     internal func parseData64Bit(
         bytes: Array<UInt8>.SubSequence,
         group: UInt4
@@ -642,8 +642,8 @@ public final class MIDI2Parser {
     /// Internal sub-parser: Parse SysEx8 UMP message.
     ///
     /// - Parameters:
-    ///   - bytes: 15 UMP bytes after the first byte ([1...15])
-    ///   - group: UMP group
+    ///   - bytes: 15 UMP bytes after the first byte (subscript range `[1...15]`).
+    ///   - group: UMP group.
     internal func parseData128Bit(
         bytes: Array<UInt8>.SubSequence,
         group: UInt4
@@ -738,8 +738,8 @@ public final class MIDI2Parser {
     /// Internal sub-parser: Parse MIDI 2.0 Utility message.
     ///
     /// - Parameters:
-    ///   - bytes: all bytes after the first byte ([1...])
-    ///   - group: UMP group
+    ///   - bytes: all bytes after the first byte (subscript range `[1...]`).
+    ///   - group: UMP group.
     internal func parseMIDI2Utility(
         bytes: Array<UInt8>.SubSequence,
         group: UInt4

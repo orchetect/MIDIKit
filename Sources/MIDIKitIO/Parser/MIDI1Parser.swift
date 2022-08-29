@@ -376,7 +376,7 @@ public final class MIDI1Parser {
     ///
     /// Bytes passed into this method should be guaranteed to be a single valid MIDI message.
     ///
-    /// - note: This is a helper method only intended to be called internally from within `MIDIPacketData.parseEvents()`.
+    /// - Note: This is a helper method only intended to be called internally.
     internal static func parseSingleMessage(
         _ bytes: [UInt8],
         translateNoteOnZeroVelocityToNoteOff: Bool = true,

@@ -21,11 +21,11 @@ extension MIDIEvent.NoteCC.PerNoteController {
         /// Pitch 7.25
         /// (Int: 3, Hex: 0x03)
         ///
-        /// See `MIDIEvent.NoteCC.Controller.Registered.Pitch7_25`
+        /// See ``MIDIEvent/NoteCC/PerNoteController/Registered/Pitch7_25``
         /// to convert `UInt32` value data to/from **Pitch 7.25** values.
         case pitch7_25
     
-        // Registered Per-Note CC 4...6 undefined
+        // Registered Per-Note CC 4 ... 6 undefined
     
         /// Volume
         /// (Int: 7, Hex: 0x07)
@@ -45,7 +45,7 @@ extension MIDIEvent.NoteCC.PerNoteController {
         /// (Int: 11, Hex: 0x0B)
         case expression
     
-        // Registered Per-Note CC 12...69 undefined
+        // Registered Per-Note CC 12 ... 69 undefined
     
         /// Sound Controller 1
         /// (default: Sound Variation)
@@ -97,7 +97,7 @@ extension MIDIEvent.NoteCC.PerNoteController {
         /// (Int: 79, Hex: 0x4F)
         case soundCtrl10_defaultUndefined
     
-        // Registered Per-Note CC 80...90 undefined
+        // Registered Per-Note CC 80 ... 90 undefined
     
         /// Effects 1 Depth
         /// (default: Reverb Send Level - see MMA RP-023)
@@ -126,7 +126,7 @@ extension MIDIEvent.NoteCC.PerNoteController {
         /// (Int: 95, Hex: 0x5F)
         case effects5Depth
     
-        // Per-Note CC 96...255 undefined
+        // Per-Note CC 96 ... 255 undefined
     
         /// Undefined controller number
         case undefined(Undefined)

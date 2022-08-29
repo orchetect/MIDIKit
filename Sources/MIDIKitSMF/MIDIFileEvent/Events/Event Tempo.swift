@@ -11,7 +11,7 @@ import MIDIKitCore
 
 extension MIDIFileEvent {
     /// Tempo event.
-    /// For a format 1 MIDI file, Tempo events should only occur within the first MTrk chunk.
+    /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
     /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
     public struct Tempo: Equatable, Hashable {
         /// Tempo.
@@ -27,7 +27,7 @@ extension MIDIFileEvent {
         }
         
         /// (Computed property)
-        /// Returns current `bpm` property as it will be read from the MIDI file after encoding.
+        /// Returns current ``bpm`` property as it will be read from the MIDI file after encoding.
         /// This is the effective tempo that DAWs will read when importing the MIDI file.
         public var bpmEncoded: Double {
             Self.microsecondsToBPM(ms: Self.bpmToMicroseconds(bpm: bpm))
@@ -37,7 +37,7 @@ extension MIDIFileEvent {
         ///
         /// - Get: Calculates microseconds-per-quarter note based on `bpm` property.
         ///
-        /// - Set: Sets `bpm` property to the calculated tempo from the passed microseconds-per-quarter note value.
+        /// - Set: Sets ``bpm`` property to the calculated tempo from the passed microseconds-per-quarter note value.
         public var microseconds: UInt32 {
             get {
                 Self.bpmToMicroseconds(bpm: bpm)

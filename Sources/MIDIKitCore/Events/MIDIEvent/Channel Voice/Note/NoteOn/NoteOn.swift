@@ -20,10 +20,10 @@ extension MIDIEvent {
         /// MIDI 2.0 Channel Voice Attribute
         public var attribute: NoteAttribute = .none
     
-        /// Channel Number (0x0...0xF)
+        /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         /// For MIDI 1.0, transmit velocity of 0 as a Note Off event.
@@ -35,9 +35,9 @@ extension MIDIEvent {
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
         ///   - velocity: Velocity
-        ///   - channel: Channel Number (0x0...0xF)
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
         ///   - attribute: MIDI 2.0 Channel Voice Attribute
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
         public init(
             note: UInt7,
@@ -61,9 +61,9 @@ extension MIDIEvent {
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
         ///   - velocity: Velocity
-        ///   - channel: Channel Number (0x0...0xF)
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
         ///   - attribute: MIDI 2.0 Channel Voice Attribute
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
         public init(
             note: MIDINote,
@@ -114,9 +114,9 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
     ///   - velocity: Velocity
-    ///   - channel: Channel Number (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
     public static func noteOn(
         _ note: UInt7,
@@ -144,9 +144,9 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
     ///   - velocity: Velocity
-    ///   - channel: Channel Number (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
     public static func noteOn(
         _ note: MIDINote,

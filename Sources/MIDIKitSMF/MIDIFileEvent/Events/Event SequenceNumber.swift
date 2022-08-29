@@ -16,7 +16,7 @@ extension MIDIFileEvent {
     ///
     /// - For MIDI file type 2, each track can contain a sequence number event.
     public struct SequenceNumber: Equatable, Hashable {
-        /// Sequence number (0...32767)
+        /// Sequence number (`0 ... 32767`)
         public var sequence: UInt16 = 0 {
             didSet {
                 if oldValue != sequence { sequence_Validate() }

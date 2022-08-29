@@ -39,7 +39,7 @@ extension HUISurface {
             state: Bool
         )
         
-        /// Select Assign readout text changed
+        /// Select Assign readout text changed.
         ///
         /// - Parameters:
         ///   - text: text string
@@ -50,7 +50,7 @@ extension HUISurface {
         /// A channel strip-related element was changed.
         ///
         /// - Parameters:
-        ///   - channel: channel strip 0...7
+        ///   - channel: channel strip `0 ... 7`
         ///   - param: enum describing what control was changed
         case channelStrip(
             channel: Int,
@@ -91,7 +91,7 @@ extension HUISurface {
         
         // MARK: Unhandled
         
-        /// Unhandled/unrecognized switch
+        /// Unhandled/unrecognized switch.
         case unhandledSwitch(
             zone: UInt8,
             port: UInt4,

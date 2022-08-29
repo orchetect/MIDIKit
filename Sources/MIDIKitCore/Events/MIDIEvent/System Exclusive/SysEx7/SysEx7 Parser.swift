@@ -7,10 +7,10 @@
 import Foundation
 
 extension MIDIEvent {
-    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
-    /// Message must begin with 0xF0 but terminating 0xF7 byte is optional.
+    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a ``sysEx7(manufacturer:data:group:)`` or ``universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
+    /// Message must begin with `0xF0` but terminating `0xF7` byte is optional.
     ///
-    /// - Throws: `MIDIEvent.ParseError` if message is malformed.
+    /// - Throws: ``ParseError`` if message is malformed.
     public static func sysEx7(
         rawBytes: [UInt8],
         group: UInt4 = 0
@@ -153,12 +153,12 @@ extension MIDIEvent {
         }
     }
     
-    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message in the form of a hex string and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
-    /// Message must begin with `F0` but terminating `F7` byte is optional.
+    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message in the form of a hex string and return a ``sysEx7(manufacturer:data:group:)`` or ``universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
+    /// Message must begin with `"F0"` but terminating `"F7"` byte is optional.
     ///
     /// Hex string may be formatted with (`"F7 01 02 03 F0"`) or without spaces (`"F7010203F0"`). String is case-insensitive.
     ///
-    /// - Throws: `MIDIEvent.ParseError` if message is malformed.
+    /// - Throws: ``ParseError`` if message is malformed.
     public static func sysEx7<S: StringProtocol>(
         rawHexString: S,
         group: UInt4 = 0

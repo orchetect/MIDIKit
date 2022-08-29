@@ -29,7 +29,7 @@ extension MIDIIOObject {
     ///
     /// A studio setup editor may allow the user to set the names of both driver-owned and external devices.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func getName() -> String? {
         try? MIDIKitIO.getName(of: coreMIDIObjectRef)
     }
@@ -42,7 +42,7 @@ extension MIDIIOObject {
     /// - Studio setup editors may allow the user to set this property on external devices.
     /// - Creators of virtual endpoints may set this property on their endpoints.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func getModel() -> String? {
         try? MIDIKitIO.getModel(of: coreMIDIObjectRef)
     }
@@ -55,7 +55,7 @@ extension MIDIIOObject {
     /// - Studio setup editors may allow the user to set this property on external devices.
     /// - Creators of virtual endpoints may set this property on their endpoints.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func getManufacturer() -> String? {
         try? MIDIKitIO.getManufacturer(of: coreMIDIObjectRef)
     }
@@ -101,7 +101,7 @@ extension MIDIIOObject {
     /// Get the device’s current patch, note, and control name values in MIDINameDocument XML format.
     /// (`kMIDIPropertyNameConfigurationDictionary`)
     ///
-    /// - requires: macOS 10.15, macCatalyst 13.0, iOS 13.0
+    /// - Requires: macOS 10.15, macCatalyst 13.0, iOS 13.0
     @available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *)
     public func getNameConfigurationDictionary() -> NSDictionary? {
         try? MIDIKitIO.getNameConfigurationDictionary(of: coreMIDIObjectRef)
@@ -120,7 +120,7 @@ extension MIDIIOObject {
     ///
     /// Only drivers may set this property on their owned devices.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func getDriverDeviceEditorApp() -> URL? {
         try? MIDIKitIO.getDriverDeviceEditorApp(of: coreMIDIObjectRef)
     }
@@ -134,7 +134,7 @@ extension MIDIIOObject {
     ///
     /// A studio setup editor should allow the user to choose icons for external devices.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func getImageFileURL() -> URL? {
         try? MIDIKitIO.getImage(of: coreMIDIObjectRef)
     }
@@ -162,7 +162,7 @@ extension MIDIIOObject {
     ///
     /// For objects other than endpoints, the display name is the same as its `kMIDIPropertyName` value.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func getDisplayName() -> String? {
         try? MIDIKitIO.getDisplayName(of: coreMIDIObjectRef)
     }
@@ -184,7 +184,7 @@ extension MIDIIOObject {
     ///
     /// Clients can observe changes to this property.
     ///
-    /// - requires: macOS 11.0, macCatalyst 14.0, iOS 14.0
+    /// - Requires: macOS 11.0, macCatalyst 14.0, iOS 14.0
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
     public func getProtocolID() -> MIDIProtocolVersion? {
         guard let proto = MIDIKitIO.getProtocolID(of: coreMIDIObjectRef) else { return nil }
@@ -226,7 +226,7 @@ extension MIDIIOObject {
     ///
     /// You can also set this property on any virtual destinations you create. When clients send messages to a virtual destination with an advance schedule time of 0, the destination receives the messages at the scheduled delivery time. If a virtual destination has a nonzero advance schedule time, it receives timestamped messages as soon as they’re sent, and must do its own internal scheduling of events it receives.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func getAdvanceScheduleTimeMuSec() -> String? {
         try? MIDIKitIO.getAdvanceScheduleTimeMuSec(of: coreMIDIObjectRef)
     }
@@ -285,7 +285,7 @@ extension MIDIIOObject {
     ///
     /// Set by the owning driver, on the device; should not be touched by other clients. Property is inherited from the device by its entities and endpoints.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func getDriverOwner() -> String? {
         try? MIDIKitIO.getDriverOwner(of: coreMIDIObjectRef)
     }

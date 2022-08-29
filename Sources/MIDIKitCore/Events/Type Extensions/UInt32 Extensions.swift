@@ -8,7 +8,7 @@ import Foundation
 
 extension UInt32 {
     /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint).
-    /// (`-1.0...0.0...1.0` == `0...0x80000000...0xFFFFFFFF`)
+    /// (`-1.0 ... 0.0 ... 1.0` == `0 ... 0x80000000 ... 0xFFFFFFFF`)
     ///
     /// Example:
     ///
@@ -31,7 +31,7 @@ extension UInt32 {
     }
     
     /// Converts from a bipolar floating-point unit interval (having a 0.0 neutral midpoint).
-    /// (`-1.0...0.0...1.0` == `0...0x80000000...0xFFFFFFFF`)
+    /// (`-1.0 ... 0.0 ... 1.0` == `0 ... 0x80000000 ... 0xFFFFFFFF`)
     ///
     /// Example:
     ///
@@ -53,7 +53,7 @@ extension UInt32 {
     }
     
     /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral midpoint at 0x80000000).
-    /// (`0...0x80000000...0xFFFFFFFF` == `-1.0...0.0...1.0`)
+    /// (`0 ... 0x80000000 ... 0xFFFFFFFF` == `-1.0 ... 0.0 ... 1.0`)
     public var bipolarUnitIntervalValue: Double {
         // Account for non-symmetry and round up.
         // (This is how MIDI 2.0 Spec pitch bend works.)

@@ -5,8 +5,10 @@
 //
 
 extension MIDIEvent.CC.Controller {
-    /// Channel Mode Messages (CC numbers 120...127)
+    /// Channel Mode Messages (CC numbers `120 ... 127`)
     /// (MIDI 1.0 / MIDI 2.0)
+    ///
+    /// These messages are originally defined in the MIDI 1.0 Spec as channel-wide settings modifying the operation of the channel.
     public enum Mode: Equatable, Hashable {
         /// [Channel Mode Message] All Sound Off
         /// (Int: 120, Hex: 0x78)
@@ -48,14 +50,14 @@ extension MIDIEvent.CC.Controller.Mode {
     public var controller: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .allSoundOff         : return 120
-        case .resetAllControllers : return 121
-        case .localControl        : return 122
-        case .allNotesOff         : return 123
-        case .omniModeOff         : return 124
-        case .omniModeOn          : return 125
-        case .monoModeOn          : return 126
-        case .polyModeOn          : return 127
+        case .allSoundOff:         return 120
+        case .resetAllControllers: return 121
+        case .localControl:        return 122
+        case .allNotesOff:         return 123
+        case .omniModeOff:         return 124
+        case .omniModeOn:          return 125
+        case .monoModeOn:          return 126
+        case .polyModeOn:          return 127
         }
         // swiftformat:enable spacearoundoperators
     }
@@ -66,14 +68,14 @@ extension MIDIEvent.CC.Controller.Mode {
     public var name: String {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .allSoundOff         : return "All Sound Off"
-        case .resetAllControllers : return "Reset All Controllers"
-        case .localControl        : return "Local Control"
-        case .allNotesOff         : return "All Notes Off"
-        case .omniModeOff         : return "Omni Mode Off"
-        case .omniModeOn          : return "Omni Mode On"
-        case .monoModeOn          : return "Mono Mode On"
-        case .polyModeOn          : return "Poly Mode On"
+        case .allSoundOff:         return "All Sound Off"
+        case .resetAllControllers: return "Reset All Controllers"
+        case .localControl:        return "Local Control"
+        case .allNotesOff:         return "All Notes Off"
+        case .omniModeOff:         return "Omni Mode Off"
+        case .omniModeOn:          return "Omni Mode On"
+        case .monoModeOn:          return "Mono Mode On"
+        case .polyModeOn:          return "Poly Mode On"
         }
         // swiftformat:enable spacearoundoperators
     }

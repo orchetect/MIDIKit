@@ -30,13 +30,13 @@ internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProto
     /// Internal:
     /// Send a MIDI Message, automatically assembling it into a `MIDIPacketList`.
     ///
-    /// - Parameter rawMessage: MIDI message
+    /// - Parameter rawMessage: MIDI message.
     func send(rawMessage: [UInt8]) throws
     
     /// Internal:
     /// Send one or more MIDI message(s), automatically assembling it into a `MIDIPacketList`.
     ///
-    /// - Parameter rawMessages: Array of MIDI messages
+    /// - Parameter rawMessages: Array of MIDI messages.
     func send(rawMessages: [[UInt8]]) throws
     
     /// Internal:

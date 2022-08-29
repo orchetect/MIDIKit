@@ -8,32 +8,32 @@ extension MIDIEvent {
     /// JR Timestamp (Jitter-Reduction Timestamp)
     /// (MIDI 2.0 Utility Messages)
     ///
-    /// - remark: MIDI 2.0 Spec:
-    ///
-    /// "The JR Timestamp message defines the time of the following message(s). It is a complete message.
-    ///
-    /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32)."
+    /// > MIDI 2.0 Spec:
+    /// >
+    /// > The JR Timestamp message defines the time of the following message(s). It is a complete message.
+    /// >
+    /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
     public struct JRTimestamp: Equatable, Hashable {
         /// 16-Bit Time Value
         ///
-        /// - remark: MIDI 2.0 Spec:
-        ///
-        /// "The JR Timestamp message defines the time of the following message(s). It is a complete message.
-        ///
-        /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32)."
+        /// > MIDI 2.0 Spec:
+        /// >
+        /// > The JR Timestamp message defines the time of the following message(s). It is a complete message.
+        /// >
+        /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
         public var time: UInt16
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         /// JR Timestamp (Jitter-Reduction Timestamp)
         /// (MIDI 2.0 Utility Messages)
         ///
-        /// - remark: MIDI 2.0 Spec:
-        ///
-        /// "The JR Timestamp message defines the time of the following message(s). It is a complete message.
-        ///
-        /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32)."
+        /// > MIDI 2.0 Spec:
+        /// >
+        /// > The JR Timestamp message defines the time of the following message(s). It is a complete message.
+        /// >
+        /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
         public init(
             time: UInt16,
             group: UInt4 = 0x0
@@ -46,11 +46,11 @@ extension MIDIEvent {
     /// JR Timestamp (Jitter-Reduction Timestamp)
     /// (MIDI 2.0 Utility Messages)
     ///
-    /// - remark: MIDI 2.0 Spec:
-    ///
-    /// "The JR Timestamp message defines the time of the following message(s). It is a complete message.
-    ///
-    /// A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32)."
+    /// > MIDI 2.0 Spec:
+    /// >
+    /// > The JR Timestamp message defines the time of the following message(s). It is a complete message.
+    /// >
+    /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
     public static func jrTimestamp(
         time: UInt16,
         group: UInt4 = 0x0

@@ -9,14 +9,14 @@ import Foundation
 extension MIDIEvent {
     /// Channel Voice 7-Bit (MIDI 1.0) / 16-Bit (MIDI 2.0) Value
     public enum ChanVoice7Bit16BitValue: Hashable {
-        /// Protocol-agnostic unit interval (0.0...1.0)
+        /// Protocol-agnostic unit interval (`0.0 ... 1.0`)
         /// Scaled automatically depending on MIDI protocol (1.0/2.0) in use.
         case unitInterval(Double)
     
-        /// MIDI 1.0 7-bit Channel Voice Value (0x00..0x7F)
+        /// MIDI 1.0 7-bit Channel Voice Value (`0x00 ... 0x7F`)
         case midi1(UInt7)
     
-        /// MIDI 2.0 16-bit Channel Voice Value (0x0000...0xFFFF)
+        /// MIDI 2.0 16-bit Channel Voice Value `(0x0000 ... 0xFFFF)`
         case midi2(UInt16)
     }
 }

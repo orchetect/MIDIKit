@@ -34,10 +34,10 @@ extension MIDIEvent {
         )
     }
     
-    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a `.sysEx7()` or `.universalSysEx7()` case if successful.
-    /// Message must begin with 0xF0 but terminating 0xF7 byte is optional.
+    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a ``sysEx7(manufacturer:data:group:)`` or ``universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
+    /// Message must begin with `0xF0` but terminating `0xF7` byte is optional.
     ///
-    /// - Throws: `MIDIEvent.ParseError` if message is malformed.
+    /// - Throws: ``ParseError`` if message is malformed.
     @available(*, unavailable, renamed: "Event.sysEx7(rawBytes:group:)")
     public init(
         sysEx7RawBytes rawBytes: [UInt8],
@@ -51,11 +51,11 @@ extension MIDIEvent {
         self = sysEx
     }
     
-    /// Parse a complete MIDI 2.0 System Exclusive 8 message (starting with the Stream ID byte until the end of the packet) and return a `.sysEx8()` or `.universalSysEx8()` case if successful.
+    /// Parse a complete MIDI 2.0 System Exclusive 8 message (starting with the Stream ID byte until the end of the packet) and return a ``sysEx8(manufacturer:data:group:)`` or ``universalSysEx8(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
     ///
-    /// Valid rawBytes count is 1...14. (Must always contain a Stream ID, even if there are zero data bytes to follow)
+    /// Valid rawBytes count is `1 ... 14`. (Must always contain a Stream ID, even if there are zero data bytes to follow)
     ///
-    /// - Throws: `MIDIEvent.ParseError` if message is malformed.
+    /// - Throws: ``ParseError`` if message is malformed.
     @available(*, unavailable, renamed: "Event.sysEx8(rawBytes:group:)")
     public init(
         sysEx8RawBytes rawBytes: [UInt8],

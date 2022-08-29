@@ -11,10 +11,10 @@ extension MIDIEvent {
         @ValueValidated
         public var value: Value
     
-        /// Channel Number (0x0...0xF)
+        /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(
@@ -31,9 +31,9 @@ extension MIDIEvent {
     /// Channel Voice Message: Pitch Bend
     ///
     /// - Parameters:
-    ///   - value: 14-bit Value (0...16383) where midpoint is 8192
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - value: 14-bit Value (`0 ... 16383`) where midpoint is 8192
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func pitchBend(
         value: PitchBend.Value,
         channel: UInt4,

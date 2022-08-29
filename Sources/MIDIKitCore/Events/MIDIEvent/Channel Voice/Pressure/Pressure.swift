@@ -17,10 +17,10 @@ extension MIDIEvent {
         @AmountValidated
         public var amount: Amount
     
-        /// Channel Number (0x0...0xF)
+        /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(
@@ -44,8 +44,8 @@ extension MIDIEvent {
     ///
     /// - Parameters:
     ///   - amount: Pressure Amount
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func pressure(
         amount: Pressure.Amount,
         channel: UInt4,

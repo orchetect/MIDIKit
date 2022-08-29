@@ -41,7 +41,7 @@ extension HUIParameter.ChannelParameter: HUIParameterProtocol {
         // note: zone (channel number) will be provided when accessed from `HUIParameter.zoneAndPort`
         
         // this method is only here to fulfill the HUIParameterProtocol protocol requirement, it's not actually used (and should not actually be used)
-        // if it is ever used, the channel (0x00) provided here should be replaced with the channel strip number (0x00...0x07) after calling this method
+        // if it is ever used, the channel (0x00) provided here should be replaced with the channel strip number (0x00 ... 0x07) after calling this method
         
         (0x00, port)
     }

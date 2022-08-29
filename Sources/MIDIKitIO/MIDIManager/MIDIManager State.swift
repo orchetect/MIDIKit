@@ -14,7 +14,7 @@ extension MIDIManager {
     /// Call this method once after initializing a new instance.
     /// Subsequent calls will not have any effect.
     ///
-    /// - Throws: `MIDIIOError.osStatus`
+    /// - Throws: ``MIDIIOError/osStatus(_:)``
     public func start() throws {
         try eventQueue.sync {
             // if start() was already called, return

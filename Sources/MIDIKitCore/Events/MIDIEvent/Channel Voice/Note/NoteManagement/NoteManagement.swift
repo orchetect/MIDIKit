@@ -18,10 +18,10 @@ extension MIDIEvent {
         /// Option Flags
         public var optionFlags: Set<OptionFlag> = []
     
-        /// Channel Number (0x0...0xF)
+        /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         /// Channel Voice Message: Per-Note Management
@@ -32,9 +32,9 @@ extension MIDIEvent {
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
         ///   - velocity: Velocity
-        ///   - channel: Channel Number (0x0...0xF)
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
         ///   - attribute: MIDI 2.0 Channel Voice Attribute
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             note: UInt7,
             optionFlags: Set<OptionFlag> = [],
@@ -55,9 +55,9 @@ extension MIDIEvent {
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
         ///   - velocity: Velocity
-        ///   - channel: Channel Number (0x0...0xF)
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
         ///   - attribute: MIDI 2.0 Channel Voice Attribute
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             note: MIDINote,
             optionFlags: Set<OptionFlag> = [],
@@ -81,9 +81,9 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
     ///   - velocity: Velocity
-    ///   - channel: Channel Number (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func noteManagement(
         note: UInt7,
         flags: Set<NoteManagement.OptionFlag>,
@@ -108,9 +108,9 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
     ///   - velocity: Velocity
-    ///   - channel: Channel Number (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func noteManagement(
         note: MIDINote,
         flags: Set<NoteManagement.OptionFlag>,
@@ -160,16 +160,16 @@ extension MIDIEvent.NoteManagement {
     public enum OptionFlag: Equatable, Hashable {
         /// [D] Detach Per-Note Controllers from previously received Note(s)
         ///
-        /// - remark: MIDI 2.0 Spec:
-        ///
-        /// "When a device receives a Per-Note Management message with D = 1 (Detach), all currently playing notes and previous notes on the referenced Note Number shall no longer respond to any Per-Note controllers. Currently playing notes shall maintain the current values for all Per-Note controllers until the end of the note life cycle."
+        /// > MIDI 2.0 Spec:
+        /// >
+        /// > When a device receives a Per-Note Management message with D = 1 (Detach), all currently playing notes and previous notes on the referenced Note Number shall no longer respond to any Per-Note controllers. Currently playing notes shall maintain the current values for all Per-Note controllers until the end of the note life cycle.
         case detachPerNoteControllers
     
         /// [S] Reset/Set Per-Note Controllers to default values
         ///
-        /// - remark: MIDI 2.0 Spec:
-        ///
-        /// "When a device receives a Per-Note Management message with S = 1, all Per-Note controllers on the referenced Note Number should be reset to their default values."
+        /// > MIDI 2.0 Spec:
+        /// >
+        /// > When a device receives a Per-Note Management message with S = 1, all Per-Note controllers on the referenced Note Number should be reset to their default values.
         case resetPerNoteControllers
     }
 }

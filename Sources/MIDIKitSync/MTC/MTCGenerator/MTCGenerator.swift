@@ -17,7 +17,7 @@ public class MTCGenerator: SendsMIDIEvents {
         
     /// The MTC SMPTE frame rate (24, 25, 29.97d, or 30) that was last transmitted by the generator.
     ///
-    /// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the local `timecode.frameRate` property is used for automatic selection of MTC SMPTE frame rate and scaling of outgoing timecode accordingly.
+    /// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the local ``timecode``.`frameRate` property is used for automatic selection of MTC SMPTE frame rate and scaling of outgoing timecode accordingly.
     public var mtcFrameRate: MTCFrameRate {
         var getMTCFrameRate: MTCFrameRate!
             
@@ -58,7 +58,7 @@ public class MTCGenerator: SendsMIDIEvents {
         
     /// Behavior determining when MTC Full-Frame MIDI messages should be generated.
     ///
-    /// `.ifDifferent` is recommended and suitable for most implementations.
+    /// ``MTCEncoder/FullFrameBehavior/ifDifferent`` is recommended and suitable for most implementations.
     @ThreadSafeAccess
     public var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
         
@@ -176,9 +176,7 @@ public class MTCGenerator: SendsMIDIEvents {
     /// Locate to a new timecode, while not generating continuous playback MIDI message stream.
     /// Sends a MTC full-frame message.
     ///
-    /// - Note: `timecode` may contain subframes > 0 to locate; subframes will be stripped prior to transmitting the full-frame message since the resolution of MTC full-frame messages is 1 frame.
-    ///
-    /// However, if subframes is > 0, you should not call `.start()` subsequently as it will not synchronize correctly. Instead, call `.start(now:)`.
+    /// - Note: `timecode` may contain `subframes > 0` to locate; subframes will be stripped prior to transmitting the full-frame message since the resolution of MTC full-frame messages is 1 frame.
     public func locate(to timecode: Timecode) {
         queue.sync {
             encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
@@ -189,9 +187,7 @@ public class MTCGenerator: SendsMIDIEvents {
     /// Locate to a new timecode, while not generating continuous playback MIDI message stream.
     /// Sends a MTC full-frame message.
     ///
-    /// - Note: `components` may contain subframes > 0 to locate; subframes will be stripped prior to transmitting the full-frame message since the resolution of MTC full-frame messages is 1 frame.
-    ///
-    /// However, if subframes is > 0, you should not call `.start()` subsequently as it will not synchronize correctly. Instead, call `.start(now:)`.
+    /// > Note: `components` may contain `subframes > 0` to locate; subframes will be stripped prior to transmitting the full-frame message since the resolution of MTC full-frame messages is 1 frame.
     public func locate(to components: Timecode.Components) {
         queue.sync {
             encoder.locate(to: components, transmitFullFrame: locateBehavior)
@@ -202,11 +198,11 @@ public class MTCGenerator: SendsMIDIEvents {
     /// Starts generating MTC continuous playback MIDI message stream events.
     /// Call this method at the exact time that `timecode` occurs.
     ///
-    /// Frame rate will be derived from the `timecode` object passed in.
+    /// Frame rate will be derived from the `timecode` instance passed in.
     ///
-    /// - Note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
+    /// > Note: It is not necessary to send a ``locate(to:)-1u162`` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
-    /// Call `stop()` to stop generating events.
+    /// Call ``stop()`` to stop generating events.
     public func start(now timecode: Timecode) {
         queue.sync {
             shouldStart = true
@@ -236,9 +232,9 @@ public class MTCGenerator: SendsMIDIEvents {
     /// Starts generating MTC continuous playback MIDI message stream events.
     /// Call this method at the exact time that `realTime` occurs.
     ///
-    /// - Note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
+    /// > Note: It is not necessary to send a ``locate(to:)-1u162`` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
-    /// Call `stop()` to stop generating events.
+    /// Call ``stop()`` to stop generating events.
     public func start(
         now components: Timecode.Components,
         frameRate: Timecode.FrameRate,
@@ -260,9 +256,9 @@ public class MTCGenerator: SendsMIDIEvents {
     /// Starts generating MTC continuous playback MIDI message stream events.
     /// Call this method at the exact time that `realTime` occurs.
     ///
-    /// - Note: It is not necessary to send a `locate(to:)` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
+    /// > Note: It is not necessary to send a ``locate(to:)-1u162`` message simultaneously or immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
-    /// Call `stop()` to stop generating events.
+    /// Call ``stop()`` to stop generating events.
     public func start(
         now realTime: TimeInterval,
         frameRate: Timecode.FrameRate
@@ -324,9 +320,9 @@ public class MTCGenerator: SendsMIDIEvents {
         }
     }
         
-    /// Internal: called from all other start(...) methods when they are finally ready to initiate the start of MTC generation.
-    /// - Note: This method assumes subframes == 0.
-    /// - Note: This must be called on `self.queue`.
+    /// Internal: called from all other `start(...)` methods when they are finally ready to initiate the start of MTC generation.
+    /// - Note: This method assumes `subframes == 0`.
+    /// - Important: This must be called on `self.queue`.
     internal func locateAndStart(
         now components: Timecode.Components,
         frameRate: Timecode.FrameRate

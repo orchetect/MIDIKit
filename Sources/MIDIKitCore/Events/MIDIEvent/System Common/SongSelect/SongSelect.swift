@@ -8,14 +8,14 @@ extension MIDIEvent {
     /// System Common: Song Select
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real-Time messages (MIDI Sync)."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real-Time messages (MIDI Sync).
     public struct SongSelect: Equatable, Hashable {
         /// Song Number
         public var number: UInt7
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(
@@ -30,13 +30,13 @@ extension MIDIEvent {
     /// System Common: Song Select
     /// (MIDI 1.0 / 2.0)
     ///
-    /// - remark: MIDI 1.0 Spec:
-    ///
-    /// "Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real-Time messages (MIDI Sync)."
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > Specifies which song or sequence is to be played upon receipt of a Start message in sequencers and drum machines capable of holding multiple songs or sequences. This message should be ignored if the receiver is not set to respond to incoming Real-Time messages (MIDI Sync).
     ///
     /// - Parameters:
     ///   - number: Song Number
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func songSelect(
         number: UInt7,
         group: UInt4 = 0x0

@@ -5,14 +5,14 @@
 //
 
 extension MIDIEvent.CC.Controller {
-    /// Cases describing MIDI CC NRPNs (Non-Registered Parameter Numbers)
+    /// Cases describing MIDI CC NRPNs (Non-Registered Parameter Numbers).
     /// (MIDI 1.0 / MIDI 2.0)
     ///
     /// See Recommended Practise RP-018 of the MIDI 1.0 Spec Addenda.
     public enum NRPN: Equatable, Hashable {
         /// Form an RPN message from a raw parameter number byte pair.
         ///
-        /// - parameters:
+        /// - Parameters:
         ///   - parameter: UInt8 pair.
         ///   - dataEntryMSB: Optional data entry MSB byte to follow.
         ///   - dataEntryMSB: Optional data entry LSB byte to follow.

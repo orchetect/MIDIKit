@@ -6,7 +6,7 @@
 
 import Foundation
 
-/// Object describing a MIDI note number.
+/// Value type describing a MIDI note number.
 ///
 /// Constructors and properties allow getting and setting by raw value, note name & octave, or string representation.
 public struct MIDINote: Equatable, Hashable {
@@ -278,8 +278,8 @@ extension MIDINote {
 
 extension MIDINote {
     /// Utility method that returns frequency in Hz calculated from a MIDI note number.
-    /// - parameter midiNote: MIDI note number
-    /// - parameter tuning: Tuning in Hertz
+    /// - Parameter midiNote: MIDI note number
+    /// - Parameter tuning: Tuning in Hertz
     public static func calculateFrequency(
         midiNote: Int,
         tuning: Double = 440.0
@@ -288,9 +288,9 @@ extension MIDINote {
     }
     
     /// Utility method that returns a MIDI note number calculated from frequency in Hz.
-    /// Note: Results may be out-of-bounds (outside of 0...127)
-    /// - parameter frequency: MIDI note number
-    /// - parameter tuning: Tuning in Hertz
+    /// Note: Results may be out-of-bounds (outside of `0 ... 127`)
+    /// - Parameter frequency: MIDI note number
+    /// - Parameter tuning: Tuning in Hertz
     public static func calculateMIDINoteNumber(
         frequency: Double,
         tuning: Double = 440.0

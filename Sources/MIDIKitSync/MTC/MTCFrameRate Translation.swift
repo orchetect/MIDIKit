@@ -130,7 +130,7 @@ extension Timecode.FrameRate {
     ///
     /// - Parameter fromTimecodeFrames: A `Double` with the integer part representing frame number and the fractional part representing the fraction of the frame.
     ///
-    /// - Returns: `(rawMTCFrames: Int, rawMTCQuarterFrames: UInt8)` where `rawMTCFrames` is raw MTC frame number, as decoded from quarter-frame messages and `rawMTCQuarterFrames` is number of QFs elapsed (0...7).
+    /// - Returns: `(rawMTCFrames: Int, rawMTCQuarterFrames: UInt8)` where `rawMTCFrames` is raw MTC frame number, as decoded from quarter-frame messages and `rawMTCQuarterFrames` is number of QFs elapsed (`0 ... 7`).
     internal func scaledFrames(
         fromTimecodeFrames: Double
     ) -> (

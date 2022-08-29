@@ -14,7 +14,7 @@ extension MIDIEvent {
         /// Bus Number
         public var bus: UInt7 = 0
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(
@@ -32,7 +32,7 @@ extension MIDIEvent {
     ///
     /// - Parameters:
     ///   - bus: Bus Number (0x00...0x7F)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func unofficialBusSelect(
         bus: UInt7,
         group: UInt4 = 0x0

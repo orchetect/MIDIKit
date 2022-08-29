@@ -8,7 +8,7 @@
 
 @_implementationOnly import CoreMIDI
 
-/// Returns true if current platform supports MIDI play-thru connections.
+/// Returns `true` if current platform supports MIDI play-thru connections.
 ///
 /// MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core MIDI bugs on later macOS releases.
 internal var isThruConnectionsSupportedOnCurrentPlatform: Bool {
@@ -26,7 +26,7 @@ internal var isThruConnectionsSupportedOnCurrentPlatform: Bool {
 ///
 /// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first made
 ///
-/// - Throws: `MIDIIOError.osStatus`
+/// - Throws: ``MIDIIOError/osStatus(_:)``
 internal func getSystemThruConnectionsPersistentEntries(
     matching persistentOwnerID: String
 ) throws -> [CoreMIDI.MIDIThruConnectionRef] {
@@ -68,7 +68,7 @@ internal func getSystemThruConnectionsPersistentEntries(
 ///
 /// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first made
 ///
-/// - Throws: `MIDIIOError.osStatus`
+/// - Throws: ``MIDIIOError/osStatus(_:)``
 ///
 /// - Returns: Number of deleted matching connections.
 @discardableResult
@@ -98,7 +98,7 @@ internal func removeAllSystemThruConnectionsPersistentEntries(
 /// Internal:
 /// Returns parameters for a play-thru connection by querying Core MIDI.
 ///
-/// - Throws: `MIDIIOError.osStatus`
+/// - Throws: ``MIDIIOError/osStatus(_:)``
 ///
 /// - Returns: New `MIDIThruConnectionParams` instance.
 internal func getThruConnectionParameters(

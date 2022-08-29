@@ -372,7 +372,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         // non-UInt32 aligned data layout (multiples of 4 bytes)
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0x80, 0x01]), [])
-        // valid 4-byte UInt32 word followed by non-uniform 1...3 bytes:
+        // valid 4-byte UInt32 word followed by non-uniform 1 ... 3 bytes:
         //   - technically a malformed packet
         //   - this would almost never happen since UMP packets are always 4-byte aligned;
         //   - the only way we would encounter non-4 byte alignment is if we feed raw bytes

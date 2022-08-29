@@ -20,10 +20,10 @@ extension MIDIEvent {
         @AmountValidated
         public var amount: Amount
     
-        /// Channel Number (0x0...0xF)
+        /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         /// Channel Voice Message: Polyphonic Aftertouch
@@ -78,8 +78,8 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - note: Note Number for which pressure is applied
     ///   - amount: Pressure Amount
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func notePressure(
         note: UInt7,
         amount: NotePressure.Amount,
@@ -107,8 +107,8 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - note: Note Number for which pressure is applied
     ///   - amount: Pressure Amount
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func notePressure(
         note: MIDINote,
         amount: NotePressure.Amount,

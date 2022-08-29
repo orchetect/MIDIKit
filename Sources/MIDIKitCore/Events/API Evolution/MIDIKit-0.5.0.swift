@@ -10,8 +10,9 @@ import Foundation
 
 extension MIDINote {
     /// Utility method that returns frequency in Hz calculated from a MIDI note number.
-    /// - parameter ofMIDINote: MIDI note number
-    /// - parameter tuning: Tuning in Hertz
+    ///
+    /// - Parameter ofMIDINote: MIDI note number
+    /// - Parameter tuning: Tuning in Hertz
     @available(*, unavailable, renamed: "calculateFrequency(midiNote:tuning:)")
     public static func calculateFrequency(
         ofMIDINote: Int,
@@ -24,9 +25,11 @@ extension MIDINote {
     }
     
     /// Utility method that returns a MIDI note number calculated from frequency in Hz.
-    /// Note: Results may be out-of-bounds (outside of 0...127)
-    /// - parameter ofFrequency: MIDI note number
-    /// - parameter tuning: Tuning in Hertz
+    ///
+    /// > Note: Results may be out-of-bounds (outside of `0 ... 127`)
+    ///
+    /// - Parameter ofFrequency: MIDI note number
+    /// - Parameter tuning: Tuning in Hertz
     @available(*, unavailable, renamed: "calculateMIDINoteNumber(frequency:tuning:)")
     public static func calculateMIDINoteNumber(
         ofFrequency: Double,

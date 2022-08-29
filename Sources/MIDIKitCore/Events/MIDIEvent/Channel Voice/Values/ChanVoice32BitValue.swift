@@ -7,22 +7,22 @@
 extension MIDIEvent {
     /// Channel Voice 32-Bit (MIDI 2.0) Value
     public enum ChanVoice32BitValue: Hashable {
-        /// Protocol-agnostic unit interval (0.0...1.0)
+        /// Protocol-agnostic unit interval (`0.0 ... 1.0`)
         /// Scaled automatically depending on MIDI protocol (1.0/2.0) in use.
         case unitInterval(Double)
     
-        /// MIDI 2.0 32-bit Channel Voice Value (0x00000000...0xFFFFFFFF)
+        /// MIDI 2.0 32-bit Channel Voice Value (`0x00000000 ... 0xFFFFFFFF`)
         case midi2(UInt32)
     
         // conversion initializers from MIDI 1 value types
     
-        /// Returns `.midi2()` case converting from a MIDI 1.0 7-Bit value.
+        /// Returns ``midi2(_:)`` case converting from a MIDI 1.0 7-Bit value.
         public static func midi1(sevenBit: UInt7) -> Self {
             let scaled = MIDIEvent.scaled32Bit(from7Bit: sevenBit)
             return .midi2(scaled)
         }
     
-        /// Returns `.midi2()` case converting from a MIDI 1.0 14-Bit value.
+        /// Returns ``midi2(_:)`` case converting from a MIDI 1.0 14-Bit value.
         public static func midi1(fourteenBit: UInt14) -> Self {
             let scaled = MIDIEvent.scaled32Bit(from14Bit: fourteenBit)
             return .midi2(scaled)

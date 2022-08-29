@@ -84,8 +84,8 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 
 ```swift
 // return only note on/off events within certain note number range(s)
-.filter(chanVoice: .onlyNotesInRange(40...80))
-.filter(chanVoice: .onlyNotesInRanges([20...40, 60...80]))
+.filter(chanVoice: .onlyNotesInRange(40 ... 80))
+.filter(chanVoice: .onlyNotesInRanges([20 ... 40, 60 ... 80]))
 ```
 
 ### Keep
@@ -119,8 +119,8 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 ```swift
 // retains only note on/off events within certain note ranges(s),
 // while retaining all non-Channel Voice events
-.filter(chanVoice: .keepNotesInRange(40...80))
-.filter(chanVoice: .keepNotesInRanges([20...40, 60...80]))
+.filter(chanVoice: .keepNotesInRange(40 ... 80))
+.filter(chanVoice: .keepNotesInRanges([20 ... 40, 60 ... 80]))
 ```
 
 ### Drop
@@ -160,8 +160,8 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 ```swift
 // drop note on/off events within certain note ranges(s),
 // while retaining all non-Channel Voice events
-.filter(chanVoice: .dropNotesInRange(40...80))
-.filter(chanVoice: .dropNotesInRanges([20...40, 60...80]))
+.filter(chanVoice: .dropNotesInRange(40 ... 80))
+.filter(chanVoice: .dropNotesInRanges([20 ... 40, 60 ... 80]))
 ```
 
 ## System Common

@@ -82,7 +82,7 @@ extension MIDIFile {
                         newChunk = .track(newTrack)
                     
                     default:
-                        // as per Standard MIDI File Spec 1.0,
+                        // as per Standard MIDI File 1.0 Spec:
                         // unrecognized chunks should be skipped and not throw an error
                         
                         let newUnrecognizedChunk = try Chunk

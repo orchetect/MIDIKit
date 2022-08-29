@@ -20,10 +20,10 @@ extension MIDIEvent {
         /// MIDI 2.0 Channel Voice Attribute
         public var attribute: NoteAttribute = .none
     
-        /// Channel Number (0x0...0xF)
+        /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         /// Channel Voice Message: Note Off
@@ -32,9 +32,9 @@ extension MIDIEvent {
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
         ///   - velocity: Velocity
-        ///   - channel: Channel Number (0x0...0xF)
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
         ///   - attribute: MIDI 2.0 Channel Voice Attribute
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             note: UInt7,
             velocity: MIDIEvent.NoteVelocity,
@@ -55,9 +55,9 @@ extension MIDIEvent {
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
         ///   - velocity: Velocity
-        ///   - channel: Channel Number (0x0...0xF)
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
         ///   - attribute: MIDI 2.0 Channel Voice Attribute
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             note: MIDINote,
             velocity: MIDIEvent.NoteVelocity,
@@ -81,9 +81,9 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
     ///   - velocity: Velocity
-    ///   - channel: Channel Number (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func noteOff(
         _ note: UInt7,
         velocity: NoteVelocity,
@@ -108,9 +108,9 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
     ///   - velocity: Velocity
-    ///   - channel: Channel Number (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func noteOff(
         _ note: MIDINote,
         velocity: NoteVelocity,

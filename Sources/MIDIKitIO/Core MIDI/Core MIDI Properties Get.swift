@@ -15,9 +15,9 @@
 ///
 /// - Parameters:
 ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
-///   - deep: Returns nested results for all children if `True`.
+///   - deep: Returns nested results for all children if `true`.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getProperties(
     of ref: CoreMIDI.MIDIObjectRef,
     deep: Bool = false
@@ -51,7 +51,7 @@ internal func getProperties(
 ///   - forProperty: a `CoreMIDI.Property` constant
 ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getDictionary(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef
@@ -85,7 +85,7 @@ internal func getDictionary(
 ///   - forProperty: a `CoreMIDI.Property` constant
 ///   - ref: Core MIDI object ref (`MIDIObjectRef`)
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getString(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef
@@ -136,7 +136,7 @@ internal func getInteger(
 ///
 /// A studio setup editor may allow the user to set the names of both driver-owned and external devices.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getName(of ref: CoreMIDI.MIDIObjectRef) throws -> String {
     try getString(forProperty: kMIDIPropertyName, of: ref)
 }
@@ -149,7 +149,7 @@ internal func getName(of ref: CoreMIDI.MIDIObjectRef) throws -> String {
 /// - Studio setup editors may allow the user to set this property on external devices.
 /// - Creators of virtual endpoints may set this property on their endpoints.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getModel(of ref: CoreMIDI.MIDIObjectRef) throws -> String {
     try getString(forProperty: kMIDIPropertyModel, of: ref)
 }
@@ -162,7 +162,7 @@ internal func getModel(of ref: CoreMIDI.MIDIObjectRef) throws -> String {
 /// - Studio setup editors may allow the user to set this property on external devices.
 /// - Creators of virtual endpoints may set this property on their endpoints.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getManufacturer(of ref: CoreMIDI.MIDIObjectRef) throws -> String {
     try getString(forProperty: kMIDIPropertyManufacturer, of: ref)
 }
@@ -208,7 +208,7 @@ internal func getSupportsShowControl(of ref: CoreMIDI.MIDIObjectRef) -> Bool {
 /// Get the device’s current patch, note, and control name values in MIDINameDocument XML format.
 /// (`kMIDIPropertyNameConfigurationDictionary`)
 ///
-/// - requires: macOS 10.15, macCatalyst 13.0, iOS 13.0
+/// - Requires: macOS 10.15, macCatalyst 13.0, iOS 13.0
 @available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *)
 internal func getNameConfigurationDictionary(
     of ref: CoreMIDI.MIDIObjectRef
@@ -229,7 +229,7 @@ internal func getMaxSysExSpeed(of ref: CoreMIDI.MIDIObjectRef) -> Int32 {
 ///
 /// Only drivers may set this property on their owned devices.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getDriverDeviceEditorApp(of ref: CoreMIDI.MIDIObjectRef) throws -> URL {
     let posixPath = try getString(forProperty: kMIDIPropertyDriverDeviceEditorApp, of: ref)
     return URL(fileURLWithPath: posixPath)
@@ -244,7 +244,7 @@ internal func getDriverDeviceEditorApp(of ref: CoreMIDI.MIDIObjectRef) throws ->
 ///
 /// A studio setup editor should allow the user to choose icons for external devices.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getImage(of ref: CoreMIDI.MIDIObjectRef) throws -> URL {
     let posixPath = try getString(forProperty: kMIDIPropertyImage, of: ref)
     return URL(fileURLWithPath: posixPath)
@@ -256,7 +256,7 @@ internal func getImage(of ref: CoreMIDI.MIDIObjectRef) throws -> URL {
 ///
 /// For objects other than endpoints, the display name is (sometimes) the same as its `kMIDIPropertyName` value.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getDisplayName(of ref: CoreMIDI.MIDIObjectRef) throws -> String {
     try getString(forProperty: kMIDIPropertyDisplayName, of: ref)
 }
@@ -278,7 +278,7 @@ internal func getPanDisruptsStereo(of ref: CoreMIDI.MIDIObjectRef) -> Bool {
 ///
 /// Clients can observe changes to this property.
 ///
-/// - requires: macOS 11.0, macCatalyst 14.0, iOS 14.0
+/// - Requires: macOS 11.0, macCatalyst 14.0, iOS 14.0
 @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
 internal func getProtocolID(of ref: CoreMIDI.MIDIObjectRef) -> CoreMIDI.MIDIProtocolID? {
     CoreMIDI.MIDIProtocolID(
@@ -321,7 +321,7 @@ internal func getReceivesClock(of ref: CoreMIDI.MIDIObjectRef) -> Bool {
 ///
 /// You can also set this property on any virtual destinations you create. When clients send messages to a virtual destination with an advance schedule time of 0, the destination receives the messages at the scheduled delivery time. If a virtual destination has a nonzero advance schedule time, it receives timestamped messages as soon as they’re sent, and must do its own internal scheduling of events it receives.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getAdvanceScheduleTimeMuSec(of ref: CoreMIDI.MIDIObjectRef) throws -> String {
     try getString(forProperty: kMIDIPropertyAdvanceScheduleTimeMuSec, of: ref)
 }
@@ -356,8 +356,8 @@ internal func getIsDrumMachine(of ref: CoreMIDI.MIDIObjectRef) -> Bool {
     
 /// Get a Boolean value that indicates whether the object is offline.
 ///
-/// `True` indicates the device is temporarily absent and offline.
-/// `False` indicates the object is present.
+/// `true` indicates the device is temporarily absent and offline.
+/// `false` indicates the object is present.
 ///
 /// (`kMIDIPropertyOffline`)
 internal func getIsOffline(of ref: CoreMIDI.MIDIObjectRef) -> Bool {
@@ -380,7 +380,7 @@ internal func getIsPrivate(of ref: CoreMIDI.MIDIObjectRef) -> Bool {
 ///
 /// Set by the owning driver, on the device; should not be touched by other clients. Property is inherited from the device by its entities and endpoints.
 ///
-/// - Throws: `MIDIIOError`
+/// - Throws: ``MIDIIOError``
 internal func getDriverOwner(of ref: CoreMIDI.MIDIObjectRef) throws -> String {
     try getString(forProperty: kMIDIPropertyDriverOwner, of: ref)
 }

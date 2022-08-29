@@ -10,18 +10,18 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDIManager {
-    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `MIDIManager`.
+    /// Adds a new managed input connection to the ``MIDIManager/managedInputConnections`` dictionary of the ``MIDIManager``.
     ///
     /// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Parameters:
     ///   - toOutputs: Criteria for identifying target MIDI endpoint(s). These may be added or removed later.
-    ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
-    ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
+    ///   - tag: Internal unique tag to reference the managed item in the ``MIDIManager``.
+    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides any criteria supplied in `toOutputs`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func addInputConnection(
         toOutputs: Set<MIDIEndpointIdentity>,
         tag: String,
@@ -48,18 +48,18 @@ extension MIDIManager {
         }
     }
     
-    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `MIDIManager`.
+    /// Adds a new managed input connection to the ``MIDIManager/managedInputConnections`` dictionary of the ``MIDIManager``.
     ///
     /// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Parameters:
     ///   - toOutputs: Criteria for identifying target MIDI endpoint(s). These may be added or removed later.
-    ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
-    ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
+    ///   - tag: Internal unique tag to reference the managed item in the ``MIDIManager``.
+    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides any criteria supplied in `toOutputs`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     public func addInputConnection(
         toOutputs: [MIDIEndpointIdentity],
         tag: String,
@@ -76,18 +76,18 @@ extension MIDIManager {
         )
     }
     
-    /// Adds a new managed input connection to the `managedInputConnections` dictionary of the `MIDIManager`.
+    /// Adds a new managed input connection to the ``MIDIManager/managedInputConnections`` dictionary of the ``MIDIManager``.
     ///
     /// This connects to one or more outputs in the system and subscribes to receive their MIDI events. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
     ///
     /// - Parameters:
     ///   - toOutputs: Target MIDI endpoint(s). These may be added or removed later.
-    ///   - tag: Internal unique tag to reference the managed item in the `MIDIManager`.
-    ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
+    ///   - tag: Internal unique tag to reference the managed item in the ``MIDIManager``.
+    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides any criteria supplied in `toOutputs`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///
-    /// - Throws: `MIDIIOError`
+    /// - Throws: ``MIDIIOError``
     @_disfavoredOverload
     public func addInputConnection(
         toOutputs: [MIDIOutputEndpoint],

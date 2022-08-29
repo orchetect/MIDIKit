@@ -13,12 +13,12 @@ import TimecodeKit
 extension MIDIFileEvent {
     /// Specify the SMPTE time at which the track is to start.
     /// This optional event, if present, should occur at the start of a track,
-    /// at time == 0, and prior to any MIDI events.
+    /// at `time == 0`, and prior to any MIDI events.
     /// Defaults to 00:00:00:00 @ 24fps.
     ///
-    /// - remark: Standard MIDI File Spec 1.0:
-    ///
-    /// MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE- based tracks which specify a different frame subdivision for delta-times.
+    /// > Standard MIDI File 1.0 Spec:
+    /// >
+    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE-based tracks which specify a different frame subdivision for delta-times.
     public struct SMPTEOffset: Equatable, Hashable {
         /// Timecode hour.
         /// Valid range: 0-23.
@@ -290,9 +290,9 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
 extension Timecode {
     /// Determines the best corresponding MIDI File SMPTE Offset frame rate to represent `self` and converts the timecode to that frame rate, and converts the subframes to be scaled to a 100 subframe divisor if needed.
     ///
-    /// - remark: Standard MIDI File Spec 1.0:
-    ///
-    /// MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE- based tracks which specify a different frame subdivision for delta-times.
+    /// > Standard MIDI File 1.0 Spec:
+    /// >
+    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE- based tracks which specify a different frame subdivision for delta-times.
     public var scaledToMIDIFileSMPTEFrameRate: (
         scaledTimecode: Timecode?,
         smpteFR: MIDIFile.SMPTEOffsetFrameRate

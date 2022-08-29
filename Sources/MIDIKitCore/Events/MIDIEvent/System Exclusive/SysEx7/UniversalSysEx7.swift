@@ -10,7 +10,7 @@ extension MIDIEvent {
     ///
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
     ///
-    /// - `deviceID` of 0x7F indicates "All Devices".
+    /// - `deviceID` of `0x7F` indicates "All Devices".
     public struct UniversalSysEx7: Equatable, Hashable {
         /// Universal SysEx type:
         /// realtime or non-realtime
@@ -29,7 +29,7 @@ extension MIDIEvent {
         /// Data bytes (7-bit) (excluding leading 0xF0, trailing 0xF7, universal type and ID bytes)
         public var data: [UInt8]
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         public init(
@@ -60,7 +60,7 @@ extension MIDIEvent {
     ///   - subID1: Sub ID #1
     ///   - subID2: Sub ID #2
     ///   - data: Data bytes (7-bit)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func universalSysEx7(
         universalType: UniversalSysExType,
         deviceID: UInt7,

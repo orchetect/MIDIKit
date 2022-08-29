@@ -20,10 +20,10 @@ extension MIDIEvent {
         @ValueValidated
         public var value: Value
     
-        /// Channel Number (0x0...0xF)
+        /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         /// Channel Voice Message: Per-Note Control Change (CC)
@@ -33,8 +33,8 @@ extension MIDIEvent {
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
         ///   - controller: Per-Note Controller type
         ///   - value: Value
-        ///   - channel: Channel Number (0x0...0xF)
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             note: UInt7,
             controller: PerNoteController,
@@ -56,8 +56,8 @@ extension MIDIEvent {
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
         ///   - controller: Per-Note Controller type
         ///   - value: Value
-        ///   - channel: Channel Number (0x0...0xF)
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             note: MIDINote,
             controller: PerNoteController,
@@ -82,8 +82,8 @@ extension MIDIEvent {
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
     ///   - controller: Per-Note Controller type
     ///   - value: Value
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func noteCC(
         note: UInt7,
         controller: NoteCC.PerNoteController,
@@ -109,8 +109,8 @@ extension MIDIEvent {
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
     ///   - controller: Per-Note Controller type
     ///   - value: Value
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func noteCC(
         note: MIDINote,
         controller: NoteCC.PerNoteController,

@@ -13,14 +13,14 @@ extension MIDIEvent {
         /// If attribute is set to Pitch 7.9, then this value represents the note index.
         public var note: MIDINote
     
-        /// 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
+        /// 32-bit Value (`0 ... 0xFFFFFFFF`) where midpoint is `0x80000000`
         @ValueValidated
         public var value: Value
     
-        /// Channel Number (0x0...0xF)
+        /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
     
-        /// UMP Group (0x0...0xF)
+        /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
         /// Channel Voice Message: Per-Note Pitch Bend
@@ -28,9 +28,9 @@ extension MIDIEvent {
         ///
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
-        ///   - value: 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
-        ///   - channel: Channel Number (0x0...0xF)
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - value: 32-bit Value (`0 ... 0xFFFFFFFF`) where midpoint is `0x80000000`
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             note: UInt7,
             value: Value,
@@ -48,9 +48,9 @@ extension MIDIEvent {
         ///
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
-        ///   - value: 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
-        ///   - channel: Channel Number (0x0...0xF)
-        ///   - group: UMP Group (0x0...0xF)
+        ///   - value: 32-bit Value (`0 ... 0xFFFFFFFF`) where midpoint is `0x80000000`
+        ///   - channel: Channel Number (`0x0 ... 0xF`)
+        ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             note: MIDINote,
             value: Value,
@@ -71,9 +71,9 @@ extension MIDIEvent {
     ///
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
-    ///   - value: 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - value: 32-bit Value (`0 ... 0xFFFFFFFF`) where midpoint is `0x80000000`
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func notePitchBend(
         note: UInt7,
         value: NotePitchBend.Value,
@@ -95,9 +95,9 @@ extension MIDIEvent {
     ///
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
-    ///   - value: 32-bit Value (0...0xFFFFFFFF) where midpoint is 0x80000000
-    ///   - channel: Channel Number (0x0...0xF)
-    ///   - group: UMP Group (0x0...0xF)
+    ///   - value: 32-bit Value (`0 ... 0xFFFFFFFF`) where midpoint is `0x80000000`
+    ///   - channel: Channel Number (`0x0 ... 0xF`)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func notePitchBend(
         note: MIDINote,
         value: NotePitchBend.Value,

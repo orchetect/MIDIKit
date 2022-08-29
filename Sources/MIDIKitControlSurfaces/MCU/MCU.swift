@@ -4,7 +4,7 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-// future feature of MIDIKit! nothing to see here...
+// TODO: future feature of MIDIKit! nothing to see here...
 
 /// MIDIKit MCU protocol abstraction.
 ///
