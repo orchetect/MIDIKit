@@ -19,7 +19,7 @@ open class MIDIEventFilterGroup {
         self.filters = filters
     }
     
-    /// Filter events based on the stored `filters`.
+    /// Filter events based on the stored ``filters`` in series.
     public func filter(events: [MIDIEvent]) -> [MIDIEvent] {
         var events = events
     

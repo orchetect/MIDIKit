@@ -7,7 +7,7 @@
 // MARK: - Metadata properties
 
 extension MIDIEvent {
-    /// Returns true if the event is a Utility message.
+    /// Returns `true` if the event is a Utility message.
     public var isUtility: Bool {
         switch self {
         case .noOp,
@@ -20,7 +20,7 @@ extension MIDIEvent {
         }
     }
     
-    /// Returns true if the event is a Utility message of a specific type.
+    /// Returns `true` if the event is a Utility message of a specific type.
     public func isUtility(ofType utilityType: UtilityType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -32,7 +32,7 @@ extension MIDIEvent {
         // swiftformat:enable spacearoundoperators
     }
     
-    /// Returns true if the event is a Utility message of a specific type.
+    /// Returns `true` if the event is a Utility message of a specific type.
     public func isUtility(ofTypes utilityTypes: Set<UtilityType>) -> Bool {
         for eventType in utilityTypes {
             if isUtility(ofType: eventType) { return true }

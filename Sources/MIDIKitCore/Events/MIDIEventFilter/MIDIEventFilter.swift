@@ -4,7 +4,7 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-/// A MIDI event filter definition.
+/// MIDI event filter definition.
 public enum MIDIEventFilter {
     case chanVoice(MIDIEvent.ChanVoiceTypes)
     case sysEx(MIDIEvent.SysExTypes)

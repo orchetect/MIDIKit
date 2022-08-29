@@ -5,7 +5,7 @@
 //
 
 extension MIDIEvent {
-    /// Channel Voice Message: Channel Pressure
+    /// Channel Voice Message: Channel Pressure (Aftertouch)
     /// (MIDI 1.0 / 2.0)
     ///
     /// Also known as:
@@ -34,7 +34,7 @@ extension MIDIEvent {
         }
     }
     
-    /// Channel Voice Message: Channel Pressure
+    /// Channel Voice Message: Channel Pressure (Aftertouch)
     /// (MIDI 1.0 / 2.0)
     ///
     /// Also known as:

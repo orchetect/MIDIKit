@@ -7,7 +7,7 @@
 // MARK: - Metadata properties
 
 extension MIDIEvent {
-    /// Returns true if the event is a Channel Voice message.
+    /// Returns `true` if the event is a Channel Voice message.
     public var isChannelVoice: Bool {
         switch self {
         case .noteOn,
@@ -27,7 +27,7 @@ extension MIDIEvent {
         }
     }
     
-    /// Returns true if the event is a Channel Voice message of a specific type.
+    /// Returns `true` if the event is a Channel Voice message of a specific type.
     public func isChannelVoice(ofType chanVoiceType: ChanVoiceType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -46,7 +46,7 @@ extension MIDIEvent {
         // swiftformat:enable spacearoundoperators
     }
     
-    /// Returns true if the event is a Channel Voice message of a specific type.
+    /// Returns `true` if the event is a Channel Voice message of a specific type.
     public func isChannelVoice(ofTypes chanVoiceTypes: Set<ChanVoiceType>) -> Bool {
         for eventType in chanVoiceTypes {
             if isChannelVoice(ofType: eventType) { return true }

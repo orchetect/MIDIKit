@@ -7,7 +7,7 @@
 // MARK: - Metadata properties
 
 extension MIDIEvent {
-    /// Returns true if the event is a System Real-Time message.
+    /// Returns `true` if the event is a System Real-Time message.
     public var isSystemRealTime: Bool {
         switch self {
         case .timingClock,
@@ -23,7 +23,7 @@ extension MIDIEvent {
         }
     }
     
-    /// Returns true if the event is a System Real-Time message of a specific type.
+    /// Returns `true` if the event is a System Real-Time message of a specific type.
     public func isSystemRealTime(ofType sysRealTimeType: SysRealTimeType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
@@ -38,7 +38,7 @@ extension MIDIEvent {
         // swiftformat:enable spacearoundoperators
     }
     
-    /// Returns true if the event is a System Real-Time message of a specific type.
+    /// Returns `true` if the event is a System Real-Time message of a specific type.
     public func isSystemRealTime(ofTypes sysRealTimeTypes: Set<SysRealTimeType>) -> Bool {
         for eventType in sysRealTimeTypes {
             if isSystemRealTime(ofType: eventType) { return true }

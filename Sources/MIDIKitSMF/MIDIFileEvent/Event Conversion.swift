@@ -7,7 +7,9 @@
 import MIDIKitCore
 
 extension MIDIEvent {
-    /// Convert the MIDIKit I/O event case (`MIDIEvent`) to a MIDIKitSMF event case (`MIDIFileEvent`).
+    /// Convert the MIDIKit I/O event case (``MIDIEvent``) to a MIDIKitSMF event case (``MIDIFileEvent``).
+    ///
+    /// Not all MIDI I/O events translate to MIDI File events, in which case `nil` will be returned.
     public func smfEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent? {
         switch self {
         case let .noteOn(event):
@@ -17,18 +19,18 @@ extension MIDIEvent {
             return .noteOff(delta: delta, event: event)
             
         case .noteCC:
-            // MIDI 2.0 only
+            // TODO: MIDI 2.0 only (Official MIDI File 2.0 Spec is not yet finished)
             return nil
             
         case .notePitchBend:
-            // MIDI 2.0 only
+            // TODO: MIDI 2.0 only (Official MIDI File 2.0 Spec is not yet finished)
             return nil
             
         case let .notePressure(event):
             return .notePressure(delta: delta, event: event)
             
         case .noteManagement:
-            // MIDI 2.0 only
+            // TODO: MIDI 2.0 only (Official MIDI File 2.0 Spec is not yet finished)
             return nil
             
         case let .cc(event):
@@ -50,11 +52,11 @@ extension MIDIEvent {
             return .universalSysEx(delta: delta, event: event)
             
         case .sysEx8:
-            // MIDI 2.0 only
+            // TODO: MIDI 2.0 only (Official MIDI File 2.0 Spec is not yet finished)
             return nil
             
         case .universalSysEx8:
-            // MIDI 2.0 only
+            // TODO: MIDI 2.0 only (Official MIDI File 2.0 Spec is not yet finished)
             return nil
             
         case .timecodeQuarterFrame,
@@ -74,15 +76,16 @@ extension MIDIEvent {
         case .noOp,
              .jrClock,
              .jrTimestamp:
-            // MIDI 2.0 only
-            // Not applicable to MIDI files.
+            // MIDI 2.0 only, also not applicable to MIDI files.
             return nil
         }
     }
 }
 
 extension MIDIFileEvent {
-    /// Convert the MIDIKitSMF event case (`MIDIFileEvent`) to a MIDIKit I/O event case (`MIDIEvent`).
+    /// Convert the MIDIKitSMF event case (``MIDIFileEvent``) to a MIDIKit I/O event case (``MIDIEvent``).
+    ///
+    /// Not all MIDI File events translate to MIDI I/O events, in which case `nil` will be returned.
     public func event() -> MIDIEvent? {
         switch self {
         case let .cc(_, event):
