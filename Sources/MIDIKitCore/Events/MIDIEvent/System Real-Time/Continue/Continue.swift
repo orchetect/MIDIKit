@@ -24,8 +24,8 @@ extension MIDIEvent {
     /// (MIDI 1.0 / 2.0)
     ///
     /// > MIDI 1.0 Spec:
-    ///
-    /// Continue (`0xFB`) is sent when a CONTINUE button is hit. A sequence will continue from its current location upon receipt of the next Timing Clock (`0xF8`).
+    /// >
+    /// > Continue (`0xFB`) is sent when a CONTINUE button is hit. A sequence will continue from its current location upon receipt of the next Timing Clock (`0xF8`).
     ///
     /// - Parameters:
     ///   - group: UMP Group (`0x0 ... 0xF`)

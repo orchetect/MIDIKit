@@ -261,8 +261,8 @@ extension MIDIIOObject {
     
     /// Get a Boolean value that indicates whether the object is offline.
     ///
-    /// `True` indicates the device is temporarily absent and offline.
-    /// `False` indicates the object is present.
+    /// `true` indicates the device is temporarily absent and offline.
+    /// `false` indicates the object is present.
     ///
     /// (`kMIDIPropertyOffline`)
     public func getIsOffline() -> Bool {

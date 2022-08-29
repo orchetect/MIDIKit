@@ -42,9 +42,9 @@ extension MIDIEvent.CC.Controller {
         /// (formerly Coarse Tuning - see MMA RP-022)
         ///
         /// Resolution: 100 cents
-        /// 0x00 = -6400 cents
-        /// 0x40 = A440
-        /// 0x7F = +6300 cents
+        /// - `0x00` == -6400 cents
+        /// - `0x40` == A440
+        /// - `0x7F` == +6300 cents
         case channelCoarseTuning(UInt7)
     
         /// Tuning Program Change

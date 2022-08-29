@@ -34,7 +34,7 @@ extension HUIConstants {
             public static let smallByte: UInt8 = 0x10
             /// Main time display (can be switched between modes, such as timecode, bars/beats, etc.)
             public static let timeDisplayByte: UInt8 = 0x11
-            /// Main 40x2 character display
+            /// Main 40 x 2 character display
             public static let largeByte: UInt8 = 0x12
         }
         
