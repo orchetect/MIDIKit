@@ -5,11 +5,11 @@ Managed connections are smart MIDI connections owned and maintained by the ``MID
 ## Overview
 
 > In MIDIKit, a connection added to the ``MIDIManager`` instance need only be added once in order to form and maintain a unidirectional connection to one or more MIDI ports in the system.
-
+>
 > As a managed connection, once added to the ``MIDIManager`` it will automatically handle re-connecting to the target(s) for the lifecycle of the managed connection.
-
+>
 > If the target(s) are not present in the system at the time of creating the managed connection, the ``MIDIManager`` will automatically subscribe to the target(s) if they appear. And if the target(s) disappear at any time, they will likewise be automatically re-subscribed once they appear again.
-
+>
 > You may supply the target(s) at the time of creation, or create the connection without any target port(s) and add/remove them later by calling ``MIDIInputConnection/add(outputs:)-fshr``, ``MIDIOutputConnection/add(inputs:)-4xbwz``, ``MIDIInputConnection/remove(outputs:)-7zf2d``, or ``MIDIOutputConnection/remove(inputs:)-66yrn``.
 
 ### Managed Input Connections

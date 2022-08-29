@@ -37,24 +37,24 @@ extension UInt14 {
 // MARK: - Standard library extensions
 
 extension BinaryInteger {
-    /// Convenience initializer for ``UInt14/init(_:)``.
+    /// Convenience initializer for `UInt14`.
     public var toUInt14: UInt14 {
         UInt14(self)
     }
     
-    /// Convenience initializer for ``UInt14/init(exactly:)``.
+    /// Convenience initializer for `UInt14(exactly:)`.
     public var toUInt14Exactly: UInt14? {
         UInt14(exactly: self)
     }
 }
 
 extension BinaryFloatingPoint {
-    /// Convenience initializer for ``UInt14/init(_:)``.
+    /// Convenience initializer for `UInt14`.
     public var toUInt14: UInt14 {
         UInt14(self)
     }
     
-    /// Convenience initializer for ``UInt14/init(exactly:)``.
+    /// Convenience initializer for `UInt14(exactly:)`.
     public var toUInt14Exactly: UInt14? {
         UInt14(exactly: self)
     }

@@ -17,7 +17,3 @@
 
 - ``HUIParameterProtocol``
 - ``HUISurfaceStateProtocol``
-
-### Constants
-
-- ``HUIConstants``
