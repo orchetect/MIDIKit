@@ -7,9 +7,9 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing the Main Time Display LCD and surrounding status LEDs
+    /// State storage representing the Main Time Display LCD and surrounding status LEDs.
     public struct TimeDisplay: Equatable, Hashable {
-        /// Returns the individual string components that make up the full time display `stringValue`
+        /// Returns the individual string components that make up the full time display ``stringValue``.
         public var components: [String] = [
             HUIConstants.kCharTables.timeDisplay[0x00], // "0"
             HUIConstants.kCharTables.timeDisplay[0x10], // "0."
@@ -38,10 +38,17 @@ extension HUISurface.State {
         }
         
         // LEDs
+        
+        /// Timecode LED.
         public var timecode = false
+        
+        /// Feet LED.
         public var feet = false
+        
+        /// Beats LED.
         public var beats = false
         
+        /// Rude Solo LED.
         public var rudeSolo = false
         
         /// Returns the full time display as a string of digits.

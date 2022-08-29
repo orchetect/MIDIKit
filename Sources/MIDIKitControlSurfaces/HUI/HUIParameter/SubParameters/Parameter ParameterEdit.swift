@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Parameter Edit section
+    /// Parameter Edit section.
     public enum ParameterEdit: Equatable, Hashable {
         case assign
         case compare
@@ -19,7 +19,7 @@ extension HUIParameter {
         
         // note: four vPots are not switches, they are handled elsewhere
         
-        /// Toggle: Insert (off) / Param (on)
+        /// Toggle: Insert (off) / Param (on).
         case insertOrParam
     }
 }

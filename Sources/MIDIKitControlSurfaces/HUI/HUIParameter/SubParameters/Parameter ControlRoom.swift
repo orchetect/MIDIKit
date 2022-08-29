@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Control Room section
+    /// Control Room section.
     public enum ControlRoom: Equatable, Hashable {
         case input1
         case input2

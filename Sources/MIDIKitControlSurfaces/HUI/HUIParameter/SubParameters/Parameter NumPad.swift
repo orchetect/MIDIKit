@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Number entry pad
+    /// Numeric entry pad.
     public enum NumPad: Equatable, Hashable {
         case num0
         case num1

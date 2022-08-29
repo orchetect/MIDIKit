@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Status/Group (To the right of the channel strips)
+    /// Status/Group (To the right of the channel strips).
     public enum StatusAndGroup: Equatable, Hashable {
         case auto
         case monitor

@@ -8,30 +8,31 @@ import Foundation
 import MIDIKitCore
 
 extension HUISurface.State {
-    /// State storage representing a single HUI channel strip and its components
+    /// State storage representing an individual HUI channel strip and its components.
     public struct ChannelStrip: Equatable, Hashable {
+        /// Stereo Level Meter.
         public var levelMeter = StereoLevelMeter()
         
-        /// Record Ready Button LED
+        /// Record Ready Button LED.
         public var recordReady = false
         
-        /// Insert Button LED
+        /// Insert Button LED.
         public var insert = false
         
-        /// V-Sel Button LED
+        /// V-Sel Button LED.
         public var vPotSelect = false
         public var vPotLevel: UInt7 = 0
         
-        /// Auto(mation) Button LED
+        /// Auto(mation) Button LED.
         public var auto = false
         
-        /// Solo Button LED
+        /// Solo Button LED.
         public var solo = false
         
-        /// Mute Button LED
+        /// Mute Button LED.
         public var mute = false
         
-        /// 4-character Channel Name LCD Text Display
+        /// 4-character Channel Name LCD Text Display.
         public var nameTextDisplay: String = "    " {
             didSet {
                 if nameTextDisplay.count != 4 {
@@ -45,10 +46,10 @@ extension HUISurface.State {
             }
         }
         
-        /// Select Button LED
+        /// Select Button LED.
         public var select = false
         
-        /// Motorized Fader
+        /// Motorized Fader.
         public var fader = Fader()
     }
 }

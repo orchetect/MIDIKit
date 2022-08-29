@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Transport Section
+    /// Transport Section.
     public enum Transport: Equatable, Hashable {
         case talkback     // activates onboard talkback mic
         case rewind

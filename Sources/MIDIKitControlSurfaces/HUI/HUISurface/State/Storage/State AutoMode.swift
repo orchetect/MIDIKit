@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing the Auto Mode section
+    /// State storage representing the Auto Mode section.
     public struct AutoMode: Equatable, Hashable {
         public var read = false
         public var latch = false

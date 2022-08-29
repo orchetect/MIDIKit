@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Assign (buttons to top left of channel strips)
+    /// Assign (buttons to top left of channel strips).
     public enum Assign: Equatable, Hashable {
         case sendA
         case sendB

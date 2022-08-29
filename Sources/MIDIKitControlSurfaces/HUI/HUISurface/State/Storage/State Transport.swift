@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing the Transport section
+    /// State storage representing the Transport section.
     public struct Transport: Equatable, Hashable {
         public var rewind = false
         public var stop = false

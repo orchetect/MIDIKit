@@ -7,7 +7,7 @@
 import MIDIKitCore
 
 extension HUISurface.Event {
-    /// A discrete component of a HUI channel strip and its state/value.
+    /// A discrete component of a HUI channel strip and its state.
     public enum ChannelStripComponent: Equatable, Hashable {
         case levelMeter(side: HUISurface.State.StereoLevelMeter.Side, level: Int)
         case recordReady(Bool)

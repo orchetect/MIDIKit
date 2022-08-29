@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing the Edit section
+    /// State storage representing the Edit section.
     public struct Edit: Equatable, Hashable {
         public var capture = false
         public var cut = false

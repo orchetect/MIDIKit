@@ -7,7 +7,8 @@
 import Darwin
 import MIDIKitCore
 
-/// HUI MIDI Message Parser
+/// HUI MIDI Message Parser.
+/// Interprets MIDI events and produces strongly-typed core HUI events.
 public class HUIParser {
     // MARK: local state variables
         
@@ -54,7 +55,7 @@ public class HUIParser {
 // MARK: ReceivesMIDIEvents
 
 extension HUIParser: ReceivesMIDIEvents {
-    /// Process HUI MIDI message received from host
+    /// Process HUI MIDI message received from host.
     public func midiIn(event: MIDIEvent) {
         switch event {
         case let .noteOn(payload) where
@@ -95,6 +96,7 @@ extension HUIParser: ReceivesMIDIEvents {
 // MARK: Parser
 
 extension HUIParser {
+    /// Internal: handles SysEx content.
     private func parse(sysExContent data: [UInt8]) {
         guard data.count >= 2 else { return }
         
@@ -217,6 +219,7 @@ extension HUIParser {
         }
     }
     
+    /// Internal: Handle control status messages.
     private func parse(controlStatusMessage event: MIDIEvent) {
         let data = event.midi1RawBytes()
         
@@ -347,6 +350,7 @@ extension HUIParser {
         }
     }
     
+    /// Internal: Handle level meter messages.
     private func parse(levelMetersMessage event: MIDIEvent) {
         let data = event.midi1RawBytes()
         

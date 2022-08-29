@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Footswitches and Sounds - no LEDs or buttons associated
+    /// Footswitches and Sounds - no LEDs or buttons associated.
     public enum FootswitchesAndSounds: Equatable, Hashable {
         case footswitchRelay1
         case footswitchRelay2

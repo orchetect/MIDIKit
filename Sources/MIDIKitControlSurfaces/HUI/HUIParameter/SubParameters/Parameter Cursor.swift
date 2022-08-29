@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Cursor Movement / Mode / Scrub / Shuttle
+    /// Cursor Movement / Mode / Scrub / Shuttle.
     public enum Cursor: Equatable, Hashable {
         case up
         case left

@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Channel Strips
+    /// Channel Strips.
     public enum ChannelParameter: Equatable, Hashable {
         case recordReady
         case insert
@@ -21,6 +21,7 @@ extension HUIParameter {
 }
 
 extension HUIParameter.ChannelParameter: HUIParameterProtocol {
+    /// HUI port constants.
     public var port: HUIPort {
         switch self {
         // Zones 0x00 - 0x07

@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing HotKeys (Keyboard shortcut keys)
+    /// State storage representing HotKeys (keyboard shortcut keys).
     public struct HotKeys: Equatable, Hashable {
         public var shift = false
         public var ctrl = false

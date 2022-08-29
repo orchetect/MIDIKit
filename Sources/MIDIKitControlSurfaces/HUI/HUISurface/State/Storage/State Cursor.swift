@@ -7,14 +7,14 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing Cursor Movement / Mode / Scrub / Shuttle
+    /// State storage representing Cursor Movement / Mode / Scrub / Shuttle.
     public struct Cursor: Equatable, Hashable {
         // up    - no LED, just command button
         // left  - no LED, just command button
         // right - no LED, just command button
         // down  - no LED, just command button
         
-        /// Mode button in the middle of arrow cursor buttons
+        /// Mode Button (in the middle of arrow cursor buttons).
         public var mode = false
         
         public var scrub = false

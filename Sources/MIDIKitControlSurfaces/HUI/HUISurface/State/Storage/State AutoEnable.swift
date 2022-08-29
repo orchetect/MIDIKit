@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing the Auto Enable section
+    /// State storage representing the Auto Enable section.
     public struct AutoEnable: Equatable, Hashable {
         public var fader = false
         public var pan = false

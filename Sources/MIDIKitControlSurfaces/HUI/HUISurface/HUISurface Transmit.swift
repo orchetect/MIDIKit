@@ -8,8 +8,8 @@ import Foundation
 import MIDIKitCore
 
 extension HUISurface {
-    /// HUI ping message transmit to host.
-    /// It is not necessary to call this manually. The `Surface` object will handle ping replies automatically.
+    /// Transmit a HUI ping message to the host.
+    /// It is not necessary to call this manually. The ``HUISurface`` object will handle ping replies automatically.
     public func transmitPing() {
         midiOut(HUIConstants.kMIDI.kPingReplyToHostMessage)
     }

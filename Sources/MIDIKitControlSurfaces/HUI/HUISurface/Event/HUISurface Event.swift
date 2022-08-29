@@ -7,7 +7,8 @@
 import MIDIKitCore
 
 extension HUISurface {
-    /// HUI Surface Event
+    /// HUI Surface Event.
+    /// Atomic abstractions representing each control and display element of a HUI control surface.
     public enum Event: Hashable {
         // MARK: Ping
         

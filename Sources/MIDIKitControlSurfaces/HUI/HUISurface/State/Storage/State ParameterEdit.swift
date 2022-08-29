@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 
 extension HUISurface.State {
-    /// State storage representing the Parameter Edit section
+    /// State storage representing the Parameter Edit section.
     public struct ParameterEdit: Equatable, Hashable {
         public var assign = false
         public var compare = false

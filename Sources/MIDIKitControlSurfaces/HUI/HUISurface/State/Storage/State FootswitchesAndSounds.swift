@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing footswitches and sounds
+    /// State storage representing footswitches and sounds.
     public struct FootswitchesAndSounds: Equatable, Hashable {
         public var footswitchRelay1 = false
         public var footswitchRelay2 = false

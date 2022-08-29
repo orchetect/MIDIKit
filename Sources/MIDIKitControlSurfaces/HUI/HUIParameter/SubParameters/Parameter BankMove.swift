@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Bank and channel navigation
+    /// Bank and channel navigation.
     public enum BankMove: Equatable, Hashable {
         case channelLeft
         case channelRight

@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Auto Mode (To the right of the channel strips)
+    /// Auto Mode (To the right of the channel strips).
     public enum AutoMode: Equatable, Hashable {
         case read
         case latch

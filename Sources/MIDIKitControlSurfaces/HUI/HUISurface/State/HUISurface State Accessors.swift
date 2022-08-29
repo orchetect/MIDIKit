@@ -9,6 +9,7 @@ import Foundation
 extension HUISurface.State: HUISurfaceStateProtocol {
     public typealias Param = HUIParameter
     
+    /// Returns the current HUI surface model state of the given parameter.
     public func state(of param: Param) -> Bool {
         switch param {
         case let .channelStrip(channel, channelParam):

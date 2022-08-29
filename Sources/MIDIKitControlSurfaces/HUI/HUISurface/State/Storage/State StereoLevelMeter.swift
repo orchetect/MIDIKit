@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing the state/values of a channel strip's stereo level meter on the meter bridge.
+    /// State storage representing the state of a channel strip's stereo level meter on the meter bridge.
     ///
     /// As value increases, all LEDs up to and including that value will illuminate, representing an audio level meter with 12 LED segments. A value of 0 indicates no LEDs are illuminated.
     ///
@@ -28,7 +28,7 @@ extension HUISurface.State {
     ///     0x0    <  -60dBFS  (no LEDs on)
     ///
     public struct StereoLevelMeter: Equatable, Hashable {
-        /// Left Meter Channel
+        /// Left Meter Channel.
         public var left: Int = 0 {
             didSet {
                 if !Self.levelRange.contains(left) {
@@ -37,7 +37,7 @@ extension HUISurface.State {
             }
         }
         
-        /// Right Meter Channel
+        /// Right Meter Channel.
         public var right: Int = 0 {
             didSet {
                 if !Self.levelRange.contains(right) {
@@ -52,11 +52,11 @@ extension HUISurface.State {
         /// (0 means that no LEDs on the meter are lit up.)
         public static let levelMin: Int = 0
         
-        /// Level value range maximum
+        /// Level value range maximum.
         public static let levelMax: Int = 12
         
         /// Range of possible level meter values.
-        /// (0 means that no LEDs on the meter are lit up.)
+        /// (0 indicates that no LEDs on the meter are lit up.)
         public static let levelRange = levelMin ... levelMax
     }
 }

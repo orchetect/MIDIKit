@@ -10,6 +10,7 @@ import MIDIKitCore
 // MARK: - Main Update Method
 
 extension HUISurface.State {
+    /// Internal: Updates HUI state from a received HUI event.
     internal mutating func updateState(
         from receivedEvent: HUICoreEvent
     ) -> HUISurface.Event? {

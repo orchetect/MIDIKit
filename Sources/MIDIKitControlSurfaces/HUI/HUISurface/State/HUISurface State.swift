@@ -5,9 +5,9 @@
 //
 
 extension HUISurface {
-    /// HUI Surface State.
+    /// HUI Surface State (Model).
     ///
-    /// Represents state of an entire HUI surface (all controls, parameters, etc.)
+    /// Represents state of an entire HUI control surface (all controls, display elements, etc.)
     public struct State: Equatable, Hashable {
         /// Channel strips. (0...7)
         public internal(set) var channelStrips: [ChannelStrip] = []

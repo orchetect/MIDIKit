@@ -7,18 +7,18 @@
 import Foundation
 
 extension HUIParameter {
-    /// Time Display LEDs
+    /// Time Display LEDs.
     public enum TimeDisplay: Equatable, Hashable {
         /// "TIME CODE"
-        /// Time format LEDs that are to the left of the main time display above the control room section (no button, LED only)
+        /// Time format LEDs that are to the left of the main time display above the control room section (no button, LED only).
         case timecode
         
         /// "FEET"
-        /// Time format LEDs that are to the left of the main time display above the control room section (no button, LED only)
+        /// Time format LEDs that are to the left of the main time display above the control room section (no button, LED only).
         case feet
         
         /// "BEATS"
-        /// Time format LEDs that are to the left of the main time display above the control room section (no button, LED only)
+        /// Time format LEDs that are to the left of the main time display above the control room section (no button, LED only).
         case beats
         
         /// "RUDE SOLO LIGHT"

@@ -7,7 +7,7 @@
 import MIDIKitCore
 
 extension HUISurface.Event {
-    /// A discrete component of a the param edit section and it state/value.
+    /// A discrete component of a the param edit section and it state.
     public enum ParamEditComponent: Equatable, Hashable {
         case assign(Bool)
         case compare(Bool)

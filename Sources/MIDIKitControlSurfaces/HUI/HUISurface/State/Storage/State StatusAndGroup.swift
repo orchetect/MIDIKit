@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing the Status/Group section
+    /// State storage representing the Status/Group section.
     public struct StatusAndGroup: Equatable, Hashable {
         public var auto = false
         public var monitor = false

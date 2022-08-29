@@ -8,9 +8,8 @@ import Foundation
 import MIDIKitCore
 
 /// Object representing a single HUI control surface device.
-/// (Human User Interface) for Digital Audio Workstations.
 ///
-/// A DAW control surface protocol developed by Mackie that uses MIDI 1.0 as a transport.
+/// _Human User Interface for Digital Audio Workstations_ is a DAW control surface protocol developed by Mackie that uses MIDI events as its underlying encoding.
 ///
 /// References:
 /// - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)

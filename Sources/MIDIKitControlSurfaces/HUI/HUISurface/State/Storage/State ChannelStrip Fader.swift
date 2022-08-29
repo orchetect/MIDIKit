@@ -8,28 +8,28 @@ import Foundation
 import MIDIKitCore
 
 extension HUISurface.State.ChannelStrip {
-    /// State storage representing the state/values of a channel strip fader
+    /// State storage representing the state of a channel strip fader.
     public struct Fader: Equatable, Hashable {
-        /// Raw level value
+        /// Raw level value.
         public var level: UInt14 = 0
         
-        /// Touch Status (true = fader is being touched by the user)
+        /// Touch status (`true` indicates the fader is being touched by the user).
         public var touched: Bool = false
         
         // constants
         
-        /// Constant: minimum `level` value
+        /// Constant: minimum `level` value.
         public static let levelMin: Int = 0
         
-        /// Constant: maximum `level` value
+        /// Constant: maximum `level` value.
         public static let levelMax: Int = 0x3FFF // 16383
         
-        /// Constant: Range of possible `level` values
+        /// Constant: Range of possible `level` values.
         public static let levelRange: ClosedRange<Int> = 0 ... 0x3FFF
         
         // convenience
         
-        /// Returns `.level` expressed as a unit interval between 0.0...1.0
+        /// Returns `.level` expressed as a unit interval between `0.0 ... 1.0`.
         public var levelUnitInterval: Double {
             Double(level) / Double(Self.levelMax)
         }

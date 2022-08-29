@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Auto Enable (To the right of the channel strips)
+    /// Auto Enable (To the right of the channel strips).
     public enum AutoEnable: Equatable, Hashable {
         case fader
         case pan

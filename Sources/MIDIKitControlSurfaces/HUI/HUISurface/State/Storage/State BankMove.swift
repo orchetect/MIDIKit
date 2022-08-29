@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing bank and channel navigation
+    /// State storage representing bank and channel navigation.
     public struct BankMove: Equatable, Hashable {
         public var channelLeft = false
         public var channelRight = false

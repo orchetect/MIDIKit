@@ -9,7 +9,7 @@ import Foundation
 public protocol HUISurfaceStateProtocol where Param: HUIParameterProtocol {
     associatedtype Param
     
-    /// Read the state of a parameter.
+    /// Return the state of a parameter.
     func state(of param: Param) -> Bool
     
     /// Set the state of a parameter.

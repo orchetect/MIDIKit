@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing the Function Key section
+    /// State storage representing the Function Key section.
     public struct FunctionKey: Equatable, Hashable {
         public var f1 = false
         public var f2 = false

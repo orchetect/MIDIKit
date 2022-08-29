@@ -7,6 +7,6 @@
 import Foundation
 
 public protocol HUIParameterProtocol {
-    /// HUI zone and port constant for the parameter
+    /// HUI zone and port constant for the parameter.
     var zoneAndPort: HUIZoneAndPort { get }
 }

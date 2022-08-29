@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing the Large Text Display (40x2 character matrix)
+    /// State storage representing the Large Text Display (40 x 2 character matrix).
     public struct LargeDisplay: Equatable, Hashable {
         static let defaultStringComponent = String(
             repeating: HUIConstants.kCharTables.largeDisplay[0x20],

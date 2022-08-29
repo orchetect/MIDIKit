@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing Number Pad Keys on the HUI surface
+    /// State storage representing Number Pad Keys on the HUI surface.
     public struct NumPad: Equatable, Hashable {
         public var num0 = false
         public var num1 = false

@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing the Control Room section
+    /// State storage representing the Control Room section.
     public struct ControlRoom: Equatable, Hashable {
         public var input1 = false
         public var input2 = false

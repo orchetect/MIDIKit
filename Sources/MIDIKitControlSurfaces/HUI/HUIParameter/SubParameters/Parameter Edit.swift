@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Edit (To the right of the channel strips)
+    /// Edit (To the right of the channel strips).
     public enum Edit: Equatable, Hashable {
         case capture
         case cut

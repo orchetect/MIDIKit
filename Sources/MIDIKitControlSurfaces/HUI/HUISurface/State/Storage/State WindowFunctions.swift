@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUISurface.State {
-    /// State storage representing Window Functions
+    /// State storage representing Window Functions.
     public struct WindowFunctions: Equatable, Hashable {
         public var mix = false
         public var edit = false
