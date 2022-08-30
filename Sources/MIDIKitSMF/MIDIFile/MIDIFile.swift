@@ -66,4 +66,17 @@ public struct MIDIFile: Equatable {
     public func rawData() throws -> Data {
         try encode()
     }
+    
+    /// Initialize from header parameters and track chunks.
+    public init(
+        format: Format,
+        timeBase: TimeBase,
+        chunks: [Chunk] = []
+    ) {
+        self.init()
+        
+        self.format = format
+        self.timeBase = timeBase
+        self.chunks = chunks
+    }
 }
