@@ -15,7 +15,7 @@ extension MIDIEvent.CC.Controller {
         case allSoundOff
     
         /// [Channel Mode Message] Reset All Controllers
-        /// (See MMA RP-015)
+        /// (See MMA [RP-015](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-reset-all-controllers))
         /// (Int: 121, Hex: 0x79)
         case resetAllControllers
     

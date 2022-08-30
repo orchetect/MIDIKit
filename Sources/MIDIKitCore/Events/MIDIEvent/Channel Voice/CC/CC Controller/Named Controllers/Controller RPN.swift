@@ -21,7 +21,7 @@ extension MIDIEvent.CC.Controller {
     /// >
     /// > For custom Parameter Number use, see NRPN (non-Registered Parameter Numbers).
     ///
-    /// - Note: See Recommended Practise RP-018 of the MIDI 1.0 Spec Addenda.
+    /// - Note: See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers) of the MIDI 1.0 Spec Addenda.
     public enum RPN: Equatable, Hashable {
         // MIDI Spec
     
@@ -32,14 +32,14 @@ extension MIDIEvent.CC.Controller {
         )
     
         /// Channel Fine Tuning
-        /// (formerly Fine Tuning - see MMA RP-022)
+        /// (formerly Fine Tuning - see MMA [RP-022](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/redefinition-of-rpn01-and-rpn02-channel-fine-coarse-tuning))
         ///
         /// Resolution: 100/8192 cents
         /// Midpoint = A440, min/max -/+ 100 cents
         case channelFineTuning(UInt14)
     
         /// Channel Coarse Tuning
-        /// (formerly Coarse Tuning - see MMA RP-022)
+        /// (formerly Coarse Tuning - see MMA [RP-022](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/redefinition-of-rpn01-and-rpn02-channel-fine-coarse-tuning))
         ///
         /// Resolution: 100 cents
         /// - `0x00` == -6400 cents
@@ -91,63 +91,63 @@ extension MIDIEvent.CC.Controller {
         // 3D Sound Controllers
     
         /// 3D Sound Controller: Azimuth Angle
-        /// (See MMA RP-049)
+        /// (See MMA [RP-049](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/three-dimensional-sound-controllers))
         case threeDimensionalAzimuthAngle(
             dataEntryMSB: UInt7,
             dataEntryLSB: UInt7
         )
     
         /// 3D Sound Controller: Elevation Angle
-        /// (See MMA RP-049)
+        /// (See MMA [RP-049](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/three-dimensional-sound-controllers))
         case threeDimensionalElevationAngle(
             dataEntryMSB: UInt7,
             dataEntryLSB: UInt7
         )
     
         /// 3D Sound Controller: Gain
-        /// (See MMA RP-049)
+        /// (See MMA [RP-049](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/three-dimensional-sound-controllers))
         case threeDimensionalGain(
             dataEntryMSB: UInt7,
             dataEntryLSB: UInt7
         )
     
         /// 3D Sound Controller: Distance Ratio
-        /// (See MMA RP-049)
+        /// (See MMA [RP-049](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/three-dimensional-sound-controllers))
         case threeDimensionalDistanceRatio(
             dataEntryMSB: UInt7,
             dataEntryLSB: UInt7
         )
     
         /// 3D Sound Controller: Maximum Distance
-        /// (See MMA RP-049)
+        /// (See MMA [RP-049](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/three-dimensional-sound-controllers))
         case threeDimensionalMaximumDistance(
             dataEntryMSB: UInt7,
             dataEntryLSB: UInt7
         )
     
         /// 3D Sound Controller: Gain at Maximum Distance
-        /// (See MMA RP-049)
+        /// (See MMA [RP-049](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/three-dimensional-sound-controllers))
         case threeDimensionalGainAtMaximumDistance(
             dataEntryMSB: UInt7,
             dataEntryLSB: UInt7
         )
     
         /// 3D Sound Controller: Reference Distance Ratio
-        /// (See MMA RP-049)
+        /// (See MMA [RP-049](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/three-dimensional-sound-controllers))
         case threeDimensionalReferenceDistanceRatio(
             dataEntryMSB: UInt7,
             dataEntryLSB: UInt7
         )
     
         /// 3D Sound Controller: Pan Spread Angle
-        /// (See MMA RP-049)
+        /// (See MMA [RP-049](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/three-dimensional-sound-controllers))
         case threeDimensionalPanSpreadAngle(
             dataEntryMSB: UInt7,
             dataEntryLSB: UInt7
         )
     
         /// 3D Sound Controller: Roll Angle
-        /// (See MMA RP-049)
+        /// (See MMA [RP-049](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/three-dimensional-sound-controllers))
         case threeDimensionalRollAngle(
             dataEntryMSB: UInt7,
             dataEntryLSB: UInt7

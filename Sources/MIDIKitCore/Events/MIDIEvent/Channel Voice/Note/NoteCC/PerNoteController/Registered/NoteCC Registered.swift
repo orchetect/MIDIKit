@@ -73,34 +73,34 @@ extension MIDIEvent.NoteCC.PerNoteController {
         case soundCtrl5_brightness
     
         /// Sound Controller 6
-        /// (default: Decay Time - see MMA RP-021)
+        /// (default: Decay Time - see MMA [RP-021](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/sound-controller-defaults-revised))
         /// (Int: 75, Hex: 0x4B)
         case soundCtrl6_decayTime
     
         /// Sound Controller 7
-        /// (default: Vibrato Rate - see MMA RP-021)
+        /// (default: Vibrato Rate - see MMA [RP-021](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/sound-controller-defaults-revised))
         /// (Int: 76, Hex: 0x4C)
         case soundCtrl7_vibratoRate
     
         /// Sound Controller 8
-        /// (default: Vibrato Depth - see MMA RP-021)
+        /// (default: Vibrato Depth - see MMA [RP-021](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/sound-controller-defaults-revised))
         /// (Int: 77, Hex: 0x4D)
         case soundCtrl8_vibratoDepth
     
         /// Sound Controller 9
-        /// (default: Vibrato Delay - see MMA RP-021)
+        /// (default: Vibrato Delay - see MMA [RP-021](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/sound-controller-defaults-revised))
         /// (Int: 78, Hex: 0x4E)
         case soundCtrl9_vibratoDelay
     
         /// Sound Controller 10
-        /// (default: Undefined - see MMA RP-021)
+        /// (default: Undefined - see MMA [RP-021](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/sound-controller-defaults-revised))
         /// (Int: 79, Hex: 0x4F)
         case soundCtrl10_defaultUndefined
     
         // Registered Per-Note CC 80 ... 90 undefined
     
         /// Effects 1 Depth
-        /// (default: Reverb Send Level - see MMA RP-023)
+        /// (default: Reverb Send Level - see MMA [RP-023](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/renaming-of-cc91-and-cc93))
         /// (formerly External Effects Depth)
         /// (Int: 91, Hex: 0x5B)
         case effects1Depth_reverbSendLevel
@@ -111,7 +111,7 @@ extension MIDIEvent.NoteCC.PerNoteController {
         case effects2Depth
     
         /// Effects 3 Depth
-        /// (default: Chorus Send Level - see MMA RP-023)
+        /// (default: Chorus Send Level - see MMA [RP-023](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/renaming-of-cc91-and-cc93))
         /// (formerly Chorus Depth)
         /// (Int: 93, Hex: 0x5D)
         case effects3Depth_chorusSendLevel

@@ -154,6 +154,8 @@ extension MIDIFileEvent.XMFPatchTypePrefix {
         /// > Standard MIDI File 1.0 Spec, RP-032:
         /// >
         /// > GM1 is chosen by default, so starting an SMF Track with this meta-event selecting GM1 is redundant, but still permitted. Instruments will be automatically supplied and managed by the player, not supplied in the XMF file.
+        /// >
+        /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
         case generalMIDI1 = 0x01
         
         /// General MIDI 2.
@@ -161,6 +163,8 @@ extension MIDIFileEvent.XMFPatchTypePrefix {
         /// > Standard MIDI File 1.0 Spec, RP-032:
         /// >
         /// > The SMF Track has been written to take advantage of the General MIDI 2 instrument set and/or controller responses. Instruments will be automatically supplied and managed by the player, not supplied in the XMF file. If GM2 is not available, GM1 will be used.
+        /// >
+        /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
         case generalMIDI2 = 0x02
         
         /// DLS.
@@ -168,6 +172,8 @@ extension MIDIFileEvent.XMFPatchTypePrefix {
         /// > Standard MIDI File 1.0 Spec, RP-032:
         /// >
         /// > The SMF Track has been written for the custom DLS instruments supplied via the XMF file. Instruments will be supplied via the XMF file, not supplied by the player.
+        /// >
+        /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
         case DLS = 0x03
         
         public var description: String {
