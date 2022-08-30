@@ -8,22 +8,7 @@ import Foundation
 import MIDIKitCore
 
 extension MIDIFile {
-    // MARK: - Utilities math and number conversion
-
-    static func uint16To2BytesBigEndian(_ number: UInt16) -> [UInt8] {
-        var val = number
-
-        return Array(NSData(bytes: &val, length: 2) as Data)
-            .reversed()
-    }
-
-    static func uint32To4BytesBigEndian(_ number: UInt32) -> [UInt8] {
-        var val = number
-
-        return Array(NSData(bytes: &val, length: 4) as Data)
-            .reversed()
-    }
-
+    /// Utility:
     /// Returns variable length value encoded byte array.
     static func encodeVariableLengthValue<
         T: BinaryInteger,
@@ -58,7 +43,8 @@ extension MIDIFile {
 
         return result
     }
-
+    
+    /// Utility:
     /// Returns the decoded value and the number of bytes read from the bytes array if successful.
     /// Returns nil if bytes is empty or variable length value could not be read in the expected format (ie: malformed or unexpected data)
     /// Currently returns nil if value overflows a 28-bit unsigned value.
@@ -70,7 +56,8 @@ extension MIDIFile {
         var bytes = bytes
         return decodeVariableLengthValue(from: &bytes)
     }
-
+    
+    /// Utility:
     /// Returns the decoded value and the number of bytes read from the bytes array if successful.
     /// Returns nil if bytes is empty or variable length value could not be read in the expected format (ie: malformed or unexpected data)
     /// Currently returns nil if value overflows a 28-bit unsigned value.

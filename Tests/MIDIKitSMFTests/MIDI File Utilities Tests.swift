@@ -10,18 +10,6 @@ import XCTest
 @testable import MIDIKitSMF
 
 final class MIDIFileUtilities_Tests: XCTestCase {
-    func testUInt16To2BytesBigEndian() {
-        XCTAssertEqual(MIDIFile.uint16To2BytesBigEndian(0), [0x00, 0x00])
-        XCTAssertEqual(MIDIFile.uint16To2BytesBigEndian(1), [0x00, 0x01])
-        XCTAssertEqual(MIDIFile.uint16To2BytesBigEndian(0x1234), [0x12, 0x34])
-    }
-    
-    func testUInt32To4BytesBigEndian() {
-        XCTAssertEqual(MIDIFile.uint32To4BytesBigEndian(0), [0x00, 0x00, 0x00, 0x00])
-        XCTAssertEqual(MIDIFile.uint32To4BytesBigEndian(1), [0x00, 0x00, 0x00, 0x01])
-        XCTAssertEqual(MIDIFile.uint32To4BytesBigEndian(0x1234_5678), [0x12, 0x34, 0x56, 0x78])
-    }
-    
     func testEncodeVariableLengthValue() {
         XCTAssertEqual(MIDIFile.encodeVariableLengthValue(0), [0x00])
         XCTAssertEqual(MIDIFile.encodeVariableLengthValue(1), [0x01])

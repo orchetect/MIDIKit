@@ -7,7 +7,8 @@
 import MIDIKitCore
 import TimecodeKit
 
-/// Internal: Returns `true` if both tuples are considered equal.
+/// Internal:
+/// Returns `true` if both tuples are considered equal.
 internal func mtcIsEqual(
     _ lhs: (
         mtcComponents: Timecode.Components,
@@ -37,7 +38,8 @@ internal func mtcIsEqual(
     return componentsAreEqual && mtcFrameRatesAreEqual
 }
     
-/// Internal: Converts MTC components and quarter frames to full-frame components
+/// Internal:
+/// Converts MTC components and quarter frames to full-frame components
 internal func convertToFullFrameComponents(
     mtcComponents: Timecode.Components,
     mtcQuarterFrames: UInt8

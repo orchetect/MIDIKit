@@ -40,6 +40,7 @@ extension UInt32 {
     ///     init(bipolarUnitInterval:  0.0) == 0x80000000 == .midpoint
     ///     init(bipolarUnitInterval:  0.5)
     ///     init(bipolarUnitInterval:  1.0) == 0xFFFFFFFF == .max
+    @_disfavoredOverload
     public init(bipolarUnitInterval: Double) {
         let bipolarUnitInterval = bipolarUnitInterval.clamped(to: (-1.0) ... (1.0))
     
@@ -54,6 +55,7 @@ extension UInt32 {
     
     /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral midpoint at 0x80000000).
     /// (`0 ... 0x80000000 ... 0xFFFFFFFF` == `-1.0 ... 0.0 ... 1.0`)
+    @_disfavoredOverload
     public var bipolarUnitIntervalValue: Double {
         // Account for non-symmetry and round up.
         // (This is how MIDI 2.0 Spec pitch bend works.)

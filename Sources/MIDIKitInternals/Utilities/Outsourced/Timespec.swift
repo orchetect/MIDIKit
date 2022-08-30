@@ -1,14 +1,14 @@
-//
-//  Timespec.swift
-//  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
-//
-
-/// ------------------------------------------------------------------------------------
-/// ------------------------------------------------------------------------------------
-/// Borrowed from [OTCore 1.4.2](https://github.com/orchetect/OTCore) under MIT license.
-/// ------------------------------------------------------------------------------------
-/// ------------------------------------------------------------------------------------
+/// ----------------------------------------------
+/// ----------------------------------------------
+/// OTCore/Extensions/Darwin/String.swift
+/// OTCore/Extensions/Foundation/String and CharacterSet.swift
+///
+/// Borrowed from OTCore 1.4.2 under MIT license.
+/// https://github.com/orchetect/OTCore
+/// Methods herein are unit tested at their source
+/// so no unit tests are necessary.
+/// ----------------------------------------------
+/// ----------------------------------------------
 
 #if canImport(Darwin)
 
@@ -35,7 +35,7 @@ import Darwin
 /// - Returns: `timespec(tv_sec: Int, tv_nsec: Int)` where `tv_sec` is seconds and `tc_nsec` is nanoseconds
 @available(OSX 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *)
 @_disfavoredOverload
-internal func clock_gettime_monotonic_raw() -> timespec {
+public func clock_gettime_monotonic_raw() -> timespec {
     var uptime = timespec()
     
     if clock_gettime(CLOCK_MONOTONIC_RAW, &uptime) != 0 {
@@ -50,7 +50,7 @@ internal func clock_gettime_monotonic_raw() -> timespec {
 extension timespec {
     /// Convenience constructor from floating point seconds value
     @_disfavoredOverload
-    internal init<T: BinaryFloatingPoint>(seconds floatingPoint: T) {
+    public init<T: BinaryFloatingPoint>(seconds floatingPoint: T) {
         self.init()
         
         let intVal = Int(floatingPoint * 1_000_000_000)
@@ -65,7 +65,7 @@ extension timespec {
 
 /// Add two instances of `timespec`
 @_disfavoredOverload
-internal func + (lhs: timespec, rhs: timespec) -> timespec {
+public func + (lhs: timespec, rhs: timespec) -> timespec {
     let nsRaw = rhs.tv_nsec + lhs.tv_nsec
     
     let ns = nsRaw % 1_000_000_000
@@ -77,7 +77,7 @@ internal func + (lhs: timespec, rhs: timespec) -> timespec {
 
 /// Subtract two instances of `timespec`
 @_disfavoredOverload
-internal func - (lhs: timespec, rhs: timespec) -> timespec {
+public func - (lhs: timespec, rhs: timespec) -> timespec {
     let nsRaw = lhs.tv_nsec - rhs.tv_nsec
     
     if nsRaw >= 0 {
@@ -100,20 +100,20 @@ internal func - (lhs: timespec, rhs: timespec) -> timespec {
 
 extension timespec /* : Equatable */ {
     @_disfavoredOverload
-    internal static func == (lhs: Self, rhs: Self) -> Bool {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.tv_sec == rhs.tv_sec &&
             lhs.tv_nsec == rhs.tv_nsec
     }
     
     @_disfavoredOverload
-    internal static func != (lhs: Self, rhs: Self) -> Bool {
+    public static func != (lhs: Self, rhs: Self) -> Bool {
         !(lhs == rhs)
     }
 }
 
 extension timespec /* : Comparable */ {
     @_disfavoredOverload
-    internal static func < (lhs: timespec, rhs: timespec) -> Bool {
+    public static func < (lhs: timespec, rhs: timespec) -> Bool {
         if lhs.tv_sec < rhs.tv_sec { return true }
         if lhs.tv_sec > rhs.tv_sec { return false }
         
@@ -125,7 +125,7 @@ extension timespec /* : Comparable */ {
     }
     
     @_disfavoredOverload
-    internal static func > (lhs: timespec, rhs: timespec) -> Bool {
+    public static func > (lhs: timespec, rhs: timespec) -> Bool {
         !(lhs < rhs)
     }
 }
@@ -139,7 +139,7 @@ import Foundation
 extension timespec {
     /// Convenience constructor from `TimeInterval`
     @_disfavoredOverload
-    internal init(_ interval: TimeInterval) {
+    public init(_ interval: TimeInterval) {
         self.init(seconds: interval)
     }
 }
@@ -147,7 +147,7 @@ extension timespec {
 extension timespec {
     /// Return a `TimeInterval`
     @_disfavoredOverload
-    internal var doubleValue: TimeInterval {
+    public var doubleValue: TimeInterval {
         Double(tv_sec) + (Double(tv_nsec) / 1_000_000_000)
     }
 }
