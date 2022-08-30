@@ -19,7 +19,7 @@ extension UInt7 {
     static let integerName: StaticString = "UInt7"
     
     init(unchecked value: Storage) {
-        self.storage = value
+        storage = value
     }
 }
 

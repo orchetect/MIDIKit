@@ -207,7 +207,11 @@ public enum MIDI {
     
     // MARK: Utilities - Atomic
     
-    @available(*, unavailable, message: "Renamed to top-level @ThreadSafeAccess in MIDIKitInternals target")
+    @available(
+        *,
+        unavailable,
+        message: "Renamed to top-level @ThreadSafeAccess in MIDIKitInternals target"
+    )
     @propertyWrapper
     public final class Atomic<T> {
         public init(wrappedValue value: T) { fatalError() }

@@ -16,7 +16,7 @@ import MIDIKitCore
 extension MIDI {
     @available(
         *, unavailable,
-         message: "The `MIDI.IO` namespace has been removed and first-generation nested types have been renamed `MIDIManager`, `MIDIInputEndpoint`, etc."
+        message: "The `MIDI.IO` namespace has been removed and first-generation nested types have been renamed `MIDIManager`, `MIDIInputEndpoint`, etc."
     )
     public enum IO {
         // MARK: Core MIDI Aliased Types
@@ -132,7 +132,7 @@ extension MIDI {
         
         @available(
             *, unavailable,
-             message: "setMIDINetworkSession() is now a top-level global method."
+            message: "setMIDINetworkSession() is now a top-level global method."
         )
         public static func setMIDINetworkSession(policy: MIDIIONetworkConnectionPolicy?) {
             fatalError()

@@ -1,6 +1,6 @@
 //
 //  MIDIKitSync Extensions.swift
-//  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
+//  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 

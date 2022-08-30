@@ -50,6 +50,7 @@ extension MIDIFile.Chunk {
         }
     }
 }
+
 // MARK: - Static Constructors
 
 extension MIDIFile.Chunk {
@@ -137,7 +138,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
 }
 
 extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible,
-                                            CustomDebugStringConvertible {
+CustomDebugStringConvertible {
     public var description: String {
         var outputString = ""
 

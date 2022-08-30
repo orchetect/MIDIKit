@@ -15,8 +15,8 @@ final class SysEx8_Tests: XCTestCase {
     
     func testSysEx8_SingleUMP() throws {
         let sourceRawBytes: [UInt8] = [0x00, // stream ID
-                                      0x00, 0x7D, // sysEx ID
-                                      0x01, 0x34, 0xE6] // data bytes
+                                       0x00, 0x7D, // sysEx ID
+                                       0x01, 0x34, 0xE6] // data bytes
 		
         let event = try MIDIEvent.sysEx8(rawBytes: sourceRawBytes)
         guard case let .sysEx8(innerEvent) = event

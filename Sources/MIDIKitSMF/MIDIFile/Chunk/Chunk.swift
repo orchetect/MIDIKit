@@ -20,7 +20,7 @@ extension MIDIFile {
 }
 
 extension MIDIFile.Chunk: CustomStringConvertible,
-                          CustomDebugStringConvertible {
+CustomDebugStringConvertible {
     public var description: String {
         switch self {
         case let .track(track):

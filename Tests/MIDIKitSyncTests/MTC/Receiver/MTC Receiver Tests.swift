@@ -241,7 +241,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
             let lhs = (Double(preSyncLockTime.rawValue) / 10e8) + waitTime
             let rhs = Double(futureTime.rawValue) / 10e8
             
-            //XCTAssertEqual(lhs, rhs, accuracy: 0.005)
+            // XCTAssertEqual(lhs, rhs, accuracy: 0.005)
             isSuccess = (lhs - 0.01 ... lhs + 0.01).contains(rhs)
             
             asyncDoneExp.fulfill()

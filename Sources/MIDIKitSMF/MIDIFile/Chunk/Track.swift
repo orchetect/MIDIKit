@@ -301,7 +301,7 @@ extension MIDIFile.Chunk.Track {
 }
 
 extension MIDIFile.Chunk.Track: CustomStringConvertible,
-                                CustomDebugStringConvertible {
+CustomDebugStringConvertible {
     public var description: String {
         var outputString = ""
         

@@ -42,7 +42,11 @@ extension MIDIFileEvent {
         data: [UInt8]
     ) -> Self { fatalError() }
     
-    @available(*, unavailable, renamed: "universalSysEx7(delta:universalType:deviceID:subID1:subID2:data:)")
+    @available(
+        *,
+        unavailable,
+        renamed: "universalSysEx7(delta:universalType:deviceID:subID1:subID2:data:)"
+    )
     public static func universalSysEx(
         delta: DeltaTime = .none,
         universalType: MIDIEvent.UniversalSysExType,

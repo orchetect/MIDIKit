@@ -28,7 +28,7 @@ extension MIDIFile {
 }
 
 extension MIDIFile.FrameRate: CustomStringConvertible,
-                              CustomDebugStringConvertible {
+CustomDebugStringConvertible {
     public var description: String {
         switch self {
         case ._24fps:
