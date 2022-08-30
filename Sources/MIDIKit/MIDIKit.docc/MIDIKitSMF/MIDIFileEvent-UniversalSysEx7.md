@@ -1,6 +1,6 @@
-# Note On
+# Universal System Exclusive 7
 
-Channel Voice Message: Note On
+Universal System Exclusive (7-bit)
 
 @Comment {
     // ------------------------------------
@@ -12,14 +12,17 @@ Channel Voice Message: Note On
     // ------------------------------------
 }
 
+Some standard Universal System Exclusive 7 messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
+
+- `deviceID` of `0x7F` indicates "All Devices".
+
 ## Topics
 
 ### Constructors
 
-- ``MIDIFileEvent/noteOn(delta:note:velocity:channel:)-560m``
-- ``MIDIFileEvent/noteOn(delta:note:velocity:channel:)-4jcss``
+- ``MIDIFileEvent/universalSysEx7(delta:universalType:deviceID:subID1:subID2:data:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileEvent/noteOn(delta:event:)``
-- ``MIDIFileEvent/NoteOn``
+- ``MIDIFileEvent/universalSysEx7(delta:event:)``
+- ``MIDIFileEvent/UniversalSysEx7``

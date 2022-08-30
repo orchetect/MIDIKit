@@ -9,7 +9,7 @@ Channel Voice and System Exclusive events are interchangeable between ``MIDIEven
 - term ``MIDIEvent`` → ``MIDIFileEvent``: ``MIDIEvent/smfEvent(delta:)``
 - term ``MIDIFileEvent`` → ``MIDIEvent``: ``MIDIFileEvent/event()``
 
-The remainder of ``MIDIFileEvent`` event types are only relevante to MIDI files and have no MIDI I/O event equivalent.
+The remainder of ``MIDIFileEvent`` event types are only relevant to MIDI files and have no MIDI I/O event equivalent.
 
 For more information on ``MIDIEvent``, refer to MIDIKit's own documentation.
 
@@ -40,8 +40,8 @@ For more information on ``MIDIEvent``, refer to MIDIKit's own documentation.
 
 ### System Exclusive
 
-- <doc:MIDIFileEvent-SysEx>
-- <doc:MIDIFileEvent-UniversalSysEx>
+- <doc:MIDIFileEvent-SysEx7>
+- <doc:MIDIFileEvent-UniversalSysEx7>
 
 ### Text
 

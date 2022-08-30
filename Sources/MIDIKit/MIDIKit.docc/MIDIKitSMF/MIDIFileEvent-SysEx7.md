@@ -1,6 +1,6 @@
-# Note On
+# System Exclusive 7
 
-Channel Voice Message: Note On
+System Exclusive: Manufacturer-specific (7-bit)
 
 @Comment {
     // ------------------------------------
@@ -16,10 +16,9 @@ Channel Voice Message: Note On
 
 ### Constructors
 
-- ``MIDIFileEvent/noteOn(delta:note:velocity:channel:)-560m``
-- ``MIDIFileEvent/noteOn(delta:note:velocity:channel:)-4jcss``
+- ``MIDIFileEvent/sysEx7(delta:manufacturer:data:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileEvent/noteOn(delta:event:)``
-- ``MIDIFileEvent/NoteOn``
+- ``MIDIFileEvent/sysEx7(delta:event:)``
+- ``MIDIFileEvent/SysEx7``
