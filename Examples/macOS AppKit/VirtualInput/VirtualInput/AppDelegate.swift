@@ -1,7 +1,7 @@
 //
 //  AppDelegate.swift
-//  VirtualOutput
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Cocoa
@@ -9,7 +9,7 @@ import MIDIKit
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    let midiManager = MIDI.IO.Manager(
+    let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
@@ -24,14 +24,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         do {
             print("Creating virtual MIDI input.")
             try midiManager.addInput(
                 name: virtualInputName,
                 tag: virtualInputName,
                 uniqueID: .userDefaultsManaged(key: virtualInputName),
-                receiveHandler: .eventsLogging(filterActiveSensingAndClock: true)
+                receiver: .eventsLogging(filterActiveSensingAndClock: true)
             )
         } catch {
             print("Error creating virtual MIDI input:", error.localizedDescription)

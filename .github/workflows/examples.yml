@@ -27,7 +27,8 @@ jobs:
     steps:
     - uses: actions/checkout@main
     
-    # Note: BluetoothMIDI does not have MIDIKit as a dependency so we don't need to run the branch setter script
+    - name: BluetoothMIDI - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -branch ${{ github.ref }}
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
     - name: BluetoothMIDI - Build
@@ -60,7 +61,8 @@ jobs:
     steps:
     - uses: actions/checkout@main
     
-    # Note: BluetoothMIDI does not have MIDIKit as a dependency so we don't need to run the branch setter script
+    - name: BluetoothMIDI - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -branch ${{ github.ref }}
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
     - name: BluetoothMIDI - Build
@@ -168,6 +170,13 @@ jobs:
     steps:
     - uses: actions/checkout@main
     
+    - name: HUISurface - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/Advanced/HUISurface/HUISurface.xcodeproj" -branch ${{ github.ref }}
+    - name: HUISurface - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/Advanced/HUISurface/HUISurface.xcodeproj" -resolvePackageDependencies
+    - name: HUISurface - Build
+      run: xcodebuild build -project "Examples/Advanced/HUISurface/HUISurface.xcodeproj" -scheme "HUISurface" -destination "generic/platform=macOS,name=Any Mac"
+    
     - name: MIDIEventLogger - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -branch ${{ github.ref }}
     - name: MIDIEventLogger - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
@@ -181,3 +190,10 @@ jobs:
       run: xcodebuild -project "Examples/Advanced/MIDISystemInfo/MIDISystemInfo.xcodeproj" -resolvePackageDependencies
     - name: MIDISystemInfo - Build
       run: xcodebuild build -project "Examples/Advanced/MIDISystemInfo/MIDISystemInfo.xcodeproj" -scheme "MIDISystemInfo" -destination "generic/platform=macOS,name=Any Mac"
+      
+    - name: MTCExample - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/Advanced/MTCExample/MTCExample.xcodeproj" -branch ${{ github.ref }}
+    - name: MTCExample - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/Advanced/MTCExample/MTCExample.xcodeproj" -resolvePackageDependencies
+    - name: MTCExample - Build
+      run: xcodebuild build -project "Examples/Advanced/MTCExample/MTCExample.xcodeproj" -scheme "MTCExample" -destination "generic/platform=macOS,name=Any Mac"

@@ -7,8 +7,8 @@ assignees: ''
 
 ---
 
-Please review the MIDIKit Wiki prior to submitting issues:
-https://github.com/orchetect/MIDIKit/wiki
+Please review the MIDIKit documentation prior to submitting issues:
+https://orchetect.github.io/MIDIKit
 
 Feature requests are best to be posted in the Discussions area first:
 https://github.com/orchetect/MIDIKit/discussions

@@ -1,7 +1,7 @@
 //
 //  AppDelegate.swift
-//  MIDIEventLogger
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -10,8 +10,8 @@ import MIDIKit
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var midiManager: MIDI.IO.Manager = {
-        let newManager = MIDI.IO.Manager(
+    var midiManager: MIDIManager = {
+        let newManager = MIDIManager(
             clientName: "MIDIEventLogger",
             model: "LoggerApp",
             manufacturer: "Orchetect"
@@ -24,10 +24,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             logger.default(error)
         }
-        
+    
         // uncomment this to test different API versions or limit to MIDI 1.0 protocol
         // newManager.preferredAPI = .legacyCoreMIDI
-        
+    
         return newManager
     }()
     
@@ -37,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView()
             .environmentObject(midiManager)
-        
+    
         // Create the window and set the content view.
         window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),

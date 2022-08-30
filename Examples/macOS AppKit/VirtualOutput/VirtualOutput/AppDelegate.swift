@@ -1,7 +1,7 @@
 //
 //  AppDelegate.swift
-//  VirtualOutput
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Cocoa
@@ -9,7 +9,7 @@ import MIDIKit
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    let midiManager = MIDI.IO.Manager(
+    let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         setupVirtualOutput()
     }
     
@@ -44,7 +44,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction
     func sendNoteOn(_ sender: Any) {
         guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-        
+    
         try? output.send(
             event: .noteOn(
                 60,
@@ -57,7 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction
     func sendNoteOff(_ sender: Any) {
         guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-        
+    
         try? output.send(
             event: .noteOff(
                 60,
@@ -70,7 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction
     func sendCC1(_ sender: Any) {
         guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-        
+    
         try? output.send(
             event: .cc(
                 1,

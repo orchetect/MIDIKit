@@ -20,34 +20,6 @@
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MIDIKitTests"
-               BuildableName = "MIDIKitTests"
-               BlueprintName = "MIDIKitTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MIDIKitC"
-               BuildableName = "MIDIKitC"
-               BlueprintName = "MIDIKitC"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -61,22 +33,51 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "MIDIKitTests"
-               BuildableName = "MIDIKitTests"
-               BlueprintName = "MIDIKitTests"
+               BlueprintIdentifier = "MIDIKitCoreTests"
+               BuildableName = "MIDIKitCoreTests"
+               BlueprintName = "MIDIKitCoreTests"
                ReferencedContainer = "container:">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests">
-               </Test>
-               <Test
-                  Identifier = "RoundTrip_NewCoreMIDIAPI_2_0_Protocol_Tests">
-               </Test>
-               <Test
-                  Identifier = "RoundTrip_OldCoreMIDIAPI_Tests">
-               </Test>
-            </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MIDIKitIOTests"
+               BuildableName = "MIDIKitIOTests"
+               BlueprintName = "MIDIKitIOTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MIDIKitControlSurfacesTests"
+               BuildableName = "MIDIKitControlSurfacesTests"
+               BlueprintName = "MIDIKitControlSurfacesTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MIDIKitSMFTests"
+               BuildableName = "MIDIKitSMFTests"
+               BlueprintName = "MIDIKitSMFTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MIDIKitSyncTests"
+               BuildableName = "MIDIKitSyncTests"
+               BlueprintName = "MIDIKitSyncTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>

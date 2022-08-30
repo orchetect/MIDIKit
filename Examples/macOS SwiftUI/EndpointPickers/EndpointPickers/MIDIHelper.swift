@@ -1,45 +1,45 @@
 //
 //  MIDIHelper.swift
-//  EndpointPickers
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
 import MIDIKit
 
 class MIDIHelper: ObservableObject {
-    public weak var midiManager: MIDI.IO.Manager?
+    public weak var midiManager: MIDIManager?
     
     @Published
-    public private(set) var receivedEvents: [MIDI.Event] = []
+    public private(set) var receivedEvents: [MIDIEvent] = []
     
     public init() { }
     
-    /// Run once after setting the local `midiManager` property.
+    /// Run once after setting the local ``midiManager`` property.
     public func initialSetup() {
         guard let midiManager = midiManager else {
-            print("MIDI Manager is missing.")
+            print("MIDIManager is missing.")
             return
         }
-        
+    
         do {
             print("Starting MIDI services.")
             try midiManager.start()
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-        
+    
         do {
             try midiManager.addInputConnection(
                 toOutputs: [],
                 tag: ConnectionTags.midiIn,
-                receiveHandler: .events() { [weak self] events in
+                receiver: .events { [weak self] events in
                     DispatchQueue.main.async {
                         self?.receivedEvents.append(contentsOf: events)
                     }
                 }
             )
-            
+    
             try midiManager.addOutputConnection(
                 toInputs: [],
                 tag: ConnectionTags.midiOut
@@ -51,14 +51,14 @@ class MIDIHelper: ObservableObject {
     
     // MARK: - MIDI In
     
-    public var midiInputConnection: MIDI.IO.InputConnection? {
+    public var midiInputConnection: MIDIInputConnection? {
         midiManager?.managedInputConnections[ConnectionTags.midiIn]
     }
     
-    public func midiInUpdateConnection(selectedUniqueID: MIDI.IO.UniqueID) {
+    public func midiInUpdateConnection(selectedUniqueID: MIDIIdentifier) {
         guard let midiInputConnection = midiInputConnection else { return }
-        
-        if selectedUniqueID == 0 {
+    
+        if selectedUniqueID == .invalidMIDIIdentifier {
             midiInputConnection.removeAllOutputs()
         } else {
             if midiInputConnection.outputsCriteria != [.uniqueID(selectedUniqueID)] {
@@ -70,14 +70,14 @@ class MIDIHelper: ObservableObject {
     
     // MARK: - MIDI Out
     
-    public var midiOutputConnection: MIDI.IO.OutputConnection? {
+    public var midiOutputConnection: MIDIOutputConnection? {
         midiManager?.managedOutputConnections[ConnectionTags.midiOut]
     }
     
-    public func midiOutUpdateConnection(selectedUniqueID: MIDI.IO.UniqueID) {
+    public func midiOutUpdateConnection(selectedUniqueID: MIDIIdentifier) {
         guard let midiOutputConnection = midiOutputConnection else { return }
-        
-        if selectedUniqueID == 0 {
+    
+        if selectedUniqueID == .invalidMIDIIdentifier {
             midiOutputConnection.removeAllInputs()
         } else {
             if midiOutputConnection.inputsCriteria != [.uniqueID(selectedUniqueID)] {
@@ -89,19 +89,19 @@ class MIDIHelper: ObservableObject {
     
     // MARK: - Test Virtual Endpoints
     
-    public var midiTestIn1: MIDI.IO.Input? {
+    public var midiTestIn1: MIDIInput? {
         midiManager?.managedInputs[ConnectionTags.midiTestIn1]
     }
     
-    public var midiTestIn2: MIDI.IO.Input? {
+    public var midiTestIn2: MIDIInput? {
         midiManager?.managedInputs[ConnectionTags.midiTestIn2]
     }
     
-    public var midiTestOut1: MIDI.IO.Output? {
+    public var midiTestOut1: MIDIOutput? {
         midiManager?.managedOutputs[ConnectionTags.midiTestOut1]
     }
     
-    public var midiTestOut2: MIDI.IO.Output? {
+    public var midiTestOut2: MIDIOutput? {
         midiManager?.managedOutputs[ConnectionTags.midiTestOut2]
     }
     
@@ -110,30 +110,30 @@ class MIDIHelper: ObservableObject {
             name: "Test In 1",
             tag: ConnectionTags.midiTestIn1,
             uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestIn1),
-            receiveHandler: .events() { [weak self] events in
+            receiver: .events { [weak self] events in
                 DispatchQueue.main.async {
                     self?.receivedEvents.append(contentsOf: events)
                 }
             }
         )
-        
+    
         try? midiManager?.addInput(
             name: "Test In 2",
             tag: ConnectionTags.midiTestIn2,
             uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestIn2),
-            receiveHandler: .events() { [weak self] events in
+            receiver: .events { [weak self] events in
                 DispatchQueue.main.async {
                     self?.receivedEvents.append(contentsOf: events)
                 }
             }
         )
-        
+    
         try? midiManager?.addOutput(
             name: "Test Out 1",
             tag: ConnectionTags.midiTestOut1,
             uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestOut1)
         )
-        
+    
         try? midiManager?.addOutput(
             name: "Test Out 2",
             tag: ConnectionTags.midiTestOut2,
@@ -155,11 +155,11 @@ class MIDIHelper: ObservableObject {
     
     // MARK: - Helpers
     
-    public func isInputPresentInSystem(uniqueID: MIDI.IO.UniqueID) -> Bool {
+    public func isInputPresentInSystem(uniqueID: MIDIIdentifier) -> Bool {
         midiManager?.endpoints.inputs.contains(whereUniqueID: uniqueID) ?? false
     }
     
-    public func isOutputPresentInSystem(uniqueID: MIDI.IO.UniqueID) -> Bool {
+    public func isOutputPresentInSystem(uniqueID: MIDIIdentifier) -> Bool {
         midiManager?.endpoints.outputs.contains(whereUniqueID: uniqueID) ?? false
     }
 }

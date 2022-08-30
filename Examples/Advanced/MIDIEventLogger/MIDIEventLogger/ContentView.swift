@@ -1,16 +1,15 @@
 //
 //  ContentView.swift
-//  MIDIEventLogger
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
 import OTCore
-import SwiftRadix
 import MIDIKit
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: MIDI.IO.Manager
+    @EnvironmentObject var midiManager: MIDIManager
     
     // MARK: - Constants
     
@@ -29,29 +28,29 @@ struct ContentView: View {
     
     // MARK: - UI State
     
-    @State var midiGroup: MIDI.UInt4 = 0
+    @State var midiGroup: UInt4 = 0
     
-    @State var midiInputConnectionEndpoint: MIDI.IO.OutputEndpoint? = nil
+    @State var midiInputConnectionEndpoint: MIDIOutputEndpoint? = nil
     
     // MARK: - Body
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             Spacer().frame(height: 10)
-            
+    
             MIDISubsystemStatusView()
-            
+    
             Spacer().frame(height: 10)
-            
+    
             SendMIDIEventsView(midiGroup: $midiGroup) {
                 sendEvent($0)
             }
             .environmentObject(midiManager)
-            
+    
             Spacer().frame(height: 10)
-            
+    
             ReceiveMIDIEventsView()
-            
+    
             Spacer().frame(height: 18)
         }
         .frame(
@@ -63,23 +62,23 @@ struct ContentView: View {
             alignment: .center
         )
         .padding([.leading, .trailing])
-        
+    
         .onAppear {
             do {
                 if midiManager.managedInputs[kInputTag] == nil {
                     logger.debug("Adding virtual MIDI input port to the manager.")
-                    
+    
                     try midiManager.addInput(
                         name: kInputName,
                         tag: kInputTag,
                         uniqueID: .userDefaultsManaged(key: kInputTag),
-                        receiveHandler: .eventsLogging()
+                        receiver: .eventsLogging()
                     )
                 }
-                
+    
                 if midiManager.managedOutputs[kOutputTag] == nil {
                     logger.debug("Adding virtual MIDI output port to the manager.")
-                    
+    
                     try midiManager.addOutput(
                         name: kOutputName,
                         tag: kOutputTag,
@@ -89,7 +88,7 @@ struct ContentView: View {
             } catch {
                 logger.error(error)
             }
-            
+    
             // wait a short delay in order to give Core MIDI time
             // to set up the virtual endpoints we created in the view's init()
             DispatchQueue.main.asyncAfter(
@@ -99,18 +98,9 @@ struct ContentView: View {
             }
         }
         
-        // MARK: TODO: this works but only on macOS 11 and later
-        // .onChange(of: midiInputConnectionEndpoint) { _ in
-        //    updateInputConnection()
-        // }
-        // MARK: TODO: instead, we need a hack to update when the @State var changes:
-        ZStack {
-            Text({
-                let dummy = midiInputConnectionEndpoint?.name ?? ""
-                updateInputConnection()
-                return "\(dummy)"
-            }())
-        }.frame(width: 0, height: 0)
+        .onChange(of: midiInputConnectionEndpoint) { _ in
+            updateInputConnection()
+        }
     }
     
     // MARK: - Helper Methods
@@ -135,22 +125,22 @@ struct ContentView: View {
                 return
             }
         }
-        
+    
         if !midiManager.managedInputConnections.isEmpty {
             logger.debug("Removing input connections.")
             midiManager.remove(.inputConnection, .all)
         }
-        
+    
         guard let endpoint = midiInputConnectionEndpoint else { return }
-        
+    
         let endpointName = endpoint.displayName.quoted
-        
+    
         logger.debug("Setting up new input connection to \(endpointName).")
         do {
             try midiManager.addInputConnection(
                 toOutputs: [.uniqueID(endpoint.uniqueID)],
                 tag: kInputConnectionTag,
-                receiveHandler: .eventsLogging()
+                receiver: .eventsLogging()
             )
         } catch {
             logger.error(error)
@@ -158,7 +148,7 @@ struct ContentView: View {
     }
     
     /// Send a MIDI event using our virtual output endpoint.
-    func sendEvent(_ event: MIDI.Event) {
+    func sendEvent(_ event: MIDIEvent) {
         logIfThrowsError {
             try midiManager.managedOutputs[kOutputTag]?
                 .send(event: event)
@@ -167,7 +157,7 @@ struct ContentView: View {
 }
 
 struct ContentView_Previews: PreviewProvider {
-    private static let midiManager = MIDI.IO.Manager(
+    private static let midiManager = MIDIManager(
         clientName: "Preview",
         model: "",
         manufacturer: ""

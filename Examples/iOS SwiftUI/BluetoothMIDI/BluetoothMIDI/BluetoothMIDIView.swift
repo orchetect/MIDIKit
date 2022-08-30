@@ -1,7 +1,7 @@
 //
 //  BluetoothMIDIView.swift
-//  BluetoothMIDI
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if os(iOS)
@@ -28,7 +28,7 @@ class BTMIDICentralViewController: CABTMIDICentralViewController {
     
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+    
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .done,
             target: self,

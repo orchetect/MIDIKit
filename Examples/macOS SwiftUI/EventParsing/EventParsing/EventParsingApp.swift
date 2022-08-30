@@ -1,7 +1,7 @@
 //
 //  EventParsingApp.swift
-//  EventParsing
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -9,7 +9,7 @@ import MIDIKit
 
 @main
 struct EventParsingApp: App {
-    let midiManager = MIDI.IO.Manager(
+    let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"

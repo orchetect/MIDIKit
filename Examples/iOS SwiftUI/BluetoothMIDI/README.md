@@ -19,7 +19,7 @@ Events received from all MIDI output endpoints are automatically logged to the c
 
 ## Operation
 
-Once Bluetooth connectivity is implemented (see examples above), Bluetooth MIDI devices' ports simply show up as MIDI input or output endpoints in the system. Access them by getting these properties on your `Manager` instance:
+Once Bluetooth connectivity is implemented (see examples above), Bluetooth MIDI devices' ports simply show up as MIDI input or output endpoints in the system. Access them by getting these properties on your `MIDIManager` instance:
 
 - `midiManager.endpoints.inputs`
 - `midiManager.endpoints.outputs`

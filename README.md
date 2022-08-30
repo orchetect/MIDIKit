@@ -2,51 +2,45 @@
 
 # MIDIKit
 
-[![CI Build Status](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml) [![Platforms - macOS 10.12+ | iOS 10+ (beta)](https://img.shields.io/badge/platforms-macOS%2010.12%2B%20|%20iOS%2010%2B-lightgrey.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
+[![CI Build Status](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml) [![Platforms - macOS 10.12-13.0 | iOS 10-16](https://img.shields.io/badge/platforms-macOS%2010.12–13.0%20|%20iOS%2010–16-lightgrey.svg?style=flat)](https://developer.apple.com/swift) ![Swift 5.5-5.7](https://img.shields.io/badge/Swift-5.5–5.7-orange.svg?style=flat) [![Xcode 13-14](https://img.shields.io/badge/Xcode-13–14-blue.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
 
 An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MIDI 2.0.
 
 - Modular, user-friendly I/O
-- Automatic MIDI endpoint connection management and unique ID persistence
+- Automatic MIDI endpoint connection management and identity persistence
 - Strongly-typed MIDI events that seamlessly interoperate between MIDI 1.0 and MIDI 2.0
-- Automatically uses appropriate Core MIDI API and defaults to MIDI 2.0 on platforms that support them
+- Automatically uses appropriate Core MIDI API and defaults to MIDI 2.0 on platforms that support it
 - Supports Swift Playgrounds on iPad and macOS
+- Full documentation available in Xcode Documentation browser, including helpful guides and getting started information
 
-## MIDIKit Extensions
+## Abstractions
 
-Abstractions are built as optional extensions in their own repos.
+Over and above I/O and events, MIDI extension abstractions can be found in MIDIKit:
 
-- [MIDIKitControlSurfaces](https://github.com/orchetect/MIDIKitControlSurfaces): MIDIKit extension for Control Surfaces (HUI, etc.)
-- [MIDIKitSync](https://github.com/orchetect/MIDIKitSync): MIDIKit extension for sync (MTC, etc.)
-- [MIDIKitSMF](https://github.com/orchetect/MIDIKitSMF): MIDIKit extension for reading/writing Standard MIDI Files (SMF)
+- Reading/writing Standard MIDI Files (SMF)
+- Control Surface protocols (HUI, etc.)
+- Synchronization protocols (MTC, etc.)
 
 ## Getting Started
 
-1. Add MIDIKit as a dependency using Swift Package Manager.
-   - In an app project or framework, in Xcode:
-     - Select the menu: **File → Swift Packages → Add Package Dependency...**
-     - Enter this URL: `https://github.com/orchetect/MIDIKit`
-   
-   - In a Swift Package, add it to the Package.swift dependencies:
-     ```swift
-     .package(url: "https://github.com/orchetect/MIDIKit", from: "0.5.0")
-     ```
-  
-2. Import the library:
-   ```swift
-   import MIDIKit
-   ```
+The library is available as a Swift Package Manager (SPM) package.
 
-3. See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a getting started guide, links to examples, and troubleshooting tips.
+Use the URL `https://github.com/orchetect/MIDIKit` when adding the library to a project or Swift package.
+
+See the [getting started guide](https://orchetect.github.io/MIDIKit/documentation/midikit/midikit-getting-started) for a detailed walkthrough of how to get the most out of MIDIKit.
 
 ## Documentation
 
-See the MIDIKit [Wiki](https://github.com/orchetect/MIDIKit/wiki) which includes a getting started guide, links to examples, and troubleshooting tips.
+See the [online documentation](https://orchetect.github.io/MIDIKit/) or view it in Xcode's documentation browser by selecting the **Product → Build Documentation** menu.
+
+This includes a getting started guide, links to examples, and troubleshooting tips.
 
 ## System Compatibility
 
-- Xcode 12.4 / macOS 10.15.7 are minimum requirements to compile
-- When compiled, MIDIKit supports macOS 10.12+ and iOS 10.0+
+- Xcode 13.0 / macOS 11.3 are minimum requirements to compile
+- Once compiled, MIDIKit supports macOS 10.12+ and iOS 10.0+.
+
+  tvOS and watchOS are not supported (as there is no Core MIDI implementation) but MIDIKit will build successfully on those platforms in the event it is included as a dependency in multi-platform projects.
 
 ## Author
 

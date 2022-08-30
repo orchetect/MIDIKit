@@ -12,7 +12,6 @@
 		E27D0E25284F2A8900F43247 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E27D0E23284F2A8900F43247 /* Main.storyboard */; };
 		E27D0E2A284F2A8900F43247 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E27D0E28284F2A8900F43247 /* LaunchScreen.storyboard */; };
 		E27D0E35284F2E0A00F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E34284F2E0A00F43247 /* MIDIKit */; };
-		E29AC906285A98C2009D1C2C /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC905285A98C2009D1C2C /* SwiftRadix */; };
 		E29AC91B285BF17D009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC91A285BF17D009D1C2C /* MIDIKit */; };
 		E29FF2992880BC60005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2982880BC60005E2BC2 /* Images.xcassets */; };
 /* End PBXBuildFile section */
@@ -35,7 +34,6 @@
 			files = (
 				E29AC91B285BF17D009D1C2C /* MIDIKit in Frameworks */,
 				E27D0E35284F2E0A00F43247 /* MIDIKit in Frameworks */,
-				E29AC906285A98C2009D1C2C /* SwiftRadix in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +88,6 @@
 			name = EventParsing;
 			packageProductDependencies = (
 				E27D0E34284F2E0A00F43247 /* MIDIKit */,
-				E29AC905285A98C2009D1C2C /* SwiftRadix */,
 				E29AC91A285BF17D009D1C2C /* MIDIKit */,
 			);
 			productName = EventParsing;
@@ -122,7 +119,6 @@
 			);
 			mainGroup = E27D0E11284F2A8900F43247;
 			packageReferences = (
-				E29AC904285A98C2009D1C2C /* XCRemoteSwiftPackageReference "SwiftRadix" */,
 				E29AC919285BF17D009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
 			);
 			productRefGroup = E27D0E1B284F2A8900F43247 /* Products */;
@@ -229,7 +225,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -283,7 +279,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -373,20 +369,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E29AC904285A98C2009D1C2C /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/SwiftRadix";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
-			};
-		};
 		E29AC919285BF17D009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -395,11 +383,6 @@
 		E27D0E34284F2E0A00F43247 /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MIDIKit;
-		};
-		E29AC905285A98C2009D1C2C /* SwiftRadix */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E29AC904285A98C2009D1C2C /* XCRemoteSwiftPackageReference "SwiftRadix" */;
-			productName = SwiftRadix;
 		};
 		E29AC91A285BF17D009D1C2C /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -1,20 +1,20 @@
 //
 //  ContentView.swift
-//  EndpointPickers
 //  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
 import MIDIKit
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: MIDI.IO.Manager
+    @EnvironmentObject var midiManager: MIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
-    @Binding var midiInSelectedID: MIDI.IO.UniqueID
+    @Binding var midiInSelectedID: MIDIIdentifier
     @Binding var midiInSelectedDisplayName: String
     
-    @Binding var midiOutSelectedID: MIDI.IO.UniqueID
+    @Binding var midiOutSelectedID: MIDIIdentifier
     @Binding var midiOutSelectedDisplayName: String
     
     var body: some View {
@@ -26,18 +26,18 @@ struct ContentView: View {
                             Text(
                                 "This example demonstrates maintaining menus with MIDI endpoints in the system, allowing a single selection for each menu."
                             )
-                            
+    
                             Text(
                                 "Refer to this example's README.md file for important information."
                             )
-                            
+    
                             Text(
                                 "For testing purposes, try creating virtual endpoints, selecting them as MIDI In and MIDI Out, then destroying them. They appear as missing but their selection is retained. Then create them again, and they will appear normally once again and connection will resume. They are remembered even if you quit the app."
                             )
                         }
                     }
                 }
-                
+    
                 Section() {
                     MIDIEndpointSelectionView(
                         midiInSelectedID: $midiInSelectedID,
@@ -45,7 +45,7 @@ struct ContentView: View {
                         midiOutSelectedID: $midiOutSelectedID,
                         midiOutSelectedDisplayName: $midiOutSelectedDisplayName
                     )
-                    
+    
                     Group {
                         Button("Send Note On C3") {
                             sendToConnection(event: .noteOn(
@@ -54,7 +54,7 @@ struct ContentView: View {
                                 channel: 0
                             ))
                         }
-                        
+    
                         Button("Send Note Off C3") {
                             sendToConnection(event: .noteOff(
                                 60,
@@ -62,7 +62,7 @@ struct ContentView: View {
                                 channel: 0
                             ))
                         }
-                        
+    
                         Button("Send CC1") {
                             sendToConnection(event: .cc(
                                 1,
@@ -76,18 +76,18 @@ struct ContentView: View {
                             !midiHelper.isInputPresentInSystem(uniqueID: midiOutSelectedID)
                     )
                 }
-                
+    
                 Section() {
                     Button("Create Test Virtual Endpoints") {
                         midiHelper.createVirtualInputs()
                     }
                     .disabled(midiHelper.virtualsExist)
-                    
+    
                     Button("Destroy Test Virtual Endpoints") {
                         midiHelper.destroyVirtualInputs()
                     }
                     .disabled(!midiHelper.virtualsExist)
-                    
+    
                     Group {
                         Button("Send Note On C3") {
                             sendToVirtuals(event: .noteOn(
@@ -96,7 +96,7 @@ struct ContentView: View {
                                 channel: 0
                             ))
                         }
-                        
+    
                         Button("Send Note Off C3") {
                             sendToVirtuals(event: .noteOff(
                                 60,
@@ -104,7 +104,7 @@ struct ContentView: View {
                                 channel: 0
                             ))
                         }
-                        
+    
                         Button("Send CC1") {
                             sendToVirtuals(event: .cc(
                                 1,
@@ -115,7 +115,7 @@ struct ContentView: View {
                     }
                     .disabled(!midiHelper.virtualsExist)
                 }
-                
+    
                 Section(header: Text("Received Events")) {
                     List(midiHelper.receivedEvents.reversed(), id: \.self) {
                         Text($0.description)
@@ -129,16 +129,16 @@ struct ContentView: View {
         .lineLimit(nil)
     }
     
-    func sendToConnection(event: MIDI.Event) {
+    func sendToConnection(event: MIDIEvent) {
         try? midiHelper.midiOutputConnection?.send(event: event)
     }
     
-    func sendToVirtuals(event: MIDI.Event) {
+    func sendToVirtuals(event: MIDIEvent) {
         try? midiHelper.midiTestOut1?.send(event: event)
         try? midiHelper.midiTestOut2?.send(event: event)
     }
     
-    func color(for event: MIDI.Event) -> Color? {
+    func color(for event: MIDIEvent) -> Color? {
         switch event {
         case .noteOn: return .green
         case .noteOff: return .red
