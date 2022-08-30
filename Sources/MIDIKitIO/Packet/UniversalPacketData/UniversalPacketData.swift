@@ -6,7 +6,7 @@
 
 @_implementationOnly import CoreMIDI
 
-/// Clean consolidated data encapsulation of raw data from a CoreMIDI `MIDIEventPacket` (Universal MIDI Packet).
+/// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIEventPacket` (Universal MIDI Packet).
 public struct UniversalMIDIPacketData {
 //    /// Universal MIDI Packet Words
 //    public let words: [UInt32]

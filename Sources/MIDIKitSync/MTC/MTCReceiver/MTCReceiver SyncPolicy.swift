@@ -9,14 +9,14 @@ import MIDIKitCore
 import TimecodeKit
 
 extension MTCReceiver {
-    /// Options defining behavior of the receiver
+    /// Options defining behavior of the receiver.
     public struct SyncPolicy: Equatable, Codable {
         // MARK: - Public properties
         
-        /// Sets the number of received continuous timecode frames that must elapse prior to establishing synchronization
+        /// Sets the number of received continuous timecode frames that must elapse prior to establishing synchronization.
         public var lockFrames: Int = 0
         
-        /// Sets the number of timecode frames that must be missed until the receiver enters the stopped/idle state
+        /// Sets the number of timecode frames that must be missed until the receiver enters the stopped/idle state.
         public var dropOutFrames: Int = 0
         
         // MARK: - Init
@@ -38,13 +38,13 @@ extension MTCReceiver {
         
         // MARK: - Public Methods
         
-        /// Returns real time duration in seconds of the `lockFrames` property.
+        /// Returns real time duration in seconds of the ``lockFrames`` property.
         public func lockDuration(at rate: Timecode.FrameRate) -> TimeInterval {
             let tc = Timecode(wrapping: TCC(f: lockFrames), at: rate)
             return tc.realTimeValue
         }
         
-        /// Returns real time duration in seconds of the `dropOutFrames` property.
+        /// Returns real time duration in seconds of the ``dropOutFrames`` property.
         public func dropOutDuration(at rate: Timecode.FrameRate) -> TimeInterval {
             let tc = Timecode(wrapping: TCC(f: dropOutFrames), at: rate)
             return tc.realTimeValue

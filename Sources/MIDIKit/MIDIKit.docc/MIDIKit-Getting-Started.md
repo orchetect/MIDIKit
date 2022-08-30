@@ -128,3 +128,9 @@ See the [example projects](https://github.com/orchetect/MIDIKit/blob/main/Exampl
 - term **Example projects build but do not run**: Ensure the project's scheme is selected in Xcode first.
 - term **Error -50**: This usually happens while trying to interact with the ``MIDIManager`` before it's been started, or if your project is sandboxed or targets iOS and the appropriate app entitlements have not been added.
 - term **Errors building for React Native**: [See this thread](https://github.com/orchetect/MIDIKit/issues/91) if you are having build errors.
+
+## Topics
+
+### Simple Examples
+
+- <doc:Simple-MIDI-Listener-Class-Example>

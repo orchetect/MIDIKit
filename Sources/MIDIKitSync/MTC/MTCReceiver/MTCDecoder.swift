@@ -30,7 +30,7 @@ import TimecodeKit
 ///
 /// Takes a stream of MIDI events and produces timecode values.
 ///
-/// This object is not affected by or reliant on timing at all and simply processes events as they are received. For inbound MTC sync, use the `MTCReceiver` wrapper object which adds additional abstraction for managing MTC sync state.
+/// This object is not affected by or reliant on timing at all and simply processes events as they are received. For inbound MTC sync, use the ``MTCReceiver`` wrapper object which adds additional abstraction for managing MTC sync state.
 ///
 /// > Note:
 /// >
@@ -53,7 +53,7 @@ public class MTCDecoder {
         
     /// The frame rate the local system is using.
     ///
-    /// When set, MTC frame numbers will be scaled to real frame rate frame numbers, but only when the incoming MTC frame rate and the `localFrameRate` are compatible.
+    /// When set, MTC frame numbers will be scaled to real frame rate frame numbers, but only when the incoming MTC frame rate and the ``localFrameRate`` are compatible.
     ///
     /// Remember to also set this any time the local frame rate changes so the receiver can interpret the incoming MTC accordingly.
     public var localFrameRate: Timecode.FrameRate?
@@ -89,12 +89,12 @@ public class MTCDecoder {
         
     /// Called only when the incoming MTC stream changes its frame rate classification.
     ///
-    /// This can usually be ignored, as the `MTCDecoder` can handle scaling and validation of the frame rate information from the stream transparently.
+    /// This can usually be ignored, as the ``MTCDecoder`` can handle scaling and validation of the frame rate information from the stream transparently.
     internal var mtcFrameRateChangedHandler: ((_ rate: MTCFrameRate) -> Void)?
         
     /// Sets the closure called only when the incoming MTC stream changes its frame rate classification.
     ///
-    /// This can usually be ignored, as the `MTCDecoder` can handle scaling and validation of the frame rate information from the stream transparently.
+    /// This can usually be ignored, as the ``MTCDecoder`` can handle scaling and validation of the frame rate information from the stream transparently.
     public func setMTCFrameRateChangedHandler(
         _ handler: ((_ rate: MTCFrameRate) -> Void)?
     ) {

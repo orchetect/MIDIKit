@@ -95,7 +95,7 @@ extension MIDIFileEvent {
         
         public var frameRate: MIDIFile.SMPTEOffsetFrameRate = ._30fps
         
-        /// Returns a `Timecode` struct using values contains in `self`.
+        /// Returns a new `Timecode` instance from the SMPTE offset.
         public var components: Timecode.Components {
             TCC(
                 h: Int(hours),
@@ -106,7 +106,7 @@ extension MIDIFileEvent {
             )
         }
         
-        /// Returns a `Timecode` struct using values contains in `self`.
+        /// Returns a new `Timecode` instance from the SMPTE offset.
         public var timecode: Timecode {
             components.toTimecode(
                 rawValuesAt: frameRate.timecodeRate,

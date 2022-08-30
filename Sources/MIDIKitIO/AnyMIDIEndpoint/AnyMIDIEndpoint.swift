@@ -90,14 +90,14 @@ extension AnyMIDIEndpoint: CustomDebugStringConvertible {
 // MARK: - Extensions
 
 extension _MIDIIOEndpointProtocol {
-    /// Returns the endpoint as a type-erased `AnyEndpoint`.
+    /// Returns the endpoint as a type-erased ``AnyMIDIEndpoint``.
     public func asAnyEndpoint() -> AnyMIDIEndpoint {
         .init(self)
     }
 }
 
 extension Collection where Element: MIDIIOEndpointProtocol {
-    /// Returns the collection as a collection of type-erased `AnyEndpoint` endpoints.
+    /// Returns the collection as a collection of type-erased ``AnyMIDIEndpoint`` endpoints.
     public func asAnyEndpoints() -> [AnyMIDIEndpoint] {
         map { $0.asAnyEndpoint() }
     }

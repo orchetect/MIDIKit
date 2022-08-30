@@ -19,7 +19,8 @@ public enum MIDIReceiver {
         EventsHandler
     )
         
-    /// Provides a convenience to automatically log MIDI events to the console. (Only logs events in `DEBUG` preprocessor flag builds.)
+    /// Provides a convenience to automatically log MIDI events to the console.
+    /// (Only logs events in `DEBUG` preprocessor flag builds.)
     case eventsLogging(
         filterActiveSensingAndClock: Bool = false,
         _ handler: EventsLoggingHandler? = nil
@@ -40,7 +41,7 @@ public enum MIDIReceiver {
     )
     
     /// Pass to a receiver object instance.
-    /// MIDI Event receive handler that holds a reference to a receiver object that conforms to the `ReceivesMIDIEvents` protocol.
+    /// MIDI Event receive handler that holds a reference to a receiver object that conforms to the ``ReceivesMIDIEvents`` protocol.
     /// The object reference may be held strongly or weakly.
     case object(
         ReceivesMIDIEvents,

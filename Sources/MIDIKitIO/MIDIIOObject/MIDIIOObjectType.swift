@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// Describes the type of a `MIDIIOObject` instance.
+/// Describes the type of a ``MIDIIOObject`` instance.
 public enum MIDIIOObjectType: CaseIterable, Equatable, Hashable {
     case device
     case entity

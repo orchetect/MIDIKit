@@ -21,12 +21,12 @@ extension MIDIEvent {
     public enum SysExManufacturer: Equatable, Hashable {
         /// Valid range: `0x01 ... 0x7D`
         ///
-        /// 0x00 is reserved to prefix a 2-byte ID (3 total bytes)
+        /// `0x00` is reserved to prefix a 2-byte ID (3 total bytes)
         case oneByte(UInt7)
 
         /// Valid range for bytes 2 & 3: `0x00 ... 0x7F`
         ///
-        /// Byte 1 is always `0x00`.
+        /// Byte 1 is always `0x00` and is therefore omitted from the tuple.
         case threeByte(byte2: UInt7, byte3: UInt7)
     }
 }

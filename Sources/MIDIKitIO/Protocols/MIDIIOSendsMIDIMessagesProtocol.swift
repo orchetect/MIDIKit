@@ -28,13 +28,17 @@ public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
 
 internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProtocol {
     /// Internal:
-    /// Send a MIDI Message, automatically assembling it into a `MIDIPacketList`.
+    /// Send a legacy MIDI 1.0 Message, automatically assembling it into a `MIDIPacketList`.
+    ///
+    /// This method is internal-only and its use is discouraged.
     ///
     /// - Parameter rawMessage: MIDI message.
     func send(rawMessage: [UInt8]) throws
     
     /// Internal:
-    /// Send one or more MIDI message(s), automatically assembling it into a `MIDIPacketList`.
+    /// Send one or more legacy MIDI 1.0 message(s), automatically assembling it into a `MIDIPacketList`.
+    ///
+    /// This method is internal-only and its use is discouraged.
     ///
     /// - Parameter rawMessages: Array of MIDI messages.
     func send(rawMessages: [[UInt8]]) throws

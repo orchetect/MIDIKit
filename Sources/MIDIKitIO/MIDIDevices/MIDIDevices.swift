@@ -20,7 +20,7 @@ public protocol MIDIIODevicesProtocol {
 
 /// Manages system MIDI devices information cache.
 ///
-/// Do not instance this class directly. Instead, access the `devices` property of your global `MIDIManager` instance.
+/// Do not instance this class directly. Instead, access the ``MIDIManager/devices`` property of your central ``MIDIManager`` instance.
 public final class MIDIDevices: NSObject, MIDIIODevicesProtocol {
     public internal(set) dynamic var devices: [MIDIDevice] = []
     
@@ -29,6 +29,8 @@ public final class MIDIDevices: NSObject, MIDIIODevicesProtocol {
     }
     
     /// Manually update the locally cached contents from the system.
+    ///
+    /// It is not necessary to call this method as the ``MIDIManager`` will automate updating device cache.
     public func update() {
         devices = getSystemDevices()
     }

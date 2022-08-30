@@ -60,7 +60,7 @@ public class MTCReceiver {
         
     /// The SMPTE frame rate (24, 25, 29.97d, or 30) that was last received by the receiver.
     ///
-    /// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the `localFrameRate` property is used for automatic validation and scaling of incoming timecode.
+    /// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the ``localFrameRate`` property is used for automatic validation and scaling of incoming timecode.
     public var mtcFrameRate: MTCFrameRate {
         var getMTCFrameRate: MTCFrameRate!
             

@@ -5,6 +5,7 @@
 ### Temporal
 
 - ``SafeDispatchTimer``
+- ``clock_gettime_monotonic_raw()``
 
 ### Data Access
 

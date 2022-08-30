@@ -29,7 +29,7 @@ public enum MIDIIOError: Error, Hashable {
 
 extension MIDIIOError {
     /// Internal:
-    /// Convenience to return a case of `osStatus` with its associated `CoreMIDIOSStatus` formed from a raw Core MIDI `OSStatus` (Int32) integer value.
+    /// Convenience to return a case of ``osStatus(_:)`` with its associated ``CoreMIDIOSStatus`` formed from a raw Core MIDI `OSStatus` (Int32) integer value.
     internal static func osStatus(_ rawValue: CoreMIDIOSStatus) -> Self {
         .osStatus(.init(rawValue: rawValue))
     }

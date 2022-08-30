@@ -128,7 +128,7 @@ public enum MIDIEvent: Equatable, Hashable {
     
     /// Unofficial Bus Select (Status `0xF5`)
     ///
-    /// This command is not officially supported and some MIDI subsystems will ignore it entirely. It is provided purely for legacy support and its use is discouraged.
+    /// > Warning: This command is not officially supported and some MIDI subsystems will ignore it entirely. It is provided purely for legacy support and its use is discouraged. It will likely be removed in a future release of MIDIKit.
     ///
     /// > Reference:
     /// >

@@ -7,7 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 extension MIDIReceiveHandler {
-    /// MIDI Event receive handler that holds a strong reference to a receiver object that conforms to the `ReceivesMIDIEvents` protocol.
+    /// MIDI Event receive handler that holds a strong reference to a receiver object that conforms to the ``ReceivesMIDIEvents`` protocol.
     class StrongEventsReceiver: MIDIIOReceiveHandlerProtocol {
         public let receiver: ReceivesMIDIEvents
     

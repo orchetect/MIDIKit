@@ -20,7 +20,7 @@ import MIDIKitInternals
 //      -> Strideable
 //         -> Comparable
 
-/// Specialized integer types representing non-standard bit-width values in `MIDIKit`.
+/// Protocol adopted by specialized unsigned integer types in `MIDIKit` representing novel bit widths.
 public protocol MIDIUnsignedInteger: UnsignedInteger, Codable
 where Magnitude == Storage.Magnitude,
       Words == Storage.Words,

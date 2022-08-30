@@ -18,18 +18,18 @@ extension HUISurface.State.ChannelStrip {
         
         // constants
         
-        /// Constant: minimum `level` value.
-        public static let levelMin: Int = 0
+        /// Constant: minimum ``level`` value.
+        public static let levelMin: UInt14 = 0
         
-        /// Constant: maximum `level` value.
-        public static let levelMax: Int = 0x3FFF // 16383
+        /// Constant: maximum ``level`` value.
+        public static let levelMax: UInt14 = 0x3FFF // 16383
         
-        /// Constant: Range of possible `level` values.
-        public static let levelRange: ClosedRange<Int> = 0 ... 0x3FFF
+        /// Constant: Range of possible ``level`` values.
+        public static let levelRange: ClosedRange<UInt14> = 0 ... 0x3FFF
         
         // convenience
         
-        /// Returns `.level` expressed as a unit interval between `0.0 ... 1.0`.
+        /// Returns the ``level`` property expressed as a unit interval between `0.0 ... 1.0`.
         public var levelUnitInterval: Double {
             Double(level) / Double(Self.levelMax)
         }

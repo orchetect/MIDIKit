@@ -23,7 +23,7 @@ extension MTCFrameRate {
     ///
     /// Useful for internal calculations.
     ///
-    /// To get all timecode frame rates that are compatible, use `derivedFrameRates` instead.
+    /// To get all timecode frame rates that are compatible, use ``derivedFrameRates`` instead.
     public var directEquivalentFrameRate: Timecode.FrameRate {
         switch self {
         case .mtc24:    return ._24

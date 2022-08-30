@@ -10,20 +10,20 @@
 
 /// Criterium with which to identify a MIDI endpoint.
 ///
-/// It is recommended to use `uniqueID` primarily. For added resiliency, it is also possible to use `uniqueID` with fallback criteria in the event the endpoint provider does not correctly restore its unique identifier number.
+/// It is recommended to use ``uniqueID(_:)`` primarily. For added resiliency, it is also possible to use ``uniqueIDWithFallback(id:fallbackDisplayName:)`` with fallback criteria in the event the endpoint provider does not correctly restore its unique identifier number.
 public enum MIDIEndpointIdentity {
     /// Utilizes first endpoint matching the endpoint name. (Convenience, not recommended.)
     ///
     /// ⚠️ Use of this is discouraged outside of debugging, since multiple endpoints can potentially share the same name in the system.
     ///
-    /// The best method is to use `.uniqueID()`.
+    /// The best method is to use ``uniqueID(_:)``.
     case name(String)
     
     /// Utilizes first endpoint matching the display name. (Convenience, not recommended.)
     ///
     /// ⚠️ Use of this is discouraged outside of debugging, since multiple endpoints can potentially share the same display name in the system.
     ///
-    /// The best method is to use `.uniqueID()`.
+    /// The best method is to use ``uniqueID(_:)``.
     case displayName(String)
     
     /// Endpoint matching the unique ID. (Recommended)
@@ -37,7 +37,7 @@ public enum MIDIEndpointIdentity {
     ///
     /// This may be useful in the event an endpoint vendor does not correctly maintain its own unique identifier number persistently.
     ///
-    /// ⚠️ However it is still recommended to use the `.uniqueID()` exclusive case where possible and not rely on falling back to fuzzy criteria such as display name.
+    /// ⚠️ However it is still recommended to use the ``uniqueID(_:)`` exclusive case where possible and not rely on falling back to fuzzy criteria such as display name.
     case uniqueIDWithFallback(
         id: MIDIIdentifier,
         fallbackDisplayName: String

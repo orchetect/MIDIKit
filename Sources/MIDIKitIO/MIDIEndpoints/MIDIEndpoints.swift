@@ -13,23 +13,23 @@ public protocol MIDIIOEndpointsProtocol {
     /// List of MIDI input endpoints in the system.
     var inputs: [MIDIInputEndpoint] { get }
     
-    /// List of MIDI input endpoints in the system omitting virtual endpoints owned by this `MIDIManager` instance.
+    /// List of MIDI input endpoints in the system omitting virtual endpoints owned by the ``MIDIManager`` instance.
     var inputsUnowned: [MIDIInputEndpoint] { get }
     
     /// List of MIDI output endpoints in the system.
     var outputs: [MIDIOutputEndpoint] { get }
     
-    /// List of MIDI output endpoints in the system omitting virtual endpoints owned by this `MIDIManager` instance.
+    /// List of MIDI output endpoints in the system omitting virtual endpoints owned by the ``MIDIManager`` instance.
     var outputsUnowned: [MIDIOutputEndpoint] { get }
     
     /// Manually update the locally cached contents from the system.
-    /// This method does not need to be manually invoked, as it is called automatically by the `MIDIManager` when MIDI system endpoints change.
+    /// This method does not need to be manually invoked, as it is called automatically by the ``MIDIManager`` when MIDI system endpoints change.
     mutating func update()
 }
 
 /// Manages system MIDI endpoints information cache.
 public final class MIDIEndpoints: NSObject, MIDIIOEndpointsProtocol {
-    /// Weak reference to `MIDIManager`.
+    /// Weak reference to ``MIDIManager``.
     internal weak var manager: MIDIManager?
     
     public internal(set) dynamic var inputs: [MIDIInputEndpoint] = []

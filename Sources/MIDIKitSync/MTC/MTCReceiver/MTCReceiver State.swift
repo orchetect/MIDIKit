@@ -18,7 +18,7 @@ extension MTCReceiver {
         case idle
         
         /// Pre-Sync:
-        /// MTC quarter-frames are being received in the pre-sync phase prior to transitioning to `.chasing`.
+        /// MTC quarter-frames are being received in the pre-sync phase prior to transitioning to ``sync``.
         case preSync(predictedLockTime: DispatchTime, lockTimecode: Timecode)
         
         /// Sync:
@@ -31,7 +31,7 @@ extension MTCReceiver {
         case freewheeling
         
         /// Incompatible Frame Rate:
-        /// The incoming MTC frame rate is not compatible with the `localFrameRate` and therefore sync is not possible.
+        /// The incoming MTC frame rate is not compatible with the ``MTCReceiver/localFrameRate`` and therefore sync is not possible.
         case incompatibleFrameRate
     }
 }

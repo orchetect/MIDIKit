@@ -45,7 +45,7 @@ public final class MIDIInput: _MIDIIOManagedProtocol {
     ///   - name: The port name as displayed in the system.
     ///   - uniqueID: The port's unique ID in the system.
     ///   - receiver: Receive handler to use for incoming MIDI messages.
-    ///   - midiManager: Reference to parent `MIDIManager` object.
+    ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
     internal init(
         name: String,

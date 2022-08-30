@@ -43,7 +43,7 @@ public final class MIDIOutput: _MIDIIOManagedProtocol {
     /// - Parameters:
     ///   - name: The port name as displayed in the system.
     ///   - uniqueID: The port's unique ID in the system.
-    ///   - midiManager: Reference to parent `MIDIManager` object.
+    ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
     internal init(
         name: String,

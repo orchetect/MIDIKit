@@ -16,7 +16,7 @@ import TimecodeKit
 public class MTCEncoder: SendsMIDIEvents {
     // MARK: - Public properties
         
-    /// Returns current `Timecode` at `localFrameRate`, scaling if necessary.
+    /// Returns current `Timecode` at ``localFrameRate``, scaling if necessary.
     public var timecode: Timecode {
         guard let scaledFrames = mtcFrameRate.scaledFrames(
             fromRawMTCFrames: mtcComponents.f,

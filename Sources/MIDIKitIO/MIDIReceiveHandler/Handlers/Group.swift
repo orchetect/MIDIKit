@@ -7,8 +7,8 @@
 #if !os(tvOS) && !os(watchOS)
 
 extension MIDIReceiveHandler {
-    /// `MIDIReceiver` group.
-    /// Can contain one or more `MIDIReceiveHandler` in series.
+    /// ``MIDIReceiveHandler`` group.
+    /// Can contain one or more ``MIDIReceiveHandler`` in series.
     class Group: MIDIIOReceiveHandlerProtocol {
         public var receiveHandlers: [MIDIReceiveHandler] = []
     

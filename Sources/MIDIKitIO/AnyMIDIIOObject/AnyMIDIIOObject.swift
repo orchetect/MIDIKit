@@ -12,7 +12,7 @@ import SwiftUI
 
 /// Box to contain an instance of a strongly-typed system MIDI object.
 ///
-/// Allows for simple switch case unwrapping when object type needs to be erased, such as `MIDIManager`'s handler for Core MIDI system notifications.
+/// Allows for simple switch case unwrapping when object type needs to be erased, such as ``MIDIManager``'s handler for Core MIDI system notifications.
 public enum AnyMIDIIOObject {
     case device(MIDIDevice)
     case entity(MIDIEntity)
@@ -94,7 +94,7 @@ extension AnyMIDIIOObject: MIDIIOObject {
 }
 
 extension AnyMIDIIOObject {
-    /// Initializes a case from an instance conforming to `MIDIIOObject`.
+    /// Initializes a case from an instance conforming to ``MIDIIOObject``.
     /// Returns nil if the concrete type of the instance is not recognized.
     internal init?<O: MIDIIOObject>(_ base: O) {
         switch base {

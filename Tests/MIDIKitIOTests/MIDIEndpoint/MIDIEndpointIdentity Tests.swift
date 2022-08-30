@@ -52,7 +52,7 @@ final class MIDIEndpointIdentity_Tests: XCTestCase {
         }
     }
     
-    func testEndpoint_AnyEndpoint() {
+    func testEndpoint_asAnyEndpoint() {
         var endpoint = MIDIInputEndpoint(from: 10_000_000)
         endpoint.uniqueID = 10_000_001
         let anyEndpoint = endpoint.asAnyEndpoint()

@@ -61,7 +61,7 @@ public final class MIDIThruConnection: _MIDIIOManagedProtocol {
     ///   - inputs: One or more input endpoints, maximum of 8.
     ///   - lifecycle: Non-persistent or persistent.
     ///   - params: Optionally supply custom parameters for the connection.
-    ///   - midiManager: Reference to parent `MIDIManager` object.
+    ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
     internal init(
         outputs: [MIDIOutputEndpoint],

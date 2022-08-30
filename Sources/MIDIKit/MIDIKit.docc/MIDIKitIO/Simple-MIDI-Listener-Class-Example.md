@@ -4,30 +4,25 @@ A barebones example of how to set up MIDIKit to receive MIDI events on a created
 
 ```swift
 import Foundation
-import MIDIKit
+import MIDIKitIO
 
 public class MIDIModule {
     private let midiManager = MIDIManager(
-        clientName: "MIDIEventLogger",
-        model: "LoggerApp",
+        clientName: "MyAppMIDIModule",
+        model: "MyApp",
         manufacturer: "MyCompany")
-    
+
+    let inputTag = "Virtual_MIDI_In"
+
     public init() {
         do {
-            midiManager.notificationHandler = { notification, manager in
-                print("Core MIDI notification:", notification)
-            }
-            
-            print("Starting MIDI manager.")
             try midiManager.start()
             
-            print("Creating virtual input MIDI port.")
-            let inputTag = "Virtual_MIDI_In"
             try midiManager.addInput(
-                name: "LoggerApp MIDI In",
+                name: "MyApp MIDI In",
                 tag: inputTag,
                 uniqueID: .userDefaultsManaged(key: inputTag),
-                receiveHandler: .events { [weak self] events in
+                receiver: .events { [weak self] events in
                     // Note: this handler will be called on a background thread
                     // so call the next line on main if it may result in UI updates
                     DispatchQueue.main.async {

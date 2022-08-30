@@ -28,7 +28,7 @@ public final class MIDIInputConnection: _MIDIIOManagedProtocol {
     
     public private(set) var outputsCriteria: Set<MIDIEndpointIdentity> = []
     
-    /// Stores criteria after applying any filters that have been set in the `filter` property.
+    /// Stores criteria after applying any filters that have been set in the ``filter`` property.
     /// Passing nil will re-use existing criteria, re-applying the filters.
     private func updateCriteria(_ criteria: Set<MIDIEndpointIdentity>? = nil) {
         var newCriteria = criteria ?? outputsCriteria
@@ -70,7 +70,7 @@ public final class MIDIInputConnection: _MIDIIOManagedProtocol {
         }
     }
     
-    /// Reads the `mode` property and applies it to the stored criteria.
+    /// Reads the ``mode`` property and applies it to the stored criteria.
     private func updateCriteriaFromMode() {
         switch mode {
         case .allEndpoints:
@@ -103,10 +103,10 @@ public final class MIDIInputConnection: _MIDIIOManagedProtocol {
     ///
     /// - Parameters:
     ///   - criteria: Output(s) to connect to.
-    ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
+    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
     ///   - receiver: Receive handler to use for incoming MIDI messages.
-    ///   - midiManager: Reference to parent `MIDIManager` object.
+    ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
     internal init(
         criteria: Set<MIDIEndpointIdentity>,

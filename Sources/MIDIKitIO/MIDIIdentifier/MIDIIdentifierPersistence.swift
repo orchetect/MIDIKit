@@ -22,7 +22,7 @@ public enum MIDIIdentifierPersistence {
     /// Unmanaged.
     /// You are responsible for persistently storing the unique identifier.
     /// Note that this identifier may change if the event of a collision where another endpoint already has the identifier.
-    /// This means at the end of your application's lifecycle you must query the `uniqueID` property on any `MIDIInput` or `MIDIOutput` ports you have created and update your persistent storage with them.
+    /// This means at the end of your application's lifecycle you must query the `uniqueID` property on any ``MIDIInput`` or ``MIDIOutput`` ports you have created and update your persistent storage with them.
     ///
     /// In the event a collision with an existing unique ID in the system, a new random ID will be generated until there are no collisions.
     case unmanaged(MIDIIdentifier)

@@ -56,7 +56,7 @@ public final class SafeDispatchTimer {
         timer.setEventHandler(handler: eventHandler)
     }
     
-    /// Starts the timer. The timer will occur at intervals measured since the creation of the `PriorityTimer` object, regardless of when `start()` is called.
+    /// Starts the timer. The timer will occur at intervals measured since the creation of the timer, regardless of when `start()` is called.
     ///
     /// If the timer has already started, this will have no effect.
     public func start() {

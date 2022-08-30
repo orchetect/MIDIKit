@@ -6,7 +6,9 @@
 
 /// MIDI I/O Receive Handler Protocol.
 ///
-/// For backwards compatibility with older operating systems, both `MIDIReadBlock` (old Core MIDI API) and `MIDIReceiveBlock` (new Core MIDI API) must be handled.
+/// For backwards compatibility with older operating systems,
+/// both `MIDIReadBlock` (old Core MIDI API)
+/// and `MIDIReceiveBlock` (new Core MIDI API) must be handled.
 public protocol MIDIIOReceiveHandlerProtocol {
     /// CoreMIDI `MIDIReadBlock`
     /// (deprecated after macOS 11 / iOS 14)

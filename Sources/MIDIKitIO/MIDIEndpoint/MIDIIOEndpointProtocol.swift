@@ -18,7 +18,7 @@ public protocol MIDIIOEndpointProtocol: MIDIIOObject {
     /// Returns the entity the endpoint originates from. For virtual endpoints, this will return `nil`.
     func getEntity() -> MIDIEntity?
     
-    /// Returns the endpoint as a type-erased `AnyEndpoint`.
+    /// Returns the endpoint as a type-erased ``AnyMIDIEndpoint``.
     func asAnyEndpoint() -> AnyMIDIEndpoint
 }
 

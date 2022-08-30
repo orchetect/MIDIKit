@@ -33,7 +33,7 @@ public final class MIDIOutputConnection: _MIDIIOManagedProtocol {
     
     public private(set) var inputsCriteria: Set<MIDIEndpointIdentity> = []
     
-    /// Stores criteria after applying any filters that have been set in the `filter` property.
+    /// Stores criteria after applying any filters that have been set in the ``filter`` property.
     /// Passing nil will re-use existing criteria, re-applying the filters.
     private func updateCriteria(_ criteria: Set<MIDIEndpointIdentity>? = nil) {
         var newCriteria = criteria ?? inputsCriteria
@@ -72,7 +72,7 @@ public final class MIDIOutputConnection: _MIDIIOManagedProtocol {
         }
     }
     
-    /// Reads the `mode` property and applies it to the stored criteria.
+    /// Reads the ``mode`` property and applies it to the stored criteria.
     private func updateCriteriaFromMode() {
         switch mode {
         case .allEndpoints:
@@ -98,13 +98,13 @@ public final class MIDIOutputConnection: _MIDIIOManagedProtocol {
     // init
     
     /// Internal init.
-    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O `MIDIManager` instance when calling `.addOutputConnection()`, and destroyed when calling `.remove(.outputConnection, ...)` or `.removeAll()`.
+    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O ``MIDIManager`` instance when calling ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``, and destroyed when calling ``MIDIManager/remove(_:_:)`` with ``MIDIManager/ManagedType/outputConnection`` or ``MIDIManager/removeAll()`` to destroy the managed connection.)
     ///
     /// - Parameters:
     ///   - criteria: Input(s) to connect to.
-    ///   - mode: Operation mode. Note that `allEndpoints` mode overrides `criteria`.
+    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides `criteria`.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
-    ///   - midiManager: Reference to parent `MIDIManager` object.
+    ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
     internal init(
         criteria: Set<MIDIEndpointIdentity>,

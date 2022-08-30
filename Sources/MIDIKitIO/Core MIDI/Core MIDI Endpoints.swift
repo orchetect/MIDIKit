@@ -111,7 +111,7 @@ internal func getSystemDestinationEndpoint(
 }
 
 /// Internal:
-/// Returns an `Entity` instance of the endpoint's owning entity. Returns nil
+/// Returns a ``MIDIEntity`` instance of the endpoint's owning entity.
 internal func getSystemEntity(
     for endpoint: MIDIEndpointRef
 ) throws -> MIDIEntity {

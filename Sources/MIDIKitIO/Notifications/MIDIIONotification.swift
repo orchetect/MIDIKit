@@ -57,9 +57,9 @@ public enum MIDIIONotification: Equatable, Hashable {
 }
 
 extension MIDIIONotification {
-    /// Converts an `InternalNotification` to `SystemNotification`.
+    /// Converts a ``MIDIIOInternalNotification`` to ``MIDIIONotification``.
     ///
-    /// Cache must be supplied if there is a possibility of a `removed` notification, otherwise metadata will be missing.
+    /// Cache must be supplied if there is a possibility of a ``removed(parent:child:)`` notification, otherwise metadata will be missing.
     internal init?(
         _ internalNotification: MIDIIOInternalNotification,
         cache: MIDIIOObjectCache?

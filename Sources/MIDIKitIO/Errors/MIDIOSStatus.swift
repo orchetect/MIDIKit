@@ -216,7 +216,7 @@ extension MIDIOSStatus: CustomStringConvertible {
     }
 }
 
-/// Throws an error of type `MIDIIOError` if `OSStatus` return value is != `noErr`
+/// Throws an error of type ``MIDIIOError/osStatus(_:)`` if `OSStatus` return value is != `noErr`
 internal func throwIfErr(_ closure: () -> OSStatus) throws {
     let result = closure()
     
@@ -226,7 +226,7 @@ internal func throwIfErr(_ closure: () -> OSStatus) throws {
 }
 
 extension OSStatus /* aka Int32 */ {
-    /// Throws an error of type `MIDIIOError` if self as `OSStatus` is != `noErr`
+    /// Throws an error of type ``MIDIIOError/osStatus(_:)`` if self as `OSStatus` is != `noErr`
     internal func throwIfOSStatusErr() throws {
         guard self == noErr else {
             throw MIDIIOError.osStatus(self)

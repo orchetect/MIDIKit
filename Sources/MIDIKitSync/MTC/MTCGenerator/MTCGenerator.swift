@@ -176,7 +176,7 @@ public class MTCGenerator: SendsMIDIEvents {
     /// Locate to a new timecode, while not generating continuous playback MIDI message stream.
     /// Sends a MTC full-frame message.
     ///
-    /// - Note: `timecode` may contain `subframes > 0` to locate; subframes will be stripped prior to transmitting the full-frame message since the resolution of MTC full-frame messages is 1 frame.
+    /// - Note: `timecode` may contain `subframes > 0`. Subframes will be stripped prior to transmitting the full-frame message since the resolution of MTC full-frame messages is 1 frame.
     public func locate(to timecode: Timecode) {
         queue.sync {
             encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
@@ -187,7 +187,7 @@ public class MTCGenerator: SendsMIDIEvents {
     /// Locate to a new timecode, while not generating continuous playback MIDI message stream.
     /// Sends a MTC full-frame message.
     ///
-    /// > Note: `components` may contain `subframes > 0` to locate; subframes will be stripped prior to transmitting the full-frame message since the resolution of MTC full-frame messages is 1 frame.
+    /// > Note: `components` may contain `subframes > 0`. Subframes will be stripped prior to transmitting the full-frame message since the resolution of MTC full-frame messages is 1 frame.
     public func locate(to components: Timecode.Components) {
         queue.sync {
             encoder.locate(to: components, transmitFullFrame: locateBehavior)

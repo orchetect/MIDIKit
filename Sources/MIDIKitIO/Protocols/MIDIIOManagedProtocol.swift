@@ -17,7 +17,7 @@ public protocol MIDIIOManagedProtocol: AnyObject {
 
 internal protocol _MIDIIOManagedProtocol: MIDIIOManagedProtocol {
     /// Internal:
-    /// Reference to owning `MIDIManager`
+    /// Reference to owning ``MIDIManager``
     /* weak */ var midiManager: MIDIManager? { get set }
 }
 

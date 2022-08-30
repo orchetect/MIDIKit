@@ -14,7 +14,7 @@ import Foundation
 // MARK: - Split
 
 extension Collection {
-    /// Splits a `Collection` or `String` into groups of `length` characters, grouping from left-to-right. If `backwards` is true, right-to-left.
+    /// Splits a `Collection` or `String` into groups of `every` _n_ number of characters, grouping from left-to-right. If `backwards` is `true`, right-to-left.
     @_disfavoredOverload
     public func split(
         every: Int,

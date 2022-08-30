@@ -10,7 +10,7 @@ import Foundation
 
 /// Endpoint filter rules.
 public struct MIDIEndpointFilter: Equatable, Hashable {
-    /// Virtual endpoints owned by the MIDI I/O `MIDIManager` instance.
+    /// Virtual endpoints owned by the MIDI I/O ``MIDIManager`` instance.
     public var owned: Bool = false
     
     /// Endpoints matching the given criteria.

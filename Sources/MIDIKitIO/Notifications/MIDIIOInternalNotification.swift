@@ -11,7 +11,7 @@ import Foundation
 
 /// Internal MIDI subsystem notification with raw values.
 ///
-/// This must be converted to an instance of `SystemNotification` before sending to the `MIDIManager`'s public notification handler.
+/// This must be converted to an instance of ``MIDIIONotification`` before sending to the ``MIDIManager``'s public notification handler.
 internal enum MIDIIOInternalNotification {
     case setupChanged
     

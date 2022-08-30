@@ -27,18 +27,22 @@ public func setMIDINetworkSession(policy: MIDIIONetworkConnectionPolicy?) {
 // MARK: - Notification Names
 
 extension NSNotification.Name {
-    /// aka MIDINetworkNotificationSessionDidChange
+    /// a.k.a. `MIDINetworkNotificationSessionDidChange`
+    ///
+    /// >  Core MIDI documentation: Indicates that other aspects of the session changed, such as the connection list, connection policy, and so on.
     @_disfavoredOverload
     @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
     public static let midiNetworkSessionDidChange = NSNotification.Name(
         MIDINetworkNotificationSessionDidChange
     )
     
-    /// aka MIDINetworkNotificationSessionDidChange
+    /// a.k.a. `MIDINetworkNotificationContactsDidChange`
+    ///
+    /// > Core MIDI documentation: Indicates that the list of contacts changed.
     @_disfavoredOverload
     @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
     public static let midiNetworkContactsDidChange = NSNotification.Name(
-        MIDINetworkNotificationSessionDidChange
+        MIDINetworkNotificationContactsDidChange
     )
 }
 

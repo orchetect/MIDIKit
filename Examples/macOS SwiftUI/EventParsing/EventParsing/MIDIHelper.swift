@@ -14,7 +14,7 @@ class MIDIHelper: ObservableObject {
     
     public init() { }
     
-    /// Run once after setting the local `midiManager` property.
+    /// Run once after setting the local ``midiManager`` property.
     public func initialSetup() {
         guard let midiManager = midiManager else {
             print("MIDIManager is missing.")
