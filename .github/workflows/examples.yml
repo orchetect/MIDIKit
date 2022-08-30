@@ -27,7 +27,8 @@ jobs:
     steps:
     - uses: actions/checkout@main
     
-    # Note: BluetoothMIDI does not have MIDIKit as a dependency so we don't need to run the branch setter script
+    - name: BluetoothMIDI - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -branch ${{ github.ref }}
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
     - name: BluetoothMIDI - Build
@@ -60,7 +61,8 @@ jobs:
     steps:
     - uses: actions/checkout@main
     
-    # Note: BluetoothMIDI does not have MIDIKit as a dependency so we don't need to run the branch setter script
+    - name: BluetoothMIDI - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -branch ${{ github.ref }}
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
     - name: BluetoothMIDI - Build
