@@ -46,10 +46,10 @@ extension MIDIEvent {
             return .pressure(delta: delta, event: event)
             
         case let .sysEx7(event):
-            return .sysEx(delta: delta, event: event)
+            return .sysEx7(delta: delta, event: event)
             
         case let .universalSysEx7(event):
-            return .universalSysEx(delta: delta, event: event)
+            return .universalSysEx7(delta: delta, event: event)
             
         case .sysEx8:
             // TODO: MIDI 2.0 only (Official MIDI File 2.0 Spec is not yet finished)
@@ -109,10 +109,10 @@ extension MIDIFileEvent {
         case let .programChange(_, event):
             return .programChange(event)
             
-        case let .sysEx(_, event):
+        case let .sysEx7(_, event):
             return .sysEx7(event)
             
-        case let .universalSysEx(_, event):
+        case let .universalSysEx7(_, event):
             return .universalSysEx7(event)
             
         case .channelPrefix,

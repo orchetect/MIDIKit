@@ -19,19 +19,19 @@ import MIDIKitCore
 
 extension MIDIFileEvent {
     /// System Exclusive: Manufacturer-specific (7-bit)
-    public typealias SysEx = MIDIEvent.SysEx7
+    public typealias SysEx7 = MIDIEvent.SysEx7
 }
 
 // MARK: - SysEx7 Static Constructors
 
 extension MIDIFileEvent {
     /// System Exclusive: Manufacturer-specific (7-bit)
-    public static func sysEx(
+    public static func sysEx7(
         delta: DeltaTime = .none,
         manufacturer: MIDIEvent.SysExManufacturer,
         data: [UInt8]
     ) -> Self {
-        .sysEx(
+        .sysEx7(
             delta: delta,
             event: .init(
                 manufacturer: manufacturer,
@@ -44,7 +44,7 @@ extension MIDIFileEvent {
 // MARK: - SysEx7 Encoding
 
 extension MIDIEvent.SysEx7: MIDIFileEventPayload {
-    public static let smfEventType: MIDIFileEventType = .sysEx
+    public static let smfEventType: MIDIFileEventType = .sysEx7
     
     public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         let parsedSysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytes)
@@ -96,7 +96,7 @@ extension MIDIEvent.SysEx7: MIDIFileEventPayload {
     }
     
     public var smfDescription: String {
-        "sysEx: \((midi1SMFRawBytes() as Data).count) bytes"
+        "sysEx7: \((midi1SMFRawBytes() as Data).count) bytes"
     }
 
     public var smfDebugDescription: String {
@@ -125,7 +125,7 @@ extension MIDIFileEvent {
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
     ///
     /// - `deviceID` of `0x7F` indicates "All Devices".
-    public typealias UniversalSysEx = MIDIEvent.UniversalSysEx7
+    public typealias UniversalSysEx7 = MIDIEvent.UniversalSysEx7
 }
 
 // MARK: - UniversalSysEx7 Static Constructors
@@ -136,7 +136,7 @@ extension MIDIFileEvent {
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
     ///
     /// - `deviceID` of `0x7F` indicates "All Devices".
-    public static func universalSysEx(
+    public static func universalSysEx7(
         delta: DeltaTime = .none,
         universalType: MIDIEvent.UniversalSysExType,
         deviceID: UInt7,
@@ -144,7 +144,7 @@ extension MIDIFileEvent {
         subID2: UInt7,
         data: [UInt8]
     ) -> Self {
-        .universalSysEx(
+        .universalSysEx7(
             delta: delta,
             event: .init(
                 universalType: universalType,
@@ -160,7 +160,7 @@ extension MIDIFileEvent {
 // MARK: - UniversalSysEx7 Encoding
 
 extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
-    public static let smfEventType: MIDIFileEventType = .universalSysEx
+    public static let smfEventType: MIDIFileEventType = .universalSysEx7
     
     public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
         let rawBytesArray = [UInt8](rawBytes)
@@ -210,7 +210,7 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
     }
     
     public var smfDescription: String {
-        "universalSysEx: \((midi1SMFRawBytes() as Data).count) bytes"
+        "universalSysEx7: \((midi1SMFRawBytes() as Data).count) bytes"
     }
     
     public var smfDebugDescription: String {
@@ -219,7 +219,7 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
         let byteDump = bytes
             .hexString(padEachTo: 2, prefixes: true, separator: ", ")
         
-        return "UniversalSysEx(\(bytes.count) bytes: [\(byteDump)]"
+        return "UniversalSysEx7(\(bytes.count) bytes: [\(byteDump)]"
     }
 }
 

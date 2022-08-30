@@ -1,6 +1,6 @@
-# Universal System Exclusive
+# System Exclusive 7
 
-Universal System Exclusive (7-bit)
+System Exclusive: Manufacturer-specific (7-bit)
 
 @Comment {
     // ------------------------------------
@@ -12,17 +12,13 @@ Universal System Exclusive (7-bit)
     // ------------------------------------
 }
 
-Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
-
-- `deviceID` of `0x7F` indicates "All Devices".
-
 ## Topics
 
 ### Constructors
 
-- ``MIDIFileEvent/universalSysEx(delta:universalType:deviceID:subID1:subID2:data:)``
+- ``MIDIFileEvent/sysEx7(delta:manufacturer:data:)``
 
 ### Switch Case Unwrapping
 
-- ``MIDIFileEvent/universalSysEx(delta:event:)``
-- ``MIDIFileEvent/UniversalSysEx``
+- ``MIDIFileEvent/sysEx7(delta:event:)``
+- ``MIDIFileEvent/SysEx7``

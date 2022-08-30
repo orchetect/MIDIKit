@@ -91,14 +91,14 @@ public enum MIDIFileEvent: Equatable, Hashable {
     case smpteOffset(delta: DeltaTime, event: SMPTEOffset)
     
     /// System Exclusive: Manufacturer-specific (7-bit)
-    case sysEx(delta: DeltaTime, event: SysEx)
+    case sysEx7(delta: DeltaTime, event: SysEx7)
     
     /// Universal System Exclusive (7-bit)
     ///
     /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
     ///
     /// - `deviceID` of `0x7F` indicates "All Devices".
-    case universalSysEx(delta: DeltaTime, event: UniversalSysEx)
+    case universalSysEx7(delta: DeltaTime, event: UniversalSysEx7)
     
     /// Tempo event.
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.

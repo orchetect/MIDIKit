@@ -21,16 +21,17 @@ public enum MIDIFileEventType: String, CaseIterable, Equatable, Hashable {
     case sequenceNumber
     case sequencerSpecific
     case smpteOffset
-    case sysEx
+    case sysEx7
     case tempo
     case text
     case timeSignature
-    case universalSysEx
+    case universalSysEx7
     case unrecognizedMeta
     case xmfPatchTypePrefix
 }
 
 extension MIDIFileEventType {
+    /// Returns the concrete type associated with the MIDI file event.
     public var concreteType: MIDIFileEventPayload.Type {
         switch self {
         case .cc:                 return MIDIFileEvent.CC.self
@@ -46,11 +47,11 @@ extension MIDIFileEventType {
         case .sequenceNumber:     return MIDIFileEvent.SequenceNumber.self
         case .sequencerSpecific:  return MIDIFileEvent.SequencerSpecific.self
         case .smpteOffset:        return MIDIFileEvent.SMPTEOffset.self
-        case .sysEx:              return MIDIFileEvent.SysEx.self
+        case .sysEx7:             return MIDIFileEvent.SysEx7.self
         case .tempo:              return MIDIFileEvent.Tempo.self
         case .text:               return MIDIFileEvent.Text.self
         case .timeSignature:      return MIDIFileEvent.TimeSignature.self
-        case .universalSysEx:     return MIDIFileEvent.UniversalSysEx.self
+        case .universalSysEx7:    return MIDIFileEvent.UniversalSysEx7.self
         case .unrecognizedMeta:   return MIDIFileEvent.UnrecognizedMeta.self
         case .xmfPatchTypePrefix: return MIDIFileEvent.XMFPatchTypePrefix.self
         }
@@ -58,6 +59,7 @@ extension MIDIFileEventType {
 }
 
 extension Collection where Element == MIDIFileEventType {
+    /// Returns the collection mapped to concrete types.
     public var concreteTypes: [MIDIFileEventPayload.Type] {
         map(\.concreteType.self)
     }

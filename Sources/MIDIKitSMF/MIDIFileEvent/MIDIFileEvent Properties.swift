@@ -24,11 +24,11 @@ extension MIDIFileEvent {
         case .sequenceNumber:     return .sequenceNumber
         case .sequencerSpecific:  return .sequencerSpecific
         case .smpteOffset:        return .smpteOffset
-        case .sysEx:              return .sysEx
+        case .sysEx7:             return .sysEx7
         case .tempo:              return .tempo
         case .text:               return .text
         case .timeSignature:      return .timeSignature
-        case .universalSysEx:     return .universalSysEx
+        case .universalSysEx7:    return .universalSysEx7
         case .unrecognizedMeta:   return .unrecognizedMeta
         case .xmfPatchTypePrefix: return .xmfPatchTypePrefix
         }
@@ -52,11 +52,11 @@ extension MIDIFileEvent {
         case .sequenceNumber:     return SequenceNumber.self
         case .sequencerSpecific:  return SequencerSpecific.self
         case .smpteOffset:        return SMPTEOffset.self
-        case .sysEx:              return SysEx.self
+        case .sysEx7:             return SysEx7.self
         case .tempo:              return Tempo.self
         case .text:               return Text.self
         case .timeSignature:      return TimeSignature.self
-        case .universalSysEx:     return UniversalSysEx.self
+        case .universalSysEx7:    return UniversalSysEx7.self
         case .unrecognizedMeta:   return UnrecognizedMeta.self
         case .xmfPatchTypePrefix: return XMFPatchTypePrefix.self
         }
@@ -96,7 +96,7 @@ extension MIDIFileEvent {
             return (delta: delta, event: event)
         case let .smpteOffset(delta, event):
             return (delta: delta, event: event)
-        case let .sysEx(delta, event):
+        case let .sysEx7(delta, event):
             return (delta: delta, event: event)
         case let .tempo(delta, event):
             return (delta: delta, event: event)
@@ -104,7 +104,7 @@ extension MIDIFileEvent {
             return (delta: delta, event: event)
         case let .timeSignature(delta, event):
             return (delta: delta, event: event)
-        case let .universalSysEx(delta, event):
+        case let .universalSysEx7(delta, event):
             return (delta: delta, event: event)
         case let .unrecognizedMeta(delta, event):
             return (delta: delta, event: event)
@@ -144,16 +144,16 @@ extension MIDIFileEventPayload {
             return .sequencerSpecific(delta: delta, event: event)
         case let event as MIDIFileEvent.SMPTEOffset:
             return .smpteOffset(delta: delta, event: event)
-        case let event as MIDIFileEvent.SysEx:
-            return .sysEx(delta: delta, event: event)
+        case let event as MIDIFileEvent.SysEx7:
+            return .sysEx7(delta: delta, event: event)
         case let event as MIDIFileEvent.Tempo:
             return .tempo(delta: delta, event: event)
         case let event as MIDIFileEvent.Text:
             return .text(delta: delta, event: event)
         case let event as MIDIFileEvent.TimeSignature:
             return .timeSignature(delta: delta, event: event)
-        case let event as MIDIFileEvent.UniversalSysEx:
-            return .universalSysEx(delta: delta, event: event)
+        case let event as MIDIFileEvent.UniversalSysEx7:
+            return .universalSysEx7(delta: delta, event: event)
         case let event as MIDIFileEvent.UnrecognizedMeta:
             return .unrecognizedMeta(delta: delta, event: event)
         case let event as MIDIFileEvent.XMFPatchTypePrefix:

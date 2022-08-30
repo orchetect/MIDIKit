@@ -272,7 +272,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
         }
         
         // extract MIDIFileEvent payload
-        guard case .sysEx(
+        guard case .sysEx7(
             delta: _,
             event: let unwrappedSMFEvent
         ) = smfEvent else {
@@ -302,7 +302,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
         }
         
         // extract MIDIFileEvent payload
-        guard case .universalSysEx(
+        guard case .universalSysEx7(
             delta: _,
             event: let unwrappedSMFEvent
         ) = smfEvent else {
@@ -631,8 +631,8 @@ final class Event_Conversion_SMFEventToEvent_Tests: XCTestCase {
         XCTAssertEqual(unwrappedSMFEvent, unwrappedEvent)
     }
     
-    func testMIDI_File_Event_SysEx_event() throws {
-        let smfEvent = MIDIFileEvent.sysEx(
+    func testMIDI_File_Event_SysEx7_event() throws {
+        let smfEvent = MIDIFileEvent.sysEx7(
             delta: .none,
             manufacturer: .educational(),
             data: [0x12, 0x34]
@@ -642,7 +642,7 @@ final class Event_Conversion_SMFEventToEvent_Tests: XCTestCase {
         let event = smfEvent.event()
         
         // extract MIDIFileEvent payload
-        guard case .sysEx(
+        guard case .sysEx7(
             delta: _,
             event: let unwrappedSMFEvent
         ) = smfEvent else {
@@ -658,8 +658,8 @@ final class Event_Conversion_SMFEventToEvent_Tests: XCTestCase {
         XCTAssertEqual(unwrappedSMFEvent, unwrappedEvent)
     }
     
-    func testMIDI_File_Event_UniversalSysEx_event() throws {
-        let smfEvent = MIDIFileEvent.universalSysEx(
+    func testMIDI_File_Event_UniversalSysEx7_event() throws {
+        let smfEvent = MIDIFileEvent.universalSysEx7(
             delta: .none,
             universalType: .nonRealTime,
             deviceID: 0x7F,
@@ -672,7 +672,7 @@ final class Event_Conversion_SMFEventToEvent_Tests: XCTestCase {
         let event = smfEvent.event()
         
         // extract MIDIFileEvent payload
-        guard case .universalSysEx(
+        guard case .universalSysEx7(
             delta: _,
             event: let unwrappedSMFEvent
         ) = smfEvent else {
