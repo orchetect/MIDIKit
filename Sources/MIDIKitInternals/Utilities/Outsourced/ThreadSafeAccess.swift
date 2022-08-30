@@ -18,7 +18,7 @@ import Foundation
 ///
 /// This is safe to use on collection types (`Array`, `Dictionary`, etc.).
 ///
-/// - Warning: Do not instance this wrapper on a variable declaration inside a function. Only wrap class-bound, struct-bound, or global-bound variables.
+/// - Warning: Do not instantiate this wrapper on a variable declaration inside a function body or closure body. Only wrap static or instance variables.
 @propertyWrapper
 public final class ThreadSafeAccess<T> {
     private var value: T
