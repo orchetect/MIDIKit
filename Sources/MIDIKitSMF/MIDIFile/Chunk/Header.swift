@@ -53,13 +53,13 @@ import MIDIKitCore
 // MARK: - Header
 
 extension MIDIFile.Chunk {
-    /// `MThd` chunk type.
+    /// Header: `MThd` chunk type.
     public struct Header: Equatable {
         public static let staticIdentifier: String = "MThd"
         
         public var format: MIDIFile.Format = .multipleTracksSynchronous
         
-        public var timeBase: MIDIFile.TimeBase = .musical(ticksPerQuarterNote: 960)
+        public var timeBase: MIDIFile.TimeBase = .default()
         
         public init() { }
         

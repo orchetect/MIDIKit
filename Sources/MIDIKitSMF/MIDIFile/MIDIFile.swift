@@ -27,7 +27,9 @@ public struct MIDIFile: Equatable {
         set { header.timeBase = newValue }
     }
         
-    /// Storage for tracks in the MIDI file
+    /// Storage for tracks in the MIDI file.
+    ///
+    /// The ``Chunk/Header`` chunk is managed automatically and is not instanced as a ``MIDIFile/chunks`` member.
     public var chunks: [Chunk] = []
         
     // MARK: - Init

@@ -10,7 +10,7 @@ import MIDIKitCore
 // MARK: - Track
 
 extension MIDIFile.Chunk {
-    /// `MTrk` chunk type.
+    /// Track: `MTrk` chunk type.
     public struct Track: Equatable {
         public static let staticIdentifier: String = "MTrk"
         
@@ -32,8 +32,19 @@ extension MIDIFile.Chunk.Track: MIDIFileChunk {
     public var identifier: String { Self.staticIdentifier }
 }
 
+// MARK: - Static Constructors
+
+extension MIDIFile.Chunk {
+    /// Track: `MTrk` chunk type.
+    public static func track(_ events: [MIDIFileEvent]) -> Self {
+        .track(.init(events: events))
+    }
+}
+
+// MARK: - Encoding
+
 extension MIDIFile.Chunk.Track {
-    /// Init from MIDI file buffer.
+    /// Init from MIDI file data stream.
     public init<D: MutableDataProtocol>(midi1SMFRawBytesStream stream: D) throws
         where D.SubSequence: MutableDataProtocol
     {
@@ -81,7 +92,7 @@ extension MIDIFile.Chunk.Track {
         try self.init(midi1SMFRawBytes: remainingData)
     }
     
-    /// Init from raw data block, excluding the header identifier and length
+    /// Init from raw data stream, excluding the header identifier and length.
     internal init<D: MutableDataProtocol>(midi1SMFRawBytes rawData: D) throws {
         // chunk data
         
@@ -290,7 +301,7 @@ extension MIDIFile.Chunk.Track {
 }
 
 extension MIDIFile.Chunk.Track: CustomStringConvertible,
-CustomDebugStringConvertible {
+                                CustomDebugStringConvertible {
     public var description: String {
         var outputString = ""
         

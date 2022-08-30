@@ -8,6 +8,7 @@ import Foundation
 import MIDIKitCore
 
 extension MIDIFile.Chunk {
+    /// Unrecognized MIDI File Chunk.
     public struct UnrecognizedChunk: MIDIFileChunk, Equatable {
         static let disallowedIdentifiers: [String] = [
             Header().identifier,
@@ -49,6 +50,16 @@ extension MIDIFile.Chunk {
         }
     }
 }
+// MARK: - Static Constructors
+
+extension MIDIFile.Chunk {
+    /// Unrecognized MIDI File Chunk.
+    public static func other(id: String, rawData: Data? = nil) -> Self {
+        .other(.init(id: id, rawData: rawData))
+    }
+}
+
+// MARK: - Encoding
 
 extension MIDIFile.Chunk.UnrecognizedChunk {
     /// Init from MIDI file buffer.
@@ -126,7 +137,7 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
 }
 
 extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible,
-CustomDebugStringConvertible {
+                                            CustomDebugStringConvertible {
     public var description: String {
         var outputString = ""
 

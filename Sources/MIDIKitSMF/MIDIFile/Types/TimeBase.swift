@@ -10,7 +10,7 @@ import MIDIKitCore
 // MARK: - timeBase
 
 extension MIDIFile {
-    /// MIDI file timbase as described in the MIDI file header.
+    /// MIDI file timebase as described in the MIDI file header.
     public enum TimeBase: Equatable {
         /// Musical: Delta-time ticks per quarter note (PPQN / PPQ / PPQBase).
         ///
@@ -19,12 +19,20 @@ extension MIDIFile {
         /// Consider evenly divisible sub-divisions when determining this value.
         case musical(ticksPerQuarterNote: UInt16)
         
-        /// Timecode
+        /// SMPTE Timecode
         ///
         /// Typical `ticksPerFrame` values are 4 (corresponding to MIDI Timecode), 8, 10, 80 (corresponding to SMPTE bit resolution), or 100.
         ///
         /// (A timing resolution of 1 ms can be achieved by specifying 25 fps and 40 sub-frames, which would be encoded in hex as E7 28.)
         case timecode(smpteFormat: FrameRate, ticksPerFrame: UInt8)
+    }
+}
+
+// MARK: - Static Constructors
+
+extension MIDIFile.TimeBase {
+    public static func `default`() -> Self {
+        .musical(ticksPerQuarterNote: 960)
     }
 }
 
@@ -46,6 +54,7 @@ extension MIDIFile.TimeBase {
 }
 
 extension MIDIFile.TimeBase {
+    /// Initialize from raw data.
     public init?(rawData: Data) {
         guard rawData.count == 2 else {
             return nil
@@ -54,6 +63,7 @@ extension MIDIFile.TimeBase {
         self.init(rawBytes: Array(rawData.bytes.prefix(2)))
     }
     
+    /// Initialize from raw data.
     public init?(rawBytes bytes: [UInt8]) {
         guard bytes.count == 2 else {
             return nil
@@ -82,7 +92,7 @@ extension MIDIFile.TimeBase {
 }
 
 extension MIDIFile.TimeBase: CustomStringConvertible,
-CustomDebugStringConvertible {
+                             CustomDebugStringConvertible {
     public var description: String {
         switch self {
         case let .musical(ticksPerQuarterNote):
