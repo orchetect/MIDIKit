@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitInternals
 
 /// A 7-bit unsigned integer value type used in `MIDIKit`.
-public struct UInt7: _MIDIUnsignedInteger {
+public struct UInt7: MIDIUnsignedInteger, _MIDIUnsignedInteger {
     public typealias Storage = UInt8
     var storage: Storage
 }
