@@ -424,8 +424,8 @@ extension HUIParameter {
     /// Construct from a HUI zone and port pair.
     /// Returns `nil` if the pair is undefined.
     public init?(
-        zone: UInt8,
-        port: UInt4
+        zone: HUIZone,
+        port: HUIPort
     ) {
         guard let parameter = HUIParameter.allCases
             .first(where: {
