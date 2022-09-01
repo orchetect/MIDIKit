@@ -36,17 +36,18 @@ where Magnitude == Storage.Magnitude,
     /// Returns the integer as an `Int` instance
     var intValue: Int { get }
     
+    // To assist compiler in exporting methods on _MIDIUnsignedInteger
+    static func == (lhs: Self, rhs: Self) -> Bool // Equatable
+    static func < (lhs: Self, rhs: Self) -> Bool // Comparable
+    func hash(into hasher: inout Hasher) // Hashable
+    
     // FixedWidthInteger types declared without conforming to FixedWidthInteger
     static var bitWidth: Int { get }
-    
-    // FixedWidthInteger types declared without conforming to FixedWidthInteger
     static var min: Self { get }
-    
-    // FixedWidthInteger types declared without conforming to FixedWidthInteger
     static var max: Self { get }
 }
 
-protocol _MIDIUnsignedInteger: MIDIUnsignedInteger {
+internal protocol _MIDIUnsignedInteger: MIDIUnsignedInteger {
     /// Internal: Type name for use in debugging and exceptions.
     static var integerName: StaticString { get }
     
