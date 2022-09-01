@@ -32,6 +32,14 @@ extension UInt4 {
     public static let bitWidth: Int = 4
 }
 
+// MARK: - Equatable
+
+extension UInt4 /*: Equatable */ {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.storage == rhs.storage
+    }
+}
+
 // MARK: - Standard library extensions
 
 extension BinaryInteger {

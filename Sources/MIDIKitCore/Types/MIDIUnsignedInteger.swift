@@ -112,11 +112,9 @@ extension _MIDIUnsignedInteger {
 
 // MARK: - Equatable
 
-extension _MIDIUnsignedInteger /*: Equatable */ {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.storage == rhs.storage
-    }
-}
+// Equatable must be implemented on the type itself to make the compiler happy
+// when importing the umbrella MIDIKit library product in a project or package
+// even when only importing certain targets.
 
 // MARK: - Comparable
 

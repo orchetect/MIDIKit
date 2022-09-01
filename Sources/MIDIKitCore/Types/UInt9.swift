@@ -32,6 +32,14 @@ extension UInt9 {
     public static let bitWidth: Int = 9
 }
 
+// MARK: - Equatable
+
+extension UInt9 /*: Equatable */ {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.storage == rhs.storage
+    }
+}
+
 // MARK: - Standard library extensions
 
 extension BinaryInteger {
