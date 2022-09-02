@@ -1,0 +1,61 @@
+name: Bug report
+description: Create a bug report about a reproducible problem.
+labels: bug
+body:
+- type: checkboxes
+  id: searched-discussions
+  attributes:
+    label: Please Confirm
+    options:
+      - label: I have reviewed the **[MIDIKit Documentation](https://orchetect.github.io/MIDIKit)** which contains descriptive guides and extensive API reference
+        required: true
+      - label: I have searched **[Issues](https://github.com/orchetect/MIDIKit/issues?q=is%3Aissue)** and **[Discussions](https://github.com/orchetect/MIDIKit/discussions)** to see if the same question has already been asked
+        required: true
+- type: dropdown
+  id: operating-system
+  attributes:
+    label: "macOS Version(s) Used to Build"
+    description: The operating system version being used to build (not the target runtime OS version).
+    multiple: true
+    options:
+      - "macOS 13 Ventura"
+      - "macOS 12 Monterey"
+      - "macOS 11 Big Sur"
+      - "macOS 10.15 Catalina"
+      - "macOS 10.14 Mojave"
+      - "macOS 10.13 High Sierra"
+      - "macOS 10.12 Sierra"
+      - "macOS 10.11 El Capitan"
+      - "macOS 10.10 Yosemite"
+      - "macOS 10.9 Mavericks"
+  validations:
+    required: true
+- type: dropdown
+  id: xcode-version
+  attributes:
+    label: "Xcode Version(s)"
+    multiple: true
+    options:
+      - "Xcode 14"
+      - "Xcode 13.4.1"
+      - "Xcode 13.4"
+      - "Xcode 13.3.1"
+      - "Xcode 13.3"
+      - "Xcode 13.2.1"
+      - "Xcode 13.2"
+      - "Xcode 13.1"
+      - "Xcode 13.0"
+  validations:
+    required: true
+- type: textarea
+  id: bug-description
+  attributes:
+    label: Description
+    description: "A clear and concise description of the bug and steps to reproduce."
+  validations:
+    required: true
+- type: textarea
+  id: crash-logs-and-screenshots
+  attributes:
+    label: Crash Logs, Screenshots or Other Attachments (if applicable)
+    description: "A clear and concise description of the bug and steps to reproduce."
