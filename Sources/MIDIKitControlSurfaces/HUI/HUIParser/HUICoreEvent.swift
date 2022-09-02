@@ -39,8 +39,8 @@ public enum HUICoreEvent: Hashable {
     )
         
     case `switch`(
-        zone: UInt8,
-        port: UInt4,
+        zone: HUIZone,
+        port: HUIPort,
         state: Bool
     )
 }

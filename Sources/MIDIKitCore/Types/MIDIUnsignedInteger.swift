@@ -38,15 +38,11 @@ where Magnitude == Storage.Magnitude,
     
     // FixedWidthInteger types declared without conforming to FixedWidthInteger
     static var bitWidth: Int { get }
-    
-    // FixedWidthInteger types declared without conforming to FixedWidthInteger
     static var min: Self { get }
-    
-    // FixedWidthInteger types declared without conforming to FixedWidthInteger
     static var max: Self { get }
 }
 
-protocol _MIDIUnsignedInteger: MIDIUnsignedInteger {
+internal protocol _MIDIUnsignedInteger: MIDIUnsignedInteger {
     /// Internal: Type name for use in debugging and exceptions.
     static var integerName: StaticString { get }
     
@@ -114,74 +110,6 @@ extension _MIDIUnsignedInteger {
     }
 }
 
-// MARK: - Equatable
-
-extension _MIDIUnsignedInteger /*: Equatable */ {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.storage == rhs.storage
-    }
-}
-
-// MARK: - Comparable
-
-extension _MIDIUnsignedInteger /*: Comparable */ {
-    public static func < (lhs: Self, rhs: Self) -> Bool {
-        lhs.storage < rhs.storage
-    }
-}
-
-// MARK: - Hashable
-
-extension _MIDIUnsignedInteger /*: Hashable */ {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(storage)
-    }
-}
-
-// MARK: - Codable
-
-extension _MIDIUnsignedInteger /*: Codable */ {
-    public func encode(to encoder: Encoder) throws {
-        var e = encoder.singleValueContainer()
-        try e.encode(storage)
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let d = try decoder.singleValueContainer()
-        let decoded = try d.decode(Storage.self)
-        guard let new = Self(exactly: decoded) else {
-            throw DecodingError.dataCorrupted(
-                .init(codingPath: decoder.codingPath,
-                      debugDescription: "Encoded value is not a valid \(Self.integerName).")
-            )
-        }
-        self = new
-    }
-}
-
-// MARK: - CustomStringConvertible
-
-extension _MIDIUnsignedInteger {//: CustomStringConvertible, CustomDebugStringConvertible {
-    public var description: String {
-        storage.description
-    }
-    
-    public var debugDescription: String {
-        "\(Self.integerName)(\(storage.description))"
-    }
-}
-
-// MARK: - ExpressibleByIntegerLiteral
-
-extension MIDIUnsignedInteger /*: ExpressibleByIntegerLiteral */ {
-    //public typealias IntegerLiteralType = Storage
-    // IntegerLiteralType is already expressed as same-type constraint on MIDIUnsignedInteger
-    
-    public init(integerLiteral value: Storage) {
-        self.init(value)
-    }
-}
-
 // MARK: - Strideable
 
 extension MIDIUnsignedInteger /*: Strideable */ {
@@ -197,152 +125,13 @@ extension MIDIUnsignedInteger /*: Strideable */ {
     }
 }
 
-// MARK: - _MIDIUnsignedInteger Default Implementation
+// MARK: - ExpressibleByIntegerLiteral
 
-extension _MIDIUnsignedInteger {
-    static func min<T: BinaryInteger>(as ofType: T.Type) -> T { 0 }
-    static func min<T: BinaryFloatingPoint>(as ofType: T.Type) -> T { 0 }
+extension MIDIUnsignedInteger /*: ExpressibleByIntegerLiteral */ {
+    //public typealias IntegerLiteralType = Storage
+    // IntegerLiteralType is already expressed as same-type constraint on MIDIUnsignedInteger
     
-    static func max<T: BinaryInteger>(as ofType: T.Type) -> T {
-        (0 ..< bitWidth)
-            .reduce(into: T()) { $0 |= (0b1 << $1) }
-    }
-    
-    static func max<T: BinaryFloatingPoint>(as ofType: T.Type) -> T {
-        T(max(as: Int.self))
-    }
-}
-
-// MARK: - MIDIUnsignedInteger Conveniences
-
-extension _MIDIUnsignedInteger {
-    /// Returns the integer converted to an `Int` instance (convenience).
-    public var intValue: Int { Int(storage) }
-}
-
-// MARK: - FixedWidthInteger
-
-extension _MIDIUnsignedInteger /*: FixedWidthInteger */ {
-    public static var min: Self { Self(Self.min(as: Storage.self)) }
-    
-    public static var max: Self { Self(Self.max(as: Storage.self)) }
-    
-    // this would be synthesized if MIDIUnsignedInteger conformed to FixedWidthInteger
-    public static func >>= <RHS>(lhs: inout Self, rhs: RHS) where RHS : BinaryInteger {
-        lhs.storage >>= rhs
-    }
-    
-    // this would be synthesized if MIDIUnsignedInteger conformed to FixedWidthInteger
-    public static func <<= <RHS>(lhs: inout Self, rhs: RHS) where RHS : BinaryInteger {
-        lhs.storage <<= rhs
-    }
-}
-
-// MARK: - Numeric
-
-extension _MIDIUnsignedInteger /*: Numeric */ {
-    // public typealias Magnitude = Storage.Magnitude
-    // Magnitude is already expressed as same-type constraint on MIDIUnsignedInteger
-    
-    public var magnitude: Storage.Magnitude {
-        storage.magnitude
-    }
-    
-    public init?<T>(exactly source: T) where T: BinaryInteger {
-        if source < Self.min(as: Storage.self) ||
-            source > Self.max(as: Storage.self)
-        {
-            return nil
-        }
-        self.init(unchecked: Storage(source))
-    }
-    
-    public static func * (lhs: Self, rhs: Self) -> Self {
-        Self(lhs.storage * rhs.storage)
-    }
-    
-    public static func *= (lhs: inout Self, rhs: Self) {
-        lhs = Self(lhs.storage * rhs.storage)
-    }
-}
-
-// MARK: - AdditiveArithmetic
-
-extension _MIDIUnsignedInteger /*: AdditiveArithmetic */ {
-    // static let zero synthesized by AdditiveArithmetic
-    
-    public static func + (lhs: Self, rhs: Self) -> Self {
-        Self(lhs.storage + rhs.storage)
-    }
-    
-    // += operator synthesized by AdditiveArithmetic
-    
-    public static func - (lhs: Self, rhs: Self) -> Self {
-        Self(lhs.storage - rhs.storage)
-    }
-    
-    // -= operator synthesized by AdditiveArithmetic
-}
-
-// MARK: - BinaryInteger
-
-extension _MIDIUnsignedInteger /*: BinaryInteger */ {
-    // public typealias Words = Storage.Words
-    // Words is already expressed as same-type constraint on MIDIUnsignedInteger
-    
-    public var words: Storage.Words {
-        storage.words
-    }
-    
-    // synthesized?
-    //    public static var isSigned: Bool { false }
-    
-    public var bitWidth: Int { Self.bitWidth }
-    
-    public var trailingZeroBitCount: Int {
-        storage.trailingZeroBitCount - (storage.bitWidth - Self.bitWidth)
-    }
-    
-    public static func / (lhs: Self, rhs: Self) -> Self {
-        Self(lhs.storage / rhs.storage)
-    }
-    
-    public static func /= (lhs: inout Self, rhs: Self) {
-        lhs = Self(lhs.storage / rhs.storage)
-    }
-    
-    public static func % (lhs: Self, rhs: Self) -> Self {
-        Self(lhs.storage % rhs.storage)
-    }
-    
-    public static func << <RHS>(lhs: Self, rhs: RHS) -> Self
-    where RHS: BinaryInteger {
-        Self(lhs.storage << rhs)
-    }
-    
-    public static func >> <RHS>(lhs: Self, rhs: RHS) -> Self
-    where RHS: BinaryInteger {
-        Self(lhs.storage >> rhs)
-    }
-    
-    public static func %= (lhs: inout Self, rhs: Self) {
-        lhs.storage %= rhs.storage
-    }
-    
-    public static func &= (lhs: inout Self, rhs: Self) {
-        lhs.storage &= rhs.storage
-    }
-    
-    public static func |= (lhs: inout Self, rhs: Self) {
-        lhs.storage |= rhs.storage
-    }
-    
-    public static func ^= (lhs: inout Self, rhs: Self) {
-        lhs.storage ^= rhs.storage
-    }
-    
-    public static prefix func ~ (x: Self) -> Self {
-        // mask to bit width
-        Self(unchecked: ~x.storage & Self.max(as: Self.self).storage)
+    public init(integerLiteral value: Storage) {
+        self.init(value)
     }
 }

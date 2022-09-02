@@ -190,8 +190,8 @@ extension HUISurface.State {
     }
     
     private mutating func updateState_Switch(
-        zone: UInt8,
-        port: UInt4,
+        zone: HUIZone,
+        port: HUIPort,
         state: Bool
     ) -> HUISurface.Event? {
         guard let param = HUIParameter(zone: zone, port: port)

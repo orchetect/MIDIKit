@@ -93,8 +93,8 @@ extension HUISurface {
         
         /// Unhandled/unrecognized switch.
         case unhandledSwitch(
-            zone: UInt8,
-            port: UInt4,
+            zone: HUIZone,
+            port: HUIPort,
             state: Bool
         )
     }
