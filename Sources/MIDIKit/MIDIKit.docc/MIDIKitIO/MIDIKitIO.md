@@ -38,6 +38,7 @@ To add additional functionality, import extension modules or import the MIDIKit 
 
 - <doc:MIDIKitIO-MIDI-Over-Bluetooth>
 - <doc:MIDIKitIO-MIDI-Over-Network>
+- <doc:MIDIKitIO-MIDI-Over-USB>
 
 ### Internals
 

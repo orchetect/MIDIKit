@@ -73,12 +73,12 @@ extension MIDIEntity {
         try? getSystemDevice(for: coreMIDIObjectRef)
     }
     
-    /// Returns the inputs for the entity.
+    /// Returns the input endpoints for the entity.
     public var inputs: [MIDIInputEndpoint] {
         getSystemDestinations(for: coreMIDIObjectRef)
     }
     
-    /// Returns the outputs for the entity.
+    /// Returns the output endpoints for the entity.
     public var outputs: [MIDIOutputEndpoint] {
         getSystemSources(for: coreMIDIObjectRef)
     }

@@ -21,7 +21,7 @@ extension MIDIEvent.NoteCC.PerNoteController {
         /// Pitch 7.25
         /// (Int: 3, Hex: 0x03)
         ///
-        /// See ``MIDIEvent/NoteCC/PerNoteController/Registered/Pitch7_25``
+        /// See ``Pitch7_25``
         /// to convert `UInt32` value data to/from **Pitch 7.25** values.
         case pitch7_25
     
@@ -53,7 +53,7 @@ extension MIDIEvent.NoteCC.PerNoteController {
         case soundCtrl1_soundVariation
     
         /// Sound Controller 2
-        /// (default: Timbre/Harmonic Intens.)
+        /// (default: Timbre/Harmonic Intensity)
         /// (Int: 71, Hex: 0x47)
         case soundCtrl2_timbreIntensity
     

@@ -84,10 +84,11 @@ If you are only working with Standard MIDI Files and do not require I/O or any e
 
 Follow the steps in the ``MIDIManager`` documentation to create an instance of the manager and start it.
 
-## 3. Set up Bluetooth and Network MIDI if Needed
+## 3. Additional Connectivity: Bluetooth, Network, USB
 
 - See <doc:MIDIKitIO-MIDI-Over-Bluetooth> for Bluetooth MIDI connectivity for your iOS app
 - See <doc:MIDIKitIO-MIDI-Over-Network> for network MIDI connectivity on macOS or iOS
+- See <doc:MIDIKitIO-MIDI-Over-USB> for USB connectivity information on macOS or iOS
 
 ## 4. Learn how MIDIKit Value Types Work
 
