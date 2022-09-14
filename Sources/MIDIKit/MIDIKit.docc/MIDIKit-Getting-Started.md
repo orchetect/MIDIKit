@@ -12,7 +12,7 @@ There are many more features and aspects to the library that can be discovered t
 
 1. [Import the Library](#1-Import-the-Library)
 2. [Set up the Manager](#2-Set-up-the-Manager)
-3. [Set up Bluetooth and Network MIDI if Needed](#3-Set-up-Bluetooth-and-Network-MIDI-if-Needed)
+3. [Additional Connectivity: Bluetooth, Network, USB](#3-Additional-Connectivity-Bluetooth-Network-USB)
 4. [Learn how MIDIKit Value Types Work](#4-Learn-how-MIDIKit-Value-Types-Work)
 5. [Next Steps](#5-Next-Steps)
 6. [Additional Features](#6-Additional-Features)
