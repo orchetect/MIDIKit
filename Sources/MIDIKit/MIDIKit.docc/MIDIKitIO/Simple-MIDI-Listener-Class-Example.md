@@ -11,7 +11,7 @@ public class MIDIModule {
         clientName: "MyAppMIDIModule",
         model: "MyApp",
         manufacturer: "MyCompany")
-
+    
     let inputTag = "Virtual_MIDI_In"
 
     public init() {
