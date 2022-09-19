@@ -9,48 +9,45 @@ import MIDIKitControlSurfaces
 import SwiftUI
 
 struct ContentView: View {
-    private let midiManager = MIDIManager(
-        clientName: "HUISurface",
-        model: "HUISurface",
-        manufacturer: "Orchetect",
-        notificationHandler: nil
-    )
+    weak var midiManager: MIDIManager?
 
     @ObservedObject private var huiSurface: HUISurface
     
     static let kHUIInputName = "MIDIKit HUI Input"
     static let kHUIOutputName = "MIDIKit HUI Output"
     
-    init() {
+    init(midiManager: MIDIManager?) {
+        self.midiManager = midiManager
+        
         // set up HUI Surface object
-
-        huiSurface = HUISurface()
-
-        huiSurface.huiEventHandler = { event in
-            // Logger.debug(event)
-        }
-
-        huiSurface.midiOutHandler = { [weak midiManager] midiEvents in
-            guard let output = midiManager?
-                .managedOutputs[Self.kHUIOutputName]
-            else {
-                Logger.debug("MIDI output missing.")
-                return
+        huiSurface = {
+            let huiSurface = HUISurface()
+            
+            huiSurface.huiEventHandler = { event in
+                // Logger.debug(event)
             }
             
-            do {
-                try output.send(events: midiEvents)
-            } catch {
-                Logger.debug(error.localizedDescription)
+            huiSurface.midiOutHandler = { [weak midiManager] midiEvents in
+                guard let output = midiManager?.managedOutputs[Self.kHUIOutputName]
+                else {
+                    Logger.debug("MIDI output missing.")
+                    return
+                }
+                
+                do {
+                    try output.send(events: midiEvents)
+                } catch {
+                    Logger.debug(error.localizedDescription)
+                }
             }
-        }
-
+            
+            return huiSurface
+        }()
+        
         // set up MIDI ports
-
+        
         do {
-            try midiManager.start()
-
-            try midiManager.addInput(
+            try midiManager?.addInput(
                 name: Self.kHUIInputName,
                 tag: Self.kHUIInputName,
                 uniqueID: .userDefaultsManaged(key: Self.kHUIInputName),
@@ -62,14 +59,14 @@ struct ContentView: View {
                         }
                     }
             )
-
-            try midiManager.addOutput(
+            
+            try midiManager?.addOutput(
                 name: Self.kHUIOutputName,
                 tag: Self.kHUIOutputName,
                 uniqueID: .userDefaultsManaged(key: Self.kHUIOutputName)
             )
         } catch {
-            // Logger.error("Error setting up MIDI.")
+            Logger.debug("Error setting up MIDI.")
         }
     }
     
@@ -83,7 +80,7 @@ struct ContentView: View {
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(midiManager: nil)
     }
 }
 #endif
