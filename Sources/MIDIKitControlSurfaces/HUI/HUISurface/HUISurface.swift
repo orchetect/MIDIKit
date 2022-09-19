@@ -38,7 +38,7 @@ public class HUISurface {
     /// Called when a HUI MIDI message needs transmitting.
     public var midiOutHandler: MIDIOutHandler?
         
-    // MARK: - init
+    // MARK: - Init
         
     public init(
         huiEventHandler: HUIEventHandler? = nil,

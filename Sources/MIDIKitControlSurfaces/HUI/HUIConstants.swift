@@ -17,6 +17,10 @@ extension HUIConstants {
         // MARK: System messages
         
         // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
+        // [0x90, 0x00, 0x00]
+        static let kPingToClientMessage: MIDIEvent = .noteOn(0, velocity: .midi1(0x00), channel: 0)
+        
+        // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
         // [0x90, 0x00, 0x7F]
         static let kPingReplyToHostMessage: MIDIEvent = .noteOn(0, velocity: .midi1(0x7F), channel: 0)
         
@@ -49,8 +53,11 @@ extension HUIConstants {
         static let kControlStatus: UInt8 = 0xB0
         
         enum kControlDataByte1 {
-            public static let zoneSelectByte: UInt8 = 0x0C
-            public static let portOnOffByte: UInt8 = 0x2C
+            public static let zoneSelectByteToSurface: UInt8 = 0x0C
+            public static let zoneSelectByteToHost: UInt8 =    0x0F
+            
+            public static let portOnOffByteToSurface: UInt8 =  0x2C
+            public static let portOnOffByteToHost: UInt8 =     0x2F
         }
         
         enum kChannelStripElement: UInt4, Equatable, Hashable {

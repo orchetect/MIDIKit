@@ -31,8 +31,16 @@ extension HUISurface {
             portByte += 0x40
         }
         
-        let event1 = MIDIEvent.cc(0x0F, value: .midi1(zone.toUInt7), channel: 0)
-        let event2 = MIDIEvent.cc(0x2F, value: .midi1(portByte.toUInt7), channel: 0)
+        let event1 = MIDIEvent.cc(
+            HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToHost.toUInt7,
+            value: .midi1(zone.toUInt7),
+            channel: 0
+        )
+        let event2 = MIDIEvent.cc(
+            HUIConstants.kMIDI.kControlDataByte1.portOnOffByteToHost.toUInt7,
+            value: .midi1(portByte.toUInt7),
+            channel: 0
+        )
         
         midiOut([event1, event2])
     }
@@ -83,8 +91,16 @@ extension HUISurface {
     ) {
         guard (0x0 ... 0x7).contains(channel) else { return }
         
-        let event1 = MIDIEvent.cc(0x0F, value: .midi1(channel.toUInt7), channel: 0)
-        let event2 = MIDIEvent.cc(0x2F, value: .midi1(isTouched ? 0x40 : 0x00), channel: 0)
+        let event1 = MIDIEvent.cc(
+            HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToHost.toUInt7,
+            value: .midi1(channel.toUInt7),
+            channel: 0
+        )
+        let event2 = MIDIEvent.cc(
+            HUIConstants.kMIDI.kControlDataByte1.portOnOffByteToHost.toUInt7,
+            value: .midi1(isTouched ? 0x40 : 0x00),
+            channel: 0
+        )
         
         midiOut([event1, event2])
     }

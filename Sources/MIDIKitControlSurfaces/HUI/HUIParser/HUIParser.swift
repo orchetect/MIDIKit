@@ -105,13 +105,12 @@ extension HUIParser {
               data[1] == HUIConstants.kMIDI.kSysEx.kSubID2
         else { return }
         
-        let dataAfterHeader = data
-            .suffix(
-                from: data.index(
-                    data.startIndex,
-                    offsetBy: 2
-                )
+        let dataAfterHeader = data.suffix(
+            from: data.index(
+                data.startIndex,
+                offsetBy: 2
             )
+        )
         
         guard !dataAfterHeader.isEmpty else { return }
         
@@ -266,21 +265,22 @@ extension HUIParser {
                 value: value
             ))
             
-        case HUIConstants.kMIDI.kControlDataByte1.zoneSelectByte:
+        case HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToHost,
+            HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToSurface:
             // zone select (1st message)
             
             if let zs = switchesZoneSelect {
                 let newZS = dataByte2.hexString(padTo: 2, prefix: true)
                 let oldZS = zs.hexString(padTo: 2, prefix: true)
-                Logger
-                    .debug(
-                        "Received new switch zone select \(newZS), but zone select buffer was not empty. (\(oldZS) was stored)). Storing new zone select."
-                    )
+                Logger.debug(
+                    "Received new switch zone select \(newZS), but zone select buffer was not empty. (\(oldZS) was stored)). Storing new zone select."
+                )
             }
             
             switchesZoneSelect = dataByte2
             
-        case HUIConstants.kMIDI.kControlDataByte1.portOnOffByte:
+        case HUIConstants.kMIDI.kControlDataByte1.portOnOffByteToHost,
+            HUIConstants.kMIDI.kControlDataByte1.portOnOffByteToSurface:
             // port on, or port off (2nd message)
             
             let port = dataByte2.nibbles.low
