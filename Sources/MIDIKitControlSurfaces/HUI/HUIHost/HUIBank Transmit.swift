@@ -1,17 +1,16 @@
 //
-//  HUISurface Transmit.swift
+//  HUIBank Transmit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-import Foundation
 import MIDIKitCore
 
-extension HUISurface {
-    /// Transmit a HUI ping message to the host.
-    /// It is not necessary to call this manually. The ``HUISurface`` object will handle ping replies automatically.
+extension HUIBank {
+    /// Transmit a HUI ping message to the client surface.
+    /// It is not necessary to call this manually. The ``HUIHost`` object will handle ping transmission on an internal timer automatically.
     public func transmitPing() {
-        let event = encodeHUIPing(toHost: true)
+        let event = encodeHUIPing(toHost: false)
         midiOut(event)
     }
     
@@ -29,12 +28,12 @@ extension HUISurface {
             zone: zone,
             port: port,
             state: state,
-            toHost: true
+            toHost: false
         )
         midiOut(events)
     }
     
-    /// Transmit switch state to the host.
+    /// Transmit switch state to the client surface.
     public func transmitSwitch(
         _ param: HUIParameter,
         state: Bool
@@ -48,7 +47,7 @@ extension HUISurface {
         )
     }
     
-    /// Transmit fader level to the host.
+    /// Transmit fader level to the client surface.
     /// - Parameters:
     ///   - level: `0 ... 16383`
     ///   - channel: `0 ... 7`
@@ -58,22 +57,5 @@ extension HUISurface {
     ) {
         let events = encodeHUIFader(level: level, channel: channel)
         midiOut(events)
-    }
-    
-    /// Transmit fader touch/release message to the host.
-    /// - Parameters:
-    ///   - isTouched: `true` sends touch message, `false` sends release message.
-    ///   - channel: `0 ... 7`
-    public func transmitFader(
-        isTouched: Bool,
-        channel: Int
-    ) {
-        let events = encodeHUIFader(isTouched: isTouched, channel: channel)
-        midiOut(events)
-    }
-    
-    /// Sends a message that tells the host that the HUI device is powering on or off.
-    public func transmitSystemReset() {
-        midiOut(HUIConstants.kMIDI.kSystemResetMessage)
     }
 }

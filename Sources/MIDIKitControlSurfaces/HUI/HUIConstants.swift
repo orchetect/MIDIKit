@@ -52,6 +52,8 @@ extension HUIConstants {
         // HUI also uses running status for back-to-back 0xB status messages.
         static let kControlStatus: UInt8 = 0xB0
         
+        // For sending and receiving HUI, switch messages, the zone select
+        // and port byte uses a different lower nibble depending on transmit direction.
         enum kControlDataByte1 {
             public static let zoneSelectByteToSurface: UInt8 = 0x0C
             public static let zoneSelectByteToHost: UInt8 =    0x0F
