@@ -12,7 +12,7 @@ public final class HUIBank {
     // MARK: - Parser
     
     var translator: HUISurface.State = .init()
-    var parser: HUIParser = .init()
+    var parser: HUIParser = .init(role: .host)
     
     // MARK: - Handlers
     

@@ -10,7 +10,7 @@ extension HUIBank {
     /// Transmit a HUI ping message to the client surface.
     /// It is not necessary to call this manually. The ``HUIHost`` object will handle ping transmission on an internal timer automatically.
     public func transmitPing() {
-        let event = encodeHUIPing(toHost: false)
+        let event = encodeHUIPing(to: .surface)
         midiOut(event)
     }
     
@@ -29,7 +29,7 @@ extension HUIBank {
             zone: zone,
             port: port,
             state: state,
-            toHost: false
+            to: .surface
         )
         midiOut(events)
     }

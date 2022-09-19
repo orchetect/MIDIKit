@@ -10,14 +10,17 @@ import MIDIKitCore
 /// Encodes HUI ping message as a MIDI event. (Specify to host or to client surface).
 ///
 /// - Parameters:
-///   - toHost: `true` if transmitting to host, `false` if transmitting to client surface.
+///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI events.
 func encodeHUIPing(
-    toHost: Bool
+    to role: HUIRole
 ) -> MIDIEvent {
-    toHost
-        ? HUIConstants.kMIDI.kPingReplyToHostMessage
-        : HUIConstants.kMIDI.kPingToClientMessage
+    switch role {
+    case .host:
+        return HUIConstants.kMIDI.kPingReplyToHostMessage
+    case .surface:
+        return HUIConstants.kMIDI.kPingToSurfaceMessage
+    }
 }
 
 /// Utility:
@@ -27,13 +30,13 @@ func encodeHUIPing(
 ///   - zone: HUI zone number.
 ///   - port: HUI port number.
 ///   - state: Switch state.
-///   - toHost: `true` if transmitting to host, `false` if transmitting to client surface.
+///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI events.
 func encodeHUISwitch(
     zone: HUIZone,
     port: HUIPort,
     state: Bool,
-    toHost: Bool
+    to role: HUIRole
 ) -> [MIDIEvent] {
     // set on off byte
     var portByte: UInt8 = port.uInt8Value
@@ -42,7 +45,7 @@ func encodeHUISwitch(
         portByte += 0x40
     }
     
-    let ccA = toHost
+    let ccA = role == .host
         ? HUIConstants.kMIDI.kControlDataByte1
             .zoneSelectByteToHost
         : HUIConstants.kMIDI.kControlDataByte1
@@ -53,7 +56,7 @@ func encodeHUISwitch(
         channel: 0
     )
     
-    let ccB = toHost
+    let ccB = role == .host
         ? HUIConstants.kMIDI.kControlDataByte1
             .portOnOffByteToHost
         : HUIConstants.kMIDI.kControlDataByte1

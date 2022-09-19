@@ -49,7 +49,7 @@ public final class HUISurface {
             
         state = State()
             
-        parser = HUIParser()
+        parser = HUIParser(role: .surface)
             
         parser.huiEventHandler = { [weak self] huiCoreEvent in
             // send ping-reply if ping request is received

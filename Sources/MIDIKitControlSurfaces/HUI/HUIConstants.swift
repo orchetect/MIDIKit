@@ -18,7 +18,7 @@ extension HUIConstants {
         
         // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
         // [0x90, 0x00, 0x00]
-        static let kPingToClientMessage: MIDIEvent = .noteOn(0, velocity: .midi1(0x00), channel: 0)
+        static let kPingToSurfaceMessage: MIDIEvent = .noteOn(0, velocity: .midi1(0x00), channel: 0)
         
         // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
         // [0x90, 0x00, 0x7F]

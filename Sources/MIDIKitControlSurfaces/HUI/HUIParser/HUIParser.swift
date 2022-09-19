@@ -10,6 +10,9 @@ import MIDIKitCore
 /// HUI MIDI Message Parser.
 /// Interprets MIDI events and produces strongly-typed core HUI events.
 public final class HUIParser {
+    /// Parser role (host or client surface).
+    public let role: HUIRole
+    
     // MARK: local state variables
         
     private var timeDisplay: [String] = []
@@ -27,8 +30,10 @@ public final class HUIParser {
     // MARK: - init
         
     public init(
+        role: HUIRole,
         huiEventHandler: HUIEventHandler? = nil
     ) {
+        self.role = role
         self.huiEventHandler = huiEventHandler
         reset()
     }
@@ -58,10 +63,12 @@ extension HUIParser: ReceivesMIDIEvents {
     /// Process HUI MIDI message received from host.
     public func midiIn(event: MIDIEvent) {
         switch event {
-        case let .noteOn(payload) where
-            payload.note.number == 0 &&
-            payload.velocity.midi1Value == 0:
+        case HUIConstants.kMIDI.kPingReplyToHostMessage where role == .host:
+            // handler should update last ping received time/date stamp
+            // so it can maintain presence state for the remote HUI surface
+            huiEventHandler?(.ping)
             
+        case HUIConstants.kMIDI.kPingToSurfaceMessage where role == .surface:
             // handler should send HUI ping-reply to host
             huiEventHandler?(.ping)
             
@@ -266,7 +273,7 @@ extension HUIParser {
             ))
             
         case HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToHost,
-            HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToSurface:
+             HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToSurface:
             // zone select (1st message)
             
             if let zs = switchesZoneSelect {
@@ -280,7 +287,7 @@ extension HUIParser {
             switchesZoneSelect = dataByte2
             
         case HUIConstants.kMIDI.kControlDataByte1.portOnOffByteToHost,
-            HUIConstants.kMIDI.kControlDataByte1.portOnOffByteToSurface:
+             HUIConstants.kMIDI.kControlDataByte1.portOnOffByteToSurface:
             // port on, or port off (2nd message)
             
             let port = dataByte2.nibbles.low
