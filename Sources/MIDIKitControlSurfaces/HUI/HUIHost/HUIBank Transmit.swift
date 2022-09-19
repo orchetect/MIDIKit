@@ -15,6 +15,7 @@ extension HUIBank {
     }
     
     /// Transmit switch state to host.
+    /// 
     /// - Parameters:
     ///   - zone: HUI zone number.
     ///   - port: HUI port number.
@@ -48,6 +49,7 @@ extension HUIBank {
     }
     
     /// Transmit fader level to the client surface.
+    ///
     /// - Parameters:
     ///   - level: `0 ... 16383`
     ///   - channel: `0 ... 7`

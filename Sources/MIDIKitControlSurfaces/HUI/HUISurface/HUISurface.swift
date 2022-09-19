@@ -13,7 +13,7 @@ import MIDIKitCore
 ///
 /// References:
 /// - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
-public class HUISurface {
+public final class HUISurface {
     // MARK: - State
         
     public internal(set) var state: State {

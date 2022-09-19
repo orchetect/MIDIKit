@@ -9,7 +9,7 @@ import MIDIKitCore
 
 /// HUI MIDI Message Parser.
 /// Interprets MIDI events and produces strongly-typed core HUI events.
-public class HUIParser {
+public final class HUIParser {
     // MARK: local state variables
         
     private var timeDisplay: [String] = []

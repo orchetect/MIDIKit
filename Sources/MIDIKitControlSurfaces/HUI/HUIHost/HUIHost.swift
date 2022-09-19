@@ -9,7 +9,7 @@ import MIDIKitCore
 
 /// Object representing a HUI host which can provide one or more HUI banks.
 /// Each bank can service a single HUI device and requires a MIDI input and output for each bank.
-public class HUIHost {
+public final class HUIHost {
     /// HUI Banks that are configured for this HUI host instance.
     public internal(set) var banks: [HUIBank] = []
     
@@ -27,12 +27,14 @@ public class HUIHost {
     
     // MARK: - Ping
     
-    /// Creates and starts the ping timer. Is called once on class init.
+    /// Creates and starts the ping timer.
+    /// This should be called once on class init.
     func startPingTimer() {
         DispatchQueue.global().async { [self] in
             pingTimer = Timer(timeInterval: 1.0, repeats: true) { [weak self] _ in
+                let event = encodeHUIPing(toHost: false)
                 self?.banks.forEach {
-                    $0.midiOut(HUIConstants.kMIDI.kPingToClientMessage)
+                    $0.midiOut(event)
                 }
             }
         }
@@ -41,7 +43,9 @@ public class HUIHost {
     // MARK: - Methods
     
     /// Add a HUI bank that can interface with a single HUI device.
-    public func addBank(midiOutHandler: SendsMIDIEvents.MIDIOutHandler? = nil) {
+    public func addBank(
+        midiOutHandler: SendsMIDIEvents.MIDIOutHandler? = nil
+    ) {
         banks.append(HUIBank(midiOutHandler: midiOutHandler))
     }
     
