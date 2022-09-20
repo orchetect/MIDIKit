@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+import MIDIKitInternals
 
 /// Object representing a ``HUIHost`` bank (connectable to one HUI device).
 public final class HUIBank {
@@ -16,41 +17,107 @@ public final class HUIBank {
     
     // MARK: - Handlers
     
+    /// HUI event receive handler.
     public typealias HUIEventHandler = ((_ huiEvent: HUISurface.Event) -> Void)
     
     /// Parser event handler that triggers when HUI events are received.
     public var huiEventHandler: HUIEventHandler?
     
+    /// Remote presence state change handler (when pings resume or cease after timeout).
+    public typealias PresenceChangedHandler = (_ isPresent: Bool) -> Void
+    
+    /// Called when the remote presence state changes (when pings resume or cease after timeout).
+    public var remotePresenceChangedHandler: PresenceChangedHandler?
+    
     public var midiOutHandler: MIDIOutHandler?
     
     // MARK: - Presence
     
-    var lastPingReceived: Date?
+    /// Time duration to wait since the last ping received before transitioning ``isRemotePresent`` to `false`.
+    ///
+    /// HUI pings are sent from the host to surface(s) every 1 second. A timeout duration between 2 ... 5 seconds is reasonable depending on desired leeway.
+    public var remotePresenceTimeout: TimeInterval = 2.0 {
+        didSet {
+            // validate
+            if remotePresenceTimeout < 1.1 { remotePresenceTimeout = 1.1 }
+            // update timer interval
+            remotePresenceTimer?.setRate(.seconds(remotePresenceTimeout))
+            remotePresenceTimer?.restart()
+        }
+    }
     
-    public var isPresent: Bool {
-        guard let lastPingReceived = lastPingReceived
-        else { return false }
+    var remotePresenceTimer: SafeDispatchTimer?
+    
+    func setupRemotePresenceTimer() {
+        guard remotePresenceTimer == nil else { return }
         
-        // 0.5sec margin over 1.0 ping time interval
-        return Date().timeIntervalSince(lastPingReceived) < 1.5
+        remotePresenceTimer = .init(
+            rate: .seconds(remotePresenceTimeout),
+            queue: .global(),
+            leeway: .milliseconds(50),
+            eventHandler: { [weak self] in
+                self?.isRemotePresent = false
+                self?.remotePresenceTimer?.stop()
+            }
+        )
+    }
+    
+    /// This property will be `true` while ping messages are being received.
+    /// If ping messages are interrupted, this property with transition to `false`.
+    /// It will transition back to `true` once received ping messages resume.
+    ///
+    /// Ping timeout can be set to a custom value by setting the ``remotePresenceTimeout`` property.
+    ///
+    /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes.
+    public internal(set) var isRemotePresent: Bool = false {
+        willSet {
+            guard isRemotePresent != newValue else { return }
+            
+            if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *) {
+                DispatchQueue.main.async {
+                    self.objectWillChange.send()
+                }
+            }
+        }
+        didSet {
+            guard oldValue != isRemotePresent else { return }
+            remotePresenceChangedHandler?(isRemotePresent)
+        }
+    }
+    
+    func receivedPing() {
+        remotePresenceTimer?.restart(firingNow: false)
+        isRemotePresent = true
     }
     
     // MARK: - Init
     
-    init(midiOutHandler: MIDIOutHandler?) {
+    init(
+        huiEventHandler: HUIEventHandler?,
+        midiOutHandler: MIDIOutHandler?,
+        remotePresenceChangedHandler: PresenceChangedHandler? = nil
+    ) {
+        self.huiEventHandler = huiEventHandler
         self.midiOutHandler = midiOutHandler
+        self.remotePresenceChangedHandler = remotePresenceChangedHandler
         
-        parser.huiEventHandler = { [weak self] huiCoreEvent in
-            if case .ping = huiCoreEvent {
-                self?.lastPingReceived = Date()
-            }
+        parser = HUIParser(
+            role: .host,
+            huiEventHandler: { [weak self] huiCoreEvent in
+                if case .ping = huiCoreEvent {
+                    self?.receivedPing()
+                }
             
-            if let surfaceEvent = self?.translator.updateState(from: huiCoreEvent) {
-                self?.huiEventHandler?(surfaceEvent)
-            } else {
-                Logger.debug("Unhandled HUI event: \(huiCoreEvent)")
+                if let surfaceEvent = self?.translator.updateState(from: huiCoreEvent) {
+                    self?.huiEventHandler?(surfaceEvent)
+                } else {
+                    Logger.debug("Unhandled HUI event: \(huiCoreEvent)")
+                }
             }
-        }
+        )
+        
+        // presence timer
+        setupRemotePresenceTimer()
     }
 }
 
@@ -61,3 +128,12 @@ extension HUIBank: ReceivesMIDIEvents {
 }
 
 extension HUIBank: SendsMIDIEvents { }
+
+#if canImport(Combine)
+import Combine
+
+@available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *)
+extension HUIBank: ObservableObject {
+    // nothing here; just add ObservableObject conformance
+}
+#endif

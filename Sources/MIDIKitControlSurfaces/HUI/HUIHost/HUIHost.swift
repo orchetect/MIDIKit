@@ -51,9 +51,17 @@ public final class HUIHost {
     
     /// Add a HUI bank that can interface with a single HUI device.
     public func addBank(
-        midiOutHandler: SendsMIDIEvents.MIDIOutHandler? = nil
+        huiEventHandler: HUIBank.HUIEventHandler?,
+        midiOutHandler: SendsMIDIEvents.MIDIOutHandler? = nil,
+        remotePresenceChangedHandler: HUIBank.PresenceChangedHandler? = nil
     ) {
-        banks.append(HUIBank(midiOutHandler: midiOutHandler))
+        banks.append(
+            HUIBank(
+                huiEventHandler: huiEventHandler,
+                midiOutHandler: midiOutHandler,
+                remotePresenceChangedHandler: remotePresenceChangedHandler
+            )
+        )
     }
     
     /// Remove the HUI bank at the given index.
@@ -65,6 +73,7 @@ public final class HUIHost {
     
     /// Remove all HUI banks.
     public func removeAllBanks() {
+        guard !banks.isEmpty else { return }
         banks.removeAll()
     }
 }
