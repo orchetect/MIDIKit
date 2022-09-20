@@ -252,12 +252,12 @@ extension Sequence where Element == HUILargeDisplayCharacter {
     }
 }
 
-extension [HUILargeDisplayCharacter] {
+extension Array where Element == HUILargeDisplayCharacter {
     /// Default text slice.
     public static let defaultSlice: Self = .init(repeating: .default(), count: 10)
 }
 
-extension [[HUILargeDisplayCharacter]] {
+extension Array where Element == [HUILargeDisplayCharacter] {
     /// Default text slices.
     public static let defaultSlices: Self = .init(repeating: .defaultSlice, count: 8)
 }

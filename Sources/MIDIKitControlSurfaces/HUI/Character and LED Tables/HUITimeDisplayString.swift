@@ -75,7 +75,7 @@ public struct HUITimeDisplayString: Equatable, Hashable {
     }
 }
 
-extension [HUITimeDisplayCharacter] {
+extension Array where Element == HUITimeDisplayCharacter {
     /// Empty display digits.
     /// Equivalent to: "        "
     public static let blankDigits: [HUITimeDisplayCharacter] = [
