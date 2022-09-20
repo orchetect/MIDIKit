@@ -23,7 +23,7 @@ extension HUISurface.State {
             side: side,
             level: level
         ):
-            return updateState_LevelMeters(
+            return updateStateFromLevelMeters(
                 channelStrip: channelStrip,
                 side: side,
                 level: level
@@ -33,34 +33,34 @@ extension HUISurface.State {
             channelStrip: channelStrip,
             level: level
         ):
-            return updateState_FaderLevel(
+            return updateStateFromFaderLevel(
                 channelStrip: channelStrip,
                 level: level
             )
             
         case let .vPot(
-            number: number,
-            value: value
+            vPot: vPot,
+            delta: delta
         ):
-            return updateState_VPot(
-                number: number,
-                value: value
+            return updateStateFromVPot(
+                vPot: vPot,
+                delta: delta
             )
             
-        case let .largeDisplayText(components: components):
-            return updateState_LargeDisplayText(components: components)
+        case let .largeDisplay(slices: slices):
+            return updateStateFromLargeDisplayText(slices: slices)
             
-        case let .timeDisplayText(components: components):
-            return updateState_TimeDisplayText(components: components)
+        case let .timeDisplay(text: text):
+            return updateStateFromTimeDisplayText(text: text)
             
         case let .selectAssignText(text: text):
-            return updateState_AssignText(text: text)
+            return updateStateFromAssignText(text: text)
             
         case let .channelName(
             channelStrip: channelStrip,
             text: text
         ):
-            return updateState_ChannelText(
+            return updateStateFromChannelText(
                 text: text,
                 channelStrip: channelStrip
             )
@@ -70,7 +70,7 @@ extension HUISurface.State {
             port: port,
             state: state
         ):
-            return updateState_Switch(
+            return updateStateFromSwitch(
                 zone: zone,
                 port: port,
                 state: state
@@ -82,19 +82,16 @@ extension HUISurface.State {
 // MARK: - State Update Trunk Methods
 
 extension HUISurface.State {
-    private mutating func updateState_LevelMeters(
-        channelStrip: Int,
+    private mutating func updateStateFromLevelMeters(
+        channelStrip: UInt4,
         side: HUISurface.State.StereoLevelMeter.Side,
         level: Int
     ) -> HUIEvent? {
-        guard channelStrips.indices.contains(channelStrip) else {
-            Logger.debug("HUI: Level meter channel out of range: \(channelStrip)")
-            return nil
-        }
-        
         switch side {
-        case .left: channelStrips[channelStrip].levelMeter.left = level
-        case .right: channelStrips[channelStrip].levelMeter.right = level
+        case .left:
+            channelStrips[channelStrip.intValue].levelMeter.left = level
+        case .right:
+            channelStrips[channelStrip.intValue].levelMeter.right = level
         }
         
         return .channelStrip(
@@ -103,93 +100,87 @@ extension HUISurface.State {
         )
     }
     
-    private mutating func updateState_FaderLevel(
-        channelStrip: Int,
+    private mutating func updateStateFromFaderLevel(
+        channelStrip: UInt4,
         level: UInt14
     ) -> HUIEvent? {
-        guard channelStrips.indices.contains(channelStrip) else {
-            Logger.debug("HUI: Fader channel out of range: \(channelStrip)")
-            return nil
-        }
-        
-        channelStrips[channelStrip].fader.level = level
+       channelStrips[channelStrip.intValue].fader.level = level
         
         return .channelStrip(
             channel: channelStrip,
-            .faderLevel(level)
+            .faderLevel(level: level)
         )
     }
     
-    private mutating func updateState_VPot(
-        number: Int,
-        value: UInt7
+    private mutating func updateStateFromVPot(
+        vPot: HUIVPot,
+        delta: UInt7
     ) -> HUIEvent? {
-        switch number {
-        case 0 ... 7:
-            channelStrips[number].vPotLevel = value
-            
-            return .channelStrip(
-                channel: number,
-                .vPot(value)
+        switch vPot {
+        case .channel(let chan):
+            // update surface state's absolute value
+            channelStrips[chan.intValue].vPotLevel = UInt7(
+                clamping: channelStrips[chan.intValue].vPotLevel.intValue + delta.intValue
             )
             
-        case 8:
-            return .paramEdit(.param1VPotLevel(value))
-        case 9:
-            return .paramEdit(.param2VPotLevel(value))
-        case 10:
-            return .paramEdit(.param3VPotLevel(value))
-        case 11:
-            return .paramEdit(.param4VPotLevel(value))
-            
-        default:
-            Logger.debug("HUI: VPot with index \(number) not handled.")
-            return nil
+            // return delta change
+            return .channelStrip(
+                channel: chan,
+                .vPot(delta: delta)
+            )
+        case .editAssignA:
+            return .paramEdit(.param1VPotLevel(delta: delta))
+        case .editAssignB:
+            return .paramEdit(.param2VPotLevel(delta: delta))
+        case .editAssignC:
+            return .paramEdit(.param3VPotLevel(delta: delta))
+        case .editAssignD:
+            return .paramEdit(.param4VPotLevel(delta: delta))
+        case .editAssignScroll:
+            return .paramEdit(.paramScroll(delta: delta))
         }
     }
     
-    private mutating func updateState_LargeDisplayText(
-        components: [String]
+    private mutating func updateStateFromLargeDisplayText(
+        slices: [[HUILargeDisplayCharacter]]
     ) -> HUIEvent? {
-        largeDisplay.components = components
+        largeDisplay.slices = slices
         
-        let topString = largeDisplay.topStringValue
-        let bottomString = largeDisplay.bottomStringValue
+        let topString = largeDisplay.top
+        let bottomString = largeDisplay.bottom
         
         return .largeDisplay(top: topString, bottom: bottomString)
     }
     
-    private mutating func updateState_TimeDisplayText(
-        components: [String]
+    private mutating func updateStateFromTimeDisplayText(
+        text: HUITimeDisplayString
     ) -> HUIEvent? {
-        timeDisplay.components = components
+        timeDisplay.timeString = text
         
-        let timeDisplayString = timeDisplay.stringValue
-        
-        return .timeDisplay(timeString: timeDisplayString)
+        return .timeDisplay(timeString: text)
     }
     
-    private mutating func updateState_AssignText(
-        text: String
+    private mutating func updateStateFromAssignText(
+        text: HUISmallDisplayString
     ) -> HUIEvent? {
         assign.textDisplay = text
         
         return .selectAssignText(text: text)
     }
     
-    private mutating func updateState_ChannelText(
-        text: String,
-        channelStrip: Int
+    private mutating func updateStateFromChannelText(
+        text: HUISmallDisplayString,
+        channelStrip: UInt4
     ) -> HUIEvent? {
-        channelStrips[channelStrip].nameTextDisplay = text
+        channelStrips[channelStrip.intValue].nameTextDisplay = text
         
         return .channelStrip(
             channel: channelStrip,
-            .nameTextDisplay(text)
+            .nameTextDisplay(text: text)
         )
     }
     
-    private mutating func updateState_Switch(
+    private mutating func updateStateFromSwitch(
         zone: HUIZone,
         port: HUIPort,
         state: Bool
@@ -211,42 +202,42 @@ extension HUISurface.State {
             case .recordReady:
                 return .channelStrip(
                     channel: channel,
-                    .recordReady(state)
+                    .recordReady(state: state)
                 )
             case .insert:
                 return .channelStrip(
                     channel: channel,
-                    .insert(state)
+                    .insert(state: state)
                 )
             case .vPotSelect:
                 return .channelStrip(
                     channel: channel,
-                    .vPotSelect(state)
+                    .vPotSelect(state: state)
                 )
             case .auto:
                 return .channelStrip(
                     channel: channel,
-                    .auto(state)
+                    .auto(state: state)
                 )
             case .solo:
                 return .channelStrip(
                     channel: channel,
-                    .solo(state)
+                    .solo(state: state)
                 )
             case .mute:
                 return .channelStrip(
                     channel: channel,
-                    .mute(state)
+                    .mute(state: state)
                 )
             case .select:
                 return .channelStrip(
                     channel: channel,
-                    .select(state)
+                    .select(state: state)
                 )
             case .faderTouched:
                 return .channelStrip(
                     channel: channel,
-                    .faderTouched(state)
+                    .faderTouched(state: state)
                 )
             }
             
@@ -295,21 +286,21 @@ extension HUISurface.State {
         case let .parameterEdit(subParam):
             switch subParam {
             case .assign:
-                return .paramEdit(.assign(state))
+                return .paramEdit(.assign(state: state))
             case .compare:
-                return .paramEdit(.compare(state))
+                return .paramEdit(.compare(state: state))
             case .bypass:
-                return .paramEdit(.bypass(state))
+                return .paramEdit(.bypass(state: state))
             case .param1Select:
-                return .paramEdit(.param1Select(state))
+                return .paramEdit(.param1Select(state: state))
             case .param2Select:
-                return .paramEdit(.param2Select(state))
+                return .paramEdit(.param2Select(state: state))
             case .param3Select:
-                return .paramEdit(.param3Select(state))
+                return .paramEdit(.param3Select(state: state))
             case .param4Select:
-                return .paramEdit(.param4Select(state))
+                return .paramEdit(.param4Select(state: state))
             case .insertOrParam:
-                return .paramEdit(.insertOrParam(state))
+                return .paramEdit(.insertOrParam(state: state))
             }
             
         case let .footswitchesAndSounds(subParam):

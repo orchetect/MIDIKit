@@ -54,7 +54,7 @@ extension HUISurface {
     ///   - channel: `0 ... 7`
     public func transmitFader(
         level: UInt14,
-        channel: Int
+        channel: UInt4
     ) {
         let events = encodeHUIFader(level: level, channel: channel)
         midiOut(events)
@@ -66,7 +66,7 @@ extension HUISurface {
     ///   - channel: `0 ... 7`
     public func transmitFader(
         isTouched: Bool,
-        channel: Int
+        channel: UInt4
     ) {
         let events = encodeHUIFader(isTouched: isTouched, channel: channel)
         midiOut(events)

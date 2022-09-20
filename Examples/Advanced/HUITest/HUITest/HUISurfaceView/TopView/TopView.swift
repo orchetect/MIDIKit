@@ -11,9 +11,15 @@ extension HUISurfaceView {
         VStack {
             HStack {
                 Spacer()
-                Text("hui")
-                    .font(.system(size: 36, weight: .bold, design: .rounded))
-                    .frame(width: Self.kLeftSideViewWidth)
+                VStack {
+                    Text((huiSurface.isRemotePresent ? "🟢" : "🔴") + " Host")
+                        .font(.system(size: 10))
+                    Spacer()
+                        .frame(height: 8)
+                    Text("hui")
+                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                        .frame(width: Self.kLeftSideViewWidth)
+                }
                 MeterBridgeView()
                 LargeTextDisplayView()
                     .frame(width: Self.kRightSideViewWidth)

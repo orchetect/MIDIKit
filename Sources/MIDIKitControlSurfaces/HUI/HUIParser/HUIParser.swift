@@ -14,21 +14,21 @@ public final class HUIParser {
     public let role: HUIRole
     
     // MARK: local state variables
-        
-    private var timeDisplay: [String] = []
-    private var largeDisplay: [String] = []
+    
+    private var timeDisplay: [HUITimeDisplayCharacter] = []
+    private var largeDisplay: [[HUILargeDisplayCharacter]] = []
     private var faderMSB: [UInt8] = []
     private var switchesZoneSelect: UInt8?
-        
+    
     // MARK: handlers
-        
+    
     public typealias HUIEventHandler = ((HUICoreEvent) -> Void)
-        
+    
     /// Parser event handler that triggers when HUI events are received.
     public var huiEventHandler: HUIEventHandler?
-        
+    
     // MARK: - init
-        
+    
     public init(
         role: HUIRole,
         huiEventHandler: HUIEventHandler? = nil
@@ -40,19 +40,16 @@ public final class HUIParser {
         
     /// Resets the parser to original init state. (Handlers are unaffected.)
     public func reset() {
-        timeDisplay = [String](repeating: " ", count: 8)
-            
-        largeDisplay = [String](
-            repeating: HUISurface.State.LargeDisplay.defaultStringComponent,
-            count: 8
-        )
-            
+        timeDisplay = .defaultDigits
+        
+        largeDisplay = .defaultSlices
+        
         // HUI protocol (and the HUI hardware control surface) has only 8 channel faders.
         // Even though some control surface models have a 9th master fader
         // such as EMAGIC Logic Control and Mackie Control Universal,
         // when running in HUI mode, the master fader is disabled.
         faderMSB = [UInt8](repeating: 0, count: 8)
-            
+        
         switchesZoneSelect = nil
     }
 }
@@ -134,25 +131,26 @@ extension HUIParser {
             
             // channel can be 0-8 (0-7 = channel strips, 8 = Select Assign text display)
             let channel = dataAfterHeader[atOffset: 1]
-            var newString = ""
+            var newChars: [HUISmallDisplayCharacter] = []
             
             for byte in dataAfterHeader[atOffsets: 2 ... 5] {
-                newString += HUIConstants.kCharTables.smallDisplay[Int(byte)]
+                let char = HUISmallDisplayCharacter(rawValue: byte) ?? .unknown()
+                newChars.append(char)
             }
             
-            if (0 ... 7).contains(channel) {
+            let newString = HUISmallDisplayString(chars: newChars)
+            
+            switch channel {
+            case 0 ... 7:
                 huiEventHandler?(.channelName(
-                    channelStrip: Int(channel),
+                    channelStrip: channel.toUInt4,
                     text: newString
                 ))
-            } else if channel == 8 {
-                // ***** not storing local state yet - needs to be implemented
-                
-                // ***** should get folded into a master Select Assign callback
+            case 8:
                 huiEventHandler?(.selectAssignText(text: newString))
-            } else {
+            default:
                 Logger.debug(
-                    "Small Display text message channel not expected: \(channel). Needs to be coded."
+                    "Small Display text message channel not expected: \(channel)."
                 )
             }
             
@@ -174,48 +172,42 @@ extension HUIParser {
             var largeDisplayData = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
             
             while largeDisplayData.count >= 11 {
-                let zone = Int(largeDisplayData[atOffset: 0])
+                let slice = Int(largeDisplayData[atOffset: 0])
                 
-                var newString = ""
+                var newSlice: [HUILargeDisplayCharacter] = []
                 let letters = largeDisplayData[atOffsets: 1 ... 10]
                 
                 for letter in letters {
-                    newString += HUIConstants.kCharTables.largeDisplay[Int(letter)]
+                    let char = HUILargeDisplayCharacter(rawValue: letter) ?? .unknown()
+                    newSlice.append(char)
                 }
-                largeDisplay[zone] = newString // update local state
+                largeDisplay[slice] = newSlice // update local state
                 
                 largeDisplayData = largeDisplayData.dropFirst(11)
             }
             
-            huiEventHandler?(.largeDisplayText(components: largeDisplay))
+            huiEventHandler?(.largeDisplay(slices: largeDisplay))
             return
             
         case HUIConstants.kMIDI.kDisplayType.timeDisplayByte:
             guard dataAfterHeader.count > 1 else { return }
-            let tcData: [Int] = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
-                .map { Int($0) }
+            let tcData = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
+            guard tcData.count <= 8 else {
+                Logger.debug("Received HUI time display message but it contained too many bytes.")
+                return
+            }
             var timeDisplayIndex = 0
             
             for number in tcData {
-                var lookupChar = ""
-                
-                if number < HUIConstants.kCharTables.timeDisplay.count {
-                    // in lookup table bounds
-                    lookupChar = HUIConstants.kCharTables.timeDisplay[number]
-                } else {
-                    // not recognized
-                    lookupChar = "?"
-                    Logger.debug(
-                        "Timecode character code not recognized: \(number.hexString()) (Int: \(number))"
-                    )
-                }
+                let char = HUITimeDisplayCharacter(rawValue: number) ?? .unknown()
                 
                 // update local state
-                timeDisplay[7 - timeDisplayIndex] = lookupChar
+                timeDisplay[7 - timeDisplayIndex] = char
                 timeDisplayIndex += 1
             }
             
-            huiEventHandler?(.timeDisplayText(components: timeDisplay))
+            let newString = HUITimeDisplayString(digits: timeDisplay)
+            huiEventHandler?(.timeDisplay(text: newString))
             return
             
         default:
@@ -249,9 +241,9 @@ extension HUIParser {
         case 0x20 ... 0x27:
             // Channel Strip Fader level LSB
             
-            let channel = Int(dataByte1.nibbles.low)
+            let channel = dataByte1.nibbles.low
             
-            let msb = UInt16(faderMSB[channel]) << 7
+            let msb = UInt16(faderMSB[channel.intValue]) << 7
             let lsb = UInt16(dataByte2)
             
             guard let level = (msb + lsb).toUInt14Exactly else { return }
@@ -264,12 +256,13 @@ extension HUIParser {
         case 0x10 ... 0x1B:
             // V-Pots
             
-            let number = Int(dataByte1 % 0x10)
-            let value = dataByte2.toUInt7
+            let number = dataByte1 % 0x10
+            guard let vPot = HUIVPot(rawValue: number) else { return }
+            let delta = dataByte2.toUInt7
             
             huiEventHandler?(.vPot(
-                number: number,
-                value: value
+                vPot: vPot,
+                delta: delta
             ))
             
         case HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToHost,
@@ -368,7 +361,7 @@ extension HUIParser {
         let dataByte1 = data[1]
         let dataByte2 = data[2]
         
-        let channel = Int(dataByte1)
+        let channel = dataByte1.toUInt4Exactly ?? 0
         let sideAndValue = dataByte2 // encodes both side and value
         
         var side: HUISurface.State.StereoLevelMeter.Side

@@ -12,8 +12,8 @@ extension HUISurfaceView {
         VStack(alignment: .leading, spacing: 5) {
             // Text(String(repeating: "0", count: 40))
             // Text(String(repeating: "0", count: 40))
-            Text(huiSurface.state.largeDisplay.topStringValue)
-            Text(huiSurface.state.largeDisplay.bottomStringValue)
+            Text(huiSurface.state.largeDisplay.top.stringValue)
+            Text(huiSurface.state.largeDisplay.bottom.stringValue)
         }
         .font(.system(size: 14, weight: .regular, design: .monospaced))
         .foregroundColor(Color.white)

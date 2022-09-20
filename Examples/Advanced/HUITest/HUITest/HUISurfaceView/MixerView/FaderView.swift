@@ -16,12 +16,12 @@ extension HUISurfaceView {
         static let faderCapsuleHeight: CGFloat = 40
         static let faderCapsuleWidth: CGFloat = 25
 
-        let channel: Int
+        let channel: UInt4
 
         @State private var isPressed = false
 
         var body: some View {
-            let pos = CGFloat(huiSurface.state.channelStrips[channel].fader.levelUnitInterval)
+            let pos = CGFloat(huiSurface.state.channelStrips[channel.intValue].fader.levelUnitInterval)
 
             ZStack {
                 Rectangle()
@@ -45,7 +45,7 @@ extension HUISurfaceView {
                                         isPressed = true
                                         return
                                     }
-                                    // TODO: finish SwiftUI HUI fader
+                                    // TODO: finish SwiftUI HUI fader; use Controls lib?
                                 }
                                 .onEnded { _ in
                                     releasedAction()

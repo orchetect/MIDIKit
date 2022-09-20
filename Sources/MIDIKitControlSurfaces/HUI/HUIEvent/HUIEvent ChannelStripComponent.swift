@@ -7,19 +7,19 @@
 import MIDIKitCore
 
 extension HUIEvent {
-    /// A discrete component of a HUI channel strip and its state.
+    /// A discrete component of a HUI channel strip and its state change.
     public enum ChannelStripComponent: Equatable, Hashable {
         case levelMeter(side: HUISurface.State.StereoLevelMeter.Side, level: Int)
-        case recordReady(Bool)
-        case insert(Bool)
-        case vPotSelect(Bool)
-        case vPot(UInt7)
-        case auto(Bool)
-        case solo(Bool)
-        case mute(Bool)
-        case nameTextDisplay(String)
-        case select(Bool)
-        case faderTouched(Bool)
-        case faderLevel(UInt14)
+        case recordReady(state: Bool)
+        case insert(state: Bool)
+        case vPotSelect(state: Bool)
+        case vPot(delta: UInt7)
+        case auto(state: Bool)
+        case solo(state: Bool)
+        case mute(state: Bool)
+        case nameTextDisplay(text: HUISmallDisplayString)
+        case select(state: Bool)
+        case faderTouched(state: Bool)
+        case faderLevel(level: UInt14)
     }
 }

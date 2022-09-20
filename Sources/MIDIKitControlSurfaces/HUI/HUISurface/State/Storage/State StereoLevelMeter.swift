@@ -50,10 +50,10 @@ extension HUISurface.State {
         
         /// Level value range minimum.
         /// (0 means that no LEDs on the meter are lit up.)
-        public static let levelMin: Int = 0
+        public static let levelMin: Int = 0x0
         
         /// Level value range maximum.
-        public static let levelMax: Int = 12
+        public static let levelMax: Int = 0xC
         
         /// Range of possible level meter values.
         /// (0 indicates that no LEDs on the meter are lit up.)
@@ -63,9 +63,17 @@ extension HUISurface.State {
 
 extension HUISurface.State.StereoLevelMeter {
     /// Enum describing the side of a stereo level meter
-    public enum Side: Equatable, Hashable {
+    public enum Side: Equatable, Hashable, CustomStringConvertible {
         case left
         case right
+        
+        /// Raw value for HUI message encoding.
+        var rawValue: UInt8 {
+            switch self {
+            case .left: return 0
+            case .right: return 1
+            }
+        }
         
         public var description: String {
             switch self {

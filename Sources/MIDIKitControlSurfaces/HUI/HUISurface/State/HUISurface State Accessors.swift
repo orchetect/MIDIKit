@@ -13,7 +13,7 @@ extension HUISurface.State: HUISurfaceStateProtocol {
     public func state(of param: Param) -> Bool {
         switch param {
         case let .channelStrip(channel, channelParam):
-            return channelStrips[channel].state(of: channelParam)
+            return channelStrips[channel.intValue].state(of: channelParam)
             
         case let .hotKey(subParam):
             return hotKeys.state(of: subParam)
@@ -68,7 +68,7 @@ extension HUISurface.State: HUISurfaceStateProtocol {
     public mutating func setState(of param: Param, to state: Bool) {
         switch param {
         case let .channelStrip(channel, channelParam):
-            channelStrips[channel].setState(of: channelParam, to: state)
+            channelStrips[channel.intValue].setState(of: channelParam, to: state)
             
         case let .hotKey(subParam):
             hotKeys.setState(of: subParam, to: state)

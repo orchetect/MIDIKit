@@ -33,18 +33,7 @@ extension HUISurface.State {
         public var mute = false
         
         /// 4-character Channel Name LCD Text Display.
-        public var nameTextDisplay: String = "    " {
-            didSet {
-                if nameTextDisplay.count != 4 {
-                    // trims or pads string to always be exactly 4 characters wide
-                    nameTextDisplay = nameTextDisplay.padding(
-                        toLength: 4,
-                        withPad: " ",
-                        startingAt: 0
-                    )
-                }
-            }
-        }
+        public var nameTextDisplay: HUISmallDisplayString = .init()
         
         /// Select Button LED.
         public var select = false

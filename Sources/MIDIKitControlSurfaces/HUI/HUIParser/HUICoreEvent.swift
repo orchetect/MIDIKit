@@ -10,34 +10,34 @@ import MIDIKitCore
 /// Represents raw HUI messages with essential abstractions.
 public enum HUICoreEvent: Hashable {
     case ping
-        
+    
     case levelMeters(
-        channelStrip: Int,
+        channelStrip: UInt4,
         side: HUISurface.State.StereoLevelMeter.Side,
         level: Int
     )
-        
+    
     case faderLevel(
-        channelStrip: Int,
+        channelStrip: UInt4,
         level: UInt14
     )
-        
+    
     case vPot(
-        number: Int,
-        value: UInt7
+        vPot: HUIVPot,
+        delta: UInt7
     )
-        
-    case largeDisplayText(components: [String])
-        
-    case timeDisplayText(components: [String])
-        
-    case selectAssignText(text: String)
-        
+    
+    case largeDisplay(slices: [[HUILargeDisplayCharacter]])
+    
+    case timeDisplay(text: HUITimeDisplayString)
+    
+    case selectAssignText(text: HUISmallDisplayString)
+    
     case channelName(
-        channelStrip: Int,
-        text: String
+        channelStrip: UInt4,
+        text: HUISmallDisplayString
     )
-        
+    
     case `switch`(
         zone: HUIZone,
         port: HUIPort,
@@ -65,25 +65,25 @@ extension HUICoreEvent: CustomStringConvertible {
             return "faderLevel(channelStrip: \(channelStrip), level: \(level))"
             
         case let .vPot(
-            number: channelStrip,
-            value: value
+            vPot: vPot,
+            delta: delta
         ):
-            return "vPot(number: \(channelStrip), value: \(value))"
+            return "vPot(\(vPot), delta: \(delta))"
             
-        case let .largeDisplayText(components: components):
-            return "largeDisplayText(components: \(components))"
+        case let .largeDisplay(slices: slices):
+            return "largeDisplay(slices: \(slices.map(\.stringValue)))"
             
-        case let .timeDisplayText(components: components):
-            return "timeDisplayText(components: \(components))"
+        case let .timeDisplay(text: text):
+            return "timeDisplay(text: \(text.stringValue))"
             
         case let .selectAssignText(text: text):
-            return "selectAssignText(text: \(text))"
+            return "selectAssignText(text: \(text.stringValue))"
             
         case let .channelName(
             channelStrip: channelStrip,
             text: text
         ):
-            return "channelName(channelStrip: \(channelStrip), text: \(text))"
+            return "channelName(channelStrip: \(channelStrip), text: \(text.stringValue))"
             
         case let .switch(
             zone: zone,

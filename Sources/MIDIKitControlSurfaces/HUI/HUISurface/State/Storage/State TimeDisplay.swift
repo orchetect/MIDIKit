@@ -9,33 +9,10 @@ import Foundation
 extension HUISurface.State {
     /// State storage representing the Main Time Display LCD and surrounding status LEDs.
     public struct TimeDisplay: Equatable, Hashable {
-        /// Returns the individual string components that make up the full time display ``stringValue``.
-        public var components: [String] = [
-            HUIConstants.kCharTables.timeDisplay[0x00], // "0"
-            HUIConstants.kCharTables.timeDisplay[0x10], // "0."
-            HUIConstants.kCharTables.timeDisplay[0x00], // "0"
-            HUIConstants.kCharTables.timeDisplay[0x10], // "0."
-            HUIConstants.kCharTables.timeDisplay[0x00], // "0"
-            HUIConstants.kCharTables.timeDisplay[0x10], // "0."
-            HUIConstants.kCharTables.timeDisplay[0x00], // "0"
-            HUIConstants.kCharTables.timeDisplay[0x00]  // "0"
-        ] {
-            didSet {
-                switch components.count {
-                case ...7:
-                    components.append(
-                        contentsOf: [String](
-                            repeating: HUIConstants.kCharTables.timeDisplay[0x20],
-                            count: 8 - components.count
-                        )
-                    )
-                case 9...:
-                    components = Array(components.prefix(8))
-                default:
-                    break
-                }
-            }
-        }
+        /// HUI time display string, comprised of 8 digits.
+        ///
+        /// The time display consists of eight 7-segment displays (called digits). Every digit except the last (rightmost) has the ability to show a trailing decimal point (dot).
+        public var timeString: HUITimeDisplayString = .init()
         
         // LEDs
         
@@ -50,11 +27,6 @@ extension HUISurface.State {
         
         /// Rude Solo LED.
         public var rudeSolo = false
-        
-        /// Returns the full time display as a string of digits.
-        public var stringValue: String {
-            components.reduce("", +)
-        }
     }
 }
 

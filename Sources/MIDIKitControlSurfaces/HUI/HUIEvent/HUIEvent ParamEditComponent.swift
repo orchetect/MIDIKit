@@ -7,24 +7,25 @@
 import MIDIKitCore
 
 extension HUIEvent {
-    /// A discrete component of a the param edit section and it state.
+    /// A discrete component of a the param edit section and its state change.
     public enum ParamEditComponent: Equatable, Hashable {
-        case assign(Bool)
-        case compare(Bool)
-        case bypass(Bool)
+        case assign(state: Bool)
+        case compare(state: Bool)
+        case bypass(state: Bool)
         
-        case param1Select(Bool)
-        case param1VPotLevel(UInt7)
+        case param1Select(state: Bool)
+        case param1VPotLevel(delta: UInt7)
         
-        case param2Select(Bool)
-        case param2VPotLevel(UInt7)
+        case param2Select(state: Bool)
+        case param2VPotLevel(delta: UInt7)
         
-        case param3Select(Bool)
-        case param3VPotLevel(UInt7)
+        case param3Select(state: Bool)
+        case param3VPotLevel(delta: UInt7)
         
-        case param4Select(Bool)
-        case param4VPotLevel(UInt7)
+        case param4Select(state: Bool)
+        case param4VPotLevel(delta: UInt7)
         
-        case insertOrParam(Bool)
+        case insertOrParam(state: Bool)
+        case paramScroll(delta: UInt7)
     }
 }

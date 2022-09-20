@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  HUIClientView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -8,7 +8,7 @@ import MIDIKitIO
 import MIDIKitControlSurfaces
 import SwiftUI
 
-struct ContentView: View {
+struct HUIClientView: View {
     weak var midiManager: MIDIManager?
 
     @ObservedObject private var huiSurface: HUISurface
@@ -22,30 +22,31 @@ struct ContentView: View {
         // set up HUI Surface object
         huiSurface = {
             let huiSurface = HUISurface()
-            
+        
             huiSurface.huiEventHandler = { event in
                 // Logger.debug(event)
             }
-            
+        
             huiSurface.midiOutHandler = { [weak midiManager] midiEvents in
-                guard let output = midiManager?.managedOutputs[Self.kHUIOutputName]
+                guard let output = midiManager?
+                    .managedOutputs[Self.kHUIOutputName]
                 else {
                     Logger.debug("MIDI output missing.")
                     return
                 }
-                
+            
                 do {
                     try output.send(events: midiEvents)
                 } catch {
                     Logger.debug(error.localizedDescription)
                 }
             }
-            
+        
             return huiSurface
         }()
         
         // set up MIDI ports
-        
+
         do {
             try midiManager?.addInput(
                 name: Self.kHUIInputName,
@@ -59,7 +60,7 @@ struct ContentView: View {
                         }
                     }
             )
-            
+
             try midiManager?.addOutput(
                 name: Self.kHUIOutputName,
                 tag: Self.kHUIOutputName,
@@ -80,7 +81,7 @@ struct ContentView: View {
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(midiManager: nil)
+        HUIClientView(midiManager: nil)
     }
 }
 #endif

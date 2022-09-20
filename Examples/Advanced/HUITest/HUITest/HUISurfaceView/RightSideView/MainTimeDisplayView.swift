@@ -27,8 +27,7 @@ extension HUISurfaceView {
             .font(.system(size: 9, weight: .regular))
             
             Text(
-                huiSurface.state.timeDisplay.stringValue
-                // .split(every: 2).joined(separator: " ")
+                huiSurface.state.timeDisplay.timeString.stringValue
             )
             .font(.system(size: 20, weight: .regular, design: .monospaced))
             .foregroundColor(Color.red)

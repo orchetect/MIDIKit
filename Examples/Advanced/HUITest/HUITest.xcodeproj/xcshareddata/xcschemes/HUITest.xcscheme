@@ -47,11 +47,20 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E284EBB126AE018F0016AA0F"
+            BuildableName = "HUITest.app"
+            BlueprintName = "HUITest"
+            ReferencedContainer = "container:HUITest.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E284EBB126AE018F0016AA0F"
             BuildableName = "HUISurface.app"
             BlueprintName = "HUISurface"
             ReferencedContainer = "container:HUISurface.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		E21628E426E2DFF30022B66F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21628E326E2DFF30022B66F /* Logger.swift */; };
-		E24FF24528B97D8F000A2055 /* MIDIKitControlSurfaces in Frameworks */ = {isa = PBXBuildFile; productRef = E24FF24428B97D8F000A2055 /* MIDIKitControlSurfaces */; };
-		E24FF24828B97DBF000A2055 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E24FF24728B97DBF000A2055 /* MIDIKitIO */; };
 		E283F0932740AF7E0037F199 /* RightSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0922740AF7E0037F199 /* RightSideView.swift */; };
 		E283F0952740B5A60037F199 /* LeftSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0942740B5A60037F199 /* LeftSideView.swift */; };
 		E283F0972740C8770037F199 /* Labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0962740C8770037F199 /* Labels.swift */; };
@@ -26,7 +24,7 @@
 		E283F0B3274103C80037F199 /* NumPadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0B2274103C80037F199 /* NumPadView.swift */; };
 		E283F0B5274103E00037F199 /* TransportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0B4274103E00037F199 /* TransportView.swift */; };
 		E284EBB626AE018F0016AA0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBB526AE018F0016AA0F /* AppDelegate.swift */; };
-		E284EBB826AE018F0016AA0F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBB726AE018F0016AA0F /* ContentView.swift */; };
+		E284EBB826AE018F0016AA0F /* HUIClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBB726AE018F0016AA0F /* HUIClientView.swift */; };
 		E284EBBA26AE01900016AA0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E284EBB926AE01900016AA0F /* Assets.xcassets */; };
 		E284EBBD26AE01900016AA0F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E284EBBC26AE01900016AA0F /* Preview Assets.xcassets */; };
 		E284EBC026AE01900016AA0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E284EBBE26AE01900016AA0F /* Main.storyboard */; };
@@ -36,6 +34,8 @@
 		E284EBD426AE01F00016AA0F /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD126AE01F00016AA0F /* TopView.swift */; };
 		E284EBD826AE02090016AA0F /* HUI Parameter Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD726AE02090016AA0F /* HUI Parameter Wrapper.swift */; };
 		E284EBDF26AE03D00016AA0F /* MIDIKitControlSurfaces in Frameworks */ = {isa = PBXBuildFile; productRef = E284EBDE26AE03D00016AA0F /* MIDIKitControlSurfaces */; };
+		E2D5FB1928D913D50040A023 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E2D5FB1828D913D50040A023 /* MIDIKitIO */; };
+		E2D5FB1B28D9198A0040A023 /* HUIHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5FB1A28D9198A0040A023 /* HUIHostView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,19 +55,21 @@
 		E283F0B0274103A30037F199 /* ControlRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlRoomView.swift; sourceTree = "<group>"; };
 		E283F0B2274103C80037F199 /* NumPadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumPadView.swift; sourceTree = "<group>"; };
 		E283F0B4274103E00037F199 /* TransportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportView.swift; sourceTree = "<group>"; };
-		E284EBB226AE018F0016AA0F /* HUISurface.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUISurface.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E284EBB226AE018F0016AA0F /* HUITest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUITest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E284EBB526AE018F0016AA0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E284EBB726AE018F0016AA0F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E284EBB726AE018F0016AA0F /* HUIClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUIClientView.swift; sourceTree = "<group>"; };
 		E284EBB926AE01900016AA0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E284EBBC26AE01900016AA0F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E284EBBF26AE01900016AA0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E284EBC126AE01900016AA0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E284EBC226AE01900016AA0F /* HUISurface.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HUISurface.entitlements; sourceTree = "<group>"; };
+		E284EBC226AE01900016AA0F /* HUITest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HUITest.entitlements; sourceTree = "<group>"; };
 		E284EBCB26AE01EA0016AA0F /* MomentaryButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MomentaryButton.swift; sourceTree = "<group>"; };
 		E284EBCF26AE01F00016AA0F /* HUISurfaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUISurfaceView.swift; sourceTree = "<group>"; };
 		E284EBD026AE01F00016AA0F /* MixerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerView.swift; sourceTree = "<group>"; };
 		E284EBD126AE01F00016AA0F /* TopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		E284EBD726AE02090016AA0F /* HUI Parameter Wrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HUI Parameter Wrapper.swift"; sourceTree = "<group>"; };
+		E2D5FB1628D913B10040A023 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
+		E2D5FB1A28D9198A0040A023 /* HUIHostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUIHostView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,8 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E24FF24528B97D8F000A2055 /* MIDIKitControlSurfaces in Frameworks */,
-				E24FF24828B97DBF000A2055 /* MIDIKitIO in Frameworks */,
+				E2D5FB1928D913D50040A023 /* MIDIKitIO in Frameworks */,
 				E284EBDF26AE03D00016AA0F /* MIDIKitControlSurfaces in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -130,7 +131,8 @@
 		E284EBA926AE018F0016AA0F = {
 			isa = PBXGroup;
 			children = (
-				E284EBB426AE018F0016AA0F /* HUISurface */,
+				E2D5FB1628D913B10040A023 /* MIDIKit */,
+				E284EBB426AE018F0016AA0F /* HUITest */,
 				E284EBB326AE018F0016AA0F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -138,16 +140,17 @@
 		E284EBB326AE018F0016AA0F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E284EBB226AE018F0016AA0F /* HUISurface.app */,
+				E284EBB226AE018F0016AA0F /* HUITest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E284EBB426AE018F0016AA0F /* HUISurface */ = {
+		E284EBB426AE018F0016AA0F /* HUITest */ = {
 			isa = PBXGroup;
 			children = (
 				E284EBB526AE018F0016AA0F /* AppDelegate.swift */,
-				E284EBB726AE018F0016AA0F /* ContentView.swift */,
+				E2D5FB1A28D9198A0040A023 /* HUIHostView.swift */,
+				E284EBB726AE018F0016AA0F /* HUIClientView.swift */,
 				E284EBCE26AE01F00016AA0F /* HUISurfaceView */,
 				E284EBCA26AE01EA0016AA0F /* Control Views */,
 				E284EBD726AE02090016AA0F /* HUI Parameter Wrapper.swift */,
@@ -155,10 +158,10 @@
 				E284EBBE26AE01900016AA0F /* Main.storyboard */,
 				E284EBC126AE01900016AA0F /* Info.plist */,
 				E284EBB926AE01900016AA0F /* Assets.xcassets */,
-				E284EBC226AE01900016AA0F /* HUISurface.entitlements */,
+				E284EBC226AE01900016AA0F /* HUITest.entitlements */,
 				E284EBBB26AE01900016AA0F /* Preview Content */,
 			);
-			path = HUISurface;
+			path = HUITest;
 			sourceTree = "<group>";
 		};
 		E284EBBB26AE01900016AA0F /* Preview Content */ = {
@@ -194,9 +197,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E284EBB126AE018F0016AA0F /* HUISurface */ = {
+		E284EBB126AE018F0016AA0F /* HUITest */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E284EBC526AE01900016AA0F /* Build configuration list for PBXNativeTarget "HUISurface" */;
+			buildConfigurationList = E284EBC526AE01900016AA0F /* Build configuration list for PBXNativeTarget "HUITest" */;
 			buildPhases = (
 				E284EBAE26AE018F0016AA0F /* Sources */,
 				E284EBAF26AE018F0016AA0F /* Frameworks */,
@@ -206,14 +209,13 @@
 			);
 			dependencies = (
 			);
-			name = HUISurface;
+			name = HUITest;
 			packageProductDependencies = (
 				E284EBDE26AE03D00016AA0F /* MIDIKitControlSurfaces */,
-				E24FF24428B97D8F000A2055 /* MIDIKitControlSurfaces */,
-				E24FF24728B97DBF000A2055 /* MIDIKitIO */,
+				E2D5FB1828D913D50040A023 /* MIDIKitIO */,
 			);
 			productName = HUISurface;
-			productReference = E284EBB226AE018F0016AA0F /* HUISurface.app */;
+			productReference = E284EBB226AE018F0016AA0F /* HUITest.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -230,7 +232,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E284EBAD26AE018F0016AA0F /* Build configuration list for PBXProject "HUISurface" */;
+			buildConfigurationList = E284EBAD26AE018F0016AA0F /* Build configuration list for PBXProject "HUITest" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -240,13 +242,12 @@
 			);
 			mainGroup = E284EBA926AE018F0016AA0F;
 			packageReferences = (
-				E24FF24328B97D8F000A2055 /* XCRemoteSwiftPackageReference "MIDIKit" */,
 			);
 			productRefGroup = E284EBB326AE018F0016AA0F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E284EBB126AE018F0016AA0F /* HUISurface */,
+				E284EBB126AE018F0016AA0F /* HUITest */,
 			);
 		};
 /* End PBXProject section */
@@ -272,6 +273,7 @@
 				E283F0A3274101FD0037F199 /* LargeTextDisplayView.swift in Sources */,
 				E284EBCC26AE01EA0016AA0F /* MomentaryButton.swift in Sources */,
 				E284EBD826AE02090016AA0F /* HUI Parameter Wrapper.swift in Sources */,
+				E2D5FB1B28D9198A0040A023 /* HUIHostView.swift in Sources */,
 				E283F0B5274103E00037F199 /* TransportView.swift in Sources */,
 				E283F0B3274103C80037F199 /* NumPadView.swift in Sources */,
 				E283F0A9274102FF0037F199 /* ParameterEditAssignView.swift in Sources */,
@@ -280,7 +282,7 @@
 				E283F0A1274101D50037F199 /* MeterBridgeView.swift in Sources */,
 				E283F0AD274103480037F199 /* SwitchMatrixView.swift in Sources */,
 				E283F0A5274102770037F199 /* ChannelStripView.swift in Sources */,
-				E284EBB826AE018F0016AA0F /* ContentView.swift in Sources */,
+				E284EBB826AE018F0016AA0F /* HUIClientView.swift in Sources */,
 				E283F0A7274102A60037F199 /* FaderView.swift in Sources */,
 				E284EBB626AE018F0016AA0F /* AppDelegate.swift in Sources */,
 				E284EBD426AE01F00016AA0F /* TopView.swift in Sources */,
@@ -431,25 +433,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = HUISurface/HUISurface.entitlements;
+				CODE_SIGN_ENTITLEMENTS = HUITest/HUITest.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"HUISurface/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"HUITest/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				INFOPLIST_FILE = HUISurface/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "HUI Surface";
+				INFOPLIST_FILE = HUITest/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "HUI Test";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.HUISurface${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.HUITest${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -461,25 +463,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = HUISurface/HUISurface.entitlements;
+				CODE_SIGN_ENTITLEMENTS = HUITest/HUITest.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"HUISurface/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"HUITest/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
-				INFOPLIST_FILE = HUISurface/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "HUI Surface";
+				INFOPLIST_FILE = HUITest/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "HUI Test";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.HUISurface${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.HUITest${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -489,7 +491,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E284EBAD26AE018F0016AA0F /* Build configuration list for PBXProject "HUISurface" */ = {
+		E284EBAD26AE018F0016AA0F /* Build configuration list for PBXProject "HUITest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E284EBC326AE01900016AA0F /* Debug */,
@@ -498,7 +500,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E284EBC526AE01900016AA0F /* Build configuration list for PBXNativeTarget "HUISurface" */ = {
+		E284EBC526AE01900016AA0F /* Build configuration list for PBXNativeTarget "HUITest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E284EBC626AE01900016AA0F /* Debug */,
@@ -509,31 +511,14 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		E24FF24328B97D8F000A2055 /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/MIDIKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.6.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		E24FF24428B97D8F000A2055 /* MIDIKitControlSurfaces */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E24FF24328B97D8F000A2055 /* XCRemoteSwiftPackageReference "MIDIKit" */;
-			productName = MIDIKitControlSurfaces;
-		};
-		E24FF24728B97DBF000A2055 /* MIDIKitIO */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E24FF24328B97D8F000A2055 /* XCRemoteSwiftPackageReference "MIDIKit" */;
-			productName = MIDIKitIO;
-		};
 		E284EBDE26AE03D00016AA0F /* MIDIKitControlSurfaces */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MIDIKitControlSurfaces;
+		};
+		E2D5FB1828D913D50040A023 /* MIDIKitIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MIDIKitIO;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -55,9 +55,18 @@ extension HUIHostBank {
     ///   - channel: `0 ... 7`
     public func transmitFader(
         level: UInt14,
-        channel: Int
+        channel: UInt4
     ) {
         let events = encodeHUIFader(level: level, channel: channel)
+        midiOut(events)
+    }
+    
+    /// Transmit a HUI event to the client surface.
+    ///
+    /// - Parameters
+    ///   - event: HUI event.
+    public func transmit(event: HUIEvent) {
+        let events = event.encoded(to: .surface)
         midiOut(events)
     }
 }

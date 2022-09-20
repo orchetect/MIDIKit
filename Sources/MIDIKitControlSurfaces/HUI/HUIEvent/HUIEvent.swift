@@ -22,15 +22,15 @@ public enum HUIEvent: Hashable {
     ///   - top: String representing top row.
     ///   - bottom: String representing bottom row.
     case largeDisplay(
-        top: String,
-        bottom: String
+        top: HUILargeDisplayString,
+        bottom: HUILargeDisplayString
     )
     
     /// Time display changed.
     ///
     /// - Parameters:
     ///   - timeString: String representing the full text read-out.
-    case timeDisplay(timeString: String)
+    case timeDisplay(timeString: HUITimeDisplayString)
     
     /// An LED changed near the time display.
     case timeDisplayStatus(
@@ -42,7 +42,7 @@ public enum HUIEvent: Hashable {
     ///
     /// - Parameters:
     ///   - text: text string
-    case selectAssignText(text: String)
+    case selectAssignText(text: HUISmallDisplayString)
         
     // MARK: Channel Strips
     
@@ -52,7 +52,7 @@ public enum HUIEvent: Hashable {
     ///   - channel: channel strip `0 ... 7`
     ///   - param: enum describing what control was changed
     case channelStrip(
-        channel: Int,
+        channel: UInt4,
         ChannelStripComponent
     )
     

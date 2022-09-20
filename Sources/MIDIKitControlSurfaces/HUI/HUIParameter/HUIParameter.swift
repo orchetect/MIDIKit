@@ -9,7 +9,7 @@ import MIDIKitCore
 
 /// HUI Parameter
 public enum HUIParameter: Equatable, Hashable {
-    case channelStrip(Int, ChannelParameter)
+    case channelStrip(UInt4, ChannelParameter)
     case hotKey(HotKey)
     case window(WindowFunction)
     case bankMove(BankMove)

@@ -15,7 +15,7 @@ extension HUISurfaceView {
     struct ChannelStripView: View {
         @EnvironmentObject var huiSurface: HUISurface
         
-        let channel: Int
+        let channel: UInt4
         
         var body: some View {
             VStack(alignment: .center, spacing: 10) {
@@ -66,7 +66,7 @@ extension HUISurfaceView {
                 }
                 
                 Group {
-                    Text(huiSurface.state.channelStrips[channel].nameTextDisplay)
+                    Text(huiSurface.state.channelStrips[channel.intValue].nameTextDisplay.stringValue)
                         .font(.system(size: 16, weight: .regular, design: .monospaced))
                         .foregroundColor(.green)
                         .frame(maxWidth: .infinity)

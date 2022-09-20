@@ -10,14 +10,7 @@ extension HUISurface.State {
     /// State storage representing the Assign controls.
     public struct Assign: Equatable, Hashable {
         /// Text display (4 character width).
-        public var textDisplay = "    " {
-            didSet {
-                if textDisplay.count != 4 {
-                    // trims or pads string to always be exactly 4 characters wide
-                    textDisplay = textDisplay.padding(toLength: 4, withPad: " ", startingAt: 0)
-                }
-            }
-        }
+        public var textDisplay: HUISmallDisplayString = .init()
         
         public var recordReadyAll = false
         public var bypass = false
