@@ -12,7 +12,7 @@ import MIDIKitInternals
 /// Each bank can service a single HUI device and requires a MIDI input and output for each bank.
 public final class HUIHost {
     /// HUI Banks that are configured for this HUI host instance.
-    public internal(set) var banks: [HUIBank] = []
+    public internal(set) var banks: [HUIHostBank] = []
     
     internal var pingTimer: SafeDispatchTimer?
     
@@ -51,12 +51,12 @@ public final class HUIHost {
     
     /// Add a HUI bank that can interface with a single HUI device.
     public func addBank(
-        huiEventHandler: HUIBank.HUIEventHandler?,
+        huiEventHandler: HUIHostBank.HUIEventHandler?,
         midiOutHandler: SendsMIDIEvents.MIDIOutHandler? = nil,
-        remotePresenceChangedHandler: HUIBank.PresenceChangedHandler? = nil
+        remotePresenceChangedHandler: HUIHostBank.PresenceChangedHandler? = nil
     ) {
         banks.append(
-            HUIBank(
+            HUIHostBank(
                 huiEventHandler: huiEventHandler,
                 midiOutHandler: midiOutHandler,
                 remotePresenceChangedHandler: remotePresenceChangedHandler

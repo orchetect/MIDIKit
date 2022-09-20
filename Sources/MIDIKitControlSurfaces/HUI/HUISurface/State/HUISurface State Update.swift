@@ -13,7 +13,7 @@ extension HUISurface.State {
     /// Internal: Updates HUI state from a received HUI event.
     internal mutating func updateState(
         from receivedEvent: HUICoreEvent
-    ) -> HUISurface.Event? {
+    ) -> HUIEvent? {
         switch receivedEvent {
         case .ping:
             return .ping
@@ -86,7 +86,7 @@ extension HUISurface.State {
         channelStrip: Int,
         side: HUISurface.State.StereoLevelMeter.Side,
         level: Int
-    ) -> HUISurface.Event? {
+    ) -> HUIEvent? {
         guard channelStrips.indices.contains(channelStrip) else {
             Logger.debug("HUI: Level meter channel out of range: \(channelStrip)")
             return nil
@@ -106,7 +106,7 @@ extension HUISurface.State {
     private mutating func updateState_FaderLevel(
         channelStrip: Int,
         level: UInt14
-    ) -> HUISurface.Event? {
+    ) -> HUIEvent? {
         guard channelStrips.indices.contains(channelStrip) else {
             Logger.debug("HUI: Fader channel out of range: \(channelStrip)")
             return nil
@@ -123,7 +123,7 @@ extension HUISurface.State {
     private mutating func updateState_VPot(
         number: Int,
         value: UInt7
-    ) -> HUISurface.Event? {
+    ) -> HUIEvent? {
         switch number {
         case 0 ... 7:
             channelStrips[number].vPotLevel = value
@@ -150,7 +150,7 @@ extension HUISurface.State {
     
     private mutating func updateState_LargeDisplayText(
         components: [String]
-    ) -> HUISurface.Event? {
+    ) -> HUIEvent? {
         largeDisplay.components = components
         
         let topString = largeDisplay.topStringValue
@@ -161,7 +161,7 @@ extension HUISurface.State {
     
     private mutating func updateState_TimeDisplayText(
         components: [String]
-    ) -> HUISurface.Event? {
+    ) -> HUIEvent? {
         timeDisplay.components = components
         
         let timeDisplayString = timeDisplay.stringValue
@@ -171,7 +171,7 @@ extension HUISurface.State {
     
     private mutating func updateState_AssignText(
         text: String
-    ) -> HUISurface.Event? {
+    ) -> HUIEvent? {
         assign.textDisplay = text
         
         return .selectAssignText(text: text)
@@ -180,7 +180,7 @@ extension HUISurface.State {
     private mutating func updateState_ChannelText(
         text: String,
         channelStrip: Int
-    ) -> HUISurface.Event? {
+    ) -> HUIEvent? {
         channelStrips[channelStrip].nameTextDisplay = text
         
         return .channelStrip(
@@ -193,7 +193,7 @@ extension HUISurface.State {
         zone: HUIZone,
         port: HUIPort,
         state: Bool
-    ) -> HUISurface.Event? {
+    ) -> HUIEvent? {
         guard let param = HUIParameter(zone: zone, port: port)
         else {
             return .unhandledSwitch(zone: zone, port: port, state: state)

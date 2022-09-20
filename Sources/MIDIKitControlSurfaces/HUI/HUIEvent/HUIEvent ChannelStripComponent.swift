@@ -1,12 +1,12 @@
 //
-//  HUISurface Event ChannelStripComponent.swift
+//  HUIEvent ChannelStripComponent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
-extension HUISurface.Event {
+extension HUIEvent {
     /// A discrete component of a HUI channel strip and its state.
     public enum ChannelStripComponent: Equatable, Hashable {
         case levelMeter(side: HUISurface.State.StereoLevelMeter.Side, level: Int)

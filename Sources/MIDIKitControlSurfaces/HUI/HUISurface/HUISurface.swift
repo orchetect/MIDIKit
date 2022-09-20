@@ -35,7 +35,7 @@ public final class HUISurface {
     // MARK: - Handlers
     
     /// HUI event receive handler.
-    public typealias HUIEventHandler = ((_ huiEvent: Event) -> Void)
+    public typealias HUIEventHandler = ((_ huiEvent: HUIEvent) -> Void)
     
     /// Parser event handler that triggers when HUI events are received.
     public var huiEventHandler: HUIEventHandler?

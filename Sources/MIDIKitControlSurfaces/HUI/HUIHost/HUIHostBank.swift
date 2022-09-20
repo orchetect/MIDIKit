@@ -1,5 +1,5 @@
 //
-//  HUIBank.swift
+//  HUIHostBank.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@ import MIDIKitCore
 import MIDIKitInternals
 
 /// Object representing a ``HUIHost`` bank (connectable to one HUI device).
-public final class HUIBank {
+public final class HUIHostBank {
     // MARK: - Parser
     
     var translator: HUISurface.State = .init()
@@ -18,7 +18,7 @@ public final class HUIBank {
     // MARK: - Handlers
     
     /// HUI event receive handler.
-    public typealias HUIEventHandler = ((_ huiEvent: HUISurface.Event) -> Void)
+    public typealias HUIEventHandler = ((_ huiEvent: HUIEvent) -> Void)
     
     /// Parser event handler that triggers when HUI events are received.
     public var huiEventHandler: HUIEventHandler?
@@ -121,19 +121,19 @@ public final class HUIBank {
     }
 }
 
-extension HUIBank: ReceivesMIDIEvents {
+extension HUIHostBank: ReceivesMIDIEvents {
     public func midiIn(event: MIDIEvent) {
         parser.midiIn(event: event)
     }
 }
 
-extension HUIBank: SendsMIDIEvents { }
+extension HUIHostBank: SendsMIDIEvents { }
 
 #if canImport(Combine)
 import Combine
 
 @available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *)
-extension HUIBank: ObservableObject {
+extension HUIHostBank: ObservableObject {
     // nothing here; just add ObservableObject conformance
 }
 #endif

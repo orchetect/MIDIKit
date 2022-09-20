@@ -1,12 +1,12 @@
 //
-//  HUISurface Event ParamEditComponent.swift
+//  HUIEvent ParamEditComponent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
-extension HUISurface.Event {
+extension HUIEvent {
     /// A discrete component of a the param edit section and it state.
     public enum ParamEditComponent: Equatable, Hashable {
         case assign(Bool)

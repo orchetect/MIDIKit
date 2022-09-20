@@ -1,12 +1,12 @@
 //
-//  HUIBank Transmit.swift
+//  HUIHostBank Transmit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
-extension HUIBank {
+extension HUIHostBank {
     /// Transmit a HUI ping message to the client surface.
     /// It is not necessary to call this manually. The ``HUIHost`` object will handle ping transmission on an internal timer automatically.
     public func transmitPing() {
