@@ -28,16 +28,16 @@ public final class HUISurface {
         }
     }
     
-    // MARK: - Parser
+    // MARK: - Decoder
     
-    internal var parser: HUIParser!
+    internal var decoder: HUIDecoder!
     
     // MARK: - Handlers
     
     /// HUI event receive handler.
     public typealias HUIEventHandler = ((_ huiEvent: HUIEvent) -> Void)
     
-    /// Parser event handler that triggers when HUI events are received.
+    /// Event handler that is called when HUI events are received.
     public var huiEventHandler: HUIEventHandler?
     
     /// Remote presence state change handler (when pings resume or cease after timeout).
@@ -123,7 +123,7 @@ public final class HUISurface {
             
         state = State()
             
-        parser = HUIParser(
+        decoder = HUIDecoder(
             role: .surface,
             huiEventHandler: { [weak self] huiCoreEvent in
                 if case .ping = huiCoreEvent {
@@ -156,13 +156,13 @@ public final class HUISurface {
     /// Resets state back to init state. Handlers are unaffected.
     public func reset() {
         state = State()
-        parser.reset()
+        decoder.reset()
     }
 }
 
 extension HUISurface: ReceivesMIDIEvents {
     public func midiIn(event: MIDIEvent) {
-        parser.midiIn(event: event)
+        decoder.midiIn(event: event)
     }
 }
 

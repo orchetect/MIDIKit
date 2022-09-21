@@ -1,5 +1,5 @@
 //
-//  HUIParser.swift
+//  HUIDecoder.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -7,10 +7,12 @@
 import Darwin
 import MIDIKitCore
 
-/// HUI MIDI Message Parser.
-/// Interprets MIDI events and produces strongly-typed core HUI events.
-public final class HUIParser {
-    /// Parser role (host or client surface).
+/// HUI MIDI Message Decoder.
+/// Interprets HUI MIDI events and produces strongly-typed core HUI events.
+///
+/// This object is typically instanced once per HUI device. When using ``HUISurface``, it encapsulates an instance of the decoder.
+public final class HUIDecoder {
+    /// Decoder role (host or client surface).
     public let role: HUIRole
     
     // MARK: local state variables
@@ -24,7 +26,7 @@ public final class HUIParser {
     
     public typealias HUIEventHandler = ((HUICoreEvent) -> Void)
     
-    /// Parser event handler that triggers when HUI events are received.
+    /// Decoder event handler that is called when HUI events are received.
     public var huiEventHandler: HUIEventHandler?
     
     // MARK: - init
@@ -38,7 +40,7 @@ public final class HUIParser {
         reset()
     }
         
-    /// Resets the parser to original init state. (Handlers are unaffected.)
+    /// Resets the decoder to original init state. (Handlers are unaffected.)
     public func reset() {
         timeDisplay = .defaultDigits
         
@@ -56,7 +58,7 @@ public final class HUIParser {
 
 // MARK: ReceivesMIDIEvents
 
-extension HUIParser: ReceivesMIDIEvents {
+extension HUIDecoder: ReceivesMIDIEvents {
     /// Process HUI MIDI message received from host.
     public func midiIn(event: MIDIEvent) {
         switch event {
@@ -97,9 +99,9 @@ extension HUIParser: ReceivesMIDIEvents {
     }
 }
 
-// MARK: Parser
+// MARK: Decoder
 
-extension HUIParser {
+extension HUIDecoder {
     /// Internal: handles SysEx content.
     private func parse(sysExContent data: [UInt8]) {
         guard data.count >= 2 else { return }

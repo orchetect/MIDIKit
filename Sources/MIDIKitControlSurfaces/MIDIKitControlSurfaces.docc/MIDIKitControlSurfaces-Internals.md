@@ -11,7 +11,7 @@
 
 ### Classes
 
-- ``HUIParser``
+- ``HUIDecoder``
 
 ### Protocols
 

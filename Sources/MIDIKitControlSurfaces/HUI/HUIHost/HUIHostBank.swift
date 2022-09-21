@@ -10,17 +10,17 @@ import MIDIKitInternals
 
 /// Object representing a ``HUIHost`` bank (connectable to one HUI device).
 public final class HUIHostBank {
-    // MARK: - Parser
+    // MARK: - Decoder
     
     var translator: HUISurface.State = .init()
-    var parser: HUIParser = .init(role: .host)
+    var decoder: HUIDecoder = .init(role: .host)
     
     // MARK: - Handlers
     
     /// HUI event receive handler.
     public typealias HUIEventHandler = ((_ huiEvent: HUIEvent) -> Void)
     
-    /// Parser event handler that triggers when HUI events are received.
+    /// Event handler that is called when HUI events are received.
     public var huiEventHandler: HUIEventHandler?
     
     /// Remote presence state change handler (when pings resume or cease after timeout).
@@ -101,7 +101,7 @@ public final class HUIHostBank {
         self.midiOutHandler = midiOutHandler
         self.remotePresenceChangedHandler = remotePresenceChangedHandler
         
-        parser = HUIParser(
+        decoder = HUIDecoder(
             role: .host,
             huiEventHandler: { [weak self] huiCoreEvent in
                 if case .ping = huiCoreEvent {
@@ -123,7 +123,7 @@ public final class HUIHostBank {
 
 extension HUIHostBank: ReceivesMIDIEvents {
     public func midiIn(event: MIDIEvent) {
-        parser.midiIn(event: event)
+        decoder.midiIn(event: event)
     }
 }
 
