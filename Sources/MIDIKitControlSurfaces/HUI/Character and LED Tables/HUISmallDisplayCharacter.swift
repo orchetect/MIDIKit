@@ -163,19 +163,9 @@ public enum HUISmallDisplayCharacter: UInt8, CaseIterable {
     case rightBrace = 0x7D
     case tilde = 0x7E
     case shadedSquare = 0x7F
-    
-    /// Returns the user-facing display string of the character.
-    public var string: String {
-        Self.stringTable[Int(rawValue)]
-    }
-    
-    /// Initialize from the user-facing display string of the character.
-    public init?<S: StringProtocol>(_ string: S) {
-        guard let idx = Self.stringTable.firstIndex(of: String(string))
-        else { return nil }
-        self.init(rawValue: UInt8(idx))
-    }
-    
+}
+
+extension HUISmallDisplayCharacter: _HUICharacterProtocol {
     static let stringTable = [
         "ì",  "↑",  "→",  "↓",  "←",  "¿",  "à",  "Ø", // 0x00 ...
         "ø",  "ò",  "ù",  "Ň",  "Ç",  "ê",  "É",  "é", //      ... 0x0F
@@ -194,31 +184,14 @@ public enum HUISmallDisplayCharacter: UInt8, CaseIterable {
         "p",  "q",  "r",  "s",  "t",  "u",  "v",  "w", // 0x70 ...
         "x",  "y",  "z",  "{",  "|",  "}",  "~",  "░"  //      ... 0x7F
     ]
-    
-    /// Suitable default case for use as a default/neutral character.
+}
+
+extension HUISmallDisplayCharacter: HUICharacterProtocol {
     public static func `default`() -> Self {
         .space
     }
     
-    /// Suitable default case for use as a substitute for an unknown character.
     public static func unknown() -> Self {
         .question // just a random '?' character
-    }
-}
-
-// MARK: - CustomStringConvertible
-
-extension HUISmallDisplayCharacter: CustomStringConvertible {
-    public var description: String {
-        string
-    }
-}
-
-// MARK: - Sequence Category Methods
-
-extension Sequence where Element == HUISmallDisplayCharacter {
-    /// Returns the HUI character sequence as a single concatenated string of characters.
-    public var stringValue: String {
-        map { $0.string }.joined()
     }
 }

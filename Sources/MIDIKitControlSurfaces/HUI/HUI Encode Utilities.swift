@@ -267,7 +267,7 @@ func encodeHUILargeDisplay(
 func encodeHUITimeDisplay(
     text: HUITimeDisplayString
 ) -> MIDIEvent {
-    let textBytes = text.digits.map(\.rawValue).reversed()
+    let textBytes = text.chars.map(\.rawValue).reversed()
     
     return huiSysExTemplate(
         body: [

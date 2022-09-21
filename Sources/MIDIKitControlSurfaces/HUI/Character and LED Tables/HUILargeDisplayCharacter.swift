@@ -174,19 +174,9 @@ public enum HUILargeDisplayCharacter: UInt8, CaseIterable {
     case rightBrace = 0x7D
     case rightArrow = 0x7E
     case leftArrow = 0x7F
-    
-    /// Returns the user-facing display string of the character.
-    public var string: String {
-        Self.stringTable[Int(rawValue)]
-    }
-    
-    /// Initialize from the user-facing display string of the character.
-    public init?<S: StringProtocol>(_ string: S) {
-        guard let idx = Self.stringTable.firstIndex(of: String(string))
-        else { return nil }
-        self.init(rawValue: UInt8(idx))
-    }
-    
+}
+
+extension HUILargeDisplayCharacter: _HUICharacterProtocol {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:options --maxwidth none
     static let stringTable = [
@@ -223,7 +213,9 @@ public enum HUILargeDisplayCharacter: UInt8, CaseIterable {
         "x",  "y",  "z",  "{",    //
         "|",  "}",  "→",  "←"     //      ... 0x7F
     ]
-    
+}
+
+extension HUILargeDisplayCharacter: HUICharacterProtocol {
     /// Suitable default case for use as a default/neutral character.
     public static func `default`() -> Self {
         .space
@@ -235,22 +227,7 @@ public enum HUILargeDisplayCharacter: UInt8, CaseIterable {
     }
 }
 
-// MARK: - CustomStringConvertible
-
-extension HUILargeDisplayCharacter: CustomStringConvertible {
-    public var description: String {
-        string
-    }
-}
-
 // MARK: - Sequence Category Methods
-
-extension Sequence where Element == HUILargeDisplayCharacter {
-    /// Returns the HUI character sequence as a single concatenated string of characters.
-    public var stringValue: String {
-        map { $0.string }.joined()
-    }
-}
 
 extension Array where Element == HUILargeDisplayCharacter {
     /// Default text slice.

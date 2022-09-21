@@ -41,7 +41,7 @@ public final class HUIDecoder {
         
     /// Resets the decoder to original init state. (Handlers are unaffected.)
     public func reset() {
-        timeDisplay = .defaultDigits
+        timeDisplay = .defaultChars
         
         largeDisplay = .defaultSlices
         
@@ -207,7 +207,7 @@ extension HUIDecoder {
                 timeDisplayIndex += 1
             }
             
-            let newString = HUITimeDisplayString(digits: timeDisplay)
+            let newString = HUITimeDisplayString(chars: timeDisplay)
             huiEventHandler?(.timeDisplay(text: newString))
             return
             

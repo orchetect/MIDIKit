@@ -28,7 +28,7 @@ public struct HUIVPotDisplay: Equatable, Hashable {
             leds = LEDState(rawValue: rawIndex) ?? .unknown()
             lowerLED = false
         case 0x40 ... 0x7B:
-            leds = LEDState(rawValue: rawIndex) ?? .unknown()
+            leds = LEDState(rawValue: rawIndex % 0x40) ?? .unknown()
             lowerLED = true
         default:
             leds = .allOff
@@ -110,7 +110,12 @@ extension HUIVPotDisplay {
         /// LED configuration represented as a `Bool` array.
         public var boolArray: [Bool] {
             let bits = Self.ledMatrix[Int(rawValue)]
-            return (0 ..< 11).map { (bits >> $0) & 0b1 == 0b1 }
+            return (0 ..< 11).map { (bits >> $0) & 0b1 == 0b1 }.reversed()
+        }
+        
+        /// LED states as an 11-bit pattern. (Big-endian, occupying 11 least significant bits).
+        public var bitPattern: UInt16 {
+            Self.ledMatrix[Int(rawValue)]
         }
         
         // swiftformat:disable numberFormatting

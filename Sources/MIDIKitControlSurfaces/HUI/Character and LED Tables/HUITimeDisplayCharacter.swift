@@ -8,18 +8,18 @@ import Foundation
 
 /// HUI time display character set.
 public enum HUITimeDisplayCharacter: UInt8, CaseIterable {
-    case _0          = 0x00
-    case _1          = 0x01
-    case _2          = 0x02
-    case _3          = 0x03
+    case num0        = 0x00
+    case num1        = 0x01
+    case num2        = 0x02
+    case num3        = 0x03
     
-    case _4          = 0x04
-    case _5          = 0x05
-    case _6          = 0x06
-    case _7          = 0x07
+    case num4        = 0x04
+    case num5        = 0x05
+    case num6        = 0x06
+    case num7        = 0x07
     
-    case _8          = 0x08
-    case _9          = 0x09
+    case num8        = 0x08
+    case num9        = 0x09
     case A           = 0x0A
     case B           = 0x0B
     
@@ -28,18 +28,18 @@ public enum HUITimeDisplayCharacter: UInt8, CaseIterable {
     case E           = 0x0E
     case F           = 0x0F
     
-    case _0dot       = 0x10
-    case _1dot       = 0x11
-    case _2dot       = 0x12
-    case _3dot       = 0x13
+    case num0dot     = 0x10
+    case num1dot     = 0x11
+    case num2dot     = 0x12
+    case num3dot     = 0x13
     
-    case _4dot       = 0x14
-    case _5dot       = 0x15
-    case _6dot       = 0x16
-    case _7dot       = 0x17
+    case num4dot     = 0x14
+    case num5dot     = 0x15
+    case num6dot     = 0x16
+    case num7dot     = 0x17
     
-    case _8dot       = 0x18
-    case _9dot       = 0x19
+    case num8dot     = 0x18
+    case num9dot     = 0x19
     case Adot        = 0x1A
     case Bdot        = 0x1B
     
@@ -71,36 +71,9 @@ public enum HUITimeDisplayCharacter: UInt8, CaseIterable {
     
     /// Empty space with a trailing dot.
     case spaceDot    = 0x30
-    
-    /// Returns `true` if the character has a trailing dot (decimal).
-    public var hasDot: Bool {
-        switch self {
-        case ._0, ._1, ._2, ._3, ._4, ._5, ._6, ._7, ._8, ._9, .A, .B, .C, .D, .E, .F:
-            return false
-        
-        case ._0dot, ._1dot, ._2dot, ._3dot, ._4dot, ._5dot, ._6dot, ._7dot, ._8dot, ._9dot, .Adot, .Bdot, .Cdot, .Ddot, .Edot, .Fdot:
-            return true
-            
-        case .space, .unknown0x21, .unknown0x22, .unknown0x23, .unknown0x24, .unknown0x25, .unknown0x26, .unknown0x27, .unknown0x28, .unknown0x29, .unknown0x2A, .unknown0x2B, .unknown0x2C, .unknown0x2D, .unknown0x2E, .unknown0x2F:
-            return false
-            
-        case .spaceDot:
-            return true
-        }
-    }
-    
-    /// Returns the user-facing display string of the character.
-    public var string: String {
-        Self.stringTable[Int(rawValue)]
-    }
-    
-    /// Initialize from the user-facing display string of the character.
-    public init?<S: StringProtocol>(_ string: S) {
-        guard let idx = Self.stringTable.firstIndex(of: String(string))
-        else { return nil }
-        self.init(rawValue: UInt8(idx))
-    }
-    
+}
+
+extension HUITimeDisplayCharacter: _HUICharacterProtocol {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:options --maxwidth none
     
@@ -121,31 +94,43 @@ public enum HUITimeDisplayCharacter: UInt8, CaseIterable {
         "?",  "?",  "?",          // 0x2F - placeholders, not sure about these; put in question marks for now
         " ."                      // 0x30 - this is a guess; I think it's an empty space with a period
     ]
-    
-    /// Suitable default case for use as a default/neutral character.
+}
+
+extension HUITimeDisplayCharacter: HUICharacterProtocol {
     public static func `default`() -> Self {
         .space
     }
     
-    /// Suitable default case for use as a substitute for an unknown character.
     public static func unknown() -> Self {
         .unknown0x21 // just a random '?' character
     }
 }
 
-// MARK: - CustomStringConvertible
+// MARK: - Additional methods
 
-extension HUITimeDisplayCharacter: CustomStringConvertible {
-    public var description: String {
-        string
-    }
-}
-
-// MARK: - Sequence Category Methods
-
-extension Sequence where Element == HUITimeDisplayCharacter {
-    /// Returns the HUI character sequence as a single concatenated string of characters.
-    public var stringValue: String {
-        map { $0.string }.joined()
+extension HUITimeDisplayCharacter {
+    /// Returns `true` if the character has a trailing dot (decimal).
+    public var hasDot: Bool {
+        switch self {
+        case .num0, .num1, .num2, .num3, .num4,
+                .num5, .num6, .num7, .num8, .num9,
+                .A, .B, .C, .D, .E, .F:
+            return false
+            
+        case .num0dot, .num1dot, .num2dot, .num3dot, .num4dot,
+                .num5dot, .num6dot, .num7dot, .num8dot, .num9dot,
+                .Adot, .Bdot, .Cdot, .Ddot, .Edot, .Fdot:
+            return true
+            
+        case .space,
+                .unknown0x21, .unknown0x22, .unknown0x23,
+                .unknown0x24, .unknown0x25, .unknown0x26, .unknown0x27,
+                .unknown0x28, .unknown0x29, .unknown0x2A, .unknown0x2B,
+                .unknown0x2C, .unknown0x2D, .unknown0x2E, .unknown0x2F:
+            return false
+            
+        case .spaceDot:
+            return true
+        }
     }
 }
