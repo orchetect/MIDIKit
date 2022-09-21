@@ -4,12 +4,10 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-import Foundation
-
 #if shouldTestCurrentPlatform
 
 import XCTest
-@testable import MIDIKitControlSurfaces
+@testable import MIDIKitInternals
 
 class Utilities_RandomAccessCollectionTests: XCTestCase {
     func testRangeOfOffsets() {
