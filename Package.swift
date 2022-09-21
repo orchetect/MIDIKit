@@ -62,44 +62,51 @@ let package = Package(
                 .target(name: "MIDIKitControlSurfaces"),
                 .target(name: "MIDIKitSMF"),
                 .target(name: "MIDIKitSync")
-            ]
+            ],
+            swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         .target(
             name: "MIDIKitInternals",
-            dependencies: []
+            dependencies: [],
+            swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         .target(
             name: "MIDIKitCore",
             dependencies: [
                 .target(name: "MIDIKitInternals")
-            ]
+            ],
+            swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         .target(
             name: "MIDIKitIO",
             dependencies: [
                 .target(name: "MIDIKitInternals"),
                 .target(name: "MIDIKitCore")
-            ]
+            ],
+            swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         .target(
             name: "MIDIKitControlSurfaces",
             dependencies: [
                 .target(name: "MIDIKitCore")
-            ]
+            ],
+            swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         .target(
             name: "MIDIKitSMF",
             dependencies: [
                 .target(name: "MIDIKitCore"),
                 "TimecodeKit"
-            ]
+            ],
+            swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         .target(
             name: "MIDIKitSync",
             dependencies: [
                 .target(name: "MIDIKitCore"),
                 "TimecodeKit"
-            ]
+            ],
+            swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         
         // test targets
