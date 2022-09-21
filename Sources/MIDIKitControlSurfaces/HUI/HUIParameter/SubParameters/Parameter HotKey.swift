@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Keyboard HotKeys.
+    /// Keyboard hotkeys.
     public enum HotKey: Equatable, Hashable {
         case ctrl
         case shift

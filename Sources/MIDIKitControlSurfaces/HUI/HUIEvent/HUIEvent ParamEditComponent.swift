@@ -7,7 +7,7 @@
 import MIDIKitCore
 
 extension HUIEvent {
-    /// A discrete component of a the param edit section and its state change.
+    /// A discrete component of a the Param Edit section and its state change.
     public enum ParamEditComponent: Equatable, Hashable {
         case assign(state: Bool)
         case compare(state: Bool)

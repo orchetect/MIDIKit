@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  HUIEvent Encode.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 import MIDIKitCore
 
 extension HUIEvent {
-    /// Encode the HUI event to raw HUI MIDI events.
+    /// Encode the HUI event to raw HUI MIDI event(s).
     public func encoded(to role: HUIRole) -> [MIDIEvent] {
         switch self {
         case .ping:

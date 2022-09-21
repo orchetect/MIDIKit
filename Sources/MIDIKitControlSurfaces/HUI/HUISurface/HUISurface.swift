@@ -10,10 +10,12 @@ import MIDIKitInternals
 
 /// Object representing a single HUI control surface device.
 ///
-/// _Human User Interface for Digital Audio Workstations_ is a DAW control surface protocol developed by Mackie that uses MIDI events as its underlying encoding.
+/// This object would typically be used by a client application (ie: a control surface application on an iPad) in order to manage state of a HUI surface. It connects to the host software/hardware through bidirectional MIDI (input and output).
 ///
-/// References:
-/// - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
+/// > HUI (_Human User Interface for Digital Audio Workstations_) is a DAW control surface protocol developed by Mackie that uses MIDI events as its underlying encoding.
+/// >
+/// > References:
+/// > - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
 public final class HUISurface {
     // MARK: - State
     

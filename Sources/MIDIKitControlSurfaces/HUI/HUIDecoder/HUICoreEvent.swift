@@ -7,7 +7,7 @@
 import MIDIKitCore
 
 /// HUI Core Event.
-/// Represents raw HUI messages with essential abstractions.
+/// Abstracts raw HUI messages into basic common-currency HUI message types carrying raw data as encoded.
 public enum HUICoreEvent: Hashable {
     case ping
     

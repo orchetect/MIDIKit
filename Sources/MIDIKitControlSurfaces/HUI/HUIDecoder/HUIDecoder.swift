@@ -7,7 +7,6 @@
 import Darwin
 import MIDIKitCore
 
-/// HUI MIDI Message Decoder.
 /// Interprets HUI MIDI events and produces strongly-typed core HUI events.
 ///
 /// This object is typically instanced once per HUI device. When using ``HUISurface``, it encapsulates an instance of the decoder.

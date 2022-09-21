@@ -4,7 +4,6 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-import Foundation
 import MIDIKitCore
 
 extension HUISurface {
@@ -16,6 +15,7 @@ extension HUISurface {
     }
     
     /// Transmit switch state to host.
+    ///
     /// - Parameters:
     ///   - zone: HUI zone number.
     ///   - port: HUI port number.
@@ -35,6 +35,10 @@ extension HUISurface {
     }
     
     /// Transmit switch state to the host.
+    ///
+    /// - Parameters:
+    ///   - param: Switch parameter.
+    ///   - state: Switch state.
     public func transmitSwitch(
         _ param: HUIParameter,
         state: Bool
@@ -49,6 +53,7 @@ extension HUISurface {
     }
     
     /// Transmit fader level to the host.
+    ///
     /// - Parameters:
     ///   - level: `0 ... 16383`
     ///   - channel: `0 ... 7`
@@ -61,6 +66,7 @@ extension HUISurface {
     }
     
     /// Transmit fader touch/release message to the host.
+    /// 
     /// - Parameters:
     ///   - isTouched: `true` sends touch message, `false` sends release message.
     ///   - channel: `0 ... 7`

@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Function Keys (To the right of the channel strips).
+    /// Function keys (to the right of the channel strips).
     public enum FunctionKey: Equatable, Hashable {
         case f1
         case f2

@@ -260,6 +260,7 @@ func encodeHUILargeDisplay(
 
 /// Utility:
 /// Encodes time display message (timecode, mm:ss, bars/beats, frames).
+/// 
 /// - Parameters:
 ///   - text: 8 digits, the first seven with optional trailing dots.
 /// - Returns: MIDI event.

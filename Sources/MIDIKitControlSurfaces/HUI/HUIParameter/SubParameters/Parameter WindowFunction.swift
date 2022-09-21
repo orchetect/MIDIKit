@@ -7,7 +7,7 @@
 import Foundation
 
 extension HUIParameter {
-    /// Window Functions.
+    /// Window functions.
     public enum WindowFunction: Equatable, Hashable {
         case mix
         case edit

@@ -35,6 +35,10 @@ extension HUIHostBank {
     }
     
     /// Transmit switch state to the client surface.
+    ///
+    /// - Parameters:
+    ///   - param: Switch parameter.
+    ///   - state: Switch state.
     public func transmitSwitch(
         _ param: HUIParameter,
         state: Bool
@@ -63,7 +67,7 @@ extension HUIHostBank {
     
     /// Transmit a HUI event to the client surface.
     ///
-    /// - Parameters
+    /// - Parameters:
     ///   - event: HUI event.
     public func transmit(event: HUIEvent) {
         let events = event.encoded(to: .surface)
