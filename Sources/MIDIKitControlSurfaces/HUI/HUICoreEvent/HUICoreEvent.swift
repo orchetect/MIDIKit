@@ -8,12 +8,12 @@ import MIDIKitCore
 
 /// HUI Core Event.
 /// Abstracts raw HUI messages into basic common-currency HUI message types carrying raw data as encoded.
-public enum HUICoreEvent: Hashable {
+public enum HUICoreEvent: Equatable, Hashable {
     /// HUI ping message.
     case ping
     
     /// Stereo LED level meters.
-    case levelMeters(
+    case levelMeter(
         channelStrip: UInt4,
         side: HUIModel.StereoLevelMeter.Side,
         level: Int
@@ -25,10 +25,12 @@ public enum HUICoreEvent: Hashable {
         level: UInt14
     )
     
-    /// V-Pot delta change.
+    /// V-Pot encoding.
+    /// When encoding host → surface, this is the LED preset index.
+    /// When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
     case vPot(
         vPot: HUIVPot,
-        delta: UInt7
+        value: UInt7
     )
     
     /// Large Display text slices.
@@ -44,10 +46,10 @@ public enum HUICoreEvent: Hashable {
     case timeDisplay(charsRightToLeft: [HUITimeDisplayCharacter])
     
     /// Select Assign 4-character text display.
-    case selectAssignText(text: HUISmallDisplayString)
+    case selectAssignDisplay(text: HUISmallDisplayString)
     
     /// Channel strip 4-character name text display.
-    case channelName(
+    case channelDisplay(
         channelStrip: UInt4,
         text: HUISmallDisplayString
     )
@@ -65,12 +67,12 @@ extension HUICoreEvent: CustomStringConvertible {
         case .ping:
             return "ping"
         
-        case let .levelMeters(
+        case let .levelMeter(
             channelStrip: channelStrip,
             side: side,
             level: level
         ):
-            return "levelMeters(channelStrip: \(channelStrip), side: \(side), level: \(level))"
+            return "levelMeter(channelStrip: \(channelStrip), side: \(side), level: \(level))"
             
         case let .faderLevel(
             channelStrip: channelStrip,
@@ -80,9 +82,9 @@ extension HUICoreEvent: CustomStringConvertible {
             
         case let .vPot(
             vPot: vPot,
-            delta: delta
+            value: value
         ):
-            return "vPot(\(vPot), delta: \(delta))"
+            return "vPot(\(vPot), value: \(value))"
             
         case let .largeDisplay(slices: slices):
             let flatSlices = slices.map { "\($0.key): \($0.value.stringValue)" }
@@ -91,14 +93,14 @@ extension HUICoreEvent: CustomStringConvertible {
         case let .timeDisplay(charsRightToLeft: charsRightToLeft):
             return "timeDisplay(chars: \(charsRightToLeft.reversed().stringValue))"
             
-        case let .selectAssignText(text: text):
-            return "selectAssignText(text: \(text.stringValue))"
+        case let .selectAssignDisplay(text: text):
+            return "selectAssignDisplay(text: \(text.stringValue))"
             
-        case let .channelName(
+        case let .channelDisplay(
             channelStrip: channelStrip,
             text: text
         ):
-            return "channelName(channelStrip: \(channelStrip), text: \(text.stringValue))"
+            return "channelDisplay(channelStrip: \(channelStrip), text: \(text.stringValue))"
             
         case let .switch(
             huiSwitch: huiSwitch,

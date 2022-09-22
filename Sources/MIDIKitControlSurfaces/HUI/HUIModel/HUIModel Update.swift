@@ -26,7 +26,7 @@ extension HUIModel {
         case .ping:
             return .ping
             
-        case let .levelMeters(
+        case let .levelMeter(
             channelStrip: channelStrip,
             side: side,
             level: level
@@ -48,11 +48,11 @@ extension HUIModel {
             
         case let .vPot(
             vPot: vPot,
-            delta: delta
+            value: value
         ):
             return updateStateFromVPot(
                 vPot: vPot,
-                delta: delta
+                value: value
             )
             
         case let .largeDisplay(slices: slices):
@@ -61,10 +61,10 @@ extension HUIModel {
         case let .timeDisplay(charsRightToLeft: chars):
             return updateStateFromTimeDisplayText(charsRightToLeft: chars)
             
-        case let .selectAssignText(text: text):
+        case let .selectAssignDisplay(text: text):
             return updateStateFromAssignText(text: text)
             
-        case let .channelName(
+        case let .channelDisplay(
             channelStrip: channelStrip,
             text: text
         ):
@@ -120,30 +120,30 @@ extension HUIModel {
     
     private mutating func updateStateFromVPot(
         vPot: HUIVPot,
-        delta: UInt7
+        value: UInt7
     ) -> HUIEvent? {
         switch vPot {
         case .channel(let chan):
             // update surface state's absolute value
             channelStrips[chan.intValue].vPotLevel = UInt7(
-                clamping: channelStrips[chan.intValue].vPotLevel.intValue + delta.intValue
+                clamping: channelStrips[chan.intValue].vPotLevel.intValue + value.intValue
             )
             
             // return delta change
             return .channelStrip(
                 channel: chan,
-                .vPot(delta: delta)
+                .vPot(value: value)
             )
         case .editAssignA:
-            return .paramEdit(.param1VPotLevel(delta: delta))
+            return .paramEdit(.param1VPotLevel(delta: value))
         case .editAssignB:
-            return .paramEdit(.param2VPotLevel(delta: delta))
+            return .paramEdit(.param2VPotLevel(delta: value))
         case .editAssignC:
-            return .paramEdit(.param3VPotLevel(delta: delta))
+            return .paramEdit(.param3VPotLevel(delta: value))
         case .editAssignD:
-            return .paramEdit(.param4VPotLevel(delta: delta))
+            return .paramEdit(.param4VPotLevel(delta: value))
         case .editAssignScroll:
-            return .paramEdit(.paramScroll(delta: delta))
+            return .paramEdit(.paramScroll(delta: value))
         }
     }
     
