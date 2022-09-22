@@ -63,6 +63,9 @@ public enum HUISwitch: Equatable, Hashable {
     
     /// Footswitches and Sounds - no LEDs or buttons associated.
     case footswitchesAndSounds(FootswitchesAndSounds)
+    
+    /// Undefined HUI switch.
+    case undefined(zone: HUIZone, port: HUIPort)
 }
 
 extension HUISwitch: CaseIterable {
@@ -396,6 +399,9 @@ extension HUISwitch: HUISwitchProtocol {
 
         case let .footswitchesAndSounds(param):
             return param.zoneAndPort
+            
+        case let .undefined(zone: zone, port: port):
+            return (zone: zone, port: port)
         }
     }
 }
@@ -453,23 +459,26 @@ extension HUISwitch: CustomStringConvertible {
 
         case let .footswitchesAndSounds(param):
             return "footswitchesAndSounds(\(param))"
+            
+        case let .undefined(zone: zone, port: port):
+            return "undefined(zone: \(zone), port: \(port))"
         }
     }
 }
 
 extension HUISwitch {
     /// Initialize from a HUI zone and port pair.
-    /// Returns `nil` if the pair is unknown by HUI or not used.
-    public init?(
+    public init(
         zone: HUIZone,
         port: HUIPort
     ) {
-        guard let parameter = HUISwitch.allCases.first(where: {
+        if let parameter = HUISwitch.allCases.first(where: {
             $0.zoneAndPort.zone == zone
                 && $0.zoneAndPort.port == port
-        })
-        else { return nil }
-        
-        self = parameter
+        }) {
+            self = parameter
+        } else {
+            self = .undefined(zone: zone, port: port)
+        }
     }
 }

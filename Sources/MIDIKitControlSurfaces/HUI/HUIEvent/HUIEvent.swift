@@ -111,8 +111,8 @@ public enum HUIEvent: Hashable {
     
     // MARK: Unhandled
     
-    /// Unhandled/unrecognized switch.
-    case unhandledSwitch(
+    /// Undefined/unrecognized switch.
+    case undefinedSwitch(
         zone: HUIZone,
         port: HUIPort,
         state: Bool

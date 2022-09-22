@@ -178,7 +178,7 @@ extension HUIEvent {
                 to: role
             )
 
-        case let .unhandledSwitch(zone, port, state):
+        case let .undefinedSwitch(zone, port, state):
             return encodeHUISwitch(
                 zone: zone,
                 port: port,

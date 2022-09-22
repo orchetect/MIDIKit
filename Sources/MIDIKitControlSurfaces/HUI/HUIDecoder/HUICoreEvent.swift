@@ -9,38 +9,52 @@ import MIDIKitCore
 /// HUI Core Event.
 /// Abstracts raw HUI messages into basic common-currency HUI message types carrying raw data as encoded.
 public enum HUICoreEvent: Hashable {
+    /// HUI ping message.
     case ping
     
+    /// Stereo LED level meters.
     case levelMeters(
         channelStrip: UInt4,
         side: HUIModel.StereoLevelMeter.Side,
         level: Int
     )
     
+    /// Motorized fader level.
     case faderLevel(
         channelStrip: UInt4,
         level: UInt14
     )
     
+    /// V-Pot delta change.
     case vPot(
         vPot: HUIVPot,
         delta: UInt7
     )
     
-    case largeDisplay(slices: [[HUILargeDisplayCharacter]])
+    /// Large Display text slices.
+    ///
+    /// Slices are indexed `0 ... 7` and are 10 characters each.
+    case largeDisplay(slices: [UInt4: [HUILargeDisplayCharacter]])
     
-    case timeDisplay(text: HUITimeDisplayString)
+    /// Time Display digits.
+    ///
+    /// Between one and 8 digits, indexed in the array from right-to-left of the actual display. (Index 0 is the rightmost character).
+    ///
+    /// This is because HUI encodes time display digits in reverse order since the digits on the righthand side of a time display will update most frequently, which allows conservation of data bandwidth when transmitting frequent time display changes.
+    case timeDisplay(charsRightToLeft: [HUITimeDisplayCharacter])
     
+    /// Select Assign 4-character text display.
     case selectAssignText(text: HUISmallDisplayString)
     
+    /// Channel strip 4-character name text display.
     case channelName(
         channelStrip: UInt4,
         text: HUISmallDisplayString
     )
     
+    /// HUI switch type with state.
     case `switch`(
-        zone: HUIZone,
-        port: HUIPort,
+        huiSwitch: HUISwitch,
         state: Bool
     )
 }
@@ -71,10 +85,11 @@ extension HUICoreEvent: CustomStringConvertible {
             return "vPot(\(vPot), delta: \(delta))"
             
         case let .largeDisplay(slices: slices):
-            return "largeDisplay(slices: \(slices.map(\.stringValue)))"
+            let flatSlices = slices.map { "\($0.key): \($0.value.stringValue)" }
+            return "largeDisplay(slices: \(flatSlices))"
             
-        case let .timeDisplay(text: text):
-            return "timeDisplay(text: \(text.stringValue))"
+        case let .timeDisplay(charsRightToLeft: charsRightToLeft):
+            return "timeDisplay(chars: \(charsRightToLeft.reversed().stringValue))"
             
         case let .selectAssignText(text: text):
             return "selectAssignText(text: \(text.stringValue))"
@@ -86,11 +101,10 @@ extension HUICoreEvent: CustomStringConvertible {
             return "channelName(channelStrip: \(channelStrip), text: \(text.stringValue))"
             
         case let .switch(
-            zone: zone,
-            port: port,
+            huiSwitch: huiSwitch,
             state: state
         ):
-            return "switch(zone: \(zone), port: \(port), state: \(state ? "on" : "off"))"
+            return "switch(\(huiSwitch), state: \(state ? "on" : "off"))"
         }
     }
 }

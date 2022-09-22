@@ -9,15 +9,13 @@ import MIDIKitCore
 
 /// Interprets HUI MIDI events and produces strongly-typed core HUI events.
 ///
-/// This object is typically instanced once per HUI device. When using ``HUISurface``, it encapsulates an instance of the decoder.
+/// This object is typically instanced once per HUI device. When using ``HUISurface``, it encapsulates an instance of the decoder and uses it transparently.
 public final class HUIDecoder {
     /// Decoder role (host or client surface).
     public let role: HUIRole
     
     // MARK: local state variables
     
-    private var timeDisplay: [HUITimeDisplayCharacter] = []
-    private var largeDisplay: [[HUILargeDisplayCharacter]] = []
     private var faderMSB: [UInt8] = []
     private var switchesZoneSelect: UInt8?
     
@@ -41,10 +39,6 @@ public final class HUIDecoder {
         
     /// Resets the decoder to original init state. (Handlers are unaffected.)
     public func reset() {
-        timeDisplay = .defaultChars
-        
-        largeDisplay = .defaultSlices
-        
         // HUI protocol (and the HUI hardware control surface) has only 8 channel faders.
         // Even though some control surface models have a 9th master fader
         // such as EMAGIC Logic Control and Mackie Control Universal,
@@ -172,8 +166,14 @@ extension HUIDecoder {
             
             var largeDisplayData = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
             
+            var newSlices: [UInt4: [HUILargeDisplayCharacter]] = [:]
+            
             while largeDisplayData.count >= 11 {
-                let slice = Int(largeDisplayData[atOffset: 0])
+                let rawSliceIndex = Int(largeDisplayData[atOffset: 0])
+                guard let sliceIndex = UInt4(exactly: rawSliceIndex) else {
+                    Logger.debug("Encountered out-of-range HUI large display slice index: \(rawSliceIndex)")
+                    return
+                }
                 
                 var newSlice: [HUILargeDisplayCharacter] = []
                 let letters = largeDisplayData[atOffsets: 1 ... 10]
@@ -182,12 +182,12 @@ extension HUIDecoder {
                     let char = HUILargeDisplayCharacter(rawValue: letter) ?? .unknown()
                     newSlice.append(char)
                 }
-                largeDisplay[slice] = newSlice // update local state
+                newSlices[sliceIndex] = newSlice
                 
                 largeDisplayData = largeDisplayData.dropFirst(11)
             }
             
-            huiEventHandler?(.largeDisplay(slices: largeDisplay))
+            huiEventHandler?(.largeDisplay(slices: newSlices))
             return
             
         case HUIConstants.kMIDI.kDisplayType.timeDisplayByte:
@@ -197,18 +197,10 @@ extension HUIDecoder {
                 Logger.debug("Received HUI time display message but it contained too many bytes.")
                 return
             }
-            var timeDisplayIndex = 0
             
-            for number in tcData {
-                let char = HUITimeDisplayCharacter(rawValue: number) ?? .unknown()
-                
-                // update local state
-                timeDisplay[7 - timeDisplayIndex] = char
-                timeDisplayIndex += 1
-            }
-            
-            let newString = HUITimeDisplayString(chars: timeDisplay)
-            huiEventHandler?(.timeDisplay(text: newString))
+            // chars are encoded in right-to-left sequence order.
+            let newChars = tcData.map { HUITimeDisplayCharacter(rawValue: $0) ?? .unknown() }
+            huiEventHandler?(.timeDisplay(charsRightToLeft: newChars))
             return
             
         default:
@@ -307,16 +299,16 @@ extension HUIDecoder {
                 let stateNibble = dataByte2.nibbles.high.hexString(prefix: true)
                 
                 if let zone = switchesZoneSelect {
-                    if let guess = HUISwitch(
-                        zone: zone,
-                        port: port
-                    ) {
-                        Logger.debug(
-                            "Received \(cmd) (switch cmd msg 2/2) matching \(guess) but has unexpected state nibble \(stateNibble). Ignoring message."
-                        )
-                    } else {
+                    let huiSwitch = HUISwitch(zone: zone, port: port)
+                    
+                    switch huiSwitch {
+                    case .undefined(zone: _, port: _):
                         Logger.debug(
                             "Received \(cmd) (switch cmd msg 2/2) but has unexpected state nibble \(stateNibble). Additionally, could not guess zone and port pair name. Ignoring message."
+                        )
+                    default:
+                        Logger.debug(
+                            "Received \(cmd) (switch cmd msg 2/2) matching \(huiSwitch) but has unexpected state nibble \(stateNibble). Ignoring message."
                         )
                     }
                 } else {
@@ -331,7 +323,8 @@ extension HUIDecoder {
             
             if let zone = switchesZoneSelect {
                 switchesZoneSelect = nil // reset zone select
-                huiEventHandler?(.switch(zone: zone, port: port, state: state))
+                let huiSwitch = HUISwitch(zone: zone, port: port)
+                huiEventHandler?(.switch(huiSwitch: huiSwitch, state: state))
             } else {
                 let cmd = data.hexString(padEachTo: 2, prefixes: true)
                 

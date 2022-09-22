@@ -10,6 +10,8 @@ extension HUIModel: HUISurfaceStateProtocol {
     public typealias Switch = HUISwitch
     
     /// Returns the current state in the model of the given HUI switch parameter.
+    ///
+    /// > Reading state of ``HUISwitch/undefined(zone:port:)`` will always return `false` as state is not stored for undefined switches.
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case let .channelStrip(channel, subParam):
@@ -62,10 +64,16 @@ extension HUIModel: HUISurfaceStateProtocol {
             
         case let .footswitchesAndSounds(subParam):
             return footswitchesAndSounds.state(of: subParam)
+            
+        case .undefined(zone: _, port: _):
+            // no actual state - just return false as a default
+            return false
         }
     }
     
     /// Sets the state in the model of the given HUI switch parameter.
+    ///
+    /// > Setting state for ``HUISwitch/undefined(zone:port:)`` has no effect and will not be stored.
     public mutating func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case let .channelStrip(channel, subParam):
@@ -118,6 +126,10 @@ extension HUIModel: HUISurfaceStateProtocol {
             
         case let .footswitchesAndSounds(subParam):
             footswitchesAndSounds.setState(of: subParam, to: state)
+            
+        case .undefined(zone: _, port: _):
+            // don't store state for undefined switches
+            break
         }
     }
 }

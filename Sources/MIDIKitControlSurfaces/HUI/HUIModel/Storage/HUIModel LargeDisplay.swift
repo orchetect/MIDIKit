@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import MIDIKitCore
 
 extension HUIModel {
     /// State storage representing the Large Text Display (40 x 2 character matrix).
@@ -26,37 +27,61 @@ extension HUIModel {
         /// Internal:
         /// Get or set the 8 individual 10-character string slices that make up the large display contents.
         /// When encoded in a HUI message, these are indexed 0 through 7.
-        var slices: [[HUILargeDisplayCharacter]] {
+        var slices: [UInt4: [HUILargeDisplayCharacter]] {
             get {
-                let topSlices = top.chars.split(every: 10).map { Array($0) }
-                let bottomSlices = bottom.chars.split(every: 10).map { Array($0) }
-                return topSlices + bottomSlices
+                Self.slices(top: top, bottom: bottom)
             }
             set {
-                // validate
-                var newValue = newValue
-                switch newValue.count {
-                case ...7:
-                    newValue += [[HUILargeDisplayCharacter]](
-                        repeating: .defaultSlice,
-                        count: 8 - slices.count
-                    )
-                case 9...:
-                    newValue = Array(slices.prefix(8))
-                default:
-                    break
-                }
-                
-                // conditionally set only if different
-                let newTopChars = newValue[0 ... 3].flatMap { $0 }
-                let newBottomChars = newValue[4 ... 7].flatMap { $0 }
-                if newTopChars != top.chars {
-                    top.chars = newTopChars
-                }
-                if newBottomChars != bottom.chars {
-                    bottom.chars = newBottomChars
+                update(mergingFrom: newValue)
+            }
+        }
+        
+        /// Internal:
+        /// Update HUI string storage by merging string slices atomically.
+        ///
+        /// - Returns: `true` if characters were different and replaced with new characters.
+        @discardableResult
+        mutating func update(mergingFrom slices: [UInt4: [HUILargeDisplayCharacter]]) -> Bool {
+            guard !slices.isEmpty else { return false }
+            
+            let topSlices = slices.filter { (0 ... 3).contains($0.key) }
+            let bottomSlices = slices.filter { (4 ... 7).contains($0.key) }
+            
+            var isTopDiff = false
+            var isBottomDiff = false
+            
+            // update top
+            var newTop = top
+            for (sliceIndex, sliceChars) in topSlices {
+                if newTop.update(slice: sliceIndex, newChars: sliceChars) {
+                    isTopDiff = true
                 }
             }
+            if isTopDiff { top = newTop }
+            
+            // update bottom
+            var newBottom = bottom
+            for (sliceIndex, sliceChars) in bottomSlices {
+                if newBottom.update(slice: sliceIndex, newChars: sliceChars) {
+                    isBottomDiff = true
+                }
+            }
+            if isBottomDiff { bottom = newBottom }
+            
+            return isTopDiff || isBottomDiff
+        }
+        
+        /// Internal:
+        /// Converts two 40-char large display strings to a dictionary of slices.
+        /// Keyed by slice index (`0 ... 7`)
+        static func slices(
+            top: HUILargeDisplayString,
+            bottom: HUILargeDisplayString
+        ) -> [UInt4: [HUILargeDisplayCharacter]] {
+            (top.slices + bottom.slices).enumerated()
+                .reduce(into: [UInt4: [HUILargeDisplayCharacter]]()) {
+                    $0[$1.0.toUInt4] = $1.1
+                }
         }
     }
 }

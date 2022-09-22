@@ -58,8 +58,8 @@ extension HUIModel {
         case let .largeDisplay(slices: slices):
             return updateStateFromLargeDisplayText(slices: slices)
             
-        case let .timeDisplay(text: text):
-            return updateStateFromTimeDisplayText(text: text)
+        case let .timeDisplay(charsRightToLeft: chars):
+            return updateStateFromTimeDisplayText(charsRightToLeft: chars)
             
         case let .selectAssignText(text: text):
             return updateStateFromAssignText(text: text)
@@ -74,13 +74,11 @@ extension HUIModel {
             )
             
         case let .switch(
-            zone: zone,
-            port: port,
+            huiSwitch: huiSwitch,
             state: state
         ):
             return updateStateFromSwitch(
-                zone: zone,
-                port: port,
+                huiSwitch: huiSwitch,
                 state: state
             )
         }
@@ -150,9 +148,11 @@ extension HUIModel {
     }
     
     private mutating func updateStateFromLargeDisplayText(
-        slices: [[HUILargeDisplayCharacter]]
+        slices: [UInt4: [HUILargeDisplayCharacter]]
     ) -> HUIEvent? {
-        largeDisplay.slices = slices
+        guard !slices.isEmpty else { return nil }
+        
+        largeDisplay.update(mergingFrom: slices)
         
         let topString = largeDisplay.top
         let bottomString = largeDisplay.bottom
@@ -161,11 +161,16 @@ extension HUIModel {
     }
     
     private mutating func updateStateFromTimeDisplayText(
-        text: HUITimeDisplayString
+        charsRightToLeft: [HUITimeDisplayCharacter]
     ) -> HUIEvent? {
-        timeDisplay.timeString = text
+        guard !charsRightToLeft.isEmpty else { return nil }
         
-        return .timeDisplay(timeString: text)
+        var ts = timeDisplay.timeString
+        let newCharsRange = (7 - charsRightToLeft.count) ... 7
+        ts.chars.replaceSubrange(newCharsRange, with: charsRightToLeft.reversed())
+        timeDisplay.timeString = ts
+        
+        return .timeDisplay(timeString: ts)
     }
     
     private mutating func updateStateFromAssignText(
@@ -189,15 +194,9 @@ extension HUIModel {
     }
     
     private mutating func updateStateFromSwitch(
-        zone: HUIZone,
-        port: HUIPort,
+        huiSwitch: HUISwitch,
         state: Bool
     ) -> HUIEvent? {
-        guard let huiSwitch = HUISwitch(zone: zone, port: port)
-        else {
-            return .unhandledSwitch(zone: zone, port: port, state: state)
-        }
-        
         // set state for parameter
         
         setState(of: huiSwitch, to: state)
@@ -313,6 +312,9 @@ extension HUIModel {
             
         case let .footswitchesAndSounds(subParam):
             return .footswitchesAndSounds(param: subParam, state: state)
+            
+        case let .undefined(zone: zone, port: port):
+            return .undefinedSwitch(zone: zone, port: port, state: state)
         }
     }
 }
