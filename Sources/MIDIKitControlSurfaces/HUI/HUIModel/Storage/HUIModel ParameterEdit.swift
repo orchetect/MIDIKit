@@ -15,16 +15,24 @@ extension HUIModel {
         public var bypass = false
         
         public var param1Select = false
-        public var param1VPotLevel: UInt7 = 0
+        
+        /// Parameter 1 V-Pot Display LEDs.
+        public var param1VPotDisplay: HUIVPotDisplay = .init()
         
         public var param2Select = false
-        public var param2VPotLevel: UInt7 = 0
+        
+        /// Parameter 2 V-Pot Display LEDs.
+        public var param2VPotDisplay: HUIVPotDisplay = .init()
         
         public var param3Select = false
-        public var param3VPotLevel: UInt7 = 0
+        
+        /// Parameter 3 V-Pot Display LEDs.
+        public var param3VPotDisplay: HUIVPotDisplay = .init()
         
         public var param4Select = false
-        public var param4VPotLevel: UInt7 = 0
+        
+        /// Parameter 4 V-Pot Display LEDs.
+        public var param4VPotDisplay: HUIVPotDisplay = .init()
         
         /// Toggle: Insert (off) / Param (on)
         public var insertOrParam = false

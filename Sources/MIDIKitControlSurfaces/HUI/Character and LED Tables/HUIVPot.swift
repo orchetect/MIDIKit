@@ -16,6 +16,7 @@ public enum HUIVPot: Equatable, Hashable {
     case editAssignD
     case editAssignScroll
     
+    /// Internal:
     /// Initialize from raw value for encoding/decoding HUI message.
     init?(rawValue: UInt8) {
         switch rawValue {
@@ -37,6 +38,7 @@ public enum HUIVPot: Equatable, Hashable {
         }
     }
     
+    /// Internal:
     /// Raw value for encoding/decoding HUI message.
     var rawValue: UInt8 {
         switch self {
@@ -52,6 +54,38 @@ public enum HUIVPot: Equatable, Hashable {
             return 0xB
         case .editAssignScroll:
             return 0xC
+        }
+    }
+}
+
+public enum HUIVPotValue: Equatable, Hashable {
+    /// V-Pot display LED ring. (11 LED ring with a lower LED)
+    /// Only applies to HUI messages sent from the host in order to update a client surface's V-Pot LEDs.
+    case display(HUIVPotDisplay)
+    
+    /// V-Pot rotary knob delta change -/+.
+    /// Only applies to HUI messages sent from a client surface in order to transmit rotary knob input from the user to the host.
+    case delta(Int7)
+    
+    /// Internal:
+    /// Raw value for encoding/decoding HUI message.
+    var rawValue: UInt7 {
+        switch self {
+        case let .display(display):
+            return display.rawIndex
+        case let .delta(delta):
+            return delta.rawUInt7Byte
+        }
+    }
+    
+    /// Internal:
+    /// Returns wrapped `Int7` value.
+    var wrappedValue: Int7 {
+        switch self {
+        case let .display(display):
+            return Int7(display.rawIndex)
+        case let .delta(delta):
+            return delta
         }
     }
 }

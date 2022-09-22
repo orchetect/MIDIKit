@@ -23,8 +23,8 @@ extension HUICoreEvent {
         case let .faderLevel(channelStrip, level):
             return encodeHUIFader(level: level, channel: channelStrip)
             
-        case let .vPot(vPot, delta):
-            return [encodeHUIVPotValue(for: vPot, delta: delta)]
+        case let .vPot(vPot, value):
+            return [encodeHUIVPotValue(for: vPot, rawValue: value.rawValue)]
             
         case let .largeDisplay(slices):
             return encodeHUILargeDisplay(slices: slices)

@@ -162,7 +162,7 @@ func encodeHUIFader(
 /// - Parameters:
 ///   - channel: Channel strip number (`0 ... 7`).
 ///   - side: Left or right side of the stereo meter.
-///   - level: Level amount (`0x0 ... 0xC`).
+///   - level: Level amount (`0x0 ... 0xC`). Where `0x0` is off, `0x1 ... 0xB` is signal level, and `0xC` is clipping (red LED).
 /// - Returns: MIDI event.
 func encodeHUILevelMeter(
     channel: UInt4,
@@ -178,22 +178,22 @@ func encodeHUILevelMeter(
     )
 }
 
-// MARK: - V-Pot Delta Values
+// MARK: - V-Pot Value
 
 /// Utility:
-/// Encodes HUI V-Pot delta value message as a MIDI event. (To host or to client surface)
+/// Encodes HUI V-Pot value message as a MIDI event. (To host or to client surface)
 ///
 /// - Parameters:
 ///   - vPot: V-Pot identity.
-///   - value: Delta change value.
+///   - rawValue: Encoded value. When encoding host → surface, this is the LED preset index. When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
 /// - Returns: MIDI event.
 func encodeHUIVPotValue(
     for vPot: HUIVPot,
-    delta: UInt7
+    rawValue: UInt7
 ) -> MIDIEvent {
     .cc(
         0x10 + vPot.rawValue.toUInt7,
-        value: .midi1(delta),
+        value: .midi1(rawValue),
         channel: 0
     )
 }

@@ -21,7 +21,9 @@ extension HUIModel {
         
         /// V-Sel Button LED.
         public var vPotSelect = false
-        public var vPotLevel: UInt7 = 0
+        
+        /// V-Pot Display LEDs.
+        public var vPotDisplay: HUIVPotDisplay = .init()
         
         /// Auto(mation) Button LED.
         public var auto = false

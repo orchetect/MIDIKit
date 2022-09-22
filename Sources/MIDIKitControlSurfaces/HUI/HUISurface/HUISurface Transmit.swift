@@ -78,6 +78,19 @@ extension HUISurface {
         midiOut(events)
     }
     
+    /// Transmit V-Pot rotary knob delta change to the client surface.
+    ///
+    /// - Parameters:
+    ///   - vPot: V-Pot identity.
+    ///   - delta: Delta change amount as a 7-bit signed integer (`-64 ... 63`).
+    public func transmitVPot(
+        for vPot: HUIVPot,
+        delta: Int7
+    ) {
+        let event = encodeHUIVPotValue(for: vPot, rawValue: delta.rawUInt7Byte)
+        midiOut(event)
+    }
+    
     /// Sends a message that tells the host that the HUI device is powering on or off.
     public func transmitSystemReset() {
         midiOut(HUIConstants.kMIDI.kSystemResetMessage)

@@ -124,7 +124,7 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     
     /// Encoding is identical to host or to surface.
     func testVPotValue() {
-        let midiEvent = encodeHUIVPotValue(for: .editAssignA, delta: 3)
+        let midiEvent = encodeHUIVPotValue(for: .editAssignA, rawValue: 3)
         
         XCTAssertEqual(
             midiEvent,

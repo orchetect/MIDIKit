@@ -16,11 +16,17 @@ public struct HUIVPotDisplay: Equatable, Hashable {
     /// Lower LED state.
     public var lowerLED: Bool
     
+    public init() {
+        leds = .allOff
+        lowerLED = false
+    }
+    
     public init(leds: LEDState, lowerLED: Bool) {
         self.leds = leds
         self.lowerLED = lowerLED
     }
     
+    /// Internal:
     /// Init from raw encoded preset index.
     init(rawIndex: UInt8) {
         switch rawIndex {
@@ -34,6 +40,12 @@ public struct HUIVPotDisplay: Equatable, Hashable {
             leds = .allOff
             lowerLED = false
         }
+    }
+    
+    /// Internal:
+    /// Returns raw encoded preset index.
+    var rawIndex: UInt7 {
+        leds.rawValue.toUInt7 + (lowerLED ? 0x40 : 0x00)
     }
 }
 

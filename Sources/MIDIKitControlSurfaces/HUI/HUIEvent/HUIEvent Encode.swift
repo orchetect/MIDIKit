@@ -209,7 +209,7 @@ extension HUIEvent.ChannelStripComponent {
         case let .vPotSelect(state):
             return encodeHUISwitch(.channelStrip(channel, .vPotSelect), state: state, to: role)
         case let .vPot(value):
-            return [encodeHUIVPotValue(for: .channel(channel), delta: value)]
+            return [encodeHUIVPotValue(for: .channel(channel), rawValue: value.rawValue)]
         case let .auto(state):
             return encodeHUISwitch(.channelStrip(channel, .auto), state: state, to: role)
         case let .solo(state):
@@ -242,24 +242,24 @@ extension HUIEvent.ParamEditComponent {
             return encodeHUISwitch(.paramEdit(.bypass), state: state, to: role)
         case let .param1Select(state):
             return encodeHUISwitch(.paramEdit(.param1Select), state: state, to: role)
-        case let .param1VPotLevel(delta):
-            return [encodeHUIVPotValue(for: .editAssignA, delta: delta)]
+        case let .param1VPot(value):
+            return [encodeHUIVPotValue(for: .editAssignA, rawValue: value.rawValue)]
         case let .param2Select(state):
             return encodeHUISwitch(.paramEdit(.param2Select), state: state, to: role)
-        case let .param2VPotLevel(delta):
-            return [encodeHUIVPotValue(for: .editAssignB, delta: delta)]
+        case let .param2VPot(value):
+            return [encodeHUIVPotValue(for: .editAssignB, rawValue: value.rawValue)]
         case let .param3Select(state):
             return encodeHUISwitch(.paramEdit(.param3Select), state: state, to: role)
-        case let .param3VPotLevel(delta):
-            return [encodeHUIVPotValue(for: .editAssignC, delta: delta)]
+        case let .param3VPot(value):
+            return [encodeHUIVPotValue(for: .editAssignC, rawValue: value.rawValue)]
         case let .param4Select(state):
             return encodeHUISwitch(.paramEdit(.param4Select), state: state, to: role)
-        case let .param4VPotLevel(delta):
-            return [encodeHUIVPotValue(for: .editAssignD, delta: delta)]
+        case let .param4VPot(value):
+            return [encodeHUIVPotValue(for: .editAssignD, rawValue: value.rawValue)]
         case let .insertOrParam(state):
             return encodeHUISwitch(.paramEdit(.insertOrParam), state: state, to: role)
         case let .paramScroll(delta):
-            return [encodeHUIVPotValue(for: .editAssignScroll, delta: delta)]
+            return [encodeHUIVPotValue(for: .editAssignScroll, rawValue: delta.rawUInt7Byte)]
         }
     }
 }

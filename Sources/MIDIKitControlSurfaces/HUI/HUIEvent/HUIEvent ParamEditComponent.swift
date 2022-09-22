@@ -14,18 +14,18 @@ extension HUIEvent {
         case bypass(state: Bool)
         
         case param1Select(state: Bool)
-        case param1VPotLevel(delta: UInt7)
+        case param1VPot(value: HUIVPotValue)
         
         case param2Select(state: Bool)
-        case param2VPotLevel(delta: UInt7)
+        case param2VPot(value: HUIVPotValue)
         
         case param3Select(state: Bool)
-        case param3VPotLevel(delta: UInt7)
+        case param3VPot(value: HUIVPotValue)
         
         case param4Select(state: Bool)
-        case param4VPotLevel(delta: UInt7)
+        case param4VPot(value: HUIVPotValue)
         
         case insertOrParam(state: Bool)
-        case paramScroll(delta: UInt7)
+        case paramScroll(delta: Int7)
     }
 }

@@ -23,9 +23,7 @@ extension HUIEvent {
         case vPotSelect(state: Bool)
         
         /// V-Pot encoding.
-        /// When encoding host → surface, this is the LED preset index.
-        /// When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
-        case vPot(value: UInt7)
+        case vPot(value: HUIVPotValue)
         
         
         case auto(state: Bool)

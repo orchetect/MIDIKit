@@ -247,12 +247,21 @@ extension HUIDecoder {
             // When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
             
             let number = dataByte1 % 0x10
-            guard let vPot = HUIVPot(rawValue: number) else { return }
-            let value = dataByte2.toUInt7
+            guard let vPot = HUIVPot(rawValue: number),
+                  let value = Int7(exactly: dataByte2)
+            else { return }
+            
+            let vPotValue: HUIVPotValue
+            switch role {
+            case .host:
+                vPotValue = HUIVPotValue.delta(value)
+            case .surface:
+                vPotValue = HUIVPotValue.display(.init(rawIndex: UInt8(value.intValue)))
+            }
             
             huiEventHandler?(.vPot(
                 vPot: vPot,
-                value: value
+                value: vPotValue
             ))
             
         case HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToHost,

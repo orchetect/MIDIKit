@@ -120,30 +120,32 @@ extension HUIModel {
     
     private mutating func updateStateFromVPot(
         vPot: HUIVPot,
-        value: UInt7
+        value: HUIVPotValue
     ) -> HUIEvent? {
+        let rawValue = value.rawValue
+        let display = HUIVPotDisplay(rawIndex: rawValue.uInt8Value)
+        
         switch vPot {
         case .channel(let chan):
-            // update surface state's absolute value
-            channelStrips[chan.intValue].vPotLevel = UInt7(
-                clamping: channelStrips[chan.intValue].vPotLevel.intValue + value.intValue
-            )
-            
-            // return delta change
+            channelStrips[chan.intValue].vPotDisplay = display
             return .channelStrip(
                 channel: chan,
                 .vPot(value: value)
             )
         case .editAssignA:
-            return .paramEdit(.param1VPotLevel(delta: value))
+            parameterEdit.param1VPotDisplay = display
+            return .paramEdit(.param1VPot(value: value))
         case .editAssignB:
-            return .paramEdit(.param2VPotLevel(delta: value))
+            parameterEdit.param2VPotDisplay = display
+            return .paramEdit(.param2VPot(value: value))
         case .editAssignC:
-            return .paramEdit(.param3VPotLevel(delta: value))
+            parameterEdit.param3VPotDisplay = display
+            return .paramEdit(.param3VPot(value: value))
         case .editAssignD:
-            return .paramEdit(.param4VPotLevel(delta: value))
+            parameterEdit.param4VPotDisplay = display
+            return .paramEdit(.param4VPot(value: value))
         case .editAssignScroll:
-            return .paramEdit(.paramScroll(delta: value))
+            return .paramEdit(.paramScroll(delta: value.wrappedValue))
         }
     }
     

@@ -51,14 +51,19 @@ final class HUIDecoderTests: XCTestCase {
     }
     
     func testVPotDelta() {
+        // delta rotary knob change
         runHUICoreEventTest(
             to: .host,
-            .vPot(vPot: .editAssignA, value: 4) // delta rotary knob change
+            .vPot(vPot: .editAssignA, value: .delta(4))
         )
         
+        // LED ring preset index
         runHUICoreEventTest(
             to: .surface,
-            .vPot(vPot: .editAssignA, value: 0x11) // LED ring preset index
+            .vPot(
+                vPot: .editAssignA,
+                value: .display(.init(leds: .singleL5, lowerLED: false))
+            )
         )
     }
     

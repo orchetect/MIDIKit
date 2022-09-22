@@ -30,7 +30,7 @@ public enum HUICoreEvent: Equatable, Hashable {
     /// When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
     case vPot(
         vPot: HUIVPot,
-        value: UInt7
+        value: HUIVPotValue
     )
     
     /// Large Display text slices.
