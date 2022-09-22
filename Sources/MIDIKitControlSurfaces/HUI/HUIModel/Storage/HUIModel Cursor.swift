@@ -23,10 +23,10 @@ extension HUIModel {
 }
 
 extension HUIModel.Cursor: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.Cursor
+    public typealias Switch = HUISwitch.Cursor
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .up:       return false
         case .left:     return false
         case .right:    return false
@@ -37,8 +37,8 @@ extension HUIModel.Cursor: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .up:       return
         case .left:     return
         case .right:    return

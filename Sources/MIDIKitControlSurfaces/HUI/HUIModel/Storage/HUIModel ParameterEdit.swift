@@ -32,10 +32,10 @@ extension HUIModel {
 }
 
 extension HUIModel.ParameterEdit: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.ParameterEdit
+    public typealias Switch = HUISwitch.ParameterEdit
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .assign:         return assign
         case .compare:        return compare
         case .bypass:         return bypass
@@ -47,8 +47,8 @@ extension HUIModel.ParameterEdit: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .assign:         assign = state
         case .compare:        compare = state
         case .bypass:         bypass = state

@@ -22,7 +22,7 @@ public enum HUIEvent: Hashable {
     
     // MARK: Text Displays
     
-    /// Large text display changed.
+    /// Large text display.
     ///
     /// - Parameters:
     ///   - top: String representing top row.
@@ -32,7 +32,7 @@ public enum HUIEvent: Hashable {
         bottom: HUILargeDisplayString
     )
     
-    /// Time display changed.
+    /// Time display.
     ///
     /// - Parameters:
     ///   - timeString: String representing the full text read-out.
@@ -40,11 +40,11 @@ public enum HUIEvent: Hashable {
     
     /// An LED changed near the time display.
     case timeDisplayStatus(
-        param: HUIParameter.TimeDisplay,
+        param: HUISwitch.TimeDisplay,
         state: Bool
     )
     
-    /// Select Assign readout text changed.
+    /// Select Assign readout text.
     ///
     /// - Parameters:
     ///   - text: text string
@@ -52,7 +52,7 @@ public enum HUIEvent: Hashable {
         
     // MARK: Channel Strips
     
-    /// A channel strip-related element was changed.
+    /// A channel strip-related element.
     ///
     /// - Parameters:
     ///   - channel: channel strip `0 ... 7`
@@ -65,49 +65,49 @@ public enum HUIEvent: Hashable {
     // MARK: Switches
     
     /// Keyboard hotkeys.
-    case hotKey(param: HUIParameter.HotKey, state: Bool)
+    case hotKey(param: HUISwitch.HotKey, state: Bool)
     
     /// Param Edit section.
     case paramEdit(ParamEditComponent)
     
     /// Function keys (to the right of the channel strips).
-    case functionKey(param: HUIParameter.FunctionKey, state: Bool)
+    case functionKey(param: HUISwitch.FunctionKey, state: Bool)
     
     /// Auto Enable section (to the right of the channel strips).
-    case autoEnable(param: HUIParameter.AutoEnable, state: Bool)
+    case autoEnable(param: HUISwitch.AutoEnable, state: Bool)
     
     /// Auto Mode section (to the right of the channel strips).
-    case autoMode(param: HUIParameter.AutoMode, state: Bool)
+    case autoMode(param: HUISwitch.AutoMode, state: Bool)
     
     /// Status/Group section (to the right of the channel strips).
-    case statusAndGroup(param: HUIParameter.StatusAndGroup, state: Bool)
+    case statusAndGroup(param: HUISwitch.StatusAndGroup, state: Bool)
     
     /// Edit section (to the right of the channel strips).
-    case edit(param: HUIParameter.Edit, state: Bool)
+    case edit(param: HUISwitch.Edit, state: Bool)
     
     /// Numeric entry pad.
-    case numPad(param: HUIParameter.NumPad, state: Bool)
+    case numPad(param: HUISwitch.NumPad, state: Bool)
     
     /// Window functions.
-    case windowFunctions(param: HUIParameter.WindowFunction, state: Bool)
+    case window(param: HUISwitch.Window, state: Bool)
     
     /// Bank and channel navigation.
-    case bankMove(param: HUIParameter.BankMove, state: Bool)
+    case bankMove(param: HUISwitch.BankMove, state: Bool)
     
     /// Assign section (buttons to top left of channel strips).
-    case assign(param: HUIParameter.Assign, state: Bool)
+    case assign(param: HUISwitch.Assign, state: Bool)
     
     /// Cursor Movement / Mode / Scrub / Shuttle.
-    case cursor(param: HUIParameter.Cursor, state: Bool)
+    case cursor(param: HUISwitch.Cursor, state: Bool)
     
     /// Control Room section.
-    case controlRoom(param: HUIParameter.ControlRoom, state: Bool)
+    case controlRoom(param: HUISwitch.ControlRoom, state: Bool)
     
     /// Transport section.
-    case transport(param: HUIParameter.Transport, state: Bool)
+    case transport(param: HUISwitch.Transport, state: Bool)
     
     /// Footswitches and Sounds - no LEDs or buttons associated.
-    case footswitchesAndSounds(param: HUIParameter.FootswitchesAndSounds, state: Bool)
+    case footswitchesAndSounds(param: HUISwitch.FootswitchesAndSounds, state: Bool)
     
     // MARK: Unhandled
     

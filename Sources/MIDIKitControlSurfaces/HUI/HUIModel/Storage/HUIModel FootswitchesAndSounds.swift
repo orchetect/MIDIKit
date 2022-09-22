@@ -17,10 +17,10 @@ extension HUIModel {
 }
 
 extension HUIModel.FootswitchesAndSounds: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.FootswitchesAndSounds
+    public typealias Switch = HUISwitch.FootswitchesAndSounds
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .footswitchRelay1:  return footswitchRelay1
         case .footswitchRelay2:  return footswitchRelay2
         case .click:             return click
@@ -28,8 +28,8 @@ extension HUIModel.FootswitchesAndSounds: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .footswitchRelay1:  footswitchRelay1 = state
         case .footswitchRelay2:  footswitchRelay2 = state
         case .click:             click = state

@@ -21,10 +21,10 @@ extension HUIModel {
 }
 
 extension HUIModel.FunctionKey: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.FunctionKey
+    public typealias Switch = HUISwitch.FunctionKey
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .f1:         return f1
         case .f2:         return f2
         case .f3:         return f3
@@ -36,8 +36,8 @@ extension HUIModel.FunctionKey: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .f1:         f1 = state
         case .f2:         f2 = state
         case .f3:         f3 = state

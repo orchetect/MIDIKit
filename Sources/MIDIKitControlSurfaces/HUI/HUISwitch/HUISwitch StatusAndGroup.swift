@@ -1,12 +1,12 @@
 //
-//  Parameter StatusAndGroup.swift
+//  HUISwitch StatusAndGroup.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Status/Group section (to the right of the channel strips).
     public enum StatusAndGroup: Equatable, Hashable {
         case auto
@@ -18,7 +18,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.StatusAndGroup: HUIParameterProtocol {
+extension HUISwitch.StatusAndGroup: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x19
@@ -33,7 +33,7 @@ extension HUIParameter.StatusAndGroup: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.StatusAndGroup: CustomStringConvertible {
+extension HUISwitch.StatusAndGroup: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x19

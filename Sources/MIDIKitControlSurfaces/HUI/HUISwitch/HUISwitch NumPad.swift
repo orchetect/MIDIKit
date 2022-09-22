@@ -1,12 +1,12 @@
 //
-//  Parameter NumPad.swift
+//  HUISwitch NumPad.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Numeric entry pad.
     public enum NumPad: Equatable, Hashable {
         case num0
@@ -31,7 +31,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.NumPad: HUIParameterProtocol {
+extension HUISwitch.NumPad: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x13
@@ -64,7 +64,7 @@ extension HUIParameter.NumPad: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.NumPad: CustomStringConvertible {
+extension HUISwitch.NumPad: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x13

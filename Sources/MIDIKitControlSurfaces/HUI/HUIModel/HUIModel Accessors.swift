@@ -7,13 +7,13 @@
 import Foundation
 
 extension HUIModel: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter
+    public typealias Switch = HUISwitch
     
     /// Returns the current state in the model of the given HUI switch parameter.
-    public func state(of param: Param) -> Bool {
-        switch param {
-        case let .channelStrip(channel, channelParam):
-            return channelStrips[channel.intValue].state(of: channelParam)
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
+        case let .channelStrip(channel, subParam):
+            return channelStrips[channel.intValue].state(of: subParam)
             
         case let .hotKey(subParam):
             return hotKeys.state(of: subParam)
@@ -57,7 +57,7 @@ extension HUIModel: HUISurfaceStateProtocol {
         case let .functionKey(subParam):
             return functionKey.state(of: subParam)
             
-        case let .parameterEdit(subParam):
+        case let .paramEdit(subParam):
             return parameterEdit.state(of: subParam)
             
         case let .footswitchesAndSounds(subParam):
@@ -66,10 +66,10 @@ extension HUIModel: HUISurfaceStateProtocol {
     }
     
     /// Sets the state in the model of the given HUI switch parameter.
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
-        case let .channelStrip(channel, channelParam):
-            channelStrips[channel.intValue].setState(of: channelParam, to: state)
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
+        case let .channelStrip(channel, subParam):
+            channelStrips[channel.intValue].setState(of: subParam, to: state)
             
         case let .hotKey(subParam):
             hotKeys.setState(of: subParam, to: state)
@@ -113,7 +113,7 @@ extension HUIModel: HUISurfaceStateProtocol {
         case let .functionKey(subParam):
             functionKey.setState(of: subParam, to: state)
             
-        case let .parameterEdit(subParam):
+        case let .paramEdit(subParam):
             parameterEdit.setState(of: subParam, to: state)
             
         case let .footswitchesAndSounds(subParam):

@@ -44,10 +44,10 @@ extension HUIModel {
 }
 
 extension HUIModel.ChannelStrip: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.ChannelParameter
+    public typealias Switch = HUISwitch.ChannelStrip
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .recordReady:  return recordReady
         case .insert:       return insert
         case .vPotSelect:   return vPotSelect
@@ -59,8 +59,8 @@ extension HUIModel.ChannelStrip: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .recordReady:  recordReady = state
         case .insert:       insert = state
         case .vPotSelect:   vPotSelect = state

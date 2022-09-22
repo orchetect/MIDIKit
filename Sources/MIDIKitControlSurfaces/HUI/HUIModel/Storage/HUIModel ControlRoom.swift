@@ -24,10 +24,10 @@ extension HUIModel {
 }
 
 extension HUIModel.ControlRoom: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.ControlRoom
+    public typealias Switch = HUISwitch.ControlRoom
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .input1:             return input1
         case .input2:             return input2
         case .input3:             return input3
@@ -41,8 +41,8 @@ extension HUIModel.ControlRoom: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .input1:             input1 = state
         case .input2:             input2 = state
         case .input3:             input3 = state

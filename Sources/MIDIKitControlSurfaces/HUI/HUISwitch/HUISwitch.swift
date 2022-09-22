@@ -1,5 +1,5 @@
 //
-//  HUIParameter.swift
+//  HUISwitch.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -7,31 +7,68 @@
 import Foundation
 import MIDIKitCore
 
-/// HUI Parameter
-public enum HUIParameter: Equatable, Hashable {
-    case channelStrip(UInt4, ChannelParameter)
+/// HUI Switch.
+/// Identifiers for all possible HUI toggle/boolean controls: Buttons, LEDs, and auxiliary capabilities like external footswitch toggles and beep sounds. These are all collectively referred to as HUI switches.
+///
+/// - An LED has a state of on (`true`) and off (`false`).
+/// - When a user engages a switch on a HUI control surface (ie: presses a button or touches a fader cap) it has a state of pressed/touched (`true`) and unpressed/untouched (`false`). Which means if a user momentarily pushes and releases a button it will result in two immediately successive `true` then `false` state messages. If a user presses and holds a button, it will result in a `true` state message upon press and then the `false` state message only upon button release.
+public enum HUISwitch: Equatable, Hashable {
+    /// Channel strip component.
+    case channelStrip(UInt4, ChannelStrip)
+    
+    /// Keyboard hotkeys.
     case hotKey(HotKey)
-    case window(WindowFunction)
+    
+    /// Window functions.
+    case window(Window)
+    
+    /// Bank and channel navigation.
     case bankMove(BankMove)
+    
+    /// Assign section (buttons to top left of channel strips).
     case assign(Assign)
+    
+    /// Cursor Movement / Mode / Scrub / Shuttle.
     case cursor(Cursor)
+    
+    /// Transport section.
     case transport(Transport)
+    
+    /// Control Room section.
     case controlRoom(ControlRoom)
+    
+    /// Numeric entry pad.
     case numPad(NumPad)
+    
+    /// Time display.
     case timeDisplay(TimeDisplay)
+    
+    /// Auto Enable section (to the right of the channel strips).
     case autoEnable(AutoEnable)
+    
+    /// Auto Mode section (to the right of the channel strips).
     case autoMode(AutoMode)
+    
+    /// Status/Group section (to the right of the channel strips).
     case statusAndGroup(StatusAndGroup)
+    
+    /// Edit section (to the right of the channel strips).
     case edit(Edit)
+    
+    /// Function keys (to the right of the channel strips).
     case functionKey(FunctionKey)
-    case parameterEdit(ParameterEdit)
+    
+    /// Param Edit section.
+    case paramEdit(ParameterEdit)
+    
+    /// Footswitches and Sounds - no LEDs or buttons associated.
     case footswitchesAndSounds(FootswitchesAndSounds)
 }
 
-extension HUIParameter: CaseIterable {
+extension HUISwitch: CaseIterable {
     public typealias AllCases = [Self]
     
-    public static var allCases: [HUIParameter] = [
+    public static var allCases: [HUISwitch] = [
         // Zones 0x00 - 0x07
         // Channel Strips
         .channelStrip(0, .faderTouched),
@@ -288,14 +325,14 @@ extension HUIParameter: CaseIterable {
         
         // Zone 0x1C
         // Parameter Edit  (Section at top right below the Large Display readout)
-        .parameterEdit(.insertOrParam),
-        .parameterEdit(.assign),
-        .parameterEdit(.param1Select),
-        .parameterEdit(.param2Select),
-        .parameterEdit(.param3Select),
-        .parameterEdit(.param4Select),
-        .parameterEdit(.bypass),
-        .parameterEdit(.compare),
+        .paramEdit(.insertOrParam),
+        .paramEdit(.assign),
+        .paramEdit(.param1Select),
+        .paramEdit(.param2Select),
+        .paramEdit(.param3Select),
+        .paramEdit(.param4Select),
+        .paramEdit(.bypass),
+        .paramEdit(.compare),
         
         // Zone 0x1D
         // Functions only - no LEDs or buttons
@@ -306,7 +343,7 @@ extension HUIParameter: CaseIterable {
     ]
 }
 
-extension HUIParameter: HUIParameterProtocol {
+extension HUISwitch: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         case let .channelStrip(channelStrip, channelParameter):
@@ -354,7 +391,7 @@ extension HUIParameter: HUIParameterProtocol {
         case let .functionKey(param):
             return param.zoneAndPort
 
-        case let .parameterEdit(param):
+        case let .paramEdit(param):
             return param.zoneAndPort
 
         case let .footswitchesAndSounds(param):
@@ -363,11 +400,11 @@ extension HUIParameter: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter: CustomStringConvertible {
+extension HUISwitch: CustomStringConvertible {
     public var description: String {
         switch self {
-        case let .channelStrip(channelStrip, channelParameter):
-            return "channelStrip(\(channelStrip), \(channelParameter))"
+        case let .channelStrip(channelStrip, param):
+            return "channelStrip(\(channelStrip), \(param))"
 
         case let .hotKey(param):
             return "hotKey(\(param))"
@@ -411,8 +448,8 @@ extension HUIParameter: CustomStringConvertible {
         case let .functionKey(param):
             return "functionKey(\(param))"
 
-        case let .parameterEdit(param):
-            return "parameterEdit(\(param))"
+        case let .paramEdit(param):
+            return "paramEdit(\(param))"
 
         case let .footswitchesAndSounds(param):
             return "footswitchesAndSounds(\(param))"
@@ -420,18 +457,17 @@ extension HUIParameter: CustomStringConvertible {
     }
 }
 
-extension HUIParameter {
-    /// Construct from a HUI zone and port pair.
-    /// Returns `nil` if the pair is undefined.
+extension HUISwitch {
+    /// Initialize from a HUI zone and port pair.
+    /// Returns `nil` if the pair is unknown by HUI or not used.
     public init?(
         zone: HUIZone,
         port: HUIPort
     ) {
-        guard let parameter = HUIParameter.allCases
-            .first(where: {
-                $0.zoneAndPort.zone == zone
-                    && $0.zoneAndPort.port == port
-            })
+        guard let parameter = HUISwitch.allCases.first(where: {
+            $0.zoneAndPort.zone == zone
+                && $0.zoneAndPort.port == port
+        })
         else { return nil }
         
         self = parameter

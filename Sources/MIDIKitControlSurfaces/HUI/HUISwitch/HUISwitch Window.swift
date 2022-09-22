@@ -1,14 +1,14 @@
 //
-//  Parameter WindowFunction.swift
+//  HUISwitch Window.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Window functions.
-    public enum WindowFunction: Equatable, Hashable {
+    public enum Window: Equatable, Hashable {
         case mix
         case edit
         case transport
@@ -18,7 +18,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.WindowFunction: HUIParameterProtocol {
+extension HUISwitch.Window: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x09
@@ -33,7 +33,7 @@ extension HUIParameter.WindowFunction: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.WindowFunction: CustomStringConvertible {
+extension HUISwitch.Window: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x09

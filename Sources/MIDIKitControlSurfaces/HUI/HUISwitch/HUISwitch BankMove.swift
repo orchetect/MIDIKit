@@ -1,12 +1,12 @@
 //
-//  Parameter BankMove.swift
+//  HUISwitch BankMove.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Bank and channel navigation.
     public enum BankMove: Equatable, Hashable {
         case channelLeft
@@ -17,7 +17,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.BankMove: HUIParameterProtocol {
+extension HUISwitch.BankMove: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x0A
@@ -30,7 +30,7 @@ extension HUIParameter.BankMove: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.BankMove: CustomStringConvertible {
+extension HUISwitch.BankMove: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x0A

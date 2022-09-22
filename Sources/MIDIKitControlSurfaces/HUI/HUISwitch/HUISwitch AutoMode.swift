@@ -1,12 +1,12 @@
 //
-//  Parameter AutoMode.swift
+//  HUISwitch AutoMode.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Auto Mode section (to the right of the channel strips).
     public enum AutoMode: Equatable, Hashable {
         case read
@@ -18,7 +18,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.AutoMode: HUIParameterProtocol {
+extension HUISwitch.AutoMode: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x18
@@ -33,7 +33,7 @@ extension HUIParameter.AutoMode: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.AutoMode: CustomStringConvertible {
+extension HUISwitch.AutoMode: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x18

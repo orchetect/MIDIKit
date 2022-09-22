@@ -32,12 +32,12 @@ extension HUISurfaceView {
         @EnvironmentObject var huiSurface: HUISurface
 
         let channel: Int
-        let side: HUISurface.State.StereoLevelMeter.Side
+        let side: HUIModel.StereoLevelMeter.Side
 
         static let segmentIndexes = Array(
             stride(
-                from: HUISurface.State.StereoLevelMeter.levelMax,
-                through: HUISurface.State.StereoLevelMeter.levelMin + 1,
+                from: HUIModel.StereoLevelMeter.levelMax,
+                through: HUIModel.StereoLevelMeter.levelMin + 1,
                 by: -1
             )
         )
@@ -53,7 +53,7 @@ extension HUISurfaceView {
         }
 
         func level() -> Int {
-            huiSurface.state.channelStrips[channel].levelMeter.level(of: side)
+            huiSurface.model.channelStrips[channel].levelMeter.level(of: side)
         }
 
         func color(forSegment segment: Int) -> Color {

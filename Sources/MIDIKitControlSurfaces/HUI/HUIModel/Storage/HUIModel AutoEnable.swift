@@ -19,10 +19,10 @@ extension HUIModel {
 }
 
 extension HUIModel.AutoEnable: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.AutoEnable
+    public typealias Switch = HUISwitch.AutoEnable
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .fader:     return fader
         case .pan:       return pan
         case .plugin:    return plugin
@@ -32,8 +32,8 @@ extension HUIModel.AutoEnable: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .fader:     fader = state
         case .pan:       pan = state
         case .plugin:    plugin = state

@@ -1,12 +1,12 @@
 //
-//  Parameter AutoEnable.swift
+//  HUISwitch AutoEnable.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Auto Enable section (to the right of the channel strips).
     public enum AutoEnable: Equatable, Hashable {
         case fader
@@ -18,7 +18,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.AutoEnable: HUIParameterProtocol {
+extension HUISwitch.AutoEnable: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x17
@@ -33,7 +33,7 @@ extension HUIParameter.AutoEnable: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.AutoEnable: CustomStringConvertible {
+extension HUISwitch.AutoEnable: CustomStringConvertible {
     public var description: String {
         switch self {
         case .plugin:    return "plugin"

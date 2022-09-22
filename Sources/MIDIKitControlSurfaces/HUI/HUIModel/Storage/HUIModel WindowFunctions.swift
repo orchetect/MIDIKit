@@ -19,10 +19,10 @@ extension HUIModel {
 }
 
 extension HUIModel.WindowFunctions: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.WindowFunction
+    public typealias Switch = HUISwitch.Window
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .mix:        return mix
         case .edit:       return edit
         case .transport:  return transport
@@ -32,8 +32,8 @@ extension HUIModel.WindowFunctions: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .mix:        mix = state
         case .edit:       edit = state
         case .transport:  transport = state

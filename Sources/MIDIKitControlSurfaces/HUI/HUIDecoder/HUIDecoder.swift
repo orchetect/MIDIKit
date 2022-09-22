@@ -307,7 +307,7 @@ extension HUIDecoder {
                 let stateNibble = dataByte2.nibbles.high.hexString(prefix: true)
                 
                 if let zone = switchesZoneSelect {
-                    if let guess = HUIParameter(
+                    if let guess = HUISwitch(
                         zone: zone,
                         port: port
                     ) {

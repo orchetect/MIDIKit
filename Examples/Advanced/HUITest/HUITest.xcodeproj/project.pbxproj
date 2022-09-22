@@ -32,7 +32,7 @@
 		E284EBD226AE01F00016AA0F /* HUISurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBCF26AE01F00016AA0F /* HUISurfaceView.swift */; };
 		E284EBD326AE01F00016AA0F /* MixerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD026AE01F00016AA0F /* MixerView.swift */; };
 		E284EBD426AE01F00016AA0F /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD126AE01F00016AA0F /* TopView.swift */; };
-		E284EBD826AE02090016AA0F /* HUI Parameter Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD726AE02090016AA0F /* HUI Parameter Wrapper.swift */; };
+		E284EBD826AE02090016AA0F /* HUISwitch Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD726AE02090016AA0F /* HUISwitch Wrapper.swift */; };
 		E284EBDF26AE03D00016AA0F /* MIDIKitControlSurfaces in Frameworks */ = {isa = PBXBuildFile; productRef = E284EBDE26AE03D00016AA0F /* MIDIKitControlSurfaces */; };
 		E2D5FB1928D913D50040A023 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E2D5FB1828D913D50040A023 /* MIDIKitIO */; };
 		E2D5FB1B28D9198A0040A023 /* HUIHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5FB1A28D9198A0040A023 /* HUIHostView.swift */; };
@@ -67,7 +67,7 @@
 		E284EBCF26AE01F00016AA0F /* HUISurfaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUISurfaceView.swift; sourceTree = "<group>"; };
 		E284EBD026AE01F00016AA0F /* MixerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerView.swift; sourceTree = "<group>"; };
 		E284EBD126AE01F00016AA0F /* TopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
-		E284EBD726AE02090016AA0F /* HUI Parameter Wrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HUI Parameter Wrapper.swift"; sourceTree = "<group>"; };
+		E284EBD726AE02090016AA0F /* HUISwitch Wrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HUISwitch Wrapper.swift"; sourceTree = "<group>"; };
 		E2D5FB1628D913B10040A023 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
 		E2D5FB1A28D9198A0040A023 /* HUIHostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUIHostView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,7 +153,7 @@
 				E284EBB726AE018F0016AA0F /* HUIClientView.swift */,
 				E284EBCE26AE01F00016AA0F /* HUISurfaceView */,
 				E284EBCA26AE01EA0016AA0F /* Control Views */,
-				E284EBD726AE02090016AA0F /* HUI Parameter Wrapper.swift */,
+				E284EBD726AE02090016AA0F /* HUISwitch Wrapper.swift */,
 				E21628E326E2DFF30022B66F /* Logger.swift */,
 				E284EBBE26AE01900016AA0F /* Main.storyboard */,
 				E284EBC126AE01900016AA0F /* Info.plist */,
@@ -272,7 +272,7 @@
 			files = (
 				E283F0A3274101FD0037F199 /* LargeTextDisplayView.swift in Sources */,
 				E284EBCC26AE01EA0016AA0F /* MomentaryButton.swift in Sources */,
-				E284EBD826AE02090016AA0F /* HUI Parameter Wrapper.swift in Sources */,
+				E284EBD826AE02090016AA0F /* HUISwitch Wrapper.swift in Sources */,
 				E2D5FB1B28D9198A0040A023 /* HUIHostView.swift in Sources */,
 				E283F0B5274103E00037F199 /* TransportView.swift in Sources */,
 				E283F0B3274103C80037F199 /* NumPadView.swift in Sources */,

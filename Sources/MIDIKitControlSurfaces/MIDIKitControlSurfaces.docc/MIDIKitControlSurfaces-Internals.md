@@ -15,5 +15,5 @@
 
 ### Protocols
 
-- ``HUIParameterProtocol``
+- ``HUISwitchProtocol``
 - ``HUISurfaceStateProtocol``

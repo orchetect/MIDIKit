@@ -1,12 +1,12 @@
 //
-//  Parameter HotKey.swift
+//  HUISwitch HotKey.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Keyboard hotkeys.
     public enum HotKey: Equatable, Hashable {
         case ctrl
@@ -20,7 +20,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.HotKey: HUIParameterProtocol {
+extension HUISwitch.HotKey: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x08
@@ -37,7 +37,7 @@ extension HUIParameter.HotKey: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.HotKey: CustomStringConvertible {
+extension HUISwitch.HotKey: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x08

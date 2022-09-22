@@ -41,7 +41,7 @@ extension HUISurfaceView {
                             .parameterEdit(.param1Select),
                             .green
                         )
-                        RotaryKnob(size: 40) // .parameterEdit(.param1VPot)
+                        RotaryKnob(size: 40) // .paramEdit(.param1VPot)
                     }
                     .frame(width: 75)
                     
@@ -54,7 +54,7 @@ extension HUISurfaceView {
                             .parameterEdit(.param2Select),
                             .green
                         )
-                        RotaryKnob(size: 40) // .parameterEdit(.param2VPot)
+                        RotaryKnob(size: 40) // .paramEdit(.param2VPot)
                     }
                     .frame(width: 75)
                     
@@ -67,7 +67,7 @@ extension HUISurfaceView {
                             .parameterEdit(.param3Select),
                             .green
                         )
-                        RotaryKnob(size: 40) // .parameterEdit(.param3VPot)
+                        RotaryKnob(size: 40) // .paramEdit(.param3VPot)
                     }
                     .frame(width: 75)
                     
@@ -80,7 +80,7 @@ extension HUISurfaceView {
                             .parameterEdit(.param4Select),
                             .green
                         )
-                        RotaryKnob(size: 40) // .parameterEdit(.param4VPot)
+                        RotaryKnob(size: 40) // .paramEdit(.param4VPot)
                     }
                     .frame(width: 75)
                     

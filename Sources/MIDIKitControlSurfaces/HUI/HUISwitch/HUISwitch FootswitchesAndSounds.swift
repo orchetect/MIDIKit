@@ -1,12 +1,12 @@
 //
-//  Parameter FootswitchesAndSounds.swift
+//  HUISwitch FootswitchesAndSounds.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Footswitches and Sounds - no LEDs or buttons associated.
     public enum FootswitchesAndSounds: Equatable, Hashable {
         case footswitchRelay1
@@ -16,7 +16,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.FootswitchesAndSounds: HUIParameterProtocol {
+extension HUISwitch.FootswitchesAndSounds: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x1D
@@ -29,7 +29,7 @@ extension HUIParameter.FootswitchesAndSounds: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.FootswitchesAndSounds: CustomStringConvertible {
+extension HUISwitch.FootswitchesAndSounds: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x1D

@@ -21,7 +21,7 @@ extension HUISurfaceView {
         @State private var isPressed = false
 
         var body: some View {
-            let pos = CGFloat(huiSurface.state.channelStrips[channel.intValue].fader.levelUnitInterval)
+            let pos = CGFloat(huiSurface.model.channelStrips[channel.intValue].fader.levelUnitInterval)
 
             ZStack {
                 Rectangle()

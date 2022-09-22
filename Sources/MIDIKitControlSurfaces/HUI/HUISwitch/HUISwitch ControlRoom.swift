@@ -1,12 +1,12 @@
 //
-//  Parameter ControlRoom.swift
+//  HUISwitch ControlRoom.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Control Room section.
     public enum ControlRoom: Equatable, Hashable {
         case input1
@@ -22,7 +22,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.ControlRoom: HUIParameterProtocol {
+extension HUISwitch.ControlRoom: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x11
@@ -44,7 +44,7 @@ extension HUIParameter.ControlRoom: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.ControlRoom: CustomStringConvertible {
+extension HUISwitch.ControlRoom: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x11

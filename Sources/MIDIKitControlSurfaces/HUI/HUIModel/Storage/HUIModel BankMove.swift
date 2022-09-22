@@ -17,10 +17,10 @@ extension HUIModel {
 }
 
 extension HUIModel.BankMove: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.BankMove
+    public typealias Switch = HUISwitch.BankMove
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .channelLeft:   return channelLeft
         case .channelRight:  return channelRight
         case .bankLeft:      return bankLeft
@@ -28,8 +28,8 @@ extension HUIModel.BankMove: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .channelLeft:   channelLeft = state
         case .channelRight:  channelRight = state
         case .bankLeft:      bankLeft = state

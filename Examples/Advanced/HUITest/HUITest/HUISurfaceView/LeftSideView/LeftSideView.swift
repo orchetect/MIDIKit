@@ -79,7 +79,7 @@ extension HUISurfaceView {
                     
                     VStack {
                         Text("SELECT-ASSIGN").font(.system(size: 9))
-                        Text(huiSurface.state.assign.textDisplay.stringValue)
+                        Text(huiSurface.model.assign.textDisplay.stringValue)
                             .font(.system(size: 16, weight: .regular, design: .monospaced))
                             .foregroundColor(.green)
                             .frame(maxWidth: .infinity)

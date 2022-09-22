@@ -31,10 +31,10 @@ extension HUIModel {
 }
 
 extension HUIModel.Transport: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.Transport
+    public typealias Switch = HUISwitch.Transport
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .talkback:        return talkback
         case .rewind:          return rewind
         case .fastFwd:         return fastFwd
@@ -54,8 +54,8 @@ extension HUIModel.Transport: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .talkback:        talkback = state
         case .rewind:          rewind = state
         case .fastFwd:         fastFwd = state

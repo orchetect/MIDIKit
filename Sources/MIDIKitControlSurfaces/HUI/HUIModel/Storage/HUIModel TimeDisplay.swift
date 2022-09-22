@@ -31,10 +31,10 @@ extension HUIModel {
 }
 
 extension HUIModel.TimeDisplay: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.TimeDisplay
+    public typealias Switch = HUISwitch.TimeDisplay
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .timecode:  return timecode
         case .feet:      return feet
         case .beats:     return beats
@@ -42,8 +42,8 @@ extension HUIModel.TimeDisplay: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .timecode:  timecode = state
         case .feet:      feet = state
         case .beats:     beats = state

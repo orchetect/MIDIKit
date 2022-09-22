@@ -19,10 +19,10 @@ extension HUIModel {
 }
 
 extension HUIModel.AutoMode: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.AutoMode
+    public typealias Switch = HUISwitch.AutoMode
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .read:   return read
         case .latch:  return latch
         case .trim:   return trim
@@ -32,8 +32,8 @@ extension HUIModel.AutoMode: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .read:   read = state
         case .latch:  latch = state
         case .trim:   trim = state

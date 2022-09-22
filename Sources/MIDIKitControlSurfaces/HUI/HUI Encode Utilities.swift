@@ -78,16 +78,16 @@ func encodeHUISwitch(
 /// Encodes HUI switch message as MIDI events. (Specify to host or to client surface).
 ///
 /// - Parameters:
-///   - param: HUI Parameter.
+///   - huiSwitch: HUI switch.
 ///   - state: Switch state.
 ///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI events.
 func encodeHUISwitch(
-    _ param: HUIParameter,
+    _ huiSwitch: HUISwitch,
     state: Bool,
     to role: HUIRole
 ) -> [MIDIEvent] {
-    let zoneAndPort = param.zoneAndPort
+    let zoneAndPort = huiSwitch.zoneAndPort
     
     return encodeHUISwitch(
         zone: zoneAndPort.zone,

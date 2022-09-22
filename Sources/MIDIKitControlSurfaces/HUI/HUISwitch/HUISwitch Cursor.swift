@@ -1,12 +1,12 @@
 //
-//  Parameter Cursor.swift
+//  HUISwitch Cursor.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Cursor Movement / Mode / Scrub / Shuttle.
     public enum Cursor: Equatable, Hashable {
         case up
@@ -20,7 +20,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.Cursor: HUIParameterProtocol {
+extension HUISwitch.Cursor: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x0D
@@ -36,7 +36,7 @@ extension HUIParameter.Cursor: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.Cursor: CustomStringConvertible {
+extension HUISwitch.Cursor: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x0D

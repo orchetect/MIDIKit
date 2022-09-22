@@ -37,13 +37,13 @@ extension HUISurface {
     /// Transmit switch state to the host.
     ///
     /// - Parameters:
-    ///   - param: Switch parameter.
+    ///   - huiSwitch: Switch parameter.
     ///   - state: Switch state.
     public func transmitSwitch(
-        _ param: HUIParameter,
+        _ huiSwitch: HUISwitch,
         state: Bool
     ) {
-        let zoneAndPort = param.zoneAndPort
+        let zoneAndPort = huiSwitch.zoneAndPort
         
         transmitSwitch(
             zone: zoneAndPort.zone,

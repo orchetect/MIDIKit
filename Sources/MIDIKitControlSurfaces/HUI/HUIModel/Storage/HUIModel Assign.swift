@@ -35,10 +35,10 @@ extension HUIModel {
 }
 
 extension HUIModel.Assign: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.Assign
+    public typealias Switch = HUISwitch.Assign
     
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .sendA:           return sendA
         case .sendB:           return sendB
         case .sendC:           return sendC
@@ -58,8 +58,8 @@ extension HUIModel.Assign: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .sendA:           sendA = state
         case .sendB:           sendB = state
         case .sendC:           sendC = state

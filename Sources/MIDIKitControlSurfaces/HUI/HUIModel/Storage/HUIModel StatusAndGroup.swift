@@ -19,10 +19,10 @@ extension HUIModel {
 }
 
 extension HUIModel.StatusAndGroup: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.StatusAndGroup
+    public typealias Switch = HUISwitch.StatusAndGroup
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .auto:     return auto
         case .monitor:  return monitor
         case .phase:    return phase
@@ -32,8 +32,8 @@ extension HUIModel.StatusAndGroup: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .auto:     auto = state
         case .monitor:  monitor = state
         case .phase:    phase = state

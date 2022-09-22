@@ -32,10 +32,10 @@ extension HUIModel {
 }
 
 extension HUIModel.NumPad: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.NumPad
+    public typealias Switch = HUISwitch.NumPad
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .num0:          return num0
         case .num1:          return num1
         case .num2:          return num2
@@ -58,8 +58,8 @@ extension HUIModel.NumPad: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .num0:          num0 = state
         case .num1:          num1 = state
         case .num2:          num2 = state

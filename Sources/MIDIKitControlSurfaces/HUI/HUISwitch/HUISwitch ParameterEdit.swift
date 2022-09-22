@@ -1,12 +1,12 @@
 //
-//  Parameter ParameterEdit.swift
+//  HUISwitch ParameterEdit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Parameter Edit section.
     public enum ParameterEdit: Equatable, Hashable {
         case assign
@@ -24,7 +24,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.ParameterEdit: HUIParameterProtocol {
+extension HUISwitch.ParameterEdit: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         case .insertOrParam:  return (0x1C, 0x0)
@@ -39,7 +39,7 @@ extension HUIParameter.ParameterEdit: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.ParameterEdit: CustomStringConvertible {
+extension HUISwitch.ParameterEdit: CustomStringConvertible {
     public var description: String {
         switch self {
         case .insertOrParam:  return "insertOrParam"

@@ -193,18 +193,18 @@ extension HUIModel {
         port: HUIPort,
         state: Bool
     ) -> HUIEvent? {
-        guard let param = HUIParameter(zone: zone, port: port)
+        guard let huiSwitch = HUISwitch(zone: zone, port: port)
         else {
             return .unhandledSwitch(zone: zone, port: port, state: state)
         }
         
         // set state for parameter
         
-        setState(of: param, to: state)
+        setState(of: huiSwitch, to: state)
         
         // return event wrapping the control and its value
         
-        switch param {
+        switch huiSwitch {
         case let .channelStrip(channel, channelParam):
             switch channelParam {
             case .recordReady:
@@ -253,7 +253,7 @@ extension HUIModel {
             return .hotKey(param: subParam, state: state)
             
         case let .window(subParam):
-            return .windowFunctions(param: subParam, state: state)
+            return .window(param: subParam, state: state)
             
         case let .bankMove(subParam):
             return .bankMove(param: subParam, state: state)
@@ -291,7 +291,7 @@ extension HUIModel {
         case let .functionKey(subParam):
             return .functionKey(param: subParam, state: state)
             
-        case let .parameterEdit(subParam):
+        case let .paramEdit(subParam):
             switch subParam {
             case .assign:
                 return .paramEdit(.assign(state: state))

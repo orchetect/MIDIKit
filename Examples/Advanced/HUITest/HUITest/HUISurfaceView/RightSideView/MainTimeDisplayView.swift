@@ -13,21 +13,21 @@ extension HUISurfaceView {
             VStack(alignment: .trailing, spacing: 4) {
                 Text(
                     "TIME CODE "
-                        + (huiSurface.state.timeDisplay.timecode ? "🔴" : "⚪️")
+                        + (huiSurface.model.timeDisplay.timecode ? "🔴" : "⚪️")
                 )
                 Text(
                     "FEET "
-                        + (huiSurface.state.timeDisplay.feet ? "🔴" : "⚪️")
+                        + (huiSurface.model.timeDisplay.feet ? "🔴" : "⚪️")
                 )
                 Text(
                     "BEATS "
-                        + (huiSurface.state.timeDisplay.beats ? "🔴" : "⚪️")
+                        + (huiSurface.model.timeDisplay.beats ? "🔴" : "⚪️")
                 )
             }
             .font(.system(size: 9, weight: .regular))
             
             Text(
-                huiSurface.state.timeDisplay.timeString.stringValue
+                huiSurface.model.timeDisplay.timeString.stringValue
             )
             .font(.system(size: 20, weight: .regular, design: .monospaced))
             .foregroundColor(Color.red)
@@ -45,7 +45,7 @@ extension HUISurfaceView {
                 }
                 .font(.system(size: 9, weight: .regular))
                 
-                Text(huiSurface.state.timeDisplay.rudeSolo ? "🔴" : "⚪️")
+                Text(huiSurface.model.timeDisplay.rudeSolo ? "🔴" : "⚪️")
                     .font(.system(size: 14))
             }
         }

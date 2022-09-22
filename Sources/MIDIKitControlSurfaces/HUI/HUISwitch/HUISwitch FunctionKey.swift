@@ -1,12 +1,12 @@
 //
-//  Parameter FunctionKey.swift
+//  HUISwitch FunctionKey.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Function keys (to the right of the channel strips).
     public enum FunctionKey: Equatable, Hashable {
         case f1
@@ -20,7 +20,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.FunctionKey: HUIParameterProtocol {
+extension HUISwitch.FunctionKey: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x1B
@@ -37,7 +37,7 @@ extension HUIParameter.FunctionKey: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.FunctionKey: CustomStringConvertible {
+extension HUISwitch.FunctionKey: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x1B

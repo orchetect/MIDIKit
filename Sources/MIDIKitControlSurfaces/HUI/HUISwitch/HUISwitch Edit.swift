@@ -1,12 +1,12 @@
 //
-//  Parameter Edit.swift
+//  HUISwitch Edit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Edit section (to the right of the channel strips).
     public enum Edit: Equatable, Hashable {
         case capture
@@ -18,7 +18,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.Edit: HUIParameterProtocol {
+extension HUISwitch.Edit: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x1A
@@ -33,7 +33,7 @@ extension HUIParameter.Edit: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.Edit: CustomStringConvertible {
+extension HUISwitch.Edit: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x1A

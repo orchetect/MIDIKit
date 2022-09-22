@@ -1,12 +1,12 @@
 //
-//  Parameter Transport.swift
+//  HUISwitch Transport.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Transport section.
     public enum Transport: Equatable, Hashable {
         case talkback     // activates onboard talkback mic
@@ -28,7 +28,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.Transport: HUIParameterProtocol {
+extension HUISwitch.Transport: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x0E
@@ -59,7 +59,7 @@ extension HUIParameter.Transport: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.Transport: CustomStringConvertible {
+extension HUISwitch.Transport: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x0E

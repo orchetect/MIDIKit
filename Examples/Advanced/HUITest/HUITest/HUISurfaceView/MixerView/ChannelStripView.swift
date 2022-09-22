@@ -66,7 +66,7 @@ extension HUISurfaceView {
                 }
                 
                 Group {
-                    Text(huiSurface.state.channelStrips[channel.intValue].nameTextDisplay.stringValue)
+                    Text(huiSurface.model.channelStrips[channel.intValue].nameTextDisplay.stringValue)
                         .font(.system(size: 16, weight: .regular, design: .monospaced))
                         .foregroundColor(.green)
                         .frame(maxWidth: .infinity)

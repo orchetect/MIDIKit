@@ -23,10 +23,10 @@ extension HUIModel {
 }
 
 extension HUIModel.HotKeys: HUISurfaceStateProtocol {
-    public typealias Param = HUIParameter.HotKey
+    public typealias Switch = HUISwitch.HotKey
 
-    public func state(of param: Param) -> Bool {
-        switch param {
+    public func state(of huiSwitch: Switch) -> Bool {
+        switch huiSwitch {
         case .ctrl:      return ctrl
         case .shift:     return shift
         case .editMode:  return editMode
@@ -38,8 +38,8 @@ extension HUIModel.HotKeys: HUISurfaceStateProtocol {
         }
     }
     
-    public mutating func setState(of param: Param, to state: Bool) {
-        switch param {
+    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+        switch huiSwitch {
         case .ctrl:      ctrl = state
         case .shift:     shift = state
         case .editMode:  editMode = state

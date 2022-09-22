@@ -1,12 +1,12 @@
 //
-//  Parameter TimeDisplay.swift
+//  HUISwitch TimeDisplay.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Time Display LEDs.
     public enum TimeDisplay: Equatable, Hashable {
         /// "TIME CODE"
@@ -27,7 +27,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.TimeDisplay: HUIParameterProtocol {
+extension HUISwitch.TimeDisplay: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x16
@@ -40,7 +40,7 @@ extension HUIParameter.TimeDisplay: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.TimeDisplay: CustomStringConvertible {
+extension HUISwitch.TimeDisplay: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x16

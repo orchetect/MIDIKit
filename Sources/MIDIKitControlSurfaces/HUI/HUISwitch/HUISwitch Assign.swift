@@ -1,12 +1,12 @@
 //
-//  Parameter Assign.swift
+//  HUISwitch Assign.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIParameter {
+extension HUISwitch {
     /// Assign section (buttons to top left of channel strips).
     public enum Assign: Equatable, Hashable {
         case sendA
@@ -28,7 +28,7 @@ extension HUIParameter {
     }
 }
 
-extension HUIParameter.Assign: HUIParameterProtocol {
+extension HUISwitch.Assign: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x0B
@@ -55,7 +55,7 @@ extension HUIParameter.Assign: HUIParameterProtocol {
     }
 }
 
-extension HUIParameter.Assign: CustomStringConvertible {
+extension HUISwitch.Assign: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x0B
