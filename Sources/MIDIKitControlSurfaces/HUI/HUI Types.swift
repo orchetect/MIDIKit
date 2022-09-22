@@ -22,4 +22,13 @@ public enum HUIRole: Equatable, Hashable, CaseIterable {
     /// HUI Surface
     /// (ie: a physical HUI control surface device or a software emulation like an iPad HUI control surface app).
     case surface
+    
+    /// Returns the inverted role.
+    /// (ie: for ``host``, returns ``surface``. And vice-versa.)
+    public func inverted() -> Self {
+        switch self {
+        case .host: return .surface
+        case .surface: return .host
+        }
+    }
 }
