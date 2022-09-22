@@ -54,7 +54,7 @@ public struct HUITimeDisplayString: HUIStringProtocol, Equatable, Hashable {
     }
     
     /// Internal:
-    /// Updates the string from a partial or whole character sequence.
+    /// Updates the string from a partial or whole character sequence, in sequence order from right to left.
     ///
     /// - Parameters:
     ///   - charsRightToLeft: Between 1 and 8 characters, in sequence order from right to left.

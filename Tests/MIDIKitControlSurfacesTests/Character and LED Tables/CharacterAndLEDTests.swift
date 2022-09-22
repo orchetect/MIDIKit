@@ -71,6 +71,75 @@ final class CharacterAndLEDTests: XCTestCase {
         )
     }
     
+    /// Test padding/truncation validation
+    func testHUILargeDisplayString_SetChars() {
+        var str = HUILargeDisplayString(lossy: "AB 9")
+        
+        str.chars = []
+        XCTAssertEqual(
+            str.chars,
+            .init(repeating: .space, count: 40)
+        )
+        
+        str.chars = [.A, .B, .space, .num9]
+        XCTAssertEqual(
+            str.chars,
+            [.A, .B, .space, .num9] + .init(repeating: .space, count: 36)
+        )
+        
+        str.chars = .init(repeating: .A, count: 40)
+        XCTAssertEqual(
+            str.chars,
+            .init(repeating: .A, count: 40)
+        )
+        
+        str.chars = .init(repeating: .A, count: 40) + [.num1, .num2, .num3, .num4]
+        XCTAssertEqual(
+            str.chars,
+            .init(repeating: .A, count: 40)
+        )
+    }
+    
+    func testHUILargeDisplayString_UpdateSlice_IsDifferent() {
+        var str = HUILargeDisplayString()
+        
+        str = .init(lossy: "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+        XCTAssertTrue(str.update(slice: 0, newChars: [.Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z]))
+        XCTAssertEqual(str.stringValue, "ZZZZZZZZZZCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+        
+        str = .init(lossy: "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+        str.update(slice: 1, newChars: [.Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z])
+        XCTAssertEqual(str.stringValue, "AAAAABBBBBZZZZZZZZZZEEEEEFFFFFGGGGGHHHHH")
+        
+        str = .init(lossy: "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+        XCTAssertTrue(str.update(slice: 2, newChars: [.Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z]))
+        XCTAssertEqual(str.stringValue, "AAAAABBBBBCCCCCDDDDDZZZZZZZZZZGGGGGHHHHH")
+        
+        str = .init(lossy: "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+        XCTAssertTrue(str.update(slice: 3, newChars: [.Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z]))
+        XCTAssertEqual(str.stringValue, "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFZZZZZZZZZZ")
+    }
+    
+    func testHUILargeDisplayString_UpdateSlice_IsNotDifferent() {
+        var str = HUILargeDisplayString()
+        
+        str = .init(lossy: "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+        XCTAssertFalse(str.update(slice: 0, newChars: [.A, .A, .A, .A, .A, .B, .B, .B, .B, .B]))
+        XCTAssertEqual(str.stringValue, "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+        
+        str = .init(lossy: "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+        XCTAssertFalse(str.update(slice: 3, newChars: [.G, .G, .G, .G, .G, .H, .H, .H, .H, .H]))
+        XCTAssertEqual(str.stringValue, "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+    }
+    
+    func testHUILargeDisplayString_UpdateSlice_SliceIndexOutOfBounds() {
+        var str = HUILargeDisplayString()
+        
+        str = .init(lossy: "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+        XCTAssertFalse(str.update(slice: 4, newChars: [.Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z, .Z]))
+        XCTAssertEqual(str.stringValue, "AAAAABBBBBCCCCCDDDDDEEEEEFFFFFGGGGGHHHHH")
+    }
+    
     // MARK: - HUISmallDisplayCharacter
     
     /// Ensure each character's string can reform the character enum case.
@@ -204,7 +273,10 @@ final class CharacterAndLEDTests: XCTestCase {
     
     func testHUITimeDisplayString_Update_Full_IsNotDifferent() {
         var str = HUITimeDisplayString(lossy: "12345678")
-        XCTAssertFalse(str.update(charsRightToLeft: [.num8, .num7, .num6, .num5, .num4, .num3, .num2, .num1]))
+        XCTAssertFalse(
+            str
+                .update(charsRightToLeft: [.num8, .num7, .num6, .num5, .num4, .num3, .num2, .num1])
+        )
         XCTAssertEqual(str.stringValue, "12345678")
     }
     
@@ -267,7 +339,8 @@ final class CharacterAndLEDTests: XCTestCase {
         let staticCount = 40
         
         let chars: [HUILargeDisplayCharacter] = [.A, .B]
-        let padded: [HUILargeDisplayCharacter] = [.A, .B] + .init(repeating: .default(), count: staticCount - 2)
+        let padded: [HUILargeDisplayCharacter] = [.A, .B] +
+            .init(repeating: .default(), count: staticCount - 2)
         
         // category method
         let p1 = chars.pad(count: staticCount, with: .default())

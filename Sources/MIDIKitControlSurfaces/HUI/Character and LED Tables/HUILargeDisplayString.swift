@@ -35,16 +35,15 @@ extension HUILargeDisplayString {
     ///
     /// - Parameters:
     ///   - slice: Slice index (`0 ... 3`)
-    ///   - chars: 10 character array
-    /// - Returns: `true` if characters were different and replaced with new characters.
+    ///   - newChars: 10 character array
+    /// - Returns: `true` if update resulted in a string that is different from the previous string.
     @discardableResult
     mutating func update(slice: UInt4, newChars: [Element]) -> Bool {
         guard newChars.count == 10 else { return false }
         guard (0 ... 3).contains(slice) else { return false }
         
-        let lBound = max((slice * 10) - 1, 0)
-        let uBound = (slice * 10) + 10 - 1
-        let range = lBound.intValue ... uBound.intValue
+        let offset = 10 * slice.intValue
+        let range = offset ... offset + 9
         
         if !(chars[range].elementsEqual(newChars)) {
             chars.replaceSubrange(range, with: newChars)
