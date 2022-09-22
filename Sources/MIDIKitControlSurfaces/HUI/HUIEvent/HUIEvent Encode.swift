@@ -216,7 +216,7 @@ extension HUIEvent.ChannelStripComponent {
             return encodeHUISwitch(.channelStrip(channel, .solo), state: state, to: role)
         case let .mute(state):
             return encodeHUISwitch(.channelStrip(channel, .mute), state: state, to: role)
-        case let .nameTextDisplay(text):
+        case let .nameDisplay(text):
             return [encodeHUISmallDisplay(for: .channel(channel), text: text)]
         case let .select(state):
             return encodeHUISwitch(.channelStrip(channel, .select), state: state, to: role)

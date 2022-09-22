@@ -194,7 +194,7 @@ extension HUIModel {
         
         return .channelStrip(
             channel: channelStrip,
-            .nameTextDisplay(text: text)
+            .nameDisplay(text: text)
         )
     }
     
