@@ -29,8 +29,8 @@ extension HUIEvent {
                 to: role
             )
 
-        case let .selectAssignText(text):
-            return [encodeHUISmallText(for: .selectAssign, text: text)]
+        case let .selectAssignDisplay(text):
+            return [encodeHUISmallDisplay(for: .selectAssign, text: text)]
 
         case let .channelStrip(channel, channelStripComponent):
             return channelStripComponent.encoded(to: role, channel: channel)
@@ -217,7 +217,7 @@ extension HUIEvent.ChannelStripComponent {
         case let .mute(state):
             return encodeHUISwitch(.channelStrip(channel, .mute), state: state, to: role)
         case let .nameTextDisplay(text):
-            return [encodeHUISmallText(for: .channel(channel), text: text)]
+            return [encodeHUISmallDisplay(for: .channel(channel), text: text)]
         case let .select(state):
             return encodeHUISwitch(.channelStrip(channel, .select), state: state, to: role)
         case let .faderTouched(state):

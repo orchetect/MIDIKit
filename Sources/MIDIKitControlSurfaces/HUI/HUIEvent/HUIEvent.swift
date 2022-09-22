@@ -44,11 +44,11 @@ public enum HUIEvent: Hashable {
         state: Bool
     )
     
-    /// Select Assign readout text.
+    /// Select Assign text display.
     ///
     /// - Parameters:
     ///   - text: text string
-    case selectAssignText(text: HUISmallDisplayString)
+    case selectAssignDisplay(text: HUISmallDisplayString)
         
     // MARK: Channel Strips
     

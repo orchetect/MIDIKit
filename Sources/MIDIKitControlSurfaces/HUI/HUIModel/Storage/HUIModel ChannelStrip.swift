@@ -32,8 +32,8 @@ extension HUIModel {
         /// Mute Button LED.
         public var mute = false
         
-        /// 4-character Channel Name LCD Text Display.
-        public var nameTextDisplay: HUISmallDisplayString = .init()
+        /// 4-character channel name text display.
+        public var nameDisplay: HUISmallDisplayString = .init()
         
         /// Select Button LED.
         public var select = false

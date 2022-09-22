@@ -9,7 +9,7 @@ import Foundation
 extension HUIModel {
     /// State storage representing the Assign controls.
     public struct Assign: Equatable, Hashable {
-        /// Text display (4 character width).
+        /// 4-character text display.
         public var textDisplay: HUISmallDisplayString = .init()
         
         public var recordReadyAll = false

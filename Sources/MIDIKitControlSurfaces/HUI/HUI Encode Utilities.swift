@@ -157,7 +157,7 @@ func encodeHUIFader(
 // MARK: - Level Meters
 
 /// Utility:
-/// Encodes HUI level meter message as a MIDI event. (To host or to client surface)
+/// Encodes HUI level meter message as a MIDI event. (To client surface)
 ///
 /// - Parameters:
 ///   - channel: Channel strip number (`0 ... 7`).
@@ -256,7 +256,7 @@ func encodeHUILargeDisplay(
 /// Encodes a single text slice (up to 10 characters), which matches the HUI encoding spec.
 ///
 /// - Parameters:
-///   - sliceIndex: Text slice index (`0 ... 7`). Each slice contains up to 10 ASCII characters.
+///   - sliceIndex: Text slice index (`0 ... 7`). Each slice contains 10 characters.
 ///   - text: Slice text, up to 10 characters.
 /// - Returns: MIDI event.
 func encodeHUILargeDisplay(
@@ -320,7 +320,7 @@ func encodeHUITimeDisplay(
 ///   - channel: Channel `0 ... 7`, Select Assign text display.
 ///   - text: 4-character HUI-encoded text.
 /// - Returns: MIDI event.
-func encodeHUISmallText(
+func encodeHUISmallDisplay(
     for display: HUISmallDisplay,
     text: HUISmallDisplayString
 ) -> MIDIEvent {

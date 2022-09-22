@@ -56,13 +56,13 @@ extension HUIModel {
             )
             
         case let .largeDisplay(slices: slices):
-            return updateStateFromLargeDisplayText(slices: slices)
+            return updateStateFromLargeDisplay(slices: slices)
             
         case let .timeDisplay(charsRightToLeft: chars):
-            return updateStateFromTimeDisplayText(charsRightToLeft: chars)
+            return updateStateFromTimeDisplay(charsRightToLeft: chars)
             
         case let .selectAssignDisplay(text: text):
-            return updateStateFromAssignText(text: text)
+            return updateStateFromAssign(text: text)
             
         case let .channelDisplay(
             channelStrip: channelStrip,
@@ -147,7 +147,7 @@ extension HUIModel {
         }
     }
     
-    private mutating func updateStateFromLargeDisplayText(
+    private mutating func updateStateFromLargeDisplay(
         slices: [UInt4: [HUILargeDisplayCharacter]]
     ) -> HUIEvent? {
         guard !slices.isEmpty else { return nil }
@@ -163,7 +163,7 @@ extension HUIModel {
         return .largeDisplay(top: topString, bottom: bottomString)
     }
     
-    private mutating func updateStateFromTimeDisplayText(
+    private mutating func updateStateFromTimeDisplay(
         charsRightToLeft: [HUITimeDisplayCharacter]
     ) -> HUIEvent? {
         guard !charsRightToLeft.isEmpty else { return nil }
@@ -176,19 +176,19 @@ extension HUIModel {
         return .timeDisplay(timeString: timeDisplay.timeString)
     }
     
-    private mutating func updateStateFromAssignText(
+    private mutating func updateStateFromAssign(
         text: HUISmallDisplayString
     ) -> HUIEvent? {
         assign.textDisplay = text
         
-        return .selectAssignText(text: text)
+        return .selectAssignDisplay(text: text)
     }
     
     private mutating func updateStateFromChannelText(
         text: HUISmallDisplayString,
         channelStrip: UInt4
     ) -> HUIEvent? {
-        channelStrips[channelStrip.intValue].nameTextDisplay = text
+        channelStrips[channelStrip.intValue].nameDisplay = text
         
         return .channelStrip(
             channel: channelStrip,

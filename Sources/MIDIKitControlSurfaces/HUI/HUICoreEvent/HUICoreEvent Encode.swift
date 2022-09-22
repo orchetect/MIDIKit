@@ -33,10 +33,10 @@ extension HUICoreEvent {
             return [encodeHUITimeDisplay(charsRightToLeft: charsRightToLeft)]
             
         case let .selectAssignDisplay(text):
-            return [encodeHUISmallText(for: .selectAssign, text: text)]
+            return [encodeHUISmallDisplay(for: .selectAssign, text: text)]
             
         case let .channelDisplay(channelStrip, text):
-            return [encodeHUISmallText(for: .channel(channelStrip), text: text)]
+            return [encodeHUISmallDisplay(for: .channel(channelStrip), text: text)]
             
         case let .switch(huiSwitch, state):
             return encodeHUISwitch(huiSwitch, state: state, to: role)
