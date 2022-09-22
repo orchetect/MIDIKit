@@ -12,13 +12,12 @@ import MIDIKitInternals
 public final class HUIHostBank {
     // MARK: - Decoder
     
-    var translator: HUIModel = .init()
     var decoder: HUIDecoder = .init(role: .host)
     
     // MARK: - Handlers
     
-    /// HUI event receive handler.
-    public typealias HUIEventHandler = ((_ huiEvent: HUIEvent) -> Void)
+    /// HUI core event receive handler.
+    public typealias HUIEventHandler = ((_ huiCoreEvent: HUICoreEvent) -> Void)
     
     /// Event handler that is called when HUI events are received.
     public var huiEventHandler: HUIEventHandler?
@@ -108,11 +107,7 @@ public final class HUIHostBank {
                     self?.receivedPing()
                 }
             
-                if let surfaceEvent = self?.translator.updateState(from: huiCoreEvent) {
-                    self?.huiEventHandler?(surfaceEvent)
-                } else {
-                    Logger.debug("Unhandled HUI event: \(huiCoreEvent)")
-                }
+                self?.huiEventHandler?(huiCoreEvent)
             }
         )
         
