@@ -9,29 +9,9 @@ import MIDIKitCore
 extension HUISurface {
     /// Transmit a HUI ping message to the host.
     /// It is not necessary to call this manually. The ``HUISurface`` object will handle ping replies automatically.
-    public func transmitPing() {
+    internal func transmitPing() {
         let event = encodeHUIPing(to: .host)
         midiOut(event)
-    }
-    
-    /// Transmit switch state to host.
-    ///
-    /// - Parameters:
-    ///   - zone: HUI zone number.
-    ///   - port: HUI port number.
-    ///   - state: State of switch or action.
-    internal func transmitSwitch(
-        zone: HUIZone,
-        port: HUIPort,
-        state: Bool
-    ) {
-        let events = encodeHUISwitch(
-            zone: zone,
-            port: port,
-            state: state,
-            to: .host
-        )
-        midiOut(events)
     }
     
     /// Transmit switch state to the host.
@@ -45,11 +25,13 @@ extension HUISurface {
     ) {
         let zoneAndPort = huiSwitch.zoneAndPort
         
-        transmitSwitch(
+        let events = encodeHUISwitch(
             zone: zoneAndPort.zone,
             port: zoneAndPort.port,
-            state: state
+            state: state,
+            to: .host
         )
+        midiOut(events)
     }
     
     /// Transmit fader level to the host.
@@ -66,7 +48,7 @@ extension HUISurface {
     }
     
     /// Transmit fader touch/release message to the host.
-    /// 
+    ///
     /// - Parameters:
     ///   - isTouched: `true` sends touch message, `false` sends release message.
     ///   - channel: `0 ... 7`
