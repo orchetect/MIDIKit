@@ -80,11 +80,11 @@ extension HUIDecoder: ReceivesMIDIEvents {
             guard payload.manufacturer == HUIConstants.kMIDI.kSysEx.kManufacturer else { return }
             parse(sysExContent: payload.data)
             
-        case .cc:
-            parse(controlStatusMessage: event)
+        case let .cc(payload):
+            parse(controlStatusPayload: payload)
             
-        case .notePressure:
-            parse(levelMetersMessage: event)
+        case let .notePressure(payload):
+            parse(levelMetersPayload: payload)
             
         default:
             Logger.debug("Unhandled MIDI event received: \(event)")
@@ -137,12 +137,12 @@ extension HUIDecoder {
             
             switch channel {
             case 0 ... 7:
-                huiEventHandler?(.channelName(
+                huiEventHandler?(.channelDisplay(
                     channelStrip: channel.toUInt4,
                     text: newString
                 ))
             case 8:
-                huiEventHandler?(.selectAssignText(text: newString))
+                huiEventHandler?(.selectAssignDisplay(text: newString))
             default:
                 Logger.debug(
                     "Small Display text message channel not expected: \(channel)."
@@ -211,17 +211,11 @@ extension HUIDecoder {
     }
     
     /// Internal: Handle control status messages.
-    private func parse(controlStatusMessage event: MIDIEvent) {
-        let data = event.midi1RawBytes()
-        
-        guard data.count >= 3 else { return }
-        
-        guard data[0] == HUIConstants.kMIDI.kControlStatus else { return }
-        
-        let dataByte1 = data[1]
-        let dataByte2 = data[2]
-        
+    private func parse(controlStatusPayload payload: MIDIEvent.CC) {
         // Control Segment
+        
+        let dataByte1 = payload.controller.number.uInt8Value
+        let dataByte2 = payload.value.midi1Value.uInt8Value
         
         switch dataByte1 {
         case 0x00 ... 0x07:
@@ -249,13 +243,16 @@ extension HUIDecoder {
         case 0x10 ... 0x1B:
             // V-Pots
             
+            // When encoding host → surface, this is the LED preset index.
+            // When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
+            
             let number = dataByte1 % 0x10
             guard let vPot = HUIVPot(rawValue: number) else { return }
-            let delta = dataByte2.toUInt7
+            let value = dataByte2.toUInt7
             
             huiEventHandler?(.vPot(
                 vPot: vPot,
-                delta: delta
+                value: value
             ))
             
         case HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToHost,
@@ -295,7 +292,7 @@ extension HUIDecoder {
                 state = true
                 
             default:
-                let cmd = data.hexString(padEachTo: 2, prefixes: true)
+                let cmd = payload.midi1RawBytes().hexString(padEachTo: 2, prefixes: true)
                 let stateNibble = dataByte2.nibbles.high.hexString(prefix: true)
                 
                 if let zone = switchesZoneSelect {
@@ -326,7 +323,7 @@ extension HUIDecoder {
                 let huiSwitch = HUISwitch(zone: zone, port: port)
                 huiEventHandler?(.switch(huiSwitch: huiSwitch, state: state))
             } else {
-                let cmd = data.hexString(padEachTo: 2, prefixes: true)
+                let cmd = payload.midi1RawBytes().hexString(padEachTo: 2, prefixes: true)
                 
                 Logger
                     .debug(
@@ -338,38 +335,22 @@ extension HUIDecoder {
             
         default:
             let b1 = dataByte1.hexString(padTo: 2, prefix: true)
-            let msg = data.hexString(padEachTo: 2, prefixes: true)
+            let cmd = payload.midi1RawBytes().hexString(padEachTo: 2, prefixes: true)
             
-            Logger.debug("Unrecognized HUI MIDI status 0xB0 data byte 1: \(b1) in message: \(msg).")
+            Logger.debug("Unrecognized HUI MIDI status 0xB0 data byte 1: \(b1) in message: \(cmd).")
         }
     }
     
     /// Internal: Handle level meter messages.
-    private func parse(levelMetersMessage event: MIDIEvent) {
-        let data = event.midi1RawBytes()
+    private func parse(levelMetersPayload payload: MIDIEvent.NotePressure) {
+        let channel = payload.note.number.toUInt4Exactly ?? 0
         
-        guard data.count >= 3 else { return }
+        // encodes both side and value
+        let sideAndValue = payload.amount.midi1Value.uInt8Value.nibbles
+        let side: HUIModel.StereoLevelMeter.Side = sideAndValue.high == 0 ? .left : .right
+        let level: Int = sideAndValue.low.intValue
         
-        guard data[0] == HUIConstants.kMIDI.kLevelMetersStatus else { return }
-        
-        let dataByte1 = data[1]
-        let dataByte2 = data[2]
-        
-        let channel = dataByte1.toUInt4Exactly ?? 0
-        let sideAndValue = dataByte2 // encodes both side and value
-        
-        var side: HUIModel.StereoLevelMeter.Side
-        var level: Int
-        
-        if sideAndValue >= 0x10 {
-            side = .right // right
-            level = Int(sideAndValue % 0x10)
-        } else {
-            side = .left // left
-            level = Int(sideAndValue)
-        }
-        
-        huiEventHandler?(.levelMeters(
+        huiEventHandler?(.levelMeter(
             channelStrip: channel,
             side: side,
             level: level
