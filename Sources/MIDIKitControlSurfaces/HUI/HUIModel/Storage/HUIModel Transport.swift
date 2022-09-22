@@ -1,12 +1,12 @@
 //
-//  State Transport.swift
+//  HUIModel Transport.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurface.State {
+extension HUIModel {
     /// State storage representing the Transport section.
     public struct Transport: Equatable, Hashable {
         public var rewind = false
@@ -30,7 +30,7 @@ extension HUISurface.State {
     }
 }
 
-extension HUISurface.State.Transport: HUISurfaceStateProtocol {
+extension HUIModel.Transport: HUISurfaceStateProtocol {
     public typealias Param = HUIParameter.Transport
 
     public func state(of param: Param) -> Bool {

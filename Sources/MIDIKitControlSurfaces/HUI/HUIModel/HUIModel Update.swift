@@ -1,5 +1,5 @@
 //
-//  HUISurface State Update.swift
+//  HUIModel Update.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -9,9 +9,8 @@ import MIDIKitCore
 
 // MARK: - Main Update Method
 
-extension HUISurface.State {
-    /// Internal:
-    /// Updates HUI state from a received HUI event.
+extension HUIModel {
+    /// Updates HUI state from a received ``HUICoreEvent`` (returned from ``HUIDecoder`` after parsing incoming HUI MIDI).
     /// The corresponding granular ``HUIEvent`` is then returned.
     internal mutating func updateState(
         from receivedEvent: HUICoreEvent
@@ -83,10 +82,10 @@ extension HUISurface.State {
 
 // MARK: - State Update Trunk Methods
 
-extension HUISurface.State {
+extension HUIModel {
     private mutating func updateStateFromLevelMeters(
         channelStrip: UInt4,
-        side: HUISurface.State.StereoLevelMeter.Side,
+        side: StereoLevelMeter.Side,
         level: Int
     ) -> HUIEvent? {
         switch side {

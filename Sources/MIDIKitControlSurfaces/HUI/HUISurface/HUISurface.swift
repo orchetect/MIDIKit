@@ -21,8 +21,8 @@ public final class HUISurface {
     
     /// HUI control surface state model.
     ///
-    /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes.
-    public internal(set) var state: State {
+    /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes when ``HUISurface`` is instanced as a `@ObservedObject var`.
+    public internal(set) var model: HUIModel {
         willSet {
             if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *) {
                 objectWillChange.send()
@@ -123,7 +123,7 @@ public final class HUISurface {
         self.huiEventHandler = huiEventHandler
         self.midiOutHandler = midiOutHandler
             
-        state = State()
+        model = HUIModel()
             
         decoder = HUIDecoder(
             role: .surface,
@@ -133,7 +133,7 @@ public final class HUISurface {
                 }
                 
                 // process event
-                if let surfaceEvent = self?.state.updateState(from: huiCoreEvent) {
+                if let surfaceEvent = self?.model.updateState(from: huiCoreEvent) {
                     self?.huiEventHandler?(surfaceEvent)
                 } else {
                     Logger.debug("Unhandled HUI event: \(huiCoreEvent)")
@@ -157,7 +157,7 @@ public final class HUISurface {
         
     /// Resets state back to init state. Handlers are unaffected.
     public func reset() {
-        state = State()
+        model = HUIModel()
         decoder.reset()
     }
 }

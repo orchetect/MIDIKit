@@ -166,10 +166,10 @@ func encodeHUIFader(
 /// - Returns: MIDI event.
 func encodeHUILevelMeter(
     channel: UInt4,
-    side: HUISurface.State.StereoLevelMeter.Side,
+    side: HUIModel.StereoLevelMeter.Side,
     level: Int
 ) -> MIDIEvent {
-    let clampedLevel = level.clamped(to: HUISurface.State.StereoLevelMeter.levelRange)
+    let clampedLevel = level.clamped(to: HUIModel.StereoLevelMeter.levelRange)
     let val = (side.rawValue << 0xF) + UInt8(clampedLevel)
     return .notePressure(
         note: channel.toUInt7,

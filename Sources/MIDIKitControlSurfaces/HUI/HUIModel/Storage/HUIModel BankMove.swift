@@ -1,12 +1,12 @@
 //
-//  State BankMove.swift
+//  HUIModel BankMove.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurface.State {
+extension HUIModel {
     /// State storage representing bank and channel navigation.
     public struct BankMove: Equatable, Hashable {
         public var channelLeft = false
@@ -16,7 +16,7 @@ extension HUISurface.State {
     }
 }
 
-extension HUISurface.State.BankMove: HUISurfaceStateProtocol {
+extension HUIModel.BankMove: HUISurfaceStateProtocol {
     public typealias Param = HUIParameter.BankMove
 
     public func state(of param: Param) -> Bool {

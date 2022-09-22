@@ -1,12 +1,12 @@
 //
-//  State FootswitchesAndSounds.swift
+//  HUIModel FootswitchesAndSounds.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurface.State {
+extension HUIModel {
     /// State storage representing footswitches and sounds.
     public struct FootswitchesAndSounds: Equatable, Hashable {
         public var footswitchRelay1 = false
@@ -16,7 +16,7 @@ extension HUISurface.State {
     }
 }
 
-extension HUISurface.State.FootswitchesAndSounds: HUISurfaceStateProtocol {
+extension HUIModel.FootswitchesAndSounds: HUISurfaceStateProtocol {
     public typealias Param = HUIParameter.FootswitchesAndSounds
 
     public func state(of param: Param) -> Bool {

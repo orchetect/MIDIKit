@@ -1,5 +1,5 @@
 //
-//  State ChannelStrip Fader.swift
+//  HUIModel ChannelStrip Fader.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-extension HUISurface.State.ChannelStrip {
+extension HUIModel.ChannelStrip {
     /// State storage representing the state of a channel strip fader.
     public struct Fader: Equatable, Hashable {
         /// Raw level value.
@@ -36,4 +36,4 @@ extension HUISurface.State.ChannelStrip {
     }
 }
 
-// HUISurfaceStateProtocol conformance is on HUISurface.State.ChannelStrip and it handles the `.touched` switch property there, so we don't need a setter/getter here
+// HUISurfaceStateProtocol conformance is on HUIModel.ChannelStrip and it handles the `.touched` switch property there, so we don't need a setter/getter here

@@ -365,7 +365,7 @@ extension HUIDecoder {
         let channel = dataByte1.toUInt4Exactly ?? 0
         let sideAndValue = dataByte2 // encodes both side and value
         
-        var side: HUISurface.State.StereoLevelMeter.Side
+        var side: HUIModel.StereoLevelMeter.Side
         var level: Int
         
         if sideAndValue >= 0x10 {

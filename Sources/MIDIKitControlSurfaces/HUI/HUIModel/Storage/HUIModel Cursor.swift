@@ -1,12 +1,12 @@
 //
-//  State Cursor.swift
+//  HUIModel Cursor.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurface.State {
+extension HUIModel {
     /// State storage representing Cursor Movement / Mode / Scrub / Shuttle.
     public struct Cursor: Equatable, Hashable {
         // up    - no LED, just command button
@@ -22,7 +22,7 @@ extension HUISurface.State {
     }
 }
 
-extension HUISurface.State.Cursor: HUISurfaceStateProtocol {
+extension HUIModel.Cursor: HUISurfaceStateProtocol {
     public typealias Param = HUIParameter.Cursor
 
     public func state(of param: Param) -> Bool {

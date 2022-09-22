@@ -12,7 +12,7 @@ import MIDIKitInternals
 public final class HUIHostBank {
     // MARK: - Decoder
     
-    var translator: HUISurface.State = .init()
+    var translator: HUIModel = .init()
     var decoder: HUIDecoder = .init(role: .host)
     
     // MARK: - Handlers

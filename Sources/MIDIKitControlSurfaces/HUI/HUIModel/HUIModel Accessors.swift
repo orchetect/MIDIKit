@@ -1,12 +1,12 @@
 //
-//  HUISurface State Accessors.swift
+//  HUIModel Accessors.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurface.State: HUISurfaceStateProtocol {
+extension HUIModel: HUISurfaceStateProtocol {
     public typealias Param = HUIParameter
     
     /// Returns the current HUI switch state of the given parameter in the surface model.

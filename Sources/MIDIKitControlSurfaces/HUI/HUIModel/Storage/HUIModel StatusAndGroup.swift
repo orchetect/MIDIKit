@@ -1,12 +1,12 @@
 //
-//  State StatusAndGroup.swift
+//  HUIModel StatusAndGroup.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurface.State {
+extension HUIModel {
     /// State storage representing the Status/Group section.
     public struct StatusAndGroup: Equatable, Hashable {
         public var auto = false
@@ -18,7 +18,7 @@ extension HUISurface.State {
     }
 }
 
-extension HUISurface.State.StatusAndGroup: HUISurfaceStateProtocol {
+extension HUIModel.StatusAndGroup: HUISurfaceStateProtocol {
     public typealias Param = HUIParameter.StatusAndGroup
 
     public func state(of param: Param) -> Bool {

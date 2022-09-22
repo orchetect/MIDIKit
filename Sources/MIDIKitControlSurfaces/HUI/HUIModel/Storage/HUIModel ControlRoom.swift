@@ -1,12 +1,12 @@
 //
-//  State ControlRoom.swift
+//  HUIModel ControlRoom.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurface.State {
+extension HUIModel {
     /// State storage representing the Control Room section.
     public struct ControlRoom: Equatable, Hashable {
         public var input1 = false
@@ -23,7 +23,7 @@ extension HUISurface.State {
     }
 }
 
-extension HUISurface.State.ControlRoom: HUISurfaceStateProtocol {
+extension HUIModel.ControlRoom: HUISurfaceStateProtocol {
     public typealias Param = HUIParameter.ControlRoom
 
     public func state(of param: Param) -> Bool {

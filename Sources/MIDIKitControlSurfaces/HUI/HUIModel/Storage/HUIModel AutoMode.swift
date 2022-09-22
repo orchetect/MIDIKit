@@ -1,12 +1,12 @@
 //
-//  State AutoMode.swift
+//  HUIModel AutoMode.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurface.State {
+extension HUIModel {
     /// State storage representing the Auto Mode section.
     public struct AutoMode: Equatable, Hashable {
         public var read = false
@@ -18,7 +18,7 @@ extension HUISurface.State {
     }
 }
 
-extension HUISurface.State.AutoMode: HUISurfaceStateProtocol {
+extension HUIModel.AutoMode: HUISurfaceStateProtocol {
     public typealias Param = HUIParameter.AutoMode
 
     public func state(of param: Param) -> Bool {

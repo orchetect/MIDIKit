@@ -13,7 +13,7 @@ public enum HUICoreEvent: Hashable {
     
     case levelMeters(
         channelStrip: UInt4,
-        side: HUISurface.State.StereoLevelMeter.Side,
+        side: HUIModel.StereoLevelMeter.Side,
         level: Int
     )
     
