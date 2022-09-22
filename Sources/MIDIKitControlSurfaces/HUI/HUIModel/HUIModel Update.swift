@@ -12,7 +12,14 @@ import MIDIKitCore
 extension HUIModel {
     /// Updates HUI state from a received ``HUICoreEvent`` (returned from ``HUIDecoder`` after parsing incoming HUI MIDI).
     /// The corresponding granular ``HUIEvent`` is then returned.
-    internal mutating func updateState(
+    ///
+    /// > This is a utility method provided for custom implementations. When using ``HUIHost``/``HUIHostBank`` it is not necessary to call this method as it will be handled automatically.
+    ///
+    /// - Parameters:
+    ///   - receivedEvent: The incoming ``HUICoreEvent``.
+    /// - Returns: The strongly-typed ``HUIEvent`` containing the result of the state change.
+    @discardableResult
+    public mutating func updateState(
         from receivedEvent: HUICoreEvent
     ) -> HUIEvent? {
         switch receivedEvent {
@@ -80,7 +87,7 @@ extension HUIModel {
     }
 }
 
-// MARK: - State Update Trunk Methods
+// MARK: - State Update Sub-Methods
 
 extension HUIModel {
     private mutating func updateStateFromLevelMeters(

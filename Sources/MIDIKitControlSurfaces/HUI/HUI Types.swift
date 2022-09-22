@@ -14,7 +14,12 @@ public typealias HUIPort = UInt4
 public typealias HUIZoneAndPort = (zone: HUIZone, port: HUIPort)
 
 /// Enum describing the HUI role (host or client surface).
-public enum HUIRole {
+public enum HUIRole: Equatable, Hashable, CaseIterable {
+    /// Host
+    /// (ie: a desktop DAW).
     case host
+    
+    /// HUI Surface
+    /// (ie: a physical HUI control surface device or a software emulation like an iPad HUI control surface app).
     case surface
 }

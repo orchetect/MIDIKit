@@ -17,9 +17,10 @@ import MIDIKitInternals
 /// > References:
 /// > - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
 public final class HUISurface {
-    // MARK: - State
+    // MARK: - State Model
     
     /// HUI control surface state model.
+    /// Represents state of an entire HUI control surface (all controls, display elements, etc.).
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes when ``HUISurface`` is instanced as a `@ObservedObject var`.
     public internal(set) var model: HUIModel {
