@@ -187,6 +187,18 @@ final class CharacterAndLEDTests: XCTestCase {
         XCTAssertTrue(vp.lowerLED)
     }
     
+    func testHUIVPotDisplay_Init_RawIndex_AllOff() {
+        let vp = HUIVPotDisplay(rawIndex: 0)
+        XCTAssertEqual(vp.leds, .allOff)
+        XCTAssertFalse(vp.lowerLED)
+    }
+    
+    func testHUIVPotDisplay_Init_RawIndex_OutOfBounds() {
+        let vp = HUIVPotDisplay(rawIndex: 0x80)
+        XCTAssertEqual(vp.leds, .allOff)
+        XCTAssertFalse(vp.lowerLED)
+    }
+    
     // MARK: - pad
     
     func testPad_Empty() {
