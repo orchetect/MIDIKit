@@ -240,9 +240,15 @@ func encodeHUILargeDisplay(
 ) -> [MIDIEvent] {
     // even though it's possible to embed more than one slice in a single SysEx message,
     // we will just do one SysEx per slice (which is how Pro Tools transmits slices)
-    slices.map { (sliceIndex, sliceChars) in
-        encodeHUILargeDisplay(sliceIndex: sliceIndex, text: sliceChars)
-    }
+    
+    // also, it's not necessary to sort the slices in index order
+    // but it can't hurt, and makes unit testing more predictable
+    
+    slices
+        .sorted(by: { $0.key < $1.key })
+        .map { (sliceIndex, sliceChars) in
+            encodeHUILargeDisplay(sliceIndex: sliceIndex, text: sliceChars)
+        }
 }
 
 /// Utility:
@@ -271,7 +277,7 @@ func encodeHUILargeDisplay(
 
 /// Utility:
 /// Encode time display message (timecode, mm:ss, bars/beats, frames). (To client surface)
-/// 
+///
 /// - Parameters:
 ///   - text: 8 digits, the first seven with optional trailing dots.
 /// - Returns: MIDI event.
@@ -279,6 +285,24 @@ func encodeHUITimeDisplay(
     text: HUITimeDisplayString
 ) -> MIDIEvent {
     let textBytes = text.chars.map(\.rawValue).reversed()
+    
+    return huiSysExTemplate(
+        body: [
+            HUIConstants.kMIDI.kDisplayType.timeDisplayByte
+        ] + textBytes
+    )
+}
+
+/// Utility:
+/// Encode time display message (timecode, mm:ss, bars/beats, frames). (To client surface)
+///
+/// - Parameters:
+///   - charsRightToLeft: Between 1 and 8 characters in reverse sequence order (first array element is rightmost digit). More than 8 characters will discarded and truncated to 8 characters.
+/// - Returns: MIDI event.
+func encodeHUITimeDisplay(
+    charsRightToLeft: [HUITimeDisplayCharacter]
+) -> MIDIEvent {
+    let textBytes = charsRightToLeft.prefix(8).map(\.rawValue)
     
     return huiSysExTemplate(
         body: [
