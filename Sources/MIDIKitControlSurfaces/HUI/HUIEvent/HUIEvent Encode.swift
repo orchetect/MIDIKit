@@ -8,7 +8,7 @@ import MIDIKitCore
 
 extension HUIEvent {
     /// Encode the HUI event to raw HUI MIDI event(s).
-    public func encoded(to role: HUIRole) -> [MIDIEvent] {
+    public func encode(to role: HUIRole) -> [MIDIEvent] {
         switch self {
         case .ping:
             return [encodeHUIPing(to: role)]

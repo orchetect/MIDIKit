@@ -9,7 +9,7 @@ import MIDIKitCore
 // MARK: - Ping
 
 /// Utility:
-/// Encodes HUI ping message as a MIDI event. (Specify to host or to client surface).
+/// Encode HUI ping message as a MIDI event. (Specify to host or to client surface).
 ///
 /// - Parameters:
 ///   - role: Transmission direction (to host or to remote client surface).
@@ -28,7 +28,7 @@ func encodeHUIPing(
 // MARK: - Switch
 
 /// Utility:
-/// Encodes HUI switch message as MIDI events. (Specify to host or to client surface).
+/// Encode HUI switch message as MIDI events. (Specify to host or to client surface).
 ///
 /// - Parameters:
 ///   - zone: HUI zone number.
@@ -75,7 +75,7 @@ func encodeHUISwitch(
 }
 
 /// Utility:
-/// Encodes HUI switch message as MIDI events. (Specify to host or to client surface).
+/// Encode HUI switch message as MIDI events. (Specify to host or to client surface).
 ///
 /// - Parameters:
 ///   - huiSwitch: HUI switch.
@@ -100,7 +100,7 @@ func encodeHUISwitch(
 // MARK: - Fader
 
 /// Utility:
-/// Encodes HUI fader level message as MIDI events. (To host or to client surface).
+/// Encode HUI fader level message as MIDI events. (To host or to client surface).
 ///
 /// - Parameters:
 ///   - level: Fader level (`0 ... 16383`).
@@ -157,7 +157,7 @@ func encodeHUIFader(
 // MARK: - Level Meters
 
 /// Utility:
-/// Encodes HUI level meter message as a MIDI event.
+/// Encodes HUI level meter message as a MIDI event. (To host or to client surface)
 ///
 /// - Parameters:
 ///   - channel: Channel strip number (`0 ... 7`).
@@ -181,7 +181,7 @@ func encodeHUILevelMeter(
 // MARK: - V-Pot Delta Values
 
 /// Utility:
-/// Encodes HUI V-Pot delta value message as a MIDI event.
+/// Encodes HUI V-Pot delta value message as a MIDI event. (To host or to client surface)
 ///
 /// - Parameters:
 ///   - vPot: V-Pot identity.
@@ -201,41 +201,52 @@ func encodeHUIVPotValue(
 // MARK: - Large Text Display
 
 /// Utility:
-/// Encodes HUI large text display as MIDI events. (To surface)
+/// Encode HUI large text display as MIDI events. (To surface)
+/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding spec.
+///
+/// - Parameters:
+///   - display: Top and bottom text line text, each 40 characters in length.
+/// - Returns: MIDI event.
+func encodeHUILargeDisplay(
+    display: HUIModel.LargeDisplay
+) -> [MIDIEvent] {
+    encodeHUILargeDisplay(slices: display.slices)
+}
+
+/// Utility:
+/// Encode HUI large text display as MIDI events. (To surface)
 /// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding spec.
 ///
 /// - Parameters:
 ///   - top: Top text line text of 40 characters in length.
-///   - bottom: Top text line text of 40 characters in length.
+///   - bottom: Bottom text line text of 40 characters in length.
 /// - Returns: MIDI event.
 func encodeHUILargeDisplay(
     top: HUILargeDisplayString,
     bottom: HUILargeDisplayString
 ) -> [MIDIEvent] {
-    // limit+pad top and bottom to exactly 4 slices each
-    let topSlices = top.slices
-    let bottomSlices = bottom.slices
-    let slices = topSlices + bottomSlices
-    return encodeHUILargeDisplay(slices: slices)
+    encodeHUILargeDisplay(slices: HUIModel.LargeDisplay.slices(top: top, bottom: bottom))
 }
 
 /// Utility:
-/// Encodes HUI large text display as MIDI events. (To surface)
+/// Encode HUI large text display as MIDI events. (To surface)
 /// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding spec.
 ///
 /// - Parameters:
-///   - slices: 8 text slices of 10 characters each.
+///   - slices: Between 1 and 8 text slices of 10 characters each.
 /// - Returns: MIDI event.
 func encodeHUILargeDisplay(
-    slices: [[HUILargeDisplayCharacter]]
+    slices: [UInt4: [HUILargeDisplayCharacter]]
 ) -> [MIDIEvent] {
-    slices.prefix(8).enumerated().map { (sliceIndex, text) in
-        encodeHUILargeDisplay(sliceIndex: sliceIndex.toUInt4, text: text)
+    // even though it's possible to embed more than one slice in a single SysEx message,
+    // we will just do one SysEx per slice (which is how Pro Tools transmits slices)
+    slices.map { (sliceIndex, sliceChars) in
+        encodeHUILargeDisplay(sliceIndex: sliceIndex, text: sliceChars)
     }
 }
 
 /// Utility:
-/// Encodes HUI large text display as MIDI events. (To surface)
+/// Encode HUI large text display as MIDI events. (To surface)
 /// Encodes a single text slice (up to 10 characters), which matches the HUI encoding spec.
 ///
 /// - Parameters:
@@ -259,7 +270,7 @@ func encodeHUILargeDisplay(
 // MARK: - Time Display
 
 /// Utility:
-/// Encodes time display message (timecode, mm:ss, bars/beats, frames).
+/// Encode time display message (timecode, mm:ss, bars/beats, frames). (To client surface)
 /// 
 /// - Parameters:
 ///   - text: 8 digits, the first seven with optional trailing dots.
@@ -279,7 +290,7 @@ func encodeHUITimeDisplay(
 // MARK: - Small Text Display
 
 /// Utility:
-/// Encodes small text message (channel strip or Select Assign).
+/// Encode small text message (channel strip or Select Assign). (To client surface)
 ///
 /// - Parameters:
 ///   - channel: Channel `0 ... 7`, Select Assign text display.

@@ -24,6 +24,8 @@ extension HUIModel {
             self.bottom = bottom
         }
         
+        // MARK: - Internal Methods
+        
         /// Internal:
         /// Get or set the 8 individual 10-character string slices that make up the large display contents.
         /// When encoded in a HUI message, these are indexed 0 through 7.

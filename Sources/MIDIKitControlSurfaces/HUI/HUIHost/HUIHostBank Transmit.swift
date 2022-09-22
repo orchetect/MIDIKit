@@ -70,7 +70,7 @@ extension HUIHostBank {
     /// - Parameters:
     ///   - event: HUI event.
     public func transmit(event: HUIEvent) {
-        let events = event.encoded(to: .surface)
+        let events = event.encode(to: .surface)
         midiOut(events)
     }
 }
