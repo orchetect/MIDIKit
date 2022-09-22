@@ -52,6 +52,26 @@ public struct HUITimeDisplayString: HUIStringProtocol, Equatable, Hashable {
         
         self.chars = chars
     }
+    
+    /// Internal:
+    /// Updates the string from a partial or whole character sequence.
+    ///
+    /// - Parameters:
+    ///   - charsRightToLeft: Between 1 and 8 characters, in sequence order from right to left.
+    /// - Returns: `true` if update resulted in a string that is different from the previous string.
+    @discardableResult
+    mutating func update(charsRightToLeft: [Element]) -> Bool {
+        guard !charsRightToLeft.isEmpty else { return false }
+        
+        let newCharsRange = (8 - charsRightToLeft.count) ... 7
+        let newOrderedChars = Array(charsRightToLeft.reversed())
+        
+        let isDifferent = !chars[newCharsRange].elementsEqual(newOrderedChars)
+        guard isDifferent else { return false }
+        
+        chars.replaceSubrange(newCharsRange, with: newOrderedChars)
+        return true
+    }
 }
 
 extension Array where Element == HUITimeDisplayCharacter {

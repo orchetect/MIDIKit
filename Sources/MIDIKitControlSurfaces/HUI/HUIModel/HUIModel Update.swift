@@ -11,7 +11,7 @@ import MIDIKitCore
 
 extension HUIModel {
     /// Updates HUI state from a received ``HUICoreEvent`` (returned from ``HUIDecoder`` after parsing incoming HUI MIDI).
-    /// The corresponding granular ``HUIEvent`` is then returned.
+    /// The corresponding granular ``HUIEvent`` is then returned containing the result of the model change.
     ///
     /// > This is a utility method provided for custom implementations. When using ``HUIHost``/``HUIHostBank`` it is not necessary to call this method as it will be handled automatically.
     ///
@@ -152,7 +152,10 @@ extension HUIModel {
     ) -> HUIEvent? {
         guard !slices.isEmpty else { return nil }
         
-        largeDisplay.update(mergingFrom: slices)
+        let isDifferent = largeDisplay.update(mergingFrom: slices)
+        
+        // only return an event if the contents actually changed
+        guard isDifferent else { return nil }
         
         let topString = largeDisplay.top
         let bottomString = largeDisplay.bottom
@@ -165,12 +168,12 @@ extension HUIModel {
     ) -> HUIEvent? {
         guard !charsRightToLeft.isEmpty else { return nil }
         
-        var ts = timeDisplay.timeString
-        let newCharsRange = (7 - charsRightToLeft.count) ... 7
-        ts.chars.replaceSubrange(newCharsRange, with: charsRightToLeft.reversed())
-        timeDisplay.timeString = ts
+        let isDifferent = timeDisplay.timeString.update(charsRightToLeft: charsRightToLeft)
         
-        return .timeDisplay(timeString: ts)
+        // only return an event if the contents actually changed
+        guard isDifferent else { return nil }
+        
+        return .timeDisplay(timeString: timeDisplay.timeString)
     }
     
     private mutating func updateStateFromAssignText(

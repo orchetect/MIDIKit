@@ -161,6 +161,53 @@ final class CharacterAndLEDTests: XCTestCase {
         )
     }
     
+    /// Test padding/truncation validation
+    func testHUITimeDisplayString_SetChars() {
+        var str = HUITimeDisplayString(lossy: "12345678")
+        
+        str.chars = []
+        XCTAssertEqual(str.stringValue, "        ")
+        
+        str.chars = [.A, .B]
+        XCTAssertEqual(str.stringValue, "AB      ")
+        
+        str.chars = [.A, .B, .C, .D, .E, .F, .num1, .num2]
+        XCTAssertEqual(str.stringValue, "ABCDEF12")
+        
+        str.chars = [.A, .B, .C, .D, .E, .F, .num1, .num2, .num3, .num4]
+        XCTAssertEqual(str.stringValue, "ABCDEF12")
+    }
+    
+    func testHUITimeDisplayString_Update_Empty() {
+        var str = HUITimeDisplayString(lossy: "12345678")
+        XCTAssertFalse(str.update(charsRightToLeft: []))
+        XCTAssertEqual(str.stringValue, "12345678")
+    }
+    
+    func testHUITimeDisplayString_Update_Partial_IsDifferent() {
+        var str = HUITimeDisplayString(lossy: "12345678")
+        XCTAssertTrue(str.update(charsRightToLeft: [.A, .B]))
+        XCTAssertEqual(str.stringValue, "123456BA")
+    }
+    
+    func testHUITimeDisplayString_Update_Partial_IsNotDifferent() {
+        var str = HUITimeDisplayString(lossy: "12345678")
+        XCTAssertFalse(str.update(charsRightToLeft: [.num8, .num7]))
+        XCTAssertEqual(str.stringValue, "12345678")
+    }
+    
+    func testHUITimeDisplayString_Update_Full_IsDifferent() {
+        var str = HUITimeDisplayString(lossy: "12345678")
+        XCTAssertTrue(str.update(charsRightToLeft: [.A, .B, .C, .D, .E, .F, .num1, .num2]))
+        XCTAssertEqual(str.stringValue, "21FEDCBA")
+    }
+    
+    func testHUITimeDisplayString_Update_Full_IsNotDifferent() {
+        var str = HUITimeDisplayString(lossy: "12345678")
+        XCTAssertFalse(str.update(charsRightToLeft: [.num8, .num7, .num6, .num5, .num4, .num3, .num2, .num1]))
+        XCTAssertEqual(str.stringValue, "12345678")
+    }
+    
     // MARK: - HUIVPotDisplay
     
     func testHUIVPotDisplayAndLEDState() {
