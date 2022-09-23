@@ -1,5 +1,5 @@
 //
-//  HUIEvent.swift
+//  HUISurfaceModelNotification.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -14,7 +14,7 @@ import MIDIKitCore
 /// >
 /// > - Both a host and client surface can send channel strip Solo state to each other. The host sends the state to the client surface, and the client surface updates its state and UI to reflect it. Then the user can interact with the client surface at any time to toggle the Solo button which sends the same message back to the host, causing the host to toggle the corresponding track Solo.
 /// > - A host can send a time display change to a client surface, but a client surface cannot send any time display changes back to the host. It is a read-only display on the client surface and there is no way to interact with it.
-public enum HUIEvent: Hashable {
+public enum HUISurfaceModelNotification: Hashable {
     // MARK: Ping
     
     /// HUI ping event.

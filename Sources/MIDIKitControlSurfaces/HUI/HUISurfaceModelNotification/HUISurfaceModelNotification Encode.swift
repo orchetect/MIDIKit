@@ -1,14 +1,17 @@
 //
-//  HUIEvent Encode.swift
+//  HUISurfaceModelNotification Encode.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
-extension HUIEvent {
+extension HUISurfaceModelNotification {
+    /// Internal:
     /// Encode the HUI event to raw HUI MIDI event(s).
-    public func encode(to role: HUIRole) -> [MIDIEvent] {
+    ///
+    /// This shouldn't really be used since this event type is the result of a ``HUISurface`` model state change, and this event isn't designed to be transmitted. This encode method may be removed in future.
+    internal func encode(to role: HUIRole) -> [MIDIEvent] {
         switch self {
         case .ping:
             return [encodeHUIPing(to: role)]
@@ -189,7 +192,7 @@ extension HUIEvent {
     }
 }
 
-extension HUIEvent.ChannelStripComponent {
+extension HUISurfaceModelNotification.ChannelStripComponent {
     /// Encode the HUI channel strip event to raw HUI MIDI events.
     public func encoded(
         to role: HUIRole,
@@ -228,7 +231,7 @@ extension HUIEvent.ChannelStripComponent {
     }
 }
 
-extension HUIEvent.ParamEditComponent {
+extension HUISurfaceModelNotification.ParamEditComponent {
     /// Encode the HUI channel strip event to raw HUI MIDI events.
     public func encoded(
         to role: HUIRole

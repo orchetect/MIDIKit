@@ -17,7 +17,8 @@ MIDI control surface protocol abstractions (HUI, etc.) for MIDIKit.
 - ``HUIHost``
 - ``HUIHostBank``
 - ``HUISurface``
-- ``HUIEvent``
+- ``HUISurfaceModel``
+- ``HUISurfaceModelNotification``
 - ``HUISwitch``
 
 ### MCU

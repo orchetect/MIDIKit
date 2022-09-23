@@ -8,9 +8,9 @@ import Foundation
 import MIDIKitCore
 import MIDIKitInternals
 
-/// Object representing a single HUI control surface device.
+/// Object representing a single HUI control surface device, holding a model of its state and providing granular update notifications.
 ///
-/// This object would typically be used by a client application (ie: a control surface application on an iPad) in order to manage state of a HUI surface. It connects to the host software/hardware through bidirectional MIDI (input and output).
+/// This object would typically be used by a client application (ie: a control surface application on an iPad) in order to manage state of a HUI surface. It interfaces with HUI host software/hardware through bidirectional MIDI (input and output).
 ///
 /// > HUI (_Human User Interface for Digital Audio Workstations_) is a DAW control surface protocol developed by Mackie that uses MIDI events as its underlying encoding.
 /// >
@@ -38,10 +38,10 @@ public final class HUISurface {
     // MARK: - Handlers
     
     /// HUI event receive handler.
-    public typealias HUIEventHandler = ((_ huiEvent: HUIEvent) -> Void)
+    public typealias ModelNotificationHandler = ((_ notification: HUISurfaceModelNotification) -> Void)
     
-    /// Event handler that is called when HUI events are received.
-    public var huiEventHandler: HUIEventHandler?
+    /// Notification handler that is called as a result of the ``model`` being updated from received HUI events.
+    public var modelNotificationHandler: ModelNotificationHandler?
     
     /// Remote presence state change handler (when pings resume or cease after timeout).
     public typealias PresenceChangedHandler = (_ isPresent: Bool) -> Void
@@ -117,11 +117,11 @@ public final class HUISurface {
     // MARK: - Init
         
     public init(
-        huiEventHandler: HUIEventHandler? = nil,
+        modelNotificationHandler: ModelNotificationHandler? = nil,
         remotePresenceChangedHandler: PresenceChangedHandler? = nil,
         midiOutHandler: MIDIOutHandler? = nil
     ) {
-        self.huiEventHandler = huiEventHandler
+        self.modelNotificationHandler = modelNotificationHandler
         self.midiOutHandler = midiOutHandler
             
         model = HUISurfaceModel()
@@ -135,7 +135,7 @@ public final class HUISurface {
                 
                 // process event
                 if let surfaceEvent = self?.model.updateState(from: huiCoreEvent) {
-                    self?.huiEventHandler?(surfaceEvent)
+                    self?.modelNotificationHandler?(surfaceEvent)
                 } else {
                     Logger.debug("Unhandled HUI event: \(huiCoreEvent)")
                 }

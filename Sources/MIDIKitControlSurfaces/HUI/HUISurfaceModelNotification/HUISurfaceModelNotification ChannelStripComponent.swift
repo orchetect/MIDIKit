@@ -1,12 +1,12 @@
 //
-//  HUIEvent ChannelStripComponent.swift
+//  HUISurfaceModelNotification ChannelStripComponent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
-extension HUIEvent {
+extension HUISurfaceModelNotification {
     /// A discrete component of a HUI channel strip and its state change.
     public enum ChannelStripComponent: Equatable, Hashable {
         /// Stereo Level Meter.

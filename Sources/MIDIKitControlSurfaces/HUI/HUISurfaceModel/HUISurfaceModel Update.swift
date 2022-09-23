@@ -11,17 +11,17 @@ import MIDIKitCore
 
 extension HUISurfaceModel {
     /// Updates HUI state from a received ``HUICoreEvent`` (returned from ``HUIDecoder`` after parsing incoming HUI MIDI).
-    /// The corresponding granular ``HUIEvent`` is then returned containing the result of the model change.
+    /// The corresponding granular ``HUISurfaceModelNotification`` is then returned containing the result of the model change.
     ///
     /// > This is a utility method provided for custom implementations. When using ``HUIHost``/``HUIHostBank`` it is not necessary to call this method as it will be handled automatically.
     ///
     /// - Parameters:
     ///   - receivedEvent: The incoming ``HUICoreEvent``.
-    /// - Returns: The strongly-typed ``HUIEvent`` containing the result of the state change.
+    /// - Returns: The strongly-typed ``HUISurfaceModelNotification`` containing the result of the state change.
     @discardableResult
     public mutating func updateState(
         from receivedEvent: HUICoreEvent
-    ) -> HUIEvent? {
+    ) -> HUISurfaceModelNotification? {
         switch receivedEvent {
         case .ping:
             return .ping
@@ -92,7 +92,7 @@ extension HUISurfaceModel {
         channelStrip: UInt4,
         side: StereoLevelMeter.Side,
         level: Int
-    ) -> HUIEvent? {
+    ) -> HUISurfaceModelNotification? {
         switch side {
         case .left:
             channelStrips[channelStrip.intValue].levelMeter.left = level
@@ -109,7 +109,7 @@ extension HUISurfaceModel {
     private mutating func updateStateFromFaderLevel(
         channelStrip: UInt4,
         level: UInt14
-    ) -> HUIEvent? {
+    ) -> HUISurfaceModelNotification? {
         channelStrips[channelStrip.intValue].fader.level = level
         
         return .channelStrip(
@@ -121,7 +121,7 @@ extension HUISurfaceModel {
     private mutating func updateStateFromVPot(
         vPot: HUIVPot,
         value: HUIVPotValue
-    ) -> HUIEvent? {
+    ) -> HUISurfaceModelNotification? {
         let rawValue = value.rawValue
         let display = HUIVPotDisplay(rawIndex: rawValue.uInt8Value)
         
@@ -151,7 +151,7 @@ extension HUISurfaceModel {
     
     private mutating func updateStateFromLargeDisplay(
         slices: [UInt4: [HUILargeDisplayCharacter]]
-    ) -> HUIEvent? {
+    ) -> HUISurfaceModelNotification? {
         guard !slices.isEmpty else { return nil }
         
         let isDifferent = largeDisplay.update(mergingFrom: slices)
@@ -167,7 +167,7 @@ extension HUISurfaceModel {
     
     private mutating func updateStateFromTimeDisplay(
         charsRightToLeft: [HUITimeDisplayCharacter]
-    ) -> HUIEvent? {
+    ) -> HUISurfaceModelNotification? {
         guard !charsRightToLeft.isEmpty else { return nil }
         
         let isDifferent = timeDisplay.timeString.update(charsRightToLeft: charsRightToLeft)
@@ -180,7 +180,7 @@ extension HUISurfaceModel {
     
     private mutating func updateStateFromAssign(
         text: HUISmallDisplayString
-    ) -> HUIEvent? {
+    ) -> HUISurfaceModelNotification? {
         assign.textDisplay = text
         
         return .selectAssignDisplay(text: text)
@@ -189,7 +189,7 @@ extension HUISurfaceModel {
     private mutating func updateStateFromChannelText(
         text: HUISmallDisplayString,
         channelStrip: UInt4
-    ) -> HUIEvent? {
+    ) -> HUISurfaceModelNotification? {
         channelStrips[channelStrip.intValue].nameDisplay = text
         
         return .channelStrip(
@@ -201,7 +201,7 @@ extension HUISurfaceModel {
     private mutating func updateStateFromSwitch(
         huiSwitch: HUISwitch,
         state: Bool
-    ) -> HUIEvent? {
+    ) -> HUISurfaceModelNotification? {
         // set state for parameter
         
         setState(of: huiSwitch, to: state)
