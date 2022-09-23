@@ -41,7 +41,7 @@ extension HUISurfaceModel: HUISurfaceStateProtocol {
         case let .numPad(subParam):
             return numPad.state(of: subParam)
             
-        case let .timeDisplay(subParam):
+        case let .timeDisplayStatus(subParam):
             return timeDisplay.state(of: subParam)
             
         case let .autoEnable(subParam):
@@ -103,7 +103,7 @@ extension HUISurfaceModel: HUISurfaceStateProtocol {
         case let .numPad(subParam):
             numPad.setState(of: subParam, to: state)
             
-        case let .timeDisplay(subParam):
+        case let .timeDisplayStatus(subParam):
             timeDisplay.setState(of: subParam, to: state)
             
         case let .autoEnable(subParam):

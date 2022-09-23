@@ -10,6 +10,8 @@ import MIDIKitCore
 /// HUI Switch.
 /// Identifiers for all possible HUI toggle/boolean controls: Buttons, LEDs, and auxiliary capabilities like external footswitch toggles and beep sounds. These are all collectively referred to as HUI switches.
 ///
+/// > Note: Not all switches are relevant for both host and surface. Some only apply to one or the other. But most apply to both.
+///
 /// - An LED has a state of on (`true`) and off (`false`).
 /// - When a user engages a switch on a HUI control surface (ie: presses a button or touches a fader cap) it has a state of pressed/touched (`true`) and unpressed/untouched (`false`). Which means if a user momentarily pushes and releases a button it will result in two immediately successive `true` then `false` state messages. If a user presses and holds a button, it will result in a `true` state message upon press and then the `false` state message only upon button release.
 public enum HUISwitch: Equatable, Hashable {
@@ -41,7 +43,7 @@ public enum HUISwitch: Equatable, Hashable {
     case numPad(NumPad)
     
     /// Time display.
-    case timeDisplay(TimeDisplay)
+    case timeDisplayStatus(TimeDisplayStatus)
     
     /// Auto Enable section (to the right of the channel strips).
     case autoEnable(AutoEnable)
@@ -274,10 +276,10 @@ extension HUISwitch: CaseIterable {
         
         // Zone 0x16
         // Timecode LEDs (no buttons, LEDs only)
-        .timeDisplay(.timecode),
-        .timeDisplay(.feet),
-        .timeDisplay(.beats),
-        .timeDisplay(.rudeSolo),
+        .timeDisplayStatus(.timecode),
+        .timeDisplayStatus(.feet),
+        .timeDisplayStatus(.beats),
+        .timeDisplayStatus(.rudeSolo),
         
         // Zone 0x17
         // Auto Enable (To the right of the channel strips)
@@ -376,7 +378,7 @@ extension HUISwitch: HUISwitchProtocol {
         case let .numPad(param):
             return param.zoneAndPort
 
-        case let .timeDisplay(param):
+        case let .timeDisplayStatus(param):
             return param.zoneAndPort
 
         case let .autoEnable(param):
@@ -436,8 +438,8 @@ extension HUISwitch: CustomStringConvertible {
         case let .numPad(param):
             return "numPad(\(param))"
 
-        case let .timeDisplay(param):
-            return "timeDisplay(\(param))"
+        case let .timeDisplayStatus(param):
+            return "timeDisplayStatus(\(param))"
 
         case let .autoEnable(param):
             return "autoEnable(\(param))"

@@ -47,6 +47,7 @@ extension HUISurfaceEvent: _HUIEventProtocol {
         case let .vPot(vPot, value):
             switch value {
             case .display:
+                // TODO: should never happen, but not great solution
                 fatalError()
             case let .delta(delta):
                 self = .vPot(vPot: vPot, delta: delta)
@@ -56,7 +57,7 @@ extension HUISurfaceEvent: _HUIEventProtocol {
             self = .switch(huiSwitch: huiSwitch, state: state)
             
         default:
-            // should never happen
+            // TODO: should never happen, but not great solution
             fatalError()
         }
     }

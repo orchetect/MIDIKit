@@ -10,13 +10,13 @@ import MIDIKitCore
 // MARK: - Main Update Method
 
 extension HUISurfaceModel {
-    /// Updates HUI state from a received ``HUICoreEvent`` (returned from ``HUIDecoder`` after parsing incoming HUI MIDI).
+    /// Updates HUI state from a received ``HUIHostEvent`` (returned from ``HUIHostEventDecoder`` after parsing incoming HUI MIDI).
     /// The corresponding granular ``HUISurfaceModelNotification`` is then returned containing the result of the model change.
     ///
     /// > This is a utility method provided for custom implementations. When using ``HUIHost``/``HUIHostBank`` it is not necessary to call this method as it will be handled automatically.
     ///
     /// - Parameters:
-    ///   - receivedEvent: The incoming ``HUICoreEvent``.
+    ///   - receivedEvent: The incoming ``HUIHostEvent``.
     /// - Returns: The strongly-typed ``HUISurfaceModelNotification`` containing the result of the state change.
     @discardableResult
     public mutating func updateState(
@@ -273,8 +273,8 @@ extension HUISurfaceModel {
         case let .numPad(subParam):
             return .numPad(param: subParam, state: state)
             
-        case let .timeDisplay(subParam):
-            return .timeDisplay(param: subParam, state: state)
+        case let .timeDisplayStatus(subParam):
+            return .timeDisplayStatus(param: subParam, state: state)
             
         case let .autoEnable(subParam):
             return .autoEnable(param: subParam, state: state)

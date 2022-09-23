@@ -1,5 +1,5 @@
 //
-//  HUISwitch TimeDisplay.swift
+//  HUISwitch TimeDisplayStatus.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -8,7 +8,7 @@ import Foundation
 
 extension HUISwitch {
     /// Time Display LEDs.
-    public enum TimeDisplay: Equatable, Hashable {
+    public enum TimeDisplayStatus: Equatable, Hashable {
         /// "TIME CODE"
         /// Time format LEDs that are to the left of the main time display above the control room section (no button, LED only).
         case timecode
@@ -27,7 +27,7 @@ extension HUISwitch {
     }
 }
 
-extension HUISwitch.TimeDisplay: HUISwitchProtocol {
+extension HUISwitch.TimeDisplayStatus: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x16
@@ -40,7 +40,7 @@ extension HUISwitch.TimeDisplay: HUISwitchProtocol {
     }
 }
 
-extension HUISwitch.TimeDisplay: CustomStringConvertible {
+extension HUISwitch.TimeDisplayStatus: CustomStringConvertible {
     public var description: String {
         switch self {
         // Zone 0x16

@@ -43,3 +43,32 @@ extension HUISurfaceModelNotification {
         case faderLevel(level: UInt14)
     }
 }
+
+extension HUISurfaceModelNotification.ChannelStripComponent: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case let .levelMeter(side, level):
+            return "levelMeter(side: \(side), level: \(level))"
+        case let .recordReady(state):
+            return "recordReady(state: \(state))"
+        case let .insert(state):
+            return "insert(state: \(state))"
+        case let .vPotSelect(state):
+            return "vPotSelect(state: \(state))"
+        case let .vPot(display):
+            return "vPot(\(display))"
+        case let .auto(state):
+            return "auto(state: \(state))"
+        case let .solo(state):
+            return "solo(state: \(state))"
+        case let .mute(state):
+            return "mute(state: \(state))"
+        case let .nameDisplay(text):
+            return "nameDisplay(text: \(text))"
+        case let .select(state):
+            return "select(state: \(state))"
+        case let .faderLevel(level):
+            return "faderLevel(\(level))"
+        }
+    }
+}

@@ -1,5 +1,5 @@
 //
-//  HUISurfaceModel TimeDisplay.swift
+//  HUISurfaceModel TimeDisplayStatus.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -31,7 +31,7 @@ extension HUISurfaceModel {
 }
 
 extension HUISurfaceModel.TimeDisplay: HUISurfaceStateProtocol {
-    public typealias Switch = HUISwitch.TimeDisplay
+    public typealias Switch = HUISwitch.TimeDisplayStatus
 
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {

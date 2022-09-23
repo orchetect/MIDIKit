@@ -61,7 +61,7 @@ extension HUIHostEvent: _HUIEventProtocol {
             case let .display(display):
                 self = .vPot(vPot: vPot, display: display)
             case .delta:
-                // should never happen
+                // TODO: should never happen, but not great solution
                 fatalError()
             }
             
