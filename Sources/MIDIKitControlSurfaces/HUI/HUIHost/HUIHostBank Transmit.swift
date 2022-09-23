@@ -84,12 +84,47 @@ extension HUIHostBank {
     
     /// Transmit large display text (40 x 2 characters) to the client surface.
     ///
-    /// - Parameters
+    /// - Parameters:
     ///   - display: Full display to transmit
     public func transmitLargeDisplay(
         _ display: HUISurfaceModel.LargeDisplay
     ) {
         let event = encodeHUILargeDisplay(display: display)
+        midiOut(event)
+    }
+    
+    /// Transmit small display text (4 characters) to the client surface.
+    ///
+    /// - Parameters:
+    ///   - display: Identity of the small display.
+    ///   - text: 4-character text to display.
+    public func transmitSmallDisplay(
+        _ display: HUISmallDisplay,
+        text: HUISmallDisplayString
+    ) {
+        let event = encodeHUISmallDisplay(for: display, text: text)
+        midiOut(event)
+    }
+    
+    /// Transmit full set of time display digits to the client surface.
+    ///
+    /// - Parameters:
+    ///   - text: Full set of 8 digits.
+    public func transmitTimeDisplay(
+        text: HUITimeDisplayString
+    ) {
+        let event = encodeHUITimeDisplay(text: text)
+        midiOut(event)
+    }
+    
+    /// Transmit some or all of the time display digits to the client surface.
+    ///
+    /// - Parameters:
+    ///   - charsRightToLeft: Between 1 and 8 characters in reverse sequence order (first array element is rightmost digit). More than 8 characters will discarded and truncated to 8 characters.
+    public func transmitTimeDisplay(
+        charsRightToLeft: [HUITimeDisplayCharacter]
+    ) {
+        let event = encodeHUITimeDisplay(charsRightToLeft: charsRightToLeft)
         midiOut(event)
     }
 }
