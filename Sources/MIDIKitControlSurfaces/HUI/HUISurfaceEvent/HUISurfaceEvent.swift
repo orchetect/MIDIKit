@@ -37,6 +37,9 @@ public enum HUISurfaceEvent: Equatable, Hashable {
         delta: Int7
     )
     
+    /// Jog Wheel -/+ delta change.
+    case jogWheel(delta: Int7)
+    
     /// System reset message:
     /// Whenever a HUI surface is turned on or off it should transmit this message to the host.
     case systemReset
@@ -72,6 +75,10 @@ extension HUISurfaceEvent: CustomStringConvertible {
             delta: delta
         ):
             return "vPot(\(vPot), delta: \(delta))"
+            
+        case let .jogWheel(delta):
+            return "jogWheel(delta: \(delta))"
+            
         case .systemReset:
             return "systemReset"
         }

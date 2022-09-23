@@ -55,6 +55,12 @@ final class HUISurfaceEventDecoderTests: XCTestCase {
         )
     }
     
+    func testJogWheel() {
+        runHUIEventTest(
+            .jogWheel(delta: -4)
+        )
+    }
+    
     func testSystemReset() {
         runHUIEventTest(
             .systemReset

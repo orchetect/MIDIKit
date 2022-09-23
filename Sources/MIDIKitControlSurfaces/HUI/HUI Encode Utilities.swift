@@ -198,6 +198,24 @@ func encodeHUIVPotValue(
     )
 }
 
+// MARK: - Jog Wheel Delta
+
+/// Utility:
+/// Encodes HUI Jog Wheel delta value message as a MIDI event. (To host)
+///
+/// - Parameters:
+///   - rawDelta: Encoded delta -/+ value (7-bit signed integer bit pattern).
+/// - Returns: MIDI event.
+func encodeJogWheel(
+    rawDelta: UInt7
+) -> MIDIEvent {
+    .cc(
+        0x0D,
+        value: .midi1(rawDelta),
+        channel: 0
+    )
+}
+
 // MARK: - Large Text Display
 
 /// Utility:

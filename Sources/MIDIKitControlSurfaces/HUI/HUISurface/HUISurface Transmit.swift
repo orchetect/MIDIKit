@@ -60,7 +60,7 @@ extension HUISurface {
         midiOut(events)
     }
     
-    /// Transmit V-Pot rotary knob delta change to the client surface.
+    /// Transmit V-Pot rotary knob delta change to the host.
     ///
     /// - Parameters:
     ///   - vPot: V-Pot identity.
@@ -70,6 +70,14 @@ extension HUISurface {
         delta: Int7
     ) {
         let event = encodeHUIVPotValue(for: vPot, rawValue: delta.rawUInt7Byte)
+        midiOut(event)
+    }
+    
+    /// Transmit Jog Wheel delta change to the host.
+    public func transmitJogWheel(
+        delta: Int7
+    ) {
+        let event = encodeJogWheel(rawDelta: delta.rawUInt7Byte)
         midiOut(event)
     }
     

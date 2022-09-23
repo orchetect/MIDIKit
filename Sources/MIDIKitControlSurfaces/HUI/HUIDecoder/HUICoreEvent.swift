@@ -60,6 +60,9 @@ internal enum HUICoreEvent: Equatable, Hashable {
         state: Bool
     )
     
+    /// Jog Wheel -/+ delta change.
+    case jogWheel(delta: Int7)
+    
     /// System Reset:
     /// Message that tells the host that the HUI surface is powering on or off.
     case systemReset
@@ -111,6 +114,9 @@ extension HUICoreEvent: CustomStringConvertible {
             state: state
         ):
             return "switch(\(huiSwitch), state: \(state ? "on" : "off"))"
+            
+        case let .jogWheel(delta):
+            return "jogWheel(delta: \(delta))"
             
         case .systemReset:
             return "systemReset"

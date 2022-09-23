@@ -266,6 +266,20 @@ extension HUIDecoder {
             
             faderMSB[channel] = dataByte2
             
+        case 0x0D:
+            // Jog Wheel delta
+            
+            let value = Int7(bitPattern: dataByte2)
+            
+            switch role {
+            case .host:
+                throw HUIDecoderError.unhandled(
+                    "Jog Wheel event decoded but host is not capable of generating Jog Wheel events, only receiving them."
+                )
+            case .surface:
+                return .jogWheel(delta: value)
+            }
+            
         case 0x20 ... 0x27:
             // Channel Strip Fader level LSB
             

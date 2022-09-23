@@ -12,23 +12,26 @@ extension HUISurfaceEvent {
         switch self {
         case .ping:
             return [encodeHUIPing(to: .host)]
-
+        
         case let .levelMeter(channelStrip, side, level):
             return [encodeHUILevelMeter(
                 channel: channelStrip,
                 side: side,
                 level: level
             )]
-            
+        
         case let .faderLevel(channelStrip, level):
             return encodeHUIFader(level: level, channel: channelStrip)
-            
+        
         case let .vPot(vPot, value):
             return [encodeHUIVPotValue(for: vPot, rawValue: value.rawUInt7Byte)]
+        
+        case let .jogWheel(delta):
+            return [encodeJogWheel(rawDelta: delta.rawUInt7Byte)]
             
         case let .switch(huiSwitch, state):
             return encodeHUISwitch(huiSwitch, state: state, to: .host)
-            
+        
         case .systemReset:
             return [encodeHUISystemReset()]
         }
@@ -61,6 +64,9 @@ extension HUISurfaceEvent: _HUIEventProtocol {
             
         case .systemReset:
             self = .systemReset
+            
+        case let .jogWheel(delta):
+            self = .jogWheel(delta: delta)
             
         default:
             // TODO: should never happen, but not great solution
