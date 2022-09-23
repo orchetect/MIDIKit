@@ -9,12 +9,25 @@ import MIDIKitCore
 
 /// Enum describing a HUI surface V-Pot.
 public enum HUIVPot: Equatable, Hashable {
+    /// Channel strip V-Pot.
     case channel(UInt4)
+    
+    /// Edit/Assign V-Pot A.
     case editAssignA
+    
+    /// Edit Assign V-Pot B.
     case editAssignB
+    
+    /// Edit/Assign V-Pot C.
     case editAssignC
+    
+    /// Edit/Assign V-Pot D.
     case editAssignD
+    
+    /// Edit/Assign Scroll rotary knob.
+    /// This is a user-input knob only and has no LED ring display.
     case editAssignScroll
+    
     
     /// Internal:
     /// Initialize from raw value for encoding/decoding HUI message.

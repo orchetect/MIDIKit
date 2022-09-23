@@ -8,7 +8,9 @@ import Foundation
 import MIDIKitCore
 import MIDIKitInternals
 
-/// Object representing a ``HUIHost`` bank (connectable to one HUI device).
+/// Object representing a ``HUIHost`` bank (connectable to one HUI surface over bidirectional MIDI).
+///
+/// This object is created and managed by ``HUIHost``. Do not instantiate this object directly. Instead, call ``HUIHost/addBank(huiEventHandler:midiOutHandler:remotePresenceChangedHandler:)`` to add banks to your ``HUIHost`` instance.
 public final class HUIHostBank {
     // MARK: - Decoder
     
@@ -91,6 +93,7 @@ public final class HUIHostBank {
     
     // MARK: - Init
     
+    /// Internal: Init.
     init(
         huiEventHandler: HUIEventHandler?,
         midiOutHandler: MIDIOutHandler?,

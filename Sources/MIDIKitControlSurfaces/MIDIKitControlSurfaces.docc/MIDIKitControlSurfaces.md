@@ -12,18 +12,27 @@ MIDI control surface protocol abstractions (HUI, etc.) for MIDIKit.
 
 - <doc:MIDIKitControlSurfaces-Getting-Started>
 
-### HUI
+### HUI Host (DAW)
 
 - ``HUIHost``
 - ``HUIHostBank``
+- ``HUIHostEvent``
+- <doc:MIDIKitControlSurfaces-Text>
+
+### HUI Surface (Controller)
+
 - ``HUISurface``
 - ``HUISurfaceModel``
 - ``HUISurfaceModelNotification``
+- ``HUISurfaceEvent``
+
+### HUI Common
+
 - ``HUISwitch``
 
-### MCU
+- ``HUIVPot``
+- ``HUIVPotDisplay``
 
-- ``MCU``
 
 ### MIDIKit Protocol Conformances
 

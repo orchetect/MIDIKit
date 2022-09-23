@@ -31,6 +31,7 @@ For more detailed documentation on these types, see MIDIKitCore documentation.
 
 ### Additional Value Types
 
+- ``Int7``
 - ``UInt9``
 - ``UInt25``
 - ``UMPWord``

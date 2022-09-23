@@ -100,13 +100,13 @@ extension HUIVPotDisplay {
         case centerWidth7    = 0x35
         case centerWidth9    = 0x36
         case centerWidth11   = 0x37
-        /// Same state as ``fromCenterWidth11``.
+        /// Same state as ``centerWidth11``.
         case centerWidth11altA = 0x38
-        /// Same state as ``fromCenterWidth11``.
+        /// Same state as ``centerWidth11``.
         case centerWidth11altB = 0x39
-        /// Same state as ``fromCenterWidth11``.
+        /// Same state as ``centerWidth11``.
         case centerWidth11altC = 0x3A
-        /// Same state as ``fromCenterWidth11``.
+        /// Same state as ``centerWidth11``.
         case centerWidth11altD = 0x3B
         
         /// LED configuration represented as a string of 11 characters.

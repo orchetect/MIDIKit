@@ -26,6 +26,7 @@ public final class HUIHost {
     
     // MARK: - Init
     
+    /// Initialize with defaults.
     public init() {
         startPingTimer()
     }

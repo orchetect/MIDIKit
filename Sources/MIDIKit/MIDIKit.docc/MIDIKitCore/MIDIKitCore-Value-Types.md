@@ -74,6 +74,7 @@ The inverse is also true when converting from a unit interval to a MIDI 1.0 or M
 
 ### Additional Value Types
 
+- ``Int7``
 - ``UInt9``
 - ``UInt25``
 - ``UMPWord``

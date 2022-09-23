@@ -2,18 +2,29 @@
 
 ## Topics
 
-### Supporting Types
+### Coding
 
-- ``HUICoreEvent``
+- ``HUIRole``
+- ``HUIHostEventDecoder``
+- ``HUISurfaceEventDecoder``
+- ``HUIDecoderError``
+
+### Switch Parameters
+
 - ``HUIZone``
 - ``HUIPort``
 - ``HUIZoneAndPort``
 
-### Classes
+### HUI Strings and Characters
 
-- ``HUIParser``
+- ``HUICharacterProtocol``
+- ``HUIStringProtocol``
+- ``HUIStringCharsValidation``
+- ``HUILargeDisplaySlices``
 
 ### Protocols
 
-- ``HUIParameterProtocol``
+- ``HUIDecoderProtocol``
+- ``HUIEventProtocol``
+- ``HUISwitchProtocol``
 - ``HUISurfaceStateProtocol``
