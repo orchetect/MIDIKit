@@ -114,6 +114,34 @@ final class Int7_Tests: XCTestCase {
         XCTAssertEqual(Int7(truncatingIfNecessary: -65).binaryString, "0b0111111") // wrap 63
         XCTAssertEqual(Int7(truncatingIfNecessary: -66).binaryString, "0b0111110") // wrap 62
     }
+    
+    func testInit_BitPattern_UInt7() {
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b1000001)).intValue, -63) // wrap -63
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b1000000)).intValue, -64) // wrap -64
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b0111111)).intValue,  63) // max
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b0000001)).intValue,   1)
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b0000000)).intValue,   0)
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b1111111)).intValue,  -1)
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b1111110)).intValue,  -2)
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b1000001)).intValue, -63)
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b1000000)).intValue, -64) // min
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b0111111)).intValue,  63) // wrap 63
+        XCTAssertEqual(Int7(bitPattern: UInt7(0b0111110)).intValue,  62) // wrap 62
+    }
+    
+    func testInit_BitPattern_UInt8() {
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b1000001)).intValue, -63) // wrap -63
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b1000000)).intValue, -64) // wrap -64
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b0111111)).intValue,  63) // max
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b0000001)).intValue,   1)
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b0000000)).intValue,   0)
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b1111111)).intValue,  -1)
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b1111110)).intValue,  -2)
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b1000001)).intValue, -63)
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b1000000)).intValue, -64) // min
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b0111111)).intValue,  63) // wrap 63
+        XCTAssertEqual(Int7(bitPattern: UInt8(0b0111110)).intValue,  62) // wrap 62
+    }
 }
 
 #endif
