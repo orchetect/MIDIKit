@@ -1,8 +1,7 @@
 //
 //  HUIHostView.swift
-//  HUITest
-//
-//  Created by Steffan Andrews on 2022-09-19.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitIO
@@ -110,7 +109,9 @@ struct HUIHostView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
             Text("This window acts as a HUI host (ie: a DAW) and connects to the HUI surface.")
-            Text("To test the HUI surface with an actual DAW instead (such as Pro Tools, Logic, Cubase, etc.), close this window and the HUI Surface window can be used as a standalone HUI device with the DAW.")
+            Text(
+                "To test the HUI surface with an actual DAW instead (such as Pro Tools, Logic, Cubase, etc.), close this window and the HUI Surface window can be used as a standalone HUI device with the DAW."
+            )
             
             Text((huiHostHelper.isRemotePresent ? "🟢" : "🔴") + " Surface")
             

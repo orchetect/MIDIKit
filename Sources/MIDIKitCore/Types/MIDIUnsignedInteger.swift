@@ -113,7 +113,7 @@ extension _MIDIUnsignedInteger {
 // MARK: - Strideable
 
 extension MIDIUnsignedInteger /*: Strideable */ {
-    //public typealias Stride = Int
+    // public typealias Stride = Int
     // Stride is already expressed as same-type constraint on MIDIUnsignedInteger
     
     public func advanced(by n: Stride) -> Self {
@@ -128,7 +128,7 @@ extension MIDIUnsignedInteger /*: Strideable */ {
 // MARK: - ExpressibleByIntegerLiteral
 
 extension MIDIUnsignedInteger /*: ExpressibleByIntegerLiteral */ {
-    //public typealias IntegerLiteralType = Storage
+    // public typealias IntegerLiteralType = Storage
     // IntegerLiteralType is already expressed as same-type constraint on MIDIUnsignedInteger
     
     public init(integerLiteral value: Storage) {

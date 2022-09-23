@@ -92,7 +92,7 @@ extension HUISurfaceModel {
 /// Keyed by slice index (`0 ... 7`).
 public typealias HUILargeDisplaySlices = [UInt4: [HUILargeDisplayCharacter]]
 
-extension Dictionary<UInt4, [HUILargeDisplayCharacter]> {
+extension [UInt4: [HUILargeDisplayCharacter]] {
     /// Internal:
     /// Converts two 40-char large display strings to a dictionary of slices.
     /// Keyed by slice index (`0 ... 7`).
@@ -103,4 +103,3 @@ extension Dictionary<UInt4, [HUILargeDisplayCharacter]> {
         self = HUISurfaceModel.LargeDisplay.slices(top: top, bottom: bottom)
     }
 }
-

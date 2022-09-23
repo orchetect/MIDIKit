@@ -8,14 +8,15 @@ import Foundation
 
 public protocol HUIStringProtocol: CustomStringConvertible
 where Self: Equatable & Hashable,
-      Element: Equatable & Hashable {
+      Element: Equatable & Hashable
+{
     associatedtype Element: HUICharacterProtocol
     static var defaultChars: [Element] { get }
     
     /// Fixed (static) char length for the string.
     static var staticCount: Int { get }
     
-    /* @HUIStringCharsValidation */
+    // @HUIStringCharsValidation
     /// HUI-encoded characters that make up the string.
     var chars: [Element] { get set }
     

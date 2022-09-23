@@ -66,13 +66,16 @@ extension HUISurfaceView {
                 }
                 
                 Group {
-                    Text(huiSurface.model.channelStrips[channel.intValue].nameTextDisplay.stringValue)
-                        .font(.system(size: 16, weight: .regular, design: .monospaced))
-                        .foregroundColor(.green)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 26)
-                        .background(Color.black)
-                        .cornerRadius(3.0, antialiased: true)
+                    Text(
+                        huiSurface.model.channelStrips[channel.intValue].nameTextDisplay
+                            .stringValue
+                    )
+                    .font(.system(size: 16, weight: .regular, design: .monospaced))
+                    .foregroundColor(.green)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 26)
+                    .background(Color.black)
+                    .cornerRadius(3.0, antialiased: true)
                     
                     HUIStateButton(
                         "SELECT",

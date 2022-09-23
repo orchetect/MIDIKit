@@ -138,7 +138,7 @@ func encodeHUIFader(
     channel: UInt4
 ) -> [MIDIEvent] {
     // UInt4 is self-validating, no need for guard
-    //guard (0x0 ... 0x7).contains(channel) else { return [] }
+    // guard (0x0 ... 0x7).contains(channel) else { return [] }
     
     let event1 = MIDIEvent.cc(
         HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToHost.toUInt7,

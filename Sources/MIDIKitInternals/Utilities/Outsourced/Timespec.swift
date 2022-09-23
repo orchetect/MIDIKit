@@ -65,7 +65,7 @@ extension timespec {
 extension timespec {
     /// Add two instances of `timespec`.
     @_disfavoredOverload
-    static public func + (lhs: timespec, rhs: timespec) -> timespec {
+    public static func + (lhs: timespec, rhs: timespec) -> timespec {
         let nsRaw = rhs.tv_nsec + lhs.tv_nsec
         let ns = nsRaw % 1_000_000_000
         let s = lhs.tv_sec + rhs.tv_sec + (nsRaw / 1_000_000_000)
@@ -74,7 +74,7 @@ extension timespec {
     
     /// Subtract two instances of `timespec`.
     @_disfavoredOverload
-    static public func - (lhs: timespec, rhs: timespec) -> timespec {
+    public static func - (lhs: timespec, rhs: timespec) -> timespec {
         let nsRaw = lhs.tv_nsec - rhs.tv_nsec
         
         if nsRaw >= 0 {

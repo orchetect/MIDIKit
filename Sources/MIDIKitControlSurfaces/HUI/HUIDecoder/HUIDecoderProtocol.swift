@@ -29,4 +29,3 @@ extension HUIDecoderProtocol {
         self.eventHandler = eventHandler
     }
 }
-

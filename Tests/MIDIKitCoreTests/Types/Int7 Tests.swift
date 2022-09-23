@@ -10,6 +10,9 @@ import XCTest
 import MIDIKitCore
 
 final class Int7_Tests: XCTestCase {
+    // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
+    // swiftformat:disable spacearoundoperators
+    
     fileprivate let _min      = 0b1111111 // int -64
     fileprivate let _midpoint = 0b0000000 // int   0
     fileprivate let _max      = 0b0111111 // int  63

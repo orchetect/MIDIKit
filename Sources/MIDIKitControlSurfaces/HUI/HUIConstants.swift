@@ -22,13 +22,21 @@ extension HUIConstants {
         
         // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
         // [0x90, 0x00, 0x7F]
-        static let kPingReplyToHostMessage: MIDIEvent = .noteOn(0, velocity: .midi1(0x7F), channel: 0)
+        static let kPingReplyToHostMessage: MIDIEvent = .noteOn(
+            0,
+            velocity: .midi1(0x7F),
+            channel: 0
+        )
         
         static let kSystemResetMessage: MIDIEvent = .systemReset() // [0xFF]
         
         // [0xF0, 0x00, 0x00, 0x66, 0x05, 0x00]
         enum kSysEx {
-            public static let kManufacturer: MIDIEvent.SysExManufacturer = .threeByte(byte2: 0x00, byte3: 0x66) // Mackie
+            /// Mackie SysEx Manufacturer ID
+            public static let kManufacturer: MIDIEvent.SysExManufacturer = .threeByte(
+                byte2: 0x00,
+                byte3: 0x66
+            )
             public static let kSubID1: UInt8 = 0x05 // product ID?
             public static let kSubID2: UInt8 = 0x00
         }

@@ -10,14 +10,18 @@ import MIDIKitCore
 /// Parses received MIDI events and converts them to ``HUIHostEvent`` events.
 public final class HUIHostEventDecoder: HUIDecoderProtocol {
     // HUIDecoderProtocol
+    
     public typealias Event = HUIHostEvent
+    
     public var eventHandler: EventHandler?
+    
     public init() {
         decoder = HUIDecoder(role: .host) { [weak self] coreEvent in
             let huiEvent = Event(from: coreEvent)
             self?.eventHandler?(huiEvent)
         }
     }
+
     public func reset() {
         decoder.reset()
     }

@@ -113,20 +113,20 @@ extension HUITimeDisplayCharacter {
     public var hasDot: Bool {
         switch self {
         case .num0, .num1, .num2, .num3, .num4,
-                .num5, .num6, .num7, .num8, .num9,
-                .A, .B, .C, .D, .E, .F:
+             .num5, .num6, .num7, .num8, .num9,
+             .A, .B, .C, .D, .E, .F:
             return false
             
         case .num0dot, .num1dot, .num2dot, .num3dot, .num4dot,
-                .num5dot, .num6dot, .num7dot, .num8dot, .num9dot,
-                .Adot, .Bdot, .Cdot, .Ddot, .Edot, .Fdot:
+             .num5dot, .num6dot, .num7dot, .num8dot, .num9dot,
+             .Adot, .Bdot, .Cdot, .Ddot, .Edot, .Fdot:
             return true
             
         case .space,
-                .unknown0x21, .unknown0x22, .unknown0x23,
-                .unknown0x24, .unknown0x25, .unknown0x26, .unknown0x27,
-                .unknown0x28, .unknown0x29, .unknown0x2A, .unknown0x2B,
-                .unknown0x2C, .unknown0x2D, .unknown0x2E, .unknown0x2F:
+             .unknown0x21, .unknown0x22, .unknown0x23,
+             .unknown0x24, .unknown0x25, .unknown0x26, .unknown0x27,
+             .unknown0x28, .unknown0x29, .unknown0x2A, .unknown0x2B,
+             .unknown0x2C, .unknown0x2D, .unknown0x2E, .unknown0x2F:
             return false
             
         case .spaceDot:

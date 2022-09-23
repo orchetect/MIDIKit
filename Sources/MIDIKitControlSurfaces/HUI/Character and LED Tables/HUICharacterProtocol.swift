@@ -53,7 +53,7 @@ extension HUICharacterProtocol /* : CustomStringConvertible */ {
 
 // MARK: - Sequence Category Methods
 
-extension RangeReplaceableCollection where Element : HUICharacterProtocol {
+extension RangeReplaceableCollection where Element: HUICharacterProtocol {
     /// Returns the HUI character sequence as a single concatenated string of characters.
     public var stringValue: String {
         map { $0.string }.joined()
@@ -68,7 +68,7 @@ extension RangeReplaceableCollection where Element : HUICharacterProtocol {
         case ..<padCount:
             return Array(self) + .init(repeating: pad, count: padCount - count)
         case (padCount + 1)...:
-            return Array(self.prefix(padCount))
+            return Array(prefix(padCount))
         default:
             return Array(self)
         }

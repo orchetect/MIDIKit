@@ -83,7 +83,7 @@ extension HUIHostBank {
     }
     
     /// Transmit large display text (40 x 2 characters) to the client surface.
-    /// 
+    ///
     /// - Parameters
     ///   - display: Full display to transmit
     public func transmitLargeDisplay(

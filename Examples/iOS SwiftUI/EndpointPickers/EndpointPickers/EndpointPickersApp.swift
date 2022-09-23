@@ -45,31 +45,31 @@ struct EndpointPickersApp: App {
             .environmentObject(midiHelper)
         }
     
-            .onChange(of: midiInSelectedID) {
-                if $0 == .invalidMIDIIdentifier {
-                    midiInSelectedDisplayName = "None"
-                } else if let found = midiManager.endpoints.outputs
-                    .first(whereUniqueID: .init($0))
-                {
-                    midiInSelectedDisplayName = found.displayName
-                }
-    
-                midiHelper.midiInUpdateConnection(selectedUniqueID: $0)
-                midiSavePersistentState()
+        .onChange(of: midiInSelectedID) {
+            if $0 == .invalidMIDIIdentifier {
+                midiInSelectedDisplayName = "None"
+            } else if let found = midiManager.endpoints.outputs
+                .first(whereUniqueID: .init($0))
+            {
+                midiInSelectedDisplayName = found.displayName
             }
     
-            .onChange(of: midiOutSelectedID) {
-                if $0 == .invalidMIDIIdentifier {
-                    midiOutSelectedDisplayName = "None"
-                } else if let found = midiManager.endpoints.inputs
-                    .first(whereUniqueID: .init($0))
-                {
-                    midiOutSelectedDisplayName = found.displayName
-                }
+            midiHelper.midiInUpdateConnection(selectedUniqueID: $0)
+            midiSavePersistentState()
+        }
     
-                midiHelper.midiOutUpdateConnection(selectedUniqueID: $0)
-                midiSavePersistentState()
+        .onChange(of: midiOutSelectedID) {
+            if $0 == .invalidMIDIIdentifier {
+                midiOutSelectedDisplayName = "None"
+            } else if let found = midiManager.endpoints.inputs
+                .first(whereUniqueID: .init($0))
+            {
+                midiOutSelectedDisplayName = found.displayName
             }
+    
+            midiHelper.midiOutUpdateConnection(selectedUniqueID: $0)
+            midiSavePersistentState()
+        }
     }
 }
 

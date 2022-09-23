@@ -38,7 +38,9 @@ public final class HUISurface {
     // MARK: - Handlers
     
     /// HUI event receive handler.
-    public typealias ModelNotificationHandler = ((_ notification: HUISurfaceModelNotification) -> Void)
+    public typealias ModelNotificationHandler = (
+        (_ notification: HUISurfaceModelNotification) -> Void
+    )
     
     /// Notification handler that is called as a result of the ``model`` being updated from received HUI events.
     public var modelNotificationHandler: ModelNotificationHandler?

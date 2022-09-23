@@ -83,7 +83,7 @@ struct HUIButton: View, MomentaryButtonProtocol {
         fontSize: CGFloat? = nil
     ) {
         self.title = title
-        self.huiSwitch = .init(param)
+        huiSwitch = .init(param)
         self.width = width
         self.fontSize = fontSize
     }
@@ -121,7 +121,7 @@ struct HUIStateButton: View, MomentaryButtonProtocol  {
         self.title = title
         self.fontSize = fontSize
         self.width = width
-        self.huiSwitch = .init(param)
+        huiSwitch = .init(param)
         self.ledColor = ledColor.color
     }
 
@@ -179,7 +179,7 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
         fontSize: CGFloat? = 14
     ) {
         self.title = title
-        self.huiSwitch = .init(param)
+        huiSwitch = .init(param)
         self.width = width
         self.spacing = spacing
         self.widthScale = widthScale
