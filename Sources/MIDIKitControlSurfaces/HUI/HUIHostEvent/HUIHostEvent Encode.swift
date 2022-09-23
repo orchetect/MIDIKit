@@ -80,7 +80,7 @@ extension HUIHostEvent: _HUIEventProtocol {
         case let .switch(huiSwitch, state):
             self = .switch(huiSwitch: huiSwitch, state: state)
             
-        case let .jogWheel:
+        case .jogWheel:
             // TODO: should never happen, but not great solution
             fatalError()
             

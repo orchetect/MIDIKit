@@ -66,7 +66,6 @@ final class HUISurfaceEventDecoderTests: XCTestCase {
             .systemReset
         )
     }
-
 }
 
 #endif
