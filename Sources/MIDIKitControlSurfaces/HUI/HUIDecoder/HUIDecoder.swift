@@ -356,7 +356,7 @@ extension HUIDecoder {
         
         // encodes both side and value
         let sideAndValue = payload.amount.midi1Value.uInt8Value.nibbles
-        let side: HUIModel.StereoLevelMeter.Side = sideAndValue.high == 0 ? .left : .right
+        let side: HUISurfaceModel.StereoLevelMeter.Side = sideAndValue.high == 0 ? .left : .right
         let level: Int = sideAndValue.low.intValue
         
         huiEventHandler?(.levelMeter(

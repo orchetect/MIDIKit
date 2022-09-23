@@ -23,7 +23,7 @@ public final class HUISurface {
     /// Represents state of an entire HUI control surface (all controls, display elements, etc.).
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes when ``HUISurface`` is instanced as a `@ObservedObject var`.
-    public internal(set) var model: HUIModel {
+    public internal(set) var model: HUISurfaceModel {
         willSet {
             if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *) {
                 objectWillChange.send()
@@ -124,7 +124,7 @@ public final class HUISurface {
         self.huiEventHandler = huiEventHandler
         self.midiOutHandler = midiOutHandler
             
-        model = HUIModel()
+        model = HUISurfaceModel()
             
         decoder = HUIDecoder(
             role: .surface,
@@ -158,7 +158,7 @@ public final class HUISurface {
         
     /// Resets state back to init state. Handlers are unaffected.
     public func reset() {
-        model = HUIModel()
+        model = HUISurfaceModel()
         decoder.reset()
     }
 }

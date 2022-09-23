@@ -1,12 +1,12 @@
 //
-//  HUIModel Accessors.swift
+//  HUISurfaceModel Accessors.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIModel: HUISurfaceStateProtocol {
+extension HUISurfaceModel: HUISurfaceStateProtocol {
     public typealias Switch = HUISwitch
     
     /// Returns the current state in the model of the given HUI switch parameter.

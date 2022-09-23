@@ -1,12 +1,12 @@
 //
-//  HUIModel Assign.swift
+//  HUISurfaceModel Assign.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIModel {
+extension HUISurfaceModel {
     /// State storage representing the Assign controls.
     public struct Assign: Equatable, Hashable {
         /// 4-character text display.
@@ -34,7 +34,7 @@ extension HUIModel {
     }
 }
 
-extension HUIModel.Assign: HUISurfaceStateProtocol {
+extension HUISurfaceModel.Assign: HUISurfaceStateProtocol {
     public typealias Switch = HUISwitch.Assign
     
     public func state(of huiSwitch: Switch) -> Bool {

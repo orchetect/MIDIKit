@@ -1,12 +1,12 @@
 //
-//  HUIModel WindowFunctions.swift
+//  HUISurfaceModel WindowFunctions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIModel {
+extension HUISurfaceModel {
     /// State storage representing Window Functions.
     public struct WindowFunctions: Equatable, Hashable {
         public var mix = false
@@ -18,7 +18,7 @@ extension HUIModel {
     }
 }
 
-extension HUIModel.WindowFunctions: HUISurfaceStateProtocol {
+extension HUISurfaceModel.WindowFunctions: HUISurfaceStateProtocol {
     public typealias Switch = HUISwitch.Window
 
     public func state(of huiSwitch: Switch) -> Bool {

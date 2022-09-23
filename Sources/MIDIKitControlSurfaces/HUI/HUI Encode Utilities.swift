@@ -166,10 +166,10 @@ func encodeHUIFader(
 /// - Returns: MIDI event.
 func encodeHUILevelMeter(
     channel: UInt4,
-    side: HUIModel.StereoLevelMeter.Side,
+    side: HUISurfaceModel.StereoLevelMeter.Side,
     level: Int
 ) -> MIDIEvent {
-    let clampedLevel = level.clamped(to: HUIModel.StereoLevelMeter.levelRange)
+    let clampedLevel = level.clamped(to: HUISurfaceModel.StereoLevelMeter.levelRange)
     let val = UInt8(high: side.rawValue.toUInt4, low: clampedLevel.toUInt4)
     return .notePressure(
         note: channel.toUInt7,
@@ -208,7 +208,7 @@ func encodeHUIVPotValue(
 ///   - display: Top and bottom text line text, each 40 characters in length.
 /// - Returns: MIDI event.
 func encodeHUILargeDisplay(
-    display: HUIModel.LargeDisplay
+    display: HUISurfaceModel.LargeDisplay
 ) -> [MIDIEvent] {
     encodeHUILargeDisplay(slices: display.slices)
 }
@@ -225,7 +225,7 @@ func encodeHUILargeDisplay(
     top: HUILargeDisplayString,
     bottom: HUILargeDisplayString
 ) -> [MIDIEvent] {
-    encodeHUILargeDisplay(slices: HUIModel.LargeDisplay.slices(top: top, bottom: bottom))
+    encodeHUILargeDisplay(slices: HUISurfaceModel.LargeDisplay.slices(top: top, bottom: bottom))
 }
 
 /// Utility:

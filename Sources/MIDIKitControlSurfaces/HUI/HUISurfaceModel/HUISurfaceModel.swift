@@ -1,5 +1,5 @@
 //
-//  HUIModel State.swift
+//  HUISurfaceModel.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -11,7 +11,7 @@
 /// The same model is used for:
 /// - The main control surface unit (including extra functions and control room section)
 /// - Any additional 8-fader bank extension units (except that the extra functions that don't exist on these hardware units simply don't apply and are ignored)
-public struct HUIModel: Equatable, Hashable {
+public struct HUISurfaceModel: Equatable, Hashable {
     // MARK: - State Storage
     
     /// State storage representing channel 8 strips and their components. (`0 ... 7`)

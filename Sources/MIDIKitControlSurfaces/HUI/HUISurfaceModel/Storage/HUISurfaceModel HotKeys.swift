@@ -1,12 +1,12 @@
 //
-//  HUIModel HotKeys.swift
+//  HUISurfaceModel HotKeys.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIModel {
+extension HUISurfaceModel {
     /// State storage representing HotKeys (keyboard shortcut keys).
     public struct HotKeys: Equatable, Hashable {
         public var shift = false
@@ -22,7 +22,7 @@ extension HUIModel {
     }
 }
 
-extension HUIModel.HotKeys: HUISurfaceStateProtocol {
+extension HUISurfaceModel.HotKeys: HUISurfaceStateProtocol {
     public typealias Switch = HUISwitch.HotKey
 
     public func state(of huiSwitch: Switch) -> Bool {

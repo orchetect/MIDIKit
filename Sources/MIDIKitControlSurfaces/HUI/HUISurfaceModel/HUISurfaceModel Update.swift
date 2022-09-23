@@ -1,5 +1,5 @@
 //
-//  HUIModel Update.swift
+//  HUISurfaceModel Update.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@ import MIDIKitCore
 
 // MARK: - Main Update Method
 
-extension HUIModel {
+extension HUISurfaceModel {
     /// Updates HUI state from a received ``HUICoreEvent`` (returned from ``HUIDecoder`` after parsing incoming HUI MIDI).
     /// The corresponding granular ``HUIEvent`` is then returned containing the result of the model change.
     ///
@@ -87,7 +87,7 @@ extension HUIModel {
 
 // MARK: - State Update Sub-Methods
 
-extension HUIModel {
+extension HUISurfaceModel {
     private mutating func updateStateFromLevelMeters(
         channelStrip: UInt4,
         side: StereoLevelMeter.Side,
@@ -110,7 +110,7 @@ extension HUIModel {
         channelStrip: UInt4,
         level: UInt14
     ) -> HUIEvent? {
-       channelStrips[channelStrip.intValue].fader.level = level
+        channelStrips[channelStrip.intValue].fader.level = level
         
         return .channelStrip(
             channel: channelStrip,
@@ -126,7 +126,7 @@ extension HUIModel {
         let display = HUIVPotDisplay(rawIndex: rawValue.uInt8Value)
         
         switch vPot {
-        case .channel(let chan):
+        case let .channel(chan):
             channelStrips[chan.intValue].vPotDisplay = display
             return .channelStrip(
                 channel: chan,

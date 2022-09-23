@@ -1,5 +1,5 @@
 //
-//  HUIModel ParameterEdit.swift
+//  HUISurfaceModel ParameterEdit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-extension HUIModel {
+extension HUISurfaceModel {
     /// State storage representing the Parameter Edit section.
     public struct ParameterEdit: Equatable, Hashable {
         public var assign = false
@@ -39,7 +39,7 @@ extension HUIModel {
     }
 }
 
-extension HUIModel.ParameterEdit: HUISurfaceStateProtocol {
+extension HUISurfaceModel.ParameterEdit: HUISurfaceStateProtocol {
     public typealias Switch = HUISwitch.ParameterEdit
 
     public func state(of huiSwitch: Switch) -> Bool {

@@ -1,12 +1,12 @@
 //
-//  HUIModel FunctionKey.swift
+//  HUISurfaceModel FunctionKey.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIModel {
+extension HUISurfaceModel {
     /// State storage representing the Function Key section.
     public struct FunctionKey: Equatable, Hashable {
         public var f1 = false
@@ -20,7 +20,7 @@ extension HUIModel {
     }
 }
 
-extension HUIModel.FunctionKey: HUISurfaceStateProtocol {
+extension HUISurfaceModel.FunctionKey: HUISurfaceStateProtocol {
     public typealias Switch = HUISwitch.FunctionKey
 
     public func state(of huiSwitch: Switch) -> Bool {

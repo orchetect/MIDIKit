@@ -1,12 +1,12 @@
 //
-//  HUIModel StereoLevelMeter.swift
+//  HUISurfaceModel StereoLevelMeter.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUIModel {
+extension HUISurfaceModel {
     /// State storage representing the state of a channel strip's stereo level meter on the meter bridge.
     ///
     /// As value increases, all LEDs up to and including that value will illuminate, representing an audio level meter with 12 LED segments. A value of `0x0` indicates no LEDs are illuminated.
@@ -99,7 +99,7 @@ extension HUIModel {
     }
 }
 
-extension HUIModel.StereoLevelMeter {
+extension HUISurfaceModel.StereoLevelMeter {
     /// Enum describing the side of a stereo level meter
     public enum Side: Equatable, Hashable, CustomStringConvertible {
         /// Left stereo channel.

@@ -1,5 +1,5 @@
 //
-//  HUIModel LargeDisplay.swift
+//  HUISurfaceModel LargeDisplay.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-extension HUIModel {
+extension HUISurfaceModel {
     /// State storage representing the Large Text Display (40 x 2 character matrix).
     public struct LargeDisplay: Equatable, Hashable {
         /// Top 40-character character readout.

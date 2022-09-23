@@ -10,7 +10,7 @@ extension HUIEvent {
     /// A discrete component of a HUI channel strip and its state change.
     public enum ChannelStripComponent: Equatable, Hashable {
         /// Stereo Level Meter.
-        case levelMeter(side: HUIModel.StereoLevelMeter.Side, level: Int)
+        case levelMeter(side: HUISurfaceModel.StereoLevelMeter.Side, level: Int)
         
         /// Record Ready Button LED.
         case recordReady(state: Bool)
