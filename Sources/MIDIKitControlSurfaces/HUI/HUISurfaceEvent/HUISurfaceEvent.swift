@@ -36,6 +36,10 @@ public enum HUISurfaceEvent: Equatable, Hashable {
         vPot: HUIVPot,
         delta: Int7
     )
+    
+    /// System reset message:
+    /// Whenever a HUI surface is turned on or off it should transmit this message to the host.
+    case systemReset
 }
 
 extension HUISurfaceEvent: CustomStringConvertible {
@@ -68,6 +72,8 @@ extension HUISurfaceEvent: CustomStringConvertible {
             delta: delta
         ):
             return "vPot(\(vPot), delta: \(delta))"
+        case .systemReset:
+            return "systemReset"
         }
     }
 }

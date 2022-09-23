@@ -54,6 +54,13 @@ final class HUISurfaceEventDecoderTests: XCTestCase {
             .vPot(vPot: .editAssignA, delta: 4)
         )
     }
+    
+    func testSystemReset() {
+        runHUIEventTest(
+            .systemReset
+        )
+    }
+
 }
 
 #endif

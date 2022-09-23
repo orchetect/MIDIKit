@@ -73,7 +73,7 @@ extension HUISurface {
         midiOut(event)
     }
     
-    /// Sends a message that tells the host that the HUI device is powering on or off.
+    /// Sends a message that tells the host that the HUI surface is powering on or off.
     public func transmitSystemReset() {
         midiOut(HUIConstants.kMIDI.kSystemResetMessage)
     }

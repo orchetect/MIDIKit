@@ -70,12 +70,12 @@ extension HUIDecoder: ReceivesMIDIEvents {
     func decode(event: MIDIEvent) throws -> HUICoreEvent? {
         switch event {
         case HUIConstants.kMIDI.kPingReplyToHostMessage where role == .surface:
-            // handler should update last ping received time/date stamp
-            // so it can maintain presence state for the remote HUI surface
+            // handler should send HUI ping-reply to host
             return .ping
             
         case HUIConstants.kMIDI.kPingToSurfaceMessage where role == .host:
-            // handler should send HUI ping-reply to host
+            // handler should update last ping received time/date stamp
+            // so it can maintain presence state for the remote HUI surface
             return .ping
             
         case let .noteOff(payload) where
@@ -98,6 +98,9 @@ extension HUIDecoder: ReceivesMIDIEvents {
             
         case let .notePressure(payload):
             return parse(levelMetersPayload: payload)
+            
+        case .systemReset where role == .surface:
+            return .systemReset
             
         default:
             Logger.debug("Unhandled MIDI event received: \(event)")

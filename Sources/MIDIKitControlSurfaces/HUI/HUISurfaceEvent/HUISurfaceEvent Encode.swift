@@ -28,6 +28,9 @@ extension HUISurfaceEvent {
             
         case let .switch(huiSwitch, state):
             return encodeHUISwitch(huiSwitch, state: state, to: .host)
+            
+        case .systemReset:
+            return [encodeHUISystemReset()]
         }
     }
 }
@@ -55,6 +58,9 @@ extension HUISurfaceEvent: _HUIEventProtocol {
             
         case let .switch(huiSwitch, state):
             self = .switch(huiSwitch: huiSwitch, state: state)
+            
+        case .systemReset:
+            self = .systemReset
             
         default:
             // TODO: should never happen, but not great solution

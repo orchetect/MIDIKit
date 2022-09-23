@@ -59,6 +59,10 @@ internal enum HUICoreEvent: Equatable, Hashable {
         huiSwitch: HUISwitch,
         state: Bool
     )
+    
+    /// System Reset:
+    /// Message that tells the host that the HUI surface is powering on or off.
+    case systemReset
 }
 
 extension HUICoreEvent: CustomStringConvertible {
@@ -107,6 +111,9 @@ extension HUICoreEvent: CustomStringConvertible {
             state: state
         ):
             return "switch(\(huiSwitch), state: \(state ? "on" : "off"))"
+            
+        case .systemReset:
+            return "systemReset"
         }
     }
 }

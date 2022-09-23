@@ -351,3 +351,11 @@ func huiSysExTemplate(body: [UInt8]) -> MIDIEvent {
         ] + body
     )
 }
+
+/// Utility:
+/// Encode HUI system reset message. (To host)
+///
+/// - Returns: MIDI event.
+func encodeHUISystemReset() -> MIDIEvent {
+    HUIConstants.kMIDI.kSystemResetMessage
+}

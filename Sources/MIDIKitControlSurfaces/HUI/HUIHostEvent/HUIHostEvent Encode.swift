@@ -79,6 +79,10 @@ extension HUIHostEvent: _HUIEventProtocol {
             
         case let .switch(huiSwitch, state):
             self = .switch(huiSwitch: huiSwitch, state: state)
+            
+        case .systemReset:
+            // TODO: should never happen, but not great solution
+            fatalError()
         }
     }
 }
