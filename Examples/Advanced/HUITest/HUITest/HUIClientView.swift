@@ -23,8 +23,8 @@ struct HUIClientView: View {
         huiSurface = {
             let huiSurface = HUISurface()
         
-            huiSurface.huiEventHandler = { event in
-                // Logger.debug(event)
+            huiSurface.modelNotificationHandler = { notification in
+                // Logger.debug(notification)
             }
         
             huiSurface.midiOutHandler = { [weak midiManager] midiEvents in

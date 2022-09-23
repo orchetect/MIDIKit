@@ -57,13 +57,13 @@ class HUIHostHelper: ObservableObject {
                 
                 DispatchQueue.main.async {
                     switch event {
-                    case .channelStrip(channel: 0, let component):
-                        switch component {
-                        case let .solo(state):
+                    case let .switch(huiSwitch, state):
+                        switch huiSwitch {
+                        case .channelStrip(0, .solo):
                             if state {
                                 self?.bank0Ch0Solo.toggle()
                             }
-                        case let .mute(state):
+                        case .channelStrip(0, .mute):
                             if state {
                                 self?.bank0Ch0Mute.toggle()
                             }
@@ -118,10 +118,10 @@ struct HUIHostView: View {
             GroupBox(label: Text("Channel Strip 1")) {
                 VStack {
                     Button("Set Channel Name") {
-                        huiBank0?.transmit(event: .channelStrip(
-                            channel: 0,
-                            .nameTextDisplay(text: .init(lossy: "TEXT"))
-                        ))
+                        huiBank0?.transmitSmallDisplay(
+                            .channel(0),
+                            text: .init(lossy: "TEXT")
+                        )
                     }
                     Toggle("Solo", isOn: $huiHostHelper.bank0Ch0Solo)
                         .onChange(of: huiHostHelper.bank0Ch0Solo) { newValue in

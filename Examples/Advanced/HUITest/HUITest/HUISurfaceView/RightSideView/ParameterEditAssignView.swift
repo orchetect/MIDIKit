@@ -15,18 +15,18 @@ extension HUISurfaceView {
                 VStack {
                     HUIStateButton(
                         "ASSIGN",
-                        .parameterEdit(.assign),
+                        .paramEdit(.assign),
                         .green
                     )
                     HUIStateButton(
                         "COMPARE",
-                        .parameterEdit(.compare),
+                        .paramEdit(.compare),
                         .green,
                         fontSize: 8.5
                     )
                     HUIStateButton(
                         "BYPASS",
-                        .parameterEdit(.bypass),
+                        .paramEdit(.bypass),
                         .green
                     )
                 }
@@ -38,7 +38,7 @@ extension HUISurfaceView {
                     VStack {
                         HUIStateButton(
                             "SELECT",
-                            .parameterEdit(.param1Select),
+                            .paramEdit(.param1Select),
                             .green
                         )
                         RotaryKnob(size: 40) // .paramEdit(.param1VPot)
@@ -51,7 +51,7 @@ extension HUISurfaceView {
                     VStack {
                         HUIStateButton(
                             "SELECT",
-                            .parameterEdit(.param2Select),
+                            .paramEdit(.param2Select),
                             .green
                         )
                         RotaryKnob(size: 40) // .paramEdit(.param2VPot)
@@ -64,7 +64,7 @@ extension HUISurfaceView {
                     VStack {
                         HUIStateButton(
                             "SELECT",
-                            .parameterEdit(.param3Select),
+                            .paramEdit(.param3Select),
                             .green
                         )
                         RotaryKnob(size: 40) // .paramEdit(.param3VPot)
@@ -77,7 +77,7 @@ extension HUISurfaceView {
                     VStack {
                         HUIStateButton(
                             "SELECT",
-                            .parameterEdit(.param4Select),
+                            .paramEdit(.param4Select),
                             .green
                         )
                         RotaryKnob(size: 40) // .paramEdit(.param4VPot)
@@ -90,7 +90,7 @@ extension HUISurfaceView {
                 VStack {
                     HUIStateButton(
                         "INSERT ○\nPARAM ●",
-                        .parameterEdit(.insertOrParam),
+                        .paramEdit(.insertOrParam),
                         .green,
                         width: 60
                     )
