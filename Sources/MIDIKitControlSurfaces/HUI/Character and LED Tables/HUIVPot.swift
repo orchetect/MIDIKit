@@ -58,7 +58,8 @@ public enum HUIVPot: Equatable, Hashable {
     }
 }
 
-public enum HUIVPotValue: Equatable, Hashable {
+// TODO: remove later if not needed
+enum HUIVPotValue: Equatable, Hashable {
     /// V-Pot display LED ring. (11 LED ring with a lower LED)
     /// Only applies to HUI messages sent from the host in order to update a client surface's V-Pot LEDs.
     case display(HUIVPotDisplay)

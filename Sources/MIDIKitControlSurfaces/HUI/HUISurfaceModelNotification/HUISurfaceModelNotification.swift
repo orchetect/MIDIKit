@@ -39,7 +39,7 @@ public enum HUISurfaceModelNotification: Hashable {
     case timeDisplay(timeString: HUITimeDisplayString)
     
     /// An LED changed near the time display.
-    case timeDisplayStatus(
+    case timeDisplay(
         param: HUISwitch.TimeDisplay,
         state: Bool
     )

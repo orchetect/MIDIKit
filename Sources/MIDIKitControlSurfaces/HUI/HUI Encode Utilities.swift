@@ -225,7 +225,7 @@ func encodeHUILargeDisplay(
     top: HUILargeDisplayString,
     bottom: HUILargeDisplayString
 ) -> [MIDIEvent] {
-    encodeHUILargeDisplay(slices: HUISurfaceModel.LargeDisplay.slices(top: top, bottom: bottom))
+    encodeHUILargeDisplay(slices: .init(top: top, bottom: bottom))
 }
 
 /// Utility:
@@ -236,7 +236,7 @@ func encodeHUILargeDisplay(
 ///   - slices: Between 1 and 8 text slices of 10 characters each.
 /// - Returns: MIDI event.
 func encodeHUILargeDisplay(
-    slices: [UInt4: [HUILargeDisplayCharacter]]
+    slices: HUILargeDisplaySlices
 ) -> [MIDIEvent] {
     // even though it's possible to embed more than one slice in a single SysEx message,
     // we will just do one SysEx per slice (which is how Pro Tools transmits slices)

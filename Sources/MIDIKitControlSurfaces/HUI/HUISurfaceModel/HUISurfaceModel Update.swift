@@ -20,7 +20,7 @@ extension HUISurfaceModel {
     /// - Returns: The strongly-typed ``HUISurfaceModelNotification`` containing the result of the state change.
     @discardableResult
     public mutating func updateState(
-        from receivedEvent: HUICoreEvent
+        from receivedEvent: HUIHostEvent
     ) -> HUISurfaceModelNotification? {
         switch receivedEvent {
         case .ping:
@@ -48,11 +48,11 @@ extension HUISurfaceModel {
             
         case let .vPot(
             vPot: vPot,
-            value: value
+            display: display
         ):
             return updateStateFromVPot(
                 vPot: vPot,
-                value: value
+                display: display
             )
             
         case let .largeDisplay(slices: slices):
@@ -120,37 +120,35 @@ extension HUISurfaceModel {
     
     private mutating func updateStateFromVPot(
         vPot: HUIVPot,
-        value: HUIVPotValue
+        display: HUIVPotDisplay
     ) -> HUISurfaceModelNotification? {
-        let rawValue = value.rawValue
-        let display = HUIVPotDisplay(rawIndex: rawValue.uInt8Value)
-        
         switch vPot {
         case let .channel(chan):
             channelStrips[chan.intValue].vPotDisplay = display
             return .channelStrip(
                 channel: chan,
-                .vPot(value: value)
+                .vPot(display: display)
             )
         case .editAssignA:
             parameterEdit.param1VPotDisplay = display
-            return .paramEdit(.param1VPot(value: value))
+            return .paramEdit(.param1VPot(display: display))
         case .editAssignB:
             parameterEdit.param2VPotDisplay = display
-            return .paramEdit(.param2VPot(value: value))
+            return .paramEdit(.param2VPot(display: display))
         case .editAssignC:
             parameterEdit.param3VPotDisplay = display
-            return .paramEdit(.param3VPot(value: value))
+            return .paramEdit(.param3VPot(display: display))
         case .editAssignD:
             parameterEdit.param4VPotDisplay = display
-            return .paramEdit(.param4VPot(value: value))
+            return .paramEdit(.param4VPot(display: display))
         case .editAssignScroll:
-            return .paramEdit(.paramScroll(delta: value.wrappedValue))
+            // scroll V-Pot has no LED ring display; ignore
+            return nil
         }
     }
     
     private mutating func updateStateFromLargeDisplay(
-        slices: [UInt4: [HUILargeDisplayCharacter]]
+        slices: HUILargeDisplaySlices
     ) -> HUISurfaceModelNotification? {
         guard !slices.isEmpty else { return nil }
         
@@ -247,10 +245,8 @@ extension HUISurfaceModel {
                     .select(state: state)
                 )
             case .faderTouched:
-                return .channelStrip(
-                    channel: channel,
-                    .faderTouched(state: state)
-                )
+                // ignore - only HUI surface can send fader touch messages
+                return nil
             }
             
         case let .hotKey(subParam):
@@ -278,7 +274,7 @@ extension HUISurfaceModel {
             return .numPad(param: subParam, state: state)
             
         case let .timeDisplay(subParam):
-            return .timeDisplayStatus(param: subParam, state: state)
+            return .timeDisplay(param: subParam, state: state)
             
         case let .autoEnable(subParam):
             return .autoEnable(param: subParam, state: state)

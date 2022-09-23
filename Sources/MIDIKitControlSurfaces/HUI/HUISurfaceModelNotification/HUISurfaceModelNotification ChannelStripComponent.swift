@@ -21,8 +21,8 @@ extension HUISurfaceModelNotification {
         /// V-Sel Button LED.
         case vPotSelect(state: Bool)
         
-        /// V-Pot encoding.
-        case vPot(value: HUIVPotValue)
+        /// V-Pot LED ring display.
+        case vPot(display: HUIVPotDisplay)
         
         /// Auto(mation) Button LED.
         case auto(state: Bool)
@@ -38,9 +38,6 @@ extension HUISurfaceModelNotification {
         
         /// Select Button LED.
         case select(state: Bool)
-        
-        /// Motorized Fader touched state.
-        case faderTouched(state: Bool)
         
         /// Motorized Fader level.
         case faderLevel(level: UInt14)

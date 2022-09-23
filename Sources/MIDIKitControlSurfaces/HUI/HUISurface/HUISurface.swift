@@ -33,7 +33,7 @@ public final class HUISurface {
     
     // MARK: - Decoder
     
-    internal var decoder: HUIDecoder!
+    var decoder: HUIHostEventDecoder!
     
     // MARK: - Handlers
     
@@ -123,24 +123,21 @@ public final class HUISurface {
     ) {
         self.modelNotificationHandler = modelNotificationHandler
         self.midiOutHandler = midiOutHandler
-            
+        
         model = HUISurfaceModel()
-            
-        decoder = HUIDecoder(
-            role: .surface,
-            huiEventHandler: { [weak self] huiCoreEvent in
-                if case .ping = huiCoreEvent {
-                    self?.receivedPing()
-                }
-                
-                // process event
-                if let surfaceEvent = self?.model.updateState(from: huiCoreEvent) {
-                    self?.modelNotificationHandler?(surfaceEvent)
-                } else {
-                    Logger.debug("Unhandled HUI event: \(huiCoreEvent)")
-                }
+        
+        decoder = HUIHostEventDecoder { [weak self] huiCoreEvent in
+            if case .ping = huiCoreEvent {
+                self?.receivedPing()
             }
-        )
+                
+            // process event
+            if let surfaceEvent = self?.model.updateState(from: huiCoreEvent) {
+                self?.modelNotificationHandler?(surfaceEvent)
+            } else {
+                Logger.debug("Unhandled HUI event: \(huiCoreEvent)")
+            }
+        }
         
         // presence timer
         setupRemotePresenceTimer()

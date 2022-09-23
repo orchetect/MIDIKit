@@ -12,12 +12,12 @@ import MIDIKitInternals
 public final class HUIHostBank {
     // MARK: - Decoder
     
-    var decoder: HUIDecoder = .init(role: .host)
+    var decoder: HUISurfaceEventDecoder!
     
     // MARK: - Handlers
     
     /// HUI core event receive handler.
-    public typealias HUIEventHandler = ((_ huiCoreEvent: HUICoreEvent) -> Void)
+    public typealias HUIEventHandler = ((_ event: HUISurfaceEvent) -> Void)
     
     /// Event handler that is called when HUI events are received.
     public var huiEventHandler: HUIEventHandler?
@@ -100,16 +100,13 @@ public final class HUIHostBank {
         self.midiOutHandler = midiOutHandler
         self.remotePresenceChangedHandler = remotePresenceChangedHandler
         
-        decoder = HUIDecoder(
-            role: .host,
-            huiEventHandler: { [weak self] huiCoreEvent in
-                if case .ping = huiCoreEvent {
-                    self?.receivedPing()
-                }
-            
-                self?.huiEventHandler?(huiCoreEvent)
+        decoder = HUISurfaceEventDecoder { [weak self] huiCoreEvent in
+            if case .ping = huiCoreEvent {
+                self?.receivedPing()
             }
-        )
+            
+            self?.huiEventHandler?(huiCoreEvent)
+        }
         
         // presence timer
         setupRemotePresenceTimer()

@@ -55,7 +55,7 @@ extension HUIHostBank {
     ///   - level: Level amount (`0x0 ... 0xC`). Where `0x0` is off, `0x1 ... 0xB` is signal level, and `0xC` is clipping (red LED).
     public func transmitLevelMeter(
         channel: UInt4,
-        side: HUIModel.StereoLevelMeter.Side,
+        side: HUISurfaceModel.StereoLevelMeter.Side,
         level: Int
     ) {
         let event = encodeHUILevelMeter(
@@ -71,8 +71,8 @@ extension HUIHostBank {
     /// - Parameters:
     ///   - vPot: V-Pot identity.
     ///   - value: Encoded value. When encoding host → surface, this is the LED preset index. When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
-    public func transmitVPotValue(
-        for vPot: HUIVPot,
+    public func transmitVPot(
+        _ vPot: HUIVPot,
         display: HUIVPotDisplay
     ) {
         let event = encodeHUIVPotValue(
@@ -82,13 +82,14 @@ extension HUIHostBank {
         midiOut(event)
     }
     
-    /// Transmit a HUI event to the client surface.
-    /// This is a convenience function. Where possible, use the dedicated transmit methods for each event type.
-    ///
-    /// - Parameters:
-    ///   - event: HUI event.
-    public func transmit(event: HUIEvent) {
-        let events = event.encode(to: .surface)
-        midiOut(events)
+    /// Transmit large display text (40 x 2 characters) to the client surface.
+    /// 
+    /// - Parameters
+    ///   - display: Full display to transmit
+    public func transmitLargeDisplay(
+        _ display: HUISurfaceModel.LargeDisplay
+    ) {
+        let event = encodeHUILargeDisplay(display: display)
+        midiOut(event)
     }
 }

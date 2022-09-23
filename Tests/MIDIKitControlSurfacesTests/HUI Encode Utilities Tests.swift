@@ -10,6 +10,9 @@ import XCTest
 @testable import MIDIKitControlSurfaces
 
 final class HUIEncodeUtilitiesTests: XCTestCase {
+    // swiftformat:options --wrapcollections preserve
+    // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
+    
     func testPing_toHost() {
         let midiEvent = encodeHUIPing(to: .host)
         
@@ -174,8 +177,10 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     
     /// Message is only valid being sent to surface.
     func testSmallDisplay() {
-        let midiEvent = encodeHUISmallDisplay(for: .selectAssign,
-                                              text: .init(lossy: "1234"))
+        let midiEvent = encodeHUISmallDisplay(
+            for: .selectAssign,
+            text: .init(lossy: "1234")
+        )
         
         XCTAssertEqual(
             midiEvent,

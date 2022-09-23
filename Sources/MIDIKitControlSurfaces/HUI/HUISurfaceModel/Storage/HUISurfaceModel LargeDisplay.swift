@@ -29,9 +29,9 @@ extension HUISurfaceModel {
         /// Internal:
         /// Get or set the 8 individual 10-character string slices that make up the large display contents.
         /// When encoded in a HUI message, these are indexed 0 through 7.
-        var slices: [UInt4: [HUILargeDisplayCharacter]] {
+        var slices: HUILargeDisplaySlices {
             get {
-                Self.slices(top: top, bottom: bottom)
+                .init(top: top, bottom: bottom)
             }
             set {
                 update(mergingFrom: newValue)
@@ -43,7 +43,7 @@ extension HUISurfaceModel {
         ///
         /// - Returns: `true` if characters were different and replaced with new characters.
         @discardableResult
-        mutating func update(mergingFrom slices: [UInt4: [HUILargeDisplayCharacter]]) -> Bool {
+        mutating func update(mergingFrom slices: HUILargeDisplaySlices) -> Bool {
             guard !slices.isEmpty else { return false }
             
             let topSlices = slices.filter { (0 ... 3).contains($0.key) }
@@ -75,15 +75,32 @@ extension HUISurfaceModel {
         
         /// Internal:
         /// Converts two 40-char large display strings to a dictionary of slices.
-        /// Keyed by slice index (`0 ... 7`)
+        /// Keyed by slice index (`0 ... 7`).
         static func slices(
             top: HUILargeDisplayString,
             bottom: HUILargeDisplayString
-        ) -> [UInt4: [HUILargeDisplayCharacter]] {
+        ) -> HUILargeDisplaySlices {
             (top.slices + bottom.slices).enumerated()
-                .reduce(into: [UInt4: [HUILargeDisplayCharacter]]()) {
+                .reduce(into: HUILargeDisplaySlices()) {
                     $0[$1.0.toUInt4] = $1.1
                 }
         }
     }
 }
+
+/// Display text slices for HUI Large Display.
+/// Keyed by slice index (`0 ... 7`).
+public typealias HUILargeDisplaySlices = [UInt4: [HUILargeDisplayCharacter]]
+
+extension Dictionary<UInt4, [HUILargeDisplayCharacter]> {
+    /// Internal:
+    /// Converts two 40-char large display strings to a dictionary of slices.
+    /// Keyed by slice index (`0 ... 7`).
+    init(
+        top: HUILargeDisplayString,
+        bottom: HUILargeDisplayString
+    ) {
+        self = HUISurfaceModel.LargeDisplay.slices(top: top, bottom: bottom)
+    }
+}
+

@@ -1,22 +1,21 @@
 //
-//  HUICoreEvent.swift
+//  HUIHostEvent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
-/// HUI Core Event.
-/// Abstracts raw HUI messages into basic common-currency HUI message types carrying raw data as encoded.
-public enum HUICoreEvent: Equatable, Hashable {
+/// HUI Host Event: basic HUI host message definition.
+/// These events are sent from the host to the client surface to update state of the surface: fader levels, text displays, LEDs, and even triggering beep sounds.
+public enum HUIHostEvent: Equatable, Hashable {
     /// HUI ping message.
     case ping
     
-    /// Stereo LED level meters.
-    case levelMeter(
-        channelStrip: UInt4,
-        side: HUISurfaceModel.StereoLevelMeter.Side,
-        level: Int
+    /// HUI switch type with state.
+    case `switch`(
+        huiSwitch: HUISwitch,
+        state: Bool
     )
     
     /// Motorized fader level.
@@ -25,18 +24,23 @@ public enum HUICoreEvent: Equatable, Hashable {
         level: UInt14
     )
     
-    /// V-Pot encoding.
-    /// When encoding host → surface, this is the LED preset index.
-    /// When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
+    /// Stereo LED level meters.
+    case levelMeter(
+        channelStrip: UInt4,
+        side: HUISurfaceModel.StereoLevelMeter.Side,
+        level: Int
+    )
+    
+    /// V-Pot LED display.
     case vPot(
         vPot: HUIVPot,
-        value: HUIVPotValue
+        display: HUIVPotDisplay
     )
     
     /// Large Display text slices.
     ///
     /// Slices are indexed `0 ... 7` and are 10 characters each.
-    case largeDisplay(slices: [UInt4: [HUILargeDisplayCharacter]])
+    case largeDisplay(slices: HUILargeDisplaySlices)
     
     /// Time Display digits.
     ///
@@ -53,26 +57,19 @@ public enum HUICoreEvent: Equatable, Hashable {
         channelStrip: UInt4,
         text: HUISmallDisplayString
     )
-    
-    /// HUI switch type with state.
-    case `switch`(
-        huiSwitch: HUISwitch,
-        state: Bool
-    )
 }
 
-extension HUICoreEvent: CustomStringConvertible {
+extension HUIHostEvent: CustomStringConvertible {
     public var description: String {
         switch self {
         case .ping:
             return "ping"
-        
-        case let .levelMeter(
-            channelStrip: channelStrip,
-            side: side,
-            level: level
+            
+        case let .switch(
+            huiSwitch: huiSwitch,
+            state: state
         ):
-            return "levelMeter(channelStrip: \(channelStrip), side: \(side), level: \(level))"
+            return "switch(\(huiSwitch), state: \(state ? "on" : "off"))"
             
         case let .faderLevel(
             channelStrip: channelStrip,
@@ -80,11 +77,18 @@ extension HUICoreEvent: CustomStringConvertible {
         ):
             return "faderLevel(channelStrip: \(channelStrip), level: \(level))"
             
+        case let .levelMeter(
+            channelStrip: channelStrip,
+            side: side,
+            level: level
+        ):
+            return "levelMeter(channelStrip: \(channelStrip), side: \(side), level: \(level))"
+            
         case let .vPot(
             vPot: vPot,
-            value: value
+            display: display
         ):
-            return "vPot(\(vPot), value: \(value))"
+            return "vPot(\(vPot), display: \(display))"
             
         case let .largeDisplay(slices: slices):
             let flatSlices = slices.map { "\($0.key): \($0.value.stringValue)" }
@@ -101,12 +105,6 @@ extension HUICoreEvent: CustomStringConvertible {
             text: text
         ):
             return "channelDisplay(channelStrip: \(channelStrip), text: \(text.stringValue))"
-            
-        case let .switch(
-            huiSwitch: huiSwitch,
-            state: state
-        ):
-            return "switch(\(huiSwitch), state: \(state ? "on" : "off"))"
         }
     }
 }
