@@ -136,7 +136,7 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     }
     
     /// Message is only valid being sent to surface.
-    func testLargeDisplay() {
+    func testLargeDisplay_OneEntireSlice() {
         let midiEvent = encodeHUILargeDisplay(sliceIndex: 1, text: [
             .A, .B, .C, .D, .E,
             .F, .G, .H, .I, .J
@@ -152,6 +152,46 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
                     0x01, // slice index
                     0x41, 0x42, 0x43, 0x44, 0x45, // ABCDE
                     0x46, 0x47, 0x48, 0x49, 0x4A  // FGHIJ
+                ]
+            )
+        )
+    }
+    
+    /// Message is only valid being sent to surface.
+    func testLargeDisplay_OneChar() {
+        let midiEvent = encodeHUILargeDisplay(sliceIndex: 2, text: [
+            .A,
+        ])
+        
+        XCTAssertEqual(
+            midiEvent,
+            .sysEx7(
+                manufacturer: .threeByte(byte2: 0x00, byte3: 0x66),
+                data: [
+                    0x05, 0x00, // subID1, subID2
+                    0x12, // large display ID
+                    0x02, // slice index
+                    0x41  // A
+                ]
+            )
+        )
+    }
+    
+    /// Message is only valid being sent to surface.
+    func testLargeDisplay_TwoChar2() {
+        let midiEvent = encodeHUILargeDisplay(sliceIndex: 2, text: [
+            .A, .B
+        ])
+        
+        XCTAssertEqual(
+            midiEvent,
+            .sysEx7(
+                manufacturer: .threeByte(byte2: 0x00, byte3: 0x66),
+                data: [
+                    0x05, 0x00, // subID1, subID2
+                    0x12,       // large display ID
+                    0x02,       // slice index
+                    0x41, 0x42  // AB
                 ]
             )
         )

@@ -58,7 +58,7 @@ extension HUIDecoder: ReceivesMIDIEvents {
             }
             huiEventHandler?(coreEvent)
         } catch {
-            Logger.debug(error.localizedDescription)
+            Logger.debug("\(error)")
         }
     }
     

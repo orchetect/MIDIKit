@@ -64,7 +64,7 @@ final class HUIHostEventDecoderTests: XCTestCase {
                 1: [.A, .B, .C, .D, .E, .F, .G, .H, .I, .J]
             ])
         )
-        
+
         // since large display slices each get encoded to separate SysEx MIDI messages,
         // they will be decoded as separate HUICoreEvent events
         runHUIEventTest(
@@ -76,6 +76,21 @@ final class HUIHostEventDecoderTests: XCTestCase {
                 .largeDisplay(slices: [1: [.A, .B, .C, .D, .E, .F, .G, .H, .I, .J]]),
                 .largeDisplay(slices: [4: [.Z, .Y, .X, .W, .V, .U, .T, .S, .R, .Q]])
             ]
+        )
+        
+        // char counts != 10 are invalid and would result in malformed HUI SysEx data
+        runHUIEventTest(
+            .largeDisplay(slices: [
+                2: [.A]
+            ]),
+            matches: []
+        )
+        
+        runHUIEventTest(
+            .largeDisplay(slices: [
+                1: [.A, .B]
+            ]),
+            matches: []
         )
     }
     
