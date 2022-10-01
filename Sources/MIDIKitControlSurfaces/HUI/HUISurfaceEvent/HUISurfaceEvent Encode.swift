@@ -53,8 +53,10 @@ extension HUISurfaceEvent: _HUIEventProtocol {
         case let .vPot(vPot, value):
             switch value {
             case .display:
-                // TODO: should never happen, but not great solution
-                fatalError()
+                // TODO: should probably refactor so this case isn't possible
+                assertionFailure("HUISurfaceEvent should never be initialized from a vPot LED ring display encoding message. This should never happen.")
+                // return neutral event as failsafe instead of crashing
+                self = .ping
             case let .delta(delta):
                 self = .vPot(vPot: vPot, delta: delta)
             }
@@ -69,8 +71,9 @@ extension HUISurfaceEvent: _HUIEventProtocol {
             self = .jogWheel(delta: delta)
             
         default:
-            // TODO: should never happen, but not great solution
-            fatalError()
+            Logger.debug("HUISurfaceEvent was initialized from a non-relevant HUICoreEvent: \(coreEvent). This should never happen.")
+            // return neutral event as failsafe instead of crashing
+            self = .ping
         }
     }
 }

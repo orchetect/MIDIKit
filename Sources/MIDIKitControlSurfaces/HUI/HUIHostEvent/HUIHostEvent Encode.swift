@@ -61,8 +61,10 @@ extension HUIHostEvent: _HUIEventProtocol {
             case let .display(display):
                 self = .vPot(vPot: vPot, display: display)
             case .delta:
-                // TODO: should never happen, but not great solution
-                fatalError()
+                // TODO: should probably refactor so this case isn't possible
+                assertionFailure("HUIHostEvent should never be initialized from a vPot delta change message. This should never happen.")
+                // return neutral event as failsafe instead of crashing
+                self = .ping
             }
             
         case let .largeDisplay(slices):
@@ -81,12 +83,15 @@ extension HUIHostEvent: _HUIEventProtocol {
             self = .switch(huiSwitch: huiSwitch, state: state)
             
         case .jogWheel:
-            // TODO: should never happen, but not great solution
-            fatalError()
+            // TODO: should probably refactor so this case isn't possible
+            assertionFailure("HUIHostEvent should never be initialized from a jog wheel message. This should never happen.")
+            // return neutral event as failsafe instead of crashing
+            self = .ping
             
         case .systemReset:
-            // TODO: should never happen, but not great solution
-            fatalError()
+            Logger.debug("HUIHostEvent was initialized from a system reset message, which is undefined for a HUI host to receive.")
+            // return neutral event as failsafe instead of crashing
+            self = .ping
         }
     }
 }
