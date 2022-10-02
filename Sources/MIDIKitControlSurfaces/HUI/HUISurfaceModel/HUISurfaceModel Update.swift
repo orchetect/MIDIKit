@@ -21,10 +21,10 @@ extension HUISurfaceModel {
     @discardableResult
     public mutating func updateState(
         from receivedEvent: HUIHostEvent
-    ) -> HUISurfaceModelNotification? {
+    ) -> HUISurfaceModelUpdateResult {
         switch receivedEvent {
         case .ping:
-            return .ping
+            return .changed(.ping)
             
         case let .levelMeter(
             channelStrip: channelStrip,
@@ -92,114 +92,171 @@ extension HUISurfaceModel {
         channelStrip: UInt4,
         side: StereoLevelMeter.Side,
         level: Int
-    ) -> HUISurfaceModelNotification? {
+    ) -> HUISurfaceModelUpdateResult {
         switch side {
         case .left:
+            let isDiff = channelStrips[channelStrip.intValue].levelMeter.left != level
+            guard isDiff else { return .unchanged }
             channelStrips[channelStrip.intValue].levelMeter.left = level
         case .right:
+            let isDiff = channelStrips[channelStrip.intValue].levelMeter.right != level
+            guard isDiff else { return .unchanged }
             channelStrips[channelStrip.intValue].levelMeter.right = level
         }
         
-        return .channelStrip(
+        let notif: HUISurfaceModelNotification = .channelStrip(
             channel: channelStrip,
             .levelMeter(side: side, level: level)
         )
+        return .changed(notif)
     }
     
     private mutating func updateStateFromFaderLevel(
         channelStrip: UInt4,
         level: UInt14
-    ) -> HUISurfaceModelNotification? {
+    ) -> HUISurfaceModelUpdateResult {
+        let isDiff = channelStrips[channelStrip.intValue].fader.level != level
+        guard isDiff else { return .unchanged }
+        
         channelStrips[channelStrip.intValue].fader.level = level
         
-        return .channelStrip(
+        let notif: HUISurfaceModelNotification = .channelStrip(
             channel: channelStrip,
             .faderLevel(level: level)
         )
+        return .changed(notif)
     }
     
     private mutating func updateStateFromVPot(
         vPot: HUIVPot,
         display: HUIVPotDisplay
-    ) -> HUISurfaceModelNotification? {
+    ) -> HUISurfaceModelUpdateResult {
+        let notif: HUISurfaceModelNotification
+        
         switch vPot {
         case let .channel(chan):
+            let isDiff = channelStrips[chan.intValue].vPotDisplay != display
+            guard isDiff else { return .unchanged }
+            
             channelStrips[chan.intValue].vPotDisplay = display
-            return .channelStrip(
+            notif = .channelStrip(
                 channel: chan,
                 .vPot(display: display)
             )
+            
         case .editAssignA:
+            let isDiff = parameterEdit.param1VPotDisplay != display
+            guard isDiff else { return .unchanged }
+            
             parameterEdit.param1VPotDisplay = display
-            return .paramEdit(.param1VPot(display: display))
+            notif = .paramEdit(.param1VPot(display: display))
+            
         case .editAssignB:
+            let isDiff = parameterEdit.param2VPotDisplay != display
+            guard isDiff else { return .unchanged }
+            
             parameterEdit.param2VPotDisplay = display
-            return .paramEdit(.param2VPot(display: display))
+            notif = .paramEdit(.param2VPot(display: display))
+            
         case .editAssignC:
+            let isDiff = parameterEdit.param3VPotDisplay != display
+            guard isDiff else { return .unchanged }
+            
             parameterEdit.param3VPotDisplay = display
-            return .paramEdit(.param3VPot(display: display))
+            notif = .paramEdit(.param3VPot(display: display))
+            
         case .editAssignD:
+            let isDiff = parameterEdit.param4VPotDisplay != display
+            guard isDiff else { return .unchanged }
+            
             parameterEdit.param4VPotDisplay = display
-            return .paramEdit(.param4VPot(display: display))
+            notif = .paramEdit(.param4VPot(display: display))
+            
         case .editAssignScroll:
             // scroll V-Pot has no LED ring display; ignore
-            return nil
+            return .unchanged
         }
+        
+        return .changed(notif)
     }
     
     private mutating func updateStateFromLargeDisplay(
         slices: HUILargeDisplaySlices
-    ) -> HUISurfaceModelNotification? {
-        guard !slices.isEmpty else { return nil }
+    ) -> HUISurfaceModelUpdateResult {
+        guard !slices.isEmpty else { return .unchanged }
         
-        let isDifferent = largeDisplay.update(mergingFrom: slices)
+        let isDiff = largeDisplay.update(mergingFrom: slices)
         
         // only return an event if the contents actually changed
-        guard isDifferent else { return nil }
+        guard isDiff else { return .unchanged }
         
         let topString = largeDisplay.top
         let bottomString = largeDisplay.bottom
         
-        return .largeDisplay(top: topString, bottom: bottomString)
+        let notif: HUISurfaceModelNotification = .largeDisplay(
+            top: topString,
+            bottom: bottomString
+        )
+        return .changed(notif)
     }
     
     private mutating func updateStateFromTimeDisplay(
         charsRightToLeft: [HUITimeDisplayCharacter]
-    ) -> HUISurfaceModelNotification? {
-        guard !charsRightToLeft.isEmpty else { return nil }
+    ) -> HUISurfaceModelUpdateResult {
+        guard !charsRightToLeft.isEmpty else { return .unchanged }
         
-        let isDifferent = timeDisplay.timeString.update(charsRightToLeft: charsRightToLeft)
+        let isDiff = timeDisplay.timeString.update(charsRightToLeft: charsRightToLeft)
         
         // only return an event if the contents actually changed
-        guard isDifferent else { return nil }
+        guard isDiff else { return .unchanged }
         
-        return .timeDisplay(timeString: timeDisplay.timeString)
+        let notif: HUISurfaceModelNotification = .timeDisplay(
+            timeString: timeDisplay.timeString
+        )
+        return .changed(notif)
     }
     
     private mutating func updateStateFromAssign(
         text: HUISmallDisplayString
-    ) -> HUISurfaceModelNotification? {
+    ) -> HUISurfaceModelUpdateResult {
+        let isDiff = assign.textDisplay != text
+        
+        // only return an event if the contents actually changed
+        guard isDiff else { return .unchanged }
+        
         assign.textDisplay = text
         
-        return .selectAssignDisplay(text: text)
+        let notif: HUISurfaceModelNotification = .selectAssignDisplay(
+            text: text
+        )
+        return .changed(notif)
     }
     
     private mutating func updateStateFromChannelText(
         text: HUISmallDisplayString,
         channelStrip: UInt4
-    ) -> HUISurfaceModelNotification? {
+    ) -> HUISurfaceModelUpdateResult {
+        let isDiff = channelStrips[channelStrip.intValue].nameDisplay != text
+        
+        // only return an event if the contents actually changed
+        guard isDiff else { return .unchanged }
+        
         channelStrips[channelStrip.intValue].nameDisplay = text
         
-        return .channelStrip(
+        let notif: HUISurfaceModelNotification = .channelStrip(
             channel: channelStrip,
             .nameDisplay(text: text)
         )
+        return .changed(notif)
     }
     
     private mutating func updateStateFromSwitch(
         huiSwitch: HUISwitch,
         state: Bool
-    ) -> HUISurfaceModelNotification? {
+    ) -> HUISurfaceModelUpdateResult {
+        let isDiff = self.state(of: huiSwitch) != state
+        guard isDiff else { return .unchanged }
+        
         // set state for parameter
         
         setState(of: huiSwitch, to: state)
@@ -210,112 +267,114 @@ extension HUISurfaceModel {
         case let .channelStrip(channel, channelParam):
             switch channelParam {
             case .recordReady:
-                return .channelStrip(
+                return .changed(.channelStrip(
                     channel: channel,
                     .recordReady(state: state)
-                )
+                ))
             case .insert:
-                return .channelStrip(
+                return .changed(.channelStrip(
                     channel: channel,
                     .insert(state: state)
-                )
+                ))
             case .vPotSelect:
-                return .channelStrip(
+                return .changed(.channelStrip(
                     channel: channel,
                     .vPotSelect(state: state)
-                )
+                ))
             case .auto:
-                return .channelStrip(
+                return .changed(.channelStrip(
                     channel: channel,
                     .auto(state: state)
-                )
+                ))
             case .solo:
-                return .channelStrip(
+                return .changed(.channelStrip(
                     channel: channel,
                     .solo(state: state)
-                )
+                ))
             case .mute:
-                return .channelStrip(
+                return .changed(.channelStrip(
                     channel: channel,
                     .mute(state: state)
-                )
+                ))
             case .select:
-                return .channelStrip(
+                return .changed(.channelStrip(
                     channel: channel,
                     .select(state: state)
-                )
+                ))
             case .faderTouched:
                 // ignore - only HUI surface can send fader touch messages
-                return nil
+                return .unchanged
             }
             
         case let .hotKey(subParam):
-            return .hotKey(param: subParam, state: state)
+            return .changed(.hotKey(param: subParam, state: state))
             
         case let .window(subParam):
-            return .window(param: subParam, state: state)
+            return .changed(.window(param: subParam, state: state))
             
         case let .bankMove(subParam):
-            return .bankMove(param: subParam, state: state)
+            return .changed(.bankMove(param: subParam, state: state))
             
         case let .assign(subParam):
-            return .assign(param: subParam, state: state)
+            return .changed(.assign(param: subParam, state: state))
             
         case let .cursor(subParam):
-            return .cursor(param: subParam, state: state)
+            return .changed(.cursor(param: subParam, state: state))
             
         case let .transport(subParam):
-            return .transport(param: subParam, state: state)
+            return .changed(.transport(param: subParam, state: state))
             
         case let .controlRoom(subParam):
-            return .controlRoom(param: subParam, state: state)
+            return .changed(.controlRoom(param: subParam, state: state))
             
         case let .numPad(subParam):
-            return .numPad(param: subParam, state: state)
+            return .changed(.numPad(param: subParam, state: state))
             
         case let .timeDisplayStatus(subParam):
-            return .timeDisplayStatus(param: subParam, state: state)
+            return .changed(.timeDisplayStatus(param: subParam, state: state))
             
         case let .autoEnable(subParam):
-            return .autoEnable(param: subParam, state: state)
+            return .changed(.autoEnable(param: subParam, state: state))
             
         case let .autoMode(subParam):
-            return .autoMode(param: subParam, state: state)
+            return .changed(.autoMode(param: subParam, state: state))
             
         case let .statusAndGroup(subParam):
-            return .statusAndGroup(param: subParam, state: state)
+            return .changed(.statusAndGroup(param: subParam, state: state))
             
         case let .edit(subParam):
-            return .edit(param: subParam, state: state)
+            return .changed(.edit(param: subParam, state: state))
             
         case let .functionKey(subParam):
-            return .functionKey(param: subParam, state: state)
+            return .changed(.functionKey(param: subParam, state: state))
             
         case let .paramEdit(subParam):
             switch subParam {
             case .assign:
-                return .paramEdit(.assign(state: state))
+                return .changed(.paramEdit(.assign(state: state)))
             case .compare:
-                return .paramEdit(.compare(state: state))
+                return .changed(.paramEdit(.compare(state: state)))
             case .bypass:
-                return .paramEdit(.bypass(state: state))
+                return .changed(.paramEdit(.bypass(state: state)))
             case .param1Select:
-                return .paramEdit(.param1Select(state: state))
+                return .changed(.paramEdit(.param1Select(state: state)))
             case .param2Select:
-                return .paramEdit(.param2Select(state: state))
+                return .changed(.paramEdit(.param2Select(state: state)))
             case .param3Select:
-                return .paramEdit(.param3Select(state: state))
+                return .changed(.paramEdit(.param3Select(state: state)))
             case .param4Select:
-                return .paramEdit(.param4Select(state: state))
+                return .changed(.paramEdit(.param4Select(state: state)))
             case .insertOrParam:
-                return .paramEdit(.insertOrParam(state: state))
+                return .changed(.paramEdit(.insertOrParam(state: state)))
             }
             
         case let .footswitchesAndSounds(subParam):
-            return .footswitchesAndSounds(param: subParam, state: state)
+            return .changed(.footswitchesAndSounds(param: subParam, state: state))
             
         case let .undefined(zone: zone, port: port):
-            return .undefinedSwitch(zone: zone, port: port, state: state)
+            return .unhandled(
+                .switch(huiSwitch: .undefined(zone: zone, port: port), state: state)
+            )
         }
     }
 }

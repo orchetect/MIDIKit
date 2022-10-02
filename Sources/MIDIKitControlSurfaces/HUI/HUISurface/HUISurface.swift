@@ -128,16 +128,22 @@ public final class HUISurface {
         
         model = HUISurfaceModel()
         
-        decoder = HUIHostEventDecoder { [weak self] huiCoreEvent in
-            if case .ping = huiCoreEvent {
-                self?.receivedPing()
+        decoder = HUIHostEventDecoder { [weak self] hostEvent in
+            guard let self = self else { return }
+            
+            if case .ping = hostEvent {
+                self.receivedPing()
             }
                 
             // process event
-            if let surfaceEvent = self?.model.updateState(from: huiCoreEvent) {
-                self?.modelNotificationHandler?(surfaceEvent)
-            } else {
-                Logger.debug("Unhandled HUI event: \(huiCoreEvent)")
+            let result = self.model.updateState(from: hostEvent)
+            switch result {
+            case .changed(let notification):
+                self.modelNotificationHandler?(notification)
+            case .unchanged:
+                break
+            case .unhandled(let hostEvent):
+                Logger.debug("Unhandled HUI event: \(hostEvent)")
             }
         }
         
