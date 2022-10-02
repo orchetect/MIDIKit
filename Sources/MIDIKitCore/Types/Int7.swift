@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitInternals
 
 /// A 7-bit signed integer value type used in `MIDIKit`. (`-64 ... 63`)
-public struct Int7: Equatable, Hashable {
+public struct Int7 {
     static let integerName = "Int7"
     
     var sixBitStorage: UInt8
@@ -118,6 +118,31 @@ public struct Int7: Equatable, Hashable {
     /// Returns the bit pattern as a 7-bit binary string.
     public var binaryString: String {
         "0b" + ("0000000" + String(rawByte, radix: 2)).suffix(7)
+    }
+}
+
+// MARK: - Equatable
+
+extension Int7: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.sixBitStorage == rhs.sixBitStorage &&
+        lhs.isNegative == rhs.isNegative
+    }
+}
+
+// MARK: - Hashable
+
+extension Int7: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(intValue)
+    }
+}
+
+// MARK: - Comparable
+
+extension Int7: Comparable {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        lhs.intValue < rhs.intValue
     }
 }
 
