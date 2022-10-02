@@ -69,8 +69,20 @@ public enum HUIVPot: Equatable, Hashable {
             return 0xC
         }
     }
+    
+    /// Returns `true` if the V-Pot has an LED ring display.
+    public var hasDisplay: Bool {
+        switch self {
+        case .editAssignScroll:
+            return false
+        default:
+            return true
+        }
+    }
 }
 
+/// Internal:
+/// Specialized HUI V-Pot value.
 enum HUIVPotValue: Equatable, Hashable {
     /// V-Pot display LED ring. (11 LED ring with a lower LED)
     /// Only applies to HUI messages sent from the host in order to update a client surface's V-Pot LEDs.
