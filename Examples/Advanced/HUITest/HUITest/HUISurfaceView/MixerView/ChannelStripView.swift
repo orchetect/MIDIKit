@@ -87,6 +87,7 @@ extension HUISurfaceView {
                     )
                     
                     FaderView(channel: channel)
+                        .frame(height: 300)
                 }
             }
         }

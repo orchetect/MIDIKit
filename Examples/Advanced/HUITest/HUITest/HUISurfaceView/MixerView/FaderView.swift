@@ -6,6 +6,7 @@
 
 import SwiftUI
 import MIDIKitControlSurfaces
+import Controls
 
 extension HUISurfaceView {
     struct FaderView: View {
@@ -18,48 +19,33 @@ extension HUISurfaceView {
 
         let channel: UInt4
 
-        @State private var isPressed = false
+        @State private var isTouched = false
+        @State private var level: Float = 0
 
         var body: some View {
-            let pos = CGFloat(
-                huiSurface.model.channelStrips[channel.intValue].fader
-                    .levelUnitInterval
-            )
-
-            ZStack {
-                Rectangle()
-                    .frame(width: Self.faderWidth, height: Self.faderHeight, alignment: .center)
-                    .background(Color.black)
-
-                VStack(alignment: .center, spacing: 0) {
-                    Spacer(minLength: 0)
-                    Rectangle()
-                        .frame(
-                            width: Self.faderCapsuleWidth,
-                            height: Self.faderCapsuleHeight,
-                            alignment: .center
-                        )
-                        .background(Color.gray)
-                        .gesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { value in
-                                    if !isPressed {
-                                        pressedAction()
-                                        isPressed = true
-                                        return
-                                    }
-                                    // TODO: finish SwiftUI HUI fader; use Controls lib?
-                                }
-                                .onEnded { _ in
-                                    releasedAction()
-                                    isPressed = false
-                                }
-                        )
-                    Spacer()
-                        .frame(height: pos * (Self.faderHeight - Self.faderCapsuleHeight))
+            Fader(value: $level, isTouched: $isTouched)
+                .foregroundColor(.black)
+                .backgroundColor(.gray)
+                .frame(minHeight: Self.faderHeight, alignment: .center)
+                .padding([.leading, .trailing], 5)
+            
+                .onChange(of: isTouched) { newValue in
+                    newValue ? pressedAction() : releasedAction()
                 }
-                .frame(height: Self.faderHeight, alignment: .center)
-            }
+                .onChange(
+                    of: huiSurface.model
+                        .channelStrips[channel.intValue]
+                        .fader
+                        .levelUnitInterval
+                ) { newValue in
+                    guard !isTouched else { return }
+                    level = Float(newValue)
+                }
+                .onChange(of: level) { newValue in
+                    guard isTouched else { return }
+                    let rawLevel = UInt14(newValue * Float(UInt14.max))
+                    huiSurface.transmitFader(level: rawLevel, channel: channel)
+                }
         }
 
         private func pressedAction() {
