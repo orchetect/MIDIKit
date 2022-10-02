@@ -21,9 +21,11 @@ struct RotaryKnob: View {
     
     @State private var lastDragLocation: CGPoint?
     
-    init(label: String,
-         size: CGFloat,
-         vPot: HUIVPot) {
+    init(
+        label: String,
+        size: CGFloat,
+        vPot: HUIVPot
+    ) {
         self.label = label
         self.size = size
         self.vPot = vPot
@@ -94,16 +96,43 @@ struct RotaryKnob: View {
 }
 
 struct PlaceholderKnob: View {
+    var name: String = ""
     var size: CGFloat
     
     var body: some View {
         Circle()
-            .fill(Color.gray)
+            .fill(Color(white: 0.2))
             .frame(width: size, height: size)
             .overlay(
                 Circle()
-                    .fill(Color(white: 0.1))
-                    .frame(height: size / 2)
+                    .fill(Color.gray)
+                    .frame(height: size * 0.9)
+            )
+            .overlay {
+                Text(name)
+                    .foregroundColor(.black)
+            }
+    }
+}
+
+struct JogWheel: View {
+    @EnvironmentObject var huiSurface: HUISurface
+    
+    var size: CGFloat
+    
+    @State private var lastDragLocation: CGPoint?
+    
+    var body: some View {
+        PlaceholderKnob(name: "Jog Wheel", size: size)
+            .highPriorityGesture(
+                DragGesture(minimumDistance: 2)
+                    .onChanged { v in
+                        let getLastDragLocation = lastDragLocation ?? v.location
+                        let isPositive = v.location.x > getLastDragLocation.x
+                        let delta: Int7 = isPositive ? 1 : -1
+                        huiSurface.transmitJogWheel(delta: delta)
+                        lastDragLocation = v.location
+                    }
             )
     }
 }

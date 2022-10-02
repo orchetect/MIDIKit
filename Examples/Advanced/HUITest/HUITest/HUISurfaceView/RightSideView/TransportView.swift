@@ -201,7 +201,7 @@ extension HUISurfaceView {
                 
                 Spacer().frame(width: 40)
                 
-                PlaceholderKnob(size: 140)
+                JogWheel(size: 140)
                 
                 Spacer().frame(width: 40)
                 
