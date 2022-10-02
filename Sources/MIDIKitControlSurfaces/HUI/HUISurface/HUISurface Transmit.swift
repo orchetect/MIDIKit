@@ -64,12 +64,19 @@ extension HUISurface {
     ///
     /// - Parameters:
     ///   - vPot: V-Pot identity.
-    ///   - delta: Delta change amount as a 7-bit signed integer (`-64 ... 63`).
+    ///   - delta: Delta change amount as a 7-bit signed integer (clamped to `-63 ... 63`).
     public func transmitVPot(
-        for vPot: HUIVPot,
-        delta: Int7
+        delta: Int7,
+        for vPot: HUIVPot
     ) {
-        let event = encodeHUIVPotValue(for: vPot, rawValue: delta.rawUInt7Byte)
+        // don't bother sending events for a 0 delta
+        // which means no change
+        guard delta != 0 else { return }
+        
+        let event = encodeHUIVPot(
+            delta: delta,
+            for: vPot
+        )
         midiOut(event)
     }
     
@@ -77,7 +84,11 @@ extension HUISurface {
     public func transmitJogWheel(
         delta: Int7
     ) {
-        let event = encodeJogWheel(rawDelta: delta.rawUInt7Byte)
+        // don't bother sending events for a 0 delta
+        // which means no change
+        guard delta != 0 else { return }
+        
+        let event = encodeJogWheel(delta: delta)
         midiOut(event)
     }
     

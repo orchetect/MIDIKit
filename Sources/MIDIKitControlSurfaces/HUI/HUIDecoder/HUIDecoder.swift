@@ -257,6 +257,7 @@ extension HUIDecoder {
         
         let dataByte1 = payload.controller.number.uInt8Value
         let dataByte2 = payload.value.midi1Value.uInt8Value
+        let dataByte2UInt7 = payload.value.midi1Value
         
         switch dataByte1 {
         case 0x00 ... 0x07:
@@ -269,14 +270,13 @@ extension HUIDecoder {
         case 0x0D:
             // Jog Wheel delta
             
-            let value = Int7(bitPattern: dataByte2)
-            
             switch role {
             case .host:
                 throw HUIDecoderError.unhandled(
                     "Jog Wheel event decoded but host is not capable of generating Jog Wheel events, only receiving them."
                 )
             case .surface:
+                let value = decodeHUIDelta(from: dataByte2UInt7)
                 return .jogWheel(delta: value)
             }
             
@@ -299,26 +299,27 @@ extension HUIDecoder {
                 level: level
             )
             
-        case 0x10 ... 0x1B:
+        case 0x10 ... 0x1B, // to surface
+             0x40 ... 0x4B: // to host (0x40 offset of 'to surface')
             // V-Pots
             
             // When encoding host → surface, this is the LED preset index.
             // When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
             
             let number = dataByte1 % 0x10
-            guard let vPot = HUIVPot(rawValue: number),
-                  let value = Int7(exactly: dataByte2)
+            guard let vPot = HUIVPot(rawValue: number)
             else {
                 throw HUIDecoderError.malformed(
-                    "V-Pot ID or value is invalid."
+                    "V-Pot ID is invalid."
                 )
             }
             
             let vPotValue: HUIVPotValue = {
                 switch role {
                 case .host:
-                    return .display(.init(rawIndex: UInt8(value.intValue)))
+                    return .display(.init(rawIndex: dataByte2))
                 case .surface:
+                    let value = decodeHUIDelta(from: dataByte2UInt7)
                     return .delta(value)
                 }
             }()

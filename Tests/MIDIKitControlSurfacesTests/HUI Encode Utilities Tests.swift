@@ -126,12 +126,48 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     }
     
     /// Encoding is identical to host or to surface.
-    func testVPotValue() {
-        let midiEvent = encodeHUIVPotValue(for: .editAssignA, rawValue: 3)
+    func testVPot_RawValue() {
+        let midiEvent = encodeHUIVPot(rawValue: 3, for: .editAssignA, to: .surface)
         
         XCTAssertEqual(
             midiEvent,
             .cc(0x18, value: .midi1(3), channel: 0)
+        )
+    }
+    
+    /// Message is only valid being sent to surface.
+    func testVPot_Display() {
+        let midiEvent = encodeHUIVPot(
+            display: .init(leds: .center(to: .L5), lowerLED: false),
+            for: .editAssignA
+        )
+        
+        XCTAssertEqual(
+            midiEvent,
+            .cc(0x18, value: .midi1(0x11), channel: 0)
+        )
+    }
+    
+    /// Message is only valid being sent to host.
+    func testVPot_Delta() {
+        XCTAssertEqual(
+            encodeHUIVPot(delta: 63, for: .editAssignA),
+            .cc(0x48, value: .midi1(0b111_1111), channel: 0)
+        )
+        
+        XCTAssertEqual(
+            encodeHUIVPot(delta: 1, for: .editAssignA),
+            .cc(0x48, value: .midi1(0b100_0001), channel: 0)
+        )
+        
+        XCTAssertEqual(
+            encodeHUIVPot(delta: -1, for: .editAssignA),
+            .cc(0x48, value: .midi1(0b000_0001), channel: 0)
+        )
+        
+        XCTAssertEqual(
+            encodeHUIVPot(delta: -63, for: .editAssignA),
+            .cc(0x48, value: .midi1(0b011_1111), channel: 0)
         )
     }
     

@@ -23,11 +23,12 @@ extension HUISurfaceEvent {
         case let .faderLevel(channelStrip, level):
             return encodeHUIFader(level: level, channel: channelStrip)
         
-        case let .vPot(vPot, value):
-            return [encodeHUIVPotValue(for: vPot, rawValue: value.rawUInt7Byte)]
+        case let .vPot(vPot, delta):
+            return [encodeHUIVPot(delta: delta,
+                                  for: vPot)]
         
         case let .jogWheel(delta):
-            return [encodeJogWheel(rawDelta: delta.rawUInt7Byte)]
+            return [encodeJogWheel(delta: delta)]
             
         case let .switch(huiSwitch, state):
             return encodeHUISwitch(huiSwitch, state: state, to: .host)

@@ -85,9 +85,9 @@ extension HUIHostBank {
         _ vPot: HUIVPot,
         display: HUIVPotDisplay
     ) {
-        let event = encodeHUIVPotValue(
-            for: vPot,
-            rawValue: display.rawIndex
+        let event = encodeHUIVPot(
+            display: display,
+            for: vPot
         )
         midiOut(event)
     }

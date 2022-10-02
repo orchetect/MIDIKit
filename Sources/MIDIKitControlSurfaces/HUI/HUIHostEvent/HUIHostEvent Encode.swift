@@ -23,8 +23,9 @@ extension HUIHostEvent {
         case let .faderLevel(channelStrip, level):
             return encodeHUIFader(level: level, channel: channelStrip)
             
-        case let .vPot(vPot, value):
-            return [encodeHUIVPotValue(for: vPot, rawValue: value.rawIndex)]
+        case let .vPot(vPot, display):
+            return [encodeHUIVPot(display: display,
+                                  for: vPot)]
             
         case let .largeDisplay(slices):
             return encodeHUILargeDisplay(slices: slices)

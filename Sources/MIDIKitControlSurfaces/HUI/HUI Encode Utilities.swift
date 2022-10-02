@@ -186,16 +186,50 @@ func encodeHUILevelMeter(
 /// - Parameters:
 ///   - vPot: V-Pot identity.
 ///   - rawValue: Encoded value. When encoding host → surface, this is the LED preset index. When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
+///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI event.
-func encodeHUIVPotValue(
+func encodeHUIVPot(
+    rawValue: UInt7,
     for vPot: HUIVPot,
-    rawValue: UInt7
+    to role: HUIRole
 ) -> MIDIEvent {
     .cc(
-        0x10 + vPot.rawValue.toUInt7,
+        (role == .host ? 0x40 : 0x10) + vPot.rawValue.toUInt7,
         value: .midi1(rawValue),
         channel: 0
     )
+}
+
+/// Utility:
+/// Encodes HUI V-Pot value message as a MIDI event. (To client surface)
+///
+/// - Parameters:
+///   - vPot: V-Pot identity.
+///   - rawValue: Encoded value. When encoding host → surface, this is the LED preset index. When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
+///   - role: Transmission direction (to host or to remote client surface).
+/// - Returns: MIDI event.
+func encodeHUIVPot(
+    display: HUIVPotDisplay,
+    for vPot: HUIVPot
+) -> MIDIEvent {
+    encodeHUIVPot(rawValue: display.rawIndex, for: vPot, to: .surface)
+}
+
+/// Utility:
+/// Encodes HUI V-Pot value message as a MIDI event. (To host)
+///
+/// > Note: Input value is clamped to `-63 ... 63` due to bit truncation meaning an input delta value of -64 is not possible and will be truncated to -63.
+///
+/// - Parameters:
+///   - vPot: V-Pot identity.
+///   - delta: Delta -/+ value (will be clamped to `-63 ... 63`).
+/// - Returns: MIDI event.
+func encodeHUIVPot(
+    delta: Int7,
+    for vPot: HUIVPot
+) -> MIDIEvent {
+    let encoded = encodeHUIDelta(from: delta)
+    return encodeHUIVPot(rawValue: encoded, for: vPot, to: .host)
 }
 
 // MARK: - Jog Wheel Delta
@@ -207,11 +241,11 @@ func encodeHUIVPotValue(
 ///   - rawDelta: Encoded delta -/+ value (7-bit signed integer bit pattern).
 /// - Returns: MIDI event.
 func encodeJogWheel(
-    rawDelta: UInt7
+    delta: Int7
 ) -> MIDIEvent {
     .cc(
         0x0D,
-        value: .midi1(rawDelta),
+        value: .midi1(encodeHUIDelta(from: delta)),
         channel: 0
     )
 }
@@ -378,4 +412,44 @@ func huiSysExTemplate(body: [UInt8]) -> MIDIEvent {
 /// - Returns: MIDI event.
 func encodeHUISystemReset() -> MIDIEvent {
     HUIConstants.kMIDI.kSystemResetMessage
+}
+
+/// Utility:
+/// Encodes HUI delta value (V-Pot, jog wheel) into a raw byte.
+///
+/// > Note: Input value is clamped to `-63 ... 63` due to bit truncation meaning an input delta value of -64 is not possible and will be truncated to -63.
+///
+/// > Note: This is used for surface → host transmission of delta pot changes and not relevant for LED ring display encoding.
+///
+/// - Parameters:
+///   - delta: Delta -/+ value (will be clamped to `-63 ... 63`).
+/// - Returns: Encoded `UInt7` byte ready to be packed into a HUI MIDI message.
+func encodeHUIDelta(from delta: Int7) -> UInt7 {
+    let isNegative = delta < 0
+    let delta = abs(delta.intValue) & 0b11_1111
+    
+    if isNegative {
+        return UInt7(delta)
+    } else {
+        return UInt7(delta + 0b100_0000)
+    }
+}
+
+/// Utility:
+/// Decodes a raw byte into a HUI delta value (V-Pot, jog wheel).
+///
+/// > Note: This is used for surface → host transmission of delta pot changes and not relevant for LED ring display encoding.
+///
+/// - Parameters:
+///   - delta: Encoded `UInt7` byte from a HUI MIDI message.
+/// - Returns: Delta -/+ value (`-63 ... 63`).
+func decodeHUIDelta(from delta: UInt7) -> Int7 {
+    let isNegative = ((delta & 0b100_0000) >> 6) == 0b0
+    let delta = Int8(delta & 0b11_1111)
+    
+    if isNegative {
+        return Int7(-delta)
+    } else {
+        return Int7(delta)
+    }
 }
