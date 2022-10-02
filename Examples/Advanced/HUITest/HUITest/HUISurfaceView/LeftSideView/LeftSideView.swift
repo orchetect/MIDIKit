@@ -96,7 +96,8 @@ extension HUISurfaceView {
                     HUIStateButton(
                         "SUSPEND",
                         .assign(.suspend),
-                        .red
+                        .red,
+                        width: 55 // slightly oversize
                     )
                 }
                 HStack {

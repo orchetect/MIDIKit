@@ -6,6 +6,7 @@
 
 import SwiftUI
 import MIDIKitControlSurfaces
+import Controls
 
 extension HUISurfaceView {
     static let channelStripWidth: CGFloat = 60
@@ -42,7 +43,9 @@ extension HUISurfaceView {
                 VStack(alignment: .center, spacing: 2) {
                     Text("PAN/SEND")
                         .font(.system(size: 9))
-                    RotaryKnob(size: 40)
+                    RotaryKnob(label: "PAN/SEND",
+                               size: 40,
+                               vPot: .channel(channel))
                 }
                 
                 Group {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E21628E426E2DFF30022B66F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21628E326E2DFF30022B66F /* Logger.swift */; };
+		E261699428E9272400DEA000 /* Controls in Frameworks */ = {isa = PBXBuildFile; productRef = E261699328E9272400DEA000 /* Controls */; };
 		E283F0932740AF7E0037F199 /* RightSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0922740AF7E0037F199 /* RightSideView.swift */; };
 		E283F0952740B5A60037F199 /* LeftSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0942740B5A60037F199 /* LeftSideView.swift */; };
 		E283F0972740C8770037F199 /* Labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0962740C8770037F199 /* Labels.swift */; };
@@ -78,6 +79,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2D5FB1928D913D50040A023 /* MIDIKitIO in Frameworks */,
+				E261699428E9272400DEA000 /* Controls in Frameworks */,
 				E284EBDF26AE03D00016AA0F /* MIDIKitControlSurfaces in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,6 +215,7 @@
 			packageProductDependencies = (
 				E284EBDE26AE03D00016AA0F /* MIDIKitControlSurfaces */,
 				E2D5FB1828D913D50040A023 /* MIDIKitIO */,
+				E261699328E9272400DEA000 /* Controls */,
 			);
 			productName = HUISurface;
 			productReference = E284EBB226AE018F0016AA0F /* HUITest.app */;
@@ -242,6 +245,7 @@
 			);
 			mainGroup = E284EBA926AE018F0016AA0F;
 			packageReferences = (
+				E261699228E9272400DEA000 /* XCRemoteSwiftPackageReference "Controls" */,
 			);
 			productRefGroup = E284EBB326AE018F0016AA0F /* Products */;
 			projectDirPath = "";
@@ -363,7 +367,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -419,7 +423,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -511,7 +515,23 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		E261699228E9272400DEA000 /* XCRemoteSwiftPackageReference "Controls" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AudioKit/Controls";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		E261699328E9272400DEA000 /* Controls */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E261699228E9272400DEA000 /* XCRemoteSwiftPackageReference "Controls" */;
+			productName = Controls;
+		};
 		E284EBDE26AE03D00016AA0F /* MIDIKitControlSurfaces */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MIDIKitControlSurfaces;

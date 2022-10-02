@@ -41,7 +41,11 @@ extension HUISurfaceView {
                             .paramEdit(.param1Select),
                             .green
                         )
-                        RotaryKnob(size: 40) // .paramEdit(.param1VPot)
+                        RotaryKnob(
+                            label: "",
+                            size: 40,
+                            vPot: .editAssignA
+                        )
                     }
                     .frame(width: 75)
                     
@@ -54,7 +58,11 @@ extension HUISurfaceView {
                             .paramEdit(.param2Select),
                             .green
                         )
-                        RotaryKnob(size: 40) // .paramEdit(.param2VPot)
+                        RotaryKnob(
+                            label: "",
+                            size: 40,
+                            vPot: .editAssignB
+                        )
                     }
                     .frame(width: 75)
                     
@@ -67,7 +75,11 @@ extension HUISurfaceView {
                             .paramEdit(.param3Select),
                             .green
                         )
-                        RotaryKnob(size: 40) // .paramEdit(.param3VPot)
+                        RotaryKnob(
+                            label: "",
+                            size: 40,
+                            vPot: .editAssignC
+                        )
                     }
                     .frame(width: 75)
                     
@@ -80,7 +92,11 @@ extension HUISurfaceView {
                             .paramEdit(.param4Select),
                             .green
                         )
-                        RotaryKnob(size: 40) // .paramEdit(.param4VPot)
+                        RotaryKnob(
+                            label: "",
+                            size: 40,
+                            vPot: .editAssignD
+                        )
                     }
                     .frame(width: 75)
                     
@@ -94,7 +110,11 @@ extension HUISurfaceView {
                         .green,
                         width: 60
                     )
-                    RotaryKnob(size: 20)
+                    RotaryKnob(
+                        label: "",
+                        size: 20,
+                        vPot: .editAssignScroll
+                    )
                     Text("SCROLL")
                         .font(.system(size: 9))
                 }

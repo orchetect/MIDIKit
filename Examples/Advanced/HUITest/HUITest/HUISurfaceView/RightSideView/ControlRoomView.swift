@@ -44,7 +44,7 @@ extension HUISurfaceView {
                     )
                 }
                 
-                RotaryKnob(size: 50)
+                PlaceholderKnob(size: 50)
                 Text("MASTER\nVOLUME").font(.system(size: 10))
                 
                 HStack {
@@ -63,11 +63,11 @@ extension HUISurfaceView {
             .frame(maxWidth: .infinity)
             
             VStack {
-                RotaryKnob(size: 30)
+                PlaceholderKnob(size: 30)
                 Spacer().frame(height: 5)
-                RotaryKnob(size: 30)
+                PlaceholderKnob(size: 30)
                 Spacer().frame(height: 5)
-                RotaryKnob(size: 30)
+                PlaceholderKnob(size: 30)
             }
             .frame(maxWidth: .infinity)
             

@@ -15,7 +15,7 @@ extension HUISurfaceView {
             HStack {
                 HStack {
                     VStack {
-                        RotaryKnob(size: 30)
+                        PlaceholderKnob(size: 30)
                         Text("LEVEL").font(.system(size: 10))
                     }
                     VStack {
@@ -201,7 +201,7 @@ extension HUISurfaceView {
                 
                 Spacer().frame(width: 40)
                 
-                RotaryKnob(size: 140)
+                PlaceholderKnob(size: 140)
                 
                 Spacer().frame(width: 40)
                 
