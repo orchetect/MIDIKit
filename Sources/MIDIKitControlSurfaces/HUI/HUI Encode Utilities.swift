@@ -220,7 +220,7 @@ func encodeJogWheel(
 
 /// Utility:
 /// Encode HUI large text display as MIDI events. (To surface)
-/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding spec.
+/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding.
 ///
 /// - Parameters:
 ///   - display: Top and bottom text line text, each 40 characters in length.
@@ -233,7 +233,7 @@ func encodeHUILargeDisplay(
 
 /// Utility:
 /// Encode HUI large text display as MIDI events. (To surface)
-/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding spec.
+/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding.
 ///
 /// - Parameters:
 ///   - top: Top text line text of 40 characters in length.
@@ -248,7 +248,9 @@ func encodeHUILargeDisplay(
 
 /// Utility:
 /// Encode HUI large text display as MIDI events. (To surface)
-/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding spec.
+/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding.
+///
+/// This text display is split into 8 slices of 10 characters each, with slices indexed `0 ... 3` for the top 40-character row, and `4 ... 7` for the bottom 40-character row. (This mirrors its raw HUI MIDI message encoding format.) Any of these slices may be sent at any time in any order.
 ///
 /// - Parameters:
 ///   - slices: Between 1 and 8 text slices of 10 characters each.
@@ -271,7 +273,7 @@ func encodeHUILargeDisplay(
 
 /// Utility:
 /// Encode HUI large text display as MIDI events. (To surface)
-/// Encodes a single text slice (up to 10 characters), which matches the HUI encoding spec.
+/// Encodes a single text slice (up to 10 characters), which matches the HUI encoding.
 ///
 /// - Parameters:
 ///   - sliceIndex: Text slice index (`0 ... 7`). Each slice contains 10 characters.

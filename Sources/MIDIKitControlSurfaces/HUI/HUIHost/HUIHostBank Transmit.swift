@@ -7,12 +7,16 @@
 import MIDIKitCore
 
 extension HUIHostBank {
+    // MARK: - Ping
+    
     /// Transmit a HUI ping message to the client surface.
     /// It is not necessary to call this manually. The ``HUIHost`` object will handle ping transmission on an internal timer automatically.
     internal func transmitPing() {
         let event = encodeHUIPing(to: .surface)
         midiOut(event)
     }
+    
+    // MARK: - Switch
     
     /// Transmit switch state to the client surface.
     ///
@@ -34,6 +38,8 @@ extension HUIHostBank {
         midiOut(events)
     }
     
+    // MARK: - Fader
+    
     /// Transmit fader level to the client surface.
     ///
     /// - Parameters:
@@ -46,6 +52,8 @@ extension HUIHostBank {
         let events = encodeHUIFader(level: level, channel: channel)
         midiOut(events)
     }
+    
+    // MARK: - Level Meters
     
     /// Transmit LED level meter change to the client surface.
     ///
@@ -66,6 +74,8 @@ extension HUIHostBank {
         midiOut(event)
     }
     
+    // MARK: - V-Pot Value
+    
     /// Transmit V-Pot LED change to the client surface.
     ///
     /// - Parameters:
@@ -82,10 +92,12 @@ extension HUIHostBank {
         midiOut(event)
     }
     
+    // MARK: - Large Text Display
+    
     /// Transmit large display text (40 x 2 characters) to the client surface.
     ///
     /// - Parameters:
-    ///   - display: Full display to transmit
+    ///   - display: Full display to transmit.
     public func transmitLargeDisplay(
         _ display: HUISurfaceModel.LargeDisplay
     ) {
@@ -93,18 +105,20 @@ extension HUIHostBank {
         midiOut(event)
     }
     
-    /// Transmit small display text (4 characters) to the client surface.
+    /// Transmit portion(s) of large display text (40 x 2 characters) to the client surface.
+    ///
+    /// This text display is split into 8 slices of 10 characters each, with slices indexed `0 ... 3` for the top 40-character row, and `4 ... 7` for the bottom 40-character row. (This mirrors its raw HUI MIDI message encoding format.) Any of these slices may be sent at any time in any order.
     ///
     /// - Parameters:
-    ///   - display: Identity of the small display.
-    ///   - text: 4-character text to display.
-    public func transmitSmallDisplay(
-        _ display: HUISmallDisplay,
-        text: HUISmallDisplayString
+    ///   - slices: Between 1 and 8 text slices of 10 characters each.
+    public func transmitLargeDisplay(
+        slices: HUILargeDisplaySlices
     ) {
-        let event = encodeHUISmallDisplay(for: display, text: text)
+        let event = encodeHUILargeDisplay(slices: slices)
         midiOut(event)
     }
+    
+    // MARK: - Time Display
     
     /// Transmit full set of time display digits to the client surface.
     ///
@@ -125,6 +139,21 @@ extension HUIHostBank {
         charsRightToLeft: [HUITimeDisplayCharacter]
     ) {
         let event = encodeHUITimeDisplay(charsRightToLeft: charsRightToLeft)
+        midiOut(event)
+    }
+    
+    // MARK: - Small Text Display
+    
+    /// Transmit small display text (4 characters) to the client surface.
+    ///
+    /// - Parameters:
+    ///   - display: Identity of the small display.
+    ///   - text: 4-character text to display.
+    public func transmitSmallDisplay(
+        _ display: HUISmallDisplay,
+        text: HUISmallDisplayString
+    ) {
+        let event = encodeHUISmallDisplay(for: display, text: text)
         midiOut(event)
     }
 }

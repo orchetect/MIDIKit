@@ -21,8 +21,7 @@ extension MIDIEvent.NoteCC.PerNoteController {
         /// Pitch 7.25
         /// (Int: 3, Hex: 0x03)
         ///
-        /// See ``Pitch7_25``
-        /// to convert `UInt32` value data to/from **Pitch 7.25** values.
+        /// See `Pitch7_25` to convert `UInt32` value data to/from pitch 7.25 values.
         case pitch7_25
     
         // Registered Per-Note CC 4 ... 6 undefined
