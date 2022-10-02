@@ -132,4 +132,25 @@ extension HUISurfaceModel: HUISurfaceStateProtocol {
             break
         }
     }
+    
+    /// Returns the current LED display state in the model of the given HUI V-Pot.
+    ///
+    /// > The rotary scroll knob in the DSP Edit/Assign section does not have an LED ring display, so default will always be returned.
+    public func state(of vPot: HUIVPot) -> HUIVPotDisplay {
+        switch vPot {
+        case let .channel(channel):
+            return channelStrips[channel.intValue].vPotDisplay
+        case .editAssignA:
+            return parameterEdit.param1VPotDisplay
+        case .editAssignB:
+            return parameterEdit.param2VPotDisplay
+        case .editAssignC:
+            return parameterEdit.param3VPotDisplay
+        case .editAssignD:
+            return parameterEdit.param4VPotDisplay
+        case .editAssignScroll:
+            // scroll knob has no LED ring display, just return empty LED config
+            return .init(leds: .allOff, lowerLED: false)
+        }
+    }
 }
