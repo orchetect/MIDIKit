@@ -53,7 +53,7 @@ final class HUIHostEventDecoderTests: XCTestCase {
         runHUIEventTest(
             .vPot(
                 vPot: .editAssignA,
-                display: .init(leds: .singleL5, lowerLED: false)
+                display: .init(leds: .single(.L5), lowerLED: false)
             )
         )
     }

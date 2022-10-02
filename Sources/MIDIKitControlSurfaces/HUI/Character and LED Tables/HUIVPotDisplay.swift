@@ -54,60 +54,87 @@ extension HUIVPotDisplay {
     // swiftformat:options --maxwidth none
     
     /// Preset HUI VPot LED states.
-    public enum LEDState: UInt8, CaseIterable {
-        case allOff          = 0x00
+    public enum LEDState: CaseIterable, Equatable, Hashable {
+        case allOff
         
-        case singleL5        = 0x01
-        case singleL4        = 0x02
-        case singleL3        = 0x03
-        case singleL2        = 0x04
-        case singleL1        = 0x05
-        case singleC         = 0x06
-        case singleR1        = 0x07
-        case singleR2        = 0x08
-        case singleR3        = 0x09
-        case singleR4        = 0x0A
-        case singleR5        = 0x0B
+        /// A single LED is illuminated.
+        case single(LED)
         
-        case fromCenterToL5  = 0x11
-        case fromCenterToL4  = 0x12
-        case fromCenterToL3  = 0x13
-        case fromCenterToL2  = 0x14
-        case fromCenterToL1  = 0x15
-        case fromCenterToC   = 0x16
-        case fromCenterToR1  = 0x17
-        case fromCenterToR2  = 0x18
-        case fromCenterToR3  = 0x19
-        case fromCenterToR4  = 0x1A
-        case fromCenterToR5  = 0x1B
+        /// A range of LED(s) are illuminated starting from the center and extending to the given LED.
+        case center(to: LED)
         
-        case fromLeftToL5    = 0x21
-        case fromLeftToL4    = 0x22
-        case fromLeftToL3    = 0x23
-        case fromLeftToL2    = 0x24
-        case fromLeftToL1    = 0x25
-        case fromLeftToC     = 0x26
-        case fromLeftToR1    = 0x27
-        case fromLeftToR2    = 0x28
-        case fromLeftToR3    = 0x29
-        case fromLeftToR4    = 0x2A
-        case fromLeftToR5    = 0x2B
+        /// A range of LED(s) are illuminated starting from the left and extending to the given LED.
+        case left(to: LED)
         
-        case centerWidth0    = 0x31
-        case centerWidth1    = 0x32
-        case centerWidth3    = 0x33
-        case centerWidth5    = 0x34
-        case centerWidth7    = 0x35
-        case centerWidth9    = 0x36
-        case centerWidth11   = 0x37
-        /// Same state as ``centerWidth11``.
-        case centerWidth11altA = 0x38
-        /// Same state as ``centerWidth11``.
-        case centerWidth11altB = 0x39
-        /// Same state as ``centerWidth11``.
-        case centerWidth11altC = 0x3A
-        /// Same state as ``centerWidth11``.
-        case centerWidth11altD = 0x3B
+        /// A range of LED(s) are illuminated starting from the center and extending symmetrically to both left and right by the given number of LEDs.
+        case centerSymmetrical(width: Int)
+        
+        public static var allCases: [Self] = [.allOff]
+            + LED.allCases.map { .single($0) }
+            + LED.allCases.map { .center(to: $0) }
+            + LED.allCases.map { .left(to: $0) }
+            + (1 ... 5).map { .centerSymmetrical(width: $0) }
+        
+        /// Initialize from raw encoded value
+        public init?(rawValue: UInt8) {
+            guard (0x00 ... 0x7F).contains(rawValue) else { return nil }
+                    
+            let nibbles = (rawValue % 0x40).nibbles
+            
+            if nibbles.low == 0x0 {
+                self = .allOff
+                return
+            }
+            
+            func formLED() -> LED? {
+                guard nibbles.low > 0 else { return nil }
+                return LED(rawValue: UInt8(nibbles.low - 1))
+            }
+            
+            switch nibbles.high {
+            case 0x0: // single
+                if let led = formLED() {
+                    self = .single(led)
+                } else { self = .allOff }
+            case 0x1: // center to LED
+                if let led = formLED() {
+                    self = .center(to: led)
+                } else { self = .allOff }
+            case 0x2: // left to LED
+                if let led = formLED() {
+                    self = .left(to: led)
+                } else { self = .allOff }
+            case 0x3: // center width
+                switch nibbles.low {
+                case 0x0:
+                    self = .allOff
+                case 0x1 ... 0x5:
+                    self = .centerSymmetrical(width: Int(nibbles.low))
+                case 0x6 ... 0xB:
+                    self = .centerSymmetrical(width: 6)
+                default: // 0xC ... 0xF are unused
+                    self = .allOff
+                }
+            default:
+                return nil
+            }
+        }
+        
+        /// Return the raw index value encoded in the HUI message.
+        public var rawValue: UInt8 {
+            switch self {
+            case .allOff:
+                return 0x00
+            case let .single(led):
+                return 0x01 + led.rawValue
+            case let .center(led):
+                return 0x11 + led.rawValue
+            case let .left(led):
+                return 0x21 + led.rawValue
+            case let .centerSymmetrical(width):
+                return 0x30 + UInt8(width.clamped(to: 0...5))
+            }
+        }
         
         /// LED configuration represented as a string of 11 characters.
         /// Useful for debugging or simple UI display.
@@ -204,6 +231,51 @@ extension HUIVPotDisplay {
         ]
         // swiftformat:enable numberFormatting
         
+        /// Returns contiguous bounds as LED indexes from `0x0 ... 0xA`.
+        /// Returns `nil` if all LEDs are off.
+        public var bounds: ClosedRange<LED>? {
+            switch self {
+            case .allOff:
+                return nil
+            
+            case let .single(led):
+                return led ... led
+                
+            case let .center(to: led):
+                switch led {
+                case .L5, .L4, .L3, .L2, .L1:
+                    return led ... .C
+                case .C:
+                    return .C ... .C
+                case .R1, .R2, .R3, .R4, .R5:
+                    return .C ... led
+                }
+            
+            case let .left(to: led):
+                return .L5 ... led
+            
+            case let .centerSymmetrical(width: width):
+                switch width {
+                case ...0: return nil
+                case 1:    return .C ... .C
+                case 2:    return .L1 ... .R1
+                case 3:    return .L2 ... .R2
+                case 4:    return .L3 ... .R3
+                case 5:    return .L4 ... .R4
+                case 6...: return .L5 ... .R5
+                default:   return nil
+                }
+            }
+        }
+        
+        /// Returns contiguous bounds as unit intervals (`0.0 ... 1.0`).
+        /// Returns `nil` if all LEDs are off.
+        public var unitIntervalBounds: ClosedRange<Double>? {
+            guard let bounds = bounds else { return nil }
+            
+            return bounds.lowerBound.unitIntervalLowerBound ... bounds.upperBound.unitIntervalUpperBound
+        }
+        
         /// Suitable default case for use as a default/neutral preset index.
         public static func `default`() -> Self {
             .allOff
@@ -216,10 +288,67 @@ extension HUIVPotDisplay {
     }
 }
 
+extension HUIVPotDisplay.LEDState {
+    /// HUI V-Pot Display LED.
+    /// Raw value is the offset from the leftmost LED.
+    public enum LED: UInt8, CaseIterable, Equatable, Hashable {
+        case L5 = 0x0
+        case L4 = 0x1
+        case L3 = 0x2
+        case L2 = 0x3
+        case L1 = 0x4
+        case C  = 0x5
+        case R1 = 0x6
+        case R2 = 0x7
+        case R3 = 0x8
+        case R4 = 0x9
+        case R5 = 0xA
+        
+        var unitIntervalLowerBound: Double {
+            Double(rawValue) / 0xB
+        }
+        
+        var unitIntervalUpperBound: Double {
+            Double(rawValue + 1) / 0xB
+        }
+    }
+}
+
+extension HUIVPotDisplay.LEDState.LED: Comparable {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
+}
+
+extension HUIVPotDisplay.LEDState.LED: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .L5: return "L5"
+        case .L4: return "L4"
+        case .L3: return "L3"
+        case .L2: return "L2"
+        case .L1: return "L1"
+        case .C:  return "C"
+        case .R1: return "R1"
+        case .R2: return "R2"
+        case .R3: return "R3"
+        case .R4: return "R4"
+        case .R5: return "R5"
+        }
+    }
+}
+
 // MARK: - CustomStringConvertible
 
 extension HUIVPotDisplay.LEDState: CustomStringConvertible {
     public var description: String {
         "[" + stringValue() + "]"
     }
+}
+
+// MARK: - Static Constructors
+
+extension HUIVPotDisplay {
+    /// Initialize HUI V-Pot LED Ring Display state with all LEDs off.
+    public static var allOff: HUIVPotDisplay = .init(leds: .allOff, lowerLED: false)
 }

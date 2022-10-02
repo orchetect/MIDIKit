@@ -283,7 +283,7 @@ final class CharacterAndLEDTests: XCTestCase {
     // MARK: - HUIVPotDisplay
     
     func testHUIVPotDisplayAndLEDState() {
-        let vp = HUIVPotDisplay(leds: .fromCenterToL5, lowerLED: true)
+        let vp = HUIVPotDisplay(leds: .center(to: .L5), lowerLED: true)
         
         XCTAssertTrue(vp.lowerLED)
         XCTAssertEqual(vp.leds.rawValue, 0x11)
@@ -296,13 +296,13 @@ final class CharacterAndLEDTests: XCTestCase {
     
     func testHUIVPotDisplay_Init_RawIndex_NoLowerLED() {
         let vp = HUIVPotDisplay(rawIndex: 0x11)
-        XCTAssertEqual(vp.leds, .fromCenterToL5)
+        XCTAssertEqual(vp.leds, .center(to: .L5))
         XCTAssertFalse(vp.lowerLED)
     }
     
     func testHUIVPotDisplay_Init_RawIndex_LowerLED() {
         let vp = HUIVPotDisplay(rawIndex: 0x11 + 0x40)
-        XCTAssertEqual(vp.leds, .fromCenterToL5)
+        XCTAssertEqual(vp.leds, .center(to: .L5))
         XCTAssertTrue(vp.lowerLED)
     }
     
@@ -316,6 +316,152 @@ final class CharacterAndLEDTests: XCTestCase {
         let vp = HUIVPotDisplay(rawIndex: 0x80)
         XCTAssertEqual(vp.leds, .allOff)
         XCTAssertFalse(vp.lowerLED)
+    }
+    
+    func testHUIVPotDisplay_LEDState_InitRawValue() {
+        // without lower LED
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x00),
+            .allOff
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x01),
+            .single(.L5)
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x11),
+            .center(to: .L5)
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x21),
+            .left(to: .L5)
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x31),
+            .centerSymmetrical(width: 1)
+        )
+        
+        // with lower LED
+        // (n/a for LEDState but it should be able to parse it)
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x00 + 0x40),
+            .allOff
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x01 + 0x40),
+            .single(.L5)
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x11 + 0x40),
+            .center(to: .L5)
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x21 + 0x40),
+            .left(to: .L5)
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x31 + 0x40),
+            .centerSymmetrical(width: 1)
+        )
+        
+        // edge cases
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState(rawValue: 0x1F), // unused
+            .allOff
+        )
+        
+        XCTAssertNil(
+            HUIVPotDisplay.LEDState(rawValue: 0x90) // out of bounds
+        )
+    }
+    
+    func testHUIVPotDisplay_LEDState_rawValue() {
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState.allOff.rawValue,
+            0x00
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState.single(.L5).rawValue,
+            0x01
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState.center(to: .L5).rawValue,
+            0x11
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState.left(to: .L5).rawValue,
+            0x21
+        )
+        
+        XCTAssertEqual(
+            HUIVPotDisplay.LEDState.centerSymmetrical(width: 1).rawValue,
+            0x31
+        )
+    }
+    
+    func testHUIVPotDisplay_LEDState_Equatable() {
+        let allOff: HUIVPotDisplay.LEDState = .allOff
+        XCTAssertEqual(allOff, .allOff)
+        XCTAssertNotEqual(allOff, .single(.L5))
+        
+        let single: HUIVPotDisplay.LEDState = .single(.L5)
+        XCTAssertEqual(single, .single(.L5))
+        XCTAssertNotEqual(single, .single(.L4))
+        XCTAssertNotEqual(single, .center(to: .L5))
+        
+        let centerTo: HUIVPotDisplay.LEDState = .center(to: .L5)
+        XCTAssertEqual(centerTo, .center(to: .L5))
+        XCTAssertNotEqual(centerTo, .center(to: .L4))
+        XCTAssertNotEqual(centerTo, .left(to: .L5))
+        
+        let leftTo: HUIVPotDisplay.LEDState = .left(to: .L5)
+        XCTAssertEqual(leftTo, .left(to: .L5))
+        XCTAssertNotEqual(leftTo, .left(to: .L4))
+        XCTAssertNotEqual(leftTo, .centerSymmetrical(width: 1))
+        
+        let centerSym: HUIVPotDisplay.LEDState = .centerSymmetrical(width: 1)
+        XCTAssertEqual(centerSym, .centerSymmetrical(width: 1))
+        XCTAssertNotEqual(centerSym, .centerSymmetrical(width: 2))
+        XCTAssertNotEqual(centerSym, .single(.L5))
+    }
+    
+    func testHUIVPotDisplay_LEDState_Bounds() {
+        XCTAssertNil(HUIVPotDisplay.LEDState.allOff.bounds)
+        
+        XCTAssertEqual(HUIVPotDisplay.LEDState.single(.L5).bounds, .L5 ... .L5)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.single(.C).bounds, .C ... .C)
+        
+        XCTAssertEqual(HUIVPotDisplay.LEDState.center(to: .L5).bounds, .L5 ... .C)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.center(to: .C).bounds, .C ... .C)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.center(to: .R5).bounds, .C ... .R5)
+        
+        XCTAssertEqual(HUIVPotDisplay.LEDState.left(to: .L5).bounds, .L5 ... .L5)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.left(to: .C).bounds, .L5 ... .C)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.left(to: .R5).bounds, .L5 ... .R5)
+        
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: -1).bounds, nil)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 0).bounds, nil)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 1).bounds, .C ... .C)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 2).bounds, .L1 ... .R1)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 3).bounds, .L2 ... .R2)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 4).bounds, .L3 ... .R3)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 5).bounds, .L4 ... .R4)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 6).bounds, .L5 ... .R5)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 7).bounds, .L5 ... .R5) // clamps
     }
     
     // MARK: - pad
