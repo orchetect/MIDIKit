@@ -24,8 +24,7 @@ extension HUIHostEvent {
             return encodeHUIFader(level: level, channel: channelStrip)
             
         case let .vPot(vPot, display):
-            return [encodeHUIVPot(display: display,
-                                  for: vPot)]
+            return [encodeHUIVPot(display: display, for: vPot)]
             
         case let .largeDisplay(slices):
             return encodeHUILargeDisplay(slices: slices)
@@ -63,7 +62,9 @@ extension HUIHostEvent: _HUIEventProtocol {
                 self = .vPot(vPot: vPot, display: display)
             case .delta:
                 // TODO: should probably refactor so this case isn't possible
-                assertionFailure("HUIHostEvent should never be initialized from a vPot delta change message. This should never happen.")
+                assertionFailure(
+                    "HUIHostEvent should never be initialized from a vPot delta change message. This should never happen."
+                )
                 // return neutral event as failsafe instead of crashing
                 self = .ping
             }
@@ -85,12 +86,16 @@ extension HUIHostEvent: _HUIEventProtocol {
             
         case .jogWheel:
             // TODO: should probably refactor so this case isn't possible
-            assertionFailure("HUIHostEvent should never be initialized from a jog wheel message. This should never happen.")
+            assertionFailure(
+                "HUIHostEvent should never be initialized from a jog wheel message. This should never happen."
+            )
             // return neutral event as failsafe instead of crashing
             self = .ping
             
         case .systemReset:
-            Logger.debug("HUIHostEvent was initialized from a system reset message, which is undefined for a HUI host to receive.")
+            Logger.debug(
+                "HUIHostEvent was initialized from a system reset message, which is undefined for a HUI host to receive."
+            )
             // return neutral event as failsafe instead of crashing
             self = .ping
         }

@@ -22,8 +22,10 @@ public struct Fader: View {
     /// - Parameters:
     ///   - value: Fader value.
     ///   - isTouched: Fader cap is being touched by the mouse (or held if a touch screen).
-    public init(value: Binding<Float>,
-                isTouched: Binding<Bool>) {
+    public init(
+        value: Binding<Float>,
+        isTouched: Binding<Bool>
+    ) {
         _location = value
         _isTouched = isTouched
     }

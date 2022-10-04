@@ -426,12 +426,12 @@ func encodeHUISystemReset() -> MIDIEvent {
 /// - Returns: Encoded `UInt7` byte ready to be packed into a HUI MIDI message.
 func encodeHUIDelta(from delta: Int7) -> UInt7 {
     let isNegative = delta < 0
-    let delta = abs(delta.intValue) & 0b11_1111
+    let delta = abs(delta.intValue) & 0b111111
     
     if isNegative {
         return UInt7(delta)
     } else {
-        return UInt7(delta + 0b100_0000)
+        return UInt7(delta + 0b1000000)
     }
 }
 
@@ -444,8 +444,8 @@ func encodeHUIDelta(from delta: Int7) -> UInt7 {
 ///   - delta: Encoded `UInt7` byte from a HUI MIDI message.
 /// - Returns: Delta -/+ value (`-63 ... 63`).
 func decodeHUIDelta(from delta: UInt7) -> Int7 {
-    let isNegative = ((delta & 0b100_0000) >> 6) == 0b0
-    let delta = Int8(delta & 0b11_1111)
+    let isNegative = ((delta & 0b1000000) >> 6) == 0b0
+    let delta = Int8(delta & 0b111111)
     
     if isNegative {
         return Int7(-delta)

@@ -126,7 +126,7 @@ public struct Int7 {
 extension Int7: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.sixBitStorage == rhs.sixBitStorage &&
-        lhs.isNegative == rhs.isNegative
+            lhs.isNegative == rhs.isNegative
     }
 }
 

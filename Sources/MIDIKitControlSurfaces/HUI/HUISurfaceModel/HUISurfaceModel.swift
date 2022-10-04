@@ -31,8 +31,10 @@ public struct HUISurfaceModel: Equatable, Hashable {
             // array count validation
             if _channelStrips.count < 8 {
                 _channelStrips.append(
-                    contentsOf: [ChannelStrip](repeating: ChannelStrip(),
-                                               count: 8 - _channelStrips.count)
+                    contentsOf: [ChannelStrip](
+                        repeating: ChannelStrip(),
+                        count: 8 - _channelStrips.count
+                    )
                 )
             } else if _channelStrips.count > 8 {
                 _channelStrips.removeLast(_channelStrips.count - 8)

@@ -242,7 +242,7 @@ extension HUIVPotDisplay.LEDState {
         guard let bounds = bounds else { return nil }
         
         return bounds.lowerBound.unitIntervalLowerBound ...
-        bounds.upperBound.unitIntervalUpperBound
+            bounds.upperBound.unitIntervalUpperBound
     }
 }
 

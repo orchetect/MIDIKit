@@ -141,14 +141,16 @@ public final class HUISurface {
             }
                 
             // process event
-            let result = self.model.updateState(from: hostEvent,
-                                                alwaysNotify: self.alwaysNotify)
+            let result = self.model.updateState(
+                from: hostEvent,
+                alwaysNotify: self.alwaysNotify
+            )
             switch result {
-            case .changed(let notification):
+            case let .changed(notification):
                 self.modelNotificationHandler?(notification)
             case .unchanged:
                 break
-            case .unhandled(let hostEvent):
+            case let .unhandled(hostEvent):
                 Logger.debug("Unhandled HUI event: \(hostEvent)")
             }
         }

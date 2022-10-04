@@ -28,7 +28,6 @@ public enum HUIVPot: Equatable, Hashable {
     /// This is a user-input knob only and has no LED ring display.
     case editAssignScroll
     
-    
     /// Internal:
     /// Initialize from raw value for encoding/decoding HUI message.
     init?(rawValue: UInt8) {

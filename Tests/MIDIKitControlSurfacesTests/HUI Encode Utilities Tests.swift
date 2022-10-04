@@ -152,22 +152,22 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     func testVPot_Delta() {
         XCTAssertEqual(
             encodeHUIVPot(delta: 63, for: .editAssignA),
-            .cc(0x48, value: .midi1(0b111_1111), channel: 0)
+            .cc(0x48, value: .midi1(0b1111111), channel: 0)
         )
         
         XCTAssertEqual(
             encodeHUIVPot(delta: 1, for: .editAssignA),
-            .cc(0x48, value: .midi1(0b100_0001), channel: 0)
+            .cc(0x48, value: .midi1(0b1000001), channel: 0)
         )
         
         XCTAssertEqual(
             encodeHUIVPot(delta: -1, for: .editAssignA),
-            .cc(0x48, value: .midi1(0b000_0001), channel: 0)
+            .cc(0x48, value: .midi1(0b0000001), channel: 0)
         )
         
         XCTAssertEqual(
             encodeHUIVPot(delta: -63, for: .editAssignA),
-            .cc(0x48, value: .midi1(0b011_1111), channel: 0)
+            .cc(0x48, value: .midi1(0b0111111), channel: 0)
         )
     }
     
@@ -196,7 +196,7 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     /// Message is only valid being sent to surface.
     func testLargeDisplay_OneChar() {
         let midiEvent = encodeHUILargeDisplay(sliceIndex: 2, text: [
-            .A,
+            .A
         ])
         
         XCTAssertEqual(

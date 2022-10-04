@@ -80,8 +80,10 @@ struct HUIHostView: View {
                             huiBank0?.transmitSwitch(.channelStrip(0, .mute), state: newValue)
                         }
                     GroupBox(label: Text("4-Character LCD")) {
-                        LiveFormattedTextField(value: $huiHostHelper.bank0Ch0Name,
-                                               formatter: ChanTextFormatter())
+                        LiveFormattedTextField(
+                            value: $huiHostHelper.bank0Ch0Name,
+                            formatter: ChanTextFormatter()
+                        )
                         .frame(width: 100)
                         .onChange(of: huiHostHelper.bank0Ch0Name) { newValue in
                             huiBank0?.transmitSmallDisplay(
@@ -161,8 +163,8 @@ private class ChanTextFormatter: Formatter {
     override func getObjectValue(
         _ obj: AutoreleasingUnsafeMutablePointer<AnyObject?>?,
         for string: String,
-        errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>?) -> Bool
-    {
+        errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>?
+    ) -> Bool {
         obj?.pointee = string as NSString
         return true
     }
@@ -195,13 +197,15 @@ struct LiveFormattedTextField: View {
     
     @State private var liveText: String
     
-    init(_ titleKey: LocalizedStringKey = "",
-         value: Binding<String>,
-         formatter: Formatter) {
+    init(
+        _ titleKey: LocalizedStringKey = "",
+        value: Binding<String>,
+        formatter: Formatter
+    ) {
         self.titleKey = titleKey
-        self._value = value
+        _value = value
         self.formatter = formatter
-        self._liveText = State(wrappedValue: value.wrappedValue)
+        _liveText = State(wrappedValue: value.wrappedValue)
     }
     
     var body: some View {

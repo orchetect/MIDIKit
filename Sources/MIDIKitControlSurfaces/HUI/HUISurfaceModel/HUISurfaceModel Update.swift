@@ -61,16 +61,22 @@ extension HUISurfaceModel {
             )
             
         case let .largeDisplay(slices: slices):
-            return updateStateFromLargeDisplay(slices: slices,
-                                               alwaysNotify: alwaysNotify)
+            return updateStateFromLargeDisplay(
+                slices: slices,
+                alwaysNotify: alwaysNotify
+            )
             
         case let .timeDisplay(charsRightToLeft: chars):
-            return updateStateFromTimeDisplay(charsRightToLeft: chars,
-                                              alwaysNotify: alwaysNotify)
+            return updateStateFromTimeDisplay(
+                charsRightToLeft: chars,
+                alwaysNotify: alwaysNotify
+            )
             
         case let .selectAssignDisplay(text: text):
-            return updateStateFromAssign(text: text,
-                                         alwaysNotify: alwaysNotify)
+            return updateStateFromAssign(
+                text: text,
+                alwaysNotify: alwaysNotify
+            )
             
         case let .channelDisplay(
             channelStrip: channelStrip,

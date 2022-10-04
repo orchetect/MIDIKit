@@ -10,7 +10,7 @@ import MIDIKitCore
 /// Abstracts raw HUI messages into basic common-currency HUI message types carrying raw data as encoded.
 ///
 /// > This event can be used in either direction (to client surface or to host) but not all events are relevant.
-/// > 
+/// >
 /// > For example:
 /// >
 /// > - Both a host and client surface can send channel strip Solo state to each other. The host sends the state to the client surface, and the client surface updates its state and UI to reflect it. Then the user can interact with the client surface at any time to toggle the Solo button which sends the same message back to the host, causing the host to toggle the corresponding track Solo.

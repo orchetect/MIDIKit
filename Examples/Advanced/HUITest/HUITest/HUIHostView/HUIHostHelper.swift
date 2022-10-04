@@ -101,8 +101,9 @@ class HUIHostHelper: ObservableObject {
                     case let .vPot(vPot: vPot, delta: delta):
                         switch vPot {
                         case .channel(0):
-                            self.bank0VPotValue = (self.bank0VPotValue + Float(delta.intValue) / 100)
-                                .clamped(to: 0.0 ... 1.0)
+                            self.bank0VPotValue = (
+                                self.bank0VPotValue + Float(delta.intValue) / 100
+                            ).clamped(to: 0.0 ... 1.0)
                         default:
                             break
                         }
