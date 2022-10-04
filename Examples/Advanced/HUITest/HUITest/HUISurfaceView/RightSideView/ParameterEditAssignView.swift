@@ -14,20 +14,20 @@ extension HUISurfaceView {
             Group {
                 VStack {
                     HUIStateButton(
-                        "ASSIGN",
-                        .paramEdit(.assign),
-                        .green
+                        title: "ASSIGN",
+                        param: .paramEdit(.assign),
+                        ledColor: .green
                     )
                     HUIStateButton(
-                        "COMPARE",
-                        .paramEdit(.compare),
-                        .green,
+                        title: "COMPARE",
+                        param: .paramEdit(.compare),
+                        ledColor: .green,
                         fontSize: 8.5
                     )
                     HUIStateButton(
-                        "BYPASS",
-                        .paramEdit(.bypass),
-                        .green
+                        title: "BYPASS",
+                        param: .paramEdit(.bypass),
+                        ledColor: .green
                     )
                 }
                 
@@ -37,13 +37,13 @@ extension HUISurfaceView {
                     // Param 1
                     VStack {
                         HUIStateButton(
-                            "SELECT",
-                            .paramEdit(.param1Select),
-                            .green
+                            title: "SELECT",
+                            param: .paramEdit(.param1Select),
+                            ledColor: .green
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: 40,
+                            size: Self.channelStripWidth,
                             vPot: .editAssignA
                         )
                     }
@@ -54,13 +54,13 @@ extension HUISurfaceView {
                     // Param 2
                     VStack {
                         HUIStateButton(
-                            "SELECT",
-                            .paramEdit(.param2Select),
-                            .green
+                            title: "SELECT",
+                            param: .paramEdit(.param2Select),
+                            ledColor: .green
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: 40,
+                            size: Self.channelStripWidth,
                             vPot: .editAssignB
                         )
                     }
@@ -71,13 +71,13 @@ extension HUISurfaceView {
                     // Param 3
                     VStack {
                         HUIStateButton(
-                            "SELECT",
-                            .paramEdit(.param3Select),
-                            .green
+                            title: "SELECT",
+                            param: .paramEdit(.param3Select),
+                            ledColor: .green
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: 40,
+                            size: Self.channelStripWidth,
                             vPot: .editAssignC
                         )
                     }
@@ -88,13 +88,13 @@ extension HUISurfaceView {
                     // Param 4
                     VStack {
                         HUIStateButton(
-                            "SELECT",
-                            .paramEdit(.param4Select),
-                            .green
+                            title: "SELECT",
+                            param: .paramEdit(.param4Select),
+                            ledColor: .green
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: 40,
+                            size: Self.channelStripWidth,
                             vPot: .editAssignD
                         )
                     }
@@ -105,14 +105,14 @@ extension HUISurfaceView {
                 
                 VStack {
                     HUIStateButton(
-                        "INSERT ○\nPARAM ●",
-                        .paramEdit(.insertOrParam),
-                        .green,
-                        width: 60
+                        title: "INSERT ○\nPARAM ●",
+                        param: .paramEdit(.insertOrParam),
+                        ledColor: .green,
+                        height: 30
                     )
                     RotaryKnob(
                         label: "",
-                        size: 20,
+                        size: Self.channelStripWidth / 2,
                         vPot: .editAssignScroll
                     )
                     Text("SCROLL")

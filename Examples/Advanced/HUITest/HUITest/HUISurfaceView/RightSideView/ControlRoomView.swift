@@ -12,55 +12,62 @@ extension HUISurfaceView {
         HStack {
             VStack {
                 HUIStateButton(
-                    "INPUT 1",
-                    .controlRoom(.input1),
-                    .green
+                    title: "INPUT 1",
+                    param: .controlRoom(.input1),
+                    ledColor: .green,
+                    height: 30
                 )
                 HUIStateButton(
-                    "INPUT 2",
-                    .controlRoom(.input2),
-                    .green
+                    title: "INPUT 2",
+                    param: .controlRoom(.input2),
+                    ledColor: .green,
+                    height: 30
                 )
                 HUIStateButton(
-                    "INPUT 3",
-                    .controlRoom(.input3),
-                    .green
+                    title: "INPUT 3",
+                    param: .controlRoom(.input3),
+                    ledColor: .green,
+                    height: 30
                 )
             }
-            .frame(maxWidth: .infinity)
+            .spaceHogFrame()
             
             VStack {
                 HStack {
                     HUIStateButton(
-                        "1:1 DISCRETE",
-                        .controlRoom(.discreteInput1to1),
-                        .red,
+                        title: "1:1 DISCRETE",
+                        param: .controlRoom(.discreteInput1to1),
+                        ledColor: .red,
+                        height: 30,
                         fontSize: 9
                     )
                     HUIStateButton(
-                        "MONO",
-                        .controlRoom(.mono),
-                        .red
+                        title: "MONO",
+                        param: .controlRoom(.mono),
+                        ledColor: .red,
+                        height: 30
                     )
                 }
                 
                 PlaceholderKnob(size: 50)
-                Text("MASTER\nVOLUME").font(.system(size: 10))
+                Text("MASTER VOLUME").font(.system(size: 10))
                 
                 HStack {
                     HUIStateButton(
-                        "MUTE",
-                        .controlRoom(.mute),
-                        .red
+                        title: "MUTE",
+                        param: .controlRoom(.mute),
+                        ledColor: .red,
+                        height: 30
                     )
                     HUIStateButton(
-                        "DIM",
-                        .controlRoom(.dim),
-                        .red
+                        title: "DIM",
+                        param: .controlRoom(.dim),
+                        ledColor: .red,
+                        height: 30
                     )
                 }
             }
-            .frame(maxWidth: .infinity)
+            .frame(minWidth: 110)
             
             VStack {
                 PlaceholderKnob(size: 30)
@@ -69,29 +76,32 @@ extension HUISurfaceView {
                 Spacer().frame(height: 5)
                 PlaceholderKnob(size: 30)
             }
-            .frame(maxWidth: .infinity)
+            .spaceHogFrame()
             
             VStack {
                 HUIStateButton(
-                    "OUTPUT 1",
-                    .controlRoom(.output1),
-                    .green,
+                    title: "OUTPUT 1",
+                    param: .controlRoom(.output1),
+                    ledColor: .green,
+                    height: 30,
                     fontSize: 9
                 )
                 HUIStateButton(
-                    "OUTPUT 2",
-                    .controlRoom(.output2),
-                    .green,
+                    title: "OUTPUT 2",
+                    param: .controlRoom(.output2),
+                    ledColor: .green,
+                    height: 30,
                     fontSize: 9
                 )
                 HUIStateButton(
-                    "OUTPUT 3/PHONES",
-                    .controlRoom(.output3),
-                    .green,
+                    title: "OUTPUT 3\n/ PHONES",
+                    param: .controlRoom(.output3),
+                    ledColor: .green,
+                    height: 30,
                     fontSize: 9
                 )
             }
-            .frame(maxWidth: .infinity)
+            .spaceHogFrame()
         }
     }
 }

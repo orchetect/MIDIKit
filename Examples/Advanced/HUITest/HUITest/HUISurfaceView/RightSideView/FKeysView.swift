@@ -12,44 +12,44 @@ extension HUISurfaceView {
         HStack {
             Group {
                 HUIStateButton(
-                    "F1",
-                    .functionKey(.f1),
-                    .red
+                    title: "F1",
+                    param: .functionKey(.f1),
+                    ledColor: .red
                 )
                 HUIStateButton(
-                    "F2",
-                    .functionKey(.f2),
-                    .red
+                    title: "F2",
+                    param: .functionKey(.f2),
+                    ledColor: .red
                 )
                 HUIStateButton(
-                    "F3",
-                    .functionKey(.f3),
-                    .red
+                    title: "F3",
+                    param: .functionKey(.f3),
+                    ledColor: .red
                 )
                 HUIStateButton(
-                    "F4",
-                    .functionKey(.f4),
-                    .red
+                    title: "F4",
+                    param: .functionKey(.f4),
+                    ledColor: .red
                 )
                 HUIStateButton(
-                    "F5",
-                    .functionKey(.f5),
-                    .red
+                    title: "F5",
+                    param: .functionKey(.f5),
+                    ledColor: .red
                 )
                 HUIStateButton(
-                    "F6",
-                    .functionKey(.f6),
-                    .red
+                    title: "F6",
+                    param: .functionKey(.f6),
+                    ledColor: .red
                 )
                 HUIStateButton(
-                    "F7",
-                    .functionKey(.f7),
-                    .red
+                    title: "F7",
+                    param: .functionKey(.f7),
+                    ledColor: .red
                 )
                 HUIStateButton(
-                    "F8/ESC",
-                    .functionKey(.f8OrEsc),
-                    .red
+                    title: "F8/ESC",
+                    param: .functionKey(.f8OrEsc),
+                    ledColor: .red
                 )
             }
             .frame(maxWidth: .infinity)

@@ -45,7 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         huiHostWindow = NSWindow(
             contentRect: NSRect(
                 x: 100,
-                y: 100 + ((huiSurfaceHeight - huiHostWidth) / 2),
+                y: 100 + ((huiSurfaceHeight - huiHostHeight) / 2),
                 width: huiHostWidth,
                 height: huiHostHeight
             ),

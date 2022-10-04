@@ -1,5 +1,5 @@
 //
-//  MomentaryButton.swift
+//  Buttons.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -9,6 +9,7 @@ import MIDIKitControlSurfaces
 
 extension MomentaryButton {
     fileprivate static let kDefaultWidth: CGFloat = 50
+    fileprivate static let kDefaultHeight: CGFloat = 25
     fileprivate static let kDefaultFontSize: CGFloat = 10
 }
 
@@ -35,6 +36,7 @@ extension MomentaryButtonProtocol {
 struct MomentaryButton: View, MomentaryButtonProtocol {
     @State private var isPressed = false
     
+    let image: Image?
     let title: String
     var fontSize: CGFloat?
     var width: CGFloat?
@@ -42,58 +44,85 @@ struct MomentaryButton: View, MomentaryButtonProtocol {
     let pressedAction: () -> Void
     let releasedAction: () -> Void
     
+    init(
+        image: Image? = nil,
+        title: String,
+        fontSize: CGFloat? = nil,
+        width: CGFloat? = nil,
+        height: CGFloat? = nil,
+        pressedAction: @escaping () -> Void,
+        releasedAction: @escaping () -> Void
+    ) {
+        self.image = image
+        self.title = title
+        self.fontSize = fontSize
+        self.width = width
+        self.height = height
+        self.pressedAction = pressedAction
+        self.releasedAction = releasedAction
+    }
+    
     var body: some View {
         ZStack {
-            Text(title)
-                .font(.system(size: fontSize ?? Self.kDefaultFontSize))
-                .multilineTextAlignment(.center)
-                .padding(2)
-                .frame(width: width, height: height)
-                .background(isPressed ? Color.blue : Color.gray)
-                .cornerRadius(3)
+            Rectangle()
+                .fill(isPressed ? .blue : .gray)
+            VStack {
+                if let image = image {
+                    if !title.isEmpty { Spacer().frame(height: 4) }
+                    image
+                }
+                if !title.isEmpty {
+                    Text(title)
+                        .font(.system(size: fontSize ?? Self.kDefaultFontSize))
+                        .multilineTextAlignment(.center)
+                        .padding(2)
+                        .frame(width: width)
+                }
+            }
         }
-        .highPriorityGesture(
-            // this is a workaround to enable a button which triggers two different actions, one on mouse-down and one on mouse-up
-            DragGesture(minimumDistance: 0)
-                .onChanged { _ in
-                    if !isPressed {
-                        pressedAction()
-                    }
-                    isPressed = true
-                }
-                .onEnded { _ in
-                    releasedAction()
-                    isPressed = false
-                }
-        )
+        .cornerRadius(3)
+        .frame(width: width, height: height)
+        .help(title)
+        .momentaryPressGesture { state in
+            isPressed = state
+            if state { pressedAction() } else { releasedAction() }
+        }
     }
 }
 
 struct HUIButton: View, MomentaryButtonProtocol {
     @EnvironmentObject var huiSurface: HUISurface
 
+    let image: Image?
     let title: String
     var fontSize: CGFloat?
     var width: CGFloat?
+    var height: CGFloat?
     private let huiSwitch: HUISwitch.Wrapper
     
     init(
-        _ title: String = "",
-        _ param: HUISwitch,
-        width: CGFloat? = MomentaryButton.kDefaultWidth,
+        image: Image? = nil,
+        title: String = "",
+        param: HUISwitch,
+        width: CGFloat? = nil, //MomentaryButton.kDefaultWidth,
+        height: CGFloat? = nil, //MomentaryButton.kDefaultHeight,
         fontSize: CGFloat? = nil
     ) {
+        self.image = image
         self.title = title
         huiSwitch = .init(param)
         self.width = width
+        self.height = height
         self.fontSize = fontSize
     }
     
     var body: some View {
         MomentaryButton(
+            image: image,
             title: title,
             fontSize: fontSize,
-            width: width
+            width: width,
+            height: height
         ) {
             huiSurface.transmitSwitch(huiSwitch.wrapped, state: true)
         } releasedAction: {
@@ -106,31 +135,39 @@ struct HUIButton: View, MomentaryButtonProtocol {
 struct HUIStateButton: View, MomentaryButtonProtocol  {
     @EnvironmentObject var huiSurface: HUISurface
 
+    let image: Image?
     let title: String
     var fontSize: CGFloat?
     var width: CGFloat?
+    var height: CGFloat?
     private let huiSwitch: HUISwitch.Wrapper
     let ledColor: Color
 
     init(
-        _ title: String = "",
-        _ param: HUISwitch,
-        _ ledColor: HUISwitchColor,
-        width: CGFloat? = MomentaryButton.kDefaultWidth,
+        image: Image? = nil,
+        title: String = "",
+        param: HUISwitch,
+        ledColor: HUISwitchColor,
+        width: CGFloat? = nil, //MomentaryButton.kDefaultWidth,
+        height: CGFloat? = nil, //MomentaryButton.kDefaultHeight,
         fontSize: CGFloat? = nil
     ) {
+        self.image = image
         self.title = title
         self.fontSize = fontSize
         self.width = width
+        self.height = height
         huiSwitch = .init(param)
         self.ledColor = ledColor.color
     }
 
     var body: some View {
         HUIButton(
-            title,
-            huiSwitch.wrapped,
+            image: image,
+            title: title,
+            param: huiSwitch.wrapped,
             width: width,
+            height: height,
             fontSize: fontSize
         )
         .colorMultiply(
@@ -162,6 +199,7 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
     
     static let kDefaultSize: CGFloat = 40
     
+    let image: Image?
     let title: String
     var fontSize: CGFloat?
     var width: CGFloat?
@@ -171,14 +209,16 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
     private let huiSwitch: HUISwitch.Wrapper
     
     init(
-        _ title: String = "",
-        _ param: HUISwitch,
+        image: Image? = nil,
+        title: String = "",
+        param: HUISwitch,
         width: CGFloat? = kDefaultSize,
         spacing: CGFloat? = nil,
         widthScale: CGFloat = 1.0,
         heightScale: CGFloat = 1.0,
         fontSize: CGFloat? = 14
     ) {
+        self.image = image
         self.title = title
         huiSwitch = .init(param)
         self.width = width
@@ -190,6 +230,7 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
     
     var body: some View {
         MomentaryButton(
+            image: image,
             title: title,
             fontSize: fontSize,
             width: calculateWidth(),

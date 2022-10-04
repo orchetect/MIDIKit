@@ -1,5 +1,5 @@
 //
-//  RotaryKnob.swift
+//  Knobs.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
@@ -35,8 +35,12 @@ struct RotaryKnob: View {
         VStack(spacing: 0) {
             if vPot.hasDisplay {
                 ZStack {
-                    KnobShape(size: size * 0.5)
-                
+                    Circle()
+                        .fill(.black)
+                        .frame(width: size, height: size)
+                    
+                    KnobShape(size: size * 0.6)
+                    
                     Group {
                         // display knob only, non-interactive
                         if leftBound == -1,
@@ -62,12 +66,16 @@ struct RotaryKnob: View {
                         }
                     }
                     .disabled(true)
+                    
+                    VStack {
+                        Spacer()
+                        Circle()
+                            .fill(display.lowerLED ? .red : .black)
+                            .frame(width: size / 10, height: size / 10)
+                        Spacer().frame(height: size / 15)
+                    }
                 }
                 .frame(width: size, height: size)
-            
-                Circle()
-                    .fill(display.lowerLED ? .red : .black)
-                    .frame(width: size / 10, height: size / 10)
             } else {
                 KnobShape(size: size)
             }
@@ -122,17 +130,67 @@ struct PlaceholderKnob: View {
 struct KnobShape: View {
     var size: CGFloat
     
+    @State private var hover: Bool = false
+    
     var body: some View {
+        let interiorLineWidth = min(5, size / 10)
+        let interiorDash: [CGFloat] = [size / 10]
+        let interiorOffset = max(size - 15, size * 0.7)
+        let darkGray = Color(white: 0.4)
+        
         ZStack {
             Circle()
-                .fill(.gray)
+                .fill(darkGray)
                 .frame(width: size, height: size)
             Circle()
+                .fill(.radialGradient(
+                    colors: [Color(white: 0.5), Color(white: 0.7)],
+                    center: .bottomTrailing,
+                    startRadius: 0,
+                    endRadius: size
+                ))
+                .frame(width: interiorOffset, height: interiorOffset)
+                .shadow(color: .black, radius: size / 20, x: size / 30, y: size / 30)
+            Circle()
                 .stroke(
-                    Color(white: 0.3),
-                    style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round, dash: [3])
+                    .gray,
+                    style: StrokeStyle(
+                        lineWidth: interiorLineWidth,
+                        lineCap: .round,
+                        lineJoin: .round,
+                        dash: interiorDash
+                    )
                 )
-                .frame(width: size * 0.8, height: size * 0.8)
+                .frame(width: interiorOffset, height: interiorOffset)
+            
+            if size > 100 {
+                VStack {
+                    HStack { // ◀︎ ▶︎ ← →
+                        //Text("◀︎")
+                        //Text("▶︎")
+                        Text("←").rotationEffect(.degrees(360 - 15))
+                        Text("→").rotationEffect(.degrees(15))
+                    }
+                    .font(.system(size: 24))
+                    .foregroundColor(.black.opacity(0.7))
+                    .scaleEffect(CGSize.init(width: size/140, height: size/140))
+                    Spacer()
+                }
+                .padding(size / 5)
+            } else {
+                Image(
+                    systemName: "arrowtriangle.left.and.line.vertical.and.arrowtriangle.right.fill"
+                )
+                .resizable()
+                .foregroundColor(.black)
+                .frame(width: size / 2, height: size / 2)
+                .opacity(hover ? 1.0 : 0.0)
+            }
+        }
+        .onHover { state in
+            withAnimation(.linear(duration: 0.1)) {
+                hover = state
+            }
         }
     }
 }
@@ -145,16 +203,20 @@ struct JogWheel: View {
     @State private var lastDragLocation: CGPoint?
     
     var body: some View {
-        PlaceholderKnob(name: "Jog Wheel", size: size)
-            .highPriorityGesture(
-                DragGesture(minimumDistance: 2)
-                    .onChanged { v in
-                        let getLastDragLocation = lastDragLocation ?? v.location
-                        let isPositive = v.location.x > getLastDragLocation.x
-                        let delta: Int7 = isPositive ? 1 : -1
-                        huiSurface.transmitJogWheel(delta: delta)
-                        lastDragLocation = v.location
-                    }
-            )
+        ZStack {
+            KnobShape(size: size)
+            Text("Jog Wheel")
+                .foregroundColor(.black)
+        }
+        .highPriorityGesture(
+            DragGesture(minimumDistance: 2)
+                .onChanged { v in
+                    let getLastDragLocation = lastDragLocation ?? v.location
+                    let isPositive = v.location.x > getLastDragLocation.x
+                    let delta: Int7 = isPositive ? 1 : -1
+                    huiSurface.transmitJogWheel(delta: delta)
+                    lastDragLocation = v.location
+                }
+        )
     }
 }

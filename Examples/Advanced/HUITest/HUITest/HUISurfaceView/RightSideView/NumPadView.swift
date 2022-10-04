@@ -18,58 +18,58 @@ extension HUISurfaceView {
                 VStack(alignment: .center, spacing: numPadSpacing) {
                     HStack(alignment: .center, spacing: numPadSpacing) {
                         HUINumPadButton(
-                            "CLR",
-                            .numPad(.clr)
+                            title: "CLR",
+                            param: .numPad(.clr)
                         )
                         HUINumPadButton(
-                            "=",
-                            .numPad(.equals)
+                            title: "=",
+                            param: .numPad(.equals)
                         )
                         HUINumPadButton(
-                            "/",
-                            .numPad(.forwardSlash)
+                            title: "/",
+                            param: .numPad(.forwardSlash)
                         )
                         HUINumPadButton(
-                            "*",
-                            .numPad(.asterisk)
-                        )
-                    }
-                    
-                    HStack(alignment: .center, spacing: numPadSpacing) {
-                        HUINumPadButton(
-                            "7",
-                            .numPad(.num7)
-                        )
-                        HUINumPadButton(
-                            "8",
-                            .numPad(.num8)
-                        )
-                        HUINumPadButton(
-                            "9",
-                            .numPad(.num9)
-                        )
-                        HUINumPadButton(
-                            "-",
-                            .numPad(.minus)
+                            title: "*",
+                            param: .numPad(.asterisk)
                         )
                     }
                     
                     HStack(alignment: .center, spacing: numPadSpacing) {
                         HUINumPadButton(
-                            "4",
-                            .numPad(.num4)
+                            title: "7",
+                            param: .numPad(.num7)
                         )
                         HUINumPadButton(
-                            "5",
-                            .numPad(.num5)
+                            title: "8",
+                            param: .numPad(.num8)
                         )
                         HUINumPadButton(
-                            "6",
-                            .numPad(.num6)
+                            title: "9",
+                            param: .numPad(.num9)
                         )
                         HUINumPadButton(
-                            "+",
-                            .numPad(.plus)
+                            title: "-",
+                            param: .numPad(.minus)
+                        )
+                    }
+                    
+                    HStack(alignment: .center, spacing: numPadSpacing) {
+                        HUINumPadButton(
+                            title: "4",
+                            param: .numPad(.num4)
+                        )
+                        HUINumPadButton(
+                            title: "5",
+                            param: .numPad(.num5)
+                        )
+                        HUINumPadButton(
+                            title: "6",
+                            param: .numPad(.num6)
+                        )
+                        HUINumPadButton(
+                            title: "+",
+                            param: .numPad(.plus)
                         )
                     }
                     
@@ -77,34 +77,34 @@ extension HUISurfaceView {
                         VStack(alignment: .center, spacing: numPadSpacing) {
                             HStack(alignment: .center, spacing: numPadSpacing) {
                                 HUINumPadButton(
-                                    "1",
-                                    .numPad(.num1)
+                                    title: "1",
+                                    param: .numPad(.num1)
                                 )
                                 HUINumPadButton(
-                                    "2",
-                                    .numPad(.num2)
+                                    title: "2",
+                                    param: .numPad(.num2)
                                 )
                                 HUINumPadButton(
-                                    "3",
-                                    .numPad(.num3)
+                                    title: "3",
+                                    param: .numPad(.num3)
                                 )
                             }
                             HStack(alignment: .center, spacing: numPadSpacing) {
                                 HUINumPadButton(
-                                    "0",
-                                    .numPad(.num0),
+                                    title: "0",
+                                    param: .numPad(.num0),
                                     spacing: numPadSpacing,
                                     widthScale: 2
                                 )
                                 HUINumPadButton(
-                                    ".",
-                                    .numPad(.period)
+                                    title: ".",
+                                    param: .numPad(.period)
                                 )
                             }
                         }
                         HUINumPadButton(
-                            "E\nN\nT\nE\nR",
-                            .numPad(.enter),
+                            title: "E\nN\nT\nE\nR",
+                            param: .numPad(.enter),
                             spacing: numPadSpacing,
                             heightScale: 2,
                             fontSize: 12

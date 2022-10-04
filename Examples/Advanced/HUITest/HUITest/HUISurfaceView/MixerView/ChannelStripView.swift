@@ -9,7 +9,7 @@ import MIDIKitControlSurfaces
 import Controls
 
 extension HUISurfaceView {
-    static let channelStripWidth: CGFloat = 60
+    static let channelStripWidth: CGFloat = 58
 }
 
 extension HUISurfaceView {
@@ -22,21 +22,21 @@ extension HUISurfaceView {
             VStack(alignment: .center, spacing: 10) {
                 Group {
                     HUIStateButton(
-                        "REC/RDY",
-                        .channelStrip(channel, .recordReady),
-                        .red
+                        title: "REC/RDY",
+                        param: .channelStrip(channel, .recordReady),
+                        ledColor: .red
                     )
                     
                     HUIStateButton(
-                        "INSERT",
-                        .channelStrip(channel, .insert),
-                        .green
+                        title: "INSERT",
+                        param: .channelStrip(channel, .insert),
+                        ledColor: .green
                     )
                     
                     HUIStateButton(
-                        "V-SEL",
-                        .channelStrip(channel, .vPotSelect),
-                        .yellow
+                        title: "V-SEL",
+                        param: .channelStrip(channel, .vPotSelect),
+                        ledColor: .yellow
                     )
                 }
                 
@@ -45,51 +45,45 @@ extension HUISurfaceView {
                         .font(.system(size: 9))
                     RotaryKnob(
                         label: "        ",
-                        size: 40,
+                        size: channelStripWidth,
                         vPot: .channel(channel)
                     )
                 }
                 
                 Group {
                     HUIStateButton(
-                        "AUTO",
-                        .channelStrip(channel, .auto),
-                        .red
+                        title: "AUTO",
+                        param: .channelStrip(channel, .auto),
+                        ledColor: .red
                     )
                     
                     HUIStateButton(
-                        "SOLO",
-                        .channelStrip(channel, .solo),
-                        .green
+                        title: "SOLO",
+                        param: .channelStrip(channel, .solo),
+                        ledColor: .green
                     )
                     
                     HUIStateButton(
-                        "MUTE",
-                        .channelStrip(channel, .mute),
-                        .red
+                        title: "MUTE",
+                        param: .channelStrip(channel, .mute),
+                        ledColor: .red
                     )
                 }
                 
                 Group {
-                    Text(
+                    FourCharLCD(
                         huiSurface.model.channelStrips[channel.intValue].nameDisplay
                             .stringValue
                     )
-                    .font(.system(size: 16, weight: .regular, design: .monospaced))
-                    .foregroundColor(.green)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 26)
-                    .background(Color.black)
-                    .cornerRadius(3.0, antialiased: true)
                     
                     HUIStateButton(
-                        "SELECT",
-                        .channelStrip(channel, .select),
-                        .yellow
+                        title: "SELECT",
+                        param: .channelStrip(channel, .select),
+                        ledColor: .yellow
                     )
                     
                     FaderView(channel: channel)
-                        .frame(height: 300)
+                        .frame(height: 350)
                 }
             }
         }

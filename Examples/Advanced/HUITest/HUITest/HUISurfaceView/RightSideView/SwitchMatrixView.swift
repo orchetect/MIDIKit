@@ -16,36 +16,36 @@ extension HUISurfaceView {
                 HStack {
                     VStack {
                         HUIStateButton(
-                            "FADER",
-                            .autoEnable(.fader),
-                            .yellow
+                            title: "FADER",
+                            param: .autoEnable(.fader),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "PAN",
-                            .autoEnable(.pan),
-                            .yellow
+                            title: "PAN",
+                            param: .autoEnable(.pan),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "PLUG IN",
-                            .autoEnable(.plugin),
-                            .yellow
+                            title: "PLUG IN",
+                            param: .autoEnable(.plugin),
+                            ledColor: .yellow
                         )
                     }
                     VStack {
                         HUIStateButton(
-                            "MUTE",
-                            .autoEnable(.mute),
-                            .yellow
+                            title: "MUTE",
+                            param: .autoEnable(.mute),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "SEND",
-                            .autoEnable(.send),
-                            .yellow
+                            title: "SEND",
+                            param: .autoEnable(.send),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "SEND MUTE",
-                            .autoEnable(.sendMute),
-                            .yellow,
+                            title: "SEND MUTE",
+                            param: .autoEnable(.sendMute),
+                            ledColor: .yellow,
                             fontSize: 7
                         )
                     }
@@ -61,36 +61,36 @@ extension HUISurfaceView {
                 HStack {
                     VStack {
                         HUIStateButton(
-                            "READ",
-                            .autoMode(.read),
-                            .yellow
+                            title: "READ",
+                            param: .autoMode(.read),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "LATCH",
-                            .autoMode(.latch),
-                            .yellow
+                            title: "LATCH",
+                            param: .autoMode(.latch),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "TRIM",
-                            .autoMode(.trim),
-                            .yellow
+                            title: "TRIM",
+                            param: .autoMode(.trim),
+                            ledColor: .yellow
                         )
                     }
                     VStack {
                         HUIStateButton(
-                            "TOUCH",
-                            .autoMode(.touch),
-                            .yellow
+                            title: "TOUCH",
+                            param: .autoMode(.touch),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "WRITE",
-                            .autoMode(.write),
-                            .yellow
+                            title: "WRITE",
+                            param: .autoMode(.write),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "OFF",
-                            .autoMode(.off),
-                            .yellow
+                            title: "OFF",
+                            param: .autoMode(.off),
+                            ledColor: .yellow
                         )
                     }
                 }
@@ -105,37 +105,37 @@ extension HUISurfaceView {
                 HStack {
                     VStack {
                         HUIStateButton(
-                            "AUTO",
-                            .statusAndGroup(.auto),
-                            .yellow
+                            title: "AUTO",
+                            param: .statusAndGroup(.auto),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "MONITOR",
-                            .statusAndGroup(.monitor),
-                            .yellow,
+                            title: "MONITOR",
+                            param: .statusAndGroup(.monitor),
+                            ledColor: .yellow,
                             fontSize: 9
                         )
                         HUIStateButton(
-                            "PHASE",
-                            .statusAndGroup(.phase),
-                            .yellow
+                            title: "PHASE",
+                            param: .statusAndGroup(.phase),
+                            ledColor: .yellow
                         )
                     }
                     VStack {
                         HUIStateButton(
-                            "GROUP",
-                            .statusAndGroup(.group),
-                            .yellow
+                            title: "GROUP",
+                            param: .statusAndGroup(.group),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "CREATE",
-                            .statusAndGroup(.create),
-                            .yellow
+                            title: "CREATE",
+                            param: .statusAndGroup(.create),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "SUSPEND",
-                            .statusAndGroup(.suspend),
-                            .yellow,
+                            title: "SUSPEND",
+                            param: .statusAndGroup(.suspend),
+                            ledColor: .yellow,
                             fontSize: 9
                         )
                     }
@@ -151,38 +151,38 @@ extension HUISurfaceView {
                 HStack {
                     VStack {
                         HUIStateButton(
-                            "CAPTURE",
-                            .edit(.capture),
-                            .yellow,
+                            title: "CAPTURE",
+                            param: .edit(.capture),
+                            ledColor: .yellow,
                             fontSize: 9
                         )
                         HUIStateButton(
-                            "CUT",
-                            .edit(.cut),
-                            .yellow
+                            title: "CUT",
+                            param: .edit(.cut),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "PASTE",
-                            .edit(.paste),
-                            .yellow
+                            title: "PASTE",
+                            param: .edit(.paste),
+                            ledColor: .yellow
                         )
                     }
                     VStack {
                         HUIStateButton(
-                            "SEPARATE",
-                            .edit(.separate),
-                            .yellow,
+                            title: "SEPARATE",
+                            param: .edit(.separate),
+                            ledColor: .yellow,
                             fontSize: 8.5
                         )
                         HUIStateButton(
-                            "COPY",
-                            .edit(.copy),
-                            .yellow
+                            title: "COPY",
+                            param: .edit(.copy),
+                            ledColor: .yellow
                         )
                         HUIStateButton(
-                            "DELETE",
-                            .edit(.delete),
-                            .yellow
+                            title: "DELETE",
+                            param: .edit(.delete),
+                            ledColor: .yellow
                         )
                     }
                 }

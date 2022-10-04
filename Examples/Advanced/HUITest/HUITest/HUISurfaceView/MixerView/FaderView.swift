@@ -25,8 +25,8 @@ extension HUISurfaceView {
 
         var body: some View {
             Fader(value: $level, isTouched: $isTouched)
-                .foregroundColor(.gray)
-                .backgroundColor(.black)
+                .foregroundColor(.secondary)
+                .backgroundColor(.init(nsColor: .tertiaryLabelColor))
                 .frame(minHeight: Self.faderHeight, alignment: .center)
                 .padding([.leading, .trailing], 5)
                 

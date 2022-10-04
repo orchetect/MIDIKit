@@ -17,235 +17,239 @@ extension HUISurfaceView {
             VStack {
                 HStack {
                     HUIStateButton(
-                        "SEND A",
-                        .assign(.sendA),
-                        .red
+                        title: "SEND A",
+                        param: .assign(.sendA),
+                        ledColor: .red
                     )
                     HUIStateButton(
-                        "REC/RDY ALL",
-                        .assign(.recordReadyAll),
-                        .red
-                    )
-                }
-                HStack {
-                    HUIStateButton(
-                        "SEND B",
-                        .assign(.sendB),
-                        .red
-                    )
-                    HUIStateButton(
-                        "BYPASS",
-                        .assign(.bypass),
-                        .green
+                        title: "REC/RDY ALL",
+                        param: .assign(.recordReadyAll),
+                        ledColor: .red
                     )
                 }
                 HStack {
                     HUIStateButton(
-                        "SEND C",
-                        .assign(.sendC),
-                        .red
+                        title: "SEND B",
+                        param: .assign(.sendB),
+                        ledColor: .red
                     )
                     HUIStateButton(
-                        "MUTE",
-                        .assign(.mute),
-                        .red
+                        title: "BYPASS",
+                        param: .assign(.bypass),
+                        ledColor: .green
                     )
                 }
                 HStack {
                     HUIStateButton(
-                        "SEND D",
-                        .assign(.sendD),
-                        .red
+                        title: "SEND C",
+                        param: .assign(.sendC),
+                        ledColor: .red
                     )
                     HUIStateButton(
-                        "SHIFT",
-                        .assign(.shift),
-                        .red
+                        title: "MUTE",
+                        param: .assign(.mute),
+                        ledColor: .red
+                    )
+                }
+                HStack {
+                    HUIStateButton(
+                        title: "SEND D",
+                        param: .assign(.sendD),
+                        ledColor: .red
+                    )
+                    HUIStateButton(
+                        title: "SHIFT",
+                        param: .assign(.shift),
+                        ledColor: .red
                     )
                 }
                 HStack {
                     VStack {
                         HUIStateButton(
-                            "SEND E",
-                            .assign(.sendE),
-                            .red
+                            title: "SEND E",
+                            param: .assign(.sendE),
+                            ledColor: .red
                         )
                         HUIStateButton(
-                            "PAN",
-                            .assign(.pan),
-                            .yellow
+                            title: "PAN",
+                            param: .assign(.pan),
+                            ledColor: .yellow
                         )
                     }
                     
                     VStack {
-                        Text("SELECT-ASSIGN").font(.system(size: 9))
-                        Text(huiSurface.model.assign.textDisplay.stringValue)
-                            .font(.system(size: 16, weight: .regular, design: .monospaced))
-                            .foregroundColor(.green)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 26)
-                            .background(Color.black)
-                            .cornerRadius(3.0, antialiased: true)
+                        Text("SELECT-ASSIGN")
+                            .font(.system(size: 9))
+                            .spaceHogFrame()
+                        FourCharLCD(huiSurface.model.assign.textDisplay.stringValue)
+                            .spaceHogFrame()
                     }
                 }
+                .frame(height: 65)
             }
+            .frame(height: 220)
             
             VStack {
                 HStack {
-                    Text("ASSIGN").font(.system(size: 10))
+                    Text("ASSIGN")
+                        .font(.system(size: 10))
+                        .spaceHogFrame()
                     HUIStateButton(
-                        "SUSPEND",
-                        .assign(.suspend),
-                        .red,
-                        width: 55 // slightly oversize
+                        title: "SUSPEND",
+                        param: .assign(.suspend),
+                        ledColor: .red
                     )
                 }
                 HStack {
                     HUIStateButton(
-                        "INPUT",
-                        .assign(.input),
-                        .red
+                        title: "INPUT",
+                        param: .assign(.input),
+                        ledColor: .red
                     )
                     HUIStateButton(
-                        "DEFAULT",
-                        .assign(.default),
-                        .red
+                        title: "DEFAULT",
+                        param: .assign(.default),
+                        ledColor: .red
                     )
                 }
                 HStack {
                     HUIStateButton(
-                        "OUTPUT",
-                        .assign(.output),
-                        .red
+                        title: "OUTPUT",
+                        param: .assign(.output),
+                        ledColor: .red
                     )
                     HUIStateButton(
-                        "ASSIGN",
-                        .assign(.assign),
-                        .red
+                        title: "ASSIGN",
+                        param: .assign(.assign),
+                        ledColor: .red
                     )
                 }
             }
+            .frame(height: 100)
             
             VStack {
                 HUISectionLabel("BANK")
                 HStack {
                     HUIStateButton(
-                        "◀︎",
-                        .bankMove(.bankLeft),
-                        .red
+                        title: "◀︎",
+                        param: .bankMove(.bankLeft),
+                        ledColor: .red
                     )
                     HUIStateButton(
-                        "▶︎",
-                        .bankMove(.bankRight),
-                        .red
+                        title: "▶︎",
+                        param: .bankMove(.bankRight),
+                        ledColor: .red
                     )
                 }
                 HUISectionLabel("CHANNEL")
                 HStack {
                     HUIStateButton(
-                        "◀︎",
-                        .bankMove(.channelLeft),
-                        .red
+                        title: "◀︎",
+                        param: .bankMove(.channelLeft),
+                        ledColor: .red
                     )
                     HUIStateButton(
-                        "▶︎",
-                        .bankMove(.channelRight),
-                        .red
+                        title: "▶︎",
+                        param: .bankMove(.channelRight),
+                        ledColor: .red
                     )
                 }
             }
+            .frame(height: 100)
             
             VStack {
                 HUISectionLabel("WINDOW")
                 HStack {
                     HUIStateButton(
-                        "TRANSPORT",
-                        .window(.transport),
-                        .red
+                        title: "TRANS-PORT",
+                        param: .window(.transport),
+                        ledColor: .red
                     )
                     HUIStateButton(
-                        "ALT",
-                        .window(.alt),
-                        .red
-                    )
-                }
-                HStack {
-                    HUIStateButton(
-                        "EDIT",
-                        .window(.edit),
-                        .red
-                    )
-                    HUIStateButton(
-                        "STATUS",
-                        .window(.status),
-                        .red
+                        title: "ALT",
+                        param: .window(.alt),
+                        ledColor: .red
                     )
                 }
                 HStack {
                     HUIStateButton(
-                        "MIX",
-                        .window(.mix),
-                        .red
+                        title: "EDIT",
+                        param: .window(.edit),
+                        ledColor: .red
                     )
                     HUIStateButton(
-                        "MEM-LOC",
-                        .window(.memLoc),
-                        .red
+                        title: "STATUS",
+                        param: .window(.status),
+                        ledColor: .red
+                    )
+                }
+                HStack {
+                    HUIStateButton(
+                        title: "MIX",
+                        param: .window(.mix),
+                        ledColor: .red
+                    )
+                    HUIStateButton(
+                        title: "MEM-LOC",
+                        param: .window(.memLoc),
+                        ledColor: .red
                     )
                 }
             }
+            .frame(height: 140)
             
             VStack {
                 HUISectionLabel("KEYBOARD SHORTCUTS")
                 HStack {
                     HUIStateButton(
-                        "UNDO",
-                        .hotKey(.undo),
-                        .green
+                        title: "UNDO",
+                        param: .hotKey(.undo),
+                        ledColor: .green
                     )
                     HUIStateButton(
-                        "SAVE",
-                        .hotKey(.save),
-                        .red
-                    )
-                }
-                HStack {
-                    HUIStateButton(
-                        "EDIT MODE",
-                        .hotKey(.editMode),
-                        .green
-                    )
-                    HUIStateButton(
-                        "EDIT TOOL",
-                        .hotKey(.editTool),
-                        .red
+                        title: "SAVE",
+                        param: .hotKey(.save),
+                        ledColor: .red
                     )
                 }
                 HStack {
                     HUIStateButton(
-                        "SHIFT/ADD",
-                        .hotKey(.shift),
-                        .green
+                        title: "EDIT MODE",
+                        param: .hotKey(.editMode),
+                        ledColor: .green
                     )
                     HUIStateButton(
-                        "OPTION/ALT",
-                        .hotKey(.option),
-                        .red
+                        title: "EDIT TOOL",
+                        param: .hotKey(.editTool),
+                        ledColor: .red
                     )
                 }
                 HStack {
                     HUIStateButton(
-                        "CTRL/CLUTCH",
-                        .hotKey(.ctrl),
-                        .green
+                        title: "SHIFT/ADD",
+                        param: .hotKey(.shift),
+                        ledColor: .green
                     )
                     HUIStateButton(
-                        "⌘ALT/FINE",
-                        .hotKey(.cmd),
-                        .red
+                        title: "OPTION/ALT",
+                        param: .hotKey(.option),
+                        ledColor: .red
+                    )
+                }
+                HStack {
+                    HUIStateButton(
+                        title: "CTRL/CLUTCH",
+                        param: .hotKey(.ctrl),
+                        ledColor: .green
+                    )
+                    HUIStateButton(
+                        title: "⌘ALT/FINE",
+                        param: .hotKey(.cmd),
+                        ledColor: .red
                     )
                 }
             }
+            .frame(height: 180)
             
             Spacer()
         }

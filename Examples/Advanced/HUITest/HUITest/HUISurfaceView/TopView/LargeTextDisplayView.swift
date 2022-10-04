@@ -10,15 +10,13 @@ import MIDIKitControlSurfaces
 extension HUISurfaceView {
     func LargeTextDisplayView() -> some View {
         VStack(alignment: .leading, spacing: 5) {
-            // Text(String(repeating: "0", count: 40))
-            // Text(String(repeating: "0", count: 40))
             Text(huiSurface.model.largeDisplay.top.stringValue)
             Text(huiSurface.model.largeDisplay.bottom.stringValue)
         }
         .font(.system(size: 14, weight: .regular, design: .monospaced))
-        .foregroundColor(Color.white)
+        .foregroundColor(.white)
         .frame(width: 360, height: 42)
-        .background(Color.black)
+        .background(.black)
         .cornerRadius(3.0, antialiased: true)
     }
 }

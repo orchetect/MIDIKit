@@ -57,7 +57,7 @@ struct HUIHostView: View {
                         HStack {
                             if vPotDisplayFormat != .allOff {
                                 Ribbon(position: $huiHostHelper.model.bank0.channel0.pan)
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(.secondary)
                                     .backgroundColor(Color(nsColor: .controlBackgroundColor))
                                     .indicatorWidth(15)
                                     .frame(height: 20)
@@ -98,7 +98,7 @@ struct HUIHostView: View {
                         }
                     GroupBox(label: Text("Fader")) {
                         Ribbon(position: $huiHostHelper.model.bank0.channel0.faderLevel)
-                            .foregroundColor(huiHostHelper.model.bank0.channel0.faderTouched ? .green : .primary)
+                            .foregroundColor(huiHostHelper.model.bank0.channel0.faderTouched ? .green : .secondary)
                             .backgroundColor(Color(nsColor: .controlBackgroundColor))
                             .indicatorWidth(15)
                             .frame(height: 20)

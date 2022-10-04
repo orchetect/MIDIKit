@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+// TODO: this struct could be moved to AudioKit/Controls repo
+
 import SwiftUI
 @testable import Controls // TODO: remove testable
 
