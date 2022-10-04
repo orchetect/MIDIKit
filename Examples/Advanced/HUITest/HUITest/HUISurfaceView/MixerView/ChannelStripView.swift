@@ -43,7 +43,7 @@ extension HUISurfaceView {
                 VStack(alignment: .center, spacing: 2) {
                     Text("PAN/SEND")
                         .font(.system(size: 9))
-                    RotaryKnob(label: "PAN/SEND",
+                    RotaryKnob(label: "        ",
                                size: 40,
                                vPot: .channel(channel))
                 }

@@ -33,39 +33,43 @@ struct RotaryKnob: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ZStack {
-                Group {
-                    // display knob only, non-interactive
-                    if leftBound == -1,
-                       rightBound == -1
-                    {
-                        ArcKnob(
-                            label,
-                            value: .constant(1.0),
-                            range: 0.0 ... 1.0,
-                            origin: 0.0
-                        )
-                        .foregroundColor(.clear)
-                        .backgroundColor(.black)
-                    } else {
-                        ArcKnob(
-                            label,
-                            value: $rightBound,
-                            range: 0.0 ... 1.0,
-                            origin: leftBound
-                        )
-                        .foregroundColor(.red)
-                        .backgroundColor(.black)
-                    }
-                }
-                .disabled(true)
-            }
-            .frame(width: size, height: size)
-            
             if vPot.hasDisplay {
+                ZStack {
+                    KnobShape(size: size * 0.5)
+                
+                    Group {
+                        // display knob only, non-interactive
+                        if leftBound == -1,
+                           rightBound == -1
+                        {
+                            ArcKnob(
+                                label,
+                                value: .constant(1.0),
+                                range: 0.0 ... 1.0,
+                                origin: 0.0
+                            )
+                            .foregroundColor(.clear)
+                            .backgroundColor(.black)
+                        } else {
+                            ArcKnob(
+                                label,
+                                value: $rightBound,
+                                range: 0.0 ... 1.0,
+                                origin: leftBound
+                            )
+                            .foregroundColor(.red)
+                            .backgroundColor(.black)
+                        }
+                    }
+                    .disabled(true)
+                }
+                .frame(width: size, height: size)
+            
                 Circle()
-                    .fill(display.lowerLED ? .red : .gray)
+                    .fill(display.lowerLED ? .red : .black)
                     .frame(width: size / 10, height: size / 10)
+            } else {
+                KnobShape(size: size)
             }
         }
         .onChange(of: huiSurface.model.state(of: vPot)) { newValue in
@@ -112,6 +116,24 @@ struct PlaceholderKnob: View {
                 Text(name)
                     .foregroundColor(.black)
             }
+    }
+}
+
+struct KnobShape: View {
+    var size: CGFloat
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(.gray)
+                .frame(width: size, height: size)
+            Circle()
+                .stroke(
+                    Color(white: 0.3),
+                    style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round, dash: [3])
+                )
+                .frame(width: size * 0.8, height: size * 0.8)
+        }
     }
 }
 

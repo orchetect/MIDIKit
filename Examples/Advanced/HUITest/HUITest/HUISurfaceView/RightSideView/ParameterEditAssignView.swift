@@ -42,7 +42,7 @@ extension HUISurfaceView {
                             .green
                         )
                         RotaryKnob(
-                            label: "",
+                            label: "        ",
                             size: 40,
                             vPot: .editAssignA
                         )
@@ -59,7 +59,7 @@ extension HUISurfaceView {
                             .green
                         )
                         RotaryKnob(
-                            label: "",
+                            label: "        ",
                             size: 40,
                             vPot: .editAssignB
                         )
@@ -76,7 +76,7 @@ extension HUISurfaceView {
                             .green
                         )
                         RotaryKnob(
-                            label: "",
+                            label: "        ",
                             size: 40,
                             vPot: .editAssignC
                         )
@@ -93,7 +93,7 @@ extension HUISurfaceView {
                             .green
                         )
                         RotaryKnob(
-                            label: "",
+                            label: "        ",
                             size: 40,
                             vPot: .editAssignD
                         )

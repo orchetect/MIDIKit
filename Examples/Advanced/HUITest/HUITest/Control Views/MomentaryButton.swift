@@ -50,6 +50,7 @@ struct MomentaryButton: View, MomentaryButtonProtocol {
                 .padding(2)
                 .frame(width: width, height: height)
                 .background(isPressed ? Color.blue : Color.gray)
+                .cornerRadius(3)
         }
         .highPriorityGesture(
             // this is a workaround to enable a button which triggers two different actions, one on mouse-down and one on mouse-up
@@ -199,6 +200,7 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
             huiSurface.transmitSwitch(huiSwitch.wrapped, state: false)
         }
         .foregroundColor(.black)
+        .cornerRadius(5)
     }
     
     func calculateWidth() -> CGFloat? {

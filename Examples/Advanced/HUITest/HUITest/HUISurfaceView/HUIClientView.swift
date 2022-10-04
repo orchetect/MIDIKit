@@ -22,11 +22,11 @@ struct HUIClientView: View {
         // set up HUI Surface object
         huiSurface = {
             let huiSurface = HUISurface()
-        
+            
             huiSurface.modelNotificationHandler = { notification in
                 // Logger.debug(notification)
             }
-        
+            
             huiSurface.midiOutHandler = { [weak midiManager] midiEvents in
                 guard let output = midiManager?
                     .managedOutputs[Self.kHUIOutputName]
@@ -41,7 +41,7 @@ struct HUIClientView: View {
                     Logger.debug(error.localizedDescription)
                 }
             }
-        
+            
             return huiSurface
         }()
         

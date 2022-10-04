@@ -1,8 +1,7 @@
 //
 //  Fader.swift
-//  HUITest
-//
-//  Created by Steffan Andrews on 2022-10-02.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -15,12 +14,14 @@ public struct Fader: View {
     
     var backgroundColor: Color = .gray
     var foregroundColor: Color = .red
-    var cornerRadius: CGFloat = 0
+    var cornerRadius: CGFloat = 5
     var indicatorPadding: CGFloat = 0.1
     var indicatorHeight: CGFloat = 60
     
-    /// Initial the wheel with a type and bound value
-    /// - Parameter value: value to control
+    /// Initialize a fader with value and touch state bindings.
+    /// - Parameters:
+    ///   - value: Fader value.
+    ///   - isTouched: Fader cap is being touched by the mouse (or held if a touch screen).
     public init(value: Binding<Float>,
                 isTouched: Binding<Bool>) {
         _location = value

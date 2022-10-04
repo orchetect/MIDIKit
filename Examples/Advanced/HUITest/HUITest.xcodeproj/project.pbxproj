@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E20BA82928E9B1BB00EA8774 /* Fader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA82828E9B1BB00EA8774 /* Fader.swift */; };
 		E21628E426E2DFF30022B66F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21628E326E2DFF30022B66F /* Logger.swift */; };
+		E246E3C628EBF5A400BB786D /* HUIHostHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E246E3C528EBF5A400BB786D /* HUIHostHelper.swift */; };
 		E261699428E9272400DEA000 /* Controls in Frameworks */ = {isa = PBXBuildFile; productRef = E261699328E9272400DEA000 /* Controls */; };
 		E283F0932740AF7E0037F199 /* RightSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0922740AF7E0037F199 /* RightSideView.swift */; };
 		E283F0952740B5A60037F199 /* LeftSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0942740B5A60037F199 /* LeftSideView.swift */; };
@@ -43,6 +44,7 @@
 /* Begin PBXFileReference section */
 		E20BA82828E9B1BB00EA8774 /* Fader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fader.swift; sourceTree = "<group>"; };
 		E21628E326E2DFF30022B66F /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		E246E3C528EBF5A400BB786D /* HUIHostHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUIHostHelper.swift; sourceTree = "<group>"; };
 		E283F0922740AF7E0037F199 /* RightSideView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RightSideView.swift; sourceTree = "<group>"; };
 		E283F0942740B5A60037F199 /* LeftSideView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftSideView.swift; sourceTree = "<group>"; };
 		E283F0962740C8770037F199 /* Labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Labels.swift; sourceTree = "<group>"; };
@@ -89,6 +91,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E246E3C428EBF59600BB786D /* HUIHostView */ = {
+			isa = PBXGroup;
+			children = (
+				E2D5FB1A28D9198A0040A023 /* HUIHostView.swift */,
+				E246E3C528EBF5A400BB786D /* HUIHostHelper.swift */,
+			);
+			path = HUIHostView;
+			sourceTree = "<group>";
+		};
 		E283F09C274101850037F199 /* TopView */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,8 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				E284EBB526AE018F0016AA0F /* AppDelegate.swift */,
-				E2D5FB1A28D9198A0040A023 /* HUIHostView.swift */,
-				E284EBB726AE018F0016AA0F /* HUIClientView.swift */,
+				E246E3C428EBF59600BB786D /* HUIHostView */,
 				E284EBCE26AE01F00016AA0F /* HUISurfaceView */,
 				E284EBCA26AE01EA0016AA0F /* Control Views */,
 				E284EBD726AE02090016AA0F /* HUISwitch Wrapper.swift */,
@@ -190,6 +200,7 @@
 		E284EBCE26AE01F00016AA0F /* HUISurfaceView */ = {
 			isa = PBXGroup;
 			children = (
+				E284EBB726AE018F0016AA0F /* HUIClientView.swift */,
 				E284EBCF26AE01F00016AA0F /* HUISurfaceView.swift */,
 				E283F09C274101850037F199 /* TopView */,
 				E283F09D274101900037F199 /* LeftSideView */,
@@ -301,6 +312,7 @@
 				E283F0AF2741038A0037F199 /* MainTimeDisplayView.swift in Sources */,
 				E283F0992740CD4B0037F199 /* RotaryKnob.swift in Sources */,
 				E283F0972740C8770037F199 /* Labels.swift in Sources */,
+				E246E3C628EBF5A400BB786D /* HUIHostHelper.swift in Sources */,
 				E20BA82928E9B1BB00EA8774 /* Fader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

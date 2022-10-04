@@ -5,6 +5,7 @@
 //
 
 import SwiftUI
+import Combine
 import MIDIKitControlSurfaces
 import Controls
 
@@ -24,24 +25,27 @@ extension HUISurfaceView {
 
         var body: some View {
             Fader(value: $level, isTouched: $isTouched)
-                .foregroundColor(.black)
-                .backgroundColor(.gray)
+                .foregroundColor(.gray)
+                .backgroundColor(.black)
                 .frame(minHeight: Self.faderHeight, alignment: .center)
                 .padding([.leading, .trailing], 5)
-            
-                .onChange(of: isTouched) { newValue in
-                    newValue ? pressedAction() : releasedAction()
-                }
-                .onChange(
-                    of: huiSurface.model
-                        .channelStrips[channel.intValue]
-                        .fader
-                        .levelUnitInterval
+                
+                .onReceive(
+                    Just(huiSurface.model.channelStrips[channel.intValue].fader.levelUnitInterval)
                 ) { newValue in
+                    // update fader level as result of received level from host
+                    // but only if fader is not currently touched by user
                     guard !isTouched else { return }
                     level = Float(newValue)
                 }
+                .onChange(of: isTouched) { newValue in
+                    // transmit touch state to host
+                    newValue ? pressedAction() : releasedAction()
+                }
                 .onChange(of: level) { newValue in
+                    // transmit level to host but only if fader is touched by user
+                    // so as to avoid a feedback loop of transmitting back fader changes to the host
+                    // that were originally made by inbound level messages from the host
                     guard isTouched else { return }
                     let rawLevel = UInt14(newValue * Float(UInt14.max))
                     huiSurface.transmitFader(level: rawLevel, channel: channel)

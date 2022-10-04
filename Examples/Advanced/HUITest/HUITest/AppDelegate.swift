@@ -14,8 +14,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var huiSurfaceWindow: NSWindow!
     
     private let midiManager = MIDIManager(
-        clientName: "HUISurface",
-        model: "HUISurface",
+        clientName: "HUITest",
+        model: "HUITest",
         manufacturer: "Orchetect",
         notificationHandler: nil
     )
@@ -35,7 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     let huiHostWidth = 300
-    let huiHostHeight = 400
+    let huiHostHeight = 600
     
     func generateHUIHostWindow() {
         // Create the SwiftUI view that provides the window contents.
