@@ -17,10 +17,12 @@ extension HUISurfaceModel {
     ///
     /// - Parameters:
     ///   - receivedEvent: The incoming ``HUIHostEvent``.
+    ///   - alwaysNotify: Always generate a ``HUISurfaceModelUpdateResult/changed(_:)`` notification even if the state update results in no change to the model.
     /// - Returns: The strongly-typed ``HUISurfaceModelNotification`` containing the result of the state change.
     @discardableResult
     public mutating func updateState(
-        from receivedEvent: HUIHostEvent
+        from receivedEvent: HUIHostEvent,
+        alwaysNotify: Bool = false
     ) -> HUISurfaceModelUpdateResult {
         switch receivedEvent {
         case .ping:
@@ -34,7 +36,8 @@ extension HUISurfaceModel {
             return updateStateFromLevelMeters(
                 channelStrip: channelStrip,
                 side: side,
-                level: level
+                level: level,
+                alwaysNotify: alwaysNotify
             )
             
         case let .faderLevel(
@@ -43,7 +46,8 @@ extension HUISurfaceModel {
         ):
             return updateStateFromFaderLevel(
                 channelStrip: channelStrip,
-                level: level
+                level: level,
+                alwaysNotify: alwaysNotify
             )
             
         case let .vPot(
@@ -52,17 +56,21 @@ extension HUISurfaceModel {
         ):
             return updateStateFromVPot(
                 vPot: vPot,
-                display: display
+                display: display,
+                alwaysNotify: alwaysNotify
             )
             
         case let .largeDisplay(slices: slices):
-            return updateStateFromLargeDisplay(slices: slices)
+            return updateStateFromLargeDisplay(slices: slices,
+                                               alwaysNotify: alwaysNotify)
             
         case let .timeDisplay(charsRightToLeft: chars):
-            return updateStateFromTimeDisplay(charsRightToLeft: chars)
+            return updateStateFromTimeDisplay(charsRightToLeft: chars,
+                                              alwaysNotify: alwaysNotify)
             
         case let .selectAssignDisplay(text: text):
-            return updateStateFromAssign(text: text)
+            return updateStateFromAssign(text: text,
+                                         alwaysNotify: alwaysNotify)
             
         case let .channelDisplay(
             channelStrip: channelStrip,
@@ -70,7 +78,8 @@ extension HUISurfaceModel {
         ):
             return updateStateFromChannelText(
                 text: text,
-                channelStrip: channelStrip
+                channelStrip: channelStrip,
+                alwaysNotify: alwaysNotify
             )
             
         case let .switch(
@@ -79,7 +88,8 @@ extension HUISurfaceModel {
         ):
             return updateStateFromSwitch(
                 huiSwitch: huiSwitch,
-                state: state
+                state: state,
+                alwaysNotify: alwaysNotify
             )
         }
     }
@@ -91,18 +101,21 @@ extension HUISurfaceModel {
     private mutating func updateStateFromLevelMeters(
         channelStrip: UInt4,
         side: StereoLevelMeter.Side,
-        level: Int
+        level: Int,
+        alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
+        let isDiff: Bool
         switch side {
         case .left:
-            let isDiff = channelStrips[channelStrip.intValue].levelMeter.left != level
-            guard isDiff else { return .unchanged }
+            isDiff = channelStrips[channelStrip.intValue].levelMeter.left != level
             channelStrips[channelStrip.intValue].levelMeter.left = level
         case .right:
-            let isDiff = channelStrips[channelStrip.intValue].levelMeter.right != level
-            guard isDiff else { return .unchanged }
+            isDiff = channelStrips[channelStrip.intValue].levelMeter.right != level
             channelStrips[channelStrip.intValue].levelMeter.right = level
         }
+        
+        // only return an event if the contents actually changed
+        guard alwaysNotify || isDiff else { return .unchanged }
         
         let notif: HUISurfaceModelNotification = .channelStrip(
             channel: channelStrip,
@@ -113,12 +126,14 @@ extension HUISurfaceModel {
     
     private mutating func updateStateFromFaderLevel(
         channelStrip: UInt4,
-        level: UInt14
+        level: UInt14,
+        alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
         let isDiff = channelStrips[channelStrip.intValue].fader.level != level
-        guard isDiff else { return .unchanged }
-        
         channelStrips[channelStrip.intValue].fader.level = level
+        
+        // only return an event if the contents actually changed
+        guard alwaysNotify || isDiff else { return .unchanged }
         
         let notif: HUISurfaceModelNotification = .channelStrip(
             channel: channelStrip,
@@ -129,16 +144,17 @@ extension HUISurfaceModel {
     
     private mutating func updateStateFromVPot(
         vPot: HUIVPot,
-        display: HUIVPotDisplay
+        display: HUIVPotDisplay,
+        alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
         let notif: HUISurfaceModelNotification
         
         switch vPot {
         case let .channel(chan):
             let isDiff = channelStrips[chan.intValue].vPotDisplay != display
-            guard isDiff else { return .unchanged }
-            
             channelStrips[chan.intValue].vPotDisplay = display
+            
+            guard alwaysNotify || isDiff else { return .unchanged }
             notif = .channelStrip(
                 channel: chan,
                 .vPot(display: display)
@@ -146,30 +162,30 @@ extension HUISurfaceModel {
             
         case .editAssignA:
             let isDiff = parameterEdit.param1VPotDisplay != display
-            guard isDiff else { return .unchanged }
-            
             parameterEdit.param1VPotDisplay = display
+            
+            guard alwaysNotify || isDiff else { return .unchanged }
             notif = .paramEdit(.param1VPot(display: display))
             
         case .editAssignB:
             let isDiff = parameterEdit.param2VPotDisplay != display
-            guard isDiff else { return .unchanged }
-            
             parameterEdit.param2VPotDisplay = display
+            
+            guard alwaysNotify || isDiff else { return .unchanged }
             notif = .paramEdit(.param2VPot(display: display))
             
         case .editAssignC:
             let isDiff = parameterEdit.param3VPotDisplay != display
-            guard isDiff else { return .unchanged }
-            
             parameterEdit.param3VPotDisplay = display
+            
+            guard alwaysNotify || isDiff else { return .unchanged }
             notif = .paramEdit(.param3VPot(display: display))
             
         case .editAssignD:
             let isDiff = parameterEdit.param4VPotDisplay != display
-            guard isDiff else { return .unchanged }
-            
             parameterEdit.param4VPotDisplay = display
+            
+            guard alwaysNotify || isDiff else { return .unchanged }
             notif = .paramEdit(.param4VPot(display: display))
             
         case .editAssignScroll:
@@ -181,14 +197,15 @@ extension HUISurfaceModel {
     }
     
     private mutating func updateStateFromLargeDisplay(
-        slices: HUILargeDisplaySlices
+        slices: HUILargeDisplaySlices,
+        alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
         guard !slices.isEmpty else { return .unchanged }
         
         let isDiff = largeDisplay.update(mergingFrom: slices)
         
         // only return an event if the contents actually changed
-        guard isDiff else { return .unchanged }
+        guard alwaysNotify || isDiff else { return .unchanged }
         
         let topString = largeDisplay.top
         let bottomString = largeDisplay.bottom
@@ -201,14 +218,15 @@ extension HUISurfaceModel {
     }
     
     private mutating func updateStateFromTimeDisplay(
-        charsRightToLeft: [HUITimeDisplayCharacter]
+        charsRightToLeft: [HUITimeDisplayCharacter],
+        alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
         guard !charsRightToLeft.isEmpty else { return .unchanged }
         
         let isDiff = timeDisplay.timeString.update(charsRightToLeft: charsRightToLeft)
         
         // only return an event if the contents actually changed
-        guard isDiff else { return .unchanged }
+        guard alwaysNotify || isDiff else { return .unchanged }
         
         let notif: HUISurfaceModelNotification = .timeDisplay(
             timeString: timeDisplay.timeString
@@ -217,14 +235,15 @@ extension HUISurfaceModel {
     }
     
     private mutating func updateStateFromAssign(
-        text: HUISmallDisplayString
+        text: HUISmallDisplayString,
+        alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
         let isDiff = assign.textDisplay != text
         
-        // only return an event if the contents actually changed
-        guard isDiff else { return .unchanged }
-        
         assign.textDisplay = text
+        
+        // only return an event if the contents actually changed
+        guard alwaysNotify || isDiff else { return .unchanged }
         
         let notif: HUISurfaceModelNotification = .selectAssignDisplay(
             text: text
@@ -234,14 +253,15 @@ extension HUISurfaceModel {
     
     private mutating func updateStateFromChannelText(
         text: HUISmallDisplayString,
-        channelStrip: UInt4
+        channelStrip: UInt4,
+        alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
         let isDiff = channelStrips[channelStrip.intValue].nameDisplay != text
         
-        // only return an event if the contents actually changed
-        guard isDiff else { return .unchanged }
-        
         channelStrips[channelStrip.intValue].nameDisplay = text
+        
+        // only return an event if the contents actually changed
+        guard alwaysNotify || isDiff else { return .unchanged }
         
         let notif: HUISurfaceModelNotification = .channelStrip(
             channel: channelStrip,
@@ -252,17 +272,18 @@ extension HUISurfaceModel {
     
     private mutating func updateStateFromSwitch(
         huiSwitch: HUISwitch,
-        state: Bool
+        state: Bool,
+        alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
         let isDiff = self.state(of: huiSwitch) != state
-        guard isDiff else { return .unchanged }
         
         // set state for parameter
-        
         setState(of: huiSwitch, to: state)
         
-        // return event wrapping the control and its value
+        // only return an event if the contents actually changed
+        guard alwaysNotify || isDiff else { return .unchanged }
         
+        // return event wrapping the control and its value
         switch huiSwitch {
         case let .channelStrip(channel, channelParam):
             switch channelParam {

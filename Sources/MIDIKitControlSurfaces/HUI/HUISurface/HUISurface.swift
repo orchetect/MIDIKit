@@ -45,6 +45,9 @@ public final class HUISurface {
     /// Notification handler that is called as a result of the ``model`` being updated from received HUI events.
     public var modelNotificationHandler: ModelNotificationHandler?
     
+    /// Notification handler will always be called even when a received HUI MIDI event from host does not result in a change to the HUI surface state model.
+    public var alwaysNotify: Bool = false
+    
     /// Remote presence state change handler (when pings resume or cease after timeout).
     public typealias PresenceChangedHandler = (_ isPresent: Bool) -> Void
     
@@ -115,14 +118,16 @@ public final class HUISurface {
         // send ping-reply if ping request is received
         transmitPing()
     }
-        
+    
     // MARK: - Init
-        
+    
     public init(
+        alwaysNotify: Bool = false,
         modelNotificationHandler: ModelNotificationHandler? = nil,
         remotePresenceChangedHandler: PresenceChangedHandler? = nil,
         midiOutHandler: MIDIOutHandler? = nil
     ) {
+        self.alwaysNotify = alwaysNotify
         self.modelNotificationHandler = modelNotificationHandler
         self.midiOutHandler = midiOutHandler
         
@@ -136,7 +141,8 @@ public final class HUISurface {
             }
                 
             // process event
-            let result = self.model.updateState(from: hostEvent)
+            let result = self.model.updateState(from: hostEvent,
+                                                alwaysNotify: self.alwaysNotify)
             switch result {
             case .changed(let notification):
                 self.modelNotificationHandler?(notification)
@@ -153,14 +159,14 @@ public final class HUISurface {
         // HUI control surfaces send a System Reset message when they are powered on
         transmitSystemReset()
     }
-        
+    
     deinit {
         // HUI control surfaces send a System Reset message when they are powered off
         transmitSystemReset()
     }
-        
+    
     // MARK: - Methods
-        
+    
     /// Resets state back to init state. Handlers are unaffected.
     public func reset() {
         model = HUISurfaceModel()
