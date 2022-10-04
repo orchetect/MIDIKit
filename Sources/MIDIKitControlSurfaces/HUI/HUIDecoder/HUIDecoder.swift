@@ -52,11 +52,9 @@ extension HUIDecoder: ReceivesMIDIEvents {
     /// Process HUI MIDI message received from host.
     public func midiIn(event: MIDIEvent) {
         do {
-            guard let coreEvent = try decode(event: event) else {
-                // not an error condition; just no HUI event was generated
-                return
+            for coreEvent in try decode(event: event) {
+                huiEventHandler?(coreEvent)
             }
-            huiEventHandler?(coreEvent)
         } catch {
             Logger.debug("\(error)")
         }
@@ -64,19 +62,19 @@ extension HUIDecoder: ReceivesMIDIEvents {
     
     /// Decodes a MIDI event.
     ///
-    /// - Returns: An event if the MIDI event results in a decoded HUI event. Returns nil if no HUI event was generated. Not all MIDI events will return a HUI event. Some merely update the decoder's internal state, in which case `nil` will be returned. This is not an error condition.
+    /// - Returns: One or more HUI core events if the MIDI event results in decoded HUI event(s). Not all MIDI events will generate HUI event(s); some merely update the decoder's internal state, in which case an empty array will be returned. This is not an error condition.
     ///
     /// - Throws: An error if the MIDI event was malformed or contained unexpected data.
-    func decode(event: MIDIEvent) throws -> HUICoreEvent? {
+    func decode(event: MIDIEvent) throws -> [HUICoreEvent] {
         switch event {
         case HUIConstants.kMIDI.kPingReplyToHostMessage where role == .surface:
             // handler should send HUI ping-reply to host
-            return .ping
+            return [.ping]
             
         case HUIConstants.kMIDI.kPingToSurfaceMessage where role == .host:
             // handler should update last ping received time/date stamp
             // so it can maintain presence state for the remote HUI surface
-            return .ping
+            return [.ping]
             
         case let .noteOff(payload) where
             payload.note.number == 0 &&
@@ -88,23 +86,26 @@ extension HUIDecoder: ReceivesMIDIEvents {
             // however it seems Core MIDI wants to send a 16-bit midpoint value of 0x8000 instead
             
             // handler should send HUI ping-reply to host
-            return .ping
+            return [.ping]
             
         case let .sysEx7(payload):
             return try parse(sysExPayload: payload)
             
         case let .cc(payload):
-            return try parse(controlStatusPayload: payload)
-            
+            if let decoded = try parse(controlStatusPayload: payload) {
+                return [decoded]
+            } else {
+                return []
+            }
         case let .notePressure(payload):
-            return parse(levelMetersPayload: payload)
+            return [parse(levelMetersPayload: payload)]
             
         case .systemReset where role == .surface:
-            return .systemReset
+            return [.systemReset]
             
         default:
             Logger.debug("Unhandled MIDI event received: \(event)")
-            return nil
+            return []
         }
     }
 }
@@ -113,10 +114,13 @@ extension HUIDecoder: ReceivesMIDIEvents {
 
 extension HUIDecoder {
     /// Internal: handles SysEx content.
-    func parse(sysExPayload payload: MIDIEvent.SysEx7) throws -> HUICoreEvent {
+    func parse(sysExPayload payload: MIDIEvent.SysEx7) throws -> [HUICoreEvent] {
         guard payload.manufacturer == HUIConstants.kMIDI.kSysEx.kManufacturer else {
+            // this is not a critical error, it's possible the MIDI port
+            // is shared with other hardware/software and we just want to ignore
+            // SysEx messages not intended for us
             throw HUIDecoderError.malformed(
-                "SysEx manufacturer ID is incorrect."
+                "SysEx manufacturer ID is not Mackie. Ignoring MIDI message."
             )
         }
         
@@ -133,7 +137,9 @@ extension HUIDecoder {
               data[1] == HUIConstants.kMIDI.kSysEx.kSubID2
         else {
             throw HUIDecoderError.malformed(
-                "SysEx sub-IDs are incorrect."
+                "SysEx sub-IDs (first two bytes) are not recognized. "
+                + "It's possible they are IDs belonging to other Mackie hardware other than HUI. "
+                + "Raw data: [\(data.hexString(padEachTo: 2, prefixes: false))]"
             )
         }
         
@@ -152,57 +158,68 @@ extension HUIDecoder {
         
         switch dataAfterHeader.first {
         case HUIConstants.kMIDI.kDisplayType.smallByte:
-            // 0x10 channel [4 chars]
+            // 0x10
+            // then one or more sequences of:
+            //   channel [4 chars]
             
-            guard dataAfterHeader.count == 6 else {
+            // Pro Tools only ever sends SysEx with a single small display change
+            // but some DAWs like Logic will send multiple small text changes in a single SysEx
+            
+            // message length test: remove first byte (0x10), then see if remainder is divisible by 5
+            guard (dataAfterHeader.count - 1) % 5 == 0 else {
                 throw HUIDecoderError.malformed(
                     "Received Small Display text MIDI message \(data.hexString(padEachTo: 2)) but length was not expected."
                 )
             }
             
-            // channel can be 0-8 (0-7 = channel strips, 8 = Select Assign text display)
-            let channel = dataAfterHeader[atOffset: 1]
-            var newChars: [HUISmallDisplayCharacter] = []
+            let contiguousSlices = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
+            let slices = contiguousSlices.split(every: 5)
             
-            for byte in dataAfterHeader[atOffsets: 2 ... 5] {
-                let char = HUISmallDisplayCharacter(rawValue: byte) ?? .unknown()
-                newChars.append(char)
+            let events: [HUICoreEvent] = try slices.map { slice in
+                // channel can be 0-8 (0-7 = channel strips, 8 = Select Assign text display)
+                let channel = slice[atOffset: 0]
+                var newChars: [HUISmallDisplayCharacter] = []
+                
+                for byte in slice[atOffsets: 1 ... 4] {
+                    let char = HUISmallDisplayCharacter(rawValue: byte) ?? .unknown()
+                    newChars.append(char)
+                }
+                
+                let newString = HUISmallDisplayString(chars: newChars)
+                
+                switch channel {
+                case 0 ... 7:
+                    return .channelDisplay(
+                        channelStrip: channel.toUInt4,
+                        text: newString
+                    )
+                case 8:
+                    return .selectAssignDisplay(text: newString)
+                default:
+                    throw HUIDecoderError.malformed(
+                        "Small Display text message channel not expected: \(channel)."
+                    )
+                }
             }
-            
-            let newString = HUISmallDisplayString(chars: newChars)
-            
-            switch channel {
-            case 0 ... 7:
-                return .channelDisplay(
-                    channelStrip: channel.toUInt4,
-                    text: newString
-                )
-            case 8:
-                return .selectAssignDisplay(text: newString)
-            default:
-                throw HUIDecoderError.malformed(
-                    "Small Display text message channel not expected: \(channel)."
-                )
-            }
+            return events
             
         case HUIConstants.kMIDI.kDisplayType.largeByte:
             // 0x12 zone [10 chars]
             // it may be possible to receive multiple blocks in the same SysEx message (?), ie:
             // 0x12 zone [10 chars] zone [10 chars]
-            // message length test: remove first byte (0x12), then see if remainder is divisible by 11
             
+            // message length test: remove first byte (0x12), then see if remainder is divisible by 11
             guard (dataAfterHeader.count - 1) % 11 == 0 else {
                 throw HUIDecoderError.malformed(
                     "Received Large Display text MIDI message \(data.hexString(padEachTo: 2)) but length was not expected."
                 )
             }
             
-            var largeDisplayData = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
+            let contiguousSlices = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
+            let slices = contiguousSlices.split(every: 11)
             
-            var newSlices: HUILargeDisplaySlices = [:]
-            
-            while largeDisplayData.count >= 11 {
-                let rawSliceIndex = Int(largeDisplayData[atOffset: 0])
+            let newSlices: HUILargeDisplaySlices = try slices.reduce(into: [:]) { base, slice in
+                let rawSliceIndex = Int(slice[atOffset: 0])
                 guard let sliceIndex = UInt4(exactly: rawSliceIndex) else {
                     throw HUIDecoderError.malformed(
                         "Encountered out-of-range HUI large display slice index: \(rawSliceIndex)"
@@ -210,18 +227,16 @@ extension HUIDecoder {
                 }
                 
                 var newSlice: [HUILargeDisplayCharacter] = []
-                let letters = largeDisplayData[atOffsets: 1 ... 10]
+                let letters = contiguousSlices[atOffsets: 1 ... 10]
                 
                 for letter in letters {
                     let char = HUILargeDisplayCharacter(rawValue: letter) ?? .unknown()
                     newSlice.append(char)
                 }
-                newSlices[sliceIndex] = newSlice
-                
-                largeDisplayData = largeDisplayData.dropFirst(11)
+                base[sliceIndex] = newSlice
             }
             
-            return .largeDisplay(slices: newSlices)
+            return [.largeDisplay(slices: newSlices)]
             
         case HUIConstants.kMIDI.kDisplayType.timeDisplayByte:
             guard dataAfterHeader.count > 1 else {
@@ -240,7 +255,7 @@ extension HUIDecoder {
             let newChars = tcData.map {
                 HUITimeDisplayCharacter(rawValue: $0) ?? .unknown()
             }
-            return .timeDisplay(charsRightToLeft: newChars)
+            return [.timeDisplay(charsRightToLeft: newChars)]
             
         default:
             let msg = dataAfterHeader.hexString(padEachTo: 2)

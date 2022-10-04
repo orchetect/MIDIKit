@@ -27,6 +27,19 @@ final class HUIHostEventDecoderTests: XCTestCase {
         XCTAssertEqual(decodedEvents, eventsToMatch)
     }
     
+    /// Verifies that a raw HUI MIDI message decodes back to the given HUI event(s).
+    func runHUIEventTest(
+        source sourceMIDI: MIDIEvent,
+        matches outputEvents: [HUIHostEvent]
+    ) {
+        var decodedEvents: [HUIHostEvent] = []
+        let decoder = HUIHostEventDecoder { huiEvent in
+            decodedEvents.append(huiEvent)
+        }
+        decoder.midiIn(event: sourceMIDI)
+        XCTAssertEqual(decodedEvents, outputEvents)
+    }
+    
     func testPing() {
         runHUIEventTest(.ping)
     }
@@ -109,6 +122,28 @@ final class HUIHostEventDecoderTests: XCTestCase {
     func testChannelDisplay() {
         runHUIEventTest(
             .channelDisplay(channelStrip: 2, text: .init(chars: [.num1, .num2, .num3, .num4]))
+        )
+    }
+    
+    // MARK: - Edge Cases
+    
+    func testSmallText_MultipleInSingleSysEx() {
+        runHUIEventTest(
+            source: .sysEx7(
+                manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
+                data: [
+                    0x05, 0x00, // SysEx sub ID 1 & 2
+                    0x10, // small text ID
+                    0x00, // display index
+                    0x31, 0x32, 0x33, 0x34, // "1234"
+                    0x01, // display index
+                    0x35, 0x36, 0x37, 0x38 // "5678"
+                ]
+            ),
+            matches: [
+                .channelDisplay(channelStrip: 0, text: .init(chars: [.num1, .num2, .num3, .num4])),
+                .channelDisplay(channelStrip: 1, text: .init(chars: [.num5, .num6, .num7, .num8]))
+            ]
         )
     }
 }
