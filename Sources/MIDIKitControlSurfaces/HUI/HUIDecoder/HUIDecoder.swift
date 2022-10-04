@@ -299,8 +299,8 @@ extension HUIDecoder {
                 level: level
             )
             
-        case 0x10 ... 0x1B, // to surface
-             0x40 ... 0x4B: // to host (0x40 offset of 'to surface')
+        case 0x10 ... 0x1C, // to surface
+             0x40 ... 0x4C: // to host (0x40 offset of 'to surface')
             // V-Pots
             
             // When encoding host → surface, this is the LED preset index.
