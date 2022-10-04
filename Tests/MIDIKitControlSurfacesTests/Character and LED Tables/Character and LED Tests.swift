@@ -343,7 +343,7 @@ final class CharacterAndLEDTests: XCTestCase {
         
         XCTAssertEqual(
             HUIVPotDisplay.LEDState(rawValue: 0x31),
-            .centerSymmetrical(width: 1)
+            .centerRadius(radius: .C)
         )
         
         // with lower LED
@@ -371,7 +371,7 @@ final class CharacterAndLEDTests: XCTestCase {
         
         XCTAssertEqual(
             HUIVPotDisplay.LEDState(rawValue: 0x31 + 0x40),
-            .centerSymmetrical(width: 1)
+            .centerRadius(radius: .C)
         )
         
         // edge cases
@@ -408,7 +408,7 @@ final class CharacterAndLEDTests: XCTestCase {
         )
         
         XCTAssertEqual(
-            HUIVPotDisplay.LEDState.centerSymmetrical(width: 1).rawValue,
+            HUIVPotDisplay.LEDState.centerRadius(radius: .C).rawValue,
             0x31
         )
     }
@@ -431,12 +431,12 @@ final class CharacterAndLEDTests: XCTestCase {
         let leftTo: HUIVPotDisplay.LEDState = .left(to: .L5)
         XCTAssertEqual(leftTo, .left(to: .L5))
         XCTAssertNotEqual(leftTo, .left(to: .L4))
-        XCTAssertNotEqual(leftTo, .centerSymmetrical(width: 1))
+        XCTAssertNotEqual(leftTo, .centerRadius(radius: .L1))
         
-        let centerSym: HUIVPotDisplay.LEDState = .centerSymmetrical(width: 1)
-        XCTAssertEqual(centerSym, .centerSymmetrical(width: 1))
-        XCTAssertNotEqual(centerSym, .centerSymmetrical(width: 2))
-        XCTAssertNotEqual(centerSym, .single(.L5))
+        let centerRad: HUIVPotDisplay.LEDState = .centerRadius(radius: .L1)
+        XCTAssertEqual(centerRad, .centerRadius(radius: .L1))
+        XCTAssertNotEqual(centerRad, .centerRadius(radius: .L2))
+        XCTAssertNotEqual(centerRad, .single(.L5))
     }
     
     func testHUIVPotDisplay_LEDState_Bounds() {
@@ -453,15 +453,17 @@ final class CharacterAndLEDTests: XCTestCase {
         XCTAssertEqual(HUIVPotDisplay.LEDState.left(to: .C).bounds, .L5 ... .C)
         XCTAssertEqual(HUIVPotDisplay.LEDState.left(to: .R5).bounds, .L5 ... .R5)
         
-        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: -1).bounds, nil)
-        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 0).bounds, nil)
-        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 1).bounds, .C ... .C)
-        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 2).bounds, .L1 ... .R1)
-        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 3).bounds, .L2 ... .R2)
-        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 4).bounds, .L3 ... .R3)
-        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 5).bounds, .L4 ... .R4)
-        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 6).bounds, .L5 ... .R5)
-        XCTAssertEqual(HUIVPotDisplay.LEDState.centerSymmetrical(width: 7).bounds, .L5 ... .R5) // clamps
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .L5).bounds, .L5 ... .R5)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .L4).bounds, .L4 ... .R4)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .L3).bounds, .L3 ... .R3)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .L2).bounds, .L2 ... .R2)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .L1).bounds, .L1 ... .R1)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .C).bounds, .C ... .C)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .R1).bounds, .L1 ... .R1)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .R2).bounds, .L2 ... .R2)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .R3).bounds, .L3 ... .R3)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .R4).bounds, .L4 ... .R4)
+        XCTAssertEqual(HUIVPotDisplay.LEDState.centerRadius(radius: .R5).bounds, .L5 ... .R5)
     }
     
     // MARK: - pad
