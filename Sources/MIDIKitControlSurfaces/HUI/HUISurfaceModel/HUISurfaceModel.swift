@@ -15,7 +15,30 @@ public struct HUISurfaceModel: Equatable, Hashable {
     // MARK: - State Storage
     
     /// State storage representing channel 8 strips and their components. (`0 ... 7`)
-    public internal(set) var channelStrips: [ChannelStrip] = (0 ... 7).map { _ in ChannelStrip() }
+    private var _channelStrips: [ChannelStrip] = (0 ... 7).map { _ in ChannelStrip() }
+    public var channelStrips: [ChannelStrip] {
+        get {
+            _channelStrips
+        }
+        set {
+            // array count validation
+            if newValue.count == 8 { _channelStrips = newValue }
+        }
+        _modify {
+            // mutate
+            yield &_channelStrips
+
+            // array count validation
+            if _channelStrips.count < 8 {
+                _channelStrips.append(
+                    contentsOf: [ChannelStrip](repeating: ChannelStrip(),
+                                               count: 8 - _channelStrips.count)
+                )
+            } else if _channelStrips.count > 8 {
+                _channelStrips.removeLast(_channelStrips.count - 8)
+            }
+        }
+    }
     
     /// State storage representing the Main Time Display LCD and surrounding status LEDs.
     public var timeDisplay = TimeDisplay()
@@ -70,5 +93,6 @@ public struct HUISurfaceModel: Equatable, Hashable {
     
     // MARK: - Init
     
+    /// Initialize with default state.
     public init() { }
 }
