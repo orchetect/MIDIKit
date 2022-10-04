@@ -91,6 +91,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func orderAllWindowsFront() {
-        NSApp.windows.forEach { $0.makeKeyAndOrderFront(self) }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            //NSApp.windows.forEach { $0.makeKeyAndOrderFront(self) }
+            self.huiSurfaceWindow.makeKeyAndOrderFront(self)
+            self.huiHostWindow.makeKeyAndOrderFront(self)
+        }
     }
 }

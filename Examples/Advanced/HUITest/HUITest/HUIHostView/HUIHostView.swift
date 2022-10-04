@@ -56,57 +56,57 @@ struct HUIHostView: View {
                         }
                         HStack {
                             if vPotDisplayFormat != .allOff {
-                                Ribbon(position: $huiHostHelper.bank0VPotValue)
+                                Ribbon(position: $huiHostHelper.model.bank0.channel0.pan)
                                     .foregroundColor(.primary)
                                     .backgroundColor(Color(nsColor: .controlBackgroundColor))
                                     .indicatorWidth(15)
                                     .frame(height: 20)
-                                    .onChange(of: huiHostHelper.bank0VPotValue) { newValue in
+                                    .onChange(of: huiHostHelper.model.bank0.channel0.pan) { newValue in
                                         transmitVPot(value: newValue)
                                     }
                             }
-                            Toggle("Low", isOn: $huiHostHelper.bank0VPotLowerLED)
-                                .onChange(of: huiHostHelper.bank0VPotLowerLED) { newValue in
+                            Toggle("Low", isOn: $huiHostHelper.model.bank0.channel0.vPotLowerLED)
+                                .onChange(of: huiHostHelper.model.bank0.channel0.vPotLowerLED) { newValue in
                                     transmitVPot(lowerLED: newValue)
                                 }
                         }
                     }
-                    Toggle("Solo", isOn: $huiHostHelper.bank0Ch0Solo)
-                        .onChange(of: huiHostHelper.bank0Ch0Solo) { newValue in
+                    Toggle("Solo", isOn: $huiHostHelper.model.bank0.channel0.solo)
+                        .onChange(of: huiHostHelper.model.bank0.channel0.solo) { newValue in
                             huiBank0?.transmitSwitch(.channelStrip(0, .solo), state: newValue)
                         }
-                    Toggle("Mute", isOn: $huiHostHelper.bank0Ch0Mute)
-                        .onChange(of: huiHostHelper.bank0Ch0Mute) { newValue in
+                    Toggle("Mute", isOn: $huiHostHelper.model.bank0.channel0.mute)
+                        .onChange(of: huiHostHelper.model.bank0.channel0.mute) { newValue in
                             huiBank0?.transmitSwitch(.channelStrip(0, .mute), state: newValue)
                         }
                     GroupBox(label: Text("4-Character LCD")) {
                         LiveFormattedTextField(
-                            value: $huiHostHelper.bank0Ch0Name,
+                            value: $huiHostHelper.model.bank0.channel0.name,
                             formatter: ChanTextFormatter()
                         )
                         .frame(width: 100)
-                        .onChange(of: huiHostHelper.bank0Ch0Name) { newValue in
+                        .onChange(of: huiHostHelper.model.bank0.channel0.name) { newValue in
                             huiBank0?.transmitSmallDisplay(
                                 .channel(0),
                                 text: .init(lossy: newValue)
                             )
                         }
                     }
-                    Toggle("Selected", isOn: $huiHostHelper.bank0Ch0Select)
-                        .onChange(of: huiHostHelper.bank0Ch0Select) { newValue in
+                    Toggle("Selected", isOn: $huiHostHelper.model.bank0.channel0.selected)
+                        .onChange(of: huiHostHelper.model.bank0.channel0.selected) { newValue in
                             huiBank0?.transmitSwitch(.channelStrip(0, .select), state: newValue)
                         }
                     GroupBox(label: Text("Fader")) {
-                        Ribbon(position: $huiHostHelper.bank0FaderLevel)
-                            .foregroundColor(huiHostHelper.bank0Ch0FaderTouched ? .green : .primary)
+                        Ribbon(position: $huiHostHelper.model.bank0.channel0.faderLevel)
+                            .foregroundColor(huiHostHelper.model.bank0.channel0.faderTouched ? .green : .primary)
                             .backgroundColor(Color(nsColor: .controlBackgroundColor))
                             .indicatorWidth(15)
                             .frame(height: 20)
-                            .onChange(of: huiHostHelper.bank0FaderLevel) { newValue in
+                            .onChange(of: huiHostHelper.model.bank0.channel0.faderLevel) { newValue in
                                 let scaledLevel = UInt14(newValue * Float(UInt14.max))
                                 huiBank0?.transmitFader(level: scaledLevel, channel: 0)
                             }
-                            .disabled(huiHostHelper.bank0Ch0FaderTouched)
+                            .disabled(huiHostHelper.model.bank0.channel0.faderTouched)
                     }
                 }
                 .frame(width: 250, height: 260)
@@ -138,8 +138,8 @@ struct HUIHostView: View {
         huiBank0?.transmitVPot(
             .channel(0),
             display: .init(
-                leds: ledState(value ?? huiHostHelper.bank0VPotValue),
-                lowerLED: lowerLED ?? huiHostHelper.bank0VPotLowerLED
+                leds: ledState(value ?? huiHostHelper.model.bank0.channel0.pan),
+                lowerLED: lowerLED ?? huiHostHelper.model.bank0.channel0.vPotLowerLED
             )
         )
     }
