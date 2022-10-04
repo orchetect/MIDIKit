@@ -138,7 +138,7 @@ extension HUIDecoder {
         else {
             throw HUIDecoderError.malformed(
                 "SysEx sub-IDs (first two bytes) are not recognized. "
-                + "It's possible they are IDs belonging to other Mackie hardware other than HUI. "
+                + "It is possible the IDs belong to hardware other than the Mackie HUI. "
                 + "Raw data: [\(data.hexString(padEachTo: 2, prefixes: false))]"
             )
         }

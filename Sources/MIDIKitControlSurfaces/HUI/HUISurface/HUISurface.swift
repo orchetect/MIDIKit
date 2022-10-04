@@ -178,7 +178,21 @@ public final class HUISurface {
 
 extension HUISurface: ReceivesMIDIEvents {
     public func midiIn(event: MIDIEvent) {
-        decoder.midiIn(event: event)
+        // capture MIDI Device Inquiry first
+        switch event {
+            case .deviceInquiryRequest(deviceID: 0x00),
+                 .deviceInquiryRequest(deviceID: 0x7F):
+            let diResponse = MIDIEvent.deviceInquiryResponse(
+                deviceID: 0x00,
+                manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
+                deviceFamilyCode: 0x05, // TODO: needs correct value
+                deviceFamilyMemberCode: 0x00, // TODO: needs correct value
+                softwareRevision: (1,0,0,0) // TODO: needs correct value
+            )
+            midiOut(diResponse)
+        default:
+            decoder.midiIn(event: event)
+        }
     }
 }
 
