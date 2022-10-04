@@ -165,14 +165,14 @@ extension HUIDecoder {
             // Pro Tools only ever sends SysEx with a single small display change
             // but some DAWs like Logic will send multiple small text changes in a single SysEx
             
-            // message length test: remove first byte (0x10), then see if remainder is divisible by 5
-            guard (dataAfterHeader.count - 1) % 5 == 0 else {
+            let contiguousSlices = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
+            
+            guard contiguousSlices.count % 5 == 0 else {
                 throw HUIDecoderError.malformed(
                     "Received Small Display text MIDI message \(data.hexString(padEachTo: 2)) but length was not expected."
                 )
             }
             
-            let contiguousSlices = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
             let slices = contiguousSlices.split(every: 5)
             
             let events: [HUICoreEvent] = try slices.map { slice in
@@ -204,18 +204,18 @@ extension HUIDecoder {
             return events
             
         case HUIConstants.kMIDI.kDisplayType.largeByte:
-            // 0x12 zone [10 chars]
-            // it may be possible to receive multiple blocks in the same SysEx message (?), ie:
-            // 0x12 zone [10 chars] zone [10 chars]
+            // 0x12 sliceIndex [10 chars]
+            // it is possible to receive multiple blocks in the same SysEx message, ie:
+            // 0x12 sliceIndex [10 chars] sliceIndex [10 chars]
             
-            // message length test: remove first byte (0x12), then see if remainder is divisible by 11
-            guard (dataAfterHeader.count - 1) % 11 == 0 else {
+            let contiguousSlices = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
+            
+            guard contiguousSlices.count % 11 == 0 else {
                 throw HUIDecoderError.malformed(
                     "Received Large Display text MIDI message \(data.hexString(padEachTo: 2)) but length was not expected."
                 )
             }
             
-            let contiguousSlices = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
             let slices = contiguousSlices.split(every: 11)
             
             let newSlices: HUILargeDisplaySlices = try slices.reduce(into: [:]) { base, slice in
