@@ -14,6 +14,7 @@
 		E29FF2952880BBDB005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2942880BBDB005E2BC2 /* Images.xcassets */; };
 		E2B5EE5D284F4C6F00E120DC /* BTMIDICentralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B5EE5C284F4C6F00E120DC /* BTMIDICentralViewController.swift */; };
 		E2C137BE289DF0D60043AF3D /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E2C137BD289DF0D60043AF3D /* MIDIKit */; };
+		E2E1FCC928F67B6400B4351E /* BTMIDIPeripheralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E1FCC828F67B6400B4351E /* BTMIDIPeripheralViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		E29A5E942852A1A800E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E29FF2942880BBDB005E2BC2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E2B5EE5C284F4C6F00E120DC /* BTMIDICentralViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BTMIDICentralViewController.swift; sourceTree = "<group>"; };
+		E2E1FCC828F67B6400B4351E /* BTMIDIPeripheralViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BTMIDIPeripheralViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				E27D0E1D284F2A8900F43247 /* AppDelegate.swift */,
 				E27D0E21284F2A8900F43247 /* ViewController.swift */,
 				E2B5EE5C284F4C6F00E120DC /* BTMIDICentralViewController.swift */,
+				E2E1FCC828F67B6400B4351E /* BTMIDIPeripheralViewController.swift */,
 				E27D0E23284F2A8900F43247 /* Main.storyboard */,
 				E27D0E28284F2A8900F43247 /* LaunchScreen.storyboard */,
 				E29FF2942880BBDB005E2BC2 /* Images.xcassets */,
@@ -151,6 +154,7 @@
 				E2B5EE5D284F4C6F00E120DC /* BTMIDICentralViewController.swift in Sources */,
 				E27D0E22284F2A8900F43247 /* ViewController.swift in Sources */,
 				E27D0E1E284F2A8900F43247 /* AppDelegate.swift in Sources */,
+				E2E1FCC928F67B6400B4351E /* BTMIDIPeripheralViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
