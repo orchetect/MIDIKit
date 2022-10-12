@@ -340,6 +340,7 @@ public class RoundTrip_Tests_Base: XCTestCase {
 }
 
 final class RoundTrip_OldCoreMIDIAPI_Tests: RoundTrip_Tests_Base {
+    // TODO: test needs de-flaking
     func testRapidMIDIEvents_OldCoreMIDIAPI() throws {
         manager.preferredAPI = .legacyCoreMIDI
         wait(sec: 0.5)
@@ -350,6 +351,7 @@ final class RoundTrip_OldCoreMIDIAPI_Tests: RoundTrip_Tests_Base {
 }
 
 final class RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests: RoundTrip_Tests_Base {
+    // TODO: test may need de-flaking
     func testRapidMIDIEvents_NewCoreMIDIAPI_1_0_Protocol() throws {
         manager.preferredAPI = .newCoreMIDI(._1_0)
         wait(sec: 0.5)
@@ -360,6 +362,7 @@ final class RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests: RoundTrip_Tests_Base {
 }
 
 final class RoundTrip_NewCoreMIDIAPI_2_0_Protocol_Tests: RoundTrip_Tests_Base {
+    // TODO: test may need de-flaking
     func testRapidMIDIEvents_NewCoreMIDIAPI_2_0_Protocol() throws {
         manager.preferredAPI = .newCoreMIDI(._2_0)
         wait(sec: 0.5)

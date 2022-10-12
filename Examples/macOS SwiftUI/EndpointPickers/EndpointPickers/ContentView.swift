@@ -19,13 +19,13 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Group {
-                Text(
-                    "This example demonstrates maintaining menus with MIDI endpoints in the system, allowing a single selection for each menu."
-                )
-    
-                Text("Refer to this example's README.md file for important information.")
-            }
+            Text(
+                """
+                This example demonstrates maintaining menus with MIDI endpoints in the system, allowing a single selection for each menu.
+                
+                Refer to this example's README.md file for important information.
+                """
+            )
             .font(.system(size: 14))
             .padding(5)
     
