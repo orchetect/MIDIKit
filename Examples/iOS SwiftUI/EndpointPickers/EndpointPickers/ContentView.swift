@@ -22,19 +22,7 @@ struct ContentView: View {
             Form {
                 Section() {
                     NavigationLink("Info") {
-                        Form {
-                            Text(
-                                "This example demonstrates maintaining menus with MIDI endpoints in the system, allowing a single selection for each menu."
-                            )
-    
-                            Text(
-                                "Refer to this example's README.md file for important information."
-                            )
-    
-                            Text(
-                                "For testing purposes, try creating virtual endpoints, selecting them as MIDI In and MIDI Out, then destroying them. They appear as missing but their selection is retained. Then create them again, and they will appear normally once again and connection will resume. They are remembered even if you quit the app."
-                            )
-                        }
+                        InfoView()
                     }
                 }
     
@@ -123,10 +111,12 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationBarTitle("EndpointPickers Example")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitle("Endpoint Pickers")
+            
+            InfoView()
         }
-        .lineLimit(nil)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        .padding()
     }
     
     func sendToConnection(event: MIDIEvent) {
@@ -145,5 +135,21 @@ struct ContentView: View {
         case .cc: return .orange
         default: return nil
         }
+    }
+}
+
+struct InfoView: View {
+    var body: some View {
+        Text(
+            """
+            This example demonstrates maintaining menus with MIDI endpoints in the system, allowing a single selection for each menu.
+            
+            Refer to this example's README.md file for important information.
+            
+            For testing purposes, try creating virtual endpoints, selecting them as MIDI In and MIDI Out, then destroying them. They appear as missing but their selection is retained. Then create them again, and they will appear normally once again and connection will resume. They are remembered even if you quit the app.
+            """
+        )
+        .navigationTitle("Info")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

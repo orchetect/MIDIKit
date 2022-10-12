@@ -11,9 +11,14 @@ class ViewController: UIViewController {
     let appDelegate = UIApplication.shared.delegate as? AppDelegate
     
     @IBAction
-    func showBluetoothMIDISetup(_ sender: Any) {
+    func showBluetoothMIDIRemoteSetup(_ sender: Any) {
         let sheetViewController = BTMIDICentralViewController(nibName: nil, bundle: nil)
+        present(sheetViewController, animated: true, completion: nil)
+    }
     
+    @IBAction
+    func showBluetoothMIDILocalSetup(_ sender: Any) {
+        let sheetViewController = BTMIDIPeripheralViewController(nibName: nil, bundle: nil)
         present(sheetViewController, animated: true, completion: nil)
     }
     

@@ -15,17 +15,16 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
             Text("This example creates a virtual MIDI output port named \"TestApp Output\".")
-                .lineLimit(4)
                 .multilineTextAlignment(.center)
-    
+            
             Button("Send Note On C3") {
                 sendNoteOn()
             }
-    
+            
             Button("Send Note Off C3") {
                 sendNoteOff()
             }
-    
+            
             Button("Send CC1") {
                 sendCC1()
             }
@@ -34,9 +33,16 @@ struct ContentView: View {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
+}
+
+extension ContentView {
+    /// Convenience accessor for the created virtual MIDI Output.
+    var virtualOutput: MIDIOutput? {
+        midiManager.managedOutputs[virtualOutputName]
+    }
     
     func sendNoteOn() {
-        guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
+        guard let output = virtualOutput else { return }
     
         try? output.send(
             event: .noteOn(
@@ -48,7 +54,7 @@ struct ContentView: View {
     }
     
     func sendNoteOff() {
-        guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
+        guard let output = virtualOutput else { return }
     
         try? output.send(
             event: .noteOff(
@@ -60,7 +66,7 @@ struct ContentView: View {
     }
     
     func sendCC1() {
-        guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
+        guard let output = virtualOutput else { return }
     
         try? output.send(
             event: .cc(

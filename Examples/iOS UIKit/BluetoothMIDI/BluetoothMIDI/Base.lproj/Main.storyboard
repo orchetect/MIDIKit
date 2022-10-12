@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,33 +18,44 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="47" translatesAutoresizingMaskIntoConstraints="NO" id="Oyh-YC-APa">
-                                <rect key="frame" x="20" y="252.66666666666666" width="350" height="338.66666666666674"/>
+                                <rect key="frame" x="20" y="178.33333333333334" width="350" height="487.66666666666663"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iVU-XE-TsM">
-                                        <rect key="frame" x="4.6666666666666572" y="0.0" width="340.66666666666674" height="182.66666666666666"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="243.66666666666666"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                             <bool key="isElement" value="YES"/>
                                         </accessibility>
-                                        <string key="text">BluetoothMIDI Example
+                                        <string key="text">Bluetooth MIDI Example
 
-This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiving events.
+This example demonstrates two paradigms:
 
-Events received from all MIDI output endpoints are automatically logged to the console.</string>
+1. Connecting to remote Bluetooth MIDI device(s) to send/receive.
+2. Acting as a Bluetooth peripheral that other devices can connect to.
+
+Generally your app will only employ one of these paradigms, not both. For demonstration purposes, both are available in this demo app.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BNI-Lz-82Y">
-                                        <rect key="frame" x="74.666666666666671" y="229.66666666666666" width="200.66666666666663" height="30.999999999999972"/>
+                                        <rect key="frame" x="48.666666666666671" y="290.66666666666663" width="252.66666666666663" height="34.333333333333314"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Show Bluetooth MIDI Setup"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Show Remote Connect Config"/>
                                         <connections>
-                                            <action selector="showBluetoothMIDISetup:" destination="dkx-z0-nzr" eventType="touchUpInside" id="TGq-Lc-URB"/>
+                                            <action selector="showBluetoothMIDIRemoteSetup:" destination="dkx-z0-nzr" eventType="touchUpInside" id="LT6-JS-ihL"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wJ7-nw-pGd">
+                                        <rect key="frame" x="51.666666666666671" y="372" width="246.66666666666663" height="34.333333333333314"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Show Local Peripheral Config"/>
+                                        <connections>
+                                            <action selector="showBluetoothMIDILocalSetup:" destination="dkx-z0-nzr" eventType="touchUpInside" id="1vQ-wp-ZMJ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lSD-ZB-SaT">
-                                        <rect key="frame" x="39.666666666666657" y="307.66666666666674" width="270.66666666666674" height="31"/>
+                                        <rect key="frame" x="18.333333333333343" y="453.33333333333326" width="313.66666666666663" height="34.333333333333314"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Send test MIDI Event to all MIDI Inputs"/>
                                         <connections>

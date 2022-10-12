@@ -10,35 +10,69 @@ import MIDIKit
 struct ContentView: View {
     @EnvironmentObject var midiManager: MIDIManager
     
-    @State var showingBluetoothMIDIOptions = false
-    
     var body: some View {
-        VStack(alignment: .center, spacing: 20) {
-            Text(
-                "This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiving events."
-            )
-    
-            Text(
-                "Events received from all MIDI output endpoints are automatically logged to the console."
-            )
-    
-            Button("Show Bluetooth MIDI Setup") {
-                showingBluetoothMIDIOptions = true
+        NavigationView {
+            Form() {
+                NavigationLink("Info") {
+                    InfoView()
+                }
+                Section("Connect to Remote Peripheral") {
+                    NavigationLink(
+                        destination: BluetoothMIDIView()
+                            .navigationTitle("Remote Peripheral Config")
+                            .navigationBarTitleDisplayMode(.inline)
+                    ) {
+                        Label("Config", systemImage: "gear")
+                    }
+                }
+                Section("Act as Peripheral") {
+                    NavigationLink(
+                        destination: BluetoothMIDIPeripheralView()
+                            .navigationTitle("Local Peripheral Config")
+                            .navigationBarTitleDisplayMode(.inline)
+                    ) {
+                        Label("Config", systemImage: "gear")
+                    }
+                }
+                Section("Send Test Event") {
+                    Button("Broadcast test MIDI Event to all MIDI Inputs") {
+                        sendTestMIDIEvent()
+                    }
+                }
+                Section("Receive Events") {
+                    Text(
+                        "Events received from all MIDI output endpoints are logged to the console in this demo."
+                    )
+                }
             }
-    
-            Button("Send test MIDI Event to all MIDI Inputs") {
-                let conn = midiManager.managedOutputConnections["Broadcaster"]
-                try? conn?.send(event: .cc(.expression, value: .midi1(64), channel: 0))
-            }
+            .navigationTitle("Bluetooth MIDI")
+            
+            InfoView()
+            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .font(.system(size: 14))
-        .lineLimit(4)
-        .multilineTextAlignment(.center)
         .padding()
+    }
     
-        .sheet(isPresented: $showingBluetoothMIDIOptions) {
-            BluetoothMIDIView()
-        }
+    func sendTestMIDIEvent() {
+        let conn = midiManager.managedOutputConnections["Broadcaster"]
+        try? conn?.send(event: .cc(.expression, value: .midi1(64), channel: 0))
+    }
+}
+
+struct InfoView: View {
+    var body: some View {
+        Text(
+            """
+            This example demonstrates two paradigms:
+            
+            1. Connecting to remote Bluetooth MIDI device(s) to send/receive.
+            2. Acting as a Bluetooth peripheral that other devices can connect to.
+            
+            Generally your app will only employ one of these paradigms, not both. For demonstration purposes, both are available in this demo app.
+            """
+        )
+        .navigationTitle("Info")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
