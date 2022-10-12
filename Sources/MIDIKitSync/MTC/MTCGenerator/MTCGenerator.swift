@@ -10,7 +10,7 @@ import MIDIKitInternals
 import TimecodeKit
 
 /// MTC sync generator.
-public class MTCGenerator: SendsMIDIEvents {
+public final class MTCGenerator: SendsMIDIEvents {
     // MARK: - Public properties
         
     public private(set) var name: String

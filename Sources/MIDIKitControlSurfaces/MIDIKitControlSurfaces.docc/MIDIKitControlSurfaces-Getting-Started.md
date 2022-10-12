@@ -14,4 +14,4 @@ import MIDIKitControlSurfaces
 
 ## 2. Example Code
 
-See the **HUISurface** example project for a demonstration of ``HUISurface``. 
+See the **HUITest** example project for a demonstration of ``HUIHost`` and ``HUISurface``. 

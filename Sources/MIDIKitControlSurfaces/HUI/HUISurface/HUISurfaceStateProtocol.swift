@@ -6,12 +6,12 @@
 
 import Foundation
 
-public protocol HUISurfaceStateProtocol where Param: HUIParameterProtocol {
-    associatedtype Param
+public protocol HUISurfaceStateProtocol where Switch: HUISwitchProtocol {
+    associatedtype Switch
     
-    /// Return the state of a parameter.
-    func state(of param: Param) -> Bool
+    /// Return the state of a HUI switch.
+    func state(of huiSwitch: Switch) -> Bool
     
-    /// Set the state of a parameter.
-    mutating func setState(of param: Param, to state: Bool)
+    /// Set the state of a HUI switch.
+    mutating func setState(of huiSwitch: Switch, to state: Bool)
 }

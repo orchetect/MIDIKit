@@ -11,7 +11,7 @@ import XCTest
 @testable import MIDIKitIO
 import CoreMIDI
 
-open class RoundTrip_Tests_Base: XCTestCase {
+public class RoundTrip_Tests_Base: XCTestCase {
     // swiftformat:options --wrapcollections preserve
     
     fileprivate var manager: MIDIManager!

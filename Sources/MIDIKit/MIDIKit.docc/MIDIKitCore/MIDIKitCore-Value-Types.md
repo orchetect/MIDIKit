@@ -16,19 +16,25 @@ For example, when sending or receiving a MIDI Note On event, consider that all o
 
 ```swift
 // MIDI 1.0 value type
-MIDIEvent.noteOn(60,
-                 velocity: .midi1(64), // 7-bit, 0 ... 127
-                 channel: 0)
+MIDIEvent.noteOn(
+    60,
+    velocity: .midi1(64), // 7-bit, 0 ... 127
+    channel: 0
+)
 
 // MIDI 2.0 value type
-MIDIEvent.noteOn(60,
-                 velocity: .midi2(32768), // 16-bit, 0 ... 65535
-                 channel: 0)
+MIDIEvent.noteOn(
+    60,
+    velocity: .midi2(32768), // 16-bit, 0 ... 65535
+    channel: 0
+)
 
 // Unit Interval value type (MIDI protocol-agnostic)
-MIDIEvent.noteOn(60,
-                 velocity: .unitInterval(0.5), // Double, 0.0 ... 1.0
-                 channel: 0)
+MIDIEvent.noteOn(
+    60,
+    velocity: .unitInterval(0.5), // Double, 0.0 ... 1.0
+    channel: 0
+)
 ```
 
 Any of these values can be converted to any of the other value types, and MIDIKit intelligently scales them while maintaining stable midpoint values.
@@ -68,6 +74,7 @@ The inverse is also true when converting from a unit interval to a MIDI 1.0 or M
 
 ### Additional Value Types
 
+- ``Int7``
 - ``UInt9``
 - ``UInt25``
 - ``UMPWord``

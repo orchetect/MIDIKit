@@ -13,7 +13,7 @@ import TimecodeKit
 /// Takes timecode values and produces a stream of MIDI events.
 ///
 /// > Tip: This object is not affected by or reliant on timing at all and simply processes events as they are received. For outbound MTC sync, use the ``MTCGenerator`` wrapper object which adds additional abstraction for generating MTC sync.
-public class MTCEncoder: SendsMIDIEvents {
+public final class MTCEncoder: SendsMIDIEvents {
     // MARK: - Public properties
         
     /// Returns current `Timecode` at ``localFrameRate``, scaling if necessary.

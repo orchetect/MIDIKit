@@ -36,3 +36,56 @@ extension MIDIEvent.UniversalSysExType: CustomStringConvertible {
         }
     }
 }
+
+extension MIDIEvent {
+    /// SysEx: Device Inquiry request message.
+    ///
+    /// When a device receives a Device Inquiry request message that matches its device ID or uses the device ID of `0x7F` (meaning "all devices"), it should respond with a Device Inquiry response message (``deviceInquiryResponse(deviceID:)``).
+    ///
+    /// - Parameter deviceID: SysEx Device ID. An ID of 0x7F indicates "all devices".
+    /// - Returns: SysEx7 Message.
+    public static func deviceInquiryRequest(deviceID: UInt7) -> Self {
+        .universalSysEx7(
+            universalType: .nonRealTime,
+            deviceID: deviceID,
+            subID1: 0x06, // General Information
+            subID2: 0x01, // Identity Request
+            data: []
+        )
+    }
+    
+    /// SysEx: Device Inquiry response message.
+    ///
+    /// When a device receives a Device Inquiry request message (``deviceInquiryRequest(deviceID:)``) that matches its device ID or uses the device ID of `0x7F` (meaning "all devices"), it should respond with a Device Inquiry response message.
+    ///
+    /// - Parameters:
+    ///   - deviceID: SysEx Device ID. An ID of `0x7F` indicates "all devices".
+    ///   - manufacturer: Manufacturer's System Exclusive ID code
+    ///   - deviceFamilyCode: Device family code
+    ///   - deviceFamilyMemberCode: Device family member code
+    ///   - softwareRevision: Software revision level. Format is device-specific.
+    /// - Returns: SysEx7 Message.
+    public static func deviceInquiryResponse(
+        deviceID: UInt7,
+        manufacturer: SysExManufacturer,
+        deviceFamilyCode: UInt14,
+        deviceFamilyMemberCode: UInt14,
+        softwareRevision: (UInt7, UInt7, UInt7, UInt7)
+    ) -> Self {
+        .universalSysEx7(
+            universalType: .nonRealTime,
+            deviceID: deviceID,
+            subID1: 0x06, // General Information
+            subID2: 0x01, // Identity Reply
+            data: manufacturer.sysEx7RawBytes()
+                + [deviceFamilyCode.bytePair.lsb, deviceFamilyCode.bytePair.msb]
+                + [deviceFamilyMemberCode.bytePair.lsb, deviceFamilyMemberCode.bytePair.msb]
+                + [
+                    softwareRevision.0.uInt8Value,
+                    softwareRevision.1.uInt8Value,
+                    softwareRevision.2.uInt8Value,
+                    softwareRevision.3.uInt8Value
+                ]
+        )
+    }
+}

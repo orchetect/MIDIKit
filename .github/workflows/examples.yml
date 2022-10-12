@@ -170,12 +170,12 @@ jobs:
     steps:
     - uses: actions/checkout@main
     
-    - name: HUISurface - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/Advanced/HUISurface/HUISurface.xcodeproj" -branch ${{ github.ref }}
-    - name: HUISurface - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/Advanced/HUISurface/HUISurface.xcodeproj" -resolvePackageDependencies
-    - name: HUISurface - Build
-      run: xcodebuild build -project "Examples/Advanced/HUISurface/HUISurface.xcodeproj" -scheme "HUISurface" -destination "generic/platform=macOS,name=Any Mac"
+    - name: HUITest - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/Advanced/HUITest/HUITest.xcodeproj" -branch ${{ github.ref }}
+    - name: HUITest - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/Advanced/HUITest/HUITest.xcodeproj" -resolvePackageDependencies
+    - name: HUITest - Build
+      run: xcodebuild build -project "Examples/Advanced/HUITest/HUITest.xcodeproj" -scheme "HUITest" -destination "generic/platform=macOS,name=Any Mac"
     
     - name: MIDIEventLogger - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -branch ${{ github.ref }}

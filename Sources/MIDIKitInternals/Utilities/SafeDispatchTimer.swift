@@ -62,7 +62,7 @@ public final class SafeDispatchTimer {
     public func start() {
         guard !running else { return }
         running = true
-    
+        
         timer.resume()
     }
     
@@ -71,12 +71,15 @@ public final class SafeDispatchTimer {
     /// If the timer has already been started, the origin time will be set to "now" and the timer will continue to run at intervals from "now".
     ///
     /// If the timer has not yet been started or was previously suspended using `stop()`, the timer will be restarted and the origin time will be set to "now".
-    public func restart() {
+    ///
+    /// - Parameters:
+    ///   - immediate: If `true`, restarts timer and fires immediately then again at each interval. If `false`, restarts timer but first fire does not happen until the first interval is reached then again at each subsequent interval.
+    public func restart(firingNow: Bool = true) {
         // if timer is already running, reschedule the currently running timer
         // if timer is not running, schedule the timer then start it
     
         timer.schedule(
-            deadline: .now(),
+            deadline: firingNow ? .now() : .now() + rate.secondsValue,
             repeating: rate.secondsValue,
             leeway: leeway
         )

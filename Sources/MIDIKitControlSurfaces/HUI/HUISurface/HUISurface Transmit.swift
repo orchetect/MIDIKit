@@ -4,92 +4,95 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-import Foundation
 import MIDIKitCore
 
 extension HUISurface {
     /// Transmit a HUI ping message to the host.
     /// It is not necessary to call this manually. The ``HUISurface`` object will handle ping replies automatically.
-    public func transmitPing() {
-        midiOut(HUIConstants.kMIDI.kPingReplyToHostMessage)
+    internal func transmitPing() {
+        let event = encodeHUIPing(to: .host)
+        midiOut(event)
     }
     
-    /// Transmit switch state to host.
+    /// Transmit switch state to the host.
+    ///
     /// - Parameters:
-    ///   - zone: HUI zone number.
-    ///   - port: HUI port number.
-    ///   - state: State of switch or action.
-    internal func transmitSwitch(
-        zone: HUIZone,
-        port: HUIPort,
-        state: Bool
-    ) {
-        // set on off byte
-        var portByte: UInt8 = port.uInt8Value
-        
-        if state == true {
-            portByte += 0x40
-        }
-        
-        let event1 = MIDIEvent.cc(0x0F, value: .midi1(zone.toUInt7), channel: 0)
-        let event2 = MIDIEvent.cc(0x2F, value: .midi1(portByte.toUInt7), channel: 0)
-        
-        midiOut([event1, event2])
-    }
-    
-    /// Transmit switch state to host.
+    ///   - huiSwitch: Switch parameter.
+    ///   - state: Switch state.
     public func transmitSwitch(
-        _ param: HUIParameter,
+        _ huiSwitch: HUISwitch,
         state: Bool
     ) {
-        let zoneAndPort = param.zoneAndPort
+        let zoneAndPort = huiSwitch.zoneAndPort
         
-        transmitSwitch(
+        let events = encodeHUISwitch(
             zone: zoneAndPort.zone,
             port: zoneAndPort.port,
-            state: state
+            state: state,
+            to: .host
         )
+        midiOut(events)
     }
     
-    /// Transmit fader level to host.
+    /// Transmit fader level to the host.
+    ///
     /// - Parameters:
     ///   - level: `0 ... 16383`
     ///   - channel: `0 ... 7`
     public func transmitFader(
         level: UInt14,
-        channel: Int
+        channel: UInt4
     ) {
-        guard (0 ... 16383).contains(level) else { return }
-        guard (0x0 ... 0x7).contains(channel) else { return }
-        
-        let msb = level.bytePair.msb.toUInt7
-        let lsb = level.bytePair.lsb.toUInt7
-        let channelHi = channel.toUInt7
-        let channelLow = (channel + 0x20).toUInt7
-        
-        let event1 = MIDIEvent.cc(channelHi, value: .midi1(msb), channel: 0)
-        let event2 = MIDIEvent.cc(channelLow, value: .midi1(lsb), channel: 0)
-        
-        midiOut([event1, event2])
+        let events = encodeHUIFader(level: level, channel: channel)
+        midiOut(events)
     }
     
-    /// Transmit fader touch/release message to host.
+    /// Transmit fader touch/release message to the host.
+    ///
     /// - Parameters:
     ///   - isTouched: `true` sends touch message, `false` sends release message.
     ///   - channel: `0 ... 7`
     public func transmitFader(
         isTouched: Bool,
-        channel: Int
+        channel: UInt4
     ) {
-        guard (0x0 ... 0x7).contains(channel) else { return }
-        
-        let event1 = MIDIEvent.cc(0x0F, value: .midi1(channel.toUInt7), channel: 0)
-        let event2 = MIDIEvent.cc(0x2F, value: .midi1(isTouched ? 0x40 : 0x00), channel: 0)
-        
-        midiOut([event1, event2])
+        let events = encodeHUIFader(isTouched: isTouched, channel: channel)
+        midiOut(events)
     }
     
-    /// Sends a message that tells the host that the HUI device is powering on or off.
+    /// Transmit V-Pot rotary knob delta change to the host.
+    ///
+    /// - Parameters:
+    ///   - vPot: V-Pot identity.
+    ///   - delta: Delta change amount as a 7-bit signed integer (clamped to `-63 ... 63`).
+    public func transmitVPot(
+        delta: Int7,
+        for vPot: HUIVPot
+    ) {
+        // don't bother sending events for a 0 delta
+        // which means no change
+        guard delta != 0 else { return }
+        
+        let event = encodeHUIVPot(
+            delta: delta,
+            for: vPot
+        )
+        midiOut(event)
+    }
+    
+    /// Transmit Jog Wheel delta change to the host.
+    public func transmitJogWheel(
+        delta: Int7
+    ) {
+        // don't bother sending events for a 0 delta
+        // which means no change
+        guard delta != 0 else { return }
+        
+        let event = encodeJogWheel(delta: delta)
+        midiOut(event)
+    }
+    
+    /// Sends a message that tells the host that the HUI surface is powering on or off.
     public func transmitSystemReset() {
         midiOut(HUIConstants.kMIDI.kSystemResetMessage)
     }

@@ -178,8 +178,10 @@ extension UInt14 /*: Codable */ {
         let decoded = try d.decode(Storage.self)
         guard let new = Self(exactly: decoded) else {
             throw DecodingError.dataCorrupted(
-                .init(codingPath: decoder.codingPath,
-                      debugDescription: "Encoded value is not a valid \(Self.integerName).")
+                .init(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Encoded value is not a valid \(Self.integerName)."
+                )
             )
         }
         self = new
@@ -188,7 +190,7 @@ extension UInt14 /*: Codable */ {
 
 // MARK: - CustomStringConvertible
 
-extension UInt14 {//: CustomStringConvertible, CustomDebugStringConvertible {
+extension UInt14 { //: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         storage.description
     }
@@ -229,12 +231,12 @@ extension UInt14 /*: FixedWidthInteger */ {
     public static var max: Self { Self(Self.max(as: Storage.self)) }
     
     // this would be synthesized if MIDIUnsignedInteger conformed to FixedWidthInteger
-    public static func >>= <RHS>(lhs: inout Self, rhs: RHS) where RHS : BinaryInteger {
+    public static func >>= <RHS>(lhs: inout Self, rhs: RHS) where RHS: BinaryInteger {
         lhs.storage >>= rhs
     }
     
     // this would be synthesized if MIDIUnsignedInteger conformed to FixedWidthInteger
-    public static func <<= <RHS>(lhs: inout Self, rhs: RHS) where RHS : BinaryInteger {
+    public static func <<= <RHS>(lhs: inout Self, rhs: RHS) where RHS: BinaryInteger {
         lhs.storage <<= rhs
     }
 }
