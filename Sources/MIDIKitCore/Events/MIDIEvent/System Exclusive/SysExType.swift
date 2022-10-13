@@ -6,7 +6,7 @@
 
 extension MIDIEvent {
     /// Declarative System Exclusive MIDI Event types used in event filters.
-    public enum SysExTypes {
+    public enum SysExTypes: Equatable, Hashable {
         /// Return only System Exclusive events.
         case only
         /// Return only System Exclusive events matching a certain event type.

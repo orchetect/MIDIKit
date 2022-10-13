@@ -4,10 +4,15 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
-/// An object that stores zero or more MIDI event filters in series, with a method to filter MIDI events through the stored filters.
-open class MIDIEventFilterGroup {
+/// A group of filters containing zero or more MIDI event filters in series, with a method to filter MIDI events through the stored filters.
+public struct MIDIEventFilterGroup {
     /// Filters to use, processed in series.
     public var filters: [MIDIEventFilter]
+    
+    /// An object that stores zero or more MIDI event filters, with a method to filter MIDI events through the filters.
+    public init() {
+        filters = []
+    }
     
     /// An object that stores zero or more MIDI event filters, with a method to filter MIDI events through the filters.
     public init(filter: MIDIEventFilter) {
@@ -28,5 +33,21 @@ open class MIDIEventFilterGroup {
         }
     
         return events
+    }
+}
+
+// MARK: - Equatable
+
+extension MIDIEventFilterGroup: Equatable {
+    public static func == (lhs: MIDIEventFilterGroup, rhs: MIDIEventFilterGroup) -> Bool {
+        lhs.filters == rhs.filters
+    }
+}
+
+// MARK: - Hashable
+
+extension MIDIEventFilterGroup: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(filters)
     }
 }

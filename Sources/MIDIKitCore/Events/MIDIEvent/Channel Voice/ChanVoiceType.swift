@@ -6,7 +6,7 @@
 
 extension MIDIEvent {
     /// Declarative Channel Voice MIDI Event types used in event filters.
-    public enum ChanVoiceTypes {
+    public enum ChanVoiceTypes: Equatable, Hashable {
         /// Return only Channel Voice events.
         case only
         /// Return only Channel Voice events matching a certain event type.

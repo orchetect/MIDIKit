@@ -116,7 +116,7 @@ From here, you have laid the necessary groundwork to set up ports and connection
 MIDIKit contains additional objects and value types.
 
 - term ``MIDINote``: Struct representing a MIDI note with constructors and getters for note number, note name (ie: `"A#-1"`), and frequency in Hz and other metadata. This can be useful for generating UI labels with note names or calculating frequency for synthesis.
-- term ``MIDIEventFilterGroup``: Class allowing the configuration of zero or more MIDI event filters in series, capable of applying the filters to arrays of MIDI events.
+- term ``MIDIEventFilterGroup``: Struct allowing the configuration of zero or more MIDI event filters in series, capable of applying the filters to arrays of MIDI events.
 
 ## Examples
 

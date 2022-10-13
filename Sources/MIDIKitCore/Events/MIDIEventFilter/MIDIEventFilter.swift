@@ -5,7 +5,7 @@
 //
 
 /// MIDI event filter definition.
-public enum MIDIEventFilter {
+public enum MIDIEventFilter: Equatable, Hashable {
     case chanVoice(MIDIEvent.ChanVoiceTypes)
     case sysEx(MIDIEvent.SysExTypes)
     case sysCommon(MIDIEvent.SysCommonTypes)

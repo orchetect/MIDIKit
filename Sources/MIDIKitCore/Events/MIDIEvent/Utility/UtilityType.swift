@@ -8,7 +8,7 @@ import Foundation
 
 extension MIDIEvent {
     /// Declarative Utility MIDI Event types used in event filters.
-    public enum UtilityTypes {
+    public enum UtilityTypes: Equatable, Hashable {
         /// Return only Utility events.
         case only
         /// Return only Utility events matching a certain event type.

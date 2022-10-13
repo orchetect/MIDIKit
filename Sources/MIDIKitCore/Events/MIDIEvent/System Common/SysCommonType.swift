@@ -6,7 +6,7 @@
 
 extension MIDIEvent {
     /// Declarative System Common MIDI Event types used in event filters.
-    public enum SysCommonTypes {
+    public enum SysCommonTypes: Equatable, Hashable {
         /// Return only System Common events.
         case only
         /// Return only System Common events matching a certain event type.

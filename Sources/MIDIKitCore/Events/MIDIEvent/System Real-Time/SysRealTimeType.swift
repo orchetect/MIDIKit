@@ -6,7 +6,7 @@
 
 extension MIDIEvent {
     /// Declarative System Real-Time MIDI Event types used in event filters.
-    public enum SysRealTimeTypes {
+    public enum SysRealTimeTypes: Equatable, Hashable {
         /// Return only System Real-Time events.
         case only
         /// Return only System Real-Time events matching a certain event type.
