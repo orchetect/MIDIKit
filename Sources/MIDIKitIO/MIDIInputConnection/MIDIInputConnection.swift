@@ -282,7 +282,7 @@ extension MIDIInputConnection {
             try? MIDIPortConnectSource(
                 unwrappedInputPortRef,
                 nsNumRef.uint32Value,
-                Unmanaged.passRetained(nsNumRef).toOpaque()
+                Unmanaged.passUnretained(nsNumRef).toOpaque()
             )
             .throwIfOSStatusErr()
         }

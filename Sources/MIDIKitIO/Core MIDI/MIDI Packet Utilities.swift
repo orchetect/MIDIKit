@@ -21,8 +21,8 @@ internal func unpackMIDIRefCon(
     guard let refCon = refCon else { return nil }
     
     // note that this is only stable if we already know
-    // that this is the pointer type, which is guaranteed
-    // if it originates from MIDIInputConnection
+    // that this is the pointer type and refcount semantics,
+    // both of which are known if it originates from MIDIInputConnection
     let srcRefNS = Unmanaged<NSNumber>.fromOpaque(refCon).takeUnretainedValue()
     let srcRef = UInt32(truncating: srcRefNS)
     
