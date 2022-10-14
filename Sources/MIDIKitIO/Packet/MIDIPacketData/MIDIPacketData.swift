@@ -31,20 +31,22 @@ public struct MIDIPacketData {
 extension MIDIPacketData {
     internal init(
         _ midiPacketPtr: UnsafePointer<MIDIPacket>,
-        refCon: UnsafeMutableRawPointer?
+        refCon: UnsafeMutableRawPointer?,
+        refConKnown: Bool
     ) {
-        self = Self.unwrapPacket(midiPacketPtr, refCon: refCon)
+        self = Self.unwrapPacket(midiPacketPtr, refCon: refCon, refConKnown: refConKnown)
     }
     
     fileprivate static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
     
     fileprivate static func unwrapPacket(
         _ midiPacketPtr: UnsafePointer<MIDIPacket>,
-        refCon: UnsafeMutableRawPointer?
+        refCon: UnsafeMutableRawPointer?,
+        refConKnown: Bool
     ) -> MIDIPacketData {
         let packetDataCount = Int(midiPacketPtr.pointee.length)
         
-        let source = unpackMIDIRefCon(refCon: refCon)
+        let source = unpackMIDIRefCon(refCon: refCon, known: refConKnown)
         
         guard packetDataCount > 0 else {
             return MIDIPacketData(

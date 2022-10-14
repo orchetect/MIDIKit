@@ -58,6 +58,11 @@ public final class MIDIInputConnection: _MIDIIOManagedProtocol {
     /// The Core MIDI output endpoint(s) reference(s).
     public private(set) var coreMIDIOutputEndpointRefs: Set<CoreMIDIEndpointRef> = []
     
+    /// Internal:
+    /// The Core MIDI output endpoint(s) reference(s) stored as `NSNumber` classes.
+    /// This is only so that `MIDIPortConnectSource()` can take stable pointer references.
+    internal var coreMIDIOutputEndpointRefCons: Set<NSNumber> = []
+    
     /// Operating mode.
     ///
     /// Changes take effect immediately.
@@ -177,7 +182,10 @@ extension MIDIInputConnection {
                 { [weak self] packetListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
                     
-                    let packets = packetListPtr.packets(refCon: srcConnRefCon)
+                    let packets = packetListPtr.packets(
+                        refCon: srcConnRefCon,
+                        refConKnown: true
+                    )
                     
                     strongSelf.midiManager?.eventQueue.async {
                         strongSelf.receiveHandler.packetListReceived(packets)
@@ -201,7 +209,10 @@ extension MIDIInputConnection {
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
                     
-                    let packets = eventListPtr.packets(refCon: srcConnRefCon)
+                    let packets = eventListPtr.packets(
+                        refCon: srcConnRefCon,
+                        refConKnown: true
+                    )
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
                     strongSelf.midiManager?.eventQueue.async {
@@ -261,14 +272,17 @@ extension MIDIInputConnection {
         
         coreMIDIOutputEndpointRefs = Set(getOutputEndpointRefs)
         
-        for outputEndpointRef in getOutputEndpointRefs {
+        coreMIDIOutputEndpointRefCons = Set(coreMIDIOutputEndpointRefs.map {
+            NSNumber(value: $0)
+        })
+        
+        for nsNumRef in coreMIDIOutputEndpointRefCons {
             // supply the endpoint object ref
-            var r = outputEndpointRef
-            
+            // FYI: this method does not hold a strong reference to refCon. you MUST have a strong stable reference even for value types. or we get lovely crashes.
             try? MIDIPortConnectSource(
                 unwrappedInputPortRef,
-                outputEndpointRef,
-                &r
+                nsNumRef.uint32Value,
+                Unmanaged.passRetained(nsNumRef).toOpaque()
             )
             .throwIfOSStatusErr()
         }

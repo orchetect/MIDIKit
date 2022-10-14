@@ -14,13 +14,14 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
     /// Internal:
     /// Returns array of MIDIKit `UniversalPacketData` instances.
     internal func packets(
-        refCon: UnsafeMutableRawPointer?
+        refCon: UnsafeMutableRawPointer?,
+        refConKnown: Bool
     ) -> [UniversalMIDIPacketData] {
         if pointee.numPackets == 0 {
             return []
         }
         
-        let source = unpackMIDIRefCon(refCon: refCon)
+        let source = unpackMIDIRefCon(refCon: refCon, known: refConKnown)
     
         // Core MIDI's unsafeSequence() is not available on tvOS or watchOS at all
         let sequencedPackets = unsafeSequence().map {

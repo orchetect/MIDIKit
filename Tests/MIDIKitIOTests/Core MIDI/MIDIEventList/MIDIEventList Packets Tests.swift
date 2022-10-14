@@ -26,7 +26,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         )
     
         func check(_ ptr: UnsafePointer<MIDIEventList>) {
-            let packets = ptr.packets(refCon: nil)
+            let packets = ptr.packets(refCon: nil, refConKnown: false)
     
             XCTAssertEqual(
                 packets.map { $0.bytes },
@@ -56,7 +56,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         )
     
         func check(_ ptr: UnsafePointer<MIDIEventList>) {
-            let packets = ptr.packets(refCon: nil)
+            let packets = ptr.packets(refCon: nil, refConKnown: false)
     
             XCTAssertEqual(
                 packets.map { $0.bytes },
@@ -89,7 +89,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         )
     
         func check(_ ptr: UnsafePointer<MIDIEventList>) {
-            let packets = ptr.packets(refCon: nil)
+            let packets = ptr.packets(refCon: nil, refConKnown: false)
     
             XCTAssertEqual(
                 packets.map { $0.bytes },
@@ -124,7 +124,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         )
     
         func check(_ ptr: UnsafePointer<MIDIEventList>) {
-            let packets = ptr.packets(refCon: nil)
+            let packets = ptr.packets(refCon: nil, refConKnown: false)
     
             XCTAssertEqual(
                 packets.map { $0.bytes },

@@ -10,16 +10,25 @@ import Foundation
 /// Utility:
 /// Attempts to extract data from a refCon pointer supplied by `CoreMIDI.MIDIReceiveBlock` and `CoreMIDI.MIDIReadBlock` identifying the sender of the event packets.
 ///
-/// This pointer is untyped and Optional, and is not expected to contain data of any certain type unless is it a refcon that is created by MIDIKit.
+/// This pointer is untyped and Optional, and is not expected to contain data of any certain type unless is it a refCon that is created by MIDIKit.
 internal func unpackMIDIRefCon(
-    refCon: UnsafeMutableRawPointer?
+    refCon: UnsafeMutableRawPointer?,
+    known: Bool
 ) -> MIDIOutputEndpoint? {
-    guard let refCon = refCon else { return nil }
-    let srcRef = refCon.load(as: MIDIEndpointRef.self)
+    // we can only safely use refCons that we set originally
+    guard known else { return nil }
     
-    // this may not be necessary but could help filter out invalid ref data
+    guard let refCon = refCon else { return nil }
+    
+    // note that this is only stable if we already know
+    // that this is the pointer type, which is guaranteed
+    // if it originates from MIDIInputConnection
+    let srcRefNS = Unmanaged<NSNumber>.fromOpaque(refCon).takeUnretainedValue()
+    let srcRef = UInt32(truncating: srcRefNS)
+    
+    // filter out invalid ref data
     let uID = getUniqueID(of: srcRef)
     guard uID != .invalidMIDIIdentifier else { return nil }
-    
+
     return MIDIOutputEndpoint(from: srcRef)
 }

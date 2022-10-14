@@ -49,26 +49,29 @@ extension UniversalMIDIPacketData {
     /// Universal MIDI Packet
     internal init(
         _ eventPacketPtr: UnsafePointer<MIDIEventPacket>,
-        refCon: UnsafeMutableRawPointer?
+        refCon: UnsafeMutableRawPointer?,
+        refConKnown: Bool
     ) {
-        self = Self.unwrapPacket(eventPacketPtr, refCon: refCon)
+        self = Self.unwrapPacket(eventPacketPtr, refCon: refCon, refConKnown: refConKnown)
     }
     
     /// Universal MIDI Packet
     internal init(
         _ eventPacket: MIDIEventPacket,
-        refCon: UnsafeMutableRawPointer?
+        refCon: UnsafeMutableRawPointer?,
+        refConKnown: Bool
     ) {
-        self = Self.packetUnwrapper(eventPacket, refCon: refCon)
+        self = Self.packetUnwrapper(eventPacket, refCon: refCon, refConKnown: refConKnown)
     }
     
     fileprivate static func unwrapPacket(
         _ eventPacketPtr: UnsafePointer<MIDIEventPacket>,
-        refCon: UnsafeMutableRawPointer?
+        refCon: UnsafeMutableRawPointer?,
+        refConKnown: Bool
     ) -> UniversalMIDIPacketData {
         let wordCollection = eventPacketPtr.words()
         
-        let source = unpackMIDIRefCon(refCon: refCon)
+        let source = unpackMIDIRefCon(refCon: refCon, known: refConKnown)
         
         guard !wordCollection.isEmpty else {
             return UniversalMIDIPacketData(
@@ -105,11 +108,12 @@ extension UniversalMIDIPacketData {
     
     fileprivate static func packetUnwrapper(
         _ eventPacket: MIDIEventPacket,
-        refCon: UnsafeMutableRawPointer?
+        refCon: UnsafeMutableRawPointer?,
+        refConKnown: Bool
     ) -> UniversalMIDIPacketData {
         var localEventPacket = eventPacket
         
-        let source = unpackMIDIRefCon(refCon: refCon)
+        let source = unpackMIDIRefCon(refCon: refCon, known: refConKnown)
         
         return withUnsafePointer(to: localEventPacket) { unsafePtr -> UniversalMIDIPacketData in
             let wordCollection = MIDIEventPacket.WordCollection(&localEventPacket)

@@ -114,7 +114,7 @@ extension MIDIInput {
                 { [weak self] packetListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
     
-                    let packets = packetListPtr.packets(refCon: srcConnRefCon)
+                    let packets = packetListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
     
                     strongSelf.midiManager?.eventQueue.async {
                         strongSelf.receiveHandler.packetListReceived(packets)
@@ -138,7 +138,7 @@ extension MIDIInput {
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
                     
-                    let packets = eventListPtr.packets(refCon: srcConnRefCon)
+                    let packets = eventListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
                     strongSelf.midiManager?.eventQueue.async {
