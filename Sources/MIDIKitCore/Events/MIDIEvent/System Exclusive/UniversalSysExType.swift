@@ -40,7 +40,7 @@ extension MIDIEvent.UniversalSysExType: CustomStringConvertible {
 extension MIDIEvent {
     /// SysEx: Device Inquiry request message.
     ///
-    /// When a device receives a Device Inquiry request message that matches its device ID or uses the device ID of `0x7F` (meaning "all devices"), it should respond with a Device Inquiry response message (``deviceInquiryResponse(deviceID:)``).
+    /// When a device receives a Device Inquiry request message that matches its device ID or uses the device ID of `0x7F` (meaning "all devices"), it should respond with a Device Inquiry response message (``deviceInquiryResponse(deviceID:manufacturer:deviceFamilyCode:deviceFamilyMemberCode:softwareRevision:)``).
     ///
     /// - Parameter deviceID: SysEx Device ID. An ID of 0x7F indicates "all devices".
     /// - Returns: SysEx7 Message.

@@ -6,7 +6,7 @@
 
 import Foundation
 
-/// Result returned from ``HUISurfaceModel/updateState(from:)``.
+/// Result returned from ``HUISurfaceModel/updateState(from:alwaysNotify:)``.
 public enum HUISurfaceModelUpdateResult {
     /// The received HUI host event resulted in a change to the HUI surface model.
     case changed(HUISurfaceModelNotification)
