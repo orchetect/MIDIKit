@@ -17,14 +17,28 @@ public struct UniversalMIDIPacketData {
     /// Core MIDI packet timestamp
     public let timeStamp: CoreMIDITimeStamp
     
-    public init(bytes: [UInt8], timeStamp: CoreMIDITimeStamp) {
+    /// The MIDI endpoint from which the packet originated.
+    /// If this information is not available, it may be `nil`.
+    let source: MIDIOutputEndpoint?
+    
+    public init(
+        bytes: [UInt8],
+        timeStamp: CoreMIDITimeStamp,
+        source: MIDIOutputEndpoint? = nil
+    ) {
         self.bytes = bytes
         self.timeStamp = timeStamp
+        self.source = source
     }
     
-    public init(words: [UMPWord], timeStamp: CoreMIDITimeStamp) {
+    public init(
+        words: [UMPWord],
+        timeStamp: CoreMIDITimeStamp,
+        source: MIDIOutputEndpoint? = nil
+    ) {
         bytes = words.umpWordsToBytes()
         self.timeStamp = timeStamp
+        self.source = source
     }
 }
 
@@ -33,24 +47,34 @@ public struct UniversalMIDIPacketData {
 @available(macOS 11, iOS 14, macCatalyst 14, *)
 extension UniversalMIDIPacketData {
     /// Universal MIDI Packet
-    internal init(_ eventPacketPtr: UnsafePointer<MIDIEventPacket>) {
-        self = Self.unwrapPacket(eventPacketPtr)
+    internal init(
+        _ eventPacketPtr: UnsafePointer<MIDIEventPacket>,
+        refCon: UnsafeMutableRawPointer?
+    ) {
+        self = Self.unwrapPacket(eventPacketPtr, refCon: refCon)
     }
     
     /// Universal MIDI Packet
-    internal init(_ eventPacket: MIDIEventPacket) {
-        self = Self.packetUnwrapper(eventPacket)
+    internal init(
+        _ eventPacket: MIDIEventPacket,
+        refCon: UnsafeMutableRawPointer?
+    ) {
+        self = Self.packetUnwrapper(eventPacket, refCon: refCon)
     }
     
     fileprivate static func unwrapPacket(
-        _ eventPacketPtr: UnsafePointer<MIDIEventPacket>
+        _ eventPacketPtr: UnsafePointer<MIDIEventPacket>,
+        refCon: UnsafeMutableRawPointer?
     ) -> UniversalMIDIPacketData {
         let wordCollection = eventPacketPtr.words()
-    
+        
+        let source = unpackMIDIRefCon(refCon: refCon)
+        
         guard !wordCollection.isEmpty else {
             return UniversalMIDIPacketData(
                 words: [],
-                timeStamp: eventPacketPtr.pointee.timeStamp
+                timeStamp: eventPacketPtr.pointee.timeStamp,
+                source: source
             )
         }
     
@@ -60,7 +84,8 @@ extension UniversalMIDIPacketData {
             )
             return UniversalMIDIPacketData(
                 words: [],
-                timeStamp: eventPacketPtr.pointee.timeStamp
+                timeStamp: eventPacketPtr.pointee.timeStamp,
+                source: source
             )
         }
     
@@ -73,22 +98,27 @@ extension UniversalMIDIPacketData {
     
         return UniversalMIDIPacketData(
             words: words,
-            timeStamp: eventPacketPtr.pointee.timeStamp
+            timeStamp: eventPacketPtr.pointee.timeStamp,
+            source: source
         )
     }
     
     fileprivate static func packetUnwrapper(
-        _ eventPacket: MIDIEventPacket
+        _ eventPacket: MIDIEventPacket,
+        refCon: UnsafeMutableRawPointer?
     ) -> UniversalMIDIPacketData {
         var localEventPacket = eventPacket
-    
+        
+        let source = unpackMIDIRefCon(refCon: refCon)
+        
         return withUnsafePointer(to: localEventPacket) { unsafePtr -> UniversalMIDIPacketData in
             let wordCollection = MIDIEventPacket.WordCollection(&localEventPacket)
     
             guard !wordCollection.isEmpty else {
                 return UniversalMIDIPacketData(
                     words: [],
-                    timeStamp: localEventPacket.timeStamp
+                    timeStamp: localEventPacket.timeStamp,
+                    source: source
                 )
             }
     
@@ -98,7 +128,8 @@ extension UniversalMIDIPacketData {
                 )
                 return UniversalMIDIPacketData(
                     words: [],
-                    timeStamp: localEventPacket.timeStamp
+                    timeStamp: localEventPacket.timeStamp,
+                    source: source
                 )
             }
     
@@ -111,7 +142,8 @@ extension UniversalMIDIPacketData {
     
             return UniversalMIDIPacketData(
                 words: words,
-                timeStamp: localEventPacket.timeStamp
+                timeStamp: localEventPacket.timeStamp,
+                source: source
             )
         }
     }

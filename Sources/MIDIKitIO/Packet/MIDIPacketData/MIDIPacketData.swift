@@ -13,31 +13,44 @@ public struct MIDIPacketData {
     /// Core MIDI packet timestamp
     let timeStamp: CoreMIDITimeStamp
     
+    /// The MIDI endpoint from which the packet originated.
+    /// If this information is not available, it may be `nil`.
+    let source: MIDIOutputEndpoint?
+    
     public init(
         bytes: [UInt8],
-        timeStamp: CoreMIDITimeStamp
+        timeStamp: CoreMIDITimeStamp,
+        source: MIDIOutputEndpoint? = nil
     ) {
         self.bytes = bytes
         self.timeStamp = timeStamp
+        self.source = source
     }
 }
 
 extension MIDIPacketData {
-    internal init(_ midiPacketPtr: UnsafePointer<MIDIPacket>) {
-        self = Self.unwrapPacket(midiPacketPtr)
+    internal init(
+        _ midiPacketPtr: UnsafePointer<MIDIPacket>,
+        refCon: UnsafeMutableRawPointer?
+    ) {
+        self = Self.unwrapPacket(midiPacketPtr, refCon: refCon)
     }
     
     fileprivate static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
     
     fileprivate static func unwrapPacket(
-        _ midiPacketPtr: UnsafePointer<MIDIPacket>
+        _ midiPacketPtr: UnsafePointer<MIDIPacket>,
+        refCon: UnsafeMutableRawPointer?
     ) -> MIDIPacketData {
         let packetDataCount = Int(midiPacketPtr.pointee.length)
-    
+        
+        let source = unpackMIDIRefCon(refCon: refCon)
+        
         guard packetDataCount > 0 else {
             return MIDIPacketData(
                 bytes: [],
-                timeStamp: midiPacketPtr.pointee.timeStamp
+                timeStamp: midiPacketPtr.pointee.timeStamp,
+                source: source
             )
         }
     
@@ -50,7 +63,8 @@ extension MIDIPacketData {
     
         return MIDIPacketData(
             bytes: [UInt8](rawMIDIPacketDataPtr),
-            timeStamp: midiPacketPtr.pointee.timeStamp
+            timeStamp: midiPacketPtr.pointee.timeStamp,
+            source: source
         )
     }
 }

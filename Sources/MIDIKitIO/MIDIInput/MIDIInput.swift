@@ -101,9 +101,9 @@ extension MIDIInput {
             // this should prevent errors thrown due to ID collisions in the system
             uniqueID = nil
         }
-    
+        
         var newPortRef = MIDIPortRef()
-    
+        
         switch api {
         case .legacyCoreMIDI:
             // MIDIDestinationCreateWithBlock is deprecated after macOS 11 / iOS 14
@@ -114,7 +114,7 @@ extension MIDIInput {
                 { [weak self] packetListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
     
-                    let packets = packetListPtr.packets()
+                    let packets = packetListPtr.packets(refCon: srcConnRefCon)
     
                     strongSelf.midiManager?.eventQueue.async {
                         strongSelf.receiveHandler.packetListReceived(packets)
@@ -122,14 +122,14 @@ extension MIDIInput {
                 }
             )
             .throwIfOSStatusErr()
-    
+            
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
                 throw MIDIIOError.internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
             }
-    
+            
             try MIDIDestinationCreateWithProtocol(
                 manager.coreMIDIClientRef,
                 endpointName as CFString,
@@ -137,10 +137,10 @@ extension MIDIInput {
                 &newPortRef,
                 { [weak self] eventListPtr, srcConnRefCon in
                     guard let strongSelf = self else { return }
-    
-                    let packets = eventListPtr.packets()
+                    
+                    let packets = eventListPtr.packets(refCon: srcConnRefCon)
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
-    
+                    
                     strongSelf.midiManager?.eventQueue.async {
                         strongSelf.receiveHandler.eventListReceived(
                             packets,
@@ -151,9 +151,9 @@ extension MIDIInput {
             )
             .throwIfOSStatusErr()
         }
-    
+        
         coreMIDIInputPortRef = newPortRef
-    
+        
         // set meta data properties; ignore errors in case of failure
         try? setModel(of: newPortRef, to: manager.model)
         try? setManufacturer(of: newPortRef, to: manager.manufacturer)
@@ -190,7 +190,7 @@ extension MIDIInput: CustomStringConvertible {
         if let unwrappedUniqueID = uniqueID {
             uniqueIDString = "\(unwrappedUniqueID)"
         }
-    
+        
         return "MIDIInput(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"
     }
 }

@@ -12,7 +12,9 @@ import Foundation
 extension UnsafePointer where Pointee == CoreMIDI.MIDIPacketList {
     /// Internal:
     /// Returns array of MIDIKit ``MIDIPacketData`` instances.
-    internal func packets() -> [MIDIPacketData] {
+    internal func packets(
+        refCon: UnsafeMutableRawPointer?
+    ) -> [MIDIPacketData] {
         if pointee.numPackets == 0 {
             return []
         }
@@ -21,12 +23,12 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIPacketList {
     
         if #available(macOS 10.15, iOS 13.0, macCatalyst 13.0, *) {
             return unsafeSequence().map {
-                MIDIPacketData($0)
+                MIDIPacketData($0, refCon: refCon)
             }
         } else {
             var packetDatas: [MIDIPacketData] = []
             pointee.forEachPacket {
-                packetDatas.append(MIDIPacketData($0))
+                packetDatas.append(MIDIPacketData($0, refCon: refCon))
             }
             return packetDatas
         }
