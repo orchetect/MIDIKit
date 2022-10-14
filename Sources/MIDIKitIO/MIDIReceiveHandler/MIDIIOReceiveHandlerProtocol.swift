@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 /// MIDI I/O Receive Handler Protocol.
 ///
 /// For backwards compatibility with older operating systems,
@@ -24,3 +26,5 @@ public protocol MIDIIOReceiveHandlerProtocol {
         protocol midiProtocol: MIDIProtocolVersion
     )
 }
+
+#endif

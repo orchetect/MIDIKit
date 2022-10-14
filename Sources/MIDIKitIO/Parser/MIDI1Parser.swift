@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 /// Parser for MIDI 1.0 events.
 ///
 /// State is maintained internally. Use one parser class instance per MIDI endpoint for the lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and do not use a single global parser class instance for all MIDI endpoints.)
@@ -613,3 +615,5 @@ extension AnyMIDIPacket {
         MIDI1Parser.default.parsedEvents(in: bytes)
     }
 }
+
+#endif

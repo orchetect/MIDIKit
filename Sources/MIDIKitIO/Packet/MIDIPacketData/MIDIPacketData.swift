@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 @_implementationOnly import CoreMIDI
 
 /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIPacket` (MIDI 1.0).
@@ -70,3 +72,5 @@ extension MIDIPacketData {
         )
     }
 }
+
+#endif

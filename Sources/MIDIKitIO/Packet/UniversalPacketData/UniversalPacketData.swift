@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 @_implementationOnly import CoreMIDI
 
 /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIEventPacket` (Universal MIDI Packet).
@@ -41,8 +43,6 @@ public struct UniversalMIDIPacketData {
         self.source = source
     }
 }
-
-#if !os(tvOS) && !os(watchOS)
 
 @available(macOS 11, iOS 14, macCatalyst 14, *)
 extension UniversalMIDIPacketData {

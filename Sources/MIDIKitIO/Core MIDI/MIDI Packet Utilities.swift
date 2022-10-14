@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 import Foundation
 @_implementationOnly import CoreMIDI
 
@@ -32,3 +34,5 @@ internal func unpackMIDIRefCon(
 
     return MIDIOutputEndpoint(from: srcRef)
 }
+
+#endif

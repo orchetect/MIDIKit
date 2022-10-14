@@ -4,6 +4,8 @@
 //  © 2022 Steffan Andrews • Licensed under MIT License
 //
 
+#if !os(tvOS) && !os(watchOS)
+
 /// A box that can hold any MIDI packet type.
 public enum AnyMIDIPacket {
     /// MIDI 1.0 MIDI Packet
@@ -34,3 +36,5 @@ public enum AnyMIDIPacket {
         }
     }
 }
+
+#endif
