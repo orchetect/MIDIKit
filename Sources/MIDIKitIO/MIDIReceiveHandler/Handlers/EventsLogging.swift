@@ -30,7 +30,11 @@ extension MIDIReceiveHandler {
             for midiPacket in packets {
                 let events = midi1Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
-                logEvents(events)
+                logEvents(
+                    events: events,
+                    timeStamp: midiPacket.timeStamp,
+                    source: midiPacket.source
+                )
             }
         }
     
@@ -42,7 +46,11 @@ extension MIDIReceiveHandler {
             for midiPacket in packets {
                 let events = midi2Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
-                logEvents(events)
+                logEvents(
+                    events: events,
+                    timeStamp: midiPacket.timeStamp,
+                    source: midiPacket.source
+                )
             }
         }
     
@@ -65,17 +73,25 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal func logEvents(_ events: [MIDIEvent]) {
+        internal func logEvents(events: [MIDIEvent],
+                                timeStamp: CoreMIDITimeStamp,
+                                source: MIDIOutputEndpoint?) {
             var events = events
-    
+            
             if filterActiveSensingAndClock {
                 events = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
             }
-    
-            let stringOutput: String = events
+            
+            var stringOutput: String = events
                 .map { "\($0)" }
                 .joined(separator: ", ")
-    
+            + " timeStamp:\(timeStamp)"
+            
+            // not all packets will contain source refs
+            if let source = source {
+                stringOutput += " source: \(source.displayName)"
+            }
+            
             handler(stringOutput)
         }
     }

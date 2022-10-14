@@ -27,7 +27,9 @@ extension MIDIReceiveHandler {
             _ packets: [MIDIPacketData]
         ) {
             for midiPacket in packets {
-                handleBytes(midiPacket.bytes)
+                handleBytes(bytes: midiPacket.bytes,
+                            timeStamp: midiPacket.timeStamp,
+                            source: midiPacket.source)
             }
         }
     
@@ -37,7 +39,9 @@ extension MIDIReceiveHandler {
             protocol midiProtocol: MIDIProtocolVersion
         ) {
             for midiPacket in packets {
-                handleBytes(midiPacket.bytes)
+                handleBytes(bytes: midiPacket.bytes,
+                            timeStamp: midiPacket.timeStamp,
+                            source: midiPacket.source)
             }
         }
     
@@ -60,16 +64,24 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal func handleBytes(_ bytes: [UInt8]) {
+        internal func handleBytes(bytes: [UInt8],
+                                  timeStamp: CoreMIDITimeStamp,
+                                  source: MIDIOutputEndpoint?) {
             if filterActiveSensingAndClock {
                 guard bytes.first != 0xF8, // midi clock pulse
                       bytes.first != 0xFE  // active sensing
                 else { return }
             }
-    
-            let stringOutput = bytes
+            
+            var stringOutput = bytes
                 .hexString(padEachTo: 2, prefixes: false)
-    
+            + " timeStamp:\(timeStamp)"
+            
+            // not all packets will contain source refs
+            if let source = source {
+                stringOutput += " source: \(source.displayName)"
+            }
+            
             handler(stringOutput)
         }
     }
