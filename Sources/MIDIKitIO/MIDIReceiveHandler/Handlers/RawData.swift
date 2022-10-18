@@ -11,7 +11,7 @@ extension MIDIReceiver {
 }
 
 extension MIDIReceiveHandler {
-    /// Basic raw packet data receive handler.
+    /// Raw packet data receive handler.
     /// This handler is provided for debugging and data introspection but is discouraged for manually parsing MIDI packets. It is recommended to use a MIDI event handler instead.
     class RawData: MIDIIOReceiveHandlerProtocol {
         public var handler: MIDIReceiver.RawDataHandler

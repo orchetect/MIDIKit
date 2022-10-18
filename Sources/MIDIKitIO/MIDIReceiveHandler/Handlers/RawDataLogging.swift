@@ -15,6 +15,8 @@ extension MIDIReceiver {
 
 extension MIDIReceiveHandler {
     /// Raw data logging handler (hex byte strings).
+    /// On systems that use legacy MIDI 1.0 packets, their raw bytes will be logged.
+    /// On systems that support UMP and MIDI 2.0, the raw UMP packet data is logged.
     ///
     /// If `handler` is `nil`, all raw packet data is logged to the console (but only in `DEBUG` preprocessor flag builds).
     /// If `handler` is provided, the hex byte string is supplied as a parameter and not automatically logged.
