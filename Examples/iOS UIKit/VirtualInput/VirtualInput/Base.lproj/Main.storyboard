@@ -12,7 +12,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="VirtualInput" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -23,7 +23,7 @@
                                     <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                     <bool key="isElement" value="YES"/>
                                 </accessibility>
-                                <mutableString key="text">Virtual Input Example
+                                <string key="text">Virtual Input Example
 
 This example creates a virtual MIDI input port named "TestApp Input".
 
@@ -35,7 +35,7 @@ On modern operating systems supporting MIDI 2.0, event values will be natively r
 
 Regardless, MIDI 1.0 ←→ MIDI 2.0 values are always seamlessly convertible.
 
-For more details, review the Event Parsing example project.</mutableString>
+For more details, review the Event Parsing example project.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>

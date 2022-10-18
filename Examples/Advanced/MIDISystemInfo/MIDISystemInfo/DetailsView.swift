@@ -25,7 +25,7 @@ struct DetailsView: View {
     
     @State private var webViewHeight: CGFloat = .zero
     
-    @State private var webview: WKWebView = .init()
+    @State private var webView: WKWebView = .init()
     
     @State private var showAll: Bool = false
     
@@ -114,7 +114,7 @@ struct DetailsView: View {
         if let unwrappedObject = object {
             WebKitView(
                 dynamicHeight: $webViewHeight,
-                webview: $webview,
+                webView: $webView,
                 html: generateHTML(unwrappedObject)
             )
             

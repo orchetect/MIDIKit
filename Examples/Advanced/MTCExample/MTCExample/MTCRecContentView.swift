@@ -173,7 +173,6 @@ struct MTCRecContentView: View {
                     dropOutFrames: 10
                 )
             ) { timecode, _, _, displayNeedsUpdate in
-                
                 receiverTC = timecode.stringValue
                 receiverFR = mtcRec.mtcFrameRate
                 
@@ -231,9 +230,7 @@ struct MTCRecContentView: View {
                     name: kMIDISources.MTCRec.name,
                     tag: kMIDISources.MTCRec.tag,
                     uniqueID: .userDefaultsManaged(key: udKey),
-                    receiver: .events { [weak mtcRec] midiEvents in
-                        mtcRec?.midiIn(events: midiEvents)
-                    }
+                    receiver: .object(mtcRec, held: .weakly)
                 )
             } catch {
                 logger.error(error)
