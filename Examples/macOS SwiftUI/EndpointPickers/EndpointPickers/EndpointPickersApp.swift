@@ -5,7 +5,7 @@
 //
 
 import SwiftUI
-import MIDIKit
+import MIDIKitIO
 
 @main
 struct EndpointPickersApp: App {

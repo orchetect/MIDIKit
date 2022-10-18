@@ -5,7 +5,7 @@
 //
 
 import SwiftUI
-import MIDIKit
+import MIDIKitIO
 
 struct MIDIInSelectionView: View {
     @EnvironmentObject var midiManager: MIDIManager

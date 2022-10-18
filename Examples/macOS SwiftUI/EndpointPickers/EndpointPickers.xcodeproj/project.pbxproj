@@ -9,10 +9,9 @@
 /* Begin PBXBuildFile section */
 		E2055B7A285A733B00DC1138 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2055B79285A733B00DC1138 /* MIDIHelper.swift */; };
 		E24CB06F285199E400649B50 /* MIDIEndpointSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24CB06E285199E400649B50 /* MIDIEndpointSelectionView.swift */; };
+		E26CCDB028F95BD50045256C /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E26CCDAF28F95BD50045256C /* MIDIKitIO */; };
 		E27D0E43284F378100F43247 /* EndpointPickersApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E42284F378100F43247 /* EndpointPickersApp.swift */; };
 		E27D0E45284F378100F43247 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E44284F378100F43247 /* ContentView.swift */; };
-		E27D0E55284F386A00F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E54284F386A00F43247 /* MIDIKit */; };
-		E29AC930285BF355009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC92F285BF355009D1C2C /* MIDIKit */; };
 		E29FF2A72880BCF7005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2A62880BCF7005E2BC2 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -32,8 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E29AC930285BF355009D1C2C /* MIDIKit in Frameworks */,
-				E27D0E55284F386A00F43247 /* MIDIKit in Frameworks */,
+				E26CCDB028F95BD50045256C /* MIDIKitIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,8 +85,7 @@
 			);
 			name = EndpointPickers;
 			packageProductDependencies = (
-				E27D0E54284F386A00F43247 /* MIDIKit */,
-				E29AC92F285BF355009D1C2C /* MIDIKit */,
+				E26CCDAF28F95BD50045256C /* MIDIKitIO */,
 			);
 			productName = EndpointPickers;
 			productReference = E27D0E3F284F378100F43247 /* EndpointPickers.app */;
@@ -119,7 +116,7 @@
 			);
 			mainGroup = E27D0E36284F378100F43247;
 			packageReferences = (
-				E29AC92E285BF355009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
+				E26CCDAE28F95BD40045256C /* XCRemoteSwiftPackageReference "MIDIKit" */,
 			);
 			productRefGroup = E27D0E40284F378100F43247 /* Products */;
 			projectDirPath = "";
@@ -353,25 +350,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E29AC92E285BF355009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+		E26CCDAE28F95BD40045256C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.6.0;
+				branch = "event-source";
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E27D0E54284F386A00F43247 /* MIDIKit */ = {
+		E26CCDAF28F95BD50045256C /* MIDIKitIO */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MIDIKit;
-		};
-		E29AC92F285BF355009D1C2C /* MIDIKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E29AC92E285BF355009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;
-			productName = MIDIKit;
+			package = E26CCDAE28F95BD40045256C /* XCRemoteSwiftPackageReference "MIDIKit" */;
+			productName = MIDIKitIO;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
