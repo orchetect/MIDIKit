@@ -1,7 +1,7 @@
 //
 //  EventsLogging.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -14,8 +14,10 @@ extension MIDIReceiver {
 
 extension MIDIReceiveHandler {
     /// MIDI Event logging handler (event description strings).
-    /// If `handler` is nil, all events are logged to the console (but only in `DEBUG` preprocessor flag builds).
-    /// If `handler` is provided, the event description string is supplied as a parameter and not automatically logged.
+    /// If `handler` is nil, all events are logged to the console (but only in `DEBUG` preprocessor
+    /// flag builds).
+    /// If `handler` is provided, the event description string is supplied as a parameter and not
+    /// automatically logged.
     class EventsLogging: MIDIIOReceiveHandlerProtocol {
         public var handler: MIDIReceiver.EventsLoggingHandler
     
@@ -73,9 +75,11 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal func logEvents(events: [MIDIEvent],
-                                timeStamp: CoreMIDITimeStamp,
-                                source: MIDIOutputEndpoint?) {
+        internal func logEvents(
+            events: [MIDIEvent],
+            timeStamp: CoreMIDITimeStamp,
+            source: MIDIOutputEndpoint?
+        ) {
             var events = events
             
             if filterActiveSensingAndClock {
@@ -85,7 +89,7 @@ extension MIDIReceiveHandler {
             var stringOutput: String = events
                 .map { "\($0)" }
                 .joined(separator: ", ")
-            + " timeStamp:\(timeStamp)"
+                + " timeStamp:\(timeStamp)"
             
             // not all packets will contain source refs
             if let source = source {

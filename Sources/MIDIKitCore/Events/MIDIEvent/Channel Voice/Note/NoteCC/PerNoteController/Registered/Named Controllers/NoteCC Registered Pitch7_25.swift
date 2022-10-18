@@ -1,7 +1,7 @@
 //
 //  NoteCC Registered Pitch7_25.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.NoteCC.PerNoteController.Registered {
@@ -12,7 +12,8 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
     ///
     /// > MIDI 2.0 Spec:
     /// >
-    /// > Registered Per-Note Controller #3 is defined as Pitch 7.25. The message’s 32-bit data field contains:
+    /// > Registered Per-Note Controller #3 is defined as Pitch 7.25. The message’s 32-bit data
+    /// field contains:
     /// > - 7 bits: Pitch in semitones, based on default Note Number equal temperament scale
     /// > - 25 bits: Fractional Pitch above Note Number (i.e., fraction of one semitone)
     public struct Pitch7_25 {

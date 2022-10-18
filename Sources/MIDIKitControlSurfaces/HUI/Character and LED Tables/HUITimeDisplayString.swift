@@ -1,14 +1,16 @@
 //
 //  HUITimeDisplayString.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
 /// HUI time display string, comprised of 8 digits.
 ///
-/// The time display consists of eight 7-segment displays (called digits). Every digit except the last (rightmost) has the ability to show a trailing decimal point (dot).
+/// The time display consists of eight 7-segment displays (called digits).
+/// Every digit except the last (rightmost) has the ability
+/// to show a trailing decimal point (dot).
 public struct HUITimeDisplayString: HUIStringProtocol, Equatable, Hashable {
     public typealias Element = HUITimeDisplayCharacter
     
@@ -54,7 +56,8 @@ public struct HUITimeDisplayString: HUIStringProtocol, Equatable, Hashable {
     }
     
     /// Internal:
-    /// Updates the string from a partial or whole character sequence, in sequence order from right to left.
+    /// Updates the string from a partial or whole character sequence,
+    /// in sequence order from right to left.
     ///
     /// - Parameters:
     ///   - charsRightToLeft: Between 1 and 8 characters, in sequence order from right to left.

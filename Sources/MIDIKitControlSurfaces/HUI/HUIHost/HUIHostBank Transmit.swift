@@ -1,7 +1,7 @@
 //
 //  HUIHostBank Transmit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -10,7 +10,8 @@ extension HUIHostBank {
     // MARK: - Ping
     
     /// Transmit a HUI ping message to the client surface.
-    /// It is not necessary to call this manually. The ``HUIHost`` object will handle ping transmission on an internal timer automatically.
+    /// It is not necessary to call this manually. The ``HUIHost`` object will handle ping
+    /// transmission on an internal timer automatically.
     internal func transmitPing() {
         let event = encodeHUIPing(to: .surface)
         midiOut(event)
@@ -60,7 +61,8 @@ extension HUIHostBank {
     /// - Parameters:
     ///   - channel: Channel strip number (`0 ... 7`).
     ///   - side: Left or right side of the stereo meter.
-    ///   - level: Level amount (`0x0 ... 0xC`). Where `0x0` is off, `0x1 ... 0xB` is signal level, and `0xC` is clipping (red LED).
+    ///   - level: Level amount (`0x0 ... 0xC`).
+    ///     Where `0x0` is off, `0x1 ... 0xB` is signal level, and `0xC` is clipping (red LED).
     public func transmitLevelMeter(
         channel: UInt4,
         side: HUISurfaceModel.StereoLevelMeter.Side,
@@ -80,7 +82,10 @@ extension HUIHostBank {
     ///
     /// - Parameters:
     ///   - vPot: V-Pot identity.
-    ///   - value: Encoded value. When encoding host → surface, this is the LED preset index. When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
+    ///   - value: Encoded value.
+    ///     When encoding host → surface, this is the LED preset index.
+    ///     When encoding surface → host, this is the delta rotary knob change
+    ///     value -/+ when the user turns the knob.
     public func transmitVPot(
         _ vPot: HUIVPot,
         display: HUIVPotDisplay
@@ -107,7 +112,11 @@ extension HUIHostBank {
     
     /// Transmit portion(s) of large display text (40 x 2 characters) to the client surface.
     ///
-    /// This text display is split into 8 slices of 10 characters each, with slices indexed `0 ... 3` for the top 40-character row, and `4 ... 7` for the bottom 40-character row. (This mirrors its raw HUI MIDI message encoding format.) Any of these slices may be sent at any time in any order.
+    /// This text display is split into 8 slices of 10 characters each, with slices
+    /// indexed `0 ... 3` for the top 40-character row,
+    /// and `4 ... 7` for the bottom 40-character row.
+    /// (This mirrors its raw HUI MIDI message encoding format.)
+    /// Any of these slices may be sent at any time in any order.
     ///
     /// - Parameters:
     ///   - slices: Between 1 and 8 text slices of 10 characters each.
@@ -134,7 +143,9 @@ extension HUIHostBank {
     /// Transmit some or all of the time display digits to the client surface.
     ///
     /// - Parameters:
-    ///   - charsRightToLeft: Between 1 and 8 characters in reverse sequence order (first array element is rightmost digit). More than 8 characters will discarded and truncated to 8 characters.
+    ///   - charsRightToLeft: Between 1 and 8 characters in reverse sequence order (first array
+    /// element is rightmost digit). More than 8 characters will discarded and truncated to 8
+    /// characters.
     public func transmitTimeDisplay(
         charsRightToLeft: [HUITimeDisplayCharacter]
     ) {

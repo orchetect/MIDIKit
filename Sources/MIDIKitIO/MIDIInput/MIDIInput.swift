@@ -1,7 +1,7 @@
 //
 //  MIDIInput.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -11,9 +11,16 @@ import Foundation
 
 /// A managed virtual MIDI input endpoint created in the system by the MIDI I/O ``MIDIManager``.
 ///
-/// > Note: Avoid storing or caching this object unless it is unavoidable. Instead, whenever possible access it via the ``MIDIManager/managedInputs`` collection. The ``MIDIManager`` owns this object and maintains its lifecycle.
+/// > Note: Avoid storing or caching this object unless it is unavoidable. Instead, whenever
+/// possible access it via the ``MIDIManager/managedInputs`` collection. The ``MIDIManager`` owns
+/// this object and maintains its lifecycle.
 /// >
-/// > Ensure that it is only stored weakly and only passed by reference temporarily in order to execute an operation. If it absolutely must be stored strongly, ensure it is stored for no longer than the lifecycle of the managed thru connection (which is either at such time the ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with ``MIDIManager/ManagedType/input`` or ``MIDIManager/removeAll()`` to destroy the managed endpoint.)
+/// > Ensure that it is only stored weakly and only passed by reference temporarily in order to
+/// execute an operation. If it absolutely must be stored strongly, ensure it is stored for no
+/// longer than the lifecycle of the managed thru connection (which is either at such time the
+/// ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
+/// ``MIDIManager/ManagedType/input`` or ``MIDIManager/removeAll()`` to destroy the managed
+/// endpoint.)
 public final class MIDIInput: _MIDIIOManagedProtocol {
     // _MIDIIOManagedProtocol
     internal weak var midiManager: MIDIManager?
@@ -39,7 +46,11 @@ public final class MIDIInput: _MIDIIOManagedProtocol {
     // init
     
     /// Internal init.
-    /// This object is not meant to be instanced by the user. This object is automatically created and managed by the MIDI I/O ``MIDIManager`` instance when calling ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``, and destroyed when calling ``MIDIManager/remove(_:_:)`` with ``MIDIManager/ManagedType/input`` or ``MIDIManager/removeAll()``.
+    /// This object is not meant to be instanced by the user. This object is automatically created
+    /// and managed by the MIDI I/O ``MIDIManager`` instance when calling
+    /// ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``, and destroyed
+    /// when calling ``MIDIManager/remove(_:_:)`` with ``MIDIManager/ManagedType/input`` or
+    /// ``MIDIManager/removeAll()``.
     ///
     /// - Parameters:
     ///   - name: The port name as displayed in the system.
@@ -79,7 +90,8 @@ extension MIDIInput {
         .init(from: coreMIDIInputPortRef ?? 0)
     }
     
-    /// Queries the system and returns true if the endpoint exists (by matching port name and unique ID)
+    /// Queries the system and returns true if the endpoint exists
+    /// (by matching port name and unique ID)
     internal var uniqueIDExistsInSystem: MIDIEndpointRef? {
         guard let unwrappedUniqueID = uniqueID else {
             return nil
@@ -171,7 +183,8 @@ extension MIDIInput {
         }
     }
     
-    /// Disposes of the the virtual port if it's already been created in the system via the `create()` method.
+    /// Disposes of the the virtual port if it's already been created in the system via the
+    /// ``create(in:)`` method.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     internal func dispose() throws {

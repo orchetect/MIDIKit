@@ -1,7 +1,7 @@
 //
 //  MIDIReceiver.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -19,8 +19,10 @@ public enum MIDIReceiver {
         EventsHandler
     )
     
-    /// Provides a closure to handle strongly-typed MIDI events including packet timestamp and source endpoint metadata.
-    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be `nil` when used with ``MIDIInput``.
+    /// Provides a closure to handle strongly-typed MIDI events including packet timestamp and
+    /// source endpoint metadata.
+    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
+    /// `nil` when used with ``MIDIInput``.
     case eventsWithMetadata(
         translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
         EventsWithMetadataHandler
@@ -34,7 +36,8 @@ public enum MIDIReceiver {
     )
     
     /// Raw packet data receive handler.
-    /// This handler is provided for debugging and data introspection but is discouraged for manually parsing MIDI packets.
+    /// This handler is provided for debugging and data introspection but is discouraged for
+    /// manually parsing MIDI packets.
     /// It is recommended to use a MIDI event handler instead.
     case rawData(RawDataHandler)
     
@@ -42,15 +45,18 @@ public enum MIDIReceiver {
     /// On systems that use legacy MIDI 1.0 packets, their raw bytes will be logged.
     /// On systems that support UMP and MIDI 2.0, the raw UMP packet data is logged.
     ///
-    /// If `handler` is `nil`, all raw packet data is logged to the console (but only in `DEBUG` preprocessor flag builds).
-    /// If `handler` is provided, the hex byte string is supplied as a parameter and not automatically logged.
+    /// If `handler` is `nil`, all raw packet data is logged to the console (but only in `DEBUG`
+    /// preprocessor flag builds).
+    /// If `handler` is provided, the hex byte string is supplied as a parameter and not
+    /// automatically logged.
     case rawDataLogging(
         filterActiveSensingAndClock: Bool = false,
         _ handler: RawDataLoggingHandler? = nil
     )
     
     /// Pass to a receiver object instance.
-    /// MIDI Event receive handler that holds a reference to a receiver object that conforms to the ``ReceivesMIDIEvents`` protocol.
+    /// MIDI Event receive handler that holds a reference to a receiver object that conforms to the
+    /// ``ReceivesMIDIEvents`` protocol.
     /// The object reference may be held strongly or weakly.
     case object(
         ReceivesMIDIEvents,

@@ -14,11 +14,13 @@ import Foundation
 /// `ThreadSafeAccess`: A property wrapper that ensures thread-safe atomic access to a value.
 /// Multiple read accesses can potentially read at the same time, just not during a write.
 ///
-/// By using `pthread` to do the locking, this safer than using a `DispatchQueue/barrier` as there isn't a chance of priority inversion.
+/// By using `pthread` to do the locking, this safer than using a `DispatchQueue/barrier` as there
+/// isn't a chance of priority inversion.
 ///
 /// This is safe to use on collection types (`Array`, `Dictionary`, etc.).
 ///
-/// - Warning: Do not instantiate this wrapper on a variable declaration inside a function body or closure body. Only wrap static or instance variables.
+/// - Warning: Do not instantiate this wrapper on a variable declaration inside a function body or
+/// closure body. Only wrap static or instance variables.
 @propertyWrapper
 public final class ThreadSafeAccess<T> {
     private var value: T
@@ -54,14 +56,17 @@ public final class ThreadSafeAccess<T> {
     }
 }
 
-/// Defines a basic signature to which all locks will conform. Provides the basis for atomic access to stuff.
+/// Defines a basic signature to which all locks will conform. Provides the basis for atomic access
+/// to stuff.
 private protocol ThreadLock {
     init()
     
-    /// Lock a resource for writing. So only one thing can write, and nothing else can read or write.
+    /// Lock a resource for writing. So only one thing can write, and nothing else can read or
+    /// write.
     func writeLock()
     
-    /// Lock a resource for reading. Other things can also lock for reading at the same time, but nothing else can write at that time.
+    /// Lock a resource for reading. Other things can also lock for reading at the same time, but
+    /// nothing else can write at that time.
     func readLock()
     
     /// Unlock a resource

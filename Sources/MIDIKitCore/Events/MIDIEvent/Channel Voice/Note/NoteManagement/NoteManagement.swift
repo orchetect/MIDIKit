@@ -1,14 +1,15 @@
 //
 //  NoteManagement.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
     /// Channel Voice Message: Per-Note Management
     /// (MIDI 2.0)
     ///
-    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per-Note Controllers to multiple Notes on the same Note Number.
+    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control
+    /// from Per-Note Controllers to multiple Notes on the same Note Number.
     public struct NoteManagement: Equatable, Hashable {
         /// Note Number
         ///
@@ -27,7 +28,8 @@ extension MIDIEvent {
         /// Channel Voice Message: Per-Note Management
         /// (MIDI 2.0)
         ///
-        /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per-Note Controllers to multiple Notes on the same Note Number.
+        /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent
+        /// control from Per-Note Controllers to multiple Notes on the same Note Number.
         ///
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
@@ -50,7 +52,8 @@ extension MIDIEvent {
         /// Channel Voice Message: Per-Note Management
         /// (MIDI 2.0)
         ///
-        /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per-Note Controllers to multiple Notes on the same Note Number.
+        /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent
+        /// control from Per-Note Controllers to multiple Notes on the same Note Number.
         ///
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
@@ -76,7 +79,8 @@ extension MIDIEvent {
     /// Channel Voice Message: Per-Note Management
     /// (MIDI 2.0)
     ///
-    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per-Note Controllers to multiple Notes on the same Note Number.
+    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control
+    /// from Per-Note Controllers to multiple Notes on the same Note Number.
     ///
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
@@ -103,7 +107,8 @@ extension MIDIEvent {
     /// Channel Voice Message: Per-Note Management
     /// (MIDI 2.0)
     ///
-    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control from Per-Note Controllers to multiple Notes on the same Note Number.
+    /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control
+    /// from Per-Note Controllers to multiple Notes on the same Note Number.
     ///
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
@@ -131,7 +136,8 @@ extension MIDIEvent {
 extension MIDIEvent.NoteManagement {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .midi2ChannelVoice
     
@@ -162,14 +168,18 @@ extension MIDIEvent.NoteManagement {
         ///
         /// > MIDI 2.0 Spec:
         /// >
-        /// > When a device receives a Per-Note Management message with D = 1 (Detach), all currently playing notes and previous notes on the referenced Note Number shall no longer respond to any Per-Note controllers. Currently playing notes shall maintain the current values for all Per-Note controllers until the end of the note life cycle.
+        /// > When a device receives a Per-Note Management message with D = 1 (Detach), all
+        /// currently playing notes and previous notes on the referenced Note Number shall no longer
+        /// respond to any Per-Note controllers. Currently playing notes shall maintain the current
+        /// values for all Per-Note controllers until the end of the note life cycle.
         case detachPerNoteControllers
     
         /// [S] Reset/Set Per-Note Controllers to default values
         ///
         /// > MIDI 2.0 Spec:
         /// >
-        /// > When a device receives a Per-Note Management message with S = 1, all Per-Note controllers on the referenced Note Number should be reset to their default values.
+        /// > When a device receives a Per-Note Management message with S = 1, all Per-Note
+        /// controllers on the referenced Note Number should be reset to their default values.
         case resetPerNoteControllers
     }
 }

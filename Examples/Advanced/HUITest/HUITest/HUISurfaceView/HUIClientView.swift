@@ -1,7 +1,7 @@
 //
 //  HUIClientView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitIO
@@ -54,7 +54,9 @@ struct HUIClientView: View {
                 uniqueID: .userDefaultsManaged(key: Self.kHUIInputName),
                 receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false)
                     { [weak huiSurface] events in
-                        // since handler callbacks from MIDI are on a CoreMIDI thread, parse the MIDI on the main thread because SwiftUI state in this app will be updated as a result
+                        // since handler callbacks from MIDI are on a CoreMIDI thread,
+                        // parse the MIDI on the main thread because SwiftUI state in
+                        // this app will be updated as a result
                         DispatchQueue.main.async {
                             huiSurface?.midiIn(events: events)
                         }

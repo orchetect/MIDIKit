@@ -1,7 +1,7 @@
 //
 //  MIDIManager addOutputConnection.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -10,15 +10,21 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 extension MIDIManager {
-    /// Adds a new managed connected output to the ``MIDIManager/managedOutputConnections`` dictionary of the ``MIDIManager``.
+    /// Adds a new managed connected output to the ``MIDIManager/managedOutputConnections``
+    /// dictionary of the ``MIDIManager``.
     ///
-    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
+    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can
+    /// also be instanced without providing any initial inputs and then inputs can be added or
+    /// removed later.
     ///
     /// - Parameters:
-    ///   - toInputs: Criteria for identifying target MIDI endpoint(s). These may be added or removed later.
+    ///   - toInputs: Criteria for identifying target MIDI endpoint(s). These may be added or
+    /// removed later.
     ///   - tag: Internal unique tag to reference the managed item in the ``MIDIManager``.
-    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides any criteria supplied in `toInputs`.
-    ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
+    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides any
+    /// criteria supplied in `toInputs`.
+    ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to
+    /// the connection.
     ///
     /// - Throws: ``MIDIIOError``
     public func addOutputConnection(
@@ -45,15 +51,21 @@ extension MIDIManager {
         }
     }
     
-    /// Adds a new managed connected output to the ``MIDIManager/managedOutputConnections`` dictionary of the ``MIDIManager``.
+    /// Adds a new managed connected output to the ``MIDIManager/managedOutputConnections``
+    /// dictionary of the ``MIDIManager``.
     ///
-    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
+    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can
+    /// also be instanced without providing any initial inputs and then inputs can be added or
+    /// removed later.
     ///
     /// - Parameters:
-    ///   - toInputs: Criteria for identifying target MIDI endpoint(s). These may be added or removed later.
+    ///   - toInputs: Criteria for identifying target MIDI endpoint(s). These may be added or
+    /// removed later.
     ///   - tag: Internal unique tag to reference the managed item in the ``MIDIManager``.
-    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides any criteria supplied in `toInputs`.
-    ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
+    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides any
+    /// criteria supplied in `toInputs`.
+    ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to
+    /// the connection.
     ///
     /// - Throws: ``MIDIIOError``
     public func addOutputConnection(
@@ -70,15 +82,20 @@ extension MIDIManager {
         )
     }
     
-    /// Adds a new managed connected output to the ``MIDIManager/managedOutputConnections`` dictionary of the ``MIDIManager``.
+    /// Adds a new managed connected output to the ``MIDIManager/managedOutputConnections``
+    /// dictionary of the ``MIDIManager``.
     ///
-    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can also be instanced without providing any initial inputs and then inputs can be added or removed later.
+    /// This connects to one or more inputs in the system and outputs MIDI events to them. It can
+    /// also be instanced without providing any initial inputs and then inputs can be added or
+    /// removed later.
     ///
     /// - Parameters:
     ///   - toInputs: Target MIDI endpoint(s). These may be added or removed later.
     ///   - tag: Internal unique tag to reference the managed item in the ``MIDIManager``.
-    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides any criteria supplied in `toInputs`.
-    ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to the connection.
+    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides any
+    /// criteria supplied in `toInputs`.
+    ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to
+    /// the connection.
     ///
     /// - Throws: ``MIDIIOError``
     @_disfavoredOverload

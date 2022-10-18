@@ -1,7 +1,7 @@
 //
 //  MIDIFile Utilities.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -46,20 +46,23 @@ extension MIDIFile {
     
     /// Utility:
     /// Returns the decoded value and the number of bytes read from the bytes array if successful.
-    /// Returns nil if bytes is empty or variable length value could not be read in the expected format (ie: malformed or unexpected data)
+    /// Returns nil if bytes is empty or variable length value could not be read in the expected
+    /// format (ie: malformed or unexpected data)
     /// Currently returns nil if value overflows a 28-bit unsigned value.
     static func decodeVariableLengthValue<D: DataProtocol>(from bytes: D) -> (
         value: Int,
         byteLength: Int
     )? {
-        // make mutable so we can call the `inout` overload of this method and not duplicate code here
+        // make mutable so we can call the `inout` overload of this method and not duplicate code
+        // here
         var bytes = bytes
         return decodeVariableLengthValue(from: &bytes)
     }
     
     /// Utility:
     /// Returns the decoded value and the number of bytes read from the bytes array if successful.
-    /// Returns nil if bytes is empty or variable length value could not be read in the expected format (ie: malformed or unexpected data)
+    /// Returns nil if bytes is empty or variable length value could not be read in the expected
+    /// format (ie: malformed or unexpected data)
     /// Currently returns nil if value overflows a 28-bit unsigned value.
     static func decodeVariableLengthValue<D: DataProtocol>(from bytes: inout D) -> (
         value: Int,
@@ -110,7 +113,8 @@ extension MIDIFile {
 extension MutableDataProtocol {
     mutating func append(deltaTime ticks: UInt32) {
         // Variable length delta timestamp representing the number of ticks that have elapsed
-        // According to the Standard MIDI File 1.0 Spec, the entire delta-time should be at most 4 bytes long.
+        // According to the Standard MIDI File 1.0 Spec, the entire delta-time should be at most 4
+        // bytes long.
         
         append(contentsOf: MIDIFile.encodeVariableLengthValue(ticks) as Self)
     }

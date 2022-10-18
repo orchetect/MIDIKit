@@ -1,7 +1,7 @@
 //
 //  Stop.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -10,7 +10,8 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately.
+    /// > Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop
+    /// immediately.
     public struct Stop: Equatable, Hashable {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
@@ -25,7 +26,8 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop immediately.
+    /// > Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop
+    /// immediately.
     ///
     /// - Parameters:
     ///   - group: UMP Group (`0x0 ... 0xF`)
@@ -39,14 +41,16 @@ extension MIDIEvent {
 extension MIDIEvent.Stop {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
         [0xFC]
     }
     
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .systemRealTimeAndCommon
     

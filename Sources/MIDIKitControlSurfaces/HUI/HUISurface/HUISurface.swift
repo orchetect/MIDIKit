@@ -1,18 +1,22 @@
 //
 //  HUISurface.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 import MIDIKitCore
 import MIDIKitInternals
 
-/// Object representing a single HUI control surface device, holding a model of its state and providing granular update notifications.
+/// Object representing a single HUI control surface device, holding a model of its state and
+/// providing granular update notifications.
 ///
-/// This object would typically be used by a client application (ie: a control surface application on an iPad) in order to manage state of a HUI surface. It interfaces with HUI host software/hardware through bidirectional MIDI (input and output).
+/// This object would typically be used by a client application (ie: a control surface application
+/// on an iPad) in order to manage state of a HUI surface. It interfaces with HUI host
+/// software/hardware through bidirectional MIDI (input and output).
 ///
-/// > HUI (_Human User Interface for Digital Audio Workstations_) is a DAW control surface protocol developed by Mackie that uses MIDI events as its underlying encoding.
+/// > HUI (_Human User Interface for Digital Audio Workstations_) is a DAW control surface protocol
+/// developed by Mackie that uses MIDI events as its underlying encoding.
 /// >
 /// > References:
 /// > - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
@@ -22,7 +26,8 @@ public final class HUISurface {
     /// HUI control surface state model.
     /// Represents state of an entire HUI control surface (all controls, display elements, etc.).
     ///
-    /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes when ``HUISurface`` is instanced as a `@ObservedObject var`.
+    /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes
+    /// when ``HUISurface`` is instanced as a `@ObservedObject var`.
     public internal(set) var model: HUISurfaceModel {
         willSet {
             if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *) {
@@ -42,10 +47,12 @@ public final class HUISurface {
         (_ notification: HUISurfaceModelNotification) -> Void
     )
     
-    /// Notification handler that is called as a result of the ``model`` being updated from received HUI events.
+    /// Notification handler that is called as a result of the ``model`` being updated from received
+    /// HUI events.
     public var modelNotificationHandler: ModelNotificationHandler?
     
-    /// Notification handler will always be called even when a received HUI MIDI event from host does not result in a change to the HUI surface state model.
+    /// Notification handler will always be called even when a received HUI MIDI event from host
+    /// does not result in a change to the HUI surface state model.
     public var alwaysNotify: Bool = false
     
     /// Remote presence state change handler (when pings resume or cease after timeout).
@@ -58,9 +65,11 @@ public final class HUISurface {
     
     // MARK: - Presence
     
-    /// Time duration to wait since the last ping received before transitioning ``isRemotePresent`` to `false`.
+    /// Time duration to wait since the last ping received before transitioning ``isRemotePresent``
+    /// to `false`.
     ///
-    /// HUI pings are sent from the host to surface(s) every 1 second. A timeout duration between 2 ... 5 seconds is reasonable depending on desired leeway.
+    /// HUI pings are sent from the host to surface(s) every 1 second. A timeout duration between 2
+    /// ... 5 seconds is reasonable depending on desired leeway.
     public var remotePresenceTimeout: TimeInterval = 2.0 {
         didSet {
             // validate
@@ -180,14 +189,14 @@ extension HUISurface: ReceivesMIDIEvents {
     public func midiIn(event: MIDIEvent) {
         // capture MIDI Device Inquiry first
         switch event {
-            case .deviceInquiryRequest(deviceID: 0x00),
-                 .deviceInquiryRequest(deviceID: 0x7F):
+        case .deviceInquiryRequest(deviceID: 0x00),
+             .deviceInquiryRequest(deviceID: 0x7F):
             let diResponse = MIDIEvent.deviceInquiryResponse(
                 deviceID: 0x00,
                 manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
                 deviceFamilyCode: 0x05, // TODO: needs correct value
                 deviceFamilyMemberCode: 0x00, // TODO: needs correct value
-                softwareRevision: (1,0,0,0) // TODO: needs correct value
+                softwareRevision: (1, 0, 0, 0) // TODO: needs correct value
             )
             midiOut(diResponse)
         default:

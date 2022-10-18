@@ -1,7 +1,7 @@
 //
 //  MTCReceiver.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Darwin
@@ -16,9 +16,13 @@ import TimecodeKit
 ///
 /// > Note:
 /// >
-/// > - A running MTC data stream (during playback) only updates the frame number every 2 frames, so this data stream should not be relied on for deriving exact frame position, but rather as a mechanism for displaying running timecode to the user on screen or synchronizing playback to the incoming MTC data stream.
+/// > - A running MTC data stream (during playback) only updates the frame number every 2 frames, so
+/// this data stream should not be relied on for deriving exact frame position, but rather as a
+/// mechanism for displaying running timecode to the user on screen or synchronizing playback to the
+/// incoming MTC data stream.
 /// >
-/// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate timecodes when scrubbing or locating to different times.
+/// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate
+/// timecodes when scrubbing or locating to different times.
 public final class MTCReceiver {
     // MARK: - Public properties
         
@@ -41,7 +45,8 @@ public final class MTCReceiver {
     public private(set) var timecode: Timecode
         
     /// The frame rate the local system is using.
-    /// Remember to also set this any time the local frame rate changes so the receiver can interpret the incoming MTC accordingly.
+    /// Remember to also set this any time the local frame rate changes so the receiver can
+    /// interpret the incoming MTC accordingly.
     public var localFrameRate: Timecode.FrameRate? {
         get {
             var getMTCFrameRate: Timecode.FrameRate?
@@ -61,7 +66,10 @@ public final class MTCReceiver {
         
     /// The SMPTE frame rate (24, 25, 29.97d, or 30) that was last received by the receiver.
     ///
-    /// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the ``localFrameRate`` property is used for automatic validation and scaling of incoming timecode.
+    /// This property should only be inspected purely for developer informational or diagnostic
+    /// purposes. For production code or any logic related to MTC, it should be ignored -- only the
+    /// ``localFrameRate`` property is used for automatic validation and scaling of incoming
+    /// timecode.
     public var mtcFrameRate: MTCFrameRate {
         var getMTCFrameRate: MTCFrameRate!
             
@@ -89,9 +97,11 @@ public final class MTCReceiver {
         
     // MARK: - Stored closures
         
-    /// Called when a meaningful change to the timecode has occurred which would require its display to be updated.
+    /// Called when a meaningful change to the timecode has occurred which would require its display
+    /// to be updated.
     ///
-    /// Implement this closure for when you only want to display timecode and do not need to sync to MTC.
+    /// Implement this closure for when you only want to display timecode and do not need to sync to
+    /// MTC.
     public var timecodeChangedHandler: ((
         _ timecode: Timecode,
         _ event: MTCMessageType,
@@ -107,7 +117,8 @@ public final class MTCReceiver {
     /// Initialize a new MTC Receiver instance.
     ///
     /// - Parameters:
-    ///   - name: optionally supply a simple, unique alphanumeric name for the instance, used internally to identify the dispatch thread; random UUID will be used if `nil`
+    ///   - name: optionally supply a simple, unique alphanumeric name for the instance, used
+    ///     internally to identify the dispatch thread; random UUID will be used if `nil`
     ///   - initialLocalFrameRate: set an initial local frame rate
     ///   - syncPolicy: set the MTC sync policy
     ///   - timecodeChanged: handle timecode change callbacks, pass `nil` if not needed
@@ -144,8 +155,10 @@ public final class MTCReceiver {
         )
             
         // set up decoder reset timer
-        // we're accounting for the largest reasonable interval of time we are willing to wait until we assume non-contiguous MTC stream has stopped or failed
-        // it would be reasonable to allow for the slowest frame rate (23.976fps) and round up by a modest margin:
+        // we're accounting for the largest reasonable interval of time we are willing to wait until
+        // we assume non-contiguous MTC stream has stopped or failed
+        // it would be reasonable to allow for the slowest frame rate (23.976fps) and round up by a
+        // modest margin:
         // 1 frame @ 23.976 = 41.7... ms
         // 1 quarter-frame = 41.7/4 = 10.4... ms
         // Timer checking twice per QF = ~5.0ms intervals = 200Hz
@@ -210,7 +223,8 @@ public final class MTCReceiver {
         
     /// Internal: Fired from our timer object.
     internal func timerFired() {
-        // this will be called by the timer which operates on our internal queue, so we don't need to wrap this in queue.async { }
+        // this will be called by the timer which operates on our internal queue, so we don't need
+        // to wrap this in queue.async { }
             
         let timeNow = clock_gettime_monotonic_raw()
             
@@ -241,7 +255,9 @@ public final class MTCReceiver {
             
         let freewheelTimeout = timespec(dropOutFramesDuration)
             
-        // if >20ms window of time since last quarter frame, assume MTC message stream has been stopped/interrupted or being received at a speed less than realtime (ie: when Pro Tools plays back at half-speed) and reset our internal tracker
+        // if >20ms window of time since last quarter frame, assume MTC message stream has been
+        // stopped/interrupted or being received at a speed less than realtime (ie: when Pro Tools
+        // plays back at half-speed) and reset our internal tracker
         if clockDiff > continuousQFTimeout,
            clockDiff < freewheelTimeout
         {
@@ -261,7 +277,8 @@ public final class MTCReceiver {
 extension MTCReceiver: ReceivesMIDIEvents {
     /// Incoming MIDI messages (Async on MTCReceiver queue)
     public func midiIn(event: MIDIEvent) {
-        // The decoder's midiIn can trigger handler callbacks as a result, which will in turn all be executed on the queue
+        // The decoder's midiIn can trigger handler callbacks as a result, which will in turn all be
+        // executed on the queue
         
         queue.sync {
             self.decoder.midiIn(event: event)

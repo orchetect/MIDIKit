@@ -1,7 +1,7 @@
 //
 //  MIDINote Name.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDINote {
@@ -171,7 +171,9 @@ extension MIDINote {
         /// Returns the note name as a string.
         ///
         /// - Parameters:
-        ///   - respellSharpAsFlat: If note is sharp, respell enharmonically as a flat (ie: G♯ becomes A♭) Otherwise, sharp is always used, which is typical convention for MIDI note names.
+        ///   - respellSharpAsFlat: If note is sharp, respell enharmonically as a flat (ie: G♯
+        /// becomes A♭) Otherwise, sharp is always used, which is typical convention for MIDI note
+        /// names.
         ///   - unicodeAccidental: Use stylized unicode character for sharp (♯) and flat (♭).
         public func stringValue(
             respellSharpAsFlat: Bool = false,
@@ -221,7 +223,8 @@ extension MIDINote {
             // swiftformat:enable spacearoundoperators
         }
     
-        /// Returns `true` if note is sharp (has a ♯ accidental). On a piano keyboard, this would be a black key.
+        /// Returns `true` if note is sharp (has a ♯ accidental).
+        /// On a piano keyboard, this would be a black key.
         public var isSharp: Bool {
             switch self {
             case .A,

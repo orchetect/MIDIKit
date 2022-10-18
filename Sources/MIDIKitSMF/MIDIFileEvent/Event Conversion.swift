@@ -1,13 +1,14 @@
 //
 //  Event Conversion.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
 extension MIDIEvent {
-    /// Convert the MIDIKit I/O event case (``MIDIEvent``) to a MIDIKitSMF event case (``MIDIFileEvent``).
+    /// Convert the MIDIKit I/O event case (``MIDIEvent``) to a MIDIKitSMF event case
+    /// (``MIDIFileEvent``).
     ///
     /// Not all MIDI I/O events translate to MIDI File events, in which case `nil` will be returned.
     public func smfEvent(delta: MIDIFileEvent.DeltaTime) -> MIDIFileEvent? {
@@ -83,7 +84,8 @@ extension MIDIEvent {
 }
 
 extension MIDIFileEvent {
-    /// Convert the MIDIKitSMF event case (``MIDIFileEvent``) to a MIDIKit I/O event case (``MIDIEvent``).
+    /// Convert the MIDIKitSMF event case (``MIDIFileEvent``) to a MIDIKit I/O event case
+    /// (``MIDIEvent``).
     ///
     /// Not all MIDI File events translate to MIDI I/O events, in which case `nil` will be returned.
     public func event() -> MIDIEvent? {

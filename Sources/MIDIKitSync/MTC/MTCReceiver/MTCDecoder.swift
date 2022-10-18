@@ -1,7 +1,7 @@
 //
 //  MTCDecoder.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 // Notes:
@@ -10,9 +10,15 @@
 // ---------
 // - Pro Tools (as of v2018.4) does not send any full frame messages.
 // - Essentially, it does not send any location or relocation messages of any kind over MTC.
-// - When normal playback begins (forwards in time, at 1:1 speed), PT starts transmitting quarter-frames. When playback stops, it simply stops transmitting quarter-frames. It does not complete a full frame before stopping MTC transmission, it will stop at the last quarter-frame
-// - When half-speed playback starts (forwards in time, at half-speed), PT will transmit quarter-frames as normal, but they will transmit at half the speed. This is not necessary meant for the receiver to synchronize playback to, but to simply continue receiving timecode values to update its timecode display.
-// - Pro Tools is capable of forwards and backwards scrubbing at various speeds, but does not transmit any MTC data while doing those operations.
+// - When normal playback begins (forwards in time, at 1:1 speed), PT starts transmitting
+// quarter-frames. When playback stops, it simply stops transmitting quarter-frames. It does not
+// complete a full frame before stopping MTC transmission, it will stop at the last quarter-frame
+// - When half-speed playback starts (forwards in time, at half-speed), PT will transmit
+// quarter-frames as normal, but they will transmit at half the speed. This is not necessary meant
+// for the receiver to synchronize playback to, but to simply continue receiving timecode values to
+// update its timecode display.
+// - Pro Tools is capable of forwards and backwards scrubbing at various speeds, but does not
+// transmit any MTC data while doing those operations.
 //
 // Cubase
 // ------
@@ -30,13 +36,20 @@ import TimecodeKit
 ///
 /// Takes a stream of MIDI events and produces timecode values.
 ///
-/// This object is not affected by or reliant on timing at all and simply processes events as they are received. For inbound MTC sync, use the ``MTCReceiver`` wrapper object which adds additional abstraction for managing MTC sync state.
+/// This object is not affected by or reliant on timing at all and simply processes events as they
+/// are received. For inbound MTC sync, use the ``MTCReceiver`` wrapper object which adds additional
+/// abstraction for managing MTC sync state.
 ///
 /// > Note:
 /// >
-/// > - A running MTC data stream (during playback) only updates the frame number every 2 frames, so this data stream should not be relied on for deriving exact frame position, but rather as a mechanism for displaying running timecode to the user on screen or synchronizing playback to the incoming MTC data stream.
+/// > - A running MTC data stream (during playback) only updates the frame number every 2 frames, so
+/// this data stream should not be relied on for deriving exact frame position, but rather as a
+/// mechanism for displaying running timecode to the user on screen or synchronizing playback to the
+/// incoming MTC data stream.
 /// >
-/// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate timecodes when scrubbing or locating to different times, but will be limited to the base frame rates supported by MTC.
+/// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate
+/// timecodes when scrubbing or locating to different times, but will be limited to the base frame
+/// rates supported by MTC.
 public final class MTCDecoder {
     // MARK: - Public properties
         
@@ -54,9 +67,11 @@ public final class MTCDecoder {
         
     /// The frame rate the local system is using.
     ///
-    /// When set, MTC frame numbers will be scaled to real frame rate frame numbers, but only when the incoming MTC frame rate and the ``localFrameRate`` are compatible.
+    /// When set, MTC frame numbers will be scaled to real frame rate frame numbers, but only when
+    /// the incoming MTC frame rate and the ``localFrameRate`` are compatible.
     ///
-    /// Remember to also set this any time the local frame rate changes so the receiver can interpret the incoming MTC accordingly.
+    /// Remember to also set this any time the local frame rate changes so the receiver can
+    /// interpret the incoming MTC accordingly.
     public var localFrameRate: Timecode.FrameRate?
         
     /// Status of the direction of MTC quarter-frames received
@@ -64,9 +79,11 @@ public final class MTCDecoder {
         
     // MARK: - Stored closures
         
-    /// Called when a meaningful change to the timecode has occurred which would require its display to be updated.
+    /// Called when a meaningful change to the timecode has occurred which would require its display
+    /// to be updated.
     ///
-    /// Implement this closure for when you only want to display timecode and do not need to sync to MTC.
+    /// Implement this closure for when you only want to display timecode and do not need to sync to
+    /// MTC.
     internal var timecodeChangedHandler: ((
         _ timecode: Timecode,
         _ event: MTCMessageType,
@@ -74,9 +91,11 @@ public final class MTCDecoder {
         _ displayNeedsUpdate: Bool
     ) -> Void)?
         
-    /// Sets the closure called when a meaningful change to the timecode has occurred which would require its display to be updated.
+    /// Sets the closure called when a meaningful change to the timecode has occurred which would
+    /// require its display to be updated.
     ///
-    /// Implement this closure for when you only want to display timecode and do not need to sync to MTC.
+    /// Implement this closure for when you only want to display timecode and do not need to sync to
+    /// MTC.
     public func setTimecodeChangedHandler(
         _ handler: ((
             _ timecode: Timecode,
@@ -90,12 +109,15 @@ public final class MTCDecoder {
         
     /// Called only when the incoming MTC stream changes its frame rate classification.
     ///
-    /// This can usually be ignored, as the ``MTCDecoder`` can handle scaling and validation of the frame rate information from the stream transparently.
+    /// This can usually be ignored, as the ``MTCDecoder`` can handle scaling and validation of the
+    /// frame rate information from the stream transparently.
     internal var mtcFrameRateChangedHandler: ((_ rate: MTCFrameRate) -> Void)?
         
-    /// Sets the closure called only when the incoming MTC stream changes its frame rate classification.
+    /// Sets the closure called only when the incoming MTC stream changes its frame rate
+    /// classification.
     ///
-    /// This can usually be ignored, as the ``MTCDecoder`` can handle scaling and validation of the frame rate information from the stream transparently.
+    /// This can usually be ignored, as the ``MTCDecoder`` can handle scaling and validation of the
+    /// frame rate information from the stream transparently.
     public func setMTCFrameRateChangedHandler(
         _ handler: ((_ rate: MTCFrameRate) -> Void)?
     ) {
@@ -266,8 +288,10 @@ extension MTCDecoder: ReceivesMIDIEvents {
     
     /// Quarter-frame messages
     /// ----------------------
-    /// Since it takes eight quarter-frames for a complete time code message, the complete SMPTE time is updated every two frames.
-    /// A quarter-frame message consists of a status byte of 0xF1, followed by a single 7-bit data value: 3 bits to identify the piece, and 4 bits of partial time code.
+    /// Since it takes eight quarter-frames for a complete time code message, the complete SMPTE
+    /// time is updated every two frames.
+    /// A quarter-frame message consists of a status byte of 0xF1, followed by a single 7-bit data
+    /// value: 3 bits to identify the piece, and 4 bits of partial time code.
     internal func processQF(dataByte: UInt8) {
         // Verbose debugging - careful when enabling this!
         // -----------------------------------------------
@@ -282,10 +306,19 @@ extension MTCDecoder: ReceivesMIDIEvents {
         
         // Quarter-frame messages are received in this order during playback.
         // Piece 0 is transmitted at the coded moment.
-        // When time is running forward, the piece numbers increment from 0–7; with the time that piece 0 is transmitted is the coded instant, and the remaining pieces are transmitted later.
-        // If rewinding, data is received in reverse order. Again, piece 0 is transmitted at the coded moment.
-        // Since 8 Quarter Frame messages are required to piece together the current SMPTE time, timing lock can't be achieved until the slave has received all 8 messages. This will take from 2 to 4 SMPTE Frames, depending upon when the slave comes online.
-        // The Frame number (contained in the first 2 Quarter Frame messages) is the SMPTE Frames Time for when the first Quarter Frame message is sent. But, because it takes 7 more quarter-frames to piece together the current SMPTE Time, when the slave does finally piece the time together, it is actually 2 SMPTE Frames behind the real current time. So, for display purposes, the slave should always add 2 frames to the current time.
+        // When time is running forward, the piece numbers increment from 0–7; with the time that
+        // piece 0 is transmitted is the coded instant, and the remaining pieces are transmitted
+        // later.
+        // If rewinding, data is received in reverse order. Again, piece 0 is transmitted at the
+        // coded moment.
+        // Since 8 Quarter Frame messages are required to piece together the current SMPTE time,
+        // timing lock can't be achieved until the slave has received all 8 messages. This will take
+        // from 2 to 4 SMPTE Frames, depending upon when the slave comes online.
+        // The Frame number (contained in the first 2 Quarter Frame messages) is the SMPTE Frames
+        // Time for when the first Quarter Frame message is sent. But, because it takes 7 more
+        // quarter-frames to piece together the current SMPTE Time, when the slave does finally
+        // piece the time together, it is actually 2 SMPTE Frames behind the real current time. So,
+        // for display purposes, the slave should always add 2 frames to the current time.
         //
         // Piece #  Data byte   Significance
         // -------  ---------   ------------
@@ -491,7 +524,8 @@ extension MTCDecoder: ReceivesMIDIEvents {
         }
     }
     
-    /// Parses framerate info received from MTC stream and stores value
+    /// Internal:
+    /// Parses framerate info received from MTC stream and stores value.
     /// - Parameter rateBits: two-bit number
     internal func setMTCFrameRate(rateBits: UInt8) {
         if let bits = MTCFrameRate(rateBits) {
@@ -499,7 +533,9 @@ extension MTCDecoder: ReceivesMIDIEvents {
         }
     }
     
-    /// Internal: Returns true if all 8 quarter-frames have been received in order to assemble a full MTC timecode
+    /// Internal:
+    /// Returns true if all 8 quarter-frames have been received in order to assemble a full MTC
+    /// timecode.
     internal func qfBufferComplete() -> Bool {
         // return cached true value
         if quarterFrameBufferIsComplete { return true }
@@ -525,7 +561,9 @@ extension MTCDecoder: ReceivesMIDIEvents {
     ///
     /// You may want to call this, for example, when QF stream is lost or interrupted.
     ///
-    /// Flushing the registers will ensure that the next quarter-frame stream received is treated as a new stream and can avoid forming nonsense timecodes prior to receiving the full 8 quarter-frames.
+    /// Flushing the registers will ensure that the next quarter-frame stream received is treated as
+    /// a new stream and can avoid forming nonsense timecodes prior to receiving the full 8
+    /// quarter-frames.
     public func resetQFBuffer() {
         TC_H_lsb_received = false
         TC_H_msb_received = false

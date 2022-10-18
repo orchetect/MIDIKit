@@ -1,29 +1,33 @@
 //
 //  MIDIEndpoints.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
 
-// this protocol may not be necessary, it was experimental so that the `MIDIManager.endpoints` property could be swapped out with a different Endpoints class with Combine support
+// this protocol may not be necessary, it was experimental so that the `MIDIManager.endpoints`
+// property could be swapped out with a different Endpoints class with Combine support
 public protocol MIDIIOEndpointsProtocol {
     /// List of MIDI input endpoints in the system.
     var inputs: [MIDIInputEndpoint] { get }
     
-    /// List of MIDI input endpoints in the system omitting virtual endpoints owned by the ``MIDIManager`` instance.
+    /// List of MIDI input endpoints in the system omitting virtual endpoints owned by the
+    /// ``MIDIManager`` instance.
     var inputsUnowned: [MIDIInputEndpoint] { get }
     
     /// List of MIDI output endpoints in the system.
     var outputs: [MIDIOutputEndpoint] { get }
     
-    /// List of MIDI output endpoints in the system omitting virtual endpoints owned by the ``MIDIManager`` instance.
+    /// List of MIDI output endpoints in the system omitting virtual endpoints owned by the
+    /// ``MIDIManager`` instance.
     var outputsUnowned: [MIDIOutputEndpoint] { get }
     
     /// Manually update the locally cached contents from the system.
-    /// This method does not need to be manually invoked, as it is called automatically by the ``MIDIManager`` when MIDI system endpoints change.
+    /// This method does not need to be manually invoked, as it is called automatically by the
+    /// ``MIDIManager`` when MIDI system endpoints change.
     mutating func update()
 }
 

@@ -1,7 +1,7 @@
 //
 //  TimeBase.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -21,9 +21,11 @@ extension MIDIFile {
         
         /// SMPTE Timecode
         ///
-        /// Typical `ticksPerFrame` values are 4 (corresponding to MIDI Timecode), 8, 10, 80 (corresponding to SMPTE bit resolution), or 100.
+        /// Typical `ticksPerFrame` values are 4 (corresponding to MIDI Timecode), 8, 10,
+        /// 80 (corresponding to SMPTE bit resolution), or 100.
         ///
-        /// (A timing resolution of 1 ms can be achieved by specifying 25 fps and 40 sub-frames, which would be encoded in hex as E7 28.)
+        /// (A timing resolution of 1 ms can be achieved by specifying 25 fps and 40 sub-frames,
+        /// which would be encoded in hex as E7 28.)
         case timecode(smpteFormat: FrameRate, ticksPerFrame: UInt8)
     }
 }

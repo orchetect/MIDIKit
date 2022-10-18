@@ -1,7 +1,7 @@
 //
 //  SystemReset.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -10,7 +10,10 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed.
+    /// > System Reset commands all devices in a system to return to their initialized, power-up
+    /// condition. This message should be used sparingly, and should typically be sent by manual
+    /// control only. It should not be sent automatically upon power-up and under no condition
+    /// should this message be echoed.
     public struct SystemReset: Equatable, Hashable {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
@@ -25,7 +28,10 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// System Reset commands all devices in a system to return to their initialized, power-up condition. This message should be used sparingly, and should typically be sent by manual control only. It should not be sent automatically upon power-up and under no condition should this message be echoed.
+    /// System Reset commands all devices in a system to return to their initialized, power-up
+    /// condition. This message should be used sparingly, and should typically be sent by manual
+    /// control only. It should not be sent automatically upon power-up and under no condition
+    /// should this message be echoed.
     ///
     /// - Parameters:
     ///   - group: UMP Group (`0x0 ... 0xF`)
@@ -39,14 +45,16 @@ extension MIDIEvent {
 extension MIDIEvent.SystemReset {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
         [0xFF]
     }
     
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .systemRealTimeAndCommon
     

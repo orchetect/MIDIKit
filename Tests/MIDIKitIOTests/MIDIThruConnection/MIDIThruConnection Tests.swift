@@ -1,10 +1,11 @@
 //
 //  MIDIThruConnection Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
-// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets
+// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI
+// ports, so skip these tests on iOS targets
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
@@ -195,7 +196,8 @@ final class MIDIThruConnection_Tests: XCTestCase {
         connEvents = []
     }
     
-    /// Tests getting thru connection parameters from Core MIDI after creating the thru connection and verifying they are correct.
+    /// Tests getting thru connection parameters from Core MIDI after creating the thru connection
+    /// and verifying they are correct.
     func testGetParams() throws {
         try XCTSkipIf(
             !isThruConnectionsSupportedOnCurrentPlatform,

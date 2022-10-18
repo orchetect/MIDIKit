@@ -1,7 +1,7 @@
 //
 //  Core MIDI Endpoints.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -64,7 +64,8 @@ internal func getSystemSourceEndpoints(
 }
     
 /// Internal:
-/// Returns the first source `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`. If not found, returns `nil`.
+/// Returns the first source `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`.
+/// If not found, returns `nil`.
 ///
 /// - Parameter uniqueID: MIDI port unique ID to search for.
 internal func getSystemSourceEndpoint(
@@ -96,7 +97,8 @@ internal func getSystemDestinationEndpoints(
 }
     
 /// Internal:
-/// Returns the first destination `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`. If not found, returns `nil`.
+/// Returns the first destination `MIDIEndpointRef` in the system with a unique ID matching
+/// `uniqueID`. If not found, returns `nil`.
 ///
 /// - Parameter uniqueID: MIDI port unique ID to search for.
 internal func getSystemDestinationEndpoint(

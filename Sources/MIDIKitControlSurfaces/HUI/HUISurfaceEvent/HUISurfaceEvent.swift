@@ -1,13 +1,15 @@
 //
 //  HUISurfaceEvent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
 /// HUI Surface Event: basic HUI surface message definition.
-/// These events are sent from the client surface to the host as a result of user interaction with the surface: when the user moves a fader, turns a V-Pot knob, presses a button, or otherwise interacts with any aspect of the surface.
+/// These events are sent from the client surface to the host as a result of user interaction with
+/// the surface: when the user moves a fader, turns a V-Pot knob, presses a button, or otherwise
+/// interacts with any aspect of the surface.
 public enum HUISurfaceEvent: Equatable, Hashable {
     /// HUI ping message.
     case ping

@@ -1,7 +1,7 @@
 //
 //  MTCFrameRate Translation.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -35,7 +35,8 @@ extension MTCFrameRate {
 }
 
 extension Timecode.FrameRate {
-    /// Returns the base MTC frame rate that DAWs use to transmit timecode (scaling frame number if necessary)
+    /// Returns the base MTC frame rate that DAWs use to transmit timecode (scaling frame number if
+    /// necessary)
     public var mtcFrameRate: MTCFrameRate {
         switch self {
         case ._23_976:      return .mtc24
@@ -72,22 +73,27 @@ extension Timecode.FrameRate {
 extension MTCFrameRate {
     /// Scales MTC frames at `self` MTC base rate to frames at other timecode frame rate.
     ///
-    /// - Note: This is a specialized calculation, and is intended to act upon raw MTC frames as decoded from quarter-frame messages; not intended to be a generalized scale function.
+    /// - Note: This is a specialized calculation, and is intended to act upon raw MTC frames as
+    /// decoded from quarter-frame messages; not intended to be a generalized scale function.
     ///
-    /// This is a double-duty function which first checks frame rate compatibility (and returns `nil` if rates are not H:MM:SS stable), then returns the scaled frames value if they are compatible.
+    /// This is a double-duty function which first checks frame rate compatibility (and returns
+    /// `nil` if rates are not H:MM:SS stable), then returns the scaled frames value if they are
+    /// compatible.
     ///
     /// - Parameters:
     ///   - fromRawMTCFrames: Raw MTC frame number, as decoded from quarter-frame messages.
     ///   - quarterFrames: Number of QFs elapsed (0...7).
     ///   - timecodeRate: Real timecode frame rate to scale to.
     ///
-    /// - Returns: A `Double` is returned with the integer part representing frame number and the fractional part representing the fraction of the frame derived from quarter-frames.
+    /// - Returns: A `Double` is returned with the integer part representing frame number and the
+    /// fractional part representing the fraction of the frame derived from quarter-frames.
     internal func scaledFrames(
         fromRawMTCFrames: Int,
         quarterFrames: UInt8,
         to timecodeRate: Timecode.FrameRate
     ) -> Double? {
-        // if real timecode frame rates are not compatible (H:MM:SS stable), frame value scaling is not possible
+        // if real timecode frame rates are not compatible (H:MM:SS stable), frame value scaling is
+        // not possible
         guard derivedFrameRates.contains(timecodeRate) else {
             return nil
         }
@@ -96,7 +102,8 @@ extension MTCFrameRate {
         let rawMTCFrames = max(0, fromRawMTCFrames)
         let rawMTCQuarterFrames = min(max(0, quarterFrames), 7)
         
-        // baseline check: if MTC frame rate is exactly equivalent to resultant timecode frame rate, skip the scale math
+        // baseline check: if MTC frame rate is exactly equivalent to resultant timecode frame rate,
+        // skip the scale math
         if directEquivalentFrameRate == timecodeRate {
             return rawMTCQuarterFrames == 0
                 ? Double(rawMTCFrames)
@@ -111,7 +118,8 @@ extension MTCFrameRate {
         var scaled = (_rawMTCFrames + _frameFraction) * timecodeRate.mtcScaleFactor
         
         // account for 24.98fps rounding weirdness
-        // due to it being transmit as MTC-24fps, the scaled value will always be underestimated so adding a static offset is a clumsy but effective workaround
+        // due to it being transmit as MTC-24fps, the scaled value will always be underestimated so
+        // adding a static offset is a clumsy but effective workaround
         if timecodeRate == ._24_98 {
             if scaled > 0.0 {
                 scaled += 0.24
@@ -126,11 +134,15 @@ extension MTCFrameRate {
 extension Timecode.FrameRate {
     /// Scales frames at other timecode frame rate to MTC frames at `self` MTC base rate.
     ///
-    /// - Note: This is a specialized calculation, and is intended to produce raw MTC frames and quarter-frame messages; not intended to be a generalized scale function.
+    /// - Note: This is a specialized calculation, and is intended to produce raw MTC frames and
+    /// quarter-frame messages; not intended to be a generalized scale function.
     ///
-    /// - Parameter fromTimecodeFrames: A `Double` with the integer part representing frame number and the fractional part representing the fraction of the frame.
+    /// - Parameter fromTimecodeFrames: A `Double` with the integer part representing frame number
+    /// and the fractional part representing the fraction of the frame.
     ///
-    /// - Returns: `(rawMTCFrames: Int, rawMTCQuarterFrames: UInt8)` where `rawMTCFrames` is raw MTC frame number, as decoded from quarter-frame messages and `rawMTCQuarterFrames` is number of QFs elapsed (`0 ... 7`).
+    /// - Returns: `(rawMTCFrames: Int, rawMTCQuarterFrames: UInt8)` where `rawMTCFrames` is raw MTC
+    /// frame number, as decoded from quarter-frame messages and `rawMTCQuarterFrames` is number of
+    /// QFs elapsed (`0 ... 7`).
     internal func scaledFrames(
         fromTimecodeFrames: Double
     ) -> (

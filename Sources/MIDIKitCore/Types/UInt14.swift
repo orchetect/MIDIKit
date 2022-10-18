@@ -1,7 +1,7 @@
 //
 //  UInt14.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -111,7 +111,8 @@ extension UInt14 {
     /// Returns the integer as a `UInt16` instance.
     public var uInt16Value: UInt16 { storage }
     
-    /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral midpoint at 8192).
+    /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral
+    /// midpoint at 8192).
     /// (`0 ... 8192 ... 16383` == `-1.0 ... 0.0 ... 1.0`)
     public var bipolarUnitIntervalValue: Double {
         // account for non-symmetry and round up. (This is how MIDI 1.0 Spec pitchbend works)

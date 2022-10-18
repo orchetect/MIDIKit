@@ -1,7 +1,7 @@
 //
 //  Int7.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -14,7 +14,8 @@ public struct Int7 {
     var sixBitStorage: UInt8
     var isNegative: Bool
     
-    /// Initializes from an unsigned integer value, throwing an exception in the event of overflow or underflow.
+    /// Initializes from an unsigned integer value, throwing an exception in the event of overflow
+    /// or underflow.
     public init<I: UnsignedInteger>(_ source: I) {
         switch source {
         case 0 ... 63:
@@ -30,7 +31,8 @@ public struct Int7 {
         }
     }
     
-    /// Initializes from a signed integer value, throwing an exception in the event of overflow or underflow.
+    /// Initializes from a signed integer value, throwing an exception in the event of overflow or
+    /// underflow.
     public init<I: SignedInteger>(_ source: I) {
         switch source {
         case ...(-65):
@@ -55,13 +57,15 @@ public struct Int7 {
         }
     }
     
-    /// Initializes from an unsigned integer value, returning nil if the value cannot be preserved because it would otherwise overflow or underflow.
+    /// Initializes from an unsigned integer value, returning nil if the value cannot be preserved
+    /// because it would otherwise overflow or underflow.
     public init?<I: UnsignedInteger>(exactly source: I) {
         guard (-64 ... 63).contains(source) else { return nil }
         self.init(truncatingIfNecessary: source)
     }
     
-    /// Initializes from a signed integer value, returning nil if the value cannot be preserved because it would otherwise overflow or underflow.
+    /// Initializes from a signed integer value, returning nil if the value cannot be preserved
+    /// because it would otherwise overflow or underflow.
     public init?<I: SignedInteger>(exactly source: I) {
         guard (-64 ... 63).contains(source) else { return nil }
         self.init(truncatingIfNecessary: source)

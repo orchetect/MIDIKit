@@ -1,20 +1,28 @@
 //
 //  HUICoreEvent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
 /// HUI Core Event.
-/// Abstracts raw HUI messages into basic common-currency HUI message types carrying raw data as encoded.
+/// Abstracts raw HUI messages into basic common-currency HUI message types carrying raw data as
+/// encoded.
 ///
-/// > This event can be used in either direction (to client surface or to host) but not all events are relevant.
+/// > This event can be used in either direction (to client surface or to host) but not all events
+/// are relevant.
 /// >
 /// > For example:
 /// >
-/// > - Both a host and client surface can send channel strip Solo state to each other. The host sends the state to the client surface, and the client surface updates its state and UI to reflect it. Then the user can interact with the client surface at any time to toggle the Solo button which sends the same message back to the host, causing the host to toggle the corresponding track Solo.
-/// > - A host can send a time display change to a client surface, but a client surface cannot send any time display changes back to the host. It is a read-only display on the client surface and there is no way to interact with it.
+/// > - Both a host and client surface can send channel strip Solo state to each other. The host
+/// sends the state to the client surface, and the client surface updates its state and UI to
+/// reflect it. Then the user can interact with the client surface at any time to toggle the Solo
+/// button which sends the same message back to the host, causing the host to toggle the
+/// corresponding track Solo.
+/// > - A host can send a time display change to a client surface, but a client surface cannot send
+/// any time display changes back to the host. It is a read-only display on the client surface and
+/// there is no way to interact with it.
 internal enum HUICoreEvent: Equatable, Hashable {
     /// HUI ping message.
     case ping
@@ -34,7 +42,8 @@ internal enum HUICoreEvent: Equatable, Hashable {
     
     /// V-Pot encoding.
     /// When encoding host → surface, this is the LED preset index.
-    /// When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
+    /// When encoding surface → host, this is the delta rotary knob change value -/+ when the user
+    /// turns the knob.
     case vPot(
         vPot: HUIVPot,
         value: HUIVPotValue
@@ -47,9 +56,12 @@ internal enum HUICoreEvent: Equatable, Hashable {
     
     /// Time Display digits.
     ///
-    /// Between one and 8 digits, indexed in the array from right-to-left of the actual display. (Index 0 is the rightmost character).
+    /// Between one and 8 digits, indexed in the array from right-to-left of the actual display.
+    /// (Index 0 is the rightmost character).
     ///
-    /// This is because HUI encodes time display digits in reverse order since the digits on the righthand side of a time display will update most frequently, which allows conservation of data bandwidth when transmitting frequent time display changes.
+    /// This is because HUI encodes time display digits in reverse order since the digits on the
+    /// righthand side of a time display will update most frequently, which allows conservation of
+    /// data bandwidth when transmitting frequent time display changes.
     case timeDisplay(charsRightToLeft: [HUITimeDisplayCharacter])
     
     /// Select Assign 4-character text display.

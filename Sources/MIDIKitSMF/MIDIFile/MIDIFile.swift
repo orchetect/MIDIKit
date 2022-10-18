@@ -1,7 +1,7 @@
 //
 //  MIDIFile.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -29,7 +29,8 @@ public struct MIDIFile: Equatable {
         
     /// Storage for tracks in the MIDI file.
     ///
-    /// The ``Chunk/Header`` chunk is managed automatically and is not instanced as a ``MIDIFile/chunks`` member.
+    /// The ``Chunk/Header`` chunk is managed automatically and is not instanced as a
+    /// ``MIDIFile/chunks`` member.
     public var chunks: [Chunk] = []
         
     // MARK: - Init

@@ -1,7 +1,7 @@
 //
 //  Hex and Binary String.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -37,7 +37,8 @@ extension Collection where Element: BinaryInteger {
             .joined(separator: separator)
     }
     
-    /// Returns a collection of integers as a flat string of hex strings padded to _n_ characters after the prefix.
+    /// Returns a collection of integers as a flat string of hex strings
+    /// padded to _n_ characters after the prefix.
     /// Prefixes optional.
     public func hexString(
         padEachTo: Int,
@@ -80,7 +81,8 @@ extension Collection where Element: BinaryInteger {
             .joined(separator: separator)
     }
     
-    /// Returns a collection of integers as a flat string of binary strings padded to _n_ characters after the prefix.
+    /// Returns a collection of integers as a flat string of binary strings
+    /// padded to _n_ characters after the prefix.
     /// Prefixes optional.
     public func binaryString(
         padEachTo: Int,

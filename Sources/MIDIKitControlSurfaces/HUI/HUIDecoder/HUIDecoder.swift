@@ -1,7 +1,7 @@
 //
 //  HUIDecoder.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -62,7 +62,9 @@ extension HUIDecoder: ReceivesMIDIEvents {
     
     /// Decodes a MIDI event.
     ///
-    /// - Returns: One or more HUI core events if the MIDI event results in decoded HUI event(s). Not all MIDI events will generate HUI event(s); some merely update the decoder's internal state, in which case an empty array will be returned. This is not an error condition.
+    /// - Returns: One or more HUI core events if the MIDI event results in decoded HUI event(s).
+    /// Not all MIDI events will generate HUI event(s); some merely update the decoder's internal
+    /// state, in which case an empty array will be returned. This is not an error condition.
     ///
     /// - Throws: An error if the MIDI event was malformed or contained unexpected data.
     func decode(event: MIDIEvent) throws -> [HUICoreEvent] {
@@ -80,8 +82,8 @@ extension HUIDecoder: ReceivesMIDIEvents {
             payload.note.number == 0 &&
             [0, 0x8000].contains(payload.velocity.midi2Value):
             
-            // MIDI 2.0 translation from MIDI 1.0 at the Core MIDI subsystem level
-            // will force MIDI 1.0 Note On events with a velocity of 0 to be a MIDI 2.0 Note Off event.
+            // MIDI 2.0 translation from MIDI 1.0 at the Core MIDI subsystem level will
+            // force MIDI 1.0 Note On events with a velocity of 0 to be a MIDI 2.0 Note Off event.
             // Technically the MIDI 2.0 spec states that the velocity should be 0,
             // however it seems Core MIDI wants to send a 16-bit midpoint value of 0x8000 instead
             
@@ -138,8 +140,8 @@ extension HUIDecoder {
         else {
             throw HUIDecoderError.malformed(
                 "SysEx sub-IDs (first two bytes) are not recognized. "
-                + "It is possible the IDs belong to hardware other than the Mackie HUI. "
-                + "Raw data: [\(data.hexString(padEachTo: 2, prefixes: false))]"
+                    + "It is possible the IDs belong to hardware other than the Mackie HUI. "
+                    + "Raw data: [\(data.hexString(padEachTo: 2, prefixes: false))]"
             )
         }
         
@@ -319,7 +321,8 @@ extension HUIDecoder {
             // V-Pots
             
             // When encoding host → surface, this is the LED preset index.
-            // When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
+            // When encoding surface → host, this is the delta rotary knob change value -/+ when the
+            // user turns the knob.
             
             let number = dataByte1 % 0x10
             guard let vPot = HUIVPot(rawValue: number)
@@ -370,7 +373,10 @@ extension HUIDecoder {
                 state = false
                 
             case 0x2:
-                // Not sure what this is used for. Any of the HUI docs available don't mention it being used. However, Pro Tools transmits switch messages that utilize this sate nibble. It's been observed being transmit when changing a track's automation mode to Read, and one message per track is sent when opening a Pro Tools session.
+                // Not sure what this is used for. Any of the HUI docs available don't mention it
+                // being used. However, Pro Tools transmits switch messages that utilize this sate
+                // nibble. It's been observed being transmit when changing a track's automation mode
+                // to Read, and one message per track is sent when opening a Pro Tools session.
                 Logger.debug(
                     "Received (switch cmd msg 2/2) with unhandled state nibble 0x2. Ignoring."
                 )

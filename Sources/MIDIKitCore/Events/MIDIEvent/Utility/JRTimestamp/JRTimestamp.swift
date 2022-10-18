@@ -1,7 +1,7 @@
 //
 //  JRTimestamp.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -10,17 +10,21 @@ extension MIDIEvent {
     ///
     /// > MIDI 2.0 Spec:
     /// >
-    /// > The JR Timestamp message defines the time of the following message(s). It is a complete message.
+    /// > The JR Timestamp message defines the time of the following message(s). It is a complete
+    /// message.
     /// >
-    /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
+    /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1
+    /// MHz / 32).
     public struct JRTimestamp: Equatable, Hashable {
         /// 16-Bit Time Value
         ///
         /// > MIDI 2.0 Spec:
         /// >
-        /// > The JR Timestamp message defines the time of the following message(s). It is a complete message.
+        /// > The JR Timestamp message defines the time of the following message(s). It is a
+        /// complete message.
         /// >
-        /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
+        /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency
+        /// of 1 MHz / 32).
         public var time: UInt16
     
         /// UMP Group (`0x0 ... 0xF`)
@@ -31,9 +35,11 @@ extension MIDIEvent {
         ///
         /// > MIDI 2.0 Spec:
         /// >
-        /// > The JR Timestamp message defines the time of the following message(s). It is a complete message.
+        /// > The JR Timestamp message defines the time of the following message(s). It is a
+        /// complete message.
         /// >
-        /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
+        /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency
+        /// of 1 MHz / 32).
         public init(
             time: UInt16,
             group: UInt4 = 0x0
@@ -48,9 +54,11 @@ extension MIDIEvent {
     ///
     /// > MIDI 2.0 Spec:
     /// >
-    /// > The JR Timestamp message defines the time of the following message(s). It is a complete message.
+    /// > The JR Timestamp message defines the time of the following message(s). It is a complete
+    /// message.
     /// >
-    /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1 MHz / 32).
+    /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1
+    /// MHz / 32).
     public static func jrTimestamp(
         time: UInt16,
         group: UInt4 = 0x0
@@ -67,7 +75,8 @@ extension MIDIEvent {
 extension MIDIEvent.JRTimestamp {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .utility
     

@@ -1,13 +1,14 @@
 //
 //  HUIHostEvent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
 /// HUI Host Event: basic HUI host message definition.
-/// These events are sent from the host to the client surface to update state of the surface: fader levels, text displays, LEDs, and even triggering beep sounds.
+/// These events are sent from the host to the client surface to update state of the surface: fader
+/// levels, text displays, LEDs, and even triggering beep sounds.
 public enum HUIHostEvent: Equatable, Hashable {
     /// HUI ping message.
     case ping
@@ -44,9 +45,12 @@ public enum HUIHostEvent: Equatable, Hashable {
     
     /// Time Display digits.
     ///
-    /// Between one and 8 digits, indexed in the array from right-to-left of the actual display. (Index 0 is the rightmost character).
+    /// Between one and 8 digits, indexed in the array from right-to-left of the actual display.
+    /// (Index 0 is the rightmost character).
     ///
-    /// This is because HUI encodes time display digits in reverse order since the digits on the righthand side of a time display will update most frequently, which allows conservation of data bandwidth when transmitting frequent time display changes.
+    /// This is because HUI encodes time display digits in reverse order since the digits on the
+    /// righthand side of a time display will update most frequently, which allows conservation of
+    /// data bandwidth when transmitting frequent time display changes.
     case timeDisplay(charsRightToLeft: [HUITimeDisplayCharacter])
     
     /// Select Assign 4-character text display.

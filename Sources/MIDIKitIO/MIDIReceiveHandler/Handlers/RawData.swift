@@ -1,7 +1,7 @@
 //
 //  RawData.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -12,7 +12,8 @@ extension MIDIReceiver {
 
 extension MIDIReceiveHandler {
     /// Raw packet data receive handler.
-    /// This handler is provided for debugging and data introspection but is discouraged for manually parsing MIDI packets. It is recommended to use a MIDI event handler instead.
+    /// This handler is provided for debugging and data introspection but is discouraged for
+    /// manually parsing MIDI packets. It is recommended to use a MIDI event handler instead.
     class RawData: MIDIIOReceiveHandlerProtocol {
         public var handler: MIDIReceiver.RawDataHandler
     

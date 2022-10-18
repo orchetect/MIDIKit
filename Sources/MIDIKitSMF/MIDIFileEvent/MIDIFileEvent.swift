@@ -1,7 +1,7 @@
 //
 //  MIDIFileEvent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -23,7 +23,12 @@ public enum MIDIFileEvent: Equatable, Hashable {
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
-    /// > The MIDI channel (`0 ... 15`) contained in this event may be used to associate a MIDI channel with all events which follow, including System Exclusive and meta-events. This channel is "effective" until the next normal MIDI event (which contains a channel) or the next MIDI Channel Prefix meta-event. If MIDI channels refer to "tracks", this message may help jam several tracks into a format 0 file, keeping their non-MIDI data associated with a track. This capability is also present in Yamaha's ESEQ file format.
+    /// > The MIDI channel (`0 ... 15`) contained in this event may be used to associate a MIDI
+    /// > channel with all events which follow, including System Exclusive and meta-events. This
+    /// > channel is "effective" until the next normal MIDI event (which contains a channel) or the
+    /// > next MIDI Channel Prefix meta-event. If MIDI channels refer to "tracks", this message may
+    /// > help jam several tracks into a format 0 file, keeping their non-MIDI data associated with
+    /// > a track. This capability is also present in Yamaha's ESEQ file format.
     case channelPrefix(delta: DeltaTime, event: ChannelPrefix)
     
     /// Key Signature event.
@@ -118,24 +123,45 @@ public enum MIDIFileEvent: Equatable, Hashable {
     
     /// Unrecognized Meta Event.
     ///
-    /// > Note: This is not designed to be instanced, but is instead a placeholder for unrecognized or malformed data while parsing the contents of a MIDI file. In then allows for manual parsing or introspection of the unrecognized data.
+    /// > Note: This is not designed to be instanced, but is instead a placeholder for unrecognized
+    /// > or malformed data while parsing the contents of a MIDI file. In then allows for manual
+    /// > parsing or introspection of the unrecognized data.
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
-    /// > All meta-events begin with `0xFF`, then have an event type byte (which is always less than 128), and then have the length of the data stored as a variable-length quantity, and then the data itself. If there is no data, the length is `0`. As with chunks, future meta-events may be designed which may not be known to existing programs, so programs must properly ignore meta-events which they do not recognize, and indeed, should expect to see them. Programs must never ignore the length of a meta-event which they do recognize, and they shouldn't be surprised if it's bigger than they expected. If so, they must ignore everything past what they know about. However, they must not add anything of their own to the end of a meta-event.
+    /// > All meta-events begin with `0xFF`, then have an event type byte (which is always less than
+    /// > 128), and then have the length of the data stored as a variable-length quantity, and then
+    /// > the data itself. If there is no data, the length is `0`. As with chunks, future
+    /// > meta-events may be designed which may not be known to existing programs, so programs must
+    /// > properly ignore meta-events which they do not recognize, and indeed, should expect to see
+    /// > them.
+    /// > Programs must never ignore the length of a meta-event which they do recognize, and they
+    /// > shouldn't be surprised if it's bigger than they expected. If so, they must ignore
+    /// > everything past what they know about. However, they must not add anything of their own to
+    /// > the end of a meta-event.
     /// >
-    /// > SysEx events and meta-events cancel any running status which was in effect. Running status does not apply to and may not be used for these messages.
+    /// > SysEx events and meta-events cancel any running status which was in effect. Running status
+    /// > does not apply to and may not be used for these messages.
     case unrecognizedMeta(delta: DeltaTime, event: UnrecognizedMeta)
     
     /// XMF Patch Type Prefix event.
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
-    /// > XMF Type 0 and Type 1 files contain Standard MIDI Files (SMF). Each SMF Track in such XMF files may be designated to use either standard General MIDI 1 or General MIDI 2 instruments supplied by the player, or custom DLS instruments supplied via the XMF file. This document defines a new SMF Meta-Event to be used for this purpose.
+    /// > XMF Type 0 and Type 1 files contain Standard MIDI Files (SMF). Each SMF Track in such XMF
+    /// > files may be designated to use either standard General MIDI 1 or General MIDI 2
+    /// > instruments supplied by the player, or custom DLS instruments supplied via the XMF file.
+    /// > This document defines a new SMF Meta-Event to be used for this purpose.
     /// >
-    /// > In a Type 0 or Type 1 XMF File, this meta-event specifies how to interpret subsequent Program Change and Bank Select messages appearing in the same SMF Track: as General MIDI 1, General MIDI 2, or DLS. In the absence of an initial XMF Patch Type Prefix Meta-Event, General MIDI 1 (instrument set and system behavior) is chosen by default.
+    /// > In a Type 0 or Type 1 XMF File, this meta-event specifies how to interpret subsequent
+    /// > Program Change and Bank Select messages appearing in the same SMF Track: as General MIDI
+    /// > 1, General MIDI 2, or DLS. In the absence of an initial XMF Patch Type Prefix Meta-Event,
+    /// > General MIDI 1 (instrument set and system behavior) is chosen by default.
     /// >
-    /// > In a Type 0 or Type 1 XMF File, no SMF Track may be reassigned to a different instrument set (GM1, GM2, or DLS) at any time. Therefore, this meta-event should only be processed if it appears as the first message in an SMF Track; if it appears anywhere else in an SMF Track, it must be ignored.
+    /// > In a Type 0 or Type 1 XMF File, no SMF Track may be reassigned to a different instrument
+    /// > set (GM1, GM2, or DLS) at any time. Therefore, this meta-event should only be processed if
+    /// > it appears as the first message in an SMF Track; if it appears anywhere else in an SMF
+    /// > Track, it must be ignored.
     /// >
     /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
     case xmfPatchTypePrefix(delta: DeltaTime, event: XMFPatchTypePrefix)

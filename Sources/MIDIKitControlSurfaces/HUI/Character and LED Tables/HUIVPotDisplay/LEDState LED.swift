@@ -1,7 +1,7 @@
 //
 //  LEDState LED.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -80,7 +80,8 @@ extension HUIVPotDisplay.LEDState.LED {
         }
     }
     
-    /// Initialize from the LED count from center as an absolute (positive) unit interval (`0.0 ... 1.0`).
+    /// Initialize from the LED count from center as
+    /// an absolute (positive) unit interval (`0.0 ... 1.0`).
     public init?(radiusUnitInterval: Double) {
         switch radiusUnitInterval {
         case 0.0 ..< 0.2: self = .C
@@ -102,7 +103,9 @@ extension HUIVPotDisplay.LEDState.LED {
 // MARK: - Unit Interval
 
 extension HUIVPotDisplay.LEDState.LED {
-    /// Initialize from a unit interval (`0.0 ... 1.0`) corresponding to the nearest LED position from left-to-right. Value will be clamped.
+    /// Initialize from a unit interval (`0.0 ... 1.0`) corresponding
+    /// to the nearest LED position from left-to-right.
+    /// Value will be clamped.
     public init(position unitInterval: Double) {
         let raw = UInt8((unitInterval * 0xA).clamped(to: 0x0 ... 0xA))
         self = Self(rawValue: raw) ?? .L5
@@ -118,13 +121,15 @@ extension HUIVPotDisplay.LEDState.LED {
 
 extension HUIVPotDisplay.LEDState.LED {
     /// Internal:
-    /// The lower bound of the LED's position as a fraction of the overall distance of the unit interval scale.
+    /// The lower bound of the LED's position as a fraction of
+    /// the overall distance of the unit interval scale.
     var unitIntervalLowerBound: Double {
         Double(rawValue) / 0xB
     }
     
     /// Internal:
-    /// The upper bound of the LED's position as a fraction of the overall distance of the unit interval scale.
+    /// The upper bound of the LED's position as a fraction of
+    /// the overall distance of the unit interval scale.
     var unitIntervalUpperBound: Double {
         Double(rawValue + 1) / 0xB
     }

@@ -1,7 +1,7 @@
 //
 //  AppDelegate.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Cocoa
@@ -173,8 +173,10 @@ extension AppDelegate {
         // ---------------
         midiInMenu.addItem(.separator())
     
-        // If selected endpoint doesn't exist in the system, show it in the menu as missing but still selected.
-        // The MIDIManager will auto-reconnect to it if it reappears in the system in this condition.
+        // If selected endpoint doesn't exist in the system,
+        // show it in the menu as missing but still selected.
+        // The MIDIManager will auto-reconnect to it if it reappears
+        // in the system in this condition.
         if midiInMenuSelectedID != .invalidMIDIIdentifier,
            !sortedEndpoints.contains(whereUniqueID: midiInMenuSelectedID)
         {
@@ -271,8 +273,10 @@ extension AppDelegate {
         // ---------------
         midiOutMenu.addItem(.separator())
     
-        // If selected endpoint doesn't exist in the system, show it in the menu as missing but still selected.
-        // The MIDIManager will auto-reconnect to it if it reappears in the system in this condition.
+        // If selected endpoint doesn't exist in the system,
+        // show it in the menu as missing but still selected.
+        // The MIDIManager will auto-reconnect to it if it reappears
+        // in the system in this condition.
         if midiOutMenuSelectedID != .invalidMIDIIdentifier,
            !sortedEndpoints.contains(whereUniqueID: midiOutMenuSelectedID)
         {

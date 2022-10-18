@@ -1,7 +1,7 @@
 //
 //  FrameRate.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -10,10 +10,13 @@ import MIDIKitCore
 
 extension MIDIFile {
     /// Timecode Frame Rate
-    /// (For use in the MIDI file header when ``TimeBase-swift.enum/timecode(smpteFormat:ticksPerFrame:)`` timebase is selected.)
+    /// (For use in the MIDI file header when
+    /// ``TimeBase-swift.enum/timecode(smpteFormat:ticksPerFrame:)`` timebase is selected.)
     ///
     /// MIDI file header time division 2-byte value:
-    /// Bits 8 - 15 (i.e. the first byte) specifies the number of frames per second (fps), and will be one of the four SMPTE standards - 24, 25, 29d or 30, though expressed as a negative value (using 2's complement notation), as follows:
+    /// Bits 8 - 15 (i.e. the first byte) specifies the number of frames per second (fps), and will
+    /// be one of the four SMPTE standards - 24, 25, 29d or 30, though expressed as a negative value
+    /// (using 2's complement notation), as follows:
     ///
     /// - 24fps: `0xE8`
     /// - 25fps: `0xE7`

@@ -1,7 +1,7 @@
 //
 //  Event SMPTEOffset.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -26,10 +26,11 @@ extension MIDIFileEvent {
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
-    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE-based tracks which specify a different frame subdivision for delta-times.
+    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
+    /// SMPTE-based tracks which specify a different frame subdivision for delta-times.
     public struct SMPTEOffset: Equatable, Hashable {
         /// Timecode hour.
-        /// Valid range: 0-23.
+        /// Valid range: ` 0 ... 23`.
         public var hours: UInt8 = 0 {
             didSet {
                 if oldValue != hours { hours_Validate() }
@@ -41,7 +42,7 @@ extension MIDIFileEvent {
         }
         
         /// Timecode minutes.
-        /// Valid range: 0-59.
+        /// Valid range: `0 ... 59`.
         public var minutes: UInt8 = 0 {
             didSet {
                 if oldValue != minutes { minutes_Validate() }
@@ -53,7 +54,7 @@ extension MIDIFileEvent {
         }
         
         /// Timecode seconds.
-        /// Valid range: 0-59.
+        /// Valid range: `0 ... 59`.
         public var seconds: UInt8 = 0 {
             didSet {
                 if oldValue != seconds { seconds_Validate() }
@@ -65,7 +66,8 @@ extension MIDIFileEvent {
         }
         
         /// Timecode frames.
-        /// Valid range is dependent on the `frameRate` property (0-23 for 24fps, 0-29 for 30fps, etc.).
+        /// Valid range is dependent on the `frameRate` property
+        /// (`0 ... 23` for 24fps, `0 ... 29` for 30fps, etc.).
         public var frames: UInt8 = 0 {
             didSet {
                 if oldValue != frames { frames_Validate() }
@@ -81,8 +83,9 @@ extension MIDIFileEvent {
         }
         
         /// Timecode subframes.
-        /// Valid range: 0-99.
-        /// The number of fractional frames, in 100ths of a frame (even in SMPTE-based tracks using a different frame subdivision, defined in the MThd MIDI file header chunk).
+        /// Valid range: `0 ... 99`.
+        /// The number of fractional frames, in 100ths of a frame (even in SMPTE-based tracks using
+        /// a different frame subdivision, defined in the `MThd` MIDI file header chunk).
         public var subframes: UInt8 = 0 {
             didSet {
                 if oldValue != subframes { subframes_Validate() }
@@ -164,7 +167,8 @@ extension MIDIFileEvent {
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
-    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE-based tracks which specify a different frame subdivision for delta-times.
+    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
+    /// SMPTE-based tracks which specify a different frame subdivision for delta-times.
     public static func smpteOffset(
         delta: DeltaTime = .none,
         hr: UInt8,
@@ -194,7 +198,8 @@ extension MIDIFileEvent {
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
-    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE-based tracks which specify a different frame subdivision for delta-times.
+    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
+    /// SMPTE-based tracks which specify a different frame subdivision for delta-times.
     public static func smpteOffset(
         delta: DeltaTime = .none,
         scaling: Timecode
@@ -290,12 +295,18 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
         //
         // 05 is length
         //
-        // hr is a byte specifying the hour, which is also encoded with the SMPTE format (frame rate), just as it is in MIDI Time Code
+        // hr is a byte specifying the hour, which is also encoded with the SMPTE format (frame
+        // rate), just as it is in MIDI Time Code
         //   8 bits: 0rrhhhhh, where:
-        //     rr = frame rate : 00 = 24 fps, 01 = 25 fps, 10 = 30 fps (drop frame), 11 = 30 fps (non-drop frame)
-        //     hhhhh = hour (0-23)
+        //     - rr = frame rate:
+        //       00 = 24 fps
+        //       01 = 25 fps
+        //       10 = 30 fps (drop frame)
+        //       11 = 30 fps (non-drop frame)
+        //     - hhhhh = hour (0-23)
         //
-        // ff is a byte specifying the number of fractional frames, in 100ths of a frame (even in SMPTE-based tracks using a different frame subdivision, defined in the MThd chunk).
+        // ff is a byte specifying the number of fractional frames, in 100ths of a frame (even in
+        // SMPTE-based tracks using a different frame subdivision, defined in the MThd chunk).
         
         var data = D()
         
@@ -350,11 +361,14 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
 // MARK: - Helpers
 
 extension Timecode {
-    /// Determines the best corresponding MIDI File SMPTE Offset frame rate to represent this timecode, converts the timecode to that frame rate, and converts the subframes to be scaled to a 100 subframe divisor if needed.
+    /// Determines the best corresponding MIDI File SMPTE Offset frame rate to represent this
+    /// timecode, converts the timecode to that frame rate, and converts the subframes to be scaled
+    /// to a 100 subframe divisor if needed.
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
-    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE- based tracks which specify a different frame subdivision for delta-times.
+    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
+    /// SMPTE- based tracks which specify a different frame subdivision for delta-times.
     public var scaledToMIDIFileSMPTEFrameRate: (
         scaledTimecode: Timecode?,
         smpteFR: MIDIFile.SMPTEOffsetFrameRate
@@ -388,7 +402,8 @@ extension Timecode {
 }
 
 extension Timecode.FrameRate {
-    /// Returns the best corresponding MIDI File SMPTE Offset frame rate to represent the timecode framerate.
+    /// Returns the best corresponding MIDI File SMPTE Offset frame rate to represent the timecode
+    /// framerate.
     public var midiFileSMPTEOffsetRate: MIDIFile.SMPTEOffsetFrameRate {
         switch self {
         case ._23_976: return ._24fps // as output from Pro Tools

@@ -1,7 +1,7 @@
 //
 //  MIDIManager remove.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -60,7 +60,8 @@ extension MIDIManager {
         }
     }
     
-    /// Removes all unmanaged persistent MIDI thru connections stored in the system matching the given owner ID.
+    /// Removes all unmanaged persistent MIDI thru connections stored in the system matching the
+    /// given owner ID.
     ///
     /// - Parameter ownerID: Reverse-DNS domain that was used when the connection was first made
     ///

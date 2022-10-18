@@ -1,7 +1,7 @@
 //
 //  Knobs.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -166,14 +166,14 @@ struct KnobShape: View {
             if size > 100 {
                 VStack {
                     HStack { // ◀︎ ▶︎ ← →
-                        //Text("◀︎")
-                        //Text("▶︎")
+                        // Text("◀︎")
+                        // Text("▶︎")
                         Text("←").rotationEffect(.degrees(360 - 15))
                         Text("→").rotationEffect(.degrees(15))
                     }
                     .font(.system(size: 24))
                     .foregroundColor(.black.opacity(0.7))
-                    .scaleEffect(CGSize.init(width: size/140, height: size/140))
+                    .scaleEffect(CGSize(width: size / 140, height: size / 140))
                     Spacer()
                 }
                 .padding(size / 5)

@@ -1,7 +1,7 @@
 //
 //  Event ProgramChange.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -20,7 +20,9 @@ import MIDIKitCore
 extension MIDIFileEvent {
     /// Channel Voice Message: Program Change
     ///
-    /// > Note: When decoding, bank information is not decoded as part of the Program Change event but will be decoded as individual CC messages. This may be addressed in a future release of MIDIKit.
+    /// > Note: When decoding, bank information is not decoded as part of the Program Change event
+    /// but will be decoded as individual CC messages. This may be addressed in a future release of
+    /// MIDIKit.
     public typealias ProgramChange = MIDIEvent.ProgramChange
 }
 
@@ -29,7 +31,9 @@ extension MIDIFileEvent {
 extension MIDIFileEvent {
     /// Channel Voice Message: Program Change
     ///
-    /// > Note: When decoding, bank information is not decoded as part of the Program Change event but will be decoded as individual CC messages. This may be addressed in a future release of MIDIKit.
+    /// > Note: When decoding, bank information is not decoded as part of the Program Change event
+    /// but will be decoded as individual CC messages. This may be addressed in a future release of
+    /// MIDIKit.
     public static func programChange(
         delta: DeltaTime = .none,
         program: UInt7,

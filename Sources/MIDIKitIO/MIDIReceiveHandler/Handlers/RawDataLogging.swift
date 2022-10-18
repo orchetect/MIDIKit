@@ -1,7 +1,7 @@
 //
 //  RawDataLogging.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -18,8 +18,10 @@ extension MIDIReceiveHandler {
     /// On systems that use legacy MIDI 1.0 packets, their raw bytes will be logged.
     /// On systems that support UMP and MIDI 2.0, the raw UMP packet data is logged.
     ///
-    /// If `handler` is `nil`, all raw packet data is logged to the console (but only in `DEBUG` preprocessor flag builds).
-    /// If `handler` is provided, the hex byte string is supplied as a parameter and not automatically logged.
+    /// If `handler` is `nil`, all raw packet data is logged to the console (but only in `DEBUG`
+    /// preprocessor flag builds).
+    /// If `handler` is provided, the hex byte string is supplied as a parameter and not
+    /// automatically logged.
     class RawDataLogging: MIDIIOReceiveHandlerProtocol {
         public var handler: MIDIReceiver.RawDataLoggingHandler
     
@@ -29,9 +31,11 @@ extension MIDIReceiveHandler {
             _ packets: [MIDIPacketData]
         ) {
             for midiPacket in packets {
-                handleBytes(bytes: midiPacket.bytes,
-                            timeStamp: midiPacket.timeStamp,
-                            source: midiPacket.source)
+                handleBytes(
+                    bytes: midiPacket.bytes,
+                    timeStamp: midiPacket.timeStamp,
+                    source: midiPacket.source
+                )
             }
         }
     
@@ -41,9 +45,11 @@ extension MIDIReceiveHandler {
             protocol midiProtocol: MIDIProtocolVersion
         ) {
             for midiPacket in packets {
-                handleBytes(bytes: midiPacket.bytes,
-                            timeStamp: midiPacket.timeStamp,
-                            source: midiPacket.source)
+                handleBytes(
+                    bytes: midiPacket.bytes,
+                    timeStamp: midiPacket.timeStamp,
+                    source: midiPacket.source
+                )
             }
         }
     
@@ -66,9 +72,11 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal func handleBytes(bytes: [UInt8],
-                                  timeStamp: CoreMIDITimeStamp,
-                                  source: MIDIOutputEndpoint?) {
+        internal func handleBytes(
+            bytes: [UInt8],
+            timeStamp: CoreMIDITimeStamp,
+            source: MIDIOutputEndpoint?
+        ) {
             if filterActiveSensingAndClock {
                 guard bytes.first != 0xF8, // midi clock pulse
                       bytes.first != 0xFE  // active sensing
@@ -77,7 +85,7 @@ extension MIDIReceiveHandler {
             
             var stringOutput = bytes
                 .hexString(padEachTo: 2, prefixes: false)
-            + " timeStamp:\(timeStamp)"
+                + " timeStamp:\(timeStamp)"
             
             // not all packets will contain source refs
             if let source = source {

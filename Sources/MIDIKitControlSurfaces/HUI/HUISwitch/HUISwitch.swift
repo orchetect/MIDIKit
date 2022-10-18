@@ -1,19 +1,27 @@
 //
 //  HUISwitch.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 import MIDIKitCore
 
 /// HUI Switch.
-/// Identifiers for all possible HUI toggle/boolean controls: Buttons, LEDs, and auxiliary capabilities like external footswitch toggles and beep sounds. These are all collectively referred to as HUI switches.
+/// Identifiers for all possible HUI toggle/boolean controls: Buttons, LEDs, and auxiliary
+/// capabilities like external footswitch toggles and beep sounds. These are all collectively
+/// referred to as HUI switches.
 ///
-/// > Note: Not all switches are relevant for both host and surface. Some only apply to one or the other. But most apply to both.
+/// > Note: Not all switches are relevant for both host and surface. Some only apply to one or the
+/// other. But most apply to both.
 /// >
 /// > - An LED has a state of on (`true`) and off (`false`).
-/// > - When a user engages a switch on a HUI control surface (ie: presses a button or touches a fader cap) it has a state of pressed/touched (`true`) and unpressed/untouched (`false`). Which means if a user momentarily pushes and releases a button it will result in two immediately successive `true` then `false` state messages. If a user presses and holds a button, it will result in a `true` state message upon press and then the `false` state message only upon button release.
+/// > - When a user engages a switch on a HUI control surface (ie: presses a button or touches a
+/// fader cap) it has a state of pressed/touched (`true`) and unpressed/untouched (`false`). Which
+/// means if a user momentarily pushes and releases a button it will result in two immediately
+/// successive `true` then `false` state messages. If a user presses and holds a button, it will
+/// result in a `true` state message upon press and then the `false` state message only upon button
+/// release.
 public enum HUISwitch: Equatable, Hashable {
     /// Channel strip component.
     case channelStrip(UInt4, ChannelStrip)

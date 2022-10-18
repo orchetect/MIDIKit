@@ -1,7 +1,7 @@
 //
 //  ContentView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -9,8 +9,11 @@ import MIDIKit
 import OTCore
 
 struct ContentView: View {
-    // if you declare a view that creates its own @ObservedObject instance, that instance is replaced every time SwiftUI decides that it needs to discard and redraw that view.
-    // it should instead be used to retain a weak reference from the view's initializer, with the original instance of the object stored in a parent scope as either a var or @StateObject but not an @ObservedObject
+    // if you declare a view that creates its own @ObservedObject instance, that instance is
+    // replaced every time SwiftUI decides that it needs to discard and redraw that view.
+    // it should instead be used to retain a weak reference from the view's initializer, with the
+    // original instance of the object stored in a parent scope as either a var or @StateObject but
+    // not an @ObservedObject
     
     @ObservedObject var midiManager: MIDIManager
     

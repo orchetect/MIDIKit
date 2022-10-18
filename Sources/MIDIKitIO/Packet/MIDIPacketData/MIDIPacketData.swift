@@ -1,7 +1,7 @@
 //
 //  MIDIPacketData.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -59,7 +59,8 @@ extension MIDIPacketData {
         }
     
         // Access the raw memory instead of using the .pointee
-        // This workaround is needed due to a variety of crashes that can occur when either the thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
+        // This workaround is needed due to a variety of crashes that can occur when either the
+        // thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
         let rawMIDIPacketDataPtr = UnsafeRawBufferPointer(
             start: UnsafeRawPointer(midiPacketPtr) + midiPacketDataOffset,
             count: packetDataCount

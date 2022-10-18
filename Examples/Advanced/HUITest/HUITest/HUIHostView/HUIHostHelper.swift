@@ -1,7 +1,7 @@
 //
 //  HUIHostHelper.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -85,20 +85,20 @@ class HUIHostHelper: ObservableObject {
         switch event {
         case let .faderLevel(channelStrip: 0, level):
             let scaledValue = Float(level) / Float(UInt14.max)
-            self.model.bank0.channel0.faderLevel = scaledValue
+            model.bank0.channel0.faderLevel = scaledValue
             
         case let .switch(huiSwitch, state):
             switch huiSwitch {
             case let .channelStrip(0, channelItem):
                 switch channelItem {
                 case .solo:
-                    if state { self.model.bank0.channel0.solo.toggle() }
+                    if state { model.bank0.channel0.solo.toggle() }
                 case .mute:
-                    if state { self.model.bank0.channel0.mute.toggle() }
+                    if state { model.bank0.channel0.mute.toggle() }
                 case .select:
-                    if state { self.model.bank0.channel0.selected.toggle() }
+                    if state { model.bank0.channel0.selected.toggle() }
                 case .faderTouched:
-                    self.model.bank0.channel0.faderTouched = state
+                    model.bank0.channel0.faderTouched = state
                 default:
                     break
                 }
@@ -109,8 +109,8 @@ class HUIHostHelper: ObservableObject {
         case let .vPot(vPot: vPot, delta: delta):
             switch vPot {
             case .channel(0):
-                self.model.bank0.channel0.pan = (
-                    self.model.bank0.channel0.pan + Float(delta.intValue) / 100
+                model.bank0.channel0.pan = (
+                    model.bank0.channel0.pan + Float(delta.intValue) / 100
                 ).clamped(to: 0.0 ... 1.0)
             default:
                 break
@@ -122,7 +122,8 @@ class HUIHostHelper: ObservableObject {
     }
 }
 
-/// Host model. Can contain one or more banks. Each bank corresponds to an entire HUI device (remote control surface).
+/// Host model. Can contain one or more banks.
+/// Each bank corresponds to an entire HUI device (remote control surface).
 struct HUIHostModel {
     public var bank0 = Bank()
 }

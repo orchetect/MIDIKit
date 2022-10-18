@@ -1,7 +1,7 @@
 //
 //  MIDI Network Session.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -29,7 +29,9 @@ public func setMIDINetworkSession(policy: MIDIIONetworkConnectionPolicy?) {
 extension NSNotification.Name {
     /// a.k.a. `MIDINetworkNotificationSessionDidChange`
     ///
-    /// >  Core MIDI documentation: Indicates that other aspects of the session changed, such as the connection list, connection policy, and so on.
+    /// > Core MIDI Documentation:
+    /// > Indicates that other aspects of the session changed, such as the
+    /// > connection list, connection policy, and so on.
     @_disfavoredOverload
     @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
     public static let midiNetworkSessionDidChange = NSNotification.Name(
@@ -38,7 +40,8 @@ extension NSNotification.Name {
     
     /// a.k.a. `MIDINetworkNotificationContactsDidChange`
     ///
-    /// > Core MIDI documentation: Indicates that the list of contacts changed.
+    /// > Core MIDI Documentation:
+    /// > Indicates that the list of contacts changed.
     @_disfavoredOverload
     @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
     public static let midiNetworkContactsDidChange = NSNotification.Name(

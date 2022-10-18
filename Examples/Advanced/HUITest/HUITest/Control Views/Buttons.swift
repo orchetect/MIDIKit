@@ -1,7 +1,7 @@
 //
 //  Buttons.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -104,8 +104,8 @@ struct HUIButton: View, MomentaryButtonProtocol {
         image: Image? = nil,
         title: String = "",
         param: HUISwitch,
-        width: CGFloat? = nil, //MomentaryButton.kDefaultWidth,
-        height: CGFloat? = nil, //MomentaryButton.kDefaultHeight,
+        width: CGFloat? = nil, // MomentaryButton.kDefaultWidth,
+        height: CGFloat? = nil, // MomentaryButton.kDefaultHeight,
         fontSize: CGFloat? = nil
     ) {
         self.image = image
@@ -148,8 +148,8 @@ struct HUIStateButton: View, MomentaryButtonProtocol  {
         title: String = "",
         param: HUISwitch,
         ledColor: HUISwitchColor,
-        width: CGFloat? = nil, //MomentaryButton.kDefaultWidth,
-        height: CGFloat? = nil, //MomentaryButton.kDefaultHeight,
+        width: CGFloat? = nil, // MomentaryButton.kDefaultWidth,
+        height: CGFloat? = nil, // MomentaryButton.kDefaultHeight,
         fontSize: CGFloat? = nil
     ) {
         self.image = image

@@ -42,7 +42,8 @@ extension Comparable {
     }
     
     // ie: 5.0.clamped(to: 7.0..<10.0)
-    // not a good idea to implement this -- floating point numbers don't make sense in a ..< type range
+    // not a good idea to implement this -- floating point numbers don't make sense in a ..< type
+    // range
     // because would the max of 7.0..<10.0 be 9.999999999...? It can't be 10.0.
     // func clamped(to limits: Range<Self>) -> Self { }
 }

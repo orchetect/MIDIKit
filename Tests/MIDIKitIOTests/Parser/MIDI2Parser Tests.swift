@@ -1,7 +1,7 @@
 //
 //  MIDI2Parser Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
@@ -345,8 +345,10 @@ final class MIDI2Parser_Tests: XCTestCase {
     
     func testUniversalPacketData_parsedEvents_RunningStatus() {
         // MIDI 2.0 does not support/allow Running Status
-        // UMP packets containing MIDI 1.0 events must always be the entire, complete message including status byte
-        // UMP packets only ever contain a single discrete MIDI event, so Running Status within a single packet is not supported either
+        // UMP packets containing MIDI 1.0 events must always be the entire, complete message
+        // including status byte.
+        // UMP packets only ever contain a single discrete MIDI event, so Running Status within a
+        // single packet is not supported either
     
         // nothing to test
     }
@@ -385,28 +387,32 @@ final class MIDI2Parser_Tests: XCTestCase {
                                             0x00, 0x00, 0x00]), [])
     
         // note off
-        // - requires two data bytes to follow, which fills out the entire word without needing null byte padding
+        // - requires two data bytes to follow, which fills out the entire word without needing null
+        //   byte padding
         // test data byte(s) > 127
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0x80, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0x80, 0x00, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0x80, 0x80, 0x80]), [])
     
         // note on
-        // - requires two data bytes to follow, which fills out the entire word without needing null byte padding
+        // - requires two data bytes to follow, which fills out the entire word without needing null
+        //   byte padding
         // test data byte(s) > 127
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0x90, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0x90, 0x00, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0x90, 0x80, 0x80]), [])
     
         // note pressure
-        // - requires two data bytes to follow, which fills out the entire word without needing null byte padding
+        // - requires two data bytes to follow, which fills out the entire word without needing null
+        //   byte padding
         // test data byte(s) > 127
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xA0, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xA0, 0x00, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xA0, 0x80, 0x80]), [])
     
         // cc
-        // - requires two data bytes to follow, which fills out the entire word without needing null byte padding
+        // - requires two data bytes to follow, which fills out the entire word without needing null
+        //   byte padding
         // test data byte(s) > 127
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xB0, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xB0, 0x00, 0x80]), [])
@@ -414,7 +420,8 @@ final class MIDI2Parser_Tests: XCTestCase {
     
         // program change
         // - requires one data byte to follow, with one null byte trailing padding
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(
             parsedEvents(bytes: [0x20, 0xC0, 0x00, 0x80]),
             [.programChange(program: 0, channel: 0, group: 0)]
@@ -425,7 +432,8 @@ final class MIDI2Parser_Tests: XCTestCase {
     
         // channel pressure
         // - requires one data byte to follow, with one null byte trailing padding
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(
             parsedEvents(bytes: [0x20, 0xD0, 0x00, 0x80]),
             [.pressure(amount: .midi1(0), channel: 0, group: 0)]
@@ -435,7 +443,8 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xD0, 0x80, 0x80]), [])
     
         // pitch bend
-        // - requires two data bytes to follow, which fills out the entire word without needing null byte padding
+        // - requires two data bytes to follow, which fills out the entire word without needing null
+        //   byte padding
         // test data byte(s) > 127
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xE0, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xE0, 0x00, 0x80]), [])
@@ -443,7 +452,8 @@ final class MIDI2Parser_Tests: XCTestCase {
     
         // System Common - System Exclusive start
         // - not allowed in UMP packets - test for rejection
-        // - UMP message type 0x2 (MIDI 1 channel voice) can only be used for MIDI 1 channel voice messages and not MIDI 1 sysex/common/realtime so this must be rejected
+        // - UMP message type 0x2 (MIDI 1 channel voice) can only be used for MIDI 1 channel voice
+        //   messages and not MIDI 1 sysex/common/realtime so this must be rejected
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xF0, 0x00, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xF0, 0x01, 0x02]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xF0, 0x01, 0xF7]), [])
@@ -454,7 +464,8 @@ final class MIDI2Parser_Tests: XCTestCase {
                                             0x03, 0x04, 0x05, 0x06]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xF0, 0x01, 0x02,
                                             0x03, 0x04, 0x05, 0xF7]), [])
-        // - SysEx7 must be 64-bit (8 byte / 2 UInt32 word) packet, so a 4 byte packet will be rejected.
+        // - SysEx7 must be 64-bit (8 byte / 2 UInt32 word) packet, so a 4 byte packet will be
+        //   rejected.
         // - also, 0xF0 and 0xF7 bytes must be omitted in UMP SysEx packets
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF0, 0x00, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF0, 0x01, 0x02]), [])
@@ -494,7 +505,8 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x10, 0xF3, 0x3C, 0x00]),
             [.songSelect(number: 0x3C)]
         )
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xF3, 0x3C, 0x80]),
             [.songSelect(number: 0x3C)]
@@ -505,7 +517,8 @@ final class MIDI2Parser_Tests: XCTestCase {
         // System Common - Undefined
         // [msgtype+group, 0xF4, 0x00, 0x00]
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF4, 0x00, 0x00]), [])
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF4, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF4, 0x00, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF4, 0x80, 0x80]), [])
@@ -513,7 +526,8 @@ final class MIDI2Parser_Tests: XCTestCase {
         // System Common - Undefined
         // [msgtype+group, 0xF5, 0x00, 0x00]
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF5, 0x00, 0x00]), [])
-        // -trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF5, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF5, 0x00, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF5, 0x80, 0x80]), [])
@@ -524,7 +538,8 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x10, 0xF6, 0x00, 0x00]),
             [.tuneRequest(group: 0x0)]
         )
-        // -trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xF6, 0x80, 0x00]),
             [.tuneRequest(group: 0x0)]
@@ -540,9 +555,11 @@ final class MIDI2Parser_Tests: XCTestCase {
     
         // System Common - System Exclusive End (EOX / End Of Exclusive)
         // - not allowed in UMP packets - test for rejection
-        // - UMP message type 0x2 (MIDI 1 channel voice) can only be used for MIDI 1 channel voice messages and not MIDI 1 sysex/common/realtime so this must be rejected
+        // - UMP message type 0x2 (MIDI 1 channel voice) can only be used for MIDI 1 channel voice
+        //   messages and not MIDI 1 sysex/common/realtime so this must be rejected
         XCTAssertEqual(parsedEvents(bytes: [0x20, 0xF7, 0x01, 0x00]), [])
-        // - SysEx7 must be 64-bit (8 byte / 2 UInt32 word) packet, so a 4 byte packet will be rejected.
+        // - SysEx7 must be 64-bit (8 byte / 2 UInt32 word) packet, so a 4 byte packet will be
+        //   rejected.
         // - also, 0xF0 and 0xF7 bytes must be omitted in UMP SysEx packets
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF7, 0x01, 0x00]), [])
     
@@ -552,7 +569,8 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x10, 0xF8, 0x00, 0x00]),
             [.timingClock(group: 0x0)]
         )
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xF8, 0x80, 0x00]),
             [.timingClock(group: 0x0)]
@@ -569,7 +587,8 @@ final class MIDI2Parser_Tests: XCTestCase {
         // Real-Time - Undefined
         // [msgtype+group, 0xF9, 0x00, 0x00]
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF9, 0x00, 0x00]), [])
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF9, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF9, 0x00, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xF9, 0x80, 0x80]), [])
@@ -580,7 +599,8 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x10, 0xFA, 0x00, 0x00]),
             [.start(group: 0x0)]
         )
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFA, 0x80, 0x00]),
             [.start(group: 0x0)]
@@ -600,7 +620,8 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x10, 0xFB, 0x00, 0x00]),
             [.continue(group: 0x0)]
         )
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFB, 0x80, 0x00]),
             [.continue(group: 0x0)]
@@ -620,7 +641,8 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x10, 0xFC, 0x00, 0x00]),
             [.stop(group: 0x0)]
         )
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFC, 0x80, 0x00]),
             [.stop(group: 0x0)]
@@ -637,7 +659,8 @@ final class MIDI2Parser_Tests: XCTestCase {
         // System Real-Time - Undefined
         // [msgtype+group, 0xFD, 0x00, 0x00]
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xFD, 0x00, 0x00]), [])
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xFD, 0x80, 0x00]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xFD, 0x00, 0x80]), [])
         XCTAssertEqual(parsedEvents(bytes: [0x10, 0xFD, 0x80, 0x80]), [])
@@ -649,7 +672,8 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x10, 0xFE, 0x00, 0x00]),
             [.activeSensing(group: 0x0)]
         )
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFE, 0x80, 0x00]),
             [.activeSensing(group: 0x0)]
@@ -669,7 +693,8 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x10, 0xFF, 0x00, 0x00]),
             [.systemReset(group: 0x0)]
         )
-        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since they are discarded and merely there to fill out all four bytes of the UInt32 word
+        // - trailing bytes should be null (0x00) but it doesn't really matter what they are since
+        //   they are discarded and merely there to fill out all four bytes of the UInt32 word
         XCTAssertEqual(
             parsedEvents(bytes: [0x10, 0xFF, 0x80, 0x00]),
             [.systemReset(group: 0x0)]

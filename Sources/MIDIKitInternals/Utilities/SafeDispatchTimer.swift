@@ -1,18 +1,22 @@
 //
 //  SafeDispatchTimer.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Dispatch
 
 /// Simple custom safe `DispatchSourceTimer` wrapper.
 ///
-/// Timer does not start automatically when initializing. Call `start()` after initialization to begin the timer.
+/// Timer does not start automatically when initializing. Call ``start()`` after initialization to
+/// begin the timer.
 ///
-/// The timer will fire at intervals of a `rate` in Hz, starting immediately from the time at which `start()` is called.
+/// The timer will fire at intervals of a `rate` in Hz, starting immediately from the time at which
+/// ``start()`` is called.
 ///
-/// All timer methods are safe and can be called in any order without worrying about `DispatchSourceTimer`-related peculiarities (start/suspend balancing or cancelling without resuming).
+/// All timer methods are safe and can be called in any order without worrying about
+/// `DispatchSourceTimer`-related peculiarities (start/suspend balancing or cancelling without
+/// resuming).
 public final class SafeDispatchTimer {
     internal var timer: DispatchSourceTimer
     internal weak var queue: DispatchQueue?
@@ -56,7 +60,8 @@ public final class SafeDispatchTimer {
         timer.setEventHandler(handler: eventHandler)
     }
     
-    /// Starts the timer. The timer will occur at intervals measured since the creation of the timer, regardless of when `start()` is called.
+    /// Starts the timer. The timer will occur at intervals measured since the creation of the
+    /// timer, regardless of when ``start()`` is called.
     ///
     /// If the timer has already started, this will have no effect.
     public func start() {
@@ -68,12 +73,17 @@ public final class SafeDispatchTimer {
     
     /// Restarts the origin time (deadline) of the timer to "now".
     ///
-    /// If the timer has already been started, the origin time will be set to "now" and the timer will continue to run at intervals from "now".
+    /// If the timer has already been started, the origin time will be set to "now" and the timer
+    /// will continue to run at intervals from "now".
     ///
-    /// If the timer has not yet been started or was previously suspended using `stop()`, the timer will be restarted and the origin time will be set to "now".
+    /// If the timer has not yet been started or was previously suspended using ``stop()``, the
+    /// timer
+    /// will be restarted and the origin time will be set to "now".
     ///
     /// - Parameters:
-    ///   - immediate: If `true`, restarts timer and fires immediately then again at each interval. If `false`, restarts timer but first fire does not happen until the first interval is reached then again at each subsequent interval.
+    ///   - immediate: If `true`, restarts timer and fires immediately then again at each interval.
+    ///     If `false`, restarts timer but first fire does not happen until the first interval is
+    ///     reached then again at each subsequent interval.
     public func restart(firingNow: Bool = true) {
         // if timer is already running, reschedule the currently running timer
         // if timer is not running, schedule the timer then start it
@@ -91,7 +101,8 @@ public final class SafeDispatchTimer {
     
     /// Suspends the timer if it was running.
     ///
-    /// The timer can be started again by calling `start()`, preserving the origin time, or `restart()` to reset the origin time to "now".
+    /// The timer can be started again by calling ``start()``, preserving the origin time, or
+    /// ``restart(firingNow:)`` to reset the origin time to "now".
     public func stop() {
         guard running else { return }
         running = false

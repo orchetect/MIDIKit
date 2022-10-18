@@ -1,7 +1,7 @@
 //
 //  MIDIUnsignedInteger.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -20,13 +20,14 @@ import MIDIKitInternals
 //      -> Strideable
 //         -> Comparable
 
-/// Protocol adopted by specialized unsigned integer types in `MIDIKit` representing novel bit widths.
+/// Protocol adopted by specialized unsigned integer types in `MIDIKit` representing novel bit
+/// widths.
 public protocol MIDIUnsignedInteger: UnsignedInteger, Codable
-where Magnitude == Storage.Magnitude,
-      Words == Storage.Words,
-      IntegerLiteralType == Storage,
-      IntegerLiteralType: Codable,
-      Stride == Int
+    where Magnitude == Storage.Magnitude,
+    Words == Storage.Words,
+    IntegerLiteralType == Storage,
+    IntegerLiteralType: Codable,
+    Stride == Int
 {
     /// Backing storage type for the integer.
     associatedtype Storage: BinaryInteger

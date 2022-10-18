@@ -1,7 +1,7 @@
 //
 //  MIDIFileEvent Properties.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -36,7 +36,8 @@ extension MIDIFileEvent {
 }
 
 extension MIDIFileEvent {
-    /// Returns the concrete type that contains the event payload, typed as ``MIDIFileEventPayload`` protocol.
+    /// Returns the concrete type that contains the event payload, typed as ``MIDIFileEventPayload``
+    /// protocol.
     public var concreteType: MIDIFileEventPayload.Type {
         switch self {
         case .cc:                 return CC.self
@@ -64,7 +65,8 @@ extension MIDIFileEvent {
 }
 
 extension MIDIFileEvent {
-    /// Unwraps the enum case and returns the ``MIDIFileEvent`` contained within, typed as ``MIDIFileEventPayload`` protocol.
+    /// Unwraps the enum case and returns the ``MIDIFileEvent`` contained within, typed as
+    /// ``MIDIFileEventPayload`` protocol.
     public var smfUnwrappedEvent: (
         delta: DeltaTime,
         event: MIDIFileEventPayload

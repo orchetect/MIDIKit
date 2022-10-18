@@ -1,7 +1,7 @@
 //
 //  MIDINote Layout.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -33,7 +33,8 @@ extension MIDINoteRange {
 }
 
 extension MIDINote {
-    /// Returns `true` if note is sharp (has a ♯ accidental). On a piano keyboard, this would be a black key.
+    /// Returns `true` if note is sharp (has a ♯ accidental).
+    /// On a piano keyboard, this would be a black key.
     public var isSharp: Bool {
         let octaveMod = number % 12
         return [1, 3, 6, 8, 10].contains(octaveMod)

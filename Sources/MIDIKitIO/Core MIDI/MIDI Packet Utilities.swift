@@ -1,7 +1,7 @@
 //
 //  MIDI Packet Utilities.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -10,9 +10,11 @@ import Foundation
 @_implementationOnly import CoreMIDI
 
 /// Utility:
-/// Attempts to extract data from a refCon pointer supplied by `CoreMIDI.MIDIReceiveBlock` and `CoreMIDI.MIDIReadBlock` identifying the sender of the event packets.
+/// Attempts to extract data from a refCon pointer supplied by `CoreMIDI.MIDIReceiveBlock` and
+/// `CoreMIDI.MIDIReadBlock` identifying the sender of the event packets.
 ///
-/// This pointer is untyped and Optional, and is not expected to contain data of any certain type unless is it a refCon that is created by MIDIKit.
+/// This pointer is untyped and Optional, and is not expected to contain data of any certain type
+/// unless is it a refCon that is created by MIDIKit.
 internal func unpackMIDIRefCon(
     refCon: UnsafeMutableRawPointer?,
     known: Bool

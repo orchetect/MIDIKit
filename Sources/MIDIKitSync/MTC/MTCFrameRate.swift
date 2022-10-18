@@ -1,7 +1,7 @@
 //
 //  MTCFrameRate.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -56,8 +56,11 @@ import TimecodeKit
     
 /// Standard base timecode frame rate families expressed in MTC.
 ///
-/// This does not always directly correlate to the actual frame rate the transmitting and receiving DAW is using.
-/// When DAWs transmit MTC, the frame rate gets scaled down to one of the four base MTC frame rates. It is the job of the receiving DAW to scale the MTC frame data back up to the desired actual frame rate.
+/// This does not always directly correlate to the actual frame rate the transmitting and receiving
+/// DAW is using.
+/// When DAWs transmit MTC, the frame rate gets scaled down to one of the four base MTC frame rates.
+/// It is the job of the receiving DAW to scale the MTC frame data back up to the desired actual
+/// frame rate.
 public enum MTCFrameRate: Hashable, CaseIterable {
     /// MTC frame rate classification of 24 fps and related rates
     case mtc24

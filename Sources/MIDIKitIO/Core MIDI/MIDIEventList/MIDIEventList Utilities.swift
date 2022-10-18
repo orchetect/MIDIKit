@@ -1,7 +1,7 @@
 //
 //  MIDIEventList Utilities.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -89,7 +89,8 @@ extension CoreMIDI.MIDIEventPacket {
 
 extension CoreMIDI.MIDIEventList {
     /// Internal:
-    /// Assembles a single Core MIDI `MIDIEventPacket` from a Universal MIDI Packet `UInt32` word array and wraps it in a Core MIDI `MIDIEventList`.
+    /// Assembles a single Core MIDI `MIDIEventPacket` from a Universal MIDI Packet `UInt32` word
+    /// array and wraps it in a Core MIDI `MIDIEventList`.
     @available(macOS 11, iOS 14, macCatalyst 14, *)
     internal init(
         protocol midiProtocol: CoreMIDI.MIDIProtocolID,

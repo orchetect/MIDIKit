@@ -1,13 +1,15 @@
 //
 //  SysEx7 Parser.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
 extension MIDIEvent {
-    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a ``sysEx7(manufacturer:data:group:)`` or ``universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
+    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message and return a
+    /// ``sysEx7(manufacturer:data:group:)`` or
+    /// ``universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
     /// Message must begin with `0xF0` but terminating `0xF7` byte is optional.
     ///
     /// - Throws: ``ParseError`` if message is malformed.
@@ -153,10 +155,13 @@ extension MIDIEvent {
         }
     }
     
-    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message in the form of a hex string and return a ``sysEx7(manufacturer:data:group:)`` or ``universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
+    /// Parse a complete raw MIDI 1.0 System Exclusive 7 message in the form of a hex string and
+    /// return a ``sysEx7(manufacturer:data:group:)`` or
+    /// ``universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
     /// Message must begin with `"F0"` but terminating `"F7"` byte is optional.
     ///
-    /// Hex string may be formatted with (`"F7 01 02 03 F0"`) or without spaces (`"F7010203F0"`). String is case-insensitive.
+    /// Hex string may be formatted with (`"F7 01 02 03 F0"`) or without spaces (`"F7010203F0"`).
+    /// String is case-insensitive.
     ///
     /// - Throws: ``ParseError`` if message is malformed.
     public static func sysEx7<S: StringProtocol>(

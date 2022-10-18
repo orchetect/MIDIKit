@@ -1,7 +1,7 @@
 //
 //  Core MIDI Properties Set.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -104,9 +104,11 @@ internal func setDictionary(
 /// Set user-visible endpoint name.
 /// (`kMIDIPropertyName`)
 ///
-/// Devices, entities, and endpoints may all have names. The standard way to display an endpoint’s name is to ask it for its name and display it only if unique. If not, prepend the device name.
+/// Devices, entities, and endpoints may all have names. The standard way to display an endpoint’s
+/// name is to ask it for its name and display it only if unique. If not, prepend the device name.
 ///
-/// A studio setup editor may allow the user to set the names of both driver-owned and external devices.
+/// A studio setup editor may allow the user to set the names of both driver-owned and external
+/// devices.
 ///
 /// - Throws: ``MIDIIOError``
 internal func setName(
@@ -166,7 +168,8 @@ internal func setManufacturer(
 /// Set unique ID.
 /// (`kMIDIPropertyUniqueID`)
 ///
-/// The system assigns unique IDs to all objects. Creators of virtual endpoints may set this property on their endpoints, though doing so may fail if the chosen ID is not unique.
+/// The system assigns unique IDs to all objects. Creators of virtual endpoints may set this
+/// property on their endpoints, though doing so may fail if the chosen ID is not unique.
 ///
 /// - Throws: ``MIDIIOError``
 internal func setUniqueID(

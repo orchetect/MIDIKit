@@ -1,7 +1,7 @@
 //
 //  Core MIDI Thru Connections.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -10,7 +10,8 @@
 
 /// Returns `true` if current platform supports MIDI play-thru connections.
 ///
-/// MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core MIDI bugs on later macOS releases.
+/// MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core MIDI bugs
+/// on later macOS releases.
 internal var isThruConnectionsSupportedOnCurrentPlatform: Bool {
     if #available(macOS 11.0, /* iOS ???, */ *) {
         return false
@@ -20,11 +21,13 @@ internal var isThruConnectionsSupportedOnCurrentPlatform: Bool {
 }
     
 /// Internal:
-/// Queries Core MIDI for existing persistent play-thru connections stored in the system matching the specified persistent owner ID.
+/// Queries Core MIDI for existing persistent play-thru connections stored in the system matching
+/// the specified persistent owner ID.
 ///
 /// To delete them all, see sister function `removeAllSystemThruConnectionsPersistentEntries(:)`.
 ///
-/// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first made
+/// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first
+/// made
 ///
 /// - Throws: ``MIDIIOError/osStatus(_:)``
 internal func getSystemThruConnectionsPersistentEntries(
@@ -66,7 +69,8 @@ internal func getSystemThruConnectionsPersistentEntries(
 /// Internal:
 /// Deletes all system-held Core MIDI MIDI play-thru connections matching an owner ID.
 ///
-/// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first made
+/// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first
+/// made.
 ///
 /// - Throws: ``MIDIIOError/osStatus(_:)``
 ///
@@ -124,7 +128,8 @@ extension MIDIThruConnectionParams {
     }
     
     /// Internal:
-    /// Converts params from `CFData` returned from Core MIDI when getting params for a thru connection that exists in the system via `MIDIThruConnectionGetParams`.
+    /// Converts params from `CFData` returned from Core MIDI when getting params for a thru
+    /// connection that exists in the system via `MIDIThruConnectionGetParams`.
     internal init?(cfData: CFData) {
         self.init()
     

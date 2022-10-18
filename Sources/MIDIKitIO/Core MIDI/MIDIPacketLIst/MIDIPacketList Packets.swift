@@ -1,7 +1,7 @@
 //
 //  MIDIPacketList Packets.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -39,7 +39,8 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIPacketList {
 extension CoreMIDI.MIDIPacketList {
     /// Iterates packets in a `MIDIPacketList` and calls the closure for each packet.
     /// This is confirmed working on Mojave.
-    /// There were numerous difficulties in reading `MIDIPacketList` on Mojave and earlier and this solution was stable.
+    /// There were numerous difficulties in reading `MIDIPacketList` on Mojave and earlier and this
+    /// solution was stable.
     fileprivate func forEachPacket(_ closure: (UnsafeMutablePointer<MIDIPacket>) -> Void) {
         withUnsafePointer(to: packet) { ptr in
             var idx: UInt32 = 0

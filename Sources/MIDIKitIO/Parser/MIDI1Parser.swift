@@ -1,19 +1,22 @@
 //
 //  MIDI1Parser.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
 
 /// Parser for MIDI 1.0 events.
 ///
-/// State is maintained internally. Use one parser class instance per MIDI endpoint for the lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and do not use a single global parser class instance for all MIDI endpoints.)
+/// State is maintained internally. Use one parser class instance per MIDI endpoint for the
+/// lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and
+/// do not use a single global parser class instance for all MIDI endpoints.)
 public final class MIDI1Parser {
     // MARK: - Internal Default Instance
     
     /// Internal:
-    /// Default static instance for MIDIKit objects that support parsing events without requiring a parser to be instanced first.
+    /// Default static instance for MIDIKit objects that support parsing events without requiring a
+    /// parser to be instanced first.
     internal static let `default` = MIDI1Parser()
     
     // MARK: - Parser State
@@ -67,9 +70,12 @@ public final class MIDI1Parser {
         case sysExOpenEnded
     }
     
-    /// Parses raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
+    /// Parses raw packet data into an array of MIDI Events, without instancing a MIDI parser
+    /// object.
     ///
-    /// Persisted status data is normally the role of the parser class, but this method gives access to an abstracted parsing method by way of injecting and emitting persistent state (ie: running status).
+    /// Persisted status data is normally the role of the parser class, but this method gives access
+    /// to an abstracted parsing method by way of injecting and emitting persistent state (ie:
+    /// running status).
     internal static func parsedEvents(
         in bytes: [UInt8],
         runningStatus: UInt8? = nil,
@@ -203,7 +209,8 @@ public final class MIDI1Parser {
                     // System Common - Undefined
                     // [0xF4] / [0xF5]
     
-                    // MIDI 1.0 Spec: ignore these undefined statuses, but we should clear running status
+                    // MIDI 1.0 Spec: ignore these undefined statuses, but we should clear running
+                    // status
     
                     expectedDataBytes = .none
                     runningStatus = nil
@@ -221,7 +228,8 @@ public final class MIDI1Parser {
                     // System Common - System Exclusive End (EOX / End Of Exclusive)
                     // [variable number of SysEx bytes ... , 0xF7]
     
-                    // 0xF7 is not always present at the end of a SysEx message. A SysEx message can end in any one of several cases:
+                    // 0xF7 is not always present at the end of a SysEx message. A SysEx message can
+                    // end in any one of several cases:
                     //   - byte 0xF7
                     //   - parsing reaches the end of the MIDI message bytes
                     //   - another Status byte, thus starting a new message
@@ -235,7 +243,9 @@ public final class MIDI1Parser {
                     // [0xF8]
     
                     // MIDI 1.0 Spec:
-                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in
+                    //   a MIDI data stream, including between Status and Data bytes of any other
+                    //   MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -246,7 +256,9 @@ public final class MIDI1Parser {
                     // [0xF9]
     
                     // MIDI 1.0 Spec:
-                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in
+                    //   a MIDI data stream, including between Status and Data bytes of any other
+                    //   MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -258,7 +270,9 @@ public final class MIDI1Parser {
                     // [0xFA]
     
                     // MIDI 1.0 Spec:
-                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in
+                    //   a MIDI data stream, including between Status and Data bytes of any other
+                    //   MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -270,8 +284,10 @@ public final class MIDI1Parser {
                     // [0xFB]
     
                     // MIDI 1.0 Spec:
-                    // "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
-                    // "Real-Time messages should not affect Running Status."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in
+                    //   a MIDI data stream, including between Status and Data bytes of any other
+                    //   MIDI messages."
+                    //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
                     // don't change runningStatus here!
@@ -282,7 +298,9 @@ public final class MIDI1Parser {
                     // [0xFC]
     
                     // MIDI 1.0 Spec:
-                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in
+                    //   a MIDI data stream, including between Status and Data bytes of any other
+                    //   MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -294,7 +312,9 @@ public final class MIDI1Parser {
                     // [0xFD]
     
                     // MIDI 1.0 Spec:
-                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in
+                    //   a MIDI data stream, including between Status and Data bytes of any other
+                    //   MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     break
@@ -304,7 +324,9 @@ public final class MIDI1Parser {
                     // [0xFE]
     
                     // MIDI 1.0 Spec:
-                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in
+                    //   a MIDI data stream, including between Status and Data bytes of any other
+                    //   MIDI messages."
                     //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
@@ -316,8 +338,10 @@ public final class MIDI1Parser {
                     // [0xFF]
     
                     // MIDI 1.0 Spec:
-                    // "Real-Time messages can be sent at any time and may be inserted anywhere in a MIDI data stream, including between Status and Data bytes of any other MIDI messages."
-                    // "Real-Time messages should not affect Running Status."
+                    //   "Real-Time messages can be sent at any time and may be inserted anywhere in
+                    //   a MIDI data stream, including between Status and Data bytes of any other
+                    //   MIDI messages."
+                    //   "Real-Time messages should not affect Running Status."
     
                     // don't change expectedExactNumberOfDataBytes here!
                     // don't change runningStatus here!
@@ -331,7 +355,8 @@ public final class MIDI1Parser {
             default:
                 // data byte
     
-                // if current message is empty, we assume the Running Status byte should be used if it's cached
+                // if current message is empty, we assume the Running Status byte should be used if
+                // it's cached
                 if currentMessageBuffer.isEmpty,
                    let runningStatus = runningStatus
                 {

@@ -1,7 +1,7 @@
 //
 //  TransportView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -74,13 +74,13 @@ extension HUISurfaceView {
                     Group {
                         HUIStateButton(
                             image: Image(systemName: "backward.end.fill"),
-                            //title: "|◀︎ RTZ",
+                            // title: "|◀︎ RTZ",
                             param: .transport(.rtz),
                             ledColor: .yellow
                         )
                         HUIStateButton(
                             image: Image(systemName: "forward.end.fill"),
-                            //title: "END ▶︎|",
+                            // title: "END ▶︎|",
                             param: .transport(.end),
                             ledColor: .yellow
                         )
@@ -91,7 +91,7 @@ extension HUISurfaceView {
                         )
                         HUIStateButton(
                             image: Image(systemName: "repeat"),
-                            //title: "LOOP",
+                            // title: "LOOP",
                             param: .transport(.loop),
                             ledColor: .yellow
                         )
@@ -129,7 +129,7 @@ extension HUISurfaceView {
                 Group {
                     HUIStateButton(
                         image: Image(systemName: "backward.fill"),
-                        //title: "REWIND",
+                        // title: "REWIND",
                         param: .transport(.rewind),
                         ledColor: .red,
                         width: 60,
@@ -138,7 +138,7 @@ extension HUISurfaceView {
                     
                     HUIStateButton(
                         image: Image(systemName: "forward.fill"),
-                        //title: "FAST FWD",
+                        // title: "FAST FWD",
                         param: .transport(.fastFwd),
                         ledColor: .red,
                         width: 60,
@@ -147,7 +147,7 @@ extension HUISurfaceView {
                     
                     HUIStateButton(
                         image: Image(systemName: "stop.fill"),
-                        //title: "STOP",
+                        // title: "STOP",
                         param: .transport(.stop),
                         ledColor: .red,
                         width: 60,
@@ -156,7 +156,7 @@ extension HUISurfaceView {
                     
                     HUIStateButton(
                         image: Image(systemName: "play.fill"),
-                        //title: "PLAY",
+                        // title: "PLAY",
                         param: .transport(.play),
                         ledColor: .red,
                         width: 60,
@@ -165,7 +165,7 @@ extension HUISurfaceView {
                     
                     HUIStateButton(
                         image: Image(systemName: "record.circle.fill"),
-                        //title: "RECORD",
+                        // title: "RECORD",
                         param: .transport(.record),
                         ledColor: .red,
                         width: 60,

@@ -12,7 +12,12 @@
 // Endianness: All Apple platforms are currently little-endian
 
 // Floating endianness:
-// On some machines, while integers were represented in little-endian form, floating point numbers were represented in big-endian form. Because there are many floating point formats, and a lack of a standard "network" representation, no standard for transferring floating point values has been made. This means that floating point data written on one machine may not be readable on another, and this is the case even if both use IEEE 754 floating point arithmetic since the endianness of the memory representation is not part of the IEEE specification.
+// On some machines, while integers were represented in little-endian form, floating point numbers
+// were represented in big-endian form. Because there are many floating point formats, and a lack of
+// a standard "network" representation, no standard for transferring floating point values has been
+// made. This means that floating point data written on one machine may not be readable on another,
+// and this is the case even if both use IEEE 754 floating point arithmetic since the endianness of
+// the memory representation is not part of the IEEE specification.
 
 // int32
 //   32-bit big-endian two's complement integer
@@ -200,7 +205,8 @@ extension Data {
         // this crashes if Data alignment isn't correct
         // let number = { self.withUnsafeBytes { $0.load(as: Float32.self) } }()
         
-        // since .load(as:) is not memory alignment safe, memcpy is the current workaround (as of Swift 5.3)
+        // since .load(as:) is not memory alignment safe, memcpy is the current workaround (as of
+        // Swift 5.3)
         // see for more info: https://bugs.swift.org/browse/SR-10273
         let number: Float32 = withUnsafeBytes {
             var value = Float32()
@@ -307,7 +313,8 @@ extension Data {
         // this crashes if Data alignment isn't correct
         // let number: Double = { self.withUnsafeBytes { $0.load(as: Double.self) } }()
         
-        // since .load(as:) is not memory alignment safe, memcpy is the current workaround (as of Swift 5.3)
+        // since .load(as:) is not memory alignment safe, memcpy is the current workaround (as of
+        // Swift 5.3)
         // see for more info: https://bugs.swift.org/browse/SR-10273
         let number: Double = withUnsafeBytes {
             var value = Double()
@@ -360,7 +367,8 @@ extension Data {
 // MARK: - .toData
 
 extension FixedWidthInteger {
-    /// Returns Data representation of an integer. (Endianness has no effect on single-byte integers.)
+    /// Returns Data representation of an integer. (Endianness has no effect on single-byte
+    /// integers.)
     @_disfavoredOverload
     public func toData(_ endianness: NumberEndianness = .platformDefault) -> Data {
         var int: Self
@@ -400,7 +408,8 @@ extension Data {
         // this crashes if Data alignment isn't correct
         // let int: T = { self.withUnsafeBytes { $0.load(as: T.self) } }()
         
-        // since .load(as:) is not memory alignment safe, memcpy is the current workaround (as of Swift 5.3)
+        // since .load(as:) is not memory alignment safe, memcpy is the current workaround (as of
+        // Swift 5.3)
         // see for more info: https://bugs.swift.org/browse/SR-10273
         let int: T = withUnsafeBytes {
             var value = T()

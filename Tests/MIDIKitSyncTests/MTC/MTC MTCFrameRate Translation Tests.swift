@@ -1,7 +1,7 @@
 //
 //  MTC MTCFrameRate Translation Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform
@@ -12,9 +12,11 @@ import TimecodeKit
 
 final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
     func testMTC_MTCFrameRate_derivedFrameRates() {
-        // these tests may be pedantic, but we'll put them in any way since this acts as our source of truth
+        // these tests may be pedantic, but we'll put them in any way
+        // since this acts as our source of truth
         
-        // ensure all four MTC frame rate families return the correct matching derived timecode frame rates
+        // ensure all four MTC frame rate families return the correct
+        // matching derived timecode frame rates
         
         // MTC: 24
         

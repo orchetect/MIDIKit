@@ -1,7 +1,7 @@
 //
 //  MIDIIOError.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -29,7 +29,8 @@ public enum MIDIIOError: Error, Hashable {
 
 extension MIDIIOError {
     /// Internal:
-    /// Convenience to return a case of ``osStatus(_:)`` with its associated ``CoreMIDIOSStatus`` formed from a raw Core MIDI `OSStatus` (Int32) integer value.
+    /// Convenience to return a case of ``osStatus(_:)`` with its associated ``CoreMIDIOSStatus``
+    /// formed from a raw Core MIDI `OSStatus` (Int32) integer value.
     internal static func osStatus(_ rawValue: CoreMIDIOSStatus) -> Self {
         .osStatus(.init(rawValue: rawValue))
     }

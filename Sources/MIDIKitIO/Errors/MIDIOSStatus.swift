@@ -1,14 +1,15 @@
 //
 //  MIDIOSStatus.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
 
 @_implementationOnly import CoreMIDI
 
-/// An enumeration representing `CoreMIDI.MIDIServices` `OSStatus` error codes, with verbose descriptions.
+/// An enumeration representing `CoreMIDI.MIDIServices` `OSStatus` error codes, with verbose
+/// descriptions.
 public enum MIDIOSStatus: Hashable {
     /// `CoreMIDI.kMIDIInvalidClient`:
     /// An invalid `MIDIClientRef` was passed.
@@ -55,7 +56,8 @@ public enum MIDIOSStatus: Hashable {
     case setupFormatErr
     
     /// `CoreMIDI.kMIDIWrongThread`:
-    /// A driver is calling a non-I/O function in the server from a thread other than the server's main thread.
+    /// A driver is calling a non-I/O function in the server from a thread other than the server's
+    /// main thread.
     case wrongThread
     
     /// `CoreMIDI.kMIDIObjectNotFound`:
@@ -94,7 +96,8 @@ public enum MIDIOSStatus: Hashable {
 extension MIDIOSStatus {
     /// Returns the corresponding Core MIDI `OSStatus` raw value.
     ///
-    /// Core MIDI headers note: "These are the OSStatus error constants that are unique to Core MIDI. Note that Core MIDI functions may return other codes that are not listed here."
+    /// Core MIDI headers note: "These are the OSStatus error constants that are unique to Core
+    /// MIDI. Note that Core MIDI functions may return other codes that are not listed here."
     public var rawValue: CoreMIDIOSStatus {
         // swiftformat:disable spacearoundoperators
         switch self {

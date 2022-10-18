@@ -1,7 +1,7 @@
 //
 //  NoteAttribute.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -9,7 +9,8 @@ extension MIDIEvent {
     /// (MIDI 2.0)
     public enum NoteAttribute: Equatable, Hashable {
         /// None:
-        /// When sending, Attribute Value will be `0x0000` and receiver should ignore Attribute Value.
+        /// When sending, Attribute Value will be `0x0000` and receiver should ignore Attribute
+        /// Value.
         case none
     
         /// Manufacturer Specific:
@@ -28,8 +29,15 @@ extension MIDIEvent {
         ///
         /// > MIDI 2.0 Spec:
         /// >
-        /// > A Profile might define another Attribute Type that is defined for more specific use by that one Profile only.
-        /// > The application of an Attribute Type value might be defined by MMA/AMEI in a MIDI-CI Profile specification. For example, a drum Profile might define an Attribute Type as “Strike Position” with the Attribute Data value declaring the position from center of drum/cymbal to outer edge. An orchestral string Profile might define Attribute values to be used as Articulation choice such as Arco, Pizzicato, Spiccato, Tremolo, etc. Such cases generally require assigning 1 of the 256 available Attribute Types for use by that Profile. Some Profiles might be able to share some common Attribute types.
+        /// > A Profile might define another Attribute Type that is defined for more specific use by
+        /// that one Profile only.
+        /// > The application of an Attribute Type value might be defined by MMA/AMEI in a MIDI-CI
+        /// Profile specification. For example, a drum Profile might define an Attribute Type as
+        /// “Strike Position” with the Attribute Data value declaring the position from center of
+        /// drum/cymbal to outer edge. An orchestral string Profile might define Attribute values to
+        /// be used as Articulation choice such as Arco, Pizzicato, Spiccato, Tremolo, etc. Such
+        /// cases generally require assigning 1 of the 256 available Attribute Types for use by that
+        /// Profile. Some Profiles might be able to share some common Attribute types.
         case undefined(attributeType: UInt8, data: UInt16)
     }
 }
@@ -69,7 +77,8 @@ extension MIDIEvent.NoteAttribute {
     /// Range: `0+(0/512) ... 127+(511/512)`
     ///
     /// - Parameters:
-    ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
+    ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament
+    /// scale.
     ///   - fine: 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
     public static func pitch7_9(
         coarse: UInt7,

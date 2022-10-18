@@ -1,14 +1,15 @@
 //
 //  MIDINote.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
 /// Value type describing a MIDI note number.
 ///
-/// Constructors and properties allow getting and setting by raw value, note name & octave, or string representation.
+/// Constructors and properties allow getting and setting by raw value, note name & octave, or
+/// string representation.
 public struct MIDINote: Equatable, Hashable {
     // MARK: - Constants
     
@@ -105,7 +106,8 @@ public struct MIDINote: Equatable, Hashable {
     ///
     /// - Parameters:
     ///   - namingStandard: Note naming standard (octave offset).
-    ///   - respellSharpAsFlat: If note is sharp, respell enharmonically as a flat (ie: G♯ becomes A♭). Otherwise, sharp is always used, which is typical convention for MIDI note names.
+    ///   - respellSharpAsFlat: If note is sharp, respell enharmonically as a flat (ie: G♯ becomes
+    /// A♭). Otherwise, sharp is always used, which is typical convention for MIDI note names.
     ///   - unicodeAccidental: Use stylized unicode character for sharp (♯) and flat (♭).
     ///
     /// - Returns: MIDI note name string.

@@ -1,7 +1,7 @@
 //
-//  Events.swift
+//  EventsWithMetadata.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -16,7 +16,8 @@ extension MIDIReceiver {
 
 extension MIDIReceiveHandler {
     /// MIDI Event receive handler including packet timestamp and source endpoint metadata.
-    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be `nil` when used with ``MIDIInput``.
+    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
+    /// `nil` when used with ``MIDIInput``.
     class EventsWithMetadata: MIDIIOReceiveHandlerProtocol {
         public var handler: MIDIReceiver.EventsWithMetadataHandler
         

@@ -1,7 +1,7 @@
 //
 //  HUIHostView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -61,12 +61,16 @@ struct HUIHostView: View {
                                     .backgroundColor(Color(nsColor: .controlBackgroundColor))
                                     .indicatorWidth(15)
                                     .frame(height: 20)
-                                    .onChange(of: huiHostHelper.model.bank0.channel0.pan) { newValue in
+                                    .onChange(
+                                        of: huiHostHelper.model.bank0.channel0.pan
+                                    ) { newValue in
                                         transmitVPot(value: newValue)
                                     }
                             }
                             Toggle("Low", isOn: $huiHostHelper.model.bank0.channel0.vPotLowerLED)
-                                .onChange(of: huiHostHelper.model.bank0.channel0.vPotLowerLED) { newValue in
+                                .onChange(
+                                    of: huiHostHelper.model.bank0.channel0.vPotLowerLED
+                                ) { newValue in
                                     transmitVPot(lowerLED: newValue)
                                 }
                         }
@@ -98,11 +102,17 @@ struct HUIHostView: View {
                         }
                     GroupBox(label: Text("Fader")) {
                         Ribbon(position: $huiHostHelper.model.bank0.channel0.faderLevel)
-                            .foregroundColor(huiHostHelper.model.bank0.channel0.faderTouched ? .green : .secondary)
+                            .foregroundColor(
+                                huiHostHelper.model.bank0.channel0.faderTouched
+                                    ? .green
+                                    : .secondary
+                            )
                             .backgroundColor(Color(nsColor: .controlBackgroundColor))
                             .indicatorWidth(15)
                             .frame(height: 20)
-                            .onChange(of: huiHostHelper.model.bank0.channel0.faderLevel) { newValue in
+                            .onChange(
+                                of: huiHostHelper.model.bank0.channel0.faderLevel
+                            ) { newValue in
                                 let scaledLevel = UInt14(newValue * Float(UInt14.max))
                                 huiBank0?.transmitFader(level: scaledLevel, channel: 0)
                             }

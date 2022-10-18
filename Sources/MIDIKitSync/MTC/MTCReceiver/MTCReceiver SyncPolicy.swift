@@ -1,7 +1,7 @@
 //
 //  MTCReceiver SyncPolicy.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -13,10 +13,12 @@ extension MTCReceiver {
     public struct SyncPolicy: Equatable, Codable {
         // MARK: - Public properties
         
-        /// Sets the number of received continuous timecode frames that must elapse prior to establishing synchronization.
+        /// Sets the number of received continuous timecode frames that must elapse prior to
+        /// establishing synchronization.
         public var lockFrames: Int = 0
         
-        /// Sets the number of timecode frames that must be missed until the receiver enters the stopped/idle state.
+        /// Sets the number of timecode frames that must be missed until the receiver enters the
+        /// stopped/idle state.
         public var dropOutFrames: Int = 0
         
         // MARK: - Init

@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModel ChannelStrip Fader.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -36,4 +36,5 @@ extension HUISurfaceModel.ChannelStrip {
     }
 }
 
-// HUISurfaceStateProtocol conformance is on HUISurfaceModel.ChannelStrip and it handles the `.touched` switch property there, so we don't need a setter/getter here
+// HUISurfaceStateProtocol conformance is on HUISurfaceModel.ChannelStrip and it handles the
+// `.touched` switch property there, so we don't need a setter/getter here
