@@ -12,25 +12,32 @@ import Foundation
 public enum MIDIReceiver {
     /// One or more receivers in series.
     case group([MIDIReceiver])
-        
+    
     /// Provides a closure to handle strongly-typed MIDI events. (Recommended)
     case events(
         translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
         EventsHandler
     )
-        
+    
+    /// Provides a closure to handle strongly-typed MIDI events including packet timestamp and source endpoint metadata.
+    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be `nil` when used with ``MIDIInput``.
+    case eventsWithMetadata(
+        translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
+        EventsWithMetadataHandler
+    )
+    
     /// Provides a convenience to automatically log MIDI events to the console.
     /// (Only logs events in `DEBUG` preprocessor flag builds.)
     case eventsLogging(
         filterActiveSensingAndClock: Bool = false,
         _ handler: EventsLoggingHandler? = nil
     )
-        
+    
     /// Basic raw packet data receive handler.
     /// This handler is provided for debugging and data introspection but is discouraged for manually parsing MIDI packets.
     /// It is recommended to use a MIDI event handler instead.
     case rawData(RawDataHandler)
-        
+    
     /// Raw data logging handler (hex byte strings).
     ///
     /// If `handler` is `nil`, all raw packet data is logged to the console (but only in `DEBUG` preprocessor flag builds).
@@ -73,6 +80,17 @@ extension MIDIReceiver {
         ):
             return .init(
                 MIDIReceiveHandler.Events(
+                    translateMIDI1NoteOnZeroVelocityToNoteOff: translateMIDI1NoteOnZeroVelocityToNoteOff,
+                    handler
+                )
+            )
+            
+        case let .eventsWithMetadata(
+            translateMIDI1NoteOnZeroVelocityToNoteOff,
+            handler
+        ):
+            return .init(
+                MIDIReceiveHandler.EventsWithMetadata(
                     translateMIDI1NoteOnZeroVelocityToNoteOff: translateMIDI1NoteOnZeroVelocityToNoteOff,
                     handler
                 )
