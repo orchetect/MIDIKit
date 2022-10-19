@@ -293,8 +293,8 @@ extension AnyMIDIIOObject.Property {
         switch self {
         // MARK: Identification
         case .name: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .model: return [.device, .inputEndpoint, .outputEndpoint]
-        case .manufacturer: return [.device, .inputEndpoint, .outputEndpoint]
+        case .model: return [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .manufacturer: return [.device, .entity, .inputEndpoint, .outputEndpoint]
         case .uniqueID: return [.device, .entity, .inputEndpoint, .outputEndpoint]
         case .deviceID: return [.device, .entity]
     
