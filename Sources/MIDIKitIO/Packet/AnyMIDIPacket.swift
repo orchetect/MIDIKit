@@ -8,13 +8,13 @@
 
 /// A box that can hold any MIDI packet type.
 public enum AnyMIDIPacket {
-    /// MIDI 1.0 MIDI Packet
+    /// MIDI 1.0 MIDI Packet.
     case packet(MIDIPacketData)
     
-    /// MIDI 2.0 Universal MIDI Packet
+    /// MIDI 2.0 Universal MIDI Packet.
     case universalPacket(UniversalMIDIPacketData)
     
-    /// Flat array of raw bytes
+    /// Flat array of raw bytes.
     public var bytes: [UInt8] {
         switch self {
         case let .packet(packetData):
@@ -25,7 +25,7 @@ public enum AnyMIDIPacket {
         }
     }
     
-    /// Core MIDI packet timestamp
+    /// Core MIDI packet timestamp.
     public var timeStamp: CoreMIDITimeStamp {
         switch self {
         case let .packet(packetData):
