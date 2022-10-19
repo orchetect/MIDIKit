@@ -35,6 +35,18 @@ public enum AnyMIDIPacket {
             return universalPacketData.timeStamp
         }
     }
+    
+    /// The MIDI endpoint from which the packet originated.
+    /// If this information is not available, it may be `nil`.
+    public var source: MIDIOutputEndpoint? {
+        switch self {
+        case let .packet(packetData):
+            return packetData.source
+            
+        case let .universalPacket(universalPacketData):
+            return universalPacketData.source
+        }
+    }
 }
 
 #endif
