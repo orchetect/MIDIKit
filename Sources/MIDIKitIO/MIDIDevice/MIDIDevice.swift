@@ -88,7 +88,7 @@ extension MIDIDevice {
 
 extension MIDIDevice: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "MIDIDevice(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists)"
+        "MIDIDevice(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists))"
     }
 }
 
