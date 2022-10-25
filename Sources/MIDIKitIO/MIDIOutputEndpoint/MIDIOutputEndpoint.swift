@@ -14,7 +14,7 @@
 ///
 /// Instead, read endpoint arrays and individual endpoint properties from ``MIDIManager/endpoints``
 /// ad-hoc when they are needed.
-public struct MIDIOutputEndpoint: _MIDIIOEndpointProtocol {
+public struct MIDIOutputEndpoint: _MIDIEndpoint {
     // MARK: MIDIIOObject
     
     public let objectType: MIDIIOObjectType = .outputEndpoint
@@ -29,7 +29,7 @@ public struct MIDIOutputEndpoint: _MIDIIOEndpointProtocol {
         .outputEndpoint(self)
     }
     
-    // MARK: MIDIIOEndpointProtocol
+    // MARK: MIDIEndpoint
     
     public internal(set) var displayName: String = ""
     

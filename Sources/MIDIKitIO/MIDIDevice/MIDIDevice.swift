@@ -72,7 +72,7 @@ extension MIDIDevice: Identifiable {
 }
 
 extension MIDIDevice {
-    /// List of entities within the device.
+    /// List of entities owned by the device.
     public var entities: [MIDIEntity] {
         getSystemEntities(for: coreMIDIObjectRef)
     }

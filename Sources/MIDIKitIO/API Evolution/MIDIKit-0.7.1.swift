@@ -294,7 +294,7 @@ extension MIDIIOObject {
     }
 }
 
-extension _MIDIIOEndpointProtocol {
+extension _MIDIEndpoint {
     @available(*, deprecated, renamed: "entity")
     public func getEntity() -> MIDIEntity? {
         entity

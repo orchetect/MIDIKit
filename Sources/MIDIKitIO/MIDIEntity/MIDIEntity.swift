@@ -69,7 +69,8 @@ extension MIDIEntity: Identifiable {
 }
 
 extension MIDIEntity {
-    public func getDevice() -> MIDIDevice? {
+    /// Returns the device that owns the entity, if present.
+    public var device: MIDIDevice? {
         try? getSystemDevice(for: coreMIDIObjectRef)
     }
     
@@ -87,7 +88,7 @@ extension MIDIEntity {
 extension MIDIEntity {
     /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
-        getDevice() != nil
+        device != nil
     }
 }
 
