@@ -62,7 +62,7 @@
 - ``MIDIIOManagedProtocol``
 - ``MIDIIOReceivesMIDIMessagesProtocol``
 - ``MIDIIOSendsMIDIMessagesProtocol``
-- ``MIDIIOReceiveHandlerProtocol``
+- ``MIDIReceiveHandlerProtocol``
 
 ### Value Type Protocols
 

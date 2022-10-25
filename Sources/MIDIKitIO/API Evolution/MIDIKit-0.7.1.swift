@@ -306,4 +306,18 @@ extension _MIDIEndpoint {
     }
 }
 
+// Protocols
+
+@available(*, unavailable, renamed: "MIDIDevicesProtocol")
+public protocol MIDIIODevicesProtocol { }
+
+@available(*, unavailable, renamed: "MIDIEndpointsProtocol")
+public protocol MIDIIOEndpointsProtocol { }
+
+@available(*, unavailable, renamed: "MIDIEndpoint")
+public protocol MIDIIOEndpointProtocol { }
+
+@available(*, unavailable, renamed: "MIDIReceiveHandlerProtocol")
+public protocol MIDIIOReceiveHandlerProtocol { }
+
 #endif
