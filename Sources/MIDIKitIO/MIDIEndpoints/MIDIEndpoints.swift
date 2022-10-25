@@ -28,7 +28,7 @@ public protocol MIDIIOEndpointsProtocol {
     /// Manually update the locally cached contents from the system.
     /// This method does not need to be manually invoked, as it is called automatically by the
     /// ``MIDIManager`` when MIDI system endpoints change.
-    mutating func update()
+    mutating func updateCachedProperties()
 }
 
 /// Manages system MIDI endpoints information cache.
@@ -51,7 +51,7 @@ public final class MIDIEndpoints: NSObject, MIDIIOEndpointsProtocol {
         super.init()
     }
     
-    public func update() {
+    public func updateCachedProperties() {
         inputs = getSystemDestinationEndpoints()
     
         if let manager = manager {

@@ -31,7 +31,7 @@ struct DetailsView: View {
     @State private var showAll: Bool = false
     
     func generateHTML(_ endpoint: AnyMIDIIOObject) -> String {
-        let flatProperties = endpoint.getPropertiesAsStrings(onlyIncludeRelevant: !showAll)
+        let flatProperties = endpoint.propertiesAsStrings(onlyIncludeRelevant: !showAll)
         
         let htmlStart = """
             <HTML>

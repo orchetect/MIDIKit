@@ -167,7 +167,7 @@ public final class MIDIManager: NSObject {
         }
     }
     
-    /// Internal: calls `update()` on all objects caches.
+    /// Internal: updates cached properties for all objects.
     internal dynamic func updateObjectsCache() {
         #if canImport(Combine)
         if #available(
@@ -183,8 +183,8 @@ public final class MIDIManager: NSObject {
         }
         #endif
     
-        devices.update()
-        endpoints.update()
+        devices.updateCachedProperties()
+        endpoints.updateCachedProperties()
     }
 }
 

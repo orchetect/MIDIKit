@@ -20,10 +20,24 @@ public protocol MIDIIOObject {
     /// The MIDI I/O object type.
     var objectType: MIDIIOObjectType { get }
     
-    /// Name of the object.
+    // MARK: - Cached Properties
+    
+    /// User-visible name of the object.
+    /// (`kMIDIPropertyName`)
+    ///
+    /// Devices, entities, and endpoints may all have names. Note that these names are
+    /// not required to be unique. Using ``displayName`` may provide a better description
+    /// of the endpoint for user interface.
+    ///
+    /// A studio setup editor may allow the user to set the names of both driver-owned and
+    /// external devices.
     var name: String { get }
     
     /// The unique ID for the Core MIDI object.
+    /// (`kMIDIPropertyUniqueID`)
+    ///
+    /// The system assigns unique IDs to all objects.  Creators of virtual endpoints may set this
+    /// property on their endpoints, though doing so may fail if the chosen ID is not unique.
     var uniqueID: MIDIIdentifier { get }
     
     /// The Core MIDI object reference.
@@ -38,92 +52,92 @@ public protocol MIDIIOObject {
     static func == (lhs: Self, rhs: Self) -> Bool
     func hash(into hasher: inout Hasher)
     
-    // MARK: - MIDIIOObject Properties.swift
+    // MARK: - MIDIIOObjectProtocol Properties.swift
     
-    // Identification
-    func getName() -> String?
-    func getModel() -> String?
-    func getManufacturer() -> String?
-    func getUniqueID() -> MIDIIdentifier
-    func getDeviceManufacturerID() -> Int32
+    // MARK: Identification
+    // var name - cached property, declared above
+    var model: String? { get }
+    var manufacturer: String? { get }
+    // var uniqueID - cached property, declared above
+    var deviceManufacturerID: Int32 { get }
     
-    // Capabilities
-    func getSupportsMMC() -> Bool
-    func getSupportsGeneralMIDI() -> Bool
-    func getSupportsShowControl() -> Bool
+    // MARK: Capabilities
+    var supportsMMC: Bool { get }
+    var supportsGeneralMIDI: Bool { get }
+    var supportsShowControl: Bool { get }
     
-    // Configuration
+    // MARK: Configuration
     @available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *)
-    func getNameConfigurationDictionary() -> NSDictionary?
-    func getMaxSysExSpeed() -> Int32
-    func getDriverDeviceEditorApp() -> URL?
+    var nameConfigurationDictionary: NSDictionary? { get }
+    var maxSysExSpeed: Int32 { get }
+    var driverDeviceEditorApp: URL? { get }
     
-    // Presentation
-    func getImageFileURL() -> URL?
+    // MARK: Presentation
+    var imageFileURL: URL? { get }
     #if canImport(AppKit) && os(macOS)
-    func getImageAsNSImage() -> NSImage?
+    var imageAsNSImage: NSImage? { get }
     #endif
     #if canImport(UIKit)
-    func getImageAsUIImage() -> UIImage?
+    var imageAsUIImage: UIImage? { get }
     #endif
-    func getDisplayName() -> String?
+    var displayName: String? { get }
     
-    // Audio
-    func getPanDisruptsStereo() -> Bool
+    // MARK: Audio
+    var panDisruptsStereo: Bool { get }
     
-    // Protocols
+    // MARK: Protocols
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-    func getProtocolID() -> MIDIProtocolVersion?
+    var protocolID: MIDIProtocolVersion? { get }
     
-    // Timing
-    func getTransmitsMTC() -> Bool
-    func getReceivesMTC() -> Bool
-    func getTransmitsClock() -> Bool
-    func getReceivesClock() -> Bool
-    func getAdvanceScheduleTimeMuSec() -> String?
+    // MARK: Timing
+    var transmitsMTC: Bool { get }
+    var receivesMTC: Bool { get }
+    var transmitsClock: Bool { get }
+    var receivesClock: Bool { get }
+    var advanceScheduleTimeMuSec: String? { get }
     
-    // Roles
-    func getIsMixer() -> Bool
-    func getIsSampler() -> Bool
-    func getIsEffectUnit() -> Bool
-    func getIsDrumMachine() -> Bool
+    // MARK: Roles
+    var isMixer: Bool { get }
+    var isSampler: Bool { get }
+    var isEffectUnit: Bool { get }
+    var isDrumMachine: Bool { get }
     
-    // Status
-    func getIsOffline() -> Bool
-    func getIsPrivate() -> Bool
+    // MARK: Status
+    var isOffline: Bool { get }
+    var isPrivate: Bool { get }
     
-    // Drivers
-    func getDriverOwner() -> String?
-    func getDriverVersion() -> Int32
+    // MARK: Drivers
+    var driverOwner: String? { get }
+    var driverVersion: Int32 { get }
     
-    // Connections
-    func getCanRoute() -> Bool
-    func getIsBroadcast() -> Bool
-    func getConnectionUniqueID() -> MIDIIdentifier
-    func getIsEmbeddedEntity() -> Bool
-    func getSingleRealtimeEntity() -> Int32
+    // MARK: Connections
+    var canRoute: Bool { get }
+    var isBroadcast: Bool { get }
+    var connectionUniqueID: MIDIIdentifier { get }
+    var isEmbeddedEntity: Bool { get }
+    var singleRealtimeEntity: Int32 { get }
     
-    // Channels
-    func getReceiveChannels() -> Int32
-    func getTransmitChannels() -> Int32
-    func getMaxReceiveChannels() -> Int32
-    func getMaxTransmitChannels() -> Int32
+    // MARK: Channels
+    var receiveChannels: Int32 { get }
+    var transmitChannels: Int32 { get }
+    var maxReceiveChannels: Int32 { get }
+    var maxTransmitChannels: Int32 { get }
     
-    // Banks
-    func getReceivesBankSelectLSB() -> Bool
-    func getReceivesBankSelectMSB() -> Bool
-    func getTransmitsBankSelectLSB() -> Bool
-    func getTransmitsBankSelectMSB() -> Bool
+    // MARK: Banks
+    var receivesBankSelectLSB: Bool { get }
+    var receivesBankSelectMSB: Bool { get }
+    var transmitsBankSelectLSB: Bool { get }
+    var transmitsBankSelectMSB: Bool { get }
     
-    // Notes
-    func getReceivesNotes() -> Bool
-    func getTransmitsNotes() -> Bool
-    func getReceivesProgramChanges() -> Bool
-    func getTransmitsProgramChanges() -> Bool
+    // MARK: Notes
+    var receivesNotes: Bool { get }
+    var transmitsNotes: Bool { get }
+    var receivesProgramChanges: Bool { get }
+    var transmitsProgramChanges: Bool { get }
     
     // MARK: - MIDIIOObject Properties Dictionary.swift
     
-    func getPropertiesAsStrings(
+    func propertiesAsStrings(
         onlyIncludeRelevant: Bool
     ) -> [(key: String, value: String)]
 }

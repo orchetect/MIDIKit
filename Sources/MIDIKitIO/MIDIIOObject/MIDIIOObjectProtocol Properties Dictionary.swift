@@ -11,7 +11,7 @@ import Foundation
 extension MIDIIOObject {
     /// Get all properties as a key/value pair array, formatted as human-readable strings.
     /// Useful for displaying in a user interface or outputting to console for debugging.
-    public func getPropertiesAsStrings(
+    public func propertiesAsStrings(
         onlyIncludeRelevant: Bool = true
     ) -> [(key: String, value: String)] {
         (
@@ -30,60 +30,60 @@ extension MIDIIOObject {
     ) -> (key: String, value: String) {
         switch property {
         // MARK: Identification
-        case .name:
+        case .name: // override cache
             return (
                 key: "Name",
-                value: getName() ?? "-"
+                value: (try? MIDIKitIO.getName(of: coreMIDIObjectRef)) ?? "-"
             )
     
         case .model:
             return (
                 key: "Model",
-                value: getModel() ?? "-"
+                value: model ?? "-"
             )
     
         case .manufacturer:
             return (
                 key: "Manufacturer",
-                value: getManufacturer() ?? "-"
+                value: manufacturer ?? "-"
             )
     
-        case .uniqueID:
+        case .uniqueID: // override cache
             return (
                 key: "Unique ID",
-                value: "\(getUniqueID())"
+                value: "\(MIDIKitIO.getUniqueID(of: coreMIDIObjectRef))"
             )
     
         case .deviceID:
             return (
                 key: "Device ID",
-                value: "\(getDeviceManufacturerID())"
+                value: "\(deviceManufacturerID))"
             )
     
         // MARK: Capabilities
         case .supportsMMC:
             return (
                 key: "Supports MMC",
-                value: getSupportsMMC() ? "Yes" : "No"
+                value: supportsMMC ? "Yes" : "No"
             )
     
         case .supportsGeneralMIDI:
             return (
                 key: "Supports General MIDI",
-                value: getSupportsGeneralMIDI() ? "Yes" : "No"
+                value: supportsGeneralMIDI ? "Yes" : "No"
             )
     
         case .supportsShowControl:
             return (
                 key: "Supports Show Control",
-                value: getSupportsShowControl() ? "Yes" : "No"
+                value: supportsShowControl ? "Yes" : "No"
             )
     
         // MARK: Configuration
         case .nameConfigurationDictionary:
             var valueString = "-"
             if #available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *) {
-                valueString = getNameConfigurationDictionary()?.description ?? "-"
+                valueString = nameConfigurationDictionary?.description ?? "-"
             } else {
                 valueString =
                     "OS not supported. Requires macOS 10.15, macCatalyst 13.0, or iOS 13.0."
@@ -96,40 +96,40 @@ extension MIDIIOObject {
         case .maxSysExSpeed:
             return (
                 key: "Max SysEx Speed",
-                value: "\(getMaxSysExSpeed())"
+                value: "\(maxSysExSpeed)"
             )
     
         case .driverDeviceEditorApp:
             return (
                 key: "Driver Device Editor App",
-                value: getDriverDeviceEditorApp()?.absoluteString ?? "-"
+                value: driverDeviceEditorApp?.absoluteString ?? "-"
             )
     
         // MARK: Presentation
         case .image:
             return (
                 key: "Image (File URL)",
-                value: getImageFileURL()?.absoluteString ?? "-"
+                value: imageFileURL?.absoluteString ?? "-"
             )
     
         case .displayName:
             return (
                 key: "Display Name",
-                value: getDisplayName() ?? "-"
+                value: displayName ?? "-"
             )
     
         // MARK: Audio
         case .panDisruptsStereo:
             return (
                 key: "Pan Disrupts Stereo",
-                value: getPanDisruptsStereo() ? "Yes" : "No"
+                value: panDisruptsStereo ? "Yes" : "No"
             )
     
         // MARK: Protocols
         case .protocolID:
             var valueString = "-"
             if #available(macOS 11, iOS 14, macCatalyst 14, *) {
-                if let unwrappedProtocolID = getProtocolID() {
+                if let unwrappedProtocolID = protocolID {
                     valueString = "\(unwrappedProtocolID)"
                 }
             } else {
@@ -146,118 +146,118 @@ extension MIDIIOObject {
         case .transmitsMTC:
             return (
                 key: "Transmits MTC",
-                value: getTransmitsMTC() ? "Yes" : "No"
+                value: transmitsMTC ? "Yes" : "No"
             )
     
         case .receivesMTC:
             return (
                 key: "Receives MTC",
-                value: getReceivesMTC() ? "Yes" : "No"
+                value: receivesMTC ? "Yes" : "No"
             )
     
         case .transmitsClock:
             return (
                 key: "Transmits Clock",
-                value: getTransmitsClock() ? "Yes" : "No"
+                value: transmitsClock ? "Yes" : "No"
             )
     
         case .receivesClock:
             return (
                 key: "Receives Clock",
-                value: getReceivesClock() ? "Yes" : "No"
+                value: receivesClock ? "Yes" : "No"
             )
     
         case .advanceScheduleTimeMuSec:
             return (
                 key: "Advance Schedule Time (μs)",
-                value: getAdvanceScheduleTimeMuSec() ?? "-"
+                value: advanceScheduleTimeMuSec ?? "-"
             )
     
         // MARK: Roles
         case .isMixer:
             return (
                 key: "Is Mixer",
-                value: getIsMixer() ? "Yes" : "No"
+                value: isMixer ? "Yes" : "No"
             )
     
         case .isSampler:
             return (
                 key: "Is Sampler",
-                value: getIsSampler() ? "Yes" : "No"
+                value: isSampler ? "Yes" : "No"
             )
     
         case .isEffectUnit:
             return (
                 key: "Is Effect Unit",
-                value: getIsEffectUnit() ? "Yes" : "No"
+                value: isEffectUnit ? "Yes" : "No"
             )
     
         case .isDrumMachine:
             return (
                 key: "Is Drum Machine",
-                value: getIsDrumMachine() ? "Yes" : "No"
+                value: isDrumMachine ? "Yes" : "No"
             )
     
         // MARK: Status
         case .isOffline:
             return (
                 key: "Is Offline",
-                value: getIsOffline() ? "Yes" : "No"
+                value: isOffline ? "Yes" : "No"
             )
     
         case .isPrivate:
             return (
                 key: "Is Private",
-                value: getIsPrivate() ? "Yes" : "No"
+                value: isPrivate ? "Yes" : "No"
             )
     
         // MARK: Drivers
         case .driverOwner:
             return (
                 key: "Driver Owner",
-                value: getDriverOwner() ?? "-"
+                value: driverOwner ?? "-"
             )
     
         case .driverVersion:
             return (
                 key: "Driver Version",
-                value: "\(getDriverVersion())"
+                value: "\(driverVersion)"
             )
     
         // MARK: Connections
         case .canRoute:
             return (
                 key: "Can Route",
-                value: getCanRoute() ? "Yes" : "No"
+                value: canRoute ? "Yes" : "No"
             )
     
         case .isBroadcast:
             return (
                 key: "Is Broadcast",
-                value: getIsBroadcast() ? "Yes" : "No"
+                value: isBroadcast ? "Yes" : "No"
             )
     
         case .connectionUniqueID:
             return (
                 key: "Connection Unique ID",
-                value: "\(getConnectionUniqueID())"
+                value: "\(connectionUniqueID)"
             )
     
         case .isEmbeddedEntity:
             return (
                 key: "Is Embedded Entity",
-                value: getIsEmbeddedEntity() ? "Yes" : "No"
+                value: isEmbeddedEntity ? "Yes" : "No"
             )
     
         case .singleRealtimeEntity:
             return (
                 key: "Single Realtime Entity",
-                value: "\(getSingleRealtimeEntity())"
+                value: "\(singleRealtimeEntity)"
             )
     
         // MARK: Channels
         case .receiveChannels:
-            let valueString = getReceiveChannels().binaryString(padTo: 8)
+            let valueString = receiveChannels.binaryString(padTo: 8)
     
             return (
                 key: "Receive Channels",
@@ -265,7 +265,7 @@ extension MIDIIOObject {
             )
     
         case .transmitChannels:
-            let valueString = getTransmitChannels().binaryString(padTo: 8)
+            let valueString = transmitChannels.binaryString(padTo: 8)
     
             return (
                 key: "Transmit Channels",
@@ -275,64 +275,64 @@ extension MIDIIOObject {
         case .maxReceiveChannels:
             return (
                 key: "Max Receive Channels",
-                value: "\(getMaxReceiveChannels())"
+                value: "\(maxReceiveChannels)"
             )
     
         case .maxTransmitChannels:
             return (
                 key: "Max Transmit Channels",
-                value: "\(getMaxTransmitChannels())"
+                value: "\(maxTransmitChannels)"
             )
     
         // MARK: Banks
         case .receivesBankSelectLSB:
             return (
                 key: "Receives Bank Select LSB",
-                value: getReceivesBankSelectLSB() ? "Yes" : "No"
+                value: receivesBankSelectLSB ? "Yes" : "No"
             )
     
         case .receivesBankSelectMSB:
             return (
                 key: "Receives Bank Select MSB",
-                value: getReceivesBankSelectMSB() ? "Yes" : "No"
+                value: receivesBankSelectMSB ? "Yes" : "No"
             )
     
         case .transmitsBankSelectLSB:
             return (
                 key: "Transmits Bank Select LSB",
-                value: getTransmitsBankSelectLSB() ? "Yes" : "No"
+                value: transmitsBankSelectLSB ? "Yes" : "No"
             )
     
         case .transmitsBankSelectMSB:
             return (
                 key: "Transmits Bank Select MSB",
-                value: getTransmitsBankSelectMSB() ? "Yes" : "No"
+                value: transmitsBankSelectMSB ? "Yes" : "No"
             )
     
         // MARK: Notes
         case .receivesNotes:
             return (
                 key: "Receives Notes",
-                value: getReceivesNotes() ? "Yes" : "No"
+                value: receivesNotes ? "Yes" : "No"
             )
     
         case .transmitsNotes:
             return (
                 key: "Transmits Notes",
-                value: getTransmitsNotes() ? "Yes" : "No"
+                value: transmitsNotes ? "Yes" : "No"
             )
     
         // MARK: Program Changes
         case .receivesProgramChanges:
             return (
                 key: "Receives Program Changes",
-                value: getReceivesProgramChanges() ? "Yes" : "No"
+                value: receivesProgramChanges ? "Yes" : "No"
             )
     
         case .transmitsProgramChanges:
             return (
                 key: "Transmits Program Changes",
-                value: getTransmitsProgramChanges() ? "Yes" : "No"
+                value: transmitsProgramChanges ? "Yes" : "No"
             )
         }
     }

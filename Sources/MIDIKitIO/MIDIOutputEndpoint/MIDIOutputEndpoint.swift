@@ -46,22 +46,22 @@ public struct MIDIOutputEndpoint: _MIDIIOEndpointProtocol {
         )
     
         coreMIDIObjectRef = ref
-        update()
+        updateCachedProperties()
     }
     
     // MARK: Update Cached Properties
     
     /// Update the cached properties
-    internal mutating func update() {
-        if let name = getName() {
+    internal mutating func updateCachedProperties() {
+        if let name = try? MIDIKitIO.getName(of: coreMIDIObjectRef) {
             self.name = name
         }
     
-        if let displayName = getDisplayName() {
+        if let displayName = try? MIDIKitIO.getDisplayName(of: coreMIDIObjectRef) {
             self.displayName = displayName
         }
     
-        let uniqueID = getUniqueID()
+        let uniqueID = MIDIKitIO.getUniqueID(of: coreMIDIObjectRef)
         if uniqueID != .invalidMIDIIdentifier {
             self.uniqueID = uniqueID
         }

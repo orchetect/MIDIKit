@@ -17,7 +17,7 @@ public protocol MIDIIODevicesProtocol {
     /// Manually update the locally cached contents from the system.
     /// This method does not need to be manually invoked, as it is handled internally when MIDI
     /// system endpoints change.
-    func update()
+    func updateCachedProperties()
 }
 
 /// Manages system MIDI devices information cache.
@@ -35,7 +35,7 @@ public final class MIDIDevices: NSObject, MIDIIODevicesProtocol {
     ///
     /// It is not necessary to call this method as the ``MIDIManager`` will automate updating device
     /// cache.
-    public func update() {
+    public func updateCachedProperties() {
         devices = getSystemDevices()
     }
 }
