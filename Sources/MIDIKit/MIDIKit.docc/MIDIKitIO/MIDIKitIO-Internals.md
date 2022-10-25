@@ -57,8 +57,8 @@
 - ``AnyMIDIIOObject``
 
 - ``MIDIEndpoint``
-- ``MIDIIODevicesProtocol``
-- ``MIDIIOEndpointsProtocol``
+- ``MIDIDevicesProtocol``
+- ``MIDIEndpointsProtocol``
 - ``MIDIIOManagedProtocol``
 - ``MIDIIOReceivesMIDIMessagesProtocol``
 - ``MIDIIOSendsMIDIMessagesProtocol``

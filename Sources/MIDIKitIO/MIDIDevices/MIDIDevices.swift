@@ -10,7 +10,7 @@ import Foundation
 
 // this protocol may not be necessary, it was experimental so that the `MIDIManager.devices`
 // property could be swapped out with a different Devices class with Combine support
-public protocol MIDIIODevicesProtocol {
+public protocol MIDIDevicesProtocol {
     /// List of MIDI devices in the system
     var devices: [MIDIDevice] { get }
     
@@ -24,7 +24,7 @@ public protocol MIDIIODevicesProtocol {
 ///
 /// Do not instance this class directly. Instead, access the ``MIDIManager/devices`` property of
 /// your central ``MIDIManager`` instance.
-public final class MIDIDevices: NSObject, MIDIIODevicesProtocol {
+public final class MIDIDevices: NSObject, MIDIDevicesProtocol {
     public internal(set) dynamic var devices: [MIDIDevice] = []
     
     override internal init() {

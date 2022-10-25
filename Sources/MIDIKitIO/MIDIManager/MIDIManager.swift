@@ -76,10 +76,10 @@ public final class MIDIManager: NSObject {
     }
     
     /// MIDI devices in the system.
-    public internal(set) var devices: MIDIIODevicesProtocol = MIDIDevices()
+    public internal(set) var devices: MIDIDevicesProtocol = MIDIDevices()
     
     /// MIDI input and output endpoints in the system.
-    public internal(set) var endpoints: MIDIIOEndpointsProtocol = MIDIEndpoints()
+    public internal(set) var endpoints: MIDIEndpointsProtocol = MIDIEndpoints()
     
     /// Handler that is called when state has changed in the manager.
     public var notificationHandler: ((

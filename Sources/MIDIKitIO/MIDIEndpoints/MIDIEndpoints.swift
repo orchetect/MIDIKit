@@ -10,7 +10,7 @@ import Foundation
 
 // this protocol may not be necessary, it was experimental so that the `MIDIManager.endpoints`
 // property could be swapped out with a different Endpoints class with Combine support
-public protocol MIDIIOEndpointsProtocol {
+public protocol MIDIEndpointsProtocol {
     /// List of MIDI input endpoints in the system.
     var inputs: [MIDIInputEndpoint] { get }
     
@@ -32,7 +32,7 @@ public protocol MIDIIOEndpointsProtocol {
 }
 
 /// Manages system MIDI endpoints information cache.
-public final class MIDIEndpoints: NSObject, MIDIIOEndpointsProtocol {
+public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
     /// Weak reference to ``MIDIManager``.
     internal weak var manager: MIDIManager?
     
