@@ -1,18 +1,20 @@
 //
 //  AnyMIDIPacket.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
+
+#if !os(tvOS) && !os(watchOS)
 
 /// A box that can hold any MIDI packet type.
 public enum AnyMIDIPacket {
-    /// MIDI 1.0 MIDI Packet
+    /// MIDI 1.0 MIDI Packet.
     case packet(MIDIPacketData)
     
-    /// MIDI 2.0 Universal MIDI Packet
+    /// MIDI 2.0 Universal MIDI Packet.
     case universalPacket(UniversalMIDIPacketData)
     
-    /// Flat array of raw bytes
+    /// Flat array of raw bytes.
     public var bytes: [UInt8] {
         switch self {
         case let .packet(packetData):
@@ -23,7 +25,7 @@ public enum AnyMIDIPacket {
         }
     }
     
-    /// Core MIDI packet timestamp
+    /// Core MIDI packet timestamp.
     public var timeStamp: CoreMIDITimeStamp {
         switch self {
         case let .packet(packetData):
@@ -33,4 +35,18 @@ public enum AnyMIDIPacket {
             return universalPacketData.timeStamp
         }
     }
+    
+    /// The MIDI endpoint from which the packet originated.
+    /// If this information is not available, it may be `nil`.
+    public var source: MIDIOutputEndpoint? {
+        switch self {
+        case let .packet(packetData):
+            return packetData.source
+            
+        case let .universalPacket(universalPacketData):
+            return universalPacketData.source
+        }
+    }
 }
+
+#endif

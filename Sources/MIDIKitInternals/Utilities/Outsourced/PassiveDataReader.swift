@@ -49,7 +49,8 @@ public struct PassiveDataReader<D: DataProtocol> {
     // MARK: - Methods
     
     /// Manually advance by _n_ number of bytes from current read offset.
-    /// Note that this method is unchecked which may result in an offset beyond the end of the data stream.
+    /// Note that this method is unchecked which may result in an offset beyond the end of the data
+    /// stream.
     public mutating func advanceBy(_ count: Int) {
         readOffset += count
     }

@@ -1,7 +1,7 @@
 //
 //  Event Text.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -19,16 +19,19 @@ import MIDIKitCore
 
 extension MIDIFileEvent {
     /// Text event.
-    /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text, program name, device name, or lyric.
+    /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text,
+    /// program name, device name, or lyric.
     ///
-    /// Text is restricted to ASCII format only. If extended characters or encodings are used, it will be converted to ASCII lossily before encoding into the MIDI file.
+    /// Text is restricted to ASCII format only. If extended characters or encodings are used, it
+    /// will be converted to ASCII lossily before encoding into the MIDI file.
     public struct Text: Equatable, Hashable {
         /// Type of text event.
         public var textType: EventType = .text
         
         /// Text content.
         ///
-        /// ASCII text only. If extended characters or encodings are used, it will be converted to ASCII before encoding into the MIDI file.
+        /// ASCII text only. If extended characters or encodings are used, it will be converted to
+        /// ASCII before encoding into the MIDI file.
         ///
         /// (Arbitrary limit imposed: truncates at 65,536 characters long.)
         public var text: String = "" {
@@ -101,9 +104,11 @@ extension MIDIFileEvent {
 
 extension MIDIFileEvent {
     /// Text event.
-    /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text, program name, device name, or lyric.
+    /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text,
+    /// program name, device name, or lyric.
     ///
-    /// Text is restricted to ASCII format only. If extended characters or encodings are used, it will be converted to ASCII lossily before encoding into the MIDI file.
+    /// Text is restricted to ASCII format only. If extended characters or encodings are used, it
+    /// will be converted to ASCII lossily before encoding into the MIDI file.
     public static func text(
         delta: DeltaTime = .none,
         type: Text.EventType,

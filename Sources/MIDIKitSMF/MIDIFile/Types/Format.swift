@@ -1,7 +1,7 @@
 //
 //  Format.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -11,11 +11,14 @@ import MIDIKitCore
 extension MIDIFile {
     public enum Format: UInt8, CaseIterable, Equatable {
         /// Type 0:
-        /// MIDI file contains one single track containing midi data on possibly all 16 midi channels.
+        /// MIDI file contains one single track containing midi data on possibly all 16 midi
+        /// channels.
         case singleTrack = 0
 
         /// Type 1:
-        /// MIDI file contains one or more simultaneous (ie, all start from an assumed time of 0) tracks, perhaps each on a single midi channel. Together, all of these tracks are considered one sequence or pattern.
+        /// MIDI file contains one or more simultaneous (ie, all start from an assumed time of 0)
+        /// tracks, perhaps each on a single midi channel. Together, all of these tracks are
+        /// considered one sequence or pattern.
         case multipleTracksSynchronous = 1
 
         /// Type 2:

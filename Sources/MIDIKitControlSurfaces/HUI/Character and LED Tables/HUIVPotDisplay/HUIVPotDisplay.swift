@@ -1,14 +1,15 @@
 //
 //  HUIVPotDisplay.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
 /// HUI V-Pot LED Ring Display.
 ///
-/// Around each V-Pot are 11 LEDs in a ring (semi-circle), as well as a single LED centered underneath.
+/// Around each V-Pot are 11 LEDs in a ring (semi-circle),
+/// as well as a single LED centered underneath.
 public struct HUIVPotDisplay: Equatable, Hashable {
     // MARK: State
     

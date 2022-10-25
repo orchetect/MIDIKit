@@ -1,7 +1,7 @@
 //
 //  MTC Decoder Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform
@@ -11,6 +11,8 @@ import XCTest
 import TimecodeKit
 
 final class MTC_Receiver_Decoder_Tests: XCTestCase {
+    // swiftformat:options --maxwidth none
+    
     func testMTC_Decoder_Default() {
         let mtcDec = MTCDecoder()
         
@@ -307,6 +309,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
     
     func testMTC_Decoder_InternalState_QFMessages_25FPS() {
         // swiftformat:disable wrap
+        // swiftformat:disable wrapSingleLineComments
         
         // 25 fps behaves differently from 24/29.97d/30 MTC SMPTE rates
         
@@ -326,7 +329,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110010)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000010)) // QF 0 MTC 01:00:00:00 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000010)) // QF 0 MTC 01:00:00:00 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -347,7 +350,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110010)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000011)) // QF 0 MTC 01:00:00:01 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000011)) // QF 0 MTC 01:00:00:01 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -368,7 +371,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110010)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001000)) // QF 0 MTC 01:00:00:22 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001000)) // QF 0 MTC 01:00:00:22 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -388,7 +391,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110010)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000001)) // QF 0 MTC 01:00:00:24 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000001)) // QF 0 MTC 01:00:00:24 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -428,7 +431,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110010)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000101)) // QF 0 MTC 01:00:01:03 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000101)) // QF 0 MTC 01:00:01:03 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -449,7 +452,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110010)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000111)) // QF 0 MTC 01:00:00:21 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000111)) // QF 0 MTC 01:00:00:21 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -469,7 +472,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110010)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000000)) // QF 0 MTC 01:00:00:23 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000000)) // QF 0 MTC 01:00:00:23 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -509,7 +512,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110010)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000100)) // QF 0 MTC 01:00:01:02 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000100)) // QF 0 MTC 01:00:01:02 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -517,10 +520,12 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         )
         
         // swiftformat:enable wrap
+        // swiftformat:enable wrapSingleLineComments
     }
     
     func testMTC_Decoder_InternalState_QFMessages_2997DropFPS() {
         // swiftformat:disable wrap
+        // swiftformat:disable wrapSingleLineComments
         
         // test for edge cases and peculiarities with 29.97 drop fps
         
@@ -539,7 +544,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110100)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000010)) // QF 0 MTC 01:00:00;00 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000010)) // QF 0 MTC 01:00:00;00 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -553,7 +558,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110100)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000100)) // QF 0 MTC 01:00:00;02 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000100)) // QF 0 MTC 01:00:00;02 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -573,7 +578,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110100)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001100)) // QF 0 MTC 01:00:59;26 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001100)) // QF 0 MTC 01:00:59;26 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -593,7 +598,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110100)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000010)) // QF 0 MTC 01:00:59;28 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000010)) // QF 0 MTC 01:00:59;28 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -623,7 +628,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100000)) // QF 2
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000001)) // QF 4 // sync qf // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000001)) // QF 4 // sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -633,7 +638,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110100)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000110)) // QF 0 MTC 01:01:00;04 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000110)) // QF 0 MTC 01:01:00;04 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -655,7 +660,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110100)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001100)) // QF 0 MTC 01:00:59;26 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001100)) // QF 0 MTC 01:00:59;26 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -675,7 +680,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110100)) // QF 7
-        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000010)) // QF 0 MTC 01:00:59;28 // sync qf
+        mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000010)) // QF 0 MTC 01:00:59;28 - sync qf
         
         XCTAssertEqual(
             mtcDec.timecode,
@@ -721,10 +726,12 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         )
         
         // swiftformat:enable wrap
+        // swiftformat:enable wrapSingleLineComments
     }
     
     func testMTC_Decoder_InternalState_QFMessages_Direction() {
         // swiftformat:disable wrap
+        // swiftformat:disable wrapSingleLineComments
         
         let mtcDec = MTCDecoder()
         
@@ -772,6 +779,7 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         XCTAssertEqual(mtcDec.direction, .ambiguous)
         
         // swiftformat:enable wrap
+        // swiftformat:enable wrapSingleLineComments
     }
     
     func testMTC_Decoder_Handlers_FullFrameMessage() {
@@ -823,6 +831,8 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
     }
     
     func testMTC_Decoder_Handlers_QFMessages() {
+        // swiftformat:disable wrapSingleLineComments
+        
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
         
@@ -1254,6 +1264,8 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         XCTAssertEqual(_direction, .ambiguous)
+        
+        // swiftformat:enable wrapSingleLineComments
     }
 }
 

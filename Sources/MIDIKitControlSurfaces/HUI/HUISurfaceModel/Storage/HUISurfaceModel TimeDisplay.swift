@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModel TimeDisplay.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -11,7 +11,8 @@ extension HUISurfaceModel {
     public struct TimeDisplay: Equatable, Hashable {
         /// HUI time display string, comprised of 8 digits.
         ///
-        /// The time display consists of eight 7-segment displays (called digits). Every digit except the last (rightmost) has the ability to show a trailing decimal point (dot).
+        /// The time display consists of eight 7-segment displays (called digits). Every digit
+        /// except the last (rightmost) has the ability to show a trailing decimal point (dot).
         public var timeString: HUITimeDisplayString = .init()
         
         // LEDs

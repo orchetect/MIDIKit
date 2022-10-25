@@ -17,22 +17,29 @@ import Darwin
 // Apple docs:
 //
 // CLOCK_MONOTONIC
-// clock that increments monotonically, tracking the time since an arbitrary point, and will continue to increment while the system is asleep.
+// clock that increments monotonically, tracking the time since an arbitrary point, and will
+// continue to increment while the system is asleep.
 //
 // CLOCK_MONOTONIC_RAW
-// clock that increments monotonically, tracking the time since an arbitrary point like CLOCK_MONOTONIC. However, this clock is unaffected by frequency or time adjustments. It should not be compared to other system time sources.
+// clock that increments monotonically, tracking the time since an arbitrary point like
+// CLOCK_MONOTONIC. However, this clock is unaffected by frequency or time adjustments. It should
+// not be compared to other system time sources.
 //
 // CLOCK_MONOTONIC_RAW_APPROX
-// like CLOCK_MONOTONIC_RAW, but reads a value cached by the system at context switch. This can be read faster, but at a loss of accuracy as it may return values that are milliseconds old.
+// like CLOCK_MONOTONIC_RAW, but reads a value cached by the system at context switch. This can be
+// read faster, but at a loss of accuracy as it may return values that are milliseconds old.
 //
 // CLOCK_UPTIME_RAW
-// clock that increments monotonically, in the same manner as CLOCK_MONOTONIC_RAW, but that does not increment while the system is asleep. The returned value is identical to the result of mach_absolute_time() after the appropriate mach_timebase conversion is applied.
+// clock that increments monotonically, in the same manner as CLOCK_MONOTONIC_RAW, but that does not
+// increment while the system is asleep. The returned value is identical to the result of
+// mach_absolute_time() after the appropriate mach_timebase conversion is applied.
 
 /// Returns high-precision system uptime.
 ///
 /// This is preferable to using `mach_absolute_time()` since it is macOS-only.
 ///
-/// - Returns: `timespec(tv_sec: Int, tv_nsec: Int)` where `tv_sec` is seconds and `tc_nsec` is nanoseconds.
+/// - Returns: `timespec(tv_sec: Int, tv_nsec: Int)` where `tv_sec` is seconds and `tc_nsec` is
+/// nanoseconds.
 @available(OSX 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *)
 @_disfavoredOverload
 public func clock_gettime_monotonic_raw() -> timespec {

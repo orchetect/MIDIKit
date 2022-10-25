@@ -1,7 +1,7 @@
 //
 //  AnyMIDIIOObject.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -12,7 +12,8 @@ import SwiftUI
 
 /// Box to contain an instance of a strongly-typed system MIDI object.
 ///
-/// Allows for simple switch case unwrapping when object type needs to be erased, such as ``MIDIManager``'s handler for Core MIDI system notifications.
+/// Allows for simple switch case unwrapping when object type needs to be erased, such as
+/// ``MIDIManager``'s handler for Core MIDI system notifications.
 public enum AnyMIDIIOObject {
     case device(MIDIDevice)
     case entity(MIDIEntity)
@@ -111,7 +112,8 @@ extension AnyMIDIIOObject {
         }
     }
     
-    /// Returns a MIDIKit object wrapped in a strongly-typed enum case, optionally returning the cached object from the `MIDIManager`.
+    /// Returns a MIDIKit object wrapped in a strongly-typed enum case, optionally returning the
+    /// cached object from the ``MIDIManager``.
     internal init?(
         coreMIDIObjectRef: MIDIObjectRef,
         coreMIDIObjectType: MIDIObjectType,
@@ -185,7 +187,8 @@ extension AnyMIDIIOObject: CustomStringConvertible {
 // MARK: - Collection Methods
 
 extension Collection where Element: MIDIIOObject {
-    /// Return as `[` ``AnyMIDIIOObject`` `]`, type-erased representations of MIDIKit objects conforming to ``MIDIIOObject``.
+    /// Return as `[` ``AnyMIDIIOObject`` `]`, type-erased representations of MIDIKit objects
+    /// conforming to ``MIDIIOObject``.
     public func asAnyMIDIIOObjects() -> [AnyMIDIIOObject] {
         map { $0.asAnyMIDIIOObject() }
     }

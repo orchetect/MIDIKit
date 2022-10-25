@@ -1,7 +1,7 @@
 //
 //  Event Conversion Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform
@@ -82,7 +82,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
         let smfEvent = event.smfEvent(delta: .ticks(120))
         
         // no equivalent SMF event exists
-        // (however with the upcoming Standard MIDI File 2.0 spec, this may be implemented in future)
+        // (with the upcoming Standard MIDI File 2.0 spec, this may be implemented in future)
         XCTAssertNil(smfEvent)
     }
     
@@ -98,7 +98,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
         let smfEvent = event.smfEvent(delta: .ticks(120))
         
         // no equivalent SMF event exists
-        // (however with the upcoming Standard MIDI File 2.0 spec, this may be implemented in future)
+        // (with the upcoming Standard MIDI File 2.0 spec, this may be implemented in future)
         XCTAssertNil(smfEvent)
     }
     
@@ -142,7 +142,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
         let smfEvent = event.smfEvent(delta: .ticks(120))
         
         // no equivalent SMF event exists
-        // (however with the upcoming Standard MIDI File 2.0 spec, this may be implemented in future)
+        // (with the upcoming Standard MIDI File 2.0 spec, this may be implemented in future)
         XCTAssertNil(smfEvent)
     }
     
@@ -432,7 +432,8 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
         let smfEvent = event.smfEvent(delta: .ticks(120))
         
         // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
-        // (A system reset message byte (0xFF) is reserved in the MIDI file format as the start byte for various MIDI file-specific event types.)
+        // (A system reset message byte (0xFF) is reserved in the MIDI file format as the start byte
+        // for various MIDI file-specific event types.)
         XCTAssertNil(smfEvent)
     }
 }

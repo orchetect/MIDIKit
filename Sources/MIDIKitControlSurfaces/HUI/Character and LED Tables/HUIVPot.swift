@@ -1,7 +1,7 @@
 //
 //  HUIVPot.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -84,11 +84,13 @@ public enum HUIVPot: Equatable, Hashable {
 /// Specialized HUI V-Pot value.
 enum HUIVPotValue: Equatable, Hashable {
     /// V-Pot display LED ring. (11 LED ring with a lower LED)
-    /// Only applies to HUI messages sent from the host in order to update a client surface's V-Pot LEDs.
+    /// Only applies to HUI messages sent from the host in order to update
+    /// a client surface's V-Pot LEDs.
     case display(HUIVPotDisplay)
     
     /// V-Pot rotary knob delta change -/+.
-    /// Only applies to HUI messages sent from a client surface in order to transmit rotary knob input from the user to the host.
+    /// Only applies to HUI messages sent from a client surface in order to transmit
+    /// rotary knob input from the user to the host.
     case delta(Int7)
     
     /// Internal:

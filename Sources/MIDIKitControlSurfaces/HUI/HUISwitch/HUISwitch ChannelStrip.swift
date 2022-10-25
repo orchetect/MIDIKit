@@ -1,7 +1,7 @@
 //
 //  HUISwitch ChannelStrip.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -40,8 +40,10 @@ extension HUISwitch.ChannelStrip: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         // note: zone (channel number) will be provided when accessed from `HUISwitch.zoneAndPort`
         
-        // this method is only here to fulfill the HUISwitchProtocol protocol requirement, it's not actually used (and should not actually be used)
-        // if it is ever used, the channel (0x00) provided here should be replaced with the channel strip number (0x00 ... 0x07) after calling this method
+        // this method is only here to fulfill the HUISwitchProtocol protocol requirement, it's not
+        // actually used (and should not actually be used)
+        // if it is ever used, the channel (0x00) provided here should be replaced with the channel
+        // strip number (0x00 ... 0x07) after calling this method
         
         (0x00, port)
     }

@@ -1,7 +1,7 @@
 //
 //  UniversalSysEx8.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -27,7 +27,8 @@ extension MIDIEvent {
         /// Data bytes (8-bit) (excluding leading 0xF0, trailing 0xF7, universal type and ID bytes)
         public var data: [UInt8]
     
-        /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of an 8-bit Stream ID field.
+        /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of
+        /// an 8-bit Stream ID field.
         internal var streamID: UInt8 = 0x00
     
         /// UMP Group (`0x0 ... 0xF`)
@@ -102,7 +103,8 @@ extension MIDIEvent {
 extension MIDIEvent.UniversalSysEx8 {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [[UMPWord]] {
         let rawData =
             [

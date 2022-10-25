@@ -1,7 +1,7 @@
 //
 //  AppDelegate.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Cocoa
@@ -92,7 +92,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func orderAllWindowsFront() {
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-            //NSApp.windows.forEach { $0.makeKeyAndOrderFront(self) }
+            // NSApp.windows.forEach { $0.makeKeyAndOrderFront(self) }
             self.huiSurfaceWindow.makeKeyAndOrderFront(self)
             self.huiHostWindow.makeKeyAndOrderFront(self)
         }

@@ -1,7 +1,7 @@
 //
 //  MTCEncoder.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -12,7 +12,9 @@ import TimecodeKit
 ///
 /// Takes timecode values and produces a stream of MIDI events.
 ///
-/// > Tip: This object is not affected by or reliant on timing at all and simply processes events as they are received. For outbound MTC sync, use the ``MTCGenerator`` wrapper object which adds additional abstraction for generating MTC sync.
+/// > Tip: This object is not affected by or reliant on timing at all and simply processes events as
+/// they are received. For outbound MTC sync, use the ``MTCGenerator`` wrapper object which adds
+/// additional abstraction for generating MTC sync.
 public final class MTCEncoder: SendsMIDIEvents {
     // MARK: - Public properties
         
@@ -69,7 +71,9 @@ public final class MTCEncoder: SendsMIDIEvents {
     public internal(set) var mtcQuarterFrame: UInt8 = 0
         
     /// Internal:
-    /// Flag indicating whether the quarter-frame output stream has already started since the last ``locate(to:transmitFullFrame:)`` (or since initializing the class if ``locate(to:transmitFullFrame:)`` has not yet been called).
+    /// Flag indicating whether the quarter-frame output stream has already started since the last
+    /// ``locate(to:transmitFullFrame:)`` (or since initializing the class if
+    /// ``locate(to:transmitFullFrame:)`` has not yet been called).
     @ThreadSafeAccess
     internal var mtcQuarterFrameStreamHasStartedSinceLastLocate = false
         
@@ -161,9 +165,12 @@ public final class MTCEncoder: SendsMIDIEvents {
         }
     }
         
-    /// Advances to the next quarter-frame and triggers a quarter-frame MIDI message sent to the MIDI handler.
+    /// Advances to the next quarter-frame and triggers a quarter-frame MIDI message sent to the
+    /// MIDI handler.
     ///
-    /// - Note: If it is the first time ``increment()`` is being called since the last call to ``locate(to:transmitFullFrame:)`` (or since initializing the class), this method will transmit the current quarter-frame without incrementing.
+    /// - Note: If it is the first time ``increment()`` is being called since the last call to
+    /// ``locate(to:transmitFullFrame:)`` (or since initializing the class), this method will
+    /// transmit the current quarter-frame without incrementing.
     ///
     /// Used when playhead is moving later in time.
     public func increment() {
@@ -187,9 +194,12 @@ public final class MTCEncoder: SendsMIDIEvents {
         mtcQuarterFrameStreamHasStartedSinceLastLocate = true
     }
         
-    /// Decrements to the previous quarter-frame and triggers a quarter-frame MIDI message sent to the MIDI handler.
+    /// Decrements to the previous quarter-frame and triggers a quarter-frame MIDI message sent to
+    /// the MIDI handler.
     ///
-    /// - Note: If it is the first time ``decrement()`` is being called since the last call to ``locate(to:transmitFullFrame:)`` (or since initializing the class), this method will transmit the current quarter-frame without decrementing.
+    /// - Note: If it is the first time ``decrement()`` is being called since the last call to
+    /// ``locate(to:transmitFullFrame:)`` (or since initializing the class), this method will
+    /// transmit the current quarter-frame without decrementing.
     ///
     /// Used when playhead is moving earlier in time.
     public func decrement() {
@@ -213,7 +223,8 @@ public final class MTCEncoder: SendsMIDIEvents {
         mtcQuarterFrameStreamHasStartedSinceLastLocate = true
     }
         
-    /// Manually trigger a MIDI handler event to transmit a full-frame message at the current timecode.
+    /// Manually trigger a MIDI handler event to transmit a full-frame message at the current
+    /// timecode.
     public func sendFullFrameMIDIMessage() {
         let ffMessage = generateFullFrameMIDIMessage()
             

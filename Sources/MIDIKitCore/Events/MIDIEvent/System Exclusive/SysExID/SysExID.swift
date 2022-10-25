@@ -1,7 +1,7 @@
 //
 //  SysExID.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -61,7 +61,8 @@ extension MIDIEvent.SysExID {
 }
 
 extension MIDIEvent.SysExID {
-    /// Returns the Manufacturer byte(s) formatted for MIDI 1.0 SysEx7, as one byte (7-bit) or three bytes (21-bit).
+    /// Returns the Manufacturer byte(s) formatted for MIDI 1.0 SysEx7, as one byte (7-bit) or three
+    /// bytes (21-bit).
     public func sysEx7RawBytes() -> [UInt8] {
         switch self {
         case let .manufacturer(mfr):

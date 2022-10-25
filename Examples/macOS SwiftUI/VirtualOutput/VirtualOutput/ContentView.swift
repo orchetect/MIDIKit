@@ -1,7 +1,7 @@
 //
 //  ContentView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -36,45 +36,33 @@ struct ContentView: View {
     }
 }
 
-extension ContentView{
+extension ContentView {
     /// Convenience accessor for created virtual MIDI Output.
     var virtualOutput: MIDIOutput? {
         midiManager.managedOutputs[virtualOutputName]
     }
     
     func sendNoteOn() {
-        guard let output = virtualOutput else { return }
-    
-        try? output.send(
-            event: .noteOn(
-                60,
-                velocity: .midi1(127),
-                channel: 0
-            )
-        )
+        try? virtualOutput?.send(event: .noteOn(
+            60,
+            velocity: .midi1(127),
+            channel: 0
+        ))
     }
     
     func sendNoteOff() {
-        guard let output = virtualOutput else { return }
-    
-        try? output.send(
-            event: .noteOff(
-                60,
-                velocity: .midi1(0),
-                channel: 0
-            )
-        )
+        try? virtualOutput?.send(event: .noteOff(
+            60,
+            velocity: .midi1(0),
+            channel: 0
+        ))
     }
     
     func sendCC1() {
-        guard let output = virtualOutput else { return }
-    
-        try? output.send(
-            event: .cc(
-                1,
-                value: .midi1(64),
-                channel: 0
-            )
-        )
+        try? virtualOutput?.send(event: .cc(
+            1,
+            value: .midi1(64),
+            channel: 0
+        ))
     }
 }

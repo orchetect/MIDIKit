@@ -1,7 +1,7 @@
 //
 //  MIDIManager addThruConnection.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -13,23 +13,36 @@ extension MIDIManager {
     /// Creates a new MIDI play-through (thru) connection.
     ///
     /// > Warning:
-    /// > ⚠️ MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core MIDI bugs on later macOS releases. Attempting to create thru connections on macOS Big Sur or later will throw an error.
+    /// > ⚠️ MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core
+    /// MIDI bugs on later macOS releases. Attempting to create thru connections on macOS Big Sur or
+    /// later will throw an error.
     ///
-    /// If the connection is non-persistent, a managed thru connection will be added to ``MIDIManager/managedThruConnections`` and its lifecycle will be that of the ``MIDIManager`` or until ``MIDIManager/remove(_:_:)`` is called for the connection.
+    /// If the connection is non-persistent, a managed thru connection will be added to
+    /// ``MIDIManager/managedThruConnections`` and its lifecycle will be that of the ``MIDIManager``
+    /// or until ``MIDIManager/remove(_:_:)`` is called for the connection.
     ///
-    /// If the connection is persistent, it is instead stored persistently by the system and references will not be directly held in the ``MIDIManager``. To access persistent connections, ``MIDIManager/unmanagedPersistentThruConnections(ownerID:)`` will retrieve a list of connections from the system, if any match the owner ID passed as argument.
+    /// If the connection is persistent, it is instead stored persistently by the system and
+    /// references will not be directly held in the ``MIDIManager``. To access persistent
+    /// connections, ``MIDIManager/unmanagedPersistentThruConnections(ownerID:)`` will retrieve a
+    /// list of connections from the system, if any match the owner ID passed as argument.
     ///
-    /// For every persistent thru connection your app creates, they should be assigned the same persistent ID (reverse-DNS domain) so they can be managed or removed in future.
+    /// For every persistent thru connection your app creates, they should be assigned the same
+    /// persistent ID (reverse-DNS domain) so they can be managed or removed in future.
     ///
-    /// - Warning: Be careful when creating persistent thru connections, as they can become stale and orphaned if the endpoints used to create them cease to be relevant at any point in time.
+    /// - Warning: Be careful when creating persistent thru connections, as they can become stale
+    /// and orphaned if the endpoints used to create them cease to be relevant at any point in time.
     ///
     /// - Note: Max 8 outputs and max 8 inputs are allowed when forming a thru connection.
     ///
     /// - Parameters:
     ///   - outputs: Maximum of 8 ``MIDIOutputEndpoint``.
     ///   - inputs: Maximum of 8 ``MIDIInputEndpoint``.
-    ///   - tag: Unique `String` key to refer to the new object that gets added to ``MIDIManager/managedThruConnections`` dictionary.
-    ///   - lifecycle: If ``MIDIThruConnection/Lifecycle-swift.enum/nonPersistent``, thru connection will expire when the app terminates. If ``MIDIThruConnection/Lifecycle-swift.enum/persistent(ownerID:)``, the connection persists in the system indefinitely (even after system reboots) until explicitly removed.
+    ///   - tag: Unique `String` key to refer to the new object that gets added to
+    /// ``MIDIManager/managedThruConnections`` dictionary.
+    ///   - lifecycle: If ``MIDIThruConnection/Lifecycle-swift.enum/nonPersistent``, thru connection
+    /// will expire when the app terminates. If
+    /// ``MIDIThruConnection/Lifecycle-swift.enum/persistent(ownerID:)``, the connection persists in
+    /// the system indefinitely (even after system reboots) until explicitly removed.
     ///   - params: Optionally define custom ``MIDIThruConnection/Parameters-swift.struct``.
     ///
     /// - Throws: ``MIDIIOError``

@@ -1,14 +1,15 @@
 //
 //  HUISurface Transmit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
 extension HUISurface {
     /// Transmit a HUI ping message to the host.
-    /// It is not necessary to call this manually. The ``HUISurface`` object will handle ping replies automatically.
+    /// It is not necessary to call this manually. The ``HUISurface`` object will handle ping
+    /// replies automatically.
     internal func transmitPing() {
         let event = encodeHUIPing(to: .host)
         midiOut(event)

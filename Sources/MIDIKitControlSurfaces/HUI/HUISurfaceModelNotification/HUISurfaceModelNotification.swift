@@ -1,12 +1,14 @@
 //
 //  HUISurfaceModelNotification.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 
-/// Notification returned as a result of updating ``HUISurfaceModel`` state. Strongly-typed event abstractions representing each control and display element of a HUI control surface along with its new state value.
+/// Notification returned as a result of updating ``HUISurfaceModel`` state. Strongly-typed event
+/// abstractions representing each control and display element of a HUI control surface along with
+/// its new state value.
 public enum HUISurfaceModelNotification: Hashable {
     // MARK: Ping
     

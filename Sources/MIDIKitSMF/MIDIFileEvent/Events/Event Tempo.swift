@@ -1,7 +1,7 @@
 //
 //  Event Tempo.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -45,7 +45,8 @@ extension MIDIFileEvent {
         ///
         /// - Get: Calculates microseconds-per-quarter note based on `bpm` property.
         ///
-        /// - Set: Sets ``bpm`` property to the calculated tempo from the passed microseconds-per-quarter note value.
+        /// - Set: Sets ``bpm`` property to the calculated tempo from the passed
+        /// microseconds-per-quarter note value.
         public var microseconds: UInt32 {
             get {
                 Self.bpmToMicroseconds(bpm: bpm)

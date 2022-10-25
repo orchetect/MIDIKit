@@ -1,7 +1,7 @@
 //
 //  MIDIIOObject.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -29,7 +29,8 @@ public protocol MIDIIOObject {
     /// The Core MIDI object reference.
     var coreMIDIObjectRef: CoreMIDIObjectRef { get }
     
-    /// Return as ``AnyMIDIIOObject``, a type-erased representation of a MIDIKit object conforming to ``MIDIIOObject``.
+    /// Return as ``AnyMIDIIOObject``, a type-erased representation of a MIDIKit object conforming
+    /// to ``MIDIIOObject``.
     func asAnyMIDIIOObject() -> AnyMIDIIOObject
     
     // MARK: - MIDIIOObject Comparison.swift

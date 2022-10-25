@@ -1,7 +1,7 @@
 //
 //  SysEx8.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -10,7 +10,11 @@ extension MIDIEvent {
     ///
     /// > MIDI 2.0 Spec:
     /// >
-    /// > System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs.
+    /// > System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original
+    /// System Exclusive messages, but with the added advantage of allowing all 8 bits of each data
+    /// byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high
+    /// bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8
+    /// Message is carried in one or more 128-bit UMPs.
     public struct SysEx8: Equatable, Hashable {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
@@ -19,10 +23,13 @@ extension MIDIEvent {
         ///
         /// > MIDI 2.0 Spec:
         /// >
-        /// > System Exclusive 8 initial data bytes are the same as those found in MIDI 1.0 Protocol System Exclusive messages. These bytes are Manufacturer ID (including Special ID `0x7D`, or Universal System Exclusive IDs), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable).
+        /// > System Exclusive 8 initial data bytes are the same as those found in MIDI 1.0 Protocol
+        /// System Exclusive messages. These bytes are Manufacturer ID (including Special ID `0x7D`,
+        /// or Universal System Exclusive IDs), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable).
         public var data: [UInt8]
     
-        /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of an 8-bit Stream ID field.
+        /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of
+        /// an 8-bit Stream ID field.
         internal var streamID: UInt8 = 0x00
     
         /// UMP Group (`0x0 ... 0xF`)
@@ -56,7 +63,11 @@ extension MIDIEvent {
     ///
     /// > MIDI 2.0 Spec:
     /// >
-    /// > System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs.
+    /// > System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original
+    /// System Exclusive messages, but with the added advantage of allowing all 8 bits of each data
+    /// byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high
+    /// bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8
+    /// Message is carried in one or more 128-bit UMPs.
     ///
     /// - Parameters:
     ///   - manufacturer: SysEx Manufacturer ID
@@ -80,9 +91,11 @@ extension MIDIEvent {
 extension MIDIEvent.SysEx8 {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
-    /// Generates one or more 64-bit UMP packets depending on the system exclusive data length (each packet comprised of two UInt32 words).
+    /// Generates one or more 64-bit UMP packets depending on the system exclusive data length (each
+    /// packet comprised of two UInt32 words).
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [[UMPWord]] {
         let rawData = manufacturer.sysEx8RawBytes() + data
     
@@ -96,7 +109,8 @@ extension MIDIEvent.SysEx8 {
 
 extension MIDIEvent.SysEx8 {
     /// Internal:
-    /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly; use the public ``umpRawWords()`` method instead.
+    /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly;
+    /// use the public ``umpRawWords()`` method instead.
     internal static func umpRawWords(
         fromSysEx8Data data: [UInt8],
         streamID: UInt8,

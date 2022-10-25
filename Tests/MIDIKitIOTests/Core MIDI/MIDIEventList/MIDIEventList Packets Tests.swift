@@ -1,7 +1,7 @@
 //
 //  MIDIEventList Packets Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
@@ -26,7 +26,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         )
     
         func check(_ ptr: UnsafePointer<MIDIEventList>) {
-            let packets = ptr.packets()
+            let packets = ptr.packets(refCon: nil, refConKnown: false)
     
             XCTAssertEqual(
                 packets.map { $0.bytes },
@@ -56,7 +56,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         )
     
         func check(_ ptr: UnsafePointer<MIDIEventList>) {
-            let packets = ptr.packets()
+            let packets = ptr.packets(refCon: nil, refConKnown: false)
     
             XCTAssertEqual(
                 packets.map { $0.bytes },
@@ -89,7 +89,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         )
     
         func check(_ ptr: UnsafePointer<MIDIEventList>) {
-            let packets = ptr.packets()
+            let packets = ptr.packets(refCon: nil, refConKnown: false)
     
             XCTAssertEqual(
                 packets.map { $0.bytes },
@@ -124,7 +124,7 @@ final class MIDIEventListPackets_Tests: XCTestCase {
         )
     
         func check(_ ptr: UnsafePointer<MIDIEventList>) {
-            let packets = ptr.packets()
+            let packets = ptr.packets(refCon: nil, refConKnown: false)
     
             XCTAssertEqual(
                 packets.map { $0.bytes },

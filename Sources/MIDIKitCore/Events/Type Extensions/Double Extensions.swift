@@ -1,7 +1,7 @@
 //
 //  Double Extensions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -35,7 +35,8 @@ extension Double {
         self = (bipolarUnitInterval / 2.0) + 0.5
     }
     
-    /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral midpoint).
+    /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral
+    /// midpoint).
     @_disfavoredOverload
     public var bipolarUnitIntervalValue: Double {
         2 * (clamped(to: 0.0 ... 1.0) - 0.5)

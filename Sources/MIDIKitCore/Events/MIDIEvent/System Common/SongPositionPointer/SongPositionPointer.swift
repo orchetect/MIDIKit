@@ -1,7 +1,7 @@
 //
 //  SongPositionPointer.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -10,7 +10,9 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start and is used to begin playback of a sequence from a position other than the beginning of the song.
+    /// > A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that
+    /// have elapsed from the start and is used to begin playback of a sequence from a position
+    /// other than the beginning of the song.
     public struct SongPositionPointer: Equatable, Hashable {
         /// The number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start.
         public var midiBeat: UInt14
@@ -32,7 +34,9 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start of the song and is used to begin playback of a sequence from a position other than the beginning of the song.
+    /// > A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that
+    /// have elapsed from the start of the song and is used to begin playback of a sequence from a
+    /// position other than the beginning of the song.
     ///
     /// - Parameters:
     ///   - midiBeat: MIDI beat number elapsed from the start
@@ -53,7 +57,8 @@ extension MIDIEvent {
 extension MIDIEvent.SongPositionPointer {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
         let bytePair = midiBeat.bytePair
         return [0xF2, bytePair.lsb, bytePair.msb]
@@ -61,7 +66,8 @@ extension MIDIEvent.SongPositionPointer {
     
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .systemRealTimeAndCommon
     

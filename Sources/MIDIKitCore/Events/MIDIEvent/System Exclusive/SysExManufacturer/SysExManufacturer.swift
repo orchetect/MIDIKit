@@ -1,7 +1,7 @@
 //
 //  SysExManufacturer.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -11,9 +11,13 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > - To avoid conflicts with non-compatible Exclusive messages, a specific ID number is granted to manufacturers of MIDI instruments by the MMA or JMSC.
+    /// > - To avoid conflicts with non-compatible Exclusive messages, a specific ID number is
+    /// granted to manufacturers of MIDI instruments by the MMA or JMSC.
     /// >
-    /// > - `[0x00]` and `[0x00 0x00 0x00]` are not to be used. Special ID `0x7D` is reserved for non-commercial use (e.g. schools, research, etc.) and is not to be used on any product released to the public. Since Non-Commercial codes would not be seen or used by an ordinary user, there is no standard format.
+    /// > - `[0x00]` and `[0x00 0x00 0x00]` are not to be used. Special ID `0x7D` is reserved for
+    /// non-commercial use (e.g. schools, research, etc.) and is not to be used on any product
+    /// released to the public. Since Non-Commercial codes would not be seen or used by an ordinary
+    /// user, there is no standard format.
     /// >
     /// > - Special IDs `0x7E` and `0x7F` are the Universal System Exclusive IDs.
     ///
@@ -97,7 +101,8 @@ extension MIDIEvent.SysExManufacturer {
 }
 
 extension MIDIEvent.SysExManufacturer {
-    /// Returns the Manufacturer byte(s) formatted for MIDI 1.0 SysEx7, as one byte (7-bit) or three bytes (21-bit).
+    /// Returns the Manufacturer byte(s) formatted for MIDI 1.0 SysEx7, as one byte (7-bit) or three
+    /// bytes (21-bit).
     public func sysEx7RawBytes() -> [UInt8] {
         switch self {
         case let .oneByte(byte):
@@ -126,9 +131,11 @@ extension MIDIEvent.SysExManufacturer {
 extension MIDIEvent.SysExManufacturer {
     /// Returns whether the byte(s) are valid SysEx Manufacturer IDs.
     ///
-    /// This does not test whether the ID belongs to a registered manufacturer. Rather, it simply reports if the bytes are legal.
+    /// This does not test whether the ID belongs to a registered manufacturer. Rather, it simply
+    /// reports if the bytes are legal.
     ///
-    /// Use the ``name`` property to return the manufacturer's name associated with the ID, or `nil` if the ID is not registered.
+    /// Use the ``name`` property to return the manufacturer's name associated with the ID, or `nil`
+    /// if the ID is not registered.
     public var isValid: Bool {
         switch self {
         case let .oneByte(byte):
@@ -141,7 +148,8 @@ extension MIDIEvent.SysExManufacturer {
         }
     }
     
-    /// Returns the name of the manufacturer associated with the Manufacturer System Exclusive ID, as assigned by the MIDI Manufacturers Association.
+    /// Returns the name of the manufacturer associated with the Manufacturer System Exclusive ID,
+    /// as assigned by the MIDI Manufacturers Association.
     ///
     /// Returns `nil` if the ID is not recognized.
     public var name: String? {
@@ -160,7 +168,8 @@ extension MIDIEvent.SysExManufacturer: CustomStringConvertible {
 extension MIDIEvent.SysExManufacturer {
     /// Returns a new instance containing the Educational Use ID.
     ///
-    /// - Note: Reserved for use only in educational institutions or for unit testing; not public release.
+    /// - Note: Reserved for use only in educational institutions or for unit testing; not public
+    /// release.
     public static func educational() -> Self {
         .oneByte(0x7D)
     }
@@ -170,7 +179,8 @@ extension MIDIEvent.SysExManufacturer {
     // Data updated as of March 2021
     // source: https://www.midi.org/specifications-old/item/manufacturer-id-numbers
 
-    /// Lookup table for Manufacturer MIDI SysEx (system exclusive) IDs assigned by the MIDI Manufacturers Association.
+    /// Lookup table for Manufacturer MIDI SysEx (system exclusive) IDs assigned by the MIDI
+    /// Manufacturers Association.
     ///
     /// (IDs can be either 1 or 3 bytes long.)
     static let kSysExIDs: [[UInt8]: String] = [

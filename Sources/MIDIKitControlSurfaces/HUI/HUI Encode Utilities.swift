@@ -1,7 +1,7 @@
 //
 //  HUI Encode Utilities.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -162,7 +162,8 @@ func encodeHUIFader(
 /// - Parameters:
 ///   - channel: Channel strip number (`0 ... 7`).
 ///   - side: Left or right side of the stereo meter.
-///   - level: Level amount (`0x0 ... 0xC`). Where `0x0` is off, `0x1 ... 0xB` is signal level, and `0xC` is clipping (red LED).
+///   - level: Level amount (`0x0 ... 0xC`).
+///     Where `0x0` is off, `0x1 ... 0xB` is signal level, and `0xC` is clipping (red LED).
 /// - Returns: MIDI event.
 func encodeHUILevelMeter(
     channel: UInt4,
@@ -185,7 +186,10 @@ func encodeHUILevelMeter(
 ///
 /// - Parameters:
 ///   - vPot: V-Pot identity.
-///   - rawValue: Encoded value. When encoding host → surface, this is the LED preset index. When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
+///   - rawValue: Encoded value.
+///     When encoding host → surface, this is the LED preset index.
+///     When encoding surface → host, this is the delta rotary knob change
+///     value -/+ when the user turns the knob.
 ///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI event.
 func encodeHUIVPot(
@@ -205,7 +209,10 @@ func encodeHUIVPot(
 ///
 /// - Parameters:
 ///   - vPot: V-Pot identity.
-///   - rawValue: Encoded value. When encoding host → surface, this is the LED preset index. When encoding surface → host, this is the delta rotary knob change value -/+ when the user turns the knob.
+///   - rawValue: Encoded value.
+///     When encoding host → surface, this is the LED preset index.
+///     When encoding surface → host, this is the delta rotary knob change
+///     value -/+ when the user turns the knob.
 ///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI event.
 func encodeHUIVPot(
@@ -218,7 +225,8 @@ func encodeHUIVPot(
 /// Utility:
 /// Encodes HUI V-Pot value message as a MIDI event. (To host)
 ///
-/// > Note: Input value is clamped to `-63 ... 63` due to bit truncation meaning an input delta value of -64 is not possible and will be truncated to -63.
+/// > Note: Input value is clamped to `-63 ... 63` due to bit truncation meaning an input delta
+/// value of -64 is not possible and will be truncated to -63.
 ///
 /// - Parameters:
 ///   - vPot: V-Pot identity.
@@ -254,7 +262,8 @@ func encodeJogWheel(
 
 /// Utility:
 /// Encode HUI large text display as MIDI events. (To surface)
-/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding.
+/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10
+/// characters each, which matches the HUI encoding.
 ///
 /// - Parameters:
 ///   - display: Top and bottom text line text, each 40 characters in length.
@@ -267,7 +276,8 @@ func encodeHUILargeDisplay(
 
 /// Utility:
 /// Encode HUI large text display as MIDI events. (To surface)
-/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding.
+/// Encodes the entire large text display (40 x 2 characters) sourced as
+/// 8 text slices of 10 characters each, which matches the HUI encoding.
 ///
 /// - Parameters:
 ///   - top: Top text line text of 40 characters in length.
@@ -282,9 +292,14 @@ func encodeHUILargeDisplay(
 
 /// Utility:
 /// Encode HUI large text display as MIDI events. (To surface)
-/// Encodes the entire large text display (40 x 2 characters) sourced as 8 text slices of 10 characters each, which matches the HUI encoding.
+/// Encodes the entire large text display (40 x 2 characters) sourced as
+/// 8 text slices of 10 characters each, which matches the HUI encoding.
 ///
-/// This text display is split into 8 slices of 10 characters each, with slices indexed `0 ... 3` for the top 40-character row, and `4 ... 7` for the bottom 40-character row. (This mirrors its raw HUI MIDI message encoding format.) Any of these slices may be sent at any time in any order.
+/// This text display is split into 8 slices of 10 characters each,
+/// with slices indexed `0 ... 3` for the top 40-character row,
+/// and `4 ... 7` for the bottom 40-character row.
+/// (This mirrors its raw HUI MIDI message encoding format.)
+/// Any of these slices may be sent at any time in any order.
 ///
 /// - Parameters:
 ///   - slices: Between 1 and 8 text slices of 10 characters each.
@@ -351,7 +366,8 @@ func encodeHUITimeDisplay(
 /// Encode time display message (timecode, mm:ss, bars/beats, frames). (To client surface)
 ///
 /// - Parameters:
-///   - charsRightToLeft: Between 1 and 8 characters in reverse sequence order (first array element is rightmost digit). More than 8 characters will discarded and truncated to 8 characters.
+///   - charsRightToLeft: Between 1 and 8 characters in reverse sequence order (first array element
+/// is rightmost digit). More than 8 characters will discarded and truncated to 8 characters.
 /// - Returns: MIDI event.
 func encodeHUITimeDisplay(
     charsRightToLeft: [HUITimeDisplayCharacter]
@@ -417,9 +433,11 @@ func encodeHUISystemReset() -> MIDIEvent {
 /// Utility:
 /// Encodes HUI delta value (V-Pot, jog wheel) into a raw byte.
 ///
-/// > Note: Input value is clamped to `-63 ... 63` due to bit truncation meaning an input delta value of -64 is not possible and will be truncated to -63.
+/// > Note: Input value is clamped to `-63 ... 63` due to bit truncation meaning an input delta
+/// value of -64 is not possible and will be truncated to -63.
 ///
-/// > Note: This is used for surface → host transmission of delta pot changes and not relevant for LED ring display encoding.
+/// > Note: This is used for surface → host transmission of delta pot changes and not relevant for
+/// LED ring display encoding.
 ///
 /// - Parameters:
 ///   - delta: Delta -/+ value (will be clamped to `-63 ... 63`).
@@ -438,7 +456,8 @@ func encodeHUIDelta(from delta: Int7) -> UInt7 {
 /// Utility:
 /// Decodes a raw byte into a HUI delta value (V-Pot, jog wheel).
 ///
-/// > Note: This is used for surface → host transmission of delta pot changes and not relevant for LED ring display encoding.
+/// > Note: This is used for surface → host transmission of delta pot changes and not relevant for
+/// LED ring display encoding.
 ///
 /// - Parameters:
 ///   - delta: Encoded `UInt7` byte from a HUI MIDI message.

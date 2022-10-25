@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModel LargeDisplay.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -27,7 +27,8 @@ extension HUISurfaceModel {
         // MARK: - Internal Methods
         
         /// Internal:
-        /// Get or set the 8 individual 10-character string slices that make up the large display contents.
+        /// Get or set the 8 individual 10-character string slices that make up
+        /// the large display contents.
         /// When encoded in a HUI message, these are indexed 0 through 7.
         var slices: HUILargeDisplaySlices {
             get {

@@ -1,7 +1,7 @@
 //
 //  MIDIEventList Packets.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -13,10 +13,15 @@ import Foundation
 extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
     /// Internal:
     /// Returns array of MIDIKit `UniversalPacketData` instances.
-    internal func packets() -> [UniversalMIDIPacketData] {
+    internal func packets(
+        refCon: UnsafeMutableRawPointer?,
+        refConKnown: Bool
+    ) -> [UniversalMIDIPacketData] {
         if pointee.numPackets == 0 {
             return []
         }
+        
+        let source = unpackMIDIRefCon(refCon: refCon, known: refConKnown)
     
         // Core MIDI's unsafeSequence() is not available on tvOS or watchOS at all
         let sequencedPackets = unsafeSequence().map {
@@ -37,7 +42,8 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
             for umpWords in parse(packetWords: sequencedPacket.words) {
                 let ump = UniversalMIDIPacketData(
                     words: umpWords,
-                    timeStamp: sequencedPacket.timeStamp
+                    timeStamp: sequencedPacket.timeStamp,
+                    source: source
                 )
                 packets.append(ump)
             }

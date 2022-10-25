@@ -1,7 +1,7 @@
 //
 //  NoteAttribute Pitch7_9.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Darwin
@@ -28,7 +28,8 @@ extension MIDIEvent.NoteAttribute {
         /// Range: `0+(0/512) ... 127+(511/512)`
         ///
         /// - Parameters:
-        ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
+        ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal
+        /// temperament scale.
         ///   - fine: 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
         public init(
             coarse: UInt7,

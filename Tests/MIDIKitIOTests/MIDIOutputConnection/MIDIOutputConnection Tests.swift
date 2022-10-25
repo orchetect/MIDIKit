@@ -1,10 +1,11 @@
 //
 //  MIDIOutputConnection Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
-// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets
+// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI
+// ports, so skip these tests on iOS targets
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
@@ -133,7 +134,8 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         input2Events = []
     }
     
-    /// Test to ensure a new input appearing in the system gets added to the connection. (Allowing manager-owned virtual inputs to be added)
+    /// Test to ensure a new input appearing in the system gets added to the connection. (Allowing
+    /// manager-owned virtual inputs to be added)
     func testOutputConnection_allEndpoints() throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
@@ -195,7 +197,8 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         input2Events = []
     }
     
-    /// Test to ensure creating a new manager-owned virtual input does not get added to the connection if `filter.owned == true`
+    /// Test to ensure creating a new manager-owned virtual input does not get added to the
+    /// connection if `filter.owned == true`
     func testOutputConnection_allEndpoints_filterOwned() throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
@@ -257,7 +260,8 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         input2Events = []
     }
 	
-    /// Test to ensure virtual input(s) owned by the manager do not get added to the connection when creating the connection.
+    /// Test to ensure virtual input(s) owned by the manager do not get added to the connection when
+    /// creating the connection.
     func testOutputConnection_filterOwned_onInit() throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,

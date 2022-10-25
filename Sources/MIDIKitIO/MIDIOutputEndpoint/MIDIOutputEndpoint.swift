@@ -1,7 +1,7 @@
 //
 //  MIDIOutputEndpoint.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -12,7 +12,8 @@
 ///
 /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
 ///
-/// Instead, read endpoint arrays and individual endpoint properties from ``MIDIManager/endpoints`` ad-hoc when they are needed.
+/// Instead, read endpoint arrays and individual endpoint properties from ``MIDIManager/endpoints``
+/// ad-hoc when they are needed.
 public struct MIDIOutputEndpoint: _MIDIIOEndpointProtocol {
     // MARK: MIDIIOObject
     

@@ -1,7 +1,7 @@
 //
 //  MIDINote Style.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -23,7 +23,9 @@ extension MIDINote {
         ///
         /// Cakewalk originally chose "C5" to represent MIDI note 60 (Middle C).
         ///
-        /// Cakewalk started life as a character-based DOS sequencer, and if they’d used "C4" or "C3" for note 60, they’d have needed additional characters on-screen for notating the lower octaves, e.g. "C-2". "C5" in effect sets the lowest octave to octave zero (C0).
+        /// Cakewalk started life as a character-based DOS sequencer, and if they’d used "C4" or
+        /// "C3" for note 60, they’d have needed additional characters on-screen for notating the
+        /// lower octaves, e.g. "C-2". "C5" in effect sets the lowest octave to octave zero (C0).
         case cakewalk
     }
 }

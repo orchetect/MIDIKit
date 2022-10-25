@@ -1,7 +1,7 @@
 //
 //  Event TimeSignature.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -19,7 +19,8 @@ import MIDIKitCore
 
 extension MIDIFileEvent {
     /// Time Signature event.
-    /// For a format 1 MIDI file, Time Signature meta events should only occur within the first `MTrk` chunk.
+    /// For a format 1 MIDI file, Time Signature meta events should only occur within the first
+    /// `MTrk` chunk.
     /// If there are no Time Signature events in a MIDI file, 4/4 is assumed.
     public struct TimeSignature: Equatable, Hashable {
         /// Numerator in time signature fraction: Literal numerator
@@ -33,7 +34,8 @@ extension MIDIFileEvent {
         public var midiClocksBetweenMetronomeClicks: UInt8 = 0x18
 
         /// Number of notated 32nd-notes in a MIDI quarter-note.
-        /// The usual value for this parameter is 8, though some sequencers allow the user to specify that what MIDI thinks of as a quarter note, should be notated as something else.
+        /// The usual value for this parameter is 8, though some sequencers allow the user to
+        /// specify that what MIDI thinks of as a quarter note, should be notated as something else.
         public var numberOf32ndNotesInAQuarterNote: UInt8 = 8
         
         // MARK: - Init
@@ -58,7 +60,8 @@ extension MIDIFileEvent {
 
 extension MIDIFileEvent {
     /// Time Signature event.
-    /// For a format 1 MIDI file, Time Signature meta events should only occur within the first `MTrk` chunk.
+    /// For a format 1 MIDI file, Time Signature meta events should only occur within the first
+    /// `MTrk` chunk.
     /// If there are no Time Signature events in a MIDI file, 4/4 is assumed.
     public static func timeSignature(
         delta: DeltaTime = .none,
@@ -117,7 +120,8 @@ extension MIDIFileEvent.TimeSignature: MIDIFileEventPayload {
         data += [midiClocksBetweenMetronomeClicks]
         
         // number of notated 32nd-notes in a MIDI quarter-note (24 MIDI Clocks)
-        // The usual value for this parameter is 8, though some sequencers allow the user to specify that what MIDI thinks of as a quarter note, should be notated as something else.
+        // The usual value for this parameter is 8, though some sequencers allow the user to specify
+        // that what MIDI thinks of as a quarter note, should be notated as something else.
         data += [numberOf32ndNotesInAQuarterNote] // 8 32nd-notes
         
         return data

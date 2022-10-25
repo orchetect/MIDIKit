@@ -1,10 +1,11 @@
 //
 //  MIDIOutput Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
-// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets
+// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI
+// ports, so skip these tests on iOS targets
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
@@ -31,7 +32,7 @@ final class MIDIOutput_Tests: XCTestCase {
             try manager.addOutput(
                 name: "MIDIKit IO Tests Source 1",
                 tag: tag1,
-                uniqueID: .adHoc // allow system to generate random ID each time, without persistence
+                uniqueID: .adHoc // allow system to generate random ID each time, no persistence
             )
         } catch let err as MIDIIOError {
             XCTFail(err.localizedDescription); return

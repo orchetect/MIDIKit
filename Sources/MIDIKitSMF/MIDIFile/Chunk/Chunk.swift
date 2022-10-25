@@ -1,7 +1,7 @@
 //
 //  Chunk.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -10,9 +10,11 @@ import MIDIKitCore
 extension MIDIFile {
     /// MIDI File Chunk.
     ///
-    /// As of the Standard MIDI File 1.0 Spec, `MThd` (header) and `MTrk` (track) are the only defined MIDI file chunks. However, others may be defined in the future.
+    /// As of the Standard MIDI File 1.0 Spec, `MThd` (header) and `MTrk` (track) are the only
+    /// defined MIDI file chunks. However, others may be defined in the future.
     ///
-    /// In ``MIDIFile``, the ``Chunk/Header`` chunk is managed automatically and is not instanced as a ``MIDIFile/chunks`` member.
+    /// In ``MIDIFile``, the ``Chunk/Header`` chunk is managed automatically and is not instanced as
+    /// a ``MIDIFile/chunks`` member.
     public enum Chunk: Equatable {
         case track(Track)
         case other(UnrecognizedChunk)
@@ -43,7 +45,8 @@ CustomDebugStringConvertible {
 }
 
 extension MIDIFile.Chunk {
-    /// Unwraps the enum case and returns the ``MIDIFile/Chunk`` contained within, typed as ``MIDIFileChunk`` protocol.
+    /// Unwraps the enum case and returns the ``MIDIFile/Chunk`` contained within, typed as
+    /// ``MIDIFileChunk`` protocol.
     public var unwrappedChunk: MIDIFileChunk {
         switch self {
         case let .track(chunk):

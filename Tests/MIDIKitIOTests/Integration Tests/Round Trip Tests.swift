@@ -1,10 +1,11 @@
 //
 //  Round Trip Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
-// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI ports, so skip these tests on iOS targets
+// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI
+// ports, so skip these tests on iOS targets
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
@@ -63,7 +64,7 @@ public class RoundTrip_Tests_Base: XCTestCase {
             try manager.addOutput(
                 name: "MIDIKit Round Trip Tests Output",
                 tag: outputTag,
-                uniqueID: .adHoc // allow system to generate random ID each time, without persistence
+                uniqueID: .adHoc // allow system to generate random ID each time, no persistence
             )
         } catch let err as MIDIIOError {
             XCTFail(err.localizedDescription); return
@@ -319,7 +320,8 @@ public class RoundTrip_Tests_Base: XCTestCase {
             print("Sent \(sourceEvents.count) events, received \(receivedEvents.count) events.")
     
             // itemize which source event(s) are missing from the received events, if any.
-            // this may reveal events that failed silently, were eaten by Core MIDI, or could not be parsed by the receiver.
+            // this may reveal events that failed silently, were eaten by Core MIDI, or could not be
+            // parsed by the receiver.
             sourceEvents.forEach {
                 if !receivedEvents.contains($0) {
                     print("Missing from received events:", $0)

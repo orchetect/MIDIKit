@@ -1,14 +1,14 @@
 //
 //  HUIStringProtocol.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
 public protocol HUIStringProtocol: CustomStringConvertible
-where Self: Equatable & Hashable,
-      Element: Equatable & Hashable
+    where Self: Equatable & Hashable,
+    Element: Equatable & Hashable
 {
     associatedtype Element: HUICharacterProtocol
     static var defaultChars: [Element] { get }
@@ -27,7 +27,8 @@ where Self: Equatable & Hashable,
     init(chars: [Element])
     
     /// Initialize from a string.
-    /// Characters will be converted or substituted if they are not contained in ``Element``'s character set.
+    /// Characters will be converted or substituted if they
+    /// are not contained in ``Element``'s character set.
     /// String will be padded and truncated to the appropriate static length.
     init<S: StringProtocol>(lossy source: S)
     

@@ -1,7 +1,7 @@
 //
 //  Stress Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform
@@ -56,7 +56,8 @@ final class StressTests: XCTestCase {
     func testThreadingMTCReceiver() {
         // MARK: - Receiver
         
-        // (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
+        // (Receiver.midiIn() is async internally so we need to wait for
+        // property updates to occur before reading them)
         
         // init with local frame rate
         let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)

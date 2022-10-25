@@ -1,19 +1,23 @@
 //
 //  SysEx8 Parser.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
 extension MIDIEvent {
-    /// Parse a complete MIDI 2.0 System Exclusive 8 message (starting with the Stream ID byte until the end of the packet) and return a ``sysEx8(manufacturer:data:group:)`` or ``universalSysEx8(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
+    /// Parse a complete MIDI 2.0 System Exclusive 8 message (starting with the Stream ID byte until
+    /// the end of the packet) and return a ``sysEx8(manufacturer:data:group:)`` or
+    /// ``universalSysEx8(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
     ///
-    /// Valid rawBytes count is `1 ... 14`. (Must always contain a Stream ID, even if there are zero data bytes to follow)
+    /// Valid rawBytes count is `1 ... 14`. (Must always contain a Stream ID, even if there are zero
+    /// data bytes to follow)
     ///
     /// > Note: This does not parse an entire SysEx8 UMP packet.
     /// >
-    /// > `rawBytes` must start with the Stream ID byte and supply all bytes until the end of the packet.
+    /// > `rawBytes` must start with the Stream ID byte and supply all bytes until the end of the
+    /// packet.
     ///
     /// - Throws: ``ParseError`` if message is malformed.
     public static func sysEx8(

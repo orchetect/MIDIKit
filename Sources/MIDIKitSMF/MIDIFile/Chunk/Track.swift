@@ -1,7 +1,7 @@
 //
 //  Track.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -207,7 +207,8 @@ extension MIDIFile.Chunk.Track {
                     }
                 
                 } else {
-                    // throw an error since no events could be decoded and there are still bytes remaining in the chunk
+                    // throw an error since no events could be decoded and there are still bytes
+                    // remaining in the chunk
                 
                     let byteOffsetString = dataReader.readOffset
                         .hexString(padTo: 1, prefix: true)

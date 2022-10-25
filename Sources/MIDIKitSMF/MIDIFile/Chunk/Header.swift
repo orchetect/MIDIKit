@@ -1,7 +1,7 @@
 //
 //  Header.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -11,22 +11,27 @@ import MIDIKitCore
 //
 // Header Chunks
 //
-// The header chunk at the beginning of the file specifies some basic information about the data in the file. Here's the syntax of the complete chunk:
+// The header chunk at the beginning of the file specifies some basic information about the data in
+// the file. Here's the syntax of the complete chunk:
 //
 // <Header Chunk> = <chunk type> <length> <format> <ntrks> <division>
 //
-// <chunk type> is the four ASCII characters 'MThd'; <length> is a 32-bit representation of the number 6 (high byte first).
+// <chunk type> is the four ASCII characters 'MThd'; <length> is a 32-bit representation of the
+// number 6 (high byte first).
 //
 // The data section contains three 16-bit words, stored most-significant byte first.
 //
-// The first word, <format>, specifies the overall organization of the file. Only three values of <format> are specified:
+// The first word, <format>, specifies the overall organization of the file. Only three values of
+// <format> are specified:
 // - 0 the file contains a single multi-channel track
 // - 1 the file contains one or more simultaneous tracks (or MIDI outputs) of a sequence
 // - 2 the file contains one or more sequentially independent single-track patterns
 //
-// The next word, <ntrks>, is the number of track chunks in the file. It will always be 1 for a format 0 file.
+// The next word, <ntrks>, is the number of track chunks in the file. It will always be 1 for a
+// format 0 file.
 //
-// The third word, <division>, specifies the meaning of the delta-times. It has two formats, one for metrical time, and one for time-code-based time:
+// The third word, <division>, specifies the meaning of the delta-times. It has two formats, one for
+// metrical time, and one for time-code-based time:
 // ---------------------------------------------
 // | 0 |        ticks per quarter-note         |
 // ---------------------------------------------
@@ -35,20 +40,38 @@ import MIDIKitCore
 // ---------------------------------------------
 // 15   14               8   7                0
 //
-// If bit 15 of <division> is a zero, the bits 14 thru 0 represent the number of delta-time "ticks" which make up a quarter-note.
-// For instance, if <division> is 96, then a time interval of an eighth-note between two events in the file would be 48.
+// If bit 15 of <division> is a zero, the bits 14 thru 0 represent the number of delta-time "ticks"
+// which make up a quarter-note.
+// For instance, if <division> is 96, then a time interval of an eighth-note between two events in
+// the file would be 48.
 //
-// If bit 15 of <division> is a one, delta-times in a file correspond to subdivisions of a second, in a way consistent with SMPTE and MIDI time code. Bits 14 thru 8 contain one of the four values -24, -25, -29, or -30, corresponding to the four standard SMPTE and MIDI time code formats (-29 corresponds to 30 drop frame), and represents the number of frames per second. These negative numbers are stored in two's complement form. The second byte (stored positive) is the resolution within a frame: typical values may be 4 (MIDI time code resolution), 8, 10, 80 (bit resolution), or 100. This system allows exact specification of time-code-based tracks, but also allows millisecond-based tracks by specifying 25 frames/sec and a resolution of 40 units per frame. If the events in a file are stored with bit resolution of thirty-frame time code, the division word would be E250 hex.
+// If bit 15 of <division> is a one, delta-times in a file correspond to subdivisions of a second,
+// in a way consistent with SMPTE and MIDI time code. Bits 14 thru 8 contain one of the four values
+// -24, -25, -29, or -30, corresponding to the four standard SMPTE and MIDI time code formats (-29
+// corresponds to 30 drop frame), and represents the number of frames per second. These negative
+// numbers are stored in two's complement form. The second byte (stored positive) is the resolution
+// within a frame: typical values may be 4 (MIDI time code resolution), 8, 10, 80 (bit resolution),
+// or 100. This system allows exact specification of time-code-based tracks, but also allows
+// millisecond-based tracks by specifying 25 frames/sec and a resolution of 40 units per frame. If
+// the events in a file are stored with bit resolution of thirty-frame time code, the division word
+// would be E250 hex.
 //
 // MIDI File Format:
-// A Format 0 file has a header chunk followed by one track chunk. It is the most interchangeable representation of data.
+// A Format 0 file has a header chunk followed by one track chunk. It is the most interchangeable
+// representation of data.
 // A Format 1 or 2 file has a header chunk followed by one or more track chunks.
 //
 // Tempo:
-// All MIDI Files should specify tempo and time signature. If they don't, the time signature is assumed to be 4/4, and the tempo 120 beats per minute. In format 0, these meta-events should occur at least at the beginning of the single multi-channel track. In format 1, these meta- events should be contained in the first track. In format 2, each of the temporally independent patterns should contain at least initial time signature and tempo information.
+// All MIDI Files should specify tempo and time signature. If they don't, the time signature is
+// assumed to be 4/4, and the tempo 120 beats per minute. In format 0, these meta-events should
+// occur at least at the beginning of the single multi-channel track. In format 1, these meta-
+// events should be contained in the first track. In format 2, each of the temporally independent
+// patterns should contain at least initial time signature and tempo information.
 
 // NOTE:
-// To allow for future expansion, a MIDI file reader should skip over (ie ignore) any chunk types that it does not know about (ie: besides MThd and MTrk), which it can easily do by reading the offending chunk's chunklen.
+// To allow for future expansion, a MIDI file reader should skip over (ie ignore) any chunk types
+// that it does not know about (ie: besides MThd and MTrk), which it can easily do by reading the
+// offending chunk's chunklen.
 
 // MARK: - Header
 
@@ -194,12 +217,15 @@ extension MIDIFile.Chunk.Header {
             data += UInt16(1).toData(.bigEndian) // only 1 track allowed
             
         } else {
-            // For format 1 or 2 files, track count can be any value. There is no limitation as far as the file format is concerned, though sequencer software will generally impose a practical limit.
+            // For format 1 or 2 files, track count can be any value. There is no limitation as far
+            // as the file format is concerned, though sequencer software will generally impose a
+            // practical limit.
             data += UInt16(withChunkCount).toData(.bigEndian)
         }
         
         // Time division: ticks per quarter note
-        // Specifies the timing interval to be used, and whether timecode (Hrs.Mins.Secs.Frames) or metrical (Bar.Beat) timeBase is to be used.
+        // Specifies the timing interval to be used, and whether timecode (Hrs.Mins.Secs.Frames) or
+        // metrical (Bar.Beat) timeBase is to be used.
         // 15-bit variable-length encoded value: big endian, with top bit reserved for timecode flag
         // Bit 15 = 0 : metrical timeBase
         // Bit 15 = 1 : timecode

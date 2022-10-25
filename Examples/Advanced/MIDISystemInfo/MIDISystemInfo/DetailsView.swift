@@ -1,7 +1,7 @@
 //
 //  DetailsView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -9,7 +9,8 @@ import WebKit
 import MIDIKit
 
 struct EmptyDetailsView: View {
-    /// coaxes WebKit to start up when EmptyDetailsView first shows in the main view, making the next WebKitView view that loads to load faster
+    /// coaxes WebKit to start up when EmptyDetailsView first shows in the main view,
+    /// making the next WebKitView view that loads to load faster
     private let dummyWKView = WKWebView()
     
     var body: some View {
@@ -25,7 +26,7 @@ struct DetailsView: View {
     
     @State private var webViewHeight: CGFloat = .zero
     
-    @State private var webview: WKWebView = .init()
+    @State private var webView: WKWebView = .init()
     
     @State private var showAll: Bool = false
     
@@ -114,7 +115,7 @@ struct DetailsView: View {
         if let unwrappedObject = object {
             WebKitView(
                 dynamicHeight: $webViewHeight,
-                webview: $webview,
+                webView: $webView,
                 html: generateHTML(unwrappedObject)
             )
             

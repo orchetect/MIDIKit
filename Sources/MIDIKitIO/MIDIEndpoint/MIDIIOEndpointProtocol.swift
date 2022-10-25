@@ -1,7 +1,7 @@
 //
 //  MIDIIOEndpointProtocol.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -15,8 +15,13 @@ public protocol MIDIIOEndpointProtocol: MIDIIOObject {
     
     // implemented in extension _MIDIIOEndpointProtocol
     
-    /// Returns the entity the endpoint originates from. For virtual endpoints, this will return `nil`.
+    /// Returns the entity the endpoint originates from.
+    /// For virtual endpoints, this will return `nil`.
     func getEntity() -> MIDIEntity?
+    
+    /// Returns the device the endpoint originates from.
+    /// For virtual endpoints, this will return `nil`.
+    func getDevice() -> MIDIDevice?
     
     /// Returns the endpoint as a type-erased ``AnyMIDIEndpoint``.
     func asAnyEndpoint() -> AnyMIDIEndpoint
@@ -31,6 +36,11 @@ internal protocol _MIDIIOEndpointProtocol: MIDIIOEndpointProtocol { }
 extension _MIDIIOEndpointProtocol {
     public func getEntity() -> MIDIEntity? {
         try? getSystemEntity(for: coreMIDIObjectRef)
+    }
+    
+    public func getDevice() -> MIDIDevice? {
+        guard let entity = getEntity() else { return nil }
+        return try? getSystemDevice(for: entity.coreMIDIObjectRef)
     }
 }
 

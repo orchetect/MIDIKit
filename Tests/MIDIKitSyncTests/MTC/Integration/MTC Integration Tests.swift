@@ -1,7 +1,7 @@
 //
 //  MTC Integration Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform
@@ -451,7 +451,8 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
     }
     
     func testMTC_Integration_EncoderDecoder_fullFrameBehavior() {
-        // test expected outcomes regarding Encoder.locate() and transmitting MTC full-frame messages
+        // test expected outcomes regarding Encoder.locate() and transmitting MTC full-frame
+        // messages
         
         // decoder
         
@@ -543,7 +544,11 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         // edge cases
         
         // quarter-frame invalidation of last full-frame cache
-        // edge case: where the Encoder has locateBehavior == .ifDifferent, if the encoder produces quarter-frame messages it should clear its cache of last full-frame message produced so that in the rare case that we locate to the same full-frame message as the last full-frame message sent it succeeds instead of errantly preventing the message
+        // edge case: where the Encoder has locateBehavior == .ifDifferent, if the encoder produces
+        // quarter-frame messages it should clear its cache of last full-frame message produced so
+        // that in the rare case that we locate to the same full-frame message as the last
+        // full-frame
+        // message sent it succeeds instead of errantly preventing the message
         
         mtcEnc.locate(
             to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24),

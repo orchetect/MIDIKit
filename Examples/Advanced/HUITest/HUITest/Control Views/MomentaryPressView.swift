@@ -1,7 +1,7 @@
 //
 //  MomentaryPressView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -31,7 +31,8 @@ struct MomentaryPressView<Content: View>: View {
     var body: some View {
         content
             .highPriorityGesture(
-                // this is a workaround to enable a button which triggers two different actions, one on mouse-down and one on mouse-up
+                // this is a workaround to enable a button which triggers two
+                // different actions: one on mouse-down and one on mouse-up
                 DragGesture(minimumDistance: 0)
                     .onChanged { _ in
                         if !isPressed {

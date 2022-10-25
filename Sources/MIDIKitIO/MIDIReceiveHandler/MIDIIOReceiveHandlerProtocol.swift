@@ -1,8 +1,10 @@
 //
 //  MIDIIOReceiveHandlerProtocol.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
+
+#if !os(tvOS) && !os(watchOS)
 
 /// MIDI I/O Receive Handler Protocol.
 ///
@@ -24,3 +26,5 @@ public protocol MIDIIOReceiveHandlerProtocol {
         protocol midiProtocol: MIDIProtocolVersion
     )
 }
+
+#endif

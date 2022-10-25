@@ -1,7 +1,7 @@
 //
 //  Event SysEx.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -122,7 +122,8 @@ extension MIDIEvent.SysEx7: MIDIFileEventPayload {
 extension MIDIFileEvent {
     /// Universal System Exclusive (7-bit)
     ///
-    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
+    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See
+    /// the official MIDI 1.0 and 2.0 specs for details.
     ///
     /// - `deviceID` of `0x7F` indicates "All Devices".
     public typealias UniversalSysEx7 = MIDIEvent.UniversalSysEx7
@@ -133,7 +134,8 @@ extension MIDIFileEvent {
 extension MIDIFileEvent {
     /// Universal System Exclusive (7-bit)
     ///
-    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
+    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See
+    /// the official MIDI 1.0 and 2.0 specs for details.
     ///
     /// - `deviceID` of `0x7F` indicates "All Devices".
     public static func universalSysEx7(

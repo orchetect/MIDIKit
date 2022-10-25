@@ -1,7 +1,7 @@
 //
 //  MIDIIONotification.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -13,7 +13,8 @@ import Foundation
 public enum MIDIIONotification: Equatable, Hashable {
     /// Some aspect of the current MIDI setup changed.
     ///
-    /// This notification carries no data. This message is redundant if you’re explicitly handling other notifications.
+    /// This notification carries no data. This message is redundant if you’re explicitly handling
+    /// other notifications.
     case setupChanged
     
     /// The system added a device, entity, or endpoint.
@@ -52,14 +53,16 @@ public enum MIDIIONotification: Equatable, Hashable {
     
     /// Other/unknown notification.
     ///
-    /// Typically will never happen unless Apple adds additional cases to Core MIDI's `MIDINotificationMessageID` enum.
+    /// Typically will never happen unless Apple adds additional cases to Core MIDI's
+    /// `MIDINotificationMessageID` enum.
     case other(messageIDRawValue: Int32)
 }
 
 extension MIDIIONotification {
     /// Converts a ``MIDIIOInternalNotification`` to ``MIDIIONotification``.
     ///
-    /// Cache must be supplied if there is a possibility of a ``removed(parent:child:)`` notification, otherwise metadata will be missing.
+    /// Cache must be supplied if there is a possibility of a ``removed(parent:child:)``
+    /// notification, otherwise metadata will be missing.
     internal init?(
         _ internalNotification: MIDIIOInternalNotification,
         cache: MIDIIOObjectCache?

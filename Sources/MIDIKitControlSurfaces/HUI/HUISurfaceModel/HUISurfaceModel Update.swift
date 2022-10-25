@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModel Update.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -10,15 +10,21 @@ import MIDIKitCore
 // MARK: - Main Update Method
 
 extension HUISurfaceModel {
-    /// Updates HUI state from a received ``HUIHostEvent`` (returned from ``HUIHostEventDecoder`` after parsing incoming HUI MIDI).
-    /// The corresponding granular ``HUISurfaceModelNotification`` is then returned containing the result of the model change.
+    /// Updates HUI state from a received ``HUIHostEvent`` (returned from ``HUIHostEventDecoder``
+    /// after parsing incoming HUI MIDI).
+    /// The corresponding granular ``HUISurfaceModelNotification`` is then returned containing the
+    /// result of the model change.
     ///
-    /// > This is a utility method provided for custom implementations. When using ``HUIHost``/``HUIHostBank`` it is not necessary to call this method as it will be handled automatically.
+    /// > This is a utility method provided for custom implementations. When using
+    /// ``HUIHost``/``HUIHostBank`` it is not necessary to call this method as it will be handled
+    /// automatically.
     ///
     /// - Parameters:
     ///   - receivedEvent: The incoming ``HUIHostEvent``.
-    ///   - alwaysNotify: Always generate a ``HUISurfaceModelUpdateResult/changed(_:)`` notification even if the state update results in no change to the model.
-    /// - Returns: The strongly-typed ``HUISurfaceModelNotification`` containing the result of the state change.
+    ///   - alwaysNotify: Always generate a ``HUISurfaceModelUpdateResult/changed(_:)`` notification
+    /// even if the state update results in no change to the model.
+    /// - Returns: The strongly-typed ``HUISurfaceModelNotification`` containing the result of the
+    /// state change.
     @discardableResult
     public mutating func updateState(
         from receivedEvent: HUIHostEvent,

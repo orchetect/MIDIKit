@@ -1,7 +1,7 @@
 //
 //  IO Constants.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 @_implementationOnly import CoreMIDI
@@ -20,13 +20,15 @@ internal let kSizeOfMIDIPacket = MemoryLayout<MIDIPacket>.size
 ///
 /// The packet is an "open-ended array of variable-length MIDIPackets" of `numPackets` count.
 ///
-/// To determine the size of the header, we can get the size of a `UInt32`, or subtract the size of a single packet from the size of a packet list.
+/// To determine the size of the header, we can get the size of a `UInt32`, or subtract the size of
+/// a single packet from the size of a packet list.
 @usableFromInline
 internal let kSizeOfMIDIPacketListHeader = kSizeOfMIDIPacketList - kSizeOfMIDIPacket
     
 /// Size of Core MIDI `MIDIPacket` header.
 ///
-/// The `MIDIPacket` struct consists of a `MIDITimeStamp` timestamp, a `UInt16` length, followed by data bytes of the length specified.
+/// The `MIDIPacket` struct consists of a `MIDITimeStamp` timestamp, a `UInt16` length, followed by
+/// data bytes of the length specified.
 ///
 /// To determine the size of the header, add the size of the `timestamp` and `length` portions.
 @usableFromInline

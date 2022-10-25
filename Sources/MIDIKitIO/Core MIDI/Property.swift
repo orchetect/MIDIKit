@@ -1,7 +1,7 @@
 //
 //  Property.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -215,7 +215,8 @@ extension AnyMIDIIOObject.Property {
         case kMIDIPropertySupportsShowControl: self = .supportsShowControl
     
         // MARK: Configuration
-        // case kMIDIPropertyNameConfigurationDictionary: self = .nameConfigurationDictionary // -- has OS requirements, handled separately
+        // case kMIDIPropertyNameConfigurationDictionary: self = .nameConfigurationDictionary
+        //   --> has OS requirements, handled separately
         case kMIDIPropertyMaxSysExSpeed: self = .maxSysExSpeed
         case kMIDIPropertyDriverDeviceEditorApp: self = .driverDeviceEditorApp
     
@@ -227,7 +228,8 @@ extension AnyMIDIIOObject.Property {
         case kMIDIPropertyPanDisruptsStereo: self = .panDisruptsStereo
     
         // MARK: Protocols
-        // case kMIDIPropertyProtocolID: self = .protocolID // -- has OS requirements, handled separately
+        // case kMIDIPropertyProtocolID: self = .protocolID
+        //    --> has OS requirements, handled separately
     
         // MARK: Timing
         case kMIDIPropertyTransmitsMTC: self = .transmitsMTC

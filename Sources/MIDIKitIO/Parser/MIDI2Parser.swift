@@ -1,17 +1,22 @@
 //
 //  MIDI2Parser.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
+
+#if !os(tvOS) && !os(watchOS)
 
 /// Parser for MIDI 2.0 events.
 ///
-/// State is maintained internally. Use one parser class instance per MIDI endpoint for the lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and do not use a single global parser class instance for all MIDI endpoints.)
+/// State is maintained internally. Use one parser class instance per MIDI endpoint for the
+/// lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and
+/// do not use a single global parser class instance for all MIDI endpoints.)
 public final class MIDI2Parser {
     // MARK: - Internal Default Instance
     
     /// Internal:
-    /// Default static instance for MIDIKit objects that support parsing events without requiring a parser to be instanced first.
+    /// Default static instance for MIDIKit objects that support parsing events without requiring a
+    /// parser to be instanced first.
     internal static let `default` = MIDI2Parser()
     
     // MARK: - Parser State
@@ -170,7 +175,8 @@ public final class MIDI2Parser {
         group: UInt4
     ) -> MIDIEvent? {
         // ensure packet is 32-bits (4 bytes / 1 UInt32 word) wide
-        // (first byte is stripped when bytes are passed into this function so we expect 3 bytes here)
+        // (first byte is stripped when bytes are passed into this function
+        // so we expect 3 bytes here)
         guard bytes.count == 3 else { return nil }
     
         let statusByte = bytes[bytes.startIndex]
@@ -256,7 +262,8 @@ public final class MIDI2Parser {
         group: UInt4
     ) -> MIDIEvent? {
         // ensure packet is 32-bits (4 bytes / 1 UInt32 word) wide
-        // (first byte is stripped when bytes are passed into this function so we expect 3 bytes here)
+        // (first byte is stripped when bytes are passed into this function
+        // so we expect 3 bytes here)
         guard bytes.count == 3 else { return nil }
     
         let statusNibble = bytes[bytes.startIndex].nibbles.high
@@ -379,7 +386,8 @@ public final class MIDI2Parser {
         group: UInt4
     ) -> MIDIEvent? {
         // ensure packet is 64-bits (8 bytes / 2 UInt32 words) wide
-        // (first byte is stripped when bytes are passed into this function so we expect 7 bytes here)
+        // (first byte is stripped when bytes are passed into this function
+        // so we expect 7 bytes here)
         guard bytes.count == 7 else { return nil }
     
         // byte 1: [status]
@@ -577,10 +585,16 @@ public final class MIDI2Parser {
         group: UInt4
     ) -> MIDIEvent? {
         // MIDI 2.0 Spec:
-        // "The MIDI 1.0 Protocol bracketing method with 0xF0 Start and 0xF7 End Status bytes is not used in the UMP Format. Instead, the SysEx payload is carried in one or more 64-bit UMPs, discarding the 0xF0 and 0xF7 bytes. The standard ID Number (Manufacturer ID, Special ID 0x7D, or Universal System Exclusive ID), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable) are included in the initial data bytes, just as they are in MIDI 1.0 Protocol message equivalents."
+        // "The MIDI 1.0 Protocol bracketing method with 0xF0 Start and 0xF7 End Status bytes is not
+        // used in the UMP Format. Instead, the SysEx payload is carried in one or more 64-bit UMPs,
+        // discarding the 0xF0 and 0xF7 bytes. The standard ID Number (Manufacturer ID, Special ID
+        // 0x7D, or Universal System Exclusive ID), Device ID, and Sub-ID#1 & Sub-ID#2 (if
+        // applicable) are included in the initial data bytes, just as they are in MIDI 1.0 Protocol
+        // message equivalents."
     
         // ensure packet is 64-bits (8 bytes / 2 UInt32 words) wide
-        // (first byte is stripped when bytes are passed into this function so we expect 7 bytes here)
+        // (first byte is stripped when bytes are passed into this function so we expect 7 bytes
+        // here)
         guard bytes.count == 7 else { return nil }
     
         let byte1Nibbles = bytes[bytes.startIndex].nibbles
@@ -649,10 +663,15 @@ public final class MIDI2Parser {
         group: UInt4
     ) -> MIDIEvent? {
         // MIDI 2.0 Spec:
-        // "System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original System Exclusive messages, but with the added advantage of allowing all 8 bits of each data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8 Message is carried in one or more 128-bit UMPs with Message Type 0x5."
+        // "System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original
+        // System Exclusive messages, but with the added advantage of allowing all 8 bits of each
+        // data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the
+        // high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive
+        // 8 Message is carried in one or more 128-bit UMPs with Message Type 0x5."
     
         // ensure packet is 128-bits (16 bytes / 4 UInt32 words) wide
-        // (first byte is stripped when bytes are passed into this function so we expect 15 bytes here)
+        // (first byte is stripped when bytes are passed into this function so we expect 15 bytes
+        // here)
         guard bytes.count == 15 else { return nil }
     
         let byte1Nibbles = bytes[bytes.startIndex].nibbles
@@ -748,7 +767,9 @@ public final class MIDI2Parser {
         followingBytes: Array<UInt8>.SubSequence
     )? {
         // MIDI 2.0 Spec:
-        // "The UMP Format provides a set of Utility Messages. Utility Messages include but are not limited to NOOP and timestamps, and might in the future include UMP transport-related functions."
+        // "The UMP Format provides a set of Utility Messages. Utility Messages include but are not
+        // limited to NOOP and timestamps, and might in the future include UMP transport-related
+        // functions."
         // These messages can be standalone 32-bit UMPs or prepend other UMP messages.
     
         // byte 0: [high nibble: message type, low nibble: group]
@@ -775,7 +796,8 @@ public final class MIDI2Parser {
             // since a status of 0x0 is NOOP and it carries no data
             // so we could skip checking these bytes.
     
-            // NOOP is always a self-contained message and never prepends other UMPs like timestamps could.
+            // NOOP is always a self-contained message and never prepends
+            // other UMPs like timestamps could.
     
             return (.noOp(group: group), [])
     
@@ -829,3 +851,5 @@ extension AnyMIDIPacket {
         MIDI2Parser.default.parsedEvents(in: bytes)
     }
 }
+
+#endif

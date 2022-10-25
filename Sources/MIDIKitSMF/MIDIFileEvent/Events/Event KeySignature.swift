@@ -1,7 +1,7 @@
 //
 //  Event KeySignature.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -21,7 +21,8 @@ import MIDIKitInternals
 extension MIDIFileEvent {
     /// Key Signature event.
     ///
-    /// For a format 1 MIDI file, Key Signature Meta events should only occur within the first `MTrk` chunk.
+    /// For a format 1 MIDI file, Key Signature Meta events should only occur within the first
+    /// `MTrk` chunk.
     ///
     /// If there are no key signature events in a MIDI file, C major is assumed.
     public struct KeySignature: Equatable, Hashable {
@@ -57,7 +58,8 @@ extension MIDIFileEvent {
 extension MIDIFileEvent {
     /// Key Signature event.
     ///
-    /// For a format 1 MIDI file, Key Signature Meta events should only occur within the first `MTrk` chunk.
+    /// For a format 1 MIDI file, Key Signature Meta events should only occur within the first
+    /// `MTrk` chunk.
     ///
     /// If there are no key signature events in a MIDI file, C major is assumed.
     public static func keySignature(
@@ -121,7 +123,8 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
     
     public func midi1SMFRawBytes<D: MutableDataProtocol>() -> D {
         // FF 59 02(length) sf mi
-        // sf is a byte specifying the number of flats (-ve) or sharps (+ve) that identifies the key signature (-7 = 7 flats, -1 = 1 flat, 0 = key of C, 1 = 1 sharp, etc).
+        // sf is a byte specifying the number of flats (-ve) or sharps (+ve) that identifies the
+        // key signature (-7 = 7 flats, -1 = 1 flat, 0 = key of C, 1 = 1 sharp, etc).
         // mi is a byte specifying a major (0) or minor (1) key.
         
         D(

@@ -1,7 +1,7 @@
 //
 //  MTCDirection.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -19,9 +19,13 @@ public enum MTCDirection {
 }
 
 extension MTCDirection {
-    /// Infers playback direction by comparing previous and current quarter-frames received, taking into account value wrapping around min/max.
+    /// Infers playback direction by comparing previous and current quarter-frames received, taking
+    /// into account value wrapping around min/max.
     ///
-    /// Returns nil if direction cannot be reasonably inferred. This may happen if both values are identical, or if values are not adjacent +/- 1 of each other, which may indicate the quarter-frame stream has been interrupted ie: when the transmitter has located to a new timecode entirely.
+    /// Returns nil if direction cannot be reasonably inferred. This may happen if both values are
+    /// identical, or if values are not adjacent +/- 1 of each other, which may indicate the
+    /// quarter-frame stream has been interrupted ie: when the transmitter has located to a new
+    /// timecode entirely.
     ///
     /// - Parameters:
     ///   - previousQF: the last quarter-frame received

@@ -1,7 +1,7 @@
 //
 //  Controller LSB.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.CC.Controller {
@@ -81,7 +81,8 @@ extension MIDIEvent.CC.Controller {
         // CC 52 ... 63 undefined
     
         /// LSBs for Undefined controller numbers
-        /// (Includes undefined controllers `20 ... 31`, corresponding to undefined LSBs of `52 ... 63`)
+        /// (Includes undefined controllers `20 ... 31`,
+        /// corresponding to undefined LSBs of `52 ... 63`)
         case undefined(LSB.Undefined)
     }
 }

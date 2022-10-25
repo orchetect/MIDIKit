@@ -1,7 +1,7 @@
 //
 //  MIDIIOInternalNotification.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -11,7 +11,8 @@ import Foundation
 
 /// Internal MIDI subsystem notification with raw values.
 ///
-/// This must be converted to an instance of ``MIDIIONotification`` before sending to the ``MIDIManager``'s public notification handler.
+/// This must be converted to an instance of ``MIDIIONotification`` before sending to the
+/// ``MIDIManager``'s public notification handler.
 internal enum MIDIIOInternalNotification {
     case setupChanged
     
@@ -44,7 +45,8 @@ internal enum MIDIIOInternalNotification {
         error: MIDIIOError
     )
     
-    /// Typically will never happen unless Apple adds additional cases to Core MIDI's `MIDINotificationMessageID` enum.
+    /// Typically will never happen unless Apple adds additional cases to Core MIDI's
+    /// `MIDINotificationMessageID` enum.
     case other(messageIDRawValue: Int32)
 }
 

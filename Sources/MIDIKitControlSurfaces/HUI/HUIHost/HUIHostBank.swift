@@ -1,7 +1,7 @@
 //
 //  HUIHostBank.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -10,7 +10,9 @@ import MIDIKitInternals
 
 /// Object representing a ``HUIHost`` bank (connectable to one HUI surface over bidirectional MIDI).
 ///
-/// This object is created and managed by ``HUIHost``. Do not instantiate this object directly. Instead, call ``HUIHost/addBank(huiEventHandler:midiOutHandler:remotePresenceChangedHandler:)`` to add banks to your ``HUIHost`` instance.
+/// This object is created and managed by ``HUIHost``. Do not instantiate this object directly.
+/// Instead, call ``HUIHost/addBank(huiEventHandler:midiOutHandler:remotePresenceChangedHandler:)``
+/// to add banks to your ``HUIHost`` instance.
 public final class HUIHostBank {
     // MARK: - Decoder
     
@@ -34,9 +36,11 @@ public final class HUIHostBank {
     
     // MARK: - Presence
     
-    /// Time duration to wait since the last ping received before transitioning ``isRemotePresent`` to `false`.
+    /// Time duration to wait since the last ping received before transitioning ``isRemotePresent``
+    /// to `false`.
     ///
-    /// HUI pings are sent from the host to surface(s) every 1 second. A timeout duration between 2 ... 5 seconds is reasonable depending on desired leeway.
+    /// HUI pings are sent from the host to surface(s) every 1 second.
+    /// A timeout duration between `2 ... 5` seconds is reasonable depending on desired leeway.
     public var remotePresenceTimeout: TimeInterval = 2.0 {
         didSet {
             // validate

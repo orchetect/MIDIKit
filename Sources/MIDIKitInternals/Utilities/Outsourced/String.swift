@@ -95,7 +95,8 @@ extension StringProtocol {
             .joined()
     }
     
-    /// Returns a string preserving only characters from the passed string and removing all other characters.
+    /// Returns a string preserving only characters from the passed string and removing all other
+    /// characters.
     @_disfavoredOverload
     public func only(characters: String) -> String {
         only(CharacterSet(charactersIn: characters))

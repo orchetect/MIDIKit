@@ -1,7 +1,7 @@
 //
 //  MTC Encoder Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform
@@ -38,7 +38,8 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
     }
     
     func testMTC_Encoder_Timecode_NominalRates() {
-        // perform a spot-check to ensure the .timecode property is returning expected Timecode for nominal (non-scaling) frame rates
+        // perform a spot-check to ensure the .timecode property is returning
+        // expected Timecode for nominal (non-scaling) frame rates
         
         var mtcEnc: MTCEncoder!
         
@@ -388,7 +389,8 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             // round raw MTC frame number down to an even number, as per MTC spec
             let originFrame: Int
             
-            // (include non-drop rates in switch case even though they won't be traversed, for sake of being exhaustive)
+            // (include non-drop rates in switch case even though they won't be
+            // traversed, for sake of being exhaustive)
             switch $0 {
             case ._23_976, ._24, ._24_98, ._25, ._29_97, ._29_97_drop, ._30, ._30_drop:
                 // 1x multiplier

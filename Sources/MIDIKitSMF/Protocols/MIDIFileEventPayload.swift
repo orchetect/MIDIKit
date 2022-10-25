@@ -1,7 +1,7 @@
 //
 //  MIDIFileEventPayload.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -22,7 +22,9 @@ public protocol MIDIFileEventPayload {
     /// Returns the new event and MIDI file buffer length (number of bytes).
     typealias StreamDecodeResult = (newEvent: Self, bufferLength: Int)
     
-    /// If it is possible to initialize a new instance of this event from the head of the data buffer, a new instance will be returned along with the byte length traversed from the buffer.
+    /// If it is possible to initialize a new instance of this event from the head of the data
+    /// stream, a new instance will be returned along with the byte length traversed from the
+    /// stream.
     static func initFrom<D: DataProtocol>(
         midi1SMFRawBytesStream stream: D
     ) throws -> StreamDecodeResult

@@ -1,15 +1,17 @@
 //
 //  HUISurfaceModel StereoLevelMeter.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
 extension HUISurfaceModel {
-    /// State storage representing the state of a channel strip's stereo level meter on the meter bridge.
+    /// State storage representing the state of a channel strip's stereo level meter on the meter
+    /// bridge.
     ///
-    /// As value increases, all LEDs up to and including that value will illuminate, representing an audio level meter with 12 LED segments. A value of `0x0` indicates no LEDs are illuminated.
+    /// As value increases, all LEDs up to and including that value will illuminate, representing an
+    /// audio level meter with 12 LED segments. A value of `0x0` indicates no LEDs are illuminated.
     ///
     ///     Value  Level       LED Segment
     ///     -----  ----------  -----------------
@@ -30,7 +32,9 @@ extension HUISurfaceModel {
     public struct StereoLevelMeter: Equatable, Hashable {
         /// Left Meter Channel.
         ///
-        /// As value increases, all LEDs up to and including that value will illuminate, representing an audio level meter with 12 LED segments. A value of `0x0` indicates no LEDs are illuminated.
+        /// As value increases, all LEDs up to and including that value will illuminate,
+        /// representing an audio level meter with 12 LED segments. A value of `0x0` indicates no
+        /// LEDs are illuminated.
         ///
         ///     Value  Level       LED Segment
         ///     -----  ----------  -----------------
@@ -58,7 +62,9 @@ extension HUISurfaceModel {
         
         /// Right Meter Channel.
         ///
-        /// As value increases, all LEDs up to and including that value will illuminate, representing an audio level meter with 12 LED segments. A value of `0x0` indicates no LEDs are illuminated.
+        /// As value increases, all LEDs up to and including that value will illuminate,
+        /// representing an audio level meter with 12 LED segments. A value of `0x0` indicates no
+        /// LEDs are illuminated.
         ///
         ///     Value  Level       LED Segment
         ///     -----  ----------  -----------------

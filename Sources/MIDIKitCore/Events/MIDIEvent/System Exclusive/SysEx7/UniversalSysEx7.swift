@@ -1,14 +1,15 @@
 //
 //  UniversalSysEx7.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
     /// Universal System Exclusive (7-bit)
     /// (MIDI 1.0 / 2.0)
     ///
-    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
+    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See
+    /// the official MIDI 1.0 and 2.0 specs for details.
     ///
     /// - `deviceID` of `0x7F` indicates "All Devices".
     public struct UniversalSysEx7: Equatable, Hashable {
@@ -52,7 +53,8 @@ extension MIDIEvent {
     /// System Exclusive: Universal SysEx (7-bit)
     /// (MIDI 1.0 / 2.0)
     ///
-    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
+    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See
+    /// the official MIDI 1.0 and 2.0 specs for details.
     ///
     /// - Parameters:
     ///   - universalType: Universal SysEx type: realtime or non-realtime
@@ -85,7 +87,8 @@ extension MIDIEvent {
 extension MIDIEvent.UniversalSysEx7 {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes(
         leadingF0: Bool = true,
         trailingF7: Bool = true
@@ -103,7 +106,8 @@ extension MIDIEvent.UniversalSysEx7 {
     
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [[UMPWord]] {
         let rawData =
             [

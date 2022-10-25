@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		E24BA23E284F1A3300AA6767 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24BA23D284F1A3300AA6767 /* AppDelegate.swift */; };
-		E24BA240284F1A3300AA6767 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24BA23F284F1A3300AA6767 /* ViewController.swift */; };
 		E24BA245284F1A3400AA6767 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E24BA243284F1A3400AA6767 /* Main.storyboard */; };
 		E24BA251284F1C5B00AA6767 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E24BA250284F1C5B00AA6767 /* MIDIKit */; };
 		E29AC927285BF2A6009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC926285BF2A6009D1C2C /* MIDIKit */; };
@@ -18,7 +17,6 @@
 /* Begin PBXFileReference section */
 		E24BA23A284F1A3300AA6767 /* EventParsing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventParsing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E24BA23D284F1A3300AA6767 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E24BA23F284F1A3300AA6767 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E24BA244284F1A3400AA6767 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E24BA246284F1A3400AA6767 /* EventParsing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EventParsing.entitlements; sourceTree = "<group>"; };
 		E29A5E972852A29F00E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -59,7 +57,6 @@
 			isa = PBXGroup;
 			children = (
 				E24BA23D284F1A3300AA6767 /* AppDelegate.swift */,
-				E24BA23F284F1A3300AA6767 /* ViewController.swift */,
 				E24BA243284F1A3400AA6767 /* Main.storyboard */,
 				E24BA246284F1A3400AA6767 /* EventParsing.entitlements */,
 				E29FF2A02880BCC5005E2BC2 /* Images.xcassets */,
@@ -144,7 +141,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E24BA240284F1A3300AA6767 /* ViewController.swift in Sources */,
 				E24BA23E284F1A3300AA6767 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -367,7 +363,7 @@
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.6.0;
+				minimumVersion = 0.7.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -1,14 +1,15 @@
 //
 //  ProgramChange Bank.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.ProgramChange {
     /// Bank Select
     /// (MIDI 1.0 / MIDI 2.0)
     ///
-    /// When receiving a Program Change event, if a bank number is present then the Bank Select event should be processed prior to the Program Change event.
+    /// When receiving a Program Change event, if a bank number is present then the Bank Select
+    /// event should be processed prior to the Program Change event.
     ///
     /// **MIDI 1.0**
     ///
@@ -19,13 +20,16 @@ extension MIDIEvent.ProgramChange {
     ///
     /// Bank numbers in MIDI 1.0 are expressed as two 7-bit bytes (MSB/"coarse" and LSB/"fine").
     ///
-    /// In some implementations, manufacturers have chosen to only use the MSB/"coarse" adjust (CC 0) switch banks since many devices don't have more than 128 banks (of 128 programs each).
+    /// In some implementations, manufacturers have chosen to only use the MSB/"coarse" adjust (CC
+    /// 0) switch banks since many devices don't have more than 128 banks (of 128 programs each).
     ///
     /// **MIDI 2.0**
     ///
-    /// For MIDI 2.0, Program Change and Bank Select information is all contained within a single UMP (Universal MIDI Packet).
+    /// For MIDI 2.0, Program Change and Bank Select information is all contained within a single
+    /// UMP (Universal MIDI Packet).
     ///
-    /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a 14-bit number (`0 ... 16383`). They correlate exactly to MIDI 1.0 bank numbers.
+    /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a
+    /// 14-bit number (`0 ... 16383`). They correlate exactly to MIDI 1.0 bank numbers.
     public enum Bank: Equatable, Hashable {
         /// No Bank Select operation will occur; only a Program Change event will happen.
         /// (MIDI 1.0 / 2.0)
@@ -43,13 +47,17 @@ extension MIDIEvent.ProgramChange {
         ///
         /// Bank numbers in MIDI 1.0 are expressed as two 7-bit bytes (MSB/"coarse" and LSB/"fine").
         ///
-        /// In some implementations, manufacturers have chosen to only use the MSB/"coarse" adjust (CC 0) switch banks since many devices don't have more than 128 banks (of 128 programs each).
+        /// In some implementations, manufacturers have chosen to only use the MSB/"coarse" adjust
+        /// (CC 0) switch banks since many devices don't have more than 128 banks (of 128 programs
+        /// each).
         ///
         /// **MIDI 2.0**
         ///
-        /// For MIDI 2.0, Program Change and Bank Select information is all contained within a single UMP (Universal MIDI Packet).
+        /// For MIDI 2.0, Program Change and Bank Select information is all contained within a
+        /// single UMP (Universal MIDI Packet).
         ///
-        /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a 14-bit number (`0 ... 16383`). They correlate exactly to MIDI 1.0 bank numbers.
+        /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a
+        /// 14-bit number (`0 ... 16383`). They correlate exactly to MIDI 1.0 bank numbers.
         case bankSelect(UInt14)
     }
 }
@@ -67,13 +75,16 @@ extension MIDIEvent.ProgramChange.Bank {
     ///
     /// Bank numbers in MIDI 1.0 are expressed as two 7-bit bytes (MSB/"coarse" and LSB/"fine").
     ///
-    /// In some implementations, manufacturers have chosen to only use the MSB/"coarse" adjust (CC 0) switch banks since many devices don't have more than 128 banks (of 128 programs each).
+    /// In some implementations, manufacturers have chosen to only use the MSB/"coarse" adjust (CC
+    /// 0) switch banks since many devices don't have more than 128 banks (of 128 programs each).
     ///
     /// **MIDI 2.0**
     ///
-    /// For MIDI 2.0, Program Change and Bank Select information is all contained within a single UMP (Universal MIDI Packet).
+    /// For MIDI 2.0, Program Change and Bank Select information is all contained within a single
+    /// UMP (Universal MIDI Packet).
     ///
-    /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a 14-bit number (`0 ... 16383`). They correlate exactly to MIDI 1.0 bank numbers.
+    /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a
+    /// 14-bit number (`0 ... 16383`). They correlate exactly to MIDI 1.0 bank numbers.
     public static func bankSelect(
         msb: UInt7,
         lsb: UInt7

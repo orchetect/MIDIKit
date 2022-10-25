@@ -1,7 +1,7 @@
 //
 //  LEDState.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -289,12 +289,12 @@ extension HUIVPotDisplay.LEDState {
         .single(LED(position: unitInterval))
     }
     
-    /// Initialize by returning a ``left(to:)-swift.enum.case`` case constructed from a unit interval corresponding to the terminating LED position.
+    /// Initialize by returning a ``left(to:)`` case constructed from a unit interval corresponding to the terminating LED position.
     public static func left(toUnitInterval unitInterval: Double) -> Self {
         .left(to: LED(position: unitInterval))
     }
     
-    /// Initialize by returning a ``center(to:)-swift.enum.case`` case constructed from a unit interval corresponding to the terminating LED position.
+    /// Initialize by returning a ``center(to:)`` case constructed from a unit interval corresponding to the terminating LED position.
     public static func center(toUnitInterval unitInterval: Double) -> Self {
         .center(to: LED(position: unitInterval))
     }

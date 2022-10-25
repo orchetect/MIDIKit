@@ -1,7 +1,7 @@
 //
 //  MTC Receiver Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform
@@ -87,7 +87,8 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
     func testMTC_Receiver_InternalState_FullFrameMessage() {
         // test full frame MTC messages and check that properties get updated
         
-        // (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
+        // (Receiver.midiIn() is async internally so we need to wait for property
+        // updates to occur before reading them)
         
         // init with local frame rate
         let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
@@ -129,9 +130,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
     }
     
     func testMTC_Receiver_InternalState_FullFrameMessage_IncompatibleFrameRate() {
-        // test state does not become .incompatibleFrameRate when localFrameRate is present but not compatible with the MTC frame rate being received by the receiver
+        // test state does not become .incompatibleFrameRate when localFrameRate is present
+        // but not compatible with the MTC frame rate being received by the receiver
         
-        // (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
+        // (Receiver.midiIn() is async internally so we need to wait for property
+        // updates to occur before reading them)
         
         // init with local frame rate
         let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._29_97)
@@ -140,7 +143,8 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps)
         wait(sec: 0.050)
         
-        // state should not change to .incompatibleFrameRate for full frame messages, only quarter frames
+        // state should not change to .incompatibleFrameRate for full frame messages, only quarter
+        // frames
         XCTAssertEqual(mtcRec.state, .idle)
         
         // timecode remains unchanged
@@ -171,7 +175,8 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         // test MTC quarter-frame messages and check that properties get updated
         
-        // (Receiver.midiIn() is async internally so we need to wait for property updates to occur before reading them)
+        // (Receiver.midiIn() is async internally so we need to wait for property
+        // updates to occur before reading them)
         
         var isSuccess = false
         let asyncDoneExp = expectation(description: "Async test completed")
@@ -228,7 +233,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
                 predictedLockTime: preSyncLockTime,
                 lockTimecode: preSyncTimecode
             ) = mtcRec.state else {
-                XCTFail("Expected receiver state is preSync, but is a different state.")
+                XCTFail("Expected preSync receiver state.")
                 asyncDoneExp.fulfill()
                 return
             }
@@ -236,7 +241,8 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
             XCTAssertEqual(preSyncTimecode, lockTimecode)
             
             // depending on the system running these tests, this test may be too
-            // brittle/restrictive and the accuracy may need to be bumped up at some point in the future
+            // brittle/restrictive and the accuracy may need to be bumped up at some point in the
+            // future
         
             let lhs = (Double(preSyncLockTime.rawValue) / 10e8) + waitTime
             let rhs = Double(futureTime.rawValue) / 10e8
@@ -304,6 +310,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
     
     func testMTC_Receiver_Handlers_QFMessages() {
         // swiftformat:disable wrap
+        // swiftformat:disable wrapSingleLineComments
         
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
@@ -520,6 +527,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_direction, .ambiguous)
         
         // swiftformat:enable wrap
+        // swiftformat:enable wrapSingleLineComments
     }
 }
 

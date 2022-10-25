@@ -1,7 +1,7 @@
 //
 //  MIDIManager.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -11,7 +11,8 @@ import Foundation
 
 /// Central MIDI Port and Connection Manager and MIDI system data provider.
 ///
-/// One ``MIDIManager`` instance stored in a global lifecycle context can manage multiple MIDI ports and connections, and is usually sufficient for all of an application's MIDI needs.
+/// One ``MIDIManager`` instance stored in a global lifecycle context can manage multiple MIDI ports
+/// and connections, and is usually sufficient for all of an application's MIDI needs.
 public final class MIDIManager: NSObject {
     // MARK: - Properties
     
@@ -21,15 +22,19 @@ public final class MIDIManager: NSObject {
     /// Core MIDI Client Reference.
     public internal(set) var coreMIDIClientRef = CoreMIDIClientRef()
     
-    /// MIDI Model: The name of your software, which will be visible to the end-user in ports created by the manager.
+    /// MIDI Model: The name of your software, which will be visible to the end-user in ports
+    /// created by the manager.
     public internal(set) var model: String = ""
     
-    /// MIDI Manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
+    /// MIDI Manufacturer: The name of your company, which may be visible to the end-user in ports
+    /// created by the manager.
     public internal(set) var manufacturer: String = ""
     
-    /// Preferred underlying Core MIDI API to use as default when creating new managed endpoints. This value defaults to the best API for the current platform.
+    /// Preferred underlying Core MIDI API to use as default when creating new managed endpoints.
+    /// This value defaults to the best API for the current platform.
     ///
-    /// The preferred API will be used where possible, unless operating system requirements force the use of a specific.
+    /// The preferred API will be used where possible, unless operating system requirements force
+    /// the use of a specific.
     public var preferredAPI: CoreMIDIAPIVersion {
         didSet {
             // prevent setting of an invalid API
@@ -54,11 +59,14 @@ public final class MIDIManager: NSObject {
     /// Dictionary of non-persistent MIDI thru connections managed by this instance.
     public internal(set) var managedThruConnections: [String: MIDIThruConnection] = [:]
     
-    /// Array of persistent MIDI thru connections which persist indefinitely (even after system reboots) until explicitly removed.
+    /// Array of persistent MIDI thru connections which persist indefinitely (even after system
+    /// reboots) until explicitly removed.
     ///
-    /// For every persistent thru connection your app creates, they should be assigned the same persistent ID (domain) so they can be managed or removed in future.
+    /// For every persistent thru connection your app creates, they should be assigned the same
+    /// persistent ID (domain) so they can be managed or removed in future.
     ///
-    /// - Warning: Be careful when creating persistent thru connections, as they can become stale and orphaned if the endpoints used to create them cease to be relevant at any point in time.
+    /// - Warning: Be careful when creating persistent thru connections, as they can become stale
+    /// and orphaned if the endpoints used to create them cease to be relevant at any point in time.
     ///
     /// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
     /// - Throws: ``MIDIIOError``
@@ -89,9 +97,12 @@ public final class MIDIManager: NSObject {
     /// Initialize the MIDI manager (and Core MIDI client).
     ///
     /// - Parameters:
-    ///   - clientName: Name identifying this instance, used as Core MIDI client ID. This is internal and not visible to the end-user.
-    ///   - model: The name of your software, which will be visible to the end-user in ports created by the manager.
-    ///   - manufacturer: The name of your company, which may be visible to the end-user in ports created by the manager.
+    ///   - clientName: Name identifying this instance, used as Core MIDI client ID.
+    ///     This is internal and not visible to the end-user.
+    ///   - model: The name of your software, which will be visible to the end-user in ports created
+    ///     by the manager.
+    ///   - manufacturer: The name of your company, which may be visible to the end-user in ports
+    ///     created by the manager.
     ///   - notificationHandler: Optionally supply a callback handler for MIDI system notifications.
     public init(
         clientName: String,
@@ -136,7 +147,10 @@ public final class MIDIManager: NSObject {
     deinit {
         eventQueue.sync {
             // Apple docs:
-            // "Don’t explicitly dispose of your client; the system automatically disposes all clients when an app terminates. However, if you call this method to dispose the last or only client owned by an app, the MIDI server may exit if there are no other clients remaining in the system"
+            // "Don’t explicitly dispose of your client; the system automatically disposes all
+            // clients when an app terminates. However, if you call this method to dispose the last
+            // or only client owned by an app, the MIDI server may exit if there are no other
+            // clients remaining in the system"
             // _ = MIDIClientDispose(coreMIDIClientRef)
     
             NotificationCenter.default.removeObserver(self)
@@ -162,7 +176,9 @@ public final class MIDIManager: NSObject {
             iOS 13,
             /* tvOS 13, watchOS 6, */ *
         ) {
-            // calling this means we don't need to use @Published on local variables in order for Combine/SwiftUI to be notified that ObservableObject class property values have changed
+            // calling this means we don't need to use @Published on local variables in order for
+            // Combine/SwiftUI to be notified that ObservableObject class property values have
+            // changed
             objectWillChange.send()
         }
         #endif

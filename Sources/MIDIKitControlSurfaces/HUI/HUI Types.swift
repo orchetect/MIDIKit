@@ -1,7 +1,7 @@
 //
 //  HUI Types.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 /// Raw HUI zone byte.
@@ -20,7 +20,8 @@ public enum HUIRole: Equatable, Hashable, CaseIterable {
     case host
     
     /// HUI Surface
-    /// (ie: a physical HUI control surface device or a software emulation like an iPad HUI control surface app).
+    /// (ie: a physical HUI control surface device or
+    /// a software emulation like an iPad HUI control surface app).
     case surface
     
     /// Returns the inverted role.

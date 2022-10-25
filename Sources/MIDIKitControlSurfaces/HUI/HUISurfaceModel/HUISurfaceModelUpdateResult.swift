@@ -1,12 +1,12 @@
 //
 //  HUISurfaceModelUpdateResult.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-/// Result returned from ``HUISurfaceModel/updateState(from:)``.
+/// Result returned from ``HUISurfaceModel/updateState(from:alwaysNotify:)``.
 public enum HUISurfaceModelUpdateResult {
     /// The received HUI host event resulted in a change to the HUI surface model.
     case changed(HUISurfaceModelNotification)

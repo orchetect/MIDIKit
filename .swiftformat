@@ -23,7 +23,7 @@
 --funcattributes prev-line
 --groupedextension "MARK: %c"
 --guardelse auto
---header "\n {file}\n MIDIKit • https://github.com/orchetect/MIDIKit\n © {year} Steffan Andrews • Licensed under MIT License\n"
+--header "\n {file}\n MIDIKit • https://github.com/orchetect/MIDIKit\n © 2021-{year} Steffan Andrews • Licensed under MIT License\n"
 --hexgrouping 4,8
 --hexliteralcase uppercase
 --ifdef no-indent

@@ -1,7 +1,7 @@
 //
 //  Controller RPN.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.CC.Controller {
@@ -11,17 +11,23 @@ extension MIDIEvent.CC.Controller {
     /// >
     /// > To set or change the value of a Registered Parameter:
     /// >
-    /// > 1. Send two Control Change messages using Control Numbers 101 (0x65) and 100 (0x64) to select the desired Registered Parameter Number.
+    /// > 1. Send two Control Change messages using Control Numbers 101 (0x65) and 100 (0x64) to
+    /// > select the desired Registered Parameter Number.
     /// >
-    /// > 2. To set the selected Registered Parameter to a specific value, send a Control Change messages to the Data Entry MSB controller (Control Number 6). If the selected Registered Parameter requires the LSB to be set, send another Control Change message to the Data Entry LSB controller (Control Number 38).
+    /// > 2. To set the selected Registered Parameter to a specific value, send a Control Change
+    /// > messages to the Data Entry MSB controller (Control Number 6). If the selected Registered
+    /// > Parameter requires the LSB to be set, send another Control Change message to the Data Entry
+    /// > LSB controller (Control Number 38).
     /// >
-    /// > 3. To make a relative adjustment to the selected Registered Parameter's current value, use the Data Increment or Data Decrement controllers (Control Numbers 96 and 97).
+    /// > 3. To make a relative adjustment to the selected Registered Parameter's current value, use
+    /// > the Data Increment or Data Decrement controllers (Control Numbers 96 and 97).
     /// >
     /// > Currently undefined RPN parameter numbers are all RESERVED for future MMA Definition.
     /// >
     /// > For custom Parameter Number use, see NRPN (non-Registered Parameter Numbers).
     ///
-    /// - Note: See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers) of the MIDI 1.0 Spec Addenda.
+    /// - Note: See Recommended Practise
+    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers) of the MIDI 1.0 Spec Addenda.
     public enum RPN: Equatable, Hashable {
         // MIDI Spec
     

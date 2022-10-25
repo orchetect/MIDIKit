@@ -1,7 +1,7 @@
 //
 //  HUISwitch TimeDisplayStatus.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -10,15 +10,18 @@ extension HUISwitch {
     /// Time Display LEDs.
     public enum TimeDisplayStatus: Equatable, Hashable {
         /// "TIME CODE"
-        /// Time format LEDs that are to the left of the main time display above the control room section (no button, LED only).
+        /// Time format LEDs that are to the left of the main time display above the control room
+        /// section (no button, LED only).
         case timecode
         
         /// "FEET"
-        /// Time format LEDs that are to the left of the main time display above the control room section (no button, LED only).
+        /// Time format LEDs that are to the left of the main time display above the control room
+        /// section (no button, LED only).
         case feet
         
         /// "BEATS"
-        /// Time format LEDs that are to the left of the main time display above the control room section (no button, LED only).
+        /// Time format LEDs that are to the left of the main time display above the control room
+        /// section (no button, LED only).
         case beats
         
         /// "RUDE SOLO LIGHT"

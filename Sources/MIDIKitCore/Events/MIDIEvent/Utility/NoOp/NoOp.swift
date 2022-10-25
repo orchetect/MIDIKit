@@ -1,7 +1,7 @@
 //
 //  NoOp.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -10,7 +10,9 @@ extension MIDIEvent {
     ///
     /// > MIDI 2.0 Spec:
     /// >
-    /// > The UMP Format provides a set of Utility Messages. Utility Messages include but are not limited to NOOP and timestamps, and might in the future include UMP transport-related functions.
+    /// > The UMP Format provides a set of Utility Messages. Utility Messages include but are not
+    /// limited to NOOP and timestamps, and might in the future include UMP transport-related
+    /// functions.
     public struct NoOp: Equatable, Hashable {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
@@ -25,7 +27,9 @@ extension MIDIEvent {
     ///
     /// > MIDI 2.0 Spec:
     /// >
-    /// > The UMP Format provides a set of Utility Messages. Utility Messages include but are not limited to NOOP and timestamps, and might in the future include UMP transport-related functions.
+    /// > The UMP Format provides a set of Utility Messages. Utility Messages include but are not
+    /// limited to NOOP and timestamps, and might in the future include UMP transport-related
+    /// functions.
     ///
     /// - Parameters:
     ///   - group: UMP Group (`0x0 ... 0xF`)
@@ -39,7 +43,8 @@ extension MIDIEvent {
 extension MIDIEvent.NoOp {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .utility
     

@@ -1,11 +1,11 @@
 //
 //  EndpointPickersApp.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
-import MIDIKit
+import MIDIKitIO
 
 @main
 struct EndpointPickersApp: App {

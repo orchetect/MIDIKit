@@ -17,11 +17,14 @@ extension StringProtocol {
     
     /// Converts a `String` to ASCII string lossily.
     ///
-    /// Performs a lossy conversion, transforming characters to printable ASCII substitutions where necessary.
+    /// Performs a lossy conversion, transforming characters to printable ASCII substitutions where
+    /// necessary.
     ///
-    /// Note that some characters may be transformed to representations that occupy more than one ASCII character. For example: char 189 (½) will be converted to "1/2"
+    /// Note that some characters may be transformed to representations that occupy more than one
+    /// ASCII character. For example: char 189 (½) will be converted to "1/2"
     ///
-    /// Where a suitable character substitution can't reasonably be performed, a question-mark "?" will be substituted.
+    /// Where a suitable character substitution can't reasonably be performed, a question-mark "?"
+    /// will be substituted.
     @available(OSX 10.11, iOS 9.0, *)
     internal var asciiStringLossy: String {
         let transformed = applyingTransform(

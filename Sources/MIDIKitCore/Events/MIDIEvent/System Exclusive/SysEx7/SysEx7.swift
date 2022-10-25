@@ -1,7 +1,7 @@
 //
 //  SysEx7.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -10,9 +10,15 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > - Receivers should ignore non-universal Exclusive messages with ID numbers that do not correspond to their own ID.
+    /// > - Receivers should ignore non-universal Exclusive messages with ID numbers that do not
+    /// correspond to their own ID.
     /// >
-    /// > - Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification.
+    /// > - Any manufacturer of MIDI hardware or software may use the system exclusive codes of any
+    /// existing product without the permission of the original manufacturer. However, they may not
+    /// modify or extend it in any way that conflicts with the original specification published by
+    /// the designer. Once published, an Exclusive format is treated like any other part of the
+    /// instruments MIDI implementation — so long as the new instrument remains within the
+    /// definitions of the published specification.
     public struct SysEx7: Equatable, Hashable {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
@@ -39,9 +45,15 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > Receivers should ignore non-universal Exclusive messages with ID numbers that do not correspond to their own ID.
+    /// > Receivers should ignore non-universal Exclusive messages with ID numbers that do not
+    /// correspond to their own ID.
     /// >
-    /// > Any manufacturer of MIDI hardware or software may use the system exclusive codes of any existing product without the permission of the original manufacturer. However, they may not modify or extend it in any way that conflicts with the original specification published by the designer. Once published, an Exclusive format is treated like any other part of the instruments MIDI implementation — so long as the new instrument remains within the definitions of the published specification.
+    /// > Any manufacturer of MIDI hardware or software may use the system exclusive codes of any
+    /// existing product without the permission of the original manufacturer. However, they may not
+    /// modify or extend it in any way that conflicts with the original specification published by
+    /// the designer. Once published, an Exclusive format is treated like any other part of the
+    /// instruments MIDI implementation — so long as the new instrument remains within the
+    /// definitions of the published specification.
     ///
     /// - Parameters:
     ///   - manufacturer: SysEx Manufacturer ID
@@ -63,7 +75,8 @@ extension MIDIEvent {
 }
 
 extension MIDIEvent.SysEx7 {
-    /// Returns the raw MIDI 1.0 message bytes that comprise the event as a human-readable string of hex characters.
+    /// Returns the raw MIDI 1.0 message bytes that comprise the event as a human-readable string of
+    /// hex characters.
     ///
     /// By default the string is returned separated by spaces (ie: `"F7 01 02 03 F0"`).
     ///
@@ -89,7 +102,8 @@ extension MIDIEvent.SysEx7 {
 extension MIDIEvent.SysEx7 {
     /// Returns the raw MIDI 1.0 message bytes that comprise the event.
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes(
         leadingF0: Bool = true,
         trailingF7: Bool = true
@@ -102,9 +116,11 @@ extension MIDIEvent.SysEx7 {
     
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
-    /// Generates one or more 64-bit UMP packets depending on the system exclusive data length (each packet comprised of two UInt32 words).
+    /// Generates one or more 64-bit UMP packets depending on the system exclusive data length (each
+    /// packet comprised of two UInt32 words).
     ///
-    /// - Note: This is mainly for internal use and is not necessary to access during typical usage of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [[UMPWord]] {
         let rawData = manufacturer.sysEx7RawBytes() + data
     
@@ -117,7 +133,8 @@ extension MIDIEvent.SysEx7 {
 
 extension MIDIEvent.SysEx7 {
     /// Internal:
-    /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly; use the public `umpRawWords()` method instead.
+    /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly;
+    /// use the public `umpRawWords()` method instead.
     internal static func umpRawWords(
         fromSysEx7Data data: [UInt8],
         group: UInt4

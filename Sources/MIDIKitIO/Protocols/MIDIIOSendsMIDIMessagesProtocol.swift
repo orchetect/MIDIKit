@@ -1,7 +1,7 @@
 //
 //  MIDIIOSendsMIDIMessagesProtocol.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -36,7 +36,8 @@ internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProto
     func send(rawMessage: [UInt8]) throws
     
     /// Internal:
-    /// Send one or more legacy MIDI 1.0 message(s), automatically assembling it into a `MIDIPacketList`.
+    /// Send one or more legacy MIDI 1.0 message(s), automatically assembling it into a
+    /// `MIDIPacketList`.
     ///
     /// This method is internal-only and its use is discouraged.
     ///

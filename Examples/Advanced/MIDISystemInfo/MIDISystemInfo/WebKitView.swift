@@ -1,7 +1,7 @@
 //
 //  WebKitView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
@@ -10,7 +10,7 @@ import WebKit
 struct WebKitView: NSViewRepresentable {
     @Binding var dynamicHeight: CGFloat
 	
-    @Binding var webview: WKWebView
+    @Binding var webView: WKWebView
 	
     var html: String = ""
 	
@@ -40,14 +40,14 @@ struct WebKitView: NSViewRepresentable {
     }
 	
     func setHTML(_ html: String) {
-        webview.loadHTMLString(html, baseURL: nil)
+        webView.loadHTMLString(html, baseURL: nil)
     }
 	
     func makeNSView(context: Context) -> WKWebView {
-        // webview.enclosingScrollView.bounces = false
-        webview.navigationDelegate = context.coordinator
-        webview.loadHTMLString("", baseURL: nil)
-        return webview
+        // webView.enclosingScrollView.bounces = false
+        webView.navigationDelegate = context.coordinator
+        webView.loadHTMLString("", baseURL: nil)
+        return webView
     }
 	
     func updateNSView(_ nsView: NSViewType, context: Context) {

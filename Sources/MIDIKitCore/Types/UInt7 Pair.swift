@@ -1,7 +1,7 @@
 //
 //  UInt7 Pair.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 /// Type that holds a pair of `UInt7`s - one MSB `UInt7`, one LSB `UInt7`.
