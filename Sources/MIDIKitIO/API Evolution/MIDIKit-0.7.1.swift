@@ -294,4 +294,16 @@ extension MIDIIOObject {
     }
 }
 
+extension _MIDIIOEndpointProtocol {
+    @available(*, deprecated, renamed: "entity")
+    public func getEntity() -> MIDIEntity? {
+        entity
+    }
+    
+    @available(*, deprecated, renamed: "device")
+    public func getDevice() -> MIDIDevice? {
+        device
+    }
+}
+
 #endif

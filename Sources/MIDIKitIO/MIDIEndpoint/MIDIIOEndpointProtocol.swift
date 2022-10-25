@@ -17,11 +17,11 @@ public protocol MIDIIOEndpointProtocol: MIDIIOObject {
     
     /// Returns the entity the endpoint originates from.
     /// For virtual endpoints, this will return `nil`.
-    func getEntity() -> MIDIEntity?
+    var entity: MIDIEntity? { get }
     
     /// Returns the device the endpoint originates from.
     /// For virtual endpoints, this will return `nil`.
-    func getDevice() -> MIDIDevice?
+    var device: MIDIDevice? { get }
     
     /// Returns the endpoint as a type-erased ``AnyMIDIEndpoint``.
     func asAnyEndpoint() -> AnyMIDIEndpoint
@@ -34,12 +34,12 @@ internal protocol _MIDIIOEndpointProtocol: MIDIIOEndpointProtocol { }
 // MIDIIOEndpointProtocol implementation
 
 extension _MIDIIOEndpointProtocol {
-    public func getEntity() -> MIDIEntity? {
+    public var entity: MIDIEntity? {
         try? getSystemEntity(for: coreMIDIObjectRef)
     }
     
-    public func getDevice() -> MIDIDevice? {
-        guard let entity = getEntity() else { return nil }
+    public var device: MIDIDevice? {
+        guard let entity = entity else { return nil }
         return try? getSystemDevice(for: entity.coreMIDIObjectRef)
     }
 }
