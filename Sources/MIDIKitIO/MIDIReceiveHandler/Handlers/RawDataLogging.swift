@@ -22,7 +22,7 @@ extension MIDIReceiveHandler {
     /// preprocessor flag builds).
     /// If `handler` is provided, the hex byte string is supplied as a parameter and not
     /// automatically logged.
-    class RawDataLogging: MIDIIOReceiveHandlerProtocol {
+    internal final class RawDataLogging: MIDIReceiveHandlerProtocol {
         public var handler: MIDIReceiver.RawDataLoggingHandler
     
         public var filterActiveSensingAndClock = false

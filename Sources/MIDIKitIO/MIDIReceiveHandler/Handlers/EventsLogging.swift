@@ -18,7 +18,7 @@ extension MIDIReceiveHandler {
     /// flag builds).
     /// If `handler` is provided, the event description string is supplied as a parameter and not
     /// automatically logged.
-    class EventsLogging: MIDIIOReceiveHandlerProtocol {
+    internal final class EventsLogging: MIDIReceiveHandlerProtocol {
         public var handler: MIDIReceiver.EventsLoggingHandler
     
         internal let midi1Parser = MIDI1Parser()
