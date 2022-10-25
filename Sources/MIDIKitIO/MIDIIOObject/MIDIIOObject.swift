@@ -52,7 +52,7 @@ public protocol MIDIIOObject {
     static func == (lhs: Self, rhs: Self) -> Bool
     func hash(into hasher: inout Hasher)
     
-    // MARK: - MIDIIOObjectProtocol Properties.swift
+    // MARK: - MIDIIOObject Properties.swift
     
     // MARK: Identification
     // var name - cached property, declared above
