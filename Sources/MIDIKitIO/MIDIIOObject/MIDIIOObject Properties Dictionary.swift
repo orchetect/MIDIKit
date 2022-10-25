@@ -9,8 +9,7 @@
 import Foundation
 
 extension MIDIIOObject {
-    /// Get all properties as a key/value pair array, formatted as human-readable strings.
-    /// Useful for displaying in a user interface or outputting to console for debugging.
+    // inline docs provided by the MIDIIOObject protocol
     public func propertiesAsStrings(
         onlyIncludeRelevant: Bool = true
     ) -> [(key: String, value: String)] {
