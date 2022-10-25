@@ -26,7 +26,7 @@ public protocol MIDIIOObject {
     /// (`kMIDIPropertyName`)
     ///
     /// Devices, entities, and endpoints may all have names. Note that these names are
-    /// not required to be unique. Using ``displayName`` may provide a better description
+    /// not required to be unique. Using ``displayName-7u7g1`` may provide a better description
     /// of the endpoint for user interface.
     ///
     /// A studio setup editor may allow the user to set the names of both driver-owned and

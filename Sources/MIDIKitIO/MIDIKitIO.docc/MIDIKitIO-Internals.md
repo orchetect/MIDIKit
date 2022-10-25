@@ -62,7 +62,6 @@
 - ``MIDIManaged``
 - ``MIDIManagedReceivesMessages``
 - ``MIDIManagedSendsMessages``
-- ``MIDIReceiveHandlerProtocol``
 
 ### Value Type Protocols
 
