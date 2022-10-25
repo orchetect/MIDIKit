@@ -59,9 +59,9 @@
 - ``MIDIEndpoint``
 - ``MIDIDevicesProtocol``
 - ``MIDIEndpointsProtocol``
-- ``MIDIIOManagedProtocol``
-- ``MIDIIOReceivesMIDIMessagesProtocol``
-- ``MIDIIOSendsMIDIMessagesProtocol``
+- ``MIDIManaged``
+- ``MIDIManagedReceivesMessages``
+- ``MIDIManagedSendsMessages``
 - ``MIDIReceiveHandlerProtocol``
 
 ### Value Type Protocols

@@ -10,7 +10,7 @@ In order to begin sending MIDI events, there are two primary mechanisms:
 
 ### Send events from a created Output
 
-To send events, call the ``MIDIIOSendsMIDIMessagesProtocol/send(event:)`` method on the ``MIDIManager/managedOutputs`` dictionary.
+To send events, call the ``MIDIManagedSendsMessages/send(event:)`` method on the ``MIDIManager/managedOutputs`` dictionary.
 
 The dictionary key corresponds to the `tag` property that was specified at the time of creating the connection in the ``MIDIManager``.
 
@@ -21,7 +21,7 @@ try conn?.send(event: .noteOn(60, velocity: .midi1(127), channel: 0x2))
 
 ### Send events from a managed Output Connection
 
-To send events, call the ``MIDIIOSendsMIDIMessagesProtocol/send(event:)`` method on the ``MIDIManager/managedOutputConnections`` dictionary.
+To send events, call the ``MIDIManagedSendsMessages/send(event:)`` method on the ``MIDIManager/managedOutputConnections`` dictionary.
 
 The dictionary key corresponds to the `tag` property that was specified at the time of creating the connection in the ``MIDIManager``.
 
@@ -34,8 +34,8 @@ try conn?.send(event: .noteOn(60, velocity: .midi1(127), channel: 0x2))
 
 ### Send Methods
 
-- ``MIDIIOSendsMIDIMessagesProtocol/send(event:)``
-- ``MIDIIOSendsMIDIMessagesProtocol/send(events:)``
+- ``MIDIManagedSendsMessages/send(event:)``
+- ``MIDIManagedSendsMessages/send(events:)``
 
 ### Protocols
 

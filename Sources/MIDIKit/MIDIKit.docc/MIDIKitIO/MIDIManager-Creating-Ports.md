@@ -75,7 +75,7 @@ try midiManager.addOutput(
 
 For the `uniqueID:` parameter it is best to use ``MIDIIdentifierPersistence/userDefaultsManaged(key:suite:)`` which automatically manages the endpoint's Core MIDI identity and restores it each time the same virtual endpoint is created, which other applications rely on to uniquely identify your endpoint so that they can reconnect to it in future.
 
-To send events, call the ``MIDIIOSendsMIDIMessagesProtocol/send(event:)`` method on the ``MIDIManager/managedOutputs`` dictionary in the ``MIDIManager`` instance.
+To send events, call the ``MIDIManagedSendsMessages/send(event:)`` method on the ``MIDIManager/managedOutputs`` dictionary in the ``MIDIManager`` instance.
 
 ```swift
 let output = midiManager.managedOutputs[outputTag]

@@ -101,10 +101,10 @@ final class MIDIManager_Public_Tests: XCTestCase {
         _ = thru?.description
     }
     
-    func testMIDIIOManagedProtocol() {
+    func testMIDIManaged() {
         // we just want to test the API
     
-        class Foo: MIDIIOManagedProtocol {
+        class Foo: MIDIManaged {
             var api: CoreMIDIAPIVersion = .legacyCoreMIDI
         }
     

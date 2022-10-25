@@ -1,5 +1,5 @@
 //
-//  MIDIIOManagedProtocol.swift
+//  MIDIManaged.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
@@ -8,7 +8,7 @@
 
 // MARK: - Public Protocol
 
-public protocol MIDIIOManagedProtocol: AnyObject {
+public protocol MIDIManaged: AnyObject {
     /// Core MIDI API version used to create the endpoint
     /// and send/receive MIDI messages (if applicable).
     /* public private(set) */ var api: CoreMIDIAPIVersion { get }
@@ -16,7 +16,7 @@ public protocol MIDIIOManagedProtocol: AnyObject {
 
 // MARK: - Internal Protocol
 
-internal protocol _MIDIIOManagedProtocol: MIDIIOManagedProtocol {
+internal protocol _MIDIManaged: MIDIManaged {
     /// Internal:
     /// Reference to owning ``MIDIManager``
     /* weak */ var midiManager: MIDIManager? { get set }

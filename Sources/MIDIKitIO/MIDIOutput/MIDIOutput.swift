@@ -21,15 +21,15 @@ import Foundation
 /// de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// ``MIDIManager/ManagedType/output`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// endpoint.)
-public final class MIDIOutput: _MIDIIOManagedProtocol {
-    // _MIDIIOManagedProtocol
+public final class MIDIOutput: _MIDIManaged {
+    // _MIDIManaged
     internal weak var midiManager: MIDIManager?
     
-    // MIDIIOManagedProtocol
+    // MIDIManaged
     public private(set) var api: CoreMIDIAPIVersion
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
     
-    // MIDIIOSendsMIDIMessagesProtocol
+    // MIDIManagedSendsMessages
     
     /// The Core MIDI output port reference.
     public private(set) var coreMIDIOutputPortRef: CoreMIDIPortRef?
@@ -175,11 +175,11 @@ extension MIDIOutput: CustomStringConvertible {
     }
 }
 
-extension MIDIOutput: MIDIIOSendsMIDIMessagesProtocol {
+extension MIDIOutput: MIDIManagedSendsMessages {
     // empty
 }
 
-extension MIDIOutput: _MIDIIOSendsMIDIMessagesProtocol {
+extension MIDIOutput: _MIDIManagedSendsMessages {
     internal func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else {
             throw MIDIIOError.internalInconsistency(

@@ -51,11 +51,11 @@ import Foundation
 /// ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// ``MIDIManager/ManagedType/nonPersistentThruConnection`` or ``MIDIManager/removeAll()`` to
 /// destroy the managed thru connection.)
-public final class MIDIThruConnection: _MIDIIOManagedProtocol {
-    // _MIDIIOManagedProtocol
+public final class MIDIThruConnection: _MIDIManaged {
+    // _MIDIManaged
     internal weak var midiManager: MIDIManager?
     
-    // MIDIIOManagedProtocol
+    // MIDIManaged
     public private(set) var api: CoreMIDIAPIVersion
     
     // class-specific

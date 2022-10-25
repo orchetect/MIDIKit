@@ -25,11 +25,11 @@ import Foundation
 /// ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// ``MIDIManager/ManagedType/inputConnection`` or ``MIDIManager/removeAll()`` to destroy the
 /// managed connection.)
-public final class MIDIInputConnection: _MIDIIOManagedProtocol {
-    // _MIDIIOManagedProtocol
+public final class MIDIInputConnection: _MIDIManaged {
+    // _MIDIManaged
     internal weak var midiManager: MIDIManager?
     
-    // MIDIIOManagedProtocol
+    // MIDIManaged
     public private(set) var api: CoreMIDIAPIVersion
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
     
@@ -465,7 +465,7 @@ extension MIDIInputConnection: CustomStringConvertible {
     }
 }
 
-extension MIDIInputConnection: MIDIIOReceivesMIDIMessagesProtocol {
+extension MIDIInputConnection: MIDIManagedReceivesMessages {
     // empty
 }
 
