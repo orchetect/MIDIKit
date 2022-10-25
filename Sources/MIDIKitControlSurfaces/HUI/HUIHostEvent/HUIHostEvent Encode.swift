@@ -44,7 +44,7 @@ extension HUIHostEvent {
     }
 }
 
-extension HUIHostEvent: _HUIEventProtocol {
+extension HUIHostEvent: _HUIEvent {
     init(from coreEvent: HUICoreEvent) {
         switch coreEvent {
         case .ping:

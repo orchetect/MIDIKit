@@ -45,7 +45,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.ChannelStrip: HUISurfaceStateProtocol {
+extension HUISurfaceModel.ChannelStrip: HUISurfaceModelState {
     public typealias Switch = HUISwitch.ChannelStrip
 
     public func state(of huiSwitch: Switch) -> Bool {

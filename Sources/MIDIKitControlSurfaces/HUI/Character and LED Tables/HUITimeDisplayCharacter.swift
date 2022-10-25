@@ -73,7 +73,7 @@ public enum HUITimeDisplayCharacter: UInt8, CaseIterable {
     case spaceDot    = 0x30
 }
 
-extension HUITimeDisplayCharacter: _HUICharacterProtocol {
+extension HUITimeDisplayCharacter: _HUICharacter {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:options --maxwidth none
     
@@ -96,7 +96,7 @@ extension HUITimeDisplayCharacter: _HUICharacterProtocol {
     ]
 }
 
-extension HUITimeDisplayCharacter: HUICharacterProtocol {
+extension HUITimeDisplayCharacter: HUICharacter {
     public static func `default`() -> Self {
         .space
     }

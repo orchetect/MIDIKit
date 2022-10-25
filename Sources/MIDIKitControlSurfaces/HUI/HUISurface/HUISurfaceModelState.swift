@@ -1,12 +1,14 @@
 //
-//  HUISurfaceStateProtocol.swift
+//  HUISurfaceModelState.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-public protocol HUISurfaceStateProtocol where Switch: HUISwitchProtocol {
+/// Protocol allowing reading and writing of ``HUISurfaceModel`` state by way of methods that
+/// accept a strongly-typed enum case.
+public protocol HUISurfaceModelState where Switch: HUISwitchProtocol {
     associatedtype Switch
     
     /// Return the state of a HUI switch.

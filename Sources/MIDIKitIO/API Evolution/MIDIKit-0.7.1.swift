@@ -7,7 +7,6 @@
 #if !os(tvOS) && !os(watchOS)
 
 import MIDIKitCore
-
 import Foundation
 @_implementationOnly import CoreMIDI
 

@@ -30,7 +30,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.Transport: HUISurfaceStateProtocol {
+extension HUISurfaceModel.Transport: HUISurfaceModelState {
     public typealias Switch = HUISwitch.Transport
 
     public func state(of huiSwitch: Switch) -> Bool {

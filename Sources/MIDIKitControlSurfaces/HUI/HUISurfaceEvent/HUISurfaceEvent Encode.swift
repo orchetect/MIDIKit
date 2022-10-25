@@ -38,7 +38,7 @@ extension HUISurfaceEvent {
     }
 }
 
-extension HUISurfaceEvent: _HUIEventProtocol {
+extension HUISurfaceEvent: _HUIEvent {
     init(from coreEvent: HUICoreEvent) {
         switch coreEvent {
         case .ping:

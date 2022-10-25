@@ -7,6 +7,6 @@
 import Foundation
 
 public protocol HUISwitchProtocol {
-    /// HUI zone and port constant for the parameter.
+    /// HUI zone and port constant for the switch.
     var zoneAndPort: HUIZoneAndPort { get }
 }

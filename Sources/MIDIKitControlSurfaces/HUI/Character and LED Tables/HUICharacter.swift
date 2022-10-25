@@ -1,12 +1,12 @@
 //
-//  HUICharacterProtocol.swift
+//  HUICharacter.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-public protocol HUICharacterProtocol: CustomStringConvertible
+public protocol HUICharacter: CustomStringConvertible
 where Self: RawRepresentable, RawValue == UInt8, Self: CaseIterable {
     /// Returns the user-facing display string of the character.
     var string: String { get }
@@ -21,7 +21,7 @@ where Self: RawRepresentable, RawValue == UInt8, Self: CaseIterable {
     static func unknown() -> Self
 }
 
-internal protocol _HUICharacterProtocol: HUICharacterProtocol {
+internal protocol _HUICharacter: HUICharacter {
     /// Internal:
     /// Table of characters. Array index corresponds to raw HUI encoding value.
     static var stringTable: [String] { get }
@@ -29,7 +29,7 @@ internal protocol _HUICharacterProtocol: HUICharacterProtocol {
 
 // MARK: - Default Implementation
 
-extension _HUICharacterProtocol {
+extension _HUICharacter {
     /// Returns the user-facing display string of the character.
     public var string: String {
         Self.stringTable[Int(rawValue)]
@@ -45,7 +45,7 @@ extension _HUICharacterProtocol {
 
 // MARK: - CustomStringConvertible
 
-extension HUICharacterProtocol /* : CustomStringConvertible */ {
+extension HUICharacter /* : CustomStringConvertible */ {
     public var description: String {
         string
     }
@@ -53,7 +53,7 @@ extension HUICharacterProtocol /* : CustomStringConvertible */ {
 
 // MARK: - Sequence Category Methods
 
-extension RangeReplaceableCollection where Element: HUICharacterProtocol {
+extension RangeReplaceableCollection where Element: HUICharacter {
     /// Returns the HUI character sequence as a single concatenated string of characters.
     public var stringValue: String {
         map { $0.string }.joined()

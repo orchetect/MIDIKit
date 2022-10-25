@@ -176,7 +176,7 @@ public enum HUILargeDisplayCharacter: UInt8, CaseIterable {
     case leftArrow = 0x7F
 }
 
-extension HUILargeDisplayCharacter: _HUICharacterProtocol {
+extension HUILargeDisplayCharacter: _HUICharacter {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:options --maxwidth none
     static let stringTable = [
@@ -215,7 +215,7 @@ extension HUILargeDisplayCharacter: _HUICharacterProtocol {
     ]
 }
 
-extension HUILargeDisplayCharacter: HUICharacterProtocol {
+extension HUILargeDisplayCharacter: HUICharacter {
     /// Suitable default case for use as a default/neutral character.
     public static func `default`() -> Self {
         .space

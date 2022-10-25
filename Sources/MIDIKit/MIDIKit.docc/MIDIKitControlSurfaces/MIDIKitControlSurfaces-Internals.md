@@ -17,14 +17,14 @@
 
 ### HUI Strings and Characters
 
-- ``HUICharacterProtocol``
-- ``HUIStringProtocol``
+- ``HUICharacter``
+- ``HUIString``
 - ``HUIStringCharsValidation``
 - ``HUILargeDisplaySlices``
 
 ### Protocols
 
-- ``HUIDecoderProtocol``
-- ``HUIEventProtocol``
+- ``HUIDecoder``
+- ``HUIEvent``
 - ``HUISwitchProtocol``
-- ``HUISurfaceStateProtocol``
+- ``HUISurfaceModelState``

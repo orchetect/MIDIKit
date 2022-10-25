@@ -31,7 +31,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.NumPad: HUISurfaceStateProtocol {
+extension HUISurfaceModel.NumPad: HUISurfaceModelState {
     public typealias Switch = HUISwitch.NumPad
 
     public func state(of huiSwitch: Switch) -> Bool {

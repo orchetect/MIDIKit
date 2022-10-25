@@ -22,7 +22,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.HotKeys: HUISurfaceStateProtocol {
+extension HUISurfaceModel.HotKeys: HUISurfaceModelState {
     public typealias Switch = HUISwitch.HotKey
 
     public func state(of huiSwitch: Switch) -> Bool {

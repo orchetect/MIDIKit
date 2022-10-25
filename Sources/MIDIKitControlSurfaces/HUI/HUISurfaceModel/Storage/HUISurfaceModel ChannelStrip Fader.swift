@@ -36,5 +36,5 @@ extension HUISurfaceModel.ChannelStrip {
     }
 }
 
-// HUISurfaceStateProtocol conformance is on HUISurfaceModel.ChannelStrip and it handles the
+// HUISurfaceModelState conformance is on HUISurfaceModel.ChannelStrip and it handles the
 // `.touched` switch property there, so we don't need a setter/getter here
