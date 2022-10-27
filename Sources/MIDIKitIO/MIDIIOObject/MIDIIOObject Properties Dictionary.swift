@@ -56,7 +56,7 @@ extension MIDIIOObject {
         case .deviceID:
             return (
                 key: "Device ID",
-                value: "\(deviceManufacturerID))"
+                value: "\(deviceManufacturerID)"
             )
     
         // MARK: Capabilities
