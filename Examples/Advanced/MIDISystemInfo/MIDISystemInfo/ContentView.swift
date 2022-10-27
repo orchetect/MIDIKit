@@ -53,7 +53,7 @@ struct ContentView: View {
                             }
     
                             Group {
-                                if let nsImg = item.getImageAsNSImage() {
+                                if let nsImg = item.imageAsNSImage {
                                     Image(nsImage: nsImg)
                                         .resizable()
                                 } else {
@@ -76,14 +76,14 @@ struct ContentView: View {
                     // filter out endpoints that have an entity because
                     // they are already being displayed in the Devices tree
                     let items = midiManager.endpoints.inputs.sortedByName()
-                        .filter { $0.getEntity() == nil }
+                        .filter { $0.entity == nil }
     
                     ForEach(items) { item in
                         let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
     
                         NavigationLink(destination: detailsView) {
                             Group {
-                                if let nsImg = item.getImageAsNSImage() {
+                                if let nsImg = item.imageAsNSImage {
                                     Image(nsImage: nsImg)
                                         .resizable()
                                 } else {
@@ -101,14 +101,14 @@ struct ContentView: View {
                     // filter out endpoints that have an entity because
                     // they are already being displayed in the Devices tree
                     let items = midiManager.endpoints.outputs.sortedByName()
-                        .filter { $0.getEntity() == nil }
+                        .filter { $0.entity == nil }
     
                     ForEach(items) { item in
                         let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
     
                         NavigationLink(destination: detailsView) {
                             Group {
-                                if let nsImg = item.getImageAsNSImage() {
+                                if let nsImg = item.imageAsNSImage {
                                     Image(nsImage: nsImg)
                                         .resizable()
                                 } else {
