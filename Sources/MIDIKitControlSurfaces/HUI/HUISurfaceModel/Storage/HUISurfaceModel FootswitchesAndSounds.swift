@@ -16,7 +16,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.FootswitchesAndSounds: HUISurfaceStateProtocol {
+extension HUISurfaceModel.FootswitchesAndSounds: HUISurfaceModelState {
     public typealias Switch = HUISwitch.FootswitchesAndSounds
 
     public func state(of huiSwitch: Switch) -> Bool {

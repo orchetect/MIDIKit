@@ -41,12 +41,12 @@ final class MIDIManager_Tests: XCTestCase {
         )
     }
 	
-    func testMIDIIOManagedProtocol() {
+    func testMIDIManaged() {
         // we just want to test the API
     
         // public protocol
     
-        class Foo: MIDIIOManagedProtocol {
+        class Foo: MIDIManaged {
             var api: CoreMIDIAPIVersion = .legacyCoreMIDI
         }
     
@@ -56,7 +56,7 @@ final class MIDIManager_Tests: XCTestCase {
     
         // internal protocol
     
-        class Bar: _MIDIIOManagedProtocol {
+        class Bar: _MIDIManaged {
             var midiManager: MIDIManager?
             var api: CoreMIDIAPIVersion = .legacyCoreMIDI
         }

@@ -24,6 +24,7 @@ MIDI control surface protocol abstractions (HUI, etc.) for MIDIKit.
 - ``HUISurface``
 - ``HUISurfaceModel``
 - ``HUISurfaceModelNotification``
+- ``HUISurfaceModelUpdateResult``
 - ``HUISurfaceEvent``
 
 ### HUI Common

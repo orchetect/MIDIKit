@@ -1,5 +1,5 @@
 //
-//  MIDIIOEndpointProtocol.swift
+//  MIDIEndpoint.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
@@ -8,20 +8,20 @@
 
 // MARK: - Public Protocol
 
-public protocol MIDIIOEndpointProtocol: MIDIIOObject {
+public protocol MIDIEndpoint: MIDIIOObject {
     /// Display name of the endpoint.
     /// This typically includes the model number and endpoint name.
     var displayName: String { get }
     
-    // implemented in extension _MIDIIOEndpointProtocol
+    // implemented in extension _MIDIEndpoint
     
     /// Returns the entity the endpoint originates from.
     /// For virtual endpoints, this will return `nil`.
-    func getEntity() -> MIDIEntity?
+    var entity: MIDIEntity? { get }
     
     /// Returns the device the endpoint originates from.
     /// For virtual endpoints, this will return `nil`.
-    func getDevice() -> MIDIDevice?
+    var device: MIDIDevice? { get }
     
     /// Returns the endpoint as a type-erased ``AnyMIDIEndpoint``.
     func asAnyEndpoint() -> AnyMIDIEndpoint
@@ -29,24 +29,26 @@ public protocol MIDIIOEndpointProtocol: MIDIIOObject {
 
 // MARK: - Internal Protocol
 
-internal protocol _MIDIIOEndpointProtocol: MIDIIOEndpointProtocol { }
+internal protocol _MIDIEndpoint: MIDIEndpoint { }
 
-// MIDIIOEndpointProtocol implementation
+// MIDIEndpoint implementation
 
-extension _MIDIIOEndpointProtocol {
-    public func getEntity() -> MIDIEntity? {
+extension _MIDIEndpoint {
+    /// Returns the entity that owns the endpoint, if present.
+    public var entity: MIDIEntity? {
         try? getSystemEntity(for: coreMIDIObjectRef)
     }
     
-    public func getDevice() -> MIDIDevice? {
-        guard let entity = getEntity() else { return nil }
+    /// Returns the device that owns the endpoint, if present.
+    public var device: MIDIDevice? {
+        guard let entity = entity else { return nil }
         return try? getSystemDevice(for: entity.coreMIDIObjectRef)
     }
 }
 
 // MARK: - Additional properties
 
-extension MIDIIOEndpointProtocol {
+extension MIDIEndpoint {
     /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
         getSystemDestinationEndpoint(matching: uniqueID) != nil

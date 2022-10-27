@@ -10,7 +10,7 @@ import Foundation
 
 // this protocol may not be necessary, it was experimental so that the `MIDIManager.endpoints`
 // property could be swapped out with a different Endpoints class with Combine support
-public protocol MIDIIOEndpointsProtocol {
+public protocol MIDIEndpointsProtocol {
     /// List of MIDI input endpoints in the system.
     var inputs: [MIDIInputEndpoint] { get }
     
@@ -28,11 +28,11 @@ public protocol MIDIIOEndpointsProtocol {
     /// Manually update the locally cached contents from the system.
     /// This method does not need to be manually invoked, as it is called automatically by the
     /// ``MIDIManager`` when MIDI system endpoints change.
-    mutating func update()
+    mutating func updateCachedProperties()
 }
 
 /// Manages system MIDI endpoints information cache.
-public final class MIDIEndpoints: NSObject, MIDIIOEndpointsProtocol {
+public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
     /// Weak reference to ``MIDIManager``.
     internal weak var manager: MIDIManager?
     
@@ -51,7 +51,7 @@ public final class MIDIEndpoints: NSObject, MIDIIOEndpointsProtocol {
         super.init()
     }
     
-    public func update() {
+    public func updateCachedProperties() {
         inputs = getSystemDestinationEndpoints()
     
         if let manager = manager {

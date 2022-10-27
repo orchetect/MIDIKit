@@ -14,7 +14,7 @@
 ///
 /// Instead, read endpoint arrays and individual endpoint properties from ``MIDIManager/endpoints``
 /// ad-hoc when they are needed.
-public struct MIDIInputEndpoint: _MIDIIOEndpointProtocol {
+public struct MIDIInputEndpoint: _MIDIEndpoint {
     // MARK: MIDIIOObject
     
     public let objectType: MIDIIOObjectType = .inputEndpoint
@@ -29,7 +29,7 @@ public struct MIDIInputEndpoint: _MIDIIOEndpointProtocol {
         .inputEndpoint(self)
     }
     
-    // MARK: MIDIIOEndpointProtocol
+    // MARK: MIDIEndpoint
     
     public internal(set) var displayName: String = ""
     
@@ -46,22 +46,22 @@ public struct MIDIInputEndpoint: _MIDIIOEndpointProtocol {
         )
     
         coreMIDIObjectRef = ref
-        update()
+        updateCachedProperties()
     }
     
     // MARK: Update Cached Properties
     
     /// Update the cached properties
-    internal mutating func update() {
-        if let name = getName() {
+    internal mutating func updateCachedProperties() {
+        if let name = try? MIDIKitIO.getName(of: coreMIDIObjectRef) {
             self.name = name
         }
     
-        if let displayName = getDisplayName() {
+        if let displayName = try? MIDIKitIO.getDisplayName(of: coreMIDIObjectRef) {
             self.displayName = displayName
         }
     
-        let uniqueID = getUniqueID()
+        let uniqueID = MIDIKitIO.getUniqueID(of: coreMIDIObjectRef)
         if uniqueID != .invalidMIDIIdentifier {
             self.uniqueID = uniqueID
         }

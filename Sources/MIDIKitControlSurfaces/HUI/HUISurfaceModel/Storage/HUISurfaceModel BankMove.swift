@@ -16,7 +16,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.BankMove: HUISurfaceStateProtocol {
+extension HUISurfaceModel.BankMove: HUISurfaceModelState {
     public typealias Switch = HUISwitch.BankMove
 
     public func state(of huiSwitch: Switch) -> Bool {

@@ -18,7 +18,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.Edit: HUISurfaceStateProtocol {
+extension HUISurfaceModel.Edit: HUISurfaceModelState {
     public typealias Switch = HUISwitch.Edit
 
     public func state(of huiSwitch: Switch) -> Bool {

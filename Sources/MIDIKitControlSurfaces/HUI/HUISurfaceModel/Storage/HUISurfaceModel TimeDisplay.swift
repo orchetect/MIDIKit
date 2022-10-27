@@ -31,7 +31,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.TimeDisplay: HUISurfaceStateProtocol {
+extension HUISurfaceModel.TimeDisplay: HUISurfaceModelState {
     public typealias Switch = HUISwitch.TimeDisplayStatus
 
     public func state(of huiSwitch: Switch) -> Bool {

@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 
 /// HUI large text display 40-character string.
-public struct HUILargeDisplayString: HUIStringProtocol, Equatable, Hashable {
+public struct HUILargeDisplayString: HUIString, Equatable, Hashable {
     public typealias Element = HUILargeDisplayCharacter
     
     public static let staticCount = 40

@@ -22,7 +22,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.Cursor: HUISurfaceStateProtocol {
+extension HUISurfaceModel.Cursor: HUISurfaceModelState {
     public typealias Switch = HUISwitch.Cursor
 
     public func state(of huiSwitch: Switch) -> Bool {

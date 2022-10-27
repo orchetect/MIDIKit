@@ -6,7 +6,7 @@
 
 import Foundation
 
-extension HUISurfaceModel: HUISurfaceStateProtocol {
+extension HUISurfaceModel: HUISurfaceModelState {
     public typealias Switch = HUISwitch
     
     /// Returns the current state in the model of the given HUI switch parameter.

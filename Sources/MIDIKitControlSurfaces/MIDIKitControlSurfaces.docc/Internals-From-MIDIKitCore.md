@@ -53,7 +53,3 @@ For more detailed documentation on these types, see MIDIKitCore documentation.
 ### Value Type Protocols
 
 - ``MIDIUnsignedInteger``
-
-### Deprecated
-
-- ``MIDI``

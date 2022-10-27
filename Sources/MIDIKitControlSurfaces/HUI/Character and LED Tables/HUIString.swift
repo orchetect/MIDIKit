@@ -1,16 +1,16 @@
 //
-//  HUIStringProtocol.swift
+//  HUIString.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-public protocol HUIStringProtocol: CustomStringConvertible
+public protocol HUIString: CustomStringConvertible
     where Self: Equatable & Hashable,
     Element: Equatable & Hashable
 {
-    associatedtype Element: HUICharacterProtocol
+    associatedtype Element: HUICharacter
     static var defaultChars: [Element] { get }
     
     /// Fixed (static) char length for the string.
@@ -38,7 +38,7 @@ public protocol HUIStringProtocol: CustomStringConvertible
 
 // MARK: - Default Implementation
 
-extension HUIStringProtocol {
+extension HUIString {
     public static var defaultChars: [Element] {
         .init(
             repeating: .default(),
@@ -67,7 +67,7 @@ extension HUIStringProtocol {
 
 // MARK: - CustomStringConvertible
 
-extension HUIStringProtocol /* : CustomStringConvertible */ {
+extension HUIString /* : CustomStringConvertible */ {
     public var description: String {
         stringValue
     }
@@ -75,7 +75,7 @@ extension HUIStringProtocol /* : CustomStringConvertible */ {
 
 // MARK: - Equatable
 
-extension HUIStringProtocol /* : Equatable */ {
+extension HUIString /* : Equatable */ {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.chars == rhs.chars
     }
@@ -83,7 +83,7 @@ extension HUIStringProtocol /* : Equatable */ {
 
 // MARK: - Hashable
 
-extension HUIStringProtocol /* : Hashable */ {
+extension HUIString /* : Hashable */ {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(chars)
     }
@@ -92,7 +92,7 @@ extension HUIStringProtocol /* : Hashable */ {
 // MARK: - Validation PropertyWrapper
 
 @propertyWrapper
-public struct HUIStringCharsValidation<Str: HUIStringProtocol> {
+public struct HUIStringCharsValidation<Str: HUIString> {
     private var value: [Str.Element]
     
     public var wrappedValue: [Str.Element] {
@@ -117,7 +117,7 @@ public struct HUIStringCharsValidation<Str: HUIStringProtocol> {
 
 /// Utility:
 /// Pads/truncates char array to static char length.
-func pad<S: HUIStringProtocol>(
+func pad<S: HUIString>(
     chars: [S.Element],
     for stringType: S.Type
 ) -> [S.Element] {

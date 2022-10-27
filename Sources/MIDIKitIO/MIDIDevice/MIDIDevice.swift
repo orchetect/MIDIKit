@@ -39,18 +39,18 @@ public struct MIDIDevice: MIDIIOObject {
         assert(ref != CoreMIDIDeviceRef())
     
         coreMIDIObjectRef = ref
-        update()
+        updateCachedProperties()
     }
     
     // MARK: Update Cached Properties
     
     /// Update the cached properties
-    internal mutating func update() {
-        if let name = getName() {
+    internal mutating func updateCachedProperties() {
+        if let name = try? MIDIKitIO.getName(of: coreMIDIObjectRef) {
             self.name = name
         }
     
-        let uniqueID = getUniqueID()
+        let uniqueID = MIDIKitIO.getUniqueID(of: coreMIDIObjectRef)
         if uniqueID != .invalidMIDIIdentifier {
             self.uniqueID = uniqueID
         }
@@ -72,7 +72,7 @@ extension MIDIDevice: Identifiable {
 }
 
 extension MIDIDevice {
-    /// List of entities within the device.
+    /// List of entities owned by the device.
     public var entities: [MIDIEntity] {
         getSystemEntities(for: coreMIDIObjectRef)
     }

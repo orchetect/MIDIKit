@@ -76,10 +76,10 @@ public final class MIDIManager: NSObject {
     }
     
     /// MIDI devices in the system.
-    public internal(set) var devices: MIDIIODevicesProtocol = MIDIDevices()
+    public internal(set) var devices: MIDIDevicesProtocol = MIDIDevices()
     
     /// MIDI input and output endpoints in the system.
-    public internal(set) var endpoints: MIDIIOEndpointsProtocol = MIDIEndpoints()
+    public internal(set) var endpoints: MIDIEndpointsProtocol = MIDIEndpoints()
     
     /// Handler that is called when state has changed in the manager.
     public var notificationHandler: ((
@@ -167,7 +167,7 @@ public final class MIDIManager: NSObject {
         }
     }
     
-    /// Internal: calls `update()` on all objects caches.
+    /// Internal: updates cached properties for all objects.
     internal dynamic func updateObjectsCache() {
         #if canImport(Combine)
         if #available(
@@ -183,8 +183,8 @@ public final class MIDIManager: NSObject {
         }
         #endif
     
-        devices.update()
-        endpoints.update()
+        devices.updateCachedProperties()
+        endpoints.updateCachedProperties()
     }
 }
 

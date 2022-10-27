@@ -1,5 +1,5 @@
 //
-//  MIDIIOSendsMIDIMessagesProtocol.swift
+//  MIDIManagedSendsMessages.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
@@ -10,7 +10,7 @@
 
 // MARK: - Public Protocol
 
-public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
+public protocol MIDIManagedSendsMessages: MIDIManaged {
     /// The Core MIDI output port ref.
     /* public private(set) */ var coreMIDIOutputPortRef: CoreMIDIPortRef? { get }
     
@@ -26,7 +26,7 @@ public protocol MIDIIOSendsMIDIMessagesProtocol: MIDIIOManagedProtocol {
 
 // MARK: - Internal Protocol
 
-internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProtocol {
+internal protocol _MIDIManagedSendsMessages: MIDIManagedSendsMessages {
     /// Internal:
     /// Send a legacy MIDI 1.0 Message, automatically assembling it into a `MIDIPacketList`.
     ///
@@ -63,7 +63,7 @@ internal protocol _MIDIIOSendsMIDIMessagesProtocol: MIDIIOSendsMIDIMessagesProto
 
 // MARK: - Implementation
 
-extension _MIDIIOSendsMIDIMessagesProtocol {
+extension _MIDIManagedSendsMessages {
     internal func send(rawMessage: [UInt8]) throws {
         switch api {
         case .legacyCoreMIDI:
@@ -117,7 +117,7 @@ extension _MIDIIOSendsMIDIMessagesProtocol {
     }
 }
 
-extension _MIDIIOSendsMIDIMessagesProtocol {
+extension _MIDIManagedSendsMessages {
     public func send(event: MIDIEvent) throws {
         switch api {
         case .legacyCoreMIDI:

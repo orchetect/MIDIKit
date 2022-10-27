@@ -1,5 +1,5 @@
 //
-//  MIDIIOObjectProtocol Comparison.swift
+//  MIDIEndpoint Comparison.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
@@ -11,9 +11,9 @@
 // (conforming types to MIDIIOObject just need to conform to Equatable
 // and this implementation will be used)
 
-extension MIDIIOObject {
+extension MIDIEndpoint {
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.coreMIDIObjectRef == rhs.coreMIDIObjectRef
+        lhs.uniqueID == rhs.uniqueID
     }
 }
 
@@ -22,10 +22,21 @@ extension MIDIIOObject {
 // (conforming types to MIDIIOObject just need to conform to Hashable
 // and this implementation will be used)
 
-extension MIDIIOObject {
+extension MIDIEndpoint {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(coreMIDIObjectRef)
+        hasher.combine(uniqueID)
     }
+}
+
+// MARK: - Identifiable default implementation
+
+// (conforming types to MIDIIOObject just need to conform to Identifiable
+// and this implementation will be used)
+
+extension MIDIEndpoint {
+    public typealias ID = MIDIIdentifier
+    
+    public var id: ID { uniqueID }
 }
 
 #endif

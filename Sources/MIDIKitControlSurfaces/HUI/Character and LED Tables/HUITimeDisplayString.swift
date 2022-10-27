@@ -11,7 +11,7 @@ import Foundation
 /// The time display consists of eight 7-segment displays (called digits).
 /// Every digit except the last (rightmost) has the ability
 /// to show a trailing decimal point (dot).
-public struct HUITimeDisplayString: HUIStringProtocol, Equatable, Hashable {
+public struct HUITimeDisplayString: HUIString, Equatable, Hashable {
     public typealias Element = HUITimeDisplayCharacter
     
     public static let staticCount = 8

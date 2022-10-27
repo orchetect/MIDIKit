@@ -34,7 +34,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.Assign: HUISurfaceStateProtocol {
+extension HUISurfaceModel.Assign: HUISurfaceModelState {
     public typealias Switch = HUISwitch.Assign
     
     public func state(of huiSwitch: Switch) -> Bool {

@@ -1,12 +1,12 @@
 //
-//  MIDIIOEndpointProtocol Collection.swift
+//  MIDIEndpoint Collection.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
 
-extension Collection where Element: MIDIIOEndpointProtocol {
+extension Collection where Element: MIDIEndpoint {
     // Note: sortedByName() is already implemented on MIDIEndpoint
     // and requires no special implementation here for endpoints.
     
@@ -21,7 +21,7 @@ extension Collection where Element: MIDIIOEndpointProtocol {
 
 // MARK: - first
 
-extension Collection where Element: MIDIIOEndpointProtocol {
+extension Collection where Element: MIDIEndpoint {
     /// Returns the first endpoint matching the given name.
     public func first(
         whereDisplayName displayName: String,
@@ -49,7 +49,7 @@ extension Collection where Element: MIDIIOEndpointProtocol {
 
 // MARK: - contains
 
-extension Collection where Element: MIDIIOEndpointProtocol {
+extension Collection where Element: MIDIEndpoint {
     /// Returns true if the collection contains an endpoint matching the given name.
     public func contains(
         whereDisplayName displayName: String,
@@ -78,7 +78,7 @@ extension Collection where Element: MIDIIOEndpointProtocol {
 
 // MARK: - filter
 
-extension Collection where Element: MIDIIOEndpointProtocol {
+extension Collection where Element: MIDIEndpoint {
     /// Returns all endpoints matching the given name.
     public func filter(
         whereName name: String,

@@ -165,7 +165,7 @@ public enum HUISmallDisplayCharacter: UInt8, CaseIterable {
     case shadedSquare = 0x7F
 }
 
-extension HUISmallDisplayCharacter: _HUICharacterProtocol {
+extension HUISmallDisplayCharacter: _HUICharacter {
     static let stringTable = [
         "ì",  "↑",  "→",  "↓",  "←",  "¿",  "à",  "Ø", // 0x00 ...
         "ø",  "ò",  "ù",  "Ň",  "Ç",  "ê",  "É",  "é", //      ... 0x0F
@@ -186,7 +186,7 @@ extension HUISmallDisplayCharacter: _HUICharacterProtocol {
     ]
 }
 
-extension HUISmallDisplayCharacter: HUICharacterProtocol {
+extension HUISmallDisplayCharacter: HUICharacter {
     public static func `default`() -> Self {
         .space
     }

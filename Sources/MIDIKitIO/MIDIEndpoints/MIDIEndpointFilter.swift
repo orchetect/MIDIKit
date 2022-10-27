@@ -37,7 +37,7 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
     
     /// Endpoint filter rules.
     @_disfavoredOverload
-    public init<T: MIDIIOEndpointProtocol & Hashable>(
+    public init<T: MIDIEndpoint & Hashable>(
         owned: Bool = false,
         criteria: Set<T>
     ) {
@@ -49,7 +49,7 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
     
     /// Endpoint filter rules.
     @_disfavoredOverload
-    public init<T: MIDIIOEndpointProtocol & Hashable>(
+    public init<T: MIDIEndpoint & Hashable>(
         owned: Bool = false,
         criteria: [T]
     ) {

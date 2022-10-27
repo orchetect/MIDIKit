@@ -18,7 +18,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.StatusAndGroup: HUISurfaceStateProtocol {
+extension HUISurfaceModel.StatusAndGroup: HUISurfaceModelState {
     public typealias Switch = HUISwitch.StatusAndGroup
 
     public func state(of huiSwitch: Switch) -> Bool {
