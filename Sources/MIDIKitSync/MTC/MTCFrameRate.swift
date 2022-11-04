@@ -53,6 +53,9 @@ import TimecodeKit
 // 120     (4*30)      0b11 - 30                               Pro Tools 2020.11
 // 120d    (4*30d)     0b10 - 29.97d                           Pro Tools 2020.11
 //
+// MTC distinguishes between film speed and video speed only by the rate at which
+// timecode advances, not by the information contained in the timecode messages;
+// thus, 29.97 fps dropframe is represented as 30 fps dropframe at 0.1% pulldown.
     
 /// Standard base timecode frame rate families expressed in MTC.
 ///
@@ -107,10 +110,10 @@ public enum MTCFrameRate: Hashable, CaseIterable {
     /// Human-readable descriptive string
     public var stringValue: String {
         switch self {
-        case .mtc24:    return "MTC-24"
-        case .mtc25:    return "MTC-25"
-        case .mtc2997d: return "MTC-29.97d"
-        case .mtc30:    return "MTC-30"
+        case .mtc24:    return "SMPTE-24"
+        case .mtc25:    return "SMPTE-25"
+        case .mtc2997d: return "SMPTE-29.97d"
+        case .mtc30:    return "SMPTE-30"
         }
     }
         
