@@ -12,8 +12,22 @@ extension HUISurfaceView {
 }
 
 extension HUISurfaceView {
-    func LeftSideView() -> some View {
-        VStack {
+    struct LeftSideView: View {
+        @EnvironmentObject var huiSurface: HUISurface
+        
+        var body: some View {
+            VStack {
+                sendSection
+                assignSection
+                bankSection
+                windowSection
+                keyboardShortcutsSection
+                Spacer()
+            }
+            .frame(width: HUISurfaceView.kLeftSideViewWidth, alignment: .top)
+        }
+        
+        private var sendSection: some View {
             VStack {
                 HStack {
                     HUIStateButton(
@@ -88,7 +102,9 @@ extension HUISurfaceView {
                 .frame(height: 65)
             }
             .frame(height: 220)
-            
+        }
+        
+        private var assignSection: some View {
             VStack {
                 HStack {
                     Text("ASSIGN")
@@ -126,7 +142,9 @@ extension HUISurfaceView {
                 }
             }
             .frame(height: 100)
-            
+        }
+        
+        private var bankSection: some View {
             VStack {
                 HUISectionLabel("BANK")
                 HStack {
@@ -156,7 +174,9 @@ extension HUISurfaceView {
                 }
             }
             .frame(height: 100)
-            
+        }
+        
+        private var windowSection: some View {
             VStack {
                 HUISectionLabel("WINDOW")
                 HStack {
@@ -197,7 +217,9 @@ extension HUISurfaceView {
                 }
             }
             .frame(height: 140)
-            
+        }
+        
+        private var keyboardShortcutsSection: some View {
             VStack {
                 HUISectionLabel("KEYBOARD SHORTCUTS")
                 HStack {
@@ -250,9 +272,6 @@ extension HUISurfaceView {
                 }
             }
             .frame(height: 180)
-            
-            Spacer()
         }
-        .frame(width: Self.kLeftSideViewWidth, alignment: .top)
     }
 }

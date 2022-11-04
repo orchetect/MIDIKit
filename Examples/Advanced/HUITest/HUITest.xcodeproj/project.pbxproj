@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		E20BA82928E9B1BB00EA8774 /* Fader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA82828E9B1BB00EA8774 /* Fader.swift */; };
 		E21628E426E2DFF30022B66F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21628E326E2DFF30022B66F /* Logger.swift */; };
+		E232239D2914F44E005F0C12 /* LiveFormattedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E232239C2914F44E005F0C12 /* LiveFormattedTextField.swift */; };
+		E232239F2914F596005F0C12 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E232239E2914F596005F0C12 /* Utilities.swift */; };
 		E246E3C628EBF5A400BB786D /* HUIHostHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E246E3C528EBF5A400BB786D /* HUIHostHelper.swift */; };
 		E246E3C828EC679D00BB786D /* MomentaryPressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E246E3C728EC679D00BB786D /* MomentaryPressView.swift */; };
 		E246E3CA28EC67D900BB786D /* SwiftUI Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E246E3C928EC67D900BB786D /* SwiftUI Extensions.swift */; };
@@ -47,6 +49,8 @@
 /* Begin PBXFileReference section */
 		E20BA82828E9B1BB00EA8774 /* Fader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fader.swift; sourceTree = "<group>"; };
 		E21628E326E2DFF30022B66F /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		E232239C2914F44E005F0C12 /* LiveFormattedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveFormattedTextField.swift; sourceTree = "<group>"; };
+		E232239E2914F596005F0C12 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		E246E3C528EBF5A400BB786D /* HUIHostHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUIHostHelper.swift; sourceTree = "<group>"; };
 		E246E3C728EC679D00BB786D /* MomentaryPressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentaryPressView.swift; sourceTree = "<group>"; };
 		E246E3C928EC67D900BB786D /* SwiftUI Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftUI Extensions.swift"; sourceTree = "<group>"; };
@@ -172,6 +176,7 @@
 				E284EBCE26AE01F00016AA0F /* HUISurfaceView */,
 				E284EBCA26AE01EA0016AA0F /* Control Views */,
 				E284EBD726AE02090016AA0F /* HUISwitch Wrapper.swift */,
+				E232239E2914F596005F0C12 /* Utilities.swift */,
 				E21628E326E2DFF30022B66F /* Logger.swift */,
 				E284EBBE26AE01900016AA0F /* Main.storyboard */,
 				E284EBC126AE01900016AA0F /* Info.plist */,
@@ -200,6 +205,7 @@
 				E20BA82828E9B1BB00EA8774 /* Fader.swift */,
 				E246E3C728EC679D00BB786D /* MomentaryPressView.swift */,
 				E246E3C928EC67D900BB786D /* SwiftUI Extensions.swift */,
+				E232239C2914F44E005F0C12 /* LiveFormattedTextField.swift */,
 			);
 			path = "Control Views";
 			sourceTree = "<group>";
@@ -300,12 +306,14 @@
 				E284EBCC26AE01EA0016AA0F /* Buttons.swift in Sources */,
 				E284EBD826AE02090016AA0F /* HUISwitch Wrapper.swift in Sources */,
 				E2D5FB1B28D9198A0040A023 /* HUIHostView.swift in Sources */,
+				E232239F2914F596005F0C12 /* Utilities.swift in Sources */,
 				E283F0B5274103E00037F199 /* TransportView.swift in Sources */,
 				E283F0B3274103C80037F199 /* NumPadView.swift in Sources */,
 				E283F0A9274102FF0037F199 /* ParameterEditAssignView.swift in Sources */,
 				E284EBD226AE01F00016AA0F /* HUISurfaceView.swift in Sources */,
 				E283F0AB274103230037F199 /* FKeysView.swift in Sources */,
 				E283F0A1274101D50037F199 /* MeterBridgeView.swift in Sources */,
+				E232239D2914F44E005F0C12 /* LiveFormattedTextField.swift in Sources */,
 				E283F0AD274103480037F199 /* SwitchMatrixView.swift in Sources */,
 				E246E3CC28EC67FF00BB786D /* FourCharLCD.swift in Sources */,
 				E283F0A5274102770037F199 /* ChannelStripView.swift in Sources */,

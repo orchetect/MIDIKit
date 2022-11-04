@@ -7,8 +7,8 @@
 import SwiftUI
 
 extension View {
-    func spaceHogFrame() -> some View {
-        ZStack {
+    func spaceHogFrame(alignment: Alignment = .center) -> some View {
+        ZStack(alignment: alignment) {
             Color.clear
             self
         }

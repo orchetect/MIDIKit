@@ -12,18 +12,20 @@ extension HUISurfaceView {
 }
 
 extension HUISurfaceView {
-    func MeterBridgeView() -> some View {
-        HStack(alignment: .center, spacing: 1) {
-            ForEach(0 ..< 7 + 1, id: \.self) { channel in
-                HStack(alignment: .center, spacing: 2) {
-                    LevelMeterView(channel: channel, side: .left)
-                        .frame(width: 10, height: Self.kMeterBridgeHeight)
-                    LevelMeterView(channel: channel, side: .right)
-                        .frame(width: 10, height: Self.kMeterBridgeHeight)
+    struct MeterBridgeView: View {
+        var body: some View {
+            HStack(alignment: .center, spacing: 1) {
+                ForEach(0 ..< 7 + 1, id: \.self) { channel in
+                    HStack(alignment: .center, spacing: 2) {
+                        LevelMeterView(channel: channel, side: .left)
+                            .frame(width: 10, height: HUISurfaceView.kMeterBridgeHeight)
+                        LevelMeterView(channel: channel, side: .right)
+                            .frame(width: 10, height: HUISurfaceView.kMeterBridgeHeight)
+                    }
+                    .frame(width: 40, height: HUISurfaceView.kMeterBridgeHeight, alignment: .center)
+                    .border(Color.black)
+                    .frame(width: 60)
                 }
-                .frame(width: 40, height: Self.kMeterBridgeHeight, alignment: .center)
-                .border(Color.black)
-                .frame(width: 60)
             }
         }
     }

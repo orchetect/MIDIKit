@@ -7,8 +7,8 @@
 import SwiftUI
 import MIDIKitControlSurfaces
 
-extension HUISurfaceView {
-    func NumPadView() -> some View {
+struct NumPadView: View {
+    var body: some View {
         Group {
             let numPadSpacing: CGFloat = 1
             

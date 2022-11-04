@@ -10,8 +10,8 @@ extension HUISurfaceView {
     static let kRightSideViewWidth: CGFloat = 500
 }
 
-extension HUISurfaceView {
-    func RightSideView() -> some View {
+struct RightSideView: View {
+    var body: some View {
         VStack {
             ParameterEditAssignView()
             HUISectionDivider(.horizontal)
@@ -35,6 +35,6 @@ extension HUISurfaceView {
             
             Spacer()
         }
-        .frame(width: Self.kRightSideViewWidth, alignment: .top)
+        .frame(width: HUISurfaceView.kRightSideViewWidth, alignment: .top)
     }
 }

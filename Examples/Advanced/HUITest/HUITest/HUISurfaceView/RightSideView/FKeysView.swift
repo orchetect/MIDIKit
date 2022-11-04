@@ -7,8 +7,8 @@
 import SwiftUI
 import MIDIKitControlSurfaces
 
-extension HUISurfaceView {
-    func FKeysView() -> some View {
+struct FKeysView: View {
+    var body: some View {
         HStack {
             Group {
                 HUIStateButton(

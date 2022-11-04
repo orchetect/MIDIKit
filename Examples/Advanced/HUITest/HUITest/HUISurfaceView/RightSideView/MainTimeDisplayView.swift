@@ -7,8 +7,10 @@
 import SwiftUI
 import MIDIKitControlSurfaces
 
-extension HUISurfaceView {
-    func MainTimeDisplayView() -> some View {
+struct MainTimeDisplayView: View {
+    @EnvironmentObject var huiSurface: HUISurface
+        
+    var body: some View {
         HStack {
             VStack(alignment: .trailing, spacing: 4) {
                 Text(
@@ -25,7 +27,7 @@ extension HUISurfaceView {
                 )
             }
             .font(.system(size: 9, weight: .regular))
-            
+                
             Text(
                 huiSurface.model.timeDisplay.timeString.stringValue
             )
@@ -34,9 +36,9 @@ extension HUISurfaceView {
             .frame(width: 150, height: 30)
             .background(Color.black)
             .cornerRadius(3.0, antialiased: true)
-            
+                
             Spacer().frame(width: 20)
-            
+                
             HStack {
                 VStack(alignment: .trailing, spacing: 1) {
                     Text("RUDE")
@@ -44,7 +46,7 @@ extension HUISurfaceView {
                     Text("LIGHT")
                 }
                 .font(.system(size: 9, weight: .regular))
-                
+                    
                 Text(huiSurface.model.timeDisplay.rudeSolo ? "🔴" : "⚪️")
                     .font(.system(size: 14))
             }

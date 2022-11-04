@@ -7,8 +7,8 @@
 import SwiftUI
 import MIDIKitControlSurfaces
 
-extension HUISurfaceView {
-    func ControlRoomView() -> some View {
+struct ControlRoomView: View {
+    var body: some View {
         HStack {
             VStack {
                 HUIStateButton(
@@ -31,7 +31,7 @@ extension HUISurfaceView {
                 )
             }
             .spaceHogFrame()
-            
+                
             VStack {
                 HStack {
                     HUIStateButton(
@@ -48,10 +48,10 @@ extension HUISurfaceView {
                         height: 30
                     )
                 }
-                
+                    
                 PlaceholderKnob(size: 50)
                 Text("MASTER VOLUME").font(.system(size: 10))
-                
+                    
                 HStack {
                     HUIStateButton(
                         title: "MUTE",
@@ -68,7 +68,7 @@ extension HUISurfaceView {
                 }
             }
             .frame(minWidth: 110)
-            
+                
             VStack {
                 PlaceholderKnob(size: 30)
                 Spacer().frame(height: 5)
@@ -77,7 +77,7 @@ extension HUISurfaceView {
                 PlaceholderKnob(size: 30)
             }
             .spaceHogFrame()
-            
+                
             VStack {
                 HUIStateButton(
                     title: "OUTPUT 1",

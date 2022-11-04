@@ -16,8 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let midiManager = MIDIManager(
         clientName: "HUITest",
         model: "HUITest",
-        manufacturer: "Orchetect",
-        notificationHandler: nil
+        manufacturer: "Orchetect"
     )
     
     func applicationDidFinishLaunching(_: Notification) {
@@ -40,6 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func generateHUIHostWindow() {
         // Create the SwiftUI view that provides the window contents.
         let contentView = HUIHostView(midiManager: midiManager)
+            .environmentObject(midiManager)
         
         // Create the window and set the content view.
         huiHostWindow = NSWindow(
@@ -54,8 +54,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
         huiHostWindow.title = "HUI Host"
         huiHostWindow.isReleasedWhenClosed = true
-        // huiSurfaceWindow.center()
-        // window.setFrameAutosaveName("HUI Host Window")
+        huiHostWindow.setFrameAutosaveName("HUI Host Window")
         huiHostWindow.contentView = NSHostingView(rootView: contentView)
         huiHostWindow.makeKeyAndOrderFront(self)
     }
@@ -66,6 +65,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func generateHUISurfaceWindow() {
         // Create the SwiftUI view that provides the window contents.
         let contentView = HUIClientView(midiManager: midiManager)
+            .environmentObject(midiManager)
         
         // Create the window and set the content view.
         huiSurfaceWindow = NSWindow(
@@ -80,14 +80,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
         huiSurfaceWindow.title = "HUI Surface"
         huiSurfaceWindow.isReleasedWhenClosed = true
-        // huiSurfaceWindow.center()
-        // window.setFrameAutosaveName("HUI Surface Window")
+        huiSurfaceWindow.setFrameAutosaveName("HUI Surface Window")
         huiSurfaceWindow.contentView = NSHostingView(rootView: contentView)
         huiSurfaceWindow.makeKeyAndOrderFront(self)
-    }
-
-    func applicationWillTerminate(_: Notification) {
-        // Insert code here to tear down your application
     }
     
     func orderAllWindowsFront() {

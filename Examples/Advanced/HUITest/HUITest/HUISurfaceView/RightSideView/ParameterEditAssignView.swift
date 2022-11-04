@@ -7,9 +7,9 @@
 import SwiftUI
 import MIDIKitControlSurfaces
 
-extension HUISurfaceView {
-    /// "DSP EDIT/ASSIGN" Section
-    func ParameterEditAssignView() -> some View {
+/// "DSP EDIT/ASSIGN" Section
+struct ParameterEditAssignView: View {
+    var body: some View {
         HStack(alignment: .top, spacing: nil) {
             Group {
                 VStack {
@@ -30,10 +30,10 @@ extension HUISurfaceView {
                         ledColor: .green
                     )
                 }
-                
+                    
                 HStack {
                     HUISectionDivider(.vertical)
-                    
+                        
                     // Param 1
                     VStack {
                         HUIStateButton(
@@ -43,14 +43,14 @@ extension HUISurfaceView {
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: Self.channelStripWidth,
+                            size: HUISurfaceView.channelStripWidth,
                             vPot: .editAssignA
                         )
                     }
                     .frame(width: 75)
-                    
+                        
                     HUISectionDivider(.vertical)
-                    
+                        
                     // Param 2
                     VStack {
                         HUIStateButton(
@@ -60,14 +60,14 @@ extension HUISurfaceView {
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: Self.channelStripWidth,
+                            size: HUISurfaceView.channelStripWidth,
                             vPot: .editAssignB
                         )
                     }
                     .frame(width: 75)
-                    
+                        
                     HUISectionDivider(.vertical)
-                    
+                        
                     // Param 3
                     VStack {
                         HUIStateButton(
@@ -77,14 +77,14 @@ extension HUISurfaceView {
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: Self.channelStripWidth,
+                            size: HUISurfaceView.channelStripWidth,
                             vPot: .editAssignC
                         )
                     }
                     .frame(width: 75)
-                    
+                        
                     HUISectionDivider(.vertical)
-                    
+                        
                     // Param 4
                     VStack {
                         HUIStateButton(
@@ -94,15 +94,15 @@ extension HUISurfaceView {
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: Self.channelStripWidth,
+                            size: HUISurfaceView.channelStripWidth,
                             vPot: .editAssignD
                         )
                     }
                     .frame(width: 75)
-                    
+                        
                     HUISectionDivider(.vertical)
                 }
-                
+                    
                 VStack {
                     HUIStateButton(
                         title: "INSERT ○\nPARAM ●",
@@ -112,7 +112,7 @@ extension HUISurfaceView {
                     )
                     RotaryKnob(
                         label: "",
-                        size: Self.channelStripWidth / 2,
+                        size: HUISurfaceView.channelStripWidth / 2,
                         vPot: .editAssignScroll
                     )
                     Text("SCROLL")

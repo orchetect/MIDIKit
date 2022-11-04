@@ -7,19 +7,19 @@
 import SwiftUI
 import MIDIKitControlSurfaces
 
-extension HUISurfaceView {
-    func TransportView() -> some View {
+struct TransportView: View {
+    var body: some View {
         VStack {
             Spacer().frame(height: 10)
-            subTransportView()
+            subTransportView
             Spacer().frame(height: 10)
-            mainTransportView()
+            mainTransportView
             Spacer().frame(height: 20)
-            cursorAndJogWheelView()
+            cursorAndJogWheelView
         }
     }
     
-    private func subTransportView() -> some View {
+    private var subTransportView: some View {
         HStack {
             HStack {
                 VStack {
@@ -109,7 +109,7 @@ extension HUISurfaceView {
         }
     }
     
-    private func mainTransportView() -> some View {
+    private var mainTransportView: some View {
         HStack {
             HStack {
                 HUIStateButton(
@@ -179,7 +179,7 @@ extension HUISurfaceView {
         .frame(height: 40)
     }
     
-    private func cursorAndJogWheelView() -> some View {
+    private var cursorAndJogWheelView: some View {
         HStack {
             Spacer().frame(width: 40)
             

@@ -11,7 +11,7 @@ import Controls
 
 class HUIHostHelper: ObservableObject {
     // MARK: MIDI
-    weak var midiManager: MIDIManager?
+    @EnvironmentObject var midiManager: MIDIManager
     
     static let kHUIInputConnectionTag = "HUIHostInputConnection"
     static let kHUIOutputConnectionTag = "HUIHostOutputConnection"
@@ -23,16 +23,14 @@ class HUIHostHelper: ObservableObject {
     
     @Published var model: HUIHostModel = .init()
     
-    init(midiManager: MIDIManager?) {
-        self.midiManager = midiManager
-        
+    init(midiManager: MIDIManager) {
         huiHost = HUIHost()
         
-        setupSingleBank()
+        setupSingleBank(midiManager: midiManager)
         
         // set up MIDI connections
         do {
-            try midiManager?.addInputConnection(
+            try midiManager.addInputConnection(
                 toOutputs: [.name(HUIClientView.kHUIOutputName)],
                 tag: Self.kHUIInputConnectionTag,
                 receiver: .object(
@@ -42,7 +40,7 @@ class HUIHostHelper: ObservableObject {
                 )
             )
             
-            try midiManager?.addOutputConnection(
+            try midiManager.addOutputConnection(
                 toInputs: [.name(HUIClientView.kHUIInputName)],
                 tag: Self.kHUIOutputConnectionTag
             )
@@ -51,7 +49,7 @@ class HUIHostHelper: ObservableObject {
         }
     }
     
-    func setupSingleBank() {
+    func setupSingleBank(midiManager: MIDIManager) {
         guard huiHost.banks.isEmpty else { return }
         
         huiHost.addBank(

@@ -5,29 +5,34 @@
 //
 
 import SwiftUI
+import MIDIKitControlSurfaces
 
 extension HUISurfaceView {
-    func TopView() -> some View {
-        VStack {
-            HStack {
-                Spacer()
-                VStack {
-                    Text((huiSurface.isRemotePresent ? "🟢" : "🔴") + " Host")
-                        .font(.system(size: 10))
-                        .foregroundColor(.white)
+    struct TopView: View {
+        @EnvironmentObject var huiSurface: HUISurface
+        
+        var body: some View {
+            VStack {
+                HStack {
                     Spacer()
-                        .frame(height: 8)
-                    Text("hui")
-                        .font(.system(size: 36, weight: .bold, design: .rounded))
-                        .frame(width: Self.kLeftSideViewWidth)
-                        .foregroundColor(.white)
+                    VStack {
+                        Text((huiSurface.isRemotePresent ? "🟢" : "🔴") + " Host")
+                            .font(.system(size: 10))
+                            .foregroundColor(.white)
+                        Spacer()
+                            .frame(height: 8)
+                        Text("hui")
+                            .font(.system(size: 36, weight: .bold, design: .rounded))
+                            .frame(width: HUISurfaceView.kLeftSideViewWidth)
+                            .foregroundColor(.white)
+                    }
+                    MeterBridgeView()
+                    LargeTextDisplayView()
+                        .frame(width: HUISurfaceView.kRightSideViewWidth)
+                    Spacer()
                 }
-                MeterBridgeView()
-                LargeTextDisplayView()
-                    .frame(width: Self.kRightSideViewWidth)
-                Spacer()
+                .background(Color.black)
             }
-            .background(Color.black)
         }
     }
 }
