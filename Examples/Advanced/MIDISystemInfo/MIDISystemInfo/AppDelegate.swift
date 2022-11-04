@@ -12,7 +12,7 @@ import MIDIKit
 class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow!
 	
-    private let midiManager: MIDIManager = MIDIManager(
+    private let midiManager = MIDIManager(
         clientName: "MIDISystemInfo",
         model: "TestApp",
         manufacturer: "Orchetect"

@@ -33,7 +33,8 @@ public enum MIDIFileEvent: Equatable, Hashable {
     
     /// Key Signature event.
     ///
-    /// For a format 1 MIDI file, Key Signature Meta events should only occur within the first `MTrk` chunk.
+    /// For a format 1 MIDI file, Key Signature Meta events should only occur within the first
+    /// `MTrk` chunk.
     ///
     /// If there are no key signature events in a MIDI file, C major is assumed.
     case keySignature(delta: DeltaTime, event: KeySignature)
@@ -71,12 +72,16 @@ public enum MIDIFileEvent: Equatable, Hashable {
     
     /// Channel Voice Message: Program Change
     ///
-    /// > Note: When decoding, bank information is not decoded as part of the Program Change event but will be decoded as individual CC messages. This may be addressed in a future release of MIDIKit.
+    /// > Note: When decoding, bank information is not decoded as part of the Program Change event
+    /// > but will be decoded as individual CC messages. This may be addressed in a future release
+    /// > of MIDIKit.
     case programChange(delta: DeltaTime, event: ProgramChange)
     
     /// Sequence Number event.
     ///
-    /// - For MIDI file type 0/1, this should only be on the first track. This is used to identify each track. If omitted, the sequences are numbered sequentially in the order the tracks appear.
+    /// - For MIDI file type 0/1, this should only be on the first track. This is used to identify
+    /// each track. If omitted, the sequences are numbered sequentially in the order the tracks
+    /// appear.
     ///
     /// - For MIDI file type 2, each track can contain a sequence number event.
     case sequenceNumber(delta: DeltaTime, event: SequenceNumber)
@@ -92,7 +97,8 @@ public enum MIDIFileEvent: Equatable, Hashable {
     ///
     /// > Standard MIDI File 1.0 Spec:
     /// >
-    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE-based tracks which specify a different frame subdivision for delta-times.
+    /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
+    /// > SMPTE-based tracks which specify a different frame subdivision for delta-times.
     case smpteOffset(delta: DeltaTime, event: SMPTEOffset)
     
     /// System Exclusive: Manufacturer-specific (7-bit)
@@ -100,7 +106,8 @@ public enum MIDIFileEvent: Equatable, Hashable {
     
     /// Universal System Exclusive (7-bit)
     ///
-    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See the official MIDI 1.0 and 2.0 specs for details.
+    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See
+    /// the official MIDI 1.0 and 2.0 specs for details.
     ///
     /// - `deviceID` of `0x7F` indicates "All Devices".
     case universalSysEx7(delta: DeltaTime, event: UniversalSysEx7)
@@ -111,13 +118,16 @@ public enum MIDIFileEvent: Equatable, Hashable {
     case tempo(delta: DeltaTime, event: Tempo)
     
     /// Text event.
-    /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text, program name, device name, or lyric.
+    /// Includes copyright, marker, cue point, track/sequence name, instrument name, generic text,
+    /// program name, device name, or lyric.
     ///
-    /// Text is restricted to ASCII format only. If extended characters or encodings are used, it will be converted to ASCII lossily before encoding into the MIDI file.
+    /// Text is restricted to ASCII format only. If extended characters or encodings are used, it
+    /// will be converted to ASCII lossily before encoding into the MIDI file.
     case text(delta: DeltaTime, event: Text)
     
     /// Time Signature event.
-    /// For a format 1 MIDI file, Time Signature meta events should only occur within the first `MTrk` chunk.
+    /// For a format 1 MIDI file, Time Signature meta events should only occur within the first
+    /// `MTrk` chunk.
     /// If there are no Time Signature events in a MIDI file, 4/4 is assumed.
     case timeSignature(delta: DeltaTime, event: TimeSignature)
     

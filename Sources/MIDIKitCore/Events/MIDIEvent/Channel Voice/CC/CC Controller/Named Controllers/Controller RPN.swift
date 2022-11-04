@@ -16,8 +16,8 @@ extension MIDIEvent.CC.Controller {
     /// >
     /// > 2. To set the selected Registered Parameter to a specific value, send a Control Change
     /// > messages to the Data Entry MSB controller (Control Number 6). If the selected Registered
-    /// > Parameter requires the LSB to be set, send another Control Change message to the Data Entry
-    /// > LSB controller (Control Number 38).
+    /// > Parameter requires the LSB to be set, send another Control Change message to the Data
+    /// > Entry LSB controller (Control Number 38).
     /// >
     /// > 3. To make a relative adjustment to the selected Registered Parameter's current value, use
     /// > the Data Increment or Data Decrement controllers (Control Numbers 96 and 97).
@@ -27,7 +27,8 @@ extension MIDIEvent.CC.Controller {
     /// > For custom Parameter Number use, see NRPN (non-Registered Parameter Numbers).
     ///
     /// - Note: See Recommended Practise
-    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers) of the MIDI 1.0 Spec Addenda.
+    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    /// of the MIDI 1.0 Spec Addenda.
     public enum RPN: Equatable, Hashable {
         // MIDI Spec
     
@@ -82,12 +83,15 @@ extension MIDIEvent.CC.Controller {
     
         /// Null Function Number for RPN/NRPN
         ///
-        /// The purpose of this event is to communicate the intent to disable data entry, data increment, and data decrement controllers until a new RPN or NRPN is selected.
+        /// The purpose of this event is to communicate the intent to disable data entry, data
+        /// increment, and data decrement controllers until a new RPN or NRPN is selected.
         case null
     
         /// Form an RPN message from a raw parameter number byte pair.
         ///
-        /// Note that RPNs are defined by the MIDI Association and use of undefined RPNs is discouraged. For using custom parameters, use NRPNs instead (Non-Registered Parameter Number).
+        /// Note that RPNs are defined by the MIDI Association and use of undefined RPNs is
+        /// discouraged. For using custom parameters, use NRPNs instead (Non-Registered Parameter
+        /// Number).
         case raw(
             parameter: UInt7Pair,
             dataEntryMSB: UInt7?,

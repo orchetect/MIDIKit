@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             sidebar
-            .frame(width: 300)
+                .frame(width: 300)
     
             EmptyDetailsView()
         }
@@ -29,11 +29,11 @@ struct ContentView: View {
                     .sortedByName()
                     .flatMap {
                         [$0.asAnyMIDIIOObject()]
-                        + $0.entities
+                            + $0.entities
                             .flatMap {
                                 [$0.asAnyMIDIIOObject()]
-                                + $0.inputs.asAnyMIDIIOObjects()
-                                + $0.outputs.asAnyMIDIIOObjects()
+                                    + $0.inputs.asAnyMIDIIOObjects()
+                                    + $0.outputs.asAnyMIDIIOObjects()
                             }
                     }
                 

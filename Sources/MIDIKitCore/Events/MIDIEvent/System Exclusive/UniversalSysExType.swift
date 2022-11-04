@@ -1,7 +1,7 @@
 //
 //  UniversalSysExType.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2022 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -40,7 +40,9 @@ extension MIDIEvent.UniversalSysExType: CustomStringConvertible {
 extension MIDIEvent {
     /// SysEx: Device Inquiry request message.
     ///
-    /// When a device receives a Device Inquiry request message that matches its device ID or uses the device ID of `0x7F` (meaning "all devices"), it should respond with a Device Inquiry response message (``deviceInquiryResponse(deviceID:manufacturer:deviceFamilyCode:deviceFamilyMemberCode:softwareRevision:)``).
+    /// When a device receives a Device Inquiry request message that matches its device ID or uses
+    /// the device ID of `0x7F` (meaning "all devices"), it should respond with a Device Inquiry
+    /// response message (``deviceInquiryResponse(deviceID:manufacturer:deviceFamilyCode:deviceFamilyMemberCode:softwareRevision:)``).
     ///
     /// - Parameter deviceID: SysEx Device ID. An ID of 0x7F indicates "all devices".
     /// - Returns: SysEx7 Message.
@@ -56,7 +58,9 @@ extension MIDIEvent {
     
     /// SysEx: Device Inquiry response message.
     ///
-    /// When a device receives a Device Inquiry request message (``deviceInquiryRequest(deviceID:)``) that matches its device ID or uses the device ID of `0x7F` (meaning "all devices"), it should respond with a Device Inquiry response message.
+    /// When a device receives a Device Inquiry request message
+    /// (``deviceInquiryRequest(deviceID:)``) that matches its device ID or uses the device ID of
+    /// `0x7F` (meaning "all devices"), it should respond with a Device Inquiry response message.
     ///
     /// - Parameters:
     ///   - deviceID: SysEx Device ID. An ID of `0x7F` indicates "all devices".

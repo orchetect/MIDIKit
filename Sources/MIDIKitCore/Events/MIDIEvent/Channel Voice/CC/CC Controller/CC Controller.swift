@@ -200,7 +200,8 @@ extension MIDIEvent.CC {
         /// High Resolution Velocity Prefix
         /// (Int: 88, Hex: 0x58)
         ///
-        /// Defined in Addenda [CA-031](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/high-resolution-velocity-prefix) of MIDI 1.0
+        /// Defined in Addenda [CA-031](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/high-resolution-velocity-prefix)
+        /// of MIDI 1.0
         case highResolutionVelocityPrefix
     
         // CC 89 ... 90 undefined

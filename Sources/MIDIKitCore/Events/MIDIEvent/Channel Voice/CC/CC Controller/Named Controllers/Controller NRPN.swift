@@ -8,7 +8,8 @@ extension MIDIEvent.CC.Controller {
     /// Cases describing MIDI CC NRPNs (Non-Registered Parameter Numbers).
     /// (MIDI 1.0 / MIDI 2.0)
     ///
-    /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers) of the MIDI 1.0 Spec Addenda.
+    /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    /// of the MIDI 1.0 Spec Addenda.
     public enum NRPN: Equatable, Hashable {
         /// Form an RPN message from a raw parameter number byte pair.
         ///
@@ -24,7 +25,8 @@ extension MIDIEvent.CC.Controller {
     
         /// Null Function Number for RPN/NRPN
         ///
-        /// The purpose of this event is to communicate the intent to disable data entry, data increment, and data decrement controllers until a new RPN or NRPN is selected.
+        /// The purpose of this event is to communicate the intent to disable data entry, data
+        /// increment, and data decrement controllers until a new RPN or NRPN is selected.
         case null
     }
 }

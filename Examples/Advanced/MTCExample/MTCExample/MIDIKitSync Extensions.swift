@@ -20,7 +20,6 @@ extension MTCEncoder.FullFrameBehavior {
     }
 }
 
-
 // TODO: Can remove if/when Codable for this is implemented in MIDIKit
 extension MTCEncoder.FullFrameBehavior: Codable {
     private enum Values: String {
@@ -60,7 +59,7 @@ extension MTCEncoder.FullFrameBehavior: RawRepresentable {
     
     public init?(rawValue: String) {
         for val in MTCEncoder.FullFrameBehavior.allCases {
-            if val.stringValue == rawValue { self = val ; return }
+            if val.stringValue == rawValue { self = val; return }
         }
         return nil
     }

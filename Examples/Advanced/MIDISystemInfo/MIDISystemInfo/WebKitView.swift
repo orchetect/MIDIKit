@@ -9,7 +9,7 @@ import WebKit
 
 struct WebKitView: NSViewRepresentable {
     @Binding var dynamicHeight: CGFloat
-    @Binding var webView: WKWebView	
+    @Binding var webView: WKWebView
     var html: String = ""
 	
     class Coordinator: NSObject, WKNavigationDelegate {

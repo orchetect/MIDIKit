@@ -38,48 +38,48 @@ struct MTCGenContentView: View {
     
     var body: some View {
         mtcGenView
-        .onAppear {
-            // create MTC generator MIDI endpoint
-            do {
-                let udKey = "\(kMIDIPorts.MTCGen.tag) - Unique ID"
+            .onAppear {
+                // create MTC generator MIDI endpoint
+                do {
+                    let udKey = "\(kMIDIPorts.MTCGen.tag) - Unique ID"
                 
-                try midiManager.addOutput(
-                    name: kMIDIPorts.MTCGen.name,
-                    tag: kMIDIPorts.MTCGen.tag,
-                    uniqueID: .userDefaultsManaged(key: udKey)
-                )
-            } catch {
-                logger.error(error)
-            }
+                    try midiManager.addOutput(
+                        name: kMIDIPorts.MTCGen.name,
+                        tag: kMIDIPorts.MTCGen.tag,
+                        uniqueID: .userDefaultsManaged(key: udKey)
+                    )
+                } catch {
+                    logger.error(error)
+                }
             
-            // set up new MTC receiver and configure it
-            mtcGen = MTCGenerator(
-                name: "main",
-                midiOutHandler: { midiEvents in
-                    try? midiManager
-                        .managedOutputs[kMIDIPorts.MTCGen.tag]?
-                        .send(events: midiEvents)
+                // set up new MTC receiver and configure it
+                mtcGen = MTCGenerator(
+                    name: "main",
+                    midiOutHandler: { midiEvents in
+                        try? midiManager
+                            .managedOutputs[kMIDIPorts.MTCGen.tag]?
+                            .send(events: midiEvents)
                     
-                    // NOTE: normally you should not run any UI updates from this handler;
-                    // this is only being done here for sake of demonstration purposes.
-                    // an activity watcher is not provided for the MTC Generator since
-                    // it is not typical that you would watch the activity of your own gen.
-                    DispatchQueue.main.async {
-                        let tc = mtcGen.timecode
-                        generatorTC = tc
+                        // NOTE: normally you should not run any UI updates from this handler;
+                        // this is only being done here for sake of demonstration purposes.
+                        // an activity watcher is not provided for the MTC Generator since
+                        // it is not typical that you would watch the activity of your own gen.
+                        DispatchQueue.main.async {
+                            let tc = mtcGen.timecode
+                            generatorTC = tc
                         
-                        if tc.seconds != lastSeconds {
-                            if mtcGenState { playClickA() }
-                            lastSeconds = tc.seconds
+                            if tc.seconds != lastSeconds {
+                                if mtcGenState { playClickA() }
+                                lastSeconds = tc.seconds
+                            }
                         }
                     }
-                }
-            )
+                )
             
-            mtcGen.locateBehavior = locateBehavior
+                mtcGen.locateBehavior = locateBehavior
             
-            locate()
-        }
+                locate()
+            }
     }
     
     private var mtcGenView: some View {
@@ -94,7 +94,7 @@ struct MTCGenContentView: View {
             VStack {
                 Button(
                     "Locate to "
-                    + TCC(h: 1, m: 00, s: 00, f: 00, sf: 00)
+                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 00)
                         .toTimecode(
                             rawValuesAt: localFrameRate,
                             base: ._100SubFrames,
@@ -119,14 +119,14 @@ struct MTCGenContentView: View {
                 
                 Button(
                     "Start at "
-                    + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
                         .toTimecode(
                             rawValuesAt: localFrameRate,
                             base: ._100SubFrames,
                             format: [.showSubFrames]
                         )
                         .stringValue
-                    + " (as Timecode)"
+                        + " (as Timecode)"
                 ) {
                     mtcGenState = true
                     if mtcGen.localFrameRate != localFrameRate {
@@ -146,14 +146,14 @@ struct MTCGenContentView: View {
                 
                 Button(
                     "Start at "
-                    + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
                         .toTimecode(
                             rawValuesAt: localFrameRate,
                             base: ._100SubFrames,
                             format: [.showSubFrames]
                         )
                         .stringValue
-                    + " (as Timecode Components)"
+                        + " (as Timecode Components)"
                 ) {
                     mtcGenState = true
                     if mtcGen.localFrameRate != localFrameRate {
@@ -177,14 +177,14 @@ struct MTCGenContentView: View {
                 
                 Button(
                     "Start at "
-                    + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
                         .toTimecode(
                             rawValuesAt: localFrameRate,
                             base: ._100SubFrames,
                             format: [.showSubFrames]
                         )
                         .stringValue
-                    + " (as TimeInterval)"
+                        + " (as TimeInterval)"
                 ) {
                     mtcGenState = true
                     if mtcGen.localFrameRate != localFrameRate {

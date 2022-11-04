@@ -25,7 +25,8 @@ struct HUIHostView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
-            Text("""
+            Text(
+                """
                 This window acts as a HUI host (ie: a DAW) and connects to the HUI surface.")
                 
                 To test the HUI surface with an actual DAW instead (Pro Tools, Logic, Cubase, etc.), close this window. The HUI Surface window can be used as a standalone HUI device."
@@ -129,8 +130,8 @@ struct HUIHostView: View {
                     Ribbon(position: $huiHostHelper.model.bank0.channel0.faderLevel)
                         .foregroundColor(
                             huiHostHelper.model.bank0.channel0.faderTouched
-                            ? .green
-                            : .secondary
+                                ? .green
+                                : .secondary
                         )
                         .backgroundColor(Color(nsColor: .controlBackgroundColor))
                         .indicatorWidth(15)

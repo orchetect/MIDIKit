@@ -8,7 +8,8 @@ extension MIDIEvent.CC.Controller {
     /// Channel Mode Messages (CC numbers `120 ... 127`)
     /// (MIDI 1.0 / MIDI 2.0)
     ///
-    /// These messages are originally defined in the MIDI 1.0 Spec as channel-wide settings modifying the operation of the channel.
+    /// These messages are originally defined in the MIDI 1.0 Spec as channel-wide settings
+    /// modifying the operation of the channel.
     public enum Mode: Equatable, Hashable {
         /// [Channel Mode Message] All Sound Off
         /// (Int: 120, Hex: 0x78)
