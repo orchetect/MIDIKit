@@ -12,14 +12,7 @@ import TimecodeKit
 import OTCore
 
 struct MTCRecContentView: View {
-    weak var midiManager: MIDIManager?
-    
-    init(midiManager: MIDIManager?) {
-        // normally in SwiftUI we would pass midiManager in as an EnvironmentObject
-        // but that only works on macOS 11.0+ and for sake of backwards compatibility
-        // we will do it old-school weak delegate storage pattern
-        self.midiManager = midiManager
-    }
+    @EnvironmentObject private var midiManager: MIDIManager
     
     // MARK: - MIDI state
     
@@ -28,27 +21,106 @@ struct MTCRecContentView: View {
     // MARK: - UI state
     
     @State var receiverTC = "--:--:--:--"
-    
     @State var receiverFR: MTCFrameRate? = nil
-    
-    @State var receiverState: MTCReceiver.State = .idle {
-        // Note: be aware didSet will trigger here on a @State var when the variable is imperatively set in code, but not when altered by a $receiverState binding in SwiftUI
-        didSet {
-            logger.default("MTC Receiver state:", receiverState)
-        }
-    }
-    
+    @State var receiverState: MTCReceiver.State = .idle
     @State var localFrameRate: Timecode.FrameRate? = nil
     
     // MARK: - Internal State
     
     @State var scheduledLock: Cancellable? = nil
-    
     @State private var lastSeconds = 0
     
     // MARK: - View
     
     var body: some View {
+        mtcRecView
+        .onAppear {
+            // set up new MTC receiver and configure it
+            mtcRec = MTCReceiver(
+                name: "main",
+                initialLocalFrameRate: ._24,
+                syncPolicy: .init(
+                    lockFrames: 16,
+                    dropOutFrames: 10
+                )
+            ) { timecode, _, _, displayNeedsUpdate in
+                receiverTC = timecode.stringValue
+                receiverFR = mtcRec.mtcFrameRate
+                
+                guard displayNeedsUpdate else { return }
+                
+                if timecode.seconds != lastSeconds {
+                    playClickB()
+                    lastSeconds = timecode.seconds
+                }
+                
+            } stateChanged: { state in
+                receiverState = state
+                logger.default("MTC Receiver state:", receiverState)
+                
+                scheduledLock?.cancel()
+                scheduledLock = nil
+                
+                switch state {
+                case .idle:
+                    break
+                    
+                case let .preSync(lockTime, timecode):
+                    let scheduled = DispatchQueue.main.schedule(
+                        after: DispatchQueue.SchedulerTimeType(lockTime),
+                        interval: .seconds(1),
+                        tolerance: .zero,
+                        options: .init(
+                            qos: .userInitiated,
+                            flags: [],
+                            group: nil
+                        )
+                    ) {
+                        logger.default(">>> LOCAL SYNC: PLAYBACK START @", timecode)
+                        scheduledLock?.cancel()
+                        scheduledLock = nil
+                    }
+                    
+                    scheduledLock = scheduled
+                    
+                case .sync:
+                    break
+                    
+                case .freewheeling:
+                    break
+                    
+                case .incompatibleFrameRate:
+                    break
+                }
+            }
+            
+            // create MTC reader MIDI endpoint
+            do {
+                let udKey = "\(kMIDISources.MTCRec.tag) - Unique ID"
+                
+                try midiManager.addInput(
+                    name: kMIDISources.MTCRec.name,
+                    tag: kMIDISources.MTCRec.tag,
+                    uniqueID: .userDefaultsManaged(key: udKey),
+                    receiver: .object(mtcRec, held: .weakly)
+                )
+            } catch {
+                logger.error(error)
+            }
+        }
+        
+        .onChange(of: localFrameRate) { _ in
+            if mtcRec.localFrameRate != localFrameRate {
+                logger.default(
+                    "Setting MTC receiver's local frame rate to",
+                    localFrameRate?.stringValue ?? "None"
+                )
+                mtcRec.localFrameRate = localFrameRate
+            }
+        }
+    }
+    
+    private var mtcRecView: some View {
         VStack(alignment: .center, spacing: 0) {
             Text(receiverTC)
                 .font(.system(size: 48, weight: .regular, design: .monospaced))
@@ -101,7 +173,7 @@ struct MTCRecContentView: View {
                     } else {
                         Text(
                             "Scaled to local rate: " + (localFrameRate?.stringValue ?? "--") +
-                                " fps"
+                            " fps"
                         )
                     }
                     
@@ -145,8 +217,8 @@ struct MTCRecContentView: View {
                                     .border(
                                         Color.white,
                                         width: $0 == receiverFR?.directEquivalentFrameRate
-                                            ? 2
-                                            : 0
+                                        ? 2
+                                        : 0
                                     )
                             }
                         }
@@ -162,90 +234,6 @@ struct MTCRecContentView: View {
             .padding(.bottom, 10)
         }
         .background(receiverState.stateColor)
-        
-        .onAppear {
-            // set up new MTC receiver and configure it
-            mtcRec = MTCReceiver(
-                name: "main",
-                initialLocalFrameRate: ._24,
-                syncPolicy: .init(
-                    lockFrames: 16,
-                    dropOutFrames: 10
-                )
-            ) { timecode, _, _, displayNeedsUpdate in
-                receiverTC = timecode.stringValue
-                receiverFR = mtcRec.mtcFrameRate
-                
-                guard displayNeedsUpdate else { return }
-                
-                if timecode.seconds != lastSeconds {
-                    playClickB()
-                    lastSeconds = timecode.seconds
-                }
-                
-            } stateChanged: { state in
-                receiverState = state
-                
-                scheduledLock?.cancel()
-                scheduledLock = nil
-                
-                switch state {
-                case .idle:
-                    break
-                    
-                case let .preSync(lockTime, timecode):
-                    let scheduled = DispatchQueue.main.schedule(
-                        after: DispatchQueue.SchedulerTimeType(lockTime),
-                        interval: .seconds(1),
-                        tolerance: .zero,
-                        options: .init(
-                            qos: .userInitiated,
-                            flags: [],
-                            group: nil
-                        )
-                    ) {
-                        logger.default(">>> LOCAL SYNC: PLAYBACK START @", timecode)
-                        scheduledLock?.cancel()
-                        scheduledLock = nil
-                    }
-                    
-                    scheduledLock = scheduled
-                    
-                case .sync:
-                    break
-                    
-                case .freewheeling:
-                    break
-                    
-                case .incompatibleFrameRate:
-                    break
-                }
-            }
-            
-            // create MTC reader MIDI endpoint
-            do {
-                let udKey = "\(kMIDISources.MTCRec.tag) - Unique ID"
-                
-                try midiManager?.addInput(
-                    name: kMIDISources.MTCRec.name,
-                    tag: kMIDISources.MTCRec.tag,
-                    uniqueID: .userDefaultsManaged(key: udKey),
-                    receiver: .object(mtcRec, held: .weakly)
-                )
-            } catch {
-                logger.error(error)
-            }
-        }
-        
-        .onChange(of: localFrameRate) { _ in
-            if mtcRec.localFrameRate != localFrameRate {
-                logger.default(
-                    "Setting MTC receiver's local frame rate to",
-                    localFrameRate?.stringValue ?? "None"
-                )
-                mtcRec.localFrameRate = localFrameRate
-            }
-        }
     }
 }
 
@@ -261,8 +249,15 @@ extension MTCReceiver.State {
     }
 }
 
-struct mtcRecContentView_Previews: PreviewProvider {
+struct MTCRecContentView_Previews: PreviewProvider {
+    private static let midiManager = MIDIManager(
+        clientName: "Preview",
+        model: "",
+        manufacturer: ""
+    )
+    
     static var previews: some View {
-        MTCRecContentView(midiManager: nil)
+        MTCRecContentView()
+            .environmentObject(midiManager)
     }
 }

@@ -13,27 +13,17 @@ import OTCore
 import SwiftRadix
 
 struct MTCGenContentView: View {
-    weak var midiManager: MIDIManager?
-    
-    init(midiManager: MIDIManager?) {
-        // normally in SwiftUI we would pass midiManager in as an EnvironmentObject
-        // but that only works on macOS 11.0+ and for sake of backwards compatibility
-        // we will do it old-school weak delegate storage pattern
-        self.midiManager = midiManager
-    }
+    @EnvironmentObject private var midiManager: MIDIManager
     
     // MARK: - MIDI state
     
     @State var mtcGen: MTCGenerator = .init()
-    
     @State var localFrameRate: Timecode.FrameRate = ._24
-    
     @State var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
     
     // MARK: - UI state
     
     @State var mtcGenState = false
-    
     @State var generatorTC: Timecode = .init(at: ._24)
     
     // MARK: - Internal State
@@ -43,6 +33,50 @@ struct MTCGenContentView: View {
     // MARK: - View
     
     var body: some View {
+        mtcGenView
+        .onAppear {
+            // create MTC generator MIDI endpoint
+            do {
+                let udKey = "\(kMIDISources.MTCGen.tag) - Unique ID"
+                
+                try midiManager.addOutput(
+                    name: kMIDISources.MTCGen.name,
+                    tag: kMIDISources.MTCGen.tag,
+                    uniqueID: .userDefaultsManaged(key: udKey)
+                )
+            } catch {
+                logger.error(error)
+            }
+            
+            // set up new MTC receiver and configure it
+            mtcGen = MTCGenerator(
+                name: "main",
+                midiOutHandler: { midiEvents in
+                    try? midiManager
+                        .managedOutputs[kMIDISources.MTCGen.tag]?
+                        .send(events: midiEvents)
+                    
+                    // NOTE: normally you should not run any UI updates from this handler; this is only being done here for sake of demonstration purposes
+                    
+                    DispatchQueue.main.async {
+                        let tc = mtcGen.timecode
+                        generatorTC = tc
+                        
+                        if tc.seconds != lastSeconds {
+                            if mtcGenState { playClickA() }
+                            lastSeconds = tc.seconds
+                        }
+                    }
+                }
+            )
+            
+            mtcGen.locateBehavior = locateBehavior
+            
+            locate()
+        }
+    }
+    
+    private var mtcGenView: some View {
         VStack(alignment: .center, spacing: 8) {
             Text(generatorTC.stringValue)
                 .font(.system(size: 48, weight: .regular, design: .monospaced))
@@ -54,7 +88,7 @@ struct MTCGenContentView: View {
             VStack {
                 Button(
                     "Locate to "
-                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 00)
+                    + TCC(h: 1, m: 00, s: 00, f: 00, sf: 00)
                         .toTimecode(
                             rawValuesAt: localFrameRate,
                             base: ._100SubFrames,
@@ -79,14 +113,14 @@ struct MTCGenContentView: View {
                 
                 Button(
                     "Start at "
-                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                    + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
                         .toTimecode(
                             rawValuesAt: localFrameRate,
                             base: ._100SubFrames,
                             format: [.showSubFrames]
                         )
                         .stringValue
-                        + " (as Timecode)"
+                    + " (as Timecode)"
                 ) {
                     mtcGenState = true
                     if mtcGen.localFrameRate != localFrameRate {
@@ -106,14 +140,14 @@ struct MTCGenContentView: View {
                 
                 Button(
                     "Start at "
-                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                    + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
                         .toTimecode(
                             rawValuesAt: localFrameRate,
                             base: ._100SubFrames,
                             format: [.showSubFrames]
                         )
                         .stringValue
-                        + " (as Timecode Components)"
+                    + " (as Timecode Components)"
                 ) {
                     mtcGenState = true
                     if mtcGen.localFrameRate != localFrameRate {
@@ -137,14 +171,14 @@ struct MTCGenContentView: View {
                 
                 Button(
                     "Start at "
-                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                    + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
                         .toTimecode(
                             rawValuesAt: localFrameRate,
                             base: ._100SubFrames,
                             format: [.showSubFrames]
                         )
                         .stringValue
-                        + " (as TimeInterval)"
+                    + " (as TimeInterval)"
                 ) {
                     mtcGenState = true
                     if mtcGen.localFrameRate != localFrameRate {
@@ -219,52 +253,10 @@ struct MTCGenContentView: View {
             }
         }
         .frame(
-            minWidth: 400,
-            maxWidth: .infinity,
-            minHeight: 300,
-            maxHeight: .infinity,
+            minWidth: 400, maxWidth: .infinity,
+            minHeight: 300, maxHeight: .infinity,
             alignment: .center
         )
-        .onAppear {
-            // create MTC generator MIDI endpoint
-            do {
-                let udKey = "\(kMIDISources.MTCGen.tag) - Unique ID"
-                
-                try midiManager?.addOutput(
-                    name: kMIDISources.MTCGen.name,
-                    tag: kMIDISources.MTCGen.tag,
-                    uniqueID: .userDefaultsManaged(key: udKey)
-                )
-            } catch {
-                logger.error(error)
-            }
-            
-            // set up new MTC receiver and configure it
-            mtcGen = MTCGenerator(
-                name: "main",
-                midiOutHandler: { midiEvents in
-                    try? midiManager?
-                        .managedOutputs[kMIDISources.MTCGen.tag]?
-                        .send(events: midiEvents)
-                    
-                    // NOTE: normally you should not run any UI updates from this handler; this is only being done here for sake of demonstration purposes
-                    
-                    DispatchQueue.main.async {
-                        let tc = mtcGen.timecode
-                        generatorTC = tc
-                        
-                        if tc.seconds != lastSeconds {
-                            if mtcGenState { playClickA() }
-                            lastSeconds = tc.seconds
-                        }
-                    }
-                }
-            )
-            
-            mtcGen.locateBehavior = locateBehavior
-            
-            locate()
-        }
     }
     
     /// Locate to a timecode, or 00:00:00:00 by default.
@@ -277,8 +269,15 @@ struct MTCGenContentView: View {
     }
 }
 
-struct mtcGenContentView_Previews: PreviewProvider {
+struct MTCGenContentView_Previews: PreviewProvider {
+    private static let midiManager = MIDIManager(
+        clientName: "Preview",
+        model: "",
+        manufacturer: ""
+    )
+    
     static var previews: some View {
-        MTCGenContentView(midiManager: nil)
+        MTCGenContentView()
+            .environmentObject(midiManager)
     }
 }

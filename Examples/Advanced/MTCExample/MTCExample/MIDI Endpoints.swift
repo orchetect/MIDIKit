@@ -15,3 +15,4 @@ enum kMIDISources {
         static let tag = "MTCRec"
     }
 }
+/Users/stef/Dropbox/coding/MIDIKit/Examples/Advanced/MTCExample/MTCExample/MTCRecContentView.swift

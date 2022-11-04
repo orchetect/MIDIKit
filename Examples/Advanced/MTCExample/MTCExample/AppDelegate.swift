@@ -13,11 +13,10 @@ import OTCore
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    let midiManager: MIDIManager = .init(
+    let midiManager = MIDIManager(
         clientName: "MTCExample",
         model: "TestApp",
-        manufacturer: "Orchetect",
-        notificationHandler: nil
+        manufacturer: "Orchetect"
     )
     
     var mtcGenWindow: NSWindow!
@@ -36,10 +35,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func createMTCGenWindow() {
-        // normally in SwiftUI we would pass midiManager in as an EnvironmentObject
-        // but that only works on macOS 11.0+ and for sake of backwards compatibility
-        // we will do it old-school weak delegate storage pattern
-        let contentView = MTCGenContentView(midiManager: midiManager)
+        let contentView = MTCGenContentView()
+            .environmentObject(midiManager)
         
         // (X,Y coord 0,0 origin is bottom left of screen)
         let scrW = NSScreen.main?.frame.width ?? 0
@@ -55,18 +52,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             styleMask: [.titled, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false
         )
-        mtcGenWindow.isReleasedWhenClosed = false
-        // mtcGenWindow.setFrameAutosaveName("MTC Generator")
+        mtcGenWindow.isReleasedWhenClosed = true
+        mtcGenWindow.setFrameAutosaveName("MTC Generator")
         mtcGenWindow.title = "MTC Generator"
         mtcGenWindow.contentView = NSHostingView(rootView: contentView)
         mtcGenWindow.makeKeyAndOrderFront(nil)
     }
     
     func createMTCRecWindow() {
-        // normally in SwiftUI we would pass midiManager in as an EnvironmentObject
-        // but that only works on macOS 11.0+ and for sake of backwards compatibility
-        // we will do it old-school weak delegate storage pattern
-        let contentView = MTCRecContentView(midiManager: midiManager)
+        let contentView = MTCRecContentView()
+            .environmentObject(midiManager)
         
         // (X,Y coord 0,0 origin is bottom left of screen)
         let scrW = NSScreen.main?.frame.width ?? 0
@@ -82,14 +77,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             styleMask: [.titled, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false
         )
-        mtcRecWindow.isReleasedWhenClosed = false
-        // mtcRecWindow.setFrameAutosaveName("MTC Receiver")
+        mtcRecWindow.isReleasedWhenClosed = true
+        mtcRecWindow.setFrameAutosaveName("MTC Receiver")
         mtcRecWindow.title = "MTC Receiver"
         mtcRecWindow.contentView = NSHostingView(rootView: contentView)
         mtcRecWindow.makeKeyAndOrderFront(nil)
-    }
-    
-    func applicationWillTerminate(_: Notification) {
-        // Insert code here to tear down your application
     }
 }
