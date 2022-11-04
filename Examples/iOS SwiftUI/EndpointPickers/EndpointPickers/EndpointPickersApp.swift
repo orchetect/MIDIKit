@@ -15,7 +15,7 @@ struct EndpointPickersApp: App {
         manufacturer: "MyCompany"
     )
     
-    @ObservedObject var midiHelper = MIDIHelper()
+    @StateObject var midiHelper = MIDIHelper()
     
     @State var midiInSelectedID: MIDIIdentifier = .invalidMIDIIdentifier
     @State var midiInSelectedDisplayName: String = "None"
