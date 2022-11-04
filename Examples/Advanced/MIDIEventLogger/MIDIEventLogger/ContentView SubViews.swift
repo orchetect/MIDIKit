@@ -12,15 +12,11 @@ import MIDIKit
 
 extension ContentView {
     func MIDISubsystemStatusView() -> some View {
-        GroupBox(label: Text("MIDI Subsystem Status")) {
+        GroupBox(label: Text("MIDI Subsystem")) {
             Text("Using " + midiManager.preferredAPI.description)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
-        .frame(
-            idealHeight: 50,
-            maxHeight: 50,
-            alignment: .center
-        )
+        .frame(idealHeight: 50, maxHeight: 50, alignment: .center)
     }
 }
 
