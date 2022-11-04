@@ -20,8 +20,6 @@ struct EmptyDetailsView: View {
 }
 
 struct DetailsView: View {
-    @Environment(\.hostingWindow) var hostingWindow
-    
     var object: AnyMIDIIOObject?
     
     @State private var webViewHeight: CGFloat = .zero
