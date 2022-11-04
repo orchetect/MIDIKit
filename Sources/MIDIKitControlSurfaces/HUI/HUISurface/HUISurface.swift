@@ -27,7 +27,7 @@ public final class HUISurface {
     /// Represents state of an entire HUI control surface (all controls, display elements, etc.).
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes
-    /// when ``HUISurface`` is instanced as a `@ObservedObject var`.
+    /// when ``HUISurface`` is instanced as a `@StateObject var`.
     public internal(set) var model: HUISurfaceModel {
         willSet {
             if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *) {
