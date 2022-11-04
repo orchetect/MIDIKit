@@ -59,15 +59,15 @@ extension HUISurfaceView {
         }
 
         func color(forSegment segment: Int) -> Color {
-            segment < level() ? segmentColor(segment) : Color.black
+            segment <= level() ? segmentColor(segment) : Color.black
         }
 
         func segmentColor(_ segment: Int) -> Color {
             switch segment {
-            case 1 ... 8: return Color.green
-            case 9 ... 11: return Color.yellow
-            case 12: return Color.red
-            default: return Color.black
+            case 0x1 ... 0x8: return .green
+            case 0x9 ... 0xB: return .yellow
+            case 0xC: return .red
+            default: return .black
             }
         }
     }

@@ -55,6 +55,18 @@ struct HUIHostView: View {
     var hostBody: some View {
         GroupBox(label: Text("Channel Strip 1")) {
             VStack {
+                Button("Send Random Meter Level") {
+                    huiBank0?.transmitLevelMeter(
+                        channel: 0,
+                        side: .left,
+                        level: HUISurfaceModel.StereoLevelMeter.levelRange.randomElement()!
+                    )
+                    huiBank0?.transmitLevelMeter(
+                        channel: 0,
+                        side: .right,
+                        level: HUISurfaceModel.StereoLevelMeter.levelRange.randomElement()!
+                    )
+                }
                 GroupBox(label: Text("V-Pot")) {
                     Picker("Style", selection: $vPotDisplayFormat) {
                         Text("Off").tag(VPotDisplayFormat.allOff)
