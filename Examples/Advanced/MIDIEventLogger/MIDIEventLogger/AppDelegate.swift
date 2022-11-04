@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let midiManager = MIDIManager(
         clientName: "MIDIEventLogger",
         model: "LoggerApp",
-        manufacturer: "Orchetect"
+        manufacturer: "MyCompany"
     ) { notification, manager in
         print("Core MIDI notification:", notification)
     }

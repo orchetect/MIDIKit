@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let midiManager = MIDIManager(
         clientName: "HUITest",
         model: "HUITest",
-        manufacturer: "Orchetect"
+        manufacturer: "MyCompany"
     )
     
     func applicationDidFinishLaunching(_: Notification) {

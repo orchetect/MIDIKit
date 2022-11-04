@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let midiManager = MIDIManager(
         clientName: "MIDISystemInfo",
         model: "TestApp",
-        manufacturer: "Orchetect"
+        manufacturer: "MyCompany"
     )
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {

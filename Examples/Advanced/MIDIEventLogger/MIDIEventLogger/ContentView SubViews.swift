@@ -11,12 +11,16 @@ import MIDIKit
 // MARK: - MIDISubsystemStatusView
 
 extension ContentView {
-    func MIDISubsystemStatusView() -> some View {
-        GroupBox(label: Text("MIDI Subsystem")) {
-            Text("Using " + midiManager.preferredAPI.description)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+    struct MIDISubsystemStatusView: View {
+        @EnvironmentObject var midiManager: MIDIManager
+        
+        var body: some View {
+            GroupBox(label: Text("MIDI Subsystem")) {
+                Text("Using " + midiManager.preferredAPI.description)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            }
+            .frame(idealHeight: 50, maxHeight: 50, alignment: .center)
         }
-        .frame(idealHeight: 50, maxHeight: 50, alignment: .center)
     }
 }
 
@@ -677,54 +681,61 @@ extension ContentView {
 // MARK: - ReceiveMIDIEventsView
 
 extension ContentView {
-    func ReceiveMIDIEventsView() -> some View {
-        ZStack(alignment: .center) {
-            GroupBox(label: Text("Receive MIDI Events")) {
-                VStack(alignment: .center, spacing: 0) {
-                    HStack {
-                        Group {
-                            GroupBox(label: Text("Source: Virtual")) {
-                                Text("🎹 " + kInputName)
+    struct ReceiveMIDIEventsView: View {
+        @EnvironmentObject var midiManager: MIDIManager
+        
+        var kInputName: String
+        @Binding var midiInputConnectionEndpoint: MIDIOutputEndpoint?
+        
+        var body: some View {
+            ZStack(alignment: .center) {
+                GroupBox(label: Text("Receive MIDI Events")) {
+                    VStack(alignment: .center, spacing: 0) {
+                        HStack {
+                            Group {
+                                GroupBox(label: Text("Source: Virtual")) {
+                                    Text("🎹 " + kInputName)
+                                        .frame(
+                                            maxWidth: .infinity,
+                                            maxHeight: .infinity,
+                                            alignment: .center
+                                        )
+                                }
+                                
+                                GroupBox(label: Text("Source: Connection")) {
+                                    Picker("", selection: $midiInputConnectionEndpoint) {
+                                        Text("None")
+                                            .tag(MIDIOutputEndpoint?.none)
+                                        
+                                        VStack { Divider().padding(.leading) }
+                                        
+                                        ForEach(midiManager.endpoints.outputs) {
+                                            Text("🎹 " + ($0.displayName))
+                                                .tag(MIDIOutputEndpoint?.some($0))
+                                        }
+                                    }
+                                    .padding()
+                                    .frame(maxWidth: 400)
                                     .frame(
                                         maxWidth: .infinity,
                                         maxHeight: .infinity,
                                         alignment: .center
                                     )
-                            }
-    
-                            GroupBox(label: Text("Source: Connection")) {
-                                Picker("", selection: $midiInputConnectionEndpoint) {
-                                    Text("None")
-                                        .tag(MIDIOutputEndpoint?.none)
-    
-                                    VStack { Divider().padding(.leading) }
-    
-                                    ForEach(midiManager.endpoints.outputs) {
-                                        Text("🎹 " + ($0.displayName))
-                                            .tag(MIDIOutputEndpoint?.some($0))
-                                    }
                                 }
-                                .padding()
-                                .frame(maxWidth: 400)
-                                .frame(
-                                    maxWidth: .infinity,
-                                    maxHeight: .infinity,
-                                    alignment: .center
-                                )
                             }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        .frame(height: 80)
+                        
+                        Text("MIDI Events received will be logged to the console in a debug build.")
+                            .lineLimit(nil)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                     }
-                    .frame(height: 80)
-    
-                    Text("MIDI Events received will be logged to the console in a debug build.")
-                        .lineLimit(nil)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 }
+                .frame(idealHeight: 100, maxHeight: 150, alignment: .center)
             }
-            .frame(idealHeight: 100, maxHeight: 150, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .center)
         }
-        .frame(maxWidth: .infinity, alignment: .center)
     }
 }

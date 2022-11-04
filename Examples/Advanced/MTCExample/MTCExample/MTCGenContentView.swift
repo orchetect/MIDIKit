@@ -276,11 +276,7 @@ struct MTCGenContentView: View {
 }
 
 struct MTCGenContentView_Previews: PreviewProvider {
-    private static let midiManager = MIDIManager(
-        clientName: "Preview",
-        model: "",
-        manufacturer: ""
-    )
+    private static let midiManager = MIDIManager(clientName: "Preview", model: "", manufacturer: "")
     
     static var previews: some View {
         MTCGenContentView()

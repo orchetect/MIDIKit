@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let midiManager = MIDIManager(
         clientName: "MTCExample",
         model: "TestApp",
-        manufacturer: "Orchetect"
+        manufacturer: "MyCompany"
     )
     
     var mtcGenWindow: NSWindow!

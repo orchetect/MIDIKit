@@ -45,11 +45,13 @@ struct ContentView: View {
             SendMIDIEventsView(midiGroup: $midiGroup) {
                 sendEvent($0)
             }
-            .environmentObject(midiManager)
     
             Spacer().frame(height: 10)
     
-            ReceiveMIDIEventsView()
+            ReceiveMIDIEventsView(
+                kInputName: kInputName,
+                midiInputConnectionEndpoint: $midiInputConnectionEndpoint
+            )
     
             Spacer().frame(height: 18)
         }
@@ -157,11 +159,7 @@ struct ContentView: View {
 }
 
 struct ContentView_Previews: PreviewProvider {
-    private static let midiManager = MIDIManager(
-        clientName: "Preview",
-        model: "",
-        manufacturer: ""
-    )
+    private static let midiManager = MIDIManager(clientName: "Preview", model: "", manufacturer: "")
     
     static var previews: some View {
         ContentView()
