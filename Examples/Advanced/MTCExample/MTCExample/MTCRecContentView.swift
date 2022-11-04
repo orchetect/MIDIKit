@@ -20,6 +20,9 @@ struct MTCRecContentView: View {
     
     // MARK: - UI state
     
+    @AppStorage("mtcRec-receiveFromSelfGen")
+    var receiveFromSelfGen: Bool = true
+    
     @State var receiverTC = "--:--:--:--"
     @State var receiverFR: MTCFrameRate? = nil
     @State var receiverState: MTCReceiver.State = .idle
@@ -96,17 +99,19 @@ struct MTCRecContentView: View {
             
             // create MTC reader MIDI endpoint
             do {
-                let udKey = "\(kMIDISources.MTCRec.tag) - Unique ID"
+                let udKey = "\(kMIDIPorts.MTCRec.tag) - Unique ID"
                 
                 try midiManager.addInput(
-                    name: kMIDISources.MTCRec.name,
-                    tag: kMIDISources.MTCRec.tag,
+                    name: kMIDIPorts.MTCRec.name,
+                    tag: kMIDIPorts.MTCRec.tag,
                     uniqueID: .userDefaultsManaged(key: udKey),
                     receiver: .object(mtcRec, held: .weakly)
                 )
             } catch {
                 logger.error(error)
             }
+            
+            updateSelfGenListen(state: receiveFromSelfGen)
         }
         
         .onChange(of: localFrameRate) { _ in
@@ -118,10 +123,19 @@ struct MTCRecContentView: View {
                 mtcRec.localFrameRate = localFrameRate
             }
         }
+        
+        .onChange(of: receiveFromSelfGen) { newValue in
+            updateSelfGenListen(state: newValue)
+        }
     }
     
     private var mtcRecView: some View {
         VStack(alignment: .center, spacing: 0) {
+            Toggle(isOn: $receiveFromSelfGen) {
+                Text("Receive from MTC Generator Window")
+            }
+            .padding(.top, 10)
+            
             Text(receiverTC)
                 .font(.system(size: 48, weight: .regular, design: .monospaced))
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -235,16 +249,29 @@ struct MTCRecContentView: View {
         }
         .background(receiverState.stateColor)
     }
+    
+    private func updateSelfGenListen(state: Bool) {
+        let tag = kMIDIPorts.MTCGenConnection.tag
+        switch state {
+        case true:
+            try? midiManager.addInputConnection(
+                toOutputs: [.name(kMIDIPorts.MTCGen.name)],
+                tag: tag,
+                receiver: .object(mtcRec, held: .weakly))
+        case false:
+            midiManager.remove(.inputConnection, .withTag(tag))
+        }
+    }
 }
 
 extension MTCReceiver.State {
     var stateColor: Color {
         switch self {
-        case .idle: return Color.clear
-        case .preSync: return Color.orange
-        case .sync: return Color.green
-        case .freewheeling: return Color.purple
-        case .incompatibleFrameRate: return Color.red
+        case .idle: return .clear
+        case .preSync: return .orange
+        case .sync: return .green
+        case .freewheeling: return .purple
+        case .incompatibleFrameRate: return .red
         }
     }
 }

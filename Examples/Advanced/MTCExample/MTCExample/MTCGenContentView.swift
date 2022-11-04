@@ -18,8 +18,12 @@ struct MTCGenContentView: View {
     // MARK: - MIDI state
     
     @State var mtcGen: MTCGenerator = .init()
-    @State var localFrameRate: Timecode.FrameRate = ._24
-    @State var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
+    
+    @AppStorage("mtcGen-localFrameRate")
+    var localFrameRate: Timecode.FrameRate = ._24
+    
+    @AppStorage("mtcGen-locateBehavior")
+    var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
     
     // MARK: - UI state
     
@@ -37,11 +41,11 @@ struct MTCGenContentView: View {
         .onAppear {
             // create MTC generator MIDI endpoint
             do {
-                let udKey = "\(kMIDISources.MTCGen.tag) - Unique ID"
+                let udKey = "\(kMIDIPorts.MTCGen.tag) - Unique ID"
                 
                 try midiManager.addOutput(
-                    name: kMIDISources.MTCGen.name,
-                    tag: kMIDISources.MTCGen.tag,
+                    name: kMIDIPorts.MTCGen.name,
+                    tag: kMIDIPorts.MTCGen.tag,
                     uniqueID: .userDefaultsManaged(key: udKey)
                 )
             } catch {
@@ -53,11 +57,13 @@ struct MTCGenContentView: View {
                 name: "main",
                 midiOutHandler: { midiEvents in
                     try? midiManager
-                        .managedOutputs[kMIDISources.MTCGen.tag]?
+                        .managedOutputs[kMIDIPorts.MTCGen.tag]?
                         .send(events: midiEvents)
                     
-                    // NOTE: normally you should not run any UI updates from this handler; this is only being done here for sake of demonstration purposes
-                    
+                    // NOTE: normally you should not run any UI updates from this handler;
+                    // this is only being done here for sake of demonstration purposes.
+                    // an activity watcher is not provided for the MTC Generator since
+                    // it is not typical that you would watch the activity of your own gen.
                     DispatchQueue.main.async {
                         let tc = mtcGen.timecode
                         generatorTC = tc
