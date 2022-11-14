@@ -83,7 +83,7 @@ jobs:
     - name: Apple Watch - Build
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=watchOS Simulator,name=Any watchOS Simulator Device"
     - name: Apple Watch - Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 7 - 45mm"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 8 (45mm)"
 
 
 # xcodebuild test reference:
