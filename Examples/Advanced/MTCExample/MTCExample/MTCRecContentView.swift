@@ -26,7 +26,7 @@ struct MTCRecContentView: View {
     @State var receiverTC = "--:--:--:--"
     @State var receiverFR: MTCFrameRate? = nil
     @State var receiverState: MTCReceiver.State = .idle
-    @State var localFrameRate: Timecode.FrameRate? = nil
+    @State var localFrameRate: TimecodeFrameRate? = nil
     
     // MARK: - Internal State
     
@@ -203,15 +203,15 @@ struct MTCRecContentView: View {
             
             Picker(selection: $localFrameRate, label: Text("Local Frame Rate")) {
                 Text("None")
-                    .tag(Timecode.FrameRate?.none)
+                    .tag(TimecodeFrameRate?.none)
                 
                 Rectangle()
                     .frame(maxWidth: .infinity)
                     .frame(height: 3)
                 
-                ForEach(Timecode.FrameRate.allCases) { fRate in
+                ForEach(TimecodeFrameRate.allCases) { fRate in
                     Text(fRate.stringValue)
-                        .tag(Timecode.FrameRate?.some(fRate))
+                        .tag(TimecodeFrameRate?.some(fRate))
                 }
             }
             .frame(width: 250)

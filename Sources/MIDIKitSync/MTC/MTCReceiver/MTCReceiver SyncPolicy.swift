@@ -41,13 +41,13 @@ extension MTCReceiver {
         // MARK: - Public Methods
         
         /// Returns real time duration in seconds of the ``lockFrames`` property.
-        public func lockDuration(at rate: Timecode.FrameRate) -> TimeInterval {
+        public func lockDuration(at rate: TimecodeFrameRate) -> TimeInterval {
             let tc = Timecode(wrapping: TCC(f: lockFrames), at: rate)
             return tc.realTimeValue
         }
         
         /// Returns real time duration in seconds of the ``dropOutFrames`` property.
-        public func dropOutDuration(at rate: Timecode.FrameRate) -> TimeInterval {
+        public func dropOutDuration(at rate: TimecodeFrameRate) -> TimeInterval {
             let tc = Timecode(wrapping: TCC(f: dropOutFrames), at: rate)
             return tc.realTimeValue
         }

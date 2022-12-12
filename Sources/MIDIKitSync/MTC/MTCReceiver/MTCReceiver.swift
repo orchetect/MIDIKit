@@ -47,9 +47,9 @@ public final class MTCReceiver {
     /// The frame rate the local system is using.
     /// Remember to also set this any time the local frame rate changes so the receiver can
     /// interpret the incoming MTC accordingly.
-    public var localFrameRate: Timecode.FrameRate? {
+    public var localFrameRate: TimecodeFrameRate? {
         get {
-            var getMTCFrameRate: Timecode.FrameRate?
+            var getMTCFrameRate: TimecodeFrameRate?
                 
             queue.sync {
                 getMTCFrameRate = decoder.localFrameRate
@@ -125,7 +125,7 @@ public final class MTCReceiver {
     ///   - stateChanged: handle receiver state change callbacks, pass `nil` if not needed
     public init(
         name: String? = nil,
-        initialLocalFrameRate: Timecode.FrameRate? = nil,
+        initialLocalFrameRate: TimecodeFrameRate? = nil,
         syncPolicy: SyncPolicy? = nil,
         timecodeChanged: ((
             _ timecode: Timecode,

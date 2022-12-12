@@ -401,9 +401,9 @@ extension Timecode {
     }
 }
 
-extension Timecode.FrameRate {
+extension TimecodeFrameRate {
     /// Returns the best corresponding MIDI File SMPTE Offset frame rate to represent the timecode
-    /// framerate.
+    /// frame rate.
     public var midiFileSMPTEOffsetRate: MIDIFile.SMPTEOffsetFrameRate {
         switch self {
         case ._23_976: return ._24fps // as output from Pro Tools
@@ -432,7 +432,7 @@ extension Timecode.FrameRate {
 
 extension MIDIFile.SMPTEOffsetFrameRate {
     /// Returns exact `Timecode` frame rate that matches the MIDI File SMPTE Offset frame rate.
-    public var timecodeRate: Timecode.FrameRate {
+    public var timecodeRate: TimecodeFrameRate {
         switch self {
         case ._24fps: return ._24
         case ._25fps: return ._25

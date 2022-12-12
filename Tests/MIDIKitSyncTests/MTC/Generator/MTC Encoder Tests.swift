@@ -29,7 +29,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         var mtcEnc: MTCEncoder!
         
-        Timecode.FrameRate.allCases.forEach {
+        TimecodeFrameRate.allCases.forEach {
             mtcEnc = MTCEncoder()
             mtcEnc.setLocalFrameRate($0)
             
@@ -249,7 +249,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         var mtcEnc: MTCEncoder!
         
-        Timecode.FrameRate.allCases.forEach {
+        TimecodeFrameRate.allCases.forEach {
             mtcEnc = MTCEncoder()
             mtcEnc.setLocalFrameRate($0)
             mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 20, s: 32, f: 10))
@@ -382,7 +382,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         var mtcEnc: MTCEncoder!
         
-        Timecode.FrameRate.allDrop.forEach {
+        TimecodeFrameRate.allDrop.forEach {
             mtcEnc = MTCEncoder()
             mtcEnc.setLocalFrameRate($0)
             
@@ -753,7 +753,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         var mtcEnc: MTCEncoder!
         
-        Timecode.FrameRate.allCases.forEach {
+        TimecodeFrameRate.allCases.forEach {
             mtcEnc = MTCEncoder()
             mtcEnc.setLocalFrameRate($0)
             mtcEnc.setMTCComponents(mtc: TCC(h: 1, m: 20, s: 32, f: 10))
@@ -1323,7 +1323,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         // test an arbitrary timecode in all timecode frame rates
         // while covering all four MTC SMPTE base frame rates
         
-        Timecode.FrameRate.allCases.forEach {
+        TimecodeFrameRate.allCases.forEach {
             mtcEnc.locate(to: TCC(h: 2, m: 4, s: 6, f: 0).toTimecode(rawValuesAt: $0))
             mtcEnc.mtcComponents.f = 8
             

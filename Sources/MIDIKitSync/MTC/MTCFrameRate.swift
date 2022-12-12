@@ -80,7 +80,7 @@ public enum MTCFrameRate: Hashable, CaseIterable {
     // MARK: - Init
         
     /// Construct based on the corresponding real timecode frame rate
-    init(_ timecodeFrameRate: Timecode.FrameRate) {
+    init(_ timecodeFrameRate: TimecodeFrameRate) {
         self = timecodeFrameRate.mtcFrameRate
     }
         

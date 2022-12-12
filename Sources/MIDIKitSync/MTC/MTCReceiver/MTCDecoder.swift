@@ -72,7 +72,7 @@ public final class MTCDecoder {
     ///
     /// Remember to also set this any time the local frame rate changes so the receiver can
     /// interpret the incoming MTC accordingly.
-    public var localFrameRate: Timecode.FrameRate?
+    public var localFrameRate: TimecodeFrameRate?
         
     /// Status of the direction of MTC quarter-frames received
     public internal(set) var direction: MTCDirection = .forwards
@@ -163,7 +163,7 @@ public final class MTCDecoder {
     // MARK: - init
         
     public init(
-        initialLocalFrameRate: Timecode.FrameRate? = nil,
+        initialLocalFrameRate: TimecodeFrameRate? = nil,
         timecodeChanged: ((
             _ timecode: Timecode,
             _ event: MTCMessageType,
@@ -248,7 +248,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
         )
         
         // set up a variable to store the actual output frame rate
-        let outputFrameRate: Timecode.FrameRate
+        let outputFrameRate: TimecodeFrameRate
         
         // scale frames if local frame rate is set
         // scaling will return nil if frame rates are not compatible
@@ -476,7 +476,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
             }
             
             // set up a variable to store the actual output frame rate
-            let outputFrameRate: Timecode.FrameRate
+            let outputFrameRate: TimecodeFrameRate
             
             // scale or interpolate based on if local frame rate is set
             // scaling will return nil if frame rates are not compatible

@@ -604,7 +604,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         
         // iterate: each timecode frame rate
         // omit 24.98fps because it does not conform to the nature of this test
-        Timecode.FrameRate.allCases
+        TimecodeFrameRate.allCases
             .filter { $0 != ._24_98 }
             .forEach { frameRate in
                 
