@@ -51,10 +51,10 @@ public final class MTCEncoder: SendsMIDIEvents {
     }
         
     /// Local frame rate (desired rate, not internal MTC SMPTE frame rate).
-    public internal(set) var localFrameRate: Timecode.FrameRate = ._30
+    public internal(set) var localFrameRate: TimecodeFrameRate = ._30
         
     /// Set local frame rate (desired rate, not internal MTC SMPTE frame rate).
-    internal func setLocalFrameRate(_ newFrameRate: Timecode.FrameRate) {
+    internal func setLocalFrameRate(_ newFrameRate: TimecodeFrameRate) {
         localFrameRate = newFrameRate
         mtcFrameRate = newFrameRate.mtcFrameRate
     }
@@ -120,7 +120,7 @@ public final class MTCEncoder: SendsMIDIEvents {
     ///   - triggerFullFrame: Triggers the MIDI handler to send a full-frame message.
     public func locate(
         to components: Timecode.Components,
-        frameRate: Timecode.FrameRate? = nil,
+        frameRate: TimecodeFrameRate? = nil,
         transmitFullFrame: FullFrameBehavior = .ifDifferent
     ) {
         if let unwrappedFrameRate = frameRate {

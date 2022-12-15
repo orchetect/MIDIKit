@@ -49,8 +49,8 @@ public final class MTCGenerator: SendsMIDIEvents {
         return getTimecode
     }
         
-    public var localFrameRate: Timecode.FrameRate {
-        var getFrameRate: Timecode.FrameRate!
+    public var localFrameRate: TimecodeFrameRate {
+        var getFrameRate: TimecodeFrameRate!
             
         queue.sync {
             getFrameRate = encoder.localFrameRate
@@ -142,7 +142,7 @@ public final class MTCGenerator: SendsMIDIEvents {
     }
         
     /// Sets timer rate to corresponding MTC quarter-frame duration in Hz.
-    internal func setTimerRate(from frameRate: Timecode.FrameRate) {
+    internal func setTimerRate(from frameRate: TimecodeFrameRate) {
         // const values generated from:
         // TCC(f: 1).toTimecode(at: frameRate)!.realTimeValue
             
@@ -247,7 +247,7 @@ public final class MTCGenerator: SendsMIDIEvents {
     /// Call ``stop()`` to stop generating events.
     public func start(
         now components: Timecode.Components,
-        frameRate: Timecode.FrameRate,
+        frameRate: TimecodeFrameRate,
         base: Timecode.SubFramesBase
     ) {
         queue.sync {
@@ -272,7 +272,7 @@ public final class MTCGenerator: SendsMIDIEvents {
     /// Call ``stop()`` to stop generating events.
     public func start(
         now realTime: TimeInterval,
-        frameRate: Timecode.FrameRate
+        frameRate: TimecodeFrameRate
     ) {
         // since realTime can be between frames,
         // we need to ensure that MTC quarter-frames begin generating
@@ -288,7 +288,7 @@ public final class MTCGenerator: SendsMIDIEvents {
             
         // convert real time to timecode at the given frame rate
         guard let inRTtoTimecode = try? Timecode(
-            realTimeValue: realTime,
+            realTime: realTime,
             at: frameRate,
             limit: ._24hours,
             base: ._100SubFrames // base doesn't matter, just for calculation
@@ -337,7 +337,7 @@ public final class MTCGenerator: SendsMIDIEvents {
     /// - Important: This must be called on `self.queue`.
     internal func locateAndStart(
         now components: Timecode.Components,
-        frameRate: Timecode.FrameRate
+        frameRate: TimecodeFrameRate
     ) {
         encoder.locate(
             to: components,

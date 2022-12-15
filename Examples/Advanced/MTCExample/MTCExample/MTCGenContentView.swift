@@ -20,7 +20,7 @@ struct MTCGenContentView: View {
     @State var mtcGen: MTCGenerator = .init()
     
     @AppStorage("mtcGen-localFrameRate")
-    var localFrameRate: Timecode.FrameRate = ._24
+    var localFrameRate: TimecodeFrameRate = ._24
     
     @AppStorage("mtcGen-locateBehavior")
     var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
@@ -217,7 +217,7 @@ struct MTCGenContentView: View {
                 .frame(height: 15)
             
             Picker("Local Frame Rate", selection: $localFrameRate) {
-                ForEach(Timecode.FrameRate.allCases) { fRate in
+                ForEach(TimecodeFrameRate.allCases) { fRate in
                     Text(fRate.stringValue)
                         .tag(fRate)
                 }

@@ -11,10 +11,10 @@ import TimecodeKit
 
 extension MTCFrameRate {
     /// Returns all timecode frame rates derived from the MTC base frame rate.
-    public var derivedFrameRates: [Timecode.FrameRate] {
+    public var derivedFrameRates: [TimecodeFrameRate] {
         // could hard-code these, but keeping it functional ensures compiler safety checking
         
-        Timecode.FrameRate
+        TimecodeFrameRate
             .allCases
             .filter { $0.transmitsMTC(using: self) }
     }
@@ -24,7 +24,7 @@ extension MTCFrameRate {
     /// Useful for internal calculations.
     ///
     /// To get all timecode frame rates that are compatible, use ``derivedFrameRates`` instead.
-    public var directEquivalentFrameRate: Timecode.FrameRate {
+    public var directEquivalentFrameRate: TimecodeFrameRate {
         switch self {
         case .mtc24:    return ._24
         case .mtc25:    return ._25
@@ -34,7 +34,7 @@ extension MTCFrameRate {
     }
 }
 
-extension Timecode.FrameRate {
+extension TimecodeFrameRate {
     /// Returns the base MTC frame rate that DAWs use to transmit timecode (scaling frame number if
     /// necessary)
     public var mtcFrameRate: MTCFrameRate {
@@ -90,7 +90,7 @@ extension MTCFrameRate {
     internal func scaledFrames(
         fromRawMTCFrames: Int,
         quarterFrames: UInt8,
-        to timecodeRate: Timecode.FrameRate
+        to timecodeRate: TimecodeFrameRate
     ) -> Double? {
         // if real timecode frame rates are not compatible (H:MM:SS stable), frame value scaling is
         // not possible
@@ -131,7 +131,7 @@ extension MTCFrameRate {
     }
 }
 
-extension Timecode.FrameRate {
+extension TimecodeFrameRate {
     /// Scales frames at other timecode frame rate to MTC frames at `self` MTC base rate.
     ///
     /// - Note: This is a specialized calculation, and is intended to produce raw MTC frames and
@@ -168,7 +168,7 @@ extension Timecode.FrameRate {
     }
 }
 
-extension Timecode.FrameRate {
+extension TimecodeFrameRate {
     /// Internal: scale factor used when scaling timecode frame rate to/from MTC SMPTE frame rates
     internal var mtcScaleFactor: Double {
         // calculated from:

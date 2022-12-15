@@ -14,7 +14,7 @@ final class MTC_MTCFrameRate_Tests: XCTestCase {
     func testMTC_MTCFrameRate_Init_TimecodeFrameRate() {
         // test is pedantic, but worth having
         
-        Timecode.FrameRate.allCases.forEach {
+        TimecodeFrameRate.allCases.forEach {
             XCTAssertEqual(MTCFrameRate($0), $0.mtcFrameRate)
         }
     }

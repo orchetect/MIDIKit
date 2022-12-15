@@ -26,7 +26,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
         // (reminder: MTC SMPTE frame numbers should only ever be even numbers,
         // as this is how the MTC spec functions)
         
-        for realRate in Timecode.FrameRate.allCases {
+        for realRate in TimecodeFrameRate.allCases {
             let mtcRate = realRate.mtcFrameRate
             
             // avoid testing incompatible frame rates which will fail any way
@@ -334,7 +334,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
     func testMTC_TimecodeFrameRate_ScaledFrames() {
         // zero
         
-        for realRate in Timecode.FrameRate.allCases {
+        for realRate in TimecodeFrameRate.allCases {
             let scaled = realRate.scaledFrames(fromTimecodeFrames: 0.0)
             
             XCTAssertEqual(
@@ -351,7 +351,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
         
         // spot-check
         
-        for realRate in Timecode.FrameRate.allCases {
+        for realRate in TimecodeFrameRate.allCases {
             switch realRate {
             case ._23_976, ._24:
                 for qf in UInt8(0) ... 7 {
@@ -471,7 +471,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
     }
     
     func testMTC_RoundTrip_ScaledFrames() {
-        for realRate in Timecode.FrameRate.allCases {
+        for realRate in TimecodeFrameRate.allCases {
             // zero
             do {
                 let scaledToMTC = realRate.scaledFrames(fromTimecodeFrames: 0.0)
