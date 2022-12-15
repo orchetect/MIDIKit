@@ -47,7 +47,7 @@ let package = Package(
     ],
     
     dependencies: [
-        .package(url: "https://github.com/orchetect/TimecodeKit", branch: "fcpxml-framerate"),
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.6.0"),
         
         // testing-only:
         .package(url: "https://github.com/orchetect/XCTestUtils", from: "1.0.1")
