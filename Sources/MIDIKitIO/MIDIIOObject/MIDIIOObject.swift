@@ -42,7 +42,7 @@ public protocol MIDIIOObject {
     /// (`kMIDIPropertyName`)
     ///
     /// Devices, entities, and endpoints may all have names. Note that these names are
-    /// not required to be unique. Using ``displayName-7u7g1`` may provide a better description
+    /// not required to be unique. Using ``MIDIIOObject/displayName-7u7g1`` may provide a better description
     /// of the endpoint for user interface.
     ///
     /// A studio setup editor may allow the user to set the names of both driver-owned and
@@ -133,13 +133,13 @@ public protocol MIDIIOObject {
     var imageFileURL: URL? { get }
     
     #if canImport(AppKit) && os(macOS)
-    /// Calls ``imageFileURL-6ltjy`` and attempts to initialize a new `NSImage`.
+    /// Calls ``MIDIIOObject/imageFileURL-6ltjy`` and attempts to initialize a new `NSImage`.
     /// (`kMIDIPropertyImage`)
     var imageAsNSImage: NSImage? { get }
     #endif
     
     #if canImport(UIKit)
-    /// Calls ``imageFileURL`` and attempts to initialize a new `UIImage`.
+    /// Calls ``MIDIIOObject/imageFileURL-6ltjy`` and attempts to initialize a new `UIImage`.
     /// (`kMIDIPropertyImage`)
     var imageAsUIImage: UIImage? { get }
     #endif

@@ -53,10 +53,10 @@ import TimecodeKit
 public final class MTCDecoder {
     // MARK: - Public properties
         
-    /// Last timecode formed from incoming MTC data
+    /// Last timecode formed from incoming MTC data.
     public internal(set) var timecode = Timecode(at: ._30)
         
-    /// The base MTC frame rate last received
+    /// The base MTC frame rate last received.
     public internal(set) var mtcFrameRate: MTCFrameRate = .mtc30 {
         didSet {
             if mtcFrameRate != oldValue {

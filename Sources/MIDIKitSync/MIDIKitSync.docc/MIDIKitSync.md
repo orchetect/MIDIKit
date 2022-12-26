@@ -31,7 +31,7 @@ MIDI synchronization protocol abstractions (MTC, etc.) for MIDIKit.
 ### TimecodeKit Types
 
 - ``Timecode``
-- ``Timecode/FrameRate-swift.enum``
+- ``TimecodeFrameRate``
 
 ### Internals
 
