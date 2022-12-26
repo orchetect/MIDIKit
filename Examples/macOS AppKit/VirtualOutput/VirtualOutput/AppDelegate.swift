@@ -41,42 +41,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    /// Convenience accessor for created virtual MIDI Output.
+    var virtualOutput: MIDIOutput? {
+        midiManager.managedOutputs[virtualOutputName]
+    }
+    
     @IBAction
     func sendNoteOn(_ sender: Any) {
-        guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-    
-        try? output.send(
-            event: .noteOn(
-                60,
-                velocity: .midi1(127),
-                channel: 0
-            )
-        )
+        try? virtualOutput?.send(event: .noteOn(
+            60,
+            velocity: .midi1(127),
+            channel: 0
+        ))
     }
     
     @IBAction
     func sendNoteOff(_ sender: Any) {
-        guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-    
-        try? output.send(
-            event: .noteOff(
-                60,
-                velocity: .midi1(0),
-                channel: 0
-            )
-        )
+        try? virtualOutput?.send(event: .noteOff(
+            60,
+            velocity: .midi1(0),
+            channel: 0
+        ))
     }
     
     @IBAction
     func sendCC1(_ sender: Any) {
-        guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-    
-        try? output.send(
-            event: .cc(
-                1,
-                value: .midi1(64),
-                channel: 0
-            )
-        )
+        try? virtualOutput?.send(event: .cc(
+            1,
+            value: .midi1(64),
+            channel: 0
+        ))
     }
 }

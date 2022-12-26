@@ -35,39 +35,32 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
     
-    func sendNoteOn() {
-        guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
+    /// Convenience accessor for created virtual MIDI Output.
+    var virtualOutput: MIDIOutput? {
+        midiManager.managedOutputs[virtualOutputName]
+    }
     
-        try? output.send(
-            event: .noteOn(
-                60,
-                velocity: .midi1(127),
-                channel: 0
-            )
-        )
+    func sendNoteOn() {
+        try? virtualOutput?.send(event: .noteOn(
+            60,
+            velocity: .midi1(127),
+            channel: 0
+        ))
     }
     
     func sendNoteOff() {
-        guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-    
-        try? output.send(
-            event: .noteOff(
-                60,
-                velocity: .midi1(0),
-                channel: 0
-            )
-        )
+        try? virtualOutput?.send(event: .noteOff(
+            60,
+            velocity: .midi1(0),
+            channel: 0
+        ))
     }
     
     func sendCC1() {
-        guard let output = midiManager.managedOutputs[virtualOutputName] else { return }
-    
-        try? output.send(
-            event: .cc(
-                1,
-                value: .midi1(64),
-                channel: 0
-            )
-        )
+        try? virtualOutput?.send(event: .cc(
+            1,
+            value: .midi1(64),
+            channel: 0
+        ))
     }
 }
