@@ -32,28 +32,20 @@ extension UnsafePointer where Pointee == MIDIEventPacket {
 }
 
 @available(macOS 11, iOS 14, macCatalyst 14, *)
+extension UnsafeMutablePointer where Pointee == MIDIEventPacket {
+    /// Returns the raw words contained in the `MIDIEventPacket`.
+    @_disfavoredOverload
+    public var rawWords: [UInt32] {
+        UnsafePointer(self).rawWords
+    }
+}
+
+@available(macOS 11, iOS 14, macCatalyst 14, *)
 extension MIDIEventPacket {
     /// Returns the raw words contained in the `MIDIEventPacket`.
     @_disfavoredOverload
     public var rawWords: [UInt32] {
-        var mutableSelf = self
-        
-        return withUnsafePointer(to: self) { unsafePtr -> [UInt32] in
-            let wordCollection = MIDIEventPacket.WordCollection(&mutableSelf)
-            
-            guard !wordCollection.isEmpty else {
-                return []
-            }
-            
-            guard wordCollection.count <= 64 else {
-                assertionFailure(
-                    "Received MIDIEventPacket reporting \(wordCollection.count) words."
-                )
-                return []
-            }
-            
-            return Array(wordCollection)
-        }
+        withUnsafePointer(to: self) { $0.rawWords }
     }
 }
 
