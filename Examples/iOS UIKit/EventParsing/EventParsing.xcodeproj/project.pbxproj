@@ -13,6 +13,7 @@
 		E27D0E35284F2E0A00F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E34284F2E0A00F43247 /* MIDIKit */; };
 		E29AC91B285BF17D009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC91A285BF17D009D1C2C /* MIDIKit */; };
 		E29FF2992880BC60005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2982880BC60005E2BC2 /* Images.xcassets */; };
+		E2D7FF1F29754A1C003212AF /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E2D7FF1E29754A1C003212AF /* SwiftRadix */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 			files = (
 				E29AC91B285BF17D009D1C2C /* MIDIKit in Frameworks */,
 				E27D0E35284F2E0A00F43247 /* MIDIKit in Frameworks */,
+				E2D7FF1F29754A1C003212AF /* SwiftRadix in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +88,7 @@
 			packageProductDependencies = (
 				E27D0E34284F2E0A00F43247 /* MIDIKit */,
 				E29AC91A285BF17D009D1C2C /* MIDIKit */,
+				E2D7FF1E29754A1C003212AF /* SwiftRadix */,
 			);
 			productName = EventParsing;
 			productReference = E27D0E1A284F2A8900F43247 /* EventParsing.app */;
@@ -117,6 +120,7 @@
 			mainGroup = E27D0E11284F2A8900F43247;
 			packageReferences = (
 				E29AC919285BF17D009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
+				E2D7FF1D29754A1C003212AF /* XCRemoteSwiftPackageReference "SwiftRadix" */,
 			);
 			productRefGroup = E27D0E1B284F2A8900F43247 /* Products */;
 			projectDirPath = "";
@@ -375,6 +379,14 @@
 				minimumVersion = 0.7.0;
 			};
 		};
+		E2D7FF1D29754A1C003212AF /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/SwiftRadix.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -386,6 +398,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E29AC919285BF17D009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;
 			productName = MIDIKit;
+		};
+		E2D7FF1E29754A1C003212AF /* SwiftRadix */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E2D7FF1D29754A1C003212AF /* XCRemoteSwiftPackageReference "SwiftRadix" */;
+			productName = SwiftRadix;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
