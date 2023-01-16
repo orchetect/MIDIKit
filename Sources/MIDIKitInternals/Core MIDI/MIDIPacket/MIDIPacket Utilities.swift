@@ -21,7 +21,15 @@ extension UnsafeMutablePointer where Pointee == MIDIPacket {
     /// Returns the raw bytes of the `MIDIPacket`.
     @_disfavoredOverload
     public var rawBytes: [UInt8] {
-        MIDIPacket.extractBytes(from: self, count: Int(pointee.length))
+        UnsafePointer(self).rawBytes
+    }
+}
+
+extension MIDIPacket {
+    /// Returns the raw bytes of the `MIDIPacket`.
+    @_disfavoredOverload
+    public var rawBytes: [UInt8] {
+        withUnsafePointer(to: self) { $0.rawBytes }
     }
 }
 
