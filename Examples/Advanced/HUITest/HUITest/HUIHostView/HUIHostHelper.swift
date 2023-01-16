@@ -6,6 +6,7 @@
 
 import SwiftUI
 import MIDIKitIO
+import MIDIKitInternals // only for utils
 import MIDIKitControlSurfaces
 import Controls
 
