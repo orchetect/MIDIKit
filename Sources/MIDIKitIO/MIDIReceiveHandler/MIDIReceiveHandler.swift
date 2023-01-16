@@ -11,14 +11,12 @@ import Foundation
 // MARK: - ReceiveHandler
 
 /// Shell class for MIDI receive handlers.
-internal class MIDIReceiveHandler: MIDIReceiveHandlerProtocol {
-    public typealias Handler = (_ packets: [AnyMIDIPacket]) -> Void
-    
+public class MIDIReceiveHandler: MIDIReceiveHandlerProtocol {
     /// The specialized MIDI receiver instance.
-    public var handler: MIDIReceiveHandlerProtocol
+    var handler: MIDIReceiveHandlerProtocol
     
     /// Parses a MIDI Packet (MIDI 1.0, legacy Core MIDI API) and passes parsed data to the handler.
-    public func packetListReceived(
+    func packetListReceived(
         _ packets: [MIDIPacketData]
     ) {
         handler.packetListReceived(packets)
@@ -27,14 +25,14 @@ internal class MIDIReceiveHandler: MIDIReceiveHandlerProtocol {
     /// Parses a Universal MIDI Packet (UMP; MIDI 2.0, new Core MIDI API) and passes parsed data to
     /// the handler.
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    public func eventListReceived(
+    func eventListReceived(
         _ packets: [UniversalMIDIPacketData],
         protocol midiProtocol: MIDIProtocolVersion
     ) {
         handler.eventListReceived(packets, protocol: midiProtocol)
     }
     
-    public init(_ handler: MIDIReceiveHandlerProtocol) {
+    init(_ handler: MIDIReceiveHandlerProtocol) {
         self.handler = handler
     }
 }

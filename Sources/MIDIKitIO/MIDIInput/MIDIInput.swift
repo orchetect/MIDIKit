@@ -67,7 +67,7 @@ public final class MIDIInput: _MIDIManaged {
     ) {
         endpointName = name
         self.uniqueID = uniqueID
-        receiveHandler = receiver.createReceiveHandler()
+        receiveHandler = receiver.create()
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
     }
@@ -80,7 +80,7 @@ public final class MIDIInput: _MIDIManaged {
 extension MIDIInput {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: MIDIReceiver) {
-        receiveHandler = receiver.createReceiveHandler()
+        receiveHandler = receiver.create()
     }
 }
 

@@ -139,7 +139,7 @@ public final class MIDIInputConnection: _MIDIManaged {
         self.midiManager = midiManager
         self.mode = mode
         self.filter = filter
-        receiveHandler = receiver.createReceiveHandler()
+        receiveHandler = receiver.create()
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
     
         // relies on midiManager, mode, and filter being set first
@@ -159,7 +159,7 @@ public final class MIDIInputConnection: _MIDIManaged {
 extension MIDIInputConnection {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: MIDIReceiver) {
-        receiveHandler = receiver.createReceiveHandler()
+        receiveHandler = receiver.create()
     }
 }
 
