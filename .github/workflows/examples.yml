@@ -81,6 +81,13 @@ jobs:
       run: xcodebuild -project "Examples/iOS SwiftUI/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
     - name: EventParsing - Build
       run: xcodebuild build -project "Examples/iOS SwiftUI/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "platform=iOS Simulator,name=iPhone 12"
+      
+    - name: USB iOS to Mac - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS SwiftUI/USB iOS to Mac/USB iOS to Mac.xcodeproj" -branch ${{ github.ref }}
+    - name: USB iOS to Mac - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/iOS SwiftUI/USB iOS to Mac/USB iOS to Mac.xcodeproj" -resolvePackageDependencies
+    - name: USB iOS to Mac - Build
+      run: xcodebuild build -project "Examples/iOS SwiftUI/USB iOS to Mac/USB iOS to Mac.xcodeproj" -scheme "USB iOS to Mac" -destination "platform=iOS Simulator,name=iPhone 12"
 
     - name: VirtualInput - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
