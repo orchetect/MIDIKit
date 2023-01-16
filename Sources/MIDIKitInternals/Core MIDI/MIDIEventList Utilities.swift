@@ -88,7 +88,6 @@ extension CoreMIDI.MIDIEventPacket {
 }
 
 extension CoreMIDI.MIDIEventList {
-    /// Internal:
     /// Assembles a single Core MIDI `MIDIEventPacket` from a Universal MIDI Packet `UInt32` word
     /// array and wraps it in a Core MIDI `MIDIEventList`.
     @_disfavoredOverload

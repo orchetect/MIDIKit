@@ -9,7 +9,6 @@
 import CoreMIDI
 
 extension MIDIPacketList {
-    /// Internal:
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a
     /// Core MIDI `MIDIPacketList`.
     @_disfavoredOverload
@@ -19,7 +18,6 @@ extension MIDIPacketList {
         packetList.deallocate()
     }
     
-    /// Internal:
     /// Assembles an array of `UInt8` packet arrays into Core MIDI `MIDIPacket`s and wraps them in a
     /// `MIDIPacketList`.
     @_disfavoredOverload
@@ -31,7 +29,6 @@ extension MIDIPacketList {
 }
 
 extension UnsafeMutablePointer where Pointee == MIDIPacketList {
-    /// Internal:
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a
     /// Core MIDI `MIDIPacketList`.
     ///
@@ -71,7 +68,6 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         self = packetListPointer
     }
     
-    /// Internal:
     /// Assembles an array of `UInt8` packet arrays into Core MIDI `MIDIPacket`s and wraps them in a
     /// `MIDIPacketList`.
     ///
