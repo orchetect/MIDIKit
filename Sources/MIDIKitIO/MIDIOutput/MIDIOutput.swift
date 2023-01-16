@@ -1,7 +1,7 @@
 //
 //  MIDIOutput.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -161,6 +161,18 @@ extension MIDIOutput {
     
         try MIDIEndpointDispose(unwrappedOutputPortRef)
             .throwIfOSStatusErr()
+    }
+}
+
+extension MIDIOutput {
+    /// Makes the virtual endpoint in the system invisible to the user.
+    public func hide() throws {
+        try endpoint.hide()
+    }
+    
+    /// Makes the virtual endpoint in the system visible to the user.
+    public func show() throws {
+        try endpoint.show()
     }
 }
 

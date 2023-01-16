@@ -1,7 +1,7 @@
 //
 //  MIDIEndpoint.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -57,6 +57,16 @@ extension MIDIEndpoint {
     /// Returns endpoint identity criterium describing the endpoint.
     public func asIdentity() -> MIDIEndpointIdentity {
         .endpoint(self)
+    }
+    
+    /// Makes a virtual endpoint in the system invisible to the user.
+    func hide() throws {
+        try MIDIKitIO.hide(endpoint: coreMIDIObjectRef)
+    }
+    
+    /// Makes a virtual endpoint in the system visible to the user.
+    func show() throws {
+        try MIDIKitIO.show(endpoint: coreMIDIObjectRef)
     }
 }
 

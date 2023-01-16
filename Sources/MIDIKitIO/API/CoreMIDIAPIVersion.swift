@@ -1,7 +1,7 @@
 //
 //  CoreMIDIAPIVersion.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 /// Describes the Core MIDI API used internally in all MIDIKit I/O operations.

@@ -1,7 +1,7 @@
 //
 //  MIDIIOObject.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -42,7 +42,8 @@ public protocol MIDIIOObject {
     /// (`kMIDIPropertyName`)
     ///
     /// Devices, entities, and endpoints may all have names. Note that these names are
-    /// not required to be unique. Using ``MIDIIOObject/displayName-7u7g1`` may provide a better description
+    /// not required to be unique. Using ``MIDIIOObject/displayName-7u7g1`` may provide a better
+    /// description
     /// of the endpoint for user interface.
     ///
     /// A studio setup editor may allow the user to set the names of both driver-owned and

@@ -1,7 +1,7 @@
 //
 //  MIDI2Parser Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
@@ -803,7 +803,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x05, 0x06, 0x07, 0x08,
                        0x09, 0x0A, 0x0B, 0x0C, 0x0D],
                 group: 2
-            )]
+                )]
         )
     }
     
@@ -889,7 +889,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                 data: [0x04, 0x05, 0x06, 0x07,
                        0x08, 0x09, 0x0A, 0x0B],
                 group: 2
-            )]
+                )]
         )
     
         parser = MIDI2Parser()
@@ -923,7 +923,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x0C, 0x0D, 0x0E, 0x0F,
                        0x10, 0x11],
                 group: 2
-            )]
+                )]
         )
     }
     
@@ -982,7 +982,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x05, 0x06, 0x07, 0x08,
                        0x09, 0x0A, 0xE6],
                 group: 2
-            )]
+                )]
         )
     
         // -----------------
@@ -1016,7 +1016,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x05, 0x06, 0x07, 0x08,
                        0x09, 0x0A, 0xE6, 0x01, 0x02],
                 group: 2
-            )]
+                )]
         )
     
         parser = MIDI2Parser()
@@ -1061,7 +1061,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x15, 0x16, 0x17, 0x18,
                        0x19, 0x20],
                 group: 2
-            )]
+                )]
         )
     }
     
@@ -1129,7 +1129,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x05, 0x06, 0x07, 0x08,
                        0x09, 0x0A, 0xE6],
                 group: 2
-            )]
+                )]
         )
     
         // --------------------------
@@ -1166,7 +1166,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x08, 0x09, 0x0A, 0xE6,
                        0x10, 0x11],
                 group: 2
-            )]
+                )]
         )
     
         parser = MIDI2Parser()
@@ -1213,7 +1213,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x14, 0x15, 0x16, 0x17,
                        0x18, 0x19, 0x20],
                 group: 2
-            )]
+                )]
         )
     }
     

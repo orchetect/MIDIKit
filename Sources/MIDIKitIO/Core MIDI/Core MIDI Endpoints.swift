@@ -1,7 +1,7 @@
 //
 //  Core MIDI Endpoints.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -129,6 +129,20 @@ internal func getSystemEntity(
     }
     
     return MIDIEntity(from: ent)
+}
+
+/// Internal:
+/// Makes a virtual endpoint in the system invisible to the user.
+internal func hide(endpoint: MIDIEndpointRef) throws {
+    try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 1)
+        .throwIfOSStatusErr()
+}
+
+/// Internal:
+/// Makes a virtual endpoint in the system visible to the user.
+internal func show(endpoint: MIDIEndpointRef) throws {
+    try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 0)
+        .throwIfOSStatusErr()
 }
 
 #endif

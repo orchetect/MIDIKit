@@ -1,12 +1,12 @@
 //
 //  HUIHost.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 import MIDIKitCore
-import MIDIKitInternals
+@_implementationOnly import MIDIKitInternals
 
 /// Object representing a HUI host which can provide one or more HUI banks.
 /// Each bank can service a single HUI device and requires a MIDI input and output for each bank.

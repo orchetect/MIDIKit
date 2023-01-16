@@ -1,7 +1,7 @@
 //
 //  MIDIInputConnection.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -139,7 +139,7 @@ public final class MIDIInputConnection: _MIDIManaged {
         self.midiManager = midiManager
         self.mode = mode
         self.filter = filter
-        receiveHandler = receiver.createReceiveHandler()
+        receiveHandler = receiver.create()
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
     
         // relies on midiManager, mode, and filter being set first
@@ -159,7 +159,7 @@ public final class MIDIInputConnection: _MIDIManaged {
 extension MIDIInputConnection {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: MIDIReceiver) {
-        receiveHandler = receiver.createReceiveHandler()
+        receiveHandler = receiver.create()
     }
 }
 

@@ -1,11 +1,12 @@
 //
 //  MIDIHelper.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
 import MIDIKit
+import SwiftRadix
 
 class MIDIHelper: ObservableObject {
     public weak var midiManager: MIDIManager?
@@ -58,9 +59,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Attribute (MIDI2):",
                 payload.attribute,
                 "\n  Channel:",
-                payload.channel.intValue.hexString(prefix: true),
+                payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .noteOff(payload):
@@ -76,9 +77,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Attribute (MIDI2):",
                 payload.attribute,
                 "\n  Channel:",
-                payload.channel.intValue.hexString(prefix: true),
+                payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .noteCC(payload):
@@ -92,9 +93,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Value (Unit Interval):",
                 payload.value.unitIntervalValue,
                 "\n  Channel:",
-                payload.channel.intValue.hexString(prefix: true),
+                payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .notePitchBend(payload):
@@ -106,9 +107,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Value (Unit Interval):",
                 payload.value.unitIntervalValue,
                 "\n  Channel:",
-                payload.channel.intValue.hexString(prefix: true),
+                payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .notePressure(payload):
@@ -122,9 +123,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Amount (Unit Interval):",
                 payload.amount.unitIntervalValue,
                 "\n  Channel:",
-                payload.channel.intValue.hexString(prefix: true),
+                payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .noteManagement(payload):
@@ -134,9 +135,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Option Flags:",
                 payload.optionFlags,
                 "\n  Channel:",
-                payload.channel.intValue.hexString(prefix: true),
+                payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .cc(payload):
@@ -151,9 +152,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Value (Unit Interval):",
                 payload.value.unitIntervalValue,
                 "\n  Channel:",
-                payload.channel.intValue.hexString(prefix: true),
+                payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .programChange(payload):
@@ -164,9 +165,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Bank Select:",
                 payload.bank,
                 "\n  Channel:",
-                payload.channel.intValue.hexString(prefix: true),
+                payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .pitchBend(payload):
@@ -179,9 +180,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Value (Unit Interval):",
                 payload.value.unitIntervalValue,
                 "\n  Channel:",
-                payload.channel.intValue.hexString(prefix: true),
+                payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .pressure(payload):
@@ -194,9 +195,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Amount (Unit Interval):",
                 payload.amount.unitIntervalValue,
                 "\n  Channel:",
-                payload.channel.intValue.hexString(prefix: true),
+                payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .sysEx7(payload):
@@ -205,9 +206,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Manufacturer:",
                 payload.manufacturer,
                 "\n  Data (\(payload.data.count) bytes):",
-                payload.data.hexString(padEachTo: 2),
+                payload.data.hex.stringValue(padTo: 2),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .universalSysEx7(payload):
@@ -216,15 +217,15 @@ class MIDIHelper: ObservableObject {
                 "\n  Type:",
                 payload.universalType,
                 "\n  Device ID:",
-                payload.deviceID.uInt8Value.hexString(padTo: 2, prefix: true),
+                payload.deviceID.uInt8Value.hex.stringValue(padTo: 2, prefix: true),
                 "\n  Sub ID #1:",
-                payload.subID1.uInt8Value.hexString(padTo: 2, prefix: true),
+                payload.subID1.uInt8Value.hex.stringValue(padTo: 2, prefix: true),
                 "\n  Sub ID #2:",
-                payload.subID2.uInt8Value.hexString(padTo: 2, prefix: true),
+                payload.subID2.uInt8Value.hex.stringValue(padTo: 2, prefix: true),
                 "\n  Data (\(payload.data.count) bytes):",
-                payload.data.hexString(padEachTo: 2),
+                payload.data.hex.stringValue(padTo: 2),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .sysEx8(payload):
@@ -233,9 +234,9 @@ class MIDIHelper: ObservableObject {
                 "\n  Manufacturer:",
                 payload.manufacturer,
                 "\n  Data (\(payload.data.count) bytes):",
-                payload.data.hexString(padEachTo: 2),
+                payload.data.hex.stringValue(padTo: 2),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .universalSysEx8(payload):
@@ -244,33 +245,33 @@ class MIDIHelper: ObservableObject {
                 "\n  Type:",
                 payload.universalType,
                 "\n  Device ID:",
-                payload.deviceID.uInt8Value.hexString(padTo: 2, prefix: true),
+                payload.deviceID.uInt8Value.hex.stringValue(padTo: 2, prefix: true),
                 "\n  Sub ID #1:",
-                payload.subID1.uInt8Value.hexString(padTo: 2, prefix: true),
+                payload.subID1.uInt8Value.hex.stringValue(padTo: 2, prefix: true),
                 "\n  Sub ID #2:",
-                payload.subID2.uInt8Value.hexString(padTo: 2, prefix: true),
+                payload.subID2.uInt8Value.hex.stringValue(padTo: 2, prefix: true),
                 "\n  Data (\(payload.data.count) bytes):",
-                payload.data.hexString(padEachTo: 2),
+                payload.data.hex.stringValue(padTo: 2),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .timecodeQuarterFrame(payload):
             print(
                 "Timecode Quarter-Frame:",
                 "\n  Data Byte:",
-                payload.dataByte.uInt8Value.hexString(padTo: 2, prefix: true),
+                payload.dataByte.uInt8Value.hex.stringValue(padTo: 2, prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .songPositionPointer(payload):
             print(
                 "Song Position Pointer:",
                 "\n  MIDI Beat:",
-                payload.midiBeat.intValue.hexString(prefix: true),
+                payload.midiBeat.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .songSelect(payload):
@@ -279,7 +280,7 @@ class MIDIHelper: ObservableObject {
                 "\n  Number:",
                 payload.number.intValue,
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .unofficialBusSelect(payload):
@@ -288,63 +289,63 @@ class MIDIHelper: ObservableObject {
                 "\n  Bus:",
                 payload.bus.intValue,
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .tuneRequest(payload):
             print(
                 "Tune Request:",
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .timingClock(payload):
             print(
                 "Timing Clock:",
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .start(payload):
             print(
                 "Start:",
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .continue(payload):
             print(
                 "Continue:",
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .stop(payload):
             print(
                 "Stop:",
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .activeSensing(payload):
             print(
                 "Active Sensing (Deprecated in MIDI 2.0):",
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .systemReset(payload):
             print(
                 "System Reset:",
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .noOp(payload):
             print(
                 "No-Op (MIDI 2.0 Only):",
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .jrClock(payload):
@@ -353,7 +354,7 @@ class MIDIHelper: ObservableObject {
                 "\n  Time Value:",
                 payload.time,
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
     
         case let .jrTimestamp(payload):
@@ -362,7 +363,7 @@ class MIDIHelper: ObservableObject {
                 "\n  Time Value:",
                 payload.time,
                 "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hexString(prefix: true)
+                payload.group.intValue.hex.stringValue(prefix: true)
             )
         }
     }

@@ -1,7 +1,7 @@
 //
 //  Event XMFPatchTypePrefix.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -59,12 +59,14 @@ extension MIDIFileEvent {
     /// > Standard MIDI File 1.0 Spec:
     /// >
     /// > XMF Type 0 and Type 1 files contain Standard MIDI Files (SMF). Each SMF Track in such XMF
-    /// > files may be designated to use either standard General MIDI 1 or General MIDI 2 instruments
+    /// > files may be designated to use either standard General MIDI 1 or General MIDI 2
+    /// instruments
     /// > supplied by the player, or custom DLS instruments supplied via the XMF file. This document
     /// > defines a new SMF Meta-Event to be used for this purpose.
     /// >
     /// > In a Type 0 or Type 1 XMF File, this meta-event specifies how to interpret subsequent
-    /// > Program Change and Bank Select messages appearing in the same SMF Track: as General MIDI 1,
+    /// > Program Change and Bank Select messages appearing in the same SMF Track: as General MIDI
+    /// 1,
     /// > General MIDI 2, or DLS. In the absence of an initial XMF Patch Type Prefix Meta-Event,
     /// > General MIDI 1 (instrument set and system behavior) is chosen by default.
     /// >

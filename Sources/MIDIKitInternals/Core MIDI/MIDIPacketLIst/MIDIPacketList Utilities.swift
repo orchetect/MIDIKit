@@ -1,27 +1,27 @@
 //
 //  MIDIPacketList Utilities.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
 
-@_implementationOnly import CoreMIDI
+import CoreMIDI
 
 extension MIDIPacketList {
-    /// Internal:
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a
     /// Core MIDI `MIDIPacketList`.
-    internal init(data: [UInt8]) {
+    @_disfavoredOverload
+    public init(data: [UInt8]) {
         let packetList = UnsafeMutablePointer<MIDIPacketList>(data: data)
         self = packetList.pointee
         packetList.deallocate()
     }
     
-    /// Internal:
-    /// Assembles an array of `UInt8` arrays into Core MIDI `MIDIPacket`s and wraps them in a
+    /// Assembles an array of `UInt8` packet arrays into Core MIDI `MIDIPacket`s and wraps them in a
     /// `MIDIPacketList`.
-    internal init(data: [[UInt8]]) throws {
+    @_disfavoredOverload
+    public init(data: [[UInt8]]) throws {
         let packetList = try UnsafeMutablePointer<MIDIPacketList>(data: data)
         self = packetList.pointee
         packetList.deallocate()
@@ -29,12 +29,12 @@ extension MIDIPacketList {
 }
 
 extension UnsafeMutablePointer where Pointee == MIDIPacketList {
-    /// Internal:
     /// Assembles a single Core MIDI `MIDIPacket` from a MIDI message byte array and wraps it in a
     /// Core MIDI `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
-    internal init(data: [UInt8]) {
+    @_disfavoredOverload
+    public init(data: [UInt8]) {
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
         let bufferSize = data.count + kSizeOfMIDIPacketCombinedHeaders
@@ -68,14 +68,14 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         self = packetListPointer
     }
     
-    /// Internal:
-    /// Assembles an array of `UInt8` arrays into Core MIDI `MIDIPacket`s and wraps them in a
+    /// Assembles an array of `UInt8` packet arrays into Core MIDI `MIDIPacket`s and wraps them in a
     /// `MIDIPacketList`.
     ///
     /// - Note: You must deallocate the pointer when finished with it.
     /// - Note: System Exclusive messages must each be packed in a dedicated MIDIPacketList with no
     /// other events, otherwise MIDIPacketList may fail.
-    internal init(data: [[UInt8]]) throws {
+    @_disfavoredOverload
+    public init(data: [[UInt8]]) throws {
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
         let bufferSize = data
@@ -85,7 +85,7 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         // MIDIPacketListAdd's discussion section states that "The maximum size of a packet list is
         // 65536 bytes."
         guard bufferSize <= 65536 else {
-            throw MIDIIOError.malformed(
+            throw MIDIKitInternalError.malformed(
                 "Data array is too large (\(bufferSize) bytes). Maximum size is 65536 bytes."
             )
         }
@@ -112,7 +112,7 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
             )
     
             guard currentPacket != nil else {
-                throw MIDIIOError.malformed(
+                throw MIDIKitInternalError.malformed(
                     "Error adding MIDI packet to packet list."
                 )
             }

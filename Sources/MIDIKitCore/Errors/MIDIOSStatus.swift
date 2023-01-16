@@ -1,7 +1,7 @@
 //
 //  MIDIOSStatus.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -228,9 +228,9 @@ internal func throwIfErr(_ closure: () -> OSStatus) throws {
     }
 }
 
-extension OSStatus /* aka Int32 */ {
+extension CoreMIDIOSStatus /* aka Int32 */ {
     /// Throws an error of type ``MIDIIOError/osStatus(_:)`` if self as `OSStatus` is != `noErr`
-    internal func throwIfOSStatusErr() throws {
+    public func throwIfOSStatusErr() throws {
         guard self == noErr else {
             throw MIDIIOError.osStatus(self)
         }

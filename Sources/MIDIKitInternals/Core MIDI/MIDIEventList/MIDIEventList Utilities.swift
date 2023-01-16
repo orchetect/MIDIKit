@@ -1,29 +1,29 @@
 //
 //  MIDIEventList Utilities.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
 
-@_implementationOnly import CoreMIDI
+import CoreMIDI
 
 extension CoreMIDI.MIDIEventPacket {
-    /// Internal:
     /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
+    @_disfavoredOverload
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    internal init(
-        words: [UMPWord],
+    public init(
+        words: [UInt32],
         timeStamp: UInt64 = mach_absolute_time()
     ) throws {
         guard !words.isEmpty else {
-            throw MIDIIOError.malformed(
+            throw MIDIKitInternalError.malformed(
                 "A Universal MIDI Packet cannot contain zero UInt32 words."
             )
         }
     
         guard words.count <= 64 else {
-            throw MIDIIOError.malformed(
+            throw MIDIKitInternalError.malformed(
                 "A Universal MIDI Packet cannot contain more than 64 UInt32 words."
             )
         }
@@ -50,21 +50,21 @@ extension CoreMIDI.MIDIEventPacket {
     // Note: this init isn't used but it works.
     // It implements Apple's built-in Core MIDI event packet builder.
     
-    /// Internal:
     /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
+    @_disfavoredOverload
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    internal init(
-        wordsUsingBuilder words: [UMPWord],
+    public init(
+        wordsUsingBuilder words: [UInt32],
         timeStamp: UInt64 = mach_absolute_time()
     ) throws {
         guard !words.isEmpty else {
-            throw MIDIIOError.malformed(
+            throw MIDIKitInternalError.malformed(
                 "A Universal MIDI Packet cannot contain zero UInt32 words."
             )
         }
 
         guard words.count <= 64 else {
-            throw MIDIIOError.malformed(
+            throw MIDIKitInternalError.malformed(
                 "A Universal MIDI Packet cannot contain more than 64 UInt32 words."
             )
         }
@@ -88,13 +88,13 @@ extension CoreMIDI.MIDIEventPacket {
 }
 
 extension CoreMIDI.MIDIEventList {
-    /// Internal:
     /// Assembles a single Core MIDI `MIDIEventPacket` from a Universal MIDI Packet `UInt32` word
     /// array and wraps it in a Core MIDI `MIDIEventList`.
+    @_disfavoredOverload
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    internal init(
+    public init(
         protocol midiProtocol: CoreMIDI.MIDIProtocolID,
-        packetWords: [UMPWord],
+        packetWords: [UInt32],
         timeStamp: UInt64 = mach_absolute_time()
     ) throws {
         let packet = try MIDIEventPacket(

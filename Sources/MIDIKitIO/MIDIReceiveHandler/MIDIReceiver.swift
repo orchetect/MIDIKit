@@ -1,7 +1,7 @@
 //
 //  MIDIReceiver.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -74,12 +74,14 @@ extension MIDIReceiver {
 }
 
 extension MIDIReceiver {
-    /// Internal:
     /// Creates a concrete receive handler class instance from the definition parameters.
-    internal func createReceiveHandler() -> MIDIReceiveHandler {
+    ///
+    /// This is only useful for custom implementations. Do not call this method when supplying a
+    /// ``MIDIReceiver`` to the ``MIDIManager``.
+    public func create() -> MIDIReceiveHandler {
         switch self {
         case let .group(definitions):
-            let handlers = definitions.map { $0.createReceiveHandler() }
+            let handlers = definitions.map { $0.create() }
             return .init(MIDIReceiveHandler.Group(handlers))
             
         case let .events(

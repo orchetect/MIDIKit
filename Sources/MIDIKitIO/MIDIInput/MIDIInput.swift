@@ -1,7 +1,7 @@
 //
 //  MIDIInput.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -67,7 +67,7 @@ public final class MIDIInput: _MIDIManaged {
     ) {
         endpointName = name
         self.uniqueID = uniqueID
-        receiveHandler = receiver.createReceiveHandler()
+        receiveHandler = receiver.create()
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
     }
@@ -80,7 +80,7 @@ public final class MIDIInput: _MIDIManaged {
 extension MIDIInput {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: MIDIReceiver) {
-        receiveHandler = receiver.createReceiveHandler()
+        receiveHandler = receiver.create()
     }
 }
 
@@ -194,6 +194,18 @@ extension MIDIInput {
     
         try MIDIEndpointDispose(unwrappedPortRef)
             .throwIfOSStatusErr()
+    }
+}
+
+extension MIDIInput {
+    /// Makes the virtual endpoint in the system invisible to the user.
+    public func hide() throws {
+        try endpoint.hide()
+    }
+    
+    /// Makes the virtual endpoint in the system visible to the user.
+    public func show() throws {
+        try endpoint.show()
     }
 }
 

@@ -1,11 +1,11 @@
 //
 //  UInt14.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
-import MIDIKitInternals
+@_implementationOnly import MIDIKitInternals
 
 /// A 14-bit unsigned integer value type used in `MIDIKit`.
 ///
