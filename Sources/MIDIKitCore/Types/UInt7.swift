@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import MIDIKitInternals
+@_implementationOnly import MIDIKitInternals
 
 /// A 7-bit unsigned integer value type used in `MIDIKit`.
 public struct UInt7: MIDIUnsignedInteger, _MIDIUnsignedInteger {

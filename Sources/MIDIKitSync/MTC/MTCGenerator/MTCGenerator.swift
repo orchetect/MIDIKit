@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-import MIDIKitInternals
+@_implementationOnly import MIDIKitInternals
 import TimecodeKit
 
 /// MTC sync generator.

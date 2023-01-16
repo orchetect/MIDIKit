@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-import MIDIKitInternals
+@_implementationOnly import MIDIKitInternals
 
 /// Object representing a single HUI control surface device, holding a model of its state and
 /// providing granular update notifications.

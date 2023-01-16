@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import MIDIKitInternals
+@_implementationOnly import MIDIKitInternals
 
 // Protocol inheritance tree (not exhaustive):
 //

@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-import MIDIKitInternals
+@_implementationOnly import MIDIKitInternals
 
 // MARK: - KeySignature
 

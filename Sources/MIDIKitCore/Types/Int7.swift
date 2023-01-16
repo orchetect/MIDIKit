@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import MIDIKitInternals
+@_implementationOnly import MIDIKitInternals
 
 /// A 7-bit signed integer value type used in `MIDIKit`. (`-64 ... 63`)
 public struct Int7 {

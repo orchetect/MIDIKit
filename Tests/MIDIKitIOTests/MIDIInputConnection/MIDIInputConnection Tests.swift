@@ -10,7 +10,7 @@
 
 import XCTest
 import XCTestUtils
-import MIDIKitInternals
+@_implementationOnly import MIDIKitInternals
 import MIDIKitIO
 import CoreMIDI
 

@@ -228,9 +228,9 @@ internal func throwIfErr(_ closure: () -> OSStatus) throws {
     }
 }
 
-extension OSStatus /* aka Int32 */ {
+extension CoreMIDIOSStatus /* aka Int32 */ {
     /// Throws an error of type ``MIDIIOError/osStatus(_:)`` if self as `OSStatus` is != `noErr`
-    internal func throwIfOSStatusErr() throws {
+    public func throwIfOSStatusErr() throws {
         guard self == noErr else {
             throw MIDIIOError.osStatus(self)
         }

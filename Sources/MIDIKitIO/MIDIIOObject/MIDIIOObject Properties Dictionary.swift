@@ -7,6 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
+@_implementationOnly import MIDIKitInternals
 
 extension MIDIIOObject {
     // inline docs provided by the MIDIIOObject protocol

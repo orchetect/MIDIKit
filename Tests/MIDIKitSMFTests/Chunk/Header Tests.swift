@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import MIDIKitSMF
+import MIDIKitInternals
 
 final class Chunk_Header_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve

@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-import MIDIKitInternals
+@_implementationOnly import MIDIKitInternals
 
 /// Object representing a ``HUIHost`` bank (connectable to one HUI surface over bidirectional MIDI).
 ///
