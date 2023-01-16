@@ -8,6 +8,7 @@
 
 import Foundation
 @_implementationOnly import CoreMIDI
+@_implementationOnly import MIDIKitInternals
 
 extension UnsafePointer where Pointee == CoreMIDI.MIDIPacketList {
     /// Internal:
@@ -28,28 +29,10 @@ extension UnsafePointer where Pointee == CoreMIDI.MIDIPacketList {
             }
         } else {
             var packetDatas: [MIDIPacketData] = []
-            pointee.forEachPacket {
+            pointee.packetPointerIterator {
                 packetDatas.append(MIDIPacketData($0, refCon: refCon, refConKnown: refConKnown))
             }
             return packetDatas
-        }
-    }
-}
-
-extension CoreMIDI.MIDIPacketList {
-    /// Iterates packets in a `MIDIPacketList` and calls the closure for each packet.
-    /// This is confirmed working on Mojave.
-    /// There were numerous difficulties in reading `MIDIPacketList` on Mojave and earlier and this
-    /// solution was stable.
-    fileprivate func forEachPacket(_ closure: (UnsafeMutablePointer<MIDIPacket>) -> Void) {
-        withUnsafePointer(to: packet) { ptr in
-            var idx: UInt32 = 0
-            var p = UnsafeMutablePointer(mutating: ptr)
-            while idx < numPackets {
-                closure(p)
-                if numPackets - idx > 0 { p = MIDIPacketNext(p) }
-                idx += 1
-            }
         }
     }
 }
