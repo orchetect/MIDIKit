@@ -6,6 +6,7 @@
 
 import Cocoa
 import MIDIKit
+import MIDIKitInternals // only for hexString()
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {

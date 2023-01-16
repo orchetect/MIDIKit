@@ -6,6 +6,7 @@
 
 import UIKit
 import MIDIKit
+import MIDIKitInternals // only for hexString()
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

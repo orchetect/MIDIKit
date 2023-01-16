@@ -7,6 +7,7 @@
 import SwiftUI
 import OTCore
 import MIDIKit
+import MIDIKitInternals // only for hexString()
 
 // MARK: - MIDISubsystemStatusView
 

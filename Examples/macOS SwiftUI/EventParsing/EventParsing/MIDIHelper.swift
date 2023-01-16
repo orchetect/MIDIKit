@@ -6,6 +6,7 @@
 
 import SwiftUI
 import MIDIKit
+import MIDIKitInternals // only for hexString()
 
 class MIDIHelper: ObservableObject {
     public weak var midiManager: MIDIManager?
