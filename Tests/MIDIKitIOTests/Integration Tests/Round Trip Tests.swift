@@ -1,7 +1,7 @@
 //
 //  Round Trip Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2022 Steffan Andrews • Licensed under MIT License
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
 // iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI
