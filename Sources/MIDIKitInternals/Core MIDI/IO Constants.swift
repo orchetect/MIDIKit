@@ -7,11 +7,9 @@
 import CoreMIDI
 
 /// Size of Core MIDI `MIDIPacketList` struct memory.
-//@usableFromInline
 public let kSizeOfMIDIPacketList = MemoryLayout<MIDIPacketList>.size
     
 /// Size of Core MIDI `MIDIPacket` struct memory.
-//@usableFromInline
 public let kSizeOfMIDIPacket = MemoryLayout<MIDIPacket>.size
     
 /// Size of Core MIDI `MIDIPacketList` header.
@@ -22,7 +20,6 @@ public let kSizeOfMIDIPacket = MemoryLayout<MIDIPacket>.size
 ///
 /// To determine the size of the header, we can get the size of a `UInt32`, or subtract the size of
 /// a single packet from the size of a packet list.
-//@usableFromInline
 public let kSizeOfMIDIPacketListHeader = kSizeOfMIDIPacketList - kSizeOfMIDIPacket
     
 /// Size of Core MIDI `MIDIPacket` header.
@@ -31,19 +28,15 @@ public let kSizeOfMIDIPacketListHeader = kSizeOfMIDIPacketList - kSizeOfMIDIPack
 /// data bytes of the length specified.
 ///
 /// To determine the size of the header, add the size of the `timestamp` and `length` portions.
-//@usableFromInline
 public let kSizeOfMIDIPacketHeader = MemoryLayout<MIDITimeStamp>.size
     + MemoryLayout<UInt16>.size
     
 /// Size of both Core MIDI `MIDIPacketList` header and `MIDIPacket` header.
-//@usableFromInline
 public let kSizeOfMIDIPacketCombinedHeaders = kSizeOfMIDIPacketListHeader
     + kSizeOfMIDIPacketHeader
 
 /// Size of Core MIDI `MIDIEventList` struct memory.
-//@usableFromInline
 public let kSizeOfMIDIEventList = MemoryLayout<MIDIEventList>.size
     
 /// Size of Core MIDI `MIDIEventPacket` struct memory.
-//@usableFromInline
 public let kSizeOfMIDIEventPacket = MemoryLayout<MIDIEventPacket>.size
