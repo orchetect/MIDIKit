@@ -13,7 +13,7 @@ extension CoreMIDI.MIDIEventPacket {
     @_disfavoredOverload
     @available(macOS 11, iOS 14, macCatalyst 14, *)
     public init(
-        words: [UMPWord],
+        words: [UInt32],
         timeStamp: UInt64 = mach_absolute_time()
     ) throws {
         guard !words.isEmpty else {
@@ -54,7 +54,7 @@ extension CoreMIDI.MIDIEventPacket {
     @_disfavoredOverload
     @available(macOS 11, iOS 14, macCatalyst 14, *)
     public init(
-        wordsUsingBuilder words: [UMPWord],
+        wordsUsingBuilder words: [UInt32],
         timeStamp: UInt64 = mach_absolute_time()
     ) throws {
         guard !words.isEmpty else {
@@ -94,7 +94,7 @@ extension CoreMIDI.MIDIEventList {
     @available(macOS 11, iOS 14, macCatalyst 14, *)
     public init(
         protocol midiProtocol: CoreMIDI.MIDIProtocolID,
-        packetWords: [UMPWord],
+        packetWords: [UInt32],
         timeStamp: UInt64 = mach_absolute_time()
     ) throws {
         let packet = try MIDIEventPacket(

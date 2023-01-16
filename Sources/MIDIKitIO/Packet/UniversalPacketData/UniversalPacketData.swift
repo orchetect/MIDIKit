@@ -7,6 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 @_implementationOnly import CoreMIDI
+@_implementationOnly import MIDIKitInternals
 
 /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIEventPacket` (Universal
 /// MIDI Packet).
@@ -70,40 +71,10 @@ extension UniversalMIDIPacketData {
         refCon: UnsafeMutableRawPointer?,
         refConKnown: Bool
     ) -> UniversalMIDIPacketData {
-        let wordCollection = eventPacketPtr.words()
-        
-        let source = unpackMIDIRefCon(refCon: refCon, known: refConKnown)
-        
-        guard !wordCollection.isEmpty else {
-            return UniversalMIDIPacketData(
-                words: [],
-                timeStamp: eventPacketPtr.pointee.timeStamp,
-                source: source
-            )
-        }
-    
-        guard wordCollection.count <= 64 else {
-            assertionFailure(
-                "Received MIDIEventPacket reporting \(wordCollection.count) words."
-            )
-            return UniversalMIDIPacketData(
-                words: [],
-                timeStamp: eventPacketPtr.pointee.timeStamp,
-                source: source
-            )
-        }
-    
-        var words: [UMPWord] = []
-        words.reserveCapacity(wordCollection.count)
-    
-        for word in wordCollection {
-            words.append(word)
-        }
-    
-        return UniversalMIDIPacketData(
-            words: words,
+        UniversalMIDIPacketData(
+            words: eventPacketPtr.rawWords,
             timeStamp: eventPacketPtr.pointee.timeStamp,
-            source: source
+            source: unpackMIDIRefCon(refCon: refCon, known: refConKnown)
         )
     }
     
@@ -112,45 +83,11 @@ extension UniversalMIDIPacketData {
         refCon: UnsafeMutableRawPointer?,
         refConKnown: Bool
     ) -> UniversalMIDIPacketData {
-        var localEventPacket = eventPacket
-        
-        let source = unpackMIDIRefCon(refCon: refCon, known: refConKnown)
-        
-        return withUnsafePointer(to: localEventPacket) { unsafePtr -> UniversalMIDIPacketData in
-            let wordCollection = MIDIEventPacket.WordCollection(&localEventPacket)
-    
-            guard !wordCollection.isEmpty else {
-                return UniversalMIDIPacketData(
-                    words: [],
-                    timeStamp: localEventPacket.timeStamp,
-                    source: source
-                )
-            }
-    
-            guard wordCollection.count <= 64 else {
-                assertionFailure(
-                    "Received MIDIEventPacket reporting \(wordCollection.count) words."
-                )
-                return UniversalMIDIPacketData(
-                    words: [],
-                    timeStamp: localEventPacket.timeStamp,
-                    source: source
-                )
-            }
-    
-            var words: [UMPWord] = []
-            words.reserveCapacity(wordCollection.count)
-    
-            for word in wordCollection {
-                words.append(word)
-            }
-    
-            return UniversalMIDIPacketData(
-                words: words,
-                timeStamp: localEventPacket.timeStamp,
-                source: source
-            )
-        }
+        UniversalMIDIPacketData(
+            words: eventPacket.rawWords,
+            timeStamp: eventPacket.timeStamp,
+            source: unpackMIDIRefCon(refCon: refCon, known: refConKnown)
+        )
     }
 }
 

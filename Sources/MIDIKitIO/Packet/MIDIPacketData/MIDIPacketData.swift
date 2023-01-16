@@ -7,6 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 @_implementationOnly import CoreMIDI
+@_implementationOnly import MIDIKitInternals
 
 /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIPacket` (MIDI 1.0).
 public struct MIDIPacketData {
@@ -39,37 +40,15 @@ extension MIDIPacketData {
         self = Self.unwrapPacket(midiPacketPtr, refCon: refCon, refConKnown: refConKnown)
     }
     
-    fileprivate static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
-    
     fileprivate static func unwrapPacket(
         _ midiPacketPtr: UnsafePointer<MIDIPacket>,
         refCon: UnsafeMutableRawPointer?,
         refConKnown: Bool
     ) -> MIDIPacketData {
-        let packetDataCount = Int(midiPacketPtr.pointee.length)
-        
-        let source = unpackMIDIRefCon(refCon: refCon, known: refConKnown)
-        
-        guard packetDataCount > 0 else {
-            return MIDIPacketData(
-                bytes: [],
-                timeStamp: midiPacketPtr.pointee.timeStamp,
-                source: source
-            )
-        }
-    
-        // Access the raw memory instead of using the .pointee
-        // This workaround is needed due to a variety of crashes that can occur when either the
-        // thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
-        let rawMIDIPacketDataPtr = UnsafeRawBufferPointer(
-            start: UnsafeRawPointer(midiPacketPtr) + midiPacketDataOffset,
-            count: packetDataCount
-        )
-    
-        return MIDIPacketData(
-            bytes: [UInt8](rawMIDIPacketDataPtr),
+        MIDIPacketData(
+            bytes: midiPacketPtr.rawBytes,
             timeStamp: midiPacketPtr.pointee.timeStamp,
-            source: source
+            source: unpackMIDIRefCon(refCon: refCon, known: refConKnown)
         )
     }
 }
