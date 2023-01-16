@@ -361,7 +361,7 @@
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.7.0;
+				minimumVersion = 0.7.3;
 			};
 		};
 		E2D7FF1A29754911003212AF /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
