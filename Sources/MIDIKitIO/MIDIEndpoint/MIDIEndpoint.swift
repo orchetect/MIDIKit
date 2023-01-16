@@ -58,6 +58,16 @@ extension MIDIEndpoint {
     public func asIdentity() -> MIDIEndpointIdentity {
         .endpoint(self)
     }
+    
+    /// Makes a virtual endpoint in the system invisible to the user.
+    func hide() throws {
+        try MIDIKitIO.hide(endpoint: coreMIDIObjectRef)
+    }
+    
+    /// Makes a virtual endpoint in the system visible to the user.
+    func show() throws {
+        try MIDIKitIO.show(endpoint: coreMIDIObjectRef)
+    }
 }
 
 #endif

@@ -197,6 +197,18 @@ extension MIDIInput {
     }
 }
 
+extension MIDIInput {
+    /// Makes the virtual endpoint in the system invisible to the user.
+    public func hide() throws {
+        try endpoint.hide()
+    }
+    
+    /// Makes the virtual endpoint in the system visible to the user.
+    public func show() throws {
+        try endpoint.show()
+    }
+}
+
 extension MIDIInput: CustomStringConvertible {
     public var description: String {
         var uniqueIDString = "nil"

@@ -131,4 +131,18 @@ internal func getSystemEntity(
     return MIDIEntity(from: ent)
 }
 
+/// Internal:
+/// Makes a virtual endpoint in the system invisible to the user.
+internal func hide(endpoint: MIDIEndpointRef) throws {
+    try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 1)
+        .throwIfOSStatusErr()
+}
+
+/// Internal:
+/// Makes a virtual endpoint in the system visible to the user.
+internal func show(endpoint: MIDIEndpointRef) throws {
+    try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 0)
+        .throwIfOSStatusErr()
+}
+
 #endif
