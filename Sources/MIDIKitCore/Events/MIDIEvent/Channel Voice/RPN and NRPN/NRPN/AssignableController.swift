@@ -1,5 +1,5 @@
 //
-//  NRPN.swift
+//  AssignableController.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
@@ -72,29 +72,17 @@ extension MIDIEvent.AssignableController: MIDIParameterNumber {
             return parameter
             
         case .null:
-            return .init(
-                msb: 0x7F,
-                lsb: 0x7F
-            )
+            return .init(msb: 0x7F, lsb: 0x7F)
         }
     }
     
-    public var dataEntryBytes: (
-        msb: UInt7?,
-        lsb: UInt7?
-    ) {
+    public var dataEntryBytes: (msb: UInt7?, lsb: UInt7?) {
         switch self {
         case let .raw(_, dataEntryMSB, dataEntryLSB):
-            return (
-                msb: dataEntryMSB,
-                lsb: dataEntryLSB
-            )
+            return (msb: dataEntryMSB, lsb: dataEntryLSB)
             
         case .null:
-            return (
-                msb: nil,
-                lsb: nil
-            )
+            return (msb: nil, lsb: nil)
         }
     }
     
