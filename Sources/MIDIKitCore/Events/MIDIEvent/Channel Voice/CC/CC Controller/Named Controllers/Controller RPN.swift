@@ -6,25 +6,39 @@
 
 extension MIDIEvent.CC.Controller {
     /// Cases describing MIDI CC RPNs (Registered Parameter Numbers)
+    /// (MIDI 1.0 / MIDI 2.0)
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > To set or change the value of a Registered Parameter:
+    /// > In order to set or change the value of a Registered Parameter (RPN), the following occurs:
     /// >
-    /// > 1. Send two Control Change messages using Control Numbers 101 (0x65) and 100 (0x64) to
-    /// > select the desired Registered Parameter Number.
+    /// > 1. Two Control Change messages are sent using CC 101 (0x65) and 100 (0x64) to select the
+    /// > desired Registered Parameter Number.
     /// >
-    /// > 2. To set the selected Registered Parameter to a specific value, send a Control Change
-    /// > messages to the Data Entry MSB controller (Control Number 6). If the selected Registered
-    /// > Parameter requires the LSB to be set, send another Control Change message to the Data
-    /// > Entry LSB controller (Control Number 38).
+    /// > 2. When setting the Registered Parameter to a specific value, CC messages are sent to the
+    /// > Data Entry MSB controller (CC 6). If the selected Registered Parameter requires the LSB to
+    /// > be set, another CC message is sent to the Data Entry LSB controller (CC 38).
     /// >
     /// > 3. To make a relative adjustment to the selected Registered Parameter's current value, use
-    /// > the Data Increment or Data Decrement controllers (Control Numbers 96 and 97).
+    /// > the Data Increment or Data Decrement controllers (CCs 96 & 97).
     /// >
     /// > Currently undefined RPN parameter numbers are all RESERVED for future MMA Definition.
     /// >
-    /// > For custom Parameter Number use, see NRPN (non-Registered Parameter Numbers).
+    /// > For custom Parameter Number use, see NRPN (Non-Registered Parameter Numbers).
+    ///
+    /// > MIDI 2.0 Spec:
+    /// >
+    /// > In the MIDI 2.0 Protocol, Registered Controllers (RPN) and Assignable Controllers (NRPN)
+    /// > use a single, unified message, making them much easier to use.
+    /// >
+    /// > As a result, CC 6, 38, 98, 99, 100, and 101 are not to be used in standalone CC messages,
+    /// > as the new MIDI 2.0 RPN/NRPN UMP messages replace them.
+    /// >
+    /// > Registered Controllers (RPNs) have specific functions defined by MMA/AMEI specifications.
+    /// > Registered Controllers map and translate directly to MIDI 1.0 Registered Parameter Numbers
+    /// > (RPN, see Appendix D.2.3) and use the same definitions as MMA/AMEI approved RPN messages.
+    /// > Registered Controllers are organized in 128 Banks (corresponds to RPN MSB), with 128
+    /// > controllers per Bank (corresponds to RPN LSB).
     ///
     /// - Note: See Recommended Practise
     /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
@@ -81,7 +95,7 @@ extension MIDIEvent.CC.Controller {
             dataEntryLSB: UInt7?
         )
     
-        /// Null Function Number for RPN/NRPN
+        /// Null Function Number for RPN/NRPN.
         ///
         /// The purpose of this event is to communicate the intent to disable data entry, data
         /// increment, and data decrement controllers until a new RPN or NRPN is selected.
