@@ -46,6 +46,12 @@ extension MIDIEvent {
         case let .pressure(event):
             return .pressure(delta: delta, event: event)
             
+        case let .rpn(event):
+            return .rpn(delta: delta, event: event)
+            
+        case let .nrpn(event):
+            return .nrpn(delta: delta, event: event)
+            
         case let .sysEx7(event):
             return .sysEx7(delta: delta, event: event)
             
@@ -116,6 +122,12 @@ extension MIDIFileEvent {
             
         case let .universalSysEx7(_, event):
             return .universalSysEx7(event)
+            
+        case let .rpn(_, event):
+            return .rpn(event)
+            
+        case let .nrpn(_, event):
+            return .nrpn(event)
             
         case .channelPrefix,
              .keySignature,

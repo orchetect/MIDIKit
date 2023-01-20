@@ -11,8 +11,8 @@ extension MIDIFile {
         case fileNotFound
         case malformedURL
         case fileReadError
-
         case malformed(_ verboseError: String)
+        case notImplemented
     }
 
     public enum EncodeError: Error {

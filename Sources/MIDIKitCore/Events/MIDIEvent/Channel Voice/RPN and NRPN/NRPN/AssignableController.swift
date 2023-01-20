@@ -1,11 +1,12 @@
 //
-//  Controller NRPN.swift
+//  NRPN.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-extension MIDIEvent.CC.Controller {
-    /// Cases describing MIDI CC NRPNs (Non-Registered Parameter Numbers).
+extension MIDIEvent {
+    /// Cases describing NRPNs (Non-Registered Parameter Numbers),
+    /// also referred to as Assignable Controllers in MIDI 2.0.
     /// (MIDI 1.0 / MIDI 2.0)
     ///
     /// > MIDI 1.0 Spec:
@@ -41,7 +42,7 @@ extension MIDIEvent.CC.Controller {
     ///
     /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
-    public enum NRPN: Equatable, Hashable {
+    public enum AssignableController: Equatable, Hashable {
         /// Form an RPN message from a raw parameter number byte pair.
         ///
         /// - Parameters:
@@ -62,17 +63,14 @@ extension MIDIEvent.CC.Controller {
     }
 }
 
-extension MIDIEvent.CC.Controller.NRPN {
-    /// Returns the parameter number byte pair.
+extension MIDIEvent.AssignableController: MIDIParameterNumber {
+    public static let type: MIDIParameterNumberType = .assignable
+    
     public var parameter: UInt7Pair {
         switch self {
-        case .raw(
-            parameter: let parameter,
-            dataEntryMSB: _,
-            dataEntryLSB: _
-        ):
+        case let .raw(parameter, _, _):
             return parameter
-    
+            
         case .null:
             return .init(
                 msb: 0x7F,
@@ -81,22 +79,17 @@ extension MIDIEvent.CC.Controller.NRPN {
         }
     }
     
-    /// Returns the data entry bytes, if present.
     public var dataEntryBytes: (
         msb: UInt7?,
         lsb: UInt7?
     ) {
         switch self {
-        case .raw(
-            parameter: _,
-            dataEntryMSB: let dataEntryMSB,
-            dataEntryLSB: let dataEntryLSB
-        ):
+        case let .raw(_, dataEntryMSB, dataEntryLSB):
             return (
                 msb: dataEntryMSB,
                 lsb: dataEntryLSB
             )
-    
+            
         case .null:
             return (
                 msb: nil,
@@ -104,63 +97,9 @@ extension MIDIEvent.CC.Controller.NRPN {
             )
         }
     }
-}
-
-extension MIDIEvent.CC.Controller.NRPN {
-    /// Returns the NRPN message consisting of 2-4 MIDI Events.
-    public func events(
-        channel: UInt4,
-        group: UInt4 = 0
-    ) -> [MIDIEvent] {
-        var nrpnEvents: [MIDIEvent] = [
-            .cc(
-                .nrpnMSB,
-                value: .midi1(parameter.msb),
-                channel: channel,
-                group: group
-            ),
-            .cc(
-                .nrpnLSB,
-                value: .midi1(parameter.lsb),
-                channel: channel,
-                group: group
-            )
-        ]
     
-        let dataEntryBytes = dataEntryBytes
-    
-        if let dataEntryMSB = dataEntryBytes.msb {
-            nrpnEvents.append(.cc(
-                .dataEntry,
-                value: .midi1(dataEntryMSB),
-                channel: channel,
-                group: group
-            ))
-        }
-    
-        if let dataEntryLSB = dataEntryBytes.lsb {
-            nrpnEvents.append(.cc(
-                .lsb(for: .dataEntry),
-                value: .midi1(dataEntryLSB),
-                channel: channel,
-                group: group
-            ))
-        }
-    
-        return nrpnEvents
-    }
-}
-
-extension MIDIEvent {
-    /// Creates an NRPN message, consisting of multiple MIDI Events.
-    public static func ccNRPN(
-        _ nrpn: CC.Controller.NRPN,
-        channel: UInt4,
-        group: UInt4 = 0
-    ) -> [MIDIEvent] {
-        nrpn.events(
-            channel: channel,
-            group: group
-        )
-    }
+    public static let controllers: (
+        msb: MIDIEvent.CC.Controller,
+        lsb: MIDIEvent.CC.Controller
+    ) = (msb: .nrpnMSB, lsb: .nrpnLSB)
 }

@@ -77,6 +77,14 @@ public enum MIDIFileEvent: Equatable, Hashable {
     /// > of MIDIKit.
     case programChange(delta: DeltaTime, event: ProgramChange)
     
+    /// Channel Voice Message: RPN (Registered Parameter Number),
+    /// also referred to as Registered Controller in MIDI 2.0.
+    case rpn(delta: DeltaTime, event: RPN)
+    
+    /// Channel Voice Message: NRPN (Non-Registered Parameter Number),
+    /// also referred to as Assignable Controller in MIDI 2.0.
+    case nrpn(delta: DeltaTime, event: NRPN)
+    
     /// Sequence Number event.
     ///
     /// - For MIDI file type 0/1, this should only be on the first track. This is used to identify

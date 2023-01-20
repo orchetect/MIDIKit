@@ -1,5 +1,5 @@
 //
-//  CC NRPN Tests.swift
+//  CC RPN Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
@@ -9,14 +9,14 @@
 import XCTest
 import MIDIKitCore
 
-final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
+final class MIDIEvent_CC_RPN_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets
     
-    typealias NRPN = MIDIEvent.CC.Controller.NRPN
+    // MARK: - midi1RPN()
     
-    func testNRPN_MIDI1_NoDataEntry() {
-        let nrpn: [MIDIEvent] = MIDIEvent.ccNRPN(
+    func testRPN_MIDI1_NoDataEntry() {
+        let rpn: [MIDIEvent] = MIDIEvent.midi1RPN(
             .raw(
                 parameter: .init(msb: 66, lsb: 103),
                 dataEntryMSB: nil,
@@ -26,14 +26,14 @@ final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
         )
     
         XCTAssertEqual(
-            nrpn.flatMap { $0.midi1RawBytes() },
-            [0xB9, 0x63, 66,
-             0xB9, 0x62, 103]
+            rpn.flatMap { $0.midi1RawBytes() },
+            [0xB9, 0x65, 66,
+             0xB9, 0x64, 103]
         )
     }
     
-    func testNRPN_MIDI1_DataEntryMSB() {
-        let nrpn: [MIDIEvent] = MIDIEvent.ccNRPN(
+    func testRPN_MIDI1_DataEntryMSB() {
+        let rpn: [MIDIEvent] = MIDIEvent.midi1RPN(
             .raw(
                 parameter: .init(msb: 66, lsb: 103),
                 dataEntryMSB: 127,
@@ -43,15 +43,15 @@ final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
         )
     
         XCTAssertEqual(
-            nrpn.flatMap { $0.midi1RawBytes() },
-            [0xB9, 0x63, 66,
-             0xB9, 0x62, 103,
+            rpn.flatMap { $0.midi1RawBytes() },
+            [0xB9, 0x65, 66,
+             0xB9, 0x64, 103,
              0xB9, 0x06, 127]
         )
     }
     
-    func testNRPN_MIDI1_testRPN_MIDI1_DataEntryMSBandLSB() {
-        let nrpn: [MIDIEvent] = MIDIEvent.ccNRPN(
+    func testRPN_MIDI1_testRPN_MIDI1_DataEntryMSBandLSB() {
+        let rpn: [MIDIEvent] = MIDIEvent.midi1RPN(
             .raw(
                 parameter: .init(msb: 66, lsb: 103),
                 dataEntryMSB: 127,
@@ -61,24 +61,24 @@ final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
         )
     
         XCTAssertEqual(
-            nrpn.flatMap { $0.midi1RawBytes() },
-            [0xB9, 0x63, 66,
-             0xB9, 0x62, 103,
+            rpn.flatMap { $0.midi1RawBytes() },
+            [0xB9, 0x65, 66,
+             0xB9, 0x64, 103,
              0xB9, 0x06, 127,
              0xB9, 0x26, 2]
         )
     }
     
-    func testNRPN_MIDI1_Null() {
-        let nrpn: [MIDIEvent] = MIDIEvent.ccNRPN(
+    func testRPN_MIDI1_Null() {
+        let nrpn: [MIDIEvent] = MIDIEvent.midi1RPN(
             .null,
             channel: 0x9
         )
     
         XCTAssertEqual(
             nrpn.flatMap { $0.midi1RawBytes() },
-            [0xB9, 0x63, 0x7F,
-             0xB9, 0x62, 0x7F]
+            [0xB9, 0x65, 0x7F,
+             0xB9, 0x64, 0x7F]
         )
     }
 }

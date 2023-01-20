@@ -132,6 +132,22 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             
             return "pitchBend(\(valString), chan: \(channelString), group: \(groupString))"
             
+        // -------------------------------
+        // MARK: Parameter Number Messages
+        // -------------------------------
+            
+        case let .rpn(event):
+            let channelString = event.channel.hexString()
+            let groupString = event.group.hexString()
+            
+            return "rpn(\(event.param), change: \(event.change) chan: \(channelString), group: \(groupString))"
+            
+        case let .nrpn(event):
+            let channelString = event.channel.hexString()
+            let groupString = event.group.hexString()
+            
+            return "nrpn(\(event.param), change: \(event.change) chan: \(channelString), group: \(groupString))"
+            
         // ----------------------
         // MARK: System Exclusive
         // ----------------------

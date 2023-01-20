@@ -18,6 +18,8 @@ public enum MIDIFileEventType: String, CaseIterable, Equatable, Hashable {
     case portPrefix
     case pressure // channel pressure
     case programChange
+    case rpn
+    case nrpn
     case sequenceNumber
     case sequencerSpecific
     case smpteOffset
@@ -44,6 +46,8 @@ extension MIDIFileEventType {
         case .portPrefix:         return MIDIFileEvent.PortPrefix.self
         case .pressure:           return MIDIFileEvent.Pressure.self
         case .programChange:      return MIDIFileEvent.ProgramChange.self
+        case .rpn:                return MIDIFileEvent.RPN.self
+        case .nrpn:               return MIDIFileEvent.NRPN.self
         case .sequenceNumber:     return MIDIFileEvent.SequenceNumber.self
         case .sequencerSpecific:  return MIDIFileEvent.SequencerSpecific.self
         case .smpteOffset:        return MIDIFileEvent.SMPTEOffset.self

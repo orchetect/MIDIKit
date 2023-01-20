@@ -45,6 +45,16 @@ extension MIDIEvent {
         case let .pitchBend(event):
             return event.midi1RawBytes()
     
+        // -------------------------------
+        // MARK: Parameter Number Messages
+        // -------------------------------
+            
+        case let .rpn(event):
+            return event.midi1RawBytes()
+            
+        case let .nrpn(event):
+            return event.midi1RawBytes()
+            
         // ----------------------
         // MARK: System Exclusive
         // ----------------------
@@ -159,6 +169,16 @@ extension MIDIEvent {
         case let .pitchBend(event):
             return [event.umpRawWords(protocol: midiProtocol)]
     
+        // -------------------------------
+        // MARK: Parameter Number Messages
+        // -------------------------------
+            
+        case let .rpn(event):
+            return event.umpRawWords(protocol: midiProtocol)
+        
+        case let .nrpn(event):
+            return event.umpRawWords(protocol: midiProtocol)
+            
         // ----------------------
         // MARK: System Exclusive
         // ----------------------

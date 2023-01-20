@@ -21,6 +21,8 @@ extension MIDIFileEvent {
         case .portPrefix:         return .portPrefix
         case .pressure:           return .pressure
         case .programChange:      return .programChange
+        case .rpn:                return .rpn
+        case .nrpn:               return .nrpn
         case .sequenceNumber:     return .sequenceNumber
         case .sequencerSpecific:  return .sequencerSpecific
         case .smpteOffset:        return .smpteOffset
@@ -50,6 +52,8 @@ extension MIDIFileEvent {
         case .portPrefix:         return PortPrefix.self
         case .pressure:           return Pressure.self
         case .programChange:      return ProgramChange.self
+        case .rpn:                return RPN.self
+        case .nrpn:               return NRPN.self
         case .sequenceNumber:     return SequenceNumber.self
         case .sequencerSpecific:  return SequencerSpecific.self
         case .smpteOffset:        return SMPTEOffset.self
@@ -91,6 +95,10 @@ extension MIDIFileEvent {
         case let .pressure(delta, event):
             return (delta: delta, event: event)
         case let .programChange(delta, event):
+            return (delta: delta, event: event)
+        case let .rpn(delta, event):
+            return (delta: delta, event: event)
+        case let .nrpn(delta, event):
             return (delta: delta, event: event)
         case let .sequenceNumber(delta, event):
             return (delta: delta, event: event)

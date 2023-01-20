@@ -83,7 +83,17 @@ extension MIDIEvent {
     
         case let .pitchBend(event):
             return event.group
-    
+        
+        // -------------------------------
+        // MARK: Parameter Number Messages
+        // -------------------------------
+            
+        case let .rpn(event):
+            return event.group
+            
+        case let .nrpn(event):
+            return event.group
+            
         // ----------------------
         // MARK: System Exclusive
         // ----------------------
