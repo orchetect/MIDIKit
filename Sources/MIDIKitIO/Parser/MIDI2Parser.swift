@@ -448,7 +448,19 @@ public final class MIDI2Parser {
             )
     
             return newEvent
-    
+        
+        case 0x2: // Registered NRPN
+            assertionFailure("Not implemented yet.") ; return nil
+            
+        case 0x3: // Assignable NRPN
+            assertionFailure("Not implemented yet.") ; return nil
+            
+        case 0x4: // Registered NRPN - Relative
+            assertionFailure("Not implemented yet.") ; return nil
+            
+        case 0x5: // Assignable NRPN - Relative
+            assertionFailure("Not implemented yet.") ; return nil
+            
         case 0x6: // note pitchbend
             guard let note = byte(1).toUInt7Exactly
             else { return nil }
@@ -461,7 +473,11 @@ public final class MIDI2Parser {
             )
     
             return newEvent
-    
+            
+        case 0x7:
+            // not used / reserved
+            return nil
+            
         case 0x8: // note off
             guard let note = byte(1).toUInt7Exactly
             else { return nil }
