@@ -149,6 +149,7 @@ public final class MIDI2Parser {
     
         case .data128bit: // 0x5
             // can contain a SysEx8 message
+            // also used for Mixed Data Set Message (see UMP/MIDI 2.0 Spec page 38)
     
             let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
     
@@ -670,6 +671,7 @@ public final class MIDI2Parser {
     }
     
     /// Internal sub-parser: Parse SysEx8 UMP message.
+    /// This can be a vanilla SysEx8 or Mixed Data Set message.
     ///
     /// - Parameters:
     ///   - bytes: 15 UMP bytes after the first byte (subscript range `[1...15]`).
@@ -684,90 +686,150 @@ public final class MIDI2Parser {
         // data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the
         // high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive
         // 8 Message is carried in one or more 128-bit UMPs with Message Type 0x5."
-    
+        
+        // SyxEx8 can be used for single or multi-packet system exclusive messages.
+        // SysEx8 can also be used for MIDI 2.0 Mixed Data Set packets.
+        
         // ensure packet is 128-bits (16 bytes / 4 UInt32 words) wide
         // (first byte is stripped when bytes are passed into this function so we expect 15 bytes
         // here)
         guard bytes.count == 15 else { return nil }
-    
+        
         let byte1Nibbles = bytes[bytes.startIndex].nibbles
+        
+        if let sysExStatusField = MIDIUMPSysExStatusField(rawValue: byte1Nibbles.high) {
+            return parseData128BitRegularSysEx(bytes: bytes, sysExStatusField: sysExStatusField, group: group)
+        }
+        
+        if let sysExStatusField = MIDIUMPMixedDataSetStatusField(rawValue: byte1Nibbles.high) {
+            return parseData128BitMixedDataSetSysEx(bytes: bytes, sysExStatusField: sysExStatusField, group: group)
+        }
+        
+        return nil
+    }
     
-        guard let sysExStatusField = MIDIUMPSysExStatusField(rawValue: byte1Nibbles.high)
-        else { return nil }
-    
+    /// Internal sub-sub-parser: Parse regular SysEx8 UMP message (not a Mixed Data Set SysEx8 UMP message).
+    ///
+    /// - Parameters:
+    ///   - bytes: 15 UMP bytes after the first byte (subscript range `[1...15]`).
+    ///   - group: UMP group.
+    private func parseData128BitRegularSysEx(
+        bytes: Array<UInt8>.SubSequence,
+        sysExStatusField: MIDIUMPSysExStatusField,
+        group: UInt4
+    ) -> MIDIEvent? {
+        // ensure packet is 128-bits (16 bytes / 4 UInt32 words) wide
+        // (first byte is stripped when bytes are passed into this function so we expect 15 bytes
+        // here)
+        guard bytes.count == 15 else { return nil }
+        
+        let byte1Nibbles = bytes[bytes.startIndex].nibbles
+        
         let numberOfBytes = byte1Nibbles.low.intValue
         guard (1 ... 14).contains(numberOfBytes) else { return nil }
-    
+        
         switch sysExStatusField {
         case .complete:
             let payloadBytes = bytes[
                 bytes.startIndex.advanced(by: 1)
-                    ..<
-                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                ..<
+                bytes.startIndex.advanced(by: 1 + numberOfBytes)
             ]
-    
+            
             guard let parsedSysEx = try? MIDIEvent.sysEx8(
                 rawBytes: Array(payloadBytes),
                 group: group
             )
             else { return nil }
-    
+            
             return parsedSysEx
-    
+            
         case .start:
             let streamID = bytes[bytes.startIndex.advanced(by: 1)]
             // include stream ID because MIDIEvent.sysEx8() expects it to be the first byte
             let payloadBytes = bytes[
                 bytes.startIndex.advanced(by: 1)
-                    ..<
-                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                ..<
+                bytes.startIndex.advanced(by: 1 + numberOfBytes)
             ]
-    
+            
             sysEx8MultiPartUMPBuffer[streamID] = Array(payloadBytes)
-    
+            
             return nil
-    
+            
         case .continue:
             let streamID = bytes[bytes.startIndex.advanced(by: 1)]
-    
+            
             guard let buffer = sysEx8MultiPartUMPBuffer[streamID],
                   !buffer.isEmpty else { return nil }
-    
+            
             let payloadBytes = bytes[
                 bytes.startIndex.advanced(by: 2)
-                    ..<
-                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                ..<
+                bytes.startIndex.advanced(by: 1 + numberOfBytes)
             ]
-    
+            
             sysEx8MultiPartUMPBuffer[streamID]?.append(contentsOf: payloadBytes)
-    
+            
             return nil
-    
+            
         case .end:
             let streamID = bytes[bytes.startIndex.advanced(by: 1)]
-    
+            
             guard let buffer = sysEx8MultiPartUMPBuffer[streamID],
                   !buffer.isEmpty else { return nil }
-    
+            
             let payloadBytes = bytes[
                 bytes.startIndex.advanced(by: 2)
-                    ..<
-                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                ..<
+                bytes.startIndex.advanced(by: 1 + numberOfBytes)
             ]
-    
+            
             // reset buffer
             sysEx8MultiPartUMPBuffer[streamID] = nil
-    
+            
             let fullData = buffer + Array(payloadBytes)
-    
+            
             guard let parsedSysEx = try? MIDIEvent.sysEx8(
                 rawBytes: fullData,
                 group: group
             )
             else { return nil }
-    
+            
             return parsedSysEx
         }
+    }
+    
+    /// Internal sub-sub-parser: Parse Mixed Data Set SysEx8 UMP message (not a regular SysEx8 UMP message).
+    ///
+    /// - Parameters:
+    ///   - bytes: 15 UMP bytes after the first byte (subscript range `[1...15]`).
+    ///   - group: UMP group.
+    private func parseData128BitMixedDataSetSysEx(
+        bytes: Array<UInt8>.SubSequence,
+        sysExStatusField: MIDIUMPMixedDataSetStatusField,
+        group: UInt4
+    ) -> MIDIEvent? {
+        // ensure packet is 128-bits (16 bytes / 4 UInt32 words) wide
+        // (first byte is stripped when bytes are passed into this function so we expect 15 bytes
+        // here)
+        guard bytes.count == 15 else { return nil }
+        
+        let byte1Nibbles = bytes[bytes.startIndex].nibbles
+        
+        let numberOfBytes = byte1Nibbles.low.intValue
+        guard (1 ... 14).contains(numberOfBytes) else { return nil }
+        
+        switch sysExStatusField {
+        case .header:
+            // TODO: finish this
+            assertionFailure("Not implemented yet. Please contact MIDIKit developer.")
+        case .payload:
+            // TODO: finish this
+            assertionFailure("Not implemented yet. Please contact MIDIKit developer.")
+        }
+        
+        return nil
     }
     
     /// Internal sub-parser: Parse MIDI 2.0 Utility message.
