@@ -477,14 +477,14 @@ public final class MIDI2Parser {
             case .registered:
                 // TODO: add RPN init and additional MIDIEvent static constructor to derive more granular RegisteredController enum case from raw parameter value.
                 newEvent = .rpn(
-                    .raw(parameter: param, dataEntryMSB: data1, dataEntryLSB: data2),
+                    .init(parameter: param, data: (msb: data1, lsb: data2)),
                     change: pnTypes.change,
                     channel: channel,
                     group: group
                 )
             case .assignable:
                 newEvent = .nrpn(
-                    .raw(parameter: param, dataEntryMSB: data1, dataEntryLSB: data2),
+                    .init(parameter: param, data: (msb: data1, lsb: data2)),
                     change: pnTypes.change,
                     channel: channel,
                     group: group

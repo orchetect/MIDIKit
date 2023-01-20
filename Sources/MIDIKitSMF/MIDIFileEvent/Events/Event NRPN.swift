@@ -30,13 +30,13 @@ extension MIDIFileEvent {
     /// also referred to as Assignable Controller in MIDI 2.0.
     public static func nrpn(
         delta: DeltaTime = .none,
-        param: MIDIEvent.AssignableController,
+        parameter: MIDIEvent.AssignableController,
         change: MIDI2ParameterNumberChange = .absolute,
         channel: UInt4 = 0
     ) -> Self {
         .nrpn(
             delta: delta,
-            event: .init(param, change: change, channel: channel)
+            event: .init(parameter, change: change, channel: channel)
         )
     }
 }
@@ -64,7 +64,7 @@ extension MIDIEvent.NRPN: MIDIFileEventPayload {
     }
     
     public var smfDescription: String {
-        "nrpn:\(param)\(change == .absolute ? "" : " - relative")"
+        "nrpn:\(parameter)\(change == .absolute ? "" : " - relative")"
     }
     
     public var smfDebugDescription: String {

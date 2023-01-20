@@ -140,13 +140,13 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
             
-            return "rpn(\(event.param), change: \(event.change), chan: \(channelString), group: \(groupString))"
+            return "rpn(\(event.parameter), change: \(event.change), chan: \(channelString), group: \(groupString))"
             
         case let .nrpn(event):
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
             
-            return "nrpn(\(event.param), change: \(event.change), chan: \(channelString), group: \(groupString))"
+            return "nrpn(\(event.parameter), change: \(event.change), chan: \(channelString), group: \(groupString))"
             
         // ----------------------
         // MARK: System Exclusive

@@ -30,13 +30,13 @@ extension MIDIFileEvent {
     /// also referred to as Registered Controller in MIDI 2.0.
     public static func rpn(
         delta: DeltaTime = .none,
-        param: MIDIEvent.RegisteredController,
+        parameter: MIDIEvent.RegisteredController,
         change: MIDI2ParameterNumberChange = .absolute,
         channel: UInt4 = 0
     ) -> Self {
         .rpn(
             delta: delta,
-            event: .init(param, change: change, channel: channel)
+            event: .init(parameter, change: change, channel: channel)
         )
     }
 }
@@ -64,7 +64,7 @@ extension MIDIEvent.RPN: MIDIFileEventPayload {
     }
     
     public var smfDescription: String {
-        "rpn:\(param)\(change == .absolute ? "" : " - relative")"
+        "rpn:\(parameter)\(change == .absolute ? "" : " - relative")"
     }
     
     public var smfDebugDescription: String {
