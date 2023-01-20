@@ -18,3 +18,9 @@ public struct UInt7Pair: Equatable, Hashable {
         .init(uInt7Pair: self)
     }
 }
+
+extension UInt7Pair: CustomStringConvertible {
+    public var description: String {
+        "[msb: \(msb.hexString(padTo: 2)), lsb: \(lsb.hexString(padTo: 2))]"
+    }
+}
