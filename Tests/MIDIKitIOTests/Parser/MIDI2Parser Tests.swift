@@ -709,6 +709,94 @@ final class MIDI2Parser_Tests: XCTestCase {
         )
     }
     
+    // MARK: - RPN / NRPN
+    
+    func testUniversalPacketData_parser_RPN_Raw_Absolute() {
+        // template method
+        
+        let parser = MIDI2Parser()
+        
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
+            UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
+                .parsedEvents(using: parser)
+        }
+        
+        // RPN Absolute - raw param
+        do {
+            let rpn: MIDIEvent = MIDIEvent.rpn(
+                .raw(parameter: .init(msb: 0x40, lsb: 0x01), dataEntryMSB: 0x12,
+                     dataEntryLSB: 0x00),
+                change: .absolute,
+                channel: 0x9
+            )
+            
+            XCTAssertEqual(
+                parsedEvents(bytes: [0x40, 0x29, 0x40, 0x01,
+                                     0x12, 0x00, 0x00, 0x00]),
+                [rpn]
+            )
+        }
+        
+        // RPN Relative - raw param
+        do {
+            let rpn: MIDIEvent = MIDIEvent.rpn(
+                .raw(parameter: .init(msb: 0x40, lsb: 0x01), dataEntryMSB: 0x12,
+                     dataEntryLSB: 0x00),
+                change: .relative,
+                channel: 0x9
+            )
+            
+            XCTAssertEqual(
+                parsedEvents(bytes: [0x40, 0x49, 0x40, 0x01,
+                                     0x12, 0x00, 0x00, 0x00]),
+                [rpn]
+            )
+        }
+    }
+    
+    func testUniversalPacketData_parser_RPN_SpecificCase_Absolute() {
+        // template method
+        
+        let parser = MIDI2Parser()
+        
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
+            UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
+                .parsedEvents(using: parser)
+        }
+        
+        // RPN Absolute - specific case
+        do {
+            let rpn: MIDIEvent = MIDIEvent.rpn(
+                .pitchBendSensitivity(semitones: 0x05, cents: 0x45),
+                change: .absolute,
+                channel: 0x9
+            )
+            
+            XCTAssertEqual(
+                parsedEvents(bytes: [0x40, 0x29, 0x00, 0x00,
+                                     0x05, 0x45, 0x00, 0x00]),
+                [rpn]
+            )
+        }
+        
+        // RPN Relative - specific case
+        do {
+            let rpn: MIDIEvent = MIDIEvent.rpn(
+                .pitchBendSensitivity(semitones: 0x05, cents: 0x45),
+                change: .relative,
+                channel: 0x9
+            )
+            
+            XCTAssertEqual(
+                parsedEvents(bytes: [0x40, 0x49, 0x00, 0x00,
+                                     0x05, 0x45, 0x00, 0x00]),
+                [rpn]
+            )
+        }
+    }
+    
+    // MARK: - SysEx
+    
     func testUniversalPacketData_parser_SysEx7() {
         // template method
     
