@@ -31,7 +31,7 @@ extension MIDIFileEvent {
     public static func rpn(
         delta: DeltaTime = .none,
         param: MIDIEvent.RegisteredController,
-        change: MIDI2ParameterNumberValueType = .absolute,
+        change: MIDI2ParameterNumberChange = .absolute,
         channel: UInt4 = 0
     ) -> Self {
         .rpn(

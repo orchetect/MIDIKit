@@ -103,7 +103,7 @@ extension MIDIParameterNumber {
     /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords(
         protocol midiProtocol: MIDIProtocolVersion,
-        change: MIDI2ParameterNumberValueType,
+        change: MIDI2ParameterNumberChange,
         channel: UInt4,
         group: UInt4 = 0
     ) -> [[UMPWord]] {

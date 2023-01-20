@@ -23,23 +23,14 @@ extension MIDIParameterNumberType: CustomStringConvertible {
 }
 
 extension MIDIParameterNumberType {
-    func umpStatusNibble(for change: MIDI2ParameterNumberValueType) -> UInt4 {
-        switch self {
-        case .registered:
-            switch change {
-            case .absolute:
-                return 0x2
-            case .relative:
-                return 0x4
-            }
-            
-        case .assignable:
-            switch change {
-            case .absolute:
-                return 0x3
-            case .relative:
-                return 0x5
-            }
-        }
+    func umpStatusNibble(for change: MIDI2ParameterNumberChange) -> UInt4 {
+        MIDIParameterNumberUtils.umpStatusNibble(type: self, change: change)
+    }
+    
+    init?(umpStatusNibble: UInt4) {
+        guard let types = MIDIParameterNumberUtils.typeAndChange(
+            fromUMPStatusNibble: umpStatusNibble
+        ) else { return nil }
+        self = types.type
     }
 }

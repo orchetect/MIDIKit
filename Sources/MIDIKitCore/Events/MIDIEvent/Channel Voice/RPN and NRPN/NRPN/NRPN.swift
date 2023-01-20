@@ -54,7 +54,7 @@ extension MIDIEvent {
         /// MIDI 2.0 Parameter Number value type.
         /// Determines whether the value is absolute or a relative change.
         /// (MIDI 1.0 will always be absolute and this property is ignored.)
-        public var change: MIDI2ParameterNumberValueType
+        public var change: MIDI2ParameterNumberChange
         
         /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
@@ -64,7 +64,7 @@ extension MIDIEvent {
     
         public init(
             _ param: AssignableController,
-            change: MIDI2ParameterNumberValueType = .absolute,
+            change: MIDI2ParameterNumberChange = .absolute,
             channel: UInt4,
             group: UInt4 = 0x0
         ) {
@@ -122,7 +122,7 @@ extension MIDIEvent {
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func nrpn(
         _ param: AssignableController,
-        change: MIDI2ParameterNumberValueType = .absolute,
+        change: MIDI2ParameterNumberChange = .absolute,
         channel: UInt4,
         group: UInt4 = 0x0
     ) -> Self {
@@ -143,7 +143,7 @@ extension MIDIEvent {
     /// This is provided for legacy support. It is recommended to use ``MIDIEvent/nrpn(_:change:channel:group:)``.
     public static func midi1NRPN(
         _ nrpn: AssignableController,
-        change: MIDI2ParameterNumberValueType = .absolute,
+        change: MIDI2ParameterNumberChange = .absolute,
         channel: UInt4,
         group: UInt4 = 0
     ) -> [MIDIEvent] {
