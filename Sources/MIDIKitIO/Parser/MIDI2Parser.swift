@@ -450,17 +450,48 @@ public final class MIDI2Parser {
     
             return newEvent
         
-        case 0x2: // Registered NRPN
-            assertionFailure("Not implemented yet.") ; return nil
+        case 0x2, // Registered Controller (RPN)  - Absolute
+             0x3, // Assignable Controller (NRPN) - Absolute
+             0x4, // Registered Controller (RPN)  - Relative
+             0x5: // Assignable Controller (NRPN) - Relative
+            guard let bankOrMSB = byte(1).toUInt7Exactly,
+                  let indexOrLSB = byte(2).toUInt7Exactly,
+                  let data1 = byte(3).toUInt7Exactly,
+                  let data2 = byte(4).toUInt7Exactly
+            else {
+                // TODO: throw error instead of returning nil
+                return nil
+            }
+            let param = UInt7Pair(msb: bankOrMSB, lsb: indexOrLSB)
             
-        case 0x3: // Assignable NRPN
-            assertionFailure("Not implemented yet.") ; return nil
+            guard let pnTypes = MIDIParameterNumberUtils.typeAndChange(
+                fromUMPStatusNibble: statusNibble
+            ) else {
+                // should never happen; these values guarantee return value will be non-nil
+                assertionFailure("Parameter Number status nibble not expected.")
+                return nil
+            }
             
-        case 0x4: // Registered NRPN - Relative
-            assertionFailure("Not implemented yet.") ; return nil
+            let newEvent: MIDIEvent
+            switch pnTypes.type {
+            case .registered:
+                // TODO: add RPN init and additional MIDIEvent static constructor to derive more granular RegisteredController enum case from raw parameter value.
+                newEvent = .rpn(
+                    .raw(parameter: param, dataEntryMSB: data1, dataEntryLSB: data2),
+                    change: pnTypes.change,
+                    channel: channel,
+                    group: group
+                )
+            case .assignable:
+                newEvent = .nrpn(
+                    .raw(parameter: param, dataEntryMSB: data1, dataEntryLSB: data2),
+                    change: pnTypes.change,
+                    channel: channel,
+                    group: group
+                )
+            }
             
-        case 0x5: // Assignable NRPN - Relative
-            assertionFailure("Not implemented yet.") ; return nil
+            return newEvent
             
         case 0x6: // note pitchbend
             guard let note = byte(1).toUInt7Exactly
