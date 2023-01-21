@@ -202,6 +202,58 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
         XCTAssertEqual(unwrappedEvent, unwrappedSMFEvent)
     }
     
+    func testMIDI_Event_RPN_smfEvent() throws {
+        let event = MIDIEvent.rpn(
+            .channelFineTuning(123),
+            channel: 0
+        )
+        
+        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        let smfEvent = event.smfEvent(delta: .ticks(120))
+        
+        // extract MIDIEvent payload
+        guard case let .rpn(unwrappedEvent) = event else {
+            XCTFail(); return
+        }
+        
+        // extract MIDIFileEvent payload
+        guard case .rpn(
+            delta: _,
+            event: let unwrappedSMFEvent
+        ) = smfEvent else {
+            XCTFail(); return
+        }
+        
+        // compare payloads to ensure they are the same
+        XCTAssertEqual(unwrappedEvent, unwrappedSMFEvent)
+    }
+    
+    func testMIDI_Event_NRPN_smfEvent() throws {
+        let event = MIDIEvent.nrpn(
+            .raw(parameter: .init(msb: 2, lsb: 1), dataEntryMSB: 0x05, dataEntryLSB: 0x20),
+            channel: 0
+        )
+        
+        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
+        let smfEvent = event.smfEvent(delta: .ticks(120))
+        
+        // extract MIDIEvent payload
+        guard case let .nrpn(unwrappedEvent) = event else {
+            XCTFail(); return
+        }
+        
+        // extract MIDIFileEvent payload
+        guard case .nrpn(
+            delta: _,
+            event: let unwrappedSMFEvent
+        ) = smfEvent else {
+            XCTFail(); return
+        }
+        
+        // compare payloads to ensure they are the same
+        XCTAssertEqual(unwrappedEvent, unwrappedSMFEvent)
+    }
+    
     func testMIDI_Event_PitchBend_smfEvent() throws {
         let event = MIDIEvent.pitchBend(
             value: .midi1(.midpoint),
@@ -625,6 +677,62 @@ final class Event_Conversion_SMFEventToEvent_Tests: XCTestCase {
         
         // extract MIDIEvent payload
         guard case let .programChange(unwrappedEvent) = event else {
+            XCTFail(); return
+        }
+        
+        // compare payloads to ensure they are the same
+        XCTAssertEqual(unwrappedSMFEvent, unwrappedEvent)
+    }
+    
+    func testMIDI_File_Event_RPN_event() throws {
+        let smfEvent = MIDIFileEvent.rpn(
+            delta: .none,
+            parameter: .channelFineTuning(123),
+            change: .absolute,
+            channel: 0
+        )
+        
+        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        let event = smfEvent.event()
+        
+        // extract MIDIFileEvent payload
+        guard case .rpn(
+            delta: _,
+            event: let unwrappedSMFEvent
+        ) = smfEvent else {
+            XCTFail(); return
+        }
+        
+        // extract MIDIEvent payload
+        guard case let .rpn(unwrappedEvent) = event else {
+            XCTFail(); return
+        }
+        
+        // compare payloads to ensure they are the same
+        XCTAssertEqual(unwrappedSMFEvent, unwrappedEvent)
+    }
+    
+    func testMIDI_File_Event_NRPN_event() throws {
+        let smfEvent = MIDIFileEvent.nrpn(
+            delta: .none,
+            parameter: .raw(parameter: .init(msb: 2, lsb: 1), dataEntryMSB: 0x05, dataEntryLSB: 0x20),
+            change: .absolute,
+            channel: 0
+        )
+        
+        // convert MIDIFileEvent case to MIDIEvent case, preserving payloads
+        let event = smfEvent.event()
+        
+        // extract MIDIFileEvent payload
+        guard case .nrpn(
+            delta: _,
+            event: let unwrappedSMFEvent
+        ) = smfEvent else {
+            XCTFail(); return
+        }
+        
+        // extract MIDIEvent payload
+        guard case let .nrpn(unwrappedEvent) = event else {
             XCTFail(); return
         }
         
