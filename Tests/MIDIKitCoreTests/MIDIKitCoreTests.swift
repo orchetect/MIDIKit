@@ -11,10 +11,6 @@ import MIDIKitCore
 
 final class MIDIKitCore_Tests: XCTestCase {
     // no tests in this file, this is the module root test file
-	
-    func testEmpty() {
-        XCTAssert(true)
-    }
 }
 
 #endif
