@@ -89,7 +89,7 @@ extension MIDIReceiveHandler {
             
             // not all packets will contain source refs
             if let source = source {
-                stringOutput += " source: \(source.displayName)"
+                stringOutput += " source:\(source.displayName.quoted)"
             }
             
             handler(stringOutput)
