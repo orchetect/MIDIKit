@@ -101,25 +101,25 @@ extension MIDIOSStatus {
     public var rawValue: CoreMIDIOSStatus {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .invalidClient      : return kMIDIInvalidClient     // -10830
-        case .invalidPort        : return kMIDIInvalidPort       // -10831
-        case .wrongEndpointType  : return kMIDIWrongEndpointType // -10832
-        case .noConnection       : return kMIDINoConnection      // -10833
-        case .unknownEndpoint    : return kMIDIUnknownEndpoint   // -10834
-        case .unknownProperty    : return kMIDIUnknownProperty   // -10835
-        case .wrongPropertyType  : return kMIDIWrongPropertyType // -10836
-        case .noCurrentSetup     : return kMIDINoCurrentSetup    // -10837
-        case .messageSendErr     : return kMIDIMessageSendErr    // -10838
-        case .serverStartErr     : return kMIDIServerStartErr    // -10839
-        case .setupFormatErr     : return kMIDISetupFormatErr    // -10840
-        case .wrongThread        : return kMIDIWrongThread       // -10841
-        case .objectNotFound     : return kMIDIObjectNotFound    // -10842
-        case .idNotUnique        : return kMIDIIDNotUnique       // -10843
-        case .notPermitted       : return kMIDINotPermitted      // -10844
-        case .unknownError       : return kMIDIUnknownError      // -10845
-        case .ioError            : return 7 // no Core MIDI constant exists
-        case .internalError      : return -50 // no Core MIDI constant exists
-        case let .other(val)     : return val
+        case .invalidClient:     return kMIDIInvalidClient     // -10830
+        case .invalidPort:       return kMIDIInvalidPort       // -10831
+        case .wrongEndpointType: return kMIDIWrongEndpointType // -10832
+        case .noConnection:      return kMIDINoConnection      // -10833
+        case .unknownEndpoint:   return kMIDIUnknownEndpoint   // -10834
+        case .unknownProperty:   return kMIDIUnknownProperty   // -10835
+        case .wrongPropertyType: return kMIDIWrongPropertyType // -10836
+        case .noCurrentSetup:    return kMIDINoCurrentSetup    // -10837
+        case .messageSendErr:    return kMIDIMessageSendErr    // -10838
+        case .serverStartErr:    return kMIDIServerStartErr    // -10839
+        case .setupFormatErr:    return kMIDISetupFormatErr    // -10840
+        case .wrongThread:       return kMIDIWrongThread       // -10841
+        case .objectNotFound:    return kMIDIObjectNotFound    // -10842
+        case .idNotUnique:       return kMIDIIDNotUnique       // -10843
+        case .notPermitted:      return kMIDINotPermitted      // -10844
+        case .unknownError:      return kMIDIUnknownError      // -10845
+        case .ioError:           return 7 // no Core MIDI constant exists
+        case .internalError:     return -50 // no Core MIDI constant exists
+        case let .other(val):    return val
         }
         // swiftformat:enable spacearoundoperators
     }
