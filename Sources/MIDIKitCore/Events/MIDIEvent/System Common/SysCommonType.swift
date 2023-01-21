@@ -33,10 +33,23 @@ extension MIDIEvent {
     
     /// System Common MIDI Event types.
     public enum SysCommonType: Equatable, Hashable {
+        /// System Common: Timecode Quarter-Frame
+        /// (MIDI 1.0 / 2.0)
         case timecodeQuarterFrame
+        
+        /// System Common: Song Position Pointer
+        /// (MIDI 1.0 / 2.0)
         case songPositionPointer
+        
+        /// System Common: Song Select
+        /// (MIDI 1.0 / 2.0)
         case songSelect
+        
+        /// Unofficial Bus Select (Status `0xF5`)
         case unofficialBusSelect
+        
+        /// System Common: Tune Request
+        /// (MIDI 1.0 / 2.0)
         case tuneRequest
     }
 }
