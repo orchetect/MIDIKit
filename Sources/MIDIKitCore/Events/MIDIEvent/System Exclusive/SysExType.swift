@@ -33,9 +33,20 @@ extension MIDIEvent {
     
     /// System Exclusive MIDI Event types.
     public enum SysExType: Equatable, Hashable {
+        /// System Exclusive: Manufacturer-specific (7-bit)
+        /// (MIDI 1.0 / 2.0)
         case sysEx7
+        
+        /// Universal System Exclusive (7-bit)
+        /// (MIDI 1.0 / 2.0)
         case universalSysEx7
+        
+        /// System Exclusive: Manufacturer-specific (8-bit)
+        /// (MIDI 2.0 only)
         case sysEx8
+        
+        /// Universal System Exclusive (8-bit)
+        /// (MIDI 2.0 only)
         case universalSysEx8
     }
 }

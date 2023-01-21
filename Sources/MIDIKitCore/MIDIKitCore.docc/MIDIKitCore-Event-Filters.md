@@ -52,6 +52,8 @@ Channel Voice filter type(s) (``MIDIEvent/ChanVoiceType``) available:
 - ``MIDIEvent/ChanVoiceType/programChange``
 - ``MIDIEvent/ChanVoiceType/pressure``
 - ``MIDIEvent/ChanVoiceType/pitchBend``
+- ``MIDIEvent/ChanVoiceType/rpn``
+- ``MIDIEvent/ChanVoiceType/nrpn``
 
 ### Only
 

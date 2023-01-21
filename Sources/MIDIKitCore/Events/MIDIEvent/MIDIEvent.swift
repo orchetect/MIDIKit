@@ -4,6 +4,10 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
+// NOTE: When editing the inline docs block for these, it should be copied to:
+// - The concrete payload struct in the enum case's associated value, and its inits
+// - MIDIEvent.ChanVoiceTypes case
+
 /// MIDI Event.
 public enum MIDIEvent: Equatable, Hashable {
     // -------------------
