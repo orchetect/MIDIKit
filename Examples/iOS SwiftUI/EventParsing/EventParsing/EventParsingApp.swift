@@ -15,7 +15,7 @@ struct EventParsingApp: App {
         manufacturer: "MyCompany"
     )
     
-    @StateObject var midiHelper = MIDIHelper()
+    var midiHelper = MIDIHelper()
     
     init() {
         midiHelper.midiManager = midiManager
