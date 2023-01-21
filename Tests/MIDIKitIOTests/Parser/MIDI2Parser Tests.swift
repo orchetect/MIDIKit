@@ -732,7 +732,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             
             XCTAssertEqual(
                 parsedEvents(bytes: [0x40, 0x29, 0x40, 0x01,
-                                     0x12, 0x00, 0x00, 0x00]),
+                                     0x24, 0x00, 0x00, 0x00]),
                 [rpn]
             )
         }
@@ -748,7 +748,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             
             XCTAssertEqual(
                 parsedEvents(bytes: [0x40, 0x49, 0x40, 0x01,
-                                     0x12, 0x00, 0x00, 0x00]),
+                                     0x24, 0x00, 0x00, 0x00]),
                 [rpn]
             )
         }
@@ -774,7 +774,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             
             XCTAssertEqual(
                 parsedEvents(bytes: [0x40, 0x29, 0x00, 0x00,
-                                     0x05, 0x45, 0x00, 0x00]),
+                                     0x0B, 0x14, 0x00, 0x00]),
                 [rpn]
             )
         }
@@ -789,7 +789,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             
             XCTAssertEqual(
                 parsedEvents(bytes: [0x40, 0x49, 0x00, 0x00,
-                                     0x05, 0x45, 0x00, 0x00]),
+                                     0x0B, 0x14, 0x00, 0x00]),
                 [rpn]
             )
         }

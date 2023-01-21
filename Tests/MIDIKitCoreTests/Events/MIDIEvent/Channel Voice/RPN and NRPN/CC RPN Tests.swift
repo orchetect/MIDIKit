@@ -98,7 +98,7 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
         XCTAssertEqual(
             nrpn.umpRawWords(protocol: ._2_0),
             [[UMPWord(0x40, 0x29, 0x40, 0x01),
-              UMPWord(0x12, 0x00, 0x00, 0x00)]]
+              UMPWord(0x24, 0x00, 0x00, 0x00)]]
         )
     }
     
@@ -113,7 +113,7 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
         XCTAssertEqual(
             nrpn.umpRawWords(protocol: ._2_0),
             [[UMPWord(0x40, 0x49, 0x40, 0x01),
-              UMPWord(0x12, 0x00, 0x00, 0x00)]]
+              UMPWord(0x24, 0x00, 0x00, 0x00)]]
         )
     }
     
