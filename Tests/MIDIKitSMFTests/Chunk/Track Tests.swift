@@ -14,6 +14,20 @@ final class Chunk_Track_Tests: XCTestCase {
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     // swiftformat:options --maxwidth none
     
+    /// Ensure that event decode order contains all event types and that there are no duplicates.
+    func testEventDecodeOrder() {
+        // check count matches since an array can contain more than one of the same identical element
+        XCTAssertEqual(
+            Set(MIDIFile.Chunk.Track.eventDecodeOrder).count,
+            MIDIFileEventType.allCases.count
+        )
+        
+        // ensure order contains all cases
+        for eventType in MIDIFileEventType.allCases {
+            XCTAssertEqual(MIDIFile.Chunk.Track.eventDecodeOrder.filter { $0 == eventType}.count, 1)
+        }
+    }
+    
     func testEmptyEvents() throws {
         let events: [MIDIFileEvent] = []
         
