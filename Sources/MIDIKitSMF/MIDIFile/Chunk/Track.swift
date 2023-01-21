@@ -278,6 +278,8 @@ extension MIDIFile.Chunk.Track {
 extension MIDIFile.Chunk.Track {
     /// Determines the order in which track raw data decoding attempts to iteratively decode events
     static let eventDecodeOrder: [MIDIFileEventType] = [
+        .rpn, // must be before .cc
+        .nrpn, // must be before .cc
         .noteOff,
         .noteOn,
         .cc,
