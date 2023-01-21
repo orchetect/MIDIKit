@@ -9,7 +9,6 @@
 
 ### Data Access
 
-- ``ThreadSafeAccess``
 - ``PassiveDataReader``
 
 ### Numeric
@@ -20,3 +19,13 @@
 
 - ``Exception``
 - ``raiseException(_:reason:)``
+- ``MIDIKitInternalError``
+
+### Constants
+- ``kSizeOfMIDIEventList``
+- ``kSizeOfMIDIEventPacket``
+- ``kSizeOfMIDIPacket``
+- ``kSizeOfMIDIPacketCombinedHeaders``
+- ``kSizeOfMIDIPacketHeader``
+- ``kSizeOfMIDIPacketList``
+- ``kSizeOfMIDIPacketListHeader``

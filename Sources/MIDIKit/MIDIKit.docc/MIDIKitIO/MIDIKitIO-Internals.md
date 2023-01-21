@@ -27,6 +27,7 @@
 - ``MIDIUMPMessageType``
 - ``MIDIUMPSysExStatusField``
 - ``MIDIUMPUtilityStatusField``
+- ``MIDIUMPMixedDataSetStatusField``
 - ``AnyMIDIPacket``
 - ``MIDI1Parser``
 - ``MIDI2Parser``
@@ -62,7 +63,3 @@
 - ``MIDIManaged``
 - ``MIDIManagedReceivesMessages``
 - ``MIDIManagedSendsMessages``
-
-### Value Type Protocols
-
-- ``MIDIUnsignedInteger``

@@ -28,7 +28,7 @@ public enum MIDIIOError: Error, Hashable {
 }
 
 extension MIDIIOError {
-    /// Convenience to return a case of ``osStatus(_:)`` with its associated ``CoreMIDIOSStatus``
+    /// Convenience to return a case of ``osStatus(_:)-swift.enum.case`` with its associated ``CoreMIDIOSStatus``
     /// formed from a raw Core MIDI `OSStatus` (Int32) integer value.
     public static func osStatus(_ rawValue: CoreMIDIOSStatus) -> Self {
         .osStatus(.init(rawValue: rawValue))

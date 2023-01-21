@@ -84,7 +84,7 @@ public enum MIDIOSStatus: Hashable {
     /// Various underlying issues could produce this error.
     ///
     /// Possibly caused by:
-    /// - not starting the MIDI client after instancing it (``MIDIManager/start()``),
+    /// - not starting the MIDI manager after instancing it (`start()` on `MIDIManager`),
     /// - an uninitialized variable being passed,
     /// - or if the MIDI server has an issue getting a process ID back internally.
     case internalError

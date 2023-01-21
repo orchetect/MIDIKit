@@ -7,6 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
+import MIDIKitCore
 @_implementationOnly import CoreMIDI
 
 extension MIDIManager {
@@ -14,7 +15,7 @@ extension MIDIManager {
     /// Call this method once after initializing a new instance.
     /// Subsequent calls will not have any effect.
     ///
-    /// - Throws: ``MIDIIOError/osStatus(_:)``
+    /// - Throws: `MIDIIOError.osStatus`
     public func start() throws {
         try eventQueue.sync {
             // if start() was already called, return

@@ -49,7 +49,25 @@ For more detailed documentation on these types, see MIDIKitCore documentation.
 - ``MIDIUMPMessageType``
 - ``MIDIUMPSysExStatusField``
 - ``MIDIUMPUtilityStatusField``
+- ``MIDIUMPMixedDataSetStatusField``
+- ``MIDIParameterNumber``
 
 ### Value Type Protocols
 
 - ``MIDIUnsignedInteger``
+
+### Errors and Status
+
+- ``MIDIIOError``
+- ``MIDIOSStatus``
+- ``CoreMIDIOSStatus``
+
+### Utilities
+
+- ``ThreadSafeAccess``
+- ``MIDIParameterNumberUtils``
+
+### RPN / NRPN Types
+
+- ``MIDI2ParameterNumberChange``
+- ``MIDIParameterNumberType``

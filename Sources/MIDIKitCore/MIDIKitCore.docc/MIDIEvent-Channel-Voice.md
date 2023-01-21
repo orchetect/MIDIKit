@@ -25,6 +25,18 @@
 
 - ``MIDIEvent/programChange(program:bank:channel:group:)``
 
+- ``MIDIEvent/rpn(_:change:channel:group:)``
+- ``MIDIEvent/rpn(parameter:data:change:channel:group:)-9unrb``
+- ``MIDIEvent/rpn(parameter:data:change:channel:group:)-7chyn``
+- ``MIDIEvent/rpn(parameter:data:change:channel:group:)-9ju8k``
+- ``MIDIEvent/midi1RPN(_:change:channel:group:)``
+
+- ``MIDIEvent/nrpn(_:change:channel:group:)``
+- ``MIDIEvent/nrpn(parameter:data:change:channel:group:)-tpej``
+- ``MIDIEvent/nrpn(parameter:data:change:channel:group:)-nib6``
+- ``MIDIEvent/nrpn(parameter:data:change:channel:group:)-u0a``
+- ``MIDIEvent/midi1NRPN(_:change:channel:group:)``
+
 ### Constructors (MIDI 2.0)
 
 - ``MIDIEvent/noteCC(note:controller:value:channel:group:)-91ea3``
@@ -59,6 +71,14 @@
 - ``MIDIEvent/programChange(_:)``
 - ``MIDIEvent/ProgramChange``
 
+- ``MIDIEvent/rpn(_:)``
+- ``MIDIEvent/RPN``
+- ``MIDIEvent/RegisteredController``
+
+- ``MIDIEvent/nrpn(_:)``
+- ``MIDIEvent/NRPN``
+- ``MIDIEvent/AssignableController``
+
 ### Switch Case Unwrapping (MIDI 2.0)
 
 - ``MIDIEvent/noteCC(_:)``
@@ -75,3 +95,6 @@
 - ``MIDIEvent/NoteAttribute``
 - ``MIDIEvent/NoteVelocity``
 - ``MIDIEvent/NoteVelocityValidated``
+
+- ``MIDIParameterNumberType``
+- ``MIDI2ParameterNumberChange``
