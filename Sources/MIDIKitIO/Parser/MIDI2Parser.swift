@@ -455,9 +455,7 @@ public final class MIDI2Parser {
              0x4, // Registered Controller (RPN)  - Relative
              0x5: // Assignable Controller (NRPN) - Relative
             guard let bankOrMSB = byte(1).toUInt7Exactly,
-                  let indexOrLSB = byte(2).toUInt7Exactly,
-                  let data1 = byte(3).toUInt7Exactly,
-                  let data2 = byte(4).toUInt7Exactly
+                  let indexOrLSB = byte(2).toUInt7Exactly
             else {
                 // TODO: throw error instead of returning nil
                 return nil
@@ -472,19 +470,26 @@ public final class MIDI2Parser {
                 return nil
             }
             
+            // MIDI 2.0 RPN/NRPN UMP upscales 14-bit data value to 32-bit
+            let downscaledData = MIDIEvent.ChanVoice14Bit32BitValue
+                .midi2(UMPWord(byte(3), byte(4), byte(5), byte(6)))
+                .midi1Value
+                .midiUInt7Pair
+            let dataTuple = (msb: downscaledData.msb, lsb: downscaledData.lsb)
+            
             let newEvent: MIDIEvent
             switch pnTypes.type {
             case .registered:
                 // TODO: add RPN init and additional MIDIEvent static constructor to derive more granular RegisteredController enum case from raw parameter value.
                 newEvent = .rpn(
-                    .init(parameter: param, data: (msb: data1, lsb: data2)),
+                    .init(parameter: param, data: dataTuple),
                     change: pnTypes.change,
                     channel: channel,
                     group: group
                 )
             case .assignable:
                 newEvent = .nrpn(
-                    .init(parameter: param, data: (msb: data1, lsb: data2)),
+                    .init(parameter: param, data: dataTuple),
                     change: pnTypes.change,
                     channel: channel,
                     group: group

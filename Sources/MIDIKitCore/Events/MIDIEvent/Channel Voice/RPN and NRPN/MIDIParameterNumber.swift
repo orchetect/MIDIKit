@@ -124,8 +124,6 @@ extension MIDIParameterNumber {
             // UMP has a dedicated MIDI 2.0 RPN/NRPN message
             let statusNibble = Self.type.umpStatusNibble(for: change).uInt8Value << 4
             let paramPair = parameterBytes
-            let dataBytes = dataEntryBytes
-            
             let word1 = UMPWord(
                 mtAndGroup,
                 statusNibble + channel.uInt8Value,
@@ -133,12 +131,15 @@ extension MIDIParameterNumber {
                 paramPair.lsb.uInt8Value
             ) // reserved
             
-            let word2 = UMPWord(
-                dataBytes.msb?.uInt8Value ?? 0x00,
-                dataBytes.lsb?.uInt8Value ?? 0x00,
-                0x00,
-                0x00
+            // MIDI 2.0 RPN/NRPN UMP upscales 14-bit data value to 32-bit
+            let dataBytes = UInt7Pair(
+                msb: dataEntryBytes.msb ?? 0x00,
+                lsb: dataEntryBytes.lsb ?? 0x00
             )
+            let upscaledData = MIDIEvent.ChanVoice14Bit32BitValue
+                .midi1(UInt14(uInt7Pair: dataBytes))
+                .midi2Value
+            let word2 = upscaledData
             
             // only need to return one packet containing 2 words
             let ump = [word1, word2]
