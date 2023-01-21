@@ -197,6 +197,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
             
+        case let .rpn(payload):
+            print(
+                "Registered Parameter Number (RPN) (a.k.a. Registered Controller):",
+                "\n  Parameter:",
+                payload.parameter,
+                "\n  Change Type (Only applicable for MIDI 2.0; MIDI 1.0 is always absolute):",
+                payload.change,
+                "\n  Channel:",
+                payload.channel.intValue.hex.stringValue(prefix: true),
+                "\n  UMP Group (MIDI2):",
+                payload.group.intValue.hex.stringValue(prefix: true)
+            )
+            
+        case let .nrpn(payload):
+            print(
+                "Non-Registered Parameter Number (NRPN) (a.k.a. Assignable Controller):",
+                "\n  Parameter:",
+                payload.parameter,
+                "\n  Change Type (Only applicable for MIDI 2.0; MIDI 1.0 is always absolute):",
+                payload.change,
+                "\n  Channel:",
+                payload.channel.intValue.hex.stringValue(prefix: true),
+                "\n  UMP Group (MIDI2):",
+                payload.group.intValue.hex.stringValue(prefix: true)
+            )
+            
         case let .sysEx7(payload):
             print(
                 "System Exclusive 7:",
