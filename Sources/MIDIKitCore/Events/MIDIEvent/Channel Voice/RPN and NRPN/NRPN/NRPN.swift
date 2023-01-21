@@ -16,7 +16,7 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > In order to set or change the value of a Assignable Parameter (NRPN), the following
+    /// > In order to set or change the value of an Assignable Parameter (NRPN), the following
     /// > occurs:
     /// >
     /// > 1. Two Control Change messages are sent using CC 99 (0x63) and 98 (0x62) to select the
@@ -83,7 +83,7 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > In order to set or change the value of a Assignable Parameter (NRPN), the following
+    /// > In order to set or change the value of an Assignable Parameter (NRPN), the following
     /// > occurs:
     /// >
     /// > 1. Two Control Change messages are sent using CC 99 (0x63) and 98 (0x62) to select the
@@ -144,7 +144,7 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > In order to set or change the value of a Assignable Parameter (NRPN), the following
+    /// > In order to set or change the value of an Assignable Parameter (NRPN), the following
     /// > occurs:
     /// >
     /// > 1. Two Control Change messages are sent using CC 99 (0x63) and 98 (0x62) to select the
@@ -205,7 +205,7 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > In order to set or change the value of a Assignable Parameter (NRPN), the following
+    /// > In order to set or change the value of an Assignable Parameter (NRPN), the following
     /// > occurs:
     /// >
     /// > 1. Two Control Change messages are sent using CC 99 (0x63) and 98 (0x62) to select the
@@ -268,7 +268,7 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// > In order to set or change the value of a Assignable Parameter (NRPN), the following
+    /// > In order to set or change the value of an Assignable Parameter (NRPN), the following
     /// > occurs:
     /// >
     /// > 1. Two Control Change messages are sent using CC 99 (0x63) and 98 (0x62) to select the
