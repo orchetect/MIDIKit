@@ -6,6 +6,3 @@
 
 /// MIDIKit analogue for Core MIDI's `OSStatus`.
 public typealias CoreMIDIOSStatus = Int32
-
-// note: this is a duplicate typealias to allow MIDIKitInternals to use it.
-// see /MIDIKitIO/Core MIDI/Core MIDI Ref Types.swift for main declaration

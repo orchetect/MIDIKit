@@ -27,6 +27,3 @@ public typealias CoreMIDIThruConnectionRef = CoreMIDIObjectRef
 
 /// MIDIKit analogue for Core MIDI's `MIDITimeStamp`.
 public typealias CoreMIDITimeStamp = UInt64
-
-/// MIDIKit analogue for Core MIDI's `OSStatus`.
-public typealias CoreMIDIOSStatus = Int32
