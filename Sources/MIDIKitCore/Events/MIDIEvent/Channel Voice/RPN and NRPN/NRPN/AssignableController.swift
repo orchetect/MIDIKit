@@ -86,6 +86,7 @@ extension MIDIEvent.AssignableController: MIDIParameterNumber {
         }
     }
     
+    /// CC controller numbers used for non-UMP MIDI 1.0 transmission.
     public static let controllers: (
         msb: MIDIEvent.CC.Controller,
         lsb: MIDIEvent.CC.Controller

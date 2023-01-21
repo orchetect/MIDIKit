@@ -34,3 +34,18 @@ extension MIDIParameterNumberType {
         self = types.type
     }
 }
+
+extension MIDIParameterNumberType {
+    /// CC controller numbers used for non-UMP MIDI 1.0 transmission.
+    public var controllers: (
+        msb: MIDIEvent.CC.Controller,
+        lsb: MIDIEvent.CC.Controller
+    ) {
+        switch self {
+        case .registered:
+            return MIDIEvent.RegisteredController.controllers
+        case .assignable:
+            return MIDIEvent.AssignableController.controllers
+        }
+    }
+}
