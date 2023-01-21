@@ -13,7 +13,7 @@ public protocol MIDIParameterNumber {
     static var type: MIDIParameterNumberType { get }
     
     /// Returns the parameter number byte pair.
-    var parameter: UInt7Pair { get }
+    var parameterBytes: UInt7Pair { get }
     
     /// Returns the data entry bytes, if present.
     var dataEntryBytes: (msb: UInt7?, lsb: UInt7?) { get }
@@ -31,13 +31,13 @@ extension MIDIParameterNumber {
         var rpnEvents: [MIDIEvent] = [
             .cc(
                 Self.controllers.msb,
-                value: .midi1(parameter.msb),
+                value: .midi1(parameterBytes.msb),
                 channel: channel,
                 group: group
             ),
             .cc(
                 Self.controllers.lsb,
-                value: .midi1(parameter.lsb),
+                value: .midi1(parameterBytes.lsb),
                 channel: channel,
                 group: group
             )
@@ -123,7 +123,7 @@ extension MIDIParameterNumber {
         case ._2_0:
             // UMP has a dedicated MIDI 2.0 RPN/NRPN message
             let statusNibble = Self.type.umpStatusNibble(for: change).uInt8Value << 4
-            let paramPair = parameter
+            let paramPair = parameterBytes
             let dataBytes = dataEntryBytes
             
             let word1 = UMPWord(

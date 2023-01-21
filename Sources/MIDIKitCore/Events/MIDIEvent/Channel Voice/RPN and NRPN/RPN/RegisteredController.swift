@@ -193,7 +193,7 @@ extension MIDIEvent {
 extension MIDIEvent.RegisteredController: MIDIParameterNumber {
     public static let type: MIDIParameterNumberType = .registered
     
-    public var parameter: UInt7Pair {
+    public var parameterBytes: UInt7Pair {
         switch self {
         // MIDI Spec
     

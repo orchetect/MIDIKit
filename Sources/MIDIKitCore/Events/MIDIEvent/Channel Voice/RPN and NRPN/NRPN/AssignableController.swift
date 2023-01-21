@@ -66,7 +66,7 @@ extension MIDIEvent {
 extension MIDIEvent.AssignableController: MIDIParameterNumber {
     public static let type: MIDIParameterNumberType = .assignable
     
-    public var parameter: UInt7Pair {
+    public var parameterBytes: UInt7Pair {
         switch self {
         case let .raw(parameter, _, _):
             return parameter
