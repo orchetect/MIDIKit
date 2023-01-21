@@ -132,9 +132,9 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             
             return "pitchBend(\(valString), chan: \(channelString), group: \(groupString))"
             
-        // -------------------------------
-        // MARK: Parameter Number Messages
-        // -------------------------------
+        // -----------------------------------------------
+        // MARK: Channel Voice - Parameter Number Messages
+        // -----------------------------------------------
             
         case let .rpn(event):
             let channelString = event.channel.hexString()

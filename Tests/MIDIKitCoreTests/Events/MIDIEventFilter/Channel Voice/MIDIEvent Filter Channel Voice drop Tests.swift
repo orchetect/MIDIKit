@@ -39,7 +39,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -63,7 +65,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -90,7 +94,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -112,7 +118,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.noteCC,
             kEvents.ChanVoice.notePitchBend,
             kEvents.ChanVoice.noteManagement,
-            kEvents.ChanVoice.cc
+            kEvents.ChanVoice.cc,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -137,7 +145,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -162,7 +172,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -188,7 +200,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -216,7 +230,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -241,7 +257,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -263,7 +281,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.noteCC,
             kEvents.ChanVoice.notePitchBend,
             kEvents.ChanVoice.noteManagement,
-            kEvents.ChanVoice.cc
+            kEvents.ChanVoice.cc,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -288,7 +308,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -313,7 +335,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -339,7 +363,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -360,7 +386,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.noteOff,
             kEvents.ChanVoice.noteCC,
             kEvents.ChanVoice.notePitchBend,
-            kEvents.ChanVoice.noteManagement
+            kEvents.ChanVoice.noteManagement,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -387,7 +415,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -413,7 +443,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -445,6 +477,8 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
             kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn,
             kEvents.ChanVoice.cc1
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
@@ -477,7 +511,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -510,6 +546,8 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
             kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn,
             kEvents.ChanVoice.cc1
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
@@ -538,7 +576,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -563,7 +603,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -589,7 +631,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -622,6 +666,8 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
             kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn,
             kEvents.ChanVoice.cc1
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
@@ -654,6 +700,8 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
             kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn,
             kEvents.ChanVoice.cc1
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
@@ -686,7 +734,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -719,6 +769,8 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
             kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn,
             kEvents.ChanVoice.cc1
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
@@ -750,7 +802,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.noteManagement,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -782,6 +836,8 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
             kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn,
             kEvents.ChanVoice.cc1
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
@@ -808,7 +864,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -832,7 +890,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -859,7 +919,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -886,7 +948,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -914,7 +978,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -942,7 +1008,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -972,7 +1040,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -996,7 +1066,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -1020,7 +1092,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -1047,7 +1121,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -1074,7 +1150,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -1102,7 +1180,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -1130,7 +1210,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -1154,7 +1236,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType
@@ -1179,7 +1263,9 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.programChange,
             kEvents.ChanVoice.pitchBend,
-            kEvents.ChanVoice.pressure
+            kEvents.ChanVoice.pressure,
+            kEvents.ChanVoice.rpn,
+            kEvents.ChanVoice.nrpn
         ]
         expectedEvents += kEvents.SysCommon.oneOfEachEventType
         expectedEvents += kEvents.SysEx.oneOfEachEventType

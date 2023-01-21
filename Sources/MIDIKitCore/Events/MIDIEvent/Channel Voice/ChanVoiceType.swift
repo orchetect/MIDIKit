@@ -92,6 +92,8 @@ extension MIDIEvent {
         case programChange
         case pressure
         case pitchBend
+        case rpn
+        case nrpn
     }
 }
 

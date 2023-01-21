@@ -63,9 +63,9 @@ public enum MIDIEvent: Equatable, Hashable {
     /// - Cubase: "Aftertouch"
     case pressure(Pressure)
     
-    // -------------------------------
-    // MARK: Parameter Number Messages
-    // -------------------------------
+    // -----------------------------------------------
+    // MARK: Channel Voice - Parameter Number Messages
+    // -----------------------------------------------
     
     /// RPN (Registered Parameter Number) Message,
     /// also referred to as Registered Controller in MIDI 2.0.

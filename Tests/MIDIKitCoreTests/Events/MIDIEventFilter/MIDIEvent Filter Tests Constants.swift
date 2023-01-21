@@ -77,7 +77,19 @@ enum kEvents {
             channel: 1,
             group: 0
         )
-    
+        
+        static let rpn: MIDIEvent = .rpn(
+            .channelFineTuning(123),
+            change: .absolute,
+            channel: 7
+        )
+        
+        static let nrpn: MIDIEvent = .nrpn(
+            .raw(parameter: .init(msb: 0x08, lsb: 0x12), dataEntryMSB: 0x10, dataEntryLSB: 0x20),
+            change: .absolute,
+            channel: 7
+        )
+        
         // ancillary events
         static let cc1: MIDIEvent = .cc(
             1,
@@ -96,7 +108,9 @@ enum kEvents {
             Self.cc,
             Self.programChange,
             Self.pitchBend,
-            Self.pressure
+            Self.pressure,
+            Self.rpn,
+            Self.nrpn
         ]
     }
     

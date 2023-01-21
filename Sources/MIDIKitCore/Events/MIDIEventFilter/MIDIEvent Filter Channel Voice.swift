@@ -19,7 +19,9 @@ extension MIDIEvent {
              .cc,
              .programChange,
              .pitchBend,
-             .pressure:
+             .pressure,
+             .rpn,
+             .nrpn:
             return true
     
         default:
@@ -31,17 +33,19 @@ extension MIDIEvent {
     public func isChannelVoice(ofType chanVoiceType: ChanVoiceType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .noteOn         : return chanVoiceType == .noteOn
-        case .noteOff        : return chanVoiceType == .noteOff
-        case .noteCC         : return chanVoiceType == .noteCC
-        case .notePitchBend  : return chanVoiceType == .notePitchBend
-        case .notePressure   : return chanVoiceType == .notePressure
-        case .noteManagement : return chanVoiceType == .noteManagement
-        case .cc             : return chanVoiceType == .cc
-        case .programChange  : return chanVoiceType == .programChange
-        case .pitchBend      : return chanVoiceType == .pitchBend
-        case .pressure       : return chanVoiceType == .pressure
-        default              : return false
+        case .noteOn:         return chanVoiceType == .noteOn
+        case .noteOff:        return chanVoiceType == .noteOff
+        case .noteCC:         return chanVoiceType == .noteCC
+        case .notePitchBend:  return chanVoiceType == .notePitchBend
+        case .notePressure:   return chanVoiceType == .notePressure
+        case .noteManagement: return chanVoiceType == .noteManagement
+        case .cc:             return chanVoiceType == .cc
+        case .programChange:  return chanVoiceType == .programChange
+        case .pitchBend:      return chanVoiceType == .pitchBend
+        case .pressure:       return chanVoiceType == .pressure
+        case .rpn:            return chanVoiceType == .rpn
+        case .nrpn:           return chanVoiceType == .nrpn
+        default:              return false
         }
         // swiftformat:enable spacearoundoperators
     }

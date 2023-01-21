@@ -41,7 +41,17 @@ extension MIDIEvent {
     
         case let .pitchBend(event):
             return event.channel
-    
+        
+        // -----------------------------------------------
+        // MARK: Channel Voice - Parameter Number Messages
+        // -----------------------------------------------
+            
+        case let .rpn(event):
+            return event.channel
+        
+        case let .nrpn(event):
+            return event.channel
+            
         default:
             return nil
         }
@@ -83,10 +93,10 @@ extension MIDIEvent {
     
         case let .pitchBend(event):
             return event.group
-        
-        // -------------------------------
-        // MARK: Parameter Number Messages
-        // -------------------------------
+            
+        // -----------------------------------------------
+        // MARK: Channel Voice - Parameter Number Messages
+        // -----------------------------------------------
             
         case let .rpn(event):
             return event.group
