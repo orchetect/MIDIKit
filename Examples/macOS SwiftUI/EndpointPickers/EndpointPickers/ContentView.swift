@@ -122,9 +122,11 @@ struct ContentView: View {
             .padding(5)
     
             GroupBox(label: Text("Received Events")) {
-                List(midiHelper.receivedEvents.reversed(), id: \.self) {
-                    Text($0.description)
-                        .foregroundColor(color(for: $0))
+                let events = midiHelper.receivedEvents.reversed()
+                
+                List(events.indices, id: \.self) { index in
+                    Text(events[index].description)
+                    .foregroundColor(color(for: events[index]))
                 }
             }
         }
@@ -151,3 +153,4 @@ struct ContentView: View {
         }
     }
 }
+

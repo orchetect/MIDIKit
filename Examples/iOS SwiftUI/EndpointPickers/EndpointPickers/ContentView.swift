@@ -105,10 +105,13 @@ struct ContentView: View {
                 }
     
                 Section(header: Text("Received Events")) {
-                    List(midiHelper.receivedEvents.reversed(), id: \.self) {
-                        Text($0.description)
-                            .foregroundColor(color(for: $0))
+                    let events = midiHelper.receivedEvents.reversed()
+                    
+                    List(events.indices, id: \.self) { index in
+                        Text(events[index].description)
+                        .foregroundColor(color(for: events[index]))
                     }
+
                 }
             }
             .navigationBarTitle("Endpoint Pickers")
