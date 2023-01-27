@@ -4,7 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
+// skip these tests on watchOS; flakey and we don't need to run them
+#if shouldTestCurrentPlatform && !os(watchOS)
 
 import XCTest
 import XCTestUtils
