@@ -10,7 +10,7 @@ Devices represent physical devices that contain entity(ies) which in turn contai
     - Output Endpoint 2
   - Entity 2
     - Input Endpoint 1
-    - Output Endpoint 2
+    - Output Endpoint 1
 - Device 2
   - Entity 1
     - Output Endpoint 1

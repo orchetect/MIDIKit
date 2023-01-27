@@ -11,5 +11,10 @@ See the following example projects:
 
 Once Bluetooth connectivity is implemented (see examples above), Bluetooth MIDI devices' ports simply show up as MIDI input or output endpoints in the system. Access them by getting these properties on the ``MIDIManager`` instance:
 
-- `midiManager`.``MIDIManager/endpoints``.``MIDIEndpoints/inputs``
-- `midiManager`.``MIDIManager/endpoints``.``MIDIEndpoints/outputs``
+- ``MIDIManager/endpoints``.``MIDIEndpoints/inputs``
+- ``MIDIManager/endpoints``.``MIDIEndpoints/outputs``
+
+Connect to these endpoints to transmit and receive MIDI:
+
+- ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``
+- ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``
