@@ -146,8 +146,8 @@ final class Event_SysEx7_Tests: XCTestCase {
     
     // MARK: - MIDIFileEvent.SysEx7
     
-    func testSysEx7_midi1SMFRawBytes_EmptyData() {
-        let sysEx = MIDIFileEvent.SysEx7(
+    func testSysEx7_midi1SMFRawBytes_EmptyData() throws {
+        let sysEx = try MIDIFileEvent.SysEx7(
             manufacturer: .oneByte(0x7D),
             data: []
         )
@@ -162,8 +162,8 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
     }
     
-    func testSysEx7_midi1SMFRawBytes_WithData() {
-        let sysEx = MIDIFileEvent.SysEx7(
+    func testSysEx7_midi1SMFRawBytes_WithData() throws {
+        let sysEx = try MIDIFileEvent.SysEx7(
             manufacturer: .oneByte(0x7D),
             data: [0x12, 0x34]
         )
@@ -180,10 +180,10 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
     }
     
-    func testSysEx7_midi1SMFRawBytes_128Bytes() {
+    func testSysEx7_midi1SMFRawBytes_128Bytes() throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128 - 2)
         
-        let sysEx = MIDIFileEvent.SysEx7(
+        let sysEx = try MIDIFileEvent.SysEx7(
             manufacturer: .oneByte(0x7D),
             data: data
         )
@@ -204,8 +204,8 @@ final class Event_SysEx7_Tests: XCTestCase {
     
     // MARK: - MIDIFileEvent.UniversalSysEx7
     
-    func testUniversalSysEx7_midi1SMFRawBytes_EmptyData() {
-        let sysEx = MIDIFileEvent.UniversalSysEx7(
+    func testUniversalSysEx7_midi1SMFRawBytes_EmptyData() throws {
+        let sysEx = try MIDIFileEvent.UniversalSysEx7(
             universalType: .realTime,
             deviceID: 0x01,
             subID1: 0x02,
@@ -226,8 +226,8 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
     }
     
-    func testUniversalSysEx7_midi1SMFRawBytes_WithData() {
-        let sysEx = MIDIFileEvent.UniversalSysEx7(
+    func testUniversalSysEx7_midi1SMFRawBytes_WithData() throws {
+        let sysEx = try MIDIFileEvent.UniversalSysEx7(
             universalType: .nonRealTime,
             deviceID: 0x7F,
             subID1: 0x00,
@@ -250,10 +250,10 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
     }
     
-    func testUniversalSysEx7_midi1SMFRawBytes_128Bytes() {
+    func testUniversalSysEx7_midi1SMFRawBytes_128Bytes() throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128 - 5)
         
-        let sysEx = MIDIFileEvent.UniversalSysEx7(
+        let sysEx = try MIDIFileEvent.UniversalSysEx7(
             universalType: .nonRealTime,
             deviceID: 0x7F,
             subID1: 0x01,

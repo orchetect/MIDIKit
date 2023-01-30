@@ -4,10 +4,12 @@
 
 ### Constructors
 
-- ``MIDIEvent/sysEx7(manufacturer:data:group:)``
+- ``MIDIEvent/sysEx7(manufacturer:data:group:)-2xian``
+- ``MIDIEvent/sysEx7(manufacturer:data:group:)-8tnhw``
 - ``MIDIEvent/sysEx7(rawHexString:group:)``
 - ``MIDIEvent/sysEx7(rawBytes:group:)``
-- ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)``
+- ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)-1p0x1``
+- ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)-150x7``
 
 - ``MIDIEvent/sysEx8(manufacturer:data:group:)``
 - ``MIDIEvent/sysEx8(rawBytes:group:)``

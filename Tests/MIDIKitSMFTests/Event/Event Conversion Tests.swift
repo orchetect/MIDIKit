@@ -309,7 +309,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_SysEx_smfEvent() throws {
-        let event = MIDIEvent.sysEx7(
+        let event = try MIDIEvent.sysEx7(
             manufacturer: .educational(),
             data: [0x12, 0x34],
             group: 2
@@ -336,7 +336,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_UniversalSysEx_smfEvent() throws {
-        let event = MIDIEvent.universalSysEx7(
+        let event = try MIDIEvent.universalSysEx7(
             universalType: .nonRealTime,
             deviceID: 0x7F,
             subID1: 0x01,
@@ -741,7 +741,7 @@ final class Event_Conversion_SMFEventToEvent_Tests: XCTestCase {
     }
     
     func testMIDI_File_Event_SysEx7_event() throws {
-        let smfEvent = MIDIFileEvent.sysEx7(
+        let smfEvent = try MIDIFileEvent.sysEx7(
             delta: .none,
             manufacturer: .educational(),
             data: [0x12, 0x34]
@@ -768,7 +768,7 @@ final class Event_Conversion_SMFEventToEvent_Tests: XCTestCase {
     }
     
     func testMIDI_File_Event_UniversalSysEx7_event() throws {
-        let smfEvent = MIDIFileEvent.universalSysEx7(
+        let smfEvent = try MIDIFileEvent.universalSysEx7(
             delta: .none,
             universalType: .nonRealTime,
             deviceID: 0x7F,

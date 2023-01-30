@@ -78,12 +78,12 @@ extension kRawMIDI {
 enum kMIDIEvent {
     enum MTC_FullFrame {
         static var _00_00_00_00_at_24fps: MIDIEvent {
-            let hh: UInt8 = 0b00000000 // 24fps, 1 hours
-            let mm: UInt8 = 0
-            let ss: UInt8 = 0
-            let ff: UInt8 = 0
+            let hh: UInt7 = 0b00000000 // 24fps, 1 hours
+            let mm: UInt7 = 0
+            let ss: UInt7 = 0
+            let ff: UInt7 = 0
             
-            let msg = MIDIEvent.universalSysEx7(
+            let msg: MIDIEvent = .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x7F,
                 subID1: 0x01,
@@ -95,12 +95,12 @@ enum kMIDIEvent {
         }
         
         static var _01_02_03_04_at_24fps: MIDIEvent {
-            let hh: UInt8 = 0b00000001 // 24fps, 1 hours
-            let mm: UInt8 = 2
-            let ss: UInt8 = 3
-            let ff: UInt8 = 4
+            let hh: UInt7 = 0b00000001 // 24fps, 1 hours
+            let mm: UInt7 = 2
+            let ss: UInt7 = 3
+            let ff: UInt7 = 4
             
-            let msg = MIDIEvent.universalSysEx7(
+            let msg: MIDIEvent = .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x7F,
                 subID1: 0x01,
@@ -112,12 +112,12 @@ enum kMIDIEvent {
         }
         
         static var _02_11_17_20_at_25fps: MIDIEvent {
-            let hh: UInt8 = 0b00100010 // 25fps, 2 hours
-            let mm: UInt8 = 11
-            let ss: UInt8 = 17
-            let ff: UInt8 = 20
+            let hh: UInt7 = 0b00100010 // 25fps, 2 hours
+            let mm: UInt7 = 11
+            let ss: UInt7 = 17
+            let ff: UInt7 = 20
             
-            let msg = MIDIEvent.universalSysEx7(
+            let msg: MIDIEvent = .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x7F,
                 subID1: 0x01,

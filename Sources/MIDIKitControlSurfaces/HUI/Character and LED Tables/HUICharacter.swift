@@ -7,7 +7,7 @@
 import Foundation
 
 public protocol HUICharacter: CustomStringConvertible
-where Self: RawRepresentable, RawValue == UInt8, Self: CaseIterable {
+where Self: RawRepresentable, RawValue == UInt7, Self: CaseIterable {
     /// Returns the user-facing display string of the character.
     var string: String { get }
     
@@ -39,7 +39,7 @@ extension _HUICharacter {
     public init?<S: StringProtocol>(_ string: S) {
         guard let idx = Self.stringTable.firstIndex(of: String(string))
         else { return nil }
-        self.init(rawValue: UInt8(idx))
+        self.init(rawValue: UInt7(idx))
     }
 }
 
@@ -48,6 +48,16 @@ extension _HUICharacter {
 extension HUICharacter /* : CustomStringConvertible */ {
     public var description: String {
         string
+    }
+}
+
+// MARK: - Conveniences
+
+extension HUICharacter {
+    /// Convenience initializer for `UInt8` raw value.
+    public init?(rawValue: UInt8) {
+        guard let uInt7 = rawValue.toUInt7Exactly else { return nil }
+        self.init(rawValue: uInt7)
     }
 }
 

@@ -37,17 +37,17 @@ extension HUIConstants {
                 byte2: 0x00,
                 byte3: 0x66
             )
-            public static let kSubID1: UInt8 = 0x05 // product ID?
-            public static let kSubID2: UInt8 = 0x00
+            public static let kSubID1: UInt7 = 0x05 // product ID?
+            public static let kSubID2: UInt7 = 0x00
         }
         
         enum kDisplayType {
             /// 4-character channel name displays, and Select-Assign displays.
-            public static let smallByte: UInt8 = 0x10
+            public static let smallByte: UInt7 = 0x10
             /// Main time display.
-            public static let timeDisplayByte: UInt8 = 0x11
+            public static let timeDisplayByte: UInt7 = 0x11
             /// Main 40 x 2 character display.
-            public static let largeByte: UInt8 = 0x12
+            public static let largeByte: UInt7 = 0x12
         }
         
         // Status 0xA is normally MIDI poly aftertouch, but HUI hijacks it.

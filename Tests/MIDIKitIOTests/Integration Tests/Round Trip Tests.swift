@@ -190,7 +190,7 @@ public class RoundTrip_Tests_Base: XCTestCase {
         })
     
         sourceEvents.append(
-            .sysEx7(
+            try .sysEx7(
                 manufacturer: .educational(),
                 data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
                        0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
@@ -199,7 +199,7 @@ public class RoundTrip_Tests_Base: XCTestCase {
         )
     
         sourceEvents.append(
-            .universalSysEx7(
+            try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,

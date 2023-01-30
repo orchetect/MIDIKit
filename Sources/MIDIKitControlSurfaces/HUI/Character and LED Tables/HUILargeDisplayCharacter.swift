@@ -5,9 +5,10 @@
 //
 
 import Foundation
+import MIDIKitCore
 
 /// HUI large text display character set.
-public enum HUILargeDisplayCharacter: UInt8, CaseIterable {
+public enum HUILargeDisplayCharacter: UInt7, CaseIterable {
     case empty0x00 = 0x00
     case empty0x01 = 0x01
     case empty0x02 = 0x02

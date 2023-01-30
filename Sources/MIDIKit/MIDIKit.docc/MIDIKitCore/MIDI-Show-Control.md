@@ -14,7 +14,7 @@ The MIDI Show Control spec says:
 
 ## Constructing Events
 
-There's actually three options that can work to construct these messages.
+There are three options that can work to construct these messages.
 
 Given the example Show Control SysEx bytes `F0 7F 01 02 01 07 0A F7`, the following examples all construct exactly the same message.
 
@@ -30,22 +30,22 @@ Given the example Show Control SysEx bytes `F0 7F 01 02 01 07 0A F7`, the follow
    
    ```swift
    let event: MIDIEvent = try .sysEx7(
-       rawHexString: ["F07F010201070AF7"]
+       rawHexString: "F07F010201070AF7"
    )
    let event: MIDIEvent = try .sysEx7(
-       rawHexString: ["F0 7F 01 02 01 07 0A F7"]
+       rawHexString: "F0 7F 01 02 01 07 0A F7"
    )
    ```
 
-3. The ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)`` constructor will also work since MIDI Show Control specifically uses Universal SysEx format. It just separates the header parts into more descriptive types, as per the MIDI spec. (With this one, you only supply the inner data bytes, so the F0/F7 trailing SysEx bytes and header info is taken care of for you.)
+3. The ``MIDIEvent/universalSysEx7(universalType:deviceID:subID1:subID2:data:group:)-1p0x1`` constructor will also work since MIDI Show Control specifically uses Universal SysEx format. It just separates the header parts into more descriptive types, as per the MIDI spec. (With this one, you only supply the inner data bytes, so the F0/F7 trailing SysEx bytes and header info is taken care of for you.)
    
    ```swift
-   let event: MIDIEvent = .universalSysEx7(
+   let event: MIDIEvent = try .universalSysEx7(
        universalType: .realTime, // byte two (0x7F)
        deviceID: 0x01, // byte three (<device_ID>)
        subID1: 0x02, // byte four (<msc>)
        subID2: 0x01, // byte five (<command_format>)
-       data: [0x07, 0x0A], // byte six and onward; omit trailing 0xF7
+       data: [0x07, 0x0A] // byte six and onward; omit trailing 0xF7
    )
    ```
 

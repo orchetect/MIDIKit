@@ -26,10 +26,28 @@ extension MIDIFileEvent {
 
 extension MIDIFileEvent {
     /// System Exclusive: Manufacturer-specific (7-bit)
+    ///
+    /// - Throws: `MIDIEvent.ParseError` if any data bytes overflow 7 bits.
     public static func sysEx7(
         delta: DeltaTime = .none,
         manufacturer: MIDIEvent.SysExManufacturer,
         data: [UInt8]
+    ) throws -> Self {
+        try .sysEx7(
+            delta: delta,
+            event: .init(
+                manufacturer: manufacturer,
+                data: data
+            )
+        )
+    }
+    
+    /// System Exclusive: Manufacturer-specific (7-bit)
+    @_disfavoredOverload
+    public static func sysEx7(
+        delta: DeltaTime = .none,
+        manufacturer: MIDIEvent.SysExManufacturer,
+        data: [UInt7]
     ) -> Self {
         .sysEx7(
             delta: delta,
@@ -145,6 +163,35 @@ extension MIDIFileEvent {
         subID1: UInt7,
         subID2: UInt7,
         data: [UInt8]
+    ) throws -> Self {
+        try .universalSysEx7(
+            delta: delta,
+            event: .init(
+                universalType: universalType,
+                deviceID: deviceID,
+                subID1: subID1,
+                subID2: subID2,
+                data: data
+            )
+        )
+    }
+    
+    /// Universal System Exclusive (7-bit)
+    ///
+    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See
+    /// the official MIDI 1.0 and 2.0 specs for details.
+    ///
+    /// - `deviceID` of `0x7F` indicates "All Devices".
+    ///
+    /// - Throws: `MIDIEvent.ParseError` if any data bytes overflow 7 bits.
+    @_disfavoredOverload
+    public static func universalSysEx7(
+        delta: DeltaTime = .none,
+        universalType: MIDIEvent.UniversalSysExType,
+        deviceID: UInt7,
+        subID1: UInt7,
+        subID2: UInt7,
+        data: [UInt7]
     ) -> Self {
         .universalSysEx7(
             delta: delta,

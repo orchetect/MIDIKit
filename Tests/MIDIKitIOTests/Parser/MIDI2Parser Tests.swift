@@ -198,7 +198,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         )
     }
     
-    func testUniversalPacketData_parsedEvents_SingleEvents_System() {
+    func testUniversalPacketData_parsedEvents_SingleEvents_System() throws {
         // template method
     
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
@@ -217,7 +217,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                  0x7D, 0x01, // SysEx7 data bytes
                  0x00, 0x00, 0x00, 0x00] // pad remaining bytes
             ),
-            [.sysEx7(
+            [try .sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01],
                 group: 0
@@ -841,7 +841,7 @@ final class MIDI2Parser_Tests: XCTestCase {
     
     // MARK: - SysEx
     
-    func testUniversalPacketData_parser_SysEx7() {
+    func testUniversalPacketData_parser_SysEx7() throws {
         // template method
     
         var parser = MIDI2Parser()
@@ -858,7 +858,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x30, 0x01, 0x7D, 0x00,
                                  0x00, 0x00, 0x00, 0x00]),
-            [.sysEx7(
+            [try .sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [],
                 group: 0
@@ -868,7 +868,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x31, 0x02, 0x7D, 0x01,
                                  0x00, 0x00, 0x00, 0x00]),
-            [.sysEx7(
+            [try .sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01],
                 group: 1
@@ -878,7 +878,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x32, 0x06, 0x7D, 0x01,
                                  0x02, 0x03, 0x04, 0x05]),
-            [.sysEx7(
+            [try .sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01, 0x02, 0x03, 0x04, 0x05],
                 group: 2
@@ -902,7 +902,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x32, 0x32, 0x06, 0x07,
                                  0x00, 0x00, 0x00, 0x00]),
-            [.sysEx7(
+            [try .sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07],
                 group: 2
@@ -929,7 +929,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x32, 0x32, 0x0C, 0x0D,
                                  0x00, 0x00, 0x00, 0x00]),
-            [.sysEx7(
+            [try .sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01, 0x02, 0x03, 0x04,
                        0x05, 0x06, 0x07, 0x08,
@@ -939,7 +939,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         )
     }
     
-    func testUniversalPacketData_parser_UniversalSysEx7() {
+    func testUniversalPacketData_parser_UniversalSysEx7() throws {
         // template method
     
         var parser = MIDI2Parser()
@@ -957,7 +957,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x30, 0x04,
                                  0x7F, // sysEx ID
                                  0x01, 0x02, 0x03, 0x00, 0x00]),
-            [.universalSysEx7(
+            [try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,
@@ -971,7 +971,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x31, 0x05,
                                  0x7F, // sysEx ID
                                  0x01, 0x02, 0x03, 0x04, 0x00]),
-            [.universalSysEx7(
+            [try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,
@@ -985,7 +985,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x32, 0x06,
                                  0x7F, // sysEx ID
                                  0x01, 0x02, 0x03, 0x04, 0x05]),
-            [.universalSysEx7(
+            [try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,
@@ -1013,7 +1013,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x32, 0x36,
                                  0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B]),
-            [.universalSysEx7(
+            [try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,
@@ -1045,7 +1045,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x32, 0x36,
                                  0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11]),
-            [.universalSysEx7(
+            [try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,

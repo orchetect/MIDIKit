@@ -5,9 +5,10 @@
 //
 
 import Foundation
+import MIDIKitCore
 
 /// HUI time display character set.
-public enum HUITimeDisplayCharacter: UInt8, CaseIterable {
+public enum HUITimeDisplayCharacter: UInt7, CaseIterable {
     case num0        = 0x00
     case num1        = 0x01
     case num2        = 0x02

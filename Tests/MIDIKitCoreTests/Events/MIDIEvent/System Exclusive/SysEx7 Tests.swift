@@ -123,37 +123,37 @@ final class SysEx7_Tests: XCTestCase {
         // space delimiter
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "F0 41 01 34 F7"),
-            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+            try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
         )
     
         // compact
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "F0410134F7"),
-            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+            try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
         )
     
         // variable spacing
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "F0 41 0134 F7"),
-            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+            try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
         )
     
         // space delimiter - no trailing F7
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "F0 41 01 34"),
-            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+            try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
         )
     
         // compact - no trailing F7
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "F0410134"),
-            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+            try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
         )
     
         // lowercase - no trailing F7
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "f0410134"),
-            .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+            try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
         )
     }
     
@@ -180,7 +180,7 @@ final class SysEx7_Tests: XCTestCase {
     }
     
     func testSysEx7_midi1RawHexString() throws {
-        let sysEx7 = MIDIEvent.SysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
+        let sysEx7 = try MIDIEvent.SysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34])
     
         XCTAssertEqual(
             sysEx7.midi1RawHexString(),
@@ -207,7 +207,7 @@ final class SysEx7_Tests: XCTestCase {
         // space delimiter
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "F0 7F 01 34 56 10 11 F7"),
-            .universalSysEx7(
+            try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x34,
@@ -219,7 +219,7 @@ final class SysEx7_Tests: XCTestCase {
         // compact
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "F07F0134561011F7"),
-            .universalSysEx7(
+            try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x34,
@@ -231,7 +231,7 @@ final class SysEx7_Tests: XCTestCase {
         // variable spacing
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "F0 7F 013456 1011 F7"),
-            .universalSysEx7(
+            try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x34,
@@ -243,7 +243,7 @@ final class SysEx7_Tests: XCTestCase {
         // space delimiter - no trailing F7
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "F0 7F 0134 56 10 11"),
-            .universalSysEx7(
+            try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x34,
@@ -255,7 +255,7 @@ final class SysEx7_Tests: XCTestCase {
         // compact - no trailing F7
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "F07F0134561011"),
-            .universalSysEx7(
+            try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x34,
@@ -267,7 +267,7 @@ final class SysEx7_Tests: XCTestCase {
         // lowercase
         XCTAssertEqual(
             try MIDIEvent.sysEx7(rawHexString: "f0 7f 01 34 56 10 11 f7"),
-            .universalSysEx7(
+            try .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x34,

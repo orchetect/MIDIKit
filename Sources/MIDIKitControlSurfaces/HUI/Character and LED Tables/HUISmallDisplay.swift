@@ -26,10 +26,10 @@ public enum HUISmallDisplay: Equatable, Hashable {
     }
     
     /// Raw value for encoding/decoding HUI message.
-    var rawValue: UInt8 {
+    var rawValue: UInt7 {
         switch self {
         case let .channel(uInt4):
-            return uInt4.uInt8Value
+            return uInt4.toUInt7
         case .selectAssign:
             return 8
         }

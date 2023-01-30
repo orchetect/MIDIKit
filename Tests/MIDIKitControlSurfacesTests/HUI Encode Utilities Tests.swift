@@ -172,7 +172,7 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     }
     
     /// Message is only valid being sent to surface.
-    func testLargeDisplay_OneEntireSlice() {
+    func testLargeDisplay_OneEntireSlice() throws {
         let midiEvent = encodeHUILargeDisplay(sliceIndex: 1, text: [
             .A, .B, .C, .D, .E,
             .F, .G, .H, .I, .J
@@ -180,7 +180,7 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
         
         XCTAssertEqual(
             midiEvent,
-            .sysEx7(
+            try .sysEx7(
                 manufacturer: .threeByte(byte2: 0x00, byte3: 0x66),
                 data: [
                     0x05, 0x00, // subID1, subID2
@@ -194,14 +194,14 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     }
     
     /// Message is only valid being sent to surface.
-    func testLargeDisplay_OneChar() {
+    func testLargeDisplay_OneChar() throws {
         let midiEvent = encodeHUILargeDisplay(sliceIndex: 2, text: [
             .A
         ])
         
         XCTAssertEqual(
             midiEvent,
-            .sysEx7(
+            try .sysEx7(
                 manufacturer: .threeByte(byte2: 0x00, byte3: 0x66),
                 data: [
                     0x05, 0x00, // subID1, subID2
@@ -214,14 +214,14 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     }
     
     /// Message is only valid being sent to surface.
-    func testLargeDisplay_TwoChar2() {
+    func testLargeDisplay_TwoChar2() throws {
         let midiEvent = encodeHUILargeDisplay(sliceIndex: 2, text: [
             .A, .B
         ])
         
         XCTAssertEqual(
             midiEvent,
-            .sysEx7(
+            try .sysEx7(
                 manufacturer: .threeByte(byte2: 0x00, byte3: 0x66),
                 data: [
                     0x05, 0x00, // subID1, subID2
@@ -234,12 +234,12 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     }
     
     /// Message is only valid being sent to surface.
-    func testTimeDisplay() {
+    func testTimeDisplay() throws {
         let midiEvent = encodeHUITimeDisplay(text: .init(lossy: "12345678"))
         
         XCTAssertEqual(
             midiEvent,
-            .sysEx7(
+            try .sysEx7(
                 manufacturer: .threeByte(byte2: 0x00, byte3: 0x66),
                 data: [
                     0x05, 0x00, // subID1, subID2
@@ -252,7 +252,7 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
     }
     
     /// Message is only valid being sent to surface.
-    func testSmallDisplay() {
+    func testSmallDisplay() throws {
         let midiEvent = encodeHUISmallDisplay(
             for: .selectAssign,
             text: .init(lossy: "1234")
@@ -260,7 +260,7 @@ final class HUIEncodeUtilitiesTests: XCTestCase {
         
         XCTAssertEqual(
             midiEvent,
-            .sysEx7(
+            try .sysEx7(
                 manufacturer: .threeByte(byte2: 0x00, byte3: 0x66),
                 data: [
                     0x05, 0x00, // subID1, subID2

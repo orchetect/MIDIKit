@@ -33,6 +33,7 @@ extension MIDIEvent {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
+        /// - Throws: ``MIDIEvent/ParseError`` if any data bytes overflow 7 bits.
         public init(
             universalType: MIDIEvent.UniversalSysExType,
             deviceID: UInt7,
@@ -40,12 +41,38 @@ extension MIDIEvent {
             subID2: UInt7,
             data: [UInt8],
             group: UInt4 = 0x0
+        ) throws {
+            self.universalType = universalType
+            self.deviceID = deviceID
+            self.subID1 = subID1
+            self.subID2 = subID2
+            
+            // data must all be 7-bit bytes,
+            // but we make the array [UInt8] instead of [UInt7] to reduce friction
+            guard data.allSatisfy({ $0 < 0x80 }) else {
+                throw ParseError.malformed
+            }
+            
+            self.data = data
+            
+            self.group = group
+        }
+        
+        @_disfavoredOverload
+        public init(
+            universalType: MIDIEvent.UniversalSysExType,
+            deviceID: UInt7,
+            subID1: UInt7,
+            subID2: UInt7,
+            data: [UInt7],
+            group: UInt4 = 0x0
         ) {
             self.universalType = universalType
             self.deviceID = deviceID
             self.subID1 = subID1
             self.subID2 = subID2
-            self.data = data
+            self.data = data.map(\.uInt8Value)
+            
             self.group = group
         }
     }
@@ -63,12 +90,48 @@ extension MIDIEvent {
     ///   - subID2: Sub ID #2
     ///   - data: Data bytes (7-bit)
     ///   - group: UMP Group (`0x0 ... 0xF`)
+    ///
+    /// - Throws: ``ParseError`` if any data bytes overflow 7 bits.
     public static func universalSysEx7(
         universalType: UniversalSysExType,
         deviceID: UInt7,
         subID1: UInt7,
         subID2: UInt7,
         data: [UInt8],
+        group: UInt4 = 0x0
+    ) throws -> Self {
+        try .universalSysEx7(
+            .init(
+                universalType: universalType,
+                deviceID: deviceID,
+                subID1: subID1,
+                subID2: subID2,
+                data: data,
+                group: group
+            )
+        )
+    }
+    
+    /// System Exclusive: Universal SysEx (7-bit)
+    /// (MIDI 1.0 / 2.0)
+    ///
+    /// Some standard Universal System Exclusive messages have been defined by the MIDI Spec. See
+    /// the official MIDI 1.0 and 2.0 specs for details.
+    ///
+    /// - Parameters:
+    ///   - universalType: Universal SysEx type: realtime or non-realtime
+    ///   - deviceID: `0x7F` indicates "All Devices"
+    ///   - subID1: Sub ID #1
+    ///   - subID2: Sub ID #2
+    ///   - data: Data bytes (7-bit)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
+    @_disfavoredOverload
+    public static func universalSysEx7(
+        universalType: UniversalSysExType,
+        deviceID: UInt7,
+        subID1: UInt7,
+        subID2: UInt7,
+        data: [UInt7],
         group: UInt4 = 0x0
     ) -> Self {
         .universalSysEx7(

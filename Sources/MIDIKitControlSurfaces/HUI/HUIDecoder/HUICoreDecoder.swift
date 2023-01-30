@@ -159,7 +159,7 @@ extension HUICoreDecoder {
         }
         
         switch dataAfterHeader.first {
-        case HUIConstants.kMIDI.kDisplayType.smallByte:
+        case HUIConstants.kMIDI.kDisplayType.smallByte.uInt8Value:
             // 0x10
             // then one or more sequences of:
             //   channel [4 chars]
@@ -205,7 +205,7 @@ extension HUICoreDecoder {
             }
             return events
             
-        case HUIConstants.kMIDI.kDisplayType.largeByte:
+        case HUIConstants.kMIDI.kDisplayType.largeByte.uInt8Value:
             // 0x12 sliceIndex [10 chars]
             // it is possible to receive multiple blocks in the same SysEx message, ie:
             // 0x12 sliceIndex [10 chars] sliceIndex [10 chars]
@@ -240,7 +240,7 @@ extension HUICoreDecoder {
             
             return [.largeDisplay(slices: newSlices)]
             
-        case HUIConstants.kMIDI.kDisplayType.timeDisplayByte:
+        case HUIConstants.kMIDI.kDisplayType.timeDisplayByte.uInt8Value:
             guard dataAfterHeader.count > 1 else {
                 throw HUIDecoderError.malformed(
                     "Received HUI time display message but did not contain enough bytes."

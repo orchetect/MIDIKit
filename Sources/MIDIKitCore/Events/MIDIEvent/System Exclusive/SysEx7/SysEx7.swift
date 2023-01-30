@@ -28,14 +28,34 @@ extension MIDIEvent {
     
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
+        /// - Throws: ``MIDIEvent/ParseError`` if any data bytes overflow 7 bits.
         public init(
             manufacturer: MIDIEvent.SysExManufacturer,
             data: [UInt8],
             group: UInt4 = 0x0
+        ) throws {
+            self.manufacturer = manufacturer
+            
+            // data must all be 7-bit bytes,
+            // but we make the array [UInt8] instead of [UInt7] to reduce friction
+            guard data.allSatisfy({ $0 < 0x80 }) else {
+                throw ParseError.malformed
+            }
+            self.data = data
+            
+            self.group = group
+        }
+        
+        @_disfavoredOverload
+        public init(
+            manufacturer: MIDIEvent.SysExManufacturer,
+            data: [UInt7],
+            group: UInt4 = 0x0
         ) {
             self.manufacturer = manufacturer
-            self.data = data
+            self.data = data.map(\.uInt8Value)
+            
             self.group = group
         }
     }
@@ -59,9 +79,45 @@ extension MIDIEvent {
     ///   - manufacturer: SysEx Manufacturer ID
     ///   - data: Data bytes (7-bit)
     ///   - group: UMP Group (`0x0 ... 0xF`)
+    ///
+    /// - Throws: ``ParseError`` if any data bytes overflow 7 bits.
     public static func sysEx7(
         manufacturer: SysExManufacturer,
         data: [UInt8],
+        group: UInt4 = 0x0
+    ) throws -> Self {
+        try .sysEx7(
+            .init(
+                manufacturer: manufacturer,
+                data: data,
+                group: group
+            )
+        )
+    }
+    
+    /// System Exclusive: Manufacturer-specific (7-bit)
+    /// (MIDI 1.0 / 2.0)
+    ///
+    /// > MIDI 1.0 Spec:
+    /// >
+    /// > Receivers should ignore non-universal Exclusive messages with ID numbers that do not
+    /// correspond to their own ID.
+    /// >
+    /// > Any manufacturer of MIDI hardware or software may use the system exclusive codes of any
+    /// existing product without the permission of the original manufacturer. However, they may not
+    /// modify or extend it in any way that conflicts with the original specification published by
+    /// the designer. Once published, an Exclusive format is treated like any other part of the
+    /// instruments MIDI implementation — so long as the new instrument remains within the
+    /// definitions of the published specification.
+    ///
+    /// - Parameters:
+    ///   - manufacturer: SysEx Manufacturer ID
+    ///   - data: Data bytes (7-bit)
+    ///   - group: UMP Group (`0x0 ... 0xF`)
+    @_disfavoredOverload
+    public static func sysEx7(
+        manufacturer: SysExManufacturer,
+        data: [UInt7],
         group: UInt4 = 0x0
     ) -> Self {
         .sysEx7(

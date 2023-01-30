@@ -8,8 +8,7 @@ import Foundation
 
 extension MIDIEvent {
     /// Parse a complete MIDI 2.0 System Exclusive 8 message (starting with the Stream ID byte until
-    /// the end of the packet) and return a ``sysEx8(manufacturer:data:group:)`` or
-    /// ``universalSysEx8(universalType:deviceID:subID1:subID2:data:group:)`` case if successful.
+    /// the end of the packet) and return a system exclusive ``MIDIEvent`` if successful.
     ///
     /// Valid rawBytes count is `1 ... 14`. (Must always contain a Stream ID, even if there are zero
     /// data bytes to follow)

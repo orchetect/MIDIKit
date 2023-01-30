@@ -337,7 +337,7 @@ func encodeHUILargeDisplay(
     return huiSysExTemplate(
         body: [
             HUIConstants.kMIDI.kDisplayType.largeByte,
-            UInt8(sliceIndex)
+            UInt7(sliceIndex)
         ] + textBytes
     )
 }
@@ -412,8 +412,25 @@ func encodeHUISmallDisplay(
 /// - Parameters:
 ///   - body: Data bytes, not including the manufacturer or sub ID 1/2.
 /// - Returns: MIDI event.
-func huiSysExTemplate(body: [UInt8]) -> MIDIEvent {
-    MIDIEvent.sysEx7(
+func huiSysExTemplate(body: [UInt8]) throws -> MIDIEvent {
+    try .sysEx7(
+        manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
+        data: [
+            HUIConstants.kMIDI.kSysEx.kSubID1.uInt8Value,
+            HUIConstants.kMIDI.kSysEx.kSubID2.uInt8Value
+        ] + body
+    )
+}
+
+/// Utility:
+/// Forms a HUI SysEx message with the given data bytes.
+///
+/// - Parameters:
+///   - body: Data bytes, not including the manufacturer or sub ID 1/2.
+/// - Returns: MIDI event.
+@_disfavoredOverload
+func huiSysExTemplate(body: [UInt7]) -> MIDIEvent {
+    .sysEx7(
         manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
         data: [
             HUIConstants.kMIDI.kSysEx.kSubID1,

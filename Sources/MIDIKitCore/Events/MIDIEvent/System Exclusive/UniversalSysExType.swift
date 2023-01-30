@@ -47,7 +47,9 @@ extension MIDIEvent {
     /// - Parameter deviceID: SysEx Device ID. An ID of 0x7F indicates "all devices".
     /// - Returns: SysEx7 Message.
     public static func deviceInquiryRequest(deviceID: UInt7) -> Self {
-        .universalSysEx7(
+        // guaranteed to work because errors are only thrown on invalid data bytes,
+        // and bytes are empty here
+        try! .universalSysEx7(
             universalType: .nonRealTime,
             deviceID: deviceID,
             subID1: 0x06, // General Information
@@ -76,7 +78,9 @@ extension MIDIEvent {
         deviceFamilyMemberCode: UInt14,
         softwareRevision: (UInt7, UInt7, UInt7, UInt7)
     ) -> Self {
-        .universalSysEx7(
+        // guaranteed to work because errors are only thrown on invalid data bytes,
+        // and bytes are all guaranteed 7-bit here
+        try! .universalSysEx7(
             universalType: .nonRealTime,
             deviceID: deviceID,
             subID1: 0x06, // General Information

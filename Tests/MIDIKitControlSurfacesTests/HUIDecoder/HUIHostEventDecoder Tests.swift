@@ -127,9 +127,9 @@ final class HUIHostEventDecoderTests: XCTestCase {
     
     // MARK: - Edge Cases
     
-    func testSmallText_MultipleInSingleSysEx() {
+    func testSmallText_MultipleInSingleSysEx() throws {
         runHUIEventTest(
-            source: .sysEx7(
+            source: try .sysEx7(
                 manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
                 data: [
                     0x05, 0x00, // SysEx sub ID 1 & 2

@@ -136,7 +136,7 @@ enum kEvents {
     enum SysEx {
         static let sysEx7: MIDIEvent = .sysEx7(
             manufacturer: .educational(),
-            data: [0x20],
+            data: [0x20] as [UInt7],
             group: 0
         )
         static let universalSysEx7: MIDIEvent = .universalSysEx7(
@@ -144,7 +144,7 @@ enum kEvents {
             deviceID: 0x7F,
             subID1: 0x01,
             subID2: 0x01,
-            data: [0x20],
+            data: [0x20] as [UInt7],
             group: 0
         )
     

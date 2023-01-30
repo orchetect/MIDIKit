@@ -5,9 +5,10 @@
 //
 
 import Foundation
+import MIDIKitCore
 
 /// HUI small text display character set.
-public enum HUISmallDisplayCharacter: UInt8, CaseIterable {
+public enum HUISmallDisplayCharacter: UInt7, CaseIterable {
     case ì = 0x00
     case upArrow = 0x01
     case rightArrow = 0x02

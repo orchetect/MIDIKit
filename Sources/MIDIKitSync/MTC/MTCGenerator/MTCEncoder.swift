@@ -254,21 +254,27 @@ public final class MTCEncoder: SendsMIDIEvents {
             mtcComponents: mtcComponents,
             mtcQuarterFrames: mtcQuarterFrame
         )
+        
+        do {
+            let midiEvent: MIDIEvent = try .universalSysEx7(
+                universalType: .realTime,
+                deviceID: 0x7F,
+                subID1: 0x01,
+                subID2: 0x01,
+                data: [
+                    (UInt8(newComponents.h) & 0b00011111) + (mtcFrameRate.bitValue << 5),
+                    UInt8(newComponents.m),
+                    UInt8(newComponents.s),
+                    UInt8(newComponents.f)
+                ]
+            )
             
-        let midiEvent = MIDIEvent.universalSysEx7(
-            universalType: .realTime,
-            deviceID: 0x7F,
-            subID1: 0x01,
-            subID2: 0x01,
-            data: [
-                (UInt8(newComponents.h) & 0b00011111) + (mtcFrameRate.bitValue << 5),
-                UInt8(newComponents.m),
-                UInt8(newComponents.s),
-                UInt8(newComponents.f)
-            ]
-        )
-            
-        return (event: midiEvent, components: newComponents)
+            return (event: midiEvent, components: newComponents)
+        } catch {
+            assertionFailure("Invalid bytes were encountered while MTCEncoder attempted to construct a full frame SysEx message.")
+            let midiEvent: MIDIEvent = .activeSensing()
+            return (event: midiEvent, components: newComponents)
+        }
     }
         
     /// Internal: triggers a handler event to transmit a quarter-frame message.
