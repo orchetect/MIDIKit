@@ -4,8 +4,7 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-// skip these tests on watchOS; flakey and we don't need to run them
-#if shouldTestCurrentPlatform && !os(watchOS)
+#if shouldTestCurrentPlatform
 
 import XCTest
 import XCTestUtils
@@ -309,6 +308,8 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_state, nil)
     }
     
+    // skip this test on tvOS/watchOS; flakey and we don't need to run it
+    #if !os(tvOS) && !os(watchOS)
     func testMTC_Receiver_Handlers_QFMessages() {
         // swiftformat:disable wrap
         // swiftformat:disable wrapSingleLineComments
@@ -530,6 +531,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // swiftformat:enable wrap
         // swiftformat:enable wrapSingleLineComments
     }
+    #endif
 }
 
 #endif
