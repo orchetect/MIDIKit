@@ -8,6 +8,7 @@ import SwiftUI
 import OTCore
 import MIDIKit
 
+// AppDelegate for legacy macOS versions support
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow!
@@ -16,22 +17,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         clientName: "MIDIEventLogger",
         model: "LoggerApp",
         manufacturer: "MyCompany"
-    ) { notification, manager in
-        print("Core MIDI notification:", notification)
-    }
+    )
+    
+    var midiHelper = MIDIHelper()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        do {
-            logger.debug("Starting MIDI manager")
-            try midiManager.start()
-        } catch {
-            logger.default(error)
-        }
+        midiHelper.midiManager = midiManager
+        midiHelper.initialSetup()
         
+        createAndShowWindow()
+    }
+    
+    func createAndShowWindow() {
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView()
             .environmentObject(midiManager)
-    
+            .environmentObject(midiHelper)
+        
         // Create the window and set the content view.
         window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),

@@ -10,6 +10,7 @@ import MIDIKit
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiHelper: MIDIHelper
     
     // MARK: - Constants
     
@@ -18,18 +19,12 @@ struct ContentView: View {
     static let kMinHeight: CGFloat = 650
     static let kMaxHeight: CGFloat = 1000
     
-    let kInputTag = "EventLoggerInput"
-    let kInputName = "MIDIKit Event Logger In"
-    
-    let kOutputTag = "EventLoggerOutput"
-    let kOutputName = "MIDIKit Event Logger Out"
-    
-    let kInputConnectionTag = "EventLoggerInputConnection"
-    
     // MARK: - UI State
     
+    /// UMP group number
     @State var midiGroup: UInt4 = 0
     
+    /// Currently selected MIDI output endpoint to connect to
     @State var midiInputConnectionEndpoint: MIDIOutputEndpoint? = nil
     
     // MARK: - Body
@@ -49,7 +44,7 @@ struct ContentView: View {
             Spacer().frame(height: 10)
     
             ReceiveMIDIEventsView(
-                kInputName: kInputName,
+                inputName: ConnectionTags.inputName,
                 midiInputConnectionEndpoint: $midiInputConnectionEndpoint
             )
     
@@ -66,40 +61,8 @@ struct ContentView: View {
         .padding([.leading, .trailing])
     
         .onAppear {
-            do {
-                if midiManager.managedInputs[kInputTag] == nil {
-                    logger.debug("Adding virtual MIDI input port to the manager.")
-    
-                    try midiManager.addInput(
-                        name: kInputName,
-                        tag: kInputTag,
-                        uniqueID: .userDefaultsManaged(key: kInputTag),
-                        receiver: .eventsLogging()
-                    )
-                }
-    
-                if midiManager.managedOutputs[kOutputTag] == nil {
-                    logger.debug("Adding virtual MIDI output port to the manager.")
-    
-                    try midiManager.addOutput(
-                        name: kOutputName,
-                        tag: kOutputTag,
-                        uniqueID: .userDefaultsManaged(key: kOutputTag)
-                    )
-                }
-            } catch {
-                logger.error(error)
-            }
-    
-            // wait a short delay in order to give Core MIDI time
-            // to set up the virtual endpoints we created in the view's init()
-            DispatchQueue.main.asyncAfter(
-                deadline: DispatchTime.now().advanced(by: .milliseconds(500))
-            ) {
-                setInputConnectionToVirtual()
-            }
+            setInputConnectionToVirtual()
         }
-        
         .onChange(of: midiInputConnectionEndpoint) { _ in
             updateInputConnection()
         }
@@ -109,51 +72,19 @@ struct ContentView: View {
     
     /// Auto-select the virtual endpoint as our input connection source.
     func setInputConnectionToVirtual() {
-        if let findInputConnectionEndpoint = midiManager.endpoints.outputs
-            .filter(whereName: kOutputName)
-            .first
-        {
-            logger.debug("Found virtual endpoint: \(findInputConnectionEndpoint)")
-            midiInputConnectionEndpoint = findInputConnectionEndpoint
-        }
+        midiInputConnectionEndpoint = midiHelper.midiOutput?.endpoint
     }
     
+    /// Update the MIDI manager's input connection to connect to the selected output endpoint.
     func updateInputConnection() {
-        // check for existing connection and compare new selection against it
-        if let ic = midiManager.managedInputConnections[kInputConnectionTag] {
-            // if endpoint is the same, don't reconnect
-            if ic.endpoints.first == midiInputConnectionEndpoint {
-                logger.debug("Already connected.")
-                return
-            }
-        }
-    
-        if !midiManager.managedInputConnections.isEmpty {
-            logger.debug("Removing input connections.")
-            midiManager.remove(.inputConnection, .all)
-        }
-    
-        guard let endpoint = midiInputConnectionEndpoint else { return }
-    
-        let endpointName = endpoint.displayName.quoted
-    
-        logger.debug("Setting up new input connection to \(endpointName).")
-        do {
-            try midiManager.addInputConnection(
-                toOutputs: [.uniqueID(endpoint.uniqueID)],
-                tag: kInputConnectionTag,
-                receiver: .eventsLogging()
-            )
-        } catch {
-            logger.error(error)
-        }
+        logger.debug("Updating input connection to endpoint: \(midiInputConnectionEndpoint?.displayName.quoted ?? "None")")
+        midiHelper.updateInputConnection(selectedUniqueID: midiInputConnectionEndpoint?.uniqueID)
     }
     
     /// Send a MIDI event using our virtual output endpoint.
     func sendEvent(_ event: MIDIEvent) {
         logIfThrowsError {
-            try midiManager.managedOutputs[kOutputTag]?
-                .send(event: event)
+            try midiHelper.midiOutput?.send(event: event)
         }
     }
 }

@@ -685,7 +685,7 @@ extension ContentView {
     struct ReceiveMIDIEventsView: View {
         @EnvironmentObject var midiManager: MIDIManager
         
-        var kInputName: String
+        var inputName: String
         @Binding var midiInputConnectionEndpoint: MIDIOutputEndpoint?
         
         var body: some View {
@@ -695,7 +695,7 @@ extension ContentView {
                         HStack {
                             Group {
                                 GroupBox(label: Text("Source: Virtual")) {
-                                    Text("🎹 " + kInputName)
+                                    Text("🎹 " + inputName)
                                         .frame(
                                             maxWidth: .infinity,
                                             maxHeight: .infinity,

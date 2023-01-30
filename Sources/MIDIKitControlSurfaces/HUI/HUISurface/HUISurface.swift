@@ -90,7 +90,6 @@ public final class HUISurface {
             queue: .global(),
             leeway: .milliseconds(50),
             eventHandler: { [weak self] in
-                
                 self?.isRemotePresent = false
                 self?.remotePresenceTimer?.stop()
             }
