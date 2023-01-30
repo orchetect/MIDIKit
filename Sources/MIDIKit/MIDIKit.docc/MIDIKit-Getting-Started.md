@@ -16,6 +16,7 @@ There are many more features and aspects to the library that can be discovered t
 4. [Learn how MIDIKit Value Types Work](#4-Learn-how-MIDIKit-Value-Types-Work)
 5. [Next Steps](#5-Next-Steps)
 6. [Additional Features](#6-Additional-Features)
+7. [Additional Guides](#7-Additional-Guides)
 
 ## 1. Import the Library
 
@@ -109,7 +110,7 @@ From here, you have laid the necessary groundwork to set up ports and connection
   - Creating MIDI endpoint selection menus & controls and persisting user selections
   - Parsing and filtering received MIDI events
   - Working with Bluetooth MIDI
-- Explore modules included in MIDIKit: <doc:MIDIKitSMF>, <doc:MIDIKitSync>, <doc:MIDIKitControlSurfaces>.
+- Explore MIDI extension modules included in MIDIKit: <doc:MIDIKitSMF>, <doc:MIDIKitSync>, <doc:MIDIKitControlSurfaces>.
 
 ## 6. Additional Features
 
@@ -117,6 +118,10 @@ MIDIKit contains additional objects and value types.
 
 - term ``MIDINote``: Struct representing a MIDI note with constructors and getters for note number, note name (ie: `"A#-1"`), and frequency in Hz and other metadata. This can be useful for generating UI labels with note names or calculating frequency for synthesis.
 - term ``MIDIEventFilterGroup``: Struct allowing the configuration of zero or more MIDI event filters in series, capable of applying the filters to arrays of MIDI events.
+
+## 7. Additional Guides
+
+- <doc:MIDI-Show-Control>
 
 ## Examples
 
