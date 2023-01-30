@@ -38,7 +38,10 @@ struct ContentView: View {
                     }
                 
                 ForEach(items) { item in
-                    let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
+                    let detailsView = DetailsView(
+                        object: item.asAnyMIDIIOObject(),
+                        renderer: HTMLDetailsView.self
+                    )
                     
                     NavigationLink(destination: detailsView) {
                         switch item.objectType {
@@ -84,7 +87,10 @@ struct ContentView: View {
                     .filter { $0.entity == nil }
                 
                 ForEach(items) { item in
-                    let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
+                    let detailsView = DetailsView(
+                        object: item.asAnyMIDIIOObject(),
+                        renderer: HTMLDetailsView.self
+                    )
                     
                     NavigationLink(destination: detailsView) {
                         Group {
@@ -109,7 +115,10 @@ struct ContentView: View {
                     .filter { $0.entity == nil }
                 
                 ForEach(items) { item in
-                    let detailsView = DetailsView(object: item.asAnyMIDIIOObject())
+                    let detailsView = DetailsView(
+                        object: item.asAnyMIDIIOObject(),
+                        renderer: HTMLDetailsView.self
+                    )
                     
                     NavigationLink(destination: detailsView) {
                         Group {

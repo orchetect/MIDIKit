@@ -9,24 +9,64 @@ import WebKit
 import MIDIKit
 
 struct EmptyDetailsView: View {
-    /// coaxes WebKit to start up when EmptyDetailsView first shows in the main view,
-    /// making the next WebKitView view that loads to load faster
-    private let dummyWKView = WKWebView()
-    
     var body: some View {
         Text("Make a selection.")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
-struct DetailsView: View {
-    var object: AnyMIDIIOObject?
-    
-    @State private var webViewHeight: CGFloat = .zero
-    
-    @State private var webView: WKWebView = .init()
+struct DetailsView<Renderer: DetailsRenderer>: View {
+    let object: AnyMIDIIOObject?
+    let renderer: Renderer.Type
     
     @State private var showAll: Bool = false
+    
+    var body: some View {
+        if let unwrappedObject = object {
+            renderer.init(object: unwrappedObject, showAll: $showAll)
+            
+            Group {
+                if showAll {
+                    Button("Show Relevant Properties") {
+                        showAll.toggle()
+                    }
+                } else {
+                    Button("Show All") {
+                        showAll.toggle()
+                    }
+                }
+            }
+            .padding(.all, 10)
+            
+        } else {
+            EmptyDetailsView()
+        }
+    }
+}
+
+protocol DetailsRenderer where Self: View {
+    associatedtype Content: View
+    
+    var object: AnyMIDIIOObject { get }
+    var body: Content { get }
+    
+    init(object: AnyMIDIIOObject, showAll: Binding<Bool>)
+}
+
+struct HTMLDetailsView: View, DetailsRenderer {
+    public var object: AnyMIDIIOObject
+    @Binding public var showAll: Bool
+    
+    @State private var webViewHeight: CGFloat = .zero
+    @State private var webView: WKWebView = .init()
+    
+    var body: some View {
+        WebKitView(
+            dynamicHeight: $webViewHeight,
+            webView: $webView,
+            html: generateHTML(object)
+        )
+    }
     
     func generateHTML(_ endpoint: AnyMIDIIOObject) -> String {
         let flatProperties = endpoint.propertiesAsStrings(onlyIncludeRelevant: !showAll)
@@ -107,31 +147,5 @@ struct DetailsView: View {
         let htmlString = "\(htmlStart)\(htmlBody)\(htmlEnd)"
         
         return htmlString
-    }
-    
-    var body: some View {
-        if let unwrappedObject = object {
-            WebKitView(
-                dynamicHeight: $webViewHeight,
-                webView: $webView,
-                html: generateHTML(unwrappedObject)
-            )
-            
-            Group {
-                if showAll {
-                    Button("Show Relevant Properties") {
-                        showAll.toggle()
-                    }
-                } else {
-                    Button("Show All") {
-                        showAll.toggle()
-                    }
-                }
-            }
-            .padding(.all, 10)
-            
-        } else {
-            EmptyDetailsView()
-        }
     }
 }
