@@ -175,6 +175,9 @@ struct MarkdownDetailsView: View, DetailsRenderer {
             .onAppear {
                 refreshProperties()
             }
+            .onChange(of: showAll) { _ in
+                refreshProperties()
+            }
         }
     }
     
