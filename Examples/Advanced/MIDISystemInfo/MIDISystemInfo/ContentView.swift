@@ -8,8 +8,18 @@ import SwiftUI
 import MIDIKit
 import OTCore
 
-struct ContentView: View {
+func platformAppropriateContentView() -> AnyView {
+    if #available(macOS 12, *) {
+        return AnyView(ContentView(renderer: MarkdownDetailsView.self))
+    } else {
+        return AnyView(ContentView(renderer: HTMLDetailsView.self))
+    }
+}
+
+struct ContentView<Renderer: DetailsRenderer>: View {
     @EnvironmentObject var midiManager: MIDIManager
+    
+    let renderer: Renderer.Type
     
     var body: some View {
         NavigationView {
@@ -40,7 +50,7 @@ struct ContentView: View {
                 ForEach(items) { item in
                     let detailsView = DetailsView(
                         object: item.asAnyMIDIIOObject(),
-                        renderer: HTMLDetailsView.self
+                        renderer: renderer
                     )
                     
                     NavigationLink(destination: detailsView) {
@@ -89,7 +99,7 @@ struct ContentView: View {
                 ForEach(items) { item in
                     let detailsView = DetailsView(
                         object: item.asAnyMIDIIOObject(),
-                        renderer: HTMLDetailsView.self
+                        renderer: renderer
                     )
                     
                     NavigationLink(destination: detailsView) {
@@ -117,7 +127,7 @@ struct ContentView: View {
                 ForEach(items) { item in
                     let detailsView = DetailsView(
                         object: item.asAnyMIDIIOObject(),
-                        renderer: HTMLDetailsView.self
+                        renderer: renderer
                     )
                     
                     NavigationLink(destination: detailsView) {
@@ -140,9 +150,13 @@ struct ContentView: View {
 }
 
 struct ContentViewCatalina_Previews: PreviewProvider {
-    static let midiManager = MIDIManager(clientName: "Preview", model: "", manufacturer: "")
+    static let midiManager = MIDIManager(
+        clientName: "Preview",
+        model: "",
+        manufacturer: ""
+    )
+    
     static var previews: some View {
-        ContentView()
-            .environmentObject(midiManager)
+        platformAppropriateContentView()
     }
 }

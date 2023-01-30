@@ -43,8 +43,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.setFrameAutosaveName("Main Window")
     
         window.title = "MIDIKit System Info"
+        
         window.contentView = NSHostingView(
-            rootView: ContentView()
+            rootView: platformAppropriateContentView()
                 .environmentObject(midiManager)
                 .environment(\.hostingWindow) { [weak window] in window }
         )

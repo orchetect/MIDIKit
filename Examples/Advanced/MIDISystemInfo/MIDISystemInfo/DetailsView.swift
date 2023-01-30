@@ -6,6 +6,7 @@
 
 import SwiftUI
 import WebKit
+import OTCore
 import MIDIKit
 
 struct EmptyDetailsView: View {
@@ -68,8 +69,8 @@ struct HTMLDetailsView: View, DetailsRenderer {
         )
     }
     
-    func generateHTML(_ endpoint: AnyMIDIIOObject) -> String {
-        let flatProperties = endpoint.propertiesAsStrings(onlyIncludeRelevant: !showAll)
+    func generateHTML(_ object: AnyMIDIIOObject) -> String {
+        let flatProperties = object.propertiesAsStrings(onlyIncludeRelevant: !showAll)
         
         let htmlStart = """
             <HTML>
@@ -120,7 +121,7 @@ struct HTMLDetailsView: View, DetailsRenderer {
         let htmlEnd = #"</BODY></HTML>"#
         
         var htmlBody = """
-            <h2>\(endpoint.name)</h2>
+            <h2>\(object.name)</h2>
             <br>
             <table>
                 <thead>
@@ -147,5 +148,70 @@ struct HTMLDetailsView: View, DetailsRenderer {
         let htmlString = "\(htmlStart)\(htmlBody)\(htmlEnd)"
         
         return htmlString
+    }
+}
+
+@available(macOS 12.0, *)
+struct MarkdownDetailsView: View, DetailsRenderer {
+    public var object: AnyMIDIIOObject
+    @Binding public var showAll: Bool
+    
+    @State private var properties: [Property] = []
+    @State private var selection: Set<Property.ID> = []
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            // SwiftUI Text doesn't render markdown headings as different sizes. dumb.
+            //Text(markdown: "# \(object.name)")
+            
+            Table(properties, selection: $selection) {
+                TableColumn("Property", value: \.key).width(min: 50, ideal: 120, max: 250)
+                TableColumn("Value", value: \.value)
+            }
+            .tableStyle(.inset(alternatesRowBackgrounds: true))
+            .onCopyCommand {
+                selectedItemsProviders()
+            }
+            .onAppear {
+                refreshProperties()
+            }
+        }
+    }
+    
+    func selectedItemsProviders() -> [NSItemProvider] {
+        let str: String
+        
+        switch selection.count {
+        case 0:
+            return []
+            
+        case 1: // single
+            // just return value
+            str = properties
+                .first { $0.id == selection.first! }?
+                .value ?? ""
+            
+        default: // multiple
+            // return key/value pairs, one per line
+            str = properties
+                .filter { selection.contains($0.key) }
+                .map { "\($0.key): \($0.value)" }
+                .joined(separator: "\n")
+        }
+        
+        let provider: NSItemProvider = .init(object: str as NSString)
+        return [provider]
+    }
+    
+    func refreshProperties() {
+        properties = object.propertiesAsStrings(onlyIncludeRelevant: !showAll)
+            .map { Property(key: $0.key, value: $0.value) }
+    }
+    
+    struct Property: Identifiable {
+        let key: String
+        let value: String
+        
+        var id: String { key }
     }
 }

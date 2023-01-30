@@ -15,6 +15,7 @@
 		E24D200525BE75A90095BDE5 /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E24D200425BE75A90095BDE5 /* OTCore */; };
 		E24D200B25BE75D90095BDE5 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E24D200A25BE75D90095BDE5 /* MIDIKit */; };
 		E26B849C25EDA4F400080052 /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26B849B25EDA4F400080052 /* DetailsView.swift */; };
+		E26FA7682987597500CD9005 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26FA7672987597500CD9005 /* Utils.swift */; };
 		E293070425E90D750011904C /* HostingWindowKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E293070325E90D750011904C /* HostingWindowKey.swift */; };
 		E29AC90F285BEFF4009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC90E285BEFF4009D1C2C /* MIDIKit */; };
 		E2F71ED22758E92E006254C0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F71ED12758E92E006254C0 /* Log.swift */; };
@@ -30,6 +31,7 @@
 		E230C4AF25AE7B33005DCB55 /* MIDISystemInfo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MIDISystemInfo.entitlements; sourceTree = "<group>"; };
 		E24696C22880B69E00485518 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E26B849B25EDA4F400080052 /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
+		E26FA7672987597500CD9005 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		E293070325E90D750011904C /* HostingWindowKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingWindowKey.swift; sourceTree = "<group>"; };
 		E2F71ED12758E92E006254C0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,6 +75,7 @@
 				E205B44325E86AA7001A07D1 /* WebKitView.swift */,
 				E293070325E90D750011904C /* HostingWindowKey.swift */,
 				E2F71ED12758E92E006254C0 /* Log.swift */,
+				E26FA7672987597500CD9005 /* Utils.swift */,
 				E230C4AB25AE7B33005DCB55 /* Main.storyboard */,
 				E230C4AE25AE7B33005DCB55 /* Info.plist */,
 				E230C4AF25AE7B33005DCB55 /* MIDISystemInfo.entitlements */,
@@ -162,6 +165,7 @@
 				E205B44425E86AA7001A07D1 /* WebKitView.swift in Sources */,
 				E2F71ED22758E92E006254C0 /* Log.swift in Sources */,
 				E26B849C25EDA4F400080052 /* DetailsView.swift in Sources */,
+				E26FA7682987597500CD9005 /* Utils.swift in Sources */,
 				E230C4A525AE7B31005DCB55 /* ContentView.swift in Sources */,
 				E293070425E90D750011904C /* HostingWindowKey.swift in Sources */,
 				E230C4A325AE7B31005DCB55 /* AppDelegate.swift in Sources */,
