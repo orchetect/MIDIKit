@@ -44,7 +44,7 @@ Given the example Show Control SysEx bytes `F0 7F 01 02 01 07 0A F7`, the follow
        universalType: .realTime, // byte two (0x7F)
        deviceID: 0x01, // byte three (<device_ID>)
        subID1: 0x02, // byte four (<msc>)
-       subID2: 0x01, // byte five(<command_format>)
+       subID2: 0x01, // byte five (<command_format>)
        data: [0x07, 0x0A], // byte six and onward; omit trailing 0xF7
    )
    ```
