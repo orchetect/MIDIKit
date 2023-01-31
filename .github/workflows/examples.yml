@@ -86,49 +86,45 @@ jobs:
     - name: EndpointPickers - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -resolvePackageDependencies
     - name: EndpointPickers - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers (iOS)" -destination "platform=iOS Simulator,name=iPhone 12"
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device"
     - name: EndpointPickers - Build (macOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers (macOS)" -destination "generic/platform=macOS,name=Any Mac"
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "generic/platform=macOS,name=Any Mac"
 
     - name: EventParsing - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
     - name: EventParsing - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "platform=iOS Simulator,name=iPhone 12"
-    # requires disabling code signing because otherwise it "has entitlements that require signing with a development certificate."
-    - name: EventParsing - Build (macCatalyst / Designed for iPad)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "platform=macOS,variant=Designed for iPad" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device"
+    - name: EventParsing - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac"
+      
     - name: SystemNotifications - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -branch ${{ github.ref }}
     - name: SystemNotifications - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -resolvePackageDependencies
     - name: SystemNotifications - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "platform=iOS Simulator,name=iPhone 12"
-    # requires disabling code signing because otherwise it "has entitlements that require signing with a development certificate."
-    - name: SystemNotifications - Build (macCatalyst / Designed for iPad)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "platform=macOS,variant=Designed for iPad" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device"
+    - name: SystemNotifications - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "generic/platform=macOS,name=Any Mac"
 
     - name: VirtualInput - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
     - name: VirtualInput - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "platform=iOS Simulator,name=iPhone 12"
-    # requires disabling code signing because otherwise it "has entitlements that require signing with a development certificate."
-    - name: VirtualInput - Build (macCatalyst / Designed for iPad)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "platform=macOS,variant=Designed for iPad" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device"
+    - name: VirtualInput - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac"
 
     - name: VirtualOutput - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
     - name: VirtualOutput - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "platform=iOS Simulator,name=iPhone 12"
-    # requires disabling code signing because otherwise it "has entitlements that require signing with a development certificate."
-    - name: VirtualOutput - Build (macCatalyst / Designed for iPad)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "platform=macOS,variant=Designed for iPad" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device"
+    - name: VirtualOutput - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=macOS,name=Any Mac"
   
   AppKit:
     name: AppKit
