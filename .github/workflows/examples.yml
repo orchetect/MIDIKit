@@ -88,7 +88,7 @@ jobs:
     - name: EndpointPickers - Build (iOS)
       run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers (iOS)" -destination "platform=iOS Simulator,name=iPhone 12"
     - name: EndpointPickers - Build (macOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers (macOS)" -destination "generic/platform=macOS,name=Any Mac"
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers (macOS)" -destination "generic/platform=macOS,name=Any iOS Device"
 
     - name: EventParsing - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
