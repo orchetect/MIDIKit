@@ -4,6 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
+#if os(macOS)
+
 import SwiftUI
 import MIDIKitIO
 
@@ -157,3 +159,5 @@ extension ContentView {
         }
     }
 }
+
+#endif

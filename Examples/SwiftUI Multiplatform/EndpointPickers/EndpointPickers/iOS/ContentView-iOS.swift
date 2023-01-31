@@ -4,6 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
+#if os(iOS)
+
 import SwiftUI
 import MIDIKit
 
@@ -157,3 +159,5 @@ struct InfoView: View {
         .frame(maxWidth: 600)
     }
 }
+
+#endif

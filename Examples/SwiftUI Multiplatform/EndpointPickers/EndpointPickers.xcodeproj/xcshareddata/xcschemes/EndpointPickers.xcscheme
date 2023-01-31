@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E2496A99298908B4003FD165"
-               BuildableName = "EndpointPickers (macOS).app"
-               BlueprintName = "EndpointPickers (macOS)"
+               BlueprintIdentifier = "E27D0E5E284F3FB600F43247"
+               BuildableName = "EndpointPickers.app"
+               BlueprintName = "EndpointPickers"
                ReferencedContainer = "container:EndpointPickers.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,9 +44,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E2496A99298908B4003FD165"
-            BuildableName = "EndpointPickers (macOS).app"
-            BlueprintName = "EndpointPickers (macOS)"
+            BlueprintIdentifier = "E27D0E5E284F3FB600F43247"
+            BuildableName = "EndpointPickers.app"
+            BlueprintName = "EndpointPickers"
             ReferencedContainer = "container:EndpointPickers.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -61,9 +61,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E2496A99298908B4003FD165"
-            BuildableName = "EndpointPickers (macOS).app"
-            BlueprintName = "EndpointPickers (macOS)"
+            BlueprintIdentifier = "E27D0E5E284F3FB600F43247"
+            BuildableName = "EndpointPickers.app"
+            BlueprintName = "EndpointPickers"
             ReferencedContainer = "container:EndpointPickers.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

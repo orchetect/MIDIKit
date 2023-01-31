@@ -34,7 +34,9 @@ struct ContentView: View {
             }
             .disabled(midiManager.managedOutputs.isEmpty)
         }
+#if os(iOS)
         .font(.system(size: 18))
+#endif
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
