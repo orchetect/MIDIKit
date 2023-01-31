@@ -373,8 +373,10 @@ public protocol MIDIIOObject {
     
     /// Get all properties as a key/value pair array, formatted as human-readable strings.
     /// Useful for displaying in a user interface or outputting to console for debugging.
-    func propertiesAsStrings(
-        onlyIncludeRelevant: Bool
+    /// The return value is an array of tuples (not a dictionary) to maintain ordering.
+    /// Not recommended for production code. Instead, use strongly-typed properties on this object.
+    func propertyStringValues(
+        relevantOnly: Bool
     ) -> [(key: String, value: String)]
 }
 

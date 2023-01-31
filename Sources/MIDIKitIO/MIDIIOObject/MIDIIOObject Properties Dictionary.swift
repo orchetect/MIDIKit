@@ -11,11 +11,11 @@ import Foundation
 
 extension MIDIIOObject {
     // inline docs provided by the MIDIIOObject protocol
-    public func propertiesAsStrings(
-        onlyIncludeRelevant: Bool = true
+    public func propertyStringValues(
+        relevantOnly: Bool = true
     ) -> [(key: String, value: String)] {
         (
-            onlyIncludeRelevant
+            relevantOnly
                 ? objectType.relevantProperties
                 : AnyMIDIIOObject.Property.allCases
         )

@@ -8,6 +8,8 @@
 
 import Foundation
 
+// Symbols that were renamed or removed.
+
 extension MIDIIONotification {
     @available(*, deprecated, renamed: "added(object:parent:)")
     public static func added(parent: AnyMIDIIOObject?, child: AnyMIDIIOObject) -> Self {
@@ -23,6 +25,15 @@ extension MIDIIONotification {
     public static func propertyChanged(object: AnyMIDIIOObject,
                                        property: AnyMIDIIOObject.Property) -> Self {
         .propertyChanged(property: property, forObject: object)
+    }
+}
+
+extension MIDIIOObject {
+    @available(*, deprecated, renamed: "propertyStringValues(relevantOnly:)")
+    public func propertiesAsStrings(
+        onlyIncludeRelevant: Bool
+    ) -> [(key: String, value: String)] {
+        propertyStringValues(relevantOnly: onlyIncludeRelevant)
     }
 }
 
