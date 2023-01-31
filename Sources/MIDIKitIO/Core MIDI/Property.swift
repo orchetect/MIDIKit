@@ -91,6 +91,165 @@ extension AnyMIDIIOObject {
     }
 }
 
+// MARK: - Name
+
+extension AnyMIDIIOObject.Property {
+    /// Returns the human-readable name of the property, suitable for display in UI or debugging.
+    public var name: String {
+        switch self {
+        // MARK: Identification
+        case .name:
+            return "Name"
+            
+        case .model:
+            return "Model"
+            
+        case .manufacturer:
+            return "Manufacturer"
+            
+        case .uniqueID:
+            return "Unique ID"
+            
+        case .deviceID:
+            return "Device ID"
+            
+        // MARK: Capabilities
+        case .supportsMMC:
+            return "Supports MMC"
+            
+        case .supportsGeneralMIDI:
+            return "Supports General MIDI"
+            
+        case .supportsShowControl:
+            return "Supports Show Control"
+            
+        // MARK: Configuration
+        case .nameConfigurationDictionary:
+            return "Name Configuration Dictionary"
+            
+        case .maxSysExSpeed:
+            return "Max SysEx Speed"
+            
+        case .driverDeviceEditorApp:
+            return "Driver Device Editor App"
+            
+        // MARK: Presentation
+        case .image:
+            return "Image (File URL)"
+            
+        case .displayName:
+            return "Display Name"
+            
+        // MARK: Audio
+        case .panDisruptsStereo:
+            return "Pan Disrupts Stereo"
+            
+        // MARK: Protocols
+        case .protocolID:
+            return "Protocol ID"
+            
+        // MARK: Timing
+        case .transmitsMTC:
+            return "Transmits MTC"
+            
+        case .receivesMTC:
+            return "Receives MTC"
+            
+        case .transmitsClock:
+            return "Transmits Clock"
+            
+        case .receivesClock:
+            return "Receives Clock"
+            
+        case .advanceScheduleTimeMuSec:
+            return "Advance Schedule Time (μs)"
+            
+        // MARK: Roles
+        case .isMixer:
+            return "Is Mixer"
+            
+        case .isSampler:
+            return "Is Sampler"
+            
+        case .isEffectUnit:
+            return "Is Effect Unit"
+            
+        case .isDrumMachine:
+            return "Is Drum Machine"
+            
+        // MARK: Status
+        case .isOffline:
+            return "Is Offline"
+            
+        case .isPrivate:
+            return "Is Private"
+            
+        // MARK: Drivers
+        case .driverOwner:
+            return "Driver Owner"
+            
+        case .driverVersion:
+            return "Driver Version"
+            
+        // MARK: Connections
+        case .canRoute:
+            return "Can Route"
+            
+        case .isBroadcast:
+            return "Is Broadcast"
+            
+        case .connectionUniqueID:
+            return "Connection Unique ID"
+            
+        case .isEmbeddedEntity:
+            return "Is Embedded Entity"
+            
+        case .singleRealtimeEntity:
+            return "Single Realtime Entity"
+            
+        // MARK: Channels
+        case .receiveChannels:
+            return "Receive Channels"
+            
+        case .transmitChannels:
+            return "Transmit Channels"
+            
+        case .maxReceiveChannels:
+            return "Max Receive Channels"
+            
+        case .maxTransmitChannels:
+            return "Max Transmit Channels"
+            
+        // MARK: Banks
+        case .receivesBankSelectLSB:
+            return "Receives Bank Select LSB"
+            
+        case .receivesBankSelectMSB:
+            return "Receives Bank Select MSB"
+            
+        case .transmitsBankSelectLSB:
+            return "Transmits Bank Select LSB"
+            
+        case .transmitsBankSelectMSB:
+            return "Transmits Bank Select MSB"
+            
+        // MARK: Notes
+        case .receivesNotes:
+            return "Receives Notes"
+            
+        case .transmitsNotes:
+            return "Transmits Notes"
+            
+        // MARK: Program Changes
+        case .receivesProgramChanges:
+            return "Receives Program Changes"
+            
+        case .transmitsProgramChanges:
+            return "Transmits Program Changes"
+        }
+    }
+}
+
 // MARK: - Property Keys
 
 extension AnyMIDIIOObject.Property {
