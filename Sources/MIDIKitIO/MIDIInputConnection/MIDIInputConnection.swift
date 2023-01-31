@@ -418,11 +418,8 @@ extension MIDIInputConnection {
     internal func notification(_ internalNotification: MIDIIOInternalNotification) {
         if mode == .allEndpoints,
            let notif = MIDIIONotification(internalNotification, cache: nil),
-           case .added(
-               parent: _,
-               child: let child
-           ) = notif,
-           case let .outputEndpoint(newOutput) = child
+           case .added(object: let object, parent: _) = notif,
+           case let .outputEndpoint(newOutput) = object
         {
             add(outputs: [newOutput])
             return

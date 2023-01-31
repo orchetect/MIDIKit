@@ -19,20 +19,20 @@ public enum MIDIIONotification: Equatable, Hashable {
     
     /// The system added a device, entity, or endpoint.
     case added(
-        parent: AnyMIDIIOObject?,
-        child: AnyMIDIIOObject
+        object: AnyMIDIIOObject,
+        parent: AnyMIDIIOObject?
     )
     
     /// The system removed a device, entity, or endpoint.
     case removed(
-        parent: AnyMIDIIOObject?,
-        child: AnyMIDIIOObject
+        object: AnyMIDIIOObject,
+        parent: AnyMIDIIOObject?
     )
     
     /// An object’s property value changed.
     case propertyChanged(
-        object: AnyMIDIIOObject,
-        property: AnyMIDIIOObject.Property
+        property: AnyMIDIIOObject.Property,
+        forObject: AnyMIDIIOObject
     )
     
     /// The system created or disposed of a persistent MIDI Thru connection.
@@ -71,13 +71,7 @@ extension MIDIIONotification {
         case .setupChanged:
             self = .setupChanged
     
-        case let .added(
-            parentRef,
-            parentType,
-            childRef,
-            childType
-        ):
-    
+        case let .added(parentRef, parentType, childRef, childType):
             let parent = AnyMIDIIOObject(
                 coreMIDIObjectRef: parentRef,
                 coreMIDIObjectType: parentType
@@ -88,18 +82,9 @@ extension MIDIIONotification {
             )
             else { return nil }
     
-            self = .added(
-                parent: parent,
-                child: child
-            )
+            self = .added(object: child, parent: parent)
     
-        case let .removed(
-            parentRef,
-            parentType,
-            childRef,
-            childType
-        ):
-    
+        case let .removed(parentRef, parentType, childRef, childType):
             // we need to rely on data cache to get more information
             // since a Core MIDI 'removed' notification happens after the object is gone
     
@@ -115,16 +100,9 @@ extension MIDIIONotification {
             )
             else { return nil }
     
-            self = .removed(
-                parent: parent,
-                child: child
-            )
+            self = .removed(object: child, parent: parent)
     
-        case let .propertyChanged(
-            forRef,
-            forRefType,
-            propertyName
-        ):
+        case let .propertyChanged(forRef, forRefType, propertyName):
     
             // specific notification
             guard let obj = AnyMIDIIOObject(
@@ -134,10 +112,7 @@ extension MIDIIONotification {
                 let property = AnyMIDIIOObject.Property(propertyName as CFString)
             else { return nil }
     
-            self = .propertyChanged(
-                object: obj,
-                property: property
-            )
+            self = .propertyChanged(property: property, forObject: obj)
     
         case .thruConnectionChanged:
             self = .thruConnectionChanged
@@ -145,10 +120,7 @@ extension MIDIIONotification {
         case .serialPortOwnerChanged:
             self = .serialPortOwnerChanged
     
-        case let .ioError(
-            deviceRef,
-            error
-        ):
+        case let .ioError(deviceRef, error):
             let device = MIDIDevice(from: deviceRef)
             self = .ioError(
                 device: device,
@@ -167,31 +139,22 @@ extension MIDIIONotification: CustomStringConvertible {
         case .setupChanged:
             return "setupChanged"
     
-        case let .added(
-            parent,
-            child
-        ):
+        case let .added(object: object, parent: parent):
             if let parent = parent {
-                return "added(parent: \(parent), child: \(child))"
+                return "added(\(object), parent: \(parent))"
             } else {
-                return "added(\(child))"
+                return "added(\(object))"
             }
     
-        case let .removed(
-            parent,
-            child
-        ):
+        case let .removed(object: object, parent: parent):
             if let parent = parent {
-                return "removed(parent: \(parent), child: \(child))"
+                return "removed(\(object), parent: \(parent))"
             } else {
-                return "removed(\(child))"
+                return "removed(\(object))"
             }
     
-        case let .propertyChanged(
-            object,
-            property
-        ):
-            return "propertyChanged(for: \(object), property: \(property))"
+        case let .propertyChanged(object, property):
+            return "propertyChanged(\(property), for: \(object))"
     
         case .thruConnectionChanged:
             return "thruConnectionChanged"
@@ -199,10 +162,7 @@ extension MIDIIONotification: CustomStringConvertible {
         case .serialPortOwnerChanged:
             return "serialPortOwnerChanged"
     
-        case let .ioError(
-            device,
-            error
-        ):
+        case let .ioError(device, error):
             return "ioError(device: \(device), error: \(error))"
     
         case let .other(messageIDRawValue):

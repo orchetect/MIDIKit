@@ -52,11 +52,8 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
         var addedNotifFound = false
         notifications.forEach { notif in
             switch notif {
-            case .added(
-                parent: _,
-                child: let child
-            ):
-                switch child {
+            case .added(object: let object, parent: _):
+                switch object {
                 case let .outputEndpoint(endpoint):
                     if endpoint.name == "MIDIKit IO Tests Source 1" {
                         addedNotifFound = true
@@ -80,11 +77,8 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
         var removedNotifFound = false
         notifications.forEach { notif in
             switch notif {
-            case .removed(
-                parent: _,
-                child: let child
-            ):
-                switch child {
+            case .removed(object: let object, parent: _):
+                switch object {
                 case let .outputEndpoint(endpoint):
                     if endpoint.name == "MIDIKit IO Tests Source 1" {
                         removedNotifFound = true
