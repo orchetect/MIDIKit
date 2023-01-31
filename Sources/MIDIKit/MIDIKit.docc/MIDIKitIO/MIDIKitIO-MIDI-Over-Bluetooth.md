@@ -4,8 +4,8 @@ Set up Bluetooth MIDI connectivity in an iOS app.
 
 See the following example projects:
 
-- [iOS SwiftUI](https://github.com/orchetect/MIDIKit/blob/main/Examples/iOS%20SwiftUI/BluetoothMIDI/) Example
-- [iOS UIKit](https://github.com/orchetect/MIDIKit/blob/main/Examples/iOS%20UIKit/BluetoothMIDI/) Example
+- [iOS SwiftUI](https://github.com/orchetect/MIDIKit/blob/main/Examples/SwiftUI%20iOS/BluetoothMIDI/) Example
+- [iOS UIKit](https://github.com/orchetect/MIDIKit/blob/main/Examples/SwiftUI%20iOS/BluetoothMIDI/) Example
 
 ## Operation
 

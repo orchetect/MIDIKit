@@ -35,4 +35,4 @@ On iOS, the operating system will create one input and one output endpoint both 
 
 On macOS, the operating system will create one input and one output endpoint with the name of the device (ie: "iPhone" or "iPad"). The iOS device will also appear in the MIDI Studio window of Audio MIDI Setup.
 
-See the [USB iOS to Mac](https://github.com/orchetect/MIDIKit/tree/main/Examples/iOS%20SwiftUI/USB%20iOS%20to%20Mac) example project for more information.
+See the [USB iOS to Mac](https://github.com/orchetect/MIDIKit/tree/main/Examples/SwiftUI%20iOS/USB%20iOS%20to%20Mac) example project for more information.
