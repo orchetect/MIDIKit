@@ -378,6 +378,13 @@ public protocol MIDIIOObject {
     func propertyStringValues(
         relevantOnly: Bool
     ) -> [(key: String, value: String)]
+    
+    /// Get a property value formatted as a human-readable string.
+    /// Useful for displaying in a user interface or outputting to console for debugging.
+    /// Not recommended for production code. Instead, use strongly-typed properties on this object.
+    func propertyStringValue(
+        for property: AnyMIDIIOObject.Property
+    ) -> String
 }
 
 #endif
