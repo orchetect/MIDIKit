@@ -35,37 +35,42 @@ extension MIDIManager {
     }
     
     internal func internalNotificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
-        let internalNotification = MIDIIOInternalNotification(pointer)
-    
+        let internalNotif = MIDIIOInternalNotification(pointer)
+        
         let cache = MIDIIOObjectCache(from: self)
-    
-        switch internalNotification {
-        case .setupChanged,
-             .added,
-             .removed,
-             .propertyChanged:
-    
+        
+        switch internalNotif {
+        case .setupChanged, .added, .removed, .propertyChanged:
             updateObjectsCache()
-    
         default:
             break
         }
-    
-        if let notification = MIDIIONotification(
-            internalNotification,
-            cache: cache
-        ) {
-            sendNotification(notification)
+        
+        let notification: MIDIIONotification? = {
+            switch internalNotif {
+            case .removed:
+                // fall back on notificationCache in case we get more than
+                // one .removed notification in a row so we have metadata on hand
+                return MIDIIONotification(internalNotif, cache: notificationCache)
+            default:
+                notificationCache = cache
+                return MIDIIONotification(internalNotif, cache: cache)
+            }
+        }()
+        
+        // send notification to handler after internal cache is updated
+        if let notification = notification {
+            sendNotificationAsync(notification)
         }
-    
+        
         // propagate notification to managed objects
-    
+        
         for outputConnection in managedOutputConnections.values {
-            outputConnection.notification(internalNotification)
+            outputConnection.notification(internalNotif)
         }
     
         for inputConnection in managedInputConnections.values {
-            inputConnection.notification(internalNotification)
+            inputConnection.notification(internalNotif)
         }
     }
 }

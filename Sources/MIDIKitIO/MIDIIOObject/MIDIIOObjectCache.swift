@@ -10,9 +10,9 @@ import Foundation
 
 /// A temporary storage object for internal MIDI objects.
 internal struct MIDIIOObjectCache {
-    var devices: [MIDIDevice]
-    var inputEndpoints: [MIDIInputEndpoint]
-    var outputEndpoints: [MIDIOutputEndpoint]
+    let devices: [MIDIDevice]
+    let inputEndpoints: [MIDIInputEndpoint]
+    let outputEndpoints: [MIDIOutputEndpoint]
     
     init(from manager: MIDIManager) {
         devices = manager.devices.devices

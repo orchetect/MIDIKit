@@ -87,6 +87,9 @@ public final class MIDIManager: NSObject {
         _ manager: MIDIManager
     ) -> Void)?
     
+    /// Internal: system state cache for notification handling.
+    var notificationCache: MIDIIOObjectCache?
+    
     // MARK: - Internal dispatch queue
     
     /// Thread for MIDI event I/O.
@@ -159,7 +162,7 @@ public final class MIDIManager: NSObject {
     
     // MARK: - Helper methods
     
-    internal func sendNotification(_ notif: MIDIIONotification) {
+    internal func sendNotificationAsync(_ notif: MIDIIONotification) {
         if let notificationHandler = notificationHandler {
             DispatchQueue.main.async {
                 notificationHandler(notif, self)
