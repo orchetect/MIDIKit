@@ -21,8 +21,8 @@ on:
     - cron: '25 12 * * *'   # once a day @ 12:25pm UTC (5:35am PST)
 
 jobs:
-  iOS-UIKit:
-    name: iOS UIKit
+  UIKit:
+    name: UIKit
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@main
@@ -55,121 +55,110 @@ jobs:
     - name: VirtualOutput - Build
       run: xcodebuild build -project "Examples/iOS UIKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "platform=iOS Simulator,name=iPhone 12"
 
-  iOS-SwiftUI:
-    name: iOS SwiftUI
+  SwiftUI-iOS:
+    name: SwiftUI iOS
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@main
     
     - name: BluetoothMIDI - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -branch ${{ github.ref }}
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -branch ${{ github.ref }}
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
+      run: xcodebuild -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies
     - name: BluetoothMIDI - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "platform=iOS Simulator,name=iPhone 12"
+      run: xcodebuild build -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "platform=iOS Simulator,name=iPhone 12"
+
+    - name: USB iOS to Mac - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -branch ${{ github.ref }}
+    - name: USB iOS to Mac - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -resolvePackageDependencies
+    - name: USB iOS to Mac - Build
+      run: xcodebuild build -project "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -scheme "USB iOS to Mac" -destination "platform=iOS Simulator,name=iPhone 12"
+
+  SwiftUI-Multiplatform:
+    name: SwiftUI Multiplatform
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@main
 
     - name: EndpointPickers - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -branch ${{ github.ref }}
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -branch ${{ github.ref }}
     - name: EndpointPickers - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/iOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -resolvePackageDependencies
-    - name: EndpointPickers - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "platform=iOS Simulator,name=iPhone 12"
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -resolvePackageDependencies
+    - name: EndpointPickers - Build (iOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "platform=iOS Simulator,name=iPhone 12"
+    - name: EndpointPickers - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "generic/platform=macOS,name=Any Mac"
 
     - name: EventParsing - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS SwiftUI/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/iOS SwiftUI/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
-    - name: EventParsing - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "platform=iOS Simulator,name=iPhone 12"
-      
-    - name: USB iOS to Mac - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS SwiftUI/USB iOS to Mac/USB iOS to Mac.xcodeproj" -branch ${{ github.ref }}
-    - name: USB iOS to Mac - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/iOS SwiftUI/USB iOS to Mac/USB iOS to Mac.xcodeproj" -resolvePackageDependencies
-    - name: USB iOS to Mac - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/USB iOS to Mac/USB iOS to Mac.xcodeproj" -scheme "USB iOS to Mac" -destination "platform=iOS Simulator,name=iPhone 12"
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
+    - name: EventParsing - Build (iOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "platform=iOS Simulator,name=iPhone 12"
+    - name: EventParsing - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac"
+
+    - name: SystemNotifications - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -branch ${{ github.ref }}
+    - name: SystemNotifications - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -resolvePackageDependencies
+    - name: SystemNotifications - Build (iOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "platform=iOS Simulator,name=iPhone 12"
+    - name: SystemNotifications - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "generic/platform=macOS,name=Any Mac"
 
     - name: VirtualInput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/iOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
-    - name: VirtualInput - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "platform=iOS Simulator,name=iPhone 12"
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
+    - name: VirtualInput - Build (iOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "platform=iOS Simulator,name=iPhone 12"
+    - name: VirtualInput - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac"
 
     - name: VirtualOutput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/iOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -branch ${{ github.ref }}
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/iOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
-    - name: VirtualOutput - Build
-      run: xcodebuild build -project "Examples/iOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "platform=iOS Simulator,name=iPhone 12"
-
-  macOS-AppKit:
-    name: macOS AppKit
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
+    - name: VirtualOutput - Build (iOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "platform=iOS Simulator,name=iPhone 12"
+    - name: VirtualOutput - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=macOS,name=Any Mac"
+  
+  AppKit:
+    name: AppKit
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@main
     
     - name: EndpointMenus - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/macOS AppKit/EndpointMenus/EndpointMenus.xcodeproj" -branch ${{ github.ref }}
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/AppKit/EndpointMenus/EndpointMenus.xcodeproj" -branch ${{ github.ref }}
     - name: EndpointMenus - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/macOS AppKit/EndpointMenus/EndpointMenus.xcodeproj" -resolvePackageDependencies
+      run: xcodebuild -project "Examples/AppKit/EndpointMenus/EndpointMenus.xcodeproj" -resolvePackageDependencies
     - name: EndpointMenus - Build
-      run: xcodebuild build -project "Examples/macOS AppKit/EndpointMenus/EndpointMenus.xcodeproj" -scheme "EndpointMenus" -destination "generic/platform=macOS,name=Any Mac"
+      run: xcodebuild build -project "Examples/AppKit/EndpointMenus/EndpointMenus.xcodeproj" -scheme "EndpointMenus" -destination "generic/platform=macOS,name=Any Mac"
 
     - name: EventParsing - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/macOS AppKit/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/AppKit/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/macOS AppKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
+      run: xcodebuild -project "Examples/AppKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
     - name: EventParsing - Build
-      run: xcodebuild build -project "Examples/macOS AppKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac"
+      run: xcodebuild build -project "Examples/AppKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac"
 
     - name: VirtualInput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/macOS AppKit/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/AppKit/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/macOS AppKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
+      run: xcodebuild -project "Examples/AppKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
     - name: VirtualInput - Build
-      run: xcodebuild build -project "Examples/macOS AppKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac"
+      run: xcodebuild build -project "Examples/AppKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac"
 
     - name: VirtualOutput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/macOS AppKit/VirtualOutput/VirtualOutput.xcodeproj" -branch ${{ github.ref }}
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/AppKit/VirtualOutput/VirtualOutput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/macOS AppKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
+      run: xcodebuild -project "Examples/AppKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
     - name: VirtualOutput - Build
-      run: xcodebuild build -project "Examples/macOS AppKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=macOS,name=Any Mac"
-
-  macOS-SwiftUI:
-    name: macOS SwiftUI
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@main
-    
-    - name: EndpointPickers - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/macOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -branch ${{ github.ref }}
-    - name: EndpointPickers - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/macOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -resolvePackageDependencies
-    - name: EndpointPickers - Build
-      run: xcodebuild build -project "Examples/macOS SwiftUI/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "generic/platform=macOS,name=Any Mac"
-
-    - name: EventParsing - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/macOS SwiftUI/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
-    - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/macOS SwiftUI/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies
-    - name: EventParsing - Build
-      run: xcodebuild build -project "Examples/macOS SwiftUI/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac"
-
-    - name: VirtualInput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/macOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
-    - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/macOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies
-    - name: VirtualInput - Build
-      run: xcodebuild build -project "Examples/macOS SwiftUI/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac"
-
-    - name: VirtualOutput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/macOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -branch ${{ github.ref }}
-    - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/macOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies
-    - name: VirtualOutput - Build
-      run: xcodebuild build -project "Examples/macOS SwiftUI/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=macOS,name=Any Mac"
+      run: xcodebuild build -project "Examples/AppKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=macOS,name=Any Mac"
 
   Advanced:
     name: Advanced
