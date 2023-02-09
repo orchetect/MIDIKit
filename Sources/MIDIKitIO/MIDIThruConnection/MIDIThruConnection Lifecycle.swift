@@ -34,4 +34,16 @@ extension MIDIThruConnection.Lifecycle: CustomStringConvertible {
     }
 }
 
+extension MIDIThruConnection.Lifecycle {
+    /// Returns true if the instance is case ``nonPersistent``.
+    public var isPersistent: Bool {
+        switch self {
+        case .nonPersistent:
+            return false
+        case .persistent:
+            return true
+        }
+    }
+}
+
 #endif

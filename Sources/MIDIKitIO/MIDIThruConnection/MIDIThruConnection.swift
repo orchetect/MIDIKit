@@ -14,12 +14,14 @@
 // TODO: Core MIDI Thru Bug
 // There is a bug in Core MIDI's Swift bridging whereby passing nil into MIDIThruConnectionCreate
 // fails to create a non-persistent thru connection and actually creates a persistent thru
-// connection, despite what the Core MIDI documentation states.
+// connection, despite what the Core MIDI documentation states. Only macOS 11 and 12 seem affected.
+// - GitHub issue: https://github.com/orchetect/MIDIKit/issues/164
 // - Radar filed: https://openradar.appspot.com/radar?id=5043482339049472
-// - So having passed .nonPersistent has the effect of creating a persistent
-//   connection with an empty ownerID.
+// - Essentially, the net effect of passing .nonPersistent on those OS versions would create
+//   a persistent thru connection with an owner of an empty string ("") so we are blocking that
+//   from happening and throwing an error on those platforms.
 
-// TODO: Core MIDI Thru Bug
+// TODO: Core MIDI Thru Bug Not Flowing Events
 // A new issue seems to be present on macOS Big Sur and later where thru connections do not flow any
 // MIDI events.
 // -
@@ -29,6 +31,7 @@
 
 import Foundation
 @_implementationOnly import CoreMIDI
+import MIDIKitCore
 
 /// A managed MIDI thru connection created in the system by the MIDI I/O ``MIDIManager``.
 ///
@@ -36,9 +39,9 @@ import Foundation
 /// ``MIDIManager`` de-initializes) or persistent (maintained even after system reboots).
 ///
 /// > Warning:
-/// > ⚠️ MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core MIDI
-/// bugs on later macOS releases. Attempting to create thru connections on macOS Big Sur or later
-/// will throw an error.
+/// > ⚠️ Non-persistent MIDI play-thru connections cannot be formed on **macOS Big Sur or Monterey**
+/// > due to a Core MIDI bug. Attempting to create thru connections on those OS versions will throw
+/// > an error.
 ///
 /// > Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible
 /// call it by accessing non-persistent thru connections using the
@@ -107,7 +110,10 @@ public final class MIDIThruConnection: _MIDIManaged {
 }
 
 extension MIDIThruConnection {
+    @objc
     internal func create(in manager: MIDIManager) throws {
+        try MIDIThruConnection.verifyPlatformSupport(for: lifecycle)
+        
         var newConnection = MIDIThruConnectionRef()
     
         let paramsData = parameters.coreMIDIThruConnectionParams(
@@ -116,21 +122,105 @@ extension MIDIThruConnection {
         )
         .cfData()
     
-        // nil == non-persistent, client-owned
-        // non-nil == persistent, stored in the system
-        var cfPersistentOwnerID: CFString?
-    
-        if case let .persistent(ownerID: ownerID) = lifecycle {
-            cfPersistentOwnerID = ownerID as CFString
+        // The underlying Objective-C method has this signature:
+        // MIDIThruConnectionCreate(CFStringRef __nullable          inPersistentOwnerID,
+        //                          CFDataRef                       inConnectionParams,
+        //                          MIDIThruConnectionRef *         outConnection)
+        //
+        // inPersistentOwnerID:
+        // -  NULL     == non-persistent, client-owned
+        // -  non-NULL == persistent, stored in the system
+        
+        switch lifecycle {
+        case .nonPersistent:
+            // ⚠️ note that macOS Big Sur and Monterey are affected by a bug where
+            // the Swift bridging of `MIDIThruConnectionCreate` is broken and
+            // always creates persistent thru-connections even if nil is passed.
+            
+            // below are numerous fruitless experiments to find a pure Swift workaround.
+            // the workaround can be done using Objective-C but it's not viable
+            // if we want to keep MIDIKit pure Swift so it can work in Swift Playgrounds
+            // on iPad etc.
+            
+            // this is the Obj-C workaround that would need to go in an Obj-C package target:
+            // swiftformat:disable wrapSingleLineComments
+            // OSStatus CMIDIThruConnectionCreateNonPersistent(CFDataRef inConnectionParams, MIDIThruConnectionRef *outConnection)
+            // {
+            //     return MIDIThruConnectionCreate(NULL, inConnectionParams, outConnection);
+            // }
+            // swiftformat:enable wrapSingleLineComments
+            
+            // MARK: Experiment 1
+            
+            // the idea was to attempt to recast the Obj-C method to force it to take
+            // some form of C null that isn't a Swift nil,
+            // however we can't access the actual Obj-C method and are still dealing with
+            // the Swift bridging method which is likely where the bug exists
+            
+            // typealias MyMIDIThruConnectionCreate = @convention(block) (
+            //     CFString?,
+            //     CFData,
+            //     UnsafeMutablePointer<MIDIThruConnectionRef>
+            // ) -> OSStatus
+            // let myCreate = unsafeBitCast(MIDIThruConnectionCreate,
+            //     to: MyMIDIThruConnectionCreate.self)
+            // try myCreate(nil, paramsData, &newConnection)
+            // .throwIfOSStatusErr()
+            
+            // MARK: Experiment 2
+            
+            // same as above but different syntax
+            
+            // let myCreate = MIDIThruConnectionCreate as @convention(block) (
+            //     CFString?,
+            //     CFData,
+            //     UnsafeMutablePointer<MIDIThruConnectionRef>
+            // ) -> OSStatus
+            // try myCreate(nil, paramsData, &newConnection)
+            // .throwIfOSStatusErr()
+            
+            // MARK: Experiment 3
+            
+            // the idea was to attempt to force a CFNull into a CFString pointer, but
+            // the method still thinks it's a CFString and throws an exception.
+            // however we can't access the actual Obj-C method and are still dealing with
+            // the Swift bridging method which is likely where the bug exists
+            
+            // var null = kCFNull
+            // try withUnsafePointer(to: &null) { cfNullPtr in
+            //    cfNullPtr.withMemoryRebound(to: CFString.self, capacity: 1) { cfStringPtr in
+            //        MIDIThruConnectionCreate(
+            //            cfStringPtr.pointee,
+            //            paramsData,
+            //            &newConnection
+            //        )
+            //    }
+            // }
+            // .throwIfOSStatusErr()
+            
+            // MARK: Official Method
+            
+            // this is the official way to create a non-persistent thru connection
+            // however it always creates persistent connections on macOS 11 and 12
+            // nil does not translate to C NULL so the connection is created persistently (bad).
+            try MIDIThruConnectionCreate(
+                nil,
+                paramsData,
+                &newConnection
+            )
+            .throwIfOSStatusErr()
+            
+        case .persistent(ownerID: let ownerID):
+            let cfPersistentOwnerID = ownerID as CFString
+            
+            try MIDIThruConnectionCreate(
+                cfPersistentOwnerID,
+                paramsData,
+                &newConnection
+            )
+            .throwIfOSStatusErr()
         }
-    
-        try MIDIThruConnectionCreate(
-            cfPersistentOwnerID,
-            paramsData,
-            &newConnection
-        )
-        .throwIfOSStatusErr()
-    
+        
         coreMIDIThruConnectionRef = newConnection
     }
     

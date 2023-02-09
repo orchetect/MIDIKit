@@ -13,9 +13,9 @@ extension MIDIManager {
     /// Creates a new MIDI play-through (thru) connection.
     ///
     /// > Warning:
-    /// > ⚠️ MIDI play-thru connections only function on **macOS Catalina or earlier** due to Core
-    /// MIDI bugs on later macOS releases. Attempting to create thru connections on macOS Big Sur or
-    /// later will throw an error.
+    /// > ⚠️ Non-persistent MIDI play-thru connections cannot be formed on **macOS Big Sur or
+    /// > Monterey** due to a Core MIDI bug. Attempting to create thru connections on those OS
+    /// > versions will throw an error.
     ///
     /// If the connection is non-persistent, a managed thru connection will be added to
     /// ``MIDIManager/managedThruConnections`` and its lifecycle will be that of the ``MIDIManager``
@@ -40,9 +40,9 @@ extension MIDIManager {
     ///   - tag: Unique `String` key to refer to the new object that gets added to
     /// ``MIDIManager/managedThruConnections`` dictionary.
     ///   - lifecycle: If ``MIDIThruConnection/Lifecycle-swift.enum/nonPersistent``, thru connection
-    /// will expire when the app terminates. If
+    ///   will expire when the app terminates. If
     /// ``MIDIThruConnection/Lifecycle-swift.enum/persistent(ownerID:)``, the connection persists in
-    /// the system indefinitely (even after system reboots) until explicitly removed.
+    ///   the system indefinitely (even after system reboots) until explicitly removed.
     ///   - params: Optionally define custom ``MIDIThruConnection/Parameters-swift.struct``.
     ///
     /// - Throws: ``MIDIIOError``
@@ -53,12 +53,8 @@ extension MIDIManager {
         lifecycle: MIDIThruConnection.Lifecycle = .nonPersistent,
         params: MIDIThruConnection.Parameters = .init()
     ) throws {
-        guard isThruConnectionsSupportedOnCurrentPlatform else {
-            throw MIDIIOError.notSupported(
-                "MIDI Thru Connections are not supported on this platform due to Core MIDI bugs."
-            )
-        }
-    
+        try MIDIThruConnection.verifyPlatformSupport(for: lifecycle)
+        
         try eventQueue.sync {
             let newCT = MIDIThruConnection(
                 outputs: outputs,
