@@ -43,11 +43,6 @@ let package = Package(
             name: "MIDIKitSync",
             type: .static,
             targets: ["MIDIKitSync"]
-        ),
-        .library(
-            name: "MIDIKitC",
-            type: .static,
-            targets: ["MIDIKitC"]
         )
     ],
     
@@ -114,17 +109,6 @@ let package = Package(
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         
-        // Objective-C code only for workarounds not possible in Swift.
-        // Note: NOTHING in this package should have this as a dependency!
-        // won't interfere with Swift Playgrounds then.
-        .target(
-            name: "MIDIKitC",
-            dependencies: [
-                // none
-            ],
-            publicHeadersPath: "."
-        ),
-        
         // test targets
         .testTarget(
             name: "MIDIKitCoreTests",
@@ -137,7 +121,6 @@ let package = Package(
             name: "MIDIKitIOTests",
             dependencies: [
                 .target(name: "MIDIKitIO"),
-                .target(name: "MIDIKitC"), // won't interfere with Swift Playgrounds
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         ),

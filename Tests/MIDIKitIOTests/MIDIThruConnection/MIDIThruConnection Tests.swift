@@ -11,7 +11,6 @@
 import XCTest
 @_implementationOnly import MIDIKitInternals
 @testable import MIDIKitIO
-import MIDIKitC
 import CoreMIDI
 
 final class MIDIThruConnection_Tests: XCTestCase {
