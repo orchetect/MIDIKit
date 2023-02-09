@@ -118,8 +118,9 @@ Once created, these can be managed by accessing ``MIDIManager/managedThruConnect
 >
 > A special workaround can be used to enable support on these OS versions.
 >
-> 1. `import MIDIKitC`
-> 2. When calling `addOutputConnection`, pass the `using` parameter as follows:
+> 1. Link against the `MIDIKitC` library
+> 2. `import MIDIKitC`
+> 3. When calling `addOutputConnection`, pass the `using` parameter as follows:
 >    ```swift
 >    try midiManager.addOutputConnection(
 >        outputs: [],

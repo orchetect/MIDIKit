@@ -47,8 +47,9 @@ import MIDIKitCore
 /// > versions will throw an error unless the `nonPersistentConnectionBlock` parameter is
 /// > provided.
 /// >
-/// > 1. `import MIDIKitC`
-/// > 2. Pass `using: CMIDIThruConnectionCreateNonPersistent` when calling
+/// > 1. Link against the `MIDIKitC` library
+/// > 2. `import MIDIKitC`
+/// > 3. Pass `CMIDIThruConnectionCreateNonPersistent` to the `using` parameter when calling
 /// > ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:using:)``
 ///
 /// > Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible

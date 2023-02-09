@@ -11,6 +11,7 @@ midiManager.remove(.input, .withTag("VirtualInputTagHere"))
 midiManager.remove(.output, .withTag("VirtualOutputTagHere"))
 midiManager.remove(.inputConnection, .withTag("InConnTagHere"))
 midiManager.remove(.outputConnection, .withTag("OutConnTagHere"))
+midiManager.remove(.nonPersistentThruConnection, .withTag("ThruConnTagHere"))
 ```
 
 ## Remove All of a Type
@@ -24,7 +25,10 @@ midiManager.remove(.input, .all)
 midiManager.remove(.output, .all)
 midiManager.remove(.inputConnection, .all)
 midiManager.remove(.outputConnection, .all)
+midiManager.remove(.nonPersistentThruConnection, .all)
 ```
+
+To remove all persistent thru connections belonging to a specific owner ID, see ``MIDIManager/removeAllUnmanagedPersistentThruConnections(ownerID:)``
 
 ## Remove All
 
