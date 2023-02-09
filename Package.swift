@@ -43,6 +43,11 @@ let package = Package(
             name: "MIDIKitSync",
             type: .static,
             targets: ["MIDIKitSync"]
+        ),
+        .library(
+            name: "MIDIKitC",
+            type: .static,
+            targets: ["MIDIKitC"]
         )
     ],
     
