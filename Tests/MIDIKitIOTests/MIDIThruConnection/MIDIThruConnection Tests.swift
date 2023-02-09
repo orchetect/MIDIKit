@@ -11,6 +11,7 @@
 import XCTest
 @_implementationOnly import MIDIKitInternals
 @testable import MIDIKitIO
+import MIDIKitC
 import CoreMIDI
 
 final class MIDIThruConnection_Tests: XCTestCase {
@@ -20,11 +21,25 @@ final class MIDIThruConnection_Tests: XCTestCase {
     
     @ThreadSafeAccess private var connEvents: [MIDIEvent] = []
     
-    func testNonPersistentThruConnection() throws {
-        try XCTSkipIf(
-            !MIDIThruConnection.isNonPersistentThruConnectionsSupported,
-            MIDIThruConnection.midiThruConnectionsNotSupportedOnCurrentPlatformErrorReason
-        )
+    func testNonPersistentThruConnection_DefaultMethod() throws {
+        try runNonPersistentThruConnection(using: nil)
+    }
+    
+    func testNonPersistentThruConnection_UsingWorkaround() throws {
+        try runNonPersistentThruConnection(using: CMIDIThruConnectionCreateNonPersistent)
+    }
+    
+    private func runNonPersistentThruConnection(
+        using nonPersistentConnectionBlock: (
+            (CFData, UnsafeMutablePointer<CoreMIDIThruConnectionRef>) -> OSStatus
+        )?
+    ) throws {
+        if nonPersistentConnectionBlock == nil {
+             try XCTSkipIf(
+                 !MIDIThruConnection.isNonPersistentThruConnectionsSupported,
+                 MIDIThruConnection.midiThruConnectionsNotSupportedOnCurrentPlatformErrorReason
+             )
+        }
         
         let manager = MIDIManager(
             clientName: UUID().uuidString,
@@ -80,7 +95,8 @@ final class MIDIThruConnection_Tests: XCTestCase {
             outputs: [output1.endpoint],
             inputs: [input1.endpoint],
             tag: connTag,
-            lifecycle: .nonPersistent
+            lifecycle: .nonPersistent,
+            using: nonPersistentConnectionBlock
         )
         
         XCTAssertNotNil(manager.managedThruConnections[connTag])
@@ -111,11 +127,6 @@ final class MIDIThruConnection_Tests: XCTestCase {
     }
     
     func testPersistentThruConnection() throws {
-        try XCTSkipIf(
-            !MIDIThruConnection.isNonPersistentThruConnectionsSupported,
-            MIDIThruConnection.midiThruConnectionsNotSupportedOnCurrentPlatformErrorReason
-        )
-        
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -199,13 +210,27 @@ final class MIDIThruConnection_Tests: XCTestCase {
         connEvents = []
     }
     
+    func testGetParams_DefaultMethod() throws {
+        try runGetParams(using: nil)
+    }
+    
+    func testGetParams_UsingWorkaround() throws {
+        try runGetParams(using: CMIDIThruConnectionCreateNonPersistent)
+    }
+    
     /// Tests getting thru connection parameters from Core MIDI after creating the thru connection
     /// and verifying they are correct.
-    func testGetParams() throws {
-        try XCTSkipIf(
-            !MIDIThruConnection.isNonPersistentThruConnectionsSupported,
-            MIDIThruConnection.midiThruConnectionsNotSupportedOnCurrentPlatformErrorReason
-        )
+    private func runGetParams(
+        using nonPersistentConnectionBlock: (
+            (CFData, UnsafeMutablePointer<CoreMIDIThruConnectionRef>) -> OSStatus
+        )?
+    ) throws {
+        if nonPersistentConnectionBlock == nil {
+            try XCTSkipIf(
+                !MIDIThruConnection.isNonPersistentThruConnectionsSupported,
+                MIDIThruConnection.midiThruConnectionsNotSupportedOnCurrentPlatformErrorReason
+            )
+        }
         
         let manager = MIDIManager(
             clientName: UUID().uuidString,
@@ -261,7 +286,8 @@ final class MIDIThruConnection_Tests: XCTestCase {
             outputs: [output1.endpoint],
             inputs: [input1.endpoint],
             tag: connTag,
-            lifecycle: .nonPersistent
+            lifecycle: .nonPersistent,
+            using: CMIDIThruConnectionCreateNonPersistent
         )
         
         XCTAssertNotNil(manager.managedThruConnections[connTag])

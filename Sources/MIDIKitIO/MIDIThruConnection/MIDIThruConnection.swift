@@ -131,8 +131,6 @@ public final class MIDIThruConnection: _MIDIManaged {
 extension MIDIThruConnection {
     @objc
     internal func create(in manager: MIDIManager) throws {
-        try MIDIThruConnection.verifyPlatformSupport(for: lifecycle)
-        
         var newConnection = MIDIThruConnectionRef()
     
         let paramsData = parameters.coreMIDIThruConnectionParams(
@@ -233,12 +231,15 @@ extension MIDIThruConnection {
             // MARK: Official Method
             
             if let nonPersistentConnectionBlock = nonPersistentConnectionBlock {
+                // use block supplied by user (MIDIKitC.CMIDIThruConnectionCreateNonPersistent)
                 try nonPersistentConnectionBlock(
                     paramsData,
                     &newConnection
                 )
                 .throwIfOSStatusErr()
             } else {
+                try MIDIThruConnection.verifyPlatformSupport(for: lifecycle)
+                
                 // this is the official way to create a non-persistent thru connection
                 // however it always creates persistent connections on macOS 11 and 12
                 // nil does not translate to C NULL so the connection is created persistently (bad).

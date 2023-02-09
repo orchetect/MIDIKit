@@ -65,7 +65,9 @@ extension MIDIManager {
             (CFData, UnsafeMutablePointer<CoreMIDIThruConnectionRef>) -> OSStatus
         )? = nil
     ) throws {
-        try MIDIThruConnection.verifyPlatformSupport(for: lifecycle)
+        if nonPersistentConnectionBlock == nil {
+            try MIDIThruConnection.verifyPlatformSupport(for: lifecycle)
+        }
         
         try eventQueue.sync {
             let newCT = MIDIThruConnection(
