@@ -22,8 +22,8 @@
 //   from happening and throwing an error on those platforms.
 
 // TODO: Core MIDI Thru Bug Not Flowing Events
-// A new issue seems to be present on macOS Big Sur and Monterey where thru connections do not flow
-// any MIDI events. Perhaps this is the real issue and has nothing to do with Swift vs. Obj-C.
+// A new issue seems to be present on macOS 11 & 12 and iOS 14 & 15 where thru connections do not
+// flow any MIDI events. This appears to be the real issue and has nothing to do with Swift vs. Obj-C.
 // -
 // https://stackoverflow.com/questions/54871326/how-is-a-coremidi-thru-connection-made-in-swift-4-2
 
@@ -57,9 +57,9 @@ import MIDIKitCore
 ///
 /// > Warning:
 /// >
-/// > Due to a Core MIDI bug, persistent thru connections are not functional on macOS
-/// > Big Sur and Monterey. On these systems, an error will be thrown. There is no known
-/// > solution or workaround.
+/// > Due to a Core MIDI bug, persistent thru connections are not functional on macOS 11 & 12 and
+/// > iOS 14 & 15. On these systems, an error will be thrown. There is no known solution or
+/// > workaround.
 public final class MIDIThruConnection: _MIDIManaged {
     // _MIDIManaged
     internal weak var midiManager: MIDIManager?
@@ -139,7 +139,7 @@ extension MIDIThruConnection {
         
         switch lifecycle {
         case .nonPersistent:
-            // ⚠️ note that macOS Big Sur and Monterey are affected by a bug where
+            // ⚠️ note that macOS 11 & 12 and iOS 14 & 15 are affected by a bug where
             // the Swift bridging of `MIDIThruConnectionCreate` is broken and
             // always creates persistent thru-connections even if nil is passed.
             // Additionally, even upon successful call to that method, events do not flow

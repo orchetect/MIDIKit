@@ -30,7 +30,7 @@ extension MIDIManager {
     /// and orphaned if the endpoints used to create them cease to be relevant at any point in time.
     ///
     /// - Warning: Due to a Core MIDI bug, persistent thru connections are not functional on macOS
-    ///   Big Sur and Monterey. On these systems, an error will be thrown. There is no known
+    ///   11 & 12 and iOS 14 & 15. On these systems, an error will be thrown. There is no known
     ///   solution or workaround.
     ///
     /// - Parameters:

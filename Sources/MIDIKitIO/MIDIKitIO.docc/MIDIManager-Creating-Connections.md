@@ -139,7 +139,7 @@ All persistent connections belonging to a particular owner ID may also be remove
 
 > Warning: 
 > 
-> Due to a Core MIDI bug, persistent thru connections are not functional on macOS Big Sur and Monterey. On these systems, an error will be thrown. There is no known solution or workaround.
+> Due to a Core MIDI bug, persistent thru connections are not functional on macOS 11 & 12 and iOS 14 & 15. On these systems, an error will be thrown. There is no known solution or workaround.
 
 ## Topics
 

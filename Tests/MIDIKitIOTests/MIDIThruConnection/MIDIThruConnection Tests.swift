@@ -168,13 +168,13 @@ final class MIDIThruConnection_Tests: XCTestCase {
             )
         }
         
-        // continue test unless current platform is macOS 11 or 12, in which case we expect an error to be thrown
-        if #available(macOS 13, *) {
+        // continue test unless current platform can't support persistent thru connections
+        if #available(macOS 13, iOS 16, *) {
             try addThru()
-        } else if #available(macOS 11, *) {
+        } else if #available(macOS 11, iOS 14, *) {
             XCTAssertThrowsError(try addThru())
-            throw XCTSkip("Can't test persistent thru connections on macOS 11 or 12")
-        } else { // macOS 10.15 and earlier
+            throw XCTSkip("Can't test persistent thru connections on macOS 11 & 12 and iOS 14 & 15.")
+        } else { // macOS 10.15.x and earlier, or iOS 13.x and earlier
             try addThru()
         }
         

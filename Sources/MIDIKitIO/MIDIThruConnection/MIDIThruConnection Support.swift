@@ -11,16 +11,16 @@ extension MIDIThruConnection {
     /// non-persistent).
     /// See the header comments in MIDIThruConnection.swift for more details.
     internal static var isThruConnectionsSupported: Bool {
-        if #available(macOS 13.0, /* iOS ???, */ *) {
-            // Apple fixed the Core MIDI bug in macOS 13 Ventura
+        if #available(macOS 13.0, iOS 16.0, *) {
+            // Apple fixed the Core MIDI bug in macOS 13.0 and iOS 16.0
             return true
-        } else if #available(macOS 11.0, /* iOS ???, */ *) {
-            // Thru Connections is broken on macOS 11 Big Sur and macOS 12 Monterey
+        } else if #available(macOS 11.0, iOS 14.0, *) {
+            // Thru Connections is broken on macOS 11 & 12 and iOS 14 & 15
             // We can use a proxy to add support for non-persistent thru connections,
             // however we can't help that persistent connections are broken.
             return false
         } else {
-            // macOS 10.15 Catalina and older
+            // macOS 10.15.x Catalina and older, or iOS 13.x or older
             return true
         }
     }
@@ -30,7 +30,7 @@ extension MIDIThruConnection {
     )
     
     internal static let persistentThruNotSupportedErrorReason: String =
-        "Persistent MIDI Thru Connections cannot be created on macOS Big Sur or Monterey due to a Core MIDI bug. Consider using a non-persistent thru connection instead."
+        "Persistent MIDI Thru Connections cannot be created on macOS 11 & 12 and iOS 14 & 15 due to a Core MIDI bug. Consider using a non-persistent thru connection instead."
 }
 
 #endif
