@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// This is an Obj-C function that wraps this method to accomplish this instead.
 OSStatus CMIDIThruConnectionCreateNonPersistent(CFDataRef inConnectionParams,
                                                 MIDIThruConnectionRef *outConnection)
+API_AVAILABLE(macos(10.2), ios(4.2)) API_UNAVAILABLE(tvos, watchos)
 {
     
     return MIDIThruConnectionCreate(NULL, inConnectionParams, outConnection);
