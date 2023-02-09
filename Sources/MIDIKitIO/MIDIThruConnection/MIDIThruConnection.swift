@@ -287,6 +287,14 @@ extension MIDIThruConnection {
     }
 }
 
+extension MIDIThruConnection {
+    internal func notification(_ internalNotification: MIDIIOInternalNotification) {
+        // Native Core MIDI thru connections don't/can't be notified of system changes.
+        // However, if we're using our custom thru connection proxy, we can notify it.
+        proxy?.notification(internalNotification)
+    }
+}
+
 extension MIDIThruConnection: CustomStringConvertible {
     public var description: String {
         var thruConnectionRefString = "nil"

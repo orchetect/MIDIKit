@@ -49,4 +49,11 @@ final class MIDIThruConnectionProxy {
     }
 }
 
+extension MIDIThruConnectionProxy {
+    internal func notification(_ internalNotification: MIDIIOInternalNotification) {
+        inputConnection.notification(internalNotification)
+        outputConnection.notification(internalNotification)
+    }
+}
+
 #endif

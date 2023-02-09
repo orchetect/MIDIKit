@@ -68,9 +68,13 @@ extension MIDIManager {
         for outputConnection in managedOutputConnections.values {
             outputConnection.notification(internalNotif)
         }
-    
+        
         for inputConnection in managedInputConnections.values {
             inputConnection.notification(internalNotif)
+        }
+        
+        for thruConnection in managedThruConnections.values {
+            thruConnection.notification(internalNotif)
         }
     }
 }
