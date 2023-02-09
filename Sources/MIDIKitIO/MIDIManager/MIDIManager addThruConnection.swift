@@ -29,17 +29,6 @@ extension MIDIManager {
     /// - Warning: Be careful when creating persistent thru connections, as they can become stale
     /// and orphaned if the endpoints used to create them cease to be relevant at any point in time.
     ///
-    /// > Warning:
-    /// > ⚠️ Non-persistent MIDI play-thru connections are affected by a Core MIDI bug on **macOS Big
-    /// > Sur and Monterey**. Attempting to create non-persistent thru connections on those OS
-    /// > versions will throw an error unless the `nonPersistentConnectionBlock` parameter is
-    /// > provided.
-    /// >
-    /// > 1. Link against the `MIDIKitC` library
-    /// > 2. `import MIDIKitC`
-    /// > 3. Pass `CMIDIThruConnectionCreateNonPersistent` to the `using` parameter when calling
-    /// > ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:using:)``
-    ///
     /// - Parameters:
     ///   - outputs: Maximum of 8 ``MIDIOutputEndpoint``.
     ///   - inputs: Maximum of 8 ``MIDIInputEndpoint``.
@@ -50,9 +39,6 @@ extension MIDIManager {
     /// ``MIDIThruConnection/Lifecycle-swift.enum/persistent(ownerID:)``, the connection persists in
     ///   the system indefinitely (even after system reboots) until explicitly removed.
     ///   - params: Optionally define custom ``MIDIThruConnection/Parameters-swift.struct``.
-    ///   - nonPersistentConnectionBlock: This may be `nil` unless creating a non-persistent thru
-    ///   connection on macOS Big Sur or Monterey. In that case, see the discussion block for more
-    ///   details.
     ///
     /// - Throws: ``MIDIIOError``
     public func addThruConnection(
@@ -60,15 +46,8 @@ extension MIDIManager {
         inputs: [MIDIInputEndpoint],
         tag: String,
         lifecycle: MIDIThruConnection.Lifecycle = .nonPersistent,
-        params: MIDIThruConnection.Parameters = .init(),
-        using nonPersistentConnectionBlock: (
-            (CFData, UnsafeMutablePointer<CoreMIDIThruConnectionRef>) -> OSStatus
-        )? = nil
+        params: MIDIThruConnection.Parameters = .init()
     ) throws {
-        if nonPersistentConnectionBlock == nil {
-            try MIDIThruConnection.verifyPlatformSupport(for: lifecycle)
-        }
-        
         try eventQueue.sync {
             let newCT = MIDIThruConnection(
                 outputs: outputs,
@@ -76,8 +55,7 @@ extension MIDIManager {
                 lifecycle: lifecycle,
                 params: params,
                 midiManager: self,
-                api: preferredAPI,
-                using: nonPersistentConnectionBlock
+                api: preferredAPI
             )
     
             // if non-persistent, add to managed array

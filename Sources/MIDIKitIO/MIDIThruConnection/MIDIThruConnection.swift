@@ -20,15 +20,15 @@
 // - Essentially, the net effect of passing .nonPersistent on those OS versions would create
 //   a persistent thru connection with an owner of an empty string ("") so we are blocking that
 //   from happening and throwing an error on those platforms.
-// The resolution for the meantime is to keep a helper method in MIDIKitC which
-// is an Objective-C target in the package. The library user must import this target and supply the
-// Obj-C workaround method when creating thru connections on the MIDIManager.
 
 // TODO: Core MIDI Thru Bug Not Flowing Events
-// A new issue seems to be present on macOS Big Sur and later where thru connections do not flow any
-// MIDI events.
+// A new issue seems to be present on macOS Big Sur and Monterey where thru connections do not flow
+// any MIDI events. Perhaps this is the real issue and has nothing to do with Swift vs. Obj-C.
 // -
 // https://stackoverflow.com/questions/54871326/how-is-a-coremidi-thru-connection-made-in-swift-4-2
+
+// The resolution for both these issues is to implement a custom replacement of a thru connection
+// that can take the place of Core MIDI's thru connection on affected OS versions.
 
 #if !os(tvOS) && !os(watchOS)
 
@@ -40,17 +40,6 @@ import MIDIKitCore
 ///
 /// Core MIDI play-through connections can be non-persistent (client-owned, auto-disposed when
 /// ``MIDIManager`` de-initializes) or persistent (maintained even after system reboots).
-///
-/// > Warning:
-/// > ⚠️ Non-persistent MIDI play-thru connections are affected by a Core MIDI bug on **macOS Big
-/// > Sur and Monterey**. Attempting to create non-persistent thru connections on those OS
-/// > versions will throw an error unless the `nonPersistentConnectionBlock` parameter is
-/// > provided.
-/// >
-/// > 1. Link against the `MIDIKitC` library
-/// > 2. `import MIDIKitC`
-/// > 3. Pass `CMIDIThruConnectionCreateNonPersistent` to the `using` parameter when calling
-/// > ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:using:)``
 ///
 /// > Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible
 /// call it by accessing non-persistent thru connections using the
@@ -77,9 +66,8 @@ public final class MIDIThruConnection: _MIDIManaged {
     public private(set) var inputs: [MIDIInputEndpoint]
     public private(set) var lifecycle: Lifecycle
     public private(set) var parameters: Parameters
-    private var nonPersistentConnectionBlock: (
-        (CFData, UnsafeMutablePointer<CoreMIDIThruConnectionRef>) -> OSStatus
-    )?
+    
+    internal var proxy: MIDIThruConnectionProxy?
     
     // init
     
@@ -97,26 +85,18 @@ public final class MIDIThruConnection: _MIDIManaged {
     ///   - params: Optionally supply custom parameters for the connection.
     ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
-    ///   - nonPersistentConnectionBlock: Optional connection method as a workaround for the Core
-    ///     MIDI bug. See
-    ///     ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:using:)`` for more
-    ///     info.
     internal init(
         outputs: [MIDIOutputEndpoint],
         inputs: [MIDIInputEndpoint],
         lifecycle: Lifecycle = .nonPersistent,
         params: Parameters = .init(),
         midiManager: MIDIManager,
-        api: CoreMIDIAPIVersion = .bestForPlatform(),
-        using nonPersistentConnectionBlock: (
-            (CFData, UnsafeMutablePointer<CoreMIDIThruConnectionRef>) -> OSStatus
-        )?
+        api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
         // truncate arrays to 8 members or less;
         // Core MIDI thru connections can only have up to 8 outputs and 8 inputs
     
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-        self.nonPersistentConnectionBlock = nonPersistentConnectionBlock
         self.outputs = Array(outputs.prefix(8))
         self.inputs = Array(inputs.prefix(8))
         self.lifecycle = lifecycle
@@ -154,6 +134,8 @@ extension MIDIThruConnection {
             // ⚠️ note that macOS Big Sur and Monterey are affected by a bug where
             // the Swift bridging of `MIDIThruConnectionCreate` is broken and
             // always creates persistent thru-connections even if nil is passed.
+            // Additionally, even upon successful call to that method, events do not flow
+            // from the outputs to the inputs. For that reason, we use a proxy connection.
             
             // below are numerous fruitless experiments to find a pure Swift workaround.
             // the workaround can be done using Objective-C but it's not viable
@@ -231,16 +213,7 @@ extension MIDIThruConnection {
             
             // MARK: Official Method
             
-            if let nonPersistentConnectionBlock = nonPersistentConnectionBlock {
-                // use block supplied by user (MIDIKitC.CMIDIThruConnectionCreateNonPersistent)
-                try nonPersistentConnectionBlock(
-                    paramsData,
-                    &newConnection
-                )
-                .throwIfOSStatusErr()
-            } else {
-                try MIDIThruConnection.verifyPlatformSupport(for: lifecycle)
-                
+            if Self.isNonPersistentThruConnectionsSupported {
                 // this is the official way to create a non-persistent thru connection
                 // however it always creates persistent connections on macOS 11 and 12
                 // nil does not translate to C NULL so the connection is created persistently (bad).
@@ -250,6 +223,14 @@ extension MIDIThruConnection {
                     &newConnection
                 )
                 .throwIfOSStatusErr()
+            } else {
+                proxy = try MIDIThruConnectionProxy(
+                    outputs: outputs,
+                    inputs: inputs,
+                    midiManager: manager,
+                    api: api
+                )
+                coreMIDIThruConnectionRef = nil
             }
             
         case .persistent(ownerID: let ownerID):
@@ -273,13 +254,21 @@ extension MIDIThruConnection {
     internal func dispose() throws {
         // don't dispose if it's a persistent connection
         guard lifecycle == .nonPersistent else { return }
-    
+        
+        // remove proxy if it's in use, which will clean up its connections
+        proxy = nil
+        
+        // dispose of Core MIDI thru connection
+        
+        // ref will be nil if either:
+        // - connection has already been disposed
+        // - we're using the custom thru proxy
         guard let unwrappedThruConnectionRef = coreMIDIThruConnectionRef else { return }
-    
+        
         defer {
             self.coreMIDIThruConnectionRef = nil
         }
-    
+        
         try MIDIThruConnectionDispose(unwrappedThruConnectionRef)
             .throwIfOSStatusErr()
     }
