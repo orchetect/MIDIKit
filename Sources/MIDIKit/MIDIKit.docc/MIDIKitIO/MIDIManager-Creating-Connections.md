@@ -91,10 +91,74 @@ conn?.add(inputs: [.uniqueID(uID)])
 conn?.remove(inputs: [.uniqueID(uID)])
 ```
 
+## Managed Thru Connections
+
+Core MIDI has a feature called play-thru connections. Events from between 1-8 existing output endpoints can be directly routed to 1-8 existing input endpoints. These can be any endpoints on the system.
+
+These connections can be created in one of two different flavors: non-persistent and persistent.
+
+### Non-Persistent Thru Connection
+
+Non-persistent thru connections are owned by the ``MIDIManager`` and automatically dispose of themselves when it deinits and/or when your app quits.
+
+```swift
+try midiManager.addOutputConnection(
+    outputs: [],
+    inputs: [],
+    tag: "ThruConnection1",
+    lifecycle: .nonPersistent
+)
+```
+
+Once created, these can be managed by accessing ``MIDIManager/managedThruConnections``.
+
+> Warning:
+>
+> Creating non-persistent thru connections suffers from a Core MIDI bug specifically on macOS Big Sur and Monterey. Calling `addOutputConnection` on these OS versions will result in an error being thrown.
+>
+> A special workaround can be used to enable support on these OS versions.
+>
+> 1. `import MIDIKitC`
+> 2. When calling `addOutputConnection`, pass the `using` parameter as follows:
+>    ```swift
+>    try midiManager.addOutputConnection(
+>        outputs: [],
+>        inputs: [],
+>        tag: "ThruConnection1",
+>        lifecycle: .nonPersistent,
+>        using: CMIDIThruConnectionCreateNonPersistent
+>    )
+>    ```
+
+### Persistent Thru Connection
+
+Persistent thru connections are stored persistently in the system and are always active, even after app termination and after system reboots.
+
+An owner ID is supplied when creating these connections so that they can be modified or removed later. Typically is ID is a reverse-DNS domain string and usually the application's bundle ID is used.
+
+```swift
+try midiManager.addOutputConnection(
+    outputs: [],
+    inputs: [],
+    tag: "ThruConnection1",
+    lifecycle: .persistent(ownerID: "com.mydomain.myapp")
+)
+```
+
+Once created, these are not stored as managed objects in ``MIDIManager``.
+
+Instead, you can access them by reading ``MIDIManager/unmanagedPersistentThruConnections(ownerID:)``.
+
+All persistent connections belonging to a particular owner ID may also be removed all at once by calling ``MIDIManager/removeAllUnmanagedPersistentThruConnections(ownerID:)``.
+
+> Warning: 
+> 
+> Be careful when creating persistent thru connections, as they can become stale and orphaned if the endpoints used to create them cease to be relevant at any point in time.
+
 ## Topics
 
 ### MIDIManager Methods
 
 - ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``
 - ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``
-- ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:)``
+- ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:using:)``
