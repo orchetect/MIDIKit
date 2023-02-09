@@ -41,7 +41,9 @@ import MIDIKitCore
 /// Core MIDI play-through connections can be non-persistent (client-owned, auto-disposed when
 /// ``MIDIManager`` de-initializes) or persistent (maintained even after system reboots).
 ///
-/// > Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible
+/// > Note:
+/// >
+/// > Do not store or cache this object unless it is unavoidable. Instead, whenever possible
 /// call it by accessing non-persistent thru connections using the
 /// ``MIDIManager/managedThruConnections`` collection. The ``MIDIManager`` owns this object and
 /// maintains non-persistent thru connections' lifecycle.
@@ -52,6 +54,12 @@ import MIDIKitCore
 /// ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// ``MIDIManager/ManagedType/nonPersistentThruConnection`` or ``MIDIManager/removeAll()`` to
 /// destroy the managed thru connection.)
+///
+/// > Warning:
+/// >
+/// > Due to a Core MIDI bug, persistent thru connections are not functional on macOS
+/// > Big Sur and Monterey. On these systems, an error will be thrown. There is no known
+/// > solution or workaround.
 public final class MIDIThruConnection: _MIDIManaged {
     // _MIDIManaged
     internal weak var midiManager: MIDIManager?
@@ -213,7 +221,7 @@ extension MIDIThruConnection {
             
             // MARK: Official Method
             
-            if Self.isNonPersistentThruConnectionsSupported {
+            if Self.isThruConnectionsSupported {
                 // this is the official way to create a non-persistent thru connection
                 // however it always creates persistent connections on macOS 11 and 12
                 // nil does not translate to C NULL so the connection is created persistently (bad).
@@ -224,6 +232,7 @@ extension MIDIThruConnection {
                 )
                 .throwIfOSStatusErr()
             } else {
+                // use a custom thru connection that does not rely on Core MIDI's thru implementation
                 proxy = try MIDIThruConnectionProxy(
                     outputs: outputs,
                     inputs: inputs,
@@ -234,6 +243,10 @@ extension MIDIThruConnection {
             }
             
         case .persistent(ownerID: let ownerID):
+            guard Self.isThruConnectionsSupported else {
+                throw Self.persistentThruNotSupportedError
+            }
+            
             let cfPersistentOwnerID = ownerID as CFString
             
             try MIDIThruConnectionCreate(

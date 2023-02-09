@@ -112,25 +112,6 @@ try midiManager.addOutputConnection(
 
 Once created, these can be managed by accessing ``MIDIManager/managedThruConnections``.
 
-> Warning:
->
-> Creating non-persistent thru connections suffers from a Core MIDI bug specifically on macOS Big Sur and Monterey. Calling `addOutputConnection` on these OS versions will result in an error being thrown.
->
-> A special workaround can be used to enable support on these OS versions.
->
-> 1. Link against the `MIDIKitC` library
-> 2. `import MIDIKitC`
-> 3. When calling `addOutputConnection`, pass the `using` parameter as follows:
->    ```swift
->    try midiManager.addOutputConnection(
->        outputs: [],
->        inputs: [],
->        tag: "ThruConnection1",
->        lifecycle: .nonPersistent,
->        using: CMIDIThruConnectionCreateNonPersistent
->    )
->    ```
-
 ### Persistent Thru Connection
 
 Persistent thru connections are stored persistently in the system and are always active, even after app termination and after system reboots.
@@ -156,10 +137,14 @@ All persistent connections belonging to a particular owner ID may also be remove
 > 
 > Be careful when creating persistent thru connections, as they can become stale and orphaned if the endpoints used to create them cease to be relevant at any point in time.
 
+> Warning: 
+> 
+> Due to a Core MIDI bug, persistent thru connections are not functional on macOS Big Sur and Monterey. On these systems, an error will be thrown. There is no known solution or workaround.
+
 ## Topics
 
 ### MIDIManager Methods
 
 - ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``
 - ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``
-- ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:using:)``
+- ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:)``

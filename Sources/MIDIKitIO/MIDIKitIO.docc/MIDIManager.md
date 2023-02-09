@@ -95,7 +95,7 @@ Remove one or more ports or managed connections from the `MIDIManager`.
 
 Thru connections are a native feature of Core MIDI that can pass MIDI events from outputs to inputs directly.
 
-- ``addThruConnection(outputs:inputs:tag:lifecycle:params:using:)``
+- ``addThruConnection(outputs:inputs:tag:lifecycle:params:)``
 - ``managedThruConnections``
 - ``unmanagedPersistentThruConnections(ownerID:)``
 - ``removeAllUnmanagedPersistentThruConnections(ownerID:)``

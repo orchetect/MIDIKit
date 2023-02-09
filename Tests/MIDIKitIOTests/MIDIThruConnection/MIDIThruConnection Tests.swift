@@ -160,12 +160,24 @@ final class MIDIThruConnection_Tests: XCTestCase {
         // add new connection
         
         let connTag = "testThruConnection"
-        try manager.addThruConnection(
-            outputs: [output1.endpoint],
-            inputs: [input1.endpoint],
-            tag: connTag,
-            lifecycle: .persistent(ownerID: ownerID)
-        )
+        func addThru() throws {
+            try manager.addThruConnection(
+                outputs: [output1.endpoint],
+                inputs: [input1.endpoint],
+                tag: connTag,
+                lifecycle: .persistent(ownerID: ownerID)
+            )
+        }
+        
+        // continue test unless current platform is macOS 11 or 12, in which case we expect an error to be thrown
+        if #available(macOS 13, *) {
+            try addThru()
+        } else if #available(macOS 11, *) {
+            XCTAssertThrowsError(try addThru())
+            throw XCTSkip("Can't test persistent thru connections on macOS 11 or 12")
+        } else { // macOS 10.15 and earlier
+            try addThru()
+        }
         
         wait(sec: 0.2)
         
