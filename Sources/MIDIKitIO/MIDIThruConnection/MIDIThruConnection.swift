@@ -20,6 +20,9 @@
 // - Essentially, the net effect of passing .nonPersistent on those OS versions would create
 //   a persistent thru connection with an owner of an empty string ("") so we are blocking that
 //   from happening and throwing an error on those platforms.
+// The resolution for the meantime is to keep a helper method in MIDIKitC which
+// is an Objective-C target in the package. The library user must import this target and supply the
+// Obj-C workaround method when creating thru connections on the MIDIManager.
 
 // TODO: Core MIDI Thru Bug Not Flowing Events
 // A new issue seems to be present on macOS Big Sur and later where thru connections do not flow any
@@ -39,9 +42,14 @@ import MIDIKitCore
 /// ``MIDIManager`` de-initializes) or persistent (maintained even after system reboots).
 ///
 /// > Warning:
-/// > ⚠️ Non-persistent MIDI play-thru connections cannot be formed on **macOS Big Sur or Monterey**
-/// > due to a Core MIDI bug. Attempting to create thru connections on those OS versions will throw
-/// > an error.
+/// > ⚠️ Non-persistent MIDI play-thru connections are affected by a Core MIDI bug on **macOS Big
+/// > Sur and Monterey**. Attempting to create non-persistent thru connections on those OS
+/// > versions will throw an error unless the `nonPersistentConnectionBlock` parameter is
+/// > provided.
+/// >
+/// > 1. `import MIDIKitC`
+/// > 2. Pass `using: CMIDIThruConnectionCreateNonPersistent` when calling
+/// > ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:using:)``
 ///
 /// > Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible
 /// call it by accessing non-persistent thru connections using the
@@ -68,6 +76,9 @@ public final class MIDIThruConnection: _MIDIManaged {
     public private(set) var inputs: [MIDIInputEndpoint]
     public private(set) var lifecycle: Lifecycle
     public private(set) var parameters: Parameters
+    private var nonPersistentConnectionBlock: (
+        (CFData, UnsafeMutablePointer<CoreMIDIThruConnectionRef>) -> OSStatus
+    )?
     
     // init
     
@@ -85,18 +96,26 @@ public final class MIDIThruConnection: _MIDIManaged {
     ///   - params: Optionally supply custom parameters for the connection.
     ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
+    ///   - nonPersistentConnectionBlock: Optional connection method as a workaround for the Core
+    ///     MIDI bug. See
+    ///     ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:using:)`` for more
+    ///     info.
     internal init(
         outputs: [MIDIOutputEndpoint],
         inputs: [MIDIInputEndpoint],
         lifecycle: Lifecycle = .nonPersistent,
         params: Parameters = .init(),
         midiManager: MIDIManager,
-        api: CoreMIDIAPIVersion = .bestForPlatform()
+        api: CoreMIDIAPIVersion = .bestForPlatform(),
+        using nonPersistentConnectionBlock: (
+            (CFData, UnsafeMutablePointer<CoreMIDIThruConnectionRef>) -> OSStatus
+        )?
     ) {
         // truncate arrays to 8 members or less;
         // Core MIDI thru connections can only have up to 8 outputs and 8 inputs
     
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+        self.nonPersistentConnectionBlock = nonPersistentConnectionBlock
         self.outputs = Array(outputs.prefix(8))
         self.inputs = Array(inputs.prefix(8))
         self.lifecycle = lifecycle
@@ -198,17 +217,38 @@ extension MIDIThruConnection {
             // }
             // .throwIfOSStatusErr()
             
+            // MARK: Experiment 4
+            
+            // can't import a target in the package unless it's set as a dependency in Package.swift
+            // so this could never work while also keeping MIDIKit friendly to pure-Swift
+            // development environments like Swift Playgrounds
+            
+            // #if canImport(MIDIKitC)
+            //
+            // try CMIDIThruConnectionCreateNonPersistent(paramsData, &newConnection)
+            //     .throwIfOSStatusErr()
+            //
+            // #else
+            
             // MARK: Official Method
             
-            // this is the official way to create a non-persistent thru connection
-            // however it always creates persistent connections on macOS 11 and 12
-            // nil does not translate to C NULL so the connection is created persistently (bad).
-            try MIDIThruConnectionCreate(
-                nil,
-                paramsData,
-                &newConnection
-            )
-            .throwIfOSStatusErr()
+            if let nonPersistentConnectionBlock = nonPersistentConnectionBlock {
+                try nonPersistentConnectionBlock(
+                    paramsData,
+                    &newConnection
+                )
+                .throwIfOSStatusErr()
+            } else {
+                // this is the official way to create a non-persistent thru connection
+                // however it always creates persistent connections on macOS 11 and 12
+                // nil does not translate to C NULL so the connection is created persistently (bad).
+                try MIDIThruConnectionCreate(
+                    nil,
+                    paramsData,
+                    &newConnection
+                )
+                .throwIfOSStatusErr()
+            }
             
         case .persistent(ownerID: let ownerID):
             let cfPersistentOwnerID = ownerID as CFString

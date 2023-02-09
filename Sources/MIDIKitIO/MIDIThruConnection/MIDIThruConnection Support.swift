@@ -48,7 +48,7 @@ extension MIDIThruConnection {
     )
     
     internal static let midiThruConnectionsNotSupportedOnCurrentPlatformErrorReason: String =
-    "Non-Persistent MIDI Thru Connections are not supported on macOS Big Sur or Monterey due to a Core MIDI bug. It is still possible, but requires a Objective-C workaround and MIDIKit is built to be pure Swift."
+    "Non-Persistent MIDI Thru Connections cannot be created on macOS Big Sur or Monterey due to a Core MIDI bug without supplying the CMIDIThruConnectionCreateNonPersistent block from MIDIKitC. See MIDIKit documentation for more details."
 }
 
 #endif

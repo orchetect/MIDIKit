@@ -12,11 +12,6 @@ import Foundation
 extension MIDIManager {
     /// Creates a new MIDI play-through (thru) connection.
     ///
-    /// > Warning:
-    /// > ⚠️ Non-persistent MIDI play-thru connections cannot be formed on **macOS Big Sur or
-    /// > Monterey** due to a Core MIDI bug. Attempting to create thru connections on those OS
-    /// > versions will throw an error.
-    ///
     /// If the connection is non-persistent, a managed thru connection will be added to
     /// ``MIDIManager/managedThruConnections`` and its lifecycle will be that of the ``MIDIManager``
     /// or until ``MIDIManager/remove(_:_:)`` is called for the connection.
@@ -29,10 +24,19 @@ extension MIDIManager {
     /// For every persistent thru connection your app creates, they should be assigned the same
     /// persistent ID (reverse-DNS domain) so they can be managed or removed in future.
     ///
+    /// - Note: Max 8 outputs and max 8 inputs are allowed when forming a thru connection.
+    ///
     /// - Warning: Be careful when creating persistent thru connections, as they can become stale
     /// and orphaned if the endpoints used to create them cease to be relevant at any point in time.
     ///
-    /// - Note: Max 8 outputs and max 8 inputs are allowed when forming a thru connection.
+    /// > Warning:
+    /// > ⚠️ Non-persistent MIDI play-thru connections are affected by a Core MIDI bug on **macOS Big
+    /// > Sur and Monterey**. Attempting to create non-persistent thru connections on those OS
+    /// > versions will throw an error unless the `nonPersistentConnectionBlock` parameter is
+    /// > provided.
+    /// >
+    /// > 1. `import MIDIKitC`
+    /// > 2. Pass `using: CMIDIThruConnectionCreateNonPersistent` to this method.
     ///
     /// - Parameters:
     ///   - outputs: Maximum of 8 ``MIDIOutputEndpoint``.
@@ -44,6 +48,11 @@ extension MIDIManager {
     /// ``MIDIThruConnection/Lifecycle-swift.enum/persistent(ownerID:)``, the connection persists in
     ///   the system indefinitely (even after system reboots) until explicitly removed.
     ///   - params: Optionally define custom ``MIDIThruConnection/Parameters-swift.struct``.
+    ///   - connectionBlock: This may be `nil` unless creating a non-persistent thru connection
+    ///   on macOS Big Sur or Monterey. In that case, passing `nil` will result in an error due to a
+    ///   Core MIDI bug that prevents creating non-persistent connections through Swift. In this
+    ///   case, `import MIDIKitC` and pass `CMIDIThruConnectionCreateNonPersistent` as the value for
+    ///   this parameter.
     ///
     /// - Throws: ``MIDIIOError``
     public func addThruConnection(
@@ -51,7 +60,10 @@ extension MIDIManager {
         inputs: [MIDIInputEndpoint],
         tag: String,
         lifecycle: MIDIThruConnection.Lifecycle = .nonPersistent,
-        params: MIDIThruConnection.Parameters = .init()
+        params: MIDIThruConnection.Parameters = .init(),
+        using nonPersistentConnectionBlock: (
+            (CFData, UnsafeMutablePointer<CoreMIDIThruConnectionRef>) -> OSStatus
+        )? = nil
     ) throws {
         try MIDIThruConnection.verifyPlatformSupport(for: lifecycle)
         
@@ -62,7 +74,8 @@ extension MIDIManager {
                 lifecycle: lifecycle,
                 params: params,
                 midiManager: self,
-                api: preferredAPI
+                api: preferredAPI,
+                using: nonPersistentConnectionBlock
             )
     
             // if non-persistent, add to managed array
