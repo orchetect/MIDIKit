@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Create the window and set the content view.
         window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 950, height: 850),
-            styleMask: [.titled, .miniaturizable, .resizable],
+            styleMask: [.titled, .unifiedTitleAndToolbar, .fullSizeContentView, .miniaturizable, .resizable],
             backing: .buffered,
             defer: false
         )
@@ -41,7 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.center()
         window.setFrameAutosaveName("Main Window")
     
-        window.title = "MIDIKit System Info"
+        window.title = "MIDI System Info"
         
         window.contentView = NSHostingView(
             rootView: ContentViewForCurrentPlatform()

@@ -12,17 +12,27 @@ import MIDIKit
 
 struct EmptyDetailsView: View {
     var body: some View {
-        Text("Make a selection.")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        VStack {
+            if #available(macOS 11.0, *) {
+                Image(systemName: "pianokeys")
+                    .resizable()
+                    .foregroundColor(.secondary)
+                    .frame(width: 200, height: 200)
+                Spacer().frame(height: 50)
+            }
+            Text("Make a selection from the sidebar.")
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 // MARK: - Surrogate Details View
 
-struct DetailsView<DetailsContent: View>: View {
+struct DetailsView<Content: View>: View {
     let object: AnyMIDIIOObject?
     let detailsContent: (_ object: AnyMIDIIOObject?,
-                         _ showAllBinding: Binding<Bool>) -> DetailsContent
+                         _ showAllBinding: Binding<Bool>) -> Content
     
     @State private var showAll: Bool = false
     
@@ -51,7 +61,7 @@ struct DetailsView<DetailsContent: View>: View {
 
 // MARK: - Per-Platform Details Views
 
-protocol DetailsViewProtocol where Self: View {
+protocol DetailsContent where Self: View {
     var object: AnyMIDIIOObject? { get set }
     var showAll: Bool { get set }
     
@@ -66,7 +76,7 @@ struct Property: Identifiable, Hashable {
     var id: String { key }
 }
 
-extension DetailsViewProtocol {
+extension DetailsContent {
     func refreshProperties() {
         guard let unwrappedObject = object else { return }
         properties = unwrappedObject.propertyStringValues(relevantOnly: !showAll)
@@ -99,8 +109,8 @@ extension DetailsViewProtocol {
     }
 }
 
-/// Legacy details view for systems prior to macOS 12.
-struct LegacyDetailsView: View, DetailsViewProtocol {
+/// Legacy details view for systems prior to macOS 12 / iOS 16.
+struct LegacyDetailsView: View, DetailsContent {
     public var object: AnyMIDIIOObject?
     @Binding public var showAll: Bool
     
@@ -121,9 +131,11 @@ struct LegacyDetailsView: View, DetailsViewProtocol {
                     // empty
                 }
             }
+#if os(macOS)
             .onCopyCommand {
                 selectedItemsProviders()
             }
+#endif
         }
         .onAppear {
             refreshProperties()
@@ -149,9 +161,9 @@ struct LegacyDetailsView: View, DetailsViewProtocol {
     }
 }
 
-/// Modern details view for macOS 12 or later.
-@available(macOS 12.0, *)
-struct TableDetailsView: View, DetailsViewProtocol {
+/// Modern details view.
+@available(macOS 12.0, iOS 16.0, *)
+struct TableDetailsView: View, DetailsContent {
     public var object: AnyMIDIIOObject?
     @Binding public var showAll: Bool
     
@@ -160,16 +172,9 @@ struct TableDetailsView: View, DetailsViewProtocol {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            // SwiftUI Text doesn't render markdown headings as different sizes. dumb.
-            //Text(markdown: "# \(object.name)")
-            
             Table(properties, selection: $selection) {
                 TableColumn("Property", value: \.key).width(min: 50, ideal: 120, max: 250)
                 TableColumn("Value", value: \.value)
-            }
-            .tableStyle(.inset(alternatesRowBackgrounds: true))
-            .onCopyCommand {
-                selectedItemsProviders()
             }
             .onAppear {
                 refreshProperties()
@@ -177,6 +182,14 @@ struct TableDetailsView: View, DetailsViewProtocol {
             .onChange(of: showAll) { _ in
                 refreshProperties()
             }
+#if os(macOS)
+            .tableStyle(.inset(alternatesRowBackgrounds: true))
+            .onCopyCommand {
+                selectedItemsProviders()
+            }
+#elseif os(iOS)
+            .tableStyle(InsetTableStyle())
+#endif
         }
     }
 }
