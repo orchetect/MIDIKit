@@ -70,7 +70,7 @@ struct HTMLDetailsView: View, DetailsRenderer {
     }
     
     func generateHTML(_ object: AnyMIDIIOObject) -> String {
-        let flatProperties = object.propertiesAsStrings(onlyIncludeRelevant: !showAll)
+        let flatProperties = object.propertyStringValues(relevantOnly: !showAll)
         
         let htmlStart = """
             <HTML>
@@ -207,7 +207,7 @@ struct MarkdownDetailsView: View, DetailsRenderer {
     }
     
     func refreshProperties() {
-        properties = object.propertiesAsStrings(onlyIncludeRelevant: !showAll)
+        properties = object.propertyStringValues(relevantOnly: !showAll)
             .map { Property(key: $0.key, value: $0.value) }
     }
     
