@@ -5,7 +5,6 @@
 //
 
 import SwiftUI
-import OTCore
 import MIDIKit
 
 @main
@@ -22,10 +21,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // set up midi manager
     
         do {
-            logger.debug("Starting MIDI manager client")
+            print("Starting MIDI manager client")
             try midiManager.start()
         } catch {
-            logger.default(error)
+            print(error)
         }
     
         // Create the window and set the content view.
@@ -45,9 +44,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.title = "MIDIKit System Info"
         
         window.contentView = NSHostingView(
-            rootView: platformAppropriateContentView()
+            rootView: ContentViewForCurrentPlatform()
                 .environmentObject(midiManager)
-                .environment(\.hostingWindow) { [weak window] in window }
         )
     
         window.makeKeyAndOrderFront(nil)

@@ -4,10 +4,11 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
+import Combine
 import SwiftUI
-import WebKit
-import OTCore
 import MIDIKit
+
+// MARK: - Empty Details Views
 
 struct EmptyDetailsView: View {
     var body: some View {
@@ -16,15 +17,18 @@ struct EmptyDetailsView: View {
     }
 }
 
-struct DetailsView<Renderer: DetailsRenderer>: View {
+// MARK: - Surrogate Details View
+
+struct DetailsView<DetailsContent: View>: View {
     let object: AnyMIDIIOObject?
-    let renderer: Renderer.Type
+    let detailsContent: (_ object: AnyMIDIIOObject?,
+                         _ showAllBinding: Binding<Bool>) -> DetailsContent
     
     @State private var showAll: Bool = false
     
     var body: some View {
         if let unwrappedObject = object {
-            renderer.init(object: unwrappedObject, showAll: $showAll)
+            detailsContent(unwrappedObject, $showAll)
             
             Group {
                 if showAll {
@@ -45,140 +49,28 @@ struct DetailsView<Renderer: DetailsRenderer>: View {
     }
 }
 
-protocol DetailsRenderer where Self: View {
-    associatedtype Content: View
+// MARK: - Per-Platform Details Views
+
+protocol DetailsViewProtocol where Self: View {
+    var object: AnyMIDIIOObject? { get set }
+    var showAll: Bool { get set }
     
-    var object: AnyMIDIIOObject { get }
-    var body: Content { get }
-    
-    init(object: AnyMIDIIOObject, showAll: Binding<Bool>)
+    var properties: [Property] { get nonmutating set }
+    var selection: Set<Property.ID> { get set }
 }
 
-struct HTMLDetailsView: View, DetailsRenderer {
-    public var object: AnyMIDIIOObject
-    @Binding public var showAll: Bool
+struct Property: Identifiable, Hashable {
+    let key: String
+    let value: String
     
-    @State private var webViewHeight: CGFloat = .zero
-    @State private var webView: WKWebView = .init()
-    
-    var body: some View {
-        WebKitView(
-            dynamicHeight: $webViewHeight,
-            webView: $webView,
-            html: generateHTML(object)
-        )
-    }
-    
-    func generateHTML(_ object: AnyMIDIIOObject) -> String {
-        let flatProperties = object.propertyStringValues(relevantOnly: !showAll)
-        
-        let htmlStart = """
-            <HTML>
-            <HEAD>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-                <style>
-                body {
-                    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-                        "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-                        "Droid Sans", "Helvetica Neue", sans-serif;
-                    font-weight: regular;
-                    font-size: 15px;
-                    background: #FFFFFF;
-                    color: #000000;
-                }
-                @media (prefers-color-scheme: dark) {
-                    body {
-                    background: #262423;
-                    color: #FFFFFF;
-                    }
-                }
-                table {
-                    table-layout: fixed;
-                    width: 100%;
-                    font-size: 14px;
-                }
-                th.props {
-                    width: 250px;
-                }
-                th.values {
-                    overflow-wrap: break-word;
-                    word-wrap: break-word;
-                    word-break: break-word;
-                    -ms-word-break: break-all;
-                }
-                th {
-                    font-weight: bold, semibold;
-                }
-                th, td {
-                    text-align: left;
-                    padding: 3px;
-                }
-                </style>
-            </HEAD>
-            <BODY>
-            """
-        
-        let htmlEnd = #"</BODY></HTML>"#
-        
-        var htmlBody = """
-            <h2>\(object.name)</h2>
-            <br>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="props">Property</th>
-                        <th class="values">Value</th>
-                    </tr>
-                </thead>
-            """
-        
-        for (key, value) in flatProperties {
-            htmlBody += """
-                  <tr>
-                    <td>\(key)</td>
-                    <td>\(value)</td>
-                  </tr>
-                """
-        }
-        
-        htmlBody += """
-            </table>
-            """
-        
-        let htmlString = "\(htmlStart)\(htmlBody)\(htmlEnd)"
-        
-        return htmlString
-    }
+    var id: String { key }
 }
 
-@available(macOS 12.0, *)
-struct MarkdownDetailsView: View, DetailsRenderer {
-    public var object: AnyMIDIIOObject
-    @Binding public var showAll: Bool
-    
-    @State private var properties: [Property] = []
-    @State private var selection: Set<Property.ID> = []
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // SwiftUI Text doesn't render markdown headings as different sizes. dumb.
-            //Text(markdown: "# \(object.name)")
-            
-            Table(properties, selection: $selection) {
-                TableColumn("Property", value: \.key).width(min: 50, ideal: 120, max: 250)
-                TableColumn("Value", value: \.value)
-            }
-            .tableStyle(.inset(alternatesRowBackgrounds: true))
-            .onCopyCommand {
-                selectedItemsProviders()
-            }
-            .onAppear {
-                refreshProperties()
-            }
-            .onChange(of: showAll) { _ in
-                refreshProperties()
-            }
-        }
+extension DetailsViewProtocol {
+    func refreshProperties() {
+        guard let unwrappedObject = object else { return }
+        properties = unwrappedObject.propertyStringValues(relevantOnly: !showAll)
+            .map { Property(key: $0.key, value: $0.value) }
     }
     
     func selectedItemsProviders() -> [NSItemProvider] {
@@ -205,16 +97,86 @@ struct MarkdownDetailsView: View, DetailsRenderer {
         let provider: NSItemProvider = .init(object: str as NSString)
         return [provider]
     }
+}
+
+/// Legacy details view for systems prior to macOS 12.
+struct LegacyDetailsView: View, DetailsViewProtocol {
+    public var object: AnyMIDIIOObject?
+    @Binding public var showAll: Bool
     
-    func refreshProperties() {
-        properties = object.propertyStringValues(relevantOnly: !showAll)
-            .map { Property(key: $0.key, value: $0.value) }
+    @State var properties: [Property] = []
+    @State var selection: Set<Property.ID> = []
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            List(selection: $selection) {
+                Section {
+                    ForEach(properties) {
+                        Row(property: $0).tag($0)
+                    }
+                } header: {
+                    Row(property: Property(key: "Property", value: "Value"))
+                        .font(.headline)
+                } footer: {
+                    // empty
+                }
+            }
+            .onCopyCommand {
+                selectedItemsProviders()
+            }
+        }
+        .onAppear {
+            refreshProperties()
+        }
+        .onReceive(Just(showAll)) { _ in // workaround since we can't use onChange {}
+            refreshProperties()
+        }
     }
     
-    struct Property: Identifiable {
-        let key: String
-        let value: String
+    struct Row: View, Identifiable {
+        let property: Property
         
-        var id: String { key }
+        var id: Property.ID { property.id }
+        
+        var body: some View {
+            HStack(alignment: .top) {
+                Text(property.key)
+                    .frame(width: 220, alignment: .leading)
+                Text(property.value)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+    }
+}
+
+/// Modern details view for macOS 12 or later.
+@available(macOS 12.0, *)
+struct TableDetailsView: View, DetailsViewProtocol {
+    public var object: AnyMIDIIOObject?
+    @Binding public var showAll: Bool
+    
+    @State var properties: [Property] = []
+    @State var selection: Set<Property.ID> = []
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            // SwiftUI Text doesn't render markdown headings as different sizes. dumb.
+            //Text(markdown: "# \(object.name)")
+            
+            Table(properties, selection: $selection) {
+                TableColumn("Property", value: \.key).width(min: 50, ideal: 120, max: 250)
+                TableColumn("Value", value: \.value)
+            }
+            .tableStyle(.inset(alternatesRowBackgrounds: true))
+            .onCopyCommand {
+                selectedItemsProviders()
+            }
+            .onAppear {
+                refreshProperties()
+            }
+            .onChange(of: showAll) { _ in
+                refreshProperties()
+            }
+        }
     }
 }
