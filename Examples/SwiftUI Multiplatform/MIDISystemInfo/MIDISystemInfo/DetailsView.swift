@@ -13,7 +13,7 @@ import MIDIKit
 struct EmptyDetailsView: View {
     var body: some View {
         VStack {
-            if #available(macOS 11.0, *) {
+            if #available(macOS 11.0, iOS 14.0, *) {
                 Image(systemName: "pianokeys")
                     .resizable()
                     .foregroundColor(.secondary)
