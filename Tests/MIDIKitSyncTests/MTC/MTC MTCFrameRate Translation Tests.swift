@@ -27,7 +27,9 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
                 ._24,
                 ._24_98,
                 ._47_952,
-                ._48
+                ._48,
+                ._95_904,
+                ._96
             ]
         )
         

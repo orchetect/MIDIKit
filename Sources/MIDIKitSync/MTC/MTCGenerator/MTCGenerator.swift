@@ -144,11 +144,12 @@ public final class MTCGenerator: SendsMIDIEvents {
     /// Sets timer rate to corresponding MTC quarter-frame duration in Hz.
     internal func setTimerRate(from frameRate: TimecodeFrameRate) {
         // const values generated from:
-        // TCC(f: 1).toTimecode(at: frameRate)!.realTimeValue
-            
+        // TCC(f: 1).toTimecode(at: frameRate).realTimeValue
+        // double and quadruple rates use the same value as their 1x rate
+        
         // duration in seconds for one quarter-frame
         let rate: Double
-            
+        
         switch frameRate {
         case ._23_976:      rate = 0.010427083333333333
         case ._24:          rate = 0.010416666666666666
@@ -158,20 +159,22 @@ public final class MTCGenerator: SendsMIDIEvents {
         case ._29_97_drop:  rate = 0.008341666666666666
         case ._30:          rate = 0.008333333333333333
         case ._30_drop:     rate = 0.008341666666666666
-        case ._47_952:      rate = 0.010427083333333333
-        case ._48:          rate = 0.010416666666666666
-        case ._50:          rate = 0.01
-        case ._59_94:       rate = 0.008341666666666666
-        case ._59_94_drop:  rate = 0.008341666666666666
-        case ._60:          rate = 0.008333333333333333
-        case ._60_drop:     rate = 0.008341666666666666
-        case ._100:         rate = 0.01
-        case ._119_88:      rate = 0.008341666666666666
-        case ._119_88_drop: rate = 0.008341666666666666
-        case ._120:         rate = 0.008333333333333333
-        case ._120_drop:    rate = 0.008341666666666666
+        case ._47_952:      rate = 0.010427083333333333 // _23_976
+        case ._48:          rate = 0.010416666666666666 // _24
+        case ._50:          rate = 0.01                 // _25
+        case ._59_94:       rate = 0.008341666666666666 // _29_97
+        case ._59_94_drop:  rate = 0.008341666666666666 // _29_97_drop
+        case ._60:          rate = 0.008333333333333333 // _30
+        case ._60_drop:     rate = 0.008341666666666666 // _30_drop
+        case ._95_904:      rate = 0.010427083333333333 // _23_976
+        case ._96:          rate = 0.010416666666666666 // _24
+        case ._100:         rate = 0.01                 // _25
+        case ._119_88:      rate = 0.008341666666666666 // _29_97
+        case ._119_88_drop: rate = 0.008341666666666666 // _29_97_drop
+        case ._120:         rate = 0.008333333333333333 // _30
+        case ._120_drop:    rate = 0.008341666666666666 // _30_drop
         }
-            
+        
         timer.setRate(.seconds(rate))
     }
         

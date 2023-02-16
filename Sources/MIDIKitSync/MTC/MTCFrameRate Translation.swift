@@ -54,6 +54,8 @@ extension TimecodeFrameRate {
         case ._59_94_drop:  return .mtc2997d
         case ._60:          return .mtc30
         case ._60_drop:     return .mtc2997d
+        case ._95_904:      return .mtc24
+        case ._96:          return .mtc24
         case ._100:         return .mtc25
         case ._119_88:      return .mtc30
         case ._119_88_drop: return .mtc2997d
@@ -190,6 +192,8 @@ extension TimecodeFrameRate {
         case ._59_94_drop:  return 2
         case ._60:          return 2
         case ._60_drop:     return 2
+        case ._95_904:      return 4
+        case ._96:          return 4
         case ._100:         return 4
         case ._119_88:      return 4
         case ._119_88_drop: return 4

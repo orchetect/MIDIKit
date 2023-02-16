@@ -421,6 +421,8 @@ extension TimecodeFrameRate {
         case ._59_94_drop: return ._2997dfps // custom
         case ._60: return ._30fps // custom
         case ._60_drop: return ._2997dfps // custom
+        case ._95_904: return ._24fps // custom
+        case ._96: return ._24fps // custom
         case ._100: return ._25fps // custom
         case ._119_88: return ._30fps // custom
         case ._119_88_drop: return ._2997dfps // custom

@@ -240,6 +240,34 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     )
                 }
                 
+            case ._95_904, ._96:
+                for qf in UInt8(0) ... 7 {
+                    XCTAssertEqual(
+                        mtcRate.scaledFrames(
+                            fromRawMTCFrames: 0,
+                            quarterFrames: qf,
+                            to: realRate
+                        ),
+                        0  + (Double(qf) * 1.0)
+                    )
+                    XCTAssertEqual(
+                        mtcRate.scaledFrames(
+                            fromRawMTCFrames: 12,
+                            quarterFrames: qf,
+                            to: realRate
+                        ),
+                        48 + (Double(qf) * 1.0)
+                    )
+                    XCTAssertEqual(
+                        mtcRate.scaledFrames(
+                            fromRawMTCFrames: 22,
+                            quarterFrames: qf,
+                            to: realRate
+                        ),
+                        88 + (Double(qf) * 1.0)
+                    )
+                }
+                
             case ._100:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
@@ -440,6 +468,18 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 56 + (Double(qf) * 0.5))
                     XCTAssertEqual(scaled.rawMTCFrames, 28)
+                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                }
+                
+            case ._95_904, ._96:
+                for qf in UInt8(0) ... 7 {
+                    let scaled = realRate.scaledFrames(fromTimecodeFrames: 48 + (Double(qf) * 1.0))
+                    XCTAssertEqual(scaled.rawMTCFrames, 12)
+                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                }
+                for qf in UInt8(0) ... 7 {
+                    let scaled = realRate.scaledFrames(fromTimecodeFrames: 88 + (Double(qf) * 1.0))
+                    XCTAssertEqual(scaled.rawMTCFrames, 22)
                     XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
                 }
                 

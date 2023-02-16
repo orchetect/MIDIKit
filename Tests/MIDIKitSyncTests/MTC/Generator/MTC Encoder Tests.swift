@@ -403,7 +403,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                 let diff = $0.maxFrames - previousEvenFrame
                 originFrame = $0.maxFrames - (diff * 2)
                 
-            case ._100, ._119_88, ._119_88_drop, ._120, ._120_drop:
+            case ._95_904, ._96, ._100, ._119_88, ._119_88_drop, ._120, ._120_drop:
                 // 4x multiplier
                 let previousEvenFrame = $0
                     .maxFrameNumberDisplayable - ($0.maxFrameNumberDisplayable % 2)
