@@ -26,7 +26,9 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
             model: "MIDIKit123",
             manufacturer: "MIDIKit",
             notificationHandler: { notification, manager in
-                self.notifications.append(notification)
+                DispatchQueue.main.async {
+                    self.notifications.append(notification)
+                }
             }
         )
     
@@ -104,7 +106,9 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
             model: "MIDIKit123",
             manufacturer: "MIDIKit",
             notificationHandler: { notification, manager in
-                self.notifications.append(notification)
+                DispatchQueue.main.async {
+                    self.notifications.append(notification)
+                }
             }
         )
         

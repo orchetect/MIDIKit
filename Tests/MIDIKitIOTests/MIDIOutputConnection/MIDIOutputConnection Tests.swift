@@ -15,12 +15,13 @@ import MIDIKitIO
 import CoreMIDI
 
 final class MIDIOutputConnection_Tests: XCTestCase {
-    override func setUp() {
+    // called before each method
+    override func setUpWithError() throws {
         wait(sec: 0.2)
     }
     
-    @ThreadSafeAccess private var input1Events: [MIDIEvent] = []
-    @ThreadSafeAccess private var input2Events: [MIDIEvent] = []
+    private var input1Events: [MIDIEvent] = []
+    private var input2Events: [MIDIEvent] = []
     
     func testOutputConnection() throws {
         let manager = MIDIManager(
@@ -44,7 +45,9 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events in
-                self.input1Events.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.input1Events.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
@@ -81,7 +84,9 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events in
-                self.input2Events.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.input2Events.append(contentsOf: events)
+                }
             }
         )
         let input2 = try XCTUnwrap(manager.managedInputs[input2Tag])
@@ -174,7 +179,9 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events in
-                self.input1Events.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.input1Events.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
@@ -237,7 +244,9 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events in
-                self.input1Events.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.input1Events.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag]); _ = input1
@@ -284,7 +293,9 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events in
-                self.input1Events.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.input1Events.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
@@ -354,7 +365,9 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events in
-                self.input1Events.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.input1Events.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
@@ -426,7 +439,9 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events in
-                self.input1Events.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.input1Events.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
@@ -495,7 +510,9 @@ final class MIDIOutputConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events in
-                self.input1Events.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.input1Events.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])

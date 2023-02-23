@@ -12,7 +12,8 @@ import XCTest
 @testable import MIDIKitIO
 import CoreMIDI
 
-public class RoundTrip_Tests_Base: XCTestCase {
+// must be open class - other tests subclass it
+open class RoundTrip_Tests_Base: XCTestCase {
     // swiftformat:options --wrapcollections preserve
     
     fileprivate var manager: MIDIManager!
@@ -22,7 +23,8 @@ public class RoundTrip_Tests_Base: XCTestCase {
     
     fileprivate var receivedEvents: [MIDIEvent] = []
     
-    override open func setUp() {
+    // called before each method
+    open override func setUpWithError() throws {
         print("RoundTrip_Tests setUp() starting")
     
         wait(sec: 0.5)
@@ -91,7 +93,9 @@ public class RoundTrip_Tests_Base: XCTestCase {
                 toOutputs: [.uniqueID(outputID)],
                 tag: inputConnectionTag,
                 receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
-                    self.receivedEvents.append(contentsOf: events)
+                    DispatchQueue.main.async {
+                        self.receivedEvents.append(contentsOf: events)
+                    }
                 }
             )
         } catch let err as MIDIIOError {
@@ -105,7 +109,7 @@ public class RoundTrip_Tests_Base: XCTestCase {
         print("RoundTrip_Tests createPorts() done")
     }
     
-    override open func tearDown() {
+    override public func tearDown() {
         print("RoundTrip_Tests tearDown starting")
     
         // remove endpoints
@@ -342,6 +346,8 @@ public class RoundTrip_Tests_Base: XCTestCase {
 }
 
 final class RoundTrip_OldCoreMIDIAPI_Tests: RoundTrip_Tests_Base {
+    // Note: do NOT override `func setUpWithError() throws` inside this class!
+    
     // TODO: test needs de-flaking
     func testRapidMIDIEvents_OldCoreMIDIAPI() throws {
         manager.preferredAPI = .legacyCoreMIDI
@@ -353,6 +359,8 @@ final class RoundTrip_OldCoreMIDIAPI_Tests: RoundTrip_Tests_Base {
 }
 
 final class RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests: RoundTrip_Tests_Base {
+    // Note: do NOT override `func setUpWithError() throws` inside this class!
+    
     // TODO: test may need de-flaking
     func testRapidMIDIEvents_NewCoreMIDIAPI_1_0_Protocol() throws {
         manager.preferredAPI = .newCoreMIDI(._1_0)
@@ -364,6 +372,8 @@ final class RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests: RoundTrip_Tests_Base {
 }
 
 final class RoundTrip_NewCoreMIDIAPI_2_0_Protocol_Tests: RoundTrip_Tests_Base {
+    // Note: do NOT override `func setUpWithError() throws` inside this class!
+    
     // TODO: test may need de-flaking
     func testRapidMIDIEvents_NewCoreMIDIAPI_2_0_Protocol() throws {
         manager.preferredAPI = .newCoreMIDI(._2_0)

@@ -14,11 +14,12 @@ import XCTest
 import CoreMIDI
 
 final class MIDIThruConnection_Tests: XCTestCase {
-    override func setUp() {
+    // called before each method
+    override func setUpWithError() throws {
         wait(sec: 0.2)
     }
     
-    @ThreadSafeAccess private var connEvents: [MIDIEvent] = []
+    private var connEvents: [MIDIEvent] = []
     
     private func testNonPersistentThruConnection() throws {
         let manager = MIDIManager(
@@ -53,7 +54,9 @@ final class MIDIThruConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
-                self.connEvents.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.connEvents.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
@@ -134,7 +137,9 @@ final class MIDIThruConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
-                self.connEvents.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.connEvents.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
@@ -241,7 +246,9 @@ final class MIDIThruConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
-                self.connEvents.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.connEvents.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
@@ -317,7 +324,9 @@ final class MIDIThruConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
-                self.connEvents.append(contentsOf: events)
+                DispatchQueue.main.async {
+                    self.connEvents.append(contentsOf: events)
+                }
             }
         )
         let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
