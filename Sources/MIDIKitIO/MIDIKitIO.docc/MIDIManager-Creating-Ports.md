@@ -28,8 +28,8 @@ try midiManager.addInput(
     tag: inputTag,
     uniqueID: .userDefaultsManaged(key: inputTag),
     receiver: .events { [weak self] events in
-        // Note: this handler will be called on a background thread
-        // so call the next line on main if it may result in UI updates
+        // Note: this handler will be called on a background thread so be
+        // sure to call anything that may result in UI updates on the main thread
         DispatchQueue.main.async {
             events.forEach { self?.received(midiEvent: $0) }
         }
