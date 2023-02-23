@@ -25,7 +25,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
     
     // called before each method
     open override func setUpWithError() throws {
-        print("RoundTrip_Tests setUp() starting")
+        print("RoundTrip_Tests setUpWithError() starting")
     
         wait(sec: 0.5)
     
@@ -54,7 +54,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
     
         wait(sec: 0.5)
     
-        print("RoundTrip_Tests setUp() done")
+        print("RoundTrip_Tests setUpWithError() done")
     }
     
     func createPorts() {

@@ -18,6 +18,8 @@ final class MIDIOutputConnection_Tests: XCTestCase {
     // called before each method
     override func setUpWithError() throws {
         wait(sec: 0.2)
+        input1Events = []
+        input2Events = []
     }
     
     private var input1Events: [MIDIEvent] = []
@@ -42,11 +44,10 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .adHoc,
-            // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
+            receiver: .events { [weak self] events in
                 DispatchQueue.main.async {
-                    self.input1Events.append(contentsOf: events)
+                    self?.input1Events.append(contentsOf: events)
                 }
             }
         )
@@ -81,11 +82,10 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 2",
             tag: input2Tag,
-            uniqueID: .adHoc,
-            // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
+            receiver: .events { [weak self] events in
                 DispatchQueue.main.async {
-                    self.input2Events.append(contentsOf: events)
+                    self?.input2Events.append(contentsOf: events)
                 }
             }
         )
@@ -176,11 +176,10 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .adHoc,
-            // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
+            receiver: .events { [weak self] events in
                 DispatchQueue.main.async {
-                    self.input1Events.append(contentsOf: events)
+                    self?.input1Events.append(contentsOf: events)
                 }
             }
         )
@@ -241,11 +240,10 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .adHoc,
-            // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
+            receiver: .events { [weak self] events in
                 DispatchQueue.main.async {
-                    self.input1Events.append(contentsOf: events)
+                    self?.input1Events.append(contentsOf: events)
                 }
             }
         )
@@ -290,11 +288,10 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .adHoc,
-            // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
+            receiver: .events { [weak self] events in
                 DispatchQueue.main.async {
-                    self.input1Events.append(contentsOf: events)
+                    self?.input1Events.append(contentsOf: events)
                 }
             }
         )
@@ -362,11 +359,10 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .adHoc,
-            // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
+            receiver: .events { [weak self] events in
                 DispatchQueue.main.async {
-                    self.input1Events.append(contentsOf: events)
+                    self?.input1Events.append(contentsOf: events)
                 }
             }
         )
@@ -436,11 +432,10 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .adHoc,
-            // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
+            receiver: .events { [weak self] events in
                 DispatchQueue.main.async {
-                    self.input1Events.append(contentsOf: events)
+                    self?.input1Events.append(contentsOf: events)
                 }
             }
         )
@@ -507,11 +502,10 @@ final class MIDIOutputConnection_Tests: XCTestCase {
         try manager.addInput(
             name: "MIDIKit IO Tests Input 1",
             tag: input1Tag,
-            uniqueID: .adHoc,
-            // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
+            receiver: .events { [weak self] events in
                 DispatchQueue.main.async {
-                    self.input1Events.append(contentsOf: events)
+                    self?.input1Events.append(contentsOf: events)
                 }
             }
         )
