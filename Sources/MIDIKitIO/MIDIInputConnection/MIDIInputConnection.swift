@@ -194,16 +194,17 @@ extension MIDIInputConnection {
                 manager.coreMIDIClientRef,
                 UUID().uuidString as CFString,
                 &newInputPortRef,
-                { [weak self] packetListPtr, srcConnRefCon in
-                    guard let strongSelf = self else { return }
+                { [weak q = midiManager?.eventQueue, weak h = receiveHandler] packetListPtr, srcConnRefCon in
+                    // we have to use weak captures of the objects directly, and NOT use [weak self]
+                    // otherwise we run into data races when Thread Sanitizer is on
                     
                     let packets = packetListPtr.packets(
                         refCon: srcConnRefCon,
                         refConKnown: true
                     )
                     
-                    strongSelf.midiManager?.eventQueue.async {
-                        strongSelf.receiveHandler.packetListReceived(packets)
+                    q?.async {
+                        h?.packetListReceived(packets)
                     }
                 }
             )
@@ -221,8 +222,9 @@ extension MIDIInputConnection {
                 UUID().uuidString as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newInputPortRef,
-                { [weak self] eventListPtr, srcConnRefCon in
-                    guard let strongSelf = self else { return }
+                { [weak q = midiManager?.eventQueue, weak h = receiveHandler] eventListPtr, srcConnRefCon in
+                    // we have to use weak captures of the objects directly, and NOT use [weak self]
+                    // otherwise we run into data races when Thread Sanitizer is on
                     
                     let packets = eventListPtr.packets(
                         refCon: srcConnRefCon,
@@ -230,8 +232,8 @@ extension MIDIInputConnection {
                     )
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    strongSelf.midiManager?.eventQueue.async {
-                        strongSelf.receiveHandler.eventListReceived(
+                    q?.async {
+                        h?.eventListReceived(
                             packets,
                             protocol: midiProtocol
                         )
