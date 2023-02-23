@@ -47,7 +47,7 @@ extension MIDIPacketData {
     ) -> MIDIPacketData {
         MIDIPacketData(
             bytes: midiPacketPtr.rawBytes,
-            timeStamp: midiPacketPtr.pointee.timeStamp,
+            timeStamp: midiPacketPtr.rawTimeStamp,
             source: unpackMIDIRefCon(refCon: refCon, known: refConKnown)
         )
     }
