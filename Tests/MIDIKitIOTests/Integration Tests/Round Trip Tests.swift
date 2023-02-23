@@ -311,7 +311,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
             try output.send(events: Array(eventGroup))
         }
     
-        wait(sec: 0.5)
+        wait(sec: 1.0)
     
         // ensure all events are received correctly
     
