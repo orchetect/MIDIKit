@@ -25,16 +25,6 @@ on:
     - cron: '35 11 * * *'   # once a day @ 11:35am UTC (4:35am PST)
     
 jobs:
-  macOS-11:
-    name: macOS 11 Big Sur
-    runs-on: macos-11
-    steps:
-    - uses: actions/checkout@main
-    - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,name=Any Mac"
-    - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS"
-
   macOS-12:
     name: macOS 12 Monterey
     runs-on: macos-12

@@ -65,6 +65,7 @@ extension MIDIPacket {
         
         let lengthPtr = ptr.advanced(by: midiPacketLengthOffset)
         // do NOT use withMemoryRebound() - it crashes due to alignment issues
+        // also FYI, loadUnaligned compiles for macOS 10.10+/iOS 8+ but is only available in Xcode 14+
         let length = lengthPtr.loadUnaligned(as: UInt16.self)
         
         let rawMIDIPacketDataPtr = UnsafeRawBufferPointer(
@@ -83,6 +84,7 @@ extension MIDIPacket {
         let timestampPtr = ptr.advanced(by: midiPacketTimeStamp)
         
         // do NOT use withMemoryRebound() - it crashes due to alignment issues
+        // also FYI, loadUnaligned compiles for macOS 10.10+/iOS 8+ but is only available in Xcode 14+
         let timeStamp = timestampPtr.loadUnaligned(as: UInt64.self)
         
         return timeStamp
