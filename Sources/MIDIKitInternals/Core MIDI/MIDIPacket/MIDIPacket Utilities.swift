@@ -64,13 +64,12 @@ extension MIDIPacket {
         // thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
         
         let lengthPtr = ptr.advanced(by: midiPacketLengthOffset)
-        let length = lengthPtr.withMemoryRebound(to: UInt16.self, capacity: 1) { pointer in
-            Int(pointer.pointee)
-        }
+        // do NOT use withMemoryRebound() - it crashes due to alignment issues
+        let length = lengthPtr.loadUnaligned(as: UInt16.self)
         
         let rawMIDIPacketDataPtr = UnsafeRawBufferPointer(
             start: ptr + midiPacketDataOffset,
-            count: length
+            count: Int(length)
         )
         
         return [UInt8](rawMIDIPacketDataPtr)
@@ -83,12 +82,7 @@ extension MIDIPacket {
         
         let timestampPtr = ptr.advanced(by: midiPacketTimeStamp)
         
-        // ⚠️ crashes and complains about alignment
-        // let timeStamp = timestampPtr.withMemoryRebound(to: UInt64.self, capacity: 1) { pointer in
-        //     pointer.pointee
-        // }
-        
-        // this works and survives brute-force unit tests
+        // do NOT use withMemoryRebound() - it crashes due to alignment issues
         let timeStamp = timestampPtr.loadUnaligned(as: UInt64.self)
         
         return timeStamp
