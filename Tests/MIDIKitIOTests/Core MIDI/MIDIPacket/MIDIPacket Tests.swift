@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import MIDIKitIO
+@_implementationOnly import MIDIKitInternals
 import CoreMIDI
 
 final class MIDIPacket_Tests: XCTestCase {
