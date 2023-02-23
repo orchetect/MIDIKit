@@ -138,7 +138,6 @@ public final class MTCReceiver {
         // handle init arguments
             
         let name = name ?? UUID().uuidString
-            
         self.name = name
             
         timecode = Timecode(at: initialLocalFrameRate ?? ._30)
@@ -170,7 +169,6 @@ public final class MTCReceiver {
         )
             
         timer.setEventHandler { [weak self] in
-                
             guard let strongSelf = self else { return }
                 
             strongSelf.queue.async {

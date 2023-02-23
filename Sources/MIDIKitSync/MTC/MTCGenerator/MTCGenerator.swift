@@ -82,7 +82,6 @@ public final class MTCGenerator: SendsMIDIEvents {
         // handle init arguments
             
         let name = name ?? UUID().uuidString
-            
         self.name = name
             
         self.midiOutHandler = midiOutHandler
@@ -103,19 +102,14 @@ public final class MTCGenerator: SendsMIDIEvents {
         )
             
         timer.setEventHandler { [weak self] in
-                
             guard let strongSelf = self else { return }
-                
             strongSelf.timerFired()
         }
             
         queue.sync {
             // encoder setup
-                
             encoder = MTCEncoder()
-                
             encoder.midiOutHandler = { [weak self] midiEvents in
-                    
                 guard let strongSelf = self else { return }
                     
                 strongSelf.midiOut(midiEvents)
