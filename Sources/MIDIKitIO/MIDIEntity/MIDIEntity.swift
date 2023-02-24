@@ -9,6 +9,8 @@
 // MARK: - Entity
 
 /// A MIDI device, wrapping a Core MIDI `MIDIEntityRef`.
+/// A device can contain zero or more entities, and an entity can contain zero or more inputs
+/// and output endpoints.
 ///
 /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
 public struct MIDIEntity: MIDIIOObject {
@@ -94,7 +96,7 @@ extension MIDIEntity {
 
 extension MIDIEntity: CustomDebugStringConvertible {
     public var debugDescription: String {
-        "MIDIEntity(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists)"
+        "MIDIEntity(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists))"
     }
 }
 
