@@ -9,7 +9,9 @@
 // MARK: - Device
 
 /// A MIDI device, wrapping a Core MIDI `MIDIDeviceRef`.
-///
+/// A device can contain zero or more entities, and an entity can contain zero or more inputs
+/// and output endpoints.
+/// 
 /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
 ///
 /// Instead, read device arrays and individual device properties from ``MIDIManager/devices`` ad-hoc
@@ -72,9 +74,19 @@ extension MIDIDevice: Identifiable {
 }
 
 extension MIDIDevice {
-    /// List of entities owned by the device.
+    /// List of entities in the device.
     public var entities: [MIDIEntity] {
         getSystemEntities(for: coreMIDIObjectRef)
+    }
+    
+    /// Returns a combined collection of all the input endpoints for all entities in the device.
+    public var inputs: [MIDIInputEndpoint] {
+        entities.flatMap(\.inputs)
+    }
+    
+    /// Returns a combined collection of all the input endpoints for all entities in the device.
+    public var outputs: [MIDIOutputEndpoint] {
+        entities.flatMap(\.outputs)
     }
 }
 
