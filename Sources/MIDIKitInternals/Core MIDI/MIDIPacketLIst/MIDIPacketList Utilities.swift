@@ -79,14 +79,14 @@ extension UnsafeMutablePointer where Pointee == MIDIPacketList {
         // Create a buffer that is big enough to hold the data to be sent and
         // all the necessary headers.
         let bufferSize = data
-            .reduce(0) { $0 + $1.count + kSizeOfMIDIPacketHeader }
+            .reduce(0) { $0 + $1.count * kSizeOfMIDIPacketHeader }
             + kSizeOfMIDIPacketListHeader
     
         // MIDIPacketListAdd's discussion section states that "The maximum size of a packet list is
         // 65536 bytes."
         guard bufferSize <= 65536 else {
             throw MIDIKitInternalError.malformed(
-                "Data array is too large (\(bufferSize) bytes). Maximum size is 65536 bytes."
+                "Data is too large (\(bufferSize) bytes). Maximum size is 65536 bytes."
             )
         }
     
