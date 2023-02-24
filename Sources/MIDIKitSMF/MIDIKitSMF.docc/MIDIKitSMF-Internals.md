@@ -20,7 +20,9 @@
 - ``TCC``
 - ``TimecodeInterval``
 - ``TimecodeTransformer``
+- ``TimecodeSortComparator``
 - ``Fraction``
 - ``FrameRateProtocol``
 - ``TimecodeFrameRate``
 - ``VideoFrameRate``
+- ``FeetAndFrames``

@@ -7,6 +7,8 @@
 - ``TCC``
 - ``TimecodeInterval``
 - ``TimecodeTransformer``
+- ``TimecodeSortComparator``
 - ``Fraction``
 - ``FrameRateProtocol``
 - ``VideoFrameRate``
+- ``FeetAndFrames``

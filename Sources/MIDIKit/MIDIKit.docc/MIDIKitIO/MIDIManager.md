@@ -9,7 +9,7 @@
 Create an instance of `MIDIManager` within a lifecycle scope that makes sense for your app. 
 
 - Typically MIDI functionality is scoped at an app-level since only one Manager is needed for an entire application's MIDI needs.
-- A `MIDIManager` instance can be stored globally, perhaps in your AppDelegate.
+- A `MIDIManager` instance can be stored globally, perhaps in your `AppDelegate` or root SwiftUI `App`.
 
 Parameters:
 
