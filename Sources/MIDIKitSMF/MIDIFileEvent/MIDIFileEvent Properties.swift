@@ -70,7 +70,8 @@ extension MIDIFileEvent {
 
 extension MIDIFileEvent {
     /// Unwraps the enum case and returns the ``MIDIFileEvent`` contained within, typed as
-    /// ``MIDIFileEventPayload`` protocol.
+    /// ``MIDIFileEventPayload`` protocol. (Convenience)
+    /// To unwrap the concrete event type, use switch case unwrapping instead.
     public var smfUnwrappedEvent: (
         delta: DeltaTime,
         event: MIDIFileEventPayload
@@ -121,6 +122,11 @@ extension MIDIFileEvent {
         case let .xmfPatchTypePrefix(delta, event):
             return (delta: delta, event: event)
         }
+    }
+    
+    /// Returns the delta time from the unwrapped event. (Convenience)
+    public var delta: DeltaTime {
+        smfUnwrappedEvent.delta
     }
 }
 
