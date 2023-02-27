@@ -27,7 +27,7 @@ extension MIDIFileEvent {
         public var numerator: UInt8 = 4
 
         /// Denominator in time signature fraction.
-        /// Expressed as a power of 2. (2 = 2^2 (4); 3 = 2^3 (8); etc.)
+        /// Expressed as a power of 2. (ie: 2 = 2^2 = 4, 3 = 2^3 = 8, etc.)
         public var denominator: UInt8 = 2
 
         /// Number of MIDI clocks between metronome clicks.
@@ -42,6 +42,13 @@ extension MIDIFileEvent {
         
         public init() { }
         
+        /// Time Signature Event.
+        ///
+        /// - Parameters:
+        ///   - numerator: Numerator in time signature fraction: Literal numerator.
+        ///   - denominator: Denominator in time signature fraction. Expressed as a power of 2. (ie: 2 = 2^2 = 4, 3 = 2^3 = 8, etc.)
+        ///   - midiClocksBetweenMetronomeClicks: Number of MIDI clocks between metronome clicks.
+        ///   - numberOf32ndNotesInAQuarterNote: Number of notated 32nd-notes in a MIDI quarter-note.
         public init(
             numerator: UInt8,
             denominator: UInt8,
@@ -63,6 +70,11 @@ extension MIDIFileEvent {
     /// For a format 1 MIDI file, Time Signature meta events should only occur within the first
     /// `MTrk` chunk.
     /// If there are no Time Signature events in a MIDI file, 4/4 is assumed.
+    ///
+    /// - Parameters:
+    ///   - delta: Delta time since the last event.
+    ///   - numerator: Numerator in time signature fraction: Literal numerator.
+    ///   - denominator: Denominator in time signature fraction. Expressed as a power of 2. (ie: 2 = 2^2 = 4, 3 = 2^3 = 8, etc.)
     public static func timeSignature(
         delta: DeltaTime = .none,
         numerator: UInt8,
