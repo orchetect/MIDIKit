@@ -12,29 +12,39 @@ private let fileManager = FileManager.default
 /// Standard MIDI Files (SMF) object. Read or write MIDI file contents.
 public struct MIDIFile: Equatable {
     // MARK: - Properties
-        
+    
     internal var header: Chunk.Header = .init()
-        
+    
     /// MIDI File Format to use when writing MIDI file.
     public var format: Format {
         get { header.format }
         set { header.format = newValue }
     }
-        
+    
     /// Specify whether the MIDI file stores time values in bars & beats (musical) or timecode
     public var timeBase: TimeBase {
         get { header.timeBase }
         set { header.timeBase = newValue }
     }
-        
+    
     /// Storage for tracks in the MIDI file.
     ///
     /// The ``Chunk/Header`` chunk is managed automatically and is not instanced as a
     /// ``MIDIFile/chunks`` member.
     public var chunks: [Chunk] = []
-        
+    
+    /// Returns copies of the tracks contained in the MIDI file.
+    /// (Computed convenience to filter ``chunks`` and return ``Chunk/Track`` instances.)
+    /// To add new tracks or modify existing tracks, mutate the ``chunks`` collection.
+    public var tracks: [Chunk.Track] {
+        chunks.compactMap {
+            guard case let .track(track) = $0 else { return nil }
+            return track
+        }
+    }
+    
     // MARK: - Init
-        
+    
     /// Initialize with default values.
     public init() { }
     
@@ -55,27 +65,27 @@ public struct MIDIFile: Equatable {
     public init(rawData: Data) throws {
         try decode(rawData: rawData)
     }
-        
+    
     /// Initialize by loading the contents of a MIDI file from disk.
     public init(midiFile path: String) throws {
         guard fileManager.fileExists(atPath: path) else {
             throw DecodeError.fileNotFound
         }
-            
+        
         guard let url = URL(string: path) else {
             throw DecodeError.malformedURL
         }
-            
+        
         try self.init(midiFile: url)
     }
-        
+    
     /// Initialize by loading the contents of a MIDI file from disk.
     public init(midiFile url: URL) throws {
         let data = try Data(contentsOf: url)
-            
+        
         try decode(rawData: data)
     }
-        
+    
     /// Returns raw MIDI file data. Throws an error if a problem occurs.
     public func rawData() throws -> Data {
         try encode()
