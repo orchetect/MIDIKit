@@ -37,7 +37,20 @@ public struct MIDIFile: Equatable {
         
     /// Initialize with default values.
     public init() { }
+    
+    /// Initialize from header parameters and track chunks.
+    public init(
+        format: Format = .multipleTracksSynchronous,
+        timeBase: TimeBase,
+        chunks: [Chunk] = []
+    ) {
+        self.init()
         
+        self.format = format
+        self.timeBase = timeBase
+        self.chunks = chunks
+    }
+    
     /// Initialize by loading the contents of a MIDI file's raw data.
     public init(rawData: Data) throws {
         try decode(rawData: rawData)
@@ -66,18 +79,5 @@ public struct MIDIFile: Equatable {
     /// Returns raw MIDI file data. Throws an error if a problem occurs.
     public func rawData() throws -> Data {
         try encode()
-    }
-    
-    /// Initialize from header parameters and track chunks.
-    public init(
-        format: Format,
-        timeBase: TimeBase,
-        chunks: [Chunk] = []
-    ) {
-        self.init()
-        
-        self.format = format
-        self.timeBase = timeBase
-        self.chunks = chunks
     }
 }
