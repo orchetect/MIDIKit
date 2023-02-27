@@ -128,10 +128,10 @@ final class MusicalTimeValueTests: XCTestCase {
             ])
         ]
         
-        guard case .track(let trackOne) = midiFile.chunks.first else { return }
+        guard let trackOne = midiFile.tracks.first else { return }
         
         let deltaTimes = trackOne.events.map {
-            $0.smfUnwrappedEvent.delta.ticksValue(using: .musical(ticksPerQuarterNote: UInt16(ppq)))
+            $0.delta.ticksValue(using: .musical(ticksPerQuarterNote: UInt16(ppq)))
         }
         
         let deltaSum = Int(deltaTimes.reduce(into: 0, +=))
