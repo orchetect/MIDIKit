@@ -9,7 +9,7 @@
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import XCTest
-import MIDIKitIO
+@testable import MIDIKitIO
 import CoreMIDI
 
 final class MIDIOutput_Tests: XCTestCase {
@@ -85,6 +85,57 @@ final class MIDIOutput_Tests: XCTestCase {
 		
         manager.remove(.output, .withTag(tag2))
         XCTAssertNil(manager.managedOutputs[tag2])
+    }
+    
+    func testSetProperties() throws {
+        let manager = MIDIManager(
+            clientName: UUID().uuidString,
+            model: "MIDIKit123",
+            manufacturer: "MIDIKit"
+        )
+        
+        // start midi client
+        try manager.start()
+        wait(sec: 0.1)
+        
+        // add new endpoint
+        
+        let tag1 = "1"
+        let initialName = "MIDIKit IO Properties Tests 1"
+        
+        do {
+            try manager.addOutput(
+                name: initialName,
+                tag: tag1,
+                uniqueID: .adHoc // allow system to generate random ID each time, no persistence
+            )
+        } catch let err as MIDIIOError {
+            XCTFail(err.localizedDescription); return
+        } catch {
+            XCTFail(error.localizedDescription); return
+        }
+        
+        let managedOutput = try XCTUnwrap(manager.managedOutputs[tag1])
+        let id1 = managedOutput.uniqueID
+        let ref1 = try XCTUnwrap(managedOutput.coreMIDIOutputPortRef)
+        XCTAssertNotNil(id1)
+        
+        // check initial conditions
+        
+        XCTAssertEqual(managedOutput.name, initialName)
+        XCTAssertEqual(managedOutput.endpoint.displayName, initialName)
+        
+        // set `name` - Core MIDI will also update `displayName` at the same time
+        
+        let newName = "New Name"
+        managedOutput.name = newName
+        wait(sec: 0.2)
+        
+        XCTAssertEqual(managedOutput.name, newName)
+        XCTAssertEqual(try getString(forProperty: kMIDIPropertyName, of: ref1), newName)
+        
+        XCTAssertEqual(managedOutput.endpoint.displayName, newName)
+        XCTAssertEqual(try getString(forProperty: kMIDIPropertyDisplayName, of: ref1), newName)
     }
 }
 
