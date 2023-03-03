@@ -86,6 +86,7 @@ public enum MIDIOSStatus: Hashable {
     /// Possibly caused by:
     /// - not starting the MIDI manager after instancing it (`start()` on `MIDIManager`),
     /// - an uninitialized variable being passed,
+    /// - attempting to set a Core MIDI property value that is read-only,
     /// - or if the MIDI server has an issue getting a process ID back internally.
     case internalError
     
