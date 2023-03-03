@@ -38,7 +38,7 @@ final class MIDIManager_Public_Tests: XCTestCase {
         _ = output?.api
         _ = output?.midiProtocol
         _ = output?.coreMIDIOutputPortRef
-        _ = output?.endpointName
+        _ = output?.name
         _ = output?.uniqueID
     
         _ = output?.description
@@ -66,7 +66,7 @@ final class MIDIManager_Public_Tests: XCTestCase {
         _ = input?.api
         _ = input?.midiProtocol
         _ = input?.coreMIDIInputPortRef
-        _ = input?.endpointName
+        _ = input?.name
         _ = input?.uniqueID
     
         _ = input?.description

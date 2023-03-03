@@ -112,8 +112,8 @@ extension MIDIEndpointIdentity: Hashable {
 extension MIDIEndpointIdentity: CustomStringConvertible {
     public var description: String {
         switch self {
-        case let .name(endpointName):
-            return "Endpoint Name: \(endpointName.quoted)"
+        case let .name(name):
+            return "Endpoint Name: \(name.quoted)"
     
         case let .displayName(displayName):
             return "Endpoint Display Name: \(displayName.quoted))"
@@ -149,11 +149,11 @@ extension MIDIEndpointIdentity {
     /// Returns `nil` if no matches are found.
     internal func locate<T: MIDIEndpoint>(in endpoints: [T]) -> T? {
         switch self {
-        case let .name(endpointName):
-            return endpoints.first(whereName: endpointName)
+        case let .name(name):
+            return endpoints.first(whereName: name)
     
-        case let .displayName(endpointName):
-            return endpoints.first(whereDisplayName: endpointName)
+        case let .displayName(name):
+            return endpoints.first(whereDisplayName: name)
     
         case let .uniqueID(uniqueID):
             return endpoints.first(whereUniqueID: uniqueID)

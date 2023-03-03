@@ -37,7 +37,18 @@ public final class MIDIOutput: _MIDIManaged {
     // class-specific
     
     /// The port name as displayed in the system.
-    public private(set) var endpointName: String = ""
+    public var name: String = "" {
+        didSet {
+            setName()
+        }
+    }
+    
+    /// Updates the endpoint's `name` property with Core MIDI.
+    /// Core MIDI automatically updates the `displayName` property as well.
+    private func setName() {
+        guard let ref = coreMIDIOutputPortRef else { return }
+        try? setString(forProperty: kMIDIPropertyName, of: ref, to: name)
+    }
     
     /// The port's unique ID in the system.
     public private(set) var uniqueID: MIDIIdentifier?
@@ -62,7 +73,7 @@ public final class MIDIOutput: _MIDIManaged {
         midiManager: MIDIManager,
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
-        endpointName = name
+        self.name = name
         self.uniqueID = uniqueID
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
@@ -110,7 +121,7 @@ extension MIDIOutput {
             // MIDISourceCreate is deprecated after macOS 11 / iOS 14
             try MIDISourceCreate(
                 manager.coreMIDIClientRef,
-                endpointName as CFString,
+                name as CFString,
                 &newPortRef
             )
             .throwIfOSStatusErr()
@@ -124,7 +135,7 @@ extension MIDIOutput {
     
             try MIDISourceCreateWithProtocol(
                 manager.coreMIDIClientRef,
-                endpointName as CFString,
+                name as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newPortRef
             )
@@ -136,7 +147,7 @@ extension MIDIOutput {
         // set meta data properties; ignore errors in case of failure
         try? setModel(of: newPortRef, to: manager.model)
         try? setManufacturer(of: newPortRef, to: manager.manufacturer)
-    
+        
         if let unwrappedUniqueID = uniqueID {
             // inject previously-stored unique ID into port
             try setUniqueID(
@@ -183,7 +194,7 @@ extension MIDIOutput: CustomStringConvertible {
             uniqueIDString = "\(unwrappedUniqueID)"
         }
     
-        return "MIDIOutput(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"
+        return "MIDIOutput(name: \(name.quoted), uniqueID: \(uniqueIDString))"
     }
 }
 

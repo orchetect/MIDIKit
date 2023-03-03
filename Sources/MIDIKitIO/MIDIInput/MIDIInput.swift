@@ -32,7 +32,18 @@ public final class MIDIInput: _MIDIManaged {
     // class-specific
     
     /// The port name as displayed in the system.
-    public private(set) var endpointName: String = ""
+    public var name: String = "" {
+        didSet {
+            setName()
+        }
+    }
+    
+    /// Updates the endpoint's `name` property with Core MIDI.
+    /// Core MIDI automatically updates the `displayName` property as well.
+    private func setName() {
+        guard let ref = coreMIDIInputPortRef else { return }
+        try? setString(forProperty: kMIDIPropertyName, of: ref, to: name)
+    }
     
     /// The port's unique ID in the system.
     public private(set) var uniqueID: MIDIIdentifier?
@@ -65,7 +76,7 @@ public final class MIDIInput: _MIDIManaged {
         midiManager: MIDIManager,
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
-        endpointName = name
+        self.name = name
         self.uniqueID = uniqueID
         receiveHandler = receiver.create()
         self.midiManager = midiManager
@@ -121,7 +132,7 @@ extension MIDIInput {
             // MIDIDestinationCreateWithBlock is deprecated after macOS 11 / iOS 14
             try MIDIDestinationCreateWithBlock(
                 manager.coreMIDIClientRef,
-                endpointName as CFString,
+                name as CFString,
                 &newPortRef,
                 { [weak q = midiManager?.eventQueue, weak h = receiveHandler] packetListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
@@ -145,7 +156,7 @@ extension MIDIInput {
             
             try MIDIDestinationCreateWithProtocol(
                 manager.coreMIDIClientRef,
-                endpointName as CFString,
+                name as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newPortRef,
                 { [weak q = midiManager?.eventQueue, weak h = receiveHandler] eventListPtr, srcConnRefCon in
@@ -171,7 +182,7 @@ extension MIDIInput {
         // set meta data properties; ignore errors in case of failure
         try? setModel(of: newPortRef, to: manager.model)
         try? setManufacturer(of: newPortRef, to: manager.manufacturer)
-    
+        
         if let unwrappedUniqueID = uniqueID {
             // inject previously-stored unique ID into port
             try setUniqueID(
@@ -218,7 +229,7 @@ extension MIDIInput: CustomStringConvertible {
             uniqueIDString = "\(unwrappedUniqueID)"
         }
         
-        return "MIDIInput(name: \(endpointName.quoted), uniqueID: \(uniqueIDString))"
+        return "MIDIInput(name: \(name.quoted), uniqueID: \(uniqueIDString))"
     }
 }
 
