@@ -1,4 +1,8 @@
-# To Do
+# MIDIKitUI Example
+
+This example shows usage of the MIDIKitUI SwiftUI controls.
+
+## To Do
 
 - [ ] Add multiple-selection list controls
 - [ ] Add `tag: String` parameter to controls so they can update the `MIDIManager` instance
