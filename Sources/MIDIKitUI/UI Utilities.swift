@@ -51,6 +51,7 @@ extension UIImage {
 import SwiftUI
 
 extension MIDIEndpoint {
+    @available(macOS 10.15, iOS 13.0, *)
     func image(resizedTo size: CGSize) -> Image? {
         #if canImport(AppKit)
         guard let nsImg = imageAsNSImage?.resized(to: size) else { return nil }

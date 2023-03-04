@@ -43,6 +43,11 @@ let package = Package(
             name: "MIDIKitSync",
             type: .static,
             targets: ["MIDIKitSync"]
+        ),
+        .library(
+            name: "MIDIKitUI",
+            type: .static,
+            targets: ["MIDIKitUI"]
         )
     ],
     
@@ -61,7 +66,8 @@ let package = Package(
                 .target(name: "MIDIKitIO"),
                 .target(name: "MIDIKitControlSurfaces"),
                 .target(name: "MIDIKitSMF"),
-                .target(name: "MIDIKitSync")
+                .target(name: "MIDIKitSync"),
+                .target(name: "MIDIKitUI")
             ],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
@@ -105,6 +111,13 @@ let package = Package(
             dependencies: [
                 .target(name: "MIDIKitCore"),
                 "TimecodeKit"
+            ],
+            swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
+        ),
+        .target(
+            name: "MIDIKitUI",
+            dependencies: [
+                .target(name: "MIDIKitIO")
             ],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),

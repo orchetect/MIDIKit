@@ -6,6 +6,7 @@
 
 import SwiftUI
 import MIDIKitIO
+import MIDIKitUI
 
 struct ListsExampleView: View {
     @AppStorage("midiInput") private var midiInput: Int?

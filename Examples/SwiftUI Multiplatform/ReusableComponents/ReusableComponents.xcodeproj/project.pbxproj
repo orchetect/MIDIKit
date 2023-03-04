@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E2B8BD9E29B308D600B92BDF /* ListsExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */; };
-		E2B8BDA029B30A8E00B92BDF /* MIDIEndpointsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BD9F29B30A8E00B92BDF /* MIDIEndpointsList.swift */; };
-		E2B8BDA229B30A9600B92BDF /* MIDIEndpointsPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BDA129B30A9600B92BDF /* MIDIEndpointsPicker.swift */; };
 		E2B8BDA429B30B3200B92BDF /* PickersExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BDA329B30B3200B92BDF /* PickersExampleView.swift */; };
-		E2B8BDA929B3262000B92BDF /* UI Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BDA829B3262000B92BDF /* UI Utilities.swift */; };
+		E2B8BDAD29B356CE00B92BDF /* MIDIKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = E2B8BDAC29B356CE00B92BDF /* MIDIKitUI */; };
 		E2F1FE7429B2DF5800054467 /* ReusableComponentsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE7329B2DF5800054467 /* ReusableComponentsApp.swift */; };
 		E2F1FE7629B2DF5800054467 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE7529B2DF5800054467 /* ContentView.swift */; };
 		E2F1FE7829B2DF5A00054467 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F1FE7729B2DF5A00054467 /* Assets.xcassets */; };
@@ -23,10 +21,7 @@
 
 /* Begin PBXFileReference section */
 		E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsExampleView.swift; sourceTree = "<group>"; };
-		E2B8BD9F29B30A8E00B92BDF /* MIDIEndpointsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIDIEndpointsList.swift; sourceTree = "<group>"; };
-		E2B8BDA129B30A9600B92BDF /* MIDIEndpointsPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIDIEndpointsPicker.swift; sourceTree = "<group>"; };
 		E2B8BDA329B30B3200B92BDF /* PickersExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickersExampleView.swift; sourceTree = "<group>"; };
-		E2B8BDA829B3262000B92BDF /* UI Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI Utilities.swift"; sourceTree = "<group>"; };
 		E2B8BDAA29B3301300B92BDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E2F1FE7029B2DF5800054467 /* ReusableComponents.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReusableComponents.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2F1FE7329B2DF5800054467 /* ReusableComponentsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableComponentsApp.swift; sourceTree = "<group>"; };
@@ -44,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2B8BDAD29B356CE00B92BDF /* MIDIKitUI in Frameworks */,
 				E2F1FE8729B2E04A00054467 /* MIDIKitIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -51,12 +47,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E2B8BDAB29B356CE00B92BDF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E2F1FE6729B2DF5800054467 = {
 			isa = PBXGroup;
 			children = (
 				E2F1FE8429B2DFEF00054467 /* MIDIKit */,
 				E2F1FE7229B2DF5800054467 /* ReusableComponents */,
 				E2F1FE7129B2DF5800054467 /* Products */,
+				E2B8BDAB29B356CE00B92BDF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -72,7 +76,6 @@
 			isa = PBXGroup;
 			children = (
 				E2B8BDAA29B3301300B92BDF /* Info.plist */,
-				E2F1FE8C29B2F30B00054467 /* Components */,
 				E2F1FE7329B2DF5800054467 /* ReusableComponentsApp.swift */,
 				E2F1FE7529B2DF5800054467 /* ContentView.swift */,
 				E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */,
@@ -94,16 +97,6 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		E2F1FE8C29B2F30B00054467 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				E2B8BD9F29B30A8E00B92BDF /* MIDIEndpointsList.swift */,
-				E2B8BDA129B30A9600B92BDF /* MIDIEndpointsPicker.swift */,
-				E2B8BDA829B3262000B92BDF /* UI Utilities.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -122,6 +115,7 @@
 			name = ReusableComponents;
 			packageProductDependencies = (
 				E2F1FE8629B2E04A00054467 /* MIDIKitIO */,
+				E2B8BDAC29B356CE00B92BDF /* MIDIKitUI */,
 			);
 			productName = ReusableComponents;
 			productReference = E2F1FE7029B2DF5800054467 /* ReusableComponents.app */;
@@ -183,9 +177,6 @@
 				E2B8BDA429B30B3200B92BDF /* PickersExampleView.swift in Sources */,
 				E2F1FE8B29B2F2ED00054467 /* Utilities.swift in Sources */,
 				E2F1FE7429B2DF5800054467 /* ReusableComponentsApp.swift in Sources */,
-				E2B8BDA029B30A8E00B92BDF /* MIDIEndpointsList.swift in Sources */,
-				E2B8BDA229B30A9600B92BDF /* MIDIEndpointsPicker.swift in Sources */,
-				E2B8BDA929B3262000B92BDF /* UI Utilities.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +396,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E2B8BDAC29B356CE00B92BDF /* MIDIKitUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MIDIKitUI;
+		};
 		E2F1FE8629B2E04A00054467 /* MIDIKitIO */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MIDIKitIO;

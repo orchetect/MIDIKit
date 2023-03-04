@@ -4,9 +4,12 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
+#if canImport(SwiftUI)
+
 import SwiftUI
 import MIDIKitIO
 
+@available(macOS 11.0, iOS 14.0, *)
 internal struct MIDIEndpointsList<Endpoint>: View
 where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdentifier {
     var endpoints: [Endpoint]
@@ -130,6 +133,7 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
     }
 }
 
+@available(macOS 11.0, iOS 14.0, *)
 public struct MIDIInputsList: View {
     @EnvironmentObject private var midiManager: MIDIManager
     
@@ -157,6 +161,7 @@ public struct MIDIInputsList: View {
     }
 }
 
+@available(macOS 11.0, iOS 14.0, *)
 public struct MIDIOutputsList: View {
     @EnvironmentObject private var midiManager: MIDIManager
     
@@ -183,3 +188,5 @@ public struct MIDIOutputsList: View {
         )
     }
 }
+
+#endif
