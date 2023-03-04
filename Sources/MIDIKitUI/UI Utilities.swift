@@ -29,7 +29,7 @@ extension NSImage {
 
 #endif
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(tvOS) && !os(watchOS)
 
 import UIKit
 
@@ -46,7 +46,7 @@ extension UIImage {
 
 #endif
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && !os(tvOS) && !os(watchOS)
 
 import SwiftUI
 

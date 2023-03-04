@@ -4,7 +4,7 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && !os(tvOS) && !os(watchOS)
 
 import SwiftUI
 import MIDIKitIO
