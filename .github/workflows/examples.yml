@@ -99,6 +99,15 @@ jobs:
     - name: EventParsing - Build (macOS)
       run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac"
       
+    - name: MIDIKitUIExample - Set dependency branch
+      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -branch ${{ github.ref }}
+    - name: MIDIKitUIExample - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -resolvePackageDependencies
+    - name: MIDIKitUIExample - Build (iOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -scheme "MIDIKitUIExample" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device"
+    - name: MIDIKitUIExample - Build (macOS)
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -scheme "MIDIKitUIExample" -destination "generic/platform=macOS,name=Any Mac"
+      
     - name: MIDISystemInfo - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/MIDISystemInfo/MIDISystemInfo.xcodeproj" -branch ${{ github.ref }}
     - name: MIDISystemInfo - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
