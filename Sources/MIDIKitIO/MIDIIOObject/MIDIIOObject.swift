@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if canImport(SwiftUI)
+import SwiftUI
+#endif
+
 #if canImport(AppKit)
 import AppKit
 #endif
@@ -132,6 +136,11 @@ public protocol MIDIIOObject {
     ///
     /// A studio setup editor should allow the user to choose icons for external devices.
     var imageFileURL: URL? { get }
+    
+    #if canImport(SwiftUI)
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    var image: Image? { get }
+    #endif
     
     #if canImport(AppKit) && os(macOS)
     /// Calls ``MIDIIOObject/imageFileURL-6ltjy`` and attempts to initialize a new `NSImage`.

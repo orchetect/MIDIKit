@@ -9,6 +9,10 @@
 import Foundation
 @_implementationOnly import CoreMIDI
 
+#if canImport(SwiftUI)
+import SwiftUI
+#endif
+
 #if canImport(AppKit)
 import AppKit
 #endif
@@ -72,6 +76,21 @@ extension MIDIIOObject {
     }
     
     // MARK: Presentation
+    
+    #if canImport(SwiftUI)
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    public var image: Image? {
+        #if os(macOS)
+        guard let img = imageAsNSImage else { return nil }
+        return Image(nsImage: img)
+        #elseif os(iOS)
+        guard let img = imageAsUIImage else { return nil }
+        return Image(uiImage: img)
+        #else
+        nil
+        #endif
+    }
+    #endif
     
     public var imageFileURL: URL? {
         try? MIDIKitIO.getImage(of: coreMIDIObjectRef)
