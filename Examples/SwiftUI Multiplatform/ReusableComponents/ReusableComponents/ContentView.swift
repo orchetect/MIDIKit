@@ -42,9 +42,6 @@ struct ContentView: View {
             EmptyDetailsView()
         }
         .navigationTitle("Reusable Components")
-//#if os(iOS)
-//        .navigationViewStyle(.doubleColumn)
-//#endif
     }
     
     private func details(index: Int) -> some View {

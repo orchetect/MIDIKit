@@ -16,15 +16,25 @@ struct PickersExampleView: View {
     
     @State private var pickerStyle: PickerStyleSelection = .automatic
     @State private var showIcons: Bool = true
+    @State private var singleColumn: Bool = true
     
     var body: some View {
         viewLayout
         
         Spacer()
         
+#if os(iOS)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            Toggle("Single Column", isOn: $singleColumn)
+                .toggleStyle(.switch)
+                .frame(width: 200)
+            
+        }
+#endif
+            
         Toggle("Show Icons", isOn: $showIcons)
             .toggleStyle(.switch)
-            .frame(width: 150)
+            .frame(width: 200)
         
         Picker("Picker Style", selection: $pickerStyle) {
             ForEach(PickerStyleSelection.allCases) {
@@ -41,11 +51,11 @@ struct PickersExampleView: View {
     @ViewBuilder
     private var viewLayout: some View {
 #if os(iOS)
-//        if UIDevice.current.userInterfaceIdiom == .phone {
+        if singleColumn {
             iPhoneView
-//        } else {
-//            standardView
-//        }
+        } else {
+            standardView
+        }
 #else
         standardView
 #endif
