@@ -147,7 +147,7 @@ extension MIDIEndpointIdentity {
 extension MIDIEndpointIdentity {
     /// Uses the identity criteria to find the first match in an endpoint collection.
     /// Returns `nil` if no matches are found.
-    internal func locate<T: MIDIEndpoint>(in endpoints: [T]) -> T? {
+    public func locate<T: MIDIEndpoint>(in endpoints: [T]) -> T? {
         switch self {
         case let .name(name):
             return endpoints.first(whereName: name)
@@ -167,6 +167,30 @@ extension MIDIEndpointIdentity {
                 fallbackDisplayName: fallbackDisplayName,
                 ignoringEmpty: true
             )
+        }
+    }
+    
+    /// Returns a Boolean value whether the identity criteria matches the endpoint.
+    public func matches<T: MIDIEndpoint>(endpoint: T) -> Bool {
+        switch self {
+        case let .name(name):
+            return [endpoint].first(whereName: name) != nil
+            
+        case let .displayName(name):
+            return [endpoint].first(whereDisplayName: name) != nil
+            
+        case let .uniqueID(uniqueID):
+            return [endpoint].first(whereUniqueID: uniqueID) != nil
+            
+        case let .uniqueIDWithFallback(
+            id: uniqueID,
+            fallbackDisplayName: fallbackDisplayName
+        ):
+            return [endpoint].first(
+                whereUniqueID: uniqueID,
+                fallbackDisplayName: fallbackDisplayName,
+                ignoringEmpty: true
+            ) != nil
         }
     }
 }
