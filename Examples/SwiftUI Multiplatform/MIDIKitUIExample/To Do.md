@@ -5,5 +5,5 @@ This example shows usage of the MIDIKitUI SwiftUI controls.
 ## To Do
 
 - [ ] Add multiple-selection list controls
-- [ ] Add `tag: String` parameter to controls so they can update the `MIDIManager` instance
-- [ ] Add `unownedOnly: Bool` parameter to controls so they can filter out manager-owned virtual endpoints
+- [ ] Demonstrate updating connections in the `MIDIManager` on endpoint selection change
+- [ ] Add `unownedOnly: Bool` parameter to controls so they can filter out manager-owned virtual endpoints (♻️)
