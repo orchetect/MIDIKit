@@ -75,4 +75,30 @@ extension MIDIEndpointFilter {
     }
 }
 
+// MARK: - Collection Methods
+
+extension Collection where Element: MIDIEndpoint {
+    public func filter(
+        using endpointFilter: MIDIEndpointFilter,
+        in manager: MIDIManager,
+        isIncluded: Bool = true
+    ) -> [Element] {
+        filter { endpoint in
+            if !endpointFilter.criteria.isEmpty {
+                guard endpointFilter.criteria
+                    .allSatisfy({ $0.matches(endpoint: endpoint) }) != isIncluded
+                else { return false }
+            }
+            
+            if endpointFilter.owned {
+                let inputs = manager.managedInputs.map(\.value.endpoint).asAnyEndpoints()
+                let outputs = manager.managedOutputs.map(\.value.endpoint).asAnyEndpoints()
+                guard (inputs + outputs).contains(endpoint.asAnyEndpoint()) != isIncluded
+                else { return false }
+            }
+            return true
+        }
+    }
+}
+
 #endif
