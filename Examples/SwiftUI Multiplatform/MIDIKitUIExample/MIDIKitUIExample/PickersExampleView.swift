@@ -15,6 +15,7 @@ struct PickersExampleView: View {
     @AppStorage("midiOutputName") private var midiOutputName: String?
     
     @State private var pickerStyle: PickerStyleSelection = .automatic
+    @State private var filterOwned: Bool = false
     @State private var showIcons: Bool = true
     @State private var singleColumn: Bool = true
     
@@ -23,18 +24,19 @@ struct PickersExampleView: View {
         
         Spacer()
         
-#if os(iOS)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            Toggle("Single Column", isOn: $singleColumn)
-                .toggleStyle(.switch)
-                .frame(width: 200)
+        VStack {
+            Toggle("Filter Manager-Owned", isOn: $filterOwned)
             
-        }
+#if os(iOS)
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                Toggle("Single Column", isOn: $singleColumn)
+            }
 #endif
             
-        Toggle("Show Icons", isOn: $showIcons)
-            .toggleStyle(.switch)
-            .frame(width: 200)
+            Toggle("Show Icons", isOn: $showIcons)
+        }
+        .toggleStyle(.switch)
+        .frame(width: 200)
         
         Picker("Picker Style", selection: $pickerStyle) {
             ForEach(PickerStyleSelection.allCases) {
@@ -110,7 +112,8 @@ struct PickersExampleView: View {
             title: "Input",
             selection: intAdapter($midiInput),
             cachedSelectionName: $midiInputName,
-            showIcons: showIcons
+            showIcons: showIcons,
+            filterOwned: filterOwned
         )
         .pickerStyle(selection: pickerStyle)
     }
@@ -120,7 +123,8 @@ struct PickersExampleView: View {
             title: "Output",
             selection: intAdapter($midiOutput),
             cachedSelectionName: $midiOutputName,
-            showIcons: showIcons
+            showIcons: showIcons,
+            filterOwned: filterOwned
         )
         .pickerStyle(selection: pickerStyle)
     }

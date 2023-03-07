@@ -14,6 +14,7 @@ struct ListsExampleView: View {
     @AppStorage("midiOutput") private var midiOutput: Int?
     @AppStorage("midiOutputName") private var midiOutputName: String?
     
+    @State private var filterOwned: Bool = false
     @State private var showIcons: Bool = true
     
     var body: some View {
@@ -22,9 +23,12 @@ struct ListsExampleView: View {
             
         Spacer()
         
-        Toggle("Show Icons", isOn: $showIcons)
-            .toggleStyle(.switch)
-            .frame(width: 150)
+        VStack {
+            Toggle("Filter Manager-Owned", isOn: $filterOwned)
+            Toggle("Show Icons", isOn: $showIcons)
+        }
+        .toggleStyle(.switch)
+        .frame(width: 200)
         
         Text("Inputs and Outputs lists allowing for a single selection or no selection.")
     }
@@ -76,7 +80,8 @@ struct ListsExampleView: View {
         MIDIInputsList(
             selection: intAdapter($midiInput),
             cachedSelectionName: $midiInputName,
-            showIcons: showIcons
+            showIcons: showIcons,
+            filterOwned: filterOwned
         )
 #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))
@@ -87,7 +92,8 @@ struct ListsExampleView: View {
         MIDIOutputsList(
             selection: intAdapter($midiOutput),
             cachedSelectionName: $midiOutputName,
-            showIcons: showIcons
+            showIcons: showIcons,
+            filterOwned: filterOwned
         )
 #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))
