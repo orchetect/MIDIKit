@@ -6,7 +6,7 @@
 
 import MIDIKitIO
 
-#if canImport(AppKit)
+#if canImport(AppKit) && os(macOS)
 
 import AppKit
 
@@ -53,7 +53,7 @@ import SwiftUI
 extension MIDIEndpoint {
     @available(macOS 10.15, iOS 13.0, *)
     func image(resizedTo size: CGSize) -> Image? {
-        #if canImport(AppKit)
+        #if canImport(AppKit) && os(macOS)
         guard let nsImg = imageAsNSImage?.resized(to: size) else { return nil }
         return Image(nsImage: nsImg)
         #elseif canImport(UIKit)
