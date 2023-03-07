@@ -12,7 +12,10 @@ import MIDIKitIO
 @available(macOS 11.0, iOS 14.0, *)
 internal struct MIDIEndpointsList<Endpoint>: View
 where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdentifier {
+    @EnvironmentObject private var midiManager: MIDIManager
+    
     var endpoints: [Endpoint]
+    @State var filter: MIDIEndpointFilter
     @Binding var selection: MIDIIdentifier?
     @Binding var cachedSelectionName: String?
     let showIcons: Bool
@@ -21,15 +24,18 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
     
     init(
         endpoints: [Endpoint],
+        filter: MIDIEndpointFilter,
         selection: Binding<MIDIIdentifier?>,
         cachedSelectionName: Binding<String?>,
         showIcons: Bool
     ) {
         self.endpoints = endpoints
+        self._filter = State(initialValue: filter)
         self._selection = selection
         self._cachedSelectionName = cachedSelectionName
         self.showIcons = showIcons
-        self._ids = State(initialValue: generateIDs(endpoints: endpoints))
+        // set up initial data, but skip filter because midiManager is not available yet
+        self._ids = State(initialValue: generateIDs(endpoints: endpoints, filtered: false))
     }
     
     public var body: some View {
@@ -40,6 +46,9 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
             }
         }
         .onAppear {
+            updateIDs(endpoints: endpoints)
+        }
+        .onChange(of: filter) { newValue in
             updateIDs(endpoints: endpoints)
         }
         .onChange(of: endpoints) { newValue in
@@ -57,8 +66,15 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         }
     }
     
-    private func generateIDs(endpoints: [Endpoint]) -> [MIDIIdentifier]{
-        let endpointIDs = endpoints.map(\.id)
+    private func generateIDs(
+        endpoints: [Endpoint],
+        filtered: Bool = true
+    ) -> [MIDIIdentifier] {
+        let endpointIDs = {
+            filtered ? endpoints.filter(using: filter, in: midiManager) : endpoints
+        }()
+            .map(\.id)
+        
         if let selection, !endpointIDs.contains(selection) {
             return [selection] + endpointIDs
         }
@@ -140,20 +156,24 @@ public struct MIDIInputsList: View {
     @Binding public var selection: MIDIIdentifier?
     @Binding public var cachedSelectionName: String?
     public let showIcons: Bool
+    public let filterOwned: Bool
     
     public init(
         selection: Binding<MIDIIdentifier?>,
         cachedSelectionName: Binding<String?>,
-        showIcons: Bool = true
+        showIcons: Bool = true,
+        filterOwned: Bool = false
     ) {
         self._selection = selection
         self._cachedSelectionName = cachedSelectionName
         self.showIcons = showIcons
+        self.filterOwned = filterOwned
     }
     
     public var body: some View {
         MIDIEndpointsList<MIDIInputEndpoint>(
             endpoints: midiManager.endpoints.inputs,
+            filter: filterOwned ? .owned() : .default(),
             selection: $selection,
             cachedSelectionName: $cachedSelectionName,
             showIcons: showIcons
@@ -168,20 +188,24 @@ public struct MIDIOutputsList: View {
     @Binding public var selection: MIDIIdentifier?
     @Binding public var cachedSelectionName: String?
     public let showIcons: Bool
+    public let filterOwned: Bool
     
     public init(
         selection: Binding<MIDIIdentifier?>,
         cachedSelectionName: Binding<String?>,
-        showIcons: Bool = true
+        showIcons: Bool = true,
+        filterOwned: Bool = false
     ) {
         self._selection = selection
         self._cachedSelectionName = cachedSelectionName
         self.showIcons = showIcons
+        self.filterOwned = filterOwned
     }
     
     public var body: some View {
         MIDIEndpointsList<MIDIOutputEndpoint>(
             endpoints: midiManager.endpoints.outputs,
+            filter: filterOwned ? .owned() : .default(),
             selection: $selection,
             cachedSelectionName: $cachedSelectionName,
             showIcons: showIcons
