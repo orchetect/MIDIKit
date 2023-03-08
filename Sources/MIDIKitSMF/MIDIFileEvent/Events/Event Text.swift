@@ -191,11 +191,7 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
             
             let byteSlice = try dataReader.read(bytes: length.value)
             
-            guard let formedText = byteSlice.asciiDataToString() else {
-                throw MIDIFile.DecodeError.malformed(
-                    "Could not decode ASCII string. It may contain unsupported characters."
-                )
-            }
+            let formedText = byteSlice.asciiDataToStringLossy() // .removing(.newlines)
             
             let newInstance = Self(
                 type: textTypeMatch.key,
