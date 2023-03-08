@@ -15,7 +15,7 @@ final class MIDINote_Yamaha_Tests: XCTestCase {
     func testInitDefaults() {
         // ensure nominal defaults
     
-        let note = MIDINote(style: style)
+        let note = MIDINote(0, style: style)
     
         XCTAssertEqual(note.number, 0)
         XCTAssertEqual(note.style, .yamaha)

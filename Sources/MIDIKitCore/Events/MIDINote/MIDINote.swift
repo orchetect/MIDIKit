@@ -21,10 +21,6 @@ public struct MIDINote: Equatable, Hashable {
     
     // MARK: - Init
     
-    public init(style: Style = .yamaha) {
-        self.style = style
-    }
-    
     /// Construct from a MIDI note number.
     @_disfavoredOverload
     public init<T: BinaryInteger>(
