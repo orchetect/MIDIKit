@@ -26,7 +26,7 @@ extension MIDIEvent {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
     
-        /// For MIDI 1.0, transmit velocity of 0 as a Note Off event.
+        /// For MIDI 1.0, translate velocity of 0 as a Note Off event.
         public var midi1ZeroVelocityAsNoteOff: Bool = true
     
         /// Channel Voice Message: Note On
@@ -38,7 +38,7 @@ extension MIDIEvent {
         ///   - channel: Channel Number (`0x0 ... 0xF`)
         ///   - attribute: MIDI 2.0 Channel Voice Attribute
         ///   - group: UMP Group (`0x0 ... 0xF`)
-        ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off
+        ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, translate velocity of 0 as a Note Off
         /// event.
         public init(
             note: UInt7,
@@ -46,7 +46,7 @@ extension MIDIEvent {
             attribute: MIDIEvent.NoteAttribute = .none,
             channel: UInt4,
             group: UInt4 = 0x0,
-            midi1ZeroVelocityAsNoteOff: Bool = true
+            midi1ZeroVelocityAsNoteOff: Bool = false
         ) {
             self.note = MIDINote(note)
             self.velocity = velocity
@@ -65,7 +65,7 @@ extension MIDIEvent {
         ///   - channel: Channel Number (`0x0 ... 0xF`)
         ///   - attribute: MIDI 2.0 Channel Voice Attribute
         ///   - group: UMP Group (`0x0 ... 0xF`)
-        ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off
+        ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, translate velocity of 0 as a Note Off
         /// event.
         public init(
             note: MIDINote,
@@ -73,7 +73,7 @@ extension MIDIEvent {
             attribute: MIDIEvent.NoteAttribute = .none,
             channel: UInt4,
             group: UInt4 = 0x0,
-            midi1ZeroVelocityAsNoteOff: Bool = true
+            midi1ZeroVelocityAsNoteOff: Bool = false
         ) {
             self.note = note
             self.velocity = velocity
@@ -119,14 +119,14 @@ extension MIDIEvent {
     ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (`0x0 ... 0xF`)
-    ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
+    ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, translate velocity of 0 as a Note Off event.
     public static func noteOn(
         _ note: UInt7,
         velocity: NoteVelocity,
         attribute: NoteAttribute = .none,
         channel: UInt4,
         group: UInt4 = 0x0,
-        midi1ZeroVelocityAsNoteOff: Bool = true
+        midi1ZeroVelocityAsNoteOff: Bool = false
     ) -> Self {
         .noteOn(
             .init(
@@ -149,14 +149,14 @@ extension MIDIEvent {
     ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (`0x0 ... 0xF`)
-    ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, transmit velocity of 0 as a Note Off event.
+    ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, translate velocity of 0 as a Note Off event.
     public static func noteOn(
         _ note: MIDINote,
         velocity: NoteVelocity,
         attribute: NoteAttribute = .none,
         channel: UInt4,
         group: UInt4 = 0x0,
-        midi1ZeroVelocityAsNoteOff: Bool = true
+        midi1ZeroVelocityAsNoteOff: Bool = false
     ) -> Self {
         .noteOn(
             .init(

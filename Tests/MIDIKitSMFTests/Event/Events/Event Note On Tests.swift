@@ -69,19 +69,7 @@ final class Event_NoteOn_Tests: XCTestCase {
         XCTAssertEqual(event.channel, 0)
     }
     
-    func testMIDI1SMFRawBytes_Velocity0_Defaulted() {
-        let event = MIDIFileEvent.NoteOn(
-            note: 60,
-            velocity: .midi1(0x00),
-            channel: 0
-        )
-        
-        let bytes: [UInt8] = event.midi1SMFRawBytes()
-        
-        XCTAssertEqual(bytes, [0x80, 0x3C, 0x00]) // interpreted as Note Off
-    }
-    
-    func testMIDI1SMFRawBytes_Velocity0_TranslateOff() {
+    func testMIDI1SMFRawBytes_Velocity0_NoTranslation() {
         let event = MIDIFileEvent.NoteOn(
             note: 60,
             velocity: .midi1(0x00),
@@ -92,6 +80,32 @@ final class Event_NoteOn_Tests: XCTestCase {
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
         XCTAssertEqual(bytes, [0x90, 0x3C, 0x00])
+    }
+    
+    func testMIDI1SMFRawBytes_Velocity0_TranslateOff() {
+        let event = MIDIFileEvent.NoteOn(
+            note: 60,
+            velocity: .midi1(0x00),
+            channel: 0,
+            midi1ZeroVelocityAsNoteOff: true
+        )
+        
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        
+        XCTAssertEqual(bytes, [0x80, 0x3C, 0x00]) // interpreted as Note Off
+    }
+    
+    func testMIDI1SMFRawBytes_Velocity1_TranslateOff() {
+        let event = MIDIFileEvent.NoteOn(
+            note: 60,
+            velocity: .midi1(0x01),
+            channel: 0,
+            midi1ZeroVelocityAsNoteOff: true
+        )
+        
+        let bytes: [UInt8] = event.midi1SMFRawBytes()
+        
+        XCTAssertEqual(bytes, [0x90, 0x3C, 0x01])
     }
 }
 
