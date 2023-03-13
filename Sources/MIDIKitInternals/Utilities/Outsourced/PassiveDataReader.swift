@@ -2,7 +2,7 @@
 /// ----------------------------------------------
 /// OTCore/Abstractions/PassiveDataReader.swift
 ///
-/// Borrowed from OTCore 1.4.2 under MIT license.
+/// Borrowed from OTCore 1.4.10 under MIT license.
 /// https://github.com/orchetect/OTCore
 /// Methods herein are unit tested at their source
 /// so no unit tests are necessary.
@@ -49,8 +49,7 @@ public struct PassiveDataReader<D: DataProtocol> {
     // MARK: - Methods
     
     /// Manually advance by _n_ number of bytes from current read offset.
-    /// Note that this method is unchecked which may result in an offset beyond the end of the data
-    /// stream.
+    /// Note that this method is unchecked which may result in an offset beyond the end of the data stream.
     public mutating func advanceBy(_ count: Int) {
         readOffset += count
     }
@@ -112,13 +111,21 @@ public struct PassiveDataReader<D: DataProtocol> {
         
         let readPosStartIndex = withData { $0.index($0.startIndex, offsetBy: readOffset) }
         
-        let count = count ?? (withData(\.count) - readOffset)
+        let remainingCount = remainingByteCount
+        
+        let count = count ?? remainingCount
+        
+        guard count <= remainingCount else {
+            throw ReadError.pastEndOfStream
+        }
         
         let endIndex = withData { $0.index(readPosStartIndex, offsetBy: count - 1) }
         
         guard withData({
             $0.indices.contains(readPosStartIndex) && $0.indices.contains(endIndex)
-        }) else { throw ReadError.pastEndOfStream }
+        }) else {
+            throw ReadError.pastEndOfStream
+        }
         
         let returnBytes = withData { $0[readPosStartIndex ... endIndex] }
         
