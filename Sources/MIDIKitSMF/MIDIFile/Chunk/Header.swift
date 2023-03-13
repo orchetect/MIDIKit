@@ -77,7 +77,7 @@ import MIDIKitCore
 
 extension MIDIFile.Chunk {
     /// Header: `MThd` chunk type.
-    public struct Header: Equatable {
+    public struct Header: Equatable, Hashable {
         public static let staticIdentifier: String = "MThd"
         
         public var format: MIDIFile.Format = .multipleTracksSynchronous

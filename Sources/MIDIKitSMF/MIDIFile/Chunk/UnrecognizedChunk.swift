@@ -9,7 +9,7 @@ import MIDIKitCore
 
 extension MIDIFile.Chunk {
     /// Unrecognized MIDI File Chunk.
-    public struct UnrecognizedChunk: MIDIFileChunk, Equatable {
+    public struct UnrecognizedChunk: MIDIFileChunk, Equatable, Hashable {
         static let disallowedIdentifiers: [String] = [
             Header().identifier,
             Track().identifier

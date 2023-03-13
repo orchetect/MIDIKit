@@ -15,14 +15,13 @@ extension MIDIFile {
     ///
     /// In ``MIDIFile``, the ``Chunk/Header`` chunk is managed automatically and is not instanced as
     /// a ``MIDIFile/chunks`` member.
-    public enum Chunk: Equatable {
+    public enum Chunk: Equatable, Hashable {
         case track(Track)
         case other(UnrecognizedChunk)
     }
 }
 
-extension MIDIFile.Chunk: CustomStringConvertible,
-CustomDebugStringConvertible {
+extension MIDIFile.Chunk: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         switch self {
         case let .track(track):

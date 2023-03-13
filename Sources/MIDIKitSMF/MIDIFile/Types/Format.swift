@@ -9,7 +9,7 @@ import MIDIKitCore
 // MARK: - Format
 
 extension MIDIFile {
-    public enum Format: UInt8, CaseIterable, Equatable {
+    public enum Format: UInt8, CaseIterable, Equatable, Hashable {
         /// Type 0:
         /// MIDI file contains one single track containing midi data on possibly all 16 midi
         /// channels.
@@ -27,8 +27,7 @@ extension MIDIFile {
     }
 }
 
-extension MIDIFile.Format: CustomStringConvertible,
-CustomDebugStringConvertible {
+extension MIDIFile.Format: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         switch self {
         case .singleTrack:

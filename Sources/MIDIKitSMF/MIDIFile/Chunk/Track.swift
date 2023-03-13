@@ -11,7 +11,7 @@ import MIDIKitCore
 
 extension MIDIFile.Chunk {
     /// Track: `MTrk` chunk type.
-    public struct Track: Equatable {
+    public struct Track: Equatable, Hashable {
         public static let staticIdentifier: String = "MTrk"
         
         internal static let chunkEnd: [UInt8] = [0xFF, 0x2F, 0x00]

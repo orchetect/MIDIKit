@@ -11,7 +11,7 @@ import MIDIKitCore
 
 extension MIDIFile {
     /// MIDI file timebase as described in the MIDI file header.
-    public enum TimeBase: Equatable {
+    public enum TimeBase: Equatable, Hashable {
         /// Musical: Delta-time ticks per quarter note (PPQN / PPQ / PPQBase).
         ///
         /// Common values: 96, 120, 480, 960. Cubase exports at 480 by default.
