@@ -49,7 +49,7 @@ extension MIDIFile {
 
                 guard let chunkType = try? dataReader.read(bytes: 4) else {
                     throw DecodeError.malformed(
-                        "There was a problem reading chunk header. Encountered end of file early."
+                        "There was a problem reading chunk header at byte offset \(dataReader.readOffset). Encountered end of file early."
                     )
                 }
 
@@ -57,7 +57,7 @@ extension MIDIFile {
                     .toUInt32(from: .bigEndian)
                 else {
                     throw DecodeError.malformed(
-                        "There was a problem reading chunk length. Encountered end of file early."
+                        "There was a problem reading chunk length at byte offset \(dataReader.readOffset). Encountered end of file early."
                     )
                 }
 
@@ -69,7 +69,7 @@ extension MIDIFile {
             
                 guard let chunkData = try? dataReader.read(bytes: Int(chunkLength)) else {
                     throw DecodeError.malformed(
-                        "There was a problem reading track data blob for track \(tracksEncountered). Encountered end of file early."
+                        "There was a problem reading track data blob at byte offset \(dataReader.readOffset) for track \(tracksEncountered). Encountered end of file early."
                     )
                 }
             
@@ -85,8 +85,9 @@ extension MIDIFile {
                         // as per Standard MIDI File 1.0 Spec:
                         // unrecognized chunks should be skipped and not throw an error
                         
-                        let newUnrecognizedChunk = try Chunk
-                            .UnrecognizedChunk(midi1SMFRawBytesStream: chunkData.bytes)
+                        let newUnrecognizedChunk = try Chunk.UnrecognizedChunk(
+                            midi1SMFRawBytesStream: chunkData.bytes
+                        )
                         newChunk = .other(newUnrecognizedChunk)
                     }
                 } catch let error as DecodeError {
@@ -94,7 +95,7 @@ extension MIDIFile {
                     switch error {
                     case let .malformed(verboseError):
                         throw DecodeError.malformed(
-                            "There was a problem reading track data for track \(tracksEncountered). " +
+                            "There was a problem reading track data at byte offset \(dataReader.readOffset) for track \(tracksEncountered). " +
                                 verboseError
                         )
                     
