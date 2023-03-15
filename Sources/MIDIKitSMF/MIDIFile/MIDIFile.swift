@@ -10,7 +10,7 @@ import MIDIKitCore
 private let fileManager = FileManager.default
 
 /// Standard MIDI Files (SMF) object. Read or write MIDI file contents.
-public struct MIDIFile: Equatable, Hashable {
+public struct MIDIFile {
     // MARK: - Properties
     
     internal var header: Chunk.Header = .init()
