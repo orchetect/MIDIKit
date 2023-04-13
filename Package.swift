@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.7
 // (be sure to update the .swift-version file when this Swift version changes)
 
 import PackageDescription
@@ -9,8 +9,8 @@ let package = Package(
     platforms: [
         .macOS(.v10_12),
         .iOS(.v10),
-        .tvOS(.v10), // builds but no MIDI features
-        .watchOS(.v3) // builds but no MIDI features
+        .tvOS(.v10), // builds, but no MIDI features
+        .watchOS(.v3) // builds, but no MIDI features
     ],
     
     products: [
