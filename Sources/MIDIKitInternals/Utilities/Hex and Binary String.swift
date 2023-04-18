@@ -48,6 +48,11 @@ extension Collection where Element: BinaryInteger {
         map { $0.hexString(padTo: padEachTo, prefix: prefixes) }
             .joined(separator: separator)
     }
+    
+    /// Returns a concatenated string formatted as a hex string array literal.
+    public func hexStringArrayLiteral(padEachTo: Int = 2) -> String {
+        "[" + hexString(padEachTo: padEachTo, prefixes: true, separator: ", ") + "]"
+    }
 }
 
 // MARK: - Binary String
