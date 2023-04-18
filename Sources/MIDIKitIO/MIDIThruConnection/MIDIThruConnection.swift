@@ -44,16 +44,16 @@ import MIDIKitCore
 /// > Note:
 /// >
 /// > Do not store or cache this object unless it is unavoidable. Instead, whenever possible
-/// call it by accessing non-persistent thru connections using the
-/// ``MIDIManager/managedThruConnections`` collection. The ``MIDIManager`` owns this object and
-/// maintains non-persistent thru connections' lifecycle.
+/// > call it by accessing non-persistent thru connections using the
+/// > ``MIDIManager/managedThruConnections`` collection. The ``MIDIManager`` owns this object and
+/// > maintains non-persistent thru connections' lifecycle.
 /// >
 /// > Ensure that it is only stored weakly and only passed by reference temporarily in order to
-/// execute an operation. If it absolutely must be stored strongly, ensure it is stored for no
-/// longer than the lifecycle of the managed thru connection (which is either at such time the
-/// ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
-/// ``MIDIManager/ManagedType/nonPersistentThruConnection`` or ``MIDIManager/removeAll()`` to
-/// destroy the managed thru connection.)
+/// > execute an operation. If it absolutely must be stored strongly, ensure it is stored for no
+/// > longer than the lifecycle of the managed thru connection (which is either at such time the
+/// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
+/// > ``MIDIManager/ManagedType/nonPersistentThruConnection`` or ``MIDIManager/removeAll()`` to
+/// > destroy the managed thru connection.)
 ///
 /// > Warning:
 /// >

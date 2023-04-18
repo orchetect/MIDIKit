@@ -61,7 +61,12 @@ extension MIDIThruConnection.Parameters {
         // Rather than initialize MIDIThruConnectionEndpoint objects,
         // just access the .endpointRef property.
         // All 8 are pre-initialized MIDIThruConnectionEndpoint objects.
-    
+        
+        // Apple docs for MIDIThruConnectionEndpoint:
+        // > Set the endpoint’s uniqueID to 0 if the endpoint exists and you’re passing its
+        // > endpointRef. When retrieving a connection from Core MIDI, its endpointRef may be NULL
+        // > if it doesn’t exist, but the uniqueID is always non-zero.
+        
         // outputs
     
         params.numSources = UInt32(outputs.count)
