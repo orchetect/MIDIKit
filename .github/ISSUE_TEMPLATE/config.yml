@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Feature request
     url: https://github.com/orchetect/MIDIKit/discussions
-    about: Suggest new features or improvements to MIDIKit.
-  - name: I need help setting up or troubleshooting MIDIKit
+    about: Suggest new features or improvements.
+  - name: I need help setting up or troubleshooting
     url: https://github.com/orchetect/MIDIKit/discussions
-    about: Questions not answered in the documentation or example projects.
+    about: Questions not answered in the documentation, discussions forum, or example projects.
