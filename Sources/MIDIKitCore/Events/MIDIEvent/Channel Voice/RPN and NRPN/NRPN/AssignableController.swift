@@ -43,7 +43,7 @@ extension MIDIEvent {
     /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
     public enum AssignableController: Equatable, Hashable {
-        /// Form an RPN message from a raw parameter number byte pair.
+        /// Form an NRPN message from a raw parameter number byte pair.
         ///
         /// - Parameters:
         ///   - parameter: UInt8 pair.
@@ -55,10 +55,10 @@ extension MIDIEvent {
             dataEntryLSB: UInt7?
         )
     
-        /// Null Function Number for RPN/NRPN.
+        /// Null Function Number.
         ///
         /// The purpose of this event is to communicate the intent to disable data entry, data
-        /// increment, and data decrement controllers until a new RPN or NRPN is selected.
+        /// increment, and data decrement controllers until a new NRPN is selected.
         case null
     }
 }

@@ -8,7 +8,21 @@
 // - The concrete payload struct in the enum case's associated value, and its inits
 // - MIDIEvent.ChanVoiceTypes case
 
-/// MIDI Event.
+/// An individual MIDI Event.
+///
+/// MIDI events are constructed as enum cases containing event payload data. Various static
+/// constructors are available for each event type.
+///
+/// In both MIDI 1.0 and MIDI 2.0, events are divided into several main categories:
+///
+/// - <doc:MIDIEvent-Channel-Voice>
+/// - <doc:MIDIEvent-System-Common>
+/// - <doc:MIDIEvent-System-Exclusive>
+/// - <doc:MIDIEvent-System-Real-Time>
+/// - <doc:MIDIEvent-Utility> (Applicable to MIDI 2.0 only)
+///
+/// MIDIKit provides type-safe abstractions for all possible events and values. For this reason, it
+/// is not necessary (and is discouraged) to use raw bytes when constructing or parsing events.
 public enum MIDIEvent: Equatable, Hashable {
     // -------------------
     // MARK: Channel Voice
@@ -30,7 +44,7 @@ public enum MIDIEvent: Equatable, Hashable {
     /// (MIDI 2.0)
     case notePitchBend(NotePitchBend)
     
-    /// Channel Voice Message: Per-Note Aftertouch (Polyphonic Aftertouch)
+    /// Channel Voice Message: Per-Note Pressure (Polyphonic Aftertouch)
     /// (MIDI 1.0 / 2.0)
     ///
     /// Also known as:

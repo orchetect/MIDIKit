@@ -106,10 +106,10 @@ extension MIDIEvent {
             dataEntryLSB: UInt7?
         )
     
-        /// Null Function Number for RPN/NRPN.
+        /// Null Function Number.
         ///
         /// The purpose of this event is to communicate the intent to disable data entry, data
-        /// increment, and data decrement controllers until a new RPN or NRPN is selected.
+        /// increment, and data decrement controllers until a new RPN is selected.
         case null
     
         /// Form an RPN message from a raw parameter number byte pair.

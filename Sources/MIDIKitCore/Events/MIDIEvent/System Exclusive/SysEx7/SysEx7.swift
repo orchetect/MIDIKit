@@ -11,14 +11,14 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > - Receivers should ignore non-universal Exclusive messages with ID numbers that do not
-    /// correspond to their own ID.
+    /// > correspond to their own ID.
     /// >
     /// > - Any manufacturer of MIDI hardware or software may use the system exclusive codes of any
-    /// existing product without the permission of the original manufacturer. However, they may not
-    /// modify or extend it in any way that conflicts with the original specification published by
-    /// the designer. Once published, an Exclusive format is treated like any other part of the
-    /// instruments MIDI implementation — so long as the new instrument remains within the
-    /// definitions of the published specification.
+    /// > existing product without the permission of the original manufacturer. However, they may
+    /// > not modify or extend it in any way that conflicts with the original specification
+    /// > published by the designer. Once published, an Exclusive format is treated like any other
+    /// > part of the instruments MIDI implementation — so long as the new instrument remains within
+    /// > the definitions of the published specification.
     public struct SysEx7: Equatable, Hashable {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
@@ -66,14 +66,14 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > Receivers should ignore non-universal Exclusive messages with ID numbers that do not
-    /// correspond to their own ID.
+    /// > correspond to their own ID.
     /// >
     /// > Any manufacturer of MIDI hardware or software may use the system exclusive codes of any
-    /// existing product without the permission of the original manufacturer. However, they may not
-    /// modify or extend it in any way that conflicts with the original specification published by
-    /// the designer. Once published, an Exclusive format is treated like any other part of the
-    /// instruments MIDI implementation — so long as the new instrument remains within the
-    /// definitions of the published specification.
+    /// > existing product without the permission of the original manufacturer. However, they may
+    /// > not modify or extend it in any way that conflicts with the original specification
+    /// > published by the designer. Once published, an Exclusive format is treated like any other
+    /// > part of the instruments MIDI implementation — so long as the new instrument remains within
+    /// > the definitions of the published specification.
     ///
     /// - Parameters:
     ///   - manufacturer: SysEx Manufacturer ID
@@ -101,14 +101,14 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > Receivers should ignore non-universal Exclusive messages with ID numbers that do not
-    /// correspond to their own ID.
+    /// > correspond to their own ID.
     /// >
     /// > Any manufacturer of MIDI hardware or software may use the system exclusive codes of any
-    /// existing product without the permission of the original manufacturer. However, they may not
-    /// modify or extend it in any way that conflicts with the original specification published by
-    /// the designer. Once published, an Exclusive format is treated like any other part of the
-    /// instruments MIDI implementation — so long as the new instrument remains within the
-    /// definitions of the published specification.
+    /// > existing product without the permission of the original manufacturer. However, they may
+    /// > not modify or extend it in any way that conflicts with the original specification
+    /// > published by the designer. Once published, an Exclusive format is treated like any other
+    /// > part of the instruments MIDI implementation — so long as the new instrument remains within
+    /// > the definitions of the published specification.
     ///
     /// - Parameters:
     ///   - manufacturer: SysEx Manufacturer ID

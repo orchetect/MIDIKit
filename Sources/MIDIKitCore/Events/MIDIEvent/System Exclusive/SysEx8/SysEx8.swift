@@ -11,10 +11,10 @@ extension MIDIEvent {
     /// > MIDI 2.0 Spec:
     /// >
     /// > System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original
-    /// System Exclusive messages, but with the added advantage of allowing all 8 bits of each data
-    /// byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high
-    /// bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8
-    /// Message is carried in one or more 128-bit UMPs.
+    /// > System Exclusive messages, but with the added advantage of allowing all 8 bits of each
+    /// > data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the
+    /// > high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive
+    /// > 8 Message is carried in one or more 128-bit UMPs.
     public struct SysEx8: Equatable, Hashable {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
@@ -64,10 +64,10 @@ extension MIDIEvent {
     /// > MIDI 2.0 Spec:
     /// >
     /// > System Exclusive 8 messages have many similarities to the MIDI 1.0 Protocol’s original
-    /// System Exclusive messages, but with the added advantage of allowing all 8 bits of each data
-    /// byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the high
-    /// bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive 8
-    /// Message is carried in one or more 128-bit UMPs.
+    /// > System Exclusive messages, but with the added advantage of allowing all 8 bits of each
+    /// > data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the
+    /// > high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive
+    /// > 8 Message is carried in one or more 128-bit UMPs.
     ///
     /// - Parameters:
     ///   - manufacturer: SysEx Manufacturer ID
