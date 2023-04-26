@@ -268,7 +268,7 @@ extension MIDIEvent.RegisteredController: MIDIParameterNumber {
     
         case let .channelFineTuning(value):
             let uInt7Pair = value.midiUInt7Pair
-            return (msb: uInt7Pair.msb,lsb: uInt7Pair.lsb)
+            return (msb: uInt7Pair.msb, lsb: uInt7Pair.lsb)
     
         case let .channelCoarseTuning(value):
             return (msb: value, lsb: nil)
