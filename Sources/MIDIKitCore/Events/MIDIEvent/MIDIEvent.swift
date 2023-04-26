@@ -248,6 +248,7 @@ public enum MIDIEvent: Equatable, Hashable {
     /// not an official message; the vendors in question should have used a SysEx command." --
     /// [David Van Brink's MIDI
     /// Spec](https://www.cs.cmu.edu/~music/cmsip/readings/davids-midi-spec.htm)
+    @available(*, deprecated, message: "Bus Select is not supported by Core MIDI and will be removed in the future.")
     case unofficialBusSelect(UnofficialBusSelect)
     
     /// System Common: Tune Request
