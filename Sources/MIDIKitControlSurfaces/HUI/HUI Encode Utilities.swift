@@ -226,7 +226,7 @@ func encodeHUIVPot(
 /// Encodes HUI V-Pot value message as a MIDI event. (To host)
 ///
 /// > Note: Input value is clamped to `-63 ... 63` due to bit truncation meaning an input delta
-/// value of -64 is not possible and will be truncated to -63.
+/// > value of -64 is not possible and will be truncated to -63.
 ///
 /// - Parameters:
 ///   - vPot: V-Pot identity.
@@ -451,10 +451,10 @@ func encodeHUISystemReset() -> MIDIEvent {
 /// Encodes HUI delta value (V-Pot, jog wheel) into a raw byte.
 ///
 /// > Note: Input value is clamped to `-63 ... 63` due to bit truncation meaning an input delta
-/// value of -64 is not possible and will be truncated to -63.
+/// > value of -64 is not possible and will be truncated to -63.
 ///
 /// > Note: This is used for surface → host transmission of delta pot changes and not relevant for
-/// LED ring display encoding.
+/// > LED ring display encoding.
 ///
 /// - Parameters:
 ///   - delta: Delta -/+ value (will be clamped to `-63 ... 63`).
@@ -474,7 +474,7 @@ func encodeHUIDelta(from delta: Int7) -> UInt7 {
 /// Decodes a raw byte into a HUI delta value (V-Pot, jog wheel).
 ///
 /// > Note: This is used for surface → host transmission of delta pot changes and not relevant for
-/// LED ring display encoding.
+/// > LED ring display encoding.
 ///
 /// - Parameters:
 ///   - delta: Encoded `UInt7` byte from a HUI MIDI message.

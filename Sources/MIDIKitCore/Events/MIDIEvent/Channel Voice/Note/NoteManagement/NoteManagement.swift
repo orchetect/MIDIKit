@@ -169,9 +169,9 @@ extension MIDIEvent.NoteManagement {
         /// > MIDI 2.0 Spec:
         /// >
         /// > When a device receives a Per-Note Management message with D = 1 (Detach), all
-        /// currently playing notes and previous notes on the referenced Note Number shall no longer
-        /// respond to any Per-Note controllers. Currently playing notes shall maintain the current
-        /// values for all Per-Note controllers until the end of the note life cycle.
+        /// > currently playing notes and previous notes on the referenced Note Number shall no
+        /// > longer respond to any Per-Note controllers. Currently playing notes shall maintain the
+        /// > current values for all Per-Note controllers until the end of the note life cycle.
         case detachPerNoteControllers
         
         /// [S] Reset/Set Per-Note Controllers to default values
@@ -179,7 +179,7 @@ extension MIDIEvent.NoteManagement {
         /// > MIDI 2.0 Spec:
         /// >
         /// > When a device receives a Per-Note Management message with S = 1, all Per-Note
-        /// controllers on the referenced Note Number should be reset to their default values.
+        /// > controllers on the referenced Note Number should be reset to their default values.
         case resetPerNoteControllers
     }
 }

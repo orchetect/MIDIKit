@@ -12,12 +12,12 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > - To avoid conflicts with non-compatible Exclusive messages, a specific ID number is
-    /// granted to manufacturers of MIDI instruments by the MMA or JMSC.
+    /// >   granted to manufacturers of MIDI instruments by the MMA or JMSC.
     /// >
     /// > - `[0x00]` and `[0x00 0x00 0x00]` are not to be used. Special ID `0x7D` is reserved for
-    /// non-commercial use (e.g. schools, research, etc.) and is not to be used on any product
-    /// released to the public. Since Non-Commercial codes would not be seen or used by an ordinary
-    /// user, there is no standard format.
+    /// >   non-commercial use (e.g. schools, research, etc.) and is not to be used on any product
+    /// >   released to the public. Since Non-Commercial codes would not be seen or used by an
+    /// >   ordinary user, there is no standard format.
     /// >
     /// > - Special IDs `0x7E` and `0x7F` are the Universal System Exclusive IDs.
     ///

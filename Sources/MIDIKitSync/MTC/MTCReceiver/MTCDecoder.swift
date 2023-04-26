@@ -11,14 +11,14 @@
 // - Pro Tools (as of v2018.4) does not send any full frame messages.
 // - Essentially, it does not send any location or relocation messages of any kind over MTC.
 // - When normal playback begins (forwards in time, at 1:1 speed), PT starts transmitting
-// quarter-frames. When playback stops, it simply stops transmitting quarter-frames. It does not
-// complete a full frame before stopping MTC transmission, it will stop at the last quarter-frame
+//   quarter-frames. When playback stops, it simply stops transmitting quarter-frames. It does not
+//   complete a full frame before stopping MTC transmission, it will stop at the last quarter-frame
 // - When half-speed playback starts (forwards in time, at half-speed), PT will transmit
-// quarter-frames as normal, but they will transmit at half the speed. This is not necessary meant
-// for the receiver to synchronize playback to, but to simply continue receiving timecode values to
-// update its timecode display.
+//   quarter-frames as normal, but they will transmit at half the speed. This is not necessary meant
+//   for the receiver to synchronize playback to, but to simply continue receiving timecode values
+//   to update its timecode display.
 // - Pro Tools is capable of forwards and backwards scrubbing at various speeds, but does not
-// transmit any MTC data while doing those operations.
+//   transmit any MTC data while doing those operations.
 //
 // Cubase
 // ------
@@ -43,13 +43,13 @@ import TimecodeKit
 /// > Note:
 /// >
 /// > - A running MTC data stream (during playback) only updates the frame number every 2 frames, so
-/// this data stream should not be relied on for deriving exact frame position, but rather as a
-/// mechanism for displaying running timecode to the user on screen or synchronizing playback to the
-/// incoming MTC data stream.
+/// > this data stream should not be relied on for deriving exact frame position, but rather as a
+/// > mechanism for displaying running timecode to the user on screen or synchronizing playback to
+/// > the incoming MTC data stream.
 /// >
 /// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate
-/// timecodes when scrubbing or locating to different times, but will be limited to the base frame
-/// rates supported by MTC.
+/// > timecodes when scrubbing or locating to different times, but will be limited to the base frame
+/// > rates supported by MTC.
 public final class MTCDecoder {
     // MARK: - Public properties
         

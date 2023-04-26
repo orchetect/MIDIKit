@@ -15,10 +15,10 @@ extension MIDIEvent {
     /// > MIDI 2.0 Spec:
     /// >
     /// > In the MIDI 2.0 Protocol, this message combines the MIDI 1.0 Protocol's separate Program
-    /// Change and Bank Select messages into a single, unified message; by contrast, the MIDI 1.0
-    /// Protocol mechanism for selecting Banks and Programs requires sending three MIDI separate 1.0
-    /// Messages. The MIDI 1.0 Protocol’s existing 16,384 Banks, each with 128 Programs, are
-    /// preserved and translate directly to the MIDI 2.0 Protocol.
+    /// > Change and Bank Select messages into a single, unified message; by contrast, the MIDI 1.0
+    /// > Protocol mechanism for selecting Banks and Programs requires sending three MIDI separate
+    /// > 1.0 Messages. The MIDI 1.0 Protocol’s existing 16,384 Banks, each with 128 Programs, are
+    /// > preserved and translate directly to the MIDI 2.0 Protocol.
     public struct ProgramChange: Equatable, Hashable {
         /// Program Number
         public var program: UInt7

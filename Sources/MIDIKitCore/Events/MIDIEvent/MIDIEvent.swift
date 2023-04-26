@@ -333,7 +333,7 @@ public enum MIDIEvent: Equatable, Hashable {
     /// > roughly 10%.
     ///
     /// - Note: Use of Active Sensing in modern MIDI devices is uncommon and the use of this
-    /// standard has been deprecated as of MIDI 2.0.
+    ///   standard has been deprecated as of MIDI 2.0.
     case activeSensing(ActiveSensing)
     
     /// System Real-Time: System Reset

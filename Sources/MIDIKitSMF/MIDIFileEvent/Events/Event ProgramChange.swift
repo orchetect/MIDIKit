@@ -21,8 +21,8 @@ extension MIDIFileEvent {
     /// Channel Voice Message: Program Change
     ///
     /// > Note: When decoding, bank information is not decoded as part of the Program Change event
-    /// but will be decoded as individual CC messages. This may be addressed in a future release of
-    /// MIDIKit.
+    /// > but will be decoded as individual CC messages. This may be addressed in a future release
+    /// > of MIDIKit.
     public typealias ProgramChange = MIDIEvent.ProgramChange
 }
 
@@ -32,8 +32,8 @@ extension MIDIFileEvent {
     /// Channel Voice Message: Program Change
     ///
     /// > Note: When decoding, bank information is not decoded as part of the Program Change event
-    /// but will be decoded as individual CC messages. This may be addressed in a future release of
-    /// MIDIKit.
+    /// > but will be decoded as individual CC messages. This may be addressed in a future release
+    /// > of MIDIKit.
     public static func programChange(
         delta: DeltaTime = .none,
         program: UInt7,

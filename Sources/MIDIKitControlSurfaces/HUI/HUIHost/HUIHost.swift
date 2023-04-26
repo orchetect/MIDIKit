@@ -17,7 +17,7 @@ import MIDIKitCore
 /// output).
 ///
 /// > HUI (_Human User Interface for Digital Audio Workstations_) is a DAW control surface protocol
-/// developed by Mackie that uses MIDI events as its underlying encoding.
+/// > developed by Mackie that uses MIDI events as its underlying encoding.
 /// >
 /// > References:
 /// > - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)

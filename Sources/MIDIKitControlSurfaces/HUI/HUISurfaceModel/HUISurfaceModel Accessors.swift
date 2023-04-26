@@ -12,7 +12,7 @@ extension HUISurfaceModel: HUISurfaceModelState {
     /// Returns the current state in the model of the given HUI switch parameter.
     ///
     /// > Reading state of ``HUISwitch/undefined(zone:port:)`` will always return `false` as state
-    /// is not stored for undefined switches.
+    /// > is not stored for undefined switches.
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case let .channelStrip(channel, subParam):
@@ -75,7 +75,7 @@ extension HUISurfaceModel: HUISurfaceModelState {
     /// Sets the state in the model of the given HUI switch parameter.
     ///
     /// > Setting state for ``HUISwitch/undefined(zone:port:)`` has no effect and will not be
-    /// stored.
+    /// > stored.
     public mutating func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case let .channelStrip(channel, subParam):
@@ -138,7 +138,7 @@ extension HUISurfaceModel: HUISurfaceModelState {
     /// Returns the current LED display state in the model of the given HUI V-Pot.
     ///
     /// > The rotary scroll knob in the DSP Edit/Assign section does not have an LED ring display,
-    /// so default will always be returned.
+    /// > so default will always be returned.
     public func state(of vPot: HUIVPot) -> HUIVPotDisplay {
         switch vPot {
         case let .channel(channel):

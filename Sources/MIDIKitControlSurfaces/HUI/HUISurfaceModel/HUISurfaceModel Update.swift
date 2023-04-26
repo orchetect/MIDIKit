@@ -16,15 +16,15 @@ extension HUISurfaceModel {
     /// result of the model change.
     ///
     /// > This is a utility method provided for custom implementations. When using
-    /// ``HUIHost``/``HUIHostBank`` it is not necessary to call this method as it will be handled
-    /// automatically.
+    /// > ``HUIHost``/``HUIHostBank`` it is not necessary to call this method as it will be handled
+    /// > automatically.
     ///
     /// - Parameters:
     ///   - receivedEvent: The incoming ``HUIHostEvent``.
     ///   - alwaysNotify: Always generate a ``HUISurfaceModelUpdateResult/changed(_:)`` notification
-    /// even if the state update results in no change to the model.
+    ///     even if the state update results in no change to the model.
     /// - Returns: The strongly-typed ``HUISurfaceModelNotification`` containing the result of the
-    /// state change.
+    ///   state change.
     @discardableResult
     public mutating func updateState(
         from receivedEvent: HUIHostEvent,

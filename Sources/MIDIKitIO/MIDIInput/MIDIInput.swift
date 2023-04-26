@@ -12,15 +12,15 @@ import Foundation
 /// A managed virtual MIDI input endpoint created in the system by the MIDI I/O ``MIDIManager``.
 ///
 /// > Note: Avoid storing or caching this object unless it is unavoidable. Instead, whenever
-/// possible access it via the ``MIDIManager/managedInputs`` collection. The ``MIDIManager`` owns
-/// this object and maintains its lifecycle.
+/// > possible access it via the ``MIDIManager/managedInputs`` collection. The ``MIDIManager`` owns
+/// > this object and maintains its lifecycle.
 /// >
 /// > Ensure that it is only stored weakly and only passed by reference temporarily in order to
-/// execute an operation. If it absolutely must be stored strongly, ensure it is stored for no
-/// longer than the lifecycle of the managed thru connection (which is either at such time the
-/// ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
-/// ``MIDIManager/ManagedType/input`` or ``MIDIManager/removeAll()`` to destroy the managed
-/// endpoint.)
+/// > execute an operation. If it absolutely must be stored strongly, ensure it is stored for no
+/// > longer than the lifecycle of the managed thru connection (which is either at such time the
+/// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
+/// > ``MIDIManager/ManagedType/input`` or ``MIDIManager/removeAll()`` to destroy the managed
+/// > endpoint.)
 public final class MIDIInput: _MIDIManaged {
     // _MIDIManaged
     internal weak var midiManager: MIDIManager?

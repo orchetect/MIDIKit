@@ -16,7 +16,7 @@ extension MIDIEvent {
     /// > Note: This does not parse an entire SysEx8 UMP packet.
     /// >
     /// > `rawBytes` must start with the Stream ID byte and supply all bytes until the end of the
-    /// packet.
+    /// > packet.
     ///
     /// - Throws: ``ParseError`` if message is malformed.
     public static func sysEx8(

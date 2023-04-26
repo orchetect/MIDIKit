@@ -18,9 +18,9 @@ public enum MIDIProtocolVersion: Equatable, Hashable {
     /// underlying transport.
     ///
     /// > TMA (The MIDI Association) states: "MIDI 2.0 is an extension of MIDI 1.0. It does not
-    /// replace MIDI 1.0 but builds on the core principles, architecture, and semantics of MIDI 1.0.
-    /// MIDI 2.0 is not a stand-alone specification. Manufacturers and developers must have a
-    /// thorough understanding of MIDI 1.0 in order to implement MIDI 2.0.
+    /// > replace MIDI 1.0 but builds on the core principles, architecture, and semantics of MIDI
+    /// > 1.0. MIDI 2.0 is not a stand-alone specification. Manufacturers and developers must have a
+    /// > thorough understanding of MIDI 1.0 in order to implement MIDI 2.0.
     case _2_0
 }
 

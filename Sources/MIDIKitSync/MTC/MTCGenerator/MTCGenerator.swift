@@ -191,8 +191,8 @@ public final class MTCGenerator: SendsMIDIEvents {
     /// Sends a MTC full-frame message.
     ///
     /// > Note: `components` may contain `subframes > 0`. Subframes will be stripped prior to
-    /// transmitting the full-frame message since the resolution of MTC full-frame messages is 1
-    /// frame.
+    /// > transmitting the full-frame message since the resolution of MTC full-frame messages is 1
+    /// > frame.
     public func locate(to components: Timecode.Components) {
         queue.sync {
             encoder.locate(to: components, transmitFullFrame: locateBehavior)
@@ -206,7 +206,7 @@ public final class MTCGenerator: SendsMIDIEvents {
     /// Frame rate will be derived from the `timecode` instance passed in.
     ///
     /// > Note: It is not necessary to send a ``locate(to:)-1u162`` message simultaneously or
-    /// immediately prior, and is actually undesirable as it can confuse the receiving entity.
+    /// > immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
     /// Call ``stop()`` to stop generating events.
     public func start(now timecode: Timecode) {
@@ -239,7 +239,7 @@ public final class MTCGenerator: SendsMIDIEvents {
     /// Call this method at the exact time that `realTime` occurs.
     ///
     /// > Note: It is not necessary to send a ``locate(to:)-1u162`` message simultaneously or
-    /// immediately prior, and is actually undesirable as it can confuse the receiving entity.
+    /// > immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
     /// Call ``stop()`` to stop generating events.
     public func start(
@@ -264,7 +264,7 @@ public final class MTCGenerator: SendsMIDIEvents {
     /// Call this method at the exact time that `realTime` occurs.
     ///
     /// > Note: It is not necessary to send a ``locate(to:)-1u162`` message simultaneously or
-    /// immediately prior, and is actually undesirable as it can confuse the receiving entity.
+    /// > immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
     /// Call ``stop()`` to stop generating events.
     public func start(
