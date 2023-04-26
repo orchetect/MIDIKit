@@ -14,9 +14,11 @@ There are many more features and aspects to the library that can be discovered t
 2. [Set up the Manager](#2-Set-up-the-Manager)
 3. [Additional Connectivity: Bluetooth, Network, USB](#3-Additional-Connectivity-Bluetooth-Network-USB)
 4. [Learn how MIDIKit Value Types Work](#4-Learn-how-MIDIKit-Value-Types-Work)
-5. [Next Steps](#5-Next-Steps)
-6. [Additional Features](#6-Additional-Features)
-7. [Additional Guides](#7-Additional-Guides)
+5. [Constructing Events](#5-Constructing-Events)
+6. [Create Ports and Connections](#6-Create-Ports-and-Connections)
+7. [Example Projects](#7-Example-Projects)
+8. [Additional Features](#8-Additional-Features)
+9. [Additional Guides](#9-Additional-Guides)
 
 ## 1. Import the Library
 
@@ -97,14 +99,21 @@ MIDIKit was built to use smart hybrid MIDI event value types, simplifying the le
 
 Learn how MIDIKit's value types work: <doc:MIDIKitCore-Value-Types>
 
-## 5. Next Steps
+## 5. Constructing Events
+
+- Learn how to construct ``MIDIKit/MIDIEvent``s
+- Learn about powerful <doc:MIDIKitCore-Event-Filters>
+
+## 6. Create Ports and Connections
 
 From here, you have laid the necessary groundwork to set up ports and connections.
 
 - <doc:MIDIManager-Creating-Ports>
 - <doc:MIDIManager-Creating-Connections> to one or more existing MIDI ports in the system
 - <doc:MIDIManager-Removing-Ports-and-Connections>
-- Learn about powerful <doc:MIDIKitCore-Event-Filters>
+
+## 7. Example Projects
+
 - Explore the [Example Projects](https://github.com/orchetect/MIDIKit/blob/main/Examples/)
   - Creating virtual ports and managed connections
   - Creating MIDI endpoint selection menus & controls and persisting user selections
@@ -112,14 +121,14 @@ From here, you have laid the necessary groundwork to set up ports and connection
   - Working with Bluetooth MIDI
 - Explore MIDI extension modules included in MIDIKit: <doc:MIDIKitSMF>, <doc:MIDIKitSync>, <doc:MIDIKitControlSurfaces>.
 
-## 6. Additional Features
+## 8. Additional Features
 
 MIDIKit contains additional objects and value types.
 
 - term ``MIDINote``: Struct representing a MIDI note with constructors and getters for note number, note name (ie: `"A#-1"`), and frequency in Hz and other metadata. This can be useful for generating UI labels with note names or calculating frequency for synthesis.
 - term ``MIDIEventFilterGroup``: Struct allowing the configuration of zero or more MIDI event filters in series, capable of applying the filters to arrays of MIDI events.
 
-## 7. Additional Guides
+## 9. Additional Guides
 
 - <doc:MIDI-Show-Control>
 
