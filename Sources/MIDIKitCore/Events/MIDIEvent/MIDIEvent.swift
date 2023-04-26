@@ -15,11 +15,11 @@
 ///
 /// In both MIDI 1.0 and MIDI 2.0, events are divided into several main categories:
 ///
-/// - <doc:MIDIEvent-Channel-Voice>
-/// - <doc:MIDIEvent-System-Common>
-/// - <doc:MIDIEvent-System-Exclusive>
-/// - <doc:MIDIEvent-System-Real-Time>
-/// - <doc:MIDIEvent-Utility> (Applicable to MIDI 2.0 only)
+/// - Channel-Voice
+/// - System-Common
+/// - System-Exclusive
+/// - System-Real-Time
+/// - Utility (Applicable to MIDI 2.0 only)
 ///
 /// MIDIKit provides type-safe abstractions for all possible events and values. For this reason, it
 /// is not necessary (and is discouraged) to use raw bytes when constructing or parsing events.

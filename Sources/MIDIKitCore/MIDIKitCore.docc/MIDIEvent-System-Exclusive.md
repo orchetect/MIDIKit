@@ -99,7 +99,7 @@ The API to construct 8-bit System Exclusive is the same as described above for 7
 The API to construct 8-bit Universal System Exclusive is the same as described above for 7-bit, except the messages can take 8-bit data bytes. However, note that 8-bit Universal System Exclusive must follow the UMP format and is not compatible with legacy 7-bit System Exclusive.
 
 - See ``MIDIEvent/sysEx8(rawBytes:group:)``
-- See ``MIDIEvent/universalSysEx8(universalType:deviceID:subID1:subID2:data:group:)`
+- See ``MIDIEvent/universalSysEx8(universalType:deviceID:subID1:subID2:data:group:)``
 - Compatibility: MIDI 2.0
 
 ## Event Value Types
