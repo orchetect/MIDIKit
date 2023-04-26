@@ -4,6 +4,8 @@ This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiv
 
 Events received from all MIDI output endpoints are automatically logged to the console.
 
+> **Note**: This project must be run on a physical iOS device. Bluetooth does not function in an iOS Simulator.
+
 ## Key Features
 
 - This example demonstrates the use of Apple's Bluetooth MIDI classes to allow your app to configure Bluetooth MIDI connections.
