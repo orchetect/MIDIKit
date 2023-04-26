@@ -24,8 +24,9 @@ extension MIDIEvent {
         /// > MIDI 2.0 Spec:
         /// >
         /// > System Exclusive 8 initial data bytes are the same as those found in MIDI 1.0 Protocol
-        /// System Exclusive messages. These bytes are Manufacturer ID (including Special ID `0x7D`,
-        /// or Universal System Exclusive IDs), Device ID, and Sub-ID#1 & Sub-ID#2 (if applicable).
+        /// > System Exclusive messages. These bytes are Manufacturer ID (including Special ID
+        /// > `0x7D`, or Universal System Exclusive IDs), Device ID, and Sub-ID#1 & Sub-ID#2 (if
+        /// > applicable).
         public var data: [UInt8]
     
         /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of

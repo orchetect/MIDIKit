@@ -11,9 +11,9 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > Specifies which song or sequence is to be played upon receipt of a Start message in
-    /// sequencers and drum machines capable of holding multiple songs or sequences. This message
-    /// should be ignored if the receiver is not set to respond to incoming Real-Time messages (MIDI
-    /// Sync).
+    /// > sequencers and drum machines capable of holding multiple songs or sequences. This message
+    /// > should be ignored if the receiver is not set to respond to incoming Real-Time messages
+    /// > (MIDI Sync).
     public struct SongSelect: Equatable, Hashable {
         /// Song Number
         public var number: UInt7
@@ -36,9 +36,9 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > Specifies which song or sequence is to be played upon receipt of a Start message in
-    /// sequencers and drum machines capable of holding multiple songs or sequences. This message
-    /// should be ignored if the receiver is not set to respond to incoming Real-Time messages (MIDI
-    /// Sync).
+    /// > sequencers and drum machines capable of holding multiple songs or sequences. This message
+    /// > should be ignored if the receiver is not set to respond to incoming Real-Time messages
+    /// > (MIDI Sync).
     ///
     /// - Parameters:
     ///   - number: Song Number

@@ -11,8 +11,8 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that
-    /// have elapsed from the start and is used to begin playback of a sequence from a position
-    /// other than the beginning of the song.
+    /// > have elapsed from the start of the song and is used to begin playback of a sequence from a
+    /// > position other than the beginning of the song.
     public struct SongPositionPointer: Equatable, Hashable {
         /// The number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start.
         public var midiBeat: UInt14
@@ -35,8 +35,8 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > A sequencer's Song Position (SP) is the number of MIDI beats (1 beat = 6 MIDI clocks) that
-    /// have elapsed from the start of the song and is used to begin playback of a sequence from a
-    /// position other than the beginning of the song.
+    /// > have elapsed from the start of the song and is used to begin playback of a sequence from a
+    /// > position other than the beginning of the song.
     ///
     /// - Parameters:
     ///   - midiBeat: MIDI beat number elapsed from the start
