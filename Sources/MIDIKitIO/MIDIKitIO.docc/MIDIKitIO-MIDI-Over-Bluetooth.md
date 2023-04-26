@@ -18,3 +18,6 @@ Connect to these endpoints to transmit and receive MIDI:
 
 - ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``
 - ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``
+
+> Tip: Bluetooth can only be tested using a physical iOS device. It does not function in an iOS Simulator.
+
