@@ -348,7 +348,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
             seconds.string(paddedTo: 2) + ":" +
             frames.string(paddedTo: 2) + "." +
             subframes.string +
-            "@\(frameRate)"
+            " @ \(frameRate)"
         
         return "smpte: " + time
     }
