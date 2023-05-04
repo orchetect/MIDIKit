@@ -10,6 +10,7 @@
 		E21299092851D8D600957FE8 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21299082851D8D600957FE8 /* MIDIHelper.swift */; };
 		E2496A912989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A8A2989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift */; };
 		E2496A922989087F003FD165 /* ContentView-iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A8B2989087F003FD165 /* ContentView-iOS.swift */; };
+		E27C5DC42A034B3100189B15 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27C5DC32A034B3100189B15 /* Utilities.swift */; };
 		E27D0E63284F3FB600F43247 /* EndpointPickersApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E62284F3FB600F43247 /* EndpointPickersApp.swift */; };
 		E27D0E75284F409600F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E74284F409600F43247 /* MIDIKit */; };
 		E2841ABB2989CB08006907BD /* ContentView-macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A902989087F003FD165 /* ContentView-macOS.swift */; };
@@ -26,6 +27,7 @@
 		E2496A8E2989087F003FD165 /* MIDIEndpointSelectionView-macOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MIDIEndpointSelectionView-macOS.swift"; sourceTree = "<group>"; };
 		E2496A8F2989087F003FD165 /* EndpointPickers.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = EndpointPickers.entitlements; sourceTree = "<group>"; };
 		E2496A902989087F003FD165 /* ContentView-macOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContentView-macOS.swift"; sourceTree = "<group>"; };
+		E27C5DC32A034B3100189B15 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		E27D0E5F284F3FB600F43247 /* EndpointPickers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EndpointPickers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27D0E62284F3FB600F43247 /* EndpointPickersApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointPickersApp.swift; sourceTree = "<group>"; };
 		E2841ABA2989CAF5006907BD /* EndpointPickers.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EndpointPickers.entitlements; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				E2496A8D2989087F003FD165 /* macOS */,
 				E27D0E62284F3FB600F43247 /* EndpointPickersApp.swift */,
 				E21299082851D8D600957FE8 /* MIDIHelper.swift */,
+				E27C5DC32A034B3100189B15 /* Utilities.swift */,
 				E29FF28C2880BB54005E2BC2 /* Images.xcassets */,
 			);
 			path = EndpointPickers;
@@ -174,6 +177,7 @@
 			files = (
 				E27D0E63284F3FB600F43247 /* EndpointPickersApp.swift in Sources */,
 				E2841ABB2989CB08006907BD /* ContentView-macOS.swift in Sources */,
+				E27C5DC42A034B3100189B15 /* Utilities.swift in Sources */,
 				E21299092851D8D600957FE8 /* MIDIHelper.swift in Sources */,
 				E2496A922989087F003FD165 /* ContentView-iOS.swift in Sources */,
 				E2496A912989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift in Sources */,

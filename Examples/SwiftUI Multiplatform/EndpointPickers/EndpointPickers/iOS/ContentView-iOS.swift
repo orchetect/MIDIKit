@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  ContentView-iOS.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 #if os(iOS)
 
 import SwiftUI
-import MIDIKit
+import MIDIKitIO
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: MIDIManager
@@ -38,38 +38,26 @@ struct ContentView: View {
     
                     Group {
                         Button("Send Note On C3") {
-                            sendToConnection(event: .noteOn(
-                                60,
-                                velocity: .midi1(127),
-                                channel: 0
-                            ))
+                            sendToConnection(.noteOn(60, velocity: .midi1(127), channel: 0))
                         }
     
                         Button("Send Note Off C3") {
-                            sendToConnection(event: .noteOff(
-                                60,
-                                velocity: .midi1(0),
-                                channel: 0
-                            ))
+                            sendToConnection(.noteOff(60, velocity: .midi1(0), channel: 0))
                         }
     
                         Button("Send CC1") {
-                            sendToConnection(event: .cc(
-                                1,
-                                value: .midi1(64),
-                                channel: 0
-                            ))
+                            sendToConnection(.cc(1, value: .midi1(64), channel: 0))
                         }
                     }
                     .disabled(
-                        midiOutSelectedID == 0 ||
-                            !midiHelper.isInputPresentInSystem(uniqueID: midiOutSelectedID)
+                        midiOutSelectedID == .invalidMIDIIdentifier ||
+                            !midiManager.endpoints.inputs.contains(whereUniqueID: midiOutSelectedID)
                     )
                 }
     
                 Section() {
                     Button("Create Test Virtual Endpoints") {
-                        midiHelper.createVirtualInputs()
+                        midiHelper.createVirtualEndpoints()
                     }
                     .disabled(midiHelper.virtualsExist)
     
@@ -80,35 +68,30 @@ struct ContentView: View {
     
                     Group {
                         Button("Send Note On C3") {
-                            sendToVirtuals(event: .noteOn(
-                                60,
-                                velocity: .midi1(127),
-                                channel: 0
-                            ))
+                            sendToVirtuals(.noteOn(60, velocity: .midi1(127), channel: 0))
                         }
     
                         Button("Send Note Off C3") {
-                            sendToVirtuals(event: .noteOff(
-                                60,
-                                velocity: .midi1(0),
-                                channel: 0
-                            ))
+                            sendToVirtuals(.noteOff(60, velocity: .midi1(0), channel: 0))
                         }
     
                         Button("Send CC1") {
-                            sendToVirtuals(event: .cc(
-                                1,
-                                value: .midi1(64),
-                                channel: 0
-                            ))
+                            sendToVirtuals(.cc(1, value: .midi1(64), channel: 0))
                         }
                     }
                     .disabled(!midiHelper.virtualsExist)
                 }
     
                 Section(header: Text("Received Events")) {
+                    Toggle("Filter Active Sensing and Clock", isOn: $midiHelper.filterActiveSensingAndClock)
+                    
                     let events = midiHelper.receivedEvents.reversed()
                     
+                    // Since MIDIEvent doesn't conform to Identifiable (and won't ever), in a List or
+                    // ForEach we need to either use an array index or a wrap MIDIEvent in a custom
+                    // type that does conform to Identifiable. It's really up to your use case.
+                    // Usually application interaction is driven by MIDI events and we aren't literally
+                    // logging events, but this is for diagnostic purposes here.
                     List(events.indices, id: \.self) { index in
                         Text(events[index].description)
                         .foregroundColor(color(for: events[index]))
@@ -123,11 +106,11 @@ struct ContentView: View {
         .padding()
     }
     
-    func sendToConnection(event: MIDIEvent) {
+    func sendToConnection(_ event: MIDIEvent) {
         try? midiHelper.midiOutputConnection?.send(event: event)
     }
     
-    func sendToVirtuals(event: MIDIEvent) {
+    func sendToVirtuals(_ event: MIDIEvent) {
         try? midiHelper.midiTestOut1?.send(event: event)
         try? midiHelper.midiTestOut2?.send(event: event)
     }
