@@ -7,17 +7,16 @@
 import SwiftUI
 import MIDIKit
 
-class MIDIHelper: ObservableObject {
-    public weak var midiManager: MIDIManager?
+/// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
+/// SwiftUI view state directly. Therefore, we need a helper class that conforms to
+/// `ObservableObject` which contains `@Published` properties that SwiftUI can use to update views.
+final class MIDIHelper: ObservableObject {
+    private weak var midiManager: MIDIManager?
     
     public init() { }
     
-    /// Run once after setting the local ``midiManager`` property.
-    public func initialSetup() {
-        guard let midiManager = midiManager else {
-            print("MIDIManager is missing.")
-            return
-        }
+    public func setup(midiManager: MIDIManager) {
+        self.midiManager = midiManager
         
         midiManager.notificationHandler = { notification, manager in
             self.logNotification(notification)
@@ -35,16 +34,16 @@ class MIDIHelper: ObservableObject {
     
     func addVirtualInput() {
         guard let midiManager = midiManager else { return }
-        let id = UUID().uuidString
+        let name = UUID().uuidString
         // we don't care about received MIDI events for this example project
-        try? midiManager.addInput(name: id, tag: id, uniqueID: .adHoc, receiver: .events({ _ in }))
+        try? midiManager.addInput(name: name, tag: name, uniqueID: .adHoc, receiver: .events({ _ in }))
     }
     
     func addVirtualOutput() {
         guard let midiManager = midiManager else { return }
-        let id = UUID().uuidString
+        let name = UUID().uuidString
         // we won't be sending any events in this example project
-        try? midiManager.addOutput(name: id, tag: id, uniqueID: .adHoc)
+        try? midiManager.addOutput(name: name, tag: name, uniqueID: .adHoc)
     }
     
     func removeVirtualInput() {

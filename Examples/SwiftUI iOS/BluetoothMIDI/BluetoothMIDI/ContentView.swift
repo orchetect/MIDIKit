@@ -9,6 +9,7 @@ import MIDIKit
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiHelper: MIDIHelper
     
     var body: some View {
         NavigationView {
@@ -36,7 +37,7 @@ struct ContentView: View {
                 }
                 Section("Send Test Event") {
                     Button("Broadcast test MIDI Event to all MIDI Inputs") {
-                        sendTestMIDIEvent()
+                        midiHelper.sendTestMIDIEvent()
                     }
                 }
                 Section("Receive Events") {
@@ -52,11 +53,6 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .padding()
     }
-    
-    func sendTestMIDIEvent() {
-        let conn = midiManager.managedOutputConnections["Broadcaster"]
-        try? conn?.send(event: .cc(.expression, value: .midi1(64), channel: 0))
-    }
 }
 
 struct InfoView: View {
@@ -69,6 +65,8 @@ struct InfoView: View {
             2. Acting as a Bluetooth peripheral that other devices can connect to.
             
             Generally your app will only employ one of these paradigms, not both. For demonstration purposes, both are available in this demo app.
+            
+            Note that this example project must be run on a physical iOS device, as Bluetooth does not function in an iOS Simulator.
             """
         )
         .navigationTitle("Info")

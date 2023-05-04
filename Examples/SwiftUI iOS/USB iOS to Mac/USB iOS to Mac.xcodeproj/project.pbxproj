@@ -10,6 +10,7 @@
 		E27D0E63284F3FB600F43247 /* USBiOStoMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E62284F3FB600F43247 /* USBiOStoMacApp.swift */; };
 		E27D0E65284F3FB600F43247 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E64284F3FB600F43247 /* ContentView.swift */; };
 		E27D0E75284F409600F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E74284F409600F43247 /* MIDIKit */; };
+		E2908A6B2A03A0380072F300 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2908A6A2A03A0380072F300 /* MIDIHelper.swift */; };
 		E29AC918285BF0FD009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC917285BF0FD009D1C2C /* MIDIKit */; };
 		E29FF2932880BBC6005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2922880BBC6005E2BC2 /* Images.xcassets */; };
 /* End PBXBuildFile section */
@@ -19,6 +20,7 @@
 		E27D0E62284F3FB600F43247 /* USBiOStoMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USBiOStoMacApp.swift; sourceTree = "<group>"; };
 		E27D0E64284F3FB600F43247 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E27D0E70284F402C00F43247 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E2908A6A2A03A0380072F300 /* MIDIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
 		E29A5E932852A17B00E87812 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E29FF2922880BBC6005E2BC2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +60,7 @@
 			children = (
 				E27D0E62284F3FB600F43247 /* USBiOStoMacApp.swift */,
 				E27D0E64284F3FB600F43247 /* ContentView.swift */,
+				E2908A6A2A03A0380072F300 /* MIDIHelper.swift */,
 				E29FF2922880BBC6005E2BC2 /* Images.xcassets */,
 				E27D0E70284F402C00F43247 /* Info.plist */,
 			);
@@ -140,6 +143,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2908A6B2A03A0380072F300 /* MIDIHelper.swift in Sources */,
 				E27D0E65284F3FB600F43247 /* ContentView.swift in Sources */,
 				E27D0E63284F3FB600F43247 /* USBiOStoMacApp.swift in Sources */,
 			);
@@ -353,7 +357,7 @@
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.8.1;
+				minimumVersion = 0.8.8;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -9,12 +9,15 @@ import MIDIKit
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiHelper: MIDIHelper
     
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
             Text(
                 """
                 This example creates a MIDI output connection to the MIDI endpoint that iOS creates once an iOS-to-Mac USB connection has been established in Audio MIDI Setup on the Mac.
+                
+                Note that this example project must be run on a physical iOS device connected with a USB cable since that is the only way for Audio MIDI Setup to show the device for connecting.
                 
                 Test events can be sent to the Mac by using the buttons below.
                 
@@ -24,50 +27,19 @@ struct ContentView: View {
             .multilineTextAlignment(.center)
             
             Button("Send Note On C3") {
-                sendNoteOn()
+                midiHelper.sendNoteOn()
             }
             
             Button("Send Note Off C3") {
-                sendNoteOff()
+                midiHelper.sendNoteOff()
             }
             
             Button("Send CC1") {
-                sendCC1()
+                midiHelper.sendCC1()
             }
         }
         .font(.system(size: 18))
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-    }
-}
-
-extension ContentView {
-    /// Convenience accessor for created MIDI Output Connection.
-    var outputConnection: MIDIOutputConnection? {
-        midiManager.managedOutputConnections[USBiOStoMacApp.outputConnectionName]
-    }
-    
-    func sendNoteOn() {
-        try? outputConnection?.send(event: .noteOn(
-            60,
-            velocity: .midi1(127),
-            channel: 0
-        ))
-    }
-    
-    func sendNoteOff() {
-        try? outputConnection?.send(event: .noteOff(
-            60,
-            velocity: .midi1(0),
-            channel: 0
-        ))
-    }
-    
-    func sendCC1() {
-        try? outputConnection?.send(event: .cc(
-            1,
-            value: .midi1(64),
-            channel: 0
-        ))
     }
 }

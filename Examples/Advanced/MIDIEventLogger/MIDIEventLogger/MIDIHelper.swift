@@ -8,17 +8,13 @@ import SwiftUI
 import OTCore
 import MIDIKit
 
-class MIDIHelper: ObservableObject {
-    public weak var midiManager: MIDIManager?
+final class MIDIHelper: ObservableObject {
+    private weak var midiManager: MIDIManager?
     
     public init() { }
     
-    /// Run once after setting the local ``midiManager`` property.
-    public func initialSetup() {
-        guard let midiManager = midiManager else {
-            print("MIDIManager is missing.")
-            return
-        }
+    public func setup(midiManager: MIDIManager) {
+        self.midiManager = midiManager
         
         midiManager.notificationHandler = { notification, manager in
             print("Core MIDI notification:", notification)
@@ -161,15 +157,5 @@ class MIDIHelper: ObservableObject {
     public var virtualEndpointsExist: Bool {
         midiInput != nil &&
         midiOutput != nil
-    }
-    
-    // MARK: - Helpers
-    
-    public func isInputPresentInSystem(uniqueID: MIDIIdentifier) -> Bool {
-        midiManager?.endpoints.inputs.contains(whereUniqueID: uniqueID) ?? false
-    }
-    
-    public func isOutputPresentInSystem(uniqueID: MIDIIdentifier) -> Bool {
-        midiManager?.endpoints.outputs.contains(whereUniqueID: uniqueID) ?? false
     }
 }

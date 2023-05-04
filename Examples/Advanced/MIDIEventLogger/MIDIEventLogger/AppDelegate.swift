@@ -22,9 +22,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var midiHelper = MIDIHelper()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        midiHelper.midiManager = midiManager
-        midiHelper.initialSetup()
-        
+        midiHelper.setup(midiManager: midiManager)
         createAndShowWindow()
     }
     

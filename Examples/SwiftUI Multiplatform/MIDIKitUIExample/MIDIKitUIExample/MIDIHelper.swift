@@ -7,19 +7,18 @@
 import SwiftUI
 import MIDIKitIO
 
-class MIDIHelper: ObservableObject {
-    public weak var midiManager: MIDIManager?
+/// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
+/// SwiftUI view state directly. Therefore, we need a helper class that conforms to
+/// `ObservableObject` which contains `@Published` properties that SwiftUI can use to update views.
+final class MIDIHelper: ObservableObject {
+    private weak var midiManager: MIDIManager?
     
     let virtualInputName = "TestApp Input"
     
     public init() { }
     
-    /// Run once after setting the local ``midiManager`` property.
-    public func initialSetup() {
-        guard let midiManager = midiManager else {
-            print("MIDIManager is missing.")
-            return
-        }
+    public func setup(midiManager: MIDIManager) {
+        self.midiManager = midiManager
     
         do {
             print("Starting MIDI services.")
@@ -45,7 +44,8 @@ class MIDIHelper: ObservableObject {
         "Test Output 4"
     ]
     
-    @Published public private(set) var virtualsExist: Bool = false
+    @Published
+    public private(set) var virtualsExist: Bool = false
     
     public func createVirtuals() throws {
         for tag in virtualInputTags {
@@ -78,5 +78,17 @@ class MIDIHelper: ObservableObject {
             midiManager?.remove(.output, .withTag(tag))
         }
         virtualsExist = false
+    }
+}
+
+// MARK: - String Constants
+
+extension MIDIHelper {
+    enum PrefKeys {
+        static let midiInID = "midiInput"
+        static let midiInName = "midiInputName"
+        
+        static let midiOutID = "midiOutput"
+        static let midiOutName = "midiOutputName"
     }
 }

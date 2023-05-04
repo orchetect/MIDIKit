@@ -9,13 +9,13 @@ import MIDIKit
 
 @main
 struct EndpointPickersApp: App {
-    var midiManager = MIDIManager(
+    let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    var midiHelper = MIDIHelper()
+    let midiHelper = MIDIHelper()
     
     @AppStorage(MIDIHelper.PrefKeys.midiInID)
     var midiInSelectedID: MIDIIdentifier = .invalidMIDIIdentifier

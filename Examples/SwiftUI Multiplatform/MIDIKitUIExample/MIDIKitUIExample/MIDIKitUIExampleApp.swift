@@ -15,11 +15,10 @@ struct MIDIKitUIExampleApp: App {
         manufacturer: "MyCompany"
     )
     
-    var midiHelper = MIDIHelper()
+    let midiHelper = MIDIHelper()
     
     init() {
-        midiHelper.midiManager = midiManager
-        midiHelper.initialSetup()
+        midiHelper.setup(midiManager: midiManager)
     }
     
     var body: some Scene {
@@ -28,7 +27,7 @@ struct MIDIKitUIExampleApp: App {
                 .environmentObject(midiManager)
                 .environmentObject(midiHelper)
 #if os(macOS)
-                .toolbar { Spacer() }
+                .toolbar { Spacer() } // coax unified titlebar to show
                 .frame(minHeight: 600)
 #endif
         }

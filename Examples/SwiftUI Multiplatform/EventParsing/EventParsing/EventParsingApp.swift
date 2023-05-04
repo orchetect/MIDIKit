@@ -15,11 +15,10 @@ struct EventParsingApp: App {
         manufacturer: "MyCompany"
     )
     
-    @ObservedObject var midiHelper = MIDIHelper()
+    let midiHelper = MIDIHelper()
     
     init() {
-        midiHelper.midiManager = midiManager
-        midiHelper.initialSetup()
+        midiHelper.setup(midiManager: midiManager)
     }
     
     var body: some Scene {

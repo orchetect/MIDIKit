@@ -41,8 +41,12 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
     public var body: some View {
         List(selection: $selection) {
             ForEach(ids, id: \.self) {
-                EndpointRow(endpoint: endpoint(for: $0), cachedSelectionName: $cachedSelectionName, showIcon: showIcons)
-                    .tag($0 as MIDIIdentifier?)
+                EndpointRow(
+                    endpoint: endpoint(for: $0),
+                    cachedSelectionName: $cachedSelectionName,
+                    showIcon: showIcons
+                )
+                .tag($0 as MIDIIdentifier?)
             }
         }
         .onAppear {
@@ -73,7 +77,7 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         let endpointIDs = {
             filtered ? endpoints.filter(using: filter, in: midiManager) : endpoints
         }()
-            .map(\.id)
+        .map(\.id)
         
         if let selection, !endpointIDs.contains(selection) {
             return [selection] + endpointIDs
@@ -122,8 +126,8 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         
         private var missingText: String {
             showIcon
-            ? cachedSelectionName ?? "Missing"
-            : (cachedSelectionName ?? "") + " (Missing)"
+                ? cachedSelectionName ?? "Missing"
+                : (cachedSelectionName ?? "") + " (Missing)"
         }
         
         @ViewBuilder
@@ -178,6 +182,7 @@ public struct MIDIInputsList: View {
             cachedSelectionName: $cachedSelectionName,
             showIcons: showIcons
         )
+        Text("Selected: \(cachedSelectionName ?? "None")")
     }
 }
 
@@ -210,6 +215,7 @@ public struct MIDIOutputsList: View {
             cachedSelectionName: $cachedSelectionName,
             showIcons: showIcons
         )
+        Text("Selected: \(cachedSelectionName ?? "None")")
     }
 }
 
