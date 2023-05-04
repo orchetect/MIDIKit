@@ -2,6 +2,8 @@
 
 This example shows usage of the MIDIKitUI SwiftUI controls.
 
+> **Warning**: This project is still a work-in-progress and some features may be broken until a future update.
+
 ## To Do
 
 - [ ] Add multiple-selection list controls
