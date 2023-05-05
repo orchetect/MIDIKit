@@ -54,11 +54,13 @@ Licensed under the MIT license. See [LICENSE](https://github.com/orchetect/MIDIK
 
 If you enjoy using MIDIKit and want to contribute to open-source financially, GitHub sponsorship is much appreciated. Feedback and code contributions are also welcome.
 
-## Community
+## Community & Support
 
-Questions can be posted to [Discussions](https://github.com/orchetect/MIDIKit/discussions). If an issue is a verifiable bug with reproducible steps it may be posted in Issues.
+Please do not email maintainers for technical support. Several options are available for questions and feature ideas:
 
-The AudioKit discord `#midikit` channel is also a place to find help if Discussions and documentation don't contain an answer.
+- Questions and feature ideas can be posted to [Discussions](https://github.com/orchetect/MIDIKit/discussions).
+- If an issue is a verifiable bug with reproducible steps it may be posted in [Issues](https://github.com/orchetect/MIDIKit/issues).
+- The [AudioKit](https://github.com/AudioKit/AudioKit) discord `#midikit` channel is also a place to find help if Discussions and documentation don't contain an answer. (Invitation is necessary)
 
 ## Contributions
 
