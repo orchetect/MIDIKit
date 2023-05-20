@@ -11,15 +11,6 @@ import XCTest
 
 final class MIDIKitSMFTests: XCTestCase {
     // no tests in root class
-    
-    func testLoadFile() throws {
-        let url = FileManager.default
-            .homeDirectoryForCurrentUser
-            .appendingPathComponent("Downloads")
-            .appendingPathComponent("RUSH_E_FINAL.mid")
-        let midiFile = try MIDIFile(midiFile: url)
-        print(midiFile.tracks.count)
-    }
 }
 
 #endif
