@@ -11,20 +11,20 @@ extension MIDIEvent {
     /// > MIDI 2.0 Spec:
     /// >
     /// > The JR Timestamp message defines the time of the following message(s). It is a complete
-    /// message.
+    /// > message.
     /// >
     /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1
-    /// MHz / 32).
+    /// > MHz / 32).
     public struct JRTimestamp: Equatable, Hashable {
         /// 16-Bit Time Value
         ///
         /// > MIDI 2.0 Spec:
         /// >
         /// > The JR Timestamp message defines the time of the following message(s). It is a
-        /// complete message.
+        /// > complete message.
         /// >
         /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency
-        /// of 1 MHz / 32).
+        /// > of 1 MHz / 32).
         public var time: UInt16
     
         /// UMP Group (`0x0 ... 0xF`)
@@ -36,10 +36,10 @@ extension MIDIEvent {
         /// > MIDI 2.0 Spec:
         /// >
         /// > The JR Timestamp message defines the time of the following message(s). It is a
-        /// complete message.
+        /// > complete message.
         /// >
         /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency
-        /// of 1 MHz / 32).
+        /// > of 1 MHz / 32).
         public init(
             time: UInt16,
             group: UInt4 = 0x0
@@ -55,10 +55,10 @@ extension MIDIEvent {
     /// > MIDI 2.0 Spec:
     /// >
     /// > The JR Timestamp message defines the time of the following message(s). It is a complete
-    /// message.
+    /// > message.
     /// >
     /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1
-    /// MHz / 32).
+    /// > MHz / 32).
     public static func jrTimestamp(
         time: UInt16,
         group: UInt4 = 0x0

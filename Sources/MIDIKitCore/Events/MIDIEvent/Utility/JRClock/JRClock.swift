@@ -13,26 +13,26 @@ extension MIDIEvent {
     /// > The JR Clock message defines the current time of the Sender.
     /// >
     /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1
-    /// MHz / 32).
+    /// > MHz / 32).
     /// >
     /// > The time value is expected to wrap around every 2.09712 seconds.
     /// >
     /// > To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock
-    /// messages for the Receiver, the Sender shall send a JR Clock message at least once every 250
-    /// milliseconds.
+    /// > messages for the Receiver, the Sender shall send a JR Clock message at least once every
+    /// > 250 milliseconds.
     public struct JRClock: Equatable, Hashable {
         /// 16-Bit Time Value
         ///
         /// > MIDI 2.0 Spec:
         /// >
         /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency
-        /// of 1 MHz / 32).
+        /// > of 1 MHz / 32).
         /// >
         /// > The time value is expected to wrap around every 2.09712 seconds.
         /// >
         /// > To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock
-        /// messages for the Receiver, the Sender shall send a JR Clock message at least once every
-        /// 250 milliseconds.
+        /// > messages for the Receiver, the Sender shall send a JR Clock message at least once
+        /// > every 250 milliseconds.
         public var time: UInt16
     
         /// UMP Group (`0x0 ... 0xF`)
@@ -46,13 +46,13 @@ extension MIDIEvent {
         /// > The JR Clock message defines the current time of the Sender.
         /// >
         /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency
-        /// of 1 MHz / 32).
+        /// > of 1 MHz / 32).
         /// >
         /// > The time value is expected to wrap around every 2.09712 seconds.
         /// >
         /// > To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock
-        /// messages for the Receiver, the Sender shall send a JR Clock message at least once every
-        /// 250 milliseconds.
+        /// > messages for the Receiver, the Sender shall send a JR Clock message at least once
+        /// > every 250 milliseconds.
         public init(
             time: UInt16,
             group: UInt4 = 0x0
@@ -70,13 +70,13 @@ extension MIDIEvent {
     /// > The JR Clock message defines the current time of the Sender.
     /// >
     /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1
-    /// MHz / 32).
+    /// > MHz / 32).
     /// >
     /// > The time value is expected to wrap around every 2.09712 seconds.
     /// >
     /// > To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock
-    /// messages for the Receiver, the Sender shall send a JR Clock message at least once every 250
-    /// milliseconds.
+    /// > messages for the Receiver, the Sender shall send a JR Clock message at least once every
+    /// > 250 milliseconds.
     public static func jrClock(
         time: UInt16,
         group: UInt4 = 0x0

@@ -8,23 +8,24 @@ extension MIDIEvent {
     /// Unofficial Bus Select (Status `0xF5`)
     ///
     /// > Warning: This command is not officially supported and some MIDI subsystems will ignore it
-    /// entirely. It is provided purely for legacy support and its use is discouraged. It will
-    /// likely be removed in a future release of MIDIKit.
+    /// > entirely. It is provided purely for legacy support and its use is discouraged. It will
+    /// > be removed in a future release of MIDIKit.
     ///
     /// > Reference:
     /// >
     /// > Some vendors have produced boxes with a single MIDI input, and multiple MIDI outputs. The
-    /// Bus Select message specifies which of the outputs further data should be sent to. This is
-    /// not an official message; the vendors in question should have used a SysEx command." --
-    /// [David Van Brink's MIDI
-    /// Spec](https://www.cs.cmu.edu/~music/cmsip/readings/davids-midi-spec.htm)
+    /// > Bus Select message specifies which of the outputs further data should be sent to. This is
+    /// > not an official message; the vendors in question should have used a SysEx command." --
+    /// > [David Van Brink's MIDI
+    /// > Spec](https://www.cs.cmu.edu/~music/cmsip/readings/davids-midi-spec.htm)
     public struct UnofficialBusSelect: Equatable, Hashable {
         /// Bus Number
         public var bus: UInt7 = 0
-    
+        
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
+        @available(*, deprecated, message: "Bus Select is not supported by Core MIDI and will be removed in the future.")
         public init(
             bus: UInt7 = 0,
             group: UInt4 = 0x0
@@ -37,20 +38,21 @@ extension MIDIEvent {
     /// Unofficial Bus Select (Status `0xF5`)
     ///
     /// > Warning: This command is not officially supported and some MIDI subsystems will ignore it
-    /// entirely. It is provided purely for legacy support and its use is discouraged. It will
-    /// likely be removed in a future release of MIDIKit.
+    /// > entirely. It is provided purely for legacy support and its use is discouraged. It will
+    /// > be removed in a future release of MIDIKit.
     ///
     /// > Reference:
     /// >
     /// > Some vendors have produced boxes with a single MIDI input, and multiple MIDI outputs. The
-    /// Bus Select message specifies which of the outputs further data should be sent to. This is
-    /// not an official message; the vendors in question should have used a SysEx command." --
-    /// [David Van Brink's MIDI
-    /// Spec](https://www.cs.cmu.edu/~music/cmsip/readings/davids-midi-spec.htm)
+    /// > Bus Select message specifies which of the outputs further data should be sent to. This is
+    /// > not an official message; the vendors in question should have used a SysEx command." --
+    /// > [David Van Brink's MIDI
+    /// > Spec](https://www.cs.cmu.edu/~music/cmsip/readings/davids-midi-spec.htm)
     ///
     /// - Parameters:
     ///   - bus: Bus Number (0x00...0x7F)
     ///   - group: UMP Group (`0x0 ... 0xF`)
+    @available(*, deprecated, message: "Bus Select is not supported by Core MIDI and will be removed in the future.")
     public static func unofficialBusSelect(
         bus: UInt7,
         group: UInt4 = 0x0

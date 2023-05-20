@@ -65,7 +65,6 @@ struct DeviceTreeView<DetailsContent: View>: View {
         }
     }
     
-//    @ViewBuilder
     private func navLink(item: AnyMIDIIOObject) -> some View {
         NavigationLink(destination: detailsView(item: item)) {
             switch item.objectType {

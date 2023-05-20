@@ -15,32 +15,17 @@ struct VirtualOutputApp: App {
         manufacturer: "MyCompany"
     )
     
-    static let virtualOutputName = "TestApp Output"
+    let midiHelper = MIDIHelper()
     
     init() {
-        do {
-            print("Starting MIDI services.")
-            try midiManager.start()
-        } catch {
-            print("Error starting MIDI services:", error.localizedDescription)
-        }
-    
-        do {
-            print("Creating virtual MIDI output.")
-            try midiManager.addOutput(
-                name: Self.virtualOutputName,
-                tag: Self.virtualOutputName,
-                uniqueID: .userDefaultsManaged(key: Self.virtualOutputName)
-            )
-        } catch {
-            print("Error creating virtual MIDI output:", error.localizedDescription)
-        }
+        midiHelper.setup(midiManager: midiManager)
     }
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(midiManager)
+                .environmentObject(midiHelper)
         }
     }
 }

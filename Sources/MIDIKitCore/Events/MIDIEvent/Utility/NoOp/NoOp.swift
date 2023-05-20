@@ -11,8 +11,8 @@ extension MIDIEvent {
     /// > MIDI 2.0 Spec:
     /// >
     /// > The UMP Format provides a set of Utility Messages. Utility Messages include but are not
-    /// limited to NOOP and timestamps, and might in the future include UMP transport-related
-    /// functions.
+    /// > limited to NOOP and timestamps, and might in the future include UMP transport-related
+    /// > functions.
     public struct NoOp: Equatable, Hashable {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
@@ -28,8 +28,8 @@ extension MIDIEvent {
     /// > MIDI 2.0 Spec:
     /// >
     /// > The UMP Format provides a set of Utility Messages. Utility Messages include but are not
-    /// limited to NOOP and timestamps, and might in the future include UMP transport-related
-    /// functions.
+    /// > limited to NOOP and timestamps, and might in the future include UMP transport-related
+    /// > functions.
     ///
     /// - Parameters:
     ///   - group: UMP Group (`0x0 ... 0xF`)

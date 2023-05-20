@@ -8,19 +8,18 @@ import SwiftUI
 import MIDIKit
 import SwiftRadix
 
-class MIDIHelper: ObservableObject {
-    public weak var midiManager: MIDIManager?
+/// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
+/// SwiftUI view state directly. Therefore, we need a helper class that conforms to
+/// `ObservableObject` which contains `@Published` properties that SwiftUI can use to update views.
+final class MIDIHelper: ObservableObject {
+    private weak var midiManager: MIDIManager?
     
     let virtualInputName = "TestApp Input"
     
     public init() { }
     
-    /// Run once after setting the local ``midiManager`` property.
-    public func initialSetup() {
-        guard let midiManager = midiManager else {
-            print("MIDIManager is missing.")
-            return
-        }
+    public func setup(midiManager: MIDIManager) {
+        self.midiManager = midiManager
     
         do {
             print("Starting MIDI services.")
@@ -36,7 +35,7 @@ class MIDIHelper: ObservableObject {
                 tag: virtualInputName,
                 uniqueID: .userDefaultsManaged(key: virtualInputName),
                 receiver: .events { [weak self] events in
-                    events.forEach { self?.handleMIDI(event: $0) }
+                    events.forEach { self?.received(event: $0) }
                 }
             )
         } catch {
@@ -44,7 +43,7 @@ class MIDIHelper: ObservableObject {
         }
     }
     
-    private func handleMIDI(event: MIDIEvent) {
+    private func received(event: MIDIEvent) {
         switch event {
         case let .noteOn(payload):
             print(

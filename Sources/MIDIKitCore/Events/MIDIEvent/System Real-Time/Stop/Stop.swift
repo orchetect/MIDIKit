@@ -11,7 +11,7 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop
-    /// immediately.
+    /// > immediately.
     public struct Stop: Equatable, Hashable {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
@@ -27,7 +27,7 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > Stop (`0xFC`) is sent when a STOP button is hit. Playback in a receiver should stop
-    /// immediately.
+    /// > immediately.
     ///
     /// - Parameters:
     ///   - group: UMP Group (`0x0 ... 0xF`)

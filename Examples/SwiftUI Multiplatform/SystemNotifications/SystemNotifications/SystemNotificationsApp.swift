@@ -18,8 +18,7 @@ struct SystemNotificationsApp: App {
     let midiHelper = MIDIHelper()
     
     init() {
-        midiHelper.midiManager = midiManager
-        midiHelper.initialSetup()
+        midiHelper.setup(midiManager: midiManager)
     }
     
     var body: some Scene {

@@ -15,16 +15,16 @@ extension MIDIEvent {
         ///
         /// If MIDI 2.0 attribute is set to Pitch 7.9, then this value represents the note index.
         public var note: MIDINote
-    
+        
         /// Option Flags
         public var optionFlags: Set<OptionFlag> = []
-    
+        
         /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
-    
+        
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         /// Channel Voice Message: Per-Note Management
         /// (MIDI 2.0)
         ///
@@ -48,7 +48,7 @@ extension MIDIEvent {
             self.channel = channel
             self.group = group
         }
-    
+        
         /// Channel Voice Message: Per-Note Management
         /// (MIDI 2.0)
         ///
@@ -140,20 +140,20 @@ extension MIDIEvent.NoteManagement {
     /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .midi2ChannelVoice
-    
+        
         let mtAndGroup = (umpMessageType.rawValue.uInt8Value << 4) + group.uInt8Value
-    
+        
         // MIDI 2.0 only
-    
+        
         let word1 = UMPWord(
             mtAndGroup,
             0xF0 + channel.uInt8Value,
             note.number.uInt8Value,
             optionFlags.byte
         )
-    
+        
         let word2: UInt32 = 0x0000_0000 // reserved
-    
+        
         return [word1, word2]
     }
 }
@@ -169,17 +169,17 @@ extension MIDIEvent.NoteManagement {
         /// > MIDI 2.0 Spec:
         /// >
         /// > When a device receives a Per-Note Management message with D = 1 (Detach), all
-        /// currently playing notes and previous notes on the referenced Note Number shall no longer
-        /// respond to any Per-Note controllers. Currently playing notes shall maintain the current
-        /// values for all Per-Note controllers until the end of the note life cycle.
+        /// > currently playing notes and previous notes on the referenced Note Number shall no
+        /// > longer respond to any Per-Note controllers. Currently playing notes shall maintain the
+        /// > current values for all Per-Note controllers until the end of the note life cycle.
         case detachPerNoteControllers
-    
+        
         /// [S] Reset/Set Per-Note Controllers to default values
         ///
         /// > MIDI 2.0 Spec:
         /// >
         /// > When a device receives a Per-Note Management message with S = 1, all Per-Note
-        /// controllers on the referenced Note Number should be reset to their default values.
+        /// > controllers on the referenced Note Number should be reset to their default values.
         case resetPerNoteControllers
     }
 }
@@ -191,11 +191,11 @@ extension Set where Element == MIDIEvent.NoteManagement.OptionFlag {
     /// Initialize flags from a raw option flags byte.
     public init(byte: UInt8) {
         self.init()
-    
+        
         if byte & 0b00000001 == 1 {
             insert(.resetPerNoteControllers)
         }
-    
+        
         if (byte & 0b00000010) >> 1 == 1 {
             insert(.detachPerNoteControllers)
         }
@@ -204,15 +204,15 @@ extension Set where Element == MIDIEvent.NoteManagement.OptionFlag {
     /// Returns the flags as a raw option flags byte.
     public var byte: UInt8 {
         var byte: UInt8 = 0b00000000
-    
+        
         if contains(.resetPerNoteControllers) {
             byte |= 0b00000001
         }
-    
+        
         if contains(.detachPerNoteControllers) {
             byte |= 0b00000010
         }
-    
+        
         return byte
     }
 }
@@ -222,7 +222,7 @@ extension MIDIEvent.NoteManagement.OptionFlag: CustomStringConvertible {
         switch self {
         case .detachPerNoteControllers:
             return "detachPerNoteControllers"
-    
+            
         case .resetPerNoteControllers:
             return "resetPerNoteControllers"
         }

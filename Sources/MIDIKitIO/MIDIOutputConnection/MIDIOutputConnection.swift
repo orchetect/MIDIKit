@@ -15,15 +15,15 @@ import Foundation
 /// be instanced without providing any initial inputs and then inputs can be added or removed later.
 ///
 /// > Note: Do not store or cache this object unless it is unavoidable. Instead, whenever possible
-/// call it by accessing the ``MIDIManager/managedOutputConnections`` collection. The
-/// ``MIDIManager`` owns this object and maintains its lifecycle.
+/// > call it by accessing the ``MIDIManager/managedOutputConnections`` collection. The
+/// > ``MIDIManager`` owns this object and maintains its lifecycle.
 /// >
 /// > Ensure that it is only stored weakly and only passed by reference temporarily in order to
-/// execute an operation. If it absolutely must be stored strongly, ensure it is stored for no
-/// longer than the lifecycle of the managed output connection (which is either at such time the
-/// ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
-/// ``MIDIManager/ManagedType/outputConnection`` or ``MIDIManager/removeAll()`` to destroy the
-/// managed connection.)
+/// > execute an operation. If it absolutely must be stored strongly, ensure it is stored for no
+/// > longer than the lifecycle of the managed output connection (which is either at such time the
+/// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
+/// > ``MIDIManager/ManagedType/outputConnection`` or ``MIDIManager/removeAll()`` to destroy the
+/// > managed connection.)
 public final class MIDIOutputConnection: _MIDIManaged {
     // _MIDIManaged
     internal weak var midiManager: MIDIManager?

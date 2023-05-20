@@ -11,9 +11,9 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > System Reset commands all devices in a system to return to their initialized, power-up
-    /// condition. This message should be used sparingly, and should typically be sent by manual
-    /// control only. It should not be sent automatically upon power-up and under no condition
-    /// should this message be echoed.
+    /// > condition. This message should be used sparingly, and should typically be sent by manual
+    /// > control only. It should not be sent automatically upon power-up and under no condition
+    /// > should this message be echoed.
     public struct SystemReset: Equatable, Hashable {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
@@ -28,10 +28,10 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// System Reset commands all devices in a system to return to their initialized, power-up
-    /// condition. This message should be used sparingly, and should typically be sent by manual
-    /// control only. It should not be sent automatically upon power-up and under no condition
-    /// should this message be echoed.
+    /// > System Reset commands all devices in a system to return to their initialized, power-up
+    /// > condition. This message should be used sparingly, and should typically be sent by manual
+    /// > control only. It should not be sent automatically upon power-up and under no condition
+    /// > should this message be echoed.
     ///
     /// - Parameters:
     ///   - group: UMP Group (`0x0 ... 0xF`)

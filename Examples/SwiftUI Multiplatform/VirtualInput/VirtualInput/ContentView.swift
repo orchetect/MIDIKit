@@ -11,7 +11,7 @@ struct ContentView: View {
         VStack(alignment: .center, spacing: 20) {
             Text(
                 """
-                This example creates a virtual MIDI input port named "\(VirtualInputApp.virtualInputName)".
+                This example creates a virtual MIDI input port named "\(MIDIHelper.virtualInputName)".
                     
                 Received MIDI events are logged to the console, filtering out Active Sensing and Clock events.
                     

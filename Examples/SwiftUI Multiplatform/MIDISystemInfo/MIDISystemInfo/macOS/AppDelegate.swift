@@ -21,7 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // set up midi manager
     
         do {
-            print("Starting MIDI manager client")
+            print("Starting MIDI manager")
             try midiManager.start()
         } catch {
             print(error)

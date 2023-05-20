@@ -18,7 +18,8 @@ struct EmptyDetailsView: View {
                     .resizable()
                     .foregroundColor(.secondary)
                     .frame(width: 200, height: 200)
-                Spacer().frame(height: 50)
+                Spacer()
+                    .frame(height: 50)
             }
             Text("Make a selection from the sidebar.")
         }

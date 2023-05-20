@@ -9,10 +9,10 @@ import MIDIKitIO
 import MIDIKitUI
 
 struct PickersExampleView: View {
-    @AppStorage("midiInput") private var midiInput: Int?
-    @AppStorage("midiInputName") private var midiInputName: String?
-    @AppStorage("midiOutput") private var midiOutput: Int?
-    @AppStorage("midiOutputName") private var midiOutputName: String?
+    @AppStorage(MIDIHelper.PrefKeys.midiInID) private var midiInput: MIDIIdentifier?
+    @AppStorage(MIDIHelper.PrefKeys.midiInName) private var midiInputName: String?
+    @AppStorage(MIDIHelper.PrefKeys.midiOutID) private var midiOutput: MIDIIdentifier?
+    @AppStorage(MIDIHelper.PrefKeys.midiOutName) private var midiOutputName: String?
     
     @State private var pickerStyle: PickerStyleSelection = .automatic
     @State private var filterOwned: Bool = false
@@ -25,7 +25,9 @@ struct PickersExampleView: View {
         Spacer()
         
         VStack {
+            // TODO: ⚠️ Not yet functional, will be fixed in future.
             Toggle("Filter Manager-Owned", isOn: $filterOwned)
+                .disabled(true)
             
 #if os(iOS)
             if UIDevice.current.userInterfaceIdiom == .pad {
@@ -110,7 +112,7 @@ struct PickersExampleView: View {
     private var inputsList: some View {
         MIDIInputsPicker(
             title: "Input",
-            selection: intAdapter($midiInput),
+            selection: $midiInput,
             cachedSelectionName: $midiInputName,
             showIcons: showIcons,
             filterOwned: filterOwned
@@ -121,7 +123,7 @@ struct PickersExampleView: View {
     private var outputsList: some View {
         MIDIOutputsPicker(
             title: "Output",
-            selection: intAdapter($midiOutput),
+            selection: $midiOutput,
             cachedSelectionName: $midiOutputName,
             showIcons: showIcons,
             filterOwned: filterOwned

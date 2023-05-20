@@ -9,10 +9,10 @@ import MIDIKitIO
 import MIDIKitUI
 
 struct ListsExampleView: View {
-    @AppStorage("midiInput") private var midiInput: Int?
-    @AppStorage("midiInputName") private var midiInputName: String?
-    @AppStorage("midiOutput") private var midiOutput: Int?
-    @AppStorage("midiOutputName") private var midiOutputName: String?
+    @AppStorage(MIDIHelper.PrefKeys.midiInID) private var midiInput: MIDIIdentifier?
+    @AppStorage(MIDIHelper.PrefKeys.midiInName) private var midiInputName: String?
+    @AppStorage(MIDIHelper.PrefKeys.midiOutID) private var midiOutput: MIDIIdentifier?
+    @AppStorage(MIDIHelper.PrefKeys.midiOutName) private var midiOutputName: String?
     
     @State private var filterOwned: Bool = false
     @State private var showIcons: Bool = true
@@ -24,7 +24,10 @@ struct ListsExampleView: View {
         Spacer()
         
         VStack {
+            // TODO: ⚠️ Not yet functional, will be fixed in future.
             Toggle("Filter Manager-Owned", isOn: $filterOwned)
+                .disabled(true)
+            
             Toggle("Show Icons", isOn: $showIcons)
         }
         .toggleStyle(.switch)
@@ -78,7 +81,7 @@ struct ListsExampleView: View {
     
     private var inputsList: some View {
         MIDIInputsList(
-            selection: intAdapter($midiInput),
+            selection: $midiInput,
             cachedSelectionName: $midiInputName,
             showIcons: showIcons,
             filterOwned: filterOwned
@@ -90,7 +93,7 @@ struct ListsExampleView: View {
     
     private var outputsList: some View {
         MIDIOutputsList(
-            selection: intAdapter($midiOutput),
+            selection: $midiOutput,
             cachedSelectionName: $midiOutputName,
             showIcons: showIcons,
             filterOwned: filterOwned

@@ -8,7 +8,7 @@ This example demonstrates parsing received MIDI events and reading their values.
 - Received MIDI events are logged to the console, filtering out Active Sensing and Clock events
 - Event values are logged in all formats available in MIDIKit:
   - MIDI 1.0 values (ie: 7-bit note velocity, CC value, 14-bit pitch bend, etc.)
-  - MIDI 2.0 (ie: 16 and 32-bit values depending on the event)
+  - MIDI 2.0 values (ie: 16-bit and 32-bit values depending on the event)
   - Unit Interval (float between 0.0 ... 1.0)
 
 ## Troubleshooting

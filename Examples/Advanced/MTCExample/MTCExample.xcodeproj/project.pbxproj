@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,7 +20,6 @@
 		E2E635B925EE4CE10039B8CF /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E2E635B825EE4CE10039B8CF /* OTCore */; };
 		E2F71ED42758ED1E006254C0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F71ED32758ED1E006254C0 /* Log.swift */; };
 		E2FAC4DE257884E000A6DD31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */; };
-		E2FAC4E5257884E100A6DD31 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2FAC4E4257884E100A6DD31 /* Preview Assets.xcassets */; };
 		E2FAC4E8257884E100A6DD31 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2FAC4E6257884E100A6DD31 /* Main.storyboard */; };
 		E2FAC51E2578856F00A6DD31 /* MIDI Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FAC51D2578856F00A6DD31 /* MIDI Endpoints.swift */; };
 /* End PBXBuildFile section */
@@ -34,7 +33,6 @@
 		E2F71ED32758ED1E006254C0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		E2FAC4DA257884E000A6DD31 /* MTCExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MTCExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E2FAC4E4257884E100A6DD31 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E2FAC4E7257884E100A6DD31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E2FAC4E9257884E100A6DD31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2FAC4EA257884E100A6DD31 /* MTCExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MTCExample.entitlements; sourceTree = "<group>"; };
@@ -88,17 +86,8 @@
 				E2FAC4E9257884E100A6DD31 /* Info.plist */,
 				E24FF24E28B9841E000A2055 /* Assets.xcassets */,
 				E2FAC4EA257884E100A6DD31 /* MTCExample.entitlements */,
-				E2FAC4E3257884E100A6DD31 /* Preview Content */,
 			);
 			path = MTCExample;
-			sourceTree = "<group>";
-		};
-		E2FAC4E3257884E100A6DD31 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				E2FAC4E4257884E100A6DD31 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,8 +124,9 @@
 		E2FAC4D2257884DF00A6DD31 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1230;
-				LastUpgradeCheck = 1230;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					E2FAC4D9257884DF00A6DD31 = {
 						CreatedOnToolsVersion = 12.3;
@@ -174,7 +164,6 @@
 			files = (
 				E2FAC4E8257884E100A6DD31 /* Main.storyboard in Resources */,
 				E24FF24F28B9841E000A2055 /* Assets.xcassets in Resources */,
-				E2FAC4E5257884E100A6DD31 /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +232,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -304,6 +294,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -336,7 +327,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "MTCExample/Preview\\ Content";
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
@@ -364,7 +355,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "MTCExample/Preview\\ Content";
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;

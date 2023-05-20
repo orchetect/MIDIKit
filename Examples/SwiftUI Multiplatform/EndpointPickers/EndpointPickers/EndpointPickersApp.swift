@@ -15,20 +15,23 @@ struct EndpointPickersApp: App {
         manufacturer: "MyCompany"
     )
     
-    var midiHelper = MIDIHelper()
+    let midiHelper = MIDIHelper()
     
-    @State var midiInSelectedID: MIDIIdentifier = .invalidMIDIIdentifier
-    @State var midiInSelectedDisplayName: String = "None"
+    @AppStorage(MIDIHelper.PrefKeys.midiInID)
+    var midiInSelectedID: MIDIIdentifier = .invalidMIDIIdentifier
     
-    @State var midiOutSelectedID: MIDIIdentifier = .invalidMIDIIdentifier
-    @State var midiOutSelectedDisplayName: String = "None"
+    @AppStorage(MIDIHelper.PrefKeys.midiInDisplayName)
+    var midiInSelectedDisplayName: String = "None"
+    
+    @AppStorage(MIDIHelper.PrefKeys.midiOutID)
+    var midiOutSelectedID: MIDIIdentifier = .invalidMIDIIdentifier
+    
+    @AppStorage(MIDIHelper.PrefKeys.midiOutDisplayName)
+    var midiOutSelectedDisplayName: String = "None"
     
     init() {
-        midiHelper.midiManager = midiManager
-        midiHelper.initialSetup()
-    
+        midiHelper.setup(midiManager: midiManager)
         // restore saved MIDI endpoint selections and connections
-        midiRestorePersistentState()
         midiHelper.midiInUpdateConnection(selectedUniqueID: midiInSelectedID)
         midiHelper.midiOutUpdateConnection(selectedUniqueID: midiOutSelectedID)
     }
@@ -44,98 +47,25 @@ struct EndpointPickersApp: App {
             .environmentObject(midiManager)
             .environmentObject(midiHelper)
         }
-    
-        .onChange(of: midiInSelectedID) {
-            if $0 == .invalidMIDIIdentifier {
+        .onChange(of: midiInSelectedID) { uid in
+            // cache endpoint name persistently so we can show it in the event the endpoint disappears
+            if uid == .invalidMIDIIdentifier {
                 midiInSelectedDisplayName = "None"
-            } else if let found = midiManager.endpoints.outputs
-                .first(whereUniqueID: .init($0))
-            {
+            } else if let found = midiManager.endpoints.outputs.first(whereUniqueID: uid) {
                 midiInSelectedDisplayName = found.displayName
             }
     
-            midiHelper.midiInUpdateConnection(selectedUniqueID: $0)
-            midiSavePersistentState()
+            midiHelper.midiInUpdateConnection(selectedUniqueID: uid)
         }
-    
-        .onChange(of: midiOutSelectedID) {
-            if $0 == .invalidMIDIIdentifier {
+        .onChange(of: midiOutSelectedID) { uid in
+            // cache endpoint name persistently so we can show it in the event the endpoint disappears
+            if uid == .invalidMIDIIdentifier {
                 midiOutSelectedDisplayName = "None"
-            } else if let found = midiManager.endpoints.inputs
-                .first(whereUniqueID: .init($0))
-            {
+            } else if let found = midiManager.endpoints.inputs.first(whereUniqueID: uid) {
                 midiOutSelectedDisplayName = found.displayName
             }
     
-            midiHelper.midiOutUpdateConnection(selectedUniqueID: $0)
-            midiSavePersistentState()
+            midiHelper.midiOutUpdateConnection(selectedUniqueID: uid)
         }
-    }
-}
-
-// MARK: - String Constants
-
-enum ConnectionTags {
-    static let midiIn = "SelectedInputConnection"
-    static let midiOut = "SelectedOutputConnection"
-    
-    static let midiTestIn1 = "TestIn1"
-    static let midiTestIn2 = "TestIn2"
-    static let midiTestOut1 = "TestOut1"
-    static let midiTestOut2 = "TestOut2"
-}
-
-enum UserDefaultsKeys {
-    static let midiInID = "SelectedMIDIInID"
-    static let midiInDisplayName = "SelectedMIDIInDisplayName"
-    
-    static let midiOutID = "SelectedMIDIOutID"
-    static let midiOutDisplayName = "SelectedMIDIOutDisplayName"
-}
-
-extension EndpointPickersApp {
-    /// This should only be run once at app startup.
-    private mutating func midiRestorePersistentState() {
-        print("Restoring saved MIDI connections.")
-    
-        let inName = UserDefaults.standard.string(forKey: UserDefaultsKeys.midiInDisplayName) ?? ""
-        _midiInSelectedDisplayName = State(wrappedValue: inName)
-    
-        let inID = Int32(
-            exactly: UserDefaults.standard.integer(forKey: UserDefaultsKeys.midiInID)
-        ) ?? .invalidMIDIIdentifier
-        _midiInSelectedID = State(wrappedValue: inID)
-    
-        let outName = UserDefaults.standard
-            .string(forKey: UserDefaultsKeys.midiOutDisplayName) ?? ""
-        _midiOutSelectedDisplayName = State(wrappedValue: outName)
-    
-        let outID = Int32(
-            exactly: UserDefaults.standard
-                .integer(forKey: UserDefaultsKeys.midiOutID)
-        ) ?? .invalidMIDIIdentifier
-        _midiOutSelectedID = State(wrappedValue: outID)
-    }
-    
-    public func midiSavePersistentState() {
-        // save endpoint selection to UserDefaults
-    
-        UserDefaults.standard.set(
-            midiInSelectedID,
-            forKey: UserDefaultsKeys.midiInID
-        )
-        UserDefaults.standard.set(
-            midiInSelectedDisplayName,
-            forKey: UserDefaultsKeys.midiInDisplayName
-        )
-    
-        UserDefaults.standard.set(
-            midiOutSelectedID,
-            forKey: UserDefaultsKeys.midiOutID
-        )
-        UserDefaults.standard.set(
-            midiOutSelectedDisplayName,
-            forKey: UserDefaultsKeys.midiOutDisplayName
-        )
     }
 }

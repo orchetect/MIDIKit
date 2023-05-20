@@ -1,5 +1,5 @@
 //
-//  MIDIEndpointSelectionView.swift
+//  MIDIEndpointSelectionView-iOS.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
@@ -22,10 +22,10 @@ struct MIDIEndpointSelectionView: View {
     var body: some View {
         Picker("MIDI In", selection: $midiInSelectedID) {
             Text("None")
-                .tag(0 as MIDIIdentifier)
+                .tag(MIDIIdentifier.invalidMIDIIdentifier)
     
             if midiInSelectedID != .invalidMIDIIdentifier,
-               !midiHelper.isOutputPresentInSystem(uniqueID: midiInSelectedID)
+               !midiManager.endpoints.outputs.contains(whereUniqueID: midiInSelectedID)
             {
                 Text("⚠️ " + midiInSelectedDisplayName)
                     .tag(midiInSelectedID)
@@ -40,10 +40,10 @@ struct MIDIEndpointSelectionView: View {
     
         Picker("MIDI Out", selection: $midiOutSelectedID) {
             Text("None")
-                .tag(0 as MIDIIdentifier)
+                .tag(MIDIIdentifier.invalidMIDIIdentifier)
     
             if midiOutSelectedID != .invalidMIDIIdentifier,
-               !midiHelper.isInputPresentInSystem(uniqueID: midiOutSelectedID)
+               !midiManager.endpoints.inputs.contains(whereUniqueID: midiOutSelectedID)
             {
                 Text("⚠️ " + midiOutSelectedDisplayName)
                     .tag(midiOutSelectedID)

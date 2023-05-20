@@ -15,27 +15,10 @@ struct VirtualInputApp: App {
         manufacturer: "MyCompany"
     )
     
-    static let virtualInputName = "TestApp Input"
+    let midiHelper = MIDIHelper()
     
     init() {
-        do {
-            print("Starting MIDI services.")
-            try midiManager.start()
-        } catch {
-            print("Error starting MIDI services:", error.localizedDescription)
-        }
-    
-        do {
-            print("Creating virtual MIDI input.")
-            try midiManager.addInput(
-                name: Self.virtualInputName,
-                tag: Self.virtualInputName,
-                uniqueID: .userDefaultsManaged(key: Self.virtualInputName),
-                receiver: .eventsLogging(filterActiveSensingAndClock: true)
-            )
-        } catch {
-            print("Error creating virtual MIDI input:", error.localizedDescription)
-        }
+        midiHelper.setup(midiManager: midiManager)
     }
     
     var body: some Scene {

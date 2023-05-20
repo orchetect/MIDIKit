@@ -40,3 +40,10 @@ extension MIDIEvent.NoteCC.PerNoteController {
         }
     }
 }
+
+extension MIDIEvent.NoteCC.PerNoteController {
+    /// Initialize a Registered Per-Note Controller with raw controller number.
+    public static func registered(_ controller: UInt8) -> Self {
+        .registered(Registered(number: controller))
+    }
+}

@@ -27,7 +27,7 @@ extension MIDIFileEvent {
     /// > Standard MIDI File 1.0 Spec:
     /// >
     /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
-    /// SMPTE-based tracks which specify a different frame subdivision for delta-times.
+    /// > SMPTE-based tracks which specify a different frame subdivision for delta-times.
     public struct SMPTEOffset: Equatable, Hashable {
         /// Timecode hour.
         /// Valid range: ` 0 ... 23`.
@@ -168,7 +168,7 @@ extension MIDIFileEvent {
     /// > Standard MIDI File 1.0 Spec:
     /// >
     /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
-    /// SMPTE-based tracks which specify a different frame subdivision for delta-times.
+    /// > SMPTE-based tracks which specify a different frame subdivision for delta-times.
     public static func smpteOffset(
         delta: DeltaTime = .none,
         hr: UInt8,
@@ -199,7 +199,7 @@ extension MIDIFileEvent {
     /// > Standard MIDI File 1.0 Spec:
     /// >
     /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
-    /// SMPTE-based tracks which specify a different frame subdivision for delta-times.
+    /// > SMPTE-based tracks which specify a different frame subdivision for delta-times.
     public static func smpteOffset(
         delta: DeltaTime = .none,
         scaling: Timecode
@@ -348,7 +348,7 @@ extension MIDIFileEvent.SMPTEOffset: MIDIFileEventPayload {
             seconds.string(paddedTo: 2) + ":" +
             frames.string(paddedTo: 2) + "." +
             subframes.string +
-            "@\(frameRate)"
+            " @ \(frameRate)"
         
         return "smpte: " + time
     }
@@ -368,7 +368,7 @@ extension Timecode {
     /// > Standard MIDI File 1.0 Spec:
     /// >
     /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
-    /// SMPTE- based tracks which specify a different frame subdivision for delta-times.
+    /// > SMPTE- based tracks which specify a different frame subdivision for delta-times.
     public var scaledToMIDIFileSMPTEFrameRate: (
         scaledTimecode: Timecode?,
         smpteFR: MIDIFile.SMPTEOffsetFrameRate

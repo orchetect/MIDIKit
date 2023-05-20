@@ -5,54 +5,78 @@
 //
 
 import SwiftUI
-import MIDIKit
+import MIDIKitIO
 
-class MIDIHelper: ObservableObject {
-    public weak var midiManager: MIDIManager?
+/// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
+/// SwiftUI view state directly. Therefore, we need a helper class that conforms to
+/// `ObservableObject` which contains `@Published` properties that SwiftUI can use to update views.
+final class MIDIHelper: ObservableObject {
+    private weak var midiManager: MIDIManager?
     
     @Published
     public private(set) var receivedEvents: [MIDIEvent] = []
     
+    @Published
+    public var filterActiveSensingAndClock = false
+    
     public init() { }
     
-    /// Run once after setting the local ``midiManager`` property.
-    public func initialSetup() {
-        guard let midiManager = midiManager else {
-            print("MIDIManager is missing.")
-            return
+    public func setup(midiManager: MIDIManager) {
+        self.midiManager = midiManager
+        
+        // update a local `@Published` property in response to endpoints changing in the system
+        // when MIDI devices/endpoints change in system
+        midiManager.notificationHandler = { [weak self] notif, _ in
+            switch notif {
+            case .added, .removed, .propertyChanged:
+                self?.updateVirtualsExist()
+            default:
+                break
+            }
         }
-    
+        
         do {
             print("Starting MIDI services.")
             try midiManager.start()
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-    
+        
         do {
             try midiManager.addInputConnection(
                 toOutputs: [],
-                tag: ConnectionTags.midiIn,
+                tag: Tags.midiIn,
                 receiver: .events { [weak self] events in
-                    DispatchQueue.main.async {
-                        self?.receivedEvents.append(contentsOf: events)
-                    }
+                    self?.received(events: events)
                 }
             )
-    
+            
             try midiManager.addOutputConnection(
                 toInputs: [],
-                tag: ConnectionTags.midiOut
+                tag: Tags.midiOut
             )
         } catch {
             print("Error creating MIDI connections:", error.localizedDescription)
         }
     }
     
-    // MARK: - MIDI In
+    // MARK: Common Event Receiver
+    
+    private func received(events: [MIDIEvent]) {
+        let events = filterActiveSensingAndClock
+            ? events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
+            : events
+        
+        // must update properties that result in UI changes on main thread
+        DispatchQueue.main.async {
+            self.receivedEvents.append(contentsOf: events)
+        }
+    }
+    
+    // MARK: - MIDI Input Connection
     
     public var midiInputConnection: MIDIInputConnection? {
-        midiManager?.managedInputConnections[ConnectionTags.midiIn]
+        midiManager?.managedInputConnections[Tags.midiIn]
     }
     
     public func midiInUpdateConnection(selectedUniqueID: MIDIIdentifier) {
@@ -68,10 +92,10 @@ class MIDIHelper: ObservableObject {
         }
     }
     
-    // MARK: - MIDI Out
+    // MARK: - MIDI Output Connection
     
     public var midiOutputConnection: MIDIOutputConnection? {
-        midiManager?.managedOutputConnections[ConnectionTags.midiOut]
+        midiManager?.managedOutputConnections[Tags.midiOut]
     }
     
     public func midiOutUpdateConnection(selectedUniqueID: MIDIIdentifier) {
@@ -90,54 +114,50 @@ class MIDIHelper: ObservableObject {
     // MARK: - Test Virtual Endpoints
     
     public var midiTestIn1: MIDIInput? {
-        midiManager?.managedInputs[ConnectionTags.midiTestIn1]
+        midiManager?.managedInputs[Tags.midiTestIn1]
     }
     
     public var midiTestIn2: MIDIInput? {
-        midiManager?.managedInputs[ConnectionTags.midiTestIn2]
+        midiManager?.managedInputs[Tags.midiTestIn2]
     }
     
     public var midiTestOut1: MIDIOutput? {
-        midiManager?.managedOutputs[ConnectionTags.midiTestOut1]
+        midiManager?.managedOutputs[Tags.midiTestOut1]
     }
     
     public var midiTestOut2: MIDIOutput? {
-        midiManager?.managedOutputs[ConnectionTags.midiTestOut2]
+        midiManager?.managedOutputs[Tags.midiTestOut2]
     }
     
-    public func createVirtualInputs() {
+    public func createVirtualEndpoints() {
         try? midiManager?.addInput(
             name: "Test In 1",
-            tag: ConnectionTags.midiTestIn1,
-            uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestIn1),
+            tag: Tags.midiTestIn1,
+            uniqueID: .userDefaultsManaged(key: Tags.midiTestIn1),
             receiver: .events { [weak self] events in
-                DispatchQueue.main.async {
-                    self?.receivedEvents.append(contentsOf: events)
-                }
+                self?.received(events: events)
             }
         )
-    
+        
         try? midiManager?.addInput(
             name: "Test In 2",
-            tag: ConnectionTags.midiTestIn2,
-            uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestIn2),
+            tag: Tags.midiTestIn2,
+            uniqueID: .userDefaultsManaged(key: Tags.midiTestIn2),
             receiver: .events { [weak self] events in
-                DispatchQueue.main.async {
-                    self?.receivedEvents.append(contentsOf: events)
-                }
+                self?.received(events: events)
             }
         )
-    
+        
         try? midiManager?.addOutput(
             name: "Test Out 1",
-            tag: ConnectionTags.midiTestOut1,
-            uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestOut1)
+            tag: Tags.midiTestOut1,
+            uniqueID: .userDefaultsManaged(key: Tags.midiTestOut1)
         )
-    
+        
         try? midiManager?.addOutput(
             name: "Test Out 2",
-            tag: ConnectionTags.midiTestOut2,
-            uniqueID: .userDefaultsManaged(key: ConnectionTags.midiTestOut2)
+            tag: Tags.midiTestOut2,
+            uniqueID: .userDefaultsManaged(key: Tags.midiTestOut2)
         )
     }
     
@@ -146,20 +166,35 @@ class MIDIHelper: ObservableObject {
         midiManager?.remove(.output, .all)
     }
     
-    public var virtualsExist: Bool {
-        midiTestIn1 != nil &&
+    @Published
+    public private(set) var virtualsExist: Bool = false
+    
+    private func updateVirtualsExist() {
+        virtualsExist = midiTestIn1 != nil &&
             midiTestIn2 != nil &&
             midiTestOut1 != nil &&
             midiTestOut2 != nil
     }
-    
-    // MARK: - Helpers
-    
-    public func isInputPresentInSystem(uniqueID: MIDIIdentifier) -> Bool {
-        midiManager?.endpoints.inputs.contains(whereUniqueID: uniqueID) ?? false
+}
+
+// MARK: - String Constants
+
+extension MIDIHelper {
+    enum Tags {
+        static let midiIn = "SelectedInputConnection"
+        static let midiOut = "SelectedOutputConnection"
+        
+        static let midiTestIn1 = "TestIn1"
+        static let midiTestIn2 = "TestIn2"
+        static let midiTestOut1 = "TestOut1"
+        static let midiTestOut2 = "TestOut2"
     }
     
-    public func isOutputPresentInSystem(uniqueID: MIDIIdentifier) -> Bool {
-        midiManager?.endpoints.outputs.contains(whereUniqueID: uniqueID) ?? false
+    enum PrefKeys {
+        static let midiInID = "SelectedMIDIInID"
+        static let midiInDisplayName = "SelectedMIDIInDisplayName"
+        
+        static let midiOutID = "SelectedMIDIOutID"
+        static let midiOutDisplayName = "SelectedMIDIOutDisplayName"
     }
 }

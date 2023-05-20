@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // set up midi manager
         
         do {
-            print("Starting MIDI manager client")
+            print("Starting MIDI manager")
             try Self.midiManager.start()
         } catch {
             print(error)

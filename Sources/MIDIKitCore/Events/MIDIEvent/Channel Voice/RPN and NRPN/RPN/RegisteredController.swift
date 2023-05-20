@@ -106,10 +106,10 @@ extension MIDIEvent {
             dataEntryLSB: UInt7?
         )
     
-        /// Null Function Number for RPN/NRPN.
+        /// Null Function Number.
         ///
         /// The purpose of this event is to communicate the intent to disable data entry, data
-        /// increment, and data decrement controllers until a new RPN or NRPN is selected.
+        /// increment, and data decrement controllers until a new RPN is selected.
         case null
     
         /// Form an RPN message from a raw parameter number byte pair.
@@ -268,7 +268,7 @@ extension MIDIEvent.RegisteredController: MIDIParameterNumber {
     
         case let .channelFineTuning(value):
             let uInt7Pair = value.midiUInt7Pair
-            return (msb: uInt7Pair.msb,lsb: uInt7Pair.lsb)
+            return (msb: uInt7Pair.msb, lsb: uInt7Pair.lsb)
     
         case let .channelCoarseTuning(value):
             return (msb: value, lsb: nil)

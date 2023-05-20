@@ -10,9 +10,9 @@ extension MIDIEvent {
     ///
     /// > MIDI 1.0 Spec:
     /// >
-    /// Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is
-    /// pressed. This message commands all receivers which are synchronized to incoming Real-Time
-    /// messages (MIDI Sync mode) to start at the beginning of the song or sequence.
+    /// > Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is
+    /// > pressed. This message commands all receivers which are synchronized to incoming Real-Time
+    /// > messages (MIDI Sync mode) to start at the beginning of the song or sequence.
     public struct Start: Equatable, Hashable {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
@@ -28,8 +28,8 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > Start (`0xFA`) is sent when a PLAY button on the master (sequencer or drum machine) is
-    /// pressed. This message commands all receivers which are synchronized to incoming Real-Time
-    /// messages (MIDI Sync mode) to start at the beginning of the song or sequence.
+    /// > pressed. This message commands all receivers which are synchronized to incoming Real-Time
+    /// > messages (MIDI Sync mode) to start at the beginning of the song or sequence.
     ///
     /// - Parameters:
     ///   - group: UMP Group (`0x0 ... 0xF`)
