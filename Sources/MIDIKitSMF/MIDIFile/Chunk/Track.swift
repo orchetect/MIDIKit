@@ -128,10 +128,12 @@ extension MIDIFile.Chunk.Track {
                 }
             
                 dataReader.advanceBy(eventDeltaTime.byteLength)
-            
+                
                 // event
-            
-                guard var readBuffer = try? dataReader.nonAdvancingRead()
+                
+                // TODO: an effort to improve performance when reading large MIDI files, but parser needs to be rewritten to vastly improve efficiency
+                let readAheadCount = dataReader.remainingByteCount.clamped(to: 1...512)
+                guard var readBuffer = try? dataReader.nonAdvancingRead(bytes: readAheadCount)
                 else {
                     throw MIDIFile.DecodeError.malformed(
                         "Encountered end of file early."
@@ -172,13 +174,15 @@ extension MIDIFile.Chunk.Track {
             
                 var foundEvent: (newEvent: MIDIFileEventPayload, bufferLength: Int)?
             
-                for eventDef in MIDIFile.Chunk.Track.eventDecodeOrder.concreteTypes {
-                    if let success = try? eventDef.initFrom(midi1SMFRawBytesStream: readBuffer) {
-                        foundEvent = success
-                        break // break for-loop lazily
+                autoreleasepool {
+                    for eventDef in MIDIFile.Chunk.Track.eventDecodeOrder.concreteTypes {
+                        if let success = try? eventDef.initFrom(midi1SMFRawBytesStream: readBuffer) {
+                            foundEvent = success
+                            break // break for-loop lazily
+                        }
                     }
                 }
-            
+                
                 if let foundEvent = foundEvent {
                     // inject delta time into event
                     let newEventDelta: MIDIFileEvent
@@ -278,10 +282,10 @@ extension MIDIFile.Chunk.Track {
 extension MIDIFile.Chunk.Track {
     /// Determines the order in which track raw data decoding attempts to iteratively decode events
     static let eventDecodeOrder: [MIDIFileEventType] = [
-        .rpn, // must be before .cc
-        .nrpn, // must be before .cc
         .noteOff,
         .noteOn,
+        .rpn, // must be before .cc
+        .nrpn, // must be before .cc
         .cc,
         .pressure,
         .pitchBend,

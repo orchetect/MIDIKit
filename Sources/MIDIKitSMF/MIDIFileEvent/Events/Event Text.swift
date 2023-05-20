@@ -174,7 +174,8 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
                 )
             }
             
-            let bodyBytes = try dataReader.nonAdvancingRead()
+            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1...4)
+            let bodyBytes = try dataReader.nonAdvancingRead(bytes: readAheadCount)
             guard let length = MIDIFile.decodeVariableLengthValue(from: bodyBytes)
             else {
                 throw MIDIFile.DecodeError.malformed(

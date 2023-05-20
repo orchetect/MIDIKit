@@ -70,9 +70,10 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
                     "Event does not start with expected bytes."
                 )
             }
-        
+            
+            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1...4)
             guard let length = MIDIFile
-                .decodeVariableLengthValue(from: try dataReader.nonAdvancingRead())
+                .decodeVariableLengthValue(from: try dataReader.nonAdvancingRead(bytes: readAheadCount))
             else {
                 throw MIDIFile.DecodeError.malformed(
                     "Could not extract variable length."

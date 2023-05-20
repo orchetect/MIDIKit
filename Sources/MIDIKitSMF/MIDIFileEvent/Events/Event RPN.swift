@@ -125,7 +125,10 @@ extension MIDIParameterNumberUtils {
                 let result: MIDIFileEvent.CC.StreamDecodeResult
                 do {
                     result = try MIDIFileEvent.CC.initFrom(
-                        midi1SMFRawBytesStream: prefixBytes + dataReader.nonAdvancingRead()
+                        midi1SMFRawBytesStream: prefixBytes
+                            + dataReader.nonAdvancingRead(
+                                bytes: MIDIEvent.CC.midi1SMFFixedRawBytesLength - prefixBytes.count
+                            )
                     )
                 } catch {
                     throw MIDIFile.DecodeError.malformed(
@@ -150,7 +153,6 @@ extension MIDIParameterNumberUtils {
                 } else {
                     // update internal running status for this sub-parser
                     runningStatus = UInt8(high: 0xB, low: result.newEvent.channel)
-                    
                 }
                 
                 // remove prefix byte count (if any) from byte count
