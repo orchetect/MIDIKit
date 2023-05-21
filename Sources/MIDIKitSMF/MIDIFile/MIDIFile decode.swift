@@ -63,49 +63,52 @@ extension MIDIFile {
 
                 let chunkTypeString = chunkType.asciiDataToString() ?? "????"
             
-                let newChunk: Chunk
-            
-                // chunk length
-            
-                guard let chunkData = try? dataReader.read(bytes: Int(chunkLength)) else {
-                    throw DecodeError.malformed(
-                        "There was a problem reading track data blob at byte offset \(dataReader.readOffset) for track \(tracksEncountered). Encountered end of file early."
-                    )
-                }
-            
-                do {
-                    switch chunkTypeString {
-                    case MIDIFile.Chunk.Track.staticIdentifier:
-                        tracksEncountered += 1
+                try autoreleasepool {
+                    let newChunk: Chunk
                     
-                        let newTrack = try Chunk.Track(midi1SMFRawBytes: chunkData.bytes)
-                        newChunk = .track(newTrack)
+                    // chunk length
                     
-                    default:
-                        // as per Standard MIDI File 1.0 Spec:
-                        // unrecognized chunks should be skipped and not throw an error
-                        
-                        let newUnrecognizedChunk = try Chunk.UnrecognizedChunk(
-                            midi1SMFRawBytesStream: chunkData.bytes
-                        )
-                        newChunk = .other(newUnrecognizedChunk)
-                    }
-                } catch let error as DecodeError {
-                    // append some context for the error and rethrow it
-                    switch error {
-                    case let .malformed(verboseError):
+                    guard let chunkData = try? dataReader.read(bytes: Int(chunkLength)) else {
                         throw DecodeError.malformed(
-                            "There was a problem reading track data at byte offset \(dataReader.readOffset) for track \(tracksEncountered). " +
-                                verboseError
+                            "There was a problem reading track data blob at byte offset \(dataReader.readOffset) for track \(tracksEncountered). Encountered end of file early."
                         )
-                    
-                    default:
-                        throw error
                     }
+                    
+                    do {
+                        switch chunkTypeString {
+                        case MIDIFile.Chunk.Track.staticIdentifier:
+                            tracksEncountered += 1
+                            
+                            
+                            let newTrack = try Chunk.Track(midi1SMFRawBytes: chunkData.bytes)
+                            newChunk = .track(newTrack)
+                            
+                        default:
+                            // as per Standard MIDI File 1.0 Spec:
+                            // unrecognized chunks should be skipped and not throw an error
+                            
+                            let newUnrecognizedChunk = try Chunk.UnrecognizedChunk(
+                                midi1SMFRawBytesStream: chunkData.bytes
+                            )
+                            newChunk = .other(newUnrecognizedChunk)
+                        }
+                    } catch let error as DecodeError {
+                        // append some context for the error and rethrow it
+                        switch error {
+                        case let .malformed(verboseError):
+                            throw DecodeError.malformed(
+                                "There was a problem reading track data at byte offset \(dataReader.readOffset) for track \(tracksEncountered). " +
+                                verboseError
+                            )
+                            
+                        default:
+                            throw error
+                        }
+                    }
+                    
+                    newChunks.append(newChunk)
                 }
-            
-                newChunks.append(newChunk)
-
+                
                 if dataReader.readOffset >= data.count {
                     endOfFile = true
                 }
