@@ -131,6 +131,7 @@ MIDIKit contains additional objects and value types.
 ## 9. Additional Guides
 
 - <doc:MIDI-Show-Control>
+- <doc:Send-and-Receive-on-iOS-in-Background>
 
 ## Examples
 

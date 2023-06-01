@@ -40,6 +40,10 @@ To add additional functionality, import extension modules or import the MIDIKit 
 - <doc:MIDIKitIO-MIDI-Over-Network>
 - <doc:MIDIKitIO-MIDI-Over-USB>
 
+### Additional Guides
+
+- <doc:Send-and-Receive-on-iOS-in-Background>
+
 ### Internals
 
 - <doc:MIDIKitIO-Internals>
