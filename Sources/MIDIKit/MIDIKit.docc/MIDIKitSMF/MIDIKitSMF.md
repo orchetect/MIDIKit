@@ -38,6 +38,10 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 - ``SendsMIDIEvents``
 - ``ReceivesMIDIEvents``
 
+### Related Types
+
+- ``MusicalTimeValue``
+
 ### Internals
 
 - <doc:MIDIKitSMF-Internals>

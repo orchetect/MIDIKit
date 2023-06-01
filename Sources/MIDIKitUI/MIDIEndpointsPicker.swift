@@ -156,6 +156,7 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
     }
 }
 
+/// SwiftUI `Picker` view for selecting MIDI input endpoints.
 @available(macOS 11.0, iOS 14.0, *)
 public struct MIDIInputsPicker: View {
     @EnvironmentObject private var midiManager: MIDIManager
@@ -192,6 +193,7 @@ public struct MIDIInputsPicker: View {
     }
 }
 
+/// SwiftUI `Picker` view for selecting MIDI output endpoints.
 @available(macOS 11.0, iOS 14.0, *)
 public struct MIDIOutputsPicker: View {
     @EnvironmentObject private var midiManager: MIDIManager

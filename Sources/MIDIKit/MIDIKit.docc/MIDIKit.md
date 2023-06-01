@@ -20,6 +20,7 @@ For more detailed documentation on each area of MIDIKit, see the appropriate sub
 
 - <doc:MIDIKitCore>
 - <doc:MIDIKitIO>
+- <doc:MIDIKitUI>
 - <doc:MIDIKitSMF>
 - <doc:MIDIKitSync>
 - <doc:MIDIKitControlSurfaces>

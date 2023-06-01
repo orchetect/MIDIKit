@@ -483,6 +483,7 @@ let mainTarget = MainTarget(name: "MIDIKit")
 let subTargets: [SubTarget] = [
     "MIDIKitCore",
     "MIDIKitIO",
+    "MIDIKitUI",
     "MIDIKitControlSurfaces",
     "MIDIKitSMF",
     "MIDIKitSync"

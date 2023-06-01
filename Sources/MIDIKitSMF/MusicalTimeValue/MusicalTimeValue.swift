@@ -6,6 +6,10 @@
 
 import Foundation
 
+/// Represents a musical time value (bar, beat, beat division, and ticks).
+///
+/// Often displayed in a DAW or sequencer.
+/// Provides conversion methods and string output.
 public struct MusicalTimeValue {
     public var bar: Int
     public var beat: Int
@@ -18,6 +22,17 @@ public struct MusicalTimeValue {
     
     public var isNegative: Bool
     
+    /// Initialize using discrete musical time components (bar, beat, beat division, ticks) at a
+    /// given PPQ.
+    ///
+    /// If the time is negative, use absolute (positive) discrete values but pass ``isNegative`` as `true`.
+    ///
+    /// Subdividing a beat into time unit larger than ticks is possible by specifying a number
+    /// greater than 0 for ``divisionsPerBeat``.
+    ///
+    /// The maximum value of the ticks component is ``ppq`` `/` ``divisionsPerBeat``. In the event
+    /// that ``divisionsPerBeat`` `== 0` then ``beatDivision`` is ignored and the maximum number of
+    /// ticks is simply equal to the ``ppq``.
     public init(
         bar: Int,
         beat: Int,
@@ -38,13 +53,21 @@ public struct MusicalTimeValue {
         self.isNegative = isNegative
     }
     
-    /// Initialize from a total number of elapsed ticks (positive or negative) at a given PPQ.
+    /// Initialize using a total number of elapsed ticks (positive or negative) at a given PPQ.
     /// Uses a static time signature.
-    public init(elapsedTicks: Int,
-                beatsPerBar: Int = 4,
-                divisionsPerBeat: Int = 4,
-                ppq: Int)
-    {
+    ///
+    /// Subdividing a beat into time unit larger than ticks is possible by specifying a number
+    /// greater than 0 for ``divisionsPerBeat``.
+    ///
+    /// The maximum value of the ticks component is ``ppq`` `/` ``divisionsPerBeat``. In the event
+    /// that ``divisionsPerBeat`` `== 0` then ``beatDivision`` is ignored and the maximum number of
+    /// ticks is simply equal to the ``ppq``.
+    public init(
+        elapsedTicks: Int,
+        beatsPerBar: Int = 4,
+        divisionsPerBeat: Int = 4,
+        ppq: Int
+    ) {
         isNegative = elapsedTicks < 0
         
         // sanitize inputs
@@ -77,6 +100,10 @@ public struct MusicalTimeValue {
     
     /// Returns total elapsed ticks.
     /// Uses a static time signature.
+    ///
+    /// The maximum value of the ticks component is ``ppq`` `/` ``divisionsPerBeat``. In the event
+    /// that ``divisionsPerBeat`` `== 0` then ``beatDivision`` is ignored and the maximum number of
+    /// ticks is simply equal to the ``ppq``.
     public func elapsedTicks() -> Int {
         // calculate
         let ticksPerBar = beatsPerBar * ppq

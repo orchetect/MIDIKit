@@ -119,7 +119,7 @@ From here, you have laid the necessary groundwork to set up ports and connection
   - Creating MIDI endpoint selection menus & controls and persisting user selections
   - Parsing and filtering received MIDI events
   - Working with Bluetooth MIDI
-- Explore MIDI extension modules included in MIDIKit: <doc:MIDIKitSMF>, <doc:MIDIKitSync>, <doc:MIDIKitControlSurfaces>.
+- Explore MIDI extension modules included in MIDIKit: <doc:MIDIKitUI>, <doc:MIDIKitSMF>, <doc:MIDIKitSync>, <doc:MIDIKitControlSurfaces>.
 
 ## 8. Additional Features
 
