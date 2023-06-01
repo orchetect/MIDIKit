@@ -121,9 +121,10 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
             }
         
             let readMetaType = try dataReader.readByte()
-        
+            
+            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1...4)
             guard let length = MIDIFile
-                .decodeVariableLengthValue(from: try dataReader.nonAdvancingRead())
+                .decodeVariableLengthValue(from: try dataReader.nonAdvancingRead(bytes: readAheadCount))
             else {
                 throw MIDIFile.DecodeError.malformed(
                     "Could not extract variable length."
