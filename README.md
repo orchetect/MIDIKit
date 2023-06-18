@@ -2,7 +2,7 @@
 
 # MIDIKit
 
-[![CI Build Status](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml) [![Platforms - macOS 10.12-14.0 | iOS 10-17](https://img.shields.io/badge/platforms-macOS%2010.12–14.0%20|%20iOS%2010–17-lightgrey.svg?style=flat)](https://developer.apple.com/swift) ![Swift 5.7-5.9](https://img.shields.io/badge/Swift-5.7–5.9-orange.svg?style=flat) [![Xcode 14-15](https://img.shields.io/badge/Xcode-14–15-blue.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
+[![CI Build Status](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKit/actions/workflows/build.yml) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2FMIDIKit%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/orchetect/MIDIKit) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2FMIDIKit%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/orchetect/MIDIKit) [![Xcode 14-15](https://img.shields.io/badge/Xcode-14–15-blue.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
 
 An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MIDI 2.0.
 
