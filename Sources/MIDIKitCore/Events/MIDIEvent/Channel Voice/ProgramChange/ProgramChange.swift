@@ -104,13 +104,21 @@ extension MIDIEvent {
 }
 
 extension MIDIEvent.ProgramChange {
-    /// Returns the raw MIDI 1.0 message bytes that comprise the event.
+    /// Returns the raw MIDI 1.0 status byte for the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    public func midi1RawStatusByte() -> UInt8 {
+        0xC0 + channel.uInt8Value
+    }
+    
+    /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
     /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
         let programChangeMessage = [
-            0xC0 + channel.uInt8Value,
+            midi1RawStatusByte(),
             program.uInt8Value
         ]
     
@@ -125,16 +133,16 @@ extension MIDIEvent.ProgramChange {
             // - Program Change
     
             return [
-                0xB0 + channel.uInt8Value,
+                midi1RawStatusByte(),
                 0x00,
                 bankNumber.midiUInt7Pair.msb.uInt8Value
             ]
-                + [
-                    0xB0 + channel.uInt8Value,
-                    0x32,
-                    bankNumber.midiUInt7Pair.lsb.uInt8Value
-                ]
-                + programChangeMessage
+            + [
+                midi1RawStatusByte(),
+                0x32,
+                bankNumber.midiUInt7Pair.lsb.uInt8Value
+            ]
+            + programChangeMessage
         }
     }
     
@@ -157,14 +165,14 @@ extension MIDIEvent.ProgramChange {
     public func umpRawWords(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {
-        let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4) + group
-            .uInt8Value
+        let mtAndGroup = (umpMessageType(protocol: midiProtocol).rawValue.uInt8Value << 4)
+            + group.uInt8Value
     
         switch midiProtocol {
         case ._1_0:
             let word = UMPWord(
                 mtAndGroup,
-                0xC0 + channel.uInt8Value,
+                midi1RawStatusByte(),
                 program.uInt8Value,
                 0x00
             ) // pad an empty byte to fill 4 bytes
@@ -191,7 +199,7 @@ extension MIDIEvent.ProgramChange {
     
             let word1 = UMPWord(
                 mtAndGroup,
-                0xC0 + channel.uInt8Value,
+                midi1RawStatusByte(),
                 0x00, // reserved
                 optionFlags
             )

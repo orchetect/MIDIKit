@@ -131,13 +131,21 @@ extension MIDIEvent {
 }
 
 extension MIDIEvent.NoteOff {
-    /// Returns the raw MIDI 1.0 message bytes that comprise the event.
+    /// Returns the raw MIDI 1.0 status byte for the event.
+    ///
+    /// - Note: This is mainly for internal use and is not necessary to access during typical usage
+    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    public func midi1RawStatusByte() -> UInt8 {
+        0x80 + channel.uInt8Value
+    }
+    
+    /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
     /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
         [
-            0x80 + channel.uInt8Value,
+            midi1RawStatusByte(),
             note.number.uInt8Value,
             velocity.midi1Value.uInt8Value
         ]
@@ -169,7 +177,7 @@ extension MIDIEvent.NoteOff {
         case ._1_0:
             let word = UMPWord(
                 mtAndGroup,
-                0x80 + channel.uInt8Value,
+                midi1RawStatusByte(),
                 note.number.uInt8Value,
                 velocity.midi1Value.uInt8Value
             )
@@ -179,7 +187,7 @@ extension MIDIEvent.NoteOff {
         case ._2_0:
             let word1 = UMPWord(
                 mtAndGroup,
-                0x80 + channel.uInt8Value,
+                midi1RawStatusByte(),
                 note.number.uInt8Value,
                 attribute.attributeType
             )

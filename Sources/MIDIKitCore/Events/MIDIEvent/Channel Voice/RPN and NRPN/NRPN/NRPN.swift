@@ -341,7 +341,7 @@ extension MIDIEvent {
 }
 
 extension MIDIEvent.NRPN {
-    /// Returns the raw MIDI 1.0 message bytes that comprise the event.
+    /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
     /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
