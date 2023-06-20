@@ -127,7 +127,7 @@ extension MIDIEvent {
         }
     }
     
-    /// Returns the MIDI 1.0 status byte for the event if the event is compatible with MIDI 1.0.
+    /// Returns the raw MIDI 1.0 status byte for the event if the event is compatible with MIDI 1.0.
     public func midi1RawStatusByte() -> UInt8? {
         switch self {
         // -------------------
@@ -230,6 +230,126 @@ extension MIDIEvent {
             
         case let .systemReset(event):
             return event.midi1RawStatusByte()
+            
+        // -------------------------------
+        // MARK: MIDI 2.0 Utility Messages
+        // -------------------------------
+            
+        case .noOp:
+            return nil
+            
+        case .jrClock:
+            return nil
+            
+        case .jrTimestamp:
+            return nil
+        }
+    }
+    
+    /// Returns the raw MIDI 1.0 data bytes for the event (excluding status byte) if the event is
+    /// compatible with MIDI 1.0.
+    public func midi1RawDataBytes() -> (data1: UInt8?, data2: UInt8?)? {
+        switch self {
+        // -------------------
+        // MARK: Channel Voice
+        // -------------------
+            
+        case let .noteOn(event):
+            return event.midi1RawDataBytes()
+            
+        case let .noteOff(event):
+            return event.midi1RawDataBytes()
+            
+        case .noteCC:
+            return nil
+            
+        case .notePitchBend:
+            return nil
+            
+        case let .notePressure(event):
+            return event.midi1RawDataBytes()
+            
+        case .noteManagement:
+            return nil
+            
+        case let .cc(event):
+            return event.midi1RawDataBytes()
+            
+        case let .programChange(event):
+            return (data1: event.midi1RawDataBytes(), data2: nil)
+            
+        case let .pressure(event):
+            return (data1: event.midi1RawDataBytes(), data2: nil)
+            
+        case let .pitchBend(event):
+            return event.midi1RawDataBytes()
+            
+        // -----------------------------------------------
+        // MARK: Channel Voice - Parameter Number Messages
+        // -----------------------------------------------
+            
+        case .rpn:
+            return nil // technically multiple events
+            
+        case .nrpn:
+            return nil // technically multiple events
+            
+        // ----------------------
+        // MARK: System Exclusive
+        // ----------------------
+            
+        case .sysEx7: // 'data' bytes are ambiguous/variable length; ignore
+            return nil
+            
+        case .universalSysEx7: // 'data' bytes are ambiguous/variable length; ignore
+            return nil
+            
+        case .sysEx8:
+            return nil
+            
+        case .universalSysEx8:
+            return nil
+            
+        // -------------------
+        // MARK: System Common
+        // -------------------
+            
+        case let .timecodeQuarterFrame(event):
+            return (data1: event.midi1RawDataBytes(), data2: nil)
+            
+        case let .songPositionPointer(event):
+            return event.midi1RawDataBytes()
+            
+        case let .songSelect(event):
+            return (data1: event.midi1RawDataBytes(), data2: nil)
+            
+        case let .unofficialBusSelect(event):
+            return (data1: event.midi1RawDataBytes(), data2: nil)
+            
+        case .tuneRequest:
+            return (data1: nil, data2: nil) // no data bytes
+            
+        // ----------------------
+        // MARK: System Real-Time
+        // ----------------------
+            
+        case .timingClock:
+            return (data1: nil, data2: nil) // no data bytes
+            
+        case .start:
+            return (data1: nil, data2: nil) // no data bytes
+            
+        case .continue:
+            return (data1: nil, data2: nil) // no data bytes
+            
+        case .stop:
+            return (data1: nil, data2: nil) // no data bytes
+            
+        case .activeSensing:
+            return (data1: nil, data2: nil) // no data bytes
+            
+        case .systemReset:
+            return (data1: nil, data2: nil) // no data bytes
             
         // -------------------------------
         // MARK: MIDI 2.0 Utility Messages

@@ -70,15 +70,17 @@ extension MIDIEvent.Pressure {
         0xD0 + channel.uInt8Value
     }
     
+    /// Returns the raw MIDI 1.0 data bytes for the event (excluding status byte).
+    public func midi1RawDataBytes() -> UInt8 {
+        amount.midi1Value.uInt8Value
+    }
+    
     /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
     /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
-        [
-            midi1RawStatusByte(),
-            amount.midi1Value.uInt8Value
-        ]
+        [midi1RawStatusByte(), midi1RawDataBytes()]
     }
     
     private func umpMessageType(
@@ -108,7 +110,7 @@ extension MIDIEvent.Pressure {
             let word = UMPWord(
                 mtAndGroup,
                 midi1RawStatusByte(),
-                amount.midi1Value.uInt8Value,
+                midi1RawDataBytes(),
                 0x00
             ) // pad an empty byte to fill 4 bytes
     

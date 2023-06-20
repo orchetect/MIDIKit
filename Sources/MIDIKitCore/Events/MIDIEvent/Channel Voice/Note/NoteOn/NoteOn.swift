@@ -177,7 +177,36 @@ extension MIDIEvent.NoteOn {
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
     /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawStatusByte() -> UInt8 {
-        0x90 + channel.uInt8Value
+        switch velocity {
+        case .midi1, .unitInterval:
+            if velocity.midi1Value == 0, midi1ZeroVelocityAsNoteOff {
+                // send as Note Off event
+                return 0x80 + channel.uInt8Value
+            } else {
+                // send as Note On event
+                return 0x90 + channel.uInt8Value
+            }
+        case .midi2:
+            // send as Note On event
+            return 0x90 + channel.uInt8Value
+        }
+    }
+    
+    /// Returns the raw MIDI 1.0 data bytes for the event (excluding status byte).
+    public func midi1RawDataBytes() -> (data1: UInt8, data2: UInt8) {
+        switch velocity {
+        case .midi1, .unitInterval:
+            return (data1: note.number.uInt8Value, data2: velocity.midi1Value.uInt8Value)
+        case .midi2:
+            // MIDI 2.0 Spec:
+            // When translating a MIDI 2.0 Note On message to the MIDI 1.0 Protocol, if the
+            // translated MIDI 1.0 value of the Velocity is zero, then the Translator shall replace
+            // the zero with a value of 1.
+            
+            var midi1Velocity = velocity.midi1Value.uInt8Value
+            if midi1Velocity == 0 { midi1Velocity = 1 }
+            return (data1: note.number.uInt8Value, data2: midi1Velocity)
+        }
     }
     
     /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
@@ -185,47 +214,8 @@ extension MIDIEvent.NoteOn {
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
     /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
-        func process(midi1Value: UInt7) -> [UInt8] {
-            if midi1Value == 0, midi1ZeroVelocityAsNoteOff {
-                // send as Note Off event
-                return [
-                    0x80 + channel.uInt8Value,
-                    note.number.uInt8Value,
-                    velocity.midi1Value.uInt8Value
-                ]
-    
-            } else {
-                // send as Note On event
-                return [
-                    midi1RawStatusByte(),
-                    note.number.uInt8Value,
-                    velocity.midi1Value.uInt8Value
-                ]
-            }
-        }
-    
-        switch velocity {
-        case let .midi1(midi1Value):
-            return process(midi1Value: midi1Value)
-    
-        case .midi2:
-            // MIDI 2.0 Spec:
-            // When translating a MIDI 2.0 Note On message to the MIDI 1.0 Protocol, if the
-            // translated MIDI 1.0 value of the Velocity is zero, then the Translator shall replace
-            // the zero with a value of 1.
-    
-            var midi1Velocity = velocity.midi1Value.uInt8Value
-            if midi1Velocity == 0 { midi1Velocity = 1 }
-    
-            return [
-                midi1RawStatusByte(),
-                note.number.uInt8Value,
-                midi1Velocity
-            ]
-    
-        case .unitInterval:
-            return process(midi1Value: velocity.midi1Value)
-        }
+        let dataBytes = midi1RawDataBytes()
+        return [midi1RawStatusByte(), dataBytes.data1, dataBytes.data2]
     }
     
     private func umpMessageType(
@@ -271,7 +261,7 @@ extension MIDIEvent.NoteOn {
     
             let word1 = UMPWord(
                 mtAndGroup,
-                midi1RawStatusByte(),
+                0x90 + channel.uInt8Value,
                 note.number.uInt8Value,
                 attribute.attributeType
             )

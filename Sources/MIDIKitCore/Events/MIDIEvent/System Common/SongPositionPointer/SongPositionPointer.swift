@@ -63,13 +63,19 @@ extension MIDIEvent.SongPositionPointer {
         0xF2
     }
     
+    /// Returns the raw MIDI 1.0 data bytes for the event (excluding status byte).
+    public func midi1RawDataBytes() -> (data1: UInt8, data2: UInt8) {
+        let bytePair = midiBeat.bytePair
+        return (data1: bytePair.lsb, data2: bytePair.msb)
+    }
+    
     /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
     /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
-        let bytePair = midiBeat.bytePair
-        return [0xF2, bytePair.lsb, bytePair.msb]
+        let dataBytes = midi1RawDataBytes()
+        return [midi1RawStatusByte(), dataBytes.data1, dataBytes.data2]
     }
     
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
@@ -85,7 +91,7 @@ extension MIDIEvent.SongPositionPointer {
     
         let word = UMPWord(
             mtAndGroup,
-            0xF2,
+            midi1RawStatusByte(),
             bytePair.lsb,
             bytePair.msb
         )

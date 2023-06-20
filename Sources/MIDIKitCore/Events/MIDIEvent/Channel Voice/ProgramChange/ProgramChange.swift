@@ -112,6 +112,14 @@ extension MIDIEvent.ProgramChange {
         0xC0 + channel.uInt8Value
     }
     
+    /// Returns the raw MIDI 1.0 data bytes for the event (excluding status byte).
+    /// Note that this only returns the data byte for the program change message. If
+    /// ``bank-swift.property`` is set, the bank select message data bytes are not returned from
+    /// this method.
+    public func midi1RawDataBytes() -> UInt8 {
+        program.uInt8Value
+    }
+    
     /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
@@ -119,7 +127,7 @@ extension MIDIEvent.ProgramChange {
     public func midi1RawBytes() -> [UInt8] {
         let programChangeMessage = [
             midi1RawStatusByte(),
-            program.uInt8Value
+            midi1RawDataBytes()
         ]
     
         switch bank {
@@ -133,12 +141,12 @@ extension MIDIEvent.ProgramChange {
             // - Program Change
     
             return [
-                midi1RawStatusByte(),
+                0xB0 + channel.uInt8Value,
                 0x00,
                 bankNumber.midiUInt7Pair.msb.uInt8Value
             ]
             + [
-                midi1RawStatusByte(),
+                0xB0 + channel.uInt8Value,
                 0x32,
                 bankNumber.midiUInt7Pair.lsb.uInt8Value
             ]
@@ -173,7 +181,7 @@ extension MIDIEvent.ProgramChange {
             let word = UMPWord(
                 mtAndGroup,
                 midi1RawStatusByte(),
-                program.uInt8Value,
+                midi1RawDataBytes(),
                 0x00
             ) // pad an empty byte to fill 4 bytes
     
@@ -205,7 +213,7 @@ extension MIDIEvent.ProgramChange {
             )
     
             let word2 = UMPWord(
-                program.uInt8Value,
+                midi1RawDataBytes(),
                 0x00, // reserved
                 bankMSB,
                 bankLSB
