@@ -309,17 +309,15 @@ extension MIDIFile.Chunk.Track {
     /// Returns ``events`` mapped to their beat position in the sequence.
     /// This is computed so avoid frequent calls to this method.
     /// Ensure the `ppq` supplied is the same as used in the MIDI file.
-    public func eventsAtBeatPositions(ppq: UInt16) -> [(beat: Double, event: MIDIFileEventPayload)] {
+    public func eventsAtBeatPositions(ppq: UInt16) -> [(beat: Double, event: MIDIFileEvent)] {
         var position: Double = 0.0
-        return events.lazy
-            .map { $0.smfUnwrappedEvent }
-            .map { (delta, payload) in
-                let deltaTicks = delta.ticksValue(using: .musical(ticksPerQuarterNote: ppq))
-                if deltaTicks != 0 {
-                    position += Double(deltaTicks) / Double(ppq)
-                }
-                return (beat: position, event: payload)
+        return events.map {
+            let deltaTicks = $0.delta.ticksValue(using: .musical(ticksPerQuarterNote: ppq))
+            if deltaTicks != 0 {
+                position += Double(deltaTicks) / Double(ppq)
             }
+            return (beat: position, event: $0)
+        }
     }
 }
 

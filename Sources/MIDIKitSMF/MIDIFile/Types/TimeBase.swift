@@ -12,7 +12,7 @@ import MIDIKitCore
 extension MIDIFile {
     /// MIDI file timebase as described in the MIDI file header.
     public enum TimeBase: Equatable, Hashable {
-        /// Musical: Delta-time ticks per quarter note (PPQN / PPQ / PPQBase).
+        /// Musical: Delta-time ticks per quarter note (PPQN / PPQ / PPQBase / TPQN).
         ///
         /// Common values: 96, 120, 480, 960. Cubase exports at 480 by default.
         /// Can also be a larger value if needed.
@@ -41,8 +41,8 @@ extension MIDIFile.TimeBase {
 extension MIDIFile.TimeBase {
     var rawData: Data {
         switch self {
-        case let .musical(TicksPerQuarterNote):
-            return (TicksPerQuarterNote & 0b01111111_11111111)
+        case let .musical(ticksPerQuarterNote):
+            return (ticksPerQuarterNote & 0b01111111_11111111)
                 .toData(.bigEndian)
             
         case let .timecode(smpteFormat, ticksPerFrame):
