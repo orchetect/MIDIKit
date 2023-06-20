@@ -11,15 +11,28 @@ import Foundation
 /// Often displayed in a DAW or sequencer.
 /// Provides conversion methods and string output.
 public struct MusicalTimeValue {
+    /// Bar number time component. Zero-based.
     public var bar: Int
+    
+    /// Beat number time component. The beat within the current bar. Zero-based.
     public var beat: Int
+    
+    /// Beat subdivision time component. Zero-based.
     public var beatDivision: Int
+    
+    /// Remaining ticks time component. Ticks elapsed since the beat division. Zero-based.
     public var ticks: Int
     
+    /// Beats per bar property.
     public let beatsPerBar: Int
+    
+    /// Divisions per beat property.
     public let divisionsPerBeat: Int
+    
+    /// PPQ (ticks per beat) property.
     public let ppq: Int
     
+    /// Time value sign. Returns `true` if time value is a negative interval.
     public var isNegative: Bool
     
     /// Initialize using discrete musical time components (bar, beat, beat division, ticks) at a
