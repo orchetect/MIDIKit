@@ -128,7 +128,7 @@ final class MusicalTimeValueTests: XCTestCase {
             ])
         ]
         
-        guard let trackOne = midiFile.tracks.first else { return }
+        let trackOne = try XCTUnwrap(midiFile.tracks.first)
         
         let deltaTimes = trackOne.events.map {
             $0.delta.ticksValue(using: .musical(ticksPerQuarterNote: UInt16(ppq)))

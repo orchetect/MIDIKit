@@ -106,31 +106,31 @@ extension MIDIFileEvent.DeltaTime {
             return val
 
         case .wholeNote:
-            return midiFileTicksPerQuarter * UInt32(pow(2.0, 2.0))
+            return midiFileTicksPerQuarter * 4  // 2^5
 
         case .halfNote:
-            return midiFileTicksPerQuarter * 2
+            return midiFileTicksPerQuarter * 2  // 2^1
 
         case .quarterNote:
-            return midiFileTicksPerQuarter
+            return midiFileTicksPerQuarter      // 2^0
 
         case ._8thNote:
-            return midiFileTicksPerQuarter / 2
+            return midiFileTicksPerQuarter / 2  // 2^1
 
         case ._16thNote:
-            return midiFileTicksPerQuarter / UInt32(pow(2.0, 2.0))
+            return midiFileTicksPerQuarter / 4  // 2^2
 
         case ._32ndNote:
-            return midiFileTicksPerQuarter / UInt32(pow(2.0, 3.0))
+            return midiFileTicksPerQuarter / 8  // 2^3
 
         case ._64thNote:
-            return midiFileTicksPerQuarter / UInt32(pow(2.0, 4.0))
+            return midiFileTicksPerQuarter / 16 // 2^4
 
         case ._128thNote:
-            return midiFileTicksPerQuarter / UInt32(pow(2.0, 5.0))
+            return midiFileTicksPerQuarter / 32 // 2^5
 
         case ._256thNote:
-            return midiFileTicksPerQuarter / UInt32(pow(2.0, 6.0))
+            return midiFileTicksPerQuarter / 64 // 2^6
         }
     }
 }
