@@ -2,25 +2,36 @@
 
 Keeping your iOS app alive while it is in the background to allow MIDI messages to be sent and received.
 
-## Background
+## Context
 
 By default, iOS places apps into a suspended state when they are backgrounded (user either switches to a different app, goes back to the home screen, or powers the screen off).
 
 In this state, sending and receiving MIDI events is also suspended.
 
-Various workarounds are possible to keep a backgrounded app awake in order to process MIDI events.
+In order to have a good chance of passing App Store review, an entitlement needs to be added for a reason and not purely as a workaround.
 
-This guide describes one such workaround.
+## Producing Audio While in Background
 
-## Workaround
+If the application generates audio in response to receiving MIDI, you may add a background mode to allow audio playback which will keep the app (and the MIDI runloop) alive.
 
-One suitable workaround is to generate null audio as background activity.
+However be aware that an audio stream must be playing to keep the app alive. The Apple docs state:
+
+> As long as [the app] is playing audio or video content or recording audio content, the app continues to run in the background. However, if recording or playback stops, the system suspends the app.
 
 1. Add the _Background Modes -> Audio, Airplay, and Picture in Picture_ app entitlement.
 
 ![Background Modes](background-modes-audio.png)
 
-2. Add a background audio manager class:
+2. Use AVFoundation to set up the app's audio session.
+
+   ```swift
+   try AVAudioSession.sharedInstance()
+       .setCategory(.playback, mode: .default, options: .mixWithOthers)
+   ```
+
+3. Set the session as active either once at app startup, or dynamically make it active when the app is backgrounded (and inactive when the app is foregrounded).
+
+4. An example implementation where a silent audio stream is played while the app is backgrounded, allowing for additional audio to play at any time as well:
 
    ```swift
    import AVFoundation
@@ -29,16 +40,17 @@ One suitable workaround is to generate null audio as background activity.
        private var audioPlayer: AVPlayer
    
        public init() {
-           let playerItem = AVPlayerItem(url: URL(fileURLWithPath: ""))
+           let playerItem = AVPlayerItem(url: URL(fileURLWithPath: "")) // empty audio
            audioPlayer = AVPlayer(playerItem: playerItem)
-           
+   
            do {
-               try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: .mixWithOthers)
+               try AVAudioSession.sharedInstance()
+                   .setCategory(.playback, mode: .default, options: .mixWithOthers)
            } catch {
-               print("Error initializing background audio player: \(error)")
+               print("Error setting up background audio session: \(error)")
            }
        }
-       
+   
        private func setActive(_ state: Bool) {
            do {
                try AVAudioSession.sharedInstance().setActive(state)
@@ -46,12 +58,12 @@ One suitable workaround is to generate null audio as background activity.
                print("Error setting background audio state: \(error)")
            }
        }
-       
+   
        public func start() {
            setActive(true)
            audioPlayer.play()
        }
-       
+   
        public func stop() {
            audioPlayer.pause()
            setActive(false)
@@ -59,10 +71,10 @@ One suitable workaround is to generate null audio as background activity.
    }
    ```
 
-3. Add an instance of the class. Start background audio when your app transitions to the background and stop it when in the foreground.
+   Start background audio when your app transitions to the background and stop it when in the foreground.
 
    #### SwiftUI
-   
+
    ```swift
    @main
    struct MyApp: App {
@@ -90,7 +102,7 @@ One suitable workaround is to generate null audio as background activity.
    ```
 
    #### UIKit Using Scenes
-   
+
    ```swift
    class SceneDelegate: UIResponder, UIWindowSceneDelegate {
        private let backgroundAudioManager = BackgroundAudioManager()
@@ -106,7 +118,7 @@ One suitable workaround is to generate null audio as background activity.
    ```
 
    #### UIKit Without Scenes
-   
+
    ```swift
    @main
    class AppDelegate: UIResponder, UIApplicationDelegate {
