@@ -68,6 +68,7 @@ extension MIDIManager {
     /// the connection.
     ///
     /// - Throws: ``MIDIIOError``
+    @_disfavoredOverload
     public func addOutputConnection(
         toInputs: [MIDIEndpointIdentity],
         tag: String,

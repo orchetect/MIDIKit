@@ -72,6 +72,7 @@ extension MIDIManager {
     ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///
     /// - Throws: ``MIDIIOError``
+    @_disfavoredOverload
     public func addInputConnection(
         toOutputs: [MIDIEndpointIdentity],
         tag: String,
