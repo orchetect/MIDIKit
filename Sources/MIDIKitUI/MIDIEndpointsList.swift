@@ -96,7 +96,7 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         endpoints.first(whereUniqueID: id)
     }
     
-    private struct EndpointRow<Endpoint: MIDIEndpoint>: View {
+    private struct EndpointRow: View {
         let endpoint: Endpoint?
         @Binding var cachedSelectionName: String?
         let showIcon: Bool
