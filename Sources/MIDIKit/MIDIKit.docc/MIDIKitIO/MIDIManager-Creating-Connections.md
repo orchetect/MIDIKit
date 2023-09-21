@@ -34,13 +34,12 @@ try midiManager.addInputConnection(
 )
 ```
 
-As a convenience, MIDIKit offers a way to automatically subscribe to receiving events from all MIDI outputs in the system by setting the ``MIDIConnectionMode/allEndpoints`` mode and filtering out ``MIDIEndpointFilter/owned()`` endpoints owned by the ``MIDIManager``.
+As a convenience, MIDIKit offers a way to automatically subscribe to receiving events from all MIDI outputs in the system by setting the ``MIDIInputConnectionMode/allOutputs`` mode and filtering out ``MIDIEndpointFilter/owned()`` endpoints owned by the ``MIDIManager``.
 
 ```swift
 try midiManager.addInputConnection(
-    toOutputs: [],
+    to: .allOutputs,
     tag: "InputConnection1",
-    mode: .allEndpoints, // continually auto-add new outputs that appear
     filter: .owned(), // filter out Manager-owned virtual outputs
     receiveHandler: // add your handler here...
 )
@@ -145,6 +144,6 @@ All persistent connections belonging to a particular owner ID may also be remove
 
 ### MIDIManager Methods
 
-- ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``
-- ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``
+- ``MIDIManager/addInputConnection(to:tag:filter:receiver:)``
+- ``MIDIManager/addOutputConnection(to:tag:filter:)``
 - ``MIDIManager/addThruConnection(outputs:inputs:tag:lifecycle:params:)``

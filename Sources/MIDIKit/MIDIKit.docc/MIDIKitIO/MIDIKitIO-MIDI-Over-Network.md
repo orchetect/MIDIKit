@@ -46,8 +46,8 @@ Once a network MIDI session session is established between devices, MIDI endpoin
 
 Connect to these endpoints to transmit and receive MIDI over the established network session:
 
-- ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``
-- ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``
+- ``MIDIManager/addInputConnection(to:tag:filter:receiver:)``
+- ``MIDIManager/addOutputConnection(to:tag:filter:)``
 
 ## Example
 

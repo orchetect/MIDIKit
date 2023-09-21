@@ -16,8 +16,8 @@ Once Bluetooth connectivity is implemented (see examples above), Bluetooth MIDI 
 
 Connect to these endpoints to transmit and receive MIDI:
 
-- ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``
-- ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``
+- ``MIDIManager/addInputConnection(to:tag:filter:receiver:)``
+- ``MIDIManager/addOutputConnection(to:tag:filter:)``
 
 > Tip: Bluetooth can only be tested using a physical iOS device. It does not function in an iOS Simulator.
 

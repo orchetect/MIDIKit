@@ -6,7 +6,7 @@ In order to begin sending MIDI events, there are two primary mechanisms:
 
 - term ``MIDIManager/addOutput(name:tag:uniqueID:)``: Create a virtual Output.
 
-- term ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``: Form a managed Output Connection that can connect to one or more existing MIDI inputs in the system.
+- term ``MIDIManager/addOutputConnection(to:tag:filter:)``: Form a managed Output Connection that can connect to one or more existing MIDI inputs in the system.
 
 ### Send events from a created Output
 

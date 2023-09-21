@@ -17,7 +17,8 @@
 
 ### Supporting Types
 
-- ``MIDIConnectionMode``
+- ``MIDIInputConnectionMode``
+- ``MIDIOutputConnectionMode``
 - ``MIDIEndpointType``
 
 ### MIDI Packets and Parsing
