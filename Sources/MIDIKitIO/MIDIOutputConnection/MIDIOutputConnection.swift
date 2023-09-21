@@ -71,7 +71,7 @@ public final class MIDIOutputConnection: _MIDIManaged {
     /// Operating mode.
     ///
     /// Changes take effect immediately.
-    public var mode: MIDIConnectionMode {
+    public var mode: MIDIOutputConnectionMode {
         didSet {
             guard oldValue != mode else { return }
             guard let midiManager = midiManager else { return }
@@ -83,11 +83,11 @@ public final class MIDIOutputConnection: _MIDIManaged {
     /// Reads the ``mode`` property and applies it to the stored criteria.
     private func updateCriteriaFromMode() {
         switch mode {
-        case .allEndpoints:
-            updateCriteria(.currentInputs())
-    
-        case .definedEndpoints:
+        case .inputs(_):
             updateCriteria()
+    
+        case .allInputs:
+            updateCriteria(.currentInputs())
         }
     }
     
@@ -114,15 +114,13 @@ public final class MIDIOutputConnection: _MIDIManaged {
     ///
     /// - Parameters:
     ///   - criteria: Input(s) to connect to.
-    ///   - mode: Operation mode. Note that ``MIDIConnectionMode/allEndpoints`` mode overrides
-    ///     `criteria`.
+    ///   - mode: Operation mode.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to
     ///     the connection.
     ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
     internal init(
-        criteria: Set<MIDIEndpointIdentity>,
-        mode: MIDIConnectionMode,
+        mode: MIDIOutputConnectionMode,
         filter: MIDIEndpointFilter,
         midiManager: MIDIManager,
         api: CoreMIDIAPIVersion = .bestForPlatform()
@@ -133,10 +131,11 @@ public final class MIDIOutputConnection: _MIDIManaged {
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
     
         // relies on midiManager, mode, and filter being set first
-        if mode == .allEndpoints {
-            updateCriteriaFromMode()
-        } else {
+        switch mode {
+        case .inputs(let criteria):
             updateCriteria(criteria)
+        case .allInputs:
+            updateCriteriaFromMode()
         }
     }
     
@@ -281,7 +280,7 @@ extension MIDIOutputConnection {
 
 extension MIDIOutputConnection {
     internal func notification(_ internalNotification: MIDIIOInternalNotification) {
-        if mode == .allEndpoints,
+        if mode == .allInputs,
            let notif = MIDIIONotification(internalNotification, cache: nil),
            case .added(object: let object, parent: _) = notif,
            case let .inputEndpoint(newInput) = object

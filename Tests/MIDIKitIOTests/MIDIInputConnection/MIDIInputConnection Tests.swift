@@ -50,7 +50,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         // add new connection, connecting to output1
         let connTag = "testInputConnection"
         try manager.addInputConnection(
-            toOutputs: [.uniqueID(output1ID)],
+            to: .outputs(matching: [.uniqueID(output1ID)]),
             tag: connTag,
             receiver: .events { events in
                 DispatchQueue.main.async {
@@ -154,9 +154,8 @@ final class MIDIInputConnection_Tests: XCTestCase {
         // add new connection
         let connTag = "testInputConnection"
         try manager.addInputConnection(
-            toOutputs: [],
+            to: .allOutputs,
             tag: connTag,
-            mode: .allEndpoints,
             filter: .init(owned: false, criteria: .currentOutputs()),
             receiver: .events { events in
                 DispatchQueue.main.async {
@@ -214,9 +213,8 @@ final class MIDIInputConnection_Tests: XCTestCase {
         // add new connection
         let connTag = "testInputConnection"
         try manager.addInputConnection(
-            toOutputs: [],
+            to: .allOutputs,
             tag: connTag,
-            mode: .allEndpoints,
             filter: .init(owned: true, criteria: .currentOutputs()),
             receiver: .events { events in
                 DispatchQueue.main.async {
@@ -285,12 +283,11 @@ final class MIDIInputConnection_Tests: XCTestCase {
     
         wait(sec: 0.2)
     
-        // add new connection, attempting to connect to output1
+        // add new connection
         let connTag = "testInputConnection"
         try manager.addInputConnection(
-            toOutputs: [output1.endpoint],
+            to: .allOutputs,
             tag: connTag,
-            mode: .allEndpoints,
             filter: .init(
                 owned: true,
                 criteria: manager.endpoints.outputsUnowned
@@ -302,10 +299,14 @@ final class MIDIInputConnection_Tests: XCTestCase {
                 }
             }
         )
-    
+        
         let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
         wait(sec: 0.5) // some time for connection to setup
-    
+        
+        // attempt to add output1
+        conn.add(outputs: [output1.endpoint])
+        wait(sec: 0.5)
+        
         // assert output1 was not added to the connection
         XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
@@ -357,7 +358,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         // add new connection, attempting to connect to output1
         let connTag = "testInputConnection"
         try manager.addInputConnection(
-            toOutputs: [output1.endpoint],
+            to: .outputs([output1.endpoint]),
             tag: connTag,
             receiver: .events { events in
                 DispatchQueue.main.async {
@@ -371,7 +372,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         wait(sec: 0.5) // some time for connection to setup
     
         // set mode and filter
-        conn.mode = .allEndpoints
+        conn.mode = .allOutputs
         conn.filter = .init(owned: true)
         wait(sec: 0.5) // some time for connection to update
     
@@ -422,12 +423,11 @@ final class MIDIInputConnection_Tests: XCTestCase {
     
         wait(sec: 0.2)
     
-        // add new connection, attempting to connect to output1
+        // add new connection
         let connTag = "testInputConnection"
         try manager.addInputConnection(
-            toOutputs: [output1.endpoint],
+            to: .allOutputs,
             tag: connTag,
-            mode: .allEndpoints,
             filter: .init(
                 owned: false,
                 criteria: [.uniqueID(output1ID)]
@@ -442,7 +442,11 @@ final class MIDIInputConnection_Tests: XCTestCase {
     
         let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
         wait(sec: 0.5) // some time for connection to setup
-    
+        
+        // attempt to add output1
+        conn.add(outputs: [output1.endpoint])
+        wait(sec: 0.5)
+        
         // assert output1 was not added to the connection
         XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
         XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
@@ -493,7 +497,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         // add new connection, attempting to connect to output1
         let connTag = "testInputConnection"
         try manager.addInputConnection(
-            toOutputs: [output1.endpoint],
+            to: .outputs([output1.endpoint]),
             tag: connTag,
             receiver: .events { events in
                 DispatchQueue.main.async {
@@ -507,7 +511,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         wait(sec: 0.5) // some time for connection to setup
     
         // set mode and filter
-        conn.mode = .allEndpoints
+        conn.mode = .allOutputs
         conn.filter = .init(
             owned: false,
             criteria: [.uniqueID(output1ID)]

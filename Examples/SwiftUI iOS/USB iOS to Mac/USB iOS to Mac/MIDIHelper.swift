@@ -43,14 +43,14 @@ final class MIDIHelper: ObservableObject {
             
             print("Creating MIDI input connection.")
             try midiManager.addInputConnection(
-                toOutputs: [.name("IDAM MIDI Host")],
+                to: .outputs(matching: [.name("IDAM MIDI Host")]),
                 tag: Self.inputConnectionName,
                 receiver: .eventsLogging()
             )
             
             print("Creating MIDI output connection.")
             try midiManager.addOutputConnection(
-                toInputs: [.name("IDAM MIDI Host")],
+                to: .inputs(matching: [.name("IDAM MIDI Host")]),
                 tag: Self.outputConnectionName
             )
         } catch {

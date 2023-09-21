@@ -28,16 +28,6 @@ extension Set where Element == MIDIOutputEndpoint {
     public static func currentOutputs() -> Self {
         Set(getSystemSourceEndpoints())
     }
-    
-    /// Returns endpoint identity criteria describing the endpoints.
-    public func asIdentities() -> Set<MIDIEndpointIdentity> {
-        // for some reason Set(map { ... }) was not working
-        // so we have to use reduce
-    
-        reduce(into: Set<MIDIEndpointIdentity>()) {
-            $0.insert(.uniqueID($1.uniqueID))
-        }
-    }
 }
 
 extension Array where Element == MIDIOutputEndpoint {
@@ -45,12 +35,6 @@ extension Array where Element == MIDIOutputEndpoint {
     @_disfavoredOverload
     public static func currentOutputs() -> Self {
         getSystemSourceEndpoints()
-    }
-    
-    /// Returns endpoint identity criteria describing the endpoints.
-    @_disfavoredOverload
-    public func asIdentities() -> [MIDIEndpointIdentity] {
-        map { .uniqueID($0.uniqueID) }
     }
 }
 

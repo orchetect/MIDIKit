@@ -32,7 +32,7 @@ class HUIHostHelper: ObservableObject {
         // set up MIDI connections
         do {
             try midiManager.addInputConnection(
-                toOutputs: [.name(HUIClientView.kHUIOutputName)],
+                to: .outputs(matching: [.name(HUIClientView.kHUIOutputName)]),
                 tag: Self.kHUIInputConnectionTag,
                 receiver: .object(
                     huiHost.banks[0],
@@ -42,7 +42,7 @@ class HUIHostHelper: ObservableObject {
             )
             
             try midiManager.addOutputConnection(
-                toInputs: [.name(HUIClientView.kHUIInputName)],
+                to: .inputs(matching: [.name(HUIClientView.kHUIInputName)]),
                 tag: Self.kHUIOutputConnectionTag
             )
         } catch {

@@ -255,7 +255,7 @@ struct MTCRecContentView: View {
         switch state {
         case true:
             try? midiManager.addInputConnection(
-                toOutputs: [.name(kMIDIPorts.MTCGen.name)],
+                to: .outputs(matching: [.name(kMIDIPorts.MTCGen.name)]),
                 tag: tag,
                 receiver: .object(mtcRec, held: .weakly)
             )

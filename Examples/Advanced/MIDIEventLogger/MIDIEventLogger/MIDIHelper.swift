@@ -47,7 +47,7 @@ final class MIDIHelper: ObservableObject {
                 logger.debug("Adding MIDI input connection to the manager.")
                 
                 try midiManager?.addInputConnection(
-                    toOutputs: [],
+                    to: .none,
                     tag: ConnectionTags.inputConnectionTag,
                     receiver: .eventsLogging()
                 )
@@ -61,7 +61,7 @@ final class MIDIHelper: ObservableObject {
                 logger.debug("Adding MIDI output connection to the manager.")
                 
                 try midiManager?.addOutputConnection(
-                    toInputs: [],
+                    to: .none,
                     tag: ConnectionTags.outputConnectionTag
                 )
             }

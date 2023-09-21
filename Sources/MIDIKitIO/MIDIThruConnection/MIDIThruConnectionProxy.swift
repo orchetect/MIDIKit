@@ -23,16 +23,14 @@ final class MIDIThruConnectionProxy {
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) throws {
         outputConnection = MIDIOutputConnection(
-            criteria: Set(inputs.asIdentities()),
-            mode: .definedEndpoints,
+            mode: .inputs(matching: Set(inputs.asIdentities())),
             filter: .default(),
             midiManager: midiManager,
             api: api
         )
         
         inputConnection = MIDIInputConnection(
-            criteria: Set(outputs.asIdentities()),
-            mode: .definedEndpoints,
+            mode: .outputs(matching: Set(outputs.asIdentities())),
             filter: .default(),
             receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false, { [weak self] events in
                 try? self?.outputConnection.send(events: events)

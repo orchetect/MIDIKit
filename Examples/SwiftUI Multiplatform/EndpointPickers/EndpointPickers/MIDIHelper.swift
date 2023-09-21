@@ -44,7 +44,7 @@ final class MIDIHelper: ObservableObject {
         
         do {
             try midiManager.addInputConnection(
-                toOutputs: [],
+                to: .none,
                 tag: Tags.midiIn,
                 receiver: .events { [weak self] events in
                     self?.received(events: events)
@@ -52,7 +52,7 @@ final class MIDIHelper: ObservableObject {
             )
             
             try midiManager.addOutputConnection(
-                toInputs: [],
+                to: .none,
                 tag: Tags.midiOut
             )
         } catch {

@@ -36,14 +36,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
             // set up input connection
             try midiManager.addInputConnection(
-                toOutputs: [],
+                to: .none,
                 tag: ConnectionTags.midiIn,
                 receiver: .eventsLogging(filterActiveSensingAndClock: true)
             )
     
             // set up output connection
             try midiManager.addOutputConnection(
-                toInputs: [],
+                to: .none,
                 tag: ConnectionTags.midiOut
             )
         } catch {
