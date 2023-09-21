@@ -64,7 +64,7 @@ extension MIDIFileEvent {
 extension MIDIEvent.SysEx7: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .sysEx7
     
-    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
         let parsedSysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytes)
         
         switch parsedSysEx {
@@ -92,8 +92,8 @@ extension MIDIEvent.SysEx7: MIDIFileEventPayload {
             + [0xF7]
     }
     
-    public static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytesStream stream: D
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol
     ) throws -> StreamDecodeResult {
         guard stream.count >= 3 else {
             throw MIDIFile.DecodeError.malformed(
@@ -211,7 +211,7 @@ extension MIDIFileEvent {
 extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .universalSysEx7
     
-    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
         let rawBytesArray = [UInt8](rawBytes)
         let parsedSysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: rawBytesArray)
         
@@ -237,8 +237,8 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
         return [0xF0] + MIDIFile.encodeVariableLengthValue(msg.count + 1) + msg + [0xF7]
     }
     
-    public static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytesStream stream: D
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol
     ) throws -> StreamDecodeResult {
         guard stream.count >= 3 else {
             throw MIDIFile.DecodeError.malformed(
@@ -275,8 +275,8 @@ extension MIDIEvent.UniversalSysEx7: MIDIFileEventPayload {
 // MARK: - SysEx7/UniversalSysEx7 unified parser
 
 extension MIDIEvent {
-    internal static func sysEx7<D: DataProtocol>(
-        midi1SMFRawBytes rawBytes: D,
+    static func sysEx7(
+        midi1SMFRawBytes rawBytes: some DataProtocol,
         group: UInt4 = 0
     ) throws -> Self {
         guard rawBytes.count >= 3 else {
@@ -293,9 +293,9 @@ extension MIDIEvent {
                 )
             }
             
-            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1...4)
-            guard let length = MIDIFile
-                .decodeVariableLengthValue(from: try dataReader.nonAdvancingRead(bytes: readAheadCount))
+            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 4)
+            guard let length = try MIDIFile
+                .decodeVariableLengthValue(from: dataReader.nonAdvancingRead(bytes: readAheadCount))
             else {
                 throw MIDIFile.DecodeError.malformed(
                     "Could not extract variable length."

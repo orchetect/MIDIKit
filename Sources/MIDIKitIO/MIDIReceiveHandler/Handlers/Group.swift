@@ -9,7 +9,7 @@
 extension MIDIReceiveHandler {
     /// ``MIDIReceiveHandler`` group.
     /// Can contain one or more ``MIDIReceiveHandler`` in series.
-    internal final class Group: MIDIReceiveHandlerProtocol {
+    final class Group: MIDIReceiveHandlerProtocol {
         public var receiveHandlers: [MIDIReceiveHandler] = []
     
         public func packetListReceived(
@@ -30,7 +30,7 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal init(_ receiveHandlers: [MIDIReceiveHandler]) {
+        init(_ receiveHandlers: [MIDIReceiveHandler]) {
             self.receiveHandlers = receiveHandlers
         }
     }

@@ -29,7 +29,7 @@ extension MIDIEvent {
     
         /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of
         /// an 8-bit Stream ID field.
-        internal var streamID: UInt8 = 0x00
+        var streamID: UInt8 = 0x00
     
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
@@ -50,7 +50,7 @@ extension MIDIEvent {
             self.group = group
         }
     
-        internal init(
+        init(
             universalType: MIDIEvent.UniversalSysExType,
             deviceID: UInt7,
             subID1: UInt7,

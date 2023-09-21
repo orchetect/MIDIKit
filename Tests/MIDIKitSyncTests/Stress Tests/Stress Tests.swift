@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
-@testable import MIDIKitSync
 import CoreMIDI
+@testable import MIDIKitSync
+import XCTest
 
 final class StressTests: XCTestCase {
     func testThreadingMTCGenerator() {
@@ -60,15 +60,14 @@ final class StressTests: XCTestCase {
         // property updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
-            { timecode, messageType, direction, displayNeedsUpdate in
-                _ = timecode
-                _ = messageType
-                _ = direction
-                _ = displayNeedsUpdate
-            } stateChanged: { state in
-                _ = state
-            }
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24) { timecode, messageType, direction, displayNeedsUpdate in
+            _ = timecode
+            _ = messageType
+            _ = direction
+            _ = displayNeedsUpdate
+        } stateChanged: { state in
+            _ = state
+        }
         
         // test public properties and methods
         // to make sure we don't encounter thread-related crashes

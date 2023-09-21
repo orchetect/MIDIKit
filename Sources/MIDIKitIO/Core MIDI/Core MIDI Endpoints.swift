@@ -12,7 +12,7 @@
     
 /// Internal:
 /// List of MIDI endpoints in the system (computed property)
-internal func getSystemSourceEndpoints() -> [MIDIOutputEndpoint] {
+func getSystemSourceEndpoints() -> [MIDIOutputEndpoint] {
     let srcCount = MIDIGetNumberOfSources()
     
     var endpoints: [MIDIOutputEndpoint] = []
@@ -31,7 +31,7 @@ internal func getSystemSourceEndpoints() -> [MIDIOutputEndpoint] {
     
 /// Internal:
 /// Dictionary of destination names & endpoint unique IDs (computed property)
-internal func getSystemDestinationEndpoints() -> [MIDIInputEndpoint] {
+func getSystemDestinationEndpoints() -> [MIDIInputEndpoint] {
     let destCount = MIDIGetNumberOfDestinations()
     
     var endpoints: [MIDIInputEndpoint] = []
@@ -50,7 +50,7 @@ internal func getSystemDestinationEndpoints() -> [MIDIInputEndpoint] {
 /// Returns all source `MIDIEndpointRef`s in the system that have a name matching `name`.
 ///
 /// - Parameter name: MIDI port name to search for.
-internal func getSystemSourceEndpoints(
+func getSystemSourceEndpoints(
     matching name: String
 ) -> [CoreMIDI.MIDIEndpointRef] {
     var refs: [MIDIEndpointRef] = []
@@ -68,7 +68,7 @@ internal func getSystemSourceEndpoints(
 /// If not found, returns `nil`.
 ///
 /// - Parameter uniqueID: MIDI port unique ID to search for.
-internal func getSystemSourceEndpoint(
+func getSystemSourceEndpoint(
     matching uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIEndpointRef? {
     for i in 0 ..< MIDIGetNumberOfSources() {
@@ -83,7 +83,7 @@ internal func getSystemSourceEndpoint(
 /// Returns all destination `MIDIEndpointRef`s in the system that have a name matching `name`.
 ///
 /// - Parameter name: MIDI port name to search for.
-internal func getSystemDestinationEndpoints(
+func getSystemDestinationEndpoints(
     matching name: String
 ) -> [CoreMIDI.MIDIEndpointRef] {
     var refs: [MIDIEndpointRef] = []
@@ -101,7 +101,7 @@ internal func getSystemDestinationEndpoints(
 /// `uniqueID`. If not found, returns `nil`.
 ///
 /// - Parameter uniqueID: MIDI port unique ID to search for.
-internal func getSystemDestinationEndpoint(
+func getSystemDestinationEndpoint(
     matching uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIEndpointRef? {
     for i in 0 ..< MIDIGetNumberOfDestinations() {
@@ -114,7 +114,7 @@ internal func getSystemDestinationEndpoint(
 
 /// Internal:
 /// Returns a ``MIDIEntity`` instance of the endpoint's owning entity.
-internal func getSystemEntity(
+func getSystemEntity(
     for endpoint: MIDIEndpointRef
 ) throws -> MIDIEntity {
     var ent = MIDIEntityRef()
@@ -133,14 +133,14 @@ internal func getSystemEntity(
 
 /// Internal:
 /// Makes a virtual endpoint in the system invisible to the user.
-internal func hide(endpoint: MIDIEndpointRef) throws {
+func hide(endpoint: MIDIEndpointRef) throws {
     try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 1)
         .throwIfOSStatusErr()
 }
 
 /// Internal:
 /// Makes a virtual endpoint in the system visible to the user.
-internal func show(endpoint: MIDIEndpointRef) throws {
+func show(endpoint: MIDIEndpointRef) throws {
     try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 0)
         .throwIfOSStatusErr()
 }

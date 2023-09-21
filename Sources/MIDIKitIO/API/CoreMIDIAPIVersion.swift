@@ -52,12 +52,12 @@ extension CoreMIDIAPIVersion {
             #if os(macOS)
                 // Apple has deprecated legacy API but not yet obsoleted.
                 // TODO: Once it becomes known what macOS version fully obsoletes it, update this:
-                //if #available(macOS 14, *) { return false }
+                // if #available(macOS 14, *) { return false }
                 return true
             #elseif os(iOS)
                 // Apple has deprecated legacy API but not yet obsoleted.
-            // TODO: Once it becomes known what iOS version fully obsoletes it, update this:
-                //if #available(iOS 17, *) { return false }
+                // TODO: Once it becomes known what iOS version fully obsoletes it, update this:
+                // if #available(iOS 17, *) { return false }
                 return true
             #elseif os(tvOS) || os(watchOS)
                 // only new API is supported on tvOS and watchOS,

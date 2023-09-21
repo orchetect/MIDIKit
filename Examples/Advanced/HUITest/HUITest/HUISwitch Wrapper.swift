@@ -5,8 +5,8 @@
 //
 
 import Foundation
-import SwiftUI
 import MIDIKitControlSurfaces
+import SwiftUI
 
 extension HUISwitch {
     /// Because SwiftUI wants to crash constantly for no reason.

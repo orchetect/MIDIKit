@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSMF
+import XCTest
 
 final class MusicalTimeValueTests: XCTestCase {
     func testEmpty() throws {
@@ -44,7 +44,12 @@ final class MusicalTimeValueTests: XCTestCase {
     func test0BeatsPerBar() throws {
         let ppq = 480
         
-        let mt = MusicalTimeValue(elapsedTicks: ppq * 8, beatsPerBar: 0, divisionsPerBeat: 0, ppq: ppq)
+        let mt = MusicalTimeValue(
+            elapsedTicks: ppq * 8,
+            beatsPerBar: 0,
+            divisionsPerBeat: 0,
+            ppq: ppq
+        )
         
         XCTAssertEqual(mt.bar, 8)
         XCTAssertEqual(mt.beat, 0)
@@ -61,7 +66,12 @@ final class MusicalTimeValueTests: XCTestCase {
         let ppq = 480
         
         let elapsedTicks = (ppq * 9) + 240 + 60
-        let mt = MusicalTimeValue(elapsedTicks: elapsedTicks, beatsPerBar: 1, divisionsPerBeat: 0, ppq: ppq)
+        let mt = MusicalTimeValue(
+            elapsedTicks: elapsedTicks,
+            beatsPerBar: 1,
+            divisionsPerBeat: 0,
+            ppq: ppq
+        )
         
         XCTAssertEqual(mt.bar, 9)
         XCTAssertEqual(mt.beat, 0)
@@ -77,7 +87,12 @@ final class MusicalTimeValueTests: XCTestCase {
         let ppq = 480
         
         let elapsedTicks = -((ppq * 9) + 240 + 60)
-        let mt = MusicalTimeValue(elapsedTicks: elapsedTicks, beatsPerBar: 4, divisionsPerBeat: 4, ppq: ppq)
+        let mt = MusicalTimeValue(
+            elapsedTicks: elapsedTicks,
+            beatsPerBar: 4,
+            divisionsPerBeat: 4,
+            ppq: ppq
+        )
         
         XCTAssertEqual(mt.bar, 2)
         XCTAssertEqual(mt.beat, 1)
@@ -138,7 +153,12 @@ final class MusicalTimeValueTests: XCTestCase {
         
         // 4 divisions per beat
         do {
-            let mt = MusicalTimeValue(elapsedTicks: deltaSum, beatsPerBar: 4, divisionsPerBeat: 4, ppq: ppq)
+            let mt = MusicalTimeValue(
+                elapsedTicks: deltaSum,
+                beatsPerBar: 4,
+                divisionsPerBeat: 4,
+                ppq: ppq
+            )
             
             XCTAssertEqual(mt.bar, 1)
             XCTAssertEqual(mt.beat, 1)
@@ -152,7 +172,12 @@ final class MusicalTimeValueTests: XCTestCase {
         
         // 8 divisions per beat
         do {
-            let mt = MusicalTimeValue(elapsedTicks: deltaSum, beatsPerBar: 4, divisionsPerBeat: 8, ppq: ppq)
+            let mt = MusicalTimeValue(
+                elapsedTicks: deltaSum,
+                beatsPerBar: 4,
+                divisionsPerBeat: 8,
+                ppq: ppq
+            )
             
             XCTAssertEqual(mt.bar, 1)
             XCTAssertEqual(mt.beat, 1)
@@ -166,7 +191,12 @@ final class MusicalTimeValueTests: XCTestCase {
         
         // 0 divisions per beat
         do {
-            let mt = MusicalTimeValue(elapsedTicks: deltaSum, beatsPerBar: 4, divisionsPerBeat: 0, ppq: ppq)
+            let mt = MusicalTimeValue(
+                elapsedTicks: deltaSum,
+                beatsPerBar: 4,
+                divisionsPerBeat: 0,
+                ppq: ppq
+            )
             
             XCTAssertEqual(mt.bar, 1)
             XCTAssertEqual(mt.beat, 1)

@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKit
+import SwiftUI
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -30,7 +30,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Create the window and set the content view.
         window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 950, height: 850),
-            styleMask: [.titled, .unifiedTitleAndToolbar, .fullSizeContentView, .miniaturizable, .resizable],
+            styleMask: [
+                .titled,
+                .unifiedTitleAndToolbar,
+                .fullSizeContentView,
+                .miniaturizable,
+                .resizable
+            ],
             backing: .buffered,
             defer: false
         )

@@ -9,11 +9,11 @@
 extension MIDIReceiveHandler {
     /// MIDI Event receive handler that holds a strong reference to a receiver object that conforms
     /// to the ``ReceivesMIDIEvents`` protocol.
-    internal final class StrongEventsReceiver: MIDIReceiveHandlerProtocol {
+    final class StrongEventsReceiver: MIDIReceiveHandlerProtocol {
         public let receiver: ReceivesMIDIEvents
     
-        internal let midi1Parser = MIDI1Parser()
-        internal let midi2Parser = MIDI2Parser()
+        let midi1Parser = MIDI1Parser()
+        let midi2Parser = MIDI2Parser()
     
         public func packetListReceived(
             _ packets: [MIDIPacketData]
@@ -37,7 +37,7 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal init(
+        init(
             translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
             receiver: ReceivesMIDIEvents
         ) {

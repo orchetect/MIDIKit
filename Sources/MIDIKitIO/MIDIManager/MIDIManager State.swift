@@ -6,9 +6,9 @@
 
 #if !os(tvOS) && !os(watchOS)
 
+@_implementationOnly import CoreMIDI
 import Foundation
 import MIDIKitCore
-@_implementationOnly import CoreMIDI
 
 extension MIDIManager {
     /// Starts the manager and registers itself with the Core MIDI subsystem.
@@ -21,12 +21,11 @@ extension MIDIManager {
             // if start() was already called, return
             guard coreMIDIClientRef == MIDIClientRef() else { return }
     
-            try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef)
-                { [weak self] notificationPtr in
-                    guard let self = self else { return }
-                    self.internalNotificationHandler(notificationPtr)
-                }
-                .throwIfOSStatusErr()
+            try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef) { [weak self] notificationPtr in
+                guard let self else { return }
+                self.internalNotificationHandler(notificationPtr)
+            }
+            .throwIfOSStatusErr()
     
             // initial cache of endpoints
     
@@ -34,7 +33,7 @@ extension MIDIManager {
         }
     }
     
-    internal func internalNotificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
+    func internalNotificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
         let internalNotif = MIDIIOInternalNotification(pointer)
         
         let cache = MIDIIOObjectCache(from: self)
@@ -59,7 +58,7 @@ extension MIDIManager {
         }()
         
         // send notification to handler after internal cache is updated
-        if let notification = notification {
+        if let notification {
             sendNotificationAsync(notification)
         }
         

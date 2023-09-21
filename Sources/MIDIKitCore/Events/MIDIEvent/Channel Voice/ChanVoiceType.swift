@@ -110,8 +110,8 @@ extension MIDIEvent {
         /// Channel Voice Message: Per-Note Management
         /// (MIDI 2.0)
         ///
-        /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control
-        /// from Per- Note Controllers to multiple Notes on the same Note Number.
+        /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent
+        /// control from Per- Note Controllers to multiple Notes on the same Note Number.
         case noteManagement
         
         /// Channel Voice Message: Channel Control Change (CC)

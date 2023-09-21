@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitControlSurfaces
+import XCTest
 
 final class HUIHostEventDecoderTests: XCTestCase {
     /// Verifies that a HUI event encodes and decodes back to itself.
@@ -128,8 +128,8 @@ final class HUIHostEventDecoderTests: XCTestCase {
     // MARK: - Edge Cases
     
     func testSmallText_MultipleInSingleSysEx() throws {
-        runHUIEventTest(
-            source: try .sysEx7(
+        try runHUIEventTest(
+            source: .sysEx7(
                 manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
                 data: [
                     0x05, 0x00, // SysEx sub ID 1 & 2

@@ -5,8 +5,8 @@
 //
 
 import Combine
-import SwiftUI
 import MIDIKit
+import SwiftUI
 
 // MARK: - Empty Details Views
 
@@ -32,8 +32,10 @@ struct EmptyDetailsView: View {
 
 struct DetailsView<Content: View>: View {
     let object: AnyMIDIIOObject?
-    let detailsContent: (_ object: AnyMIDIIOObject?,
-                         _ showAllBinding: Binding<Bool>) -> Content
+    let detailsContent: (
+        _ object: AnyMIDIIOObject?,
+        _ showAllBinding: Binding<Bool>
+    ) -> Content
     
     @State private var showAll: Bool = false
     
@@ -132,11 +134,11 @@ struct LegacyDetailsView: View, DetailsContent {
                     // empty
                 }
             }
-#if os(macOS)
+            #if os(macOS)
             .onCopyCommand {
                 selectedItemsProviders()
             }
-#endif
+            #endif
         }
         .onAppear {
             refreshProperties()
@@ -183,14 +185,14 @@ struct TableDetailsView: View, DetailsContent {
             .onChange(of: showAll) { _ in
                 refreshProperties()
             }
-#if os(macOS)
+            #if os(macOS)
             .tableStyle(.inset(alternatesRowBackgrounds: true))
             .onCopyCommand {
                 selectedItemsProviders()
             }
-#elseif os(iOS)
+            #elseif os(iOS)
             .tableStyle(InsetTableStyle())
-#endif
+            #endif
         }
     }
 }

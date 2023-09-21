@@ -6,8 +6,8 @@
 
 #if os(macOS)
 
-import SwiftUI
 import MIDIKitIO
+import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: MIDIManager
@@ -38,7 +38,10 @@ struct ContentView: View {
                 )
                 .padding([.leading, .trailing], 60)
                 
-                Toggle("Filter Active Sensing and Clock", isOn: $midiHelper.filterActiveSensingAndClock)
+                Toggle(
+                    "Filter Active Sensing and Clock",
+                    isOn: $midiHelper.filterActiveSensingAndClock
+                )
             }
             .padding(5)
     
@@ -64,7 +67,7 @@ struct ContentView: View {
                 }
                 .disabled(
                     midiOutSelectedID == .invalidMIDIIdentifier ||
-                    !midiManager.endpoints.inputs.contains(whereUniqueID: midiOutSelectedID)
+                        !midiManager.endpoints.inputs.contains(whereUniqueID: midiOutSelectedID)
                 )
             }
             .padding(5)
@@ -111,7 +114,7 @@ struct ContentView: View {
                 // logging events, but this is for diagnostic purposes here.
                 List(events.indices, id: \.self) { index in
                     Text(events[index].description)
-                    .foregroundColor(color(for: events[index]))
+                        .foregroundColor(color(for: events[index]))
                 }
                 .frame(minHeight: 100)
             }

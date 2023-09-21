@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 import CoreMIDI
+import Foundation
 
 @available(macOS 11, iOS 14, macCatalyst 14, *)
 extension UnsafePointer where Pointee == MIDIEventPacket {

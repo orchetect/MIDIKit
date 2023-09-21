@@ -204,23 +204,23 @@ public final class MTCReceiver {
     // MARK: - Queue (internal)
     
     /// Maintain a high-priority internal thread
-    internal var queue: DispatchQueue
+    var queue: DispatchQueue
     
     // MARK: - Decoder (internal)
     
-    internal var decoder: MTCDecoder!
+    var decoder: MTCDecoder!
     
-    internal var timeLastQuarterFrameReceived: timespec = .init()
+    var timeLastQuarterFrameReceived: timespec = .init()
     
-    internal var freewheelPreviousTimecode: Timecode = .init(at: ._30)
-    internal var freewheelSequentialFrames = 0
+    var freewheelPreviousTimecode: Timecode = .init(at: ._30)
+    var freewheelSequentialFrames = 0
     
     // MARK: - Timer (internal)
     
-    internal let timer: SafeDispatchTimer
+    let timer: SafeDispatchTimer
     
     /// Internal: Fired from our timer object.
-    internal func timerFired() {
+    func timerFired() {
         // this will be called by the timer which operates on our internal queue, so we don't need
         // to wrap this in queue.async { }
         
@@ -288,7 +288,7 @@ extension MTCReceiver: ReceivesMIDIEvents {
 
 extension MTCReceiver {
     /// Internal: MTCDecoder handler proxy method
-    internal func timecodeDidChange(
+    func timecodeDidChange(
         to incomingTC: Timecode,
         event: MTCMessageType,
         direction: MTCDirection,

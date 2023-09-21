@@ -16,7 +16,7 @@ public struct Int7 {
     
     /// Initializes from an unsigned integer value, throwing an exception in the event of overflow
     /// or underflow.
-    public init<I: UnsignedInteger>(_ source: I) {
+    public init(_ source: some UnsignedInteger) {
         switch source {
         case 0 ... 63:
             sixBitStorage = UInt8(source)
@@ -33,7 +33,7 @@ public struct Int7 {
     
     /// Initializes from a signed integer value, throwing an exception in the event of overflow or
     /// underflow.
-    public init<I: SignedInteger>(_ source: I) {
+    public init(_ source: some SignedInteger) {
         switch source {
         case ...(-65):
             Exception.underflow.raise(reason: "\(Self.integerName) integer underflowed")
@@ -59,37 +59,37 @@ public struct Int7 {
     
     /// Initializes from an unsigned integer value, returning nil if the value cannot be preserved
     /// because it would otherwise overflow or underflow.
-    public init?<I: UnsignedInteger>(exactly source: I) {
+    public init?(exactly source: some UnsignedInteger) {
         guard (-64 ... 63).contains(source) else { return nil }
         self.init(truncatingIfNecessary: source)
     }
     
     /// Initializes from a signed integer value, returning nil if the value cannot be preserved
     /// because it would otherwise overflow or underflow.
-    public init?<I: SignedInteger>(exactly source: I) {
+    public init?(exactly source: some SignedInteger) {
         guard (-64 ... 63).contains(source) else { return nil }
         self.init(truncatingIfNecessary: source)
     }
     
-    public init<I: UnsignedInteger>(truncatingIfNecessary uint: I) {
+    public init(truncatingIfNecessary uint: some UnsignedInteger) {
         sixBitStorage = UInt8(uint & 0b111111)
         isNegative = false
     }
     
-    public init<I: SignedInteger>(truncatingIfNecessary int: I) {
+    public init(truncatingIfNecessary int: some SignedInteger) {
         let truncated = Self.literalBits(truncatingIfNecessary: int)
         sixBitStorage = truncated.sixBitStorage
         isNegative = truncated.isNegative
     }
     
-    public init<I: UnsignedInteger>(bitPattern source: I) {
+    public init(bitPattern source: some UnsignedInteger) {
         let truncated = Self.literalBits(truncatingIfNecessary: source)
         sixBitStorage = truncated.sixBitStorage
         isNegative = truncated.isNegative
     }
     
-    static func literalBits<B: BinaryInteger>(
-        truncatingIfNecessary int: B
+    static func literalBits(
+        truncatingIfNecessary int: some BinaryInteger
     ) -> (sixBitStorage: UInt8, isNegative: Bool) {
         let absInt = int & 0b111111
         let isNeg = ((int & 0b1000000) >> 6) == 0b1

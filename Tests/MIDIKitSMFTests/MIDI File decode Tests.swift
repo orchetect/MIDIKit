@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSMF
+import XCTest
 
 final class MIDIFileDecodeTests: XCTestCase {
     // empty for now

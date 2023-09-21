@@ -4,9 +4,9 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKitIO
 import MIDIKitUI
+import SwiftUI
 
 struct ListsExampleView: View {
     @AppStorage(MIDIHelper.PrefKeys.midiInID) private var midiInput: MIDIIdentifier?
@@ -38,15 +38,15 @@ struct ListsExampleView: View {
     
     @ViewBuilder
     private var viewLayout: some View {
-#if os(iOS)
+        #if os(iOS)
         if UIDevice.current.userInterfaceIdiom == .phone {
             iPhoneView
         } else {
             standardView
         }
-#else
+        #else
         standardView
-#endif
+        #endif
     }
     
     @ViewBuilder
@@ -60,8 +60,12 @@ struct ListsExampleView: View {
             }
         }
         Group {
-            Text("Note that these lists will not be selectable on iPhone, but are on iPad and macOS.")
-            Text("For iOS it is recommended to use the `MIDI*putsPicker` variants instead of these.")
+            Text(
+                "Note that these lists will not be selectable on iPhone, but are on iPad and macOS."
+            )
+            Text(
+                "For iOS it is recommended to use the `MIDI*putsPicker` variants instead of these."
+            )
         }
         .multilineTextAlignment(.center)
     }
@@ -86,9 +90,9 @@ struct ListsExampleView: View {
             showIcons: showIcons,
             filterOwned: filterOwned
         )
-#if os(macOS)
+        #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))
-#endif
+        #endif
     }
     
     private var outputsList: some View {
@@ -98,8 +102,8 @@ struct ListsExampleView: View {
             showIcons: showIcons,
             filterOwned: filterOwned
         )
-#if os(macOS)
+        #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))
-#endif
+        #endif
     }
 }

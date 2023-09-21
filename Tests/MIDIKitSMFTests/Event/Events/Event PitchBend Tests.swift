@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSMF
+import XCTest
 
 final class Event_PitchBend_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve

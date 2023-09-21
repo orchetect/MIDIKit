@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSMF
+import XCTest
 
 final class Event_NRPN_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
@@ -25,7 +25,10 @@ final class Event_NRPN_Tests: XCTestCase {
         
         let event = try MIDIFileEvent.NRPN(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.parameter, .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03))
+        XCTAssertEqual(
+            event.parameter,
+            .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03)
+        )
         XCTAssertEqual(event.channel, 1)
     }
     
@@ -39,7 +42,10 @@ final class Event_NRPN_Tests: XCTestCase {
         
         let event = try MIDIFileEvent.NRPN(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.parameter, .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03))
+        XCTAssertEqual(
+            event.parameter,
+            .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03)
+        )
         XCTAssertEqual(event.channel, 1)
     }
     

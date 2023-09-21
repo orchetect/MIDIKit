@@ -38,7 +38,7 @@ extension MIDI2ParameterNumberChange {
     
     init?(umpStatusNibble: UInt4) {
         guard let types = MIDIParameterNumberUtils.typeAndChange(
-                fromUMPStatusNibble: umpStatusNibble
+            fromUMPStatusNibble: umpStatusNibble
         ) else { return nil }
         self = types.change
     }

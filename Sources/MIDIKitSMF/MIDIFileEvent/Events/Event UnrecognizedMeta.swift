@@ -105,7 +105,7 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .unrecognizedMeta
     
-    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
         guard rawBytes.count >= 3 else {
             throw MIDIFile.DecodeError.malformed(
                 "Not enough bytes."
@@ -122,9 +122,9 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
         
             let readMetaType = try dataReader.readByte()
             
-            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1...4)
-            guard let length = MIDIFile
-                .decodeVariableLengthValue(from: try dataReader.nonAdvancingRead(bytes: readAheadCount))
+            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 4)
+            guard let length = try MIDIFile
+                .decodeVariableLengthValue(from: dataReader.nonAdvancingRead(bytes: readAheadCount))
             else {
                 throw MIDIFile.DecodeError.malformed(
                     "Could not extract variable length."
@@ -156,8 +156,8 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
             data
     }
     
-    public static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytesStream stream: D
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol
     ) throws -> StreamDecodeResult {
         guard stream.count >= 3 else {
             throw MIDIFile.DecodeError.malformed(

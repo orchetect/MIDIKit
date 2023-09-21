@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class MIDIEvent_CC_RPN_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
@@ -88,9 +88,12 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
     // MARK: - MIDIEvent.rpn() -> Raw MIDI 2.0 RPN UMP Words
     
     func testRPN_MIDI2_EventToWords_Absolute() {
-        let nrpn: MIDIEvent = MIDIEvent.rpn(
-            .raw(parameter: .init(msb: 0x40, lsb: 0x01), dataEntryMSB: 0x12,
-                 dataEntryLSB: nil),
+        let nrpn: MIDIEvent = .rpn(
+            .raw(
+                parameter: .init(msb: 0x40, lsb: 0x01),
+                dataEntryMSB: 0x12,
+                dataEntryLSB: nil
+            ),
             change: .absolute,
             channel: 0x9
         )
@@ -103,9 +106,12 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
     }
     
     func testRPN_MIDI2_EventToWords_Relative() {
-        let nrpn: MIDIEvent = MIDIEvent.rpn(
-            .raw(parameter: .init(msb: 0x40, lsb: 0x01), dataEntryMSB: 0x12,
-                 dataEntryLSB: nil),
+        let nrpn: MIDIEvent = .rpn(
+            .raw(
+                parameter: .init(msb: 0x40, lsb: 0x01),
+                dataEntryMSB: 0x12,
+                dataEntryLSB: nil
+            ),
             change: .relative,
             channel: 0x9
         )
@@ -118,7 +124,7 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
     }
     
     func testRPN_MIDI2_EventToWords_Null() {
-        let nrpn: MIDIEvent = MIDIEvent.rpn(
+        let nrpn: MIDIEvent = .rpn(
             .null,
             change: .absolute,
             channel: 0x9

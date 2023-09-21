@@ -49,7 +49,7 @@ public struct UniversalMIDIPacketData {
 @available(macOS 11, iOS 14, macCatalyst 14, *)
 extension UniversalMIDIPacketData {
     /// Universal MIDI Packet
-    internal init(
+    init(
         _ eventPacketPtr: UnsafePointer<MIDIEventPacket>,
         refCon: UnsafeMutableRawPointer?,
         refConKnown: Bool
@@ -58,7 +58,7 @@ extension UniversalMIDIPacketData {
     }
     
     /// Universal MIDI Packet
-    internal init(
+    init(
         _ eventPacket: MIDIEventPacket,
         refCon: UnsafeMutableRawPointer?,
         refConKnown: Bool

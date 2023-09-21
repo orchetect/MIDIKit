@@ -23,7 +23,8 @@
 
 // TODO: Core MIDI Thru Bug Not Flowing Events
 // A new issue seems to be present on macOS 11 & 12 and iOS 14 & 15 where thru connections do not
-// flow any MIDI events. This appears to be the real issue and has nothing to do with Swift vs. Obj-C.
+// flow any MIDI events. This appears to be the real issue and has nothing to do with Swift vs.
+// Obj-C.
 // -
 // https://stackoverflow.com/questions/54871326/how-is-a-coremidi-thru-connection-made-in-swift-4-2
 
@@ -32,8 +33,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 import MIDIKitCore
 
 /// A managed MIDI thru connection created in the system by the MIDI I/O ``MIDIManager``.
@@ -62,7 +63,7 @@ import MIDIKitCore
 /// > workaround.
 public final class MIDIThruConnection: _MIDIManaged {
     // _MIDIManaged
-    internal weak var midiManager: MIDIManager?
+    weak var midiManager: MIDIManager?
     
     // MIDIManaged
     public private(set) var api: CoreMIDIAPIVersion
@@ -75,7 +76,7 @@ public final class MIDIThruConnection: _MIDIManaged {
     public private(set) var lifecycle: Lifecycle
     public private(set) var parameters: Parameters
     
-    internal var proxy: MIDIThruConnectionProxy?
+    var proxy: MIDIThruConnectionProxy?
     
     // init
     
@@ -93,7 +94,7 @@ public final class MIDIThruConnection: _MIDIManaged {
     ///   - params: Optionally supply custom parameters for the connection.
     ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
-    internal init(
+    init(
         outputs: [MIDIOutputEndpoint],
         inputs: [MIDIInputEndpoint],
         lifecycle: Lifecycle = .nonPersistent,
@@ -119,7 +120,7 @@ public final class MIDIThruConnection: _MIDIManaged {
 
 extension MIDIThruConnection {
     @objc
-    internal func create(in manager: MIDIManager) throws {
+    func create(in manager: MIDIManager) throws {
         var newConnection = MIDIThruConnectionRef()
     
         let paramsData = parameters.coreMIDIThruConnectionParams(
@@ -232,7 +233,8 @@ extension MIDIThruConnection {
                 )
                 .throwIfOSStatusErr()
             } else {
-                // use a custom thru connection that does not rely on Core MIDI's thru implementation
+                // use a custom thru connection that does not rely on Core MIDI's thru
+                // implementation
                 proxy = try MIDIThruConnectionProxy(
                     outputs: outputs,
                     inputs: inputs,
@@ -242,7 +244,7 @@ extension MIDIThruConnection {
                 coreMIDIThruConnectionRef = nil
             }
             
-        case .persistent(ownerID: let ownerID):
+        case let .persistent(ownerID: ownerID):
             guard Self.isThruConnectionsSupported else {
                 throw Self.persistentThruNotSupportedError
             }
@@ -264,7 +266,7 @@ extension MIDIThruConnection {
     /// ``create(in:)`` method.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-    internal func dispose() throws {
+    func dispose() throws {
         // don't dispose if it's a persistent connection
         guard lifecycle == .nonPersistent else { return }
         
@@ -288,7 +290,7 @@ extension MIDIThruConnection {
 }
 
 extension MIDIThruConnection {
-    internal func notification(_ internalNotification: MIDIIOInternalNotification) {
+    func notification(_ internalNotification: MIDIIOInternalNotification) {
         // Native Core MIDI thru connections don't need/can't be notified of system changes.
         // However, if we're using our custom thru connection proxy, we can notify it.
         proxy?.notification(internalNotification)

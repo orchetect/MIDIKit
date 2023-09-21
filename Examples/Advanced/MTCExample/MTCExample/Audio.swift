@@ -4,9 +4,9 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import Foundation
 import AudioKit
 import DunneAudioKit // provides Synth()
+import Foundation
 import OTCore
 
 let globalAudioEngine = AudioEngine()

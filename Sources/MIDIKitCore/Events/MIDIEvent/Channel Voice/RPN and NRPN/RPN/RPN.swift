@@ -121,7 +121,8 @@ extension MIDIEvent {
     ///
     /// - Parameters:
     ///   - parameter: Registered Parameter Number (Registered Controller).
-    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is always absolute.
+    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is
+    ///     always absolute.
     ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func rpn(
@@ -185,7 +186,8 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - parameter: Registered Parameter Number (Registered Controller).
     ///   - data: Two 7-bit MIDI 1.0 data bytes, optional.
-    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is always absolute.
+    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is
+    ///     always absolute.
     ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func rpn(
@@ -248,7 +250,8 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - parameter: Registered Parameter Number (Registered Controller).
     ///   - data: MIDI 1.0 14-bit data value.
-    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is always absolute.
+    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is
+    ///     always absolute.
     ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func rpn(
@@ -313,7 +316,8 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - parameter: Registered Parameter Number (Registered Controller).
     ///   - data: MIDI 2.0 32-bit data value. Will be scaled down to 14-bit when necessary.
-    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is always absolute.
+    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is
+    ///     always absolute.
     ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func rpn(
@@ -336,7 +340,8 @@ extension MIDIEvent {
     
     /// Assembles a MIDI 1.0 RPN compound message, consisting of multiple CC events.
     ///
-    /// This is provided for legacy support. It is recommended to use ``MIDIEvent/rpn(_:change:channel:group:)``.
+    /// This is provided for legacy support. It is recommended to use
+    /// ``MIDIEvent/rpn(_:change:channel:group:)``.
     public static func midi1RPN(
         _ parameter: RegisteredController,
         change: MIDI2ParameterNumberChange = .absolute,

@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import UIKit
 import MIDIKit
+import UIKit
 
 class ViewController: UIViewController {
     let appDelegate = UIApplication.shared.delegate as? AppDelegate

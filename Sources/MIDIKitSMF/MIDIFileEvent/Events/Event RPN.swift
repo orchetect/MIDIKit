@@ -46,18 +46,18 @@ extension MIDIFileEvent {
 extension MIDIEvent.RPN: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .rpn
     
-    public init<D>(midi1SMFRawBytes rawBytes: D) throws where D : DataProtocol {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
         let newEvent = try Self.initFrom(midi1SMFRawBytesStream: rawBytes)
         self = newEvent.newEvent
     }
     
-    public func midi1SMFRawBytes<D>() -> D where D : MutableDataProtocol {
+    public func midi1SMFRawBytes<D>() -> D where D: MutableDataProtocol {
         D(midi1RawBytes())
     }
     
-    public static func initFrom<D>(
-        midi1SMFRawBytesStream stream: D
-    ) throws -> StreamDecodeResult where D : DataProtocol {
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol
+    ) throws -> StreamDecodeResult {
         let result = try MIDIParameterNumberUtils.initFrom(
             midi1SMFRawBytesStream: stream,
             expectedType: .registered
@@ -83,8 +83,8 @@ extension MIDIEvent.RPN: MIDIFileEventPayload {
 
 extension MIDIParameterNumberUtils {
     // generic parser for RPN and NRPN messages since they are so similar in format
-    public static func initFrom<D>(
-        midi1SMFRawBytesStream stream: D,
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol,
         expectedType: MIDIParameterNumberType
     ) throws -> (
         param: UInt7Pair,
@@ -92,10 +92,9 @@ extension MIDIParameterNumberUtils {
         dataLSB: UInt7?,
         channel: UInt4,
         byteLength: Int
-    )
-    where D: DataProtocol {
+    ) {
         try stream.withDataReader { dataReader in
-            var runningStatus: UInt8? = nil
+            var runningStatus: UInt8?
             
             func runningStatusChannel() -> UInt4? {
                 runningStatus?.nibbles.low
@@ -111,7 +110,7 @@ extension MIDIParameterNumberUtils {
             func readValue(for cc: MIDIEvent.CC.Controller) throws -> MIDIFileEvent.CC.StreamDecodeResult {
                 let prefixBytes: [UInt8] = try {
                     if needsRunningStatus() {
-                        guard let runningStatus = runningStatus else {
+                        guard let runningStatus else {
                             throw MIDIFile.DecodeError.malformed(
                                 "Missing running status byte."
                             )
@@ -143,7 +142,7 @@ extension MIDIParameterNumberUtils {
                     )
                 }
                 
-                if let runningStatus = runningStatus {
+                if let runningStatus {
                     // only allow continuing if running status doesn't change
                     guard runningStatus.nibbles.low == result.newEvent.channel else {
                         throw MIDIFile.DecodeError.malformed(
@@ -160,7 +159,10 @@ extension MIDIParameterNumberUtils {
                 
                 dataReader.advanceBy(actualByteCountRead)
                 
-                let newResult: MIDIFileEvent.CC.StreamDecodeResult = (newEvent: result.newEvent, bufferLength: actualByteCountRead)
+                let newResult: MIDIFileEvent.CC.StreamDecodeResult = (
+                    newEvent: result.newEvent,
+                    bufferLength: actualByteCountRead
+                )
                 
                 return newResult
             }
@@ -180,7 +182,7 @@ extension MIDIParameterNumberUtils {
             totalByteCount += dataMSBResult.bufferLength
             
             let dataLSBResult = try? readValue(for: .lsb(for: .dataEntry))
-            if let dataLSBResult = dataLSBResult {
+            if let dataLSBResult {
                 totalByteCount += dataLSBResult.bufferLength
             }
             

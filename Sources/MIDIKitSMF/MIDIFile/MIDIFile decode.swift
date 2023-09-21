@@ -79,7 +79,6 @@ extension MIDIFile {
                         case MIDIFile.Chunk.Track.staticIdentifier:
                             tracksEncountered += 1
                             
-                            
                             let newTrack = try Chunk.Track(midi1SMFRawBytes: chunkData.bytes)
                             newChunk = .track(newTrack)
                             
@@ -98,7 +97,7 @@ extension MIDIFile {
                         case let .malformed(verboseError):
                             throw DecodeError.malformed(
                                 "There was a problem reading track data at byte offset \(dataReader.readOffset) for track \(tracksEncountered). " +
-                                verboseError
+                                    verboseError
                             )
                             
                         default:

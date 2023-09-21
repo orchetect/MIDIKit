@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSMF
+import XCTest
 
 final class MIDIKitSMFTests: XCTestCase {
     // no tests in root class

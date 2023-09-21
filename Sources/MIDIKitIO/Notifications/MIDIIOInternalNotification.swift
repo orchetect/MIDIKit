@@ -6,14 +6,14 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 
 /// Internal MIDI subsystem notification with raw values.
 ///
 /// This must be converted to an instance of ``MIDIIONotification`` before sending to the
 /// ``MIDIManager``'s public notification handler.
-internal enum MIDIIOInternalNotification {
+enum MIDIIOInternalNotification {
     case setupChanged
     
     case added(
@@ -51,7 +51,7 @@ internal enum MIDIIOInternalNotification {
 }
 
 extension MIDIIOInternalNotification {
-    internal init(_ message: UnsafePointer<MIDINotification>) {
+    init(_ message: UnsafePointer<MIDINotification>) {
         let messageID = message.pointee.messageID
     
         switch messageID {

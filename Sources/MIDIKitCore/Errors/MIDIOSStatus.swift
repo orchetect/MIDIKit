@@ -220,8 +220,9 @@ extension MIDIOSStatus: CustomStringConvertible {
     }
 }
 
-/// Throws an error of type ``MIDIIOError/osStatus(_:)-swift.enum.case`` if `OSStatus` return value `!= noErr`.
-internal func throwIfErr(_ closure: () -> OSStatus) throws {
+/// Throws an error of type ``MIDIIOError/osStatus(_:)-swift.enum.case`` if `OSStatus` return value
+/// `!= noErr`.
+func throwIfErr(_ closure: () -> OSStatus) throws {
     let result = closure()
     
     guard result == noErr else {
@@ -230,7 +231,8 @@ internal func throwIfErr(_ closure: () -> OSStatus) throws {
 }
 
 extension CoreMIDIOSStatus /* aka Int32 */ {
-    /// Throws an error of type ``MIDIIOError/osStatus(_:)-swift.enum.case`` if `self as OSStatus != noErr`.
+    /// Throws an error of type ``MIDIIOError/osStatus(_:)-swift.enum.case`` if `self as OSStatus !=
+    /// noErr`.
     public func throwIfOSStatusErr() throws {
         guard self == noErr else {
             throw MIDIIOError.osStatus(self)

@@ -397,7 +397,7 @@ extension FixedWidthInteger {
 
 extension Data {
     /// Internal use.
-    internal func toNumber<T: FixedWidthInteger>(
+    func toNumber<T: FixedWidthInteger>(
         from endianness: NumberEndianness = .platformDefault,
         toType: T.Type
     ) -> T? {
@@ -466,7 +466,7 @@ extension Data {
 
 // MARK: - Data Bytes
 
-extension Collection where Element == UInt8 {
+extension Collection<UInt8> {
     /// Same as `Data(self)`
     /// Returns a Data object using the array as bytes.
     @_disfavoredOverload

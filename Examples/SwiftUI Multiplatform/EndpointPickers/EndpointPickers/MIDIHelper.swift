@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKitIO
+import SwiftUI
 
 /// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
 /// SwiftUI view state directly. Therefore, we need a helper class that conforms to
@@ -80,7 +80,7 @@ final class MIDIHelper: ObservableObject {
     }
     
     public func midiInUpdateConnection(selectedUniqueID: MIDIIdentifier) {
-        guard let midiInputConnection = midiInputConnection else { return }
+        guard let midiInputConnection else { return }
     
         if selectedUniqueID == .invalidMIDIIdentifier {
             midiInputConnection.removeAllOutputs()
@@ -99,7 +99,7 @@ final class MIDIHelper: ObservableObject {
     }
     
     public func midiOutUpdateConnection(selectedUniqueID: MIDIIdentifier) {
-        guard let midiOutputConnection = midiOutputConnection else { return }
+        guard let midiOutputConnection else { return }
     
         if selectedUniqueID == .invalidMIDIIdentifier {
             midiOutputConnection.removeAllInputs()

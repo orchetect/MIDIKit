@@ -130,7 +130,7 @@ public enum MTCFrameRate: Hashable, CaseIterable {
     // MARK: - Internal properties
         
     /// FPS Value for scaling MTC frame rate
-    internal var fpsValueForScaling: Int {
+    var fpsValueForScaling: Int {
         switch self {
         case .mtc24:    return 24
         case .mtc25:    return 25

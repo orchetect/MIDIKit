@@ -223,7 +223,7 @@ extension AppDelegate {
     }
     
     private func midiInMenuUpdateConnection() {
-        guard let midiInputConnection = midiInputConnection else { return }
+        guard let midiInputConnection else { return }
     
         if midiInMenuSelectedID == .invalidMIDIIdentifier {
             midiInputConnection.removeAllOutputs()
@@ -321,7 +321,7 @@ extension AppDelegate {
     }
     
     private func midiOutMenuUpdateConnection() {
-        guard let midiOutputConnection = midiOutputConnection else { return }
+        guard let midiOutputConnection else { return }
     
         if midiOutMenuSelectedID == .invalidMIDIIdentifier {
             midiOutputConnection.removeAllInputs()

@@ -4,10 +4,10 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import Combine
-import MIDIKitControlSurfaces
 import Controls
+import MIDIKitControlSurfaces
+import SwiftUI
 
 extension HUISurfaceView {
     struct FaderView: View {

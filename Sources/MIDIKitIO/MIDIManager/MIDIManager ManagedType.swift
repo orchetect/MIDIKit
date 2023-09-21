@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 
 extension MIDIManager {
     /// Managed port or connection type.

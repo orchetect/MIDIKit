@@ -22,7 +22,7 @@ extension MIDIThruConnection {
 }
 
 extension MIDIThruConnection.Parameters {
-    internal init(_ coreMIDIParams: MIDIThruConnectionParams) {
+    init(_ coreMIDIParams: MIDIThruConnectionParams) {
         filterOutAllControls = coreMIDIParams.filterOutAllControls != 0
         filterOutBeatClock = coreMIDIParams.filterOutBeatClock != 0
         filterOutMTC = coreMIDIParams.filterOutMTC != 0
@@ -33,7 +33,7 @@ extension MIDIThruConnection.Parameters {
 
 extension MIDIThruConnection.Parameters {
     /// Builds Core MIDI `MIDIThruConnectionParams` from local properties.
-    internal func coreMIDIThruConnectionParams(
+    func coreMIDIThruConnectionParams(
         inputs: [MIDIInputEndpoint],
         outputs: [MIDIOutputEndpoint]
     ) -> MIDIThruConnectionParams {

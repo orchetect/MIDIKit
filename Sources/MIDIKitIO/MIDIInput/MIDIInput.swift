@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 
 /// A managed virtual MIDI input endpoint created in the system by the MIDI I/O ``MIDIManager``.
 ///
@@ -23,7 +23,7 @@ import Foundation
 /// > endpoint.)
 public final class MIDIInput: _MIDIManaged {
     // _MIDIManaged
-    internal weak var midiManager: MIDIManager?
+    weak var midiManager: MIDIManager?
     
     // MIDIManaged
     public private(set) var api: CoreMIDIAPIVersion
@@ -52,7 +52,7 @@ public final class MIDIInput: _MIDIManaged {
     public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
     
     /// Receive handler for inbound MIDI events.
-    internal var receiveHandler: MIDIReceiveHandler
+    var receiveHandler: MIDIReceiveHandler
     
     // init
     
@@ -69,7 +69,7 @@ public final class MIDIInput: _MIDIManaged {
     ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
-    internal init(
+    init(
         name: String,
         uniqueID: MIDIUniqueID? = nil,
         receiver: MIDIReceiver,
@@ -103,7 +103,7 @@ extension MIDIInput {
     
     /// Queries the system and returns true if the endpoint exists
     /// (by matching port name and unique ID)
-    internal var uniqueIDExistsInSystem: MIDIEndpointRef? {
+    var uniqueIDExistsInSystem: MIDIEndpointRef? {
         guard let unwrappedUniqueID = uniqueID else {
             return nil
         }
@@ -117,7 +117,7 @@ extension MIDIInput {
 }
 
 extension MIDIInput {
-    internal func create(in manager: MIDIManager) throws {
+    func create(in manager: MIDIManager) throws {
         if uniqueIDExistsInSystem != nil {
             // if uniqueID is already in use, set it to nil here
             // so MIDIDestinationCreateWithBlock can return a new unused ID;
@@ -200,7 +200,7 @@ extension MIDIInput {
     /// ``create(in:)`` method.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-    internal func dispose() throws {
+    func dispose() throws {
         guard let unwrappedPortRef = coreMIDIInputPortRef else { return }
     
         defer { self.coreMIDIInputPortRef = nil }

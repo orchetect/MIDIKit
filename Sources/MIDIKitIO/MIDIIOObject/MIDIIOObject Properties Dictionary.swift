@@ -87,7 +87,7 @@ extension MIDIIOObject {
                 }
             } else {
                 valueString =
-                "OS not supported. Requires macOS 11.0, macCatalyst 14.0, or iOS 14.0."
+                    "OS not supported. Requires macOS 11.0, macCatalyst 14.0, or iOS 14.0."
             }
             
             return valueString

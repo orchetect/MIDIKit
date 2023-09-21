@@ -28,10 +28,10 @@ extension MIDIFile {
         for chunk in chunks {
             switch chunk {
             case let .track(track):
-                data.append(try track.midi1SMFRawBytes(using: timeBase))
+                try data.append(track.midi1SMFRawBytes(using: timeBase))
 
             case let .other(unrecognizedChunk):
-                data.append(try unrecognizedChunk.midi1SMFRawBytes(using: timeBase))
+                try data.append(unrecognizedChunk.midi1SMFRawBytes(using: timeBase))
             }
         }
 

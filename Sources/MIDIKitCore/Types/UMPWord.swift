@@ -35,7 +35,7 @@ extension UMPWord {
     }
 }
 
-extension Collection where Element == UMPWord {
+extension Collection<UMPWord> {
     /// Internal: Flattens an array of `UInt32` UMP words into an array of bytes.
     public func umpWordsToBytes() -> [UInt8] {
         var bytes: [UInt8] = []

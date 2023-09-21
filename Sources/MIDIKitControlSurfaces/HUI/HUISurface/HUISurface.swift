@@ -142,7 +142,7 @@ public final class HUISurface {
         model = HUISurfaceModel()
         
         decoder = HUIHostEventDecoder { [weak self] hostEvent in
-            guard let self = self else { return }
+            guard let self else { return }
             
             if case .ping = hostEvent {
                 self.receivedPing()

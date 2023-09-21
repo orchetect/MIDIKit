@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
-@testable import MIDIKitSMF
 import MIDIKitInternals
+@testable import MIDIKitSMF
+import XCTest
 
 final class Chunk_Header_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve

@@ -6,7 +6,7 @@
 
 // MARK: - Filter
 
-extension Collection where Element == MIDIEvent {
+extension Collection<MIDIEvent> {
     /// Filter events by UMP group.
     public func filter(group: UInt4) -> [Element] {
         filter { $0.group == group }
@@ -20,7 +20,7 @@ extension Collection where Element == MIDIEvent {
 
 // MARK: - Drop
 
-extension Collection where Element == MIDIEvent {
+extension Collection<MIDIEvent> {
     /// Drop all events with the specified UMP group.
     public func drop(group: UInt4) -> [Element] {
         filter { $0.group != group }

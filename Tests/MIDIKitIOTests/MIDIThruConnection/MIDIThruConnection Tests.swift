@@ -8,10 +8,10 @@
 // ports, so skip these tests on iOS targets
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
-import XCTest
+import CoreMIDI
 @_implementationOnly import MIDIKitInternals
 @testable import MIDIKitIO
-import CoreMIDI
+import XCTest
 
 final class MIDIThruConnection_Tests: XCTestCase {
     // called before each method
@@ -36,7 +36,9 @@ final class MIDIThruConnection_Tests: XCTestCase {
             // as a failsafe, clean up any persistent connections with an empty owner ID.
             // this is to account for the possible re-emergence of the Core MIDI thru bug
             
-            if let num = try? manager.unmanagedPersistentThruConnections(ownerID: "").count, num > 0 {
+            if let num = try? manager.unmanagedPersistentThruConnections(ownerID: "").count,
+               num > 0
+            {
                 print("Removing \(num) empty-ownerID persistent thru connections.")
             }
             
@@ -178,7 +180,9 @@ final class MIDIThruConnection_Tests: XCTestCase {
             try addThru()
         } else if #available(macOS 11, iOS 14, *) {
             XCTAssertThrowsError(try addThru())
-            throw XCTSkip("Can't test persistent thru connections on macOS 11 & 12 and iOS 14 & 15.")
+            throw XCTSkip(
+                "Can't test persistent thru connections on macOS 11 & 12 and iOS 14 & 15."
+            )
         } else { // macOS 10.15.x and earlier, or iOS 13.x and earlier
             try addThru()
         }
@@ -228,7 +232,9 @@ final class MIDIThruConnection_Tests: XCTestCase {
             // as a failsafe, clean up any persistent connections with an empty owner ID.
             // this is to account for the possible re-emergence of the Core MIDI thru bug
             
-            if let num = try? manager.unmanagedPersistentThruConnections(ownerID: "").count, num > 0 {
+            if let num = try? manager.unmanagedPersistentThruConnections(ownerID: "").count,
+               num > 0
+            {
                 print("Removing \(num) empty-ownerID persistent thru connections.")
             }
             
@@ -284,7 +290,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         wait(sec: 0.2)
         
         let connRef = manager.managedThruConnections[connTag]!.coreMIDIThruConnectionRef!
-        let getParams = try XCTUnwrap(try getThruConnectionParameters(ref: connRef))
+        let getParams = try XCTUnwrap(getThruConnectionParameters(ref: connRef))
         
         XCTAssertEqual(getParams.numSources, 1)
         XCTAssertEqual(getParams.sources.0.endpointRef, output1Ref)

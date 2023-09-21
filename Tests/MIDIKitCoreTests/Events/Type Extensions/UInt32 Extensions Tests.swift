@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class UInt32Extensions_Tests: XCTestCase {
     fileprivate let _min: UInt32      = 0x0000_0000

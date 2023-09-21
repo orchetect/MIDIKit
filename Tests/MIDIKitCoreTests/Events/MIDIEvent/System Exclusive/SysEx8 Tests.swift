@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class SysEx8_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve

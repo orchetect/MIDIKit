@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKitControlSurfaces
+import SwiftUI
 
 /// "DSP EDIT/ASSIGN" Section
 struct ParameterEditAssignView: View {

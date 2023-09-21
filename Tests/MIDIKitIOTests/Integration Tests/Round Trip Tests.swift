@@ -8,9 +8,9 @@
 // ports, so skip these tests on iOS targets
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
-import XCTest
-@testable import MIDIKitIO
 import CoreMIDI
+@testable import MIDIKitIO
+import XCTest
 
 // must be open class - other tests subclass it
 open class RoundTrip_Tests_Base: XCTestCase {
@@ -24,7 +24,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
     fileprivate var receivedEvents: [MIDIEvent] = []
     
     // called before each method
-    open override func setUpWithError() throws {
+    override open func setUpWithError() throws {
         print("RoundTrip_Tests setUpWithError() starting")
     
         wait(sec: 0.5)
@@ -193,8 +193,8 @@ open class RoundTrip_Tests_Base: XCTestCase {
             )
         })
     
-        sourceEvents.append(
-            try .sysEx7(
+        try sourceEvents.append(
+            .sysEx7(
                 manufacturer: .educational(),
                 data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
                        0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C,
@@ -202,8 +202,8 @@ open class RoundTrip_Tests_Base: XCTestCase {
             )
         )
     
-        sourceEvents.append(
-            try .universalSysEx7(
+        try sourceEvents.append(
+            .universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,

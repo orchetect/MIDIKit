@@ -5,6 +5,8 @@
 //
 
 extension MIDIEvent.CC {
+    // swiftformat:disable wrapSingleLineComments
+    
     /// MIDI Control Change Controller
     /// (MIDI 1.0 / MIDI 2.0)
     public enum Controller: Equatable, Hashable {
@@ -273,4 +275,5 @@ extension MIDIEvent.CC {
         /// (Includes: 9, 14, 15, 20 ... 31, 85 ... 87, 89, 90, 102 ... 119)
         case undefined(Undefined)
     }
+    // swiftformat:enable wrap
 }

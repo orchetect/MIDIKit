@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKit
+import SwiftUI
 
 /// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
 /// SwiftUI view state directly. Therefore, we need a helper class that conforms to
@@ -34,7 +34,7 @@ final class MIDIHelper: ObservableObject {
     static let outputConnectionName = "TestApp Output Connection"
     
     private func setupConnections() {
-        guard let midiManager = midiManager else { return }
+        guard let midiManager else { return }
         
         do {
             // "IDAM MIDI Host" is the name of the MIDI input and output that iOS creates

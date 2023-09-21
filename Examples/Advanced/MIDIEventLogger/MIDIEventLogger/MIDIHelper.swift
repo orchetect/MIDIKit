@@ -4,9 +4,9 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
-import OTCore
 import MIDIKit
+import OTCore
+import SwiftUI
 
 final class MIDIHelper: ObservableObject {
     private weak var midiManager: MIDIManager?
@@ -71,9 +71,9 @@ final class MIDIHelper: ObservableObject {
     }
     
     public func updateInputConnection(selectedUniqueID: MIDIIdentifier?) {
-        guard let midiInputConnection = midiInputConnection else { return }
+        guard let midiInputConnection else { return }
         
-        guard let selectedUniqueID = selectedUniqueID else {
+        guard let selectedUniqueID else {
             midiInputConnection.removeAllOutputs()
             return
         }
@@ -90,9 +90,9 @@ final class MIDIHelper: ObservableObject {
     }
     
     public func updateOutputConnection(selectedUniqueID: MIDIIdentifier?) {
-        guard let midiOutputConnection = midiOutputConnection else { return }
+        guard let midiOutputConnection else { return }
         
-        guard let selectedUniqueID = selectedUniqueID else {
+        guard let selectedUniqueID else {
             midiOutputConnection.removeAllInputs()
             return
         }
@@ -156,6 +156,6 @@ final class MIDIHelper: ObservableObject {
     
     public var virtualEndpointsExist: Bool {
         midiInput != nil &&
-        midiOutput != nil
+            midiOutput != nil
     }
 }

@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSync
 import TimecodeKit
+import XCTest
 
 final class MTC_MTCFrameRate_Tests: XCTestCase {
     func testMTC_MTCFrameRate_Init_TimecodeFrameRate() {

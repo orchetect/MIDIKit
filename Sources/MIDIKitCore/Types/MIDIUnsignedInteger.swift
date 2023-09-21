@@ -43,7 +43,7 @@ public protocol MIDIUnsignedInteger: UnsignedInteger, Codable
     static var max: Self { get }
 }
 
-internal protocol _MIDIUnsignedInteger: MIDIUnsignedInteger {
+protocol _MIDIUnsignedInteger: MIDIUnsignedInteger {
     /// Internal: Type name for use in debugging and exceptions.
     static var integerName: StaticString { get }
     
@@ -61,7 +61,7 @@ internal protocol _MIDIUnsignedInteger: MIDIUnsignedInteger {
 }
 
 extension _MIDIUnsignedInteger {
-    public init<T: BinaryInteger>(_ source: T) {
+    public init(_ source: some BinaryInteger) {
         if source < Self.min(as: Storage.self) {
             Exception.underflow.raise(reason: "\(Self.integerName) integer underflowed")
         }
@@ -71,11 +71,11 @@ extension _MIDIUnsignedInteger {
         self.init(unchecked: Storage(source))
     }
     
-    public init<T: BinaryInteger>(truncatingIfNeeded source: T) {
+    public init(truncatingIfNeeded source: some BinaryInteger) {
         self.init(Storage(truncatingIfNeeded: source))
     }
     
-    public init<T: BinaryInteger>(clamping source: T) {
+    public init(clamping source: some BinaryInteger) {
         let clamped = Storage(
             Int(source)
                 .clamped(to: Self.min(as: Int.self) ... Self.max(as: Int.self))

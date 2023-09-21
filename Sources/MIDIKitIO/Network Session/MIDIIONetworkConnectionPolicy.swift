@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 
 // MARK: - NetworkConnectionPolicy
 
@@ -14,7 +14,7 @@ public enum MIDIIONetworkConnectionPolicy: UInt, Equatable {
     case hostsInContactList
     case anyone
     
-    internal init(_ coreMIDIPolicy: MIDINetworkConnectionPolicy) {
+    init(_ coreMIDIPolicy: MIDINetworkConnectionPolicy) {
         switch coreMIDIPolicy {
         case .noOne:
             self = .noOne
@@ -30,7 +30,7 @@ public enum MIDIIONetworkConnectionPolicy: UInt, Equatable {
         }
     }
     
-    internal var coreMIDIPolicy: MIDINetworkConnectionPolicy {
+    var coreMIDIPolicy: MIDINetworkConnectionPolicy {
         switch self {
         case .noOne:
             return .noOne

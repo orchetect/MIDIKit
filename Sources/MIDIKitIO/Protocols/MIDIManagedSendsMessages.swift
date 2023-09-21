@@ -26,7 +26,7 @@ public protocol MIDIManagedSendsMessages: MIDIManaged {
 
 // MARK: - Internal Protocol
 
-internal protocol _MIDIManagedSendsMessages: MIDIManagedSendsMessages {
+protocol _MIDIManagedSendsMessages: MIDIManagedSendsMessages {
     /// Internal:
     /// Send a legacy MIDI 1.0 Message, automatically assembling it into a `MIDIPacketList`.
     ///
@@ -64,7 +64,7 @@ internal protocol _MIDIManagedSendsMessages: MIDIManagedSendsMessages {
 // MARK: - Implementation
 
 extension _MIDIManagedSendsMessages {
-    internal func send(rawMessage: [UInt8]) throws {
+    func send(rawMessage: [UInt8]) throws {
         switch api {
         case .legacyCoreMIDI:
             var packetList = MIDIPacketList(data: rawMessage)
@@ -80,7 +80,7 @@ extension _MIDIManagedSendsMessages {
         }
     }
     
-    internal func send(rawMessages: [[UInt8]]) throws {
+    func send(rawMessages: [[UInt8]]) throws {
         switch api {
         case .legacyCoreMIDI:
             var packetList = try MIDIPacketList(data: rawMessages)
@@ -97,7 +97,7 @@ extension _MIDIManagedSendsMessages {
     }
     
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    internal func send(rawWords: [UMPWord]) throws {
+    func send(rawWords: [UMPWord]) throws {
         switch api {
         case .legacyCoreMIDI:
             throw MIDIIOError.internalInconsistency(

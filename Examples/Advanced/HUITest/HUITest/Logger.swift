@@ -8,7 +8,7 @@ import os.log
 
 enum Logger {
     /// Prints a message to the console log. (`os_log`). Only outputs to log in a `DEBUG` build.
-    internal static func debug(_ message: String) {
+    static func debug(_ message: String) {
         #if DEBUG
         os_log(
             "%{public}@",

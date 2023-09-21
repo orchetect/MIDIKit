@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKitIO
+import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var midiHelper: MIDIHelper
@@ -16,27 +16,27 @@ struct ContentView: View {
                 Section("Controls") {
                     NavigationLink("Endpoint List") {
                         details(index: 0)
-#if os(iOS)
+                        #if os(iOS)
                             .navigationBarTitle("Endpoint List", displayMode: .inline)
                             .navigationBarBackButtonHidden(false)
-#endif
+                        #endif
                     }.tag(0)
                     
                     NavigationLink("Endpoint Picker") {
                         details(index: 1)
-#if os(iOS)
+                        #if os(iOS)
                             .navigationBarTitle("Endpoint Picker", displayMode: .inline)
                             .navigationBarBackButtonHidden(false)
-#endif
+                        #endif
                     }.tag(1)
                 }
             
-#if os(iOS)
+                #if os(iOS)
                 Section("Info") {
                     EmptyDetailsView.textBody
                         .foregroundColor(.secondary)
                 }
-#endif
+                #endif
             }
             
             EmptyDetailsView()

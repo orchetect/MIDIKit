@@ -23,7 +23,7 @@ import MIDIKitCore
 /// > - A host can send a time display change to a client surface, but a client surface cannot send
 /// any time display changes back to the host. It is a read-only display on the client surface and
 /// there is no way to interact with it.
-internal enum HUICoreEvent: Equatable, Hashable {
+enum HUICoreEvent: Equatable, Hashable {
     /// HUI ping message.
     case ping
     

@@ -54,7 +54,7 @@ extension MIDIDevicesProtocol {
 public final class MIDIDevices: NSObject, MIDIDevicesProtocol {
     public internal(set) dynamic var devices: [MIDIDevice] = []
     
-    override internal init() {
+    override init() {
         super.init()
     }
     

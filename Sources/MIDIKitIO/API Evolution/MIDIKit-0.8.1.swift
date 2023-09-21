@@ -22,8 +22,10 @@ extension MIDIIONotification {
     }
     
     @available(*, deprecated, renamed: "propertyChanged(property:forObject:)")
-    public static func propertyChanged(object: AnyMIDIIOObject,
-                                       property: AnyMIDIIOObject.Property) -> Self {
+    public static func propertyChanged(
+        object: AnyMIDIIOObject,
+        property: AnyMIDIIOObject.Property
+    ) -> Self {
         .propertyChanged(property: property, forObject: object)
     }
 }

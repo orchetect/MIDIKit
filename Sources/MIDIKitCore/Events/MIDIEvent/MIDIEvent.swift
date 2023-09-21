@@ -161,7 +161,8 @@ public enum MIDIEvent: Equatable, Hashable {
     /// > organized in 128 Banks (corresponds to NRPN MSB), with 128 controllers per Bank
     /// > (corresponds to NRPN LSB).
     ///
-    /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    /// See Recommended Practise
+    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
     case nrpn(NRPN)
     
@@ -262,7 +263,11 @@ public enum MIDIEvent: Equatable, Hashable {
     /// > not an official message; the vendors in question should have used a SysEx command." --
     /// > [David Van Brink's MIDI
     /// > Spec](https://www.cs.cmu.edu/~music/cmsip/readings/davids-midi-spec.htm)
-    @available(*, deprecated, message: "Bus Select is not supported by Core MIDI and will be removed in the future.")
+    @available(
+        *,
+        deprecated,
+        message: "Bus Select is not supported by Core MIDI and will be removed in the future."
+    )
     case unofficialBusSelect(UnofficialBusSelect)
     
     /// System Common: Tune Request

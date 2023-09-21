@@ -23,8 +23,8 @@ public struct MIDINote: Equatable, Hashable {
     
     /// Construct from a MIDI note number.
     @_disfavoredOverload
-    public init<T: BinaryInteger>(
-        _ number: T,
+    public init(
+        _ number: some BinaryInteger,
         style: Style = .yamaha
     ) throws {
         self.style = style

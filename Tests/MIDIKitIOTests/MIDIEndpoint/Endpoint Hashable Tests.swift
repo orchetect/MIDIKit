@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
-import XCTest
 @testable import MIDIKitIO
+import XCTest
 
 final class Endpoint_Hashable_Tests: XCTestCase {
     func testInputEndpoint1() {

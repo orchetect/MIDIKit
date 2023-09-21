@@ -5,8 +5,8 @@
 //
 
 import Cocoa
-import SwiftUI
 import MIDIKitIO
+import SwiftUI
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {

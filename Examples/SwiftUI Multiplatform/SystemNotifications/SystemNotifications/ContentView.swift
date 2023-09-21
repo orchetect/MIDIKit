@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKit
+import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: MIDIManager
@@ -34,9 +34,9 @@ struct ContentView: View {
             }
             .disabled(midiManager.managedOutputs.isEmpty)
         }
-#if os(iOS)
+        #if os(iOS)
         .font(.system(size: 18))
-#endif
+        #endif
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }

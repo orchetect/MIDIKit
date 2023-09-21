@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class MIDINote_Roland_Tests: XCTestCase {
     fileprivate let style: MIDINote.Style = .roland

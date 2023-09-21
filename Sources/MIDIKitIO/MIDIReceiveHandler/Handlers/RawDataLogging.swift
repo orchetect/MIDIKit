@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import os.log
 import Foundation
+import os.log
 
 extension MIDIReceiver {
     public typealias RawDataLoggingHandler = (_ packetBytesString: String) -> Void
@@ -22,7 +22,7 @@ extension MIDIReceiveHandler {
     /// preprocessor flag builds).
     /// If `handler` is provided, the hex byte string is supplied as a parameter and not
     /// automatically logged.
-    internal final class RawDataLogging: MIDIReceiveHandlerProtocol {
+    final class RawDataLogging: MIDIReceiveHandlerProtocol {
         public var handler: MIDIReceiver.RawDataLoggingHandler
     
         public var filterActiveSensingAndClock = false
@@ -53,7 +53,7 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal init(
+        init(
             filterActiveSensingAndClock: Bool = false,
             log: OSLog = .default,
             _ handler: MIDIReceiver.RawDataLoggingHandler? = nil
@@ -72,7 +72,7 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal func handleBytes(
+        func handleBytes(
             bytes: [UInt8],
             timeStamp: CoreMIDITimeStamp,
             source: MIDIOutputEndpoint?
@@ -88,7 +88,7 @@ extension MIDIReceiveHandler {
                 + " timeStamp:\(timeStamp)"
             
             // not all packets will contain source refs
-            if let source = source {
+            if let source {
                 stringOutput += " source:\(source.displayName.quoted)"
             }
             

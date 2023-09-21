@@ -18,7 +18,7 @@ extension UInt32 {
     ///     init(bipolarUnitInterval:  0.5)
     ///     init(bipolarUnitInterval:  1.0) == 0xFFFFFFFF == .max
     @_disfavoredOverload
-    public init<T: BinaryFloatingPoint>(bipolarUnitInterval: T) {
+    public init(bipolarUnitInterval: some BinaryFloatingPoint) {
         let bipolarUnitInterval = bipolarUnitInterval.clamped(to: (-1.0) ... (1.0))
     
         if bipolarUnitInterval > 0.0 {

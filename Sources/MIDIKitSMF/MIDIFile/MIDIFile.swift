@@ -13,7 +13,7 @@ private let fileManager = FileManager.default
 public struct MIDIFile {
     // MARK: - Properties
     
-    internal var header: Chunk.Header = .init()
+    var header: Chunk.Header = .init()
     
     /// MIDI File Format to use when writing MIDI file.
     public var format: Format {

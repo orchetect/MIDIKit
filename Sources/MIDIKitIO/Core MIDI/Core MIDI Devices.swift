@@ -10,7 +10,7 @@
 
 /// Internal:
 /// List of MIDI devices in the system.
-internal func getSystemDevices() -> [MIDIDevice] {
+func getSystemDevices() -> [MIDIDevice] {
     let devCount = MIDIGetNumberOfDevices()
     
     var devices: [MIDIDevice] = []
@@ -27,7 +27,7 @@ internal func getSystemDevices() -> [MIDIDevice] {
 
 /// Internal:
 /// List of MIDI entities in the system.
-internal func getSystemEntities(for device: CoreMIDI.MIDIDeviceRef) -> [MIDIEntity] {
+func getSystemEntities(for device: CoreMIDI.MIDIDeviceRef) -> [MIDIEntity] {
     let entityCount = MIDIDeviceGetNumberOfEntities(device)
     
     var entities: [MIDIEntity] = []

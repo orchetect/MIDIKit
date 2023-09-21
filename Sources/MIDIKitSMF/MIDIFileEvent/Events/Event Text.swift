@@ -129,7 +129,7 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.Text: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .text
     
-    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
         let result = try Self.initFrom(stream: rawBytes).newEvent
         
         textType = result.textType
@@ -148,14 +148,14 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
             stringData
     }
 
-    public static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytesStream stream: D
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol
     ) throws -> StreamDecodeResult {
-        try Self.initFrom(stream: stream)
+        try initFrom(stream: stream)
     }
 
-    internal static func initFrom<D: DataProtocol>(
-        stream rawBytes: D
+    static func initFrom(
+        stream rawBytes: some DataProtocol
     ) throws -> StreamDecodeResult {
         guard rawBytes.count >= 3 else {
             throw MIDIFile.DecodeError.malformed(
@@ -174,7 +174,7 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
                 )
             }
             
-            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1...4)
+            let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 4)
             let bodyBytes = try dataReader.nonAdvancingRead(bytes: readAheadCount)
             guard let length = MIDIFile.decodeVariableLengthValue(from: bodyBytes)
             else {

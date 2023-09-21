@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 import SwiftUI
 
 /// Box to contain an instance of a strongly-typed system MIDI object.
@@ -97,7 +97,7 @@ extension AnyMIDIIOObject: MIDIIOObject {
 extension AnyMIDIIOObject {
     /// Initializes a case from an instance conforming to ``MIDIIOObject``.
     /// Returns nil if the concrete type of the instance is not recognized.
-    internal init?<O: MIDIIOObject>(_ base: O) {
+    init?(_ base: some MIDIIOObject) {
         switch base {
         case let obj as MIDIDevice:
             self = .device(obj)
@@ -114,7 +114,7 @@ extension AnyMIDIIOObject {
     
     /// Returns a MIDIKit object wrapped in a strongly-typed enum case, optionally returning the
     /// cached object from the ``MIDIManager``.
-    internal init?(
+    init?(
         coreMIDIObjectRef: MIDIObjectRef,
         coreMIDIObjectType: MIDIObjectType,
         using cache: MIDIIOObjectCache? = nil
@@ -126,7 +126,7 @@ extension AnyMIDIIOObject {
             return nil
     
         case .device, .externalDevice:
-            if let cache = cache,
+            if let cache,
                let getCachedDevice = cache.devices
                    .first(where: { $0.coreMIDIObjectRef == coreMIDIObjectRef })
             {
@@ -139,7 +139,7 @@ extension AnyMIDIIOObject {
             self = .entity(MIDIEntity(from: coreMIDIObjectRef))
     
         case .source, .externalSource:
-            if let cache = cache,
+            if let cache,
                let getCachedEndpoint = cache.outputEndpoints
                    .first(where: { $0.coreMIDIObjectRef == coreMIDIObjectRef })
             {
@@ -149,7 +149,7 @@ extension AnyMIDIIOObject {
             }
     
         case .destination, .externalDestination:
-            if let cache = cache,
+            if let cache,
                let getCachedEndpoint = cache.inputEndpoints
                    .first(where: { $0.coreMIDIObjectRef == coreMIDIObjectRef })
             {

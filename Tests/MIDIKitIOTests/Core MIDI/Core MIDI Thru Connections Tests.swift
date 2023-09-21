@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
-import XCTest
-@testable import MIDIKitIO
 import CoreMIDI
+@testable import MIDIKitIO
+import XCTest
 
 final class CoreMIDIThruConnectionsTests_Tests: XCTestCase {
     func testParameters_CFData() throws {

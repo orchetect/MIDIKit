@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSync
 import TimecodeKit
+import XCTest
 
 final class MTC_Integration_Integration_Tests: XCTestCase {
     func testMTC_Integration_EncoderDecoder_24fps() {
@@ -20,15 +20,14 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         var _displayNeedsUpdate: Bool?; _ = _displayNeedsUpdate
         var _mtcFR: MTCFrameRate?; _ = _mtcFR
         
-        let mtcDec = MTCDecoder(initialLocalFrameRate: nil)
-            { timecode, messageType, direction, displayNeedsUpdate in
-                _timecode = timecode
-                _mType = messageType
-                _direction = direction
-                _displayNeedsUpdate = displayNeedsUpdate
-            } mtcFrameRateChanged: { mtcFrameRate in
-                _mtcFR = mtcFrameRate
-            }
+        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, displayNeedsUpdate in
+            _timecode = timecode
+            _mType = messageType
+            _direction = direction
+            _displayNeedsUpdate = displayNeedsUpdate
+        } mtcFrameRateChanged: { mtcFrameRate in
+            _mtcFR = mtcFrameRate
+        }
         
         // encoder
         
@@ -108,15 +107,14 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         var _displayNeedsUpdate: Bool?; _ = _displayNeedsUpdate
         var _mtcFR: MTCFrameRate?; _ = _mtcFR
         
-        let mtcDec = MTCDecoder(initialLocalFrameRate: nil)
-            { timecode, messageType, direction, displayNeedsUpdate in
-                _timecode = timecode
-                _mType = messageType
-                _direction = direction
-                _displayNeedsUpdate = displayNeedsUpdate
-            } mtcFrameRateChanged: { mtcFrameRate in
-                _mtcFR = mtcFrameRate
-            }
+        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, displayNeedsUpdate in
+            _timecode = timecode
+            _mType = messageType
+            _direction = direction
+            _displayNeedsUpdate = displayNeedsUpdate
+        } mtcFrameRateChanged: { mtcFrameRate in
+            _mtcFR = mtcFrameRate
+        }
         
         // encoder
         
@@ -354,15 +352,14 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         var _displayNeedsUpdate: Bool?; _ = _displayNeedsUpdate
         var _mtcFR: MTCFrameRate?; _ = _mtcFR
         
-        let mtcDec = MTCDecoder(initialLocalFrameRate: nil)
-            { timecode, messageType, direction, displayNeedsUpdate in
-                _timecode = timecode
-                _mType = messageType
-                _direction = direction
-                _displayNeedsUpdate = displayNeedsUpdate
-            } mtcFrameRateChanged: { mtcFrameRate in
-                _mtcFR = mtcFrameRate
-            }
+        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, displayNeedsUpdate in
+            _timecode = timecode
+            _mType = messageType
+            _direction = direction
+            _displayNeedsUpdate = displayNeedsUpdate
+        } mtcFrameRateChanged: { mtcFrameRate in
+            _mtcFR = mtcFrameRate
+        }
         
         // encoder
         
@@ -462,15 +459,14 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         var _displayNeedsUpdate: Bool?; _ = _displayNeedsUpdate
         var _mtcFR: MTCFrameRate?; _ = _mtcFR
         
-        let mtcDec = MTCDecoder(initialLocalFrameRate: nil)
-            { timecode, messageType, direction, displayNeedsUpdate in
-                _timecode = timecode
-                _mType = messageType
-                _direction = direction
-                _displayNeedsUpdate = displayNeedsUpdate
-            } mtcFrameRateChanged: { mtcFrameRate in
-                _mtcFR = mtcFrameRate
-            }
+        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, displayNeedsUpdate in
+            _timecode = timecode
+            _mType = messageType
+            _direction = direction
+            _displayNeedsUpdate = displayNeedsUpdate
+        } mtcFrameRateChanged: { mtcFrameRate in
+            _mtcFR = mtcFrameRate
+        }
         
         // encoder
         
@@ -584,15 +580,14 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         var _displayNeedsUpdate: Bool?; _ = _displayNeedsUpdate
         var _mtcFR: MTCFrameRate?; _ = _mtcFR
         
-        let mtcDec = MTCDecoder(initialLocalFrameRate: nil)
-            { timecode, messageType, direction, displayNeedsUpdate in
-                _timecode = timecode
-                _mType = messageType
-                _direction = direction
-                _displayNeedsUpdate = displayNeedsUpdate
-            } mtcFrameRateChanged: { mtcFrameRate in
-                _mtcFR = mtcFrameRate
-            }
+        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, displayNeedsUpdate in
+            _timecode = timecode
+            _mType = messageType
+            _direction = direction
+            _displayNeedsUpdate = displayNeedsUpdate
+        } mtcFrameRateChanged: { mtcFrameRate in
+            _mtcFR = mtcFrameRate
+        }
         
         // encoder
         

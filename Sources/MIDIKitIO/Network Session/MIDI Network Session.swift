@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 
 /// Sets the application's MIDI Network Session connection policy.
 /// Passing `nil` disables network MIDI connections.
@@ -15,7 +15,7 @@ import Foundation
 /// Supported on macOS 10.15+, macCatalyst 13.0+ and iOS 4.2+.
 @available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *)
 public func setMIDINetworkSession(policy: MIDIIONetworkConnectionPolicy?) {
-    if let policy = policy {
+    if let policy {
         MIDINetworkSession.default().isEnabled = true
         MIDINetworkSession.default().connectionPolicy = policy.coreMIDIPolicy
     } else {

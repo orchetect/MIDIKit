@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class UInt7_Tests: XCTestCase {
     fileprivate let _min      = 0b0000000 // int   0, hex 0x00

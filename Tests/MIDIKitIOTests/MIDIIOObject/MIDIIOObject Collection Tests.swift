@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
-import XCTest
 @testable import MIDIKitIO
+import XCTest
 
 final class MIDIIOObject_Collection_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve

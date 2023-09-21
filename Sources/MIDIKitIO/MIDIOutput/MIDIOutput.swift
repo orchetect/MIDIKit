@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 
 /// A managed virtual MIDI output endpoint created in the system by the MIDI I/O ``MIDIManager``.
 ///
@@ -23,7 +23,7 @@ import Foundation
 /// > endpoint.)
 public final class MIDIOutput: _MIDIManaged {
     // _MIDIManaged
-    internal weak var midiManager: MIDIManager?
+    weak var midiManager: MIDIManager?
     
     // MIDIManaged
     public private(set) var api: CoreMIDIAPIVersion
@@ -67,7 +67,7 @@ public final class MIDIOutput: _MIDIManaged {
     ///   - uniqueID: The port's unique ID in the system.
     ///   - midiManager: Reference to parent ``MIDIManager`` object.
     ///   - api: Core MIDI API version.
-    internal init(
+    init(
         name: String,
         uniqueID: MIDIUniqueID? = nil,
         midiManager: MIDIManager,
@@ -92,7 +92,7 @@ extension MIDIOutput {
     
     /// Queries the system and returns the endpoint ref if the endpoint exists (by matching port
     /// name and unique ID)
-    internal var uniqueIDExistsInSystem: MIDIEndpointRef? {
+    var uniqueIDExistsInSystem: MIDIEndpointRef? {
         guard let unwrappedUniqueID = uniqueID else {
             return nil
         }
@@ -106,7 +106,7 @@ extension MIDIOutput {
 }
 
 extension MIDIOutput {
-    internal func create(in manager: MIDIManager) throws {
+    func create(in manager: MIDIManager) throws {
         if uniqueIDExistsInSystem != nil {
             // if uniqueID is already in use, set it to nil here
             // so MIDISourceCreate can return a new unused ID;
@@ -165,7 +165,7 @@ extension MIDIOutput {
     /// `create()` method.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-    internal func dispose() throws {
+    func dispose() throws {
         guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else { return }
     
         defer { self.coreMIDIOutputPortRef = nil }
@@ -203,7 +203,7 @@ extension MIDIOutput: MIDIManagedSendsMessages {
 }
 
 extension MIDIOutput: _MIDIManagedSendsMessages {
-    internal func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
+    func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
         guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else {
             throw MIDIIOError.internalInconsistency(
                 "Port reference is nil."
@@ -215,7 +215,7 @@ extension MIDIOutput: _MIDIManagedSendsMessages {
     }
     
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    internal func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
+    func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
         guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else {
             throw MIDIIOError.internalInconsistency(
                 "Port reference is nil."

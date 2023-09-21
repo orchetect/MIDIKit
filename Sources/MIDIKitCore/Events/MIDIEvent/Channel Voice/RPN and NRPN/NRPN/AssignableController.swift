@@ -40,7 +40,8 @@ extension MIDIEvent {
     /// > organized in 128 Banks (corresponds to NRPN MSB), with 128 controllers per Bank
     /// > (corresponds to NRPN LSB).
     ///
-    /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    /// See Recommended Practise
+    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
     public enum AssignableController: Equatable, Hashable {
         /// Form an NRPN message from a raw parameter number byte pair.

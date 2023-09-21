@@ -7,7 +7,8 @@
 extension MIDIEvent.RegisteredController {
     /// Initialize an enum case from the controller number.
     /// If a case matching the param bytes is not found, the
-    /// ``MIDIEvent/RegisteredController/raw(parameter:dataEntryMSB:dataEntryLSB:)`` case will be returned.
+    /// ``MIDIEvent/RegisteredController/raw(parameter:dataEntryMSB:dataEntryLSB:)`` case will be
+    /// returned.
     public init(
         parameter: UInt7Pair,
         data: (msb: UInt7?, lsb: UInt7?)
@@ -51,11 +52,17 @@ extension MIDIEvent.RegisteredController {
             
         case (0x3D, 0x00):
             let dataPair = dataPair()
-            self = .threeDimensionalAzimuthAngle(dataEntryMSB: dataPair.msb, dataEntryLSB: dataPair.lsb)
+            self = .threeDimensionalAzimuthAngle(
+                dataEntryMSB: dataPair.msb,
+                dataEntryLSB: dataPair.lsb
+            )
             
         case (0x3D, 0x01):
             let dataPair = dataPair()
-            self = .threeDimensionalElevationAngle(dataEntryMSB: dataPair.msb, dataEntryLSB: dataPair.lsb)
+            self = .threeDimensionalElevationAngle(
+                dataEntryMSB: dataPair.msb,
+                dataEntryLSB: dataPair.lsb
+            )
             
         case (0x3D, 0x02):
             let dataPair = dataPair()
@@ -63,27 +70,45 @@ extension MIDIEvent.RegisteredController {
             
         case (0x3D, 0x03):
             let dataPair = dataPair()
-            self = .threeDimensionalDistanceRatio(dataEntryMSB: dataPair.msb, dataEntryLSB: dataPair.lsb)
+            self = .threeDimensionalDistanceRatio(
+                dataEntryMSB: dataPair.msb,
+                dataEntryLSB: dataPair.lsb
+            )
             
         case (0x3D, 0x04):
             let dataPair = dataPair()
-            self = .threeDimensionalMaximumDistance(dataEntryMSB: dataPair.msb, dataEntryLSB: dataPair.lsb)
+            self = .threeDimensionalMaximumDistance(
+                dataEntryMSB: dataPair.msb,
+                dataEntryLSB: dataPair.lsb
+            )
             
         case (0x3D, 0x05):
             let dataPair = dataPair()
-            self = .threeDimensionalGainAtMaximumDistance(dataEntryMSB: dataPair.msb, dataEntryLSB: dataPair.lsb)
+            self = .threeDimensionalGainAtMaximumDistance(
+                dataEntryMSB: dataPair.msb,
+                dataEntryLSB: dataPair.lsb
+            )
             
         case (0x3D, 0x06):
             let dataPair = dataPair()
-            self = .threeDimensionalReferenceDistanceRatio(dataEntryMSB: dataPair.msb, dataEntryLSB: dataPair.lsb)
+            self = .threeDimensionalReferenceDistanceRatio(
+                dataEntryMSB: dataPair.msb,
+                dataEntryLSB: dataPair.lsb
+            )
             
         case (0x3D, 0x07):
             let dataPair = dataPair()
-            self = .threeDimensionalPanSpreadAngle(dataEntryMSB: dataPair.msb, dataEntryLSB: dataPair.lsb)
+            self = .threeDimensionalPanSpreadAngle(
+                dataEntryMSB: dataPair.msb,
+                dataEntryLSB: dataPair.lsb
+            )
             
         case (0x3D, 0x08):
             let dataPair = dataPair()
-            self = .threeDimensionalRollAngle(dataEntryMSB: dataPair.msb, dataEntryLSB: dataPair.lsb)
+            self = .threeDimensionalRollAngle(
+                dataEntryMSB: dataPair.msb,
+                dataEntryLSB: dataPair.lsb
+            )
             
         default:
             self = .raw(

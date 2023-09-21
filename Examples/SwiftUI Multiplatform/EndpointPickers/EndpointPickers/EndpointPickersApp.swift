@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKit
+import SwiftUI
 
 @main
 struct EndpointPickersApp: App {
@@ -48,7 +48,8 @@ struct EndpointPickersApp: App {
             .environmentObject(midiHelper)
         }
         .onChange(of: midiInSelectedID) { uid in
-            // cache endpoint name persistently so we can show it in the event the endpoint disappears
+            // cache endpoint name persistently so we can show it in the event the endpoint
+            // disappears
             if uid == .invalidMIDIIdentifier {
                 midiInSelectedDisplayName = "None"
             } else if let found = midiManager.endpoints.outputs.first(whereUniqueID: uid) {
@@ -58,7 +59,8 @@ struct EndpointPickersApp: App {
             midiHelper.midiInUpdateConnection(selectedUniqueID: uid)
         }
         .onChange(of: midiOutSelectedID) { uid in
-            // cache endpoint name persistently so we can show it in the event the endpoint disappears
+            // cache endpoint name persistently so we can show it in the event the endpoint
+            // disappears
             if uid == .invalidMIDIIdentifier {
                 midiOutSelectedDisplayName = "None"
             } else if let found = midiManager.endpoints.inputs.first(whereUniqueID: uid) {

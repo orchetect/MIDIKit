@@ -11,7 +11,7 @@
 extension MIDIInputEndpoint {
     /// Unit testing only:
     /// Manually mock an endpoint with custom name, display name, and unique ID.
-    internal init(
+    init(
         ref: CoreMIDIEndpointRef,
         name: String,
         displayName: String,
@@ -27,7 +27,7 @@ extension MIDIInputEndpoint {
 extension MIDIOutputEndpoint {
     /// Unit testing only:
     /// Manually mock an endpoint with custom name, display name, and unique ID.
-    internal init(
+    init(
         ref: CoreMIDIEndpointRef,
         name: String,
         displayName: String,

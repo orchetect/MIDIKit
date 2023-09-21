@@ -8,11 +8,11 @@
 
 extension MIDIReceiveHandler {
     /// MIDI Event receive handler that holds a weak reference to a receiver object.
-    internal final class WeakEventsReceiver: MIDIReceiveHandlerProtocol {
+    final class WeakEventsReceiver: MIDIReceiveHandlerProtocol {
         public weak var receiver: ReceivesMIDIEvents?
     
-        internal let midi1Parser = MIDI1Parser()
-        internal let midi2Parser = MIDI2Parser()
+        let midi1Parser = MIDI1Parser()
+        let midi2Parser = MIDI2Parser()
     
         public func packetListReceived(
             _ packets: [MIDIPacketData]
@@ -36,7 +36,7 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal init(
+        init(
             translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
             receiver: ReceivesMIDIEvents
         ) {

@@ -5,11 +5,11 @@
 //
 
 import Cocoa
-import SwiftUI
 import MIDIKitIO
 import MIDIKitSync
-import TimecodeKit
 import OTCore
+import SwiftUI
+import TimecodeKit
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {

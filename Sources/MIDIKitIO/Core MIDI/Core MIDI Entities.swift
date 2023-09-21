@@ -12,7 +12,7 @@ import Foundation
 
 /// Internal:
 /// List of MIDI entities in the system (computed property)
-internal func getSystemDevice(
+func getSystemDevice(
     for entity: CoreMIDI.MIDIEntityRef
 ) throws -> MIDIDevice? {
     var dev = MIDIDeviceRef()
@@ -27,7 +27,7 @@ internal func getSystemDevice(
     
 /// Internal:
 /// List of source endpoints for the entity (computed property)
-internal func getSystemSources(
+func getSystemSources(
     for entity: CoreMIDI.MIDIEntityRef
 ) -> [MIDIOutputEndpoint] {
     let srcCount = MIDIEntityGetNumberOfSources(entity)
@@ -46,7 +46,7 @@ internal func getSystemSources(
     
 /// Internal:
 /// List of destination endpoints for the entity (computed property)
-internal func getSystemDestinations(
+func getSystemDestinations(
     for entity: CoreMIDI.MIDIEntityRef
 ) -> [MIDIInputEndpoint] {
     let srcCount = MIDIEntityGetNumberOfDestinations(entity)

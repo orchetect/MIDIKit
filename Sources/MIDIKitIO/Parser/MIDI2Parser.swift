@@ -17,7 +17,7 @@ public final class MIDI2Parser {
     /// Internal:
     /// Default static instance for MIDIKit objects that support parsing events without requiring a
     /// parser to be instanced first.
-    internal static let `default` = MIDI2Parser()
+    static let `default` = MIDI2Parser()
     
     // MARK: - Parser State
     
@@ -171,7 +171,7 @@ public final class MIDI2Parser {
     /// - Parameters:
     ///   - bytes: 3 UMP bytes after the first byte (subscript range [1...3]).
     ///   - group: UMP group.
-    internal func parseSystemRealTimeAndCommon(
+    func parseSystemRealTimeAndCommon(
         bytes: Array<UInt8>.SubSequence,
         group: UInt4
     ) -> MIDIEvent? {
@@ -257,7 +257,7 @@ public final class MIDI2Parser {
     /// - Parameters:
     ///   - bytes: 3 UMP bytes after the first byte (subscript range `[1...3]`).
     ///   - group: UMP group.
-    internal func parseMIDI1ChannelVoice(
+    func parseMIDI1ChannelVoice(
         bytes: Array<UInt8>.SubSequence,
         channel: UInt4,
         group: UInt4
@@ -381,7 +381,7 @@ public final class MIDI2Parser {
     ///   - bytes: 3 UMP bytes after the first byte (subscript range `[1...3]`).
     ///   - channel: MIDI Channel.
     ///   - group: UMP group.
-    internal func parseMIDI2ChannelVoice(
+    func parseMIDI2ChannelVoice(
         bytes: Array<UInt8>.SubSequence,
         channel: UInt4,
         group: UInt4
@@ -633,7 +633,7 @@ public final class MIDI2Parser {
     /// - Parameters:
     ///   - bytes: 7 UMP bytes after the first byte (subscript range `[1...7]`).
     ///   - group: UMP group.
-    internal func parseData64Bit(
+    func parseData64Bit(
         bytes: Array<UInt8>.SubSequence,
         group: UInt4
     ) -> MIDIEvent? {
@@ -712,7 +712,7 @@ public final class MIDI2Parser {
     /// - Parameters:
     ///   - bytes: 15 UMP bytes after the first byte (subscript range `[1...15]`).
     ///   - group: UMP group.
-    internal func parseData128Bit(
+    func parseData128Bit(
         bytes: Array<UInt8>.SubSequence,
         group: UInt4
     ) -> MIDIEvent? {
@@ -744,7 +744,8 @@ public final class MIDI2Parser {
         return nil
     }
     
-    /// Internal sub-sub-parser: Parse regular SysEx8 UMP message (not a Mixed Data Set SysEx8 UMP message).
+    /// Internal sub-sub-parser: Parse regular SysEx8 UMP message (not a Mixed Data Set SysEx8 UMP
+    /// message).
     ///
     /// - Parameters:
     ///   - bytes: 15 UMP bytes after the first byte (subscript range `[1...15]`).
@@ -768,8 +769,8 @@ public final class MIDI2Parser {
         case .complete:
             let payloadBytes = bytes[
                 bytes.startIndex.advanced(by: 1)
-                ..<
-                bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                    ..<
+                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
             ]
             
             guard let parsedSysEx = try? MIDIEvent.sysEx8(
@@ -785,8 +786,8 @@ public final class MIDI2Parser {
             // include stream ID because MIDIEvent.sysEx8() expects it to be the first byte
             let payloadBytes = bytes[
                 bytes.startIndex.advanced(by: 1)
-                ..<
-                bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                    ..<
+                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
             ]
             
             sysEx8MultiPartUMPBuffer[streamID] = Array(payloadBytes)
@@ -801,8 +802,8 @@ public final class MIDI2Parser {
             
             let payloadBytes = bytes[
                 bytes.startIndex.advanced(by: 2)
-                ..<
-                bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                    ..<
+                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
             ]
             
             sysEx8MultiPartUMPBuffer[streamID]?.append(contentsOf: payloadBytes)
@@ -817,8 +818,8 @@ public final class MIDI2Parser {
             
             let payloadBytes = bytes[
                 bytes.startIndex.advanced(by: 2)
-                ..<
-                bytes.startIndex.advanced(by: 1 + numberOfBytes)
+                    ..<
+                    bytes.startIndex.advanced(by: 1 + numberOfBytes)
             ]
             
             // reset buffer
@@ -836,7 +837,8 @@ public final class MIDI2Parser {
         }
     }
     
-    /// Internal sub-sub-parser: Parse Mixed Data Set SysEx8 UMP message (not a regular SysEx8 UMP message).
+    /// Internal sub-sub-parser: Parse Mixed Data Set SysEx8 UMP message (not a regular SysEx8 UMP
+    /// message).
     ///
     /// - Parameters:
     ///   - bytes: 15 UMP bytes after the first byte (subscript range `[1...15]`).
@@ -873,7 +875,7 @@ public final class MIDI2Parser {
     /// - Parameters:
     ///   - bytes: all bytes after the first byte (subscript range `[1...]`).
     ///   - group: UMP group.
-    internal func parseMIDI2Utility(
+    func parseMIDI2Utility(
         bytes: Array<UInt8>.SubSequence,
         group: UInt4
     ) -> (
@@ -949,19 +951,19 @@ public final class MIDI2Parser {
 
 extension UniversalMIDIPacketData {
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
-    internal func parsedEvents() -> [MIDIEvent] {
+    func parsedEvents() -> [MIDIEvent] {
         MIDI2Parser.default.parsedEvents(in: bytes)
     }
     
     /// Parse this instance's raw packet data into an array of MIDI Events.
-    internal func parsedEvents(using parser: MIDI2Parser) -> [MIDIEvent] {
+    func parsedEvents(using parser: MIDI2Parser) -> [MIDIEvent] {
         parser.parsedEvents(in: self)
     }
 }
 
 extension AnyMIDIPacket {
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
-    internal func parsedMIDI2Events() -> [MIDIEvent] {
+    func parsedMIDI2Events() -> [MIDIEvent] {
         MIDI2Parser.default.parsedEvents(in: bytes)
     }
 }

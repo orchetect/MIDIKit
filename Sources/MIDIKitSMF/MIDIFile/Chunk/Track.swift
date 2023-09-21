@@ -14,7 +14,7 @@ extension MIDIFile.Chunk {
     public struct Track: Equatable, Hashable {
         public static let staticIdentifier: String = "MTrk"
         
-        internal static let chunkEnd: [UInt8] = [0xFF, 0x2F, 0x00]
+        static let chunkEnd: [UInt8] = [0xFF, 0x2F, 0x00]
         
         /// Storage for events in the track.
         public var events: [MIDIFileEvent] = []
@@ -93,7 +93,7 @@ extension MIDIFile.Chunk.Track {
     }
     
     /// Init from raw data stream, excluding the header identifier and length.
-    internal init<D: MutableDataProtocol>(midi1SMFRawBytes rawData: D) throws {
+    init<D: MutableDataProtocol>(midi1SMFRawBytes rawData: D) throws {
         // chunk data
         
         try rawData.withDataReader { dataReader in
@@ -132,7 +132,7 @@ extension MIDIFile.Chunk.Track {
                 // event
                 
                 // TODO: an effort to improve performance when reading large MIDI files, but parser needs to be rewritten to vastly improve efficiency
-                let readAheadCount = dataReader.remainingByteCount.clamped(to: 1...512)
+                let readAheadCount = dataReader.remainingByteCount.clamped(to: 1 ... 512)
                 guard var readBuffer = try? dataReader.nonAdvancingRead(bytes: readAheadCount)
                 else {
                     throw MIDIFile.DecodeError.malformed(
@@ -166,7 +166,7 @@ extension MIDIFile.Chunk.Track {
                 }
             
                 // if running status byte is present, inject it into the byte buffer
-                if let runningStatusByte = runningStatusByte {
+                if let runningStatusByte {
                     readBuffer.insert(runningStatusByte, at: readBuffer.startIndex)
                 }
             
@@ -176,14 +176,16 @@ extension MIDIFile.Chunk.Track {
             
                 autoreleasepool {
                     for eventDef in MIDIFile.Chunk.Track.eventDecodeOrder.concreteTypes {
-                        if let success = try? eventDef.initFrom(midi1SMFRawBytesStream: readBuffer) {
+                        if let success = try? eventDef
+                            .initFrom(midi1SMFRawBytesStream: readBuffer)
+                        {
                             foundEvent = success
                             break // break for-loop lazily
                         }
                     }
                 }
                 
-                if let foundEvent = foundEvent {
+                if let foundEvent {
                     // inject delta time into event
                     let newEventDelta: MIDIFileEvent
                         .DeltaTime = .ticks(UInt32(eventDeltaTime.value))
@@ -310,7 +312,7 @@ extension MIDIFile.Chunk.Track {
     /// This is computed so avoid frequent calls to this method.
     /// Ensure the `ppq` supplied is the same as used in the MIDI file.
     public func eventsAtBeatPositions(ppq: UInt16) -> [(beat: Double, event: MIDIFileEvent)] {
-        var position: Double = 0.0
+        var position = 0.0
         return events.map {
             let deltaTicks = $0.delta.ticksValue(using: .musical(ticksPerQuarterNote: ppq))
             if deltaTicks != 0 {

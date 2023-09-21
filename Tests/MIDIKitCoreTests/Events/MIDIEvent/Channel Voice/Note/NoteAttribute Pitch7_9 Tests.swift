@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class MIDIEvent_NoteAttribute_Pitch7_9_Tests: XCTestCase {
     typealias Pitch7_9 = MIDIEvent.NoteAttribute.Pitch7_9

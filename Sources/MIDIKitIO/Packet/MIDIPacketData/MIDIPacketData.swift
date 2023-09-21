@@ -32,7 +32,7 @@ public struct MIDIPacketData {
 }
 
 extension MIDIPacketData {
-    internal init(
+    init(
         _ midiPacketPtr: UnsafePointer<MIDIPacket>,
         refCon: UnsafeMutableRawPointer?,
         refConKnown: Bool

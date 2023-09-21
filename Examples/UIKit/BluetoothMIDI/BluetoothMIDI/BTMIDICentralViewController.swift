@@ -6,8 +6,8 @@
 
 #if os(iOS)
 
-import UIKit
 import CoreAudioKit
+import UIKit
 
 class BTMIDICentralViewController: CABTMIDICentralViewController {
     var uiViewController: UIViewController?

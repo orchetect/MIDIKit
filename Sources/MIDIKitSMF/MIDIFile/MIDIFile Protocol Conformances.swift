@@ -9,9 +9,9 @@ import MIDIKitCore
 extension MIDIFile: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.header == rhs.header &&
-        lhs.format == rhs.format &&
-        lhs.timeBase == rhs.timeBase &&
-        lhs.chunks == rhs.chunks
+            lhs.format == rhs.format &&
+            lhs.timeBase == rhs.timeBase &&
+            lhs.chunks == rhs.chunks
     }
 }
 

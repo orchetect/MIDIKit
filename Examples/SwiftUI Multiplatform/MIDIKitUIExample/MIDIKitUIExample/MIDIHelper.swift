@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKitIO
+import SwiftUI
 
 /// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
 /// SwiftUI view state directly. Therefore, we need a helper class that conforms to

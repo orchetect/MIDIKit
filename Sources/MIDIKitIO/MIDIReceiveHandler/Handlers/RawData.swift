@@ -14,7 +14,7 @@ extension MIDIReceiveHandler {
     /// Raw packet data receive handler.
     /// This handler is provided for debugging and data introspection but is discouraged for
     /// manually parsing MIDI packets. It is recommended to use a MIDI event handler instead.
-    internal final class RawData: MIDIReceiveHandlerProtocol {
+    final class RawData: MIDIReceiveHandlerProtocol {
         public var handler: MIDIReceiver.RawDataHandler
     
         public func packetListReceived(
@@ -37,7 +37,7 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal init(
+        init(
             _ handler: @escaping MIDIReceiver.RawDataHandler
         ) {
             self.handler = handler

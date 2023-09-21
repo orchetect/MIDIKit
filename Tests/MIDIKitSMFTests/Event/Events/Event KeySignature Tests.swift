@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSMF
+import XCTest
 
 final class Event_KeySignature_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve

@@ -4,9 +4,9 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
-import MIDIKitControlSurfaces
 import Controls
+import MIDIKitControlSurfaces
+import SwiftUI
 
 struct RotaryKnob: View {
     @EnvironmentObject var huiSurface: HUISurface

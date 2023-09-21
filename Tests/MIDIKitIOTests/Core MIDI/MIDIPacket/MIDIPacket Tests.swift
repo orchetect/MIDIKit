@@ -6,10 +6,10 @@
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
-import XCTest
-@testable import MIDIKitIO
-@_implementationOnly import MIDIKitInternals
 import CoreMIDI
+@_implementationOnly import MIDIKitInternals
+@testable import MIDIKitIO
+import XCTest
 
 final class MIDIPacket_Tests: XCTestCase {
     func testEmptyBytes256Length() throws {

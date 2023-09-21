@@ -6,8 +6,8 @@
 
 #if os(iOS)
 
-import SwiftUI
 import MIDIKitIO
+import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: MIDIManager
@@ -83,18 +83,22 @@ struct ContentView: View {
                 }
     
                 Section(header: Text("Received Events")) {
-                    Toggle("Filter Active Sensing and Clock", isOn: $midiHelper.filterActiveSensingAndClock)
+                    Toggle(
+                        "Filter Active Sensing and Clock",
+                        isOn: $midiHelper.filterActiveSensingAndClock
+                    )
                     
                     let events = midiHelper.receivedEvents.reversed()
                     
-                    // Since MIDIEvent doesn't conform to Identifiable (and won't ever), in a List or
-                    // ForEach we need to either use an array index or a wrap MIDIEvent in a custom
-                    // type that does conform to Identifiable. It's really up to your use case.
-                    // Usually application interaction is driven by MIDI events and we aren't literally
-                    // logging events, but this is for diagnostic purposes here.
+                    // Since MIDIEvent doesn't conform to Identifiable (and won't ever), in a List
+                    // or ForEach we need to either use an array index or a wrap MIDIEvent in a
+                    // custom type that does conform to Identifiable. It's really up to your use
+                    // case.
+                    // Usually application interaction is driven by MIDI events and we aren't
+                    // literally logging events, but this is for diagnostic purposes here.
                     List(events.indices, id: \.self) { index in
                         Text(events[index].description)
-                        .foregroundColor(color(for: events[index]))
+                            .foregroundColor(color(for: events[index]))
                     }
                 }
             }

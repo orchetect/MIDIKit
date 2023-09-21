@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
     func testFilter_drop() {

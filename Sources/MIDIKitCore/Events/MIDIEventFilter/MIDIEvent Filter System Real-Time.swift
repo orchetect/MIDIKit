@@ -50,7 +50,7 @@ extension MIDIEvent {
 
 // MARK: - Filter
 
-extension Collection where Element == MIDIEvent {
+extension Collection<MIDIEvent> {
     /// Filter System Real-Time events.
     public func filter(sysRealTime types: MIDIEvent.SysRealTimeTypes) -> [Element] {
         switch types {

@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class ChanVoice7Bit16BitValueTests: XCTestCase {
     // swiftformat:options --wrapcollections preserve

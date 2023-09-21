@@ -62,7 +62,7 @@ extension MIDIEvent {
 
 // MARK: - Filter
 
-extension Collection where Element == MIDIEvent {
+extension Collection<MIDIEvent> {
     /// Filter Channel Voice events.
     public func filter(chanVoice types: MIDIEvent.ChanVoiceTypes) -> [Element] {
         switch types {

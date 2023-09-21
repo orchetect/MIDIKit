@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 
 /// Central MIDI Port and Connection Manager and MIDI system data provider.
 ///
@@ -93,7 +93,7 @@ public final class MIDIManager: NSObject {
     // MARK: - Internal dispatch queue
     
     /// Thread for MIDI event I/O.
-    internal var eventQueue: DispatchQueue
+    var eventQueue: DispatchQueue
     
     // MARK: - Init
     
@@ -162,8 +162,8 @@ public final class MIDIManager: NSObject {
     
     // MARK: - Helper methods
     
-    internal func sendNotificationAsync(_ notif: MIDIIONotification) {
-        if let notificationHandler = notificationHandler {
+    func sendNotificationAsync(_ notif: MIDIIONotification) {
+        if let notificationHandler {
             DispatchQueue.main.async {
                 notificationHandler(notif, self)
             }
@@ -171,7 +171,7 @@ public final class MIDIManager: NSObject {
     }
     
     /// Internal: updates cached properties for all objects.
-    internal dynamic func updateObjectsCache() {
+    dynamic func updateObjectsCache() {
         #if canImport(Combine)
         if #available(
             macOS 10.15,

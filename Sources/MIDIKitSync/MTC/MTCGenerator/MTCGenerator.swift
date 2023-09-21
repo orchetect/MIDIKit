@@ -120,23 +120,23 @@ public final class MTCGenerator: SendsMIDIEvents {
     // MARK: - Queue (internal)
         
     /// Maintain a high-priority internal thread
-    internal var queue: DispatchQueue
+    var queue: DispatchQueue
         
     // MARK: - Encoder (internal)
         
-    internal var encoder = MTCEncoder()
+    var encoder = MTCEncoder()
         
     // MARK: - Timer (internal)
         
-    internal var timer: SafeDispatchTimer
+    var timer: SafeDispatchTimer
         
     /// Internal: Fired from our timer object.
-    internal func timerFired() {
+    func timerFired() {
         encoder.increment()
     }
         
     /// Sets timer rate to corresponding MTC quarter-frame duration in Hz.
-    internal func setTimerRate(from frameRate: TimecodeFrameRate) {
+    func setTimerRate(from frameRate: TimecodeFrameRate) {
         // const values generated from:
         // TCC(f: 1).toTimecode(at: frameRate).realTimeValue
         // double and quadruple rates use the same value as their 1x rate
@@ -332,7 +332,7 @@ public final class MTCGenerator: SendsMIDIEvents {
     /// the start of MTC generation.
     /// - Note: This method assumes `subframes == 0`.
     /// - Important: This must be called on `self.queue`.
-    internal func locateAndStart(
+    func locateAndStart(
         now components: Timecode.Components,
         frameRate: TimecodeFrameRate
     ) {

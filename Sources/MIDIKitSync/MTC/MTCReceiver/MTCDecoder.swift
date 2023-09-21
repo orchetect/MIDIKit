@@ -84,7 +84,7 @@ public final class MTCDecoder {
     ///
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
-    internal var timecodeChangedHandler: ((
+    var timecodeChangedHandler: ((
         _ timecode: Timecode,
         _ event: MTCMessageType,
         _ direction: MTCDirection,
@@ -111,7 +111,7 @@ public final class MTCDecoder {
     ///
     /// This can usually be ignored, as the ``MTCDecoder`` can handle scaling and validation of the
     /// frame rate information from the stream transparently.
-    internal var mtcFrameRateChangedHandler: ((_ rate: MTCFrameRate) -> Void)?
+    var mtcFrameRateChangedHandler: ((_ rate: MTCFrameRate) -> Void)?
         
     /// Sets the closure called only when the incoming MTC stream changes its frame rate
     /// classification.
@@ -128,37 +128,37 @@ public final class MTCDecoder {
         
     // Quarter-Frame tracking registers
         
-    internal var TC_H_lsb: UInt8 = 0b00000000
-    internal var TC_H_msb: UInt8 = 0b00000000
-    internal var TC_M_lsb: UInt8 = 0b00000000
-    internal var TC_M_msb: UInt8 = 0b00000000
-    internal var TC_S_lsb: UInt8 = 0b00000000
-    internal var TC_S_msb: UInt8 = 0b00000000
-    internal var TC_F_lsb: UInt8 = 0b00000000
-    internal var TC_F_msb: UInt8 = 0b00000000
+    var TC_H_lsb: UInt8 = 0b00000000
+    var TC_H_msb: UInt8 = 0b00000000
+    var TC_M_lsb: UInt8 = 0b00000000
+    var TC_M_msb: UInt8 = 0b00000000
+    var TC_S_lsb: UInt8 = 0b00000000
+    var TC_S_msb: UInt8 = 0b00000000
+    var TC_F_lsb: UInt8 = 0b00000000
+    var TC_F_msb: UInt8 = 0b00000000
         
-    internal var TC_H_lsb_received = false
-    internal var TC_H_msb_received = false
-    internal var TC_M_lsb_received = false
-    internal var TC_M_msb_received = false
-    internal var TC_S_lsb_received = false
-    internal var TC_S_msb_received = false
-    internal var TC_F_lsb_received = false
-    internal var TC_F_msb_received = false
+    var TC_H_lsb_received = false
+    var TC_H_msb_received = false
+    var TC_M_lsb_received = false
+    var TC_M_msb_received = false
+    var TC_S_lsb_received = false
+    var TC_S_msb_received = false
+    var TC_F_lsb_received = false
+    var TC_F_msb_received = false
         
-    internal var quarterFrameBufferIsComplete = false
-    internal var lastQuarterFrameReceived: UInt8 = 0b000
-    internal var receivedSyncQFSinceQFBufferComplete = false
+    var quarterFrameBufferIsComplete = false
+    var lastQuarterFrameReceived: UInt8 = 0b000
+    var receivedSyncQFSinceQFBufferComplete = false
         
-    internal var rawHours = 0
-    internal var rawMinutes = 0
-    internal var rawSeconds = 0
-    internal var rawFrames = 0
+    var rawHours = 0
+    var rawMinutes = 0
+    var rawSeconds = 0
+    var rawFrames = 0
         
-    internal var lastCapturedWholeTimecode = TCC(h: 0, m: 0, s: 0, f: 0)
-    internal var lastCapturedWholeTimecodeDirection: MTCDirection = .ambiguous
-    internal var lastCapturedWholeTimecodeDeltaQFs: Int?
-    internal var lastTimecodeSentToHandler = TCC(h: 0, m: 0, s: 0, f: 0)
+    var lastCapturedWholeTimecode = TCC(h: 0, m: 0, s: 0, f: 0)
+    var lastCapturedWholeTimecodeDirection: MTCDirection = .ambiguous
+    var lastCapturedWholeTimecodeDeltaQFs: Int?
+    var lastTimecodeSentToHandler = TCC(h: 0, m: 0, s: 0, f: 0)
         
     // MARK: - init
         
@@ -217,7 +217,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
     /// rr == 01: 25 frames/s
     /// rr == 10: 29.97d frames/s (SMPTE drop-frame timecode)
     /// rr == 11: 30 frames/s
-    internal func processSysEx(
+    func processSysEx(
         universalType: MIDIEvent.UniversalSysExType,
         deviceID: UInt7,
         subID1: UInt7,
@@ -292,7 +292,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
     /// time is updated every two frames.
     /// A quarter-frame message consists of a status byte of 0xF1, followed by a single 7-bit data
     /// value: 3 bits to identify the piece, and 4 bits of partial time code.
-    internal func processQF(dataByte: UInt8) {
+    func processQF(dataByte: UInt8) {
         // Verbose debugging - careful when enabling this!
         // -----------------------------------------------
         // print("F1",
@@ -527,7 +527,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
     /// Internal:
     /// Parses framerate info received from MTC stream and stores value.
     /// - Parameter rateBits: two-bit number
-    internal func setMTCFrameRate(rateBits: UInt8) {
+    func setMTCFrameRate(rateBits: UInt8) {
         if let bits = MTCFrameRate(rateBits) {
             mtcFrameRate = bits
         }
@@ -536,7 +536,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
     /// Internal:
     /// Returns true if all 8 quarter-frames have been received in order to assemble a full MTC
     /// timecode.
-    internal func qfBufferComplete() -> Bool {
+    func qfBufferComplete() -> Bool {
         // return cached true value
         if quarterFrameBufferIsComplete { return true }
         

@@ -12,11 +12,11 @@ struct ContentView: View {
             Text(
                 """
                 This example creates a virtual MIDI input port named "\(MIDIHelper.virtualInputName)".
-                    
+                
                 Received MIDI events are logged to the console, filtering out Active Sensing and Clock events.
-                    
+                
                 Values are logged in both MIDI 1.0 and MIDI 2.0 resolutions for convenience, regardless of which API being used in the system.
-                    
+                
                 For a more in-depth example demonstrating reading values from events, review the Event Parsing example project.
                 """
             )

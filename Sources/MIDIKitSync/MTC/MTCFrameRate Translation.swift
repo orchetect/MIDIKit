@@ -89,7 +89,7 @@ extension MTCFrameRate {
     ///
     /// - Returns: A `Double` is returned with the integer part representing frame number and the
     /// fractional part representing the fraction of the frame derived from quarter-frames.
-    internal func scaledFrames(
+    func scaledFrames(
         fromRawMTCFrames: Int,
         quarterFrames: UInt8,
         to timecodeRate: TimecodeFrameRate
@@ -145,7 +145,7 @@ extension TimecodeFrameRate {
     /// - Returns: `(rawMTCFrames: Int, rawMTCQuarterFrames: UInt8)` where `rawMTCFrames` is raw MTC
     /// frame number, as decoded from quarter-frame messages and `rawMTCQuarterFrames` is number of
     /// QFs elapsed (`0 ... 7`).
-    internal func scaledFrames(
+    func scaledFrames(
         fromTimecodeFrames: Double
     ) -> (
         rawMTCFrames: Int,
@@ -172,7 +172,7 @@ extension TimecodeFrameRate {
 
 extension TimecodeFrameRate {
     /// Internal: scale factor used when scaling timecode frame rate to/from MTC SMPTE frame rates
-    internal var mtcScaleFactor: Double {
+    var mtcScaleFactor: Double {
         // calculated from:
         // (self.maxFrameNumberDisplayable + 1) / self.mtcFrameRate.fpsValueForScaling
         

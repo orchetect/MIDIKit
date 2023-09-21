@@ -31,7 +31,7 @@ extension MIDIEvent {
     
         /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of
         /// an 8-bit Stream ID field.
-        internal var streamID: UInt8 = 0x00
+        var streamID: UInt8 = 0x00
     
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
@@ -46,7 +46,7 @@ extension MIDIEvent {
             self.group = group
         }
     
-        internal init(
+        init(
             manufacturer: SysExManufacturer,
             data: [UInt8],
             streamID: UInt8,
@@ -112,7 +112,7 @@ extension MIDIEvent.SysEx8 {
     /// Internal:
     /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly;
     /// use the public ``umpRawWords()`` method instead.
-    internal static func umpRawWords(
+    static func umpRawWords(
         fromSysEx8Data data: [UInt8],
         streamID: UInt8,
         group: UInt4

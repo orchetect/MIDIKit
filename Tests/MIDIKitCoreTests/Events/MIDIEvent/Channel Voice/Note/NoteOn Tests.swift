@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitCore
+import XCTest
 
 final class MIDIEvent_NoteOn_Tests: XCTestCase {
     typealias NoteOn = MIDIEvent.NoteOn

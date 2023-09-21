@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class NumberFormatting_Tests: XCTestCase {
     func testRoundedDecimalPlaces_Default() {

@@ -14,11 +14,11 @@ extension MIDIReceiver {
 
 extension MIDIReceiveHandler {
     /// MIDI Event receive handler.
-    internal final class Events: MIDIReceiveHandlerProtocol {
+    final class Events: MIDIReceiveHandlerProtocol {
         public var handler: MIDIReceiver.EventsHandler
         
-        internal let midi1Parser = MIDI1Parser()
-        internal let midi2Parser = MIDI2Parser()
+        let midi1Parser = MIDI1Parser()
+        let midi2Parser = MIDI2Parser()
         
         public func packetListReceived(
             _ packets: [MIDIPacketData]
@@ -43,7 +43,7 @@ extension MIDIReceiveHandler {
             }
         }
         
-        internal init(
+        init(
             translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
             _ handler: @escaping MIDIReceiver.EventsHandler
         ) {

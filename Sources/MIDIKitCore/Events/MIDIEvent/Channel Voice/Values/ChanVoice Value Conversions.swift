@@ -12,7 +12,7 @@ extension MIDIEvent {
     /// Internal:
     /// Scales a 7-bit value to a 16-bit value.
     /// Adheres to scaling algorithm defined in MIDI 2.0 Spec.
-    internal static func scaled16Bit(from7Bit source: UInt7) -> UInt16 {
+    static func scaled16Bit(from7Bit source: UInt7) -> UInt16 {
         let bitShiftedValue = UInt16(source) << 9
         if source <= 64 {
             return bitShiftedValue
@@ -26,7 +26,7 @@ extension MIDIEvent {
     
     /// Internal:
     /// Scales a 16-bit value to a 7-bit value.
-    internal static func scaled7Bit(from16Bit source: UInt16) -> UInt7 {
+    static func scaled7Bit(from16Bit source: UInt16) -> UInt7 {
         UInt7(source >> 9) // (16 - 7)
     }
 }
@@ -37,7 +37,7 @@ extension MIDIEvent {
     /// Internal:
     /// Scales a 7-bit value to a 32-bit value.
     /// Adheres to scaling algorithm defined in MIDI 2.0 Spec.
-    internal static func scaled32Bit(from7Bit source: UInt7) -> UInt32 {
+    static func scaled32Bit(from7Bit source: UInt7) -> UInt32 {
         var bitShiftedValue = UInt32(source) << 25 // (32 - 7)
         if source <= 0x40 {
             return bitShiftedValue
@@ -54,7 +54,7 @@ extension MIDIEvent {
     
     /// Internal:
     /// Scales a 32-bit value to a 7-bit value.
-    internal static func scaled7Bit(from32Bit source: UInt32) -> UInt7 {
+    static func scaled7Bit(from32Bit source: UInt32) -> UInt7 {
         UInt7(source >> 25) // (32 - 7)
     }
 }
@@ -65,7 +65,7 @@ extension MIDIEvent {
     /// Internal:
     /// Scales a 14-bit value to a 32-bit value.
     /// Adheres to scaling algorithm defined in MIDI 2.0 Spec.
-    internal static func scaled32Bit(from14Bit source: UInt14) -> UInt32 {
+    static func scaled32Bit(from14Bit source: UInt14) -> UInt32 {
         var bitShiftedValue = UInt32(source) << 18 // (32 - 14)
         if source <= 0x2000 {
             return bitShiftedValue
@@ -82,7 +82,7 @@ extension MIDIEvent {
     
     /// Internal:
     /// Scales a 32-bit value to a 14-bit value.
-    internal static func scaled14Bit(from32Bit source: UInt32) -> UInt14 {
+    static func scaled14Bit(from32Bit source: UInt32) -> UInt14 {
         UInt14(source >> 18) // (32 - 14)
     }
 }
@@ -92,7 +92,7 @@ extension MIDIEvent {
 extension MIDIEvent {
     /// Internal:
     /// Scales a 7-bit value to a unit interval value.
-    internal static func scaledUnitInterval(from7Bit source: UInt7) -> Double {
+    static func scaledUnitInterval(from7Bit source: UInt7) -> Double {
         if source <= 0x40 {
             return Double(source.uInt8Value) / 0x80
         } else if source == 0x7F {
@@ -104,7 +104,7 @@ extension MIDIEvent {
     
     /// Internal:
     /// Scales a unit interval value to a 7-bit value.
-    internal static func scaled7Bit(fromUnitInterval source: Double) -> UInt7 {
+    static func scaled7Bit(fromUnitInterval source: Double) -> UInt7 {
         let source = source.clamped(to: 0.0 ... 1.0)
     
         if source <= 0.5 {
@@ -120,7 +120,7 @@ extension MIDIEvent {
 extension MIDIEvent {
     /// Internal:
     /// Scales a 14-bit value to a unit interval value.
-    internal static func scaledUnitInterval(from14Bit source: UInt14) -> Double {
+    static func scaledUnitInterval(from14Bit source: UInt14) -> Double {
         if source <= 0x2000 {
             return Double(source.uInt16Value) / 0x4000
         } else if source == 0x3FFF {
@@ -132,7 +132,7 @@ extension MIDIEvent {
     
     /// Internal:
     /// Scales a unit interval value to a 14-bit value.
-    internal static func scaled14Bit(fromUnitInterval source: Double) -> UInt14 {
+    static func scaled14Bit(fromUnitInterval source: Double) -> UInt14 {
         let source = source.clamped(to: 0.0 ... 1.0)
     
         if source <= 0.5 {
@@ -148,7 +148,7 @@ extension MIDIEvent {
 extension MIDIEvent {
     /// Internal:
     /// Scales a 16-bit value to a unit interval value.
-    internal static func scaledUnitInterval(from16Bit source: UInt16) -> Double {
+    static func scaledUnitInterval(from16Bit source: UInt16) -> Double {
         if source <= 0x8000 {
             return Double(source) / 0x10000
         } else if source == 0xFFFF {
@@ -160,7 +160,7 @@ extension MIDIEvent {
     
     /// Internal:
     /// Scales a unit interval value to a 16-bit value.
-    internal static func scaled16Bit(fromUnitInterval source: Double) -> UInt16 {
+    static func scaled16Bit(fromUnitInterval source: Double) -> UInt16 {
         let source = source.clamped(to: 0.0 ... 1.0)
     
         if source <= 0.5 {
@@ -176,7 +176,7 @@ extension MIDIEvent {
 extension MIDIEvent {
     /// Internal:
     /// Scales a 32-bit value to a unit interval value.
-    internal static func scaledUnitInterval(from32Bit source: UInt32) -> Double {
+    static func scaledUnitInterval(from32Bit source: UInt32) -> Double {
         if source <= 0x8000_0000 {
             return Double(source) / 0x1_0000_0000
         } else if source == 0xFFFF_FFFF {
@@ -188,7 +188,7 @@ extension MIDIEvent {
     
     /// Internal:
     /// Scales a unit interval value to a 32-bit value.
-    internal static func scaled32Bit(fromUnitInterval source: Double) -> UInt32 {
+    static func scaled32Bit(fromUnitInterval source: Double) -> UInt32 {
         let source = source.clamped(to: 0.0 ... 1.0)
     
         if source <= 0.5 {
@@ -204,13 +204,13 @@ extension MIDIEvent {
 extension MIDIEvent {
     /// Internal:
     /// Scales a unit interval value to a bipolar unit interval value.
-    internal static func scaledBipolarUnitInterval(fromUnitInterval source: Double) -> Double {
+    static func scaledBipolarUnitInterval(fromUnitInterval source: Double) -> Double {
         source.bipolarUnitIntervalValue
     }
     
     /// Internal:
     /// Scales a bipolar unit interval value to a unit interval value.
-    internal static func scaledUnitInterval(fromBipolarUnitInterval source: Double) -> Double {
+    static func scaledUnitInterval(fromBipolarUnitInterval source: Double) -> Double {
         Double(bipolarUnitInterval: source)
     }
 }
@@ -220,13 +220,13 @@ extension MIDIEvent {
 extension MIDIEvent {
     /// Internal:
     /// Scales a 14-bit value to a bipolar unit interval value.
-    internal static func scaledBipolarUnitInterval(from14Bit source: UInt14) -> Double {
+    static func scaledBipolarUnitInterval(from14Bit source: UInt14) -> Double {
         source.bipolarUnitIntervalValue
     }
     
     /// Internal:
     /// Scales a bipolar unit interval value to a 14-bit value.
-    internal static func scaled14Bit(fromBipolarUnitInterval source: Double) -> UInt14 {
+    static func scaled14Bit(fromBipolarUnitInterval source: Double) -> UInt14 {
         UInt14(bipolarUnitInterval: source)
     }
 }
@@ -236,13 +236,13 @@ extension MIDIEvent {
 extension MIDIEvent {
     /// Internal:
     /// Scales a 32-bit value to a bipolar unit interval value.
-    internal static func scaledBipolarUnitInterval(from32Bit source: UInt32) -> Double {
+    static func scaledBipolarUnitInterval(from32Bit source: UInt32) -> Double {
         source.bipolarUnitIntervalValue
     }
     
     /// Internal:
     /// Scales a bipolar unit interval value to a 32-bit value.
-    internal static func scaled32Bit(fromBipolarUnitInterval source: Double) -> UInt32 {
+    static func scaled32Bit(fromBipolarUnitInterval source: Double) -> UInt32 {
         UInt32(bipolarUnitInterval: source)
     }
 }

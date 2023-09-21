@@ -81,7 +81,7 @@ extension UInt14 {
     ///     init(bipolarUnitInterval:  0.0) == 8192  == .midpoint
     ///     init(bipolarUnitInterval:  0.5) == 12287
     ///     init(bipolarUnitInterval:  1.0) == 16383 == .max
-    public init<T: BinaryFloatingPoint>(bipolarUnitInterval: T) {
+    public init(bipolarUnitInterval: some BinaryFloatingPoint) {
         let bipolarUnitInterval = bipolarUnitInterval.clamped(to: (-1.0) ... (1.0))
     
         if bipolarUnitInterval > 0.0 {
@@ -232,12 +232,12 @@ extension UInt14 /*: FixedWidthInteger */ {
     public static var max: Self { Self(Self.max(as: Storage.self)) }
     
     // this would be synthesized if MIDIUnsignedInteger conformed to FixedWidthInteger
-    public static func >>= <RHS>(lhs: inout Self, rhs: RHS) where RHS: BinaryInteger {
+    public static func >>= (lhs: inout Self, rhs: some BinaryInteger) {
         lhs.storage >>= rhs
     }
     
     // this would be synthesized if MIDIUnsignedInteger conformed to FixedWidthInteger
-    public static func <<= <RHS>(lhs: inout Self, rhs: RHS) where RHS: BinaryInteger {
+    public static func <<= (lhs: inout Self, rhs: some BinaryInteger) {
         lhs.storage <<= rhs
     }
 }
@@ -252,7 +252,7 @@ extension UInt14 /*: Numeric */ {
         storage.magnitude
     }
     
-    public init?<T>(exactly source: T) where T: BinaryInteger {
+    public init?(exactly source: some BinaryInteger) {
         if source < Self.min(as: Storage.self) ||
             source > Self.max(as: Storage.self)
         {
@@ -319,13 +319,11 @@ extension UInt14 /*: BinaryInteger */ {
         Self(lhs.storage % rhs.storage)
     }
     
-    public static func << <RHS>(lhs: Self, rhs: RHS) -> Self
-    where RHS: BinaryInteger {
+    public static func << (lhs: Self, rhs: some BinaryInteger) -> Self {
         Self(lhs.storage << rhs)
     }
     
-    public static func >> <RHS>(lhs: Self, rhs: RHS) -> Self
-    where RHS: BinaryInteger {
+    public static func >> (lhs: Self, rhs: some BinaryInteger) -> Self {
         Self(lhs.storage >> rhs)
     }
     

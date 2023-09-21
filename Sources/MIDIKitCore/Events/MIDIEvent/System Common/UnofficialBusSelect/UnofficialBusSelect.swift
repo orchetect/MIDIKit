@@ -25,7 +25,11 @@ extension MIDIEvent {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
         
-        @available(*, deprecated, message: "Bus Select is not supported by Core MIDI and will be removed in the future.")
+        @available(
+            *,
+            deprecated,
+            message: "Bus Select is not supported by Core MIDI and will be removed in the future."
+        )
         public init(
             bus: UInt7 = 0,
             group: UInt4 = 0x0
@@ -52,7 +56,11 @@ extension MIDIEvent {
     /// - Parameters:
     ///   - bus: Bus Number (0x00...0x7F)
     ///   - group: UMP Group (`0x0 ... 0xF`)
-    @available(*, deprecated, message: "Bus Select is not supported by Core MIDI and will be removed in the future.")
+    @available(
+        *,
+        deprecated,
+        message: "Bus Select is not supported by Core MIDI and will be removed in the future."
+    )
     public static func unofficialBusSelect(
         bus: UInt7,
         group: UInt4 = 0x0

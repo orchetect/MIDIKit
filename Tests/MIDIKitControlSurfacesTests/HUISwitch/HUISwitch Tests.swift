@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitControlSurfaces
+import XCTest
 
 final class HUISwitchTests: XCTestCase {
     /// Ensure all switches produce zone and port numbers that re-form the same switch case.

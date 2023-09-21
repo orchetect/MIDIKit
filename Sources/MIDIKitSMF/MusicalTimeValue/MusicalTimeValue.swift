@@ -153,8 +153,7 @@ public struct MusicalTimeValue {
     /// Returns a display string with bar, beat, division, and ticks.
     /// (ie: "14 2 1 0")
     public func stringValue(delimiter: String = " ", forceBeatDivision: Bool = false) -> String {
-        isNegative ? "-" : "" +
-        (
+        (isNegative ? "-" : "") + (
             divisionsPerBeat > 0 || forceBeatDivision
                 ? [bar, beat, beatDivision, ticks]
                 : [bar, beat, ticks]

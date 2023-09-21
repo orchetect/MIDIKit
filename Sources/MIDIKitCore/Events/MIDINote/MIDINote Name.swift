@@ -36,7 +36,7 @@ extension MIDINote {
     
             switch string[string.startIndex].uppercased() {
             case "A":
-                if let accidental = accidental {
+                if let accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
@@ -54,7 +54,7 @@ extension MIDINote {
                 }
     
             case "B":
-                if let accidental = accidental {
+                if let accidental {
                     switch accidental {
                     // don't allow B♭ to become C, as octave number would change
                     // case Self.sharpAccidental,
@@ -73,7 +73,7 @@ extension MIDINote {
                 }
     
             case "C":
-                if let accidental = accidental {
+                if let accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
@@ -92,7 +92,7 @@ extension MIDINote {
                 }
     
             case "D":
-                if let accidental = accidental {
+                if let accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
@@ -110,7 +110,7 @@ extension MIDINote {
                 }
     
             case "E":
-                if let accidental = accidental {
+                if let accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
@@ -128,7 +128,7 @@ extension MIDINote {
                 }
     
             case "F":
-                if let accidental = accidental {
+                if let accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
@@ -146,7 +146,7 @@ extension MIDINote {
                 }
     
             case "G":
-                if let accidental = accidental {
+                if let accidental {
                     switch accidental {
                     case Self.sharpAccidental,
                          Self.sharpAccidentalUnicode:
@@ -247,7 +247,7 @@ extension MIDINote {
     
         /// Returns note name and octave for the MIDI note number.
         /// Returns `nil` if MIDI note number is invalid.
-        internal static func convert(
+        static func convert(
             noteNumber: UInt7,
             style: Style = .yamaha
         ) -> (name: Self, octave: Int) {

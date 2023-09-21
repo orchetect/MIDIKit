@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class UInt7Pair_Tests: XCTestCase {
     func testUInt14Value() {

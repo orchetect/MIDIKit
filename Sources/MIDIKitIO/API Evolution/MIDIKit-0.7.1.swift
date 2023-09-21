@@ -6,9 +6,9 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import MIDIKitCore
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
+import MIDIKitCore
 
 #if canImport(AppKit)
 import AppKit

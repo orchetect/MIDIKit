@@ -8,11 +8,11 @@
 // ports, so skip these tests on iOS targets
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
-import XCTest
-import XCTestUtils
+import CoreMIDI
 @_implementationOnly import MIDIKitInternals
 import MIDIKitIO
-import CoreMIDI
+import XCTest
+import XCTestUtils
 
 final class MIDIOutputConnection_Tests: XCTestCase {
     // called before each method

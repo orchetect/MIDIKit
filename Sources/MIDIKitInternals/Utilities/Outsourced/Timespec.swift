@@ -57,7 +57,7 @@ public func clock_gettime_monotonic_raw() -> timespec {
 extension timespec {
     /// Convenience constructor from floating point seconds value
     @_disfavoredOverload
-    public init<T: BinaryFloatingPoint>(seconds floatingPoint: T) {
+    public init(seconds floatingPoint: some BinaryFloatingPoint) {
         self.init()
         
         let intVal = Int(floatingPoint * 1_000_000_000)

@@ -6,8 +6,8 @@
 
 #if os(iOS)
 
-import SwiftUI
 import MIDIKit
+import SwiftUI
 
 struct MIDIEndpointSelectionView: View {
     @EnvironmentObject var midiManager: MIDIManager

@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class DoubleExtensions_Tests: XCTestCase {
     func testInitBipolarUnitInterval_Float() {

@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-@testable import MIDIKitSync
 import Foundation
+@testable import MIDIKitSync
 
 /// Sync Tests Constants: Raw MIDI messages
 enum kRawMIDI { }

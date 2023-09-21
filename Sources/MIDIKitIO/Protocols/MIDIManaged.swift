@@ -16,7 +16,7 @@ public protocol MIDIManaged: AnyObject {
 
 // MARK: - Internal Protocol
 
-internal protocol _MIDIManaged: MIDIManaged {
+protocol _MIDIManaged: MIDIManaged {
     /// Internal:
     /// Reference to owning ``MIDIManager``
     /* weak */ var midiManager: MIDIManager? { get set }

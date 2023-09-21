@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSMF
+import XCTest
 
 final class MIDIFileUtilities_Tests: XCTestCase {
     func testEncodeVariableLengthValue() {

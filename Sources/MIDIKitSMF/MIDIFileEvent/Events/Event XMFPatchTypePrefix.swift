@@ -90,7 +90,7 @@ extension MIDIFileEvent {
 extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
     public static let smfEventType: MIDIFileEventType = .xmfPatchTypePrefix
     
-    public init<D: DataProtocol>(midi1SMFRawBytes rawBytes: D) throws {
+    public init(midi1SMFRawBytes rawBytes: some DataProtocol) throws {
         guard rawBytes.count == Self.midi1SMFFixedRawBytesLength else {
             throw MIDIFile.DecodeError.malformed(
                 "Invalid number of bytes. Expected \(Self.midi1SMFFixedRawBytesLength) but got \(rawBytes.count)"
@@ -136,8 +136,8 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
     
     static let midi1SMFFixedRawBytesLength = 4
     
-    public static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytesStream stream: D
+    public static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol
     ) throws -> StreamDecodeResult {
         let requiredData = stream.prefix(midi1SMFFixedRawBytesLength)
         
@@ -175,7 +175,8 @@ extension MIDIFileEvent.XMFPatchTypePrefix {
         /// > is redundant, but still permitted. Instruments will be automatically supplied and
         /// > managed by the player, not supplied in the XMF file.
         /// >
-        /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
+        /// > See
+        /// > [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
         case generalMIDI1 = 0x01
         
         /// General MIDI 2.
@@ -186,7 +187,8 @@ extension MIDIFileEvent.XMFPatchTypePrefix {
         /// > and/or controller responses. Instruments will be automatically supplied and managed by
         /// > the player, not supplied in the XMF file. If GM2 is not available, GM1 will be used.
         /// >
-        /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
+        /// > See
+        /// > [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
         case generalMIDI2 = 0x02
         
         /// DLS.
@@ -196,7 +198,8 @@ extension MIDIFileEvent.XMFPatchTypePrefix {
         /// > The SMF Track has been written for the custom DLS instruments supplied via the XMF
         /// > file. Instruments will be supplied via the XMF file, not supplied by the player.
         /// >
-        /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
+        /// > See
+        /// > [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
         case DLS = 0x03
         
         public var description: String {

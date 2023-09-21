@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSync
 import TimecodeKit
+import XCTest
 
 final class MTC_Receiver_SyncPolicy_Tests: XCTestCase {
     func testMTC_Receiver_SyncPolicy_init() {

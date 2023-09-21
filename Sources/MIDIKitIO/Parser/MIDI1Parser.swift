@@ -17,14 +17,14 @@ public final class MIDI1Parser {
     /// Internal:
     /// Default static instance for MIDIKit objects that support parsing events without requiring a
     /// parser to be instanced first.
-    internal static let `default` = MIDI1Parser()
+    static let `default` = MIDI1Parser()
     
     // MARK: - Parser State
     
     /// Interpret received Note On events with a velocity value of 0 as a Note Off event instead.
-    internal var translateNoteOnZeroVelocityToNoteOff: Bool = true
+    var translateNoteOnZeroVelocityToNoteOff: Bool = true
     
-    internal var runningStatus: UInt8?
+    var runningStatus: UInt8?
     
     // MARK: - Init
     
@@ -64,7 +64,7 @@ public final class MIDI1Parser {
     
     // MARK: - Internal Parser Methods
     
-    internal enum ExpectedDataBytes {
+    enum ExpectedDataBytes {
         case none
         case exact(Int)
         case sysExOpenEnded
@@ -76,7 +76,7 @@ public final class MIDI1Parser {
     /// Persisted status data is normally the role of the parser class, but this method gives access
     /// to an abstracted parsing method by way of injecting and emitting persistent state (ie:
     /// running status).
-    internal static func parsedEvents(
+    static func parsedEvents(
         in bytes: [UInt8],
         runningStatus: UInt8? = nil,
         translateNoteOnZeroVelocityToNoteOff: Bool = true,
@@ -358,7 +358,7 @@ public final class MIDI1Parser {
                 // if current message is empty, we assume the Running Status byte should be used if
                 // it's cached
                 if currentMessageBuffer.isEmpty,
-                   let runningStatus = runningStatus
+                   let runningStatus
                 {
                     currentMessageBuffer.append(runningStatus)
                 }
@@ -404,7 +404,7 @@ public final class MIDI1Parser {
     /// Bytes passed into this method should be guaranteed to be a single valid MIDI message.
     ///
     /// - Note: This is a helper method only intended to be called internally.
-    internal static func parseSingleMessage(
+    static func parseSingleMessage(
         _ bytes: [UInt8],
         translateNoteOnZeroVelocityToNoteOff: Bool = true,
         umpGroup: UInt4 = 0
@@ -624,19 +624,19 @@ public final class MIDI1Parser {
 
 extension MIDIPacketData {
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
-    internal func parsedEvents() -> [MIDIEvent] {
+    func parsedEvents() -> [MIDIEvent] {
         MIDI1Parser.default.parsedEvents(in: bytes)
     }
     
     /// Parse this instance's raw packet data into an array of MIDI Events.
-    internal func parsedEvents(using parser: MIDI1Parser) -> [MIDIEvent] {
+    func parsedEvents(using parser: MIDI1Parser) -> [MIDIEvent] {
         parser.parsedEvents(in: self)
     }
 }
 
 extension AnyMIDIPacket {
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
-    internal func parsedMIDI1Events() -> [MIDIEvent] {
+    func parsedMIDI1Events() -> [MIDIEvent] {
         MIDI1Parser.default.parsedEvents(in: bytes)
     }
 }

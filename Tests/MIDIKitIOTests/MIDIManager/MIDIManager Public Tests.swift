@@ -6,10 +6,10 @@
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
+import CoreMIDI
+import MIDIKitIO
 import XCTest
 import XCTestUtils
-import MIDIKitIO
-import CoreMIDI
 
 final class MIDIManager_Public_Tests: XCTestCase {
     // Note: this file does not contain any tests. It is a scratchpad.

@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKitControlSurfaces
+import SwiftUI
 
 extension MomentaryButton {
     fileprivate static let kDefaultWidth: CGFloat = 50
@@ -67,7 +67,7 @@ struct MomentaryButton: View, MomentaryButtonProtocol {
             Rectangle()
                 .fill(isPressed ? .blue : .gray)
             VStack {
-                if let image = image {
+                if let image {
                     if !title.isEmpty { Spacer().frame(height: 4) }
                     image
                 }
@@ -245,7 +245,7 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
     }
     
     func calculateWidth() -> CGFloat? {
-        guard let width = width else { return nil }
+        guard let width else { return nil }
         return width * scaleFactor(size: width, baseScale: widthScale)
     }
     
@@ -260,7 +260,7 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
         baseScale: CGFloat
     ) -> CGFloat {
         if baseScale <= 1.0 { return baseScale }
-        guard let spacing = spacing else { return baseScale }
+        guard let spacing else { return baseScale }
         
         let numberOfSpacers = floor(baseScale) - 1
         let spacerFactor = numberOfSpacers * (spacing / size)

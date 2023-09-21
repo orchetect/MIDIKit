@@ -4,9 +4,9 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import UIKit
 import MIDIKit
 import SwiftRadix
+import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

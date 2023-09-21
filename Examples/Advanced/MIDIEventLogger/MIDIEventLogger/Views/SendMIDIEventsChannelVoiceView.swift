@@ -4,10 +4,10 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
+import MIDIKit
 import OTCore
 import SwiftRadix
-import MIDIKit
+import SwiftUI
 
 extension ContentView {
     struct SendMIDIEventsChannelVoiceView: View {

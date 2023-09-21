@@ -5,6 +5,8 @@
 //
 
 extension MIDIEvent.NoteCC.PerNoteController {
+    // swiftformat:disable wrapSingleLineComments
+    
     /// Registered Per-Note Controller
     /// (MIDI 2.0)
     public enum Registered: Equatable, Hashable {
@@ -130,4 +132,5 @@ extension MIDIEvent.NoteCC.PerNoteController {
         /// Undefined controller number
         case undefined(Undefined)
     }
+    // swiftformat:enable wrapSingleLineComments
 }

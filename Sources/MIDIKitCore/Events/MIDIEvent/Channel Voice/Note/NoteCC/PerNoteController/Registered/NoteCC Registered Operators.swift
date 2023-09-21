@@ -5,19 +5,19 @@
 //
 
 extension MIDIEvent.NoteCC.PerNoteController.Registered {
-    public static func == <T: BinaryInteger>(lhs: Self, rhs: T) -> Bool {
+    public static func == (lhs: Self, rhs: some BinaryInteger) -> Bool {
         lhs.number == rhs
     }
     
-    public static func != <T: BinaryInteger>(lhs: Self, rhs: T) -> Bool {
+    public static func != (lhs: Self, rhs: some BinaryInteger) -> Bool {
         lhs.number != rhs
     }
     
-    public static func == <T: BinaryInteger>(lhs: T, rhs: Self) -> Bool {
+    public static func == (lhs: some BinaryInteger, rhs: Self) -> Bool {
         lhs == rhs.number
     }
     
-    public static func != <T: BinaryInteger>(lhs: T, rhs: Self) -> Bool {
+    public static func != (lhs: some BinaryInteger, rhs: Self) -> Bool {
         lhs != rhs.number
     }
 }

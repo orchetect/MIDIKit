@@ -5,11 +5,11 @@
 //
 
 import Combine
-import SwiftUI
 import MIDIKitIO
 import MIDIKitSync
-import TimecodeKit
 import OTCore
+import SwiftUI
+import TimecodeKit
 
 struct MTCRecContentView: View {
     @EnvironmentObject private var midiManager: MIDIManager
@@ -151,7 +151,7 @@ struct MTCRecContentView: View {
             .font(.system(size: 24, weight: .regular, design: .default))
             
             if receiverState != .idle,
-               let receiverFR = receiverFR
+               let receiverFR
             {
                 VStack {
                     Text("Derived frame rates of \(receiverFR.stringValue):")

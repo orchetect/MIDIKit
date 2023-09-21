@@ -37,9 +37,9 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
     
     /// Endpoint filter rules.
     @_disfavoredOverload
-    public init<T: MIDIEndpoint & Hashable>(
+    public init(
         owned: Bool = false,
-        criteria: Set<T>
+        criteria: Set<some MIDIEndpoint & Hashable>
     ) {
         self.owned = owned
     
@@ -49,9 +49,9 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
     
     /// Endpoint filter rules.
     @_disfavoredOverload
-    public init<T: MIDIEndpoint & Hashable>(
+    public init(
         owned: Bool = false,
-        criteria: [T]
+        criteria: [some MIDIEndpoint & Hashable]
     ) {
         self.init(
             owned: owned,

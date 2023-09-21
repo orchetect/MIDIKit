@@ -8,14 +8,14 @@
 
 // MARK: - Static conveniences
 
-extension Set where Element == MIDIEndpointIdentity {
+extension Set<MIDIEndpointIdentity> {
     /// Returns the current output endpoints in the system.
     public static func currentOutputs() -> Self {
         Set(getSystemSourceEndpoints().asIdentities())
     }
 }
 
-extension Array where Element == MIDIEndpointIdentity {
+extension [MIDIEndpointIdentity] {
     /// Returns the current output endpoints in the system.
     @_disfavoredOverload
     public static func currentOutputs() -> Self {
@@ -23,14 +23,14 @@ extension Array where Element == MIDIEndpointIdentity {
     }
 }
 
-extension Set where Element == MIDIOutputEndpoint {
+extension Set<MIDIOutputEndpoint> {
     /// Returns the current output endpoints in the system.
     public static func currentOutputs() -> Self {
         Set(getSystemSourceEndpoints())
     }
 }
 
-extension Array where Element == MIDIOutputEndpoint {
+extension [MIDIOutputEndpoint] {
     /// Returns the current output endpoints in the system.
     @_disfavoredOverload
     public static func currentOutputs() -> Self {

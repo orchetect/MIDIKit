@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
-import XCTest
-@testable import MIDIKitIO
 import CoreMIDI
+@testable import MIDIKitIO
+import XCTest
 
 final class MIDIManager_Tests: XCTestCase {
     static let clientName = UUID().uuidString

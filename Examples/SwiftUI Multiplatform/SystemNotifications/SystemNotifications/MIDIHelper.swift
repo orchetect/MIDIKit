@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKit
+import SwiftUI
 
 /// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
 /// SwiftUI view state directly. Therefore, we need a helper class that conforms to
@@ -33,27 +33,32 @@ final class MIDIHelper: ObservableObject {
     // MARK: - Virtual Endpoints
     
     func addVirtualInput() {
-        guard let midiManager = midiManager else { return }
+        guard let midiManager else { return }
         let name = UUID().uuidString
         // we don't care about received MIDI events for this example project
-        try? midiManager.addInput(name: name, tag: name, uniqueID: .adHoc, receiver: .events({ _ in }))
+        try? midiManager.addInput(
+            name: name,
+            tag: name,
+            uniqueID: .adHoc,
+            receiver: .events { _ in }
+        )
     }
     
     func addVirtualOutput() {
-        guard let midiManager = midiManager else { return }
+        guard let midiManager else { return }
         let name = UUID().uuidString
         // we won't be sending any events in this example project
         try? midiManager.addOutput(name: name, tag: name, uniqueID: .adHoc)
     }
     
     func removeVirtualInput() {
-        guard let midiManager = midiManager else { return }
+        guard let midiManager else { return }
         guard let port = midiManager.managedInputs.randomElement() else { return }
         midiManager.remove(.input, .withTag(port.key))
     }
     
     func removeVirtualOutput() {
-        guard let midiManager = midiManager else { return }
+        guard let midiManager else { return }
         guard let port = midiManager.managedOutputs.randomElement() else { return }
         midiManager.remove(.output, .withTag(port.key))
     }
@@ -65,20 +70,22 @@ final class MIDIHelper: ObservableObject {
         case .setupChanged:
             print("Setup changed")
             
-        case .added(let object, let parent):
+        case let .added(object, parent):
             let objectDescription = description(for: object)
             let parentDescription = description(for: parent)
             print("Added: \(objectDescription), parent: \(parentDescription)")
             
-        case .removed(let object, let parent):
+        case let .removed(object, parent):
             let objectDescription = description(for: object)
             let parentDescription = description(for: parent)
             print("Removed: \(objectDescription), parent: \(parentDescription)")
             
-        case .propertyChanged(let property, let object):
+        case let .propertyChanged(property, object):
             let objectDescription = description(for: object)
             let propertyValueDescription = object.propertyStringValue(for: property)
-            print("Property Changed: \(property) for \(objectDescription) to \(propertyValueDescription)")
+            print(
+                "Property Changed: \(property) for \(objectDescription) to \(propertyValueDescription)"
+            )
             
         case .thruConnectionChanged:
             // this notification carries no data
@@ -88,28 +95,28 @@ final class MIDIHelper: ObservableObject {
             // this notification carries no data
             print("Serial Port Owner Changed")
             
-        case .ioError(let device, let error):
+        case let .ioError(device, error):
             print("I/O Error for device \(device.name): \(error)")
             
-        case .other(let messageIDRawValue):
+        case let .other(messageIDRawValue):
             print("Other with ID \(messageIDRawValue)")
         }
     }
     
     func description(for object: AnyMIDIIOObject?) -> String {
-        guard let object = object else { return "nil" }
+        guard let object else { return "nil" }
         
         switch object {
-        case .device(let device):
+        case let .device(device):
             return "Device \(device) with \(device.entities.count) entities"
             
-        case .entity(let entity):
+        case let .entity(entity):
             return "Entity \(entity) with \(entity.inputs.count) inputs and \(entity.outputs.count) outputs"
             
-        case .inputEndpoint(let endpoint):
+        case let .inputEndpoint(endpoint):
             return "Input Endpoint \"\(endpoint.name)\" with ID \(endpoint.uniqueID)"
             
-        case .outputEndpoint(let endpoint):
+        case let .outputEndpoint(endpoint):
             return "Output Endpoint \"\(endpoint.name)\" with ID \(endpoint.uniqueID)"
         }
     }

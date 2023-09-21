@@ -1,12 +1,11 @@
 //
 //  SceneDelegate.swift
-//  iOS-SwiftUI-AppDelegate-Template
-//
-//  Created by Steffan Andrews on 2023-02-14.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?

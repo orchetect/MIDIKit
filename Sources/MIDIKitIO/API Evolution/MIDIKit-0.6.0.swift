@@ -13,12 +13,12 @@ import MIDIKitCore
 
 // MARK: MIDIUniqueID -> MIDIIdentifier
 
-extension Set where Element == MIDIIdentifier {
+extension Set<MIDIIdentifier> {
     @available(*, unavailable, renamed: "asIdentities")
     public func asCriteria() -> Set<MIDIEndpointIdentity> { fatalError() }
 }
 
-extension Array where Element == MIDIIdentifier {
+extension [MIDIIdentifier] {
     @available(*, unavailable, renamed: "asIdentities")
     public func asCriteria() -> [MIDIEndpointIdentity] { fatalError() }
 }

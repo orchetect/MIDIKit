@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 @_implementationOnly import MIDIKitInternals
 
 #if !os(tvOS) && !os(watchOS)
@@ -14,7 +14,7 @@ import Foundation
 extension UnsafePointer where Pointee == CoreMIDI.MIDIEventList {
     /// Internal:
     /// Returns array of MIDIKit `UniversalPacketData` instances.
-    internal func packets(
+    func packets(
         refCon: UnsafeMutableRawPointer?,
         refConKnown: Bool
     ) -> [UniversalMIDIPacketData] {

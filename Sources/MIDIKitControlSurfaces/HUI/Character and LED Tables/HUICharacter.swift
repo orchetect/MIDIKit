@@ -21,7 +21,7 @@ where Self: RawRepresentable, RawValue == UInt7, Self: CaseIterable {
     static func unknown() -> Self
 }
 
-internal protocol _HUICharacter: HUICharacter {
+protocol _HUICharacter: HUICharacter {
     /// Internal:
     /// Table of characters. Array index corresponds to raw HUI encoding value.
     static var stringTable: [String] { get }
@@ -36,7 +36,7 @@ extension _HUICharacter {
     }
     
     /// Initialize from the user-facing display string of the character.
-    public init?<S: StringProtocol>(_ string: S) {
+    public init?(_ string: some StringProtocol) {
         guard let idx = Self.stringTable.firstIndex(of: String(string))
         else { return nil }
         self.init(rawValue: UInt7(idx))

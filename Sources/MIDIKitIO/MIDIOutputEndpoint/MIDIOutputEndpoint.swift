@@ -39,7 +39,7 @@ public struct MIDIOutputEndpoint: _MIDIEndpoint {
     
     // MARK: Init
     
-    internal init(from ref: CoreMIDIEndpointRef) {
+    init(from ref: CoreMIDIEndpointRef) {
         assert(
             ref != CoreMIDIEndpointRef(),
             "Encountered Core MIDI output endpoint ref value of 0 which is invalid."
@@ -52,7 +52,7 @@ public struct MIDIOutputEndpoint: _MIDIEndpoint {
     // MARK: Update Cached Properties
     
     /// Update the cached properties
-    internal mutating func updateCachedProperties() {
+    mutating func updateCachedProperties() {
         if let name = try? MIDIKitIO.getName(of: coreMIDIObjectRef) {
             self.name = name
         }

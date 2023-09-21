@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSync
 import TimecodeKit
+import XCTest
 
 final class MTC_Receiver_Decoder_Tests: XCTestCase {
     // swiftformat:options --maxwidth none

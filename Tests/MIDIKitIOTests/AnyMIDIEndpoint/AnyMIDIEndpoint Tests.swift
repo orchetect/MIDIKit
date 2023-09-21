@@ -8,9 +8,8 @@
 // ports, so skip these tests on iOS targets
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
-import XCTest
 @testable import MIDIKitIO
-import MIDIKitIO
+import XCTest
 
 final class AnyMIDIEndpoint_Tests: XCTestCase {
     func testAnyMIDIEndpoint() throws {

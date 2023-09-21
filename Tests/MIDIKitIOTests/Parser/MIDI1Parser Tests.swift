@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
-import XCTest
 @testable import MIDIKitIO
+import XCTest
 
 final class MIDI1Parser_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
@@ -78,7 +78,7 @@ final class MIDI1Parser_Tests: XCTestCase {
         // SysEx
         XCTAssertEqual(
             parsedEvents(bytes: [0xF0, 0x7D, 0x01, 0xF7]),
-            [try .sysEx7(
+            try [.sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01],
                 group: 0
@@ -415,8 +415,8 @@ final class MIDI1Parser_Tests: XCTestCase {
                     ]
                 ),
                 
-                realTimeEvent + [
-                    try .sysEx7(
+                try realTimeEvent + [
+                    .sysEx7(
                         manufacturer: .oneByte(0x41),
                         data: [0x01, 0x34, 0x27, 0x52]
                     )
@@ -714,21 +714,21 @@ final class MIDI1Parser_Tests: XCTestCase {
         // 0xF7 termination byte
         XCTAssertEqual(
             parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34, 0xF7]),
-            [try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0)]
+            try [.sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0)]
         )
         
         // no termination byte
         XCTAssertEqual(
             parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34]),
-            [try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0)]
+            try [.sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0)]
         )
         
         // new status byte (non-realtime)
         XCTAssertEqual(
             parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34,
                                  0x90, 0x3C, 0x40]),
-            [try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0),
-             .noteOn(60, velocity: .midi1(64), channel: 0, group: 0)]
+            try [.sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0),
+                 .noteOn(60, velocity: .midi1(64), channel: 0, group: 0)]
         )
         
         // system real-time events are not a SysEx terminator, as the parser does not
@@ -736,24 +736,24 @@ final class MIDI1Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x34,
                                  0xFE]),
-            [.activeSensing(group: 0),
-             try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0)]
+            try [.activeSensing(group: 0),
+                 .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x34], group: 0)]
         )
         
         // multiple SysEx messages in a single packet
         XCTAssertEqual(
             parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x02, 0xF7,   // 0xF7 termination
                                  0xF0, 0x42, 0x03, 0x04, 0xF7]), // 0xF7 termination
-            [try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x02], group: 0),
-             try .sysEx7(manufacturer: .oneByte(0x42), data: [0x03, 0x04], group: 0)]
+            try [.sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x02], group: 0),
+                 .sysEx7(manufacturer: .oneByte(0x42), data: [0x03, 0x04], group: 0)]
         )
         
         // multiple SysEx messages in a single packet
         XCTAssertEqual(
             parsedEvents(bytes: [0xF0, 0x41, 0x01, 0x02,   // no 0xF7 termination
                                  0xF0, 0x42, 0x03, 0x04]), // 0xF0 acts as termination to 1st sysex
-            [try .sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x02], group: 0),
-             try .sysEx7(manufacturer: .oneByte(0x42), data: [0x03, 0x04], group: 0)]
+            try [.sysEx7(manufacturer: .oneByte(0x41), data: [0x01, 0x02], group: 0),
+                 .sysEx7(manufacturer: .oneByte(0x42), data: [0x03, 0x04], group: 0)]
         )
     }
     

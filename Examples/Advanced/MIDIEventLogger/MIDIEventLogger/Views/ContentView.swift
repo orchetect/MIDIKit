@@ -4,9 +4,9 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
-import OTCore
 import MIDIKit
+import OTCore
+import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: MIDIManager
@@ -77,7 +77,9 @@ struct ContentView: View {
     
     /// Update the MIDI manager's input connection to connect to the selected output endpoint.
     func updateInputConnection() {
-        logger.debug("Updating input connection to endpoint: \(midiInputConnectionEndpoint?.displayName.quoted ?? "None")")
+        logger.debug(
+            "Updating input connection to endpoint: \(midiInputConnectionEndpoint?.displayName.quoted ?? "None")"
+        )
         midiHelper.updateInputConnection(selectedUniqueID: midiInputConnectionEndpoint?.uniqueID)
     }
     

@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSMF
+import XCTest
 
 final class Chunk_Track_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
@@ -24,7 +24,7 @@ final class Chunk_Track_Tests: XCTestCase {
         
         // ensure order contains all cases
         for eventType in MIDIFileEventType.allCases {
-            XCTAssertEqual(MIDIFile.Chunk.Track.eventDecodeOrder.filter { $0 == eventType}.count, 1)
+            XCTAssertEqual(MIDIFile.Chunk.Track.eventDecodeOrder.filter { $0 == eventType }.count, 1)
         }
     }
     

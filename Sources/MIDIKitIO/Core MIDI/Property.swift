@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 
 // MARK: - Property
 
@@ -448,7 +448,7 @@ extension AnyMIDIIOObject.Property {
 
 extension AnyMIDIIOObject.Property {
     /// Internal: returns relevant `MIDIIOObjectType` object types associated with the property.
-    internal var relevantObjects: Set<MIDIIOObjectType> {
+    var relevantObjects: Set<MIDIIOObjectType> {
         switch self {
         // MARK: Identification
         case .name: return [.device, .entity, .inputEndpoint, .outputEndpoint]
@@ -533,7 +533,7 @@ extension AnyMIDIIOObject.Property {
 
 extension MIDIIOObjectType {
     /// Internal: returns relevant `MIDIIOObject.Property`s associated with the object type.
-    internal var relevantProperties: [AnyMIDIIOObject.Property] {
+    var relevantProperties: [AnyMIDIIOObject.Property] {
         AnyMIDIIOObject.Property.allCases.filter {
             $0.relevantObjects.contains(self)
         }

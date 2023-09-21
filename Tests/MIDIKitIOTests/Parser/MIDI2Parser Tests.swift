@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
-import XCTest
 @testable import MIDIKitIO
+import XCTest
 
 final class MIDI2Parser_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
@@ -217,7 +217,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                  0x7D, 0x01, // SysEx7 data bytes
                  0x00, 0x00, 0x00, 0x00] // pad remaining bytes
             ),
-            [try .sysEx7(
+            try [.sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01],
                 group: 0
@@ -723,9 +723,12 @@ final class MIDI2Parser_Tests: XCTestCase {
         
         // RPN Absolute - raw param
         do {
-            let rpn: MIDIEvent = MIDIEvent.rpn(
-                .raw(parameter: .init(msb: 0x40, lsb: 0x01), dataEntryMSB: 0x12,
-                     dataEntryLSB: 0x00),
+            let rpn: MIDIEvent = .rpn(
+                .raw(
+                    parameter: .init(msb: 0x40, lsb: 0x01),
+                    dataEntryMSB: 0x12,
+                    dataEntryLSB: 0x00
+                ),
                 change: .absolute,
                 channel: 0x9
             )
@@ -739,9 +742,12 @@ final class MIDI2Parser_Tests: XCTestCase {
         
         // RPN Relative - raw param
         do {
-            let rpn: MIDIEvent = MIDIEvent.rpn(
-                .raw(parameter: .init(msb: 0x40, lsb: 0x01), dataEntryMSB: 0x12,
-                     dataEntryLSB: 0x00),
+            let rpn: MIDIEvent = .rpn(
+                .raw(
+                    parameter: .init(msb: 0x40, lsb: 0x01),
+                    dataEntryMSB: 0x12,
+                    dataEntryLSB: 0x00
+                ),
                 change: .relative,
                 channel: 0x9
             )
@@ -766,7 +772,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         
         // RPN Absolute - specific case
         do {
-            let rpn: MIDIEvent = MIDIEvent.rpn(
+            let rpn: MIDIEvent = .rpn(
                 .pitchBendSensitivity(semitones: 0x05, cents: 0x45),
                 change: .absolute,
                 channel: 0x9
@@ -781,7 +787,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         
         // RPN Relative - specific case
         do {
-            let rpn: MIDIEvent = MIDIEvent.rpn(
+            let rpn: MIDIEvent = .rpn(
                 .pitchBendSensitivity(semitones: 0x05, cents: 0x45),
                 change: .relative,
                 channel: 0x9
@@ -808,9 +814,12 @@ final class MIDI2Parser_Tests: XCTestCase {
         
         // RPN Absolute - raw param
         do {
-            let rpn: MIDIEvent = MIDIEvent.nrpn(
-                .raw(parameter: .init(msb: 0x40, lsb: 0x01), dataEntryMSB: 0x12,
-                     dataEntryLSB: 0x00),
+            let rpn: MIDIEvent = .nrpn(
+                .raw(
+                    parameter: .init(msb: 0x40, lsb: 0x01),
+                    dataEntryMSB: 0x12,
+                    dataEntryLSB: 0x00
+                ),
                 change: .absolute,
                 channel: 0x9
             )
@@ -824,9 +833,12 @@ final class MIDI2Parser_Tests: XCTestCase {
         
         // RPN Relative - raw param
         do {
-            let rpn: MIDIEvent = MIDIEvent.nrpn(
-                .raw(parameter: .init(msb: 0x40, lsb: 0x01), dataEntryMSB: 0x12,
-                     dataEntryLSB: 0x00),
+            let rpn: MIDIEvent = .nrpn(
+                .raw(
+                    parameter: .init(msb: 0x40, lsb: 0x01),
+                    dataEntryMSB: 0x12,
+                    dataEntryLSB: 0x00
+                ),
                 change: .relative,
                 channel: 0x9
             )
@@ -858,7 +870,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x30, 0x01, 0x7D, 0x00,
                                  0x00, 0x00, 0x00, 0x00]),
-            [try .sysEx7(
+            try [.sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [],
                 group: 0
@@ -868,7 +880,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x31, 0x02, 0x7D, 0x01,
                                  0x00, 0x00, 0x00, 0x00]),
-            [try .sysEx7(
+            try [.sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01],
                 group: 1
@@ -878,7 +890,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x32, 0x06, 0x7D, 0x01,
                                  0x02, 0x03, 0x04, 0x05]),
-            [try .sysEx7(
+            try [.sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01, 0x02, 0x03, 0x04, 0x05],
                 group: 2
@@ -902,7 +914,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x32, 0x32, 0x06, 0x07,
                                  0x00, 0x00, 0x00, 0x00]),
-            [try .sysEx7(
+            try [.sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07],
                 group: 2
@@ -929,13 +941,13 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x32, 0x32, 0x0C, 0x0D,
                                  0x00, 0x00, 0x00, 0x00]),
-            [try .sysEx7(
+            try [.sysEx7(
                 manufacturer: .oneByte(0x7D),
                 data: [0x01, 0x02, 0x03, 0x04,
                        0x05, 0x06, 0x07, 0x08,
                        0x09, 0x0A, 0x0B, 0x0C, 0x0D],
                 group: 2
-                )]
+            )]
         )
     }
     
@@ -957,7 +969,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x30, 0x04,
                                  0x7F, // sysEx ID
                                  0x01, 0x02, 0x03, 0x00, 0x00]),
-            [try .universalSysEx7(
+            try [.universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,
@@ -971,7 +983,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x31, 0x05,
                                  0x7F, // sysEx ID
                                  0x01, 0x02, 0x03, 0x04, 0x00]),
-            [try .universalSysEx7(
+            try [.universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,
@@ -985,7 +997,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             parsedEvents(bytes: [0x32, 0x06,
                                  0x7F, // sysEx ID
                                  0x01, 0x02, 0x03, 0x04, 0x05]),
-            [try .universalSysEx7(
+            try [.universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,
@@ -1013,7 +1025,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x32, 0x36,
                                  0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B]),
-            [try .universalSysEx7(
+            try [.universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,
@@ -1021,7 +1033,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                 data: [0x04, 0x05, 0x06, 0x07,
                        0x08, 0x09, 0x0A, 0x0B],
                 group: 2
-                )]
+            )]
         )
     
         parser = MIDI2Parser()
@@ -1045,7 +1057,7 @@ final class MIDI2Parser_Tests: XCTestCase {
         XCTAssertEqual(
             parsedEvents(bytes: [0x32, 0x36,
                                  0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11]),
-            [try .universalSysEx7(
+            try [.universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x01,
                 subID1: 0x02,
@@ -1055,7 +1067,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x0C, 0x0D, 0x0E, 0x0F,
                        0x10, 0x11],
                 group: 2
-                )]
+            )]
         )
     }
     
@@ -1114,7 +1126,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x05, 0x06, 0x07, 0x08,
                        0x09, 0x0A, 0xE6],
                 group: 2
-                )]
+            )]
         )
     
         // -----------------
@@ -1148,7 +1160,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x05, 0x06, 0x07, 0x08,
                        0x09, 0x0A, 0xE6, 0x01, 0x02],
                 group: 2
-                )]
+            )]
         )
     
         parser = MIDI2Parser()
@@ -1193,7 +1205,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x15, 0x16, 0x17, 0x18,
                        0x19, 0x20],
                 group: 2
-                )]
+            )]
         )
     }
     
@@ -1261,7 +1273,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x05, 0x06, 0x07, 0x08,
                        0x09, 0x0A, 0xE6],
                 group: 2
-                )]
+            )]
         )
     
         // --------------------------
@@ -1298,7 +1310,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x08, 0x09, 0x0A, 0xE6,
                        0x10, 0x11],
                 group: 2
-                )]
+            )]
         )
     
         parser = MIDI2Parser()
@@ -1345,7 +1357,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                        0x14, 0x15, 0x16, 0x17,
                        0x18, 0x19, 0x20],
                 group: 2
-                )]
+            )]
         )
     }
     

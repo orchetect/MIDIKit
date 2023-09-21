@@ -7,7 +7,8 @@
 extension MIDIEvent.AssignableController {
     /// Initialize an enum case from the controller number.
     /// If a case matching the param bytes is not found, the
-    /// ``MIDIEvent/AssignableController/raw(parameter:dataEntryMSB:dataEntryLSB:)`` case will be returned.
+    /// ``MIDIEvent/AssignableController/raw(parameter:dataEntryMSB:dataEntryLSB:)`` case will be
+    /// returned.
     public init(
         parameter: UInt7Pair,
         data: (msb: UInt7?, lsb: UInt7?)

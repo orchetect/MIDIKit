@@ -18,8 +18,8 @@ import Dispatch
 /// `DispatchSourceTimer`-related peculiarities (start/suspend balancing or cancelling without
 /// resuming).
 public final class SafeDispatchTimer {
-    internal var timer: DispatchSourceTimer
-    internal weak var queue: DispatchQueue?
+    var timer: DispatchSourceTimer
+    weak var queue: DispatchQueue?
     
     /// (Read-only) Frequency in Hz of the timer
     public internal(set) var rate: Rate = .seconds(1.0)

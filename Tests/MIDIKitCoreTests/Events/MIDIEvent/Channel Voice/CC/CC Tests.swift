@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class MIDIEvent_CC_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve

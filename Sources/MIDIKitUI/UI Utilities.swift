@@ -20,7 +20,7 @@ extension NSImage {
         ctx?.imageInterpolation = .high
         let fromRect = CGRect(origin: .zero, size: size)
         let toRect = CGRect(origin: .zero, size: newSize)
-        self.draw(in: toRect, from: fromRect, operation: .copy, fraction: 1)
+        draw(in: toRect, from: fromRect, operation: .copy, fraction: 1)
         img.unlockFocus()
         
         return img

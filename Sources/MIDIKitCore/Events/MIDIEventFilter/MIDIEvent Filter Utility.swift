@@ -44,7 +44,7 @@ extension MIDIEvent {
 
 // MARK: - Filter
 
-extension Collection where Element == MIDIEvent {
+extension Collection<MIDIEvent> {
     /// Filter Utility events.
     public func filter(utility types: MIDIEvent.UtilityTypes) -> [Element] {
         switch types {

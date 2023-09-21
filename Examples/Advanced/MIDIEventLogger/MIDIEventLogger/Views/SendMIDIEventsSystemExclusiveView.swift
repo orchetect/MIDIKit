@@ -1,13 +1,13 @@
 //
-//  SendMIDIEventsMIDI2ChannelVoiceView.swift
+//  SendMIDIEventsSystemExclusiveView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
+import MIDIKit
 import OTCore
 import SwiftRadix
-import MIDIKit
+import SwiftUI
 
 extension ContentView {
     struct SendMIDIEventsSystemExclusiveView: View {
@@ -162,8 +162,10 @@ extension ContentView {
         
         /// Sample SysEx8 event generator.
         private func sysEx8(dataByteCount: Int, group: UInt4) -> MIDIEvent {
-            let dataBytes: [UInt8] = .init(randomValuesBetween: UInt8.min ... UInt8.max,
-                                           count: dataByteCount)
+            let dataBytes: [UInt8] = .init(
+                randomValuesBetween: UInt8.min ... UInt8.max,
+                count: dataByteCount
+            )
             
             return .sysEx8(
                 manufacturer: .educational(),
@@ -174,8 +176,10 @@ extension ContentView {
         
         /// Sample Universal SysEx8 event generator.
         private func universalSysEx8(dataByteCount: Int, group: UInt4) -> MIDIEvent {
-            let dataBytes: [UInt8] = .init(randomValuesBetween: UInt8.min ... UInt8.max,
-                                           count: dataByteCount)
+            let dataBytes: [UInt8] = .init(
+                randomValuesBetween: UInt8.min ... UInt8.max,
+                count: dataByteCount
+            )
             
             return .universalSysEx8(
                 universalType: Bool.random() ? .realTime : .nonRealTime,

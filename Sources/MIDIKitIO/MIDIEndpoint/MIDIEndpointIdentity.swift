@@ -132,7 +132,7 @@ extension MIDIEndpointIdentity: CustomStringConvertible {
 
 extension MIDIEndpointIdentity {
     /// Returns endpoint identity criteria describing an endpoint.
-    public static func endpoint<T: MIDIEndpoint>(_ endpoint: T) -> Self {
+    public static func endpoint(_ endpoint: some MIDIEndpoint) -> Self {
         if !endpoint.displayName.isEmpty {
             return .uniqueIDWithFallback(
                 id: endpoint.uniqueID,
@@ -171,7 +171,7 @@ extension MIDIEndpointIdentity {
     }
     
     /// Returns a Boolean value whether the identity criteria matches the endpoint.
-    public func matches<T: MIDIEndpoint>(endpoint: T) -> Bool {
+    public func matches(endpoint: some MIDIEndpoint) -> Bool {
         switch self {
         case let .name(name):
             return [endpoint].first(whereName: name) != nil

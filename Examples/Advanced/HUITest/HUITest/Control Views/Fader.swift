@@ -6,8 +6,8 @@
 
 // TODO: this struct could be moved to AudioKit/Controls repo
 
-import SwiftUI
 @testable import Controls // TODO: remove testable
+import SwiftUI
 
 /// Fader
 public struct Fader: View {

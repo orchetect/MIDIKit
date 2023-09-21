@@ -29,7 +29,7 @@ public final class HUIHost {
     /// configured to connect to it. So each bank will receive pings individually. HUI surfaces
     /// should respond with a ping-reply after each ping so that the host can maintain connection
     /// presence.
-    internal var pingTimer: SafeDispatchTimer?
+    var pingTimer: SafeDispatchTimer?
     
     // MARK: - Init
     

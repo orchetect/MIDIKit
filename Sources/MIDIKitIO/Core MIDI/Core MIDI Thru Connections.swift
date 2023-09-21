@@ -18,7 +18,7 @@
 /// made
 ///
 /// - Throws: ``MIDIIOError/osStatus(_:)``
-internal func getSystemThruConnectionsPersistentEntries(
+func getSystemThruConnectionsPersistentEntries(
     matching persistentOwnerID: String
 ) throws -> [CoreMIDI.MIDIThruConnectionRef] {
     // set up empty unmanaged data pointer
@@ -64,7 +64,7 @@ internal func getSystemThruConnectionsPersistentEntries(
 ///
 /// - Returns: Number of deleted matching connections.
 @discardableResult
-internal func removeAllSystemThruConnectionsPersistentEntries(
+func removeAllSystemThruConnectionsPersistentEntries(
     matching persistentOwnerID: String
 ) throws -> Int {
     let getList = try getSystemThruConnectionsPersistentEntries(matching: persistentOwnerID)
@@ -93,7 +93,7 @@ internal func removeAllSystemThruConnectionsPersistentEntries(
 /// - Throws: ``MIDIIOError/osStatus(_:)``
 ///
 /// - Returns: New `MIDIThruConnectionParams` instance.
-internal func getThruConnectionParameters(
+func getThruConnectionParameters(
     ref: CoreMIDI.MIDIThruConnectionRef
 ) throws -> CoreMIDI.MIDIThruConnectionParams? {
     var paramsData: Unmanaged<CFData> = Unmanaged.passUnretained(Data() as CFData)
@@ -107,7 +107,7 @@ internal func getThruConnectionParameters(
 extension MIDIThruConnectionParams {
     /// Internal:
     /// Converts params to `CFData` required for passing into `MIDIThruConnectionCreate`.
-    internal func cfData() -> CFData {
+    func cfData() -> CFData {
         var mutableSelf = self
         let length = MIDIThruConnectionParamsSize(&mutableSelf)
         let nsData = Data(bytes: &mutableSelf, count: length)
@@ -118,7 +118,7 @@ extension MIDIThruConnectionParams {
     /// Internal:
     /// Converts params from `CFData` returned from Core MIDI when getting params for a thru
     /// connection that exists in the system via `MIDIThruConnectionGetParams`.
-    internal init?(cfData: CFData) {
+    init?(cfData: CFData) {
         self.init()
     
         guard (cfData as Data).count <= MemoryLayout<MIDIThruConnectionParams>.size else {

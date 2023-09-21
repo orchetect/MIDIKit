@@ -17,7 +17,7 @@
 ///   - string: New string value
 ///
 /// - Throws: ``MIDIIOError``
-internal func setString(
+func setString(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
     to string: String
@@ -39,7 +39,7 @@ internal func setString(
 ///   - integer: New integer value
 ///
 /// - Throws: ``MIDIIOError``
-internal func setInteger(
+func setInteger(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
     to integer: Int32
@@ -61,7 +61,7 @@ internal func setInteger(
 ///   - data: New data value
 ///
 /// - Throws: ``MIDIIOError``
-internal func setData(
+func setData(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
     to data: CFData
@@ -83,7 +83,7 @@ internal func setData(
 ///   - dictionary: New dictionary value
 ///
 /// - Throws: ``MIDIIOError``
-internal func setDictionary(
+func setDictionary(
     forProperty: CFString,
     of ref: CoreMIDI.MIDIObjectRef,
     to dictionary: CFDictionary
@@ -111,7 +111,7 @@ internal func setDictionary(
 /// devices.
 ///
 /// - Throws: ``MIDIIOError``
-internal func setName(
+func setName(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: String
 ) throws {
@@ -132,7 +132,7 @@ internal func setName(
 /// - Creators of virtual endpoints may set this property on their endpoints.
 ///
 /// - Throws: ``MIDIIOError``
-internal func setModel(
+func setModel(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: String
 ) throws {
@@ -153,7 +153,7 @@ internal func setModel(
 /// - Creators of virtual endpoints may set this property on their endpoints.
 ///
 /// - Throws: ``MIDIIOError``
-internal func setManufacturer(
+func setManufacturer(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: String
 ) throws {
@@ -172,7 +172,7 @@ internal func setManufacturer(
 /// property on their endpoints, though doing so may fail if the chosen ID is not unique.
 ///
 /// - Throws: ``MIDIIOError``
-internal func setUniqueID(
+func setUniqueID(
     of ref: CoreMIDI.MIDIObjectRef,
     to newValue: CoreMIDI.MIDIUniqueID
 ) throws {

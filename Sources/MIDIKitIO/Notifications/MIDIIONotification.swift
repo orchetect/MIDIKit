@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 
 /// Core MIDI subsystem notification.
 public enum MIDIIONotification: Equatable, Hashable {
@@ -63,7 +63,7 @@ extension MIDIIONotification {
     ///
     /// Cache must be supplied if there is a possibility of a ``removed(parent:child:)``
     /// notification, otherwise metadata will be missing.
-    internal init?(
+    init?(
         _ internalNotification: MIDIIOInternalNotification,
         cache: MIDIIOObjectCache?
     ) {
@@ -140,14 +140,14 @@ extension MIDIIONotification: CustomStringConvertible {
             return "setupChanged"
     
         case let .added(object: object, parent: parent):
-            if let parent = parent {
+            if let parent {
                 return "added(\(object), parent: \(parent))"
             } else {
                 return "added(\(object))"
             }
     
         case let .removed(object: object, parent: parent):
-            if let parent = parent {
+            if let parent {
                 return "removed(\(object), parent: \(parent))"
             } else {
                 return "removed(\(object))"

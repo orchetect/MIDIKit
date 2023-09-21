@@ -4,10 +4,10 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
-import MIDIKitIO
-import MIDIKitControlSurfaces
 import Controls
+import MIDIKitControlSurfaces
+import MIDIKitIO
+import SwiftUI
 
 struct HUIHostView: View {
     @EnvironmentObject var midiManager: MIDIManager

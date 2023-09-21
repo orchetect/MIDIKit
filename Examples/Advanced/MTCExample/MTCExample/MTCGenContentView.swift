@@ -5,12 +5,12 @@
 //
 
 import Combine
-import SwiftUI
 import MIDIKitIO
 import MIDIKitSync
-import TimecodeKit
 import OTCore
 import SwiftRadix
+import SwiftUI
+import TimecodeKit
 
 struct MTCGenContentView: View {
     @EnvironmentObject private var midiManager: MIDIManager

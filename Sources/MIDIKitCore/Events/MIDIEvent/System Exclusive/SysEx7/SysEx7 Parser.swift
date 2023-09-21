@@ -162,8 +162,8 @@ extension MIDIEvent {
     /// String is case-insensitive.
     ///
     /// - Throws: ``ParseError`` if message is malformed.
-    public static func sysEx7<S: StringProtocol>(
-        rawHexString: S,
+    public static func sysEx7(
+        rawHexString: some StringProtocol,
         group: UInt4 = 0
     ) throws -> Self {
         // basic string sanitation and split into character pairs

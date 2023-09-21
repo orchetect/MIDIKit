@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSync
 @testable import TimecodeKit
+import XCTest
 
 final class MTC_Generator_Encoder_Tests: XCTestCase {
     func testMTC_Encoder_Default() {

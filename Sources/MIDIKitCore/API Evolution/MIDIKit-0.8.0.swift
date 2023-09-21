@@ -6,14 +6,10 @@
 
 extension MIDIEvent.CC.Controller {
     @available(*, unavailable, renamed: "MIDIEvent.RegisteredController")
-    public enum RPN {
-        
-    }
+    public enum RPN { }
     
     @available(*, unavailable, renamed: "MIDIEvent.AssignableController")
-    public enum NRPN {
-        
-    }
+    public enum NRPN { }
 }
 
 extension MIDIEvent {

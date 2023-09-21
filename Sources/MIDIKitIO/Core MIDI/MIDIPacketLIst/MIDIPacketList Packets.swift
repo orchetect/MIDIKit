@@ -6,14 +6,14 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 @_implementationOnly import MIDIKitInternals
 
 extension UnsafePointer where Pointee == CoreMIDI.MIDIPacketList {
     /// Internal:
     /// Returns array of MIDIKit ``MIDIPacketData`` instances.
-    internal func packets(
+    func packets(
         refCon: UnsafeMutableRawPointer?,
         refConKnown: Bool
     ) -> [MIDIPacketData] {

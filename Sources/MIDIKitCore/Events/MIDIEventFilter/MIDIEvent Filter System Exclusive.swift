@@ -46,7 +46,7 @@ extension MIDIEvent {
 
 // MARK: - Filter
 
-extension Collection where Element == MIDIEvent {
+extension Collection<MIDIEvent> {
     /// Filter System Exclusive events.
     public func filter(sysEx types: MIDIEvent.SysExTypes) -> [Element] {
         switch types {

@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
-import XCTest
 @testable import MIDIKitIO
+import XCTest
 
 final class MIDIEndpointIdentity_Tests: XCTestCase {
     func testEndpoint_OutputEndpoint() {

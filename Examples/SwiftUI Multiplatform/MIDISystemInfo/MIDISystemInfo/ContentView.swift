@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKit
+import SwiftUI
 
 struct ContentViewForCurrentPlatform: View {
     var body: some View {
@@ -24,8 +24,10 @@ struct ContentViewForCurrentPlatform: View {
 struct ContentView<DetailsContent: View>: View {
     @EnvironmentObject var midiManager: MIDIManager
     
-    let detailsContent: (_ object: AnyMIDIIOObject?,
-                         _ showAllBinding: Binding<Bool>) -> DetailsContent
+    let detailsContent: (
+        _ object: AnyMIDIIOObject?,
+        _ showAllBinding: Binding<Bool>
+    ) -> DetailsContent
     
     var body: some View {
         NavigationView {
@@ -45,17 +47,19 @@ struct ContentView<DetailsContent: View>: View {
             OtherInputsView(detailsContent: detailsContent)
             OtherOutputsView(detailsContent: detailsContent)
         }
-#if os(macOS)
+        #if os(macOS)
         .listStyle(.sidebar)
-#endif
+        #endif
     }
 }
 
 struct DeviceTreeView<DetailsContent: View>: View {
     @EnvironmentObject private var midiManager: MIDIManager
     
-    let detailsContent: (_ object: AnyMIDIIOObject?,
-                         _ showAllBinding: Binding<Bool>) -> DetailsContent
+    let detailsContent: (
+        _ object: AnyMIDIIOObject?,
+        _ showAllBinding: Binding<Bool>
+    ) -> DetailsContent
     
     var body: some View {
         Section(header: Text("Device Tree")) {
@@ -106,11 +110,11 @@ struct DeviceTreeView<DetailsContent: View>: View {
             .sortedByName()
             .flatMap {
                 [$0.asAnyMIDIIOObject()]
-                + $0.entities
+                    + $0.entities
                     .flatMap {
                         [$0.asAnyMIDIIOObject()]
-                        + $0.inputs.asAnyMIDIIOObjects()
-                        + $0.outputs.asAnyMIDIIOObjects()
+                            + $0.inputs.asAnyMIDIIOObjects()
+                            + $0.outputs.asAnyMIDIIOObjects()
                     }
             }
     }
@@ -119,8 +123,10 @@ struct DeviceTreeView<DetailsContent: View>: View {
 struct OtherInputsView<DetailsContent: View>: View {
     @EnvironmentObject private var midiManager: MIDIManager
     
-    let detailsContent: (_ object: AnyMIDIIOObject?,
-                         _ showAllBinding: Binding<Bool>) -> DetailsContent
+    let detailsContent: (
+        _ object: AnyMIDIIOObject?,
+        _ showAllBinding: Binding<Bool>
+    ) -> DetailsContent
     
     var body: some View {
         Section(header: Text("Other Inputs")) {
@@ -151,8 +157,10 @@ struct OtherInputsView<DetailsContent: View>: View {
 struct OtherOutputsView<DetailsContent: View>: View {
     @EnvironmentObject private var midiManager: MIDIManager
     
-    let detailsContent: (_ object: AnyMIDIIOObject?,
-                         _ showAllBinding: Binding<Bool>) -> DetailsContent
+    let detailsContent: (
+        _ object: AnyMIDIIOObject?,
+        _ showAllBinding: Binding<Bool>
+    ) -> DetailsContent
     
     var body: some View {
         Section(header: Text("Other Outputs")) {
@@ -195,17 +203,18 @@ struct ItemIcon<Content: View>: View {
         .frame(width: 18, height: 18, alignment: .center)
     }
     
-#if os(macOS)
+    #if os(macOS)
     private var image: Image? {
         guard let img = item.imageAsNSImage else { return nil }
         return Image(nsImage: img).resizable()
     }
-#elseif os(iOS)
+
+    #elseif os(iOS)
     private var image: Image? {
         guard let img = item.imageAsUIImage else { return nil }
         return Image(uiImage: img).resizable()
     }
-#endif
+    #endif
 }
 
 struct ContentViewCatalina_Previews: PreviewProvider {

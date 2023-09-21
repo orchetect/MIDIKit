@@ -62,7 +62,7 @@ extension MIDIFileEventType {
     }
 }
 
-extension Collection where Element == MIDIFileEventType {
+extension Collection<MIDIFileEventType> {
     /// Returns the collection mapped to concrete types.
     public var concreteTypes: [MIDIFileEventPayload.Type] {
         map(\.concreteType.self)

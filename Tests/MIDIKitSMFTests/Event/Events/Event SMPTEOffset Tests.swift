@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSMF
 import TimecodeKit
+import XCTest
 
 final class Event_SMPTEOffset_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve

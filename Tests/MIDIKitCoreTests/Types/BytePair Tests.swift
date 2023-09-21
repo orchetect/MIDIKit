@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class BytePair_Tests: XCTestCase {
     func testInit_msb_lsb() {

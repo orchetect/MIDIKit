@@ -18,7 +18,7 @@ extension MIDINote {
         ofMIDINote: Int,
         tuning: Double = 440.0
     ) -> Double {
-        Self.calculateFrequency(
+        calculateFrequency(
             midiNote: ofMIDINote,
             tuning: tuning
         )
@@ -35,7 +35,7 @@ extension MIDINote {
         ofFrequency: Double,
         tuning: Double = 440.0
     ) -> Int {
-        Self.calculateMIDINoteNumber(
+        calculateMIDINoteNumber(
             frequency: ofFrequency,
             tuning: tuning
         )

@@ -34,7 +34,7 @@ public struct MIDIEntity: MIDIIOObject {
     
     // MARK: Init
     
-    internal init(from ref: CoreMIDIEntityRef) {
+    init(from ref: CoreMIDIEntityRef) {
         assert(ref != CoreMIDIEntityRef())
     
         coreMIDIObjectRef = ref
@@ -44,7 +44,7 @@ public struct MIDIEntity: MIDIIOObject {
     // MARK: - Cached Properties Update
     
     /// Update the cached properties
-    internal mutating func updateCachedProperties() {
+    mutating func updateCachedProperties() {
         if let name = try? MIDIKitIO.getName(of: coreMIDIObjectRef) {
             self.name = name
         }

@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitControlSurfaces
+import XCTest
 
 final class HUISurfaceEventDecoderTests: XCTestCase {
     /// Verifies that a HUI event encodes and decodes back to itself.

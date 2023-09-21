@@ -9,6 +9,6 @@ import Foundation
 /// Protocol that all concrete HUI event types conform to.
 public protocol HUIEvent { }
 
-internal protocol _HUIEvent: HUIEvent {
+protocol _HUIEvent: HUIEvent {
     init(from coreEvent: HUICoreEvent)
 }

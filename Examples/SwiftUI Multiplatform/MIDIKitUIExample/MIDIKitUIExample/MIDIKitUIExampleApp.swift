@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKitIO
+import SwiftUI
 
 @main
 struct MIDIKitUIExampleApp: App {
@@ -26,10 +26,10 @@ struct MIDIKitUIExampleApp: App {
             ContentView()
                 .environmentObject(midiManager)
                 .environmentObject(midiHelper)
-#if os(macOS)
+            #if os(macOS)
                 .toolbar { Spacer() } // coax unified titlebar to show
                 .frame(minHeight: 600)
-#endif
+            #endif
         }
     }
 }

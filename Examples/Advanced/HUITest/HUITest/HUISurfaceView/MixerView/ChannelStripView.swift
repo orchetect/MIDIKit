@@ -4,9 +4,9 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
-import MIDIKitControlSurfaces
 import Controls
+import MIDIKitControlSurfaces
+import SwiftUI
 
 extension HUISurfaceView {
     static let channelStripWidth: CGFloat = 58

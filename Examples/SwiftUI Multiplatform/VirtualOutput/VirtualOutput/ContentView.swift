@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKit
+import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: MIDIManager
@@ -13,8 +13,10 @@ struct ContentView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
-            Text("This example creates a virtual MIDI output port named \"\(MIDIHelper.virtualOutputName)\".")
-                .multilineTextAlignment(.center)
+            Text(
+                "This example creates a virtual MIDI output port named \"\(MIDIHelper.virtualOutputName)\"."
+            )
+            .multilineTextAlignment(.center)
             
             Button("Send Note On C3") {
                 midiHelper.sendNoteOn()
@@ -28,9 +30,9 @@ struct ContentView: View {
                 midiHelper.sendCC1()
             }
         }
-#if os(iOS)
+        #if os(iOS)
         .font(.system(size: 18))
-#endif
+        #endif
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }

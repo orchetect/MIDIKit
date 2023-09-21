@@ -11,7 +11,7 @@
 /// A MIDI device, wrapping a Core MIDI `MIDIDeviceRef`.
 /// A device can contain zero or more entities, and an entity can contain zero or more inputs
 /// and output endpoints.
-/// 
+///
 /// Although this is a value-type struct, do not store or cache it as it will not remain updated.
 ///
 /// Instead, read device arrays and individual device properties from ``MIDIManager/devices`` ad-hoc
@@ -37,7 +37,7 @@ public struct MIDIDevice: MIDIIOObject {
     
     // MARK: Init
     
-    internal init(from ref: CoreMIDIDeviceRef) {
+    init(from ref: CoreMIDIDeviceRef) {
         assert(ref != CoreMIDIDeviceRef())
     
         coreMIDIObjectRef = ref
@@ -47,7 +47,7 @@ public struct MIDIDevice: MIDIIOObject {
     // MARK: Update Cached Properties
     
     /// Update the cached properties
-    internal mutating func updateCachedProperties() {
+    mutating func updateCachedProperties() {
         if let name = try? MIDIKitIO.getName(of: coreMIDIObjectRef) {
             self.name = name
         }

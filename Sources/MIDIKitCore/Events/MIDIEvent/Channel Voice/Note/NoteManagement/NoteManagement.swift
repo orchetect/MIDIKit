@@ -184,7 +184,7 @@ extension MIDIEvent.NoteManagement {
     }
 }
 
-extension Set where Element == MIDIEvent.NoteManagement.OptionFlag {
+extension Set<MIDIEvent.NoteManagement.OptionFlag> {
     /// Per-Note Management Option Flag
     /// (MIDI 2.0)
     ///
@@ -229,7 +229,7 @@ extension MIDIEvent.NoteManagement.OptionFlag: CustomStringConvertible {
     }
 }
 
-extension Collection where Element == MIDIEvent.NoteManagement.OptionFlag {
+extension Collection<MIDIEvent.NoteManagement.OptionFlag> {
     public var description: String {
         "[" + map { $0.description }.joined(separator: ", ") + "]"
     }

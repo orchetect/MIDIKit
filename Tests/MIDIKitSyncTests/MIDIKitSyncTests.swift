@@ -6,9 +6,9 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
-@testable import MIDIKitSync
 import CoreMIDI
+@testable import MIDIKitSync
+import XCTest
 
 final class MIDIKitSyncTests: XCTestCase {
     // no tests in this file, this is the module root test file

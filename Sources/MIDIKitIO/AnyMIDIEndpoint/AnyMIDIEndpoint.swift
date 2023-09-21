@@ -44,7 +44,7 @@ public struct AnyMIDIEndpoint: _MIDIEndpoint {
     
     // MARK: Init
     
-    internal init<E: _MIDIEndpoint>(_ base: E) {
+    init(_ base: some _MIDIEndpoint) {
         switch base {
         case is MIDIInputEndpoint:
             objectType = .inputEndpoint

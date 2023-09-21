@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitControlSurfaces
+import XCTest
 
 final class CharacterAndLEDTests: XCTestCase {
     // MARK: - HUILargeDisplayCharacter

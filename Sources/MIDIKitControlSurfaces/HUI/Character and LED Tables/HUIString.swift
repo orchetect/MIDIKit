@@ -30,7 +30,7 @@ public protocol HUIString: CustomStringConvertible
     /// Characters will be converted or substituted if they
     /// are not contained in ``Element``'s character set.
     /// String will be padded and truncated to the appropriate static length.
-    init<S: StringProtocol>(lossy source: S)
+    init(lossy source: some StringProtocol)
     
     /// Return the characters as a concatenated human-readable string.
     var stringValue: String { get }
@@ -42,7 +42,7 @@ extension HUIString {
     public static var defaultChars: [Element] {
         .init(
             repeating: .default(),
-            count: Self.staticCount
+            count: staticCount
         )
     }
     
@@ -51,7 +51,7 @@ extension HUIString {
         self.chars = chars
     }
     
-    public init<S: StringProtocol>(lossy source: S) {
+    public init(lossy source: some StringProtocol) {
         self.init()
         
         let encoded: [Element] = source

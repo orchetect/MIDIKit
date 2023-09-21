@@ -11,9 +11,8 @@ extension MIDIFile {
     /// Utility:
     /// Returns variable length value encoded byte array.
     static func encodeVariableLengthValue<
-        T: BinaryInteger,
         D: MutableDataProtocol
-    >(_ number: T) -> D {
+    >(_ number: some BinaryInteger) -> D {
         var result = D()
         var count = 0
 
@@ -49,7 +48,7 @@ extension MIDIFile {
     /// Returns nil if bytes is empty or variable length value could not be read in the expected
     /// format (ie: malformed or unexpected data)
     /// Currently returns nil if value overflows a 28-bit unsigned value.
-    static func decodeVariableLengthValue<D: DataProtocol>(from bytes: D) -> (
+    static func decodeVariableLengthValue(from bytes: some DataProtocol) -> (
         value: Int,
         byteLength: Int
     )? {

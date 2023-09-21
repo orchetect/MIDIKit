@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitSMF
+import XCTest
 
 final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     func testMIDI_Event_NoteOn_smfEvent() throws {
@@ -715,7 +715,11 @@ final class Event_Conversion_SMFEventToEvent_Tests: XCTestCase {
     func testMIDI_File_Event_NRPN_event() throws {
         let smfEvent = MIDIFileEvent.nrpn(
             delta: .none,
-            parameter: .raw(parameter: .init(msb: 2, lsb: 1), dataEntryMSB: 0x05, dataEntryLSB: 0x20),
+            parameter: .raw(
+                parameter: .init(msb: 2, lsb: 1),
+                dataEntryMSB: 0x05,
+                dataEntryLSB: 0x20
+            ),
             change: .absolute,
             channel: 0
         )

@@ -6,17 +6,18 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 import MIDIKitCore
 
 /// Internal class.
-/// Used as a stand-in replacement for Core MIDI's `MIDIThruConnectionCreate` on macOS versions that are affected by the thru-connection bug.
+/// Used as a stand-in replacement for Core MIDI's `MIDIThruConnectionCreate` on macOS versions that
+/// are affected by the thru-connection bug.
 final class MIDIThruConnectionProxy {
     private var inputConnection: MIDIInputConnection!
     private var outputConnection: MIDIOutputConnection!
     
-    internal init(
+    init(
         outputs: [MIDIOutputEndpoint],
         inputs: [MIDIInputEndpoint],
         midiManager: MIDIManager,
@@ -32,9 +33,9 @@ final class MIDIThruConnectionProxy {
         inputConnection = MIDIInputConnection(
             mode: .outputs(matching: Set(outputs.asIdentities())),
             filter: .default(),
-            receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false, { [weak self] events in
+            receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { [weak self] events in
                 try? self?.outputConnection.send(events: events)
-            }),
+            },
             midiManager: midiManager,
             api: api
         )
@@ -48,7 +49,7 @@ final class MIDIThruConnectionProxy {
 }
 
 extension MIDIThruConnectionProxy {
-    internal func notification(_ internalNotification: MIDIIOInternalNotification) {
+    func notification(_ internalNotification: MIDIIOInternalNotification) {
         inputConnection.notification(internalNotification)
         outputConnection.notification(internalNotification)
     }

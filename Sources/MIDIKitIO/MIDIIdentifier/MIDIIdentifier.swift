@@ -19,7 +19,7 @@ extension MIDIIdentifier {
 
 // MARK: - Collection
 
-extension Set where Element == MIDIIdentifier {
+extension Set<MIDIIdentifier> {
     /// Returns endpoint identity criteria formed from endpoints matching the collection's MIDI
     /// identifiers.
     public func asIdentities() -> Set<MIDIEndpointIdentity> {
@@ -32,7 +32,7 @@ extension Set where Element == MIDIIdentifier {
     }
 }
 
-extension Array where Element == MIDIIdentifier {
+extension [MIDIIdentifier] {
     /// Returns endpoint identity criteria formed from endpoints matching the collection's MIDI
     /// identifiers.
     @_disfavoredOverload

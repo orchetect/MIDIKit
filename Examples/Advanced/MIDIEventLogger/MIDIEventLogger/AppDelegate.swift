@@ -4,9 +4,9 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
-import OTCore
 import MIDIKit
+import OTCore
+import SwiftUI
 
 // AppDelegate for legacy macOS versions support
 @main

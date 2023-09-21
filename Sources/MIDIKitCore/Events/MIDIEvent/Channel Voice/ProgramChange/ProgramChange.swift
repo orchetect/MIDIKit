@@ -145,12 +145,12 @@ extension MIDIEvent.ProgramChange {
                 0x00,
                 bankNumber.midiUInt7Pair.msb.uInt8Value
             ]
-            + [
-                0xB0 + channel.uInt8Value,
-                0x32,
-                bankNumber.midiUInt7Pair.lsb.uInt8Value
-            ]
-            + programChangeMessage
+                + [
+                    0xB0 + channel.uInt8Value,
+                    0x32,
+                    bankNumber.midiUInt7Pair.lsb.uInt8Value
+                ]
+                + programChangeMessage
         }
     }
     

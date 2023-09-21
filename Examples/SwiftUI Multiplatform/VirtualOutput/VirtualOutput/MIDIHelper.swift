@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKit
+import SwiftUI
 
 /// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
 /// SwiftUI view state directly. Therefore, we need a helper class that conforms to
@@ -38,7 +38,7 @@ final class MIDIHelper: ObservableObject {
     }
     
     func addVirtualOutput() {
-        guard let midiManager = midiManager else { return }
+        guard let midiManager else { return }
         do {
             print("Creating virtual MIDI output.")
             try midiManager.addOutput(

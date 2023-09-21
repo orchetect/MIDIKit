@@ -6,13 +6,13 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 @_implementationOnly import CoreMIDI
+import Foundation
 
 extension MIDIManager {
     /// Sets up MIDI network session notification observers.
     /// Call this only once on class init.
-    internal func addNetworkSessionObservers() {
+    func addNetworkSessionObservers() {
         guard #available(macOS 10.15, macCatalyst 13.0, iOS 4.2, *) else { return }
     
         NotificationCenter.default.addObserver(

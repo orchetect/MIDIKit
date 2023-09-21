@@ -25,7 +25,7 @@ public struct HUITimeDisplayString: HUIString, Equatable, Hashable {
     
     // we override default implementation of this init
     // because it requires special handling
-    public init<S: StringProtocol>(lossy source: S) {
+    public init(lossy source: some StringProtocol) {
         var chars: [Element] = []
         
         // ensure there's at least one character in the source string
@@ -77,7 +77,7 @@ public struct HUITimeDisplayString: HUIString, Equatable, Hashable {
     }
 }
 
-extension Array where Element == HUITimeDisplayCharacter {
+extension [HUITimeDisplayCharacter] {
     /// Empty display digits.
     /// Equivalent to: "        "
     public static let blankChars: [HUITimeDisplayCharacter] = [

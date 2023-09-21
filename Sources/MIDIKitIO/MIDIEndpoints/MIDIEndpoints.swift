@@ -34,7 +34,7 @@ public protocol MIDIEndpointsProtocol {
 /// Manages system MIDI endpoints information cache.
 public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
     /// Weak reference to ``MIDIManager``.
-    internal weak var manager: MIDIManager?
+    weak var manager: MIDIManager?
     
     public internal(set) dynamic var inputs: [MIDIInputEndpoint] = []
     public internal(set) dynamic var inputsUnowned: [MIDIInputEndpoint] = []
@@ -42,11 +42,11 @@ public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
     public internal(set) dynamic var outputs: [MIDIOutputEndpoint] = []
     public internal(set) dynamic var outputsUnowned: [MIDIOutputEndpoint] = []
     
-    override internal init() {
+    override init() {
         super.init()
     }
     
-    internal init(manager: MIDIManager) {
+    init(manager: MIDIManager) {
         self.manager = manager
         super.init()
     }
@@ -54,7 +54,7 @@ public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
     public func updateCachedProperties() {
         inputs = getSystemDestinationEndpoints()
     
-        if let manager = manager {
+        if let manager {
             let managedInputsIDs = manager.managedInputs.values
                 .compactMap { $0.uniqueID }
     
@@ -67,7 +67,7 @@ public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
     
         outputs = getSystemSourceEndpoints()
     
-        if let manager = manager {
+        if let manager {
             let managedOutputsIDs = manager.managedOutputs.values
                 .compactMap { $0.uniqueID }
     

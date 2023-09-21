@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitInternals
+import XCTest
 
 class Utilities_RandomAccessCollectionTests: XCTestCase {
     func testRangeOfOffsets() {

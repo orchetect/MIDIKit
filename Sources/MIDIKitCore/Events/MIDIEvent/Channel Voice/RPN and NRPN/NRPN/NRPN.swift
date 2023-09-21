@@ -45,7 +45,8 @@ extension MIDIEvent {
     /// > organized in 128 Banks (corresponds to NRPN MSB), with 128 controllers per Bank
     /// > (corresponds to NRPN LSB).
     ///
-    /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    /// See Recommended Practise
+    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
     public struct NRPN: Equatable, Hashable {
         /// Non-Registered Parameter Number (Assignable Controller).
@@ -112,12 +113,14 @@ extension MIDIEvent {
     /// > organized in 128 Banks (corresponds to NRPN MSB), with 128 controllers per Bank
     /// > (corresponds to NRPN LSB).
     ///
-    /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    /// See Recommended Practise
+    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
     ///
     /// - Parameters:
     ///   - parameter: Non-Registered Parameter Number (Assignable Controller).
-    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is always absolute.
+    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is
+    ///     always absolute.
     ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func nrpn(
@@ -173,13 +176,15 @@ extension MIDIEvent {
     /// > organized in 128 Banks (corresponds to NRPN MSB), with 128 controllers per Bank
     /// > (corresponds to NRPN LSB).
     ///
-    /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    /// See Recommended Practise
+    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
     ///
     /// - Parameters:
     ///   - parameter: Non-Registered Parameter Number (Assignable Controller).
     ///   - data: Two 7-bit data bytes, optional.
-    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is always absolute.
+    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is
+    ///     always absolute.
     ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func nrpn(
@@ -234,13 +239,15 @@ extension MIDIEvent {
     /// > organized in 128 Banks (corresponds to NRPN MSB), with 128 controllers per Bank
     /// > (corresponds to NRPN LSB).
     ///
-    /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    /// See Recommended Practise
+    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
     ///
     /// - Parameters:
     ///   - parameter: Non-Registered Parameter Number (Assignable Controller).
     ///   - data: MIDI 1.0 14-bit data value.
-    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is always absolute.
+    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is
+    ///     always absolute.
     ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func nrpn(
@@ -297,13 +304,15 @@ extension MIDIEvent {
     /// > organized in 128 Banks (corresponds to NRPN MSB), with 128 controllers per Bank
     /// > (corresponds to NRPN LSB).
     ///
-    /// See Recommended Practise [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    /// See Recommended Practise
+    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
     ///
     /// - Parameters:
     ///   - parameter: Non-Registered Parameter Number (Assignable Controller).
     ///   - data: MIDI 2.0 32-bit data value. Will be scaled down to 14-bit when necessary.
-    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is always absolute.
+    ///   - change: Determines whether the value is absolute or a relative change. MIDI 1.0 is
+    ///     always absolute.
     ///   - channel: Channel Number (`0x0 ... 0xF`)
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func nrpn(
@@ -326,7 +335,8 @@ extension MIDIEvent {
     
     /// Assembles a MIDI 1.0 NRPN compound message, consisting of multiple CC events.
     ///
-    /// This is provided for legacy support. It is recommended to use ``MIDIEvent/nrpn(_:change:channel:group:)``.
+    /// This is provided for legacy support. It is recommended to use
+    /// ``MIDIEvent/nrpn(_:change:channel:group:)``.
     public static func midi1NRPN(
         _ parameter: AssignableController,
         change: MIDI2ParameterNumberChange = .absolute,

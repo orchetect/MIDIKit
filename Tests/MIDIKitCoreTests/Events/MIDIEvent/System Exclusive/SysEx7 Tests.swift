@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class SysEx7_Tests: XCTestCase {
     func testSysEx7RawBytes_Typical() throws {

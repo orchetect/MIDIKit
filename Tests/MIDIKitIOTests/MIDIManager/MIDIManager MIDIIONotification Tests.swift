@@ -8,10 +8,10 @@
 // ports, so skip these tests on iOS targets
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
+import CoreMIDI
+import MIDIKitIO
 import XCTest
 import XCTestUtils
-import MIDIKitIO
-import CoreMIDI
 
 final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
     fileprivate var notifications: [MIDIIONotification] = []

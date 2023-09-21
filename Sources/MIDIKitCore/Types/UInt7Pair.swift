@@ -1,5 +1,5 @@
 //
-//  UInt7 Pair.swift
+//  UInt7Pair.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //

@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKitIO
 import MIDIKitControlSurfaces
+import MIDIKitIO
 import SwiftUI
 
 struct HUIClientView: View {
@@ -53,15 +53,14 @@ struct HUIClientView: View {
                         name: Self.kHUIInputName,
                         tag: Self.kHUIInputName,
                         uniqueID: .userDefaultsManaged(key: Self.kHUIInputName),
-                        receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false)
-                            { [weak huiSurface] events in
-                                // since handler callbacks from MIDI are on a CoreMIDI thread,
-                                // parse the MIDI on the main thread because SwiftUI state in
-                                // this app will be updated as a result
-                                DispatchQueue.main.async {
-                                    huiSurface?.midiIn(events: events)
-                                }
+                        receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { [weak huiSurface] events in
+                            // since handler callbacks from MIDI are on a CoreMIDI thread,
+                            // parse the MIDI on the main thread because SwiftUI state in
+                            // this app will be updated as a result
+                            DispatchQueue.main.async {
+                                huiSurface?.midiIn(events: events)
                             }
+                        }
                     )
                     
                     try midiManager.addOutput(

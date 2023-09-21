@@ -18,11 +18,11 @@ extension MIDIReceiveHandler {
     /// flag builds).
     /// If `handler` is provided, the event description string is supplied as a parameter and not
     /// automatically logged.
-    internal final class EventsLogging: MIDIReceiveHandlerProtocol {
+    final class EventsLogging: MIDIReceiveHandlerProtocol {
         public var handler: MIDIReceiver.EventsLoggingHandler
     
-        internal let midi1Parser = MIDI1Parser()
-        internal let midi2Parser = MIDI2Parser()
+        let midi1Parser = MIDI1Parser()
+        let midi2Parser = MIDI2Parser()
     
         public var filterActiveSensingAndClock = false
     
@@ -56,7 +56,7 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal init(
+        init(
             filterActiveSensingAndClock: Bool = false,
             log: OSLog = .default,
             _ handler: MIDIReceiver.EventsLoggingHandler? = nil
@@ -75,7 +75,7 @@ extension MIDIReceiveHandler {
             }
         }
     
-        internal func logEvents(
+        func logEvents(
             events: [MIDIEvent],
             timeStamp: CoreMIDITimeStamp,
             source: MIDIOutputEndpoint?
@@ -92,7 +92,7 @@ extension MIDIReceiveHandler {
                 + " timeStamp:\(timeStamp)"
             
             // not all packets will contain source refs
-            if let source = source {
+            if let source {
                 stringOutput += " source:\(source.displayName.quoted)"
             }
             

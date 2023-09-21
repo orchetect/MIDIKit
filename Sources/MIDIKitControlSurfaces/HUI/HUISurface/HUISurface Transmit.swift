@@ -10,7 +10,7 @@ extension HUISurface {
     /// Transmit a HUI ping message to the host.
     /// It is not necessary to call this manually. The ``HUISurface`` object will handle ping
     /// replies automatically.
-    internal func transmitPing() {
+    func transmitPing() {
         let event = encodeHUIPing(to: .host)
         midiOut(event)
     }

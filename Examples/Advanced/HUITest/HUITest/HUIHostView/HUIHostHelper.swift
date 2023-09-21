@@ -4,11 +4,11 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
-import MIDIKitIO
-import MIDIKitInternals // only for utils
-import MIDIKitControlSurfaces
 import Controls
+import MIDIKitControlSurfaces
+import MIDIKitInternals // only for utils
+import MIDIKitIO
+import SwiftUI
 
 class HUIHostHelper: ObservableObject {
     // MARK: MIDI
@@ -55,7 +55,7 @@ class HUIHostHelper: ObservableObject {
         
         huiHost.addBank(
             huiEventHandler: { [weak self] event in
-                guard let self = self else { return }
+                guard let self else { return }
                 if !(event == .ping && !self.logPing) {
                     Logger.debug("Host received: \(event)")
                 }
@@ -66,7 +66,7 @@ class HUIHostHelper: ObservableObject {
                 }
             },
             midiOutHandler: { [weak midiManager] events in
-                guard let midiManager = midiManager else { return }
+                guard let midiManager else { return }
                 let conn = midiManager.managedOutputConnections[Self.kHUIOutputConnectionTag]
                 
                 try? conn?.send(events: events)

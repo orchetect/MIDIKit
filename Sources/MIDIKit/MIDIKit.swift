@@ -21,7 +21,5 @@
 
 // MIDIKitSync
 @_exported import MIDIKitSync
-// @_exported import TimecodeKit // already exported above
-
 // MIDIKitUI
 @_exported import MIDIKitUI

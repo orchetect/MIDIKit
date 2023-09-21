@@ -48,7 +48,7 @@ extension MIDIEvent {
 
 // MARK: - Filter
 
-extension Collection where Element == MIDIEvent {
+extension Collection<MIDIEvent> {
     /// Filter System Common events.
     public func filter(sysCommon types: MIDIEvent.SysCommonTypes) -> [Element] {
         switch types {

@@ -239,7 +239,7 @@ extension HUIVPotDisplay.LEDState {
     /// Returns contiguous bounds as unit intervals (`0.0 ... 1.0`).
     /// Returns `nil` if all LEDs are off.
     public var unitIntervalBounds: ClosedRange<Double>? {
-        guard let bounds = bounds else { return nil }
+        guard let bounds else { return nil }
         
         return bounds.lowerBound.unitIntervalLowerBound ...
             bounds.upperBound.unitIntervalUpperBound

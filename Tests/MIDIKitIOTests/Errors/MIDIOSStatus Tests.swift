@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
-import XCTest
 import MIDIKitIO
+import XCTest
 
 final class Errors_MIDIOSStatus_Tests: XCTestCase {
     func testRawValue() {

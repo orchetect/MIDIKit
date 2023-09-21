@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 @testable import MIDIKitSMF
+import XCTest
 
 final class Event_SysEx7_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve

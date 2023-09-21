@@ -30,11 +30,11 @@ extension MTCReceiver {
         
         // MARK: - Internal Methods
         
-        internal mutating func setLockFrames(_ value: Int) {
+        mutating func setLockFrames(_ value: Int) {
             lockFrames = min(max(0, value), 100)
         }
         
-        internal mutating func setDropOutFramesFrames(_ value: Int) {
+        mutating func setDropOutFramesFrames(_ value: Int) {
             dropOutFrames = min(max(0, value), 100)
         }
         

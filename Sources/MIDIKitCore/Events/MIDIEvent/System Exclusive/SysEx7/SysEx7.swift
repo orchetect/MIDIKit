@@ -147,7 +147,7 @@ extension MIDIEvent.SysEx7 {
             trailingF7: trailingF7
         )
     
-        if let separator = separator {
+        if let separator {
             return bytes.hexString(padEachTo: 2, prefixes: false, separator: separator)
         } else {
             return bytes.hexString(padEachTo: 2, prefixes: false, separator: "")
@@ -199,7 +199,7 @@ extension MIDIEvent.SysEx7 {
     /// Internal:
     /// Helper method to build the raw UMP packet words. This is not meant to be accessed directly;
     /// use the public `umpRawWords()` method instead.
-    internal static func umpRawWords(
+    static func umpRawWords(
         fromSysEx7Data data: [UInt8],
         group: UInt4
     ) -> [[UMPWord]] {

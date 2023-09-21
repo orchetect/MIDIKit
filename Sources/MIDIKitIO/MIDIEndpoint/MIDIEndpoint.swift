@@ -29,7 +29,7 @@ public protocol MIDIEndpoint: MIDIIOObject {
 
 // MARK: - Internal Protocol
 
-internal protocol _MIDIEndpoint: MIDIEndpoint { }
+protocol _MIDIEndpoint: MIDIEndpoint { }
 
 // MIDIEndpoint implementation
 
@@ -41,7 +41,7 @@ extension _MIDIEndpoint {
     
     /// Returns the device that owns the endpoint, if present.
     public var device: MIDIDevice? {
-        guard let entity = entity else { return nil }
+        guard let entity else { return nil }
         return try? getSystemDevice(for: entity.coreMIDIObjectRef)
     }
 }

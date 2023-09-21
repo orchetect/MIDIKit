@@ -6,11 +6,11 @@
 
 #if canImport(SwiftUI) && !os(tvOS) && !os(watchOS)
 
-import SwiftUI
 import MIDIKitIO
+import SwiftUI
 
 @available(macOS 11.0, iOS 14.0, *)
-internal struct MIDIEndpointsList<Endpoint>: View
+struct MIDIEndpointsList<Endpoint>: View
 where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdentifier {
     @EnvironmentObject private var midiManager: MIDIManager
     
@@ -30,12 +30,12 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         showIcons: Bool
     ) {
         self.endpoints = endpoints
-        self._filter = State(initialValue: filter)
-        self._selection = selection
-        self._cachedSelectionName = cachedSelectionName
+        _filter = State(initialValue: filter)
+        _selection = selection
+        _cachedSelectionName = cachedSelectionName
         self.showIcons = showIcons
         // set up initial data, but skip filter because midiManager is not available yet
-        self._ids = State(initialValue: generateIDs(endpoints: endpoints, filtered: false))
+        _ids = State(initialValue: generateIDs(endpoints: endpoints, filtered: false))
     }
     
     public var body: some View {
@@ -74,15 +74,14 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         endpoints: [Endpoint],
         filtered: Bool = true
     ) -> [MIDIIdentifier] {
-        let endpointIDs = {
+        let endpointIDs = (
             filtered ? endpoints.filter(using: filter, in: midiManager) : endpoints
-        }()
+        )
         .map(\.id)
         
         if let selection, !endpointIDs.contains(selection) {
             return [selection] + endpointIDs
-        }
-        else {
+        } else {
             return endpointIDs
         }
     }
@@ -139,15 +138,15 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
                         .scaledToFit()
                 } else {
                     Image(systemName: "pianokeys")
-#if os(macOS)
+                    #if os(macOS)
                         .foregroundColor(.primary) // needed otherwise it uses accent color
-#endif
+                    #endif
                 }
             } else {
                 Image(systemName: "exclamationmark.triangle.fill")
-#if os(macOS)
+                #if os(macOS)
                     .foregroundColor(.primary) // needed otherwise it uses accent color
-#endif
+                #endif
             }
         }
     }
@@ -169,8 +168,8 @@ public struct MIDIInputsList: View {
         showIcons: Bool = true,
         filterOwned: Bool = false
     ) {
-        self._selection = selection
-        self._cachedSelectionName = cachedSelectionName
+        _selection = selection
+        _cachedSelectionName = cachedSelectionName
         self.showIcons = showIcons
         self.filterOwned = filterOwned
     }
@@ -203,8 +202,8 @@ public struct MIDIOutputsList: View {
         showIcons: Bool = true,
         filterOwned: Bool = false
     ) {
-        self._selection = selection
-        self._cachedSelectionName = cachedSelectionName
+        _selection = selection
+        _cachedSelectionName = cachedSelectionName
         self.showIcons = showIcons
         self.filterOwned = filterOwned
     }

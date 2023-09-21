@@ -25,8 +25,8 @@ public protocol MIDIFileEventPayload {
     /// If it is possible to initialize a new instance of this event from the head of the data
     /// stream, a new instance will be returned along with the byte length traversed from the
     /// stream.
-    static func initFrom<D: DataProtocol>(
-        midi1SMFRawBytesStream stream: D
+    static func initFrom(
+        midi1SMFRawBytesStream stream: some DataProtocol
     ) throws -> StreamDecodeResult
     
     /// Description for the event in a MIDI file context.

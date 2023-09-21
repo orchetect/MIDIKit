@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitCore
+import XCTest
 
 final class StringFormatting_Tests: XCTestCase {
     // MARK: - Hex Strings

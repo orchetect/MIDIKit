@@ -6,11 +6,11 @@
 
 #if canImport(SwiftUI) && !os(tvOS) && !os(watchOS)
 
-import SwiftUI
 import MIDIKitIO
+import SwiftUI
 
 @available(macOS 11.0, iOS 14.0, *)
-internal struct MIDIEndpointsPicker<Endpoint>: View
+struct MIDIEndpointsPicker<Endpoint>: View
 where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdentifier {
     @EnvironmentObject private var midiManager: MIDIManager
     
@@ -33,12 +33,12 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
     ) {
         self.title = title
         self.endpoints = endpoints
-        self._filter = State(initialValue: filter)
-        self._selection = selection
-        self._cachedSelectionName = cachedSelectionName
+        _filter = State(initialValue: filter)
+        _selection = selection
+        _cachedSelectionName = cachedSelectionName
         self.showIcons = showIcons
         // set up initial data, but skip filter because midiManager is not available yet
-        self._ids = State(initialValue: generateIDs(endpoints: endpoints, filtered: false))
+        _ids = State(initialValue: generateIDs(endpoints: endpoints, filtered: false))
     }
     
     public var body: some View {
@@ -47,8 +47,12 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
                 .tag(MIDIIdentifier?.none)
             
             ForEach(ids, id: \.self) {
-                EndpointRow(endpoint: endpoint(for: $0), cachedSelectionName: $cachedSelectionName, showIcon: showIcons)
-                    .tag($0 as MIDIIdentifier?)
+                EndpointRow(
+                    endpoint: endpoint(for: $0),
+                    cachedSelectionName: $cachedSelectionName,
+                    showIcon: showIcons
+                )
+                .tag($0 as MIDIIdentifier?)
             }
         }
         .onAppear {
@@ -76,15 +80,14 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         endpoints: [Endpoint],
         filtered: Bool = true
     ) -> [MIDIIdentifier] {
-        let endpointIDs = {
+        let endpointIDs = (
             filtered ? endpoints.filter(using: filter, in: midiManager) : endpoints
-        }()
-            .map(\.id)
+        )
+        .map(\.id)
         
         if let selection, !endpointIDs.contains(selection) {
             return [selection] + endpointIDs
-        }
-        else {
+        } else {
             return endpointIDs
         }
     }
@@ -106,14 +109,17 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         var body: some View {
             if showIcon {
                 HStack {
-#if os(macOS)
+                    #if os(macOS)
                     image(resampled: true)
-                        .frame(width: 16, height: 16) // only works on macOS with inline picker style
-#elseif os(iOS)
+                        .frame(
+                            width: 16,
+                            height: 16
+                        ) // only works on macOS with inline picker style
+                    #elseif os(iOS)
                     image(resampled: false)
-#else
+                    #else
                     image(resampled: false)
-#endif
+                    #endif
                     text
                 }
             } else {
@@ -133,8 +139,8 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         
         private var missingText: String {
             showIcon
-            ? cachedSelectionName ?? "Missing"
-            : (cachedSelectionName ?? "") + " (Missing)"
+                ? cachedSelectionName ?? "Missing"
+                : (cachedSelectionName ?? "") + " (Missing)"
         }
         
         @ViewBuilder
@@ -175,8 +181,8 @@ public struct MIDIInputsPicker: View {
         filterOwned: Bool = false
     ) {
         self.title = title
-        self._selection = selection
-        self._cachedSelectionName = cachedSelectionName
+        _selection = selection
+        _cachedSelectionName = cachedSelectionName
         self.showIcons = showIcons
         self.filterOwned = filterOwned
     }
@@ -212,8 +218,8 @@ public struct MIDIOutputsPicker: View {
         filterOwned: Bool = false
     ) {
         self.title = title
-        self._selection = selection
-        self._cachedSelectionName = cachedSelectionName
+        _selection = selection
+        _cachedSelectionName = cachedSelectionName
         self.showIcons = showIcons
         self.filterOwned = filterOwned
     }

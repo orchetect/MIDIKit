@@ -46,7 +46,7 @@ public final class MTCEncoder: SendsMIDIEvents {
     @ThreadSafeAccess
     public internal(set) var mtcComponents = Timecode.Components()
         
-    internal func setMTCComponents(mtc newComponents: Timecode.Components) {
+    func setMTCComponents(mtc newComponents: Timecode.Components) {
         mtcComponents = newComponents
     }
         
@@ -54,7 +54,7 @@ public final class MTCEncoder: SendsMIDIEvents {
     public internal(set) var localFrameRate: TimecodeFrameRate = ._30
         
     /// Set local frame rate (desired rate, not internal MTC SMPTE frame rate).
-    internal func setLocalFrameRate(_ newFrameRate: TimecodeFrameRate) {
+    func setLocalFrameRate(_ newFrameRate: TimecodeFrameRate) {
         localFrameRate = newFrameRate
         mtcFrameRate = newFrameRate.mtcFrameRate
     }
@@ -75,10 +75,10 @@ public final class MTCEncoder: SendsMIDIEvents {
     /// ``locate(to:transmitFullFrame:)`` (or since initializing the class if
     /// ``locate(to:transmitFullFrame:)`` has not yet been called).
     @ThreadSafeAccess
-    internal var mtcQuarterFrameStreamHasStartedSinceLastLocate = false
+    var mtcQuarterFrameStreamHasStartedSinceLastLocate = false
         
     /// Internal: track last full-frame message sent to the handler.
-    internal var lastTransmitFullFrame: (
+    var lastTransmitFullFrame: (
         mtcComponents: Timecode.Components,
         mtcFrameRate: MTCFrameRate
     )?
@@ -234,7 +234,7 @@ public final class MTCEncoder: SendsMIDIEvents {
     }
         
     /// Internal: generates a full-frame message at current position.
-    internal func generateFullFrameMIDIMessage() -> (
+    func generateFullFrameMIDIMessage() -> (
         event: MIDIEvent,
         components: Timecode.Components
     ) {
@@ -271,14 +271,16 @@ public final class MTCEncoder: SendsMIDIEvents {
             
             return (event: midiEvent, components: newComponents)
         } catch {
-            assertionFailure("Invalid bytes were encountered while MTCEncoder attempted to construct a full frame SysEx message.")
+            assertionFailure(
+                "Invalid bytes were encountered while MTCEncoder attempted to construct a full frame SysEx message."
+            )
             let midiEvent: MIDIEvent = .activeSensing()
             return (event: midiEvent, components: newComponents)
         }
     }
         
     /// Internal: triggers a handler event to transmit a quarter-frame message.
-    internal func sendQuarterFrameMIDIMessage() {
+    func sendQuarterFrameMIDIMessage() {
         midiOut(generateQuarterFrameMIDIMessage())
             
         // invalidate last full-frame information
@@ -286,7 +288,7 @@ public final class MTCEncoder: SendsMIDIEvents {
     }
         
     /// Internal: generates a quarter-frame message at current position.
-    internal func generateQuarterFrameMIDIMessage() -> MIDIEvent {
+    func generateQuarterFrameMIDIMessage() -> MIDIEvent {
         // Piece #  Data byte   Significance
         // -------  ---------   ------------
         // 0        0000 ffff   Frame number lsbits

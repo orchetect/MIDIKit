@@ -9,7 +9,7 @@
 import Foundation
 
 /// A temporary storage object for internal MIDI objects.
-internal struct MIDIIOObjectCache {
+struct MIDIIOObjectCache {
     let devices: [MIDIDevice]
     let inputEndpoints: [MIDIInputEndpoint]
     let outputEndpoints: [MIDIOutputEndpoint]

@@ -6,10 +6,10 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
-import XCTestUtils
 @testable import MIDIKitSync
 import TimecodeKit
+import XCTest
+import XCTestUtils
 
 final class MTC_Receiver_Receiver_Tests: XCTestCase {
     func testMTC_Receiver_Default() {
@@ -276,15 +276,14 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         var _state: MTCReceiver.State?
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
-            { timecode, messageType, direction, displayNeedsUpdate in
-                _timecode = timecode
-                _mType = messageType
-                _direction = direction
-                _displayNeedsUpdate = displayNeedsUpdate
-            } stateChanged: { state in
-                _state = state
-            }
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24) { timecode, messageType, direction, displayNeedsUpdate in
+            _timecode = timecode
+            _mType = messageType
+            _direction = direction
+            _displayNeedsUpdate = displayNeedsUpdate
+        } stateChanged: { state in
+            _state = state
+        }
         
         // default / initial state
         
@@ -328,15 +327,14 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         var _state: MTCReceiver.State?
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
-            { timecode, messageType, direction, displayNeedsUpdate in
-                _timecode = timecode
-                _mType = messageType
-                _direction = direction
-                _displayNeedsUpdate = displayNeedsUpdate
-            } stateChanged: { state in
-                _state = state
-            }
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24) { timecode, messageType, direction, displayNeedsUpdate in
+            _timecode = timecode
+            _mType = messageType
+            _direction = direction
+            _displayNeedsUpdate = displayNeedsUpdate
+        } stateChanged: { state in
+            _state = state
+        }
         
         // default / initial state
         

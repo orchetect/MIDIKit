@@ -4,9 +4,9 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import MIDIKitIO
 import MIDIKitUI
+import SwiftUI
 
 struct PickersExampleView: View {
     @AppStorage(MIDIHelper.PrefKeys.midiInID) private var midiInput: MIDIIdentifier?
@@ -29,11 +29,11 @@ struct PickersExampleView: View {
             Toggle("Filter Manager-Owned", isOn: $filterOwned)
                 .disabled(true)
             
-#if os(iOS)
+            #if os(iOS)
             if UIDevice.current.userInterfaceIdiom == .pad {
                 Toggle("Single Column", isOn: $singleColumn)
             }
-#endif
+            #endif
             
             Toggle("Show Icons", isOn: $showIcons)
         }
@@ -54,15 +54,15 @@ struct PickersExampleView: View {
     
     @ViewBuilder
     private var viewLayout: some View {
-#if os(iOS)
+        #if os(iOS)
         if singleColumn {
             iPhoneView
         } else {
             standardView
         }
-#else
+        #else
         standardView
-#endif
+        #endif
     }
     
     private var iPhoneView: some View {
@@ -137,15 +137,15 @@ extension View {
     fileprivate func pickerStyle(selection: PickerStyleSelection) -> some View {
         switch selection {
         case .automatic:
-            self.pickerStyle(.automatic)
+            pickerStyle(.automatic)
         case .inline:
-            self.pickerStyle(.inline)
+            pickerStyle(.inline)
         case .menu:
-            self.pickerStyle(.menu)
-#if os(macOS)
+            pickerStyle(.menu)
+        #if os(macOS)
         case .radioGroup:
-            self.pickerStyle(.radioGroup)
-#endif
+            pickerStyle(.radioGroup)
+        #endif
         }
     }
 }
@@ -154,9 +154,9 @@ private enum PickerStyleSelection: String, Identifiable, CaseIterable {
     case automatic = "Automatic"
     case inline = "Inline"
     case menu = "Menu"
-#if os(macOS)
+    #if os(macOS)
     case radioGroup = "Radio Group"
-#endif
+    #endif
     
     var id: RawValue { rawValue }
     var name: String { id }
@@ -164,10 +164,10 @@ private enum PickerStyleSelection: String, Identifiable, CaseIterable {
 
 extension PickerStyle {
     fileprivate static var selectionOptions: [any PickerStyle] {
-#if os(macOS)
+        #if os(macOS)
         [.automatic, .inline, .menu, .radioGroup]
-#else
+        #else
         [.automatic, .inline, .menu]
-#endif
+        #endif
     }
 }

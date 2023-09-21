@@ -6,7 +6,7 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-extension Set where Element == AnyMIDIEndpoint {
+extension Set<AnyMIDIEndpoint> {
     // empty
 }
 

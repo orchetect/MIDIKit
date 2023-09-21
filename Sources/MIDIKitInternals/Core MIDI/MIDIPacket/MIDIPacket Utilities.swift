@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-import Foundation
 import CoreMIDI
+import Foundation
 
 extension UnsafePointer where Pointee == MIDIPacket {
     /// Returns the raw bytes of the `MIDIPacket`.

@@ -6,8 +6,8 @@
 
 #if shouldTestCurrentPlatform
 
-import XCTest
 import MIDIKitIO
+import XCTest
 
 final class MIDIKitIOTests_Tests: XCTestCase {
     // no tests in this file, this is the module root test file

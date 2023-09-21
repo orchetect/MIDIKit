@@ -6,9 +6,9 @@
 
 #if os(iOS)
 
-import UIKit
-import SwiftUI
 import CoreAudioKit
+import SwiftUI
+import UIKit
 
 struct BluetoothMIDIPeripheralView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> BTMIDIPeripheralViewController {

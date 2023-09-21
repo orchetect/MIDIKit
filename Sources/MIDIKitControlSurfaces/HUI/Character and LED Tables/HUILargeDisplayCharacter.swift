@@ -230,12 +230,12 @@ extension HUILargeDisplayCharacter: HUICharacter {
 
 // MARK: - Sequence Category Methods
 
-extension Array where Element == HUILargeDisplayCharacter {
+extension [HUILargeDisplayCharacter] {
     /// Default text slice.
     public static let defaultSlice: Self = .init(repeating: .default(), count: 10)
 }
 
-extension Array where Element == [HUILargeDisplayCharacter] {
+extension [[HUILargeDisplayCharacter]] {
     /// Default text slices.
     public static let defaultSlices: Self = .init(repeating: .defaultSlice, count: 8)
 }
