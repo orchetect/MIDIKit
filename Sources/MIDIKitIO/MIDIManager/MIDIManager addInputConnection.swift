@@ -32,7 +32,6 @@ extension MIDIManager {
         filter: MIDIEndpointFilter = .default(),
         receiver: MIDIReceiver
     ) throws {
-        
         try eventQueue.sync {
             let newCD = MIDIInputConnection(
                 mode: outputs,
