@@ -47,7 +47,7 @@ struct MTCRecContentView: View {
                         dropOutFrames: 10
                     )
                 ) { timecode, _, _, displayNeedsUpdate in
-                    receiverTC = timecode.stringValue
+                    receiverTC = timecode.stringValue()
                     receiverFR = mtcRec.mtcFrameRate
                 
                     guard displayNeedsUpdate else { return }

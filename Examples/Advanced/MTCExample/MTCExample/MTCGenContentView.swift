@@ -28,7 +28,7 @@ struct MTCGenContentView: View {
     // MARK: - UI state
     
     @State var mtcGenState = false
-    @State var generatorTC: Timecode = .init(at: .fps24)
+    @State var generatorTC: Timecode = .init(.zero, at: .fps24)
     
     // MARK: - Internal State
     
@@ -84,7 +84,7 @@ struct MTCGenContentView: View {
     
     private var mtcGenView: some View {
         VStack(alignment: .center, spacing: 8) {
-            Text(generatorTC.stringValue)
+            Text(generatorTC.stringValue())
                 .font(.system(size: 48, weight: .regular, design: .monospaced))
                 .frame(maxWidth: .infinity)
             
@@ -112,7 +112,7 @@ struct MTCGenContentView: View {
                         // update generator frame rate by triggering a locate
                         locate()
                     }
-                    logger.debug("Starting at \(generatorTC.stringValue)")
+                    logger.debug("Starting at \(generatorTC.stringValue())")
                     mtcGen.start(now: generatorTC)
                 }
                 .disabled(mtcGenState)
@@ -272,7 +272,7 @@ struct MTCGenContentView: View {
     func locate(
         to components: Timecode.Components = .init(h: 00, m: 00, s: 00, f: 00)
     ) {
-        let tc = components.timecode(at: localFrameRate, by: .allowingInvalid)
+        let tc = Timecode(.components(components), at: localFrameRate, by: .allowingInvalid)
         generatorTC = tc
         mtcGen.locate(to: tc)
     }
