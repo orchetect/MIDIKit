@@ -91,7 +91,7 @@ extension MIDIEvent.ProgramChange: MIDIFileEventPayload {
             
             // TODO: Should this attempt to decode bank messages that may follow?
             
-            let newEvent = MIDIEvent.programChange(
+            let newEvent: MIDIEvent = .programChange(
                 program: programNumber,
                 channel: channel
             )

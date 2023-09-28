@@ -112,7 +112,7 @@ extension MIDIEvent.NoteOff: MIDIFileEventPayload {
             )
         }
         
-        let newEvent = MIDIEvent.noteOff(
+        let newEvent: MIDIEvent = .noteOff(
             noteNum,
             velocity: .midi1(velocity),
             channel: channel

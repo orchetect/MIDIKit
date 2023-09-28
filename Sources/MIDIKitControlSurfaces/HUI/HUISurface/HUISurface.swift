@@ -190,7 +190,7 @@ extension HUISurface: ReceivesMIDIEvents {
         switch event {
         case .deviceInquiryRequest(deviceID: 0x00),
              .deviceInquiryRequest(deviceID: 0x7F):
-            let diResponse = MIDIEvent.deviceInquiryResponse(
+            let diResponse: MIDIEvent = .deviceInquiryResponse(
                 deviceID: 0x00,
                 manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
                 deviceFamilyCode: 0x05, // TODO: needs correct value

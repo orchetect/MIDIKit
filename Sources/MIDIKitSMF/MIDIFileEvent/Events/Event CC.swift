@@ -112,7 +112,7 @@ extension MIDIEvent.CC: MIDIFileEventPayload {
             )
         }
             
-        let newEvent = MIDIEvent.cc(
+        let newEvent: MIDIEvent = .cc(
             .init(number: ccNum),
             value: .midi1(value),
             channel: channel

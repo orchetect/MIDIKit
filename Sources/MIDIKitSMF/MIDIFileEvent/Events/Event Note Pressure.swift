@@ -122,7 +122,7 @@ extension MIDIEvent.NotePressure: MIDIFileEventPayload {
                 )
             }
         
-            let newEvent = MIDIEvent.notePressure(
+            let newEvent: MIDIEvent = .notePressure(
                 note: noteNum,
                 amount: .midi1(pressure),
                 channel: channel

@@ -325,7 +325,7 @@ public final class MTCEncoder: SendsMIDIEvents {
             break // will never happen
         }
             
-        let midiEvent = MIDIEvent.timecodeQuarterFrame(dataByte: dataByte.toUInt7)
+        let midiEvent: MIDIEvent = .timecodeQuarterFrame(dataByte: dataByte.toUInt7)
             
         return midiEvent
     }

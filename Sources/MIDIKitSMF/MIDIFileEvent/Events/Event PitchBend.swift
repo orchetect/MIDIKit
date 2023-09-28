@@ -97,7 +97,7 @@ extension MIDIEvent.PitchBend: MIDIFileEventPayload {
                 )
             }
         
-            let newEvent = MIDIEvent.pitchBend(
+            let newEvent: MIDIEvent = .pitchBend(
                 value: .midi1(value),
                 channel: channel
             )

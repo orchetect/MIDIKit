@@ -54,7 +54,7 @@ func encodeHUISwitch(
             .zoneSelectByteToHost
         : HUIConstants.kMIDI.kControlDataByte1
             .zoneSelectByteToSurface
-    let event1 = MIDIEvent.cc(
+    let event1: MIDIEvent = .cc(
         ccA.toUInt7,
         value: .midi1(zone.toUInt7),
         channel: 0
@@ -65,7 +65,7 @@ func encodeHUISwitch(
             .portOnOffByteToHost
         : HUIConstants.kMIDI.kControlDataByte1
             .portOnOffByteToSurface
-    let event2 = MIDIEvent.cc(
+    let event2: MIDIEvent = .cc(
         ccB.toUInt7,
         value: .midi1(portByte.toUInt7),
         channel: 0
@@ -120,8 +120,8 @@ func encodeHUIFader(
     let channelHi = channel.toUInt7
     let channelLow = channel.toUInt7 + 0x20
     
-    let event1 = MIDIEvent.cc(channelHi, value: .midi1(msb), channel: 0)
-    let event2 = MIDIEvent.cc(channelLow, value: .midi1(lsb), channel: 0)
+    let event1: MIDIEvent = .cc(channelHi, value: .midi1(msb), channel: 0)
+    let event2: MIDIEvent = .cc(channelLow, value: .midi1(lsb), channel: 0)
     
     return [event1, event2]
 }
@@ -140,12 +140,12 @@ func encodeHUIFader(
     // UInt4 is self-validating, no need for guard
     // guard (0x0 ... 0x7).contains(channel) else { return [] }
     
-    let event1 = MIDIEvent.cc(
+    let event1: MIDIEvent = .cc(
         HUIConstants.kMIDI.kControlDataByte1.zoneSelectByteToHost.toUInt7,
         value: .midi1(channel.toUInt7),
         channel: 0
     )
-    let event2 = MIDIEvent.cc(
+    let event2: MIDIEvent = .cc(
         HUIConstants.kMIDI.kControlDataByte1.portOnOffByteToHost.toUInt7,
         value: .midi1(isTouched ? 0x40 : 0x00),
         channel: 0

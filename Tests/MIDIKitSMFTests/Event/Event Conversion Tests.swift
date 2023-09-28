@@ -11,7 +11,7 @@ import XCTest
 
 final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     func testMIDI_Event_NoteOn_smfEvent() throws {
-        let event = MIDIEvent.noteOn(
+        let event: MIDIEvent = .noteOn(
             60,
             velocity: .midi1(64),
             attribute: .profileSpecific(data: 0x1234),
@@ -41,7 +41,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_NoteOff_smfEvent() throws {
-        let event = MIDIEvent.noteOff(
+        let event: MIDIEvent = .noteOff(
             60,
             velocity: .midi1(0),
             attribute: .profileSpecific(data: 0x1234),
@@ -70,7 +70,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_NoteCC_smfEvent() throws {
-        let event = MIDIEvent.noteCC(
+        let event: MIDIEvent = .noteCC(
             note: 60,
             controller: .registered(.modWheel),
             value: .midi2(32768),
@@ -87,7 +87,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_NotePitchBend_smfEvent() throws {
-        let event = MIDIEvent.notePitchBend(
+        let event: MIDIEvent = .notePitchBend(
             note: 60,
             value: .midi2(.zero),
             channel: 1,
@@ -103,7 +103,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_NotePressure_smfEvent() throws {
-        let event = MIDIEvent.notePressure(
+        let event: MIDIEvent = .notePressure(
             note: 60,
             amount: .midi2(.zero),
             channel: 1,
@@ -131,7 +131,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_NoteManagement_smfEvent() throws {
-        let event = MIDIEvent.noteManagement(
+        let event: MIDIEvent = .noteManagement(
             note: 60,
             flags: [.detachPerNoteControllers],
             channel: 1,
@@ -147,7 +147,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_CC_smfEvent() throws {
-        let event = MIDIEvent.cc(
+        let event: MIDIEvent = .cc(
             .modWheel,
             value: .midi1(64),
             channel: 1,
@@ -175,7 +175,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_ProgramChange_smfEvent() throws {
-        let event = MIDIEvent.programChange(
+        let event: MIDIEvent = .programChange(
             program: 20,
             bank: .bankSelect(4),
             channel: 1,
@@ -203,7 +203,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_RPN_smfEvent() throws {
-        let event = MIDIEvent.rpn(
+        let event: MIDIEvent = .rpn(
             .channelFineTuning(123),
             channel: 0
         )
@@ -229,7 +229,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_NRPN_smfEvent() throws {
-        let event = MIDIEvent.nrpn(
+        let event: MIDIEvent = .nrpn(
             .raw(parameter: .init(msb: 2, lsb: 1), dataEntryMSB: 0x05, dataEntryLSB: 0x20),
             channel: 0
         )
@@ -255,7 +255,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_PitchBend_smfEvent() throws {
-        let event = MIDIEvent.pitchBend(
+        let event: MIDIEvent = .pitchBend(
             value: .midi1(.midpoint),
             channel: 1,
             group: 2
@@ -282,7 +282,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_Pressure_smfEvent() throws {
-        let event = MIDIEvent.pressure(
+        let event: MIDIEvent = .pressure(
             amount: .midi1(5),
             channel: 1,
             group: 2
@@ -309,7 +309,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_SysEx_smfEvent() throws {
-        let event = try MIDIEvent.sysEx7(
+        let event: MIDIEvent = try .sysEx7(
             manufacturer: .educational(),
             data: [0x12, 0x34],
             group: 2
@@ -336,7 +336,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_UniversalSysEx_smfEvent() throws {
-        let event = try MIDIEvent.universalSysEx7(
+        let event: MIDIEvent = try .universalSysEx7(
             universalType: .nonRealTime,
             deviceID: 0x7F,
             subID1: 0x01,
@@ -366,7 +366,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_TimecodeQuarterFrame_smfEvent() {
-        let event = MIDIEvent.timecodeQuarterFrame(
+        let event: MIDIEvent = .timecodeQuarterFrame(
             dataByte: 0x00,
             group: 2
         )
@@ -379,7 +379,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_SongPositionPointer_smfEvent() {
-        let event = MIDIEvent.songPositionPointer(
+        let event: MIDIEvent = .songPositionPointer(
             midiBeat: 8,
             group: 2
         )
@@ -392,7 +392,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_SongSelect_smfEvent() {
-        let event = MIDIEvent.songSelect(
+        let event: MIDIEvent = .songSelect(
             number: 4,
             group: 2
         )
@@ -405,7 +405,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_UnofficialBusSelect_smfEvent() {
-        let event = MIDIEvent.unofficialBusSelect(
+        let event: MIDIEvent = .unofficialBusSelect(
             bus: 4,
             group: 2
         )
@@ -418,7 +418,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_TuneRequest_smfEvent() {
-        let event = MIDIEvent.tuneRequest(group: 2)
+        let event: MIDIEvent = .tuneRequest(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
         let smfEvent = event.smfEvent(delta: .ticks(120))
@@ -428,7 +428,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_TimingClock_smfEvent() {
-        let event = MIDIEvent.timingClock(group: 2)
+        let event: MIDIEvent = .timingClock(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
         let smfEvent = event.smfEvent(delta: .ticks(120))
@@ -438,7 +438,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_Start_smfEvent() {
-        let event = MIDIEvent.start(group: 2)
+        let event: MIDIEvent = .start(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
         let smfEvent = event.smfEvent(delta: .ticks(120))
@@ -448,7 +448,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_Continue_smfEvent() {
-        let event = MIDIEvent.continue(group: 2)
+        let event: MIDIEvent = .continue(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
         let smfEvent = event.smfEvent(delta: .ticks(120))
@@ -458,7 +458,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_Stop_smfEvent() {
-        let event = MIDIEvent.stop(group: 2)
+        let event: MIDIEvent = .stop(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
         let smfEvent = event.smfEvent(delta: .ticks(120))
@@ -468,7 +468,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_ActiveSensing_smfEvent() {
-        let event = MIDIEvent.activeSensing(group: 2)
+        let event: MIDIEvent = .activeSensing(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
         let smfEvent = event.smfEvent(delta: .ticks(120))
@@ -478,7 +478,7 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
     }
     
     func testMIDI_Event_SystemReset_smfEvent() {
-        let event = MIDIEvent.systemReset(group: 2)
+        let event: MIDIEvent = .systemReset(group: 2)
         
         // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
         let smfEvent = event.smfEvent(delta: .ticks(120))
