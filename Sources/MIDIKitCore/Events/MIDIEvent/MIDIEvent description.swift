@@ -31,7 +31,7 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
             
-            return "noteOn(\(noteString)), vel: \(velString), \(attrStr)chan: \(channelString), group: \(groupString))"
+            return "noteOn(\(noteString), vel: \(velString), \(attrStr)chan: \(channelString), group: \(groupString))"
             
         case let .noteOff(event):
             let attrStr: String
@@ -44,21 +44,14 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             
             let noteString = "\(event.note.number) (\(event.note.stringValue()))"
             
-            // only include velocity if > 0
-            var velString: String
-            switch event.velocity {
-            case .midi1(0):
-                velString = ""
-            default:
-                let midi1VelString = "midi1(\(event.velocity.midi1Value))"
-                let midi2VelString = "midi2(\(event.velocity.midi2Value))"
-                velString = "\(midi1VelString)/\(midi2VelString), "
-            }
+            let midi1VelString = "midi1(\(event.velocity.midi1Value))"
+            let midi2VelString = "midi2(\(event.velocity.midi2Value))"
+            let velString = "\(midi1VelString)/\(midi2VelString)"
             
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
             
-            return "noteOff(\(noteString)), \(velString)\(attrStr)chan: \(channelString), group: \(groupString))"
+            return "noteOff(\(noteString), vel: \(velString), \(attrStr)chan: \(channelString), group: \(groupString))"
             
         case let .noteCC(event):
             let noteString = "\(event.note.number) (\(event.note.stringValue()))"
@@ -66,7 +59,7 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
             
-            return "noteCC(note: \(noteString)), controller: \(event.controller), val: \(event.value), chan: \(channelString), group: \(groupString))"
+            return "noteCC(note: \(noteString), controller: \(event.controller), val: \(event.value), chan: \(channelString), group: \(groupString))"
             
         case let .notePitchBend(event):
             let noteString = "\(event.note.number) (\(event.note.stringValue()))"
@@ -74,7 +67,7 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
             
-            return "notePitchBend(note: \(noteString)), value: \(event.value), chan: \(channelString), group: \(groupString))"
+            return "notePitchBend(note: \(noteString), value: \(event.value), chan: \(channelString), group: \(groupString))"
             
         case let .notePressure(event):
             let noteString = "\(event.note.number) (\(event.note.stringValue()))"
@@ -86,7 +79,7 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
             
-            return "notePressure(note: \(noteString)), amount: \(valString), chan: \(channelString), group: \(groupString))"
+            return "notePressure(note: \(noteString), amount: \(valString), chan: \(channelString), group: \(groupString))"
             
         case let .noteManagement(event):
             let channelString = event.channel.hexString()
