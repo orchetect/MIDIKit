@@ -26,10 +26,10 @@ extension MTCFrameRate {
     /// To get all timecode frame rates that are compatible, use ``derivedFrameRates`` instead.
     public var directEquivalentFrameRate: TimecodeFrameRate {
         switch self {
-        case .mtc24:    return ._24
-        case .mtc25:    return ._25
-        case .mtc2997d: return ._29_97_drop
-        case .mtc30:    return ._30
+        case .mtc24:    return .fps24
+        case .mtc25:    return .fps25
+        case .mtc2997d: return .fps29_97d
+        case .mtc30:    return .fps30
         }
     }
 }
@@ -39,28 +39,28 @@ extension TimecodeFrameRate {
     /// necessary)
     public var mtcFrameRate: MTCFrameRate {
         switch self {
-        case ._23_976:      return .mtc24
-        case ._24:          return .mtc24
-        case ._24_98:       return .mtc24
-        case ._25:          return .mtc25
-        case ._29_97:       return .mtc30
-        case ._29_97_drop:  return .mtc2997d
-        case ._30:          return .mtc30
-        case ._30_drop:     return .mtc2997d
-        case ._47_952:      return .mtc24
-        case ._48:          return .mtc24
-        case ._50:          return .mtc25
-        case ._59_94:       return .mtc30
-        case ._59_94_drop:  return .mtc2997d
-        case ._60:          return .mtc30
-        case ._60_drop:     return .mtc2997d
-        case ._95_904:      return .mtc24
-        case ._96:          return .mtc24
-        case ._100:         return .mtc25
-        case ._119_88:      return .mtc30
-        case ._119_88_drop: return .mtc2997d
-        case ._120:         return .mtc30
-        case ._120_drop:    return .mtc2997d
+        case .fps23_976:  return .mtc24
+        case .fps24:      return .mtc24
+        case .fps24_98:   return .mtc24
+        case .fps25:      return .mtc25
+        case .fps29_97:   return .mtc30
+        case .fps29_97d:  return .mtc2997d
+        case .fps30:      return .mtc30
+        case .fps30d:     return .mtc2997d
+        case .fps47_952:  return .mtc24
+        case .fps48:      return .mtc24
+        case .fps50:      return .mtc25
+        case .fps59_94:   return .mtc30
+        case .fps59_94d:  return .mtc2997d
+        case .fps60:      return .mtc30
+        case .fps60d:     return .mtc2997d
+        case .fps95_904:  return .mtc24
+        case .fps96:      return .mtc24
+        case .fps100:     return .mtc25
+        case .fps119_88:  return .mtc30
+        case .fps119_88d: return .mtc2997d
+        case .fps120:     return .mtc30
+        case .fps120d:    return .mtc2997d
         }
     }
     
@@ -122,7 +122,7 @@ extension MTCFrameRate {
         // account for 24.98fps rounding weirdness
         // due to it being transmit as MTC-24fps, the scaled value will always be underestimated so
         // adding a static offset is a clumsy but effective workaround
-        if timecodeRate == ._24_98 {
+        if timecodeRate == .fps24_98 {
             if scaled > 0.0 {
                 scaled += 0.24
             }
@@ -152,7 +152,7 @@ extension TimecodeFrameRate {
         rawMTCQuarterFrames: UInt8
     ) {
         // account for 24.98fps rounding weirdness
-        let scaleFactor = self == ._24_98
+        let scaleFactor = self == .fps24_98
             ? mtcScaleFactor - 0.001
             : mtcScaleFactor
         
@@ -177,28 +177,28 @@ extension TimecodeFrameRate {
         // (self.maxFrameNumberDisplayable + 1) / self.mtcFrameRate.fpsValueForScaling
         
         switch self {
-        case ._23_976:      return 1
-        case ._24:          return 1
-        case ._24_98:       return 1.0416666666666666666666 // 25.0/24.0
-        case ._25:          return 1
-        case ._29_97:       return 1
-        case ._29_97_drop:  return 1
-        case ._30:          return 1
-        case ._30_drop:     return 1
-        case ._47_952:      return 2
-        case ._48:          return 2
-        case ._50:          return 2
-        case ._59_94:       return 2
-        case ._59_94_drop:  return 2
-        case ._60:          return 2
-        case ._60_drop:     return 2
-        case ._95_904:      return 4
-        case ._96:          return 4
-        case ._100:         return 4
-        case ._119_88:      return 4
-        case ._119_88_drop: return 4
-        case ._120:         return 4
-        case ._120_drop:    return 4
+        case .fps23_976:  return 1
+        case .fps24:      return 1
+        case .fps24_98:   return 1.0416666666666666666666 // 25.0/24.0
+        case .fps25:      return 1
+        case .fps29_97:   return 1
+        case .fps29_97d:  return 1
+        case .fps30:      return 1
+        case .fps30d:     return 1
+        case .fps47_952:  return 2
+        case .fps48:      return 2
+        case .fps50:      return 2
+        case .fps59_94:   return 2
+        case .fps59_94d:  return 2
+        case .fps60:      return 2
+        case .fps60d:     return 2
+        case .fps95_904:  return 4
+        case .fps96:      return 4
+        case .fps100:     return 4
+        case .fps119_88:  return 4
+        case .fps119_88d: return 4
+        case .fps120:     return 4
+        case .fps120d:    return 4
         }
     }
 }

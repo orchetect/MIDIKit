@@ -37,10 +37,10 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         
         // test
         
-        mtcDec.localFrameRate = ._24
-        mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24))
+        mtcDec.localFrameRate = .fps24
+        mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         mtcEnc.increment() // QF 0
         mtcEnc.increment() // QF 1
@@ -51,51 +51,51 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 6
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps24, by: .allowingInvalid))
         mtcEnc.increment() // QF 1
         mtcEnc.increment() // QF 2
         mtcEnc.increment() // QF 3
         mtcEnc.increment() // QF 4
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 03).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 03), at: .fps24, by: .allowingInvalid))
         mtcEnc.increment() // QF 5
         mtcEnc.increment() // QF 6
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 04).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 04), at: .fps24, by: .allowingInvalid))
         for _ in 1 ... (19 * 4) { mtcEnc.increment() } // advance 19 frames (4 QF per frame)
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 23).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 23), at: .fps24, by: .allowingInvalid))
         mtcEnc.increment() // QF 5
         mtcEnc.increment() // QF 6
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 01, f: 00).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 01, f: 00), at: .fps24, by: .allowingInvalid))
         XCTAssertEqual(_direction, .forwards)
         mtcEnc.decrement() // QF 7
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 23).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 23), at: .fps24, by: .allowingInvalid))
         XCTAssertEqual(_direction, .backwards)
         mtcEnc.decrement() // QF 6
         mtcEnc.decrement() // QF 5
         mtcEnc.decrement() // QF 4
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 23).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 23), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 3
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 22).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 22), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 22).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 22), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 7
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 21).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 21), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 6
         mtcEnc.decrement() // QF 5
         mtcEnc.decrement() // QF 4
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 21).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 21), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 3
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 20).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 20), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 20).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 20), at: .fps24, by: .allowingInvalid))
     }
     
     func testMTC_Integration_EncoderDecoder_29_97drop() {
@@ -124,12 +124,12 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         
         // test
         
-        mtcDec.localFrameRate = ._29_97_drop
-        mtcEnc.locate(to: TCC(h: 1, m: 00, s: 59, f: 00).toTimecode(rawValuesAt: ._29_97_drop))
+        mtcDec.localFrameRate = .fps29_97d
+        mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 59, f: 00), at: .fps29_97d, by: .allowingInvalid))
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 00).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         mtcEnc.increment() // QF 0
@@ -143,7 +143,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 02).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 02), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 1
         mtcEnc.increment() // QF 2
@@ -151,7 +151,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 4
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 03).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 03), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 5
         mtcEnc.increment() // QF 6
@@ -159,13 +159,13 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 04).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 04), at: .fps29_97d, by: .allowingInvalid)
         )
         for _ in 1 ... (25 * 4) { mtcEnc.increment() } // advance 25 frames (4 QF per frame)
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 29), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 5
         mtcEnc.increment() // QF 6
@@ -173,13 +173,13 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 01, s: 00, f: 02).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 01, s: 00, f: 02), at: .fps29_97d, by: .allowingInvalid)
         )
         XCTAssertEqual(_direction, .forwards)
         mtcEnc.decrement() // QF 7
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 29), at: .fps29_97d, by: .allowingInvalid)
         )
         XCTAssertEqual(_direction, .backwards)
         mtcEnc.decrement() // QF 6
@@ -187,53 +187,53 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.decrement() // QF 4
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 29), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 3
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 28).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 28), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 28).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 28), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 7
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 27).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 27), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 6
         mtcEnc.decrement() // QF 5
         mtcEnc.decrement() // QF 4
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 27).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 27), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 3
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 26).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 26), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 26).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 26), at: .fps29_97d, by: .allowingInvalid)
         )
         
         // variant
         
-        mtcDec.localFrameRate = ._29_97_drop
-        mtcEnc.locate(to: TCC(h: 1, m: 00, s: 59, f: 00).toTimecode(rawValuesAt: ._29_97_drop))
+        mtcDec.localFrameRate = .fps29_97d
+        mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 59, f: 00), at: .fps29_97d, by: .allowingInvalid))
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 00).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         mtcEnc.increment() // QF 0
@@ -247,7 +247,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 02).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 02), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 1
         mtcEnc.increment() // QF 2
@@ -255,7 +255,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 4
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 03).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 03), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 5
         mtcEnc.increment() // QF 6
@@ -263,13 +263,13 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 04).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 04), at: .fps29_97d, by: .allowingInvalid)
         )
         for _ in 1 ... (25 * 4) { mtcEnc.increment() } // advance 25 frames (4 QF per frame)
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 29), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 5
         mtcEnc.increment() // QF 6
@@ -277,69 +277,69 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 01, s: 00, f: 02).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 01, s: 00, f: 02), at: .fps29_97d, by: .allowingInvalid)
         )
         // ** START: additional lines added for test variant **
         mtcEnc.increment() // QF 1
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 01, s: 00, f: 02).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 01, s: 00, f: 02), at: .fps29_97d, by: .allowingInvalid)
         )
         XCTAssertEqual(_direction, .forwards)
         mtcEnc.decrement() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 01, s: 00, f: 02).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 01, s: 00, f: 02), at: .fps29_97d, by: .allowingInvalid)
         )
         XCTAssertEqual(_direction, .backwards)
         // ** END: additional lines added for test variant **
         mtcEnc.decrement() // QF 7
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 29), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 6
         mtcEnc.decrement() // QF 5
         mtcEnc.decrement() // QF 4
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 29), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 3
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 28).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 28), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 28).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 28), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 7
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 27).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 27), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 6
         mtcEnc.decrement() // QF 5
         mtcEnc.decrement() // QF 4
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 27).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 27), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 3
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 26).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 26), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
         XCTAssertEqual(
             _timecode,
-            TCC(h: 1, m: 00, s: 59, f: 26).toTimecode(rawValuesAt: ._29_97_drop)
+            Timecode(.components(h: 1, m: 00, s: 59, f: 26), at: .fps29_97d, by: .allowingInvalid)
         )
     }
     
@@ -369,10 +369,10 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         
         // test
         
-        mtcDec.localFrameRate = ._48
-        mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._48))
+        mtcDec.localFrameRate = .fps48
+        mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps48, by: .allowingInvalid))
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps48, by: .allowingInvalid))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         mtcEnc.increment() // QF 0
         mtcEnc.increment() // QF 1
@@ -383,68 +383,68 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 6
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 04).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 04), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 1
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 04).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 04), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 2
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 05).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 05), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 3
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 05).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 05), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 4
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 06).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 06), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 5
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 06).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 06), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 6
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 07).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 07), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 7
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 07).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 07), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 0
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 08).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 08), at: .fps48, by: .allowingInvalid))
         for _ in 1 ... (19 * 4) { mtcEnc.increment() } // advance 19 frames (4 QF per frame)
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 46).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 46), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 5
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 46).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 46), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 6
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 47).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 47), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 7
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 47).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 47), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 0
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 01, f: 00).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 01, f: 00), at: .fps48, by: .allowingInvalid))
         XCTAssertEqual(_direction, .forwards)
         mtcEnc.decrement() // QF 7
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 47).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 47), at: .fps48, by: .allowingInvalid))
         XCTAssertEqual(_direction, .backwards)
         mtcEnc.decrement() // QF 6
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 47).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 47), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 5
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 46).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 46), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 4
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 46).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 46), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 3
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 45).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 45), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 2
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 45).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 45), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 1
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 44).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 44), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 0
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 44).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 44), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 7
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 43).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 43), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 6
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 43).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 43), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 5
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 42).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 42), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 4
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 42).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 42), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 3
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 41).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 41), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 2
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 41).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 41), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 1
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 40).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 40), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 0
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 40).toTimecode(rawValuesAt: ._48))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 40), at: .fps48, by: .allowingInvalid))
     }
     
     func testMTC_Integration_EncoderDecoder_fullFrameBehavior() {
@@ -476,51 +476,51 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         
         // test -- basic behavior
         
-        mtcDec.localFrameRate = ._24
+        mtcDec.localFrameRate = .fps24
         
         // locate
-        mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24))
+        mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(_displayNeedsUpdate, true)
         
         _displayNeedsUpdate = nil
         
         // locate to same position
-        mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24))
+        mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(_displayNeedsUpdate, nil)
         
         // locate to same position, but force a full-frame message to transmit
         mtcEnc.locate(
-            to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24),
+            to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid),
             transmitFullFrame: .always
         )
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(_displayNeedsUpdate, false)
         
         // locate to new timecode
         mtcEnc.locate(
-            to: TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(rawValuesAt: ._24),
+            to: Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps24, by: .allowingInvalid),
             transmitFullFrame: .always
         )
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps24, by: .allowingInvalid))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(_displayNeedsUpdate, true)
         
         // locate to same timecode, but change frame rate
         mtcEnc.locate(
-            to: TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(rawValuesAt: ._25),
+            to: Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps25, by: .allowingInvalid),
             transmitFullFrame: .always
         )
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(rawValuesAt: ._25))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps25, by: .allowingInvalid))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(_displayNeedsUpdate, false)
         
@@ -529,11 +529,11 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         // locate to new timecode, but request full-frame not be transmit
         
         mtcEnc.locate(
-            to: TCC(h: 1, m: 00, s: 00, f: 04).toTimecode(rawValuesAt: ._25),
+            to: Timecode(.components(h: 1, m: 00, s: 00, f: 04), at: .fps25, by: .allowingInvalid),
             transmitFullFrame: .never
         )
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 02).toTimecode(rawValuesAt: ._25))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps25, by: .allowingInvalid))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(_displayNeedsUpdate, nil)
         
@@ -547,11 +547,11 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         // message sent it succeeds instead of errantly preventing the message
         
         mtcEnc.locate(
-            to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24),
+            to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid),
             transmitFullFrame: .always
         )
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(_displayNeedsUpdate, true)
         
@@ -563,15 +563,15 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         XCTAssertNil(mtcEnc.lastTransmitFullFrame) // brittle but only way to test this
         
         // locate to same timecode; full-frame should transmit
-        mtcEnc.locate(to: TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24))
+        mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(_displayNeedsUpdate, false)
         XCTAssertEqual(_mType, .fullFrame)
     }
     
-    func testBruteForce() {
+    func testBruteForce() throws {
         // decoder
         
         var _timecode: Timecode?; _ = _timecode
@@ -599,8 +599,8 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         
         // iterate: each timecode frame rate
         // omit 24.98fps because it does not conform to the nature of this test
-        TimecodeFrameRate.allCases
-            .filter { $0 != ._24_98 }
+        try TimecodeFrameRate.allCases
+            .filter { $0 != .fps24_98 }
             .forEach { frameRate in
                 
                 // inform the decoder that our desired local frame rate has changed
@@ -611,27 +611,27 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
                 switch frameRate.mtcScaleFactor {
                 case 1:
                     ranges = [
-                        TCC(h: 0, m: 00, s: 00, f: 02).toTimecode(rawValuesAt: frameRate) ...
-                            TCC(h: 0, m: 00, s: 04, f: 10).toTimecode(rawValuesAt: frameRate),
+                        Timecode(.components(h: 0, m: 00, s: 00, f: 02), at: frameRate, by: .allowingInvalid) ...
+                            Timecode(.components(h: 0, m: 00, s: 04, f: 10), at: frameRate, by: .allowingInvalid),
                         
-                        TCC(h: 1, m: 00, s: 59, f: 02).toTimecode(rawValuesAt: frameRate) ...
-                            TCC(h: 1, m: 01, s: 01, f: 10).toTimecode(rawValuesAt: frameRate)
+                        Timecode(.components(h: 1, m: 00, s: 59, f: 02), at: frameRate, by: .allowingInvalid) ...
+                            Timecode(.components(h: 1, m: 01, s: 01, f: 10), at: frameRate, by: .allowingInvalid)
                     ]
                 case 2:
                     ranges = [
-                        TCC(h: 0, m: 00, s: 00, f: 04).toTimecode(rawValuesAt: frameRate) ...
-                            TCC(h: 0, m: 00, s: 02, f: 10).toTimecode(rawValuesAt: frameRate),
+                        Timecode(.components(h: 0, m: 00, s: 00, f: 04), at: frameRate, by: .allowingInvalid) ...
+                            Timecode(.components(h: 0, m: 00, s: 02, f: 10), at: frameRate, by: .allowingInvalid),
                         
-                        TCC(h: 1, m: 00, s: 59, f: 04).toTimecode(rawValuesAt: frameRate) ...
-                            TCC(h: 1, m: 01, s: 01, f: 10).toTimecode(rawValuesAt: frameRate)
+                        Timecode(.components(h: 1, m: 00, s: 59, f: 04), at: frameRate, by: .allowingInvalid) ...
+                            Timecode(.components(h: 1, m: 01, s: 01, f: 10), at: frameRate, by: .allowingInvalid)
                     ]
                 case 4:
                     ranges = [
-                        TCC(h: 0, m: 00, s: 00, f: 08).toTimecode(rawValuesAt: frameRate) ...
-                            TCC(h: 0, m: 00, s: 02, f: 10).toTimecode(rawValuesAt: frameRate),
+                        Timecode(.components(h: 0, m: 00, s: 00, f: 08), at: frameRate, by: .allowingInvalid) ...
+                            Timecode(.components(h: 0, m: 00, s: 02, f: 10), at: frameRate, by: .allowingInvalid),
                         
-                        TCC(h: 1, m: 00, s: 59, f: 08).toTimecode(rawValuesAt: frameRate) ...
-                            TCC(h: 1, m: 01, s: 01, f: 10).toTimecode(rawValuesAt: frameRate)
+                        Timecode(.components(h: 1, m: 00, s: 59, f: 08), at: frameRate, by: .allowingInvalid) ...
+                            Timecode(.components(h: 1, m: 01, s: 01, f: 10), at: frameRate, by: .allowingInvalid)
                     ]
                 default:
                     XCTFail("Unhandled frame rate")
@@ -641,7 +641,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
                 // iterate: each span in the collection of test ranges
                 for range in ranges {
                     let startOffset = 2 * Int(frameRate.mtcScaleFactor)
-                    mtcEnc.locate(to: range.first!.subtracting(wrapping: TCC(f: startOffset)))
+                    mtcEnc.locate(to: try range.first!.subtracting(.components(f: startOffset), by: .wrapping))
                     
                     mtcEnc.increment() // QF 0
                     XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)

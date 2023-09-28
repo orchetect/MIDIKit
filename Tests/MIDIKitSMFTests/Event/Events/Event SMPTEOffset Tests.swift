@@ -88,11 +88,11 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
         // basic: four SMPTE Offset frame rates
         
         do {
-            let tc = TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._24)
+            let tc = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
             
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
-            XCTAssertEqual(smpte.components, TCC(h: 1, m: 2, s: 3, f: 4))
+            XCTAssertEqual(smpte.components, .init(h: 1, m: 2, s: 3, f: 4))
             XCTAssertEqual(smpte.frameRate, ._24fps)
             
             XCTAssertEqual(smpte.timecode, tc)
@@ -100,11 +100,11 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
         }
         
         do {
-            let tc = TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._25)
+            let tc = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps25, by: .allowingInvalid)
             
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
-            XCTAssertEqual(smpte.components, TCC(h: 1, m: 2, s: 3, f: 4))
+            XCTAssertEqual(smpte.components, .init(h: 1, m: 2, s: 3, f: 4))
             XCTAssertEqual(smpte.frameRate, ._25fps)
             
             XCTAssertEqual(smpte.timecode, tc)
@@ -112,11 +112,11 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
         }
         
         do {
-            let tc = TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._29_97_drop)
+            let tc = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps29_97d, by: .allowingInvalid)
             
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
-            XCTAssertEqual(smpte.components, TCC(h: 1, m: 2, s: 3, f: 4))
+            XCTAssertEqual(smpte.components, .init(h: 1, m: 2, s: 3, f: 4))
             XCTAssertEqual(smpte.frameRate, ._2997dfps)
             
             XCTAssertEqual(smpte.timecode, tc)
@@ -124,11 +124,11 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
         }
         
         do {
-            let tc = TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._30)
+            let tc = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps30, by: .allowingInvalid)
             
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
-            XCTAssertEqual(smpte.components, TCC(h: 1, m: 2, s: 3, f: 4))
+            XCTAssertEqual(smpte.components, .init(h: 1, m: 2, s: 3, f: 4))
             XCTAssertEqual(smpte.frameRate, ._30fps)
             
             XCTAssertEqual(smpte.timecode, tc)
@@ -138,20 +138,20 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
         // subframe scaling
         
         do {
-            let tc = TCC(h: 1, sf: 40).toTimecode(rawValuesAt: ._24, base: ._80SubFrames)
+            let tc = Timecode(.components(h: 1, sf: 40), at: .fps24, base: .max80SubFrames, by: .allowingInvalid)
             
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
-            XCTAssertEqual(smpte.components, TCC(h: 1, sf: 50))
+            XCTAssertEqual(smpte.components, .init(h: 1, sf: 50))
             XCTAssertEqual(smpte.frameRate, ._24fps)
         }
         
         do {
-            let tc = TCC(h: 1, sf: 50).toTimecode(rawValuesAt: ._25, base: ._100SubFrames)
+            let tc = Timecode(.components(h: 1, sf: 50), at: .fps25, base: .max100SubFrames, by: .allowingInvalid)
             
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
-            XCTAssertEqual(smpte.components, TCC(h: 1, sf: 50))
+            XCTAssertEqual(smpte.components, .init(h: 1, sf: 50))
             XCTAssertEqual(smpte.frameRate, ._25fps)
         }
     }
@@ -160,71 +160,71 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
         // basic: four SMPTE Offset frame rates
         
         do {
-            let scaled = TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._24)
+            let scaled = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
                 .scaledToMIDIFileSMPTEFrameRate
             
-            XCTAssertEqual(scaled.scaledTimecode?.components, TCC(h: 1, m: 2, s: 3, f: 4))
-            XCTAssertEqual(scaled.scaledTimecode?.frameRate, ._24)
-            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, ._100SubFrames)
+            XCTAssertEqual(scaled.scaledTimecode?.components, .init(h: 1, m: 2, s: 3, f: 4))
+            XCTAssertEqual(scaled.scaledTimecode?.frameRate, .fps24)
+            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, .max100SubFrames)
         }
         
         do {
-            let scaled = TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._25)
+            let scaled = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps25, by: .allowingInvalid)
                 .scaledToMIDIFileSMPTEFrameRate
             
-            XCTAssertEqual(scaled.scaledTimecode?.components, TCC(h: 1, m: 2, s: 3, f: 4))
-            XCTAssertEqual(scaled.scaledTimecode?.frameRate, ._25)
-            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, ._100SubFrames)
+            XCTAssertEqual(scaled.scaledTimecode?.components, .init(h: 1, m: 2, s: 3, f: 4))
+            XCTAssertEqual(scaled.scaledTimecode?.frameRate, .fps25)
+            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, .max100SubFrames)
         }
         
         do {
-            let scaled = TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._29_97_drop)
+            let scaled = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps29_97d, by: .allowingInvalid)
                 .scaledToMIDIFileSMPTEFrameRate
             
-            XCTAssertEqual(scaled.scaledTimecode?.components, TCC(h: 1, m: 2, s: 3, f: 4))
-            XCTAssertEqual(scaled.scaledTimecode?.frameRate, ._29_97_drop)
-            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, ._100SubFrames)
+            XCTAssertEqual(scaled.scaledTimecode?.components, .init(h: 1, m: 2, s: 3, f: 4))
+            XCTAssertEqual(scaled.scaledTimecode?.frameRate, .fps29_97d)
+            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, .max100SubFrames)
         }
         
         do {
-            let scaled = TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._30)
+            let scaled = Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps30, by: .allowingInvalid)
                 .scaledToMIDIFileSMPTEFrameRate
             
-            XCTAssertEqual(scaled.scaledTimecode?.components, TCC(h: 1, m: 2, s: 3, f: 4))
-            XCTAssertEqual(scaled.scaledTimecode?.frameRate, ._30)
-            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, ._100SubFrames)
+            XCTAssertEqual(scaled.scaledTimecode?.components, .init(h: 1, m: 2, s: 3, f: 4))
+            XCTAssertEqual(scaled.scaledTimecode?.frameRate, .fps30)
+            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, .max100SubFrames)
         }
         
         // subframe scaling
         
         do {
-            let scaled = TCC(h: 1, sf: 40).toTimecode(rawValuesAt: ._24, base: ._80SubFrames)
+            let scaled = Timecode(.components(h: 1, sf: 40), at: .fps24, base: .max80SubFrames, by: .allowingInvalid)
                 .scaledToMIDIFileSMPTEFrameRate
             
-            XCTAssertEqual(scaled.scaledTimecode?.components, TCC(h: 1, sf: 50))
-            XCTAssertEqual(scaled.scaledTimecode?.frameRate, ._24)
-            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, ._100SubFrames)
+            XCTAssertEqual(scaled.scaledTimecode?.components, .init(h: 1, sf: 50))
+            XCTAssertEqual(scaled.scaledTimecode?.frameRate, .fps24)
+            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, .max100SubFrames)
         }
         
         do {
-            let scaled = TCC(h: 1, sf: 50).toTimecode(rawValuesAt: ._25, base: ._100SubFrames)
+            let scaled = Timecode(.components(h: 1, sf: 50), at: .fps25, base: .max100SubFrames, by: .allowingInvalid)
                 .scaledToMIDIFileSMPTEFrameRate
             
-            XCTAssertEqual(scaled.scaledTimecode?.components, TCC(h: 1, sf: 50))
-            XCTAssertEqual(scaled.scaledTimecode?.frameRate, ._25)
-            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, ._100SubFrames)
+            XCTAssertEqual(scaled.scaledTimecode?.components, .init(h: 1, sf: 50))
+            XCTAssertEqual(scaled.scaledTimecode?.frameRate, .fps25)
+            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, .max100SubFrames)
         }
         
         do {
-            let scaled = TCC(h: 1).toTimecode(rawValuesAt: ._47_952)
+            let scaled = Timecode(.components(h: 1), at: .fps47_952, by: .allowingInvalid)
                 .scaledToMIDIFileSMPTEFrameRate
             
             XCTAssertEqual(
                 scaled.scaledTimecode?.components,
-                TCC(d: 0, h: 1, m: 0, s: 3, f: 14, sf: 40)
+                .init(d: 0, h: 1, m: 0, s: 3, f: 14, sf: 40)
             )
-            XCTAssertEqual(scaled.scaledTimecode?.frameRate, ._24)
-            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, ._100SubFrames)
+            XCTAssertEqual(scaled.scaledTimecode?.frameRate, .fps24)
+            XCTAssertEqual(scaled.scaledTimecode?.subFramesBase, .max100SubFrames)
         }
     }
 }

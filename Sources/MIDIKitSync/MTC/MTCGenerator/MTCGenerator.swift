@@ -138,35 +138,35 @@ public final class MTCGenerator: SendsMIDIEvents {
     /// Sets timer rate to corresponding MTC quarter-frame duration in Hz.
     func setTimerRate(from frameRate: TimecodeFrameRate) {
         // const values generated from:
-        // TCC(f: 1).toTimecode(at: frameRate).realTimeValue
+        // Timecode(.components(f: 1), at: frameRate).realTimeValue
         // double and quadruple rates use the same value as their 1x rate
         
         // duration in seconds for one quarter-frame
         let rate: Double
         
         switch frameRate {
-        case ._23_976:      rate = 0.010427083333333333
-        case ._24:          rate = 0.010416666666666666
-        case ._24_98:       rate = 0.010009999999999998
-        case ._25:          rate = 0.01
-        case ._29_97:       rate = 0.008341666666666666
-        case ._29_97_drop:  rate = 0.008341666666666666
-        case ._30:          rate = 0.008333333333333333
-        case ._30_drop:     rate = 0.008341666666666666
-        case ._47_952:      rate = 0.010427083333333333 // _23_976
-        case ._48:          rate = 0.010416666666666666 // _24
-        case ._50:          rate = 0.01                 // _25
-        case ._59_94:       rate = 0.008341666666666666 // _29_97
-        case ._59_94_drop:  rate = 0.008341666666666666 // _29_97_drop
-        case ._60:          rate = 0.008333333333333333 // _30
-        case ._60_drop:     rate = 0.008341666666666666 // _30_drop
-        case ._95_904:      rate = 0.010427083333333333 // _23_976
-        case ._96:          rate = 0.010416666666666666 // _24
-        case ._100:         rate = 0.01                 // _25
-        case ._119_88:      rate = 0.008341666666666666 // _29_97
-        case ._119_88_drop: rate = 0.008341666666666666 // _29_97_drop
-        case ._120:         rate = 0.008333333333333333 // _30
-        case ._120_drop:    rate = 0.008341666666666666 // _30_drop
+        case .fps23_976:  rate = 0.010427083333333333
+        case .fps24:      rate = 0.010416666666666666
+        case .fps24_98:   rate = 0.010009999999999998
+        case .fps25:      rate = 0.01
+        case .fps29_97:   rate = 0.008341666666666666
+        case .fps29_97d:  rate = 0.008341666666666666
+        case .fps30:      rate = 0.008333333333333333
+        case .fps30d:     rate = 0.008341666666666666
+        case .fps47_952:  rate = 0.010427083333333333 // _23_976
+        case .fps48:      rate = 0.010416666666666666 // _24
+        case .fps50:      rate = 0.01                 // _25
+        case .fps59_94:   rate = 0.008341666666666666 // _29_97
+        case .fps59_94d:  rate = 0.008341666666666666 // _29_97_drop
+        case .fps60:      rate = 0.008333333333333333 // _30
+        case .fps60d:     rate = 0.008341666666666666 // _30_drop
+        case .fps95_904:  rate = 0.010427083333333333 // _23_976
+        case .fps96:      rate = 0.010416666666666666 // _24
+        case .fps100:     rate = 0.01                 // _25
+        case .fps119_88:  rate = 0.008341666666666666 // _29_97
+        case .fps119_88d: rate = 0.008341666666666666 // _29_97_drop
+        case .fps120:     rate = 0.008333333333333333 // _30
+        case .fps120d:    rate = 0.008341666666666666 // _30_drop
         }
         
         timer.setRate(.seconds(rate))
@@ -252,9 +252,10 @@ public final class MTCGenerator: SendsMIDIEvents {
         }
             
         let tc = Timecode(
-            rawValues: components,
+            .components(components),
             at: frameRate,
-            base: base
+            base: base,
+            by: .allowingInvalid
         )
             
         start(now: tc)
@@ -285,10 +286,10 @@ public final class MTCGenerator: SendsMIDIEvents {
             
         // convert real time to timecode at the given frame rate
         guard let inRTtoTimecode = try? Timecode(
-            realTime: realTime,
+            .realTime(seconds: realTime),
             at: frameRate,
-            limit: ._24hours,
-            base: ._100SubFrames // base doesn't matter, just for calculation
+            base: .max100SubFrames, // base doesn't matter, just for calculation
+            limit: .max24Hours
         ) else { return }
             
         // if subframes == 0, no scheduling is required
@@ -307,7 +308,7 @@ public final class MTCGenerator: SendsMIDIEvents {
         // truncate subframes and advance 1 frame
         var tcAtNextEvenFrame = inRTtoTimecode
         tcAtNextEvenFrame.subFrames = 0
-        tcAtNextEvenFrame.add(wrapping: TCC(f: 1))
+        try? tcAtNextEvenFrame.add(.components(f: 1), by: .wrapping)
             
         let secsToStartOfNextFrame = tcAtNextEvenFrame.realTimeValue - realTime
             

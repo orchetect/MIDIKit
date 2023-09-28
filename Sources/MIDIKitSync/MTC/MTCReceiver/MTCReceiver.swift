@@ -140,7 +140,7 @@ public final class MTCReceiver {
         let name = name ?? UUID().uuidString
         self.name = name
         
-        timecode = Timecode(at: initialLocalFrameRate ?? ._30)
+        timecode = Timecode(.zero, at: initialLocalFrameRate ?? .fps30)
         
         if let unwrappedSyncPolicy = syncPolicy {
             self.syncPolicy = unwrappedSyncPolicy
@@ -212,7 +212,7 @@ public final class MTCReceiver {
     
     var timeLastQuarterFrameReceived: timespec = .init()
     
-    var freewheelPreviousTimecode: Timecode = .init(at: ._30)
+    var freewheelPreviousTimecode: Timecode = .init(.zero, at: .fps30)
     var freewheelSequentialFrames = 0
     
     // MARK: - Timer (internal)
@@ -246,8 +246,9 @@ public final class MTCReceiver {
         
         let dropOutFramesDuration =
             Timecode(
-                wrapping: TCC(f: syncPolicy.dropOutFrames),
-                at: decoder.localFrameRate ?? ._30
+                .components(f: syncPolicy.dropOutFrames),
+                at: decoder.localFrameRate ?? .fps30,
+                by: .wrapping
             )
             .realTimeValue
         
@@ -350,7 +351,7 @@ extension MTCReceiver {
             if state == .freewheeling {
                 if incomingTC - freewheelPreviousTimecode
                     == (try? Timecode(
-                        TCC(f: 1),
+                        .components(f: 1),
                         at: decoder.localFrameRate ?? incomingTC.frameRate
                     ))
                 {
@@ -370,8 +371,9 @@ extension MTCReceiver {
                 // calculate time until lock
                 
                 let preSyncFrames = Timecode(
-                    wrapping: TCC(f: syncPolicy.lockFrames),
-                    at: decoder.localFrameRate ?? incomingTC.frameRate
+                    .components(f: syncPolicy.lockFrames),
+                    at: decoder.localFrameRate ?? incomingTC.frameRate,
+                    by: .wrapping
                 )
                 let prerollDuration = Int(preSyncFrames.realTimeValue * 1_000_000) // microseconds
                 

@@ -19,22 +19,22 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         XCTAssertEqual(mtcRec.name, "test")
         XCTAssertEqual(mtcRec.state, .idle)
-        XCTAssertEqual(mtcRec.timecode, Timecode(at: ._30))
+        XCTAssertEqual(mtcRec.timecode, Timecode(.zero, at: .fps30))
         XCTAssertEqual(mtcRec.localFrameRate, nil)
         // (skip syncPolicy, it has its own unit tests)
         
         // basic properties mutation
         
         // localFrameRate
-        mtcRec.localFrameRate = ._29_97
-        XCTAssertEqual(mtcRec.localFrameRate, ._29_97)
-        XCTAssertEqual(mtcRec.decoder.localFrameRate, ._29_97)
+        mtcRec.localFrameRate = .fps29_97
+        XCTAssertEqual(mtcRec.localFrameRate, .fps29_97)
+        XCTAssertEqual(mtcRec.decoder.localFrameRate, .fps29_97)
     }
     
     func testMTC_Receiver_Init_Arguments() {
         let mtcRec = MTCReceiver(
             name: "test",
-            initialLocalFrameRate: ._48,
+            initialLocalFrameRate: .fps48,
             syncPolicy: .init(
                 lockFrames: 20,
                 dropOutFrames: 22
@@ -44,9 +44,9 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // check if defaults are nominal
         
         XCTAssertEqual(mtcRec.name, "test")
-        XCTAssertEqual(mtcRec.timecode, Timecode(at: ._48))
-        XCTAssertEqual(mtcRec.localFrameRate, ._48)
-        XCTAssertEqual(mtcRec.decoder.localFrameRate, ._48)
+        XCTAssertEqual(mtcRec.timecode, Timecode(.zero, at: .fps48))
+        XCTAssertEqual(mtcRec.localFrameRate, .fps48)
+        XCTAssertEqual(mtcRec.decoder.localFrameRate, .fps48)
         XCTAssertEqual(mtcRec.syncPolicy, .init(
             lockFrames: 20,
             dropOutFrames: 22
@@ -64,7 +64,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         wait(sec: 0.050)
         XCTAssertEqual(
             mtcRec.timecode,
-            TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
         )
         
         // 00:00:00:00 @ MTC 24fps
@@ -72,7 +72,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         wait(sec: 0.050)
         XCTAssertEqual(
             mtcRec.timecode,
-            TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
         )
         
         // 02:11:17:20 @ MTC 25fps
@@ -80,7 +80,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         wait(sec: 0.050)
         XCTAssertEqual(
             mtcRec.timecode,
-            TCC(h: 2, m: 11, s: 17, f: 20).toTimecode(rawValuesAt: ._25)
+            Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
         )
     }
     
@@ -91,14 +91,14 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: .fps24)
         
         // 01:02:03:04 @ MTC 24fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps)
         wait(sec: 0.050)
         XCTAssertEqual(
             mtcRec.timecode,
-            TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
         )
         
         // 00:00:00:00 @ MTC 24fps
@@ -106,7 +106,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         wait(sec: 0.050)
         XCTAssertEqual(
             mtcRec.timecode,
-            TCC(h: 0, m: 0, s: 0, f: 0).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
         )
         
         // 02:11:17:20 @ MTC 25fps
@@ -114,18 +114,17 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         wait(sec: 0.050)
         XCTAssertEqual(
             mtcRec.timecode,
-            TCC(h: 2, m: 11, s: 17, f: 20)
-                .toTimecode(rawValuesAt: ._25)
+            Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
         ) // local real rate still 24fps
         
-        mtcRec.localFrameRate = ._25 // sync
+        mtcRec.localFrameRate = .fps25 // sync
         
         // 02:11:17:20 @ MTC 25fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps)
         wait(sec: 0.050)
         XCTAssertEqual(
             mtcRec.timecode,
-            TCC(h: 2, m: 11, s: 17, f: 20).toTimecode(rawValuesAt: ._25)
+            Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
         )
     }
     
@@ -137,7 +136,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._29_97)
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: .fps29_97)
         
         // 01:02:03:04 @ MTC 24fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps)
@@ -148,11 +147,10 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(mtcRec.state, .idle)
         
         // timecode remains unchanged
-        XCTAssertEqual(mtcRec.timecode.frameRate, ._29_97)
+        XCTAssertEqual(mtcRec.timecode.frameRate, .fps29_97)
         XCTAssertEqual(
             mtcRec.timecode,
-            TCC(h: 0, m: 0, s: 0, f: 0)
-                .toTimecode(rawValuesAt: ._29_97)
+            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps29_97, by: .allowingInvalid)
         ) // default MTC-30fps
     }
     
@@ -184,7 +182,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // elevate thread priority for latency-sensitive tests
         DispatchQueue.global(qos: .userInitiated).async { [self] in
             // init with local frame rate
-            let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24)
+            let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: .fps24)
         
             XCTAssertEqual(mtcRec.state, .idle)
         
@@ -213,12 +211,13 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
             XCTAssertEqual(
                 mtcRec.timecode,
-                TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(rawValuesAt: ._24)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
             )
         
             let preSyncFrames = Timecode(
-                wrapping: TCC(f: mtcRec.syncPolicy.lockFrames),
-                at: ._24
+                .components(f: mtcRec.syncPolicy.lockFrames),
+                at: .fps24,
+                by: .wrapping
             )
             let prerollDuration = Int(preSyncFrames.realTimeValue * 1_000_000) // microseconds
         
@@ -226,7 +225,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
             let durationUntilLock = DispatchTimeInterval.microseconds(prerollDuration)
             let futureTime = now + durationUntilLock
         
-            let lockTimecode = TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(rawValuesAt: ._24)
+            let lockTimecode = Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
                 .advanced(by: mtcRec.syncPolicy.lockFrames)
         
             guard case let .preSync(
@@ -276,7 +275,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         var _state: MTCReceiver.State?
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24) { timecode, messageType, direction, displayNeedsUpdate in
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: .fps24) { timecode, messageType, direction, displayNeedsUpdate in
             _timecode = timecode
             _mType = messageType
             _direction = direction
@@ -299,10 +298,10 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         wait(sec: 0.050)
         
-        XCTAssertEqual(_timecode, TCC(h: 1, m: 2, s: 3, f: 4).toTimecode(rawValuesAt: ._24))
+        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid))
         XCTAssertEqual(_mType, .fullFrame)
         XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_timecode?.frameRate, ._24)
+        XCTAssertEqual(_timecode?.frameRate, .fps24)
         XCTAssertEqual(_direction, .forwards)
         XCTAssertEqual(_state, nil)
     }
@@ -327,7 +326,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         var _state: MTCReceiver.State?
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24) { timecode, messageType, direction, displayNeedsUpdate in
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: .fps24) { timecode, messageType, direction, displayNeedsUpdate in
             _timecode = timecode
             _mType = messageType
             _direction = direction
@@ -399,11 +398,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // new TC
         XCTAssertEqual(_mType, .quarterFrame)
         XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_timecode?.frameRate, ._24)
+        XCTAssertEqual(_timecode?.frameRate, .fps24)
         XCTAssertEqual(_direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
@@ -411,11 +410,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         XCTAssertEqual(_mType, .quarterFrame)
         XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, ._24)
+        XCTAssertEqual(_timecode?.frameRate, .fps24)
         XCTAssertEqual(_direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
@@ -423,11 +422,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         XCTAssertEqual(_mType, .quarterFrame)
         XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, ._24)
+        XCTAssertEqual(_timecode?.frameRate, .fps24)
         XCTAssertEqual(_direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
@@ -435,11 +434,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         XCTAssertEqual(_mType, .quarterFrame)
         XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, ._24)
+        XCTAssertEqual(_timecode?.frameRate, .fps24)
         XCTAssertEqual(_direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
@@ -447,11 +446,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // new TC
         XCTAssertEqual(_mType, .quarterFrame)
         XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_timecode?.frameRate, ._24)
+        XCTAssertEqual(_timecode?.frameRate, .fps24)
         XCTAssertEqual(_direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
@@ -459,11 +458,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         XCTAssertEqual(_mType, .quarterFrame)
         XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, ._24)
+        XCTAssertEqual(_timecode?.frameRate, .fps24)
         XCTAssertEqual(_direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
@@ -471,11 +470,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         XCTAssertEqual(_mType, .quarterFrame)
         XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, ._24)
+        XCTAssertEqual(_timecode?.frameRate, .fps24)
         XCTAssertEqual(_direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
@@ -483,11 +482,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         XCTAssertEqual(_mType, .quarterFrame)
         XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, ._24)
+        XCTAssertEqual(_timecode?.frameRate, .fps24)
         XCTAssertEqual(_direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010)) // QF 0
@@ -495,11 +494,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         XCTAssertEqual(
             _timecode,
-            TCC(h: 2, m: 3, s: 4, f: 10).toTimecode(rawValuesAt: ._24)
+            Timecode(.components(h: 2, m: 3, s: 4, f: 10), at: .fps24, by: .allowingInvalid)
         ) // new TC
         XCTAssertEqual(_mType, .quarterFrame)
         XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_timecode?.frameRate, ._24)
+        XCTAssertEqual(_timecode?.frameRate, .fps24)
         XCTAssertEqual(_direction, .forwards)
         
         // reverse

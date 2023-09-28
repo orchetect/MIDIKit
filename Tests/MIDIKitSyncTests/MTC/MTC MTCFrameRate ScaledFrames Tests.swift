@@ -34,7 +34,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
             else { continue }
             
             switch realRate {
-            case ._23_976, ._24:
+            case .fps23_976, .fps24:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
                         mtcRate.scaledFrames(
@@ -62,7 +62,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     )
                 }
                 
-            case ._24_98:
+            case .fps24_98:
                 // MTC 24 -> realRate
                 // this one is the odd duck; Cubase transmits 24.98 as MTC 24
                 
@@ -100,7 +100,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     24.98
                 )
                 
-            case ._25:
+            case .fps25:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
                         mtcRate.scaledFrames(
@@ -128,7 +128,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     )
                 }
                 
-            case ._29_97, ._29_97_drop, ._30, ._30_drop:
+            case .fps29_97, .fps29_97d, .fps30, .fps30d:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
                         mtcRate.scaledFrames(
@@ -156,7 +156,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     )
                 }
                 
-            case ._47_952, ._48:
+            case .fps47_952, .fps48:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
                         mtcRate.scaledFrames(
@@ -184,7 +184,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     )
                 }
                 
-            case ._50:
+            case .fps50:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
                         mtcRate.scaledFrames(
@@ -212,7 +212,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     )
                 }
                 
-            case ._59_94, ._59_94_drop, ._60, ._60_drop:
+            case .fps59_94, .fps59_94d, .fps60, .fps60d:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
                         mtcRate.scaledFrames(
@@ -240,7 +240,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     )
                 }
                 
-            case ._95_904, ._96:
+            case .fps95_904, .fps96:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
                         mtcRate.scaledFrames(
@@ -268,7 +268,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     )
                 }
                 
-            case ._100:
+            case .fps100:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
                         mtcRate.scaledFrames(
@@ -296,7 +296,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     )
                 }
                 
-            case ._119_88, ._119_88_drop, ._120, ._120_drop:
+            case .fps119_88, .fps119_88d, .fps120, .fps120d:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
                         mtcRate.scaledFrames(
@@ -333,7 +333,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
             mtc30.scaledFrames(
                 fromRawMTCFrames: -1,
                 quarterFrames: 0,
-                to: ._30
+                to: .fps30
             ),
             0
         )
@@ -343,7 +343,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
             mtc30.scaledFrames(
                 fromRawMTCFrames: 60,
                 quarterFrames: 0,
-                to: ._30
+                to: .fps30
             ),
             60
         )
@@ -353,7 +353,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
             mtc30.scaledFrames(
                 fromRawMTCFrames: 0,
                 quarterFrames: 8,
-                to: ._30
+                to: .fps30
             ),
             0.25 * 7
         )
@@ -381,7 +381,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
         
         for realRate in TimecodeFrameRate.allCases {
             switch realRate {
-            case ._23_976, ._24:
+            case .fps23_976, .fps24:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 12 + (Double(qf) * 0.25))
                     XCTAssertEqual(scaled.rawMTCFrames, 12)
@@ -393,7 +393,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
                 }
                 
-            case ._24_98:
+            case .fps24_98:
                 // MTC 24 -> realRate
                 // this one is the odd duck; Cubase transmits 24.98 as MTC 24
                 // just do a spot-check, as testing all 8 quarter-frames is tricky
@@ -411,7 +411,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                 XCTAssertEqual(scaled3.rawMTCFrames, 24)
                 XCTAssertEqual(scaled3.rawMTCQuarterFrames, 0)
                 
-            case ._25:
+            case .fps25:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 12 + (Double(qf) * 0.25))
                     XCTAssertEqual(scaled.rawMTCFrames, 12)
@@ -423,7 +423,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
                 }
                 
-            case ._29_97, ._29_97_drop, ._30, ._30_drop:
+            case .fps29_97, .fps29_97d, .fps30, .fps30d:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 14 + (Double(qf) * 0.25))
                     XCTAssertEqual(scaled.rawMTCFrames, 14)
@@ -435,7 +435,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
                 }
                 
-            case ._47_952, ._48:
+            case .fps47_952, .fps48:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 24 + (Double(qf) * 0.5))
                     XCTAssertEqual(scaled.rawMTCFrames, 12)
@@ -447,7 +447,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
                 }
                 
-            case ._50:
+            case .fps50:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 24 + (Double(qf) * 0.5))
                     XCTAssertEqual(scaled.rawMTCFrames, 12)
@@ -459,7 +459,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
                 }
                 
-            case ._59_94, ._59_94_drop, ._60, ._60_drop:
+            case .fps59_94, .fps59_94d, .fps60, .fps60d:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 28 + (Double(qf) * 0.5))
                     XCTAssertEqual(scaled.rawMTCFrames, 14)
@@ -471,7 +471,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
                 }
                 
-            case ._95_904, ._96:
+            case .fps95_904, .fps96:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 48 + (Double(qf) * 1.0))
                     XCTAssertEqual(scaled.rawMTCFrames, 12)
@@ -483,7 +483,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
                 }
                 
-            case ._100:
+            case .fps100:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 48 + (Double(qf) * 1.0))
                     XCTAssertEqual(scaled.rawMTCFrames, 12)
@@ -495,7 +495,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
                 }
                 
-            case ._119_88, ._119_88_drop, ._120, ._120_drop:
+            case .fps119_88, .fps119_88d, .fps120, .fps120d:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 56 + (Double(qf) * 1.0))
                     XCTAssertEqual(scaled.rawMTCFrames, 14)

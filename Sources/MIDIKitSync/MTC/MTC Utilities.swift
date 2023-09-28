@@ -22,19 +22,19 @@ func mtcIsEqual(
     guard let strongLHS = lhs,
           let strongRHS = rhs
     else { return false }
-        
+    
     let lhsComponents = strongLHS.mtcComponents
     let rhsComponents = strongRHS.mtcComponents
-        
+    
     let componentsAreEqual =
-        lhsComponents.h == rhsComponents.h &&
-        lhsComponents.m == rhsComponents.m &&
-        lhsComponents.s == rhsComponents.s &&
-        lhsComponents.f == rhsComponents.f
-        
+        lhsComponents.hours == rhsComponents.hours &&
+        lhsComponents.minutes == rhsComponents.minutes &&
+        lhsComponents.seconds == rhsComponents.seconds &&
+        lhsComponents.frames == rhsComponents.frames
+    
     let mtcFrameRatesAreEqual =
         strongLHS.mtcFrameRate == strongRHS.mtcFrameRate
-        
+    
     return componentsAreEqual && mtcFrameRatesAreEqual
 }
     
@@ -45,7 +45,7 @@ func convertToFullFrameComponents(
     mtcQuarterFrames: UInt8
 ) -> Timecode.Components {
     var newComponents = mtcComponents
-    newComponents.f += ((25 * Int(mtcQuarterFrames)) / 100)
+    newComponents.frames += ((25 * Int(mtcQuarterFrames)) / 100)
         
     return newComponents
 }

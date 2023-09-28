@@ -20,7 +20,7 @@ final class MTC_Utilities_Tests: XCTestCase {
         MTCFrameRate.allCases.forEach {
             XCTAssertFalse(
                 mtcIsEqual(
-                    (mtcComponents: TCC(), mtcFrameRate: $0),
+                    (mtcComponents: .init(), mtcFrameRate: $0),
                     nil
                 )
             )
@@ -28,31 +28,31 @@ final class MTC_Utilities_Tests: XCTestCase {
             XCTAssertFalse(
                 mtcIsEqual(
                     nil,
-                    (mtcComponents: TCC(), mtcFrameRate: $0)
+                    (mtcComponents: .init(), mtcFrameRate: $0)
                 )
             )
             
             // == components, == frame rate
             XCTAssertTrue(
                 mtcIsEqual(
-                    (mtcComponents: TCC(), mtcFrameRate: $0),
-                    (mtcComponents: TCC(), mtcFrameRate: $0)
+                    (mtcComponents: .init(), mtcFrameRate: $0),
+                    (mtcComponents: .init(), mtcFrameRate: $0)
                 )
             )
             
             // == components, == frame rate
             XCTAssertTrue(
                 mtcIsEqual(
-                    (mtcComponents: TCC(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: $0),
-                    (mtcComponents: TCC(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: $0)
+                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: $0),
+                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: $0)
                 )
             )
             
             // != components, == frame rate
             XCTAssertFalse(
                 mtcIsEqual(
-                    (mtcComponents: TCC(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: $0),
-                    (mtcComponents: TCC(h: 1, m: 02, s: 03, f: 05), mtcFrameRate: $0)
+                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: $0),
+                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 05), mtcFrameRate: $0)
                 )
             )
         }
@@ -60,8 +60,8 @@ final class MTC_Utilities_Tests: XCTestCase {
         // == components, != frame rate
         XCTAssertFalse(
             mtcIsEqual(
-                (mtcComponents: TCC(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: .mtc24),
-                (mtcComponents: TCC(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: .mtc25)
+                (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: .mtc24),
+                (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: .mtc25)
             )
         )
     }

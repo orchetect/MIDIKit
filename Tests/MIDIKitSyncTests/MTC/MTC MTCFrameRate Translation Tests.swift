@@ -23,13 +23,13 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
         XCTAssertEqual(
             MTCFrameRate.mtc24.derivedFrameRates,
             [
-                ._23_976,
-                ._24,
-                ._24_98,
-                ._47_952,
-                ._48,
-                ._95_904,
-                ._96
+                .fps23_976,
+                .fps24,
+                .fps24_98,
+                .fps47_952,
+                .fps48,
+                .fps95_904,
+                .fps96
             ]
         )
         
@@ -38,9 +38,9 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
         XCTAssertEqual(
             MTCFrameRate.mtc25.derivedFrameRates,
             [
-                ._25,
-                ._50,
-                ._100
+                .fps25,
+                .fps50,
+                .fps100
             ]
         )
         
@@ -49,12 +49,12 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
         XCTAssertEqual(
             MTCFrameRate.mtc2997d.derivedFrameRates,
             [
-                ._29_97_drop,
-                ._30_drop,
-                ._59_94_drop,
-                ._60_drop,
-                ._119_88_drop,
-                ._120_drop
+                .fps29_97d,
+                .fps30d,
+                .fps59_94d,
+                .fps60d,
+                .fps119_88d,
+                .fps120d
             ]
         )
         
@@ -63,12 +63,12 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
         XCTAssertEqual(
             MTCFrameRate.mtc30.derivedFrameRates,
             [
-                ._29_97,
-                ._30,
-                ._59_94,
-                ._60,
-                ._119_88,
-                ._120
+                .fps29_97,
+                .fps30,
+                .fps59_94,
+                .fps60,
+                .fps119_88,
+                .fps120
             ]
         )
     }

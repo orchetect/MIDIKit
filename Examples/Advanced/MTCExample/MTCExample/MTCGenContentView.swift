@@ -20,7 +20,7 @@ struct MTCGenContentView: View {
     @State var mtcGen: MTCGenerator = .init()
     
     @AppStorage("mtcGen-localFrameRate")
-    var localFrameRate: TimecodeFrameRate = ._24
+    var localFrameRate: TimecodeFrameRate = .fps24
     
     @AppStorage("mtcGen-locateBehavior")
     var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
@@ -28,7 +28,7 @@ struct MTCGenContentView: View {
     // MARK: - UI state
     
     @State var mtcGenState = false
-    @State var generatorTC: Timecode = .init(at: ._24)
+    @State var generatorTC: Timecode = .init(at: .fps24)
     
     // MARK: - Internal State
     
@@ -94,15 +94,15 @@ struct MTCGenContentView: View {
             VStack {
                 Button(
                     "Locate to "
-                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 00)
-                        .toTimecode(
-                            rawValuesAt: localFrameRate,
-                            base: ._100SubFrames,
-                            format: [.showSubFrames]
+                        + Timecode(
+                            .components(h: 1, m: 00, s: 00, f: 00, sf: 00),
+                            at: localFrameRate,
+                            base: .max100SubFrames,
+                            by: .allowingInvalid
                         )
-                        .stringValue
+                        .stringValue(format: [.showSubFrames])
                 ) {
-                    locate(to: TCC(h: 1, m: 00, s: 00, f: 00, sf: 00))
+                    locate(to: .init(h: 1, m: 00, s: 00, f: 00, sf: 00))
                 }
                 .disabled(mtcGenState)
                 
@@ -119,13 +119,13 @@ struct MTCGenContentView: View {
                 
                 Button(
                     "Start at "
-                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
-                        .toTimecode(
-                            rawValuesAt: localFrameRate,
-                            base: ._100SubFrames,
-                            format: [.showSubFrames]
+                        + Timecode(
+                            .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
+                            at: localFrameRate,
+                            base: .max100SubFrames,
+                            by: .allowingInvalid
                         )
-                        .stringValue
+                        .stringValue(format: [.showSubFrames])
                         + " (as Timecode)"
                 ) {
                     mtcGenState = true
@@ -134,10 +134,11 @@ struct MTCGenContentView: View {
                         locate()
                     }
                     
-                    let startTC = TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
-                        .toTimecode(
-                            rawValuesAt: localFrameRate,
-                            base: ._100SubFrames
+                    let startTC = Timecode(
+                            .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
+                            at: localFrameRate,
+                            base: .max100SubFrames,
+                            by: .allowingInvalid
                         )
                     
                     mtcGen.start(now: startTC)
@@ -146,13 +147,13 @@ struct MTCGenContentView: View {
                 
                 Button(
                     "Start at "
-                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
-                        .toTimecode(
-                            rawValuesAt: localFrameRate,
-                            base: ._100SubFrames,
-                            format: [.showSubFrames]
+                        + Timecode(
+                            .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
+                            at: localFrameRate,
+                            base: .max100SubFrames,
+                            by: .allowingInvalid
                         )
-                        .stringValue
+                        .stringValue(format: [.showSubFrames])
                         + " (as Timecode Components)"
                 ) {
                     mtcGenState = true
@@ -161,11 +162,12 @@ struct MTCGenContentView: View {
                         locate()
                     }
                     
-                    let startTC = TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
-                        .toTimecode(
-                            rawValuesAt: localFrameRate,
-                            base: ._100SubFrames
-                        )
+                    let startTC = Timecode(
+                        .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
+                        at: localFrameRate,
+                        base: .max100SubFrames,
+                        by: .allowingInvalid
+                    )
                     
                     mtcGen.start(
                         now: startTC.components,
@@ -177,13 +179,13 @@ struct MTCGenContentView: View {
                 
                 Button(
                     "Start at "
-                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
-                        .toTimecode(
-                            rawValuesAt: localFrameRate,
-                            base: ._100SubFrames,
-                            format: [.showSubFrames]
+                        + Timecode(
+                            .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
+                            at: localFrameRate,
+                            base: .max100SubFrames,
+                            by: .allowingInvalid
                         )
-                        .stringValue
+                        .stringValue(format: [.showSubFrames])
                         + " (as TimeInterval)"
                 ) {
                     mtcGenState = true
@@ -192,10 +194,11 @@ struct MTCGenContentView: View {
                         locate()
                     }
                     
-                    let startRealTimeSeconds = TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
-                        .toTimecode(
-                            rawValuesAt: localFrameRate,
-                            base: ._100SubFrames
+                    let startRealTimeSeconds = Timecode(
+                            .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
+                            at: localFrameRate,
+                            base: .max100SubFrames,
+                            by: .allowingInvalid
                         )
                         .realTimeValue
                     
@@ -267,9 +270,9 @@ struct MTCGenContentView: View {
     
     /// Locate to a timecode, or 00:00:00:00 by default.
     func locate(
-        to components: Timecode.Components = TCC(h: 00, m: 00, s: 00, f: 00)
+        to components: Timecode.Components = .init(h: 00, m: 00, s: 00, f: 00)
     ) {
-        let tc = components.toTimecode(rawValuesAt: localFrameRate)
+        let tc = components.timecode(at: localFrameRate, by: .allowingInvalid)
         generatorTC = tc
         mtcGen.locate(to: tc)
     }

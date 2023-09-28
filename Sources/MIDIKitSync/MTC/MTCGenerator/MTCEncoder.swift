@@ -21,24 +21,25 @@ public final class MTCEncoder: SendsMIDIEvents {
     /// Returns current `Timecode` at ``localFrameRate``, scaling if necessary.
     public var timecode: Timecode {
         guard let scaledFrames = mtcFrameRate.scaledFrames(
-            fromRawMTCFrames: mtcComponents.f,
+            fromRawMTCFrames: mtcComponents.frames,
             quarterFrames: mtcQuarterFrame,
             to: localFrameRate
         ) else {
             // rates are not compatible; return a default instead of failing
             // in future we may want this to be an error condition
-            return Timecode(at: localFrameRate)
+            return Timecode(.zero, at: localFrameRate)
         }
             
         var scaledComponents = mtcComponents
-        scaledComponents.f = Int(scaledFrames)
+        scaledComponents.frames = Int(scaledFrames)
         // sanitize: clear subframes since we're working at 1-frame resolution with timecode display values
-        scaledComponents.sf = 0
+        scaledComponents.subFrames = 0
             
         return Timecode(
-            wrapping: scaledComponents,
+            .components(scaledComponents),
             at: localFrameRate,
-            limit: ._24hours
+            limit: .max24Hours,
+            by: .wrapping
         )
     }
         
@@ -51,7 +52,7 @@ public final class MTCEncoder: SendsMIDIEvents {
     }
         
     /// Local frame rate (desired rate, not internal MTC SMPTE frame rate).
-    public internal(set) var localFrameRate: TimecodeFrameRate = ._30
+    public internal(set) var localFrameRate: TimecodeFrameRate = .fps30
         
     /// Set local frame rate (desired rate, not internal MTC SMPTE frame rate).
     func setLocalFrameRate(_ newFrameRate: TimecodeFrameRate) {
@@ -130,13 +131,13 @@ public final class MTCEncoder: SendsMIDIEvents {
         // Step 1: set Encoder's internal MTC components
             
         let scaledFrames = localFrameRate
-            .scaledFrames(fromTimecodeFrames: Double(components.f))
+            .scaledFrames(fromTimecodeFrames: Double(components.frames))
             
         var newComponents = components
-        newComponents.f = scaledFrames.rawMTCFrames
+        newComponents.frames = scaledFrames.rawMTCFrames
             
         // sanitize: clear subframes since we're working at 1-frame resolution with timecode display values
-        newComponents.sf = 0
+        newComponents.subFrames = 0
             
         setMTCComponents(mtc: newComponents)
         mtcQuarterFrame = scaledFrames.rawMTCQuarterFrames
@@ -179,11 +180,11 @@ public final class MTCEncoder: SendsMIDIEvents {
                 mtcQuarterFrame += 1
             } else {
                 guard var tc = try? Timecode(
-                    mtcComponents,
+                    .components(mtcComponents),
                     at: mtcFrameRate.directEquivalentFrameRate
                 ) else { return }
                     
-                tc.add(wrapping: TCC(f: 2))
+                try? tc.add(.components(f: 2), by: .wrapping)
                 mtcComponents = tc.components
                 mtcQuarterFrame = 0
             }
@@ -208,11 +209,11 @@ public final class MTCEncoder: SendsMIDIEvents {
                 mtcQuarterFrame -= 1
             } else {
                 guard var tc = try? Timecode(
-                    mtcComponents,
+                    .components(mtcComponents),
                     at: mtcFrameRate.directEquivalentFrameRate
                 ) else { return }
                     
-                tc.subtract(wrapping: TCC(f: 2))
+                try? tc.subtract(.components(f: 2), by: .wrapping)
                 mtcComponents = tc.components
                 mtcQuarterFrame = 7
             }
@@ -262,10 +263,10 @@ public final class MTCEncoder: SendsMIDIEvents {
                 subID1: 0x01,
                 subID2: 0x01,
                 data: [
-                    (UInt8(newComponents.h) & 0b00011111) + (mtcFrameRate.bitValue << 5),
-                    UInt8(newComponents.m),
-                    UInt8(newComponents.s),
-                    UInt8(newComponents.f)
+                    (UInt8(newComponents.hours) & 0b00011111) + (mtcFrameRate.bitValue << 5),
+                    UInt8(newComponents.minutes),
+                    UInt8(newComponents.seconds),
+                    UInt8(newComponents.frames)
                 ]
             )
             
@@ -304,21 +305,21 @@ public final class MTCEncoder: SendsMIDIEvents {
             
         switch mtcQuarterFrame {
         case 0b000: // QF 0
-            dataByte += (UInt8(mtcComponents.f) & 0b00001111)
+            dataByte += (UInt8(mtcComponents.frames) & 0b00001111)
         case 0b001: // QF 1
-            dataByte += (UInt8(mtcComponents.f) & 0b00010000) >> 4
+            dataByte += (UInt8(mtcComponents.frames) & 0b00010000) >> 4
         case 0b010: // QF 2
-            dataByte += (UInt8(mtcComponents.s) & 0b00001111)
+            dataByte += (UInt8(mtcComponents.seconds) & 0b00001111)
         case 0b011: // QF 3
-            dataByte += (UInt8(mtcComponents.s) & 0b00110000) >> 4
+            dataByte += (UInt8(mtcComponents.seconds) & 0b00110000) >> 4
         case 0b100: // QF 4
-            dataByte += (UInt8(mtcComponents.m) & 0b00001111)
+            dataByte += (UInt8(mtcComponents.minutes) & 0b00001111)
         case 0b101: // QF 5
-            dataByte += (UInt8(mtcComponents.m) & 0b00110000) >> 4
+            dataByte += (UInt8(mtcComponents.minutes) & 0b00110000) >> 4
         case 0b110: // QF 6
-            dataByte += (UInt8(mtcComponents.h) & 0b00001111)
+            dataByte += (UInt8(mtcComponents.hours) & 0b00001111)
         case 0b111: // QF 7
-            dataByte += ((UInt8(mtcComponents.h) & 0b00010000) >> 4)
+            dataByte += ((UInt8(mtcComponents.hours) & 0b00010000) >> 4)
                 + (mtcFrameRate.bitValue << 1)
         default:
             break // will never happen

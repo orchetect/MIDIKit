@@ -100,7 +100,7 @@ extension MIDIFileEvent {
         
         /// Returns a new `Timecode` instance from the SMPTE offset.
         public var components: Timecode.Components {
-            TCC(
+            .init(
                 h: Int(hours),
                 m: Int(minutes),
                 s: Int(seconds),
@@ -111,9 +111,11 @@ extension MIDIFileEvent {
         
         /// Returns a new `Timecode` instance from the SMPTE offset.
         public var timecode: Timecode {
-            components.toTimecode(
-                rawValuesAt: frameRate.timecodeRate,
-                base: ._100SubFrames
+            Timecode(
+                .components(components),
+                at: frameRate.timecodeRate,
+                base: .max100SubFrames,
+                by: .allowingInvalid
             )
         }
         
@@ -142,7 +144,7 @@ extension MIDIFileEvent {
             let smpteTCAndRate = timecode.scaledToMIDIFileSMPTEFrameRate
             
             let smpteTC = smpteTCAndRate.scaledTimecode
-                ?? Timecode(at: timecode.frameRate) // 00:00:00:00 default
+                ?? Timecode(.zero, at: timecode.frameRate) // 00:00:00:00 default
             
             frameRate = smpteTCAndRate.smpteFR
             
@@ -378,7 +380,7 @@ extension Timecode {
         var scaledTC = try? converted(to: midiFileSMPTEFrameRate.timecodeRate)
         
         // scale subframes if needed
-        if scaledTC?.subFramesBase != ._100SubFrames,
+        if scaledTC?.subFramesBase != .max100SubFrames,
            let nonNilscaledTC = scaledTC
         {
             let originalSF = Double(nonNilscaledTC.subFrames)
@@ -388,11 +390,12 @@ extension Timecode {
                 Int((originalSF / originalSFD) * 100)
             
             var newComponents = nonNilscaledTC.components
-            newComponents.sf = scaledSubFrames
+            newComponents.subFrames = scaledSubFrames
             
-            scaledTC = try? newComponents.toTimecode(
+            scaledTC = try? Timecode(
+                .components(newComponents),
                 at: nonNilscaledTC.frameRate,
-                base: ._100SubFrames
+                base: .max100SubFrames
             )
         }
         
@@ -406,28 +409,28 @@ extension TimecodeFrameRate {
     /// frame rate.
     public var midiFileSMPTEOffsetRate: MIDIFile.SMPTEOffsetFrameRate {
         switch self {
-        case ._23_976: return ._24fps // as output from Pro Tools
-        case ._24: return ._24fps // as output from Pro Tools
-        case ._24_98: return ._24fps // custom
-        case ._25: return ._25fps // as output from Pro Tools
-        case ._29_97: return ._30fps // as output from Pro Tools
-        case ._29_97_drop: return ._2997dfps // as output from Pro Tools
-        case ._30: return ._30fps // as output from Pro Tools
-        case ._30_drop: return ._2997dfps // as output from Pro Tools
-        case ._47_952: return ._24fps // as output from Pro Tools
-        case ._48: return ._24fps // as output from Pro Tools
-        case ._50: return ._25fps // custom
-        case ._59_94: return ._30fps // custom
-        case ._59_94_drop: return ._2997dfps // custom
-        case ._60: return ._30fps // custom
-        case ._60_drop: return ._2997dfps // custom
-        case ._95_904: return ._24fps // custom
-        case ._96: return ._24fps // custom
-        case ._100: return ._25fps // custom
-        case ._119_88: return ._30fps // custom
-        case ._119_88_drop: return ._2997dfps // custom
-        case ._120: return ._30fps // custom
-        case ._120_drop: return ._2997dfps // custom
+        case .fps23_976: return ._24fps // as output from Pro Tools
+        case .fps24: return ._24fps // as output from Pro Tools
+        case .fps24_98: return ._24fps // custom
+        case .fps25: return ._25fps // as output from Pro Tools
+        case .fps29_97: return ._30fps // as output from Pro Tools
+        case .fps29_97d: return ._2997dfps // as output from Pro Tools
+        case .fps30: return ._30fps // as output from Pro Tools
+        case .fps30d: return ._2997dfps // as output from Pro Tools
+        case .fps47_952: return ._24fps // as output from Pro Tools
+        case .fps48: return ._24fps // as output from Pro Tools
+        case .fps50: return ._25fps // custom
+        case .fps59_94: return ._30fps // custom
+        case .fps59_94d: return ._2997dfps // custom
+        case .fps60: return ._30fps // custom
+        case .fps60d: return ._2997dfps // custom
+        case .fps95_904: return ._24fps // custom
+        case .fps96: return ._24fps // custom
+        case .fps100: return ._25fps // custom
+        case .fps119_88: return ._30fps // custom
+        case .fps119_88d: return ._2997dfps // custom
+        case .fps120: return ._30fps // custom
+        case .fps120d: return ._2997dfps // custom
         }
     }
 }
@@ -436,10 +439,10 @@ extension MIDIFile.SMPTEOffsetFrameRate {
     /// Returns exact `Timecode` frame rate that matches the MIDI File SMPTE Offset frame rate.
     public var timecodeRate: TimecodeFrameRate {
         switch self {
-        case ._24fps: return ._24
-        case ._25fps: return ._25
-        case ._2997dfps: return ._29_97_drop
-        case ._30fps: return ._30
+        case ._24fps: return .fps24
+        case ._25fps: return .fps25
+        case ._2997dfps: return .fps29_97d
+        case ._30fps: return .fps30
         }
     }
 }

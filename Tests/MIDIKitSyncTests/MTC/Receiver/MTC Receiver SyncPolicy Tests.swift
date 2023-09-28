@@ -49,13 +49,13 @@ final class MTC_Receiver_SyncPolicy_Tests: XCTestCase {
         sp = .init(lockFrames: 30, dropOutFrames: 30)
         
         XCTAssertEqual(
-            sp.lockDuration(at: ._30),
+            sp.lockDuration(at: .fps30),
             1.0000000,
             accuracy: 0.0000001
         )
         
         XCTAssertEqual(
-            sp.dropOutDuration(at: ._30),
+            sp.dropOutDuration(at: .fps30),
             1.0000000,
             accuracy: 0.0000001
         )

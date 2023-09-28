@@ -41,7 +41,7 @@ struct MTCRecContentView: View {
                 // set up new MTC receiver and configure it
                 mtcRec = MTCReceiver(
                     name: "main",
-                    initialLocalFrameRate: ._24,
+                    initialLocalFrameRate: .fps24,
                     syncPolicy: .init(
                         lockFrames: 16,
                         dropOutFrames: 10

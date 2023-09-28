@@ -18,10 +18,10 @@ extension MIDIFile {
     /// be one of the four SMPTE standards - 24, 25, 29d or 30, though expressed as a negative value
     /// (using 2's complement notation), as follows:
     ///
-    /// - 24fps: `0xE8`
-    /// - 25fps: `0xE7`
-    /// - 29fps: `0xE3`
-    /// - 30fps: `0xE2`
+    /// - 24 fps: `0xE8`
+    /// - 25 fps: `0xE7`
+    /// - 29.97 drop fps: `0xE3`
+    /// - 30 fps: `0xE2`
     public enum FrameRate: UInt8, CaseIterable, Equatable, Hashable {
         case _24fps    = 0b1101000 // 0xE8, assuming top bit of 1
         case _25fps    = 0b1100111 // 0xE7, assuming top bit of 1

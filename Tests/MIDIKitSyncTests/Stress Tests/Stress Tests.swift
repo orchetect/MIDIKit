@@ -34,13 +34,13 @@ final class StressTests: XCTestCase {
             mtcGen.midiOutHandler = { _ in }
             
             // public methods
-            mtcGen.locate(to: Timecode(at: ._24))
-            mtcGen.locate(to: TCC())
-            mtcGen.start(now: Timecode(at: ._24))
+            mtcGen.locate(to: Timecode(.zero, at: .fps24))
+            mtcGen.locate(to: Timecode.Components.zero)
+            mtcGen.start(now: Timecode(.zero, at: .fps24))
             mtcGen.stop()
-            mtcGen.start(now: TCC(), frameRate: ._24, base: ._100SubFrames)
+            mtcGen.start(now: Timecode.Components.zero, frameRate: .fps24, base: .max100SubFrames)
             mtcGen.stop()
-            mtcGen.start(now: 0.0, frameRate: ._24)
+            mtcGen.start(now: 0.0, frameRate: .fps24)
             mtcGen.stop()
         }
         
@@ -60,7 +60,7 @@ final class StressTests: XCTestCase {
         // property updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: ._24) { timecode, messageType, direction, displayNeedsUpdate in
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: .fps24) { timecode, messageType, direction, displayNeedsUpdate in
             _ = timecode
             _ = messageType
             _ = direction
@@ -77,7 +77,7 @@ final class StressTests: XCTestCase {
             _ = mtcRec.state
             _ = mtcRec.timecode
             _ = mtcRec.localFrameRate
-            mtcRec.localFrameRate = ._30
+            mtcRec.localFrameRate = .fps30
             _ = mtcRec.mtcFrameRate
             _ = mtcRec.direction
             _ = mtcRec.syncPolicy
