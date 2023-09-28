@@ -35,7 +35,7 @@ final class TimeBase_Tests: XCTestCase {
     }
     
     func testInitTimecode() {
-        let timeBase = MIDIFile.TimeBase.timecode(smpteFormat: ._25fps, ticksPerFrame: 80)
+        let timeBase = MIDIFile.TimeBase.timecode(smpteFormat: .fps25, ticksPerFrame: 80)
         
         let rawData: [UInt8] = [0b11100111, 0x50]
         
@@ -48,7 +48,7 @@ final class TimeBase_Tests: XCTestCase {
             ) = MIDIFile.TimeBase(rawBytes: rawData)
             else { XCTFail(); return }
             
-            XCTAssertEqual(smpteFormat, ._25fps)
+            XCTAssertEqual(smpteFormat, .fps25)
             XCTAssertEqual(ticksPerFrame, 80)
         }
         
@@ -59,7 +59,7 @@ final class TimeBase_Tests: XCTestCase {
             ) = MIDIFile.TimeBase(rawData: rawData.data)
             else { XCTFail(); return }
             
-            XCTAssertEqual(smpteFormat, ._25fps)
+            XCTAssertEqual(smpteFormat, .fps25)
             XCTAssertEqual(ticksPerFrame, 80)
         }
     }
