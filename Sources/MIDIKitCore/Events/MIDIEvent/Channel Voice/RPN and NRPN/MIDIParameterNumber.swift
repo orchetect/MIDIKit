@@ -87,10 +87,10 @@ extension MIDIParameterNumber {
         protocol midiProtocol: MIDIProtocolVersion
     ) -> MIDIUMPMessageType {
         switch midiProtocol {
-        case ._1_0:
+        case .midi1_0:
             return .midi1ChannelVoice
             
-        case ._2_0:
+        case .midi2_0:
             return .midi2ChannelVoice
         }
     }
@@ -111,7 +111,7 @@ extension MIDIParameterNumber {
             .uInt8Value
         
         switch midiProtocol {
-        case ._1_0:
+        case .midi1_0:
             // UMP has no MIDI 1.0 RPN/NRPN message, so we send all the CC messages individually.
             // this will produce more than one UMP packet.
             return Array(
@@ -120,7 +120,7 @@ extension MIDIParameterNumber {
                     .joined()
             )
             
-        case ._2_0:
+        case .midi2_0:
             // UMP has a dedicated MIDI 2.0 RPN/NRPN message
             let statusNibble = Self.type.umpStatusNibble(for: change).uInt8Value << 4
             let paramPair = parameterBytes

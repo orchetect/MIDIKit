@@ -22,7 +22,7 @@ extension CoreMIDIAPIVersion {
     public var midiProtocol: MIDIProtocolVersion {
         switch self {
         case .legacyCoreMIDI:
-            return ._1_0
+            return .midi1_0
     
         case let .newCoreMIDI(protocolVersion):
             return protocolVersion
@@ -34,7 +34,7 @@ extension CoreMIDIAPIVersion {
     /// Returns the recommended API version for the current platform (operating system).
     public static func bestForPlatform() -> Self {
         if #available(macOS 11, iOS 14, macCatalyst 14, *) {
-            return .newCoreMIDI(._2_0)
+            return .newCoreMIDI(.midi2_0)
     
         } else {
             return .legacyCoreMIDI

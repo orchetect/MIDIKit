@@ -26,7 +26,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
             )
     
             XCTAssertEqual(
-                cc.umpRawWords(protocol: ._1_0),
+                cc.umpRawWords(protocol: .midi1_0),
                 [[
                     UMPWord(
                         0x29,
@@ -51,7 +51,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
             )
     
             XCTAssertEqual(
-                cc.umpRawWords(protocol: ._2_0),
+                cc.umpRawWords(protocol: .midi2_0),
                 [[
                     UMPWord(
                         0x49,
@@ -85,7 +85,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
             )
     
             XCTAssertEqual(
-                cc.umpRawWords(protocol: ._2_0),
+                cc.umpRawWords(protocol: .midi2_0),
                 [[
                     UMPWord(
                         0x49,
@@ -204,7 +204,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             )
-            .umpRawWords(protocol: ._1_0),
+            .umpRawWords(protocol: .midi1_0),
             [0x2080_3C00] // note off
         )
     
@@ -217,7 +217,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             )
-            .umpRawWords(protocol: ._1_0),
+            .umpRawWords(protocol: .midi1_0),
             [0x2090_3C00] // note on
         )
     
@@ -232,7 +232,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             )
-            .umpRawWords(protocol: ._1_0),
+            .umpRawWords(protocol: .midi1_0),
             [0x2090_3C01] // note on, velocity 1 (as per MIDI 2.0 spec)
         )
     
@@ -245,7 +245,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             )
-            .umpRawWords(protocol: ._1_0),
+            .umpRawWords(protocol: .midi1_0),
             [0x2090_3C01] // note on, velocity 1 (as per MIDI 2.0 spec)
         )
     
@@ -260,7 +260,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             )
-            .umpRawWords(protocol: ._1_0),
+            .umpRawWords(protocol: .midi1_0),
             [0x2080_3C00] // note off
         )
     
@@ -273,7 +273,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             )
-            .umpRawWords(protocol: ._1_0),
+            .umpRawWords(protocol: .midi1_0),
             [0x2090_3C00] // note on
         )
     }
@@ -290,7 +290,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: ._2_0),
+            .umpRawWords(protocol: .midi2_0),
             [
                 0x4090_3C00, // note on
                 0x0000_0000
@@ -306,7 +306,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: ._2_0),
+            .umpRawWords(protocol: .midi2_0),
             [
                 0x4090_3C00, // note on
                 0x0000_0000
@@ -324,7 +324,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: ._2_0),
+            .umpRawWords(protocol: .midi2_0),
             [
                 0x4090_3C00, // note on
                 0x0000_0000
@@ -340,7 +340,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: ._2_0),
+            .umpRawWords(protocol: .midi2_0),
             [
                 0x4090_3C00, // note on
                 0x0000_0000
@@ -358,7 +358,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: ._2_0),
+            .umpRawWords(protocol: .midi2_0),
             [
                 0x4090_3C00, // note on
                 0x0000_0000
@@ -374,7 +374,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: ._2_0),
+            .umpRawWords(protocol: .midi2_0),
             [
                 0x4090_3C00, // note on
                 0x0000_0000

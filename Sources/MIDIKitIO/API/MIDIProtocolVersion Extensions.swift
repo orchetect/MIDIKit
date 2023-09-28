@@ -12,13 +12,13 @@ extension MIDIProtocolVersion {
     init(_ coreMIDIProtocol: CoreMIDI.MIDIProtocolID) {
         switch coreMIDIProtocol {
         case ._1_0:
-            self = ._1_0
+            self = .midi1_0
     
         case ._2_0:
-            self = ._2_0
+            self = .midi2_0
     
         @unknown default:
-            self = ._2_0
+            self = .midi2_0
         }
     }
     
@@ -26,10 +26,10 @@ extension MIDIProtocolVersion {
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
     var coreMIDIProtocol: CoreMIDI.MIDIProtocolID {
         switch self {
-        case ._1_0:
+        case .midi1_0:
             return ._1_0
     
-        case ._2_0:
+        case .midi2_0:
             return ._2_0
         }
     }

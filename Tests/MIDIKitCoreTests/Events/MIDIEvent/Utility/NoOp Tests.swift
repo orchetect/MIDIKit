@@ -19,7 +19,7 @@ final class MIDIEventNoOp_Tests: XCTestCase {
             let event: MIDIEvent = .noOp(group: grp)
     
             XCTAssertEqual(
-                event.umpRawWords(protocol: ._2_0),
+                event.umpRawWords(protocol: .midi2_0),
                 [[
                     UMPWord(
                         0x00 + grp.uInt8Value,

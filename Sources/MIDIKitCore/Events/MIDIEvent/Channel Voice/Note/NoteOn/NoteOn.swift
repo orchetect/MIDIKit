@@ -222,10 +222,10 @@ extension MIDIEvent.NoteOn {
         protocol midiProtocol: MIDIProtocolVersion
     ) -> MIDIUMPMessageType {
         switch midiProtocol {
-        case ._1_0:
+        case .midi1_0:
             return .midi1ChannelVoice
     
-        case ._2_0:
+        case .midi2_0:
             return .midi2ChannelVoice
         }
     }
@@ -241,7 +241,7 @@ extension MIDIEvent.NoteOn {
             .uInt8Value
     
         switch midiProtocol {
-        case ._1_0:
+        case .midi1_0:
             let midi1Bytes = midi1RawBytes() // always 3 bytes
     
             let word = UMPWord(
@@ -253,7 +253,7 @@ extension MIDIEvent.NoteOn {
     
             return [word]
     
-        case ._2_0:
+        case .midi2_0:
             // MIDI 2.0 Spec:
             // The allowable Velocity range for a MIDI 2.0 Note On message is 0x0000-0xFFFF. Unlike
             // the MIDI 1.0 Note On message, a velocity value of zero does not function as a Note

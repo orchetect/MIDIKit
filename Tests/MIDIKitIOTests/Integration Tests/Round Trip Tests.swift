@@ -215,7 +215,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
         )
     
         // add MIDI 2.0-only events if applicable
-        if output.api == .newCoreMIDI(._2_0) {
+        if output.api == .newCoreMIDI(.midi2_0) {
             sourceEvents.append(contentsOf: (0 ... 127).map {
                 .noteOn(
                     $0.toUInt7,
@@ -363,7 +363,7 @@ final class RoundTrip_NewCoreMIDIAPI_1_0_Protocol_Tests: RoundTrip_Tests_Base {
     
     // TODO: test may need de-flaking
     func testRapidMIDIEvents_NewCoreMIDIAPI_1_0_Protocol() throws {
-        manager.preferredAPI = .newCoreMIDI(._1_0)
+        manager.preferredAPI = .newCoreMIDI(.midi1_0)
         wait(sec: 0.5)
         createPorts()
         wait(sec: 0.5)
@@ -376,7 +376,7 @@ final class RoundTrip_NewCoreMIDIAPI_2_0_Protocol_Tests: RoundTrip_Tests_Base {
     
     // TODO: test may need de-flaking
     func testRapidMIDIEvents_NewCoreMIDIAPI_2_0_Protocol() throws {
-        manager.preferredAPI = .newCoreMIDI(._2_0)
+        manager.preferredAPI = .newCoreMIDI(.midi2_0)
         wait(sec: 0.5)
         createPorts()
         wait(sec: 0.5)

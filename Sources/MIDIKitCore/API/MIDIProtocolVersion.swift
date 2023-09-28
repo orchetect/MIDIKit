@@ -10,7 +10,7 @@ public enum MIDIProtocolVersion: Equatable, Hashable {
     ///
     /// MIDI 1.0 defines the original MIDI specification as ratified in the mid-1980s with minor
     /// revisions through 1996.
-    case _1_0
+    case midi1_0
     
     /// MIDI 2.0
     ///
@@ -21,16 +21,16 @@ public enum MIDIProtocolVersion: Equatable, Hashable {
     /// > replace MIDI 1.0 but builds on the core principles, architecture, and semantics of MIDI
     /// > 1.0. MIDI 2.0 is not a stand-alone specification. Manufacturers and developers must have a
     /// > thorough understanding of MIDI 1.0 in order to implement MIDI 2.0.
-    case _2_0
+    case midi2_0
 }
 
 extension MIDIProtocolVersion: CustomStringConvertible {
     public var description: String {
         switch self {
-        case ._1_0:
+        case .midi1_0:
             return "MIDI 1.0"
     
-        case ._2_0:
+        case .midi2_0:
             return "MIDI 2.0"
         }
     }

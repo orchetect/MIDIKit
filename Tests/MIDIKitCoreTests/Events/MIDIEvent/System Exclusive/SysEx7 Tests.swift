@@ -23,7 +23,7 @@ final class SysEx7_Tests: XCTestCase {
 		
         XCTAssertEqual(event.midi1RawBytes(), sourceRawBytes)
         XCTAssertEqual(
-            event.umpRawWords(protocol: ._2_0),
+            event.umpRawWords(protocol: .midi2_0),
             [[0x3003_4101, 0x3400_0000]]
         )
     }
@@ -41,7 +41,7 @@ final class SysEx7_Tests: XCTestCase {
     
         XCTAssertEqual(event.midi1RawBytes(), sourceRawBytes)
         XCTAssertEqual(
-            event.umpRawWords(protocol: ._2_0),
+            event.umpRawWords(protocol: .midi2_0),
             [[0x3001_4100, 0x0000_0000]]
         )
     }
@@ -59,7 +59,7 @@ final class SysEx7_Tests: XCTestCase {
     
         XCTAssertEqual(event.midi1RawBytes(), [0xF0, 0x41, 0xF7])
         XCTAssertEqual(
-            event.umpRawWords(protocol: ._2_0),
+            event.umpRawWords(protocol: .midi2_0),
             [[0x3001_4100, 0x0000_0000]]
         )
     }

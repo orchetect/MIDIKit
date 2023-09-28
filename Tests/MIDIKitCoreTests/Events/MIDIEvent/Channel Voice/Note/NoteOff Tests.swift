@@ -44,7 +44,7 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
             )
     
             XCTAssertEqual(
-                cc.umpRawWords(protocol: ._1_0),
+                cc.umpRawWords(protocol: .midi1_0),
                 [[
                     UMPWord(
                         0x29,
@@ -68,7 +68,7 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
             )
     
             XCTAssertEqual(
-                cc.umpRawWords(protocol: ._2_0),
+                cc.umpRawWords(protocol: .midi2_0),
                 [[
                     UMPWord(
                         0x49,
@@ -101,7 +101,7 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
             )
     
             XCTAssertEqual(
-                cc.umpRawWords(protocol: ._2_0),
+                cc.umpRawWords(protocol: .midi2_0),
                 [[
                     UMPWord(
                         0x49,

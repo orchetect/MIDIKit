@@ -77,10 +77,10 @@ extension MIDIEvent.PitchBend {
         protocol midiProtocol: MIDIProtocolVersion
     ) -> MIDIUMPMessageType {
         switch midiProtocol {
-        case ._1_0:
+        case .midi1_0:
             return .midi1ChannelVoice
     
-        case ._2_0:
+        case .midi2_0:
             return .midi2ChannelVoice
         }
     }
@@ -96,7 +96,7 @@ extension MIDIEvent.PitchBend {
             .uInt8Value
     
         switch midiProtocol {
-        case ._1_0:
+        case .midi1_0:
             let bytePair = value.midi1Value.bytePair
     
             let word = UMPWord(
@@ -108,7 +108,7 @@ extension MIDIEvent.PitchBend {
     
             return [word]
     
-        case ._2_0:
+        case .midi2_0:
             let word1 = UMPWord(
                 mtAndGroup,
                 midi1RawStatusByte(),

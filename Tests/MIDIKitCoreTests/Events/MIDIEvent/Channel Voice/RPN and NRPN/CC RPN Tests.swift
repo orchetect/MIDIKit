@@ -99,7 +99,7 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
         )
         
         XCTAssertEqual(
-            nrpn.umpRawWords(protocol: ._2_0),
+            nrpn.umpRawWords(protocol: .midi2_0),
             [[UMPWord(0x40, 0x29, 0x40, 0x01),
               UMPWord(0x24, 0x00, 0x00, 0x00)]]
         )
@@ -117,7 +117,7 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
         )
         
         XCTAssertEqual(
-            nrpn.umpRawWords(protocol: ._2_0),
+            nrpn.umpRawWords(protocol: .midi2_0),
             [[UMPWord(0x40, 0x49, 0x40, 0x01),
               UMPWord(0x24, 0x00, 0x00, 0x00)]]
         )
@@ -131,7 +131,7 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
         )
         
         XCTAssertEqual(
-            nrpn.umpRawWords(protocol: ._2_0),
+            nrpn.umpRawWords(protocol: .midi2_0),
             [[UMPWord(0x40, 0x29, 0x7F, 0x7F),
               UMPWord(0x00, 0x00, 0x00, 0x00)]]
         )
