@@ -20,15 +20,15 @@ extension MIDIFileEvent {
         // case seconds(TimeInterval)
         // case milliseconds(Double)
 
-        case wholeNote
-        case halfNote
-        case quarterNote
-        case _8thNote
-        case _16thNote
-        case _32ndNote
-        case _64thNote
-        case _128thNote
-        case _256thNote
+        case noteWhole
+        case noteHalf
+        case noteQuarter
+        case note8th
+        case note16th
+        case note32nd
+        case note64th
+        case note128th
+        case note256th
     }
 }
 
@@ -59,21 +59,20 @@ extension MIDIFileEvent.DeltaTime: Hashable {
 
 // MARK: - CustomStringConvertible
 
-extension MIDIFileEvent.DeltaTime: CustomStringConvertible,
-CustomDebugStringConvertible {
+extension MIDIFileEvent.DeltaTime: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         switch self {
         case .none:             return "none"
         case let .ticks(ticks): return "ticks:\(ticks)"
-        case .wholeNote:        return "wholeNote"
-        case .halfNote:         return "halfNote"
-        case .quarterNote:      return "quarterNote"
-        case ._8thNote:         return "8thNote"
-        case ._16thNote:        return "16thNote"
-        case ._32ndNote:        return "32ndNote"
-        case ._64thNote:        return "64thNote"
-        case ._128thNote:       return "128thNote"
-        case ._256thNote:       return "256thNote"
+        case .noteWhole:        return "whole note"
+        case .noteHalf:         return "half note"
+        case .noteQuarter:      return "quarter note"
+        case .note8th:          return "8th note"
+        case .note16th:         return "16th note"
+        case .note32nd:         return "32nd note"
+        case .note64th:         return "64th note"
+        case .note128th:        return "128th note"
+        case .note256th:        return "256th note"
         }
     }
 
@@ -105,31 +104,31 @@ extension MIDIFileEvent.DeltaTime {
         case let .ticks(val):
             return val
 
-        case .wholeNote:
+        case .noteWhole:
             return midiFileTicksPerQuarter * 4  // 2^5
 
-        case .halfNote:
+        case .noteHalf:
             return midiFileTicksPerQuarter * 2  // 2^1
 
-        case .quarterNote:
+        case .noteQuarter:
             return midiFileTicksPerQuarter      // 2^0
 
-        case ._8thNote:
+        case .note8th:
             return midiFileTicksPerQuarter / 2  // 2^1
 
-        case ._16thNote:
+        case .note16th:
             return midiFileTicksPerQuarter / 4  // 2^2
 
-        case ._32ndNote:
+        case .note32nd:
             return midiFileTicksPerQuarter / 8  // 2^3
 
-        case ._64thNote:
+        case .note64th:
             return midiFileTicksPerQuarter / 16 // 2^4
 
-        case ._128thNote:
+        case .note128th:
             return midiFileTicksPerQuarter / 32 // 2^5
 
-        case ._256thNote:
+        case .note256th:
             return midiFileTicksPerQuarter / 64 // 2^6
         }
     }
