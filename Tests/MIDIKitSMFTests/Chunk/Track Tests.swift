@@ -113,7 +113,7 @@ final class Chunk_Track_Tests: XCTestCase {
                     sec: 0,
                     fr: 0,
                     subFr: 0,
-                    frRate: ._2997dfps
+                    frRate: .fps29_97d
                 ),
                 .timeSignature(
                     delta: .none,

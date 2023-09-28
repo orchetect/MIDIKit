@@ -875,7 +875,7 @@ final class Event_Conversion_SMFEventToEvent_Tests: XCTestCase {
             sec: 3,
             fr: 4,
             subFr: 0,
-            frRate: ._2997dfps
+            frRate: .fps29_97d
         )
                                                   
         // convert MIDIFileEvent case to MIDIEvent case, preserving payloads

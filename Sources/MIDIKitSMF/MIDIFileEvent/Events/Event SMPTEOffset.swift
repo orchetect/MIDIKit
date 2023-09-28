@@ -76,9 +76,9 @@ extension MIDIFileEvent {
         
         private mutating func frames_Validate() {
             switch frameRate {
-            case ._24fps: frames = frames.clamped(to: 0 ... 23)
-            case ._25fps: frames = frames.clamped(to: 0 ... 25)
-            case ._30fps, ._2997dfps: frames = frames.clamped(to: 0 ... 29)
+            case .fps24: frames = frames.clamped(to: 0 ... 23)
+            case .fps25: frames = frames.clamped(to: 0 ... 25)
+            case .fps30, .fps29_97d: frames = frames.clamped(to: 0 ... 29)
             }
         }
         
@@ -96,7 +96,7 @@ extension MIDIFileEvent {
             subframes = subframes.clamped(to: 0 ... 99)
         }
         
-        public var frameRate: MIDIFile.SMPTEOffsetFrameRate = ._30fps
+        public var frameRate: MIDIFile.SMPTEOffsetFrameRate = .fps30
         
         /// Returns a new `Timecode` instance from the SMPTE offset.
         public var components: Timecode.Components {
@@ -129,7 +129,7 @@ extension MIDIFileEvent {
             sec: UInt8,
             fr: UInt8,
             subFr: UInt8 = 0,
-            frRate: MIDIFile.SMPTEOffsetFrameRate = ._30fps
+            frRate: MIDIFile.SMPTEOffsetFrameRate = .fps30
         ) {
             frameRate = frRate // enum, no validation needed
             
@@ -178,7 +178,7 @@ extension MIDIFileEvent {
         sec: UInt8,
         fr: UInt8,
         subFr: UInt8,
-        frRate: MIDIFile.SMPTEOffsetFrameRate = ._30fps
+        frRate: MIDIFile.SMPTEOffsetFrameRate = .fps30
     ) -> Self {
         .smpteOffset(
             delta: delta,
@@ -409,28 +409,28 @@ extension TimecodeFrameRate {
     /// frame rate.
     public var midiFileSMPTEOffsetRate: MIDIFile.SMPTEOffsetFrameRate {
         switch self {
-        case .fps23_976: return ._24fps // as output from Pro Tools
-        case .fps24: return ._24fps // as output from Pro Tools
-        case .fps24_98: return ._24fps // custom
-        case .fps25: return ._25fps // as output from Pro Tools
-        case .fps29_97: return ._30fps // as output from Pro Tools
-        case .fps29_97d: return ._2997dfps // as output from Pro Tools
-        case .fps30: return ._30fps // as output from Pro Tools
-        case .fps30d: return ._2997dfps // as output from Pro Tools
-        case .fps47_952: return ._24fps // as output from Pro Tools
-        case .fps48: return ._24fps // as output from Pro Tools
-        case .fps50: return ._25fps // custom
-        case .fps59_94: return ._30fps // custom
-        case .fps59_94d: return ._2997dfps // custom
-        case .fps60: return ._30fps // custom
-        case .fps60d: return ._2997dfps // custom
-        case .fps95_904: return ._24fps // custom
-        case .fps96: return ._24fps // custom
-        case .fps100: return ._25fps // custom
-        case .fps119_88: return ._30fps // custom
-        case .fps119_88d: return ._2997dfps // custom
-        case .fps120: return ._30fps // custom
-        case .fps120d: return ._2997dfps // custom
+        case .fps23_976: return .fps24 // as output from Pro Tools
+        case .fps24: return .fps24 // as output from Pro Tools
+        case .fps24_98: return .fps24 // custom
+        case .fps25: return .fps25 // as output from Pro Tools
+        case .fps29_97: return .fps30 // as output from Pro Tools
+        case .fps29_97d: return .fps29_97d // as output from Pro Tools
+        case .fps30: return .fps30 // as output from Pro Tools
+        case .fps30d: return .fps29_97d // as output from Pro Tools
+        case .fps47_952: return .fps24 // as output from Pro Tools
+        case .fps48: return .fps24 // as output from Pro Tools
+        case .fps50: return .fps25 // custom
+        case .fps59_94: return .fps30 // custom
+        case .fps59_94d: return .fps29_97d // custom
+        case .fps60: return .fps30 // custom
+        case .fps60d: return .fps29_97d // custom
+        case .fps95_904: return .fps24 // custom
+        case .fps96: return .fps24 // custom
+        case .fps100: return .fps25 // custom
+        case .fps119_88: return .fps30 // custom
+        case .fps119_88d: return .fps29_97d // custom
+        case .fps120: return .fps30 // custom
+        case .fps120d: return .fps29_97d // custom
         }
     }
 }
@@ -439,10 +439,10 @@ extension MIDIFile.SMPTEOffsetFrameRate {
     /// Returns exact `Timecode` frame rate that matches the MIDI File SMPTE Offset frame rate.
     public var timecodeRate: TimecodeFrameRate {
         switch self {
-        case ._24fps: return .fps24
-        case ._25fps: return .fps25
-        case ._2997dfps: return .fps29_97d
-        case ._30fps: return .fps30
+        case .fps24: return .fps24
+        case .fps25: return .fps25
+        case .fps29_97d: return .fps29_97d
+        case .fps30: return .fps30
         }
     }
 }

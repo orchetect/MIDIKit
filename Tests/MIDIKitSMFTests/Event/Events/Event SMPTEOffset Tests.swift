@@ -25,7 +25,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
         XCTAssertEqual(event.seconds, 3)
         XCTAssertEqual(event.frames, 4)
         XCTAssertEqual(event.subframes, 5)
-        XCTAssertEqual(event.frameRate, ._25fps)
+        XCTAssertEqual(event.frameRate, .fps25)
     }
     
     func testMIDI1SMFRawBytes() {
@@ -35,7 +35,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             sec: 3,
             fr: 4,
             subFr: 5,
-            frRate: ._25fps
+            frRate: .fps25
         )
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
@@ -51,7 +51,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             
             let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
-            XCTAssertEqual(event.frameRate, ._24fps)
+            XCTAssertEqual(event.frameRate, .fps24)
         }
         
         do {
@@ -60,7 +60,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             
             let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
-            XCTAssertEqual(event.frameRate, ._25fps)
+            XCTAssertEqual(event.frameRate, .fps25)
         }
         
         do {
@@ -69,7 +69,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             
             let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
-            XCTAssertEqual(event.frameRate, ._2997dfps)
+            XCTAssertEqual(event.frameRate, .fps29_97d)
         }
         
         do {
@@ -78,7 +78,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             
             let event = try MIDIFileEvent.SMPTEOffset(midi1SMFRawBytes: rawData)
             
-            XCTAssertEqual(event.frameRate, ._30fps)
+            XCTAssertEqual(event.frameRate, .fps30)
         }
     }
     
@@ -93,7 +93,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
             XCTAssertEqual(smpte.components, .init(h: 1, m: 2, s: 3, f: 4))
-            XCTAssertEqual(smpte.frameRate, ._24fps)
+            XCTAssertEqual(smpte.frameRate, .fps24)
             
             XCTAssertEqual(smpte.timecode, tc)
             XCTAssertEqual(smpte.timecode.frameRate, tc.frameRate)
@@ -105,7 +105,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
             XCTAssertEqual(smpte.components, .init(h: 1, m: 2, s: 3, f: 4))
-            XCTAssertEqual(smpte.frameRate, ._25fps)
+            XCTAssertEqual(smpte.frameRate, .fps25)
             
             XCTAssertEqual(smpte.timecode, tc)
             XCTAssertEqual(smpte.timecode.frameRate, tc.frameRate)
@@ -117,7 +117,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
             XCTAssertEqual(smpte.components, .init(h: 1, m: 2, s: 3, f: 4))
-            XCTAssertEqual(smpte.frameRate, ._2997dfps)
+            XCTAssertEqual(smpte.frameRate, .fps29_97d)
             
             XCTAssertEqual(smpte.timecode, tc)
             XCTAssertEqual(smpte.timecode.frameRate, tc.frameRate)
@@ -129,7 +129,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
             XCTAssertEqual(smpte.components, .init(h: 1, m: 2, s: 3, f: 4))
-            XCTAssertEqual(smpte.frameRate, ._30fps)
+            XCTAssertEqual(smpte.frameRate, .fps30)
             
             XCTAssertEqual(smpte.timecode, tc)
             XCTAssertEqual(smpte.timecode.frameRate, tc.frameRate)
@@ -143,7 +143,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
             XCTAssertEqual(smpte.components, .init(h: 1, sf: 50))
-            XCTAssertEqual(smpte.frameRate, ._24fps)
+            XCTAssertEqual(smpte.frameRate, .fps24)
         }
         
         do {
@@ -152,7 +152,7 @@ final class Event_SMPTEOffset_Tests: XCTestCase {
             let smpte = MIDIFileEvent.SMPTEOffset(scaling: tc)
             
             XCTAssertEqual(smpte.components, .init(h: 1, sf: 50))
-            XCTAssertEqual(smpte.frameRate, ._25fps)
+            XCTAssertEqual(smpte.frameRate, .fps25)
         }
     }
     

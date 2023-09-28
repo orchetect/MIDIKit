@@ -11,10 +11,10 @@ import MIDIKitCore
 extension MIDIFile {
     /// For use in SMPTE Offset track events
     public enum SMPTEOffsetFrameRate: UInt8, CaseIterable, Equatable, Hashable {
-        case _24fps    = 0b00 // 0 decimal
-        case _25fps    = 0b01 // 1 decimal
-        case _2997dfps = 0b10 // 2 decimal
-        case _30fps    = 0b11 // 3 decimal
+        case fps24     = 0b00 // 0 decimal
+        case fps25     = 0b01 // 1 decimal
+        case fps29_97d = 0b10 // 2 decimal
+        case fps30     = 0b11 // 3 decimal
     }
 }
 
@@ -22,16 +22,16 @@ extension MIDIFile.SMPTEOffsetFrameRate: CustomStringConvertible,
 CustomDebugStringConvertible {
     public var description: String {
         switch self {
-        case ._24fps:
+        case .fps24:
             return "24fps"
             
-        case ._25fps:
+        case .fps25:
             return "25fps"
             
-        case ._2997dfps:
+        case .fps29_97d:
             return "29.97dfps"
             
-        case ._30fps:
+        case .fps30:
             return "30fps"
         }
     }
