@@ -35,4 +35,4 @@ Defaults to `00:00:00:00 @ 24fps`.
 ### Types
 
 - ``Timecode``
-- ``TCC``
+- ``Timecode/Components``
