@@ -393,8 +393,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.1;
 			};
 		};
 		E2E5DD79298A4D8A00B745E4 /* XCRemoteSwiftPackageReference "TimecodeKit" */ = {
