@@ -6,6 +6,13 @@
 
 import Foundation
 
-public enum MIDIKitInternalError: Error {
+public enum MIDIKitInternalError: LocalizedError {
     case malformed(_ verboseError: String)
+    
+    public var errorDescription: String? {
+        switch self {
+        case .malformed(let verboseError):
+            return "Malformed: \(verboseError)"
+        }
+    }
 }

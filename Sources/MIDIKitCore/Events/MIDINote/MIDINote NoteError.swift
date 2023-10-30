@@ -8,7 +8,7 @@ import Foundation
 
 extension MIDINote {
     /// Error type returned by `MIDINote` methods.
-    public enum NoteError: Error {
+    public enum NoteError: LocalizedError {
         /// Operation resulted in a MIDI note that is out of bounds (invalid).
         case outOfBounds
     
@@ -17,18 +17,13 @@ extension MIDINote {
     }
 }
 
-extension MIDINote.NoteError: CustomStringConvertible {
-    public var localizedDescription: String {
-        description
-    }
-    
-    public var description: String {
+extension MIDINote.NoteError {
+    public var errorDescription: String? {
         switch self {
         case .outOfBounds:
-            return "Operation resulted in a MIDI note that is out of bounds (invalid)."
-    
+            return "MIDI note is out of bounds (invalid)."
         case .malformedNoteName:
-            return "An unexpected or malformed note name was encountered and could not be parsed."
+            return "An unexpected or malformed note name was encountered."
         }
     }
 }
