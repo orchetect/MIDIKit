@@ -15,7 +15,7 @@ extension MIDIReceiver {
     )
     @_disfavoredOverload
     public static func events(
-        translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
+        translateMIDI1NoteOnZeroVelocityToNoteOff: Bool,
         _ handler: @escaping EventsHandler
     ) -> Self {
         .events(
@@ -32,7 +32,7 @@ extension MIDIReceiver {
     )
     @_disfavoredOverload
     public static func eventsWithMetadata(
-        translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
+        translateMIDI1NoteOnZeroVelocityToNoteOff: Bool,
         _ handler: @escaping EventsWithMetadataHandler
     ) -> Self {
         .eventsWithMetadata(
@@ -49,7 +49,7 @@ extension MIDIReceiver {
     )
     @_disfavoredOverload
     public static func eventsLogging(
-        filterActiveSensingAndClock: Bool = false,
+        filterActiveSensingAndClock: Bool,
         _ handler: EventsLoggingHandler? = nil
     ) -> Self {
         .eventsLogging(
@@ -66,7 +66,7 @@ extension MIDIReceiver {
     )
     @_disfavoredOverload
     public static func rawDataLogging(
-        filterActiveSensingAndClock: Bool = false,
+        filterActiveSensingAndClock: Bool,
         _ handler: RawDataLoggingHandler? = nil
     ) -> Self {
         .rawDataLogging(handler)
@@ -82,7 +82,7 @@ extension MIDIReceiver {
     public static func object(
         _ object: ReceivesMIDIEvents,
         held: ReceiverRefStorage,
-        translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true
+        translateMIDI1NoteOnZeroVelocityToNoteOff: Bool
     ) -> Self {
         .object(
             object,

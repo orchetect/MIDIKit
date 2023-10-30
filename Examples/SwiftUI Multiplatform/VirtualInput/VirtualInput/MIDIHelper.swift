@@ -40,7 +40,7 @@ final class MIDIHelper: ObservableObject {
                 name: Self.virtualInputName,
                 tag: Self.virtualInputName,
                 uniqueID: .userDefaultsManaged(key: Self.virtualInputName),
-                receiver: .eventsLogging([.filterActiveSensingAndClock])
+                receiver: .eventsLogging(options: [.filterActiveSensingAndClock])
             )
         } catch {
             print("Error creating virtual MIDI input:", error.localizedDescription)
