@@ -62,7 +62,9 @@ public enum MIDIIdentifierPersistence {
     )
 }
 
-extension MIDIIdentifierPersistence: Sendable { }
+// @unchecked should be safe, as UserDefaults is the only compiler warning thrown
+// and UserDefaults is thread-safe any way
+extension MIDIIdentifierPersistence: @unchecked Sendable { }
 
 // MARK: - Read/Write Methods
 
