@@ -31,9 +31,11 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,name=Any Mac"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,name=Any Mac" \
+             | xcpretty && exit ${PIPESTATUS[0]}
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS" \
+             | xcpretty && exit ${PIPESTATUS[0]}
 
   macCatalyst:
     name: macCatalyst
@@ -41,9 +43,11 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,variant=Mac Catalyst,name=Any Mac"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,variant=Mac Catalyst,name=Any Mac" \
+             | xcpretty && exit ${PIPESTATUS[0]}
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,variant=Mac Catalyst"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,variant=Mac Catalyst" \
+             | xcpretty && exit ${PIPESTATUS[0]}
 
   iOS:
     name: iOS
@@ -51,9 +55,11 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: iPhone 12 Simulator - Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=iOS Simulator,name=Any iOS Device"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=iOS Simulator,name=Any iOS Device" \
+             | xcpretty && exit ${PIPESTATUS[0]}
     - name: iPhone 12 Simulator - Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12" \
+             | xcpretty && exit ${PIPESTATUS[0]}
   
   tvOS:
     name: tvOS
@@ -61,9 +67,11 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Apple TV - Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=tvOS Simulator,name=Any tvOS Simulator Device"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=tvOS Simulator,name=Any tvOS Simulator Device" \
+             | xcpretty && exit ${PIPESTATUS[0]}
     - name: Apple TV - Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation)"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation)" \
+             | xcpretty && exit ${PIPESTATUS[0]}
       
   watchOS:
     name: watchOS
@@ -71,9 +79,11 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Apple Watch - Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=watchOS Simulator,name=Any watchOS Simulator Device"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=watchOS Simulator,name=Any watchOS Simulator Device" \
+             | xcpretty && exit ${PIPESTATUS[0]}
     - name: Apple Watch - Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 8 (45mm)"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 8 (45mm)" \
+             | xcpretty && exit ${PIPESTATUS[0]}
 
 
 # xcodebuild test reference:
