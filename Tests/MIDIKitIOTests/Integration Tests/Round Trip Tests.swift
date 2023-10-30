@@ -92,7 +92,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
             try manager.addInputConnection(
                 to: .outputs(matching: [.uniqueID(outputID)]),
                 tag: inputConnectionTag,
-                receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { events in
+                receiver: .events { events in
                     DispatchQueue.main.async {
                         self.receivedEvents.append(contentsOf: events)
                     }

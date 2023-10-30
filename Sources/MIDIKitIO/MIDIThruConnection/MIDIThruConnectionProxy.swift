@@ -33,7 +33,7 @@ final class MIDIThruConnectionProxy {
         inputConnection = MIDIInputConnection(
             mode: .outputs(matching: Set(outputs.asIdentities())),
             filter: .default(),
-            receiver: .events(translateMIDI1NoteOnZeroVelocityToNoteOff: false) { [weak self] events in
+            receiver: .events { [weak self] events in
                 try? self?.outputConnection.send(events: events)
             },
             midiManager: midiManager,

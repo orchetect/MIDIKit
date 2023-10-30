@@ -24,7 +24,7 @@ extension MIDIReceiveHandler {
         let midi1Parser = MIDI1Parser()
         let midi2Parser = MIDI2Parser()
     
-        public var filterActiveSensingAndClock = false
+        public let options: MIDIReceiverOptions
     
         public func packetListReceived(
             _ packets: [MIDIPacketData]
@@ -32,7 +32,7 @@ extension MIDIReceiveHandler {
             for midiPacket in packets {
                 let events = midi1Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
-                logEvents(
+                log(
                     events: events,
                     timeStamp: midiPacket.timeStamp,
                     source: midiPacket.source
@@ -48,7 +48,7 @@ extension MIDIReceiveHandler {
             for midiPacket in packets {
                 let events = midi2Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
-                logEvents(
+                log(
                     events: events,
                     timeStamp: midiPacket.timeStamp,
                     source: midiPacket.source
@@ -57,12 +57,15 @@ extension MIDIReceiveHandler {
         }
     
         init(
-            filterActiveSensingAndClock: Bool = false,
+            options: MIDIReceiverOptions,
             log: OSLog = .default,
-            _ handler: MIDIReceiver.EventsLoggingHandler? = nil
+            handler: MIDIReceiver.EventsLoggingHandler?
         ) {
-            self.filterActiveSensingAndClock = filterActiveSensingAndClock
-    
+            self.options = options
+            
+            midi1Parser.translateNoteOnZeroVelocityToNoteOff = options
+                .contains(.translateMIDI1NoteOnZeroVelocityToNoteOff)
+            
             self.handler = handler ?? { packetBytesString in
                 #if DEBUG
                 os_log(
@@ -75,14 +78,14 @@ extension MIDIReceiveHandler {
             }
         }
     
-        func logEvents(
+        func log(
             events: [MIDIEvent],
             timeStamp: CoreMIDITimeStamp,
             source: MIDIOutputEndpoint?
         ) {
             var events = events
             
-            if filterActiveSensingAndClock {
+            if options.contains(.filterActiveSensingAndClock) {
                 events = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
             }
             

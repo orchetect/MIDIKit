@@ -48,12 +48,21 @@ extension MIDIReceiveHandler {
         }
         
         init(
-            translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
-            _ handler: @escaping MIDIReceiver.EventsWithMetadataHandler
+            options: MIDIReceiverOptions,
+            handler: @escaping MIDIReceiver.EventsWithMetadataHandler
         ) {
-            midi1Parser.translateNoteOnZeroVelocityToNoteOff =
-                translateMIDI1NoteOnZeroVelocityToNoteOff
-            self.handler = handler
+            midi1Parser.translateNoteOnZeroVelocityToNoteOff = options
+                .contains(.translateMIDI1NoteOnZeroVelocityToNoteOff)
+            
+            if options.contains(.filterActiveSensingAndClock) {
+                self.handler = { events, timeStamp, source in
+                    let filtered = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
+                    guard !filtered.isEmpty else { return }
+                    handler(filtered, timeStamp, source)
+                }
+            } else {
+                self.handler = handler
+            }
         }
     }
 }

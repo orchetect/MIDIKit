@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - ReceiveHandler
 
-/// Shell class for MIDI receive handlers.
+/// Wrapper for MIDI receive handlers.
 public class MIDIReceiveHandler: MIDIReceiveHandlerProtocol {
     /// The specialized MIDI receiver instance.
     var handler: MIDIReceiveHandlerProtocol

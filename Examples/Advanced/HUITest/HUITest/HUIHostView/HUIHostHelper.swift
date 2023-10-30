@@ -36,8 +36,7 @@ class HUIHostHelper: ObservableObject {
                 tag: Self.kHUIInputConnectionTag,
                 receiver: .object(
                     huiHost.banks[0],
-                    held: .weakly,
-                    translateMIDI1NoteOnZeroVelocityToNoteOff: false
+                    held: .weakly
                 )
             )
             

@@ -15,8 +15,8 @@ public enum MIDIReceiver {
     
     /// Provides a closure to handle strongly-typed MIDI events. (Recommended)
     case events(
-        translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
-        EventsHandler
+        options: MIDIReceiverOptions = [],
+        _ handler: EventsHandler
     )
     
     /// Provides a closure to handle strongly-typed MIDI events including packet timestamp and
@@ -24,14 +24,14 @@ public enum MIDIReceiver {
     /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
     /// `nil` when used with ``MIDIInput``.
     case eventsWithMetadata(
-        translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
-        EventsWithMetadataHandler
+        options: MIDIReceiverOptions = [],
+        _ handler: EventsWithMetadataHandler
     )
     
     /// Provides a convenience to automatically log MIDI events to the console.
     /// (Only logs events in `DEBUG` preprocessor flag builds.)
     case eventsLogging(
-        filterActiveSensingAndClock: Bool = false,
+        options: MIDIReceiverOptions = [],
         _ handler: EventsLoggingHandler? = nil
     )
     
@@ -39,7 +39,9 @@ public enum MIDIReceiver {
     /// This handler is provided for debugging and data introspection but is discouraged for
     /// manually parsing MIDI packets.
     /// It is recommended to use a MIDI event handler instead.
-    case rawData(RawDataHandler)
+    case rawData(
+        _ handler: RawDataHandler
+    )
     
     /// Raw data logging handler (hex byte strings).
     /// On systems that use legacy MIDI 1.0 packets, their raw bytes will be logged.
@@ -50,7 +52,6 @@ public enum MIDIReceiver {
     /// If `handler` is provided, the hex byte string is supplied as a parameter and not
     /// automatically logged.
     case rawDataLogging(
-        filterActiveSensingAndClock: Bool = false,
         _ handler: RawDataLoggingHandler? = nil
     )
     
@@ -59,9 +60,9 @@ public enum MIDIReceiver {
     /// ``ReceivesMIDIEvents`` protocol.
     /// The object reference may be held strongly or weakly.
     case object(
-        ReceivesMIDIEvents,
+        _ object: ReceivesMIDIEvents,
         held: ReceiverRefStorage,
-        translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true
+        options: MIDIReceiverOptions = []
     )
 }
 
@@ -79,75 +80,37 @@ extension MIDIReceiver {
     /// This is only useful for custom implementations. Do not call this method when supplying a
     /// ``MIDIReceiver`` to the ``MIDIManager``.
     public func create() -> MIDIReceiveHandler {
+        MIDIReceiveHandler(createInternalHandler())
+    }
+    
+    private func createInternalHandler() -> MIDIReceiveHandlerProtocol {
         switch self {
         case let .group(definitions):
             let handlers = definitions.map { $0.create() }
-            return .init(MIDIReceiveHandler.Group(handlers))
+            return MIDIReceiveHandler.Group(handlers)
             
-        case let .events(
-            translateMIDI1NoteOnZeroVelocityToNoteOff,
-            handler
-        ):
-            return .init(
-                MIDIReceiveHandler.Events(
-                    translateMIDI1NoteOnZeroVelocityToNoteOff: translateMIDI1NoteOnZeroVelocityToNoteOff,
-                    handler
-                )
-            )
+        case let .events(options, handler):
+            return MIDIReceiveHandler.Events(options: options, handler: handler)
             
-        case let .eventsWithMetadata(
-            translateMIDI1NoteOnZeroVelocityToNoteOff,
-            handler
-        ):
-            return .init(
-                MIDIReceiveHandler.EventsWithMetadata(
-                    translateMIDI1NoteOnZeroVelocityToNoteOff: translateMIDI1NoteOnZeroVelocityToNoteOff,
-                    handler
-                )
-            )
+        case let .eventsWithMetadata(options, handler):
+            return MIDIReceiveHandler.EventsWithMetadata(options: options, handler: handler)
             
-        case let .eventsLogging(
-            filterActiveSensingAndClock,
-            handler
-        ):
-            return .init(
-                MIDIReceiveHandler.EventsLogging(
-                    filterActiveSensingAndClock: filterActiveSensingAndClock,
-                    handler
-                )
-            )
+        case let .eventsLogging(options, handler):
+            return MIDIReceiveHandler.EventsLogging(options: options, handler: handler)
             
         case let .rawData(handler):
-            return .init(MIDIReceiveHandler.RawData(handler))
+            return MIDIReceiveHandler(MIDIReceiveHandler.RawData(handler: handler))
             
-        case let .rawDataLogging(filterActiveSensingAndClock, handler):
-            return .init(
-                MIDIReceiveHandler.RawDataLogging(
-                    filterActiveSensingAndClock: filterActiveSensingAndClock,
-                    handler
-                )
-            )
+        case let .rawDataLogging(handler):
+            return MIDIReceiveHandler.RawDataLogging(handler: handler)
             
-        case let .object(
-            object,
-            storageType,
-            translateMIDI1NoteOnZeroVelocityToNoteOff
-        ):
+        case let .object(object, storageType, options):
             switch storageType {
             case .strongly:
-                return .init(
-                    MIDIReceiveHandler.StrongEventsReceiver(
-                        translateMIDI1NoteOnZeroVelocityToNoteOff: translateMIDI1NoteOnZeroVelocityToNoteOff,
-                        receiver: object
-                    )
-                )
+                return MIDIReceiveHandler.StrongEventsReceiver(options: options, receiver: object)
+                
             case .weakly:
-                return .init(
-                    MIDIReceiveHandler.WeakEventsReceiver(
-                        translateMIDI1NoteOnZeroVelocityToNoteOff: translateMIDI1NoteOnZeroVelocityToNoteOff,
-                        receiver: object
-                    )
-                )
+                return MIDIReceiveHandler.WeakEventsReceiver(options: options, receiver: object)
             }
         }
     }

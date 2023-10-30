@@ -38,7 +38,7 @@ extension MIDIReceiveHandler {
         }
     
         init(
-            _ handler: @escaping MIDIReceiver.RawDataHandler
+            handler: @escaping MIDIReceiver.RawDataHandler
         ) {
             self.handler = handler
         }

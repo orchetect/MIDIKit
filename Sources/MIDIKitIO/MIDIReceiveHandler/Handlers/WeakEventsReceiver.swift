@@ -10,20 +10,22 @@ extension MIDIReceiveHandler {
     /// MIDI Event receive handler that holds a weak reference to a receiver object.
     final class WeakEventsReceiver: MIDIReceiveHandlerProtocol {
         public weak var receiver: ReceivesMIDIEvents?
-    
+        
         let midi1Parser = MIDI1Parser()
         let midi2Parser = MIDI2Parser()
-    
+        
+        let options: MIDIReceiverOptions
+        
         public func packetListReceived(
             _ packets: [MIDIPacketData]
         ) {
             for midiPacket in packets {
                 let events = midi1Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
-                receiver?.midiIn(events: events)
+                handle(events: events)
             }
         }
-    
+        
         @available(macOS 11, iOS 14, macCatalyst 14, *)
         public func eventListReceived(
             _ packets: [UniversalMIDIPacketData],
@@ -32,17 +34,28 @@ extension MIDIReceiveHandler {
             for midiPacket in packets {
                 let events = midi2Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
-                receiver?.midiIn(events: events)
+                handle(events: events)
             }
         }
-    
+        
         init(
-            translateMIDI1NoteOnZeroVelocityToNoteOff: Bool = true,
+            options: MIDIReceiverOptions,
             receiver: ReceivesMIDIEvents
         ) {
-            midi1Parser.translateNoteOnZeroVelocityToNoteOff =
-                translateMIDI1NoteOnZeroVelocityToNoteOff
+            self.options = options
+            midi1Parser.translateNoteOnZeroVelocityToNoteOff = options
+                .contains(.translateMIDI1NoteOnZeroVelocityToNoteOff)
             self.receiver = receiver
+        }
+        
+        func handle(events: [MIDIEvent]) {
+            if options.contains(.filterActiveSensingAndClock) {
+                let filtered = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
+                guard !filtered.isEmpty else { return }
+                receiver?.midiIn(events: filtered)
+            } else {
+                receiver?.midiIn(events: events)
+            }
         }
     }
 }

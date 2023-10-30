@@ -31,7 +31,7 @@ extension MIDIReceiveHandler {
             _ packets: [MIDIPacketData]
         ) {
             for midiPacket in packets {
-                handleBytes(
+                log(
                     bytes: midiPacket.bytes,
                     timeStamp: midiPacket.timeStamp,
                     source: midiPacket.source
@@ -45,7 +45,7 @@ extension MIDIReceiveHandler {
             protocol midiProtocol: MIDIProtocolVersion
         ) {
             for midiPacket in packets {
-                handleBytes(
+                log(
                     bytes: midiPacket.bytes,
                     timeStamp: midiPacket.timeStamp,
                     source: midiPacket.source
@@ -54,12 +54,9 @@ extension MIDIReceiveHandler {
         }
     
         init(
-            filterActiveSensingAndClock: Bool = false,
             log: OSLog = .default,
-            _ handler: MIDIReceiver.RawDataLoggingHandler? = nil
+            handler: MIDIReceiver.RawDataLoggingHandler? = nil
         ) {
-            self.filterActiveSensingAndClock = filterActiveSensingAndClock
-    
             self.handler = handler ?? { packetBytesString in
                 #if DEBUG
                 os_log(
@@ -72,17 +69,11 @@ extension MIDIReceiveHandler {
             }
         }
     
-        func handleBytes(
+        func log(
             bytes: [UInt8],
             timeStamp: CoreMIDITimeStamp,
             source: MIDIOutputEndpoint?
         ) {
-            if filterActiveSensingAndClock {
-                guard bytes.first != 0xF8, // midi clock pulse
-                      bytes.first != 0xFE  // active sensing
-                else { return }
-            }
-            
             var stringOutput = bytes
                 .hexString(padEachTo: 2, prefixes: false)
                 + " timeStamp:\(timeStamp)"
