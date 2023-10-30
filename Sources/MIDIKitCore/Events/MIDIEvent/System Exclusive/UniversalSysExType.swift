@@ -37,6 +37,8 @@ extension MIDIEvent.UniversalSysExType: CustomStringConvertible {
     }
 }
 
+extension MIDIEvent.UniversalSysExType: Sendable { }
+
 extension MIDIEvent {
     /// SysEx: Device Inquiry request message.
     ///

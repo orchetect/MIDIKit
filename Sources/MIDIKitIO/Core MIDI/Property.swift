@@ -250,6 +250,8 @@ extension AnyMIDIIOObject.Property {
     }
 }
 
+extension AnyMIDIIOObject.Property: Sendable { }
+
 // MARK: - Property Keys
 
 extension AnyMIDIIOObject.Property {

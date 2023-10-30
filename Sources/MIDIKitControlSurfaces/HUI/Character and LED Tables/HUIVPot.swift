@@ -80,6 +80,8 @@ public enum HUIVPot: Equatable, Hashable {
     }
 }
 
+extension HUIVPot: Sendable { }
+
 /// Internal:
 /// Specialized HUI V-Pot value.
 enum HUIVPotValue: Equatable, Hashable {
@@ -115,3 +117,5 @@ enum HUIVPotValue: Equatable, Hashable {
         }
     }
 }
+
+extension HUIVPotValue: Sendable { }

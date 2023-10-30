@@ -45,3 +45,5 @@ extension HUISwitch.AutoEnable: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.AutoEnable: Sendable { }

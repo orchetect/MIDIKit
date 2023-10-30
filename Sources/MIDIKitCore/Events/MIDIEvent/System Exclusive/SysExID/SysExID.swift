@@ -25,6 +25,8 @@ extension MIDIEvent.SysExID: CustomStringConvertible {
     }
 }
 
+extension MIDIEvent.SysExID: Sendable { }
+
 extension MIDIEvent.SysExID {
     public init?(sysEx7RawBytes: [UInt8]) {
         if let mfr = MIDIEvent.SysExManufacturer(sysEx7RawBytes: sysEx7RawBytes) {

@@ -177,6 +177,8 @@ public enum HUILargeDisplayCharacter: UInt7, CaseIterable {
     case leftArrow = 0x7F
 }
 
+extension HUILargeDisplayCharacter: Sendable { }
+
 extension HUILargeDisplayCharacter: _HUICharacter {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:options --maxwidth none

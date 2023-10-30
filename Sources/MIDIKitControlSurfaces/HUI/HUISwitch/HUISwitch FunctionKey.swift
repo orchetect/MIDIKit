@@ -53,3 +53,5 @@ extension HUISwitch.FunctionKey: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.FunctionKey: Sendable { }

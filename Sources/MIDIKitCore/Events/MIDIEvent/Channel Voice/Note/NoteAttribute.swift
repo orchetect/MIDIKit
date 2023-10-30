@@ -42,6 +42,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.NoteAttribute: Sendable { }
+
 extension MIDIEvent.NoteAttribute {
     /// Note Attribute
     /// (MIDI 2.0)

@@ -51,3 +51,5 @@ extension HUISwitch.Cursor: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.Cursor: Sendable { }

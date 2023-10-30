@@ -4,8 +4,6 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import Foundation
-
 public protocol SendsMIDIEvents {
     /// Handler used when calling `midiOut()` methods.
     typealias MIDIOutHandler = ((_ events: [MIDIEvent]) -> Void)

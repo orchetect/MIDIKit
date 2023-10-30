@@ -96,6 +96,10 @@ extension UInt9 /*: Hashable */ {
     }
 }
 
+// MARK: - Sendable
+
+extension UInt9: Sendable { }
+
 // MARK: - Codable
 
 extension UInt9 /*: Codable */ {

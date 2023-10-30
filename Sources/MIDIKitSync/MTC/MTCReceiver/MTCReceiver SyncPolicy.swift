@@ -53,3 +53,5 @@ extension MTCReceiver {
         }
     }
 }
+
+extension MTCReceiver.SyncPolicy: Sendable { }

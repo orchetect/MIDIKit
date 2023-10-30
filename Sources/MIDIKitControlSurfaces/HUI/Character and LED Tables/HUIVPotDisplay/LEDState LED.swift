@@ -52,6 +52,10 @@ extension HUIVPotDisplay.LEDState.LED: CustomStringConvertible {
     }
 }
 
+// MARK: - Sendable
+
+extension HUIVPotDisplay.LEDState.LED: Sendable { }
+
 // MARK: - Radius
 
 extension HUIVPotDisplay.LEDState.LED {

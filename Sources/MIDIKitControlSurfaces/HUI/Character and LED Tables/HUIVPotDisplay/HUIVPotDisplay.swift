@@ -32,6 +32,8 @@ public struct HUIVPotDisplay: Equatable, Hashable {
     }
 }
 
+extension HUIVPotDisplay: Sendable { }
+
 // MARK: - Static Constructors
 
 extension HUIVPotDisplay {

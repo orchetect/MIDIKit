@@ -91,3 +91,6 @@ public struct MIDIFile {
         try encode()
     }
 }
+
+// Sendable must be applied in the same file as the struct for it to be compiler-checked.
+extension MIDIFile: Sendable { }

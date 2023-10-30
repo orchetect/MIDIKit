@@ -81,3 +81,5 @@ extension HUISwitch.Assign: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.Assign: Sendable { }

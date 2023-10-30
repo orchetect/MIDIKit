@@ -12,4 +12,6 @@ public enum MIDIEndpointType: Equatable, Hashable, CaseIterable {
     case output
 }
 
+extension MIDIEndpointType: Sendable { }
+
 #endif

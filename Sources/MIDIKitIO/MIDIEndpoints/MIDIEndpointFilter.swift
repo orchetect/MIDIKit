@@ -60,6 +60,8 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
     }
 }
 
+extension MIDIEndpointFilter: Sendable { }
+
 extension MIDIEndpointFilter {
     /// Convenience constructor to return default endpoint filter.
     public static func `default`() -> Self {

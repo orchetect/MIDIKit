@@ -18,6 +18,8 @@ public enum MIDIInputConnectionMode: Equatable, Hashable {
     case allOutputs
 }
 
+extension MIDIInputConnectionMode: Sendable { }
+
 extension MIDIInputConnectionMode {
     /// Specific endpoint(s) criteria.
     @_disfavoredOverload

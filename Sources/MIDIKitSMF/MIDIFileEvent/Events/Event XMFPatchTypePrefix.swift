@@ -51,6 +51,8 @@ extension MIDIFileEvent {
     }
 }
 
+extension MIDIFileEvent.XMFPatchTypePrefix: Sendable { }
+
 // MARK: - Static Constructors
 
 extension MIDIFileEvent {
@@ -211,3 +213,5 @@ extension MIDIFileEvent.XMFPatchTypePrefix {
         }
     }
 }
+
+extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: Sendable { }

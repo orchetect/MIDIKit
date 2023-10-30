@@ -35,3 +35,5 @@ public enum HUISmallDisplay: Equatable, Hashable {
         }
     }
 }
+
+extension HUISmallDisplay: Sendable { }

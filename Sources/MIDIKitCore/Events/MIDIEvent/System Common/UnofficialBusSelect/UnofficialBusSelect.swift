@@ -38,7 +38,11 @@ extension MIDIEvent {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.UnofficialBusSelect: Sendable { }
+
+extension MIDIEvent {
     /// Unofficial Bus Select (Status `0xF5`)
     ///
     /// > Warning: This command is not officially supported and some MIDI subsystems will ignore it

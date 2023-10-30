@@ -87,6 +87,8 @@ extension MIDIEvent.CC.Controller {
     }
 }
 
+extension MIDIEvent.CC.Controller.LSB: Sendable { }
+
 extension MIDIEvent.CC.Controller.LSB {
     /// Returns the controller number.
     public var controller: UInt7 {

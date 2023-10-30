@@ -20,7 +20,7 @@ import AppKit
 import UIKit
 #endif
 
-public protocol MIDIIOObject {
+public protocol MIDIIOObject: Sendable {
     // MARK: - Base Properties and Methods
     
     /// The MIDI I/O object type.

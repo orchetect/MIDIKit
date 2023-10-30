@@ -18,6 +18,8 @@ public enum MTCDirection {
     case ambiguous
 }
 
+extension MTCDirection: Sendable { }
+
 extension MTCDirection {
     /// Infers playback direction by comparing previous and current quarter-frames received, taking
     /// into account value wrapping around min/max.

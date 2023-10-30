@@ -41,3 +41,5 @@ extension HUISwitch.FootswitchesAndSounds: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.FootswitchesAndSounds: Sendable { }

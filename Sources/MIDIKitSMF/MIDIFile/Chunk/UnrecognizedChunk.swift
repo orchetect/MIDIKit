@@ -51,6 +51,42 @@ extension MIDIFile.Chunk {
     }
 }
 
+extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible, CustomDebugStringConvertible {
+    public var description: String {
+        var outputString = ""
+        
+        outputString += "UnrecognizedChunk(".newLined
+        outputString += "  identifier: \(identifier)".newLined
+        outputString += "  data: \(rawData.count) bytes".newLined
+        outputString += ")"
+        
+        return outputString
+    }
+    
+    public var debugDescription: String {
+        let rawDataBlock = rawData
+            .hexString(padEachTo: 2, prefixes: false)
+            .split(every: 3 * 16) // 16 bytes wide
+            .reduce("") {
+                $0 + "      " + $1.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+        
+        var outputString = ""
+        
+        outputString += "UnrecognizedChunk(".newLined
+        outputString += "  identifier: \(identifier)".newLined
+        outputString += "  data: \(rawData.count) bytes".newLined
+        outputString += "    ("
+        outputString += rawDataBlock
+        outputString += "    )"
+        outputString += ")"
+        
+        return outputString
+    }
+}
+
+extension MIDIFile.Chunk.UnrecognizedChunk: Sendable { }
+
 // MARK: - Static Constructors
 
 extension MIDIFile.Chunk {
@@ -134,40 +170,5 @@ extension MIDIFile.Chunk.UnrecognizedChunk {
         data += bodyData
         
         return data
-    }
-}
-
-extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible,
-CustomDebugStringConvertible {
-    public var description: String {
-        var outputString = ""
-
-        outputString += "UnrecognizedChunk(".newLined
-        outputString += "  identifier: \(identifier)".newLined
-        outputString += "  data: \(rawData.count) bytes".newLined
-        outputString += ")"
-
-        return outputString
-    }
-
-    public var debugDescription: String {
-        let rawDataBlock = rawData
-            .hexString(padEachTo: 2, prefixes: false)
-            .split(every: 3 * 16) // 16 bytes wide
-            .reduce("") {
-                $0 + "      " + $1.trimmingCharacters(in: .whitespacesAndNewlines)
-            }
-
-        var outputString = ""
-
-        outputString += "UnrecognizedChunk(".newLined
-        outputString += "  identifier: \(identifier)".newLined
-        outputString += "  data: \(rawData.count) bytes".newLined
-        outputString += "    ("
-        outputString += rawDataBlock
-        outputString += "    )"
-        outputString += ")"
-
-        return outputString
     }
 }

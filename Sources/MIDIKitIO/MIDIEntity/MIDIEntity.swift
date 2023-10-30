@@ -66,8 +66,15 @@ extension MIDIEntity: Hashable {
 
 extension MIDIEntity: Identifiable {
     public typealias ID = CoreMIDIObjectRef
-    
     public var id: ID { coreMIDIObjectRef }
+}
+
+extension MIDIEntity: Sendable { }
+
+extension MIDIEntity: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "MIDIEntity(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists))"
+    }
 }
 
 extension MIDIEntity {
@@ -91,12 +98,6 @@ extension MIDIEntity {
     /// Returns `true` if the object exists in the system by querying Core MIDI.
     public var exists: Bool {
         device != nil
-    }
-}
-
-extension MIDIEntity: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        "MIDIEntity(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists))"
     }
 }
 

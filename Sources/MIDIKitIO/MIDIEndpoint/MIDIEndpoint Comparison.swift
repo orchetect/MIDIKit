@@ -35,7 +35,6 @@ extension MIDIEndpoint {
 
 extension MIDIEndpoint {
     public typealias ID = MIDIIdentifier
-    
     public var id: ID { uniqueID }
 }
 

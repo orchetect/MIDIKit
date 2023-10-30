@@ -18,12 +18,16 @@ extension MIDIEvent {
     public struct TimingClock: Equatable, Hashable {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         public init(group: UInt4 = 0x0) {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.TimingClock: Sendable { }
+
+extension MIDIEvent {
     /// System Real-Time: Timing Clock
     /// (MIDI 1.0 / 2.0)
     ///

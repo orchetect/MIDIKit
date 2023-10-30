@@ -22,6 +22,8 @@ extension MIDIParameterNumberType: CustomStringConvertible {
     }
 }
 
+extension MIDIParameterNumberType: Sendable { }
+
 extension MIDIParameterNumberType {
     func umpStatusNibble(for change: MIDI2ParameterNumberChange) -> UInt4 {
         MIDIParameterNumberUtils.umpStatusNibble(type: self, change: change)

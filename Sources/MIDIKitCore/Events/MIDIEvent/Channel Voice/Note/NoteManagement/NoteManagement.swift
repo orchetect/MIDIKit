@@ -75,6 +75,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.NoteManagement: Sendable { }
+
 extension MIDIEvent {
     /// Channel Voice Message: Per-Note Management
     /// (MIDI 2.0)
@@ -183,6 +185,8 @@ extension MIDIEvent.NoteManagement {
         case resetPerNoteControllers
     }
 }
+
+extension MIDIEvent.NoteManagement.OptionFlag: Sendable { }
 
 extension Set<MIDIEvent.NoteManagement.OptionFlag> {
     /// Per-Note Management Option Flag

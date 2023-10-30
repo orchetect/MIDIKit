@@ -160,6 +160,10 @@ extension Int7: ExpressibleByIntegerLiteral {
     }
 }
 
+// MARK: - Sendable
+
+extension Int7: Sendable { }
+
 // MARK: - CustomStringConvertible
 
 extension Int7: CustomStringConvertible {

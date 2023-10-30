@@ -43,3 +43,5 @@ public enum MIDIIONetworkConnectionPolicy: UInt, Equatable {
         }
     }
 }
+
+extension MIDIIONetworkConnectionPolicy: Sendable { }

@@ -109,6 +109,8 @@ extension MIDIEvent.NoteOn: Hashable {
     }
 }
 
+extension MIDIEvent.NoteOn: Sendable { }
+
 extension MIDIEvent {
     /// Channel Voice Message: Note On
     /// (MIDI 1.0 / 2.0)

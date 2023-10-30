@@ -69,8 +69,15 @@ extension MIDIDevice: Hashable {
 
 extension MIDIDevice: Identifiable {
     public typealias ID = CoreMIDIObjectRef
-    
     public var id: ID { coreMIDIObjectRef }
+}
+
+extension MIDIDevice: Sendable { }
+
+extension MIDIDevice: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "MIDIDevice(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists))"
+    }
 }
 
 extension MIDIDevice {
@@ -95,12 +102,6 @@ extension MIDIDevice {
     public var exists: Bool {
         getSystemDevices()
             .contains(whereUniqueID: uniqueID)
-    }
-}
-
-extension MIDIDevice: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        "MIDIDevice(name: \(name.quoted), uniqueID: \(uniqueID), exists: \(exists))"
     }
 }
 

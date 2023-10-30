@@ -63,6 +63,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.CC: Sendable { }
+
 extension MIDIEvent {
     /// Channel Voice Message: Control Change (CC)
     /// (MIDI 1.0 / 2.0)

@@ -184,3 +184,6 @@ public enum MIDIFileEvent: Equatable, Hashable {
     /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
     case xmfPatchTypePrefix(delta: DeltaTime, event: XMFPatchTypePrefix)
 }
+
+// Sendable must be applied in the same file as the struct for it to be compiler-checked.
+extension MIDIFileEvent: Sendable { }

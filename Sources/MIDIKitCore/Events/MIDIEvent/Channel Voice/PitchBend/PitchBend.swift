@@ -49,6 +49,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.PitchBend: Sendable { }
+
 extension MIDIEvent.PitchBend {
     /// Returns the raw MIDI 1.0 status byte for the event.
     ///

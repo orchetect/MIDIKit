@@ -24,3 +24,5 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
         public var fine: UInt25
     }
 }
+
+extension MIDIEvent.NoteCC.PerNoteController.Registered.Pitch7_25: Sendable { }

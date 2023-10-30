@@ -22,10 +22,10 @@ extension MIDIEvent {
     public struct SysEx7: Equatable, Hashable {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
-    
+        
         /// Data bytes (7-bit) (excluding leading 0xF0, trailing 0xF7 and manufacturer bytes)
         public var data: [UInt8]
-    
+        
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
         
@@ -59,7 +59,11 @@ extension MIDIEvent {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.SysEx7: Sendable { }
+
+extension MIDIEvent {
     /// System Exclusive: Manufacturer-specific (7-bit)
     /// (MIDI 1.0 / 2.0)
     ///

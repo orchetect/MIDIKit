@@ -187,3 +187,5 @@ extension HUISurfaceModelNotification: CustomStringConvertible {
         }
     }
 }
+
+extension HUISurfaceModelNotification: Sendable { }

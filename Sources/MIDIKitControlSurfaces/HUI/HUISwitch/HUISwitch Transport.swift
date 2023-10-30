@@ -89,3 +89,5 @@ extension HUISwitch.Transport: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.Transport: Sendable { }

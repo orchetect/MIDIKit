@@ -64,6 +64,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.AssignableController: Sendable { }
+
 extension MIDIEvent.AssignableController: MIDIParameterNumber {
     public static let type: MIDIParameterNumberType = .assignable
     

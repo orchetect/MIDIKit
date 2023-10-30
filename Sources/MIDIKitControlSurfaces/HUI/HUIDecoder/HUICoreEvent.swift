@@ -142,3 +142,5 @@ extension HUICoreEvent: CustomStringConvertible {
         }
     }
 }
+
+extension HUICoreEvent: Sendable { }

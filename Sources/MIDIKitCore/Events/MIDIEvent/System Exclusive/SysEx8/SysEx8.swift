@@ -18,7 +18,7 @@ extension MIDIEvent {
     public struct SysEx8: Equatable, Hashable {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
-    
+        
         /// Data bytes (8-bit) (excluding leading 0xF0, trailing 0xF7 and stream ID)
         ///
         /// > MIDI 2.0 Spec:
@@ -28,14 +28,14 @@ extension MIDIEvent {
         /// > `0x7D`, or Universal System Exclusive IDs), Device ID, and Sub-ID#1 & Sub-ID#2 (if
         /// > applicable).
         public var data: [UInt8]
-    
+        
         /// Interleaving of multiple simultaneous System Exclusive 8 messages is enabled by use of
         /// an 8-bit Stream ID field.
         var streamID: UInt8 = 0x00
-    
+        
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         public init(
             manufacturer: SysExManufacturer,
             data: [UInt8],
@@ -45,7 +45,7 @@ extension MIDIEvent {
             self.data = data
             self.group = group
         }
-    
+        
         init(
             manufacturer: SysExManufacturer,
             data: [UInt8],
@@ -58,7 +58,11 @@ extension MIDIEvent {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.SysEx8: Sendable { }
+
+extension MIDIEvent {
     /// System Exclusive: Manufacturer-specific (8-bit)
     /// (MIDI 2.0 only)
     ///

@@ -37,11 +37,19 @@ final class Errors_MIDIOSStatus_Tests: XCTestCase {
     }
 	
     func testCustomStringConvertible() {
-        // spot check: known constant
-		
-        XCTAssert(
-            "\(MIDIOSStatus.invalidClient)".contains("kMIDIInvalidClient")
-        )
+        // spot check expected output
+        
+        let desc = "\(MIDIOSStatus.invalidClient))"
+		print(desc)
+        XCTAssert(desc.contains("invalidClient"))
+    }
+    
+    func testLocalizedDescription() {
+        // spot check expected output
+        
+        let desc = MIDIOSStatus.invalidClient.localizedDescription
+        print(desc)
+        XCTAssert(desc.contains("kMIDIInvalidClient"))
     }
 }
 

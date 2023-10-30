@@ -26,10 +26,10 @@ extension MIDIEvent {
         /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency
         /// > of 1 MHz / 32).
         public var time: UInt16
-    
+        
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         /// JR Timestamp (Jitter-Reduction Timestamp)
         /// (MIDI 2.0 Utility Messages)
         ///
@@ -48,7 +48,11 @@ extension MIDIEvent {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.JRTimestamp: Sendable { }
+
+extension MIDIEvent {
     /// JR Timestamp (Jitter-Reduction Timestamp)
     /// (MIDI 2.0 Utility Messages)
     ///

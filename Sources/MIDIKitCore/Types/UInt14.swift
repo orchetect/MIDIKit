@@ -166,6 +166,10 @@ extension UInt14 /*: Hashable */ {
     }
 }
 
+// MARK: - Sendable
+
+extension UInt14: Sendable { }
+
 // MARK: - Codable
 
 extension UInt14 /*: Codable */ {

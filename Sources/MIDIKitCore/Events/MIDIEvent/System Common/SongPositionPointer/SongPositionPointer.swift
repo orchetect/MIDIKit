@@ -16,10 +16,10 @@ extension MIDIEvent {
     public struct SongPositionPointer: Equatable, Hashable {
         /// The number of MIDI beats (1 beat = 6 MIDI clocks) that have elapsed from the start.
         public var midiBeat: UInt14
-    
+        
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         public init(
             midiBeat: UInt14,
             group: UInt4 = 0x0
@@ -28,7 +28,11 @@ extension MIDIEvent {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.SongPositionPointer: Sendable { }
+
+extension MIDIEvent {
     /// System Common: Song Position Pointer
     /// (MIDI 1.0 / 2.0)
     ///

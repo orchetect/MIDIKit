@@ -17,6 +17,8 @@ public enum CoreMIDIAPIVersion: Equatable, Hashable {
     case newCoreMIDI(MIDIProtocolVersion)
 }
 
+extension CoreMIDIAPIVersion: Sendable { }
+
 extension CoreMIDIAPIVersion {
     /// MIDI protocol version.
     public var midiProtocol: MIDIProtocolVersion {

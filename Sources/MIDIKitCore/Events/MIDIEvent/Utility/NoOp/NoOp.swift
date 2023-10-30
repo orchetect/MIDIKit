@@ -16,12 +16,16 @@ extension MIDIEvent {
     public struct NoOp: Equatable, Hashable {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         public init(group: UInt4 = 0x0) {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.NoOp: Sendable { }
+
+extension MIDIEvent {
     /// NOOP - No Operation
     /// (MIDI 2.0 Utility Messages)
     ///

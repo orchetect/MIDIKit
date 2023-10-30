@@ -61,6 +61,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.Pressure: Sendable { }
+
 extension MIDIEvent.Pressure {
     /// Returns the raw MIDI 1.0 status byte for the event.
     ///

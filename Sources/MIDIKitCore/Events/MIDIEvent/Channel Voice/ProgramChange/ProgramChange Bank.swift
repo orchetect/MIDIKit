@@ -62,6 +62,8 @@ extension MIDIEvent.ProgramChange {
     }
 }
 
+extension MIDIEvent.ProgramChange.Bank: Sendable { }
+
 extension MIDIEvent.ProgramChange.Bank {
     /// Transmit a Bank Select operation prior to Program Change event.
     /// (MIDI 1.0 / 2.0)

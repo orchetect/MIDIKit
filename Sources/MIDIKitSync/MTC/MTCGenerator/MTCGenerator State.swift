@@ -20,6 +20,8 @@ extension MTCGenerator {
     }
 }
 
+extension MTCGenerator.State: Sendable { }
+
 extension MTCGenerator.State: CustomStringConvertible {
     public var description: String {
         switch self {

@@ -237,3 +237,5 @@ extension MIDIFileEvent.Text {
         case lyric
     }
 }
+
+extension MIDIFileEvent.Text.EventType: Sendable { }

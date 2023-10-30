@@ -35,3 +35,5 @@ extension MIDIProtocolVersion: CustomStringConvertible {
         }
     }
 }
+
+extension MIDIProtocolVersion: Sendable { }

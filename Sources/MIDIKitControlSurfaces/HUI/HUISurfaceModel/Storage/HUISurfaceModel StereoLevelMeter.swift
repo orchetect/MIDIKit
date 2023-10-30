@@ -105,6 +105,8 @@ extension HUISurfaceModel {
     }
 }
 
+extension HUISurfaceModel.StereoLevelMeter: Sendable { }
+
 extension HUISurfaceModel.StereoLevelMeter {
     /// Enum describing the side of a stereo level meter
     public enum Side: Equatable, Hashable, CustomStringConvertible {
@@ -137,3 +139,5 @@ extension HUISurfaceModel.StereoLevelMeter {
         }
     }
 }
+
+extension HUISurfaceModel.StereoLevelMeter.Side: Sendable { }

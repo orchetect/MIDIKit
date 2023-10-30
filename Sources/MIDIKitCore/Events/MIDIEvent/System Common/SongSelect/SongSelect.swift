@@ -17,10 +17,10 @@ extension MIDIEvent {
     public struct SongSelect: Equatable, Hashable {
         /// Song Number
         public var number: UInt7
-    
+        
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         public init(
             number: UInt7,
             group: UInt4 = 0x0
@@ -29,7 +29,11 @@ extension MIDIEvent {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.SongSelect: Sendable { }
+
+extension MIDIEvent {
     /// System Common: Song Select
     /// (MIDI 1.0 / 2.0)
     ///

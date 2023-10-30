@@ -47,3 +47,5 @@ extension HUISwitch.StatusAndGroup: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.StatusAndGroup: Sendable { }

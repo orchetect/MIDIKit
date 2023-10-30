@@ -66,6 +66,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.NotePressure: Sendable { }
+
 extension MIDIEvent {
     /// Channel Voice Message: Polyphonic Aftertouch
     /// (MIDI 1.0 / 2.0)

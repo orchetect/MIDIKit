@@ -165,6 +165,8 @@ extension MIDIEvent.CC.Controller {
     }
 }
 
+extension MIDIEvent.CC.Controller.Undefined: Sendable { }
+
 extension MIDIEvent.CC.Controller.Undefined {
     /// Returns the controller number.
     public var controller: UInt7 {

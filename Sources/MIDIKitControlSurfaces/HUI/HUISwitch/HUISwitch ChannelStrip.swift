@@ -65,3 +65,5 @@ extension HUISwitch.ChannelStrip: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.ChannelStrip: Sendable { }

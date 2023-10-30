@@ -277,3 +277,5 @@ extension MIDIEvent.CC {
     }
     // swiftformat:enable wrap
 }
+
+extension MIDIEvent.CC.Controller: Sendable { }

@@ -267,6 +267,8 @@ extension MIDINote: Strideable {
     }
 }
 
+extension MIDINote: Sendable { }
+
 extension MIDINote {
     /// Returns an array of all 128 MIDI notes.
     public static func allNotes(style: Style = .yamaha) -> [Self] {

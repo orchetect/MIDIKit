@@ -6,9 +6,8 @@
 
 import Foundation
 
-public protocol HUIString: CustomStringConvertible
-    where Self: Equatable & Hashable,
-    Element: Equatable & Hashable
+public protocol HUIString: Equatable, Hashable, Sendable, CustomStringConvertible
+where Element: Equatable & Hashable & Sendable
 {
     associatedtype Element: HUICharacter
     static var defaultChars: [Element] { get }
@@ -92,7 +91,7 @@ extension HUIString /* : Hashable */ {
 // MARK: - Validation PropertyWrapper
 
 @propertyWrapper
-public struct HUIStringCharsValidation<Str: HUIString> {
+public struct HUIStringCharsValidation<Str: HUIString>: Sendable {
     private var value: [Str.Element]
     
     public var wrappedValue: [Str.Element] {

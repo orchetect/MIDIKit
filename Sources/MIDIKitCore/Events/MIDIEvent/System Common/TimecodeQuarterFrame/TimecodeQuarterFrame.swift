@@ -18,10 +18,10 @@ extension MIDIEvent {
     public struct TimecodeQuarterFrame: Equatable, Hashable {
         /// Data Byte containing quarter-frame bits
         public var dataByte: UInt7
-    
+        
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         public init(
             dataByte: UInt7,
             group: UInt4 = 0x0
@@ -30,7 +30,11 @@ extension MIDIEvent {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.TimecodeQuarterFrame: Sendable { }
+
+extension MIDIEvent {
     /// System Common: Timecode Quarter-Frame
     /// (MIDI 1.0 / 2.0)
     ///

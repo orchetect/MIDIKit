@@ -16,6 +16,8 @@ public enum MIDIEventFilter: Equatable, Hashable {
     case groups([UInt4])
 }
 
+extension MIDIEventFilter: Sendable { }
+
 extension MIDIEventFilter {
     /// Process MIDI events using this filter.
     public func apply(to events: [MIDIEvent]) -> [MIDIEvent] {

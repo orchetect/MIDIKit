@@ -53,3 +53,5 @@ extension HUISwitch.HotKey: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.HotKey: Sendable { }

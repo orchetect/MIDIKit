@@ -55,3 +55,7 @@ extension MIDIEventFilterGroup: Hashable {
         hasher.combine(filters)
     }
 }
+
+// MARK: - Sendable
+
+extension MIDIEventFilterGroup: Sendable { }

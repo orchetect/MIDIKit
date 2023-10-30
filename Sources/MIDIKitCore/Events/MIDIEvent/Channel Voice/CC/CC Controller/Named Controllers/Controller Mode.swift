@@ -46,6 +46,8 @@ extension MIDIEvent.CC.Controller {
     }
 }
 
+extension MIDIEvent.CC.Controller.Mode: Sendable { }
+
 extension MIDIEvent.CC.Controller.Mode {
     /// Returns the controller number.
     public var controller: UInt7 {

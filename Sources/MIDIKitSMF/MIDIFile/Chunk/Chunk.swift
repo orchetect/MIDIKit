@@ -43,6 +43,8 @@ extension MIDIFile.Chunk: CustomStringConvertible, CustomDebugStringConvertible 
     }
 }
 
+extension MIDIFile.Chunk: Sendable { }
+
 extension MIDIFile.Chunk {
     /// Unwraps the enum case and returns the ``MIDIFile/Chunk`` contained within, typed as
     /// ``MIDIFileChunk`` protocol.

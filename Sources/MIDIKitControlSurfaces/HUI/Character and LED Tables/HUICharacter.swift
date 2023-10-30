@@ -6,8 +6,8 @@
 
 import Foundation
 
-public protocol HUICharacter: CustomStringConvertible
-where Self: RawRepresentable, RawValue == UInt7, Self: CaseIterable {
+public protocol HUICharacter: CustomStringConvertible, CaseIterable, Sendable
+where Self: RawRepresentable, RawValue == UInt7 {
     /// Returns the user-facing display string of the character.
     var string: String { get }
     

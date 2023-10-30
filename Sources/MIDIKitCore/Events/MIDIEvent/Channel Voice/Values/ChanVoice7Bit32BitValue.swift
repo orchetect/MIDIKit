@@ -61,6 +61,8 @@ extension MIDIEvent.ChanVoice7Bit32BitValue: Equatable {
     }
 }
 
+extension MIDIEvent.ChanVoice7Bit32BitValue: Sendable { }
+
 extension MIDIEvent.ChanVoice7Bit32BitValue {
     /// Returns value as protocol-agnostic unit interval, converting if necessary.
     public var unitIntervalValue: Double {
@@ -107,7 +109,7 @@ extension MIDIEvent.ChanVoice7Bit32BitValue {
 
 extension MIDIEvent.ChanVoice7Bit32BitValue {
     @propertyWrapper
-    public struct Validated: Equatable, Hashable {
+    public struct Validated: Equatable, Hashable, Sendable {
         public typealias Value = MIDIEvent.ChanVoice7Bit32BitValue
     
         private var value: Value

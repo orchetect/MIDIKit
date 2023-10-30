@@ -190,6 +190,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.RegisteredController: Sendable { }
+
 extension MIDIEvent.RegisteredController: MIDIParameterNumber {
     public static let type: MIDIParameterNumberType = .registered
     

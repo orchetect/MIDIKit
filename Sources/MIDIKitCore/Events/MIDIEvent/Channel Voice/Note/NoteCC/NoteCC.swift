@@ -74,6 +74,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.NoteCC: Sendable { }
+
 extension MIDIEvent {
     /// Channel Voice Message: Per-Note Control Change (CC)
     /// (MIDI 2.0)

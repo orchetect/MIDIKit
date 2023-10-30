@@ -12,8 +12,8 @@
 /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIEventPacket` (Universal
 /// MIDI Packet).
 public struct UniversalMIDIPacketData {
-//    /// Universal MIDI Packet Words
-//    public let words: [UInt32]
+    // /// Universal MIDI Packet Words
+    // public let words: [UInt32]
     
     /// Flat array of raw bytes
     public var bytes: [UInt8]
@@ -45,6 +45,8 @@ public struct UniversalMIDIPacketData {
         self.source = source
     }
 }
+
+extension UniversalMIDIPacketData: Sendable { }
 
 @available(macOS 11, iOS 14, macCatalyst 14, *)
 extension UniversalMIDIPacketData {

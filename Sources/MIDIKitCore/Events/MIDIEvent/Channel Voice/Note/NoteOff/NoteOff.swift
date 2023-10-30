@@ -130,6 +130,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.NoteOff: Sendable { }
+
 extension MIDIEvent.NoteOff {
     /// Returns the raw MIDI 1.0 status byte for the event.
     ///

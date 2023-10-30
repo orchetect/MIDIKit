@@ -86,3 +86,5 @@ extension HUISurfaceEvent: CustomStringConvertible {
         }
     }
 }
+
+extension HUISurfaceEvent: Sendable { }

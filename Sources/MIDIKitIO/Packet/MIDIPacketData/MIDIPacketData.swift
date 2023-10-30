@@ -31,6 +31,8 @@ public struct MIDIPacketData {
     }
 }
 
+extension MIDIPacketData: Sendable { }
+
 extension MIDIPacketData {
     init(
         _ midiPacketPtr: UnsafePointer<MIDIPacket>,

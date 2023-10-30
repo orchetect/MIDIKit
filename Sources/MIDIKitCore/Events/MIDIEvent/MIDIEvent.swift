@@ -395,3 +395,6 @@ public enum MIDIEvent: Equatable, Hashable {
     /// > MHz / 32).
     case jrTimestamp(JRTimestamp)
 }
+
+// Sendable must be applied in the same file as the struct for it to be compiler-checked.
+extension MIDIEvent: Sendable { }

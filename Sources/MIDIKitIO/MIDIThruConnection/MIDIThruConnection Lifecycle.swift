@@ -22,6 +22,8 @@ extension MIDIThruConnection {
     }
 }
 
+extension MIDIThruConnection.Lifecycle: Sendable { }
+
 extension MIDIThruConnection.Lifecycle: CustomStringConvertible {
     public var description: String {
         switch self {

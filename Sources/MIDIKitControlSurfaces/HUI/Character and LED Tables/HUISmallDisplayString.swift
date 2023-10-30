@@ -19,3 +19,5 @@ public struct HUISmallDisplayString: HUIString, Equatable, Hashable {
         chars = Self.defaultChars
     }
 }
+
+extension HUISmallDisplayString: Sendable { }

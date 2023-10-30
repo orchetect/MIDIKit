@@ -96,3 +96,5 @@ extension HUISwitch.NumPad: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.NumPad: Sendable { }

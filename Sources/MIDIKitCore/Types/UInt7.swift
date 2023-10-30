@@ -98,6 +98,10 @@ extension UInt7 /*: Hashable */ {
     }
 }
 
+// MARK: - Sendable
+
+extension UInt7: Sendable { }
+
 // MARK: - Codable
 
 extension UInt7 /*: Codable */ {

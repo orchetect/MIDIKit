@@ -59,10 +59,12 @@ public enum MIDIIdentifierPersistence {
     /// random ID will be generated until there are no collisions.
     /// The ID will then be passed into the `storeHandler` closure in order to store the updated ID.
     case managedStorage(
-        readHandler: () -> MIDIIdentifier?,
-        storeHandler: (MIDIIdentifier?) -> Void
+        readHandler: @Sendable () -> MIDIIdentifier?,
+        storeHandler: @Sendable (MIDIIdentifier?) -> Void
     )
 }
+
+extension MIDIIdentifierPersistence: Sendable { }
 
 // MARK: - Read/Write Methods
 

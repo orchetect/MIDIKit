@@ -93,8 +93,9 @@ extension MIDIFile.TimeBase {
     }
 }
 
-extension MIDIFile.TimeBase: CustomStringConvertible,
-CustomDebugStringConvertible {
+extension MIDIFile.TimeBase: Sendable { }
+
+extension MIDIFile.TimeBase: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         switch self {
         case let .musical(ticksPerQuarterNote):

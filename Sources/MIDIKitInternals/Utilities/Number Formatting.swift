@@ -9,7 +9,7 @@ import Foundation
 extension Double {
     /// Rounds to `decimalPlaces` number of decimal places using rounding `rule`.
     ///
-    /// If `decimalPlaces` <= 0, trunc(self) is returned.
+    /// If `decimalPlaces <= 0`, then `trunc(self)` is returned.
     @_disfavoredOverload
     public func rounded(
         _ rule: FloatingPointRoundingRule = .toNearestOrAwayFromZero,

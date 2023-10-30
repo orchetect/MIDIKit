@@ -112,3 +112,5 @@ extension HUIHostEvent: CustomStringConvertible {
         }
     }
 }
+
+extension HUIHostEvent: Sendable { }

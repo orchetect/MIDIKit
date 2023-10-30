@@ -27,6 +27,8 @@ extension MIDIFile {
     }
 }
 
+extension MIDIFile.Format: Sendable { }
+
 extension MIDIFile.Format: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         switch self {

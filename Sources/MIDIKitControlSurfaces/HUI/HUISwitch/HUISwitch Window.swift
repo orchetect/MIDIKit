@@ -47,3 +47,5 @@ extension HUISwitch.Window: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.Window: Sendable { }

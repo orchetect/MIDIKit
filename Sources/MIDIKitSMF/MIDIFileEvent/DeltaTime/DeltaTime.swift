@@ -43,8 +43,6 @@ extension MIDIFileEvent.DeltaTime {
     }
 }
 
-// MARK: - Equatable
-
 extension MIDIFileEvent.DeltaTime: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         let timeBase = MIDIFile.TimeBase.musical(ticksPerQuarterNote: 960)
@@ -56,6 +54,8 @@ extension MIDIFileEvent.DeltaTime: Equatable {
 extension MIDIFileEvent.DeltaTime: Hashable {
     // synthesized
 }
+
+extension MIDIFileEvent.DeltaTime: Sendable { }
 
 // MARK: - CustomStringConvertible
 

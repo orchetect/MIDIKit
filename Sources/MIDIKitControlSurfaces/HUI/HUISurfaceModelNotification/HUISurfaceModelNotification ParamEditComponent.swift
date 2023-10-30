@@ -31,6 +31,8 @@ extension HUISurfaceModelNotification {
     }
 }
 
+extension HUISurfaceModelNotification.ParamEditComponent: Sendable { }
+
 extension HUISurfaceModelNotification.ParamEditComponent: CustomStringConvertible {
     public var description: String {
         switch self {

@@ -21,6 +21,8 @@ public struct HUILargeDisplayString: HUIString, Equatable, Hashable {
     }
 }
 
+extension HUILargeDisplayString: Sendable { }
+
 // MARK: - Additional Methods
 
 extension HUILargeDisplayString {

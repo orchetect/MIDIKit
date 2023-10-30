@@ -98,6 +98,10 @@ extension UInt25 /*: Hashable */ {
     }
 }
 
+// MARK: - Sendable
+
+extension UInt25: Sendable { }
+
 // MARK: - Codable
 
 extension UInt25 /*: Codable */ {

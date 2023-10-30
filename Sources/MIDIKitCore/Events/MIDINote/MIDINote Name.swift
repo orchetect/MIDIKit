@@ -278,3 +278,5 @@ extension MIDINote {
         }
     }
 }
+
+extension MIDINote.Name: Sendable { }

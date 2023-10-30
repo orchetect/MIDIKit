@@ -47,3 +47,5 @@ extension HUISwitch.AutoMode: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.AutoMode: Sendable { }

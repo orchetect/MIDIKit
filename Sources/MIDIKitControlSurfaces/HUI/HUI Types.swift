@@ -33,3 +33,5 @@ public enum HUIRole: Equatable, Hashable, CaseIterable {
         }
     }
 }
+
+extension HUIRole: Sendable { }

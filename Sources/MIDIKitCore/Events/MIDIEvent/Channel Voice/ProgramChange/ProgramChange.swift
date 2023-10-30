@@ -103,6 +103,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.ProgramChange: Sendable { }
+
 extension MIDIEvent.ProgramChange {
     /// Returns the raw MIDI 1.0 status byte for the event.
     ///

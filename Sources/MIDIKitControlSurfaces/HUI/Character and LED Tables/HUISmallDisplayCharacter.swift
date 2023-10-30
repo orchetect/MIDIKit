@@ -166,6 +166,8 @@ public enum HUISmallDisplayCharacter: UInt7, CaseIterable {
     case shadedSquare = 0x7F
 }
 
+extension HUISmallDisplayCharacter: Sendable { }
+
 extension HUISmallDisplayCharacter: _HUICharacter {
     static let stringTable = [
         "ì",  "↑",  "→",  "↓",  "←",  "¿",  "à",  "Ø", // 0x00 ...

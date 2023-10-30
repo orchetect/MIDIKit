@@ -93,6 +93,10 @@ extension UInt4 /*: Hashable */ {
     }
 }
 
+// MARK: - Sendable
+
+extension UInt4: Sendable { }
+
 // MARK: - Codable
 
 extension UInt4 /*: Codable */ {

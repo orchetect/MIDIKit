@@ -53,3 +53,5 @@ extension HUISwitch.ParameterEdit: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.ParameterEdit: Sendable { }

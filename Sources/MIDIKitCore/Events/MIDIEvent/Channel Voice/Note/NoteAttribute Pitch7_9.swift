@@ -41,6 +41,8 @@ extension MIDIEvent.NoteAttribute {
     }
 }
 
+extension MIDIEvent.NoteAttribute.Pitch7_9: Sendable { }
+
 extension MIDIEvent.NoteAttribute.Pitch7_9: CustomStringConvertible {
     public var description: String {
         "pitch7.9(\(coarse), fine:\(fine))"

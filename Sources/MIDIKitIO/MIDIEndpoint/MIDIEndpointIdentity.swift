@@ -130,6 +130,8 @@ extension MIDIEndpointIdentity: CustomStringConvertible {
     }
 }
 
+extension MIDIEndpointIdentity: Sendable { }
+
 extension MIDIEndpointIdentity {
     /// Returns endpoint identity criteria describing an endpoint.
     public static func endpoint(_ endpoint: some MIDIEndpoint) -> Self {

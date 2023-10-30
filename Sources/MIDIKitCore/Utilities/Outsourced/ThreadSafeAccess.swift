@@ -2,7 +2,7 @@
 /// ------------------------------------------------
 /// OTAtomics/OTAtomicsThreadSafe.swift
 ///
-/// Borrowed from OTAtomics 1.0.0 under MIT license.
+/// Borrowed from OTAtomics 1.0.1 under MIT license.
 /// https://github.com/orchetect/OTAtomics
 /// Methods herein are unit tested at their source
 /// so no unit tests are necessary.
@@ -22,7 +22,7 @@ import Foundation
 /// - Warning: Do not instantiate this wrapper on a variable declaration inside a function body or
 /// closure body. Only wrap static or instance variables.
 @propertyWrapper
-public final class ThreadSafeAccess<T> {
+public final class ThreadSafeAccess<T>: @unchecked Sendable where T: Sendable {
     private var value: T
     
     private let lock: ThreadLock = RWThreadLock()

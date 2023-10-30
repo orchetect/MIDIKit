@@ -42,3 +42,5 @@ extension HUISwitch.BankMove: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.BankMove: Sendable { }

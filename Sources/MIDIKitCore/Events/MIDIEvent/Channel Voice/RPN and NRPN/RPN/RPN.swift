@@ -52,7 +52,7 @@ extension MIDIEvent {
     public struct RPN: Equatable, Hashable {
         /// Registered Parameter Number (Registered Controller).
         public var parameter: RegisteredController
-    
+        
         /// MIDI 2.0 Parameter Number value type.
         /// Determines whether the value is absolute or a relative change.
         /// (MIDI 1.0 will always be absolute and this property is ignored.)
@@ -60,10 +60,10 @@ extension MIDIEvent {
         
         /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
-    
+        
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         public init(
             _ parameter: RegisteredController,
             change: MIDI2ParameterNumberChange = .absolute,
@@ -76,7 +76,11 @@ extension MIDIEvent {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.RPN: Sendable { }
+
+extension MIDIEvent {
     // note: this comment block should be duplicated to the places noted at the top of this file
     
     /// Channel Voice Message: RPN (Registered Parameter Number),

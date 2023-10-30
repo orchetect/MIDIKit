@@ -31,9 +31,10 @@ extension AnyMIDIIOObject: Hashable {
 
 extension AnyMIDIIOObject: Identifiable {
     public typealias ID = CoreMIDIObjectRef
-    
     public var id: ID { coreMIDIObjectRef }
 }
+
+extension AnyMIDIIOObject: Sendable { }
 
 extension AnyMIDIIOObject: MIDIIOObject {
     public var objectType: MIDIIOObjectType {

@@ -35,6 +35,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.SysExManufacturer: Sendable { }
+
 extension MIDIEvent.SysExManufacturer {
     /// Initialize from a MIDI 1.0 SysEx7 ID (one or three bytes).
     public init?(sysEx7RawBytes: [UInt8]) {

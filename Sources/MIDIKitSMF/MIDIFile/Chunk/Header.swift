@@ -96,6 +96,8 @@ extension MIDIFile.Chunk {
     }
 }
 
+extension MIDIFile.Chunk.Header: Sendable { }
+
 extension MIDIFile.Chunk.Header: MIDIFileChunk {
     public var identifier: String { Self.staticIdentifier }
 }

@@ -492,3 +492,5 @@ extension HUISwitch {
         }
     }
 }
+
+extension HUISwitch: Sendable { }

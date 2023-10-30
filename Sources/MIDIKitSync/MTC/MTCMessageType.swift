@@ -18,3 +18,5 @@ public enum MTCMessageType {
     /// Timecode changed as a result of MTC quarter-frame data stream
     case quarterFrame
 }
+
+extension MTCMessageType: Sendable { }

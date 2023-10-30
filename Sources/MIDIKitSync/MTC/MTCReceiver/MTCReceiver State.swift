@@ -39,6 +39,8 @@ extension MTCReceiver {
     }
 }
 
+extension MTCReceiver.State: Sendable { }
+
 extension MTCReceiver.State: CustomStringConvertible {
     public var description: String {
         switch self {

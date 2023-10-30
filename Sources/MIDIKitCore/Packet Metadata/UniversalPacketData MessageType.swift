@@ -5,7 +5,7 @@
 //
 
 /// Universal MIDI Packet Message Type
-public enum MIDIUMPMessageType: UInt4, CaseIterable {
+public enum MIDIUMPMessageType: UInt4, CaseIterable, Sendable {
     case utility                 = 0x0
     case systemRealTimeAndCommon = 0x1
     case midi1ChannelVoice       = 0x2
@@ -38,7 +38,7 @@ extension MIDIUMPMessageType {
 
 /// Universal MIDI Packet SysEx Status Field.
 /// Used with both SysEx7 and SysEx8.
-public enum MIDIUMPSysExStatusField: UInt4, CaseIterable {
+public enum MIDIUMPSysExStatusField: UInt4, CaseIterable, Sendable {
     /// Complete System Exclusive Message in one UMP System Exclusive.
     case complete = 0x0
     
@@ -57,7 +57,7 @@ public enum MIDIUMPSysExStatusField: UInt4, CaseIterable {
 
 /// Universal MIDI Packet Mixed Data Set Status Field.
 /// Only meant to be used with SysEx8 Mixed Data Set packets.
-public enum MIDIUMPMixedDataSetStatusField: UInt4, CaseIterable {
+public enum MIDIUMPMixedDataSetStatusField: UInt4, CaseIterable, Sendable {
     // 0x0...0x7 are unused/reserved
     
     /// Mixed Data Set Header UMP.
@@ -70,7 +70,7 @@ public enum MIDIUMPMixedDataSetStatusField: UInt4, CaseIterable {
 }
 
 /// Universal MIDI Packet SysEx Status Field
-public enum MIDIUMPUtilityStatusField: UInt4, CaseIterable {
+public enum MIDIUMPUtilityStatusField: UInt4, CaseIterable, Sendable {
     /// NOOP (No Operation)
     case noOp = 0x0
     

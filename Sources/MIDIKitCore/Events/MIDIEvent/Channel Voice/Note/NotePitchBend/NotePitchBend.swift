@@ -65,6 +65,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.NotePitchBend: Sendable { }
+
 extension MIDIEvent {
     /// Channel Voice Message: Per-Note Pitch Bend
     /// (MIDI 2.0)

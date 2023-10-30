@@ -6,11 +6,12 @@
 
 #if !os(tvOS) && !os(watchOS)
 
+import Foundation
 @_implementationOnly import CoreMIDI
 
 /// An enumeration representing `CoreMIDI.MIDIServices` `OSStatus` error codes, with verbose
 /// descriptions.
-public enum MIDIOSStatus: Hashable {
+public enum MIDIOSStatus: LocalizedError, Equatable, Hashable {
     /// `CoreMIDI.kMIDIInvalidClient`:
     /// An invalid `MIDIClientRef` was passed.
     case invalidClient
@@ -153,12 +154,8 @@ extension MIDIOSStatus {
     }
 }
 
-extension MIDIOSStatus: CustomStringConvertible {
-    public var localizedDescription: String {
-        description
-    }
-    
-    public var description: String {
+extension MIDIOSStatus {
+    public var errorDescription: String? {
         switch self {
         case .invalidClient:
             return "An invalid MIDIClientRef was passed. (kMIDIInvalidClient)"
@@ -219,6 +216,8 @@ extension MIDIOSStatus: CustomStringConvertible {
         }
     }
 }
+
+extension MIDIOSStatus: Sendable { }
 
 /// Throws an error of type ``MIDIIOError/osStatus(_:)-swift.enum.case`` if `OSStatus` return value
 /// `!= noErr`.

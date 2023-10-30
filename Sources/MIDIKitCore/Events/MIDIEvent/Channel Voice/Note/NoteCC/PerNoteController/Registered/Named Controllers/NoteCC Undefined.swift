@@ -946,6 +946,8 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
     }
 }
 
+extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined: Sendable { }
+
 extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined {
     /// Returns the controller number.
     public var controller: UInt8 {

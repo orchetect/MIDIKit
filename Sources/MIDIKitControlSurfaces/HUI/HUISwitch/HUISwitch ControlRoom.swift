@@ -65,3 +65,5 @@ extension HUISwitch.ControlRoom: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.ControlRoom: Sendable { }

@@ -81,6 +81,8 @@ extension AnyMIDIEndpoint: Identifiable {
     // default implementation provided by MIDIIOObject
 }
 
+extension AnyMIDIEndpoint: Sendable { }
+
 extension AnyMIDIEndpoint: CustomDebugStringConvertible {
     public var debugDescription: String {
         "AnyMIDIEndpoint(name: \(name.quoted), uniqueID: \(uniqueID))"

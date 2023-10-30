@@ -11,7 +11,7 @@ import Foundation
 
 extension MIDIManager {
     /// Managed port or connection type.
-    public enum ManagedType: CaseIterable, Hashable {
+    public enum ManagedType: CaseIterable, Hashable, Sendable {
         case inputConnection
         case outputConnection
         case input
@@ -20,7 +20,7 @@ extension MIDIManager {
     }
     
     /// Tag selection for managed input/connection operations.
-    public enum TagSelection: Hashable {
+    public enum TagSelection: Hashable, Sendable {
         case all
         case withTag(String)
     }

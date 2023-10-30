@@ -58,6 +58,8 @@ public enum MIDIIONotification: Equatable, Hashable {
     case other(messageIDRawValue: Int32)
 }
 
+extension MIDIIONotification: Sendable { }
+
 extension MIDIIONotification {
     /// Converts a ``MIDIIOInternalNotification`` to ``MIDIIONotification``.
     ///

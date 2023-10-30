@@ -110,7 +110,33 @@ public struct MusicalTimeValue {
             ticks = beatsTicks % ticksPerDivision
         }
     }
-    
+}
+
+extension MusicalTimeValue: CustomStringConvertible {
+    public var description: String {
+        stringValue()
+    }
+}
+
+extension MusicalTimeValue: Equatable {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.elapsedBeats() == rhs.elapsedBeats()
+    }
+}
+
+extension MusicalTimeValue: Hashable { }
+
+extension MusicalTimeValue: Comparable {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        lhs.elapsedBeats() < rhs.elapsedBeats()
+    }
+}
+
+extension MusicalTimeValue: Sendable { }
+
+// MARK: - Methods
+
+extension MusicalTimeValue {
     /// Returns total elapsed ticks.
     /// Uses a static time signature.
     ///
@@ -155,30 +181,10 @@ public struct MusicalTimeValue {
     public func stringValue(delimiter: String = " ", forceBeatDivision: Bool = false) -> String {
         (isNegative ? "-" : "") + (
             divisionsPerBeat > 0 || forceBeatDivision
-                ? [bar, beat, beatDivision, ticks]
-                : [bar, beat, ticks]
+            ? [bar, beat, beatDivision, ticks]
+            : [bar, beat, ticks]
         )
         .map { String($0) }
         .joined(separator: delimiter)
-    }
-}
-
-extension MusicalTimeValue: CustomStringConvertible {
-    public var description: String {
-        stringValue()
-    }
-}
-
-extension MusicalTimeValue: Equatable {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.elapsedBeats() == rhs.elapsedBeats()
-    }
-}
-
-extension MusicalTimeValue: Hashable { }
-
-extension MusicalTimeValue: Comparable {
-    public static func < (lhs: Self, rhs: Self) -> Bool {
-        lhs.elapsedBeats() < rhs.elapsedBeats()
     }
 }

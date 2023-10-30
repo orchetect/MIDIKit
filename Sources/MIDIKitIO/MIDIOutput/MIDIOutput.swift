@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-@_implementationOnly import CoreMIDI
 import Foundation
+@_implementationOnly import CoreMIDI
 
 /// A managed virtual MIDI output endpoint created in the system by the MIDI I/O ``MIDIManager``.
 ///
@@ -198,9 +198,7 @@ extension MIDIOutput: CustomStringConvertible {
     }
 }
 
-extension MIDIOutput: MIDIManagedSendsMessages {
-    // empty
-}
+extension MIDIOutput: MIDIManagedSendsMessages { }
 
 extension MIDIOutput: _MIDIManagedSendsMessages {
     func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {

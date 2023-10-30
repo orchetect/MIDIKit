@@ -6,7 +6,7 @@
 
 import Foundation
 
-public protocol HUISwitchProtocol {
+public protocol HUISwitchProtocol: Sendable {
     /// HUI zone and port constant for the switch.
     var zoneAndPort: HUIZoneAndPort { get }
 }

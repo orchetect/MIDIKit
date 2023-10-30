@@ -64,3 +64,5 @@ extension MIDINote.Style: CustomStringConvertible {
         }
     }
 }
+
+extension MIDINote.Style: Sendable { }

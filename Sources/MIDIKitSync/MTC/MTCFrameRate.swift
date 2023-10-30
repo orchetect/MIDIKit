@@ -139,3 +139,5 @@ public enum MTCFrameRate: Hashable, CaseIterable {
         }
     }
 }
+
+extension MTCFrameRate: Sendable { }

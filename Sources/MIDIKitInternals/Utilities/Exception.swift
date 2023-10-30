@@ -12,7 +12,6 @@ public func raiseException(
     reason: String? = nil
 ) {
     let exception = NSException(name: exceptionName, reason: reason, userInfo: nil)
-    
     exception.raise()
 }
 

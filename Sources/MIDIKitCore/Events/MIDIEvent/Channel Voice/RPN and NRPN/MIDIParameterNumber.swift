@@ -8,7 +8,7 @@ import Foundation
 
 /// Protocol which all Parameter Number events conform.
 /// This includes RPN (Registered Controller) and NRPN (Assignable Controller).
-public protocol MIDIParameterNumber {
+public protocol MIDIParameterNumber: Sendable {
     /// The parameter number type.
     static var type: MIDIParameterNumberType { get }
     

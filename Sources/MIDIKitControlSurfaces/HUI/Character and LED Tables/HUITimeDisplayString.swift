@@ -77,6 +77,8 @@ public struct HUITimeDisplayString: HUIString, Equatable, Hashable {
     }
 }
 
+extension HUITimeDisplayString: Sendable { }
+
 extension [HUITimeDisplayCharacter] {
     /// Empty display digits.
     /// Equivalent to: "        "

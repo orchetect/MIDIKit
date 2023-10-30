@@ -44,6 +44,8 @@ extension HUISurfaceModelNotification {
     }
 }
 
+extension HUISurfaceModelNotification.ChannelStripComponent: Sendable { }
+
 extension HUISurfaceModelNotification.ChannelStripComponent: CustomStringConvertible {
     public var description: String {
         switch self {

@@ -28,6 +28,48 @@ extension MIDIFile.Chunk {
     }
 }
 
+extension MIDIFile.Chunk.Track: CustomStringConvertible, CustomDebugStringConvertible {
+    public var description: String {
+        var outputString = ""
+        
+        outputString += "Track(".newLined
+        outputString += "  events (\(events.count)): ".newLined
+        
+        events.forEach {
+            let deltaString = $0.smfUnwrappedEvent.delta.description
+                .padding(toLength: 15, withPad: " ", startingAt: 0)
+            
+            outputString += "    \(deltaString) \($0.smfUnwrappedEvent.event.smfDescription)"
+                .newLined
+        }
+        
+        outputString += ")"
+        
+        return outputString
+    }
+    
+    public var debugDescription: String {
+        var outputString = ""
+        
+        outputString += "Track(".newLined
+        outputString += "  events (\(events.count)): ".newLined
+        
+        events.forEach {
+            let deltaString = $0.smfUnwrappedEvent.delta.debugDescription
+                .padding(toLength: 15 + 11, withPad: " ", startingAt: 0)
+            
+            outputString += "    \(deltaString) \($0.smfUnwrappedEvent.event.smfDebugDescription)"
+                .newLined
+        }
+        
+        outputString += ")"
+        
+        return outputString
+    }
+}
+
+extension MIDIFile.Chunk.Track: Sendable { }
+
 extension MIDIFile.Chunk.Track: MIDIFileChunk {
     public var identifier: String { Self.staticIdentifier }
 }
@@ -320,46 +362,5 @@ extension MIDIFile.Chunk.Track {
             }
             return (beat: position, event: $0)
         }
-    }
-}
-
-extension MIDIFile.Chunk.Track: CustomStringConvertible,
-CustomDebugStringConvertible {
-    public var description: String {
-        var outputString = ""
-        
-        outputString += "Track(".newLined
-        outputString += "  events (\(events.count)): ".newLined
-        
-        events.forEach {
-            let deltaString = $0.smfUnwrappedEvent.delta.description
-                .padding(toLength: 15, withPad: " ", startingAt: 0)
-            
-            outputString += "    \(deltaString) \($0.smfUnwrappedEvent.event.smfDescription)"
-                .newLined
-        }
-        
-        outputString += ")"
-        
-        return outputString
-    }
-    
-    public var debugDescription: String {
-        var outputString = ""
-        
-        outputString += "Track(".newLined
-        outputString += "  events (\(events.count)): ".newLined
-        
-        events.forEach {
-            let deltaString = $0.smfUnwrappedEvent.delta.debugDescription
-                .padding(toLength: 15 + 11, withPad: " ", startingAt: 0)
-            
-            outputString += "    \(deltaString) \($0.smfUnwrappedEvent.event.smfDebugDescription)"
-                .newLined
-        }
-        
-        outputString += ")"
-        
-        return outputString
     }
 }

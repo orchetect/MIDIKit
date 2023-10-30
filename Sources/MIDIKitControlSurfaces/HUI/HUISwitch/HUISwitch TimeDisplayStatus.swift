@@ -55,3 +55,5 @@ extension HUISwitch.TimeDisplayStatus: CustomStringConvertible {
         }
     }
 }
+
+extension HUISwitch.TimeDisplayStatus: Sendable { }

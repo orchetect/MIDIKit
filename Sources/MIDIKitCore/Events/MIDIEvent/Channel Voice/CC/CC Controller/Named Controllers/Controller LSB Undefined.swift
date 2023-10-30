@@ -74,6 +74,8 @@ extension MIDIEvent.CC.Controller.LSB {
     }
 }
 
+extension MIDIEvent.CC.Controller.LSB.Undefined: Sendable { }
+
 extension MIDIEvent.CC.Controller.LSB.Undefined {
     /// Returns the controller number.
     public var controller: UInt7 {

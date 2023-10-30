@@ -25,12 +25,16 @@ extension MIDIEvent {
     public struct ActiveSensing: Equatable, Hashable {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         public init(group: UInt4 = 0x0) {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.ActiveSensing: Sendable { }
+
+extension MIDIEvent {
     /// System Real-Time: Active Sensing
     /// (MIDI 1.0)
     ///

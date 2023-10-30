@@ -16,4 +16,6 @@ public enum MIDIIOObjectType: CaseIterable, Equatable, Hashable {
     case outputEndpoint
 }
 
+extension MIDIIOObjectType: Sendable { }
+
 #endif

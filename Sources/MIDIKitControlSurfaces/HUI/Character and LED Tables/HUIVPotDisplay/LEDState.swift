@@ -52,6 +52,10 @@ extension HUIVPotDisplay.LEDState: CustomStringConvertible {
     }
 }
 
+// MARK: - Sendable
+
+extension HUIVPotDisplay.LEDState: Sendable { }
+
 // MARK: - RawValue
 
 extension HUIVPotDisplay.LEDState {

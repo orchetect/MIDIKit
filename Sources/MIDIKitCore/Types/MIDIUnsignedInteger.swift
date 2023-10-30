@@ -22,7 +22,7 @@ import Foundation
 
 /// Protocol adopted by specialized unsigned integer types in `MIDIKit` representing novel bit
 /// widths.
-public protocol MIDIUnsignedInteger: UnsignedInteger, Codable
+public protocol MIDIUnsignedInteger: UnsignedInteger, Codable, Sendable
     where Magnitude == Storage.Magnitude,
     Words == Storage.Words,
     IntegerLiteralType == Storage,

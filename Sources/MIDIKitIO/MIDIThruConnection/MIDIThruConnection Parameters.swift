@@ -21,6 +21,8 @@ extension MIDIThruConnection {
     }
 }
 
+extension MIDIThruConnection.Parameters: Sendable { }
+
 extension MIDIThruConnection.Parameters {
     init(_ coreMIDIParams: MIDIThruConnectionParams) {
         filterOutAllControls = coreMIDIParams.filterOutAllControls != 0

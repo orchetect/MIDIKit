@@ -74,6 +74,8 @@ public enum HUITimeDisplayCharacter: UInt7, CaseIterable {
     case spaceDot    = 0x30
 }
 
+extension HUITimeDisplayCharacter: Sendable { }
+
 extension HUITimeDisplayCharacter: _HUICharacter {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:options --maxwidth none

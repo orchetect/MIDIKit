@@ -34,10 +34,10 @@ extension MIDIEvent {
         /// > messages for the Receiver, the Sender shall send a JR Clock message at least once
         /// > every 250 milliseconds.
         public var time: UInt16
-    
+        
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
-    
+        
         /// JR Clock (Jitter-Reduction Clock)
         /// (MIDI 2.0 Utility Messages)
         ///
@@ -61,7 +61,11 @@ extension MIDIEvent {
             self.group = group
         }
     }
-    
+}
+
+extension MIDIEvent.JRClock: Sendable { }
+
+extension MIDIEvent {
     /// JR Clock (Jitter-Reduction Clock)
     /// (MIDI 2.0 Utility Messages)
     ///

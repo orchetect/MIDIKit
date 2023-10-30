@@ -6,8 +6,8 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-@_implementationOnly import CoreMIDI
 import Foundation
+@_implementationOnly import CoreMIDI
 
 /// A managed virtual MIDI input endpoint created in the system by the MIDI I/O ``MIDIManager``.
 ///
@@ -233,8 +233,6 @@ extension MIDIInput: CustomStringConvertible {
     }
 }
 
-extension MIDIOutput: MIDIManagedReceivesMessages {
-    // empty
-}
+extension MIDIInput: MIDIManagedReceivesMessages { }
 
 #endif

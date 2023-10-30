@@ -8,8 +8,9 @@
 
 import Foundation
 
-// this protocol may not be necessary, it was experimental so that the `MIDIManager.devices`
-// property could be swapped out with a different Devices class with Combine support
+// TODO: this protocol may not be necessary
+// it was experimental so that the `MIDIManager.devices` property could be swapped out with
+// a different devices class with Combine support
 public protocol MIDIDevicesProtocol {
     /// List of MIDI devices in the system.
     ///

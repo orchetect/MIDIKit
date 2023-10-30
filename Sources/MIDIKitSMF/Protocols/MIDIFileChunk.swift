@@ -4,7 +4,7 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-public protocol MIDIFileChunk {
+public protocol MIDIFileChunk: Sendable {
     /// 4-character ASCII string identifying the chunk.
     ///
     /// For standard MIDI tracks, this is MTrk.

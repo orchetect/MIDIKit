@@ -27,6 +27,8 @@ public struct BytePair: Equatable, Hashable {
     }
 }
 
+extension BytePair: Sendable { }
+
 extension UInt16 {
     /// Initialize by combining a byte pair.
     public init(bytePair: BytePair) {

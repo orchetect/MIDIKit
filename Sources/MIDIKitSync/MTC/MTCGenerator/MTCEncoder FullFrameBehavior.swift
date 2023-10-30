@@ -27,3 +27,5 @@ extension MTCEncoder {
         case never
     }
 }
+
+extension MTCEncoder.FullFrameBehavior: Sendable { }

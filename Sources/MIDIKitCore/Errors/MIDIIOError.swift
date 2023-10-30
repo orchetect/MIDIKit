@@ -50,7 +50,7 @@ extension MIDIIOError {
             return "Read Error: \(verboseError)"
     
         case let .osStatus(midiOSStatus):
-            return midiOSStatus.description
+            return "\(midiOSStatus)"
         }
     }
 }
