@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 name: virtualInputName,
                 tag: virtualInputName,
                 uniqueID: .userDefaultsManaged(key: virtualInputName),
-                receiver: .eventsLogging(filterActiveSensingAndClock: true)
+                receiver: .eventsLogging([.filterActiveSensingAndClock])
             )
         } catch {
             print("Error creating virtual MIDI input:", error.localizedDescription)
