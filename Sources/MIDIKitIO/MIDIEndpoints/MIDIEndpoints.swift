@@ -10,7 +10,7 @@ import Foundation
 
 // this protocol may not be necessary, it was experimental so that the `MIDIManager.endpoints`
 // property could be swapped out with a different Endpoints class with Combine support
-public protocol MIDIEndpointsProtocol {
+public protocol MIDIEndpointsProtocol where Self: Equatable, Self: Hashable {
     /// List of MIDI input endpoints in the system.
     var inputs: [MIDIInputEndpoint] { get }
     
