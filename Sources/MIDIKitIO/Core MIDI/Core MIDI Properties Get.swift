@@ -26,12 +26,10 @@ func getProperties(
     let result = MIDIObjectGetProperties(ref, &props, deep)
     
     guard result == noErr else {
-        props?.release()
         throw MIDIIOError.osStatus(result)
     }
     
     guard let unwrappedProps = props?.takeRetainedValue() else {
-        props?.release()
         throw MIDIIOError.readError(
             "Got nil while reading MIDIEndpointRef property list."
         )
@@ -39,9 +37,9 @@ func getProperties(
     
     // "takeRetainedValue() is the right choice here because it is the caller's responsibility to
     // release the string.
-    //  This is different from the usual Core Foundation memory management rules, but documented in
-    //  the MIDI Services Reference"
-    //  -- https://stackoverflow.com/a/27171498/2805570
+    // This is different from the usual Core Foundation memory management rules, but documented in
+    // the MIDI Services Reference."
+    // -- https://stackoverflow.com/a/27171498/2805570
     
     return unwrappedProps
 }
@@ -55,19 +53,17 @@ func getProperties(
 ///
 /// - Throws: ``MIDIIOError``
 func getDictionary(
-    forProperty: CFString,
+    forProperty property: CFString,
     of ref: CoreMIDI.MIDIObjectRef
 ) throws -> NSDictionary {
     var dict: Unmanaged<CFDictionary>?
-    let result = MIDIObjectGetDictionaryProperty(ref, forProperty, &dict)
+    let result = MIDIObjectGetDictionaryProperty(ref, property, &dict)
     
     guard result == noErr else {
-        dict?.release()
         throw MIDIIOError.osStatus(result)
     }
     
     guard let unwrappedDict = dict?.takeRetainedValue() else {
-        dict?.release()
         throw MIDIIOError.readError(
             "Got nil while reading MIDIEndpointRef property list."
         )
@@ -75,9 +71,9 @@ func getDictionary(
     
     // "takeRetainedValue() is the right choice here because it is the caller's responsibility to
     // release the string.
-    //  This is different from the usual Core Foundation memory management rules, but documented in
-    //  the MIDI Services Reference"
-    //  -- https://stackoverflow.com/a/27171498/2805570
+    // This is different from the usual Core Foundation memory management rules, but documented in
+    // the MIDI Services Reference."
+    // -- https://stackoverflow.com/a/27171498/2805570
     
     return unwrappedDict as NSDictionary
 }
@@ -91,29 +87,27 @@ func getDictionary(
 ///
 /// - Throws: ``MIDIIOError``
 func getString(
-    forProperty: CFString,
+    forProperty property: CFString,
     of ref: CoreMIDI.MIDIObjectRef
 ) throws -> String {
     var val: Unmanaged<CFString>?
-    let result = MIDIObjectGetStringProperty(ref, forProperty, &val)
+    let result = MIDIObjectGetStringProperty(ref, property, &val)
     
     guard result == noErr else {
-        val?.release()
         throw MIDIIOError.osStatus(result)
     }
     
     guard let unwrappedVal = val?.takeRetainedValue() else {
-        val?.release()
         throw MIDIIOError.readError(
-            "Got nil while reading MIDIEndpointRef property value \((forProperty as String).quoted)"
+            "Got nil while reading MIDIEndpointRef property value \((property as String).quoted)"
         )
     }
     
     // "takeRetainedValue() is the right choice here because it is the caller's responsibility to
     // release the string.
-    //  This is different from the usual Core Foundation memory management rules, but documented in
-    //  the MIDI Services Reference"
-    //  -- https://stackoverflow.com/a/27171498/2805570
+    // This is different from the usual Core Foundation memory management rules, but documented in
+    // the MIDI Services Reference."
+    // -- https://stackoverflow.com/a/27171498/2805570
     
     return unwrappedVal as String
 }
@@ -123,11 +117,12 @@ func getString(
 ///
 /// - Parameter forProperty: a `CoreMIDI.Property` constant
 func getInteger(
-    forProperty: CFString,
+    forProperty property: CFString,
     of ref: CoreMIDI.MIDIObjectRef
 ) -> Int32 {
     var val: Int32 = 0
-    _ = MIDIObjectGetIntegerProperty(ref, forProperty, &val)
+    // TODO: handle OSStatus errors?
+    _ = MIDIObjectGetIntegerProperty(ref, property, &val)
     return val
 }
 
