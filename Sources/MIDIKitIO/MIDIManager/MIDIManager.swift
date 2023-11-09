@@ -150,9 +150,16 @@ public final class MIDIManager: NSObject {
             _observableEndpoints = MIDIObservableEndpoints()
         } else {
             endpoints = MIDIEndpoints()
+            _observableEndpoints = nil
         }
         
         super.init()
+        
+        // we can only add manager reference to endpoints after manager is initialized
+        endpoints.manager = self
+        if #available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *) {
+            observableEndpoints.manager = self
+        }
         
         addNetworkSessionObservers()
     }

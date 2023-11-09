@@ -85,6 +85,9 @@ public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
 }
 
 #if canImport(Combine)
+
+/// Manages system MIDI endpoints information cache.
+/// Class and properties are published for use in SwiftUI and Combine.
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
 public final class MIDIObservableEndpoints: NSObject, ObservableObject, MIDIEndpointsProtocol {
     /// Weak reference to ``MIDIManager``.
@@ -106,8 +109,10 @@ public final class MIDIObservableEndpoints: NSObject, ObservableObject, MIDIEndp
     }
     
     public func updateCachedProperties() {
+        willChangeValue(for: \.inputs)
         inputs = getSystemDestinationEndpoints()
         
+        willChangeValue(for: \.inputsUnowned)
         if let manager = manager {
             let managedInputsIDs = manager.managedInputs.values
                 .compactMap { $0.uniqueID }
@@ -119,8 +124,10 @@ public final class MIDIObservableEndpoints: NSObject, ObservableObject, MIDIEndp
             inputsUnowned = inputs
         }
         
+        willChangeValue(for: \.outputs)
         outputs = getSystemSourceEndpoints()
         
+        willChangeValue(for: \.outputsUnowned)
         if let manager = manager {
             let managedOutputsIDs = manager.managedOutputs.values
                 .compactMap { $0.uniqueID }
@@ -133,6 +140,7 @@ public final class MIDIObservableEndpoints: NSObject, ObservableObject, MIDIEndp
         }
     }
 }
+
 #endif
 
 #endif
