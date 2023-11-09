@@ -70,8 +70,9 @@ public final class MIDIManager: NSObject {
     ///
     /// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
     /// - Throws: ``MIDIIOError``
-    public func unmanagedPersistentThruConnections(ownerID: String) throws
-    -> [CoreMIDIThruConnectionRef] {
+    public func unmanagedPersistentThruConnections(
+        ownerID: String
+    ) throws -> [CoreMIDIThruConnectionRef] {
         try getSystemThruConnectionsPersistentEntries(matching: ownerID)
     }
     
@@ -79,7 +80,7 @@ public final class MIDIManager: NSObject {
     public internal(set) var devices: MIDIDevicesProtocol = MIDIDevices()
     
     /// MIDI input and output endpoints in the system.
-    public internal(set) var endpoints: MIDIEndpointsProtocol = MIDIEndpoints()
+    public internal(set) var endpoints: MIDIEndpointsProtocol
     
     /// Handler that is called when state has changed in the manager.
     public var notificationHandler: ((
@@ -118,11 +119,11 @@ public final class MIDIManager: NSObject {
     ) {
         // API version
         preferredAPI = .bestForPlatform()
-    
+        
         // queue client name
         var clientNameForQueue = clientName.onlyAlphanumerics
         if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
-    
+        
         // manager event queue
         let eventQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
             + ".midiManager." + clientNameForQueue + ".events"
@@ -133,17 +134,22 @@ public final class MIDIManager: NSObject {
             autoreleaseFrequency: .workItem,
             target: .global(qos: .userInitiated)
         )
-    
+        
         // assign other properties
         self.clientName = clientName
         self.model = model
         self.manufacturer = manufacturer
         self.notificationHandler = notificationHandler
-    
+        
+        // endpoints
+        if #available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *) {
+            endpoints = MIDIPublishedEndpoints()
+        } else {
+            endpoints = MIDIEndpoints()
+        }
+        
         super.init()
-    
-        endpoints = MIDIEndpoints(manager: self)
-    
+        
         addNetworkSessionObservers()
     }
     
@@ -155,7 +161,7 @@ public final class MIDIManager: NSObject {
             // or only client owned by an app, the MIDI server may exit if there are no other
             // clients remaining in the system"
             // _ = MIDIClientDispose(coreMIDIClientRef)
-    
+            
             NotificationCenter.default.removeObserver(self)
         }
     }

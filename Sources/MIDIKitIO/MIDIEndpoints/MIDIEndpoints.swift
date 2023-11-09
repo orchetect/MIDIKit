@@ -80,4 +80,57 @@ public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
     }
 }
 
+#if canImport(Combine)
+import Combine
+
+@available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
+public final class MIDIPublishedEndpoints: NSObject, ObservableObject, MIDIEndpointsProtocol {
+    /// Weak reference to ``MIDIManager``.
+    internal weak var manager: MIDIManager?
+    
+    @Published public internal(set) dynamic var inputs: [MIDIInputEndpoint] = []
+    @Published public internal(set) dynamic var inputsUnowned: [MIDIInputEndpoint] = []
+    
+    @Published public internal(set) dynamic var outputs: [MIDIOutputEndpoint] = []
+    @Published public internal(set) dynamic var outputsUnowned: [MIDIOutputEndpoint] = []
+    
+    override internal init() {
+        super.init()
+    }
+    
+    internal init(manager: MIDIManager?) {
+        self.manager = manager
+        super.init()
+    }
+    
+    public func updateCachedProperties() {
+        inputs = getSystemDestinationEndpoints()
+        
+        if let manager = manager {
+            let managedInputsIDs = manager.managedInputs.values
+                .compactMap { $0.uniqueID }
+            
+            inputsUnowned = inputs.filter {
+                !managedInputsIDs.contains($0.uniqueID)
+            }
+        } else {
+            inputsUnowned = inputs
+        }
+        
+        outputs = getSystemSourceEndpoints()
+        
+        if let manager = manager {
+            let managedOutputsIDs = manager.managedOutputs.values
+                .compactMap { $0.uniqueID }
+            
+            outputsUnowned = outputs.filter {
+                !managedOutputsIDs.contains($0.uniqueID)
+            }
+        } else {
+            outputsUnowned = outputs
+        }
+    }
+}
+#endif
+
 #endif
