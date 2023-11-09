@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if canImport(Combine)
+import Combine
+#endif
+
 // this protocol may not be necessary, it was experimental so that the `MIDIManager.endpoints`
 // property could be swapped out with a different Endpoints class with Combine support
 public protocol MIDIEndpointsProtocol where Self: Equatable, Self: Hashable {
@@ -81,10 +85,8 @@ public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
 }
 
 #if canImport(Combine)
-import Combine
-
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
-public final class MIDIPublishedEndpoints: NSObject, ObservableObject, MIDIEndpointsProtocol {
+public final class MIDIObservableEndpoints: NSObject, ObservableObject, MIDIEndpointsProtocol {
     /// Weak reference to ``MIDIManager``.
     internal weak var manager: MIDIManager?
     

@@ -80,7 +80,10 @@ public final class MIDIManager: NSObject {
     public internal(set) var devices: MIDIDevicesProtocol = MIDIDevices()
     
     /// MIDI input and output endpoints in the system.
-    public internal(set) var endpoints: any MIDIEndpointsProtocol
+    public internal(set) var endpoints: MIDIEndpoints
+    
+    /// Type-erased internal backing storage for ``observableEndpoints``.
+    internal var _observableEndpoints: (any MIDIEndpointsProtocol)?
     
     /// Handler that is called when state has changed in the manager.
     public var notificationHandler: ((
@@ -143,7 +146,8 @@ public final class MIDIManager: NSObject {
         
         // endpoints
         if #available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *) {
-            endpoints = MIDIPublishedEndpoints()
+            endpoints = MIDIEndpoints()
+            _observableEndpoints = MIDIObservableEndpoints()
         } else {
             endpoints = MIDIEndpoints()
         }
@@ -194,6 +198,7 @@ public final class MIDIManager: NSObject {
     
         devices.updateCachedProperties()
         endpoints.updateCachedProperties()
+        _observableEndpoints?.updateCachedProperties()
     }
 }
 
@@ -202,7 +207,20 @@ import Combine
 
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
 extension MIDIManager: ObservableObject {
-    // nothing here; just add ObservableObject conformance
+    /// MIDI input and output endpoints in the system.
+    /// The same as ``endpoints`` but returned as an `ObservableObject` for use in SwiftUI and Combine.
+    public var observableEndpoints: MIDIObservableEndpoints {
+        // we can be reasonably guaranteed endpoints will be
+        guard let typedEndpoints = _observableEndpoints as? MIDIObservableEndpoints else {
+            assertionFailure(
+                "MIDI Manager's endpoints instance is not expected type: \(type(of: endpoints))."
+            )
+            // this should never happen, but just in case, return a new class instance
+            // to avoid halting execution
+            return MIDIObservableEndpoints(manager: self)
+        }
+        return typedEndpoints
+    }
 }
 #endif
 
