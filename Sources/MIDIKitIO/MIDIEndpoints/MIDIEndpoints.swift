@@ -109,10 +109,10 @@ public final class MIDIObservableEndpoints: NSObject, ObservableObject, MIDIEndp
     }
     
     public func updateCachedProperties() {
-        willChangeValue(for: \.inputs)
+        objectWillChange.send()
+        
         inputs = getSystemDestinationEndpoints()
         
-        willChangeValue(for: \.inputsUnowned)
         if let manager = manager {
             let managedInputsIDs = manager.managedInputs.values
                 .compactMap { $0.uniqueID }
@@ -124,10 +124,8 @@ public final class MIDIObservableEndpoints: NSObject, ObservableObject, MIDIEndp
             inputsUnowned = inputs
         }
         
-        willChangeValue(for: \.outputs)
         outputs = getSystemSourceEndpoints()
         
-        willChangeValue(for: \.outputsUnowned)
         if let manager = manager {
             let managedOutputsIDs = manager.managedOutputs.values
                 .compactMap { $0.uniqueID }
