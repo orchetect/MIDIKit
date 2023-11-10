@@ -9,13 +9,13 @@ import SwiftUI
 
 @main
 struct MIDIKitUIExampleApp: App {
-    let midiManager = MIDIManager(
+    @ObservedObject var midiManager = ObservableMIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    let midiHelper = MIDIHelper()
+    @ObservedObject var midiHelper = MIDIHelper()
     
     init() {
         midiHelper.setup(midiManager: midiManager)

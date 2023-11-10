@@ -4,11 +4,11 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiManager: ObservableMIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
     var body: some View {
@@ -17,7 +17,7 @@ struct ContentView: View {
                 """
                 This example creates a MIDI output connection to the MIDI endpoint that iOS creates once an iOS-to-Mac USB connection has been established in Audio MIDI Setup on the Mac.
                 
-                Note that this example project must be run on a physical iOS device connected with a USB cable since that is the only way for Audio MIDI Setup to show the device for connecting.
+                Note that this example project must be run on a physical iOS device connected with a USB cable.
                 
                 Test events can be sent to the Mac by using the buttons below.
                 

@@ -16,3 +16,5 @@ MIDIKitUI adds convenient reusable user interface controls to simplify building 
 - ``MIDIOutputsPicker``
 
 ### Internals
+
+- <doc:MIDIKitUI-Internals>

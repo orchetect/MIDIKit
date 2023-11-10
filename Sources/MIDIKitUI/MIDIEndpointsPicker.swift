@@ -10,100 +10,92 @@ import MIDIKitIO
 import SwiftUI
 
 @available(macOS 11.0, iOS 14.0, *)
-struct MIDIEndpointsPicker<Endpoint>: View
-where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdentifier {
-    @EnvironmentObject private var midiManager: MIDIManager
+struct MIDIEndpointsPicker<Endpoint>: View, MIDIEndpointsSelectable
+where Endpoint: MIDIEndpoint & Hashable & Identifiable, 
+      Endpoint.ID == MIDIIdentifier
+{
+    private weak var midiManager: ObservableMIDIManager?
     
-    var title: String
+    let title: String
     var endpoints: [Endpoint]
-    @State var filter: MIDIEndpointFilter
-    @Binding var selection: MIDIIdentifier?
-    @Binding var cachedSelectionName: String?
-    let showIcons: Bool
+    var maskedFilter: MIDIEndpointMaskedFilter?
+    @Binding var selectionID: MIDIIdentifier?
+    @Binding var selectionDisplayName: String?
+    var showIcons: Bool
     
-    @State private var ids: [MIDIIdentifier] = []
+    @State var ids: [MIDIIdentifier] = []
     
     init(
         title: String,
         endpoints: [Endpoint],
-        filter: MIDIEndpointFilter,
-        selection: Binding<MIDIIdentifier?>,
-        cachedSelectionName: Binding<String?>,
-        showIcons: Bool
+        maskedFilter: MIDIEndpointMaskedFilter?,
+        selectionID: Binding<MIDIIdentifier?>,
+        selectionDisplayName: Binding<String?>,
+        showIcons: Bool,
+        midiManager: ObservableMIDIManager?
     ) {
         self.title = title
         self.endpoints = endpoints
-        _filter = State(initialValue: filter)
-        _selection = selection
-        _cachedSelectionName = cachedSelectionName
+        self.maskedFilter = maskedFilter
+        _selectionID = selectionID
+        _selectionDisplayName = selectionDisplayName
         self.showIcons = showIcons
-        // set up initial data, but skip filter because midiManager is not available yet
-        _ids = State(initialValue: generateIDs(endpoints: endpoints, filtered: false))
+        self.midiManager = midiManager
+        
+        // pre-populate IDs
+        _ids = State(initialValue: generateIDs(endpoints: endpoints, maskedFilter: maskedFilter, midiManager: midiManager))
     }
     
     public var body: some View {
-        Picker(title, selection: $selection) {
+        Picker(title, selection: $selectionID) {
             Text("None")
                 .tag(MIDIIdentifier?.none)
             
             ForEach(ids, id: \.self) {
                 EndpointRow(
                     endpoint: endpoint(for: $0),
-                    cachedSelectionName: $cachedSelectionName,
+                    selectionDisplayName: $selectionDisplayName,
                     showIcon: showIcons
                 )
                 .tag($0 as MIDIIdentifier?)
             }
         }
         .onAppear {
-            updateIDs(endpoints: endpoints)
+            updateID(endpoints: endpoints)
+            ids = generateIDs(endpoints: endpoints, maskedFilter: maskedFilter, midiManager: midiManager)
         }
-        .onChange(of: filter) { newValue in
-            updateIDs(endpoints: endpoints)
+        .onChange(of: maskedFilter) { newValue in
+            ids = generateIDs(endpoints: endpoints, maskedFilter: newValue, midiManager: midiManager)
         }
         .onChange(of: endpoints) { newValue in
-            updateIDs(endpoints: newValue)
+            updateID(endpoints: newValue)
+            ids = generateIDs(endpoints: newValue, maskedFilter: maskedFilter, midiManager: midiManager)
         }
-        .onChange(of: selection) { newValue in
-            updateIDs(endpoints: endpoints)
-            guard let selection else {
-                cachedSelectionName = nil
+        .onChange(of: selectionID) { newValue in
+            ids = generateIDs(endpoints: endpoints, maskedFilter: maskedFilter, midiManager: midiManager)
+            guard let selectionID = newValue else {
+                selectionDisplayName = nil
                 return
             }
-            if let dn = endpoint(for: selection)?.displayName {
-                cachedSelectionName = dn
+            if let displayName = endpoint(for: selectionID)?.displayName {
+                selectionDisplayName = displayName
             }
         }
     }
     
-    private func generateIDs(
-        endpoints: [Endpoint],
-        filtered: Bool = true
-    ) -> [MIDIIdentifier] {
-        let endpointIDs = (
-            filtered ? endpoints.filter(using: filter, in: midiManager) : endpoints
-        )
-        .map(\.id)
-        
-        if let selection, !endpointIDs.contains(selection) {
-            return [selection] + endpointIDs
-        } else {
-            return endpointIDs
+    private func updateID(endpoints: [Endpoint]) {
+        guard let updatedDetails = updatedID(endpoints: endpoints) else {
+            return
         }
-    }
-    
-    /// (Don't run from init.)
-    private func updateIDs(endpoints: [Endpoint]) {
-        ids = generateIDs(endpoints: endpoints)
-    }
-    
-    private func endpoint(for id: MIDIIdentifier) -> Endpoint? {
-        endpoints.first(whereUniqueID: id)
+        
+        self.selectionDisplayName = updatedDetails.displayName
+        // update ID in case it changed
+        if self.selectionID != updatedDetails.id { self.selectionID = updatedDetails.id }
     }
     
     private struct EndpointRow: View {
         let endpoint: Endpoint?
-        @Binding var cachedSelectionName: String?
+        @Binding var selectionDisplayName: String?
         let showIcon: Bool
         
         var body: some View {
@@ -139,8 +131,8 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         
         private var missingText: String {
             showIcon
-                ? cachedSelectionName ?? "Missing"
-                : (cachedSelectionName ?? "") + " (Missing)"
+                ? selectionDisplayName ?? "Missing"
+                : (selectionDisplayName ?? "") + " (Missing)"
         }
         
         @ViewBuilder
@@ -163,76 +155,128 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
 }
 
 /// SwiftUI `Picker` view for selecting MIDI input endpoints.
+///
+/// Optionally supply a tag to auto-update an output connection in MIDIManager.
+///
+/// ```swift
+/// MIDIInputsPicker( ... )
+///     .updatingOutputConnection(withTag: "MyConnection")
+/// ```
 @available(macOS 11.0, iOS 14.0, *)
-public struct MIDIInputsPicker: View {
-    @EnvironmentObject private var midiManager: MIDIManager
+public struct MIDIInputsPicker: View, _MIDIInputsSelectable {
+    @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     public var title: String
-    @Binding public var selection: MIDIIdentifier?
-    @Binding public var cachedSelectionName: String?
-    public let showIcons: Bool
-    public let filterOwned: Bool
+    @Binding public var selectionID: MIDIIdentifier?
+    @Binding public var selectionDisplayName: String?
+    public var showIcons: Bool
+    public var hideOwned: Bool
+    
+    internal var updatingOutputConnectionWithTag: String?
     
     public init(
         title: String,
-        selection: Binding<MIDIIdentifier?>,
-        cachedSelectionName: Binding<String?>,
+        selectionID: Binding<MIDIIdentifier?>,
+        selectionDisplayName: Binding<String?>,
         showIcons: Bool = true,
-        filterOwned: Bool = false
+        hideOwned: Bool = false
     ) {
         self.title = title
-        _selection = selection
-        _cachedSelectionName = cachedSelectionName
+        _selectionID = selectionID
+        _selectionDisplayName = selectionDisplayName
         self.showIcons = showIcons
-        self.filterOwned = filterOwned
+        self.hideOwned = hideOwned
     }
     
     public var body: some View {
         MIDIEndpointsPicker<MIDIInputEndpoint>(
             title: title,
-            endpoints: midiManager.endpoints.inputs,
-            filter: filterOwned ? .owned() : .default(),
-            selection: $selection,
-            cachedSelectionName: $cachedSelectionName,
-            showIcons: showIcons
+            endpoints: midiManager.observableEndpoints.inputs,
+            maskedFilter: maskedFilter,
+            selectionID: $selectionID,
+            selectionDisplayName: $selectionDisplayName,
+            showIcons: showIcons,
+            midiManager: midiManager
         )
+        .onAppear {
+            updateOutputConnection(id: selectionID)
+        }
+        .onChange(of: selectionID) { newValue in
+            updateOutputConnection(id: newValue)
+        }
+    }
+    
+    private var maskedFilter: MIDIEndpointMaskedFilter? {
+        hideOwned ? .drop(.owned()) : nil
+    }
+    
+    private func updateOutputConnection(id: MIDIIdentifier?) {
+        updateOutputConnection(selectedUniqueID: id,
+                               selectedDisplayName: selectionDisplayName,
+                               midiManager: midiManager)
     }
 }
 
 /// SwiftUI `Picker` view for selecting MIDI output endpoints.
+///
+/// Optionally supply a tag to auto-update an input connection in MIDIManager.
+///
+/// ```swift
+/// MIDIOutputsPicker( ... )
+///     .updatingInputConnection(withTag: "MyConnection")
+/// ```
 @available(macOS 11.0, iOS 14.0, *)
-public struct MIDIOutputsPicker: View {
-    @EnvironmentObject private var midiManager: MIDIManager
+public struct MIDIOutputsPicker: View, _MIDIOutputsSelectable {
+    @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     public var title: String
-    @Binding public var selection: MIDIIdentifier?
-    @Binding public var cachedSelectionName: String?
-    public let showIcons: Bool
-    public let filterOwned: Bool
+    @Binding public var selectionID: MIDIIdentifier?
+    @Binding public var selectionDisplayName: String?
+    public var showIcons: Bool
+    public var hideOwned: Bool
+    
+    internal var updatingInputConnectionWithTag: String?
     
     public init(
         title: String,
-        selection: Binding<MIDIIdentifier?>,
-        cachedSelectionName: Binding<String?>,
+        selectionID: Binding<MIDIIdentifier?>,
+        selectionDisplayName: Binding<String?>,
         showIcons: Bool = true,
-        filterOwned: Bool = false
+        hideOwned: Bool = false
     ) {
         self.title = title
-        _selection = selection
-        _cachedSelectionName = cachedSelectionName
+        _selectionID = selectionID
+        _selectionDisplayName = selectionDisplayName
         self.showIcons = showIcons
-        self.filterOwned = filterOwned
+        self.hideOwned = hideOwned
     }
     
     public var body: some View {
         MIDIEndpointsPicker<MIDIOutputEndpoint>(
             title: title,
-            endpoints: midiManager.endpoints.outputs,
-            filter: filterOwned ? .owned() : .default(),
-            selection: $selection,
-            cachedSelectionName: $cachedSelectionName,
-            showIcons: showIcons
+            endpoints: midiManager.observableEndpoints.outputs,
+            maskedFilter: maskedFilter,
+            selectionID: $selectionID,
+            selectionDisplayName: $selectionDisplayName,
+            showIcons: showIcons,
+            midiManager: midiManager
         )
+        .onAppear {
+            updateInputConnection(id: selectionID)
+        }
+        .onChange(of: selectionID) { newValue in
+            updateInputConnection(id: newValue)
+        }
+    }
+    
+    private var maskedFilter: MIDIEndpointMaskedFilter? {
+        hideOwned ? .drop(.owned()) : nil
+    }
+    
+    private func updateInputConnection(id: MIDIIdentifier?) {
+        updateInputConnection(selectedUniqueID: id,
+                              selectedDisplayName: selectionDisplayName,
+                              midiManager: midiManager)
     }
 }
 

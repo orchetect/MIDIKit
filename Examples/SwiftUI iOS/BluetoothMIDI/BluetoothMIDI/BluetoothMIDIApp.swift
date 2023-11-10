@@ -4,18 +4,18 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import SwiftUI
 
 @main
 struct BluetoothMIDIApp: App {
-    let midiManager = MIDIManager(
+    @ObservedObject var midiManager = ObservableMIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    let midiHelper = MIDIHelper()
+    @ObservedObject var midiHelper = MIDIHelper()
     
     init() {
         midiHelper.setup(midiManager: midiManager)

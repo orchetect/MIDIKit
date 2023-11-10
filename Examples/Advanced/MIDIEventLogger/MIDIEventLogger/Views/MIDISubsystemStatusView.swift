@@ -4,14 +4,14 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import OTCore
 import SwiftRadix
 import SwiftUI
 
 extension ContentView {
     struct MIDISubsystemStatusView: View {
-        @EnvironmentObject var midiManager: MIDIManager
+        @EnvironmentObject var midiManager: ObservableMIDIManager
         
         var body: some View {
             GroupBox(label: Text("MIDI Subsystem")) {

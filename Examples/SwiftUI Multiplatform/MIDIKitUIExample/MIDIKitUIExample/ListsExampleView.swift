@@ -14,7 +14,7 @@ struct ListsExampleView: View {
     @AppStorage(MIDIHelper.PrefKeys.midiOutID) private var midiOutput: MIDIIdentifier?
     @AppStorage(MIDIHelper.PrefKeys.midiOutName) private var midiOutputName: String?
     
-    @State private var filterOwned: Bool = false
+    @State private var hideCreated: Bool = false
     @State private var showIcons: Bool = true
     
     var body: some View {
@@ -24,10 +24,7 @@ struct ListsExampleView: View {
         Spacer()
         
         VStack {
-            // TODO: ⚠️ Not yet functional, will be fixed in future.
-            Toggle("Filter Manager-Owned", isOn: $filterOwned)
-                .disabled(true)
-            
+            Toggle("Hide Created", isOn: $hideCreated)
             Toggle("Show Icons", isOn: $showIcons)
         }
         .toggleStyle(.switch)
@@ -85,11 +82,14 @@ struct ListsExampleView: View {
     
     private var inputsList: some View {
         MIDIInputsList(
-            selection: $midiInput,
-            cachedSelectionName: $midiInputName,
+            selectionID: $midiInput,
+            selectionDisplayName: $midiInputName,
             showIcons: showIcons,
-            filterOwned: filterOwned
+            hideOwned: hideCreated
         )
+        // note: supply a non-nil tag to auto-update an output connection in MIDIManager
+        .updatingOutputConnection(withTag: nil)
+        
         #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))
         #endif
@@ -97,11 +97,14 @@ struct ListsExampleView: View {
     
     private var outputsList: some View {
         MIDIOutputsList(
-            selection: $midiOutput,
-            cachedSelectionName: $midiOutputName,
+            selectionID: $midiOutput,
+            selectionDisplayName: $midiOutputName,
             showIcons: showIcons,
-            filterOwned: filterOwned
+            hideOwned: hideCreated
         )
+        // note: supply a non-nil tag to auto-update an input connection in MIDIManager
+        .updatingInputConnection(withTag: nil)
+        
         #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))
         #endif

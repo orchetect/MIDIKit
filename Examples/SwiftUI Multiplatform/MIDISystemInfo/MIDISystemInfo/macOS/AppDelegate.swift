@@ -11,7 +11,7 @@ import SwiftUI
 class AppDelegate: NSObject, NSApplicationDelegate {
     var window: NSWindow!
 	
-    private let midiManager = MIDIManager(
+    private let midiManager = ObservableMIDIManager(
         clientName: "MIDISystemInfo",
         model: "TestApp",
         manufacturer: "MyCompany"

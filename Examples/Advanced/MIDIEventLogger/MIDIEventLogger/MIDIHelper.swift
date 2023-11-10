@@ -4,16 +4,16 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import OTCore
 import SwiftUI
 
 final class MIDIHelper: ObservableObject {
-    private weak var midiManager: MIDIManager?
+    private weak var midiManager: ObservableMIDIManager?
     
     public init() { }
     
-    public func setup(midiManager: MIDIManager) {
+    public func setup(midiManager: ObservableMIDIManager) {
         self.midiManager = midiManager
         
         midiManager.notificationHandler = { notification, manager in
@@ -67,44 +67,6 @@ final class MIDIHelper: ObservableObject {
             }
         } catch {
             logger.error(error)
-        }
-    }
-    
-    public func updateInputConnection(selectedUniqueID: MIDIIdentifier?) {
-        guard let midiInputConnection else { return }
-        
-        guard let selectedUniqueID else {
-            midiInputConnection.removeAllOutputs()
-            return
-        }
-        
-        switch selectedUniqueID {
-        case .invalidMIDIIdentifier:
-            midiInputConnection.removeAllOutputs()
-        default:
-            if !midiInputConnection.outputsCriteria.contains(.uniqueID(selectedUniqueID)) {
-                midiInputConnection.removeAllOutputs()
-                midiInputConnection.add(outputs: [.uniqueID(selectedUniqueID)])
-            }
-        }
-    }
-    
-    public func updateOutputConnection(selectedUniqueID: MIDIIdentifier?) {
-        guard let midiOutputConnection else { return }
-        
-        guard let selectedUniqueID else {
-            midiOutputConnection.removeAllInputs()
-            return
-        }
-        
-        switch selectedUniqueID {
-        case .invalidMIDIIdentifier:
-            midiOutputConnection.removeAllInputs()
-        default:
-            if !midiOutputConnection.inputsCriteria.contains(.uniqueID(selectedUniqueID)) {
-                midiOutputConnection.removeAllInputs()
-                midiOutputConnection.add(inputs: [.uniqueID(selectedUniqueID)])
-            }
         }
     }
     

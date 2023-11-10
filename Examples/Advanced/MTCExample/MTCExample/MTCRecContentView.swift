@@ -12,7 +12,7 @@ import SwiftUI
 import TimecodeKit
 
 struct MTCRecContentView: View {
-    @EnvironmentObject private var midiManager: MIDIManager
+    @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     // MARK: - MIDI state
     
@@ -38,80 +38,7 @@ struct MTCRecContentView: View {
     var body: some View {
         mtcRecView
             .onAppear {
-                // set up new MTC receiver and configure it
-                mtcRec = MTCReceiver(
-                    name: "main",
-                    initialLocalFrameRate: .fps24,
-                    syncPolicy: .init(
-                        lockFrames: 16,
-                        dropOutFrames: 10
-                    )
-                ) { timecode, _, _, displayNeedsUpdate in
-                    receiverTC = timecode.stringValue()
-                    receiverFR = mtcRec.mtcFrameRate
-                
-                    guard displayNeedsUpdate else { return }
-                
-                    if timecode.seconds != lastSeconds {
-                        playClickB()
-                        lastSeconds = timecode.seconds
-                    }
-                
-                } stateChanged: { state in
-                    receiverState = state
-                    logger.default("MTC Receiver state:", receiverState)
-                
-                    scheduledLock?.cancel()
-                    scheduledLock = nil
-                
-                    switch state {
-                    case .idle:
-                        break
-                    
-                    case let .preSync(lockTime, timecode):
-                        let scheduled = DispatchQueue.main.schedule(
-                            after: DispatchQueue.SchedulerTimeType(lockTime),
-                            interval: .seconds(1),
-                            tolerance: .zero,
-                            options: .init(
-                                qos: .userInitiated,
-                                flags: [],
-                                group: nil
-                            )
-                        ) {
-                            logger.default(">>> LOCAL SYNC: PLAYBACK START @", timecode)
-                            scheduledLock?.cancel()
-                            scheduledLock = nil
-                        }
-                    
-                        scheduledLock = scheduled
-                    
-                    case .sync:
-                        break
-                    
-                    case .freewheeling:
-                        break
-                    
-                    case .incompatibleFrameRate:
-                        break
-                    }
-                }
-            
-                // create MTC reader MIDI endpoint
-                do {
-                    let udKey = "\(kMIDIPorts.MTCRec.tag) - Unique ID"
-                
-                    try midiManager.addInput(
-                        name: kMIDIPorts.MTCRec.name,
-                        tag: kMIDIPorts.MTCRec.tag,
-                        uniqueID: .userDefaultsManaged(key: udKey),
-                        receiver: .object(mtcRec, held: .weakly)
-                    )
-                } catch {
-                    logger.error(error)
-                }
-            
-                updateSelfGenListen(state: receiveFromSelfGen)
+                setup()
             }
         
             .onChange(of: localFrameRate) { _ in
@@ -129,41 +56,220 @@ struct MTCRecContentView: View {
             }
     }
     
+    private func setup() {
+        // set up new MTC receiver and configure it
+        mtcRec = MTCReceiver(
+            name: "main",
+            initialLocalFrameRate: .fps24,
+            syncPolicy: .init(
+                lockFrames: 16,
+                dropOutFrames: 10
+            )
+        ) { timecode, _, _, displayNeedsUpdate in
+            receiverTC = timecode.stringValue()
+            receiverFR = mtcRec.mtcFrameRate
+            
+            guard displayNeedsUpdate else { return }
+            
+            if timecode.seconds != lastSeconds {
+                playClickB()
+                lastSeconds = timecode.seconds
+            }
+            
+        } stateChanged: { state in
+            receiverState = state
+            logger.default("MTC Receiver state:", receiverState)
+            
+            scheduledLock?.cancel()
+            scheduledLock = nil
+            
+            switch state {
+            case .idle:
+                break
+                
+            case let .preSync(lockTime, timecode):
+                let scheduled = DispatchQueue.main.schedule(
+                    after: DispatchQueue.SchedulerTimeType(lockTime),
+                    interval: .seconds(1),
+                    tolerance: .zero,
+                    options: .init(
+                        qos: .userInitiated,
+                        flags: [],
+                        group: nil
+                    )
+                ) {
+                    logger.default(">>> LOCAL SYNC: PLAYBACK START @", timecode)
+                    scheduledLock?.cancel()
+                    scheduledLock = nil
+                }
+                
+                scheduledLock = scheduled
+                
+            case .sync:
+                break
+                
+            case .freewheeling:
+                break
+                
+            case .incompatibleFrameRate:
+                break
+            }
+        }
+        
+        // create MTC reader MIDI endpoint
+        do {
+            let udKey = "\(kMIDIPorts.MTCRec.tag) - Unique ID"
+            
+            try midiManager.addInput(
+                name: kMIDIPorts.MTCRec.name,
+                tag: kMIDIPorts.MTCRec.tag,
+                uniqueID: .userDefaultsManaged(key: udKey),
+                receiver: .object(mtcRec, held: .weakly)
+            )
+        } catch {
+            logger.error(error)
+        }
+        
+        updateSelfGenListen(state: receiveFromSelfGen)
+    }
+    
     private var mtcRecView: some View {
         VStack(alignment: .center, spacing: 0) {
-            Toggle(isOn: $receiveFromSelfGen) {
-                Text("Receive from MTC Generator Window")
+            options
+                .padding(.top, 10)
+            
+            timecodeDisplay
+            
+            mtcEncodedRateInfo
+            
+            derivedFrameRatesInfo
+            
+            scalingInfo
+            
+            receiverStateDisplay
+            
+            localFrameRatePicker
+            
+            frameRateInfo
+                .padding(.bottom, 10)
+        }
+        .background(receiverState.stateColor)
+    }
+    
+    private var options: some View {
+        Toggle(isOn: $receiveFromSelfGen) {
+            Text("Receive from MTC Generator Window")
+        }
+    }
+    
+    private var timecodeDisplay: some View {
+        Text(receiverTC)
+            .font(.system(size: 48, weight: .regular, design: .monospaced))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private var mtcEncodedRateInfo: some View {
+        Group {
+            if receiverState != .idle {
+                Text("MTC encoded rate: " + (receiverFR?.stringValue ?? "--") + " fps")
+            } else {
+                Text(" ")
             }
-            .padding(.top, 10)
-            
-            Text(receiverTC)
-                .font(.system(size: 48, weight: .regular, design: .monospaced))
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            Group {
-                if receiverState != .idle {
-                    Text("MTC encoded rate: " + (receiverFR?.stringValue ?? "--") + " fps")
-                    
-                } else {
-                    Text(" ")
+        }
+        .font(.system(size: 24, weight: .regular, design: .default))
+    }
+    
+    @ViewBuilder
+    private var derivedFrameRatesInfo: some View {
+        if receiverState != .idle,
+           let receiverFR
+        {
+            VStack {
+                Text("Derived frame rates of \(receiverFR.stringValue):")
+                
+                HStack {
+                    ForEach(receiverFR.derivedFrameRates, id: \.self) {
+                        Text($0.stringValue)
+                            .foregroundColor($0 == localFrameRate ? .blue : nil)
+                            .padding(2)
+                            .border(
+                                Color.white,
+                                width: $0 == receiverFR.directEquivalentFrameRate ? 2 : 0
+                            )
+                    }
                 }
             }
-            .font(.system(size: 24, weight: .regular, design: .default))
-            
+        } else {
+            VStack {
+                Text(" ")
+                Text(" ")
+                    .padding(2)
+            }
+        }
+    }
+    
+    private var scalingInfo: some View {
+        Group {
             if receiverState != .idle,
-               let receiverFR
+               localFrameRate != nil
             {
+                if receiverState == .incompatibleFrameRate {
+                    Text("Can't scale frame rate because rates are incompatible.")
+                } else if receiverFR?.directEquivalentFrameRate == localFrameRate {
+                    Text("Scaling not needed, rates are identical.")
+                } else {
+                    Text(
+                        "Scaled to local rate: " + (localFrameRate?.stringValue ?? "--") +
+                        " fps"
+                    )
+                }
+                
+            } else {
+                Text(" ")
+            }
+        }
+        .font(.system(size: 24, weight: .regular, design: .default))
+    }
+    
+    private var receiverStateDisplay: some View {
+        Text(receiverState.description)
+            .font(.system(size: 48, weight: .regular, design: .monospaced))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private var localFrameRatePicker: some View {
+        Picker(selection: $localFrameRate, label: Text("Local Frame Rate")) {
+            Text("None")
+                .tag(TimecodeFrameRate?.none)
+            
+            Rectangle()
+                .frame(maxWidth: .infinity)
+                .frame(height: 3)
+            
+            ForEach(TimecodeFrameRate.allCases) { fRate in
+                Text(fRate.stringValue)
+                    .tag(TimecodeFrameRate?.some(fRate))
+            }
+        }
+        .frame(width: 250)
+    }
+    
+    private var frameRateInfo: some View {
+        HStack {
+            if let unwrappedLocalFrameRate = localFrameRate {
                 VStack {
-                    Text("Derived frame rates of \(receiverFR.stringValue):")
+                    Text(
+                        "Compatible remote frame rates (\(unwrappedLocalFrameRate.compatibleGroup.stringValue)):"
+                    )
                     
                     HStack {
-                        ForEach(receiverFR.derivedFrameRates, id: \.self) {
+                        ForEach(unwrappedLocalFrameRate.compatibleGroupRates, id: \.self) {
                             Text($0.stringValue)
-                                .foregroundColor($0 == localFrameRate ? .blue : nil)
+                                .foregroundColor($0 == unwrappedLocalFrameRate ? .blue : nil)
                                 .padding(2)
                                 .border(
                                     Color.white,
-                                    width: $0 == receiverFR.directEquivalentFrameRate ? 2 : 0
+                                    width: $0 == receiverFR?.directEquivalentFrameRate ? 2 : 0
                                 )
                         }
                     }
@@ -175,79 +281,7 @@ struct MTCRecContentView: View {
                         .padding(2)
                 }
             }
-            
-            Group {
-                if receiverState != .idle,
-                   localFrameRate != nil
-                {
-                    if receiverState == .incompatibleFrameRate {
-                        Text("Can't scale frame rate because rates are incompatible.")
-                    } else if receiverFR?.directEquivalentFrameRate == localFrameRate {
-                        Text("Scaling not needed, rates are identical.")
-                    } else {
-                        Text(
-                            "Scaled to local rate: " + (localFrameRate?.stringValue ?? "--") +
-                                " fps"
-                        )
-                    }
-                    
-                } else {
-                    Text(" ")
-                }
-            }
-            .font(.system(size: 24, weight: .regular, design: .default))
-            
-            Text(receiverState.description)
-                .font(.system(size: 48, weight: .regular, design: .monospaced))
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            Picker(selection: $localFrameRate, label: Text("Local Frame Rate")) {
-                Text("None")
-                    .tag(TimecodeFrameRate?.none)
-                
-                Rectangle()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 3)
-                
-                ForEach(TimecodeFrameRate.allCases) { fRate in
-                    Text(fRate.stringValue)
-                        .tag(TimecodeFrameRate?.some(fRate))
-                }
-            }
-            .frame(width: 250)
-            
-            HStack {
-                if let unwrappedLocalFrameRate = localFrameRate {
-                    VStack {
-                        Text(
-                            "Compatible remote frame rates (\(unwrappedLocalFrameRate.compatibleGroup.stringValue)):"
-                        )
-                        
-                        HStack {
-                            ForEach(unwrappedLocalFrameRate.compatibleGroupRates, id: \.self) {
-                                Text($0.stringValue)
-                                    .foregroundColor($0 == unwrappedLocalFrameRate ? .blue : nil)
-                                    .padding(2)
-                                    .border(
-                                        Color.white,
-                                        width: $0 == receiverFR?.directEquivalentFrameRate
-                                            ? 2
-                                            : 0
-                                    )
-                            }
-                        }
-                    }
-                } else {
-                    VStack {
-                        Text(" ")
-                        Text(" ")
-                            .padding(2)
-                    }
-                }
-            }
-            .padding(.bottom, 10)
         }
-        .background(receiverState.stateColor)
     }
     
     private func updateSelfGenListen(state: Bool) {
@@ -277,8 +311,12 @@ extension MTCReceiver.State {
     }
 }
 
-struct MTCRecContentView_Previews: PreviewProvider {
-    private static let midiManager = MIDIManager(clientName: "Preview", model: "", manufacturer: "")
+struct MTCRecContentViewPreviews: PreviewProvider {
+    private static let midiManager = ObservableMIDIManager(
+        clientName: "Preview",
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
     
     static var previews: some View {
         MTCRecContentView()

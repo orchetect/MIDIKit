@@ -15,7 +15,7 @@ struct PickersExampleView: View {
     @AppStorage(MIDIHelper.PrefKeys.midiOutName) private var midiOutputName: String?
     
     @State private var pickerStyle: PickerStyleSelection = .automatic
-    @State private var filterOwned: Bool = false
+    @State private var hideCreated: Bool = false
     @State private var showIcons: Bool = true
     @State private var singleColumn: Bool = true
     
@@ -25,9 +25,7 @@ struct PickersExampleView: View {
         Spacer()
         
         VStack {
-            // TODO: ⚠️ Not yet functional, will be fixed in future.
-            Toggle("Filter Manager-Owned", isOn: $filterOwned)
-                .disabled(true)
+            Toggle("Hide Created", isOn: $hideCreated)
             
             #if os(iOS)
             if UIDevice.current.userInterfaceIdiom == .pad {
@@ -112,22 +110,26 @@ struct PickersExampleView: View {
     private var inputsList: some View {
         MIDIInputsPicker(
             title: "Input",
-            selection: $midiInput,
-            cachedSelectionName: $midiInputName,
+            selectionID: $midiInput,
+            selectionDisplayName: $midiInputName,
             showIcons: showIcons,
-            filterOwned: filterOwned
+            hideOwned: hideCreated
         )
+        // note: supply a non-nil tag to auto-update an output connection in MIDIManager
+        .updatingOutputConnection(withTag: nil)
         .pickerStyle(selection: pickerStyle)
     }
     
     private var outputsList: some View {
         MIDIOutputsPicker(
             title: "Output",
-            selection: $midiOutput,
-            cachedSelectionName: $midiOutputName,
+            selectionID: $midiOutput,
+            selectionDisplayName: $midiOutputName,
             showIcons: showIcons,
-            filterOwned: filterOwned
+            hideOwned: hideCreated
         )
+        // note: supply a non-nil tag to auto-update an input connection in MIDIManager
+        .updatingInputConnection(withTag: nil)
         .pickerStyle(selection: pickerStyle)
     }
 }

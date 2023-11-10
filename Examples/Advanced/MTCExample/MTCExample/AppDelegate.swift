@@ -11,23 +11,28 @@ import OTCore
 import SwiftUI
 import TimecodeKit
 
+// AppDelegate for legacy macOS versions support
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    let midiManager = MIDIManager(
+    let midiManager = ObservableMIDIManager(
         clientName: "MTCExample",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    var mtcGenWindow: NSWindow!
-    var mtcRecWindow: NSWindow!
+    var mtcGenWindow: NSWindow?
+    var mtcRecWindow: NSWindow?
     
     func applicationDidFinishLaunching(_: Notification) {
         // audio engine setup
         setupAudioEngine()
         
         // midi setup
-        _ = try? midiManager.start()
+        do {
+            try midiManager.start()
+        } catch {
+            print(error)
+        }
         
         // create windows
         createMTCGenWindow()
@@ -52,11 +57,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             styleMask: [.titled, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false
         )
-        mtcGenWindow.isReleasedWhenClosed = true
-        mtcGenWindow.setFrameAutosaveName("MTC Generator")
-        mtcGenWindow.title = "MTC Generator"
-        mtcGenWindow.contentView = NSHostingView(rootView: contentView)
-        mtcGenWindow.makeKeyAndOrderFront(nil)
+        mtcGenWindow?.isReleasedWhenClosed = true
+        mtcGenWindow?.setFrameAutosaveName("MTC Generator")
+        mtcGenWindow?.title = "MTC Generator"
+        mtcGenWindow?.contentView = NSHostingView(rootView: contentView)
+        mtcGenWindow?.makeKeyAndOrderFront(nil)
     }
     
     func createMTCRecWindow() {
@@ -77,10 +82,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             styleMask: [.titled, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false
         )
-        mtcRecWindow.isReleasedWhenClosed = true
-        mtcRecWindow.setFrameAutosaveName("MTC Receiver")
-        mtcRecWindow.title = "MTC Receiver"
-        mtcRecWindow.contentView = NSHostingView(rootView: contentView)
-        mtcRecWindow.makeKeyAndOrderFront(nil)
+        mtcRecWindow?.isReleasedWhenClosed = true
+        mtcRecWindow?.setFrameAutosaveName("MTC Receiver")
+        mtcRecWindow?.title = "MTC Receiver"
+        mtcRecWindow?.contentView = NSHostingView(rootView: contentView)
+        mtcRecWindow?.makeKeyAndOrderFront(nil)
     }
 }

@@ -7,107 +7,153 @@
 #if os(iOS)
 
 import MIDIKitIO
+import MIDIKitUI
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiManager: ObservableMIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
-    @Binding var midiInSelectedID: MIDIIdentifier
-    @Binding var midiInSelectedDisplayName: String
+    @Binding var midiInSelectedID: MIDIIdentifier?
+    @Binding var midiInSelectedDisplayName: String?
     
-    @Binding var midiOutSelectedID: MIDIIdentifier
-    @Binding var midiOutSelectedDisplayName: String
+    @Binding var midiOutSelectedID: MIDIIdentifier?
+    @Binding var midiOutSelectedDisplayName: String?
     
     var body: some View {
         NavigationView {
             Form {
-                Section() {
-                    NavigationLink("Info") {
-                        InfoView()
-                    }
-                }
-    
-                Section() {
-                    MIDIEndpointSelectionView(
-                        midiInSelectedID: $midiInSelectedID,
-                        midiInSelectedDisplayName: $midiInSelectedDisplayName,
-                        midiOutSelectedID: $midiOutSelectedID,
-                        midiOutSelectedDisplayName: $midiOutSelectedDisplayName
-                    )
-    
-                    Group {
-                        Button("Send Note On C3") {
-                            sendToConnection(.noteOn(60, velocity: .midi1(127), channel: 0))
-                        }
-    
-                        Button("Send Note Off C3") {
-                            sendToConnection(.noteOff(60, velocity: .midi1(0), channel: 0))
-                        }
-    
-                        Button("Send CC1") {
-                            sendToConnection(.cc(1, value: .midi1(64), channel: 0))
-                        }
-                    }
-                    .disabled(
-                        midiOutSelectedID == .invalidMIDIIdentifier ||
-                            !midiManager.endpoints.inputs.contains(whereUniqueID: midiOutSelectedID)
-                    )
-                }
-    
-                Section() {
-                    Button("Create Test Virtual Endpoints") {
-                        midiHelper.createVirtualEndpoints()
-                    }
-                    .disabled(midiHelper.virtualsExist)
-    
-                    Button("Destroy Test Virtual Endpoints") {
-                        midiHelper.destroyVirtualInputs()
-                    }
-                    .disabled(!midiHelper.virtualsExist)
-    
-                    Group {
-                        Button("Send Note On C3") {
-                            sendToVirtuals(.noteOn(60, velocity: .midi1(127), channel: 0))
-                        }
-    
-                        Button("Send Note Off C3") {
-                            sendToVirtuals(.noteOff(60, velocity: .midi1(0), channel: 0))
-                        }
-    
-                        Button("Send CC1") {
-                            sendToVirtuals(.cc(1, value: .midi1(64), channel: 0))
-                        }
-                    }
-                    .disabled(!midiHelper.virtualsExist)
-                }
-    
-                Section(header: Text("Received Events")) {
-                    Toggle(
-                        "Filter Active Sensing and Clock",
-                        isOn: $midiHelper.filterActiveSensingAndClock
-                    )
-                    
-                    let events = midiHelper.receivedEvents.reversed()
-                    
-                    // Since MIDIEvent doesn't conform to Identifiable (and won't ever), in a List
-                    // or ForEach we need to either use an array index or a wrap MIDIEvent in a
-                    // custom type that does conform to Identifiable. It's really up to your use
-                    // case.
-                    // Usually application interaction is driven by MIDI events and we aren't
-                    // literally logging events, but this is for diagnostic purposes here.
-                    List(events.indices, id: \.self) { index in
-                        Text(events[index].description)
-                            .foregroundColor(color(for: events[index]))
-                    }
-                }
+                infoSection
+                
+                endpointSelectionSection
+                
+                virtualEndpointsSection
+                
+                eventLogSection
             }
             .navigationBarTitle("Endpoint Pickers")
             
-            InfoView()
+            infoView
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .padding()
+    }
+    
+    private var infoSection: some View {
+        Section() {
+            NavigationLink("Info") {
+                infoView
+            }
+        }
+    }
+    
+    private var infoView: some View {
+        Text(
+            """
+            This example demonstrates maintaining menus with MIDI endpoints in the system, allowing a single selection for each menu.
+            
+            Refer to this example's README.md file for important information.
+            
+            For testing purposes, try creating virtual endpoints, selecting them as MIDI In and MIDI Out, then destroying them. They appear as missing but their selection is retained. Then create them again, and they will appear normally once again and connection will resume. They are remembered even if you quit the app.
+            """
+        )
+        .multilineTextAlignment(.center)
+        .navigationTitle("Info")
+        .navigationBarTitleDisplayMode(.inline)
+        .frame(maxWidth: 600)
+    }
+    
+    private var endpointSelectionSection: some View {
+        Section() {
+            MIDIOutputsPicker(
+                title: "MIDI In",
+                selectionID: $midiInSelectedID,
+                selectionDisplayName: $midiInSelectedDisplayName,
+                showIcons: true,
+                hideOwned: false
+            )
+            
+            MIDIInputsPicker(
+                title: "MIDI Out",
+                selectionID: $midiOutSelectedID,
+                selectionDisplayName: $midiOutSelectedDisplayName,
+                showIcons: true,
+                hideOwned: false
+            )
+            
+            Group {
+                Button("Send Note On C3") {
+                    sendToConnection(.noteOn(60, velocity: .midi1(UInt7.random(in: 20 ... 127)), channel: 0))
+                }
+                
+                Button("Send Note Off C3") {
+                    sendToConnection(.noteOff(60, velocity: .midi1(0), channel: 0))
+                }
+                
+                Button("Send CC1") {
+                    sendToConnection(.cc(1, value: .midi1(UInt7.random()), channel: 0))
+                }
+            }
+            .disabled(isMIDIOutDisabled)
+        }
+    }
+    
+    private var virtualEndpointsSection: some View {
+        Section() {
+            Button("Create Test Virtual Endpoints") {
+                midiHelper.createVirtualEndpoints()
+            }
+            .disabled(midiHelper.virtualsExist)
+            
+            Button("Destroy Test Virtual Endpoints") {
+                midiHelper.destroyVirtualInputs()
+            }
+            .disabled(!midiHelper.virtualsExist)
+            
+            Group {
+                Button("Send Note On C3") {
+                    sendToVirtuals(.noteOn(60, velocity: .midi1(UInt7.random(in: 20 ... 127)), channel: 0))
+                }
+                
+                Button("Send Note Off C3") {
+                    sendToVirtuals(.noteOff(60, velocity: .midi1(0), channel: 0))
+                }
+                
+                Button("Send CC1") {
+                    sendToVirtuals(.cc(1, value: .midi1(UInt7.random()), channel: 0))
+                }
+            }
+            .disabled(!midiHelper.virtualsExist)
+        }
+    }
+    
+    private var eventLogSection: some View {
+        Section(header: Text("Received Events")) {
+            Toggle(
+                "Filter Active Sensing and Clock",
+                isOn: $midiHelper.filterActiveSensingAndClock
+            )
+            
+            let events = midiHelper.receivedEvents.reversed()
+            
+            // Since MIDIEvent doesn't conform to Identifiable (and won't ever), in a List
+            // or ForEach we need to either use an array index or a wrap MIDIEvent in a
+            // custom type that does conform to Identifiable. It's really up to your use
+            // case.
+            // Usually application interaction is driven by MIDI events and we aren't
+            // literally logging events, but this is for diagnostic purposes here.
+            List(events.indices, id: \.self) { index in
+                Text(events[index].description)
+                    .foregroundColor(color(for: events[index]))
+            }
+        }
+    }
+}
+
+extension ContentView {
+    private var isMIDIOutDisabled: Bool {
+        midiOutSelectedID == .invalidMIDIIdentifier ||
+        midiOutSelectedID == nil
     }
     
     func sendToConnection(_ event: MIDIEvent) {
@@ -126,24 +172,6 @@ struct ContentView: View {
         case .cc: return .orange
         default: return nil
         }
-    }
-}
-
-struct InfoView: View {
-    var body: some View {
-        Text(
-            """
-            This example demonstrates maintaining menus with MIDI endpoints in the system, allowing a single selection for each menu.
-            
-            Refer to this example's README.md file for important information.
-            
-            For testing purposes, try creating virtual endpoints, selecting them as MIDI In and MIDI Out, then destroying them. They appear as missing but their selection is retained. Then create them again, and they will appear normally once again and connection will resume. They are remembered even if you quit the app.
-            """
-        )
-        .multilineTextAlignment(.center)
-        .navigationTitle("Info")
-        .navigationBarTitleDisplayMode(.inline)
-        .frame(maxWidth: 600)
     }
 }
 

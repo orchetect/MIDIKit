@@ -9,13 +9,13 @@ import MIDIKitIO
 import SwiftUI
 
 struct HUIClientView: View {
-    @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiManager: ObservableMIDIManager
     @StateObject private var huiSurface: HUISurface
     
     static let kHUIInputName = "MIDIKit HUI Input"
     static let kHUIOutputName = "MIDIKit HUI Output"
     
-    init(midiManager: MIDIManager) {
+    init(midiManager: ObservableMIDIManager) {
         // set up HUI Surface object
         _huiSurface = {
             let huiSurface = HUISurface()
@@ -77,7 +77,7 @@ struct HUIClientView: View {
 
 #if DEBUG
 struct HUIClientView_Previews: PreviewProvider {
-    static let midiManager = MIDIManager(clientName: "Preview", model: "", manufacturer: "")
+    static let midiManager = ObservableMIDIManager(clientName: "Preview", model: "", manufacturer: "")
     static var previews: some View {
         HUIClientView(midiManager: midiManager)
     }

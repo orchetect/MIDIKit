@@ -4,13 +4,11 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
-    
     let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
@@ -18,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
     
     let virtualOutputName = "TestApp Output"
+    
+    var window: UIWindow?
     
     func application(
         _ application: UIApplication,
@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-    
+        
         do {
             print("Creating virtual MIDI output.")
             try midiManager.addOutput(
@@ -40,10 +40,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Error creating virtual MIDI output:", error.localizedDescription)
         }
-    
+        
         return true
     }
-    
+}
+
+extension AppDelegate {
     /// Convenience accessor for created virtual MIDI Output.
     var virtualOutput: MIDIOutput? {
         midiManager.managedOutputs[virtualOutputName]

@@ -3,34 +3,28 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		E21299092851D8D600957FE8 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21299082851D8D600957FE8 /* MIDIHelper.swift */; };
-		E2496A912989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A8A2989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift */; };
 		E2496A922989087F003FD165 /* ContentView-iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A8B2989087F003FD165 /* ContentView-iOS.swift */; };
 		E27C5DC42A034B3100189B15 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27C5DC32A034B3100189B15 /* Utilities.swift */; };
 		E27D0E63284F3FB600F43247 /* EndpointPickersApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E62284F3FB600F43247 /* EndpointPickersApp.swift */; };
-		E27D0E75284F409600F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E74284F409600F43247 /* MIDIKit */; };
 		E2841ABB2989CB08006907BD /* ContentView-macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A902989087F003FD165 /* ContentView-macOS.swift */; };
-		E2841ABC2989CB0B006907BD /* MIDIEndpointSelectionView-macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A8E2989087F003FD165 /* MIDIEndpointSelectionView-macOS.swift */; };
 		E29AC912285BF048009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC911285BF048009D1C2C /* MIDIKit */; };
 		E29FF28D2880BB54005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF28C2880BB54005E2BC2 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E21299082851D8D600957FE8 /* MIDIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
-		E2496A8A2989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MIDIEndpointSelectionView-iOS.swift"; sourceTree = "<group>"; };
 		E2496A8B2989087F003FD165 /* ContentView-iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContentView-iOS.swift"; sourceTree = "<group>"; };
 		E2496A8C2989087F003FD165 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E2496A8E2989087F003FD165 /* MIDIEndpointSelectionView-macOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MIDIEndpointSelectionView-macOS.swift"; sourceTree = "<group>"; };
 		E2496A8F2989087F003FD165 /* EndpointPickers.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = EndpointPickers.entitlements; sourceTree = "<group>"; };
 		E2496A902989087F003FD165 /* ContentView-macOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContentView-macOS.swift"; sourceTree = "<group>"; };
 		E27C5DC32A034B3100189B15 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		E27D0E5F284F3FB600F43247 /* EndpointPickers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EndpointPickers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27D0E62284F3FB600F43247 /* EndpointPickersApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointPickersApp.swift; sourceTree = "<group>"; };
-		E2841ABA2989CAF5006907BD /* EndpointPickers.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EndpointPickers.entitlements; sourceTree = "<group>"; };
 		E29FF28C2880BB54005E2BC2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E2FDAE542851AA8C00F98425 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -41,7 +35,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E29AC912285BF048009D1C2C /* MIDIKit in Frameworks */,
-				E27D0E75284F409600F43247 /* MIDIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,7 +45,6 @@
 			isa = PBXGroup;
 			children = (
 				E2496A8B2989087F003FD165 /* ContentView-iOS.swift */,
-				E2496A8A2989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift */,
 				E2496A8C2989087F003FD165 /* Info.plist */,
 			);
 			path = iOS;
@@ -62,7 +54,6 @@
 			isa = PBXGroup;
 			children = (
 				E2496A902989087F003FD165 /* ContentView-macOS.swift */,
-				E2496A8E2989087F003FD165 /* MIDIEndpointSelectionView-macOS.swift */,
 				E2496A8F2989087F003FD165 /* EndpointPickers.entitlements */,
 			);
 			path = macOS;
@@ -88,7 +79,6 @@
 		E27D0E61284F3FB600F43247 /* EndpointPickers */ = {
 			isa = PBXGroup;
 			children = (
-				E2841ABA2989CAF5006907BD /* EndpointPickers.entitlements */,
 				E2496A892989087F003FD165 /* iOS */,
 				E2496A8D2989087F003FD165 /* macOS */,
 				E27D0E62284F3FB600F43247 /* EndpointPickersApp.swift */,
@@ -116,7 +106,6 @@
 			);
 			name = EndpointPickers;
 			packageProductDependencies = (
-				E27D0E74284F409600F43247 /* MIDIKit */,
 				E29AC911285BF048009D1C2C /* MIDIKit */,
 			);
 			productName = EndpointPickers;
@@ -131,7 +120,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					E27D0E5E284F3FB600F43247 = {
 						CreatedOnToolsVersion = 14.0;
@@ -180,8 +169,6 @@
 				E27C5DC42A034B3100189B15 /* Utilities.swift in Sources */,
 				E21299092851D8D600957FE8 /* MIDIHelper.swift in Sources */,
 				E2496A922989087F003FD165 /* ContentView-iOS.swift in Sources */,
-				E2496A912989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift in Sources */,
-				E2841ABC2989CB0B006907BD /* MIDIEndpointSelectionView-macOS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,6 +179,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -224,6 +212,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -238,8 +227,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -253,6 +242,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -285,6 +275,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -293,8 +284,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -309,7 +300,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = EndpointPickers/EndpointPickers.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = EndpointPickers/macOS/EndpointPickers.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
@@ -317,14 +308,14 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = EndpointPickers/iOS/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = EndpointPickersSwiftUI;
+				"INFOPLIST_FILE[sdk=iphoneos*]" = EndpointPickers/iOS/Info.plist;
+				"INFOPLIST_FILE[sdk=iphonesimulator*]" = EndpointPickers/iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Endpoint Pickers";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -347,7 +338,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = EndpointPickers/EndpointPickers.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = EndpointPickers/macOS/EndpointPickers.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
@@ -355,14 +346,14 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = EndpointPickers/iOS/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = EndpointPickersSwiftUI;
+				"INFOPLIST_FILE[sdk=iphoneos*]" = EndpointPickers/iOS/Info.plist;
+				"INFOPLIST_FILE[sdk=iphonesimulator*]" = EndpointPickers/iOS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Endpoint Pickers";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -409,16 +400,12 @@
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.3;
+				minimumVersion = 0.9.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E27D0E74284F409600F43247 /* MIDIKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MIDIKit;
-		};
 		E29AC911285BF048009D1C2C /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E29AC910285BF048009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;

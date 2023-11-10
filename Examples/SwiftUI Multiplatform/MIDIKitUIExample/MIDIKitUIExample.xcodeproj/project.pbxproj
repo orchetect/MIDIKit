@@ -7,14 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E23AD72D2AFE21A400A69A01 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E23AD72C2AFE21A400A69A01 /* MIDIKit */; };
 		E2B8BD9E29B308D600B92BDF /* ListsExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */; };
 		E2B8BDA429B30B3200B92BDF /* PickersExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BDA329B30B3200B92BDF /* PickersExampleView.swift */; };
-		E2B8BDAD29B356CE00B92BDF /* MIDIKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = E2B8BDAC29B356CE00B92BDF /* MIDIKitUI */; };
 		E2F1FE7429B2DF5800054467 /* MIDIKitUIExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE7329B2DF5800054467 /* MIDIKitUIExampleApp.swift */; };
 		E2F1FE7629B2DF5800054467 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE7529B2DF5800054467 /* ContentView.swift */; };
 		E2F1FE7829B2DF5A00054467 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F1FE7729B2DF5A00054467 /* Assets.xcassets */; };
 		E2F1FE7C29B2DF5A00054467 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F1FE7B29B2DF5A00054467 /* Preview Assets.xcassets */; };
-		E2F1FE8729B2E04A00054467 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E2F1FE8629B2E04A00054467 /* MIDIKitIO */; };
 		E2F1FE8929B2E3F600054467 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE8829B2E3F600054467 /* MIDIHelper.swift */; };
 		E2F1FE8B29B2F2ED00054467 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE8A29B2F2ED00054467 /* Utilities.swift */; };
 /* End PBXBuildFile section */
@@ -23,13 +22,13 @@
 		E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsExampleView.swift; sourceTree = "<group>"; };
 		E2B8BDA329B30B3200B92BDF /* PickersExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickersExampleView.swift; sourceTree = "<group>"; };
 		E2B8BDAA29B3301300B92BDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E2CEA4952AFE3C3200BE92F7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E2F1FE7029B2DF5800054467 /* MIDIKitUIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIDIKitUIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2F1FE7329B2DF5800054467 /* MIDIKitUIExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIKitUIExampleApp.swift; sourceTree = "<group>"; };
 		E2F1FE7529B2DF5800054467 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E2F1FE7729B2DF5A00054467 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E2F1FE7929B2DF5A00054467 /* MIDIKitUIExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MIDIKitUIExample.entitlements; sourceTree = "<group>"; };
 		E2F1FE7B29B2DF5A00054467 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E2F1FE8429B2DFEF00054467 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MIDIKit; path = ../../..; sourceTree = "<group>"; };
 		E2F1FE8829B2E3F600054467 /* MIDIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
 		E2F1FE8A29B2F2ED00054467 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -39,8 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2B8BDAD29B356CE00B92BDF /* MIDIKitUI in Frameworks */,
-				E2F1FE8729B2E04A00054467 /* MIDIKitIO in Frameworks */,
+				E23AD72D2AFE21A400A69A01 /* MIDIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,7 +48,7 @@
 		E2F1FE6729B2DF5800054467 = {
 			isa = PBXGroup;
 			children = (
-				E2F1FE8429B2DFEF00054467 /* MIDIKit */,
+				E2CEA4952AFE3C3200BE92F7 /* README.md */,
 				E2F1FE7229B2DF5800054467 /* MIDIKitUIExample */,
 				E2F1FE7129B2DF5800054467 /* Products */,
 			);
@@ -67,7 +65,6 @@
 		E2F1FE7229B2DF5800054467 /* MIDIKitUIExample */ = {
 			isa = PBXGroup;
 			children = (
-				E2B8BDAA29B3301300B92BDF /* Info.plist */,
 				E2F1FE7329B2DF5800054467 /* MIDIKitUIExampleApp.swift */,
 				E2F1FE7529B2DF5800054467 /* ContentView.swift */,
 				E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */,
@@ -75,6 +72,7 @@
 				E2F1FE8829B2E3F600054467 /* MIDIHelper.swift */,
 				E2F1FE8A29B2F2ED00054467 /* Utilities.swift */,
 				E2F1FE7729B2DF5A00054467 /* Assets.xcassets */,
+				E2B8BDAA29B3301300B92BDF /* Info.plist */,
 				E2F1FE7929B2DF5A00054467 /* MIDIKitUIExample.entitlements */,
 				E2F1FE7A29B2DF5A00054467 /* Preview Content */,
 			);
@@ -106,8 +104,7 @@
 			);
 			name = MIDIKitUIExample;
 			packageProductDependencies = (
-				E2F1FE8629B2E04A00054467 /* MIDIKitIO */,
-				E2B8BDAC29B356CE00B92BDF /* MIDIKitUI */,
+				E23AD72C2AFE21A400A69A01 /* MIDIKit */,
 			);
 			productName = MIDIKitUI;
 			productReference = E2F1FE7029B2DF5800054467 /* MIDIKitUIExample.app */;
@@ -121,7 +118,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					E2F1FE6F29B2DF5800054467 = {
 						CreatedOnToolsVersion = 14.2;
@@ -137,6 +134,9 @@
 				Base,
 			);
 			mainGroup = E2F1FE6729B2DF5800054467;
+			packageReferences = (
+				E23AD72A2AFE218A00A69A01 /* XCRemoteSwiftPackageReference "MIDIKit" */,
+			);
 			productRefGroup = E2F1FE7129B2DF5800054467 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -179,6 +179,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -208,9 +209,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -239,6 +242,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -268,9 +272,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -297,6 +303,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MIDIKitUIExample/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -338,6 +345,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MIDIKitUIExample/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -393,14 +401,22 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCSwiftPackageProductDependency section */
-		E2B8BDAC29B356CE00B92BDF /* MIDIKitUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MIDIKitUI;
+/* Begin XCRemoteSwiftPackageReference section */
+		E23AD72A2AFE218A00A69A01 /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/MIDIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.4;
+			};
 		};
-		E2F1FE8629B2E04A00054467 /* MIDIKitIO */ = {
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E23AD72C2AFE21A400A69A01 /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MIDIKitIO;
+			package = E23AD72A2AFE218A00A69A01 /* XCRemoteSwiftPackageReference "MIDIKit" */;
+			productName = MIDIKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

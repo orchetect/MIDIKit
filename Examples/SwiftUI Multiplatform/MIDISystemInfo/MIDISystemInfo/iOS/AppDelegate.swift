@@ -9,7 +9,7 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    static let midiManager = MIDIManager(
+    static let midiManager = ObservableMIDIManager(
         clientName: "MIDISystemInfo",
         model: "TestApp",
         manufacturer: "MyCompany"

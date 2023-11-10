@@ -5,7 +5,7 @@
 //
 
 import Cocoa
-import MIDIKit
+import MIDIKitIO
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -24,10 +24,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-    
+        
         setupVirtualOutput()
     }
     
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        true
+    }
+}
+
+extension AppDelegate {
     private func setupVirtualOutput() {
         do {
             print("Creating virtual output port.")

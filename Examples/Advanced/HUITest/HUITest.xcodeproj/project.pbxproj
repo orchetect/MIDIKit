@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -31,11 +31,10 @@
 		E283F0B1274103A30037F199 /* ControlRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0B0274103A30037F199 /* ControlRoomView.swift */; };
 		E283F0B3274103C80037F199 /* NumPadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0B2274103C80037F199 /* NumPadView.swift */; };
 		E283F0B5274103E00037F199 /* TransportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283F0B4274103E00037F199 /* TransportView.swift */; };
-		E284EBB626AE018F0016AA0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBB526AE018F0016AA0F /* AppDelegate.swift */; };
+		E284EBB626AE018F0016AA0F /* HUITestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBB526AE018F0016AA0F /* HUITestApp.swift */; };
 		E284EBB826AE018F0016AA0F /* HUIClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBB726AE018F0016AA0F /* HUIClientView.swift */; };
 		E284EBBA26AE01900016AA0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E284EBB926AE01900016AA0F /* Assets.xcassets */; };
 		E284EBBD26AE01900016AA0F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E284EBBC26AE01900016AA0F /* Preview Assets.xcassets */; };
-		E284EBC026AE01900016AA0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E284EBBE26AE01900016AA0F /* Main.storyboard */; };
 		E284EBCC26AE01EA0016AA0F /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBCB26AE01EA0016AA0F /* Buttons.swift */; };
 		E284EBD226AE01F00016AA0F /* HUISurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBCF26AE01F00016AA0F /* HUISurfaceView.swift */; };
 		E284EBD326AE01F00016AA0F /* MixerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD026AE01F00016AA0F /* MixerView.swift */; };
@@ -71,11 +70,10 @@
 		E283F0B2274103C80037F199 /* NumPadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumPadView.swift; sourceTree = "<group>"; };
 		E283F0B4274103E00037F199 /* TransportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportView.swift; sourceTree = "<group>"; };
 		E284EBB226AE018F0016AA0F /* HUITest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUITest.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E284EBB526AE018F0016AA0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E284EBB526AE018F0016AA0F /* HUITestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUITestApp.swift; sourceTree = "<group>"; };
 		E284EBB726AE018F0016AA0F /* HUIClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUIClientView.swift; sourceTree = "<group>"; };
 		E284EBB926AE01900016AA0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E284EBBC26AE01900016AA0F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E284EBBF26AE01900016AA0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E284EBC126AE01900016AA0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E284EBC226AE01900016AA0F /* HUITest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HUITest.entitlements; sourceTree = "<group>"; };
 		E284EBCB26AE01EA0016AA0F /* Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -171,14 +169,13 @@
 		E284EBB426AE018F0016AA0F /* HUITest */ = {
 			isa = PBXGroup;
 			children = (
-				E284EBB526AE018F0016AA0F /* AppDelegate.swift */,
 				E246E3C428EBF59600BB786D /* HUIHostView */,
 				E284EBCE26AE01F00016AA0F /* HUISurfaceView */,
 				E284EBCA26AE01EA0016AA0F /* Control Views */,
+				E284EBB526AE018F0016AA0F /* HUITestApp.swift */,
 				E284EBD726AE02090016AA0F /* HUISwitch Wrapper.swift */,
 				E232239E2914F596005F0C12 /* Utilities.swift */,
 				E21628E326E2DFF30022B66F /* Logger.swift */,
-				E284EBBE26AE01900016AA0F /* Main.storyboard */,
 				E284EBC126AE01900016AA0F /* Info.plist */,
 				E284EBB926AE01900016AA0F /* Assets.xcassets */,
 				E284EBC226AE01900016AA0F /* HUITest.entitlements */,
@@ -254,8 +251,9 @@
 		E284EBAA26AE018F0016AA0F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					E284EBB126AE018F0016AA0F = {
 						CreatedOnToolsVersion = 12.4;
@@ -289,7 +287,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E284EBC026AE01900016AA0F /* Main.storyboard in Resources */,
 				E284EBBD26AE01900016AA0F /* Preview Assets.xcassets in Resources */,
 				E284EBBA26AE01900016AA0F /* Assets.xcassets in Resources */,
 			);
@@ -321,7 +318,7 @@
 				E283F0A7274102A60037F199 /* FaderView.swift in Sources */,
 				E246E3CA28EC67D900BB786D /* SwiftUI Extensions.swift in Sources */,
 				E246E3C828EC679D00BB786D /* MomentaryPressView.swift in Sources */,
-				E284EBB626AE018F0016AA0F /* AppDelegate.swift in Sources */,
+				E284EBB626AE018F0016AA0F /* HUITestApp.swift in Sources */,
 				E284EBD426AE01F00016AA0F /* TopView.swift in Sources */,
 				E284EBD326AE01F00016AA0F /* MixerView.swift in Sources */,
 				E283F0932740AF7E0037F199 /* RightSideView.swift in Sources */,
@@ -338,22 +335,12 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXVariantGroup section */
-		E284EBBE26AE01900016AA0F /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E284EBBF26AE01900016AA0F /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
 		E284EBC326AE01900016AA0F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -388,6 +375,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -402,7 +390,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -416,6 +404,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -450,6 +439,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -458,7 +448,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -564,7 +554,7 @@
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.3;
+				minimumVersion = 0.9.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

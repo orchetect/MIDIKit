@@ -27,24 +27,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.makeKeyAndVisible()
         }
     }
-
-    func sceneDidDisconnect(_ scene: UIScene) {
-        // empty
-    }
-
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        // empty
-    }
-
-    func sceneWillResignActive(_ scene: UIScene) {
-        // empty
-    }
-
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        // empty
-    }
-
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        // empty
-    }
 }

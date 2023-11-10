@@ -4,13 +4,11 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
-    
     let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
@@ -18,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
     
     let virtualInputName = "TestApp Input"
+    
+    var window: UIWindow?
     
     func application(
         _ application: UIApplication,

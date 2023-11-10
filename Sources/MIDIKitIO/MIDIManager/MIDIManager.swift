@@ -13,7 +13,12 @@ import Foundation
 ///
 /// One ``MIDIManager`` instance stored in a global lifecycle context can manage multiple MIDI ports
 /// and connections, and is usually sufficient for all of an application's MIDI needs.
-public final class MIDIManager: NSObject {
+///
+/// > Tip:
+/// >
+/// > For SwiftUI and Combine environments, see the ``ObservableMIDIManager`` subclass which adds
+/// > published devices and endpoints properties.
+public class MIDIManager: NSObject {
     // MARK: - Properties
     
     /// MIDI Client Name.
@@ -70,22 +75,26 @@ public final class MIDIManager: NSObject {
     ///
     /// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
     /// - Throws: ``MIDIIOError``
-    public func unmanagedPersistentThruConnections(ownerID: String) throws
-    -> [CoreMIDIThruConnectionRef] {
+    public func unmanagedPersistentThruConnections(
+        ownerID: String
+    ) throws -> [CoreMIDIThruConnectionRef] {
         try getSystemThruConnectionsPersistentEntries(matching: ownerID)
     }
     
     /// MIDI devices in the system.
-    public internal(set) var devices: MIDIDevicesProtocol = MIDIDevices()
+    public internal(set) var devices: MIDIDevices = MIDIDevices()
     
     /// MIDI input and output endpoints in the system.
-    public internal(set) var endpoints: MIDIEndpointsProtocol = MIDIEndpoints()
+    public internal(set) var endpoints: MIDIEndpoints
     
     /// Handler that is called when state has changed in the manager.
-    public var notificationHandler: ((
+    public typealias NotificationHandler = (
         _ notification: MIDIIONotification,
         _ manager: MIDIManager
-    ) -> Void)?
+    ) -> Void
+    
+    /// Handler that is called when state has changed in the manager.
+    public var notificationHandler: NotificationHandler?
     
     /// Internal: system state cache for notification handling.
     var notificationCache: MIDIIOObjectCache?
@@ -111,18 +120,15 @@ public final class MIDIManager: NSObject {
         clientName: String,
         model: String,
         manufacturer: String,
-        notificationHandler: ((
-            _ notification: MIDIIONotification,
-            _ manager: MIDIManager
-        ) -> Void)? = nil
+        notificationHandler: NotificationHandler? = nil
     ) {
         // API version
         preferredAPI = .bestForPlatform()
-    
+        
         // queue client name
         var clientNameForQueue = clientName.onlyAlphanumerics
         if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
-    
+        
         // manager event queue
         let eventQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
             + ".midiManager." + clientNameForQueue + ".events"
@@ -133,17 +139,21 @@ public final class MIDIManager: NSObject {
             autoreleaseFrequency: .workItem,
             target: .global(qos: .userInitiated)
         )
-    
+        
         // assign other properties
         self.clientName = clientName
         self.model = model
         self.manufacturer = manufacturer
         self.notificationHandler = notificationHandler
-    
+        
+        // endpoints
+        endpoints = MIDIEndpoints(manager: nil)
+        
         super.init()
-    
-        endpoints = MIDIEndpoints(manager: self)
-    
+        
+        // we can only add manager reference to endpoints after manager is initialized
+        endpoints.manager = self
+        
         addNetworkSessionObservers()
     }
     
@@ -155,7 +165,7 @@ public final class MIDIManager: NSObject {
             // or only client owned by an app, the MIDI server may exit if there are no other
             // clients remaining in the system"
             // _ = MIDIClientDispose(coreMIDIClientRef)
-    
+            
             NotificationCenter.default.removeObserver(self)
         }
     }
@@ -171,33 +181,10 @@ public final class MIDIManager: NSObject {
     }
     
     /// Internal: updates cached properties for all objects.
-    dynamic func updateObjectsCache() {
-        #if canImport(Combine)
-        if #available(
-            macOS 10.15,
-            macCatalyst 13,
-            iOS 13,
-            /* tvOS 13, watchOS 6, */ *
-        ) {
-            // calling this means we don't need to use @Published on local variables in order for
-            // Combine/SwiftUI to be notified that ObservableObject class property values have
-            // changed
-            objectWillChange.send()
-        }
-        #endif
-    
+    func updateObjectsCache() {
         devices.updateCachedProperties()
         endpoints.updateCachedProperties()
     }
 }
-
-#if canImport(Combine)
-import Combine
-
-@available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
-extension MIDIManager: ObservableObject {
-    // nothing here; just add ObservableObject conformance
-}
-#endif
 
 #endif

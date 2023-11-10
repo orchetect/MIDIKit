@@ -7,6 +7,7 @@ Endpoints represent both virtual and physical MIDI inputs (destinations) and out
 ### Endpoints in the System
 
 - ``MIDIManager/endpoints``
+- ``ObservableMIDIManager/observableEndpoints``
 
 ### Endpoint Identification
 
@@ -26,3 +27,5 @@ Endpoints represent both virtual and physical MIDI inputs (destinations) and out
 ### Endpoint Filtering
 
 - ``MIDIEndpointFilter``
+- ``MIDIEndpointFilterMask``
+- ``MIDIEndpointMaskedFilter``

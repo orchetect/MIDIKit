@@ -4,36 +4,34 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import SwiftUI
+import Combine
 
 @main
 struct EndpointPickersApp: App {
-    let midiManager = MIDIManager(
+    @ObservedObject var midiManager = ObservableMIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    let midiHelper = MIDIHelper()
+    @ObservedObject var midiHelper = MIDIHelper()
     
     @AppStorage(MIDIHelper.PrefKeys.midiInID)
-    var midiInSelectedID: MIDIIdentifier = .invalidMIDIIdentifier
+    var midiInSelectedID: MIDIIdentifier?
     
     @AppStorage(MIDIHelper.PrefKeys.midiInDisplayName)
-    var midiInSelectedDisplayName: String = "None"
+    var midiInSelectedDisplayName: String?
     
     @AppStorage(MIDIHelper.PrefKeys.midiOutID)
-    var midiOutSelectedID: MIDIIdentifier = .invalidMIDIIdentifier
+    var midiOutSelectedID: MIDIIdentifier?
     
     @AppStorage(MIDIHelper.PrefKeys.midiOutDisplayName)
-    var midiOutSelectedDisplayName: String = "None"
+    var midiOutSelectedDisplayName: String?
     
     init() {
         midiHelper.setup(midiManager: midiManager)
-        // restore saved MIDI endpoint selections and connections
-        midiHelper.midiInUpdateConnection(selectedUniqueID: midiInSelectedID)
-        midiHelper.midiOutUpdateConnection(selectedUniqueID: midiOutSelectedID)
     }
     
     var body: some Scene {
@@ -46,28 +44,6 @@ struct EndpointPickersApp: App {
             )
             .environmentObject(midiManager)
             .environmentObject(midiHelper)
-        }
-        .onChange(of: midiInSelectedID) { uid in
-            // cache endpoint name persistently so we can show it in the event the endpoint
-            // disappears
-            if uid == .invalidMIDIIdentifier {
-                midiInSelectedDisplayName = "None"
-            } else if let found = midiManager.endpoints.outputs.first(whereUniqueID: uid) {
-                midiInSelectedDisplayName = found.displayName
-            }
-    
-            midiHelper.midiInUpdateConnection(selectedUniqueID: uid)
-        }
-        .onChange(of: midiOutSelectedID) { uid in
-            // cache endpoint name persistently so we can show it in the event the endpoint
-            // disappears
-            if uid == .invalidMIDIIdentifier {
-                midiOutSelectedDisplayName = "None"
-            } else if let found = midiManager.endpoints.inputs.first(whereUniqueID: uid) {
-                midiOutSelectedDisplayName = found.displayName
-            }
-    
-            midiHelper.midiOutUpdateConnection(selectedUniqueID: uid)
         }
     }
 }
