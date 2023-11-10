@@ -64,6 +64,7 @@
 		E23AD7272AFE1EE700A69A01 /* LegacyDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyDetailsView.swift; sourceTree = "<group>"; };
 		E24696C22880B69E00485518 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E26B849B25EDA4F400080052 /* TableDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableDetailsView.swift; sourceTree = "<group>"; };
+		E2CEA4962AFE3C6100BE92F7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +113,7 @@
 		E230C49625AE7B31005DCB55 = {
 			isa = PBXGroup;
 			children = (
+				E2CEA4962AFE3C6100BE92F7 /* README.md */,
 				E230C4A125AE7B31005DCB55 /* MIDISystemInfo */,
 				E230C4A025AE7B31005DCB55 /* Products */,
 			);
