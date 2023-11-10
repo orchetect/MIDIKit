@@ -233,6 +233,8 @@ public final class ObservableMIDIManager: MIDIManager, ObservableObject {
     public override func updateObjectsCache() {
         objectWillChange.send()
         super.updateObjectsCache()
+        
+        observableDevices.updateCachedProperties()
         observableEndpoints.updateCachedProperties()
     }
 }
