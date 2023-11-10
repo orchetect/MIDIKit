@@ -5,4 +5,3 @@
 //
 
 @_exported import MIDIKitCore
-@_exported import MIDIKitIO
