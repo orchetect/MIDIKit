@@ -83,10 +83,13 @@ public class MIDIManager: NSObject {
     public internal(set) var endpoints: MIDIEndpoints
     
     /// Handler that is called when state has changed in the manager.
-    public var notificationHandler: ((
+    public typealias NotificationHandler = (
         _ notification: MIDIIONotification,
         _ manager: MIDIManager
-    ) -> Void)?
+    ) -> Void
+    
+    /// Handler that is called when state has changed in the manager.
+    public var notificationHandler: NotificationHandler?
     
     /// Internal: system state cache for notification handling.
     var notificationCache: MIDIIOObjectCache?
@@ -112,10 +115,7 @@ public class MIDIManager: NSObject {
         clientName: String,
         model: String,
         manufacturer: String,
-        notificationHandler: ((
-            _ notification: MIDIIONotification,
-            _ manager: MIDIManager
-        ) -> Void)? = nil
+        notificationHandler: NotificationHandler? = nil
     ) {
         // API version
         preferredAPI = .bestForPlatform()
@@ -201,6 +201,12 @@ public final class ObservableMIDIManager: MIDIManager, ObservableObject {
     @Published 
     public internal(set) var observableEndpoints = MIDIEndpoints(manager: nil)
     
+    /// Handler that is called when state has changed in the manager.
+    public typealias ObservableNotificationHandler = (
+        _ notification: MIDIIONotification,
+        _ manager: ObservableMIDIManager
+    ) -> Void
+    
     // MARK: - Init
     
     /// Initialize the MIDI manager (and Core MIDI client).
@@ -217,16 +223,25 @@ public final class ObservableMIDIManager: MIDIManager, ObservableObject {
         clientName: String,
         model: String,
         manufacturer: String,
-        notificationHandler: ((
-            _ notification: MIDIIONotification,
-            _ manager: MIDIManager
-        ) -> Void)? = nil
+        notificationHandler: ObservableNotificationHandler? = nil
     ) {
+        // wrap base MIDIManager handler with one that supplies an observable manager reference
+        var notificationHandlerWrapper: NotificationHandler? = nil
+        if let notificationHandler = notificationHandler {
+            notificationHandlerWrapper = { notif, manager in
+                guard let typedManager = manager as? ObservableMIDIManager else {
+                    assertionFailure("MIDI Manager is not expected type ObservableMIDIManager.")
+                    return
+                }
+                notificationHandler(notif, typedManager)
+            }
+        }
+        
         super.init(
             clientName: clientName,
             model: model,
             manufacturer: manufacturer,
-            notificationHandler: notificationHandler
+            notificationHandler: notificationHandlerWrapper
         )
         
         observableEndpoints.manager = self
