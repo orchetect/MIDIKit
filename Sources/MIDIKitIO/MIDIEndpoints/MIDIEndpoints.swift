@@ -96,30 +96,25 @@ extension MIDIEndpointsProtocol {
 }
 
 /// Manages system MIDI endpoints information cache.
-public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
+public struct MIDIEndpoints: MIDIEndpointsProtocol {
     /// Weak reference to ``MIDIManager``.
     weak var manager: MIDIManager?
     
-    public internal(set) dynamic var inputs: [MIDIInputEndpoint] = []
-    public internal(set) dynamic var inputsUnowned: [MIDIInputEndpoint] = []
+    public internal(set) var inputs: [MIDIInputEndpoint] = []
+    public internal(set) var inputsUnowned: [MIDIInputEndpoint] = []
     
-    public internal(set) dynamic var outputs: [MIDIOutputEndpoint] = []
-    public internal(set) dynamic var outputsUnowned: [MIDIOutputEndpoint] = []
+    public internal(set) var outputs: [MIDIOutputEndpoint] = []
+    public internal(set) var outputsUnowned: [MIDIOutputEndpoint] = []
     
-    override init() {
-        super.init()
-    }
-    
-    init(manager: MIDIManager) {
+    init(manager: MIDIManager?) {
         self.manager = manager
-        super.init()
     }
     
     /// Manually update the locally cached contents from the system.
     ///
     /// It is not necessary to call this method as the ``MIDIManager`` will automate updating device
     /// cache.
-    public func updateCachedProperties() {
+    public mutating func updateCachedProperties() {
         let fetched = _fetchProperties(manager: manager)
         
         inputs = fetched.inputs
@@ -128,47 +123,5 @@ public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
         outputsUnowned = fetched.outputsUnowned
     }
 }
-
-#if canImport(Combine)
-
-/// Manages system MIDI endpoints information cache.
-/// Class and properties are published for use in SwiftUI and Combine.
-@available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
-public final class MIDIObservableEndpoints: NSObject, ObservableObject, MIDIEndpointsProtocol {
-    /// Weak reference to ``MIDIManager``.
-    internal weak var manager: MIDIManager?
-    
-    @Published public internal(set) dynamic var inputs: [MIDIInputEndpoint] = []
-    @Published public internal(set) dynamic var inputsUnowned: [MIDIInputEndpoint] = []
-    
-    @Published public internal(set) dynamic var outputs: [MIDIOutputEndpoint] = []
-    @Published public internal(set) dynamic var outputsUnowned: [MIDIOutputEndpoint] = []
-    
-    override internal init() {
-        super.init()
-    }
-    
-    internal init(manager: MIDIManager?) {
-        self.manager = manager
-        super.init()
-    }
-    
-    /// Manually update the locally cached contents from the system.
-    ///
-    /// It is not necessary to call this method as the ``MIDIManager`` will automate updating device
-    /// cache.
-    public func updateCachedProperties() {
-        objectWillChange.send()
-        
-        let fetched = _fetchProperties(manager: manager)
-        
-        inputs = fetched.inputs
-        inputsUnowned = fetched.inputsUnowned
-        outputs = fetched.outputs
-        outputsUnowned = fetched.outputsUnowned
-    }
-}
-
-#endif
 
 #endif

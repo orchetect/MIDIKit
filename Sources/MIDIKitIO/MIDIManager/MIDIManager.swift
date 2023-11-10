@@ -142,7 +142,7 @@ public class MIDIManager: NSObject {
         self.notificationHandler = notificationHandler
         
         // endpoints
-        endpoints = MIDIEndpoints()
+        endpoints = MIDIEndpoints(manager: nil)
         
         super.init()
         
@@ -176,7 +176,7 @@ public class MIDIManager: NSObject {
     }
     
     /// Internal: updates cached properties for all objects.
-    dynamic func updateObjectsCache() {
+    func updateObjectsCache() {
         devices.updateCachedProperties()
         endpoints.updateCachedProperties()
     }
@@ -193,11 +193,13 @@ public final class ObservableMIDIManager: MIDIManager, ObservableObject {
     
     /// MIDI devices in the system.
     /// This is an observable implementation of ``devices``.
-    @Published public internal(set) var observableDevices = MIDIObservableDevices()
+    @Published 
+    public internal(set) var observableDevices = MIDIDevices()
     
     /// MIDI input and output endpoints in the system.
     /// This is an observable implementation of ``endpoints``.
-    @Published public internal(set) var observableEndpoints = MIDIObservableEndpoints()
+    @Published 
+    public internal(set) var observableEndpoints = MIDIEndpoints(manager: nil)
     
     // MARK: - Init
     
@@ -231,7 +233,7 @@ public final class ObservableMIDIManager: MIDIManager, ObservableObject {
     }
     
     public override func updateObjectsCache() {
-        objectWillChange.send()
+        // objectWillChange.send() // redundant since all local properties are marked @Published
         super.updateObjectsCache()
         
         observableDevices.updateCachedProperties()
