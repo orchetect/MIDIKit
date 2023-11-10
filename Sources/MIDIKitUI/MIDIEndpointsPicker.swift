@@ -17,8 +17,8 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
     let title: String
     var endpoints: [Endpoint]
     var maskedFilter: MIDIEndpointMaskedFilter?
-    @Binding var selection: MIDIIdentifier?
-    @Binding var cachedSelectionName: String?
+    @Binding var selectionID: MIDIIdentifier?
+    @Binding var selectionDisplayName: String?
     var showIcons: Bool
     
     @State private var ids: [MIDIIdentifier] = []
@@ -27,16 +27,16 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         title: String,
         endpoints: [Endpoint],
         maskedFilter: MIDIEndpointMaskedFilter?,
-        selection: Binding<MIDIIdentifier?>,
-        cachedSelectionName: Binding<String?>,
+        selectionID: Binding<MIDIIdentifier?>,
+        selectionDisplayName: Binding<String?>,
         showIcons: Bool,
         midiManager: ObservableMIDIManager?
     ) {
         self.title = title
         self.endpoints = endpoints
         self.maskedFilter = maskedFilter
-        _selection = selection
-        _cachedSelectionName = cachedSelectionName
+        _selectionID = selectionID
+        _selectionDisplayName = selectionDisplayName
         self.showIcons = showIcons
         self.midiManager = midiManager
         
@@ -45,37 +45,59 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
     }
     
     public var body: some View {
-        Picker(title, selection: $selection) {
+        Picker(title, selection: $selectionID) {
             Text("None")
                 .tag(MIDIIdentifier?.none)
             
             ForEach(ids, id: \.self) {
                 EndpointRow(
                     endpoint: endpoint(for: $0),
-                    cachedSelectionName: $cachedSelectionName,
+                    selectionDisplayName: $selectionDisplayName,
                     showIcon: showIcons
                 )
                 .tag($0 as MIDIIdentifier?)
             }
         }
         .onAppear {
+            updateID(endpoints: endpoints)
             updateIDs(endpoints: endpoints, maskedFilter: maskedFilter)
         }
         .onChange(of: maskedFilter) { newValue in
             updateIDs(endpoints: endpoints, maskedFilter: newValue)
         }
         .onChange(of: endpoints) { newValue in
+            updateID(endpoints: newValue)
             updateIDs(endpoints: newValue, maskedFilter: maskedFilter)
         }
-        .onChange(of: selection) { newValue in
+        .onChange(of: selectionID) { newValue in
             updateIDs(endpoints: endpoints, maskedFilter: maskedFilter)
-            guard let selection = newValue else {
-                cachedSelectionName = nil
+            guard let selectionID = newValue else {
+                selectionDisplayName = nil
                 return
             }
-            if let dn = endpoint(for: selection)?.displayName {
-                cachedSelectionName = dn
+            if let dn = endpoint(for: selectionID)?.displayName {
+                selectionDisplayName = dn
             }
+        }
+    }
+    
+    private func updateID(endpoints: [Endpoint]) {
+        if selectionID == .invalidMIDIIdentifier {
+            selectionID = nil
+            selectionDisplayName = nil
+            return
+        }
+        
+        if let selectionID = selectionID,
+           let selectionDisplayName = selectionDisplayName,
+           let found = endpoints.first(
+               whereUniqueID: selectionID,
+               fallbackDisplayName: selectionDisplayName
+           )
+        {
+            self.selectionDisplayName = found.displayName
+            // update ID in case it changed
+            if self.selectionID != found.uniqueID { self.selectionID = found.uniqueID }
         }
     }
     
@@ -93,8 +115,8 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
                 .map(\.id)
         }
         
-        if let selection, !endpointIDs.contains(selection) {
-            return [selection] + endpointIDs
+        if let selectionID, !endpointIDs.contains(selectionID) {
+            return [selectionID] + endpointIDs
         } else {
             return endpointIDs
         }
@@ -114,7 +136,7 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
     
     private struct EndpointRow: View {
         let endpoint: Endpoint?
-        @Binding var cachedSelectionName: String?
+        @Binding var selectionDisplayName: String?
         let showIcon: Bool
         
         var body: some View {
@@ -150,8 +172,8 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         
         private var missingText: String {
             showIcon
-                ? cachedSelectionName ?? "Missing"
-                : (cachedSelectionName ?? "") + " (Missing)"
+                ? selectionDisplayName ?? "Missing"
+                : (selectionDisplayName ?? "") + " (Missing)"
         }
         
         @ViewBuilder
@@ -179,21 +201,21 @@ public struct MIDIInputsPicker: View {
     @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     public var title: String
-    @Binding public var selection: MIDIIdentifier?
-    @Binding public var cachedSelectionName: String?
+    @Binding public var selectionID: MIDIIdentifier?
+    @Binding public var selectionDisplayName: String?
     public var showIcons: Bool
     public var hideOwned: Bool
     
     public init(
         title: String,
-        selection: Binding<MIDIIdentifier?>,
-        cachedSelectionName: Binding<String?>,
+        selectionID: Binding<MIDIIdentifier?>,
+        selectionDisplayName: Binding<String?>,
         showIcons: Bool = true,
         hideOwned: Bool = false
     ) {
         self.title = title
-        _selection = selection
-        _cachedSelectionName = cachedSelectionName
+        _selectionID = selectionID
+        _selectionDisplayName = selectionDisplayName
         self.showIcons = showIcons
         self.hideOwned = hideOwned
     }
@@ -203,8 +225,8 @@ public struct MIDIInputsPicker: View {
             title: title,
             endpoints: midiManager.observableEndpoints.inputs,
             maskedFilter: maskedFilter,
-            selection: $selection,
-            cachedSelectionName: $cachedSelectionName,
+            selectionID: $selectionID,
+            selectionDisplayName: $selectionDisplayName,
             showIcons: showIcons,
             midiManager: midiManager
         )
@@ -221,21 +243,21 @@ public struct MIDIOutputsPicker: View {
     @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     public var title: String
-    @Binding public var selection: MIDIIdentifier?
-    @Binding public var cachedSelectionName: String?
+    @Binding public var selectionID: MIDIIdentifier?
+    @Binding public var selectionDisplayName: String?
     public var showIcons: Bool
     public var hideOwned: Bool
     
     public init(
         title: String,
-        selection: Binding<MIDIIdentifier?>,
-        cachedSelectionName: Binding<String?>,
+        selectionID: Binding<MIDIIdentifier?>,
+        selectionDisplayName: Binding<String?>,
         showIcons: Bool = true,
         hideOwned: Bool = false
     ) {
         self.title = title
-        _selection = selection
-        _cachedSelectionName = cachedSelectionName
+        _selectionID = selectionID
+        _selectionDisplayName = selectionDisplayName
         self.showIcons = showIcons
         self.hideOwned = hideOwned
     }
@@ -245,8 +267,8 @@ public struct MIDIOutputsPicker: View {
             title: title,
             endpoints: midiManager.observableEndpoints.outputs,
             maskedFilter: maskedFilter,
-            selection: $selection,
-            cachedSelectionName: $cachedSelectionName,
+            selectionID: $selectionID,
+            selectionDisplayName: $selectionDisplayName,
             showIcons: showIcons,
             midiManager: midiManager
         )
