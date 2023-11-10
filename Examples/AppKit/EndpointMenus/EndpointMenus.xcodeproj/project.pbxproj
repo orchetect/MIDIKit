@@ -11,6 +11,7 @@
 		E24BA245284F1A3400AA6767 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E24BA243284F1A3400AA6767 /* Main.storyboard */; };
 		E29FF29F2880BC99005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF29E2880BC99005E2BC2 /* Images.xcassets */; };
 		E2CEA4922AFE2DD800BE92F7 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E2CEA4912AFE2DD800BE92F7 /* MIDIKit */; };
+		E2CEA4942AFE2E6400BE92F7 /* MIDIEndpointsMenusHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CEA4932AFE2E6400BE92F7 /* MIDIEndpointsMenusHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		E24BA246284F1A3400AA6767 /* EndpointMenus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EndpointMenus.entitlements; sourceTree = "<group>"; };
 		E24CB06D285172CF00649B50 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E29FF29E2880BC99005E2BC2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		E2CEA4932AFE2E6400BE92F7 /* MIDIEndpointsMenusHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEndpointsMenusHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				E24BA23D284F1A3300AA6767 /* AppDelegate.swift */,
+				E2CEA4932AFE2E6400BE92F7 /* MIDIEndpointsMenusHelper.swift */,
 				E24BA243284F1A3400AA6767 /* Main.storyboard */,
 				E24BA246284F1A3400AA6767 /* EndpointMenus.entitlements */,
 				E29FF29E2880BC99005E2BC2 /* Images.xcassets */,
@@ -93,7 +96,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1400;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					E24BA239284F1A3300AA6767 = {
 						CreatedOnToolsVersion = 14.0;
@@ -138,6 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2CEA4942AFE2E6400BE92F7 /* MIDIEndpointsMenusHelper.swift in Sources */,
 				E24BA23E284F1A3300AA6767 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -160,6 +164,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -193,6 +198,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -207,7 +213,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -221,6 +227,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -254,6 +261,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -262,7 +270,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
