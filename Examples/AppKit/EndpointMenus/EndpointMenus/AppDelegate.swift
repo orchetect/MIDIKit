@@ -5,7 +5,7 @@
 //
 
 import Cocoa
-import MIDIKit
+import MIDIKitIO
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
