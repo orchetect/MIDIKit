@@ -60,6 +60,35 @@ public struct MIDIEndpointFilter: Equatable, Hashable {
     }
 }
 
+extension MIDIEndpointFilter {
+    /// Process a collection of MIDI endpoints events using this filter.
+    ///
+    /// Alternatively, a `Collection` category method is available:
+    ///
+    /// ```swift
+    /// let endpoints: [MIDIInputEndpoint] = [ ... ]
+    /// let filter = MIDIEndpointFilter( ... )
+    ///
+    /// // filter only matches
+    /// let filtered = endpoints.filter(filter, in: midiManager)
+    ///
+    /// // filter by dropping matches
+    /// let filtered = endpoints.filter(dropping: filter, in: midiManager)
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - endpoints: Collection of endpoints to filter.
+    ///   - mask: Filter behavior.
+    ///   - manager: Reference to the MIDI manager.
+    public func apply<Element: MIDIEndpoint>(
+        to endpoints: some Collection<Element>,
+        mask: MIDIEndpointFilterMask,
+        in manager: MIDIManager
+    ) -> [Element] {
+        endpoints.filter(mask, self, in: manager)
+    }
+}
+
 extension MIDIEndpointFilter: Sendable { }
 
 extension MIDIEndpointFilter {
