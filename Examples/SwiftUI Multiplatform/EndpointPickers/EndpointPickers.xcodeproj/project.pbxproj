@@ -410,8 +410,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
-				branch = endpoints;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
