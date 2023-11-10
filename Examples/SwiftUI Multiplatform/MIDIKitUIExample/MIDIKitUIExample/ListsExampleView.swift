@@ -87,6 +87,9 @@ struct ListsExampleView: View {
             showIcons: showIcons,
             hideOwned: hideCreated
         )
+        // note: supply a non-nil tag to auto-update an output connection in MIDIManager
+        .updatingOutputConnection(withTag: nil)
+        
         #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))
         #endif
@@ -99,6 +102,9 @@ struct ListsExampleView: View {
             showIcons: showIcons,
             hideOwned: hideCreated
         )
+        // note: supply a non-nil tag to auto-update an input connection in MIDIManager
+        .updatingInputConnection(withTag: nil)
+        
         #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))
         #endif
