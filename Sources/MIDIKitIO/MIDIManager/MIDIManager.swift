@@ -13,7 +13,7 @@ import Foundation
 ///
 /// One ``MIDIManager`` instance stored in a global lifecycle context can manage multiple MIDI ports
 /// and connections, and is usually sufficient for all of an application's MIDI needs.
-public final class MIDIManager: NSObject {
+public class MIDIManager: NSObject {
     // MARK: - Properties
     
     /// MIDI Client Name.
@@ -82,9 +82,6 @@ public final class MIDIManager: NSObject {
     /// MIDI input and output endpoints in the system.
     public internal(set) var endpoints: MIDIEndpoints
     
-    /// Type-erased internal backing storage for ``observableEndpoints``.
-    internal var _observableEndpoints: (any MIDIEndpointsProtocol)?
-    
     /// Handler that is called when state has changed in the manager.
     public var notificationHandler: ((
         _ notification: MIDIIONotification,
@@ -145,21 +142,12 @@ public final class MIDIManager: NSObject {
         self.notificationHandler = notificationHandler
         
         // endpoints
-        if #available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *) {
-            endpoints = MIDIEndpoints()
-            _observableEndpoints = MIDIObservableEndpoints()
-        } else {
-            endpoints = MIDIEndpoints()
-            _observableEndpoints = nil
-        }
+        endpoints = MIDIEndpoints()
         
         super.init()
         
         // we can only add manager reference to endpoints after manager is initialized
         endpoints.manager = self
-        if #available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *) {
-            observableEndpoints.manager = self
-        }
         
         addNetworkSessionObservers()
     }
@@ -189,39 +177,57 @@ public final class MIDIManager: NSObject {
     
     /// Internal: updates cached properties for all objects.
     dynamic func updateObjectsCache() {
-        #if canImport(Combine)
-        if #available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *) {
-            // calling this means we don't need to use @Published on local variables in order for
-            // Combine/SwiftUI to be notified that ObservableObject class property values have
-            // changed
-            objectWillChange.send()
-        }
-        #endif
-    
         devices.updateCachedProperties()
         endpoints.updateCachedProperties()
-        _observableEndpoints?.updateCachedProperties()
     }
 }
 
 #if canImport(Combine)
 import Combine
 
+/// ``MIDIManager`` subclass that is observable in a SwiftUI or Combine context.
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
-extension MIDIManager: ObservableObject {
-    /// MIDI input and output endpoints in the system.
-    /// The same as ``endpoints`` but returned as an `ObservableObject` for use in SwiftUI and Combine.
-    public var observableEndpoints: MIDIObservableEndpoints {
-        // we can be reasonably guaranteed endpoints will be
-        guard let typedEndpoints = _observableEndpoints as? MIDIObservableEndpoints else {
-            assertionFailure(
-                "MIDI Manager's endpoints instance is not expected type: \(type(of: endpoints))."
-            )
-            // this should never happen, but just in case, return a new class instance
-            // to avoid halting execution
-            return MIDIObservableEndpoints(manager: self)
-        }
-        return typedEndpoints
+public final class ObservableMIDIManager: MIDIManager, ObservableObject {
+    // MARK: - Properties
+    
+    /// Type-erased internal backing storage for ``observableEndpoints``.
+    @Published public var observableEndpoints = MIDIObservableEndpoints()
+    
+    // MARK: - Init
+    
+    /// Initialize the MIDI manager (and Core MIDI client).
+    ///
+    /// - Parameters:
+    ///   - clientName: Name identifying this instance, used as Core MIDI client ID.
+    ///     This is internal and not visible to the end-user.
+    ///   - model: The name of your software, which will be visible to the end-user in ports created
+    ///     by the manager.
+    ///   - manufacturer: The name of your company, which may be visible to the end-user in ports
+    ///     created by the manager.
+    ///   - notificationHandler: Optionally supply a callback handler for MIDI system notifications.
+    public override init(
+        clientName: String,
+        model: String,
+        manufacturer: String,
+        notificationHandler: ((
+            _ notification: MIDIIONotification,
+            _ manager: MIDIManager
+        ) -> Void)? = nil
+    ) {
+        super.init(
+            clientName: clientName,
+            model: model,
+            manufacturer: manufacturer,
+            notificationHandler: notificationHandler
+        )
+        
+        observableEndpoints.manager = self
+    }
+    
+    public override func updateObjectsCache() {
+        objectWillChange.send()
+        super.updateObjectsCache()
+        observableEndpoints.updateCachedProperties()
     }
 }
 #endif

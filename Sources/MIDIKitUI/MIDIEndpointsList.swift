@@ -12,7 +12,7 @@ import SwiftUI
 @available(macOS 11.0, iOS 14.0, *)
 struct MIDIEndpointsList<Endpoint>: View
 where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdentifier {
-    @EnvironmentObject private var midiManager: MIDIManager
+    @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     var endpoints: [Endpoint]
     @State var filter: MIDIEndpointFilter
@@ -155,7 +155,7 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
 /// SwiftUI `List` view for selecting MIDI input endpoints.
 @available(macOS 11.0, iOS 14.0, *)
 public struct MIDIInputsList: View {
-    @EnvironmentObject private var midiManager: MIDIManager
+    @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     @Binding public var selection: MIDIIdentifier?
     @Binding public var cachedSelectionName: String?
@@ -189,7 +189,7 @@ public struct MIDIInputsList: View {
 /// SwiftUI `List` view for selecting MIDI output endpoints.
 @available(macOS 11.0, iOS 14.0, *)
 public struct MIDIOutputsList: View {
-    @EnvironmentObject private var midiManager: MIDIManager
+    @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     @Binding public var selection: MIDIIdentifier?
     @Binding public var cachedSelectionName: String?
