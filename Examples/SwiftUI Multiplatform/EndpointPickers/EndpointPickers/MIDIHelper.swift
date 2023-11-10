@@ -79,59 +79,10 @@ final class MIDIHelper: ObservableObject {
         midiManager?.managedInputConnections[Tags.midiIn]
     }
     
-    // TODO: refactor as `.updatingInputConnection(withTag: String)` view modifier on MIDIOutputsPicker
-    public func midiInUpdateConnection(
-        selectedUniqueID: MIDIIdentifier?,
-        selectedDisplayName: String?
-    ) {
-        guard let midiInputConnection else { return }
-    
-        guard let selectedUniqueID = selectedUniqueID,
-              let selectedDisplayName = selectedDisplayName,
-              selectedUniqueID != .invalidMIDIIdentifier
-        else {
-            midiInputConnection.removeAllOutputs()
-            return
-        }
-        
-        let criterium: MIDIEndpointIdentity = .uniqueIDWithFallback(
-            id: selectedUniqueID, fallbackDisplayName: selectedDisplayName
-        )
-        if midiInputConnection.outputsCriteria != [criterium] {
-            midiInputConnection.removeAllOutputs()
-            midiInputConnection.add(outputs: [criterium])
-        }
-    }
-    
     // MARK: - MIDI Output Connection
     
     public var midiOutputConnection: MIDIOutputConnection? {
         midiManager?.managedOutputConnections[Tags.midiOut]
-    }
-    
-    // TODO: refactor as `.updatingOutputConnection(withTag: String)` view modifier on MIDIInputsPicker
-    public func midiOutUpdateConnection(
-        selectedUniqueID: MIDIIdentifier?,
-        selectedDisplayName: String?
-    ) {
-        guard let midiOutputConnection else { return }
-    
-        guard let selectedUniqueID = selectedUniqueID,
-              let selectedDisplayName = selectedDisplayName,
-              selectedUniqueID != .invalidMIDIIdentifier
-        else {
-            midiOutputConnection.removeAllInputs()
-            return
-        }
-        
-        let criterium: MIDIEndpointIdentity = .uniqueIDWithFallback(
-            id: selectedUniqueID,
-            fallbackDisplayName: selectedDisplayName
-        )
-        if midiOutputConnection.inputsCriteria != [criterium] {
-            midiOutputConnection.removeAllInputs()
-            midiOutputConnection.add(inputs: [criterium])
-        }
     }
     
     // MARK: - Test Virtual Endpoints

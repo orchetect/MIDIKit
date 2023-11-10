@@ -32,16 +32,6 @@ struct EndpointPickersApp: App {
     
     init() {
         midiHelper.setup(midiManager: midiManager)
-        
-        // restore saved MIDI endpoint selections and connections
-        midiHelper.midiInUpdateConnection(
-            selectedUniqueID: midiInSelectedID,
-            selectedDisplayName: midiInSelectedDisplayName
-        )
-        midiHelper.midiOutUpdateConnection(
-            selectedUniqueID: midiOutSelectedID,
-            selectedDisplayName: midiOutSelectedDisplayName
-        )
     }
     
     var body: some Scene {
@@ -55,25 +45,5 @@ struct EndpointPickersApp: App {
             .environmentObject(midiManager)
             .environmentObject(midiHelper)
         }
-        .onChange(of: midiInSelectedID) { midiInSelectedIDChanged(to: $0) }
-        .onChange(of: midiOutSelectedID) { midiOutSelectedIDChanged(to: $0) }
-    }
-}
-
-// MARK: - Helpers
-
-extension EndpointPickersApp {
-    private func midiInSelectedIDChanged(to newOutputEndpointID: MIDIIdentifier?) {
-        midiHelper.midiInUpdateConnection(
-            selectedUniqueID: newOutputEndpointID,
-            selectedDisplayName: midiInSelectedDisplayName
-        )
-    }
-    
-    private func midiOutSelectedIDChanged(to newInputEndpointID: MIDIIdentifier?) {
-        midiHelper.midiOutUpdateConnection(
-            selectedUniqueID: newInputEndpointID,
-            selectedDisplayName: midiOutSelectedDisplayName
-        )
     }
 }

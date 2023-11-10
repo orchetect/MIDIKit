@@ -62,6 +62,7 @@ struct ContentView: View {
                 showIcons: true,
                 hideOwned: false
             )
+            .updatingInputConnection(withTag: MIDIHelper.Tags.midiIn)
             .padding([.leading, .trailing], 60)
             
             Toggle(
@@ -80,6 +81,7 @@ struct ContentView: View {
                 showIcons: true,
                 hideOwned: false
             )
+            .updatingOutputConnection(withTag: MIDIHelper.Tags.midiOut)
             .padding([.leading, .trailing], 60)
             
             HStack {
