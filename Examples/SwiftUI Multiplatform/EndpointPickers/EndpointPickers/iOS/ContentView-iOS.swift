@@ -7,17 +7,18 @@
 #if os(iOS)
 
 import MIDIKitIO
+import MIDIKitUI
 import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: ObservableMIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
-    @Binding var midiInSelectedID: MIDIIdentifier
-    @Binding var midiInSelectedDisplayName: String
+    @Binding var midiInSelectedID: MIDIIdentifier?
+    @Binding var midiInSelectedDisplayName: String?
     
-    @Binding var midiOutSelectedID: MIDIIdentifier
-    @Binding var midiOutSelectedDisplayName: String
+    @Binding var midiOutSelectedID: MIDIIdentifier?
+    @Binding var midiOutSelectedDisplayName: String?
     
     var body: some View {
         NavigationView {
@@ -64,11 +65,20 @@ struct ContentView: View {
     
     private var endpointSelectionSection: some View {
         Section() {
-            MIDIEndpointSelectionView(
-                midiInSelectedID: $midiInSelectedID,
-                midiInSelectedDisplayName: $midiInSelectedDisplayName,
-                midiOutSelectedID: $midiOutSelectedID,
-                midiOutSelectedDisplayName: $midiOutSelectedDisplayName
+            MIDIOutputsPicker(
+                title: "MIDI In",
+                selectionID: $midiInSelectedID,
+                selectionDisplayName: $midiInSelectedDisplayName,
+                showIcons: true,
+                hideOwned: false
+            )
+            
+            MIDIInputsPicker(
+                title: "MIDI Out",
+                selectionID: $midiOutSelectedID,
+                selectionDisplayName: $midiOutSelectedDisplayName,
+                showIcons: true,
+                hideOwned: false
             )
             
             Group {
@@ -143,10 +153,7 @@ struct ContentView: View {
 extension ContentView {
     private var isMIDIOutDisabled: Bool {
         midiOutSelectedID == .invalidMIDIIdentifier ||
-            !midiManager.observableEndpoints.inputs.contains(
-                whereUniqueID: midiOutSelectedID,
-                fallbackDisplayName: midiOutSelectedDisplayName
-            )
+        midiOutSelectedID == nil
     }
     
     func sendToConnection(_ event: MIDIEvent) {

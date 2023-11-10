@@ -7,17 +7,18 @@
 #if os(macOS)
 
 import MIDIKitIO
+import MIDIKitUI
 import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: ObservableMIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
-    @Binding var midiInSelectedID: MIDIIdentifier
-    @Binding var midiInSelectedDisplayName: String
+    @Binding var midiInSelectedID: MIDIIdentifier?
+    @Binding var midiInSelectedDisplayName: String?
     
-    @Binding var midiOutSelectedID: MIDIIdentifier
-    @Binding var midiOutSelectedDisplayName: String
+    @Binding var midiOutSelectedID: MIDIIdentifier?
+    @Binding var midiOutSelectedDisplayName: String?
     
     var body: some View {
         VStack {
@@ -54,9 +55,12 @@ struct ContentView: View {
     
     private var midiInConnectionView: some View {
         GroupBox(label: Text("MIDI In Connection")) {
-            MIDIInSelectionView(
-                midiInSelectedID: $midiInSelectedID,
-                midiInSelectedDisplayName: $midiInSelectedDisplayName
+            MIDIOutputsPicker(
+                title: "MIDI In",
+                selectionID: $midiInSelectedID,
+                selectionDisplayName: $midiInSelectedDisplayName,
+                showIcons: true,
+                hideOwned: false
             )
             .padding([.leading, .trailing], 60)
             
@@ -69,9 +73,12 @@ struct ContentView: View {
     
     private var midiOutConnectionView: some View {
         GroupBox(label: Text("MIDI Out Connection")) {
-            MIDIOutSelectionView(
-                midiOutSelectedID: $midiOutSelectedID,
-                midiOutSelectedDisplayName: $midiOutSelectedDisplayName
+            MIDIInputsPicker(
+                title: "MIDI Out",
+                selectionID: $midiOutSelectedID,
+                selectionDisplayName: $midiOutSelectedDisplayName,
+                showIcons: true,
+                hideOwned: false
             )
             .padding([.leading, .trailing], 60)
             
@@ -145,10 +152,7 @@ struct ContentView: View {
 extension ContentView {
     private var isMIDIOutDisabled: Bool {
         midiOutSelectedID == .invalidMIDIIdentifier ||
-            !midiManager.observableEndpoints.inputs.contains(
-                whereUniqueID: midiOutSelectedID,
-                fallbackDisplayName: midiOutSelectedDisplayName
-            )
+        midiOutSelectedID == nil
     }
     
     private func sendToConnection(_ event: MIDIEvent) {

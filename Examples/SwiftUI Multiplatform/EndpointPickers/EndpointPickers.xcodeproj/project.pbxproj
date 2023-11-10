@@ -8,23 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		E21299092851D8D600957FE8 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21299082851D8D600957FE8 /* MIDIHelper.swift */; };
-		E2496A912989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A8A2989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift */; };
 		E2496A922989087F003FD165 /* ContentView-iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A8B2989087F003FD165 /* ContentView-iOS.swift */; };
 		E27C5DC42A034B3100189B15 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27C5DC32A034B3100189B15 /* Utilities.swift */; };
 		E27D0E63284F3FB600F43247 /* EndpointPickersApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E62284F3FB600F43247 /* EndpointPickersApp.swift */; };
-		E27D0E75284F409600F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E74284F409600F43247 /* MIDIKit */; };
 		E2841ABB2989CB08006907BD /* ContentView-macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A902989087F003FD165 /* ContentView-macOS.swift */; };
-		E2841ABC2989CB0B006907BD /* MIDIEndpointSelectionView-macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2496A8E2989087F003FD165 /* MIDIEndpointSelectionView-macOS.swift */; };
 		E29AC912285BF048009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC911285BF048009D1C2C /* MIDIKit */; };
 		E29FF28D2880BB54005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF28C2880BB54005E2BC2 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E21299082851D8D600957FE8 /* MIDIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
-		E2496A8A2989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MIDIEndpointSelectionView-iOS.swift"; sourceTree = "<group>"; };
 		E2496A8B2989087F003FD165 /* ContentView-iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContentView-iOS.swift"; sourceTree = "<group>"; };
 		E2496A8C2989087F003FD165 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E2496A8E2989087F003FD165 /* MIDIEndpointSelectionView-macOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MIDIEndpointSelectionView-macOS.swift"; sourceTree = "<group>"; };
 		E2496A8F2989087F003FD165 /* EndpointPickers.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = EndpointPickers.entitlements; sourceTree = "<group>"; };
 		E2496A902989087F003FD165 /* ContentView-macOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContentView-macOS.swift"; sourceTree = "<group>"; };
 		E27C5DC32A034B3100189B15 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -40,7 +35,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E29AC912285BF048009D1C2C /* MIDIKit in Frameworks */,
-				E27D0E75284F409600F43247 /* MIDIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,7 +45,6 @@
 			isa = PBXGroup;
 			children = (
 				E2496A8B2989087F003FD165 /* ContentView-iOS.swift */,
-				E2496A8A2989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift */,
 				E2496A8C2989087F003FD165 /* Info.plist */,
 			);
 			path = iOS;
@@ -61,7 +54,6 @@
 			isa = PBXGroup;
 			children = (
 				E2496A902989087F003FD165 /* ContentView-macOS.swift */,
-				E2496A8E2989087F003FD165 /* MIDIEndpointSelectionView-macOS.swift */,
 				E2496A8F2989087F003FD165 /* EndpointPickers.entitlements */,
 			);
 			path = macOS;
@@ -114,7 +106,6 @@
 			);
 			name = EndpointPickers;
 			packageProductDependencies = (
-				E27D0E74284F409600F43247 /* MIDIKit */,
 				E29AC911285BF048009D1C2C /* MIDIKit */,
 			);
 			productName = EndpointPickers;
@@ -178,8 +169,6 @@
 				E27C5DC42A034B3100189B15 /* Utilities.swift in Sources */,
 				E21299092851D8D600957FE8 /* MIDIHelper.swift in Sources */,
 				E2496A922989087F003FD165 /* ContentView-iOS.swift in Sources */,
-				E2496A912989087F003FD165 /* MIDIEndpointSelectionView-iOS.swift in Sources */,
-				E2841ABC2989CB0B006907BD /* MIDIEndpointSelectionView-macOS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,8 +227,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -295,8 +284,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -417,10 +406,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E27D0E74284F409600F43247 /* MIDIKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MIDIKit;
-		};
 		E29AC911285BF048009D1C2C /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E29AC910285BF048009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;

@@ -24,7 +24,7 @@ final class MIDIHelper: ObservableObject {
     public func setup(midiManager: ObservableMIDIManager) {
         self.midiManager = midiManager
         
-        // update a local `@Published` property in response to when 
+        // update a local `@Published` property in response to when
         // MIDI devices/endpoints change in system
         midiManager.notificationHandler = { [weak self] notif, _ in
             switch notif {
@@ -79,24 +79,27 @@ final class MIDIHelper: ObservableObject {
         midiManager?.managedInputConnections[Tags.midiIn]
     }
     
+    // TODO: refactor as `.updatingInputConnection(withTag: String)` view modifier on MIDIOutputsPicker
     public func midiInUpdateConnection(
-        selectedUniqueID: MIDIIdentifier,
-        selectedDisplayName: String
+        selectedUniqueID: MIDIIdentifier?,
+        selectedDisplayName: String?
     ) {
         guard let midiInputConnection else { return }
     
-        guard selectedUniqueID != .invalidMIDIIdentifier else {
+        guard let selectedUniqueID = selectedUniqueID,
+              let selectedDisplayName = selectedDisplayName,
+              selectedUniqueID != .invalidMIDIIdentifier
+        else {
             midiInputConnection.removeAllOutputs()
             return
         }
         
-        if midiInputConnection.outputsCriteria != [
-            .uniqueIDWithFallback(id: selectedUniqueID, fallbackDisplayName: selectedDisplayName)
-        ] {
+        let criterium: MIDIEndpointIdentity = .uniqueIDWithFallback(
+            id: selectedUniqueID, fallbackDisplayName: selectedDisplayName
+        )
+        if midiInputConnection.outputsCriteria != [criterium] {
             midiInputConnection.removeAllOutputs()
-            midiInputConnection.add(outputs: [
-                .uniqueIDWithFallback(id: selectedUniqueID, fallbackDisplayName: selectedDisplayName)
-            ])
+            midiInputConnection.add(outputs: [criterium])
         }
     }
     
@@ -106,24 +109,28 @@ final class MIDIHelper: ObservableObject {
         midiManager?.managedOutputConnections[Tags.midiOut]
     }
     
+    // TODO: refactor as `.updatingOutputConnection(withTag: String)` view modifier on MIDIInputsPicker
     public func midiOutUpdateConnection(
-        selectedUniqueID: MIDIIdentifier,
-        selectedDisplayName: String
+        selectedUniqueID: MIDIIdentifier?,
+        selectedDisplayName: String?
     ) {
         guard let midiOutputConnection else { return }
     
-        guard selectedUniqueID != .invalidMIDIIdentifier else {
+        guard let selectedUniqueID = selectedUniqueID,
+              let selectedDisplayName = selectedDisplayName,
+              selectedUniqueID != .invalidMIDIIdentifier
+        else {
             midiOutputConnection.removeAllInputs()
             return
         }
         
-        if midiOutputConnection.inputsCriteria != [
-            .uniqueIDWithFallback(id: selectedUniqueID, fallbackDisplayName: selectedDisplayName)
-        ] {
+        let criterium: MIDIEndpointIdentity = .uniqueIDWithFallback(
+            id: selectedUniqueID,
+            fallbackDisplayName: selectedDisplayName
+        )
+        if midiOutputConnection.inputsCriteria != [criterium] {
             midiOutputConnection.removeAllInputs()
-            midiOutputConnection.add(inputs: [
-                .uniqueIDWithFallback(id: selectedUniqueID, fallbackDisplayName: selectedDisplayName)
-            ])
+            midiOutputConnection.add(inputs: [criterium])
         }
     }
     
@@ -190,7 +197,7 @@ final class MIDIHelper: ObservableObject {
     public private(set) var virtualsExist: Bool = false
     
     private func updateVirtualsExist() {
-        virtualsExist = 
+        virtualsExist =
             midiTestIn1 != nil &&
             midiTestIn2 != nil &&
             midiTestOut1 != nil &&
