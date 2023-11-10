@@ -30,6 +30,7 @@
 		E275EAB32679A493008E396D /* MTCGenContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MTCGenContentView.swift; sourceTree = "<group>"; };
 		E27E3F9F25A6E5C700F4B78E /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		E2BE847E268BC6680034F62C /* MIDIKitSync Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MIDIKitSync Extensions.swift"; sourceTree = "<group>"; };
+		E2CEA4982AFE49E700BE92F7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E2F71ED32758ED1E006254C0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		E2FAC4DA257884E000A6DD31 /* MTCExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MTCExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +60,7 @@
 		E2FAC4D1257884DF00A6DD31 = {
 			isa = PBXGroup;
 			children = (
+				E2CEA4982AFE49E700BE92F7 /* README.md */,
 				E2FAC4DC257884E000A6DD31 /* MTCExample */,
 				E2FAC4DB257884E000A6DD31 /* Products */,
 			);
@@ -126,7 +128,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1230;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					E2FAC4D9257884DF00A6DD31 = {
 						CreatedOnToolsVersion = 12.3;
@@ -202,6 +204,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -236,6 +239,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -264,6 +268,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -299,6 +304,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
@@ -401,8 +407,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.3;
+				branch = endpoints;
+				kind = branch;
 			};
 		};
 		E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
@@ -410,7 +416,7 @@
 			repositoryURL = "https://github.com/orchetect/SwiftRadix.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.0;
+				minimumVersion = 1.3.1;
 			};
 		};
 		E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */ = {
@@ -418,7 +424,7 @@
 			repositoryURL = "https://github.com/AudioKit/DunneAudioKit.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.4.0;
+				minimumVersion = 5.6.1;
 			};
 		};
 		E2E635B725EE4CE10039B8CF /* XCRemoteSwiftPackageReference "OTCore" */ = {
@@ -426,7 +432,7 @@
 			repositoryURL = "https://github.com/orchetect/OTCore.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.8;
+				minimumVersion = 1.4.13;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
