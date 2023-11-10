@@ -25,6 +25,18 @@ public protocol MIDIDevicesProtocol where Self: Equatable, Self: Hashable {
     mutating func updateCachedProperties()
 }
 
+extension MIDIDevicesProtocol /* : Equatable */ {
+    public static func == (lhs: any MIDIDevicesProtocol, rhs: any MIDIDevicesProtocol) -> Bool {
+        lhs.devices == rhs.devices
+    }
+}
+
+extension MIDIDevicesProtocol /* : Hashable */ {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(devices)
+    }
+}
+
 extension MIDIDevicesProtocol {
     /// Returns a dictionary keyed by device with value of an array containing all the input
     /// endpoints for the device. (Convenience)
