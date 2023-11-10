@@ -8,10 +8,11 @@
 
 import Foundation
 
-// TODO: this protocol may not be necessary
-// it was experimental so that the `MIDIManager.devices` property could be swapped out with
-// a different devices class with Combine support
-public protocol MIDIDevicesProtocol {
+#if canImport(Combine)
+import Combine
+#endif
+
+public protocol MIDIDevicesProtocol where Self: Equatable, Self: Hashable {
     /// List of MIDI devices in the system.
     ///
     /// A device can contain zero or more entities, and an entity can contain zero or more inputs
@@ -21,7 +22,7 @@ public protocol MIDIDevicesProtocol {
     /// Manually update the locally cached contents from the system.
     /// This method does not need to be manually invoked, as it is handled internally when MIDI
     /// system endpoints change.
-    func updateCachedProperties()
+    mutating func updateCachedProperties()
 }
 
 extension MIDIDevicesProtocol {
@@ -67,5 +68,31 @@ public final class MIDIDevices: NSObject, MIDIDevicesProtocol {
         devices = getSystemDevices()
     }
 }
+
+#if canImport(Combine)
+
+/// Manages system MIDI devices information cache.
+/// Class and properties are published for use in SwiftUI and Combine.
+///
+/// Do not instance this class directly. Instead, access the ``MIDIManager/devices`` property of
+/// your central ``MIDIManager`` instance.
+@available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
+public final class MIDIObservableDevices: NSObject, ObservableObject, MIDIDevicesProtocol {
+    @Published public internal(set) dynamic var devices: [MIDIDevice] = []
+    
+    override internal init() {
+        super.init()
+    }
+    
+    /// Manually update the locally cached contents from the system.
+    ///
+    /// It is not necessary to call this method as the ``MIDIManager`` will automate updating device
+    /// cache.
+    public func updateCachedProperties() {
+        objectWillChange.send()
+        devices = getSystemDevices()
+    }
+}
+#endif
 
 #endif

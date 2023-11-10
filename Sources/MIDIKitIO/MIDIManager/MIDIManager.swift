@@ -77,7 +77,7 @@ public class MIDIManager: NSObject {
     }
     
     /// MIDI devices in the system.
-    public internal(set) var devices: MIDIDevicesProtocol = MIDIDevices()
+    public internal(set) var devices: MIDIDevices = MIDIDevices()
     
     /// MIDI input and output endpoints in the system.
     public internal(set) var endpoints: MIDIEndpoints
@@ -186,12 +186,18 @@ public class MIDIManager: NSObject {
 import Combine
 
 /// ``MIDIManager`` subclass that is observable in a SwiftUI or Combine context.
+/// Two new properties are available: ``observableDevices`` and ``observableEndpoints``.
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
 public final class ObservableMIDIManager: MIDIManager, ObservableObject {
     // MARK: - Properties
     
-    /// Type-erased internal backing storage for ``observableEndpoints``.
-    @Published public var observableEndpoints = MIDIObservableEndpoints()
+    /// MIDI devices in the system.
+    /// This is an observable implementation of ``devices``.
+    @Published public internal(set) var observableDevices = MIDIObservableDevices()
+    
+    /// MIDI input and output endpoints in the system.
+    /// This is an observable implementation of ``endpoints``.
+    @Published public internal(set) var observableEndpoints = MIDIObservableEndpoints()
     
     // MARK: - Init
     
