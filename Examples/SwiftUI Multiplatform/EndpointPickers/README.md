@@ -6,20 +6,23 @@ This example demonstrates best practises when creating MIDI input and output sel
 
 - The pickers are updated in real-time if endpoints change in the system.
   
-  > In SwiftUI, this happens automatically when using certain data-source properties of the ``ObservableMIDIManager`` class.
+  > In SwiftUI, this happens automatically when using certain data-source properties of the `ObservableMIDIManager` class.
   >
   > - `midiManager.observableEndpoints.inputs` or `midiManager.observableEndpoints.outputs`
+  >   
   >   Changes in MIDI endpoints in the system will trigger these arrays to refresh your view.
+  >
   > - `midiManager.observableDevices.devices`
+  >   
   >   Changes in MIDI devices in the system will trigger this array to refresh your view.
-
+  
 - The menus allow for a single endpoint to be selected, or `None` may be selected to disable the connection.
   
   > This is one common use case.
 
 - The menu selections are stored in `UserDefaults` and restored on app relaunch so the user's selections are remembered.
   
-  > This is included to demonstrate that using endpoint Unique ID numbers are considered the primary method to persistently reference endpoints (since endpoint names can change and multiple endpoints in the system may share the same name). The endpoint's Display Name is also stored as a fallback method to identify the endpoint (this is only used if a 3rd-party manufacturer or developer fails to reassign their Unique ID each time their endpoint is registered in the system. While rare, it does happen occasionally.). UserDefaults is a convenient location to store the setting.
+  > This is included to demonstrate that using endpoint Unique ID numbers are considered the primary method to persistently reference endpoints (since endpoint names can change and multiple endpoints in the system may share the same name). The endpoint's Display Name is also stored as a fallback method to identify the endpoint (this is only used if a 3rd-party manufacturer or developer fails to reassign their Unique ID each time their endpoint is registered in the system. While rare, it does happen occasionally.). `UserDefaults` is a convenient location to store the setting.
   >
   > A secondary reason for persistently storing the endpoints's Display Name string is to allow us to display it to the user in the UI when the endpoint is missing in the system, since it's impossible to query Core MIDI for an endpoint property if the endpoint doesn't exist in the system.
 
