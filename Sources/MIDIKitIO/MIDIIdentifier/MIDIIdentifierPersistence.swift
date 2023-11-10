@@ -18,7 +18,7 @@ public enum MIDIIdentifierPersistence {
     /// ⚠️ This is generally not recommended and is provided mainly for testing purposes.
     ///
     /// Use ``userDefaultsManaged(key:suite:)`` where possible, or provide your own storage with
-    /// ``manualStorage(readHandler:storeHandler:)``.
+    /// ``managedStorage(readHandler:storeHandler:)``.
     case adHoc
     
     /// Unmanaged.

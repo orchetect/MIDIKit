@@ -13,6 +13,11 @@ import Foundation
 ///
 /// One ``MIDIManager`` instance stored in a global lifecycle context can manage multiple MIDI ports
 /// and connections, and is usually sufficient for all of an application's MIDI needs.
+///
+/// > Tip:
+/// >
+/// > For SwiftUI and Combine environments, see the ``ObservableMIDIManager`` subclass which adds
+/// > published devices and endpoints properties.
 public class MIDIManager: NSObject {
     // MARK: - Properties
     

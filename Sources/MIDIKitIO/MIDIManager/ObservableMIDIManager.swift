@@ -14,17 +14,56 @@ import Combine
 
 /// ``MIDIManager`` subclass that is observable in a SwiftUI or Combine context.
 /// Two new properties are available: ``observableDevices`` and ``observableEndpoints``.
+///
+/// Generally it is recommended to install the manager instance in the `App` struct.
+///
+/// ```swift
+/// @main
+/// struct MyApp: App {
+///     @ObservedObject var midiManager = ObservableMIDIManager(
+///         clientName: "MyApp",
+///         model: "MyApp",
+///         manufacturer: "MyCompany"
+///     )
+///
+///     WindowGroup {
+///         ContentView()
+///             .environmentObject(midiManager)
+///     }
+/// }
+/// ```
+///
+/// The observable properties can then be used to update view state as a result of changes in the
+/// system's MIDI devices and endpoints.
+///
+/// ```swift
+/// struct ContentView: View {
+///     @EnvironmentObject var midiManager: ObservableMIDIManager
+///
+///     var body: some View {
+///         List(midiManager.observableDevices.devices) { device in
+///             Text(device.name)
+///         }
+///         List(midiManager.observableEndpoints.inputs) { input in
+///             Text(input.name)
+///         }
+///         List(midiManager.observableEndpoints.outputs) { output in
+///             Text(output.name)
+///         }
+///     }
+/// }
+/// ```
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
 public final class ObservableMIDIManager: MIDIManager, ObservableObject {
     // MARK: - Properties
     
     /// MIDI devices in the system.
-    /// This is an observable implementation of ``devices``.
+    /// This is an observable implementation of ``MIDIManager/devices``.
     @Published
     public internal(set) var observableDevices = MIDIDevices()
     
     /// MIDI input and output endpoints in the system.
-    /// This is an observable implementation of ``endpoints``.
+    /// This is an observable implementation of ``MIDIManager/endpoints``.
     @Published
     public internal(set) var observableEndpoints = MIDIEndpoints(manager: nil)
     
