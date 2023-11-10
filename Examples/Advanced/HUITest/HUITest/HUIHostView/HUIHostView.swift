@@ -10,13 +10,13 @@ import MIDIKitIO
 import SwiftUI
 
 struct HUIHostView: View {
-    @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiManager: ObservableMIDIManager
     @StateObject var huiHostHelper: HUIHostHelper
     
     /// Convenience accessor for first HUI bank.
     private var huiBank0: HUIHostBank? { huiHostHelper.huiHost.banks.first }
     
-    init(midiManager: MIDIManager) {
+    init(midiManager: ObservableMIDIManager) {
         // set up HUI Host object
         _huiHostHelper = StateObject(wrappedValue: HUIHostHelper(midiManager: midiManager))
     }

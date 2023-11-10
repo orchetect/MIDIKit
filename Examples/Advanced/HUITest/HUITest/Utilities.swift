@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// Formatter that limits character length.
 class MaxLengthFormatter: Formatter {
@@ -57,5 +58,13 @@ class MaxLengthFormatter: Formatter {
         errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>?
     ) -> Bool {
         partialString.count <= maxCharLength
+    }
+}
+
+extension Scene {
+    /// Scene modifier to run arbitrary code when the scene's body is evaluated.
+    public func onSceneBody(_ block: @escaping () -> Void) -> some Scene {
+        DispatchQueue.main.async { block() }
+        return self
     }
 }

@@ -12,7 +12,7 @@ import SwiftUI
 
 class HUIHostHelper: ObservableObject {
     // MARK: MIDI
-    @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiManager: ObservableMIDIManager
     
     static let kHUIInputConnectionTag = "HUIHostInputConnection"
     static let kHUIOutputConnectionTag = "HUIHostOutputConnection"
@@ -24,7 +24,7 @@ class HUIHostHelper: ObservableObject {
     
     @Published var model: HUIHostModel = .init()
     
-    init(midiManager: MIDIManager) {
+    init(midiManager: ObservableMIDIManager) {
         huiHost = HUIHost()
         
         setupSingleBank(midiManager: midiManager)
@@ -49,7 +49,7 @@ class HUIHostHelper: ObservableObject {
         }
     }
     
-    func setupSingleBank(midiManager: MIDIManager) {
+    func setupSingleBank(midiManager: ObservableMIDIManager) {
         guard huiHost.banks.isEmpty else { return }
         
         huiHost.addBank(
