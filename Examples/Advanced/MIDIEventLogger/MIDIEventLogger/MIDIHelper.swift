@@ -70,44 +70,6 @@ final class MIDIHelper: ObservableObject {
         }
     }
     
-    public func updateInputConnection(selectedUniqueID: MIDIIdentifier?) {
-        guard let midiInputConnection else { return }
-        
-        guard let selectedUniqueID else {
-            midiInputConnection.removeAllOutputs()
-            return
-        }
-        
-        switch selectedUniqueID {
-        case .invalidMIDIIdentifier:
-            midiInputConnection.removeAllOutputs()
-        default:
-            if !midiInputConnection.outputsCriteria.contains(.uniqueID(selectedUniqueID)) {
-                midiInputConnection.removeAllOutputs()
-                midiInputConnection.add(outputs: [.uniqueID(selectedUniqueID)])
-            }
-        }
-    }
-    
-    public func updateOutputConnection(selectedUniqueID: MIDIIdentifier?) {
-        guard let midiOutputConnection else { return }
-        
-        guard let selectedUniqueID else {
-            midiOutputConnection.removeAllInputs()
-            return
-        }
-        
-        switch selectedUniqueID {
-        case .invalidMIDIIdentifier:
-            midiOutputConnection.removeAllInputs()
-        default:
-            if !midiOutputConnection.inputsCriteria.contains(.uniqueID(selectedUniqueID)) {
-                midiOutputConnection.removeAllInputs()
-                midiOutputConnection.add(inputs: [.uniqueID(selectedUniqueID)])
-            }
-        }
-    }
-    
     // MARK: - Virtual Endpoints
     
     public var midiInput: MIDIInput? {

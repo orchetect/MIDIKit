@@ -65,9 +65,6 @@ struct ContentView: View {
         .onAppear {
             setInputConnectionToVirtual()
         }
-        .onChange(of: midiInputConnectionID) { _ in
-            updateInputConnection()
-        }
     }
     
     // MARK: - Helper Methods
@@ -77,14 +74,6 @@ struct ContentView: View {
         guard let midiOutputEndpoint = midiHelper.midiOutput?.endpoint else { return }
         midiInputConnectionID = midiOutputEndpoint.uniqueID
         midiInputConnectionDisplayName = midiOutputEndpoint.displayName
-    }
-    
-    /// Update the MIDI manager's input connection to connect to the selected output endpoint.
-    func updateInputConnection() {
-        logger.debug(
-            "Updating input connection to endpoint: \(midiInputConnectionDisplayName?.quoted ?? "None")"
-        )
-        midiHelper.updateInputConnection(selectedUniqueID: midiInputConnectionID)
     }
     
     /// Send a MIDI event using our virtual output endpoint.

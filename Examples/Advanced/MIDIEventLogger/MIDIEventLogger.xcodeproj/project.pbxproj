@@ -22,7 +22,6 @@
 		E26A25C326C5873B00FFCF40 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25BF26C5873B00FFCF40 /* Log.swift */; };
 		E26A25C426C5873B00FFCF40 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25C026C5873B00FFCF40 /* ContentView.swift */; };
 		E26A25C926C5875A00FFCF40 /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E26A25C826C5875A00FFCF40 /* OTCore */; };
-		E26A25CD26C5876400FFCF40 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E26A25CC26C5876400FFCF40 /* MIDIKit */; };
 		E29AC90C285BEFB1009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC90B285BEFB1009D1C2C /* MIDIKit */; };
 		E2B099132880AE3800625201 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2B099122880AE3800625201 /* Images.xcassets */; };
 		E2E8BD89279F8DF4007A1AF0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */; };
@@ -56,7 +55,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E29AC90C285BEFB1009D1C2C /* MIDIKit in Frameworks */,
-				E26A25CD26C5876400FFCF40 /* MIDIKit in Frameworks */,
 				E26A25C926C5875A00FFCF40 /* OTCore in Frameworks */,
 				E26604E029888DA500177FC9 /* SwiftRadix in Frameworks */,
 			);
@@ -132,7 +130,6 @@
 			name = MIDIEventLogger;
 			packageProductDependencies = (
 				E26A25C826C5875A00FFCF40 /* OTCore */,
-				E26A25CC26C5876400FFCF40 /* MIDIKit */,
 				E29AC90B285BEFB1009D1C2C /* MIDIKit */,
 				E26604DF29888DA500177FC9 /* SwiftRadix */,
 			);
@@ -465,10 +462,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E26A25C726C5875A00FFCF40 /* XCRemoteSwiftPackageReference "OTCore" */;
 			productName = OTCore;
-		};
-		E26A25CC26C5876400FFCF40 /* MIDIKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MIDIKit;
 		};
 		E29AC90B285BEFB1009D1C2C /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;

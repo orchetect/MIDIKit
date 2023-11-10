@@ -36,22 +36,12 @@ extension ContentView {
                                 GroupBox(label: Text("Source: Connection")) {
                                     MIDIOutputsPicker(
                                         title: "",
-                                        selection: $midiInputConnectionID,
-                                        cachedSelectionName: $midiInputConnectionDisplayName,
+                                        selectionID: $midiInputConnectionID,
+                                        selectionDisplayName: $midiInputConnectionDisplayName,
                                         showIcons: true,
                                         hideOwned: false
                                     )
-//                                    Picker("", selection: $midiInputConnectionEndpoint) {
-//                                        Text("None")
-//                                            .tag(MIDIOutputEndpoint?.none)
-//                                        
-//                                        VStack { Divider().padding(.leading) }
-//                                        
-//                                        ForEach(midiManager.endpoints.outputs) {
-//                                            Text("🎹 " + ($0.displayName))
-//                                                .tag(MIDIOutputEndpoint?.some($0))
-//                                        }
-//                                    }
+                                    .updatingInputConnection(withTag: ConnectionTags.inputConnectionTag)
                                     .padding()
                                     .frame(maxWidth: 400)
                                     .frame(
