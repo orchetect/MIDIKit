@@ -33,6 +33,24 @@ public protocol MIDIEndpointsProtocol where Self: Equatable, Self: Hashable {
     mutating func updateCachedProperties()
 }
 
+extension MIDIEndpointsProtocol /* : Equatable */ {
+    public static func == (lhs: any MIDIEndpointsProtocol, rhs: any MIDIEndpointsProtocol) -> Bool {
+        lhs.inputs == rhs.inputs &&
+        lhs.inputsUnowned == rhs.inputsUnowned &&
+        lhs.outputs == rhs.outputs &&
+        lhs.outputsUnowned == rhs.outputsUnowned
+    }
+}
+
+extension MIDIEndpointsProtocol /* : Hashable */ {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(inputs)
+        hasher.combine(inputsUnowned)
+        hasher.combine(outputs)
+        hasher.combine(outputsUnowned)
+    }
+}
+
 extension MIDIEndpointsProtocol {
     internal func _fetchProperties(manager: MIDIManager?) -> (
         inputs: [MIDIInputEndpoint],
