@@ -14,7 +14,7 @@ struct ListsExampleView: View {
     @AppStorage(MIDIHelper.PrefKeys.midiOutID) private var midiOutput: MIDIIdentifier?
     @AppStorage(MIDIHelper.PrefKeys.midiOutName) private var midiOutputName: String?
     
-    @State private var filterOwned: Bool = false
+    @State private var hideCreated: Bool = false
     @State private var showIcons: Bool = true
     
     var body: some View {
@@ -24,10 +24,7 @@ struct ListsExampleView: View {
         Spacer()
         
         VStack {
-            // TODO: ⚠️ Not yet functional, will be fixed in future.
-            Toggle("Filter Manager-Owned", isOn: $filterOwned)
-                .disabled(true)
-            
+            Toggle("Hide Created", isOn: $hideCreated)
             Toggle("Show Icons", isOn: $showIcons)
         }
         .toggleStyle(.switch)
@@ -88,7 +85,7 @@ struct ListsExampleView: View {
             selection: $midiInput,
             cachedSelectionName: $midiInputName,
             showIcons: showIcons,
-            filterOwned: filterOwned
+            hideOwned: hideCreated
         )
         #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))
@@ -100,7 +97,7 @@ struct ListsExampleView: View {
             selection: $midiOutput,
             cachedSelectionName: $midiOutputName,
             showIcons: showIcons,
-            filterOwned: filterOwned
+            hideOwned: hideCreated
         )
         #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))

@@ -8,6 +8,7 @@ import MIDIKitIO
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject private var midiManager: ObservableMIDIManager
     @EnvironmentObject private var midiHelper: MIDIHelper
     
     var body: some View {
