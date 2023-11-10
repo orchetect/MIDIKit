@@ -5,8 +5,10 @@
 //
 
 import SwiftUI
+import MIDIKit
 
 struct ContentView: View {
+    @EnvironmentObject var midiManager: ObservableMIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
     var body: some View {
