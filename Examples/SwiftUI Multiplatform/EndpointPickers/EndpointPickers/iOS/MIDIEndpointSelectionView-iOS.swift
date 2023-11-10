@@ -10,7 +10,7 @@ import MIDIKit
 import SwiftUI
 
 struct MIDIEndpointSelectionView: View {
-    @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiManager: ObservableMIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
     @Binding var midiInSelectedID: MIDIIdentifier
@@ -24,15 +24,13 @@ struct MIDIEndpointSelectionView: View {
             Text("None")
                 .tag(MIDIIdentifier.invalidMIDIIdentifier)
     
-            if midiInSelectedID != .invalidMIDIIdentifier,
-               !midiManager.endpoints.outputs.contains(whereUniqueID: midiInSelectedID)
-            {
+            if isSelectedInputMissing {
                 Text("⚠️ " + midiInSelectedDisplayName)
                     .tag(midiInSelectedID)
                     .foregroundColor(.secondary)
             }
     
-            ForEach(midiManager.endpoints.outputs) {
+            ForEach(midiManager.observableEndpoints.outputs) {
                 Text($0.displayName)
                     .tag($0.uniqueID)
             }
@@ -42,19 +40,33 @@ struct MIDIEndpointSelectionView: View {
             Text("None")
                 .tag(MIDIIdentifier.invalidMIDIIdentifier)
     
-            if midiOutSelectedID != .invalidMIDIIdentifier,
-               !midiManager.endpoints.inputs.contains(whereUniqueID: midiOutSelectedID)
-            {
+            if isSelectedOutputMissing {
                 Text("⚠️ " + midiOutSelectedDisplayName)
                     .tag(midiOutSelectedID)
                     .foregroundColor(.secondary)
             }
     
-            ForEach(midiManager.endpoints.inputs) {
+            ForEach(midiManager.observableEndpoints.inputs) {
                 Text($0.displayName)
                     .tag($0.uniqueID)
             }
         }
+    }
+    
+    private var isSelectedInputMissing: Bool {
+        midiInSelectedID != .invalidMIDIIdentifier &&
+            !midiManager.observableEndpoints.outputs.contains(
+                whereUniqueID: midiInSelectedID,
+                fallbackDisplayName: midiInSelectedDisplayName
+            )
+    }
+    
+    private var isSelectedOutputMissing: Bool {
+        midiOutSelectedID != .invalidMIDIIdentifier &&
+            !midiManager.observableEndpoints.inputs.contains(
+                whereUniqueID: midiOutSelectedID,
+                fallbackDisplayName: midiOutSelectedDisplayName
+            )
     }
 }
 

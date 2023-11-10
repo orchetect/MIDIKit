@@ -10,7 +10,7 @@ import MIDIKitIO
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiManager: ObservableMIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
     @Binding var midiInSelectedID: MIDIIdentifier
@@ -27,7 +27,7 @@ struct ContentView: View {
                         InfoView()
                     }
                 }
-    
+                
                 Section() {
                     MIDIEndpointSelectionView(
                         midiInSelectedID: $midiInSelectedID,
@@ -35,53 +35,50 @@ struct ContentView: View {
                         midiOutSelectedID: $midiOutSelectedID,
                         midiOutSelectedDisplayName: $midiOutSelectedDisplayName
                     )
-    
+                    
                     Group {
                         Button("Send Note On C3") {
-                            sendToConnection(.noteOn(60, velocity: .midi1(127), channel: 0))
+                            sendToConnection(.noteOn(60, velocity: .midi1(UInt7.random(in: 20 ... 127)), channel: 0))
                         }
-    
+                        
                         Button("Send Note Off C3") {
                             sendToConnection(.noteOff(60, velocity: .midi1(0), channel: 0))
                         }
-    
+                        
                         Button("Send CC1") {
-                            sendToConnection(.cc(1, value: .midi1(64), channel: 0))
+                            sendToConnection(.cc(1, value: .midi1(UInt7.random()), channel: 0))
                         }
                     }
-                    .disabled(
-                        midiOutSelectedID == .invalidMIDIIdentifier ||
-                            !midiManager.endpoints.inputs.contains(whereUniqueID: midiOutSelectedID)
-                    )
+                    .disabled(isMIDIOutDisabled)
                 }
-    
+                
                 Section() {
                     Button("Create Test Virtual Endpoints") {
                         midiHelper.createVirtualEndpoints()
                     }
                     .disabled(midiHelper.virtualsExist)
-    
+                    
                     Button("Destroy Test Virtual Endpoints") {
                         midiHelper.destroyVirtualInputs()
                     }
                     .disabled(!midiHelper.virtualsExist)
-    
+                    
                     Group {
                         Button("Send Note On C3") {
-                            sendToVirtuals(.noteOn(60, velocity: .midi1(127), channel: 0))
+                            sendToVirtuals(.noteOn(60, velocity: .midi1(UInt7.random(in: 20 ... 127)), channel: 0))
                         }
-    
+                        
                         Button("Send Note Off C3") {
                             sendToVirtuals(.noteOff(60, velocity: .midi1(0), channel: 0))
                         }
-    
+                        
                         Button("Send CC1") {
-                            sendToVirtuals(.cc(1, value: .midi1(64), channel: 0))
+                            sendToVirtuals(.cc(1, value: .midi1(UInt7.random()), channel: 0))
                         }
                     }
                     .disabled(!midiHelper.virtualsExist)
                 }
-    
+                
                 Section(header: Text("Received Events")) {
                     Toggle(
                         "Filter Active Sensing and Clock",
@@ -108,6 +105,16 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .padding()
+    }
+}
+
+extension ContentView {
+    private var isMIDIOutDisabled: Bool {
+        midiOutSelectedID == .invalidMIDIIdentifier ||
+            !midiManager.observableEndpoints.inputs.contains(
+                whereUniqueID: midiOutSelectedID,
+                fallbackDisplayName: midiOutSelectedDisplayName
+            )
     }
     
     func sendToConnection(_ event: MIDIEvent) {

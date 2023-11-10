@@ -7,6 +7,8 @@
 import MIDIKitIO
 import SwiftUI
 
+// TODO: Add to MIDIKit?
+
 /// Allow use with `@AppStorage` by conforming to a supported `RawRepresentable` type.
 extension MIDIIdentifier: RawRepresentable {
     public typealias RawValue = Int
@@ -17,5 +19,17 @@ extension MIDIIdentifier: RawRepresentable {
     
     public var rawValue: RawValue {
         Int(self)
+    }
+}
+
+extension UInt7 {
+    public static func random() -> Self {
+        UInt7(UInt.random(in: 0 ... 127))
+    }
+    
+    public static func random(in range: ClosedRange<Self>) -> Self {
+        let lb = UInt(range.lowerBound)
+        let ub = UInt(range.upperBound)
+        return UInt7(UInt.random(in: lb ... ub))
     }
 }

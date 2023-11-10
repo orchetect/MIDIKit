@@ -11,7 +11,7 @@ import SwiftUI
 /// SwiftUI view state directly. Therefore, we need a helper class that conforms to
 /// `ObservableObject` which contains `@Published` properties that SwiftUI can use to update views.
 final class MIDIHelper: ObservableObject {
-    private weak var midiManager: MIDIManager?
+    private weak var midiManager: ObservableMIDIManager?
     
     @Published
     public private(set) var receivedEvents: [MIDIEvent] = []
@@ -21,11 +21,11 @@ final class MIDIHelper: ObservableObject {
     
     public init() { }
     
-    public func setup(midiManager: MIDIManager) {
+    public func setup(midiManager: ObservableMIDIManager) {
         self.midiManager = midiManager
         
-        // update a local `@Published` property in response to endpoints changing in the system
-        // when MIDI devices/endpoints change in system
+        // update a local `@Published` property in response to when 
+        // MIDI devices/endpoints change in system
         midiManager.notificationHandler = { [weak self] notif, _ in
             switch notif {
             case .added, .removed, .propertyChanged:
@@ -79,16 +79,24 @@ final class MIDIHelper: ObservableObject {
         midiManager?.managedInputConnections[Tags.midiIn]
     }
     
-    public func midiInUpdateConnection(selectedUniqueID: MIDIIdentifier) {
+    public func midiInUpdateConnection(
+        selectedUniqueID: MIDIIdentifier,
+        selectedDisplayName: String
+    ) {
         guard let midiInputConnection else { return }
     
-        if selectedUniqueID == .invalidMIDIIdentifier {
+        guard selectedUniqueID != .invalidMIDIIdentifier else {
             midiInputConnection.removeAllOutputs()
-        } else {
-            if midiInputConnection.outputsCriteria != [.uniqueID(selectedUniqueID)] {
-                midiInputConnection.removeAllOutputs()
-                midiInputConnection.add(outputs: [.uniqueID(selectedUniqueID)])
-            }
+            return
+        }
+        
+        if midiInputConnection.outputsCriteria != [
+            .uniqueIDWithFallback(id: selectedUniqueID, fallbackDisplayName: selectedDisplayName)
+        ] {
+            midiInputConnection.removeAllOutputs()
+            midiInputConnection.add(outputs: [
+                .uniqueIDWithFallback(id: selectedUniqueID, fallbackDisplayName: selectedDisplayName)
+            ])
         }
     }
     
@@ -98,16 +106,24 @@ final class MIDIHelper: ObservableObject {
         midiManager?.managedOutputConnections[Tags.midiOut]
     }
     
-    public func midiOutUpdateConnection(selectedUniqueID: MIDIIdentifier) {
+    public func midiOutUpdateConnection(
+        selectedUniqueID: MIDIIdentifier,
+        selectedDisplayName: String
+    ) {
         guard let midiOutputConnection else { return }
     
-        if selectedUniqueID == .invalidMIDIIdentifier {
+        guard selectedUniqueID != .invalidMIDIIdentifier else {
             midiOutputConnection.removeAllInputs()
-        } else {
-            if midiOutputConnection.inputsCriteria != [.uniqueID(selectedUniqueID)] {
-                midiOutputConnection.removeAllInputs()
-                midiOutputConnection.add(inputs: [.uniqueID(selectedUniqueID)])
-            }
+            return
+        }
+        
+        if midiOutputConnection.inputsCriteria != [
+            .uniqueIDWithFallback(id: selectedUniqueID, fallbackDisplayName: selectedDisplayName)
+        ] {
+            midiOutputConnection.removeAllInputs()
+            midiOutputConnection.add(inputs: [
+                .uniqueIDWithFallback(id: selectedUniqueID, fallbackDisplayName: selectedDisplayName)
+            ])
         }
     }
     
@@ -130,35 +146,39 @@ final class MIDIHelper: ObservableObject {
     }
     
     public func createVirtualEndpoints() {
-        try? midiManager?.addInput(
-            name: "Test In 1",
-            tag: Tags.midiTestIn1,
-            uniqueID: .userDefaultsManaged(key: Tags.midiTestIn1),
-            receiver: .events { [weak self] events in
-                self?.received(events: events)
-            }
-        )
-        
-        try? midiManager?.addInput(
-            name: "Test In 2",
-            tag: Tags.midiTestIn2,
-            uniqueID: .userDefaultsManaged(key: Tags.midiTestIn2),
-            receiver: .events { [weak self] events in
-                self?.received(events: events)
-            }
-        )
-        
-        try? midiManager?.addOutput(
-            name: "Test Out 1",
-            tag: Tags.midiTestOut1,
-            uniqueID: .userDefaultsManaged(key: Tags.midiTestOut1)
-        )
-        
-        try? midiManager?.addOutput(
-            name: "Test Out 2",
-            tag: Tags.midiTestOut2,
-            uniqueID: .userDefaultsManaged(key: Tags.midiTestOut2)
-        )
+        do {
+            try midiManager?.addInput(
+                name: "Test In 1",
+                tag: Tags.midiTestIn1,
+                uniqueID: .userDefaultsManaged(key: Tags.midiTestIn1),
+                receiver: .events { [weak self] events in
+                    self?.received(events: events)
+                }
+            )
+            
+            try midiManager?.addInput(
+                name: "Test In 2",
+                tag: Tags.midiTestIn2,
+                uniqueID: .userDefaultsManaged(key: Tags.midiTestIn2),
+                receiver: .events { [weak self] events in
+                    self?.received(events: events)
+                }
+            )
+            
+            try midiManager?.addOutput(
+                name: "Test Out 1",
+                tag: Tags.midiTestOut1,
+                uniqueID: .userDefaultsManaged(key: Tags.midiTestOut1)
+            )
+            
+            try midiManager?.addOutput(
+                name: "Test Out 2",
+                tag: Tags.midiTestOut2,
+                uniqueID: .userDefaultsManaged(key: Tags.midiTestOut2)
+            )
+        } catch {
+            print(error)
+        }
     }
     
     public func destroyVirtualInputs() {
@@ -170,7 +190,8 @@ final class MIDIHelper: ObservableObject {
     public private(set) var virtualsExist: Bool = false
     
     private func updateVirtualsExist() {
-        virtualsExist = midiTestIn1 != nil &&
+        virtualsExist = 
+            midiTestIn1 != nil &&
             midiTestIn2 != nil &&
             midiTestOut1 != nil &&
             midiTestOut2 != nil
@@ -196,5 +217,9 @@ extension MIDIHelper {
         
         static let midiOutID = "SelectedMIDIOutID"
         static let midiOutDisplayName = "SelectedMIDIOutDisplayName"
+    }
+    
+    enum Defaults {
+        static let selectedDisplayName = "None"
     }
 }
