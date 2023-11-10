@@ -4,12 +4,12 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import OTCore
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: MIDIManager
+    @EnvironmentObject var midiManager: ObservableMIDIManager
     @EnvironmentObject var midiHelper: MIDIHelper
     
     // MARK: - Constants
@@ -25,7 +25,8 @@ struct ContentView: View {
     @State var midiGroup: UInt4 = 0
     
     /// Currently selected MIDI output endpoint to connect to
-    @State var midiInputConnectionEndpoint: MIDIOutputEndpoint? = nil
+    @State var midiInputConnectionID: MIDIIdentifier? = nil
+    @State var midiInputConnectionDisplayName: String? = nil
     
     // MARK: - Body
     
@@ -45,7 +46,8 @@ struct ContentView: View {
     
             ReceiveMIDIEventsView(
                 inputName: ConnectionTags.inputName,
-                midiInputConnectionEndpoint: $midiInputConnectionEndpoint
+                midiInputConnectionID: $midiInputConnectionID,
+                midiInputConnectionDisplayName: $midiInputConnectionDisplayName
             )
     
             Spacer().frame(height: 18)
@@ -63,7 +65,7 @@ struct ContentView: View {
         .onAppear {
             setInputConnectionToVirtual()
         }
-        .onChange(of: midiInputConnectionEndpoint) { _ in
+        .onChange(of: midiInputConnectionID) { _ in
             updateInputConnection()
         }
     }
@@ -72,15 +74,17 @@ struct ContentView: View {
     
     /// Auto-select the virtual endpoint as our input connection source.
     func setInputConnectionToVirtual() {
-        midiInputConnectionEndpoint = midiHelper.midiOutput?.endpoint
+        guard let midiOutputEndpoint = midiHelper.midiOutput?.endpoint else { return }
+        midiInputConnectionID = midiOutputEndpoint.uniqueID
+        midiInputConnectionDisplayName = midiOutputEndpoint.displayName
     }
     
     /// Update the MIDI manager's input connection to connect to the selected output endpoint.
     func updateInputConnection() {
         logger.debug(
-            "Updating input connection to endpoint: \(midiInputConnectionEndpoint?.displayName.quoted ?? "None")"
+            "Updating input connection to endpoint: \(midiInputConnectionDisplayName?.quoted ?? "None")"
         )
-        midiHelper.updateInputConnection(selectedUniqueID: midiInputConnectionEndpoint?.uniqueID)
+        midiHelper.updateInputConnection(selectedUniqueID: midiInputConnectionID)
     }
     
     /// Send a MIDI event using our virtual output endpoint.
@@ -91,11 +95,19 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    private static let midiManager = MIDIManager(clientName: "Preview", model: "", manufacturer: "")
+struct ContentViewPreviews: PreviewProvider {
+    private static let midiManager = ObservableMIDIManager(
+        clientName: "Preview", 
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
+    
+    private static let midiHelper = MIDIHelper()
     
     static var previews: some View {
         ContentView()
             .environmentObject(midiManager)
+            .environmentObject(midiHelper)
+            .onAppear { midiHelper.setup(midiManager: midiManager) }
     }
 }

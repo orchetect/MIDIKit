@@ -4,16 +4,16 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import OTCore
 import SwiftUI
 
 final class MIDIHelper: ObservableObject {
-    private weak var midiManager: MIDIManager?
+    private weak var midiManager: ObservableMIDIManager?
     
     public init() { }
     
-    public func setup(midiManager: MIDIManager) {
+    public func setup(midiManager: ObservableMIDIManager) {
         self.midiManager = midiManager
         
         midiManager.notificationHandler = { notification, manager in

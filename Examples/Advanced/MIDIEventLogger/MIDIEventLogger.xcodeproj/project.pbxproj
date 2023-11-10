@@ -46,6 +46,7 @@
 		E26A25C026C5873B00FFCF40 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E2B099122880AE3800625201 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E2B38F2026C63918008770A6 /* MIDIEventLogger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MIDIEventLogger.entitlements; sourceTree = "<group>"; };
+		E2CEA4972AFE44FE00BE92F7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,6 +84,7 @@
 		E26A25A326C586F600FFCF40 = {
 			isa = PBXGroup;
 			children = (
+				E2CEA4972AFE44FE00BE92F7 /* README.md */,
 				E26A25AE26C586F600FFCF40 /* MIDIEventLogger */,
 				E26A25AD26C586F600FFCF40 /* Products */,
 			);
@@ -99,11 +101,11 @@
 		E26A25AE26C586F600FFCF40 /* MIDIEventLogger */ = {
 			isa = PBXGroup;
 			children = (
+				E26604F12988982900177FC9 /* Views */,
 				E26A25BE26C5873B00FFCF40 /* AppDelegate.swift */,
 				E24FD2A3298734DA00E076A7 /* MIDIHelper.swift */,
 				E24FD2A72987362000E076A7 /* Constants.swift */,
 				E26A25BF26C5873B00FFCF40 /* Log.swift */,
-				E26604F12988982900177FC9 /* Views */,
 				E216886026C5E5A400BF7959 /* Info.plist */,
 				E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */,
 				E2B38F2026C63918008770A6 /* MIDIEventLogger.entitlements */,
@@ -146,7 +148,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					E26A25AB26C586F600FFCF40 = {
 						CreatedOnToolsVersion = 13.0;
@@ -217,6 +219,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -251,6 +254,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -279,6 +283,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -313,6 +318,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -428,7 +434,7 @@
 			repositoryURL = "https://github.com/orchetect/SwiftRadix.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.0;
+				minimumVersion = 1.3.1;
 			};
 		};
 		E26A25C726C5875A00FFCF40 /* XCRemoteSwiftPackageReference "OTCore" */ = {
@@ -436,15 +442,15 @@
 			repositoryURL = "https://github.com/orchetect/OTCore";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.8;
+				minimumVersion = 1.4.13;
 			};
 		};
 		E29AC90A285BEFB1009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.3;
+				branch = endpoints;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

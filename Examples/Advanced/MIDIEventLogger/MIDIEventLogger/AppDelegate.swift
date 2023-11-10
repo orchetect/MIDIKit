@@ -4,16 +4,16 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import OTCore
 import SwiftUI
 
 // AppDelegate for legacy macOS versions support
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var window: NSWindow!
+    var window: NSWindow?
     
-    let midiManager = MIDIManager(
+    let midiManager = ObservableMIDIManager(
         clientName: "MIDIEventLogger",
         model: "LoggerApp",
         manufacturer: "MyCompany"
@@ -26,6 +26,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         createAndShowWindow()
     }
     
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        true
+    }
+}
+
+extension AppDelegate {
     func createAndShowWindow() {
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView()
@@ -38,10 +44,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             styleMask: [.titled, .miniaturizable, .resizable],
             backing: .buffered, defer: false
         )
-        window.isReleasedWhenClosed = true
-        window.center()
-        window.setFrameAutosaveName("Main Window")
-        window.contentView = NSHostingView(rootView: contentView)
-        window.makeKeyAndOrderFront(nil)
+        window?.isReleasedWhenClosed = true
+        window?.center()
+        window?.setFrameAutosaveName("Main Window")
+        window?.contentView = NSHostingView(rootView: contentView)
+        window?.makeKeyAndOrderFront(nil)
     }
 }

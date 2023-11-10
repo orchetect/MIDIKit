@@ -4,17 +4,19 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
+import MIDIKitUI
 import OTCore
 import SwiftRadix
 import SwiftUI
 
 extension ContentView {
     struct ReceiveMIDIEventsView: View {
-        @EnvironmentObject var midiManager: MIDIManager
+        @EnvironmentObject var midiManager: ObservableMIDIManager
         
         var inputName: String
-        @Binding var midiInputConnectionEndpoint: MIDIOutputEndpoint?
+        @Binding var midiInputConnectionID: MIDIIdentifier?
+        @Binding var midiInputConnectionDisplayName: String?
         
         var body: some View {
             ZStack(alignment: .center) {
@@ -32,17 +34,24 @@ extension ContentView {
                                 }
                                 
                                 GroupBox(label: Text("Source: Connection")) {
-                                    Picker("", selection: $midiInputConnectionEndpoint) {
-                                        Text("None")
-                                            .tag(MIDIOutputEndpoint?.none)
-                                        
-                                        VStack { Divider().padding(.leading) }
-                                        
-                                        ForEach(midiManager.endpoints.outputs) {
-                                            Text("🎹 " + ($0.displayName))
-                                                .tag(MIDIOutputEndpoint?.some($0))
-                                        }
-                                    }
+                                    MIDIOutputsPicker(
+                                        title: "",
+                                        selection: $midiInputConnectionID,
+                                        cachedSelectionName: $midiInputConnectionDisplayName,
+                                        showIcons: true,
+                                        hideOwned: false
+                                    )
+//                                    Picker("", selection: $midiInputConnectionEndpoint) {
+//                                        Text("None")
+//                                            .tag(MIDIOutputEndpoint?.none)
+//                                        
+//                                        VStack { Divider().padding(.leading) }
+//                                        
+//                                        ForEach(midiManager.endpoints.outputs) {
+//                                            Text("🎹 " + ($0.displayName))
+//                                                .tag(MIDIOutputEndpoint?.some($0))
+//                                        }
+//                                    }
                                     .padding()
                                     .frame(maxWidth: 400)
                                     .frame(
