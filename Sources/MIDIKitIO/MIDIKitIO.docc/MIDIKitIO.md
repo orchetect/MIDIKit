@@ -15,11 +15,11 @@ To add additional functionality, import extension modules or import the MIDIKit 
 ### Manager
 
 - ``MIDIManager``
-- ``ObservableMIDIManager``
 - <doc:MIDIManager-Creating-Ports>
 - <doc:MIDIManager-Creating-Connections>
 - <doc:MIDIManager-Removing-Ports-and-Connections>
 - <doc:MIDIManager-Receiving-Notifications>
+- ``ObservableMIDIManager``
 - <doc:MIDIKitIO-Combine-and-SwiftUI-Features>
 
 ### Devices & Entities
