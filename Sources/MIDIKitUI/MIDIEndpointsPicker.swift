@@ -155,6 +155,13 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable,
 }
 
 /// SwiftUI `Picker` view for selecting MIDI input endpoints.
+///
+/// Optionally supply a tag to auto-update an output connection in MIDIManager.
+///
+/// ```swift
+/// MIDIInputsPicker( ... )
+///     .updatingOutputConnection(withTag: "MyConnection")
+/// ```
 @available(macOS 11.0, iOS 14.0, *)
 public struct MIDIInputsPicker: View, _MIDIInputsSelectable {
     @EnvironmentObject private var midiManager: ObservableMIDIManager
@@ -211,6 +218,13 @@ public struct MIDIInputsPicker: View, _MIDIInputsSelectable {
 }
 
 /// SwiftUI `Picker` view for selecting MIDI output endpoints.
+///
+/// Optionally supply a tag to auto-update an input connection in MIDIManager.
+///
+/// ```swift
+/// MIDIOutputsPicker( ... )
+///     .updatingInputConnection(withTag: "MyConnection")
+/// ```
 @available(macOS 11.0, iOS 14.0, *)
 public struct MIDIOutputsPicker: View, _MIDIOutputsSelectable {
     @EnvironmentObject private var midiManager: ObservableMIDIManager
