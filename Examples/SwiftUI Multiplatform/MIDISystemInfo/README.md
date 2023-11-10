@@ -2,6 +2,8 @@
 
 This example demonstrates reading MIDI device/port information from the system. It is also a useful diagnostic workbench.
 
+The example app's structure is using legacy `NSApplicationDelegate`/`UIApplicationDelegate` in order to maintain backwards compatibility with macOS 10.10 and iOS 13. 
+
 ## Key Features
 
 - Lists devices, their entities, and their endpoints in a navigation tree
