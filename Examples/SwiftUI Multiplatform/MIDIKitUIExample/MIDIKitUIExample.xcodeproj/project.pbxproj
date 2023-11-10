@@ -22,6 +22,7 @@
 		E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsExampleView.swift; sourceTree = "<group>"; };
 		E2B8BDA329B30B3200B92BDF /* PickersExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickersExampleView.swift; sourceTree = "<group>"; };
 		E2B8BDAA29B3301300B92BDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E2CEA4952AFE3C3200BE92F7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E2F1FE7029B2DF5800054467 /* MIDIKitUIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIDIKitUIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2F1FE7329B2DF5800054467 /* MIDIKitUIExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIKitUIExampleApp.swift; sourceTree = "<group>"; };
 		E2F1FE7529B2DF5800054467 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -47,6 +48,7 @@
 		E2F1FE6729B2DF5800054467 = {
 			isa = PBXGroup;
 			children = (
+				E2CEA4952AFE3C3200BE92F7 /* README.md */,
 				E2F1FE7229B2DF5800054467 /* MIDIKitUIExample */,
 				E2F1FE7129B2DF5800054467 /* Products */,
 			);
