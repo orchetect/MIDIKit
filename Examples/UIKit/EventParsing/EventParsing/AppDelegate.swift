@@ -4,14 +4,12 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import SwiftRadix
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
-    
     let midiManager = MIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
@@ -19,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
     
     let virtualInputName = "TestApp Input"
+    
+    var window: UIWindow?
     
     func application(
         _ application: UIApplication,
@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-    
+        
         do {
             print("Creating virtual MIDI input.")
             try midiManager.addInput(
@@ -44,10 +44,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Error creating virtual MIDI input:", error.localizedDescription)
         }
-    
+        
         return true
     }
-    
+}
+
+extension AppDelegate {
     private func handleMIDI(event: MIDIEvent) {
         switch event {
         case let .noteOn(payload):
