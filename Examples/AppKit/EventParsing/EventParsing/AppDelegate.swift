@@ -5,7 +5,7 @@
 //
 
 import Cocoa
-import MIDIKit
+import MIDIKitIO
 import SwiftRadix
 
 @main
@@ -25,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             print("Error starting MIDI services:", error.localizedDescription)
         }
-    
+        
         do {
             print("Creating virtual MIDI input.")
             try midiManager.addInput(
@@ -33,7 +33,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 tag: virtualInputName,
                 uniqueID: .userDefaultsManaged(key: virtualInputName),
                 receiver: .events { [weak self] events in
-                    events.forEach { self?.handleMIDI(event: $0) }
+                    DispatchQueue.main.async {
+                        events.forEach { self?.handleMIDI(event: $0) }
+                    }
                 }
             )
         } catch {
@@ -41,6 +43,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        true
+    }
+}
+
+extension AppDelegate {
     private func handleMIDI(event: MIDIEvent) {
         switch event {
         case let .noteOn(payload):
