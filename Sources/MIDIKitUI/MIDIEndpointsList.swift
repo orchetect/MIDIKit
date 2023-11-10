@@ -75,6 +75,43 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         }
     }
     
+    private func updateID(endpoints: [Endpoint]) {
+        guard let updatedDetails = updatedID(endpoints: endpoints) else {
+            return
+        }
+        
+        self.selectionDisplayName = updatedDetails.displayName
+        // update ID in case it changed
+        if self.selectionID != updatedDetails.id { self.selectionID = updatedDetails.id }
+    }
+    
+    /// Returns non-nil if properties require updating.
+    private func updatedID(endpoints: [Endpoint]) -> (id: MIDIIdentifier?, displayName: String?)? {
+        if selectionID == .invalidMIDIIdentifier {
+            return (id: nil, displayName: nil)
+        }
+        
+        if let selectionID = selectionID,
+           let selectionDisplayName = selectionDisplayName,
+           let found = endpoints.first(
+            whereUniqueID: selectionID,
+            fallbackDisplayName: selectionDisplayName
+           )
+        {
+            return (id: found.uniqueID, displayName: found.displayName)
+        }
+        
+        return nil
+    }
+    
+    /// (Don't run from init.)
+    private func updateIDs(
+        endpoints: [Endpoint],
+        maskedFilter: MIDIEndpointMaskedFilter?
+    ) {
+        ids = generateIDs(endpoints: endpoints, maskedFilter: maskedFilter)
+    }
+    
     private func generateIDs(
         endpoints: [Endpoint],
         maskedFilter: MIDIEndpointMaskedFilter?
@@ -94,34 +131,6 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable, Endpoint.ID == MIDIIdent
         } else {
             return endpointIDs
         }
-    }
-    
-    private func updateID(endpoints: [Endpoint]) {
-        if selectionID == .invalidMIDIIdentifier {
-            selectionID = nil
-            selectionDisplayName = nil
-            return
-        }
-        
-        if let selectionID = selectionID,
-           let selectionDisplayName = selectionDisplayName,
-           let found = endpoints.first(
-               whereUniqueID: selectionID,
-               fallbackDisplayName: selectionDisplayName
-           )
-        {
-            self.selectionDisplayName = found.displayName
-            // update ID in case it changed
-            if self.selectionID != found.uniqueID { self.selectionID = found.uniqueID }
-        }
-    }
-    
-    /// (Don't run from init.)
-    private func updateIDs(
-        endpoints: [Endpoint],
-        maskedFilter: MIDIEndpointMaskedFilter?
-    ) {
-        ids = generateIDs(endpoints: endpoints, maskedFilter: maskedFilter)
     }
     
     private func endpoint(for id: MIDIIdentifier) -> Endpoint? {
