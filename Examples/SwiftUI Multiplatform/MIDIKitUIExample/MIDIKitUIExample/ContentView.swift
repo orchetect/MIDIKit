@@ -77,11 +77,13 @@ struct ContentView: View {
         Group {
             Button("Create Test Endpoints") {
                 try? midiHelper.createVirtuals()
-            }.disabled(midiHelper.virtualsExist)
+            }
+            .disabled(midiHelper.virtualsExist)
             
             Button("Remove Test Endpoints") {
                 try? midiHelper.destroyVirtuals()
-            }.disabled(!midiHelper.virtualsExist)
+            }
+            .disabled(!midiHelper.virtualsExist)
         }
         .buttonStyle(.bordered)
     }

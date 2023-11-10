@@ -110,8 +110,8 @@ struct PickersExampleView: View {
     private var inputsList: some View {
         MIDIInputsPicker(
             title: "Input",
-            selection: $midiInput,
-            cachedSelectionName: $midiInputName,
+            selectionID: $midiInput,
+            selectionDisplayName: $midiInputName,
             showIcons: showIcons,
             hideOwned: hideCreated
         )
@@ -121,8 +121,8 @@ struct PickersExampleView: View {
     private var outputsList: some View {
         MIDIOutputsPicker(
             title: "Output",
-            selection: $midiOutput,
-            cachedSelectionName: $midiOutputName,
+            selectionID: $midiOutput,
+            selectionDisplayName: $midiOutputName,
             showIcons: showIcons,
             hideOwned: hideCreated
         )

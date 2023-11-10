@@ -82,8 +82,8 @@ struct ListsExampleView: View {
     
     private var inputsList: some View {
         MIDIInputsList(
-            selection: $midiInput,
-            cachedSelectionName: $midiInputName,
+            selectionID: $midiInput,
+            selectionDisplayName: $midiInputName,
             showIcons: showIcons,
             hideOwned: hideCreated
         )
@@ -94,8 +94,8 @@ struct ListsExampleView: View {
     
     private var outputsList: some View {
         MIDIOutputsList(
-            selection: $midiOutput,
-            cachedSelectionName: $midiOutputName,
+            selectionID: $midiOutput,
+            selectionDisplayName: $midiOutputName,
             showIcons: showIcons,
             hideOwned: hideCreated
         )
