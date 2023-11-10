@@ -4,18 +4,18 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import SwiftUI
 
 /// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
 /// SwiftUI view state directly. Therefore, we need a helper class that conforms to
 /// `ObservableObject` which contains `@Published` properties that SwiftUI can use to update views.
 final class MIDIHelper: ObservableObject {
-    private weak var midiManager: MIDIManager?
+    private weak var midiManager: ObservableMIDIManager?
     
     public init() { }
     
-    public func setup(midiManager: MIDIManager) {
+    public func setup(midiManager: ObservableMIDIManager) {
         self.midiManager = midiManager
         
         do {
