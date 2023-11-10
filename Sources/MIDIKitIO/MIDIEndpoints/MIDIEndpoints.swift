@@ -12,31 +12,31 @@ import Foundation
 import Combine
 #endif
 
-// this protocol may not be necessary, it was experimental so that the `MIDIManager.endpoints`
-// property could be swapped out with a different Endpoints class with Combine support
-public protocol MIDIEndpointsProtocol where Self: Equatable, Self: Hashable {
-    /// List of MIDI input endpoints in the system.
-    var inputs: [MIDIInputEndpoint] { get }
-    
-    /// List of MIDI input endpoints in the system omitting virtual endpoints owned by the
-    /// ``MIDIManager`` instance.
-    var inputsUnowned: [MIDIInputEndpoint] { get }
-    
-    /// List of MIDI output endpoints in the system.
-    var outputs: [MIDIOutputEndpoint] { get }
-    
-    /// List of MIDI output endpoints in the system omitting virtual endpoints owned by the
-    /// ``MIDIManager`` instance.
-    var outputsUnowned: [MIDIOutputEndpoint] { get }
-    
-    /// Manually update the locally cached contents from the system.
-    /// This method does not need to be manually invoked, as it is called automatically by the
-    /// ``MIDIManager`` when MIDI system endpoints change.
-    mutating func updateCachedProperties()
-}
+// // this protocol may not be necessary, it was experimental so that the `MIDIManager.endpoints`
+// // property could be swapped out with a different Endpoints class with Combine support
+// public protocol MIDIEndpointsProtocol where Self: Equatable, Self: Hashable {
+//     /// List of MIDI input endpoints in the system.
+//     var inputs: [MIDIInputEndpoint] { get }
+//
+//     /// List of MIDI input endpoints in the system omitting virtual endpoints owned by the
+//     /// ``MIDIManager`` instance.
+//     var inputsUnowned: [MIDIInputEndpoint] { get }
+//
+//     /// List of MIDI output endpoints in the system.
+//     var outputs: [MIDIOutputEndpoint] { get }
+//
+//     /// List of MIDI output endpoints in the system omitting virtual endpoints owned by the
+//     /// ``MIDIManager`` instance.
+//     var outputsUnowned: [MIDIOutputEndpoint] { get }
+//
+//     /// Manually update the locally cached contents from the system.
+//     /// This method does not need to be manually invoked, as it is called automatically by the
+//     /// ``MIDIManager`` when MIDI system endpoints change.
+//     mutating func updateCachedProperties()
+// }
 
 /// Manages system MIDI endpoints information cache.
-public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
+public final class MIDIEndpoints: NSObject /* , MIDIEndpointsProtocol */ {
     /// Weak reference to ``MIDIManager``.
     weak var manager: MIDIManager?
     
@@ -89,7 +89,7 @@ public final class MIDIEndpoints: NSObject, MIDIEndpointsProtocol {
 /// Manages system MIDI endpoints information cache.
 /// Class and properties are published for use in SwiftUI and Combine.
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
-public final class MIDIObservableEndpoints: NSObject, ObservableObject, MIDIEndpointsProtocol {
+public final class MIDIObservableEndpoints: NSObject, ObservableObject /* , MIDIEndpointsProtocol */ {
     /// Weak reference to ``MIDIManager``.
     internal weak var manager: MIDIManager?
     
