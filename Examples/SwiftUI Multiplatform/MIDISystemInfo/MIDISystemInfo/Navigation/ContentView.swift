@@ -23,7 +23,7 @@ struct ContentViewForCurrentPlatform: View {
 }
 
 struct ContentView<DetailsContent: View>: View {
-    @EnvironmentObject private var midiManager: MIDIManager
+    @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     let detailsContent: (
         _ object: AnyMIDIIOObject?,
@@ -55,7 +55,7 @@ struct ContentView<DetailsContent: View>: View {
 }
 
 struct ContentViewPreviews: PreviewProvider {
-    static let midiManager = MIDIManager(
+    static let midiManager = ObservableMIDIManager(
         clientName: "Preview",
         model: "Preview",
         manufacturer: "MyCompany"

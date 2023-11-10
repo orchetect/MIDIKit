@@ -8,7 +8,7 @@ import MIDIKitIO
 import SwiftUI
 
 struct OtherInputsView<DetailsContent: View>: View {
-    @EnvironmentObject private var midiManager: MIDIManager
+    @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     let detailsContent: (
         _ object: AnyMIDIIOObject?,
@@ -36,7 +36,7 @@ struct OtherInputsView<DetailsContent: View>: View {
     private var otherInputs: [MIDIInputEndpoint] {
         // filter out endpoints that have an entity because
         // they are already being displayed in the Devices tree
-        midiManager.endpoints.inputs.sortedByName()
+        midiManager.observableEndpoints.inputs.sortedByName()
             .filter { $0.entity == nil }
     }
 }

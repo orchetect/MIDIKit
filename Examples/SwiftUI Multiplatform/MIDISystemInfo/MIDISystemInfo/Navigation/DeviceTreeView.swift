@@ -8,7 +8,7 @@ import MIDIKitIO
 import SwiftUI
 
 struct DeviceTreeView<DetailsContent: View>: View {
-    @EnvironmentObject private var midiManager: MIDIManager
+    @EnvironmentObject private var midiManager: ObservableMIDIManager
     
     let detailsContent: (
         _ object: AnyMIDIIOObject?,
