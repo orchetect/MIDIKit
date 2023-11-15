@@ -23,41 +23,41 @@ Pod::Spec.new do |spec|
     	subspec.dependency 'MIDIKitUI'
   	end
 
-    spec.subspec 'MIDIKitInternals' do |subspec|
+    spec.subspec 'Internals' do |subspec|
     	subspec.source_files = 'Sources/MIDIKitInternals/**/*'
   	end
 
   	spec.subspec 'MIDIKitCore' do |subspec|
     	subspec.source_files = 'Sources/MIDIKitCore/**/*'
-    	subspec.dependency 'MIDIKitInternals'
+    	subspec.dependency 'MIDIKit/MIDIKitInternals'
   	end
 
   	spec.subspec 'MIDIKitIO' do |subspec|
     	subspec.source_files = 'Sources/MIDIKitIO/**/*'
-    	subspec.dependency 'MIDIKitInternals'
-    	subspec.dependency 'MIDIKitCore'
+    	subspec.dependency 'MIDIKit/MIDIKitInternals'
+    	subspec.dependency 'MIDIKit/MIDIKitCore'
   	end
 
   	spec.subspec 'MIDIKitControlSurfaces' do |subspec|
     	subspec.source_files = 'Sources/MIDIKitControlSurfaces/**/*'
-    	subspec.dependency 'MIDIKitCore'
+    	subspec.dependency 'MIDIKit/MIDIKitCore'
   	end
 
   	spec.subspec 'MIDIKitSMF' do |subspec|
     	subspec.source_files = 'Sources/MIDIKitSMF/**/*'
-    	subspec.dependency 'MIDIKitCore'
+    	subspec.dependency 'MIDIKit/MIDIKitCore'
     	subspec.dependency 'TimecodeKit'
   	end
 
   	spec.subspec 'MIDIKitSync' do |subspec|
     	subspec.source_files = 'Sources/MIDIKitSync/**/*'
-    	subspec.dependency 'MIDIKitCore'
+    	subspec.dependency 'MIDIKit/MIDIKitCore'
     	subspec.dependency 'TimecodeKit'
   	end
 
   	spec.subspec 'MIDIKitUI' do |subspec|
     	subspec.source_files = 'Sources/MIDIKitUI/**/*'
-    	subspec.dependency 'MIDIKitIO'
+    	subspec.dependency 'MIDIKit/MIDIKitIO'
   	end
 
 end
