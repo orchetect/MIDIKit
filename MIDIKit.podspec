@@ -37,7 +37,6 @@ Pod::Spec.new do |spec|
 
   	spec.subspec 'MIDIKitIO' do |subspec|
     	subspec.source_files = 'Sources/MIDIKitIO/**/*'
-    	subspec.dependency 'MIDIKit/MIDIKitInternals'
     	subspec.dependency 'MIDIKit/MIDIKitCore'
   	end
 
