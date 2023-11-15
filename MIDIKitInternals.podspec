@@ -8,8 +8,7 @@ Pod::Spec.new do |spec|
   	spec.source           = { :git => 'https://github.com/orchetect/MIDIKit.git', :tag => spec.version.to_s }
   	spec.swift_version = '5.7'
     spec.frameworks = 'CoreMIDI'  
-    #spec.platform = :osx
-
+    spec.static_framework = true	
     spec.tvos.deployment_target = '11.0'
     spec.ios.deployment_target = '11.0'
     spec.macos.deployment_target = '10.13'
