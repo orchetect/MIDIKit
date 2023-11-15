@@ -16,4 +16,4 @@ Pod::Spec.new do |spec|
 
     spec.source_files = 'Sources/MIDIKitUI/**/*'
     spec.dependency 'MIDIKitIO'
- }
+ end

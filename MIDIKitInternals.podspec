@@ -15,4 +15,4 @@ Pod::Spec.new do |spec|
     spec.macos.deployment_target = '10.13'
 
     spec.source_files = 'Sources/MIDIKitInternals/**/*'
- }
+end

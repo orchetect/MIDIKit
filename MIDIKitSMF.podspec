@@ -17,4 +17,4 @@ Pod::Spec.new do |spec|
     spec.source_files = 'Sources/MIDIKitSMF/**/*'
     spec.dependency 'MIDIKitCore'
     spec.dependency 'TimecodeKit'
- }
+ end
