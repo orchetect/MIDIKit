@@ -23,7 +23,7 @@ Pod::Spec.new do |spec|
     	subspec.dependency 'MIDIKit/MIDIKitUI'
   	end
 
-    spec.subspec 'Internals' do |subspec|
+    spec.subspec 'MIDIKitInternals' do |subspec|
     	subspec.source_files = 'Sources/MIDIKitInternals/**/*'
   	end
 
