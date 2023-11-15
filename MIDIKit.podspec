@@ -5,7 +5,7 @@ Pod::Spec.new do |spec|
   	spec.homepage         = 'https://github.com/orchetect/MIDIKit'
   	spec.license          = { :type => 'MIT', :file => 'LICENSE.md' }
   	spec.author           = { 'orchetect' => 'https://github.com/orchetect' }
-  	spec.source           = { :git => 'https://github.com/orchetect/MIDIKit.git', :tag => s.version.to_s }
+  	spec.source           = { :git => 'https://github.com/orchetect/MIDIKit.git', :tag => spec.version.to_s }
   	spec.ios.deployment_target = '13.0'
   	spec.swift_version = '5.0'
     spec.frameworks = 'CoreMIDI'  
