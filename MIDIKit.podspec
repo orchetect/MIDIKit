@@ -1,19 +1,19 @@
-Pod::Spec.new do |s|
-  	s.name             = 'MIDIKit'
-  	s.version          = '0.9.4'
-  	s.summary          = 'An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MIDI 2.0.'
-  	s.homepage         = 'https://github.com/orchetect/MIDIKit'
-  	s.license          = { :type => 'MIT', :file => 'LICENSE.md' }
-  	s.author           = { 'orchetect' => 'https://github.com/orchetect' }
-  	s.source           = { :git => 'https://github.com/orchetect/MIDIKit.git', :tag => s.version.to_s }
-  	s.ios.deployment_target = '13.0'
-  	s.swift_version = '5.0'
-    s.frameworks = 'CoreMIDI'  
+Pod::Spec.new do |spec|
+  	spec.name             = 'MIDIKit'
+  	spec.version          = '0.9.4'
+  	spec.summary          = 'An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MIDI 2.0.'
+  	spec.homepage         = 'https://github.com/orchetect/MIDIKit'
+  	spec.license          = { :type => 'MIT', :file => 'LICENSE.md' }
+  	spec.author           = { 'orchetect' => 'https://github.com/orchetect' }
+  	spec.source           = { :git => 'https://github.com/orchetect/MIDIKit.git', :tag => s.version.to_s }
+  	spec.ios.deployment_target = '13.0'
+  	spec.swift_version = '5.0'
+    spec.frameworks = 'CoreMIDI'  
     #spec.platform = :osx
 
-    s.default_subspec = 'Core'
+    spec.default_subspec = 'Core'
 
-    s.subspec 'Core' do |subspec|
+    spec.subspec 'Core' do |subspec|
     	subspec.source_files = 'Sources/MIDIKit/**/*'
     	subspec.dependency 'MIDIKitCore'
     	subspec.dependency 'MIDIKitIO'
