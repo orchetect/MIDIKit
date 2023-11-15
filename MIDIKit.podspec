@@ -15,12 +15,12 @@ Pod::Spec.new do |spec|
 
     spec.subspec 'Core' do |subspec|
     	subspec.source_files = 'Sources/MIDIKit/**/*'
-    	subspec.dependency 'MIDIKitCore'
-    	subspec.dependency 'MIDIKitIO'
-    	subspec.dependency 'MIDIKitControlSurfaces'
-    	subspec.dependency 'MIDIKitSMF'
-    	subspec.dependency 'MIDIKitSync'
-    	subspec.dependency 'MIDIKitUI'
+    	subspec.dependency 'MIDIKit/MIDIKitCore'
+    	subspec.dependency 'MIDIKit/MIDIKitIO'
+    	subspec.dependency 'MIDIKit/MIDIKitControlSurfaces'
+    	subspec.dependency 'MIDIKit/MIDIKitSMF'
+    	subspec.dependency 'MIDIKit/MIDIKitSync'
+    	subspec.dependency 'MIDIKit/MIDIKitUI'
   	end
 
     spec.subspec 'Internals' do |subspec|
