@@ -47,7 +47,7 @@ let package = Package(
     ],
     
     dependencies: [
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.0.4"),
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.0.6"),
         
         // testing only:
         .package(url: "https://github.com/orchetect/XCTestUtils", from: "1.0.3")
