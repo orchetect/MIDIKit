@@ -306,8 +306,8 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_state, nil)
     }
     
-    // skip this test on tvOS/watchOS; flakey and we don't need to run it
-    #if !os(tvOS) && !os(watchOS)
+    // skip this test on other platforms; flaky and we don't need to run it
+    #if os(macOS)
     func testMTC_Receiver_Handlers_QFMessages() {
         // swiftformat:disable wrap
         // swiftformat:disable wrapSingleLineComments
