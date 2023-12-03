@@ -792,7 +792,7 @@ final class MIDI1Parser_Tests: XCTestCase {
             parser.parsedEvents(in: bytes, umpGroup: 0)
         }
         
-        // TODO: this test will pass if RPN/NRPN parsing is added to MIDI1Parser
+        // TODO: this test will pass if RPN/NRPN bundling is added to MIDI1Parser
         // XCTAssertEqual(
         //     parsedEvents(bytes: [
         //         0xB2, 0x63, 0x40, // CC 99 value 0x40 on channel 3
@@ -801,7 +801,7 @@ final class MIDI1Parser_Tests: XCTestCase {
         //     [.nrpn(parameter: .init(msb: 0x40, lsb: 0x41), data: (msb: 0x10, lsb: nil), channel: 0x02)]
         // )
         
-        // TODO: this test will pass if RPN/NRPN parsing is added to MIDI1Parser
+        // TODO: this test will pass if RPN/NRPN bundling is added to MIDI1Parser
         // XCTAssertEqual(
         //     parsedEvents(bytes: [
         //         0xB2, 0x63, 0x40, // CC 99 value 0x40 on channel 3
