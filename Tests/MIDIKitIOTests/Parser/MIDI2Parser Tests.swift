@@ -812,7 +812,7 @@ final class MIDI2Parser_Tests: XCTestCase {
                 .parsedEvents(using: parser)
         }
         
-        // RPN Absolute - raw param
+        // NRPN Absolute - raw param
         do {
             let rpn: MIDIEvent = .nrpn(
                 .raw(
@@ -831,7 +831,7 @@ final class MIDI2Parser_Tests: XCTestCase {
             )
         }
         
-        // RPN Relative - raw param
+        // NRPN Relative - raw param
         do {
             let rpn: MIDIEvent = .nrpn(
                 .raw(
