@@ -782,5 +782,62 @@ final class MIDI1Parser_Tests: XCTestCase {
             [.noteOn(60, velocity: .midi1(0), channel: 0, group: 0)]
         )
     }
+    
+    func testNRPN_SinglePacket() {
+        // template method
+        
+        let parser = MIDI1Parser()
+        
+        func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
+            parser.parsedEvents(in: bytes, umpGroup: 0)
+        }
+        
+        // TODO: this test will pass if RPN/NRPN parsing is added to MIDI1Parser
+        // XCTAssertEqual(
+        //     parsedEvents(bytes: [
+        //         0xB2, 0x63, 0x40, // CC 99 value 0x40 on channel 3
+        //         0x62, 0x41, // running status CC 98 value 0x41
+        //         0x06, 0x10]), // data entry MSB value 0x10
+        //     [.nrpn(parameter: .init(msb: 0x40, lsb: 0x41), data: (msb: 0x10, lsb: nil), channel: 0x02)]
+        // )
+        
+        // TODO: this test will pass if RPN/NRPN parsing is added to MIDI1Parser
+        // XCTAssertEqual(
+        //     parsedEvents(bytes: [
+        //         0xB2, 0x63, 0x40, // CC 99 value 0x40 on channel 3
+        //         0x62, 0x41, // running status CC 98 value 0x41
+        //         0x06, 0x10, // data entry MSB value 0x10
+        //         0x38, 0x20]), // data entry LSB value 0x20
+        //     [.nrpn(parameter: .init(msb: 0x40, lsb: 0x41), data: (msb: 0x10, lsb: 0x20), channel: 0x02)]
+        // )
+        
+        // default parsing style: separate CC events are received in sequence
+        XCTAssertEqual(
+            parsedEvents(bytes: [
+                0xB2, 0x63, 0x40, // CC 99 value 0x40 on channel 3
+                0x62, 0x41, // running status CC 98 value 0x41
+                0x06, 0x10]), // data entry MSB value 0x10
+            [
+                .cc(0x63, value: .midi1(0x40), channel: 0x02),
+                .cc(0x62, value: .midi1(0x41), channel: 0x02),
+                .cc(0x06, value: .midi1(0x10), channel: 0x02)
+            ]
+        )
+        
+        //  default parsing style: separate CC events are received in sequence
+        XCTAssertEqual(
+            parsedEvents(bytes: [
+                0xB2, 0x63, 0x40, // CC 99 value 0x40 on channel 3
+                0x62, 0x41, // running status CC 98 value 0x41
+                0x06, 0x10, // data entry MSB value 0x10
+                0x38, 0x20]), // data entry LSB value 0x20
+            [
+                .cc(0x63, value: .midi1(0x40), channel: 0x02),
+                .cc(0x62, value: .midi1(0x41), channel: 0x02),
+                .cc(0x06, value: .midi1(0x10), channel: 0x02),
+                .cc(0x38, value: .midi1(0x20), channel: 0x02)
+            ]
+        )
+    }
 }
 #endif

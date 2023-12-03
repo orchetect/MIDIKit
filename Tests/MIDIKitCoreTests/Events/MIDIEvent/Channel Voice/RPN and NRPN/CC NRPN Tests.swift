@@ -82,8 +82,8 @@ final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
         )
     }
     
-    // MARK: - Raw MIDI 1.0 Bytes -> MIDIEvent.midi1NRPN()
-    // TODO: add unit tests if/when aggregate CC/DataEntry parsing gets added to `MIDI1Parser`
+    // MARK: - Raw MIDI 1.0 Bytes -> MIDIEvent.nrpn()
+    // See MIDIKitIO - MIDI1Parser Tests.swift
     
     // MARK: - MIDIEvent.nrpn() -> Raw MIDI 2.0 RPN UMP Words
     
