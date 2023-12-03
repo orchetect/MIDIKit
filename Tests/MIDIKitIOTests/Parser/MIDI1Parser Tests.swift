@@ -807,7 +807,7 @@ final class MIDI1Parser_Tests: XCTestCase {
         //         0xB2, 0x63, 0x40, // CC 99 value 0x40 on channel 3
         //         0x62, 0x41, // running status CC 98 value 0x41
         //         0x06, 0x10, // data entry MSB value 0x10
-        //         0x38, 0x20]), // data entry LSB value 0x20
+        //         0x26, 0x20]), // data entry LSB value 0x20
         //     [.nrpn(parameter: .init(msb: 0x40, lsb: 0x41), data: (msb: 0x10, lsb: 0x20), channel: 0x02)]
         // )
         
@@ -830,12 +830,12 @@ final class MIDI1Parser_Tests: XCTestCase {
                 0xB2, 0x63, 0x40, // CC 99 value 0x40 on channel 3
                 0x62, 0x41, // running status CC 98 value 0x41
                 0x06, 0x10, // data entry MSB value 0x10
-                0x38, 0x20]), // data entry LSB value 0x20
+                0x26, 0x20]), // data entry LSB value 0x20
             [
                 .cc(0x63, value: .midi1(0x40), channel: 0x02),
                 .cc(0x62, value: .midi1(0x41), channel: 0x02),
                 .cc(0x06, value: .midi1(0x10), channel: 0x02),
-                .cc(0x38, value: .midi1(0x20), channel: 0x02)
+                .cc(0x26, value: .midi1(0x20), channel: 0x02)
             ]
         )
     }
