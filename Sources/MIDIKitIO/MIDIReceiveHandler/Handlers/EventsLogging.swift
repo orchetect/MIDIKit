@@ -21,8 +21,10 @@ extension MIDIReceiveHandler {
     final class EventsLogging: MIDIReceiveHandlerProtocol {
         public var handler: MIDIReceiver.EventsLoggingHandler
     
-        let midi1Parser = MIDI1Parser()
-        let midi2Parser = MIDI2Parser()
+        let midi1Parser: MIDI1Parser
+        
+        var midi2Parser: MIDI2Parser? = nil
+        var advancedMIDI2Parser: AdvancedMIDI2Parser? = nil
     
         public let options: MIDIReceiverOptions
     
@@ -32,7 +34,7 @@ extension MIDIReceiveHandler {
             for midiPacket in packets {
                 let events = midi1Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
-                log(
+                prepLogMessage(
                     events: events,
                     timeStamp: midiPacket.timeStamp,
                     source: midiPacket.source
@@ -45,14 +47,15 @@ extension MIDIReceiveHandler {
             _ packets: [UniversalMIDIPacketData],
             protocol midiProtocol: MIDIProtocolVersion
         ) {
-            for midiPacket in packets {
-                let events = midi2Parser.parsedEvents(in: midiPacket)
-                guard !events.isEmpty else { continue }
-                log(
-                    events: events,
-                    timeStamp: midiPacket.timeStamp,
-                    source: midiPacket.source
-                )
+            if let parser = midi2Parser {
+                for midiPacket in packets {
+                    let events = parser.parsedEvents(in: midiPacket)
+                    handle(events: events, timeStamp: midiPacket.timeStamp, source: midiPacket.source)
+                }
+            } else if let parser = advancedMIDI2Parser {
+                for midiPacket in packets {
+                    parser.parseEvents(in: midiPacket)
+                }
             }
         }
     
@@ -62,9 +65,6 @@ extension MIDIReceiveHandler {
             handler: MIDIReceiver.EventsLoggingHandler?
         ) {
             self.options = options
-            
-            midi1Parser.translateNoteOnZeroVelocityToNoteOff = options
-                .contains(.translateMIDI1NoteOnZeroVelocityToNoteOff)
             
             self.handler = handler ?? { packetBytesString in
                 #if DEBUG
@@ -76,9 +76,39 @@ extension MIDIReceiveHandler {
                 )
                 #endif
             }
+            
+            // MIDI 1
+            
+            midi1Parser = MIDI1Parser()
+            
+            midi1Parser.translateNoteOnZeroVelocityToNoteOff = options
+                .contains(.translateMIDI1NoteOnZeroVelocityToNoteOff)
+            
+            // MIDI 2
+            
+            if options.contains(.bundleRPNAndNRPNDataEntryLSB) {
+                advancedMIDI2Parser = AdvancedMIDI2Parser { [weak self] events, timeStamp, source in
+                    self?.handle(events: events, timeStamp: timeStamp, source: source)
+                }
+            } else {
+                midi2Parser = MIDI2Parser()
+            }
         }
-    
-        func log(
+        
+        func handle(
+            events: [MIDIEvent],
+            timeStamp: CoreMIDITimeStamp,
+            source: MIDIOutputEndpoint?
+        ) {
+            guard !events.isEmpty else { return }
+            prepLogMessage(
+                events: events,
+                timeStamp: timeStamp,
+                source: source
+            )
+        }
+        
+        func prepLogMessage(
             events: [MIDIEvent],
             timeStamp: CoreMIDITimeStamp,
             source: MIDIOutputEndpoint?

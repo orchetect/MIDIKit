@@ -13,7 +13,13 @@ public class AdvancedMIDI2Parser {
     // MARK: - Options
     
     public var bundleRPNAndNRPNDataEntryLSB: Bool = false
-    public var handleEvents: (_ events: [MIDIEvent]) -> Void
+    
+    public typealias EventsHandler = (
+        _ events: [MIDIEvent],
+        _ timeStamp: CoreMIDITimeStamp,
+        _ source: MIDIOutputEndpoint?
+    ) -> Void
+    public var handleEvents: EventsHandler
     
     // MARK: - Internal State
     
@@ -21,12 +27,12 @@ public class AdvancedMIDI2Parser {
     private var pnBundler: ParameterNumberEventBundler!
     
     public init(
-        handleEvents: @escaping (_ events: [MIDIEvent]) -> Void
+        handleEvents: @escaping EventsHandler
     ) {
         self.handleEvents = handleEvents
         
-        pnBundler = ParameterNumberEventBundler { events in
-            handleEvents(events)
+        pnBundler = ParameterNumberEventBundler { events, timeStamp, source in
+            handleEvents(events, timeStamp, source)
         }
     }
 }
@@ -37,14 +43,24 @@ extension AdvancedMIDI2Parser {
     public func parseEvents(
         in packetData: UniversalMIDIPacketData
     ) {
-        parseEvents(in: packetData.bytes)
+        parseEvents(
+            in: packetData.bytes,
+            timeStamp: packetData.timeStamp,
+            source: packetData.source
+        )
     }
     
     public func parseEvents(
-        in bytes: [UInt8]
+        in bytes: [UInt8],
+        timeStamp: CoreMIDITimeStamp = 0,
+        source: MIDIOutputEndpoint? = nil
     ) {
         var events = parser.parsedEvents(in: bytes)
-        process(parsedEvents: &events)
+        process(
+            parsedEvents: &events,
+            timeStamp: timeStamp,
+            source: source
+        )
     }
 }
 
@@ -52,14 +68,18 @@ extension AdvancedMIDI2Parser {
 
 extension AdvancedMIDI2Parser {
     // This method is broken out to make unit testing easier.
-    func process(parsedEvents events: inout [MIDIEvent]) {
+    func process(
+        parsedEvents events: inout [MIDIEvent],
+        timeStamp: CoreMIDITimeStamp = 0,
+        source: MIDIOutputEndpoint? = nil
+    ) {
         var events = events
         
         if bundleRPNAndNRPNDataEntryLSB {
-            pnBundler.process(events: &events)
+            pnBundler.process(events: &events, timeStamp: timeStamp, source: source)
         }
         
-        handleEvents(events)
+        handleEvents(events, timeStamp, source)
     }
 }
 

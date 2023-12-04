@@ -11,8 +11,10 @@ extension MIDIReceiveHandler {
     final class WeakEventsReceiver: MIDIReceiveHandlerProtocol {
         public weak var receiver: ReceivesMIDIEvents?
         
-        let midi1Parser = MIDI1Parser()
-        let midi2Parser = MIDI2Parser()
+        let midi1Parser: MIDI1Parser
+        
+        var midi2Parser: MIDI2Parser? = nil
+        var advancedMIDI2Parser: AdvancedMIDI2Parser? = nil
         
         let options: MIDIReceiverOptions
         
@@ -31,10 +33,16 @@ extension MIDIReceiveHandler {
             _ packets: [UniversalMIDIPacketData],
             protocol midiProtocol: MIDIProtocolVersion
         ) {
-            for midiPacket in packets {
-                let events = midi2Parser.parsedEvents(in: midiPacket)
-                guard !events.isEmpty else { continue }
-                handle(events: events)
+            if let parser = midi2Parser {
+                for midiPacket in packets {
+                    let events = parser.parsedEvents(in: midiPacket)
+                    guard !events.isEmpty else { continue }
+                    handle(events: events)
+                }
+            } else if let parser = advancedMIDI2Parser {
+                for midiPacket in packets {
+                    parser.parseEvents(in: midiPacket)
+                }
             }
         }
         
@@ -43,9 +51,24 @@ extension MIDIReceiveHandler {
             receiver: ReceivesMIDIEvents
         ) {
             self.options = options
+            self.receiver = receiver
+            
+            // MIDI 1
+            
+            midi1Parser = MIDI1Parser()
+            
             midi1Parser.translateNoteOnZeroVelocityToNoteOff = options
                 .contains(.translateMIDI1NoteOnZeroVelocityToNoteOff)
-            self.receiver = receiver
+            
+            // MIDI 2
+            
+            if options.contains(.bundleRPNAndNRPNDataEntryLSB) {
+                advancedMIDI2Parser = AdvancedMIDI2Parser { [weak self] events, _, _ in
+                    self?.handle(events: events)
+                }
+            } else {
+                midi2Parser = MIDI2Parser()
+            }
         }
         
         func handle(events: [MIDIEvent]) {

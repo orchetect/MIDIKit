@@ -13,7 +13,12 @@ public class ParameterNumberEventBundler {
     // MARK: - Options
     
     public var bundleRPNAndNRPNDataEntryLSB: Bool = false
-    public var handleEvents: (_ events: [MIDIEvent]) -> Void
+    public typealias EventsHandler = (
+        _ events: [MIDIEvent],
+        _ timeStamp: CoreMIDITimeStamp,
+        _ source: MIDIOutputEndpoint?
+    ) -> Void
+    public var handleEvents: EventsHandler
     
     // MARK: - Internal State
     
@@ -22,7 +27,7 @@ public class ParameterNumberEventBundler {
     private var nrpnHolder: EventHolder<MIDIEvent.NRPN>!
     
     public init(
-        handleEvents: @escaping (_ events: [MIDIEvent]) -> Void
+        handleEvents: @escaping EventsHandler
     ) {
         self.handleEvents = handleEvents
         
@@ -31,7 +36,11 @@ public class ParameterNumberEventBundler {
                 .rpn(event)
             },
             timerExpired: { [weak self] storedEvent in
-                self?.handleEvents([storedEvent])
+                self?.handleEvents(
+                    [storedEvent.event],
+                    storedEvent.timeStamp,
+                    storedEvent.source
+                )
             }
         )
         
@@ -40,7 +49,11 @@ public class ParameterNumberEventBundler {
                 .nrpn(event)
             },
             timerExpired: { [weak self] storedEvent in
-                self?.handleEvents([storedEvent])
+                self?.handleEvents(
+                    [storedEvent.event],
+                    storedEvent.timeStamp,
+                    storedEvent.source
+                )
             }
         )
     }
@@ -49,12 +62,16 @@ public class ParameterNumberEventBundler {
 // MARK: - Public Methods
 
 extension ParameterNumberEventBundler {
-    public func process(events: inout [MIDIEvent]) {
+    public func process(
+        events: inout [MIDIEvent],
+        timeStamp: CoreMIDITimeStamp,
+        source: MIDIOutputEndpoint?
+    ) {
         var newEvents: [MIDIEvent] = []
         var indicesToRemove: [Int] = []
         
         for index in events.indices {
-            let processed = processPN(in: events[index])
+            let processed = processPN(in: events[index], timeStamp: timeStamp, source: source)
             
             switch processed.eventResult {
             case .noChange: break
@@ -78,27 +95,31 @@ extension ParameterNumberEventBundler {
         case replace(MIDIEvent)
     }
     
-    private func processPN(in event: MIDIEvent) -> (eventResult: ProcessResult, newEvents: [MIDIEvent]) {
+    private func processPN(
+        in event: MIDIEvent,
+        timeStamp: CoreMIDITimeStamp,
+        source: MIDIOutputEndpoint?
+    ) -> (eventResult: ProcessResult, newEvents: [MIDIEvent]) {
         var eventResult: ProcessResult = .noChange
         var newEvents: [MIDIEvent] = []
         
         if case let .rpn(event) = event {
-            let processed = processPN(event: event, holder: rpnHolder)
+            let processed = processPN(event: event, timeStamp: timeStamp, source: source, holder: rpnHolder)
             eventResult = processed.eventResult
             newEvents.append(contentsOf: processed.newEvents)
         } else {
             if let storedEvent = rpnHolder.returnStoredAndReset() {
-                newEvents.append(.rpn(storedEvent))
+                newEvents.append(storedEvent.event)
             }
         }
         
         if case let .nrpn(event) = event {
-            let processed = processPN(event: event, holder: nrpnHolder)
+            let processed = processPN(event: event, timeStamp: timeStamp, source: source, holder: nrpnHolder)
             eventResult = processed.eventResult
             newEvents.append(contentsOf: processed.newEvents)
         } else {
             if let storedEvent = nrpnHolder.returnStoredAndReset() {
-                newEvents.append(.nrpn(storedEvent))
+                newEvents.append(storedEvent.event)
             }
         }
         
@@ -106,7 +127,9 @@ extension ParameterNumberEventBundler {
     }
     
     private func processPN<T>(
-        event: T, 
+        event: T,
+        timeStamp: CoreMIDITimeStamp,
+        source: MIDIOutputEndpoint?,
         holder: EventHolder<T>
     ) -> (eventResult: ProcessResult, newEvents: [MIDIEvent]) {
         // could be 1st UMP in a two UMP packet series where first packet has data entry LSB of 0,
@@ -120,21 +143,21 @@ extension ParameterNumberEventBundler {
                 // we can only assume that the stored event was 'complete' with a 0 Data Entry LSB.
                 // it doesn't mater if the param/LSB match;
                 // they could be consecutive PN messages each with a Data Entry LSB of 0.
-                return (eventResult: .noChange, newEvents: [holder.storedEventWrapper(storedEvent)])
+                return (eventResult: .noChange, newEvents: [holder.storedEventWrapper(storedEvent.event)])
             } else {
                 // could be either the 2nd UMP of a two UMP packet series,
                 // or could be its own fully contained PN UMP
                 
                 let paramAndDataEntryLSBMatch =
-                    event.parameter.parameterBytes == storedEvent.parameter.parameterBytes &&
-                    event.parameter.dataEntryBytes.msb == storedEvent.parameter.dataEntryBytes.msb
+                    event.parameter.parameterBytes == storedEvent.event.parameter.parameterBytes &&
+                    event.parameter.dataEntryBytes.msb == storedEvent.event.parameter.dataEntryBytes.msb
                 
                 if paramAndDataEntryLSBMatch {
                     // looks like stored event is a packet #1 in a two UMP packet series
                     return (eventResult: .noChange, newEvents: []) // keep only new event
                 } else {
                     // looks like stored event is unrelated, so add it
-                    return (eventResult: .noChange, newEvents: [holder.storedEventWrapper(storedEvent)])
+                    return (eventResult: .noChange, newEvents: [holder.storedEventWrapper(storedEvent.event)])
                 }
             }
         } else {
@@ -142,7 +165,7 @@ extension ParameterNumberEventBundler {
                 // PN UMP packet with Data Entry MSB, but 0 LSB.
                 // could be complete, or could be first of 2 UMP packets.
                 // store it and start the timer
-                holder.storedEvent = event
+                holder.storedEvent = (event, timeStamp, source)
                 holder.restartTimer()
                 return (eventResult: .remove, newEvents: [])
             } else {

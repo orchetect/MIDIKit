@@ -17,8 +17,10 @@ extension MIDIReceiveHandler {
     final class Events: MIDIReceiveHandlerProtocol {
         public var handler: MIDIReceiver.EventsHandler
         
-        let midi1Parser = MIDI1Parser()
-        let midi2Parser = MIDI2Parser()
+        let midi1Parser: MIDI1Parser
+        
+        var midi2Parser: MIDI2Parser? = nil
+        var advancedMIDI2Parser: AdvancedMIDI2Parser? = nil
         
         let options: MIDIReceiverOptions
         
@@ -37,10 +39,15 @@ extension MIDIReceiveHandler {
             _ packets: [UniversalMIDIPacketData],
             protocol midiProtocol: MIDIProtocolVersion
         ) {
-            for midiPacket in packets {
-                let events = midi2Parser.parsedEvents(in: midiPacket)
-                guard !events.isEmpty else { continue }
-                handle(events: events)
+            if let parser = midi2Parser {
+                for midiPacket in packets {
+                    let events = parser.parsedEvents(in: midiPacket)
+                    handle(events: events)
+                }
+            } else if let parser = advancedMIDI2Parser {
+                for midiPacket in packets {
+                    parser.parseEvents(in: midiPacket)
+                }
             }
         }
         
@@ -49,9 +56,6 @@ extension MIDIReceiveHandler {
             handler: @escaping MIDIReceiver.EventsHandler
         ) {
             self.options = options
-            
-            midi1Parser.translateNoteOnZeroVelocityToNoteOff = options
-                .contains(.translateMIDI1NoteOnZeroVelocityToNoteOff)
             
             if options.contains(.filterActiveSensingAndClock) {
                 self.handler = { events in
@@ -62,9 +66,28 @@ extension MIDIReceiveHandler {
             } else {
                 self.handler = handler
             }
+            
+            // MIDI 1
+            
+            midi1Parser = MIDI1Parser()
+            
+            midi1Parser.translateNoteOnZeroVelocityToNoteOff = options
+                .contains(.translateMIDI1NoteOnZeroVelocityToNoteOff)
+            
+            // MIDI 2
+            
+            if options.contains(.bundleRPNAndNRPNDataEntryLSB) {
+                advancedMIDI2Parser = AdvancedMIDI2Parser { [weak self] events, _, _ in
+                    self?.handle(events: events)
+                }
+            } else {
+                midi2Parser = MIDI2Parser()
+            }
         }
         
         func handle(events: [MIDIEvent]) {
+            guard !events.isEmpty else { return }
+            
             if options.contains(.filterActiveSensingAndClock) {
                 let filtered = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
                 guard !filtered.isEmpty else { return }

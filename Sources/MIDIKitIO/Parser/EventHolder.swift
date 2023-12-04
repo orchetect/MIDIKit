@@ -12,18 +12,27 @@ import Foundation
 final class EventHolder<T: MIDIParameterNumberEvent> {
     // MARK: - Options
     
-    public typealias TimerExpiredHandler = (_ storedEvent: MIDIEvent) -> Void
+    public typealias TimerExpiredHandler = (_ storedEvent: ReturnedStoredEvent) -> Void
     public var timerExpired: TimerExpiredHandler?
-    
     public let timeOut: TimeInterval
-    
     public var storedEventWrapper: (T) -> MIDIEvent
     
     // MARK: - Parser State
     
     private var expirationTimer: Timer?
     
-    var storedEvent: T?
+    public typealias StoredEvent = (
+        event: T,
+        timeStamp: CoreMIDITimeStamp,
+        source: MIDIOutputEndpoint?
+    )
+    var storedEvent: StoredEvent?
+    
+    public typealias ReturnedStoredEvent = (
+        event: MIDIEvent,
+        timeStamp: CoreMIDITimeStamp,
+        source: MIDIOutputEndpoint?
+    )
     
     init(
         timeOut: TimeInterval = 0.05,
@@ -37,11 +46,11 @@ final class EventHolder<T: MIDIParameterNumberEvent> {
     
     func restartTimer() {
         expirationTimer?.invalidate()
-        expirationTimer = Timer.scheduledTimer(withTimeInterval: timeOut, repeats: false) { [self] timer in
-            defer { reset() }
-            guard let storedEvent = storedEvent else { return }
-            timerExpired?(storedEventWrapper(storedEvent))
-        }
+        expirationTimer = Timer
+            .scheduledTimer(withTimeInterval: timeOut, repeats: false) { [self] timer in
+                defer { reset() }
+                callTimerExpired()
+            }
     }
     
     func reset() {
@@ -50,8 +59,8 @@ final class EventHolder<T: MIDIParameterNumberEvent> {
     }
     
     func fireStored() {
-        if let storedEvent = storedEvent {
-            timerExpired?(storedEventWrapper(storedEvent))
+        if storedEvent != nil {
+            callTimerExpired()
         }
         storedEvent = nil
     }
@@ -61,10 +70,25 @@ final class EventHolder<T: MIDIParameterNumberEvent> {
         fireStored()
     }
     
-    func returnStoredAndReset() -> T? {
-        let storedEvent = storedEvent
+    func returnStoredAndReset() -> ReturnedStoredEvent? {
+        let storedEvent = returnedStoredEvent()
         reset()
         return storedEvent
+    }
+    
+    func callTimerExpired() {
+        guard let storedEvent = returnedStoredEvent() else { return }
+        timerExpired?(storedEvent)
+    }
+    
+    func returnedStoredEvent() -> ReturnedStoredEvent? {
+        guard let storedEvent = storedEvent else { return nil }
+        let wrapped = storedEventWrapper(storedEvent.event)
+        return (
+            event: wrapped,
+            timeStamp: storedEvent.timeStamp,
+            source: storedEvent.source
+        )
     }
 }
 

@@ -16,7 +16,7 @@ final class AdvancedMIDI2Parser_Tests: XCTestCase {
     fileprivate var receivedEvents: [MIDIEvent] = []
     
     override func setUpWithError() throws {
-        parser = AdvancedMIDI2Parser { [self] events in
+        parser = AdvancedMIDI2Parser { [self] events, _, _ in
             receivedEvents.append(contentsOf: events)
         }
         
