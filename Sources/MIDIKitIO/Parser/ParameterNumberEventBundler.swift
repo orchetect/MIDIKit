@@ -1,5 +1,5 @@
 //
-//  PNBundler.swift
+//  ParameterNumberEventBundler.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@
 import Foundation
 
 /// RPN/NRPN bundling.
-public class PNBundler {
+public class ParameterNumberEventBundler {
     // MARK: - Options
     
     public var bundleRPNAndNRPNDataEntryLSB: Bool = false
@@ -48,7 +48,7 @@ public class PNBundler {
 
 // MARK: - Public Methods
 
-extension PNBundler {
+extension ParameterNumberEventBundler {
     public func process(events: inout [MIDIEvent]) {
         var newEvents: [MIDIEvent] = []
         var indicesToRemove: [Int] = []
@@ -71,7 +71,7 @@ extension PNBundler {
 
 // MARK: - Internal Methods
 
-extension PNBundler {
+extension ParameterNumberEventBundler {
     enum ProcessResult {
         case noChange
         case remove

@@ -18,14 +18,14 @@ public class AdvancedMIDI2Parser {
     // MARK: - Internal State
     
     private let parser = MIDI2Parser()
-    private var pnBundler: PNBundler!
+    private var pnBundler: ParameterNumberEventBundler!
     
     public init(
         handleEvents: @escaping (_ events: [MIDIEvent]) -> Void
     ) {
         self.handleEvents = handleEvents
         
-        pnBundler = PNBundler { events in
+        pnBundler = ParameterNumberEventBundler { events in
             handleEvents(events)
         }
     }
