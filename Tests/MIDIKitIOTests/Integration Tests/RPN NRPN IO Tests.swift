@@ -116,9 +116,9 @@ final class RPN_NRPN_IO_Tests: XCTestCase {
             try manager.addInputConnection(
                 to: .outputs([endpoint]),
                 tag: inputConnectionTag,
-                receiver: .events { events in
+                receiver: .events { [weak self] events in
                     DispatchQueue.main.async {
-                        self.receivedEvents.append(contentsOf: events)
+                        self?.receivedEvents.append(contentsOf: events)
                     }
                 }
             )
