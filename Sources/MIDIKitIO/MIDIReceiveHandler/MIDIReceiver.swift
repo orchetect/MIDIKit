@@ -96,7 +96,7 @@ extension MIDIReceiver {
             return MIDIReceiveHandler.EventsWithMetadata(options: options, handler: handler)
             
         case let .eventsLogging(options, handler):
-            return MIDIReceiveHandler.EventsLogging(options: options, handler: handler)
+            return MIDIReceiveHandler._eventsLogging(options: options, handler: handler)
             
         case let .rawData(handler):
             return MIDIReceiveHandler(MIDIReceiveHandler.RawData(handler: handler))

@@ -18,55 +18,13 @@ extension MIDIReceiveHandler {
     /// flag builds).
     /// If `handler` is provided, the event description string is supplied as a parameter and not
     /// automatically logged.
-    final class EventsLogging: MIDIReceiveHandlerProtocol {
-        public var handler: MIDIReceiver.EventsLoggingHandler
-    
-        let midi1Parser: MIDI1Parser
-        
-        var midi2Parser: MIDI2Parser? = nil
-        var advancedMIDI2Parser: AdvancedMIDI2Parser? = nil
-    
-        public let options: MIDIReceiverOptions
-    
-        public func packetListReceived(
-            _ packets: [MIDIPacketData]
-        ) {
-            for midiPacket in packets {
-                let events = midi1Parser.parsedEvents(in: midiPacket)
-                guard !events.isEmpty else { continue }
-                prepLogMessage(
-                    events: events,
-                    timeStamp: midiPacket.timeStamp,
-                    source: midiPacket.source
-                )
-            }
-        }
-    
-        @available(macOS 11, iOS 14, macCatalyst 14, *)
-        public func eventListReceived(
-            _ packets: [UniversalMIDIPacketData],
-            protocol midiProtocol: MIDIProtocolVersion
-        ) {
-            if let parser = midi2Parser {
-                for midiPacket in packets {
-                    let events = parser.parsedEvents(in: midiPacket)
-                    handle(events: events, timeStamp: midiPacket.timeStamp, source: midiPacket.source)
-                }
-            } else if let parser = advancedMIDI2Parser {
-                for midiPacket in packets {
-                    parser.parseEvents(in: midiPacket)
-                }
-            }
-        }
-    
-        init(
-            options: MIDIReceiverOptions,
-            log: OSLog = .default,
-            handler: MIDIReceiver.EventsLoggingHandler?
-        ) {
-            self.options = options
-            
-            self.handler = handler ?? { packetBytesString in
+    static func _eventsLogging(
+        options: MIDIReceiverOptions,
+        log: OSLog = .default,
+        handler: MIDIReceiver.EventsLoggingHandler?
+    ) -> MIDIReceiveHandler.EventsWithMetadata {
+        let stringLogHandler: MIDIReceiver.EventsLoggingHandler = handler
+            ?? { packetBytesString in
                 #if DEBUG
                 os_log(
                     "%{public}@",
@@ -76,61 +34,41 @@ extension MIDIReceiveHandler {
                 )
                 #endif
             }
-            
-            // MIDI 1
-            
-            midi1Parser = MIDI1Parser()
-            
-            midi1Parser.translateNoteOnZeroVelocityToNoteOff = options
-                .contains(.translateMIDI1NoteOnZeroVelocityToNoteOff)
-            
-            // MIDI 2
-            
-            if options.contains(.bundleRPNAndNRPNDataEntryLSB) {
-                advancedMIDI2Parser = AdvancedMIDI2Parser { [weak self] events, timeStamp, source in
-                    self?.handle(events: events, timeStamp: timeStamp, source: source)
-                }
-            } else {
-                midi2Parser = MIDI2Parser()
+        
+        return MIDIReceiveHandler.EventsWithMetadata(options: options) { events, timeStamp, source in
+                let logString = generateLogString(
+                    events: events,
+                    timeStamp: timeStamp,
+                    source: source,
+                    options: options
+                )
+                stringLogHandler(logString)
             }
+    }
+    
+    fileprivate static func generateLogString(
+        events: [MIDIEvent],
+        timeStamp: CoreMIDITimeStamp,
+        source: MIDIOutputEndpoint?,
+        options: MIDIReceiverOptions
+    ) -> String {
+        var events = events
+        
+        if options.contains(.filterActiveSensingAndClock) {
+            events = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
         }
         
-        func handle(
-            events: [MIDIEvent],
-            timeStamp: CoreMIDITimeStamp,
-            source: MIDIOutputEndpoint?
-        ) {
-            guard !events.isEmpty else { return }
-            prepLogMessage(
-                events: events,
-                timeStamp: timeStamp,
-                source: source
-            )
+        var stringOutput: String = events
+            .map { "\($0)" }
+            .joined(separator: ", ")
+            + " timeStamp:\(timeStamp)"
+        
+        // not all packets will contain source refs
+        if let source {
+            stringOutput += " source:\(source.displayName.quoted)"
         }
         
-        func prepLogMessage(
-            events: [MIDIEvent],
-            timeStamp: CoreMIDITimeStamp,
-            source: MIDIOutputEndpoint?
-        ) {
-            var events = events
-            
-            if options.contains(.filterActiveSensingAndClock) {
-                events = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
-            }
-            
-            var stringOutput: String = events
-                .map { "\($0)" }
-                .joined(separator: ", ")
-                + " timeStamp:\(timeStamp)"
-            
-            // not all packets will contain source refs
-            if let source {
-                stringOutput += " source:\(source.displayName.quoted)"
-            }
-            
-            handler(stringOutput)
-        }
+        return stringOutput
     }
 }
 
