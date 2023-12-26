@@ -102,7 +102,7 @@ extension MIDIReceiver {
             return MIDIReceiveHandler(MIDIReceiveHandler.RawData(handler: handler))
             
         case let .rawDataLogging(handler):
-            return MIDIReceiveHandler.RawDataLogging(handler: handler)
+            return MIDIReceiveHandler._rawDataLogging(handler: handler)
             
         case let .object(object, storageType, options):
             switch storageType {

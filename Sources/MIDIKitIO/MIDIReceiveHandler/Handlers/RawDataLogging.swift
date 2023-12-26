@@ -22,69 +22,46 @@ extension MIDIReceiveHandler {
     /// preprocessor flag builds).
     /// If `handler` is provided, the hex byte string is supplied as a parameter and not
     /// automatically logged.
-    final class RawDataLogging: MIDIReceiveHandlerProtocol {
-        public var handler: MIDIReceiver.RawDataLoggingHandler
-    
-        public var filterActiveSensingAndClock = false
-    
-        public func packetListReceived(
-            _ packets: [MIDIPacketData]
-        ) {
-            for midiPacket in packets {
-                log(
-                    bytes: midiPacket.bytes,
-                    timeStamp: midiPacket.timeStamp,
-                    source: midiPacket.source
-                )
-            }
+    static func _rawDataLogging(
+        log: OSLog = .default,
+        handler: MIDIReceiver.RawDataLoggingHandler?
+    ) -> MIDIReceiveHandler.RawData {
+        let stringLogHandler: MIDIReceiver.RawDataLoggingHandler = handler ?? { packetBytesString in
+            #if DEBUG
+            os_log(
+                "%{public}@",
+                log: log,
+                type: .debug,
+                packetBytesString
+            )
+            #endif
         }
-    
-        @available(macOS 11, iOS 14, macCatalyst 14, *)
-        public func eventListReceived(
-            _ packets: [UniversalMIDIPacketData],
-            protocol midiProtocol: MIDIProtocolVersion
-        ) {
-            for midiPacket in packets {
-                log(
-                    bytes: midiPacket.bytes,
-                    timeStamp: midiPacket.timeStamp,
-                    source: midiPacket.source
-                )
-            }
+        
+        return MIDIReceiveHandler.RawData { packet in
+            let logString = generateLogString(
+                bytes: packet.bytes,
+                timeStamp: packet.timeStamp,
+                source: packet.source
+            )
+            stringLogHandler(logString)
         }
+    }
     
-        init(
-            log: OSLog = .default,
-            handler: MIDIReceiver.RawDataLoggingHandler? = nil
-        ) {
-            self.handler = handler ?? { packetBytesString in
-                #if DEBUG
-                os_log(
-                    "%{public}@",
-                    log: log,
-                    type: .debug,
-                    packetBytesString
-                )
-                #endif
-            }
+    fileprivate static func generateLogString(
+        bytes: [UInt8],
+        timeStamp: CoreMIDITimeStamp,
+        source: MIDIOutputEndpoint?
+    ) -> String {
+        var stringOutput = bytes
+            .hexString(padEachTo: 2, prefixes: false)
+            + " timeStamp:\(timeStamp)"
+        
+        // not all packets will contain source refs
+        if let source {
+            stringOutput += " source:\(source.displayName.quoted)"
         }
-    
-        func log(
-            bytes: [UInt8],
-            timeStamp: CoreMIDITimeStamp,
-            source: MIDIOutputEndpoint?
-        ) {
-            var stringOutput = bytes
-                .hexString(padEachTo: 2, prefixes: false)
-                + " timeStamp:\(timeStamp)"
-            
-            // not all packets will contain source refs
-            if let source {
-                stringOutput += " source:\(source.displayName.quoted)"
-            }
-            
-            handler(stringOutput)
-        }
+        
+        return stringOutput
     }
 }
 
