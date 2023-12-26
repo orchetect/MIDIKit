@@ -109,7 +109,10 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             }
             
         case let .pressure(event):
-            let valString = "midi1(\(event.amount.midi1Value))"
+            let midi1ValString = "midi1(\(event.amount.midi1Value))"
+            let midi2ValString = "midi2(\(event.amount.midi2Value))"
+            let valString = "\(midi1ValString)/\(midi2ValString)"
+            
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
             
