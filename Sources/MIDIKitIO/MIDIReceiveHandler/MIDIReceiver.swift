@@ -13,19 +13,13 @@ public enum MIDIReceiver {
     /// One or more receivers in series.
     case group([MIDIReceiver])
     
-    /// Provides a closure to handle strongly-typed MIDI events. (Recommended)
+    /// Provides a closure to handle strongly-typed MIDI events including packet timestamp and
+    /// source endpoint metadata. (Recommended)
+    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
+    /// `nil` when used with ``MIDIInput``.
     case events(
         options: MIDIReceiverOptions = [],
         _ handler: EventsHandler
-    )
-    
-    /// Provides a closure to handle strongly-typed MIDI events including packet timestamp and
-    /// source endpoint metadata.
-    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
-    /// `nil` when used with ``MIDIInput``.
-    case eventsWithMetadata(
-        options: MIDIReceiverOptions = [],
-        _ handler: EventsWithMetadataHandler
     )
     
     /// Provides a convenience to automatically log MIDI events to the console.
@@ -91,9 +85,6 @@ extension MIDIReceiver {
             
         case let .events(options, handler):
             return MIDIReceiveHandler.Events(options: options, handler: handler)
-            
-        case let .eventsWithMetadata(options, handler):
-            return MIDIReceiveHandler.EventsWithMetadata(options: options, handler: handler)
             
         case let .eventsLogging(options, handler):
             return MIDIReceiveHandler._eventsLogging(options: options, handler: handler)

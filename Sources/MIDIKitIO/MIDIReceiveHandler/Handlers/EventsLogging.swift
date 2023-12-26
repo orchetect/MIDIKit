@@ -9,6 +9,7 @@
 import os.log
 
 extension MIDIReceiver {
+    /// Handler for the ``eventsLogging(options:_:)`` MIDI receiver.
     public typealias EventsLoggingHandler = (_ eventString: String) -> Void
 }
 
@@ -22,7 +23,7 @@ extension MIDIReceiveHandler {
         options: MIDIReceiverOptions,
         log: OSLog = .default,
         handler: MIDIReceiver.EventsLoggingHandler?
-    ) -> MIDIReceiveHandler.EventsWithMetadata {
+    ) -> MIDIReceiveHandler.Events {
         let stringLogHandler: MIDIReceiver.EventsLoggingHandler = handler
             ?? { packetBytesString in
                 #if DEBUG
@@ -35,7 +36,7 @@ extension MIDIReceiveHandler {
                 #endif
             }
         
-        return MIDIReceiveHandler.EventsWithMetadata(options: options) { events, timeStamp, source in
+        return MIDIReceiveHandler.Events(options: options) { events, timeStamp, source in
                 let logString = generateLogString(
                     events: events,
                     timeStamp: timeStamp,

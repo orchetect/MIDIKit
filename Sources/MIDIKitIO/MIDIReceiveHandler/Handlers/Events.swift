@@ -7,13 +7,20 @@
 #if !os(tvOS) && !os(watchOS)
 
 extension MIDIReceiver {
+    /// Handler for the ``events(options:_:)`` MIDI receiver.
+    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
+    /// `nil` when used with ``MIDIInput``.
     public typealias EventsHandler = (
-        _ events: [MIDIEvent]
+        _ events: [MIDIEvent],
+        _ timeStamp: CoreMIDITimeStamp,
+        _ source: MIDIOutputEndpoint?
     ) -> Void
 }
 
 extension MIDIReceiveHandler {
-    /// MIDI Event receive handler.
+    /// MIDI Event receive handler including packet timestamp and source endpoint.
+    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
+    /// `nil` when used with ``MIDIInput``.
     final class Events: MIDIReceiveHandlerProtocol {
         public var handler: MIDIReceiver.EventsHandler
         
@@ -22,15 +29,14 @@ extension MIDIReceiveHandler {
         var midi2Parser: MIDI2Parser? = nil
         var advancedMIDI2Parser: AdvancedMIDI2Parser? = nil
         
-        let options: MIDIReceiverOptions
-        
         public func packetListReceived(
             _ packets: [MIDIPacketData]
         ) {
             for midiPacket in packets {
                 let events = midi1Parser.parsedEvents(in: midiPacket)
                 guard !events.isEmpty else { continue }
-                handle(events: events)
+                
+                handler(events, midiPacket.timeStamp, midiPacket.source)
             }
         }
     
@@ -42,7 +48,9 @@ extension MIDIReceiveHandler {
             if let parser = midi2Parser {
                 for midiPacket in packets {
                     let events = parser.parsedEvents(in: midiPacket)
-                    handle(events: events)
+                    guard !events.isEmpty else { continue }
+                    
+                    handler(events, midiPacket.timeStamp, midiPacket.source)
                 }
             } else if let parser = advancedMIDI2Parser {
                 for midiPacket in packets {
@@ -55,13 +63,11 @@ extension MIDIReceiveHandler {
             options: MIDIReceiverOptions,
             handler: @escaping MIDIReceiver.EventsHandler
         ) {
-            self.options = options
-            
             if options.contains(.filterActiveSensingAndClock) {
-                self.handler = { events in
+                self.handler = { events, timeStamp, source in
                     let filtered = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
                     guard !filtered.isEmpty else { return }
-                    handler(filtered)
+                    handler(filtered, timeStamp, source)
                 }
             } else {
                 self.handler = handler
@@ -77,23 +83,11 @@ extension MIDIReceiveHandler {
             // MIDI 2
             
             if options.contains(.bundleRPNAndNRPNDataEntryLSB) {
-                advancedMIDI2Parser = AdvancedMIDI2Parser { [weak self] events, _, _ in
-                    self?.handle(events: events)
+                advancedMIDI2Parser = AdvancedMIDI2Parser { [weak self] events, timeStamp, source in
+                    self?.handler(events, timeStamp, source)
                 }
             } else {
                 midi2Parser = MIDI2Parser()
-            }
-        }
-        
-        func handle(events: [MIDIEvent]) {
-            guard !events.isEmpty else { return }
-            
-            if options.contains(.filterActiveSensingAndClock) {
-                let filtered = events.filter(sysRealTime: .dropTypes([.activeSensing, .timingClock]))
-                guard !filtered.isEmpty else { return }
-                handler(filtered)
-            } else {
-                handler(events)
             }
         }
     }

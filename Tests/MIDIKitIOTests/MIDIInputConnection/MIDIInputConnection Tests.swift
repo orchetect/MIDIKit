@@ -52,7 +52,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         try manager.addInputConnection(
             to: .outputs(matching: [.uniqueID(output1ID)]),
             tag: connTag,
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     print(events)
                     self.connEvents.append(contentsOf: events)
@@ -157,7 +157,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
             to: .allOutputs,
             tag: connTag,
             filter: .init(owned: false, criteria: .currentOutputs()),
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     print(events)
                     self.connEvents.append(contentsOf: events)
@@ -216,7 +216,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
             to: .allOutputs,
             tag: connTag,
             filter: .init(owned: true, criteria: .currentOutputs()),
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     print(events)
                     self.connEvents.append(contentsOf: events)
@@ -292,7 +292,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
                 owned: true,
                 criteria: manager.endpoints.outputsUnowned
             ),
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     print(events)
                     self.connEvents.append(contentsOf: events)
@@ -360,7 +360,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         try manager.addInputConnection(
             to: .outputs([output1.endpoint]),
             tag: connTag,
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     print(events)
                     self.connEvents.append(contentsOf: events)
@@ -432,7 +432,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
                 owned: false,
                 criteria: [.uniqueID(output1ID)]
             ),
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     print(events)
                     self.connEvents.append(contentsOf: events)
@@ -499,7 +499,7 @@ final class MIDIInputConnection_Tests: XCTestCase {
         try manager.addInputConnection(
             to: .outputs([output1.endpoint]),
             tag: connTag,
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     print(events)
                     self.connEvents.append(contentsOf: events)

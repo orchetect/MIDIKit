@@ -7,6 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 extension MIDIReceiver {
+    /// Handler for the ``rawData(_:)`` MIDI receiver.
     public typealias RawDataHandler = (_ packet: AnyMIDIPacket) -> Void
 }
 

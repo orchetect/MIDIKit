@@ -92,7 +92,7 @@ open class RoundTrip_Tests_Base: XCTestCase {
             try manager.addInputConnection(
                 to: .outputs(matching: [.uniqueID(outputID)]),
                 tag: inputConnectionTag,
-                receiver: .events { events in
+                receiver: .events { events, _, _ in
                     DispatchQueue.main.async {
                         self.receivedEvents.append(contentsOf: events)
                     }

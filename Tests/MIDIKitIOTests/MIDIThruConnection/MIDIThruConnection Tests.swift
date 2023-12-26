@@ -55,7 +55,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     self.connEvents.append(contentsOf: events)
                 }
@@ -138,7 +138,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     self.connEvents.append(contentsOf: events)
                 }
@@ -251,7 +251,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     self.connEvents.append(contentsOf: events)
                 }
@@ -329,7 +329,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiver: .events { events in
+            receiver: .events { events, _, _ in
                 DispatchQueue.main.async {
                     self.connEvents.append(contentsOf: events)
                 }

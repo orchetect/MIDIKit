@@ -10,6 +10,7 @@ import Foundation
 import os.log
 
 extension MIDIReceiver {
+    /// Handler for the ``rawDataLogging(_:)`` MIDI receiver.
     public typealias RawDataLoggingHandler = (_ packetBytesString: String) -> Void
 }
 

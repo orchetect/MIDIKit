@@ -29,15 +29,15 @@ extension MIDIReceiver {
     @available(
         *,
         deprecated,
-        renamed: "eventsWithMetadata(options:_:)",
+        renamed: "events(options:_:)",
         message: "`translateMIDI1NoteOnZeroVelocityToNoteOff` property is now an OptionSet flag."
     )
     @_disfavoredOverload
     public static func eventsWithMetadata(
         translateMIDI1NoteOnZeroVelocityToNoteOff: Bool,
-        _ handler: @escaping EventsWithMetadataHandler
+        _ handler: @escaping EventsHandler
     ) -> Self {
-        .eventsWithMetadata(
+        .events(
             options: translateMIDI1NoteOnZeroVelocityToNoteOff ? [.translateMIDI1NoteOnZeroVelocityToNoteOff] : [],
             handler
         )
