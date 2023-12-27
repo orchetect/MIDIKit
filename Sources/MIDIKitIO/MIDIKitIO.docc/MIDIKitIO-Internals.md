@@ -19,6 +19,7 @@
 
 - ``MIDIInputConnectionMode``
 - ``MIDIOutputConnectionMode``
+- ``MIDIConnectionMode``
 - ``MIDIEndpointType``
 
 ### MIDI Packets and Parsing
