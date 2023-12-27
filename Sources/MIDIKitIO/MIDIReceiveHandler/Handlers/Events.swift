@@ -22,7 +22,7 @@ extension MIDIReceiveHandler {
     /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
     /// `nil` when used with ``MIDIInput``.
     final class Events: EventsBase {
-        public var handler: MIDIReceiver.EventsHandler
+        var handler: MIDIReceiver.EventsHandler
         
         init(
             options: MIDIReceiverOptions,

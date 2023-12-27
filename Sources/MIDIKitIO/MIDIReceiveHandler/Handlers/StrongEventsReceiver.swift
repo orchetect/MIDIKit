@@ -10,7 +10,7 @@ extension MIDIReceiveHandler {
     /// MIDI Event receive handler that holds a strong reference to a receiver object that conforms
     /// to the ``ReceivesMIDIEvents`` protocol.
     final class StrongEventsReceiver: EventsBase {
-        public var receiver: ReceivesMIDIEvents
+        var receiver: ReceivesMIDIEvents
         
         init(
             options: MIDIReceiverOptions,

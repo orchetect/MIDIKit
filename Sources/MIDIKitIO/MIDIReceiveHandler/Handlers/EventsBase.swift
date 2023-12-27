@@ -16,7 +16,7 @@ extension MIDIReceiveHandler {
         
         let options: MIDIReceiverOptions
         
-        public func packetListReceived(
+        func packetListReceived(
             _ packets: [MIDIPacketData]
         ) {
             for midiPacket in packets {
@@ -28,7 +28,7 @@ extension MIDIReceiveHandler {
         }
     
         @available(macOS 11, iOS 14, macCatalyst 14, *)
-        public func eventListReceived(
+        func eventListReceived(
             _ packets: [UniversalMIDIPacketData],
             protocol midiProtocol: MIDIProtocolVersion
         ) {
