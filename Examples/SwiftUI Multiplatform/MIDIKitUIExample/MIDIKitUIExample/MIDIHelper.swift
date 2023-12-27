@@ -54,7 +54,10 @@ final class MIDIHelper: ObservableObject {
                 name: tag,
                 tag: tag,
                 uniqueID: .userDefaultsManaged(key: tag),
-                receiver: .eventsLogging { eventString in
+                receiver: .eventsLogging(options: [
+                    .bundleRPNAndNRPNDataEntryLSB,
+                    .filterActiveSensingAndClock
+                ]) { eventString in
                     print("Received on \(tag): \(eventString)")
                 }
             )

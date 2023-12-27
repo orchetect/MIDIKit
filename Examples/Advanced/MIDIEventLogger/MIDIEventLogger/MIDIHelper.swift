@@ -92,7 +92,10 @@ final class MIDIHelper: ObservableObject {
                     name: ConnectionTags.inputName,
                     tag: ConnectionTags.inputTag,
                     uniqueID: .userDefaultsManaged(key: ConnectionTags.inputTag),
-                    receiver: .eventsLogging()
+                    receiver: .eventsLogging(options: [
+                        .bundleRPNAndNRPNDataEntryLSB,
+                        .filterActiveSensingAndClock
+                    ])
                 )
             }
         } catch {

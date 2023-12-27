@@ -36,7 +36,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 to: .allOutputs, // auto-connect to all outputs that may appear
                 tag: "Listener",
                 filter: .owned(), // don't allow self-created virtual endpoints
-                receiver: .eventsLogging()
+                receiver: .eventsLogging(options: [
+                    .bundleRPNAndNRPNDataEntryLSB,
+                    .filterActiveSensingAndClock
+                ])
             )
         } catch {
             print(
