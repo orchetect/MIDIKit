@@ -52,7 +52,7 @@ public final class MIDIInput: _MIDIManaged {
     public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
     
     /// Receive handler for inbound MIDI events.
-    var receiveHandler: MIDIReceiveHandler
+    var receiveHandler: MIDIReceiverProtocol
     
     // init
     

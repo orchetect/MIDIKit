@@ -40,4 +40,12 @@ extension MIDIReceiver {
     }
 }
 
+@available(
+    *,
+     unavailable,
+     renamed: "MIDIReceiverProtocol",
+     message: "`MIDIReceiveHandler` class has been removed as it was redundant. Please use the `MIDIReceiverProtocol` protocol instead or consider using a built-in receiver."
+)
+public typealias MIDIReceiveHandler = MIDIReceiverProtocol
+
 #endif

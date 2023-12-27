@@ -6,9 +6,9 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-extension MIDIReceiveHandler {
+extension MIDIReceiver {
     /// Foundational receiver class which other events receivers subclass.
-    class EventsBase: MIDIReceiveHandlerProtocol {
+    class EventsBase: MIDIReceiverProtocol {
         let midi1Parser: MIDI1Parser
         
         var midi2Parser: MIDI2Parser? = nil

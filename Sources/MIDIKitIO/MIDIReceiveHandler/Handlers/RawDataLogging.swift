@@ -12,9 +12,7 @@ import os.log
 extension MIDIReceiver {
     /// Handler for the ``rawDataLogging(_:)`` MIDI receiver.
     public typealias RawDataLoggingHandler = (_ packetBytesString: String) -> Void
-}
-
-extension MIDIReceiveHandler {
+    
     /// Raw data logging handler (hex byte strings).
     /// On systems that use legacy MIDI 1.0 packets, their raw bytes will be logged.
     /// On systems that support UMP and MIDI 2.0, the raw UMP packet data is logged.
@@ -25,9 +23,9 @@ extension MIDIReceiveHandler {
     /// automatically logged.
     static func _rawDataLogging(
         log: OSLog = .default,
-        handler: MIDIReceiver.RawDataLoggingHandler?
-    ) -> MIDIReceiveHandler.RawData {
-        let stringLogHandler: MIDIReceiver.RawDataLoggingHandler = handler ?? { packetBytesString in
+        handler: RawDataLoggingHandler?
+    ) -> RawData {
+        let stringLogHandler: RawDataLoggingHandler = handler ?? { packetBytesString in
             #if DEBUG
             os_log(
                 "%{public}@",
@@ -38,7 +36,7 @@ extension MIDIReceiveHandler {
             #endif
         }
         
-        return MIDIReceiveHandler.RawData { packet in
+        return RawData { packet in
             let logString = generateLogString(
                 bytes: packet.bytes,
                 timeStamp: packet.timeStamp,

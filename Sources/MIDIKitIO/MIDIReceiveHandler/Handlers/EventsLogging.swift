@@ -11,9 +11,7 @@ import os.log
 extension MIDIReceiver {
     /// Handler for the ``eventsLogging(options:_:)`` MIDI receiver.
     public typealias EventsLoggingHandler = (_ eventString: String) -> Void
-}
-
-extension MIDIReceiveHandler {
+    
     /// MIDI Event logging handler (event description strings).
     /// If `handler` is nil, all events are logged to the console (but only in `DEBUG` preprocessor
     /// flag builds).
@@ -22,9 +20,9 @@ extension MIDIReceiveHandler {
     static func _eventsLogging(
         options: MIDIReceiverOptions,
         log: OSLog = .default,
-        handler: MIDIReceiver.EventsLoggingHandler?
-    ) -> MIDIReceiveHandler.Events {
-        let stringLogHandler: MIDIReceiver.EventsLoggingHandler = handler
+        handler: EventsLoggingHandler?
+    ) -> Events {
+        let stringLogHandler: EventsLoggingHandler = handler
             ?? { packetBytesString in
                 #if DEBUG
                 os_log(
@@ -36,7 +34,7 @@ extension MIDIReceiveHandler {
                 #endif
             }
         
-        return MIDIReceiveHandler.Events(options: options) { events, timeStamp, source in
+        return Events(options: options) { events, timeStamp, source in
                 let logString = generateLogString(
                     events: events,
                     timeStamp: timeStamp,

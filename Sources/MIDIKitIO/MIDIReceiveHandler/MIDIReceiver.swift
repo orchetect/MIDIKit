@@ -73,35 +73,31 @@ extension MIDIReceiver {
     ///
     /// This is only useful for custom implementations. Do not call this method when supplying a
     /// ``MIDIReceiver`` to the ``MIDIManager``.
-    public func create() -> MIDIReceiveHandler {
-        MIDIReceiveHandler(createInternalHandler())
-    }
-    
-    private func createInternalHandler() -> MIDIReceiveHandlerProtocol {
+    public func create() -> MIDIReceiverProtocol {
         switch self {
         case let .group(definitions):
             let handlers = definitions.map { $0.create() }
-            return MIDIReceiveHandler.Group(handlers)
+            return Group(handlers)
             
         case let .events(options, handler):
-            return MIDIReceiveHandler.Events(options: options, handler: handler)
+            return Events(options: options, handler: handler)
             
         case let .eventsLogging(options, handler):
-            return MIDIReceiveHandler._eventsLogging(options: options, handler: handler)
+            return Self._eventsLogging(options: options, handler: handler)
             
         case let .rawData(handler):
-            return MIDIReceiveHandler(MIDIReceiveHandler.RawData(handler: handler))
+            return RawData(handler: handler)
             
         case let .rawDataLogging(handler):
-            return MIDIReceiveHandler._rawDataLogging(handler: handler)
+            return Self._rawDataLogging(handler: handler)
             
         case let .object(object, storageType, options):
             switch storageType {
             case .strongly:
-                return MIDIReceiveHandler.StrongEventsReceiver(options: options, receiver: object)
+                return StrongEventsReceiver(options: options, receiver: object)
                 
             case .weakly:
-                return MIDIReceiveHandler.WeakEventsReceiver(options: options, receiver: object)
+                return WeakEventsReceiver(options: options, receiver: object)
             }
         }
     }

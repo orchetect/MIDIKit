@@ -6,7 +6,7 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-extension MIDIReceiveHandler {
+extension MIDIReceiver {
     /// MIDI Event receive handler that holds a weak reference to a receiver object that conforms
     /// to the ``ReceivesMIDIEvents`` protocol.
     final class WeakEventsReceiver: EventsBase {
