@@ -10,6 +10,7 @@
 - ``MIDIUMPUtilityStatusField``
 - ``MIDIUMPMixedDataSetStatusField``
 - ``MIDIParameterNumber``
+- ``MIDIParameterNumberEvent``
 
 ### Value Type Protocols
 

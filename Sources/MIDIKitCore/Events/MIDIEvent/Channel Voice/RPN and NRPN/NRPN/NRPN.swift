@@ -83,6 +83,8 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.NRPN: MIDIParameterNumberEvent { }
+
 extension MIDIEvent.NRPN: Sendable { }
 
 extension MIDIEvent {

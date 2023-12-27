@@ -1,5 +1,5 @@
 //
-//  MIDIReceiveHandlerProtocol.swift
+//  MIDIReceiverProtocol.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
@@ -11,7 +11,7 @@
 /// For backwards compatibility with older operating systems,
 /// both `MIDIReadBlock` (old Core MIDI API)
 /// and `MIDIReceiveBlock` (new Core MIDI API) must be handled.
-protocol MIDIReceiveHandlerProtocol {
+public protocol MIDIReceiverProtocol: AnyObject {
     /// CoreMIDI `MIDIReadBlock`
     /// (deprecated after macOS 11 / iOS 14)
     func packetListReceived(

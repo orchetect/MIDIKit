@@ -51,6 +51,7 @@ For more detailed documentation on these types, see MIDIKitCore documentation.
 - ``MIDIUMPUtilityStatusField``
 - ``MIDIUMPMixedDataSetStatusField``
 - ``MIDIParameterNumber``
+- ``MIDIParameterNumberEvent``
 
 ### Value Type Protocols
 

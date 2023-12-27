@@ -108,7 +108,7 @@ public final class MIDIInputConnection: _MIDIManaged {
     }
     
     /// Receive handler for inbound MIDI events.
-    var receiveHandler: MIDIReceiveHandler
+    var receiveHandler: MIDIReceiverProtocol
     
     // init
     

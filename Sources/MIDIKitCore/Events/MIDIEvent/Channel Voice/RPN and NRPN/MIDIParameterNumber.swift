@@ -6,7 +6,7 @@
 
 import Foundation
 
-/// Protocol which all Parameter Number events conform.
+/// Protocol which all Parameter Numbers conform.
 /// This includes RPN (Registered Controller) and NRPN (Assignable Controller).
 public protocol MIDIParameterNumber: Sendable {
     /// The parameter number type.

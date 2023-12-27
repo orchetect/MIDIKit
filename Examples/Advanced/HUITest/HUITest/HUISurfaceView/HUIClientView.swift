@@ -53,7 +53,7 @@ struct HUIClientView: View {
                         name: Self.kHUIInputName,
                         tag: Self.kHUIInputName,
                         uniqueID: .userDefaultsManaged(key: Self.kHUIInputName),
-                        receiver: .events { [weak huiSurface] events in
+                        receiver: .events { [weak huiSurface] events, timeStamp, source in
                             // since handler callbacks from MIDI are on a CoreMIDI thread,
                             // parse the MIDI on the main thread because SwiftUI state in
                             // this app will be updated as a result

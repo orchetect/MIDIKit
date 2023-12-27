@@ -13,19 +13,13 @@ public enum MIDIReceiver {
     /// One or more receivers in series.
     case group([MIDIReceiver])
     
-    /// Provides a closure to handle strongly-typed MIDI events. (Recommended)
+    /// Provides a closure to handle strongly-typed MIDI events including packet timestamp and
+    /// source endpoint metadata. (Recommended)
+    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
+    /// `nil` when used with ``MIDIInput``.
     case events(
         options: MIDIReceiverOptions = [],
         _ handler: EventsHandler
-    )
-    
-    /// Provides a closure to handle strongly-typed MIDI events including packet timestamp and
-    /// source endpoint metadata.
-    /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
-    /// `nil` when used with ``MIDIInput``.
-    case eventsWithMetadata(
-        options: MIDIReceiverOptions = [],
-        _ handler: EventsWithMetadataHandler
     )
     
     /// Provides a convenience to automatically log MIDI events to the console.
@@ -56,18 +50,26 @@ public enum MIDIReceiver {
     )
     
     /// Pass to a receiver object instance.
-    /// MIDI Event receive handler that holds a reference to a receiver object that conforms to the
+    /// MIDI event receive handler that holds a reference to a receiver object that conforms to the
     /// ``ReceivesMIDIEvents`` protocol.
-    /// The object reference may be held strongly or weakly.
-    case object(
+    /// The object is stored as a strong reference.
+    case strong(
         _ object: ReceivesMIDIEvents,
-        held: ReceiverRefStorage,
+        options: MIDIReceiverOptions = []
+    )
+    
+    /// Pass to a receiver object instance.
+    /// MIDI event receive handler that holds a reference to a receiver object that conforms to the
+    /// ``ReceivesMIDIEvents`` protocol.
+    /// The object is stored as a weak reference.
+    case weak(
+        _ object: ReceivesMIDIEvents,
         options: MIDIReceiverOptions = []
     )
 }
 
 extension MIDIReceiver {
-    /// Class instance storage semantics.
+    /// Class reference storage semantics.
     public enum ReceiverRefStorage {
         case weakly
         case strongly
@@ -79,39 +81,29 @@ extension MIDIReceiver {
     ///
     /// This is only useful for custom implementations. Do not call this method when supplying a
     /// ``MIDIReceiver`` to the ``MIDIManager``.
-    public func create() -> MIDIReceiveHandler {
-        MIDIReceiveHandler(createInternalHandler())
-    }
-    
-    private func createInternalHandler() -> MIDIReceiveHandlerProtocol {
+    public func create() -> MIDIReceiverProtocol {
         switch self {
         case let .group(definitions):
             let handlers = definitions.map { $0.create() }
-            return MIDIReceiveHandler.Group(handlers)
+            return Group(handlers)
             
         case let .events(options, handler):
-            return MIDIReceiveHandler.Events(options: options, handler: handler)
-            
-        case let .eventsWithMetadata(options, handler):
-            return MIDIReceiveHandler.EventsWithMetadata(options: options, handler: handler)
+            return Events(options: options, handler: handler)
             
         case let .eventsLogging(options, handler):
-            return MIDIReceiveHandler.EventsLogging(options: options, handler: handler)
+            return Self._eventsLogging(options: options, handler: handler)
             
         case let .rawData(handler):
-            return MIDIReceiveHandler(MIDIReceiveHandler.RawData(handler: handler))
+            return RawData(handler: handler)
             
         case let .rawDataLogging(handler):
-            return MIDIReceiveHandler.RawDataLogging(handler: handler)
+            return Self._rawDataLogging(handler: handler)
             
-        case let .object(object, storageType, options):
-            switch storageType {
-            case .strongly:
-                return MIDIReceiveHandler.StrongEventsReceiver(options: options, receiver: object)
-                
-            case .weakly:
-                return MIDIReceiveHandler.WeakEventsReceiver(options: options, receiver: object)
-            }
+        case let .strong(object, options):
+            return StrongEventsReceiver(options: options, receiver: object)
+            
+        case let .weak(object, options):
+            return WeakEventsReceiver(options: options, receiver: object)
         }
     }
 }

@@ -6,13 +6,13 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-extension MIDIReceiveHandler {
+extension MIDIReceiver {
     /// ``MIDIReceiveHandler`` group.
-    /// Can contain one or more ``MIDIReceiveHandler`` in series.
-    final class Group: MIDIReceiveHandlerProtocol {
-        public var receiveHandlers: [MIDIReceiveHandler] = []
+    /// Can contain one or more ``MIDIReceiver`` in series.
+    final class Group: MIDIReceiverProtocol {
+        var receiveHandlers: [MIDIReceiverProtocol] = []
     
-        public func packetListReceived(
+        func packetListReceived(
             _ packets: [MIDIPacketData]
         ) {
             for handler in receiveHandlers {
@@ -21,7 +21,7 @@ extension MIDIReceiveHandler {
         }
     
         @available(macOS 11, iOS 14, macCatalyst 14, *)
-        public func eventListReceived(
+        func eventListReceived(
             _ packets: [UniversalMIDIPacketData],
             protocol midiProtocol: MIDIProtocolVersion
         ) {
@@ -30,7 +30,7 @@ extension MIDIReceiveHandler {
             }
         }
     
-        init(_ receiveHandlers: [MIDIReceiveHandler]) {
+        init(_ receiveHandlers: [MIDIReceiverProtocol]) {
             self.receiveHandlers = receiveHandlers
         }
     }

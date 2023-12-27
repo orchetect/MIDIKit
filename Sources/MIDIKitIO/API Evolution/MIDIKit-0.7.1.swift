@@ -316,7 +316,7 @@ public protocol MIDIIOEndpointsProtocol { }
 @available(*, unavailable, renamed: "MIDIEndpoint")
 public protocol MIDIIOEndpointProtocol { }
 
-@available(*, unavailable, renamed: "MIDIReceiveHandlerProtocol")
+@available(*, unavailable, renamed: "MIDIReceiverProtocol")
 public protocol MIDIIOReceiveHandlerProtocol { }
 
 #endif
