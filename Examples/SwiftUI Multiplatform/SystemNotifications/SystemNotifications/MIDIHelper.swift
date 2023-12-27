@@ -40,7 +40,7 @@ final class MIDIHelper: ObservableObject {
             name: name,
             tag: name,
             uniqueID: .adHoc,
-            receiver: .events { _ in }
+            receiver: .events { _, _, _ in }
         )
     }
     

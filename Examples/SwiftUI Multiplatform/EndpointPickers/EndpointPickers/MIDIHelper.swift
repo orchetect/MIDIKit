@@ -46,7 +46,7 @@ final class MIDIHelper: ObservableObject {
             try midiManager.addInputConnection(
                 to: .none,
                 tag: Tags.midiIn,
-                receiver: .events { [weak self] events in
+                receiver: .events { [weak self] events, timeStamp, source in
                     self?.received(events: events)
                 }
             )
@@ -109,7 +109,7 @@ final class MIDIHelper: ObservableObject {
                 name: "Test In 1",
                 tag: Tags.midiTestIn1,
                 uniqueID: .userDefaultsManaged(key: Tags.midiTestIn1),
-                receiver: .events { [weak self] events in
+                receiver: .events { [weak self] events, timeStamp, source in
                     self?.received(events: events)
                 }
             )
@@ -118,7 +118,7 @@ final class MIDIHelper: ObservableObject {
                 name: "Test In 2",
                 tag: Tags.midiTestIn2,
                 uniqueID: .userDefaultsManaged(key: Tags.midiTestIn2),
-                receiver: .events { [weak self] events in
+                receiver: .events { [weak self] events, timeStamp, source in
                     self?.received(events: events)
                 }
             )

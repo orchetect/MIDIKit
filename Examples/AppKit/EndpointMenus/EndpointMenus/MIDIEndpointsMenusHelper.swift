@@ -51,7 +51,10 @@ extension MIDIEndpointsMenusHelper {
             try midiManager.addInputConnection(
                 to: .none,
                 tag: ConnectionTags.midiIn,
-                receiver: .eventsLogging()
+                receiver: .eventsLogging(options: [
+                    .bundleRPNAndNRPNDataEntryLSB,
+                    .filterActiveSensingAndClock
+                ])
             )
             
             // set up output connection

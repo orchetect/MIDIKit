@@ -34,10 +34,7 @@ class HUIHostHelper: ObservableObject {
             try midiManager.addInputConnection(
                 to: .outputs(matching: [.name(HUIClientView.kHUIOutputName)]),
                 tag: Self.kHUIInputConnectionTag,
-                receiver: .object(
-                    huiHost.banks[0],
-                    held: .weakly
-                )
+                receiver: .object(huiHost.banks[0], held: .weakly)
             )
             
             try midiManager.addOutputConnection(

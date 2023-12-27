@@ -49,7 +49,10 @@ final class MIDIHelper: ObservableObject {
                 try midiManager?.addInputConnection(
                     to: .none,
                     tag: ConnectionTags.inputConnectionTag,
-                    receiver: .eventsLogging()
+                    receiver: .eventsLogging(options: [
+                        .bundleRPNAndNRPNDataEntryLSB,
+                        .filterActiveSensingAndClock
+                    ])
                 )
             }
         } catch {

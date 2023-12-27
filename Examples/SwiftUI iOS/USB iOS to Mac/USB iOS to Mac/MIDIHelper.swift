@@ -45,7 +45,10 @@ final class MIDIHelper: ObservableObject {
             try midiManager.addInputConnection(
                 to: .outputs(matching: [.name("IDAM MIDI Host")]),
                 tag: Self.inputConnectionName,
-                receiver: .eventsLogging()
+                receiver: .eventsLogging(options: [
+                    .bundleRPNAndNRPNDataEntryLSB,
+                    .filterActiveSensingAndClock
+                ])
             )
             
             print("Creating MIDI output connection.")
