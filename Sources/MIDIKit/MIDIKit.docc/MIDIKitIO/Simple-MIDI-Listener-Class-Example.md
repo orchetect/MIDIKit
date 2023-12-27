@@ -6,11 +6,12 @@ A barebones example of how to set up MIDIKit to receive MIDI events on a created
 import Foundation
 import MIDIKitIO
 
-public class MIDIModule {
+public class MIDIHelper {
     private let midiManager = MIDIManager(
         clientName: "MyAppMIDIModule",
         model: "MyApp",
-        manufacturer: "MyCompany")
+        manufacturer: "MyCompany"
+    )
     
     let inputTag = "Virtual_MIDI_In"
 
@@ -22,7 +23,7 @@ public class MIDIModule {
                 name: "MyApp MIDI In",
                 tag: inputTag,
                 uniqueID: .userDefaultsManaged(key: inputTag),
-                receiver: .events { [weak self] events in
+                receiver: .events { [weak self] events, timeStamp, source in
                     // Note: this handler will be called on a background thread so be
                     // sure to call anything that may result in UI updates on the main thread
                     DispatchQueue.main.async {

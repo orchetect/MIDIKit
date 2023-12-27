@@ -27,7 +27,7 @@ try midiManager.addInput(
     name: "MyApp MIDI In",
     tag: inputTag,
     uniqueID: .userDefaultsManaged(key: inputTag),
-    receiver: .events { [weak self] events in
+    receiver: .events { [weak self] events, timeStamp, source in
         // Note: this handler will be called on a background thread so be
         // sure to call anything that may result in UI updates on the main thread
         DispatchQueue.main.async {
