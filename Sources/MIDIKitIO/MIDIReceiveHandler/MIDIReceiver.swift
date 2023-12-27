@@ -50,18 +50,26 @@ public enum MIDIReceiver {
     )
     
     /// Pass to a receiver object instance.
-    /// MIDI Event receive handler that holds a reference to a receiver object that conforms to the
+    /// MIDI event receive handler that holds a reference to a receiver object that conforms to the
     /// ``ReceivesMIDIEvents`` protocol.
-    /// The object reference may be held strongly or weakly.
-    case object(
+    /// The object is stored as a strong reference.
+    case strong(
         _ object: ReceivesMIDIEvents,
-        held: ReceiverRefStorage,
+        options: MIDIReceiverOptions = []
+    )
+    
+    /// Pass to a receiver object instance.
+    /// MIDI event receive handler that holds a reference to a receiver object that conforms to the
+    /// ``ReceivesMIDIEvents`` protocol.
+    /// The object is stored as a weak reference.
+    case weak(
+        _ object: ReceivesMIDIEvents,
         options: MIDIReceiverOptions = []
     )
 }
 
 extension MIDIReceiver {
-    /// Class instance storage semantics.
+    /// Class reference storage semantics.
     public enum ReceiverRefStorage {
         case weakly
         case strongly
@@ -91,14 +99,11 @@ extension MIDIReceiver {
         case let .rawDataLogging(handler):
             return Self._rawDataLogging(handler: handler)
             
-        case let .object(object, storageType, options):
-            switch storageType {
-            case .strongly:
-                return StrongEventsReceiver(options: options, receiver: object)
-                
-            case .weakly:
-                return WeakEventsReceiver(options: options, receiver: object)
-            }
+        case let .strong(object, options):
+            return StrongEventsReceiver(options: options, receiver: object)
+            
+        case let .weak(object, options):
+            return WeakEventsReceiver(options: options, receiver: object)
         }
     }
 }

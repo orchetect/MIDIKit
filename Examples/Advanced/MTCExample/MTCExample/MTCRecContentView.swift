@@ -124,7 +124,7 @@ struct MTCRecContentView: View {
                 name: kMIDIPorts.MTCRec.name,
                 tag: kMIDIPorts.MTCRec.tag,
                 uniqueID: .userDefaultsManaged(key: udKey),
-                receiver: .object(mtcRec, held: .weakly)
+                receiver: .weak(mtcRec)
             )
         } catch {
             logger.error(error)
@@ -291,7 +291,7 @@ struct MTCRecContentView: View {
             try? midiManager.addInputConnection(
                 to: .outputs(matching: [.name(kMIDIPorts.MTCGen.name)]),
                 tag: tag,
-                receiver: .object(mtcRec, held: .weakly)
+                receiver: .weak(mtcRec)
             )
         case false:
             midiManager.remove(.inputConnection, .withTag(tag))

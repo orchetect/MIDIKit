@@ -78,7 +78,7 @@ extension MIDIReceiver {
         *,
          deprecated,
          renamed: "object(_:held:options:)",
-         message: "`translateMIDI1NoteOnZeroVelocityToNoteOff` has been removed from rawDataLogging."
+         message: "`translateMIDI1NoteOnZeroVelocityToNoteOff` property is now an OptionSet flag. `object(_:held:translateMIDI1NoteOnZeroVelocityToNoteOff:)` is also now replaced by `strong(_:options:)` or `weak(_:options:)` and as such, no longer carries a `held` property."
     )
     @_disfavoredOverload
     public static func object(

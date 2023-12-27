@@ -38,6 +38,25 @@ extension MIDIReceiver {
     ) -> Self {
         .events(options: options, handler)
     }
+    
+    @available(
+        *,
+         deprecated,
+         renamed: "events",
+         message: "`object(_:held:options:)` is now replaced with `strong(_:options:)` or `weak(_:options:)` and as such, no longer carries a `held` property."
+    )
+    public static func object(
+        _ object: ReceivesMIDIEvents,
+        held: ReceiverRefStorage,
+        options: MIDIReceiverOptions = []
+    ) -> Self {
+        switch held {
+        case .weakly:
+            return .weak(object, options: options)
+        case .strongly:
+            return .strong(object, options: options)
+        }
+    }
 }
 
 @available(
