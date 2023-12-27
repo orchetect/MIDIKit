@@ -32,6 +32,8 @@
 - ``AnyMIDIPacket``
 - ``MIDI1Parser``
 - ``MIDI2Parser``
+- ``AdvancedMIDI2Parser``
+- ``ParameterNumberEventBundler``
 - ``MIDIProtocolVersion``
 
 ### Core MIDI Related

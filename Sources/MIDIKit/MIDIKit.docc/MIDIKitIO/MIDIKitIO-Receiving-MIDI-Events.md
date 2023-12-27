@@ -18,6 +18,6 @@ In order to begin receiving MIDI events, there are two primary mechanisms:
 
 - ``ReceivesMIDIEvents``
 
-### Internals
+### Internal Protocols
 
-- ``MIDIReceiveHandler``
+- ``MIDIReceiverProtocol``

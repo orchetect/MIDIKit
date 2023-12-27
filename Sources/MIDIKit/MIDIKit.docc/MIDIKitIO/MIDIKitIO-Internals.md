@@ -19,6 +19,7 @@
 
 - ``MIDIInputConnectionMode``
 - ``MIDIOutputConnectionMode``
+- ``MIDIConnectionMode``
 - ``MIDIEndpointType``
 
 ### MIDI Packets and Parsing
@@ -32,6 +33,8 @@
 - ``AnyMIDIPacket``
 - ``MIDI1Parser``
 - ``MIDI2Parser``
+- ``AdvancedMIDI2Parser``
+- ``ParameterNumberEventBundler``
 - ``MIDIProtocolVersion``
 
 ### Core MIDI Related

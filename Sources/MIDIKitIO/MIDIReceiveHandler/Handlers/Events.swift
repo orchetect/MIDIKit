@@ -7,7 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 extension MIDIReceiver {
-    /// Handler for the ``events(options:_:)`` MIDI receiver.
+    /// Handler for events-based MIDI receivers.
     /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
     /// `nil` when used with ``MIDIInput``.
     public typealias EventsHandler = (
