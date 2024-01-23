@@ -14,6 +14,7 @@ import XCTest
 
 /// These tests are meant to test the translation Core MIDI performs between legacy MIDI 1.0 packets
 /// and MIDI 2.0 UMP packets
+@available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
 final class RPN_NRPN_IO_Tests: XCTestCase {
     fileprivate var managerLegacyAPI: MIDIManager!
     fileprivate var managerNewAPI: MIDIManager!
