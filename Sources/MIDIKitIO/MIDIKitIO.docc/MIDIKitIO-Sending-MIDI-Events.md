@@ -12,7 +12,7 @@ In order to begin sending MIDI events, there are two primary mechanisms:
 
 To send events, call the ``MIDIManagedSendsMessages/send(event:)`` method on the ``MIDIManager/managedOutputs`` dictionary.
 
-The dictionary key corresponds to the `tag` property that was specified at the time of creating the connection in the ``MIDIManager``.
+The dictionary key corresponds to the `tag` property that was specified at the time of creating the output in the ``MIDIManager``.
 
 ```swift
 let conn = midiManager.managedOutputs["Output1"]
