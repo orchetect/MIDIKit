@@ -72,6 +72,7 @@ struct ContentView: View {
                 showIcons: true,
                 hideOwned: false
             )
+            .updatingInputConnection(withTag: MIDIHelper.Tags.midiIn)
             
             MIDIInputsPicker(
                 title: "MIDI Out",
@@ -80,6 +81,7 @@ struct ContentView: View {
                 showIcons: true,
                 hideOwned: false
             )
+            .updatingOutputConnection(withTag: MIDIHelper.Tags.midiOut)
             
             Group {
                 Button("Send Note On C3") {
