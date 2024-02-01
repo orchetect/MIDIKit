@@ -545,8 +545,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/AudioKit/Controls";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.4;
 			};
 		};
 		E2E1FCCA28F6841600B4351E /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
