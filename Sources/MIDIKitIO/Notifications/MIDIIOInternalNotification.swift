@@ -6,8 +6,13 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-@_implementationOnly import CoreMIDI
 import Foundation
+
+#if compiler(>=5.10)
+/* private */ import CoreMIDI
+#else
+@_implementationOnly import CoreMIDI
+#endif
 
 /// Internal MIDI subsystem notification with raw values.
 ///

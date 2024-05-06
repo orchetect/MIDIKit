@@ -7,7 +7,12 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
+
+#if compiler(>=5.10)
+/* private */ import CoreMIDI
+#else
 @_implementationOnly import CoreMIDI
+#endif
 
 /// A managed MIDI input connection created in the system by the MIDI I/O ``MIDIManager``.
 ///

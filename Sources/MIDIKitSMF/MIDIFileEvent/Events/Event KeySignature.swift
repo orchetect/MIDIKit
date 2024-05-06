@@ -6,7 +6,12 @@
 
 import Foundation
 import MIDIKitCore
+
+#if compiler(>=5.10)
+/* private */ import MIDIKitInternals
+#else
 @_implementationOnly import MIDIKitInternals
+#endif
 
 // MARK: - KeySignature
 

@@ -6,8 +6,13 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-@_implementationOnly import CoreMIDI
 import Foundation
+
+#if compiler(>=5.10)
+/* private */ import CoreMIDI
+#else
+@_implementationOnly import CoreMIDI
+#endif
 
 extension MIDIManager {
     /// Adds new a managed virtual output to the ``MIDIManager/managedOutputs`` dictionary of the

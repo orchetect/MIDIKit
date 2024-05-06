@@ -6,7 +6,11 @@
 
 #if !os(tvOS) && !os(watchOS)
 
+#if compiler(>=5.10)
+/* private */ import CoreMIDI
+#else
 @_implementationOnly import CoreMIDI
+#endif
 
 /// MIDIKit analogue for Core MIDI's `MIDIUniqueID`.
 /// Most commonly used to uniquely identify MIDI endpoints in the system.

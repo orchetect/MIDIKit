@@ -5,7 +5,12 @@
 //
 
 import Foundation
+
+#if compiler(>=5.10)
+/* private */ import MIDIKitInternals
+#else
 @_implementationOnly import MIDIKitInternals
+#endif
 
 /// A 25-bit unsigned integer value type used in `MIDIKit`.
 public struct UInt25: MIDIUnsignedInteger, _MIDIUnsignedInteger {

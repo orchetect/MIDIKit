@@ -8,7 +8,11 @@
 
 import Foundation
 
+#if compiler(>=5.10)
+/* private */ import CoreMIDI
+#else
 @_implementationOnly import CoreMIDI
+#endif
 
 /// Internal:
 /// List of MIDI entities in the system (computed property)

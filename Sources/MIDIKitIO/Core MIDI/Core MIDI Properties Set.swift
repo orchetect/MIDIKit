@@ -6,7 +6,11 @@
 
 #if !os(tvOS) && !os(watchOS)
 
+#if compiler(>=5.10)
+/* private */ import CoreMIDI
+#else
 @_implementationOnly import CoreMIDI
+#endif
 
 /// Internal:
 /// Set a string value for a `MIDIObjectRef` property key.

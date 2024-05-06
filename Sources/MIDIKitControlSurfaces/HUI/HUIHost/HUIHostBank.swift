@@ -6,7 +6,12 @@
 
 import Foundation
 import MIDIKitCore
+
+#if compiler(>=5.10)
+/* private */ import MIDIKitInternals
+#else
 @_implementationOnly import MIDIKitInternals
+#endif
 
 /// Object representing a ``HUIHost`` bank (connectable to one HUI surface over bidirectional MIDI).
 ///

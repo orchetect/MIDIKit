@@ -5,7 +5,13 @@
 //
 
 import MIDIKitCore
+
+#if compiler(>=5.10)
+/* private */ import MIDIKitInternals
+#else
 @_implementationOnly import MIDIKitInternals
+#endif
+
 import TimecodeKit
 
 /// MTC (MIDI Timecode) stream encoder object.

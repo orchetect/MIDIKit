@@ -4,8 +4,13 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-@_implementationOnly import CoreMIDI
 import Foundation
+
+#if compiler(>=5.10)
+/* private */ import CoreMIDI
+#else
+@_implementationOnly import CoreMIDI
+#endif
 
 // MARK: - NetworkConnectionPolicy
 

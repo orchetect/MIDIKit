@@ -6,9 +6,14 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-@_implementationOnly import CoreMIDI
 import Foundation
 import SwiftUI
+
+#if compiler(>=5.10)
+/* private */ import CoreMIDI
+#else
+@_implementationOnly import CoreMIDI
+#endif
 
 /// Box to contain an instance of a strongly-typed system MIDI object.
 ///
