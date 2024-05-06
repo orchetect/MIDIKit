@@ -32,28 +32,28 @@ jobs:
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: BluetoothMIDI - Build
-      run: xcodebuild build -project "Examples/UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "platform=iOS Simulator,name=iPhone 12" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
     
     - name: EventParsing - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: EventParsing - Build
-      run: xcodebuild build -project "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "platform=iOS Simulator,name=iPhone 12" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
 
     - name: VirtualInput - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: VirtualInput - Build
-      run: xcodebuild build -project "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "platform=iOS Simulator,name=iPhone 12" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
 
     - name: VirtualOutput - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/UIKit/VirtualOutput/VirtualOutput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/UIKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: VirtualOutput - Build
-      run: xcodebuild build -project "Examples/UIKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "platform=iOS Simulator,name=iPhone 12" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/UIKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
 
   SwiftUI-iOS:
     name: SwiftUI iOS
@@ -66,14 +66,14 @@ jobs:
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: BluetoothMIDI - Build
-      run: xcodebuild build -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "platform=iOS Simulator,name=iPhone 12" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
 
     - name: USB iOS to Mac - Set dependency branch
       run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -branch ${{ github.ref }}
     - name: USB iOS to Mac - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: USB iOS to Mac - Build
-      run: xcodebuild build -project "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -scheme "USB iOS to Mac" -destination "platform=iOS Simulator,name=iPhone 12" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -scheme "USB iOS to Mac" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
 
   SwiftUI-Multiplatform:
     name: SwiftUI Multiplatform
