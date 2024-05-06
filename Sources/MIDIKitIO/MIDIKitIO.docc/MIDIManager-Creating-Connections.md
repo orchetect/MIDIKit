@@ -24,7 +24,7 @@ Target endpoint(s) can be supplied upon managed connection creation, or added la
 try midiManager.addInputConnection(
     to: .none,
     tag: "InputConnection1",
-    receiveHandler: .events { [weak self] events in
+    receiver: .events { [weak self] events in
         // Note: this handler will be called on a background thread so be
         // sure to call anything that may result in UI updates on the main thread
         DispatchQueue.main.async {
@@ -41,7 +41,7 @@ try midiManager.addInputConnection(
     to: .allOutputs,
     tag: "InputConnection1",
     filter: .owned(), // filter out Manager-owned virtual outputs
-    receiveHandler: // add your handler here...
+    receiver: // add your handler here...
 )
 ```
 
@@ -71,7 +71,7 @@ Target endpoint(s) can be supplied upon managed connection creation, or added la
 
 ```swift
 try midiManager.addOutputConnection(
-    toInputs: [],
+    to: .none,
     tag: "OutputConnection1"
 )
 ```
@@ -102,8 +102,8 @@ Non-persistent thru connections are owned by the ``MIDIManager`` and automatical
 
 ```swift
 try midiManager.addOutputConnection(
-    outputs: [],
-    inputs: [],
+    outputs: .none,
+    inputs: .none,
     tag: "ThruConnection1",
     lifecycle: .nonPersistent
 )
@@ -119,8 +119,8 @@ An owner ID is supplied when creating these connections so that they can be modi
 
 ```swift
 try midiManager.addOutputConnection(
-    outputs: [],
-    inputs: [],
+    outputs: .none,
+    inputs: .none,
     tag: "ThruConnection1",
     lifecycle: .persistent(ownerID: "com.mydomain.myapp")
 )

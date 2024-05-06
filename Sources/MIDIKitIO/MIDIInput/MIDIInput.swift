@@ -59,7 +59,7 @@ public final class MIDIInput: _MIDIManaged {
     /// Internal init.
     /// This object is not meant to be instanced by the user. This object is automatically created
     /// and managed by the MIDI I/O ``MIDIManager`` instance when calling
-    /// ``MIDIManager/addInputConnection(toOutputs:tag:mode:filter:receiver:)-5xxyz``, and destroyed
+    /// ``MIDIManager/addInputConnection(to:tag:filter:receiver:)-5xxyz``, and destroyed
     /// when calling ``MIDIManager/remove(_:_:)`` with ``MIDIManager/ManagedType/input`` or
     /// ``MIDIManager/removeAll()``.
     ///

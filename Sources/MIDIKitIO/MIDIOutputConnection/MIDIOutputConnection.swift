@@ -108,7 +108,7 @@ public final class MIDIOutputConnection: _MIDIManaged {
     /// Internal init.
     /// This object is not meant to be instanced by the user. This object is automatically created
     /// and managed by the MIDI I/O ``MIDIManager`` instance when calling
-    /// ``MIDIManager/addOutputConnection(toInputs:tag:mode:filter:)-3a56s``, and destroyed when
+    /// ``MIDIManager/addOutputConnection(to:tag:filter:)-3a56s``, and destroyed when
     /// calling ``MIDIManager/remove(_:_:)`` with ``MIDIManager/ManagedType/outputConnection`` or
     /// ``MIDIManager/removeAll()`` to destroy the managed connection.)
     ///
