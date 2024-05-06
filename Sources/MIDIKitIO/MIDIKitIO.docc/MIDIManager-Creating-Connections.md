@@ -22,7 +22,7 @@ Target endpoint(s) can be supplied upon managed connection creation, or added la
 
 ```swift
 try midiManager.addInputConnection(
-    toOutputs: [],
+    to: .none,
     tag: "InputConnection1",
     receiveHandler: .events { [weak self] events in
         // Note: this handler will be called on a background thread so be

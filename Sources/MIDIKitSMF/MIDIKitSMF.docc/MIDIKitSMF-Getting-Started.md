@@ -25,7 +25,7 @@ Tracks and events can be accessed once the file is successfully read.
 ```swift
 // using a file URL
 let url = URL() // replace with url to a MIDI file on disk
-let midiFile = try MIDI.File(midiFile: url)
+let midiFile = try MIDIFile(midiFile: url)
 print(midiFile.description) // prints human-readable debug output of the file
 
 // using a file path
