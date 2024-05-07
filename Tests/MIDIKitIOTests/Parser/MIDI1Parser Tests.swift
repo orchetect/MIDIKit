@@ -57,8 +57,21 @@ final class MIDI1Parser_Tests: XCTestCase {
     
         // program change
         XCTAssertEqual(
-            parsedEvents(bytes: [0xCA, 0x20]),
-            [.programChange(program: 32, channel: 10, group: 0)]
+            parsedEvents(bytes: [0xCA, 0x40]),
+            [.programChange(program: 64, channel: 10, group: 0)]
+        )
+        // MIDI1Parser does not wait for trailing program change event in order to bundle them in a `.programChange` event.
+        // It is more idiomatic to MIDI 2.0 than MIDI 1.0.
+        // TODO: It could be implemented as an optional parser feature in future, similar to MIDI2Parser's RPN/NRPN bundling ability.
+        XCTAssertEqual(
+            parsedEvents(bytes: [0xBA, 0x00, 0x10,
+                                 0xBA, 0x20, 0x01,
+                                 0xCA, 0x40]),
+            [
+                .cc(0, value: .midi1(0x10), channel: 10, group: 0x0),
+                .cc(32, value: .midi1(0x01), channel: 10, group: 0x0),
+                .programChange(program: 64, /* bank: .bankSelect(msb: 0x10, lsb: 0x01), */ channel: 10, group: 0)
+            ]
         )
     
         // channel aftertouch
