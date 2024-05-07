@@ -149,7 +149,7 @@ extension MIDIEvent.ProgramChange {
             ]
                 + [
                     0xB0 + channel.uInt8Value,
-                    0x32,
+                    0x20,
                     bankNumber.midiUInt7Pair.lsb.uInt8Value
                 ]
                 + programChangeMessage
