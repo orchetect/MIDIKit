@@ -9,7 +9,7 @@
 #if shouldTestCurrentPlatform && !targetEnvironment(simulator)
 
 import CoreMIDI
-@_implementationOnly import MIDIKitInternals
+import MIDIKitInternals
 @testable import MIDIKitIO
 import XCTest
 

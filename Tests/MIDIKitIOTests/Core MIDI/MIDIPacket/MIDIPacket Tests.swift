@@ -7,7 +7,7 @@
 #if shouldTestCurrentPlatform && !os(tvOS) && !os(watchOS)
 
 import CoreMIDI
-@_implementationOnly import MIDIKitInternals
+import MIDIKitInternals
 @testable import MIDIKitIO
 import XCTest
 
