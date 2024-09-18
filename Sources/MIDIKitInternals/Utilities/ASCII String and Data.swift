@@ -67,7 +67,9 @@ extension DataProtocol {
     /// Attempts to lossily convert the data if it is not valid ASCII.
     public func asciiDataToStringLossy() -> String {
         let data = Data(self)
-        return String(
+        
+        // try standard String encoding inits first
+        if let str = String(
             data: data,
             encoding: .nonLossyASCII
         )
@@ -79,6 +81,15 @@ extension DataProtocol {
                 data: data,
                 encoding: .utf8
             )
-            ?? String(repeating: "?", count: count)
+        {
+            return str
+        }
+        
+        // otherwise, map characters
+        let scalars = data.map { UnicodeScalar($0) }
+        var str = ""
+        str.unicodeScalars.append(contentsOf: scalars)
+        
+        return str
     }
 }
