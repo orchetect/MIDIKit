@@ -120,7 +120,12 @@ final class Event_Text_Tests: XCTestCase {
         
         let text = try MIDIFileEvent.Text(midi1SMFRawBytes: rawData)
         
-        XCTAssertEqual(text, MIDIFileEvent.Text(copyright: "Copyright © 2000 by Some Guy Hello"))
+        // check string integrity
+        let str = "Copyright © 2000 by Some Guy Hello"
+        XCTAssertEqual(text.text, str)
+        
+        // check instance equality
+        XCTAssertEqual(text, MIDIFileEvent.Text(copyright: str))
     }
     
     func testNewlineCharacter() throws {
@@ -133,7 +138,12 @@ final class Event_Text_Tests: XCTestCase {
         
         let text = try MIDIFileEvent.Text(midi1SMFRawBytes: rawData)
         
-        XCTAssertEqual(text, MIDIFileEvent.Text(text: "Sequenced by Mr. Johnny Doe\n"))
+        // check string integrity
+        let str = "Sequenced by Mr. Johnny Doe\n"
+        XCTAssertEqual(text.text, str)
+        
+        // check instance equality
+        XCTAssertEqual(text, MIDIFileEvent.Text(text: str))
     }
     
     // TODO: add tests - edge cases etc.
