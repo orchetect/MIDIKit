@@ -128,8 +128,11 @@ extension MIDIIOInternalNotification {
                 )
             }
             
+        // `msgInternalStart` is only available in Xcode 16 for non-macOS platforms.
+        #if !os(macOS) && compiler(>=6.0)
         case .msgInternalStart:
             self = .internalStart
+        #endif
             
         @unknown default:
             self = .other(messageIDRawValue: messageID.rawValue)
