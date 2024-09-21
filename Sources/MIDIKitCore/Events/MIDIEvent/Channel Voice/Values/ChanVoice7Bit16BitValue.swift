@@ -16,7 +16,7 @@ extension MIDIEvent {
         /// MIDI 1.0 7-bit Channel Voice Value (`0x00 ... 0x7F`)
         case midi1(UInt7)
     
-        /// MIDI 2.0 16-bit Channel Voice Value `(0x0000 ... 0xFFFF)`
+        /// MIDI 2.0 16-bit Channel Voice Value (`0x0000 ... 0xFFFF`)
         case midi2(UInt16)
     }
 }
