@@ -1,5 +1,5 @@
 //
-//  MIDIKit-0.8.1.swift
+//  MIDIKitIO-0.8.1.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
