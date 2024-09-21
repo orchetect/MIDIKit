@@ -50,6 +50,10 @@ enum MIDIIOInternalNotification {
         error: MIDIIOError
     )
     
+    /// Internal start.
+    /// (Applies only to iOS, macCatalyst, tvOS, watchOS, visionOS.)
+    case internalStart
+    
     /// Typically will never happen unless Apple adds additional cases to Core MIDI's
     /// `MIDINotificationMessageID` enum.
     case other(messageIDRawValue: Int32)
@@ -58,11 +62,11 @@ enum MIDIIOInternalNotification {
 extension MIDIIOInternalNotification {
     init(_ message: UnsafePointer<MIDINotification>) {
         let messageID = message.pointee.messageID
-    
+        
         switch messageID {
         case .msgSetupChanged:
             self = .setupChanged
-    
+            
         case .msgObjectAdded:
             self = message.withMemoryRebound(
                 to: MIDIObjectAddRemoveNotification.self,
@@ -76,7 +80,7 @@ extension MIDIIOInternalNotification {
                     childType: m.childType
                 )
             }
-    
+            
         case .msgObjectRemoved:
             self = message.withMemoryRebound(
                 to: MIDIObjectAddRemoveNotification.self,
@@ -90,7 +94,7 @@ extension MIDIIOInternalNotification {
                     childType: m.childType
                 )
             }
-    
+            
         case .msgPropertyChanged:
             self = message.withMemoryRebound(
                 to: MIDIObjectPropertyChangeNotification.self,
@@ -105,13 +109,13 @@ extension MIDIIOInternalNotification {
                     propertyName: m.propertyName.takeUnretainedValue() as String
                 )
             }
-    
+            
         case .msgThruConnectionsChanged:
             self = .thruConnectionChanged
-    
+            
         case .msgSerialPortOwnerChanged:
             self = .serialPortOwnerChanged
-    
+            
         case .msgIOError:
             self = message.withMemoryRebound(
                 to: MIDIIOErrorNotification.self,
@@ -123,7 +127,10 @@ extension MIDIIOInternalNotification {
                     error: .osStatus(m.errorCode)
                 )
             }
-    
+            
+        case .msgInternalStart:
+            self = .internalStart
+            
         @unknown default:
             self = .other(messageIDRawValue: messageID.rawValue)
         }

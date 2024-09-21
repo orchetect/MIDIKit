@@ -56,6 +56,11 @@ public enum MIDIIONotification: Equatable, Hashable {
         error: MIDIIOError
     )
     
+    /// Internal start.
+    ///
+    /// Applies only to iOS, macCatalyst, tvOS, watchOS, visionOS.
+    case internalStart
+    
     /// Other/unknown notification.
     ///
     /// Typically will never happen unless Apple adds additional cases to Core MIDI's
@@ -133,6 +138,9 @@ extension MIDIIONotification {
                 device: device,
                 error: error
             )
+            
+        case .internalStart:
+            self = .internalStart
     
         case let .other(messageIDRawValue):
             self = .other(messageIDRawValue: messageIDRawValue)
@@ -172,6 +180,9 @@ extension MIDIIONotification: CustomStringConvertible {
         case let .ioError(device, error):
             return "ioError(device: \(device), error: \(error))"
     
+        case .internalStart:
+            return "internalStart"
+            
         case let .other(messageIDRawValue):
             return "other(ID: \(messageIDRawValue))"
         }
