@@ -6,13 +6,13 @@
 
 import Foundation
 
-extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
+extension MIDIEvent: CustomStringConvertible {
     public var description: String {
         switch self {
-        // -------------------
-        // MARK: Channel Voice
-        // -------------------
-        
+            // -------------------
+            // MARK: Channel Voice
+            // -------------------
+            
         case let .noteOn(event):
             let attrStr: String
             switch event.attribute {
@@ -84,7 +84,7 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
         case let .noteManagement(event):
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
-    
+            
             return "noteManagement(options: \(event.optionFlags), chan: \(channelString), group: \(groupString))"
             
         case let .cc(event):
@@ -94,13 +94,13 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
-    
+            
             return "cc(\(event.controller.number), val: \(valString), chan: \(channelString), group: \(groupString))"
             
         case let .programChange(event):
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
-    
+            
             switch event.bank {
             case .noBankSelect:
                 return "prgChange(\(event.program), chan: \(channelString), group: \(groupString))"
@@ -128,9 +128,9 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             
             return "pitchBend(\(valString), chan: \(channelString), group: \(groupString))"
             
-        // -----------------------------------------------
-        // MARK: Channel Voice - Parameter Number Messages
-        // -----------------------------------------------
+            // -----------------------------------------------
+            // MARK: Channel Voice - Parameter Number Messages
+            // -----------------------------------------------
             
         case let .rpn(event):
             let channelString = event.channel.hexString()
@@ -144,10 +144,10 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             
             return "nrpn(\(event.parameter), change: \(event.change), chan: \(channelString), group: \(groupString))"
             
-        // ----------------------
-        // MARK: System Exclusive
-        // ----------------------
-        
+            // ----------------------
+            // MARK: System Exclusive
+            // ----------------------
+            
         case let .sysEx7(event):
             let dataString = event.data.hexString(padEachTo: 2, prefixes: true)
             let groupString = event.group.hexString()
@@ -172,10 +172,10 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             
             return "universalSysEx8(\(event.universalType), deviceID: \(event.deviceID), subID1: \(event.subID1), subID2: \(event.subID2), data: [\(dataString)], group: \(groupString), streamID: \(event.streamID))"
             
-        // -------------------
-        // MARK: System Common
-        // -------------------
-    
+            // -------------------
+            // MARK: System Common
+            // -------------------
+            
         case let .timecodeQuarterFrame(event):
             let dataByteString = event.dataByte.uInt8Value
                 .binaryString(padTo: 8, prefix: true)
@@ -199,11 +199,11 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
         case let .tuneRequest(event):
             let groupString = event.group.hexString()
             return "tuneRequest(group: \(groupString))"
-        
-        // ----------------------
-        // MARK: System Real-Time
-        // ----------------------
-        
+            
+            // ----------------------
+            // MARK: System Real-Time
+            // ----------------------
+            
         case let .timingClock(event):
             let groupString = event.group.hexString()
             return "timingClock(group: \(groupString))"
@@ -228,10 +228,10 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             let groupString = event.group.hexString()
             return "systemReset(group: \(groupString))"
             
-        // -------------------------------
-        // MARK: MIDI 2.0 Utility Messages
-        // -------------------------------
-        
+            // -------------------------------
+            // MARK: MIDI 2.0 Utility Messages
+            // -------------------------------
+            
         case let .noOp(event):
             let groupString = event.group.hexString()
             return "noOp(group: \(groupString))"
@@ -245,7 +245,9 @@ extension MIDIEvent: CustomStringConvertible, CustomDebugStringConvertible {
             return "jrTimestamp(\(event.time), group: \(groupString))"
         }
     }
-    
+}
+
+extension MIDIEvent: CustomDebugStringConvertible {
     public var debugDescription: String {
         description
     }

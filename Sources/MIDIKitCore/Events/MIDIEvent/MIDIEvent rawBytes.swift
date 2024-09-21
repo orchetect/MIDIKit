@@ -4,6 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
+// MARK: - MIDI 1.0
+
 extension MIDIEvent {
     /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
@@ -366,6 +368,8 @@ extension MIDIEvent {
         }
     }
 }
+
+// MARK: - UMP
 
 extension MIDIEvent {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
