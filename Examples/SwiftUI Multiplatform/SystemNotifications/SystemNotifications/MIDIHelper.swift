@@ -98,6 +98,9 @@ final class MIDIHelper: ObservableObject {
         case let .ioError(device, error):
             print("I/O Error for device \(device.name): \(error)")
             
+        case .internalStart:
+            print("Internal Start")
+            
         case let .other(messageIDRawValue):
             print("Other with ID \(messageIDRawValue)")
         }
