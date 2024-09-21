@@ -39,6 +39,25 @@ extension MTCReceiver {
     }
 }
 
+extension MTCReceiver.State: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        // `preSync` requires custom Hashable because DispatchTime does not conform to Hashable
+        
+        switch self {
+        case .preSync(let predictedLockTime, let lockTimecode):
+            let plt = predictedLockTime.uptimeNanoseconds
+            let tc = lockTimecode.stringValue(format: .showSubFrames)
+            hasher.combine("preSync-\(plt)-\(tc)")
+        default:
+            hasher.combine(description)
+        }
+    }
+}
+
+extension MTCReceiver.State: Identifiable {
+    public var id: Self { self }
+}
+
 extension MTCReceiver.State: Sendable { }
 
 extension MTCReceiver.State: CustomStringConvertible {

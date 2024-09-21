@@ -20,6 +20,10 @@ public enum MTCDirection {
 
 extension MTCDirection: Sendable { }
 
+extension MTCDirection: Identifiable {
+    public var id: Self { self }
+}
+
 extension MTCDirection {
     /// Infers playback direction by comparing previous and current quarter-frames received, taking
     /// into account value wrapping around min/max.

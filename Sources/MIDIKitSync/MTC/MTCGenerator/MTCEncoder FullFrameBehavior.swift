@@ -28,4 +28,8 @@ extension MTCEncoder {
     }
 }
 
+extension MTCEncoder.FullFrameBehavior: Identifiable {
+    public var id: Self { self }
+}
+
 extension MTCEncoder.FullFrameBehavior: Sendable { }

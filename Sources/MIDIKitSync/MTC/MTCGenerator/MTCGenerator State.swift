@@ -20,6 +20,10 @@ extension MTCGenerator {
     }
 }
 
+extension MTCGenerator.State: Identifiable {
+    public var id: Self { self }
+}
+
 extension MTCGenerator.State: Sendable { }
 
 extension MTCGenerator.State: CustomStringConvertible {

@@ -140,4 +140,8 @@ public enum MTCFrameRate: Hashable, CaseIterable {
     }
 }
 
+extension MTCFrameRate: Identifiable {
+    public var id: Self { self }
+}
+
 extension MTCFrameRate: Sendable { }
