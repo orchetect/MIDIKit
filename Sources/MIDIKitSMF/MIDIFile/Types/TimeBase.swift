@@ -50,7 +50,7 @@ extension MIDIFile.TimeBase {
                 smpteFormat.rawValue + 0b10000000,
                 ticksPerFrame
             ]
-                .data
+            .data
         }
     }
 }
@@ -91,6 +91,10 @@ extension MIDIFile.TimeBase {
             return nil
         }
     }
+}
+
+extension MIDIFile.TimeBase: Identifiable {
+    public var id: Self { self }
 }
 
 extension MIDIFile.TimeBase: Sendable { }

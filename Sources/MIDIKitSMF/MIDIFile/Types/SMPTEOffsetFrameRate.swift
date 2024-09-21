@@ -18,6 +18,10 @@ extension MIDIFile {
     }
 }
 
+extension MIDIFile.SMPTEOffsetFrameRate: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIFile.SMPTEOffsetFrameRate: Sendable { }
 
 extension MIDIFile.SMPTEOffsetFrameRate: CustomStringConvertible {

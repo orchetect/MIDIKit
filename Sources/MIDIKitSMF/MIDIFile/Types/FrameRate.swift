@@ -23,11 +23,15 @@ extension MIDIFile {
     /// - 29.97 drop fps: `0xE3`
     /// - 30 fps: `0xE2`
     public enum FrameRate: UInt8, CaseIterable, Equatable, Hashable {
-        case fps24    = 0b1101000 // 0xE8, assuming top bit of 1
-        case fps25    = 0b1100111 // 0xE7, assuming top bit of 1
+        case fps24     = 0b1101000 // 0xE8, assuming top bit of 1
+        case fps25     = 0b1100111 // 0xE7, assuming top bit of 1
         case fps29_97d = 0b1100011 // 0xE3, assuming top bit of 1
-        case fps30    = 0b1100010 // 0xE2, assuming top bit of 1
+        case fps30     = 0b1100010 // 0xE2, assuming top bit of 1
     }
+}
+
+extension MIDIFile.FrameRate: Identifiable {
+    public var id: Self { self }
 }
 
 extension MIDIFile.FrameRate: Sendable { }

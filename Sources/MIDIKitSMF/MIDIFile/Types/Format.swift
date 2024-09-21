@@ -27,6 +27,10 @@ extension MIDIFile {
     }
 }
 
+extension MIDIFile.Format: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIFile.Format: Sendable { }
 
 extension MIDIFile.Format: CustomStringConvertible {

@@ -112,12 +112,6 @@ public struct MusicalTimeValue {
     }
 }
 
-extension MusicalTimeValue: CustomStringConvertible {
-    public var description: String {
-        stringValue()
-    }
-}
-
 extension MusicalTimeValue: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.elapsedBeats() == rhs.elapsedBeats()
@@ -132,7 +126,17 @@ extension MusicalTimeValue: Comparable {
     }
 }
 
+extension MusicalTimeValue: Identifiable {
+    public var id: Self { self }
+}
+
 extension MusicalTimeValue: Sendable { }
+
+extension MusicalTimeValue: CustomStringConvertible {
+    public var description: String {
+        stringValue()
+    }
+}
 
 // MARK: - Methods
 
