@@ -233,11 +233,13 @@ extension MIDINote {
     }
 }
 
-extension MIDINote: CustomStringConvertible, CustomDebugStringConvertible {
+extension MIDINote: CustomStringConvertible {
     public var description: String {
         stringValue(unicodeAccidental: true)
     }
-    
+}
+
+extension MIDINote: CustomDebugStringConvertible {
     public var debugDescription: String {
         "Note(\(stringValue(unicodeAccidental: true)) number:\(number))"
     }

@@ -32,7 +32,7 @@ extension MIDIFile {
 
 extension MIDIFile.FrameRate: Sendable { }
 
-extension MIDIFile.FrameRate: CustomStringConvertible, CustomDebugStringConvertible {
+extension MIDIFile.FrameRate: CustomStringConvertible {
     public var description: String {
         switch self {
         case .fps24:
@@ -48,7 +48,9 @@ extension MIDIFile.FrameRate: CustomStringConvertible, CustomDebugStringConverti
             return "30fps"
         }
     }
+}
 
+extension MIDIFile.FrameRate: CustomDebugStringConvertible {
     public var debugDescription: String {
         "FrameRate(" + description + ")"
     }

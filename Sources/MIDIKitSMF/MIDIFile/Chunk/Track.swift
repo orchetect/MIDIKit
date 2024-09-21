@@ -28,7 +28,7 @@ extension MIDIFile.Chunk {
     }
 }
 
-extension MIDIFile.Chunk.Track: CustomStringConvertible, CustomDebugStringConvertible {
+extension MIDIFile.Chunk.Track: CustomStringConvertible {
     public var description: String {
         var outputString = ""
         
@@ -47,7 +47,9 @@ extension MIDIFile.Chunk.Track: CustomStringConvertible, CustomDebugStringConver
         
         return outputString
     }
-    
+}
+
+extension MIDIFile.Chunk.Track: CustomDebugStringConvertible {
     public var debugDescription: String {
         var outputString = ""
         

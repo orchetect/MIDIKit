@@ -21,7 +21,7 @@ extension MIDIFile {
     }
 }
 
-extension MIDIFile.Chunk: CustomStringConvertible, CustomDebugStringConvertible {
+extension MIDIFile.Chunk: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .track(track):
@@ -31,7 +31,9 @@ extension MIDIFile.Chunk: CustomStringConvertible, CustomDebugStringConvertible 
             return unrecognizedChunk.description
         }
     }
-    
+}
+
+extension MIDIFile.Chunk: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case let .track(track):

@@ -51,7 +51,7 @@ extension MIDIFile.Chunk {
     }
 }
 
-extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible, CustomDebugStringConvertible {
+extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible {
     public var description: String {
         var outputString = ""
         
@@ -62,7 +62,9 @@ extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible, CustomDebug
         
         return outputString
     }
-    
+}
+
+extension MIDIFile.Chunk.UnrecognizedChunk: CustomDebugStringConvertible {
     public var debugDescription: String {
         let rawDataBlock = rawData
             .hexString(padEachTo: 2, prefixes: false)

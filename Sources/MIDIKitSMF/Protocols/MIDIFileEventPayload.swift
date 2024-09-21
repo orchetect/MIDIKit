@@ -36,8 +36,10 @@ public protocol MIDIFileEventPayload: Sendable {
     var smfDebugDescription: String { get }
 }
 
-extension MIDIFileEventPayload /* : CustomStringConvertible, CustomDebugStringConvertible */ {
+extension MIDIFileEventPayload /* : CustomStringConvertible */ {
     public var description: String { smfDescription }
-    
+}
+
+extension MIDIFileEventPayload /* : CustomDebugStringConvertible */ {
     public var debugDescription: String { smfDebugDescription }
 }

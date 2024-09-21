@@ -95,7 +95,7 @@ extension MIDIFile.TimeBase {
 
 extension MIDIFile.TimeBase: Sendable { }
 
-extension MIDIFile.TimeBase: CustomStringConvertible, CustomDebugStringConvertible {
+extension MIDIFile.TimeBase: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .musical(ticksPerQuarterNote):
@@ -105,7 +105,9 @@ extension MIDIFile.TimeBase: CustomStringConvertible, CustomDebugStringConvertib
             return "Timecode: \(smpteFormat) \(ticksPerFrame) ticks per frame"
         }
     }
-    
+}
+
+extension MIDIFile.TimeBase: CustomDebugStringConvertible {
     public var debugDescription: String {
         "timeBase(" + description + ")"
     }

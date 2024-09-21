@@ -29,7 +29,7 @@ extension MIDIFile {
 
 extension MIDIFile.Format: Sendable { }
 
-extension MIDIFile.Format: CustomStringConvertible, CustomDebugStringConvertible {
+extension MIDIFile.Format: CustomStringConvertible {
     public var description: String {
         switch self {
         case .singleTrack:
@@ -42,7 +42,9 @@ extension MIDIFile.Format: CustomStringConvertible, CustomDebugStringConvertible
             return "Type 2 (multiple tracks asynchronous)"
         }
     }
+}
 
+extension MIDIFile.Format: CustomDebugStringConvertible {
     public var debugDescription: String {
         "Format(" + description + ")"
     }

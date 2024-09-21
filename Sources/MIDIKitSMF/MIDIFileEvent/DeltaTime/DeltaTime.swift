@@ -59,7 +59,7 @@ extension MIDIFileEvent.DeltaTime: Sendable { }
 
 // MARK: - CustomStringConvertible
 
-extension MIDIFileEvent.DeltaTime: CustomStringConvertible, CustomDebugStringConvertible {
+extension MIDIFileEvent.DeltaTime: CustomStringConvertible {
     public var description: String {
         switch self {
         case .none:             return "none"
@@ -75,7 +75,9 @@ extension MIDIFileEvent.DeltaTime: CustomStringConvertible, CustomDebugStringCon
         case .note256th:        return "256th note"
         }
     }
+}
 
+extension MIDIFileEvent.DeltaTime: CustomDebugStringConvertible {
     public var debugDescription: String {
         "DeltaTime(" + description + ")"
     }

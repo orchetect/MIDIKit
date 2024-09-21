@@ -127,11 +127,13 @@ extension UInt4 /*: Codable */ {
 
 // MARK: - CustomStringConvertible
 
-extension UInt4 { //: CustomStringConvertible, CustomDebugStringConvertible {
+extension UInt4 /* : CustomStringConvertible */ {
     public var description: String {
         storage.description
     }
-    
+}
+
+extension UInt4 /* : CustomDebugStringConvertible */ {
     public var debugDescription: String {
         "\(Self.integerName)(\(storage.description))"
     }

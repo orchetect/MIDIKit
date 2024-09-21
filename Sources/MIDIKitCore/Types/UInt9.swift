@@ -130,11 +130,13 @@ extension UInt9 /*: Codable */ {
 
 // MARK: - CustomStringConvertible
 
-extension UInt9 { //: CustomStringConvertible, CustomDebugStringConvertible {
+extension UInt9 /* : CustomStringConvertible */ {
     public var description: String {
         storage.description
     }
-    
+}
+
+extension UInt9 /* : CustomDebugStringConvertible */ {
     public var debugDescription: String {
         "\(Self.integerName)(\(storage.description))"
     }

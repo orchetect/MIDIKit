@@ -20,7 +20,7 @@ extension MIDIFile {
 
 extension MIDIFile.SMPTEOffsetFrameRate: Sendable { }
 
-extension MIDIFile.SMPTEOffsetFrameRate: CustomStringConvertible, CustomDebugStringConvertible {
+extension MIDIFile.SMPTEOffsetFrameRate: CustomStringConvertible {
     public var description: String {
         switch self {
         case .fps24:
@@ -36,7 +36,9 @@ extension MIDIFile.SMPTEOffsetFrameRate: CustomStringConvertible, CustomDebugStr
             return "30fps"
         }
     }
+}
 
+extension MIDIFile.SMPTEOffsetFrameRate: CustomDebugStringConvertible {
     public var debugDescription: String {
         "SMPTEOffsetFrameRate(" + description + ")"
     }
