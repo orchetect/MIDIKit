@@ -45,11 +45,27 @@ jobs:
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS" | xcpretty && exit ${PIPESTATUS[0]}
       
+  macOS-14:
+    name: macOS 14 Sonoma
+    runs-on: macos-14
+    steps:
+    - uses: actions/checkout@main
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
+    - name: Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
+    - name: Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS" | xcpretty && exit ${PIPESTATUS[0]}
+      
   macCatalyst:
     name: macCatalyst
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@main
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     - name: Build
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,variant=Mac Catalyst,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
     - name: Unit Tests
@@ -60,30 +76,39 @@ jobs:
     runs-on: macos-latest # this must be macos, GitHub does not offer iOS directly but we can use xcodebuild
     steps:
     - uses: actions/checkout@main
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     - name: iPhone 12 Simulator - Build
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=iOS Simulator,name=Any iOS Device" | xcpretty && exit ${PIPESTATUS[0]}
     - name: iPhone 12 Simulator - Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 12" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
   
   tvOS:
     name: tvOS
     runs-on: macos-latest # this must be macos, GitHub does not offer tvOS directly but we can use xcodebuild
     steps:
     - uses: actions/checkout@main
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     - name: Apple TV - Build
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=tvOS Simulator,name=Any tvOS Simulator Device" | xcpretty && exit ${PIPESTATUS[0]}
     - name: Apple TV - Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation)" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV 4K (3rd generation)" | xcpretty && exit ${PIPESTATUS[0]}
       
   watchOS:
     name: watchOS
     runs-on: macos-latest # this must be macos, GitHub does not offer watchOS directly but we can use xcodebuild
     steps:
     - uses: actions/checkout@main
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     - name: Apple Watch - Build
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=watchOS Simulator,name=Any watchOS Simulator Device" | xcpretty && exit ${PIPESTATUS[0]}
     - name: Apple Watch - Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 8 (45mm)" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 10 (46mm)" | xcpretty && exit ${PIPESTATUS[0]}
 
 
 # xcodebuild test reference:
