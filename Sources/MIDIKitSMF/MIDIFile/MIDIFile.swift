@@ -43,6 +43,9 @@ public struct MIDIFile {
         }
     }
     
+    // Identifiable protocol conformance fulfilment
+    public let id: UUID = UUID()
+    
     // MARK: - Init
     
     /// Initialize with default values.

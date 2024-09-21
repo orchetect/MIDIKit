@@ -9,8 +9,6 @@ import MIDIKitCore
 extension MIDIFile: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.header == rhs.header &&
-            lhs.format == rhs.format &&
-            lhs.timeBase == rhs.timeBase &&
             lhs.chunks == rhs.chunks
     }
 }
@@ -18,10 +16,12 @@ extension MIDIFile: Equatable {
 extension MIDIFile: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(header)
-        hasher.combine(format)
-        hasher.combine(timeBase)
         hasher.combine(chunks)
     }
+}
+
+extension MIDIFile: Identifiable {
+    // `id` property is stored in MIDIFile struct
 }
 
 extension MIDIFile: CustomStringConvertible {
