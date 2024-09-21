@@ -36,4 +36,8 @@ extension MIDIProtocolVersion: CustomStringConvertible {
     }
 }
 
+extension MIDIProtocolVersion: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIProtocolVersion: Sendable { }

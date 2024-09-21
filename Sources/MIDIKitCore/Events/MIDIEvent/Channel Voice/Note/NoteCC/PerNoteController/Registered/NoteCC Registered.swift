@@ -135,4 +135,8 @@ extension MIDIEvent.NoteCC.PerNoteController {
     // swiftformat:enable wrapSingleLineComments
 }
 
+extension MIDIEvent.NoteCC.PerNoteController.Registered: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.NoteCC.PerNoteController.Registered: Sendable { }

@@ -46,6 +46,10 @@ extension MIDIEvent.CC.Controller {
     }
 }
 
+extension MIDIEvent.CC.Controller.Mode: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.CC.Controller.Mode: Sendable { }
 
 extension MIDIEvent.CC.Controller.Mode {

@@ -15,6 +15,10 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.UtilityType: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.UtilityType: Sendable { }
 
 extension MIDIEvent {

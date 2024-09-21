@@ -37,6 +37,10 @@ extension MIDIEvent.UniversalSysExType: CustomStringConvertible {
     }
 }
 
+extension MIDIEvent.UniversalSysExType: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.UniversalSysExType: Sendable { }
 
 extension MIDIEvent {

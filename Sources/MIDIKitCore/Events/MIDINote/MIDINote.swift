@@ -269,6 +269,10 @@ extension MIDINote: Strideable {
     }
 }
 
+extension MIDINote: Identifiable {
+    public var id: UInt7 { number }
+}
+
 extension MIDINote: Sendable { }
 
 extension MIDINote {

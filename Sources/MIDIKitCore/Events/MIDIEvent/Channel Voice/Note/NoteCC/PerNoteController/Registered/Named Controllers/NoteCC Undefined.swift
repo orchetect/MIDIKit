@@ -946,6 +946,10 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
     }
 }
 
+extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined: Sendable { }
 
 extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined {

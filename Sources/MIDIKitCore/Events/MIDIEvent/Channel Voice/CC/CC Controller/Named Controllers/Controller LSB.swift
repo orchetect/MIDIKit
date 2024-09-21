@@ -87,6 +87,10 @@ extension MIDIEvent.CC.Controller {
     }
 }
 
+extension MIDIEvent.CC.Controller.LSB: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.CC.Controller.LSB: Sendable { }
 
 extension MIDIEvent.CC.Controller.LSB {

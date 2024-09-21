@@ -33,6 +33,10 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.SysRealTimeType: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.SysRealTimeType: Sendable { }
 
 extension MIDIEvent {

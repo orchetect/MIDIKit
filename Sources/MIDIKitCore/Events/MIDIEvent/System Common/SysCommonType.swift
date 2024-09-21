@@ -28,6 +28,10 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.SysCommonType: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.SysCommonType: Sendable { }
 
 extension MIDIEvent {

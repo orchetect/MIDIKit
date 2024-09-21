@@ -16,6 +16,10 @@ extension MIDIEvent.NoteCC {
     }
 }
 
+extension MIDIEvent.NoteCC.PerNoteController: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.NoteCC.PerNoteController: Sendable { }
 
 extension MIDIEvent.NoteCC.PerNoteController: CustomStringConvertible {

@@ -72,6 +72,10 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.ChanVoiceType: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.ChanVoiceType: Sendable { }
 
 extension MIDIEvent {

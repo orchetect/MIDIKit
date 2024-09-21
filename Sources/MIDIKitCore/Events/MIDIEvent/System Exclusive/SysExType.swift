@@ -25,6 +25,10 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.SysExType: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.SysExType: Sendable { }
 
 extension MIDIEvent {

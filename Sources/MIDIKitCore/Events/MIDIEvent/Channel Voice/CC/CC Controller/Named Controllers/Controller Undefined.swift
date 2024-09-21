@@ -165,6 +165,10 @@ extension MIDIEvent.CC.Controller {
     }
 }
 
+extension MIDIEvent.CC.Controller.Undefined: Identifiable {
+    public var id: Self { self }
+}
+
 extension MIDIEvent.CC.Controller.Undefined: Sendable { }
 
 extension MIDIEvent.CC.Controller.Undefined {
