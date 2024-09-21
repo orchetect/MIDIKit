@@ -4,8 +4,8 @@
 //  © 2021-2023 Steffan Andrews • Licensed under MIT License
 //
 
-#if compiler(>=5.10)
-/* private */ import CoreMIDI
+#if compiler(>=6.0)
+internal import CoreMIDI
 #else
 @_implementationOnly import CoreMIDI
 #endif

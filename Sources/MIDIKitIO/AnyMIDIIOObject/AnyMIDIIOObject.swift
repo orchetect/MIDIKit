@@ -9,8 +9,8 @@
 import Foundation
 import SwiftUI
 
-#if compiler(>=5.10)
-/* private */ import CoreMIDI
+#if compiler(>=6.0)
+internal import CoreMIDI
 #else
 @_implementationOnly import CoreMIDI
 #endif

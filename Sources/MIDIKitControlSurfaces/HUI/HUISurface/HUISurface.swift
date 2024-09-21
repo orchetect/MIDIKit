@@ -7,8 +7,8 @@
 import Foundation
 import MIDIKitCore
 
-#if compiler(>=5.10)
-/* private */ import MIDIKitInternals
+#if compiler(>=6.0)
+internal import MIDIKitInternals
 #else
 @_implementationOnly import MIDIKitInternals
 #endif

@@ -6,14 +6,14 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-#if compiler(>=5.10)
-/* private */ import CoreMIDI
+#if compiler(>=6.0)
+internal import CoreMIDI
 #else
 @_implementationOnly import CoreMIDI
 #endif
 
-#if compiler(>=5.10)
-/* private */ import MIDIKitInternals
+#if compiler(>=6.0)
+internal import MIDIKitInternals
 #else
 @_implementationOnly import MIDIKitInternals
 #endif
