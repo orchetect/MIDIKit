@@ -8,9 +8,11 @@
 import MIDIKitIO
 import SwiftUI
 
-struct Property: Identifiable, Hashable {
+struct Property: Hashable {
     let key: String
     let value: String
-    
+}
+
+extension Property: Identifiable {
     var id: String { key }
 }
