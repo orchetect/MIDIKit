@@ -1,7 +1,7 @@
 //
 //  BytePair.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2023 Steffan Andrews • Licensed under MIT License
+//  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
 /// Type that holds a pair of `UInt8` bytes representing MSB and LSB.
