@@ -9,5 +9,8 @@ This example logs all Core MIDI system notifications to the console.
 
 ## Troubleshooting
 
-- ⚠️ If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
-- ⚠️ When building for a physical iOS device or "Designed for iPad", you must select your Team ID in the app target's code signing.
+> [!TIP]
+> If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
+
+> [!TIP]
+> When building for a physical iOS device or "Designed for iPad", you must select your Team ID in the app target's code signing.
