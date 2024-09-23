@@ -4,7 +4,8 @@ This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiv
 
 Events received from all MIDI output endpoints are automatically logged to the console.
 
-> **Note**: This project must be run on a physical iOS device. Bluetooth does not function in an iOS Simulator.
+> [!NOTE]
+> This project must be run on a physical iOS device. Bluetooth does not function in an iOS Simulator.
 
 ## Key Features
 
@@ -24,5 +25,8 @@ Once Bluetooth connectivity is implemented (see examples above), Bluetooth MIDI 
 
 ## Troubleshooting
 
-- ⚠️ If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
-- ⚠️ When building for a physical iOS device, you must select your Team ID in the app target's code signing.
+> [!TIP]
+> If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
+
+> [!TIP]
+> When building for a physical iOS device, you must select your Team ID in the app target's code signing.
