@@ -73,16 +73,21 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
     func testMTC_Decoder_InternalState_QFMessages_Typical() {
         // test MTC quarter-frame messages and check that properties get updated
         
+        
         let mtcDec = MTCDecoder()
+        XCTAssertEqual(mtcDec.localFrameRate, nil) // sanity check
+        XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30) // sanity check: MTCDecoder defaults to 30fps
         
         // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000110)) // QF 0
         
         XCTAssertEqual(mtcDec.qfBufferComplete(), false)
+        XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30) // still default
+        XCTAssertEqual(mtcDec.timecode.frameRate, .fps30) // still default
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 0, m: 0, s: 0, f: 0)
         )
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
         
@@ -90,8 +95,8 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcDec.qfBufferComplete(), false)
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 0, m: 0, s: 0, f: 0)
         )
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
         
@@ -99,8 +104,8 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcDec.qfBufferComplete(), false)
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 0, m: 0, s: 0, f: 0)
         )
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
         
@@ -108,8 +113,8 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcDec.qfBufferComplete(), false)
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 0, m: 0, s: 0, f: 0)
         )
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
         
@@ -117,8 +122,8 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcDec.qfBufferComplete(), false)
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 0, m: 0, s: 0, f: 0)
         )
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
         
@@ -126,99 +131,104 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcDec.qfBufferComplete(), false)
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 0, m: 0, s: 0, f: 0)
         )
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         XCTAssertEqual(mtcDec.qfBufferComplete(), false)
+        XCTAssertEqual(mtcDec.timecode.frameRate, .fps30) // still default
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 0, m: 0, s: 0, f: 0)
         )
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc30)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         
         XCTAssertEqual(mtcDec.qfBufferComplete(), true)
+        XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24) // finally received fps info
+        XCTAssertEqual(mtcDec.timecode.frameRate, .fps30) // TODO: this should probably be fps24
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 0, m: 0, s: 0, f: 0)
         )
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001000)) // QF 0
         
         XCTAssertEqual(mtcDec.qfBufferComplete(), true)
+        XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
+        XCTAssertEqual(mtcDec.timecode.frameRate, .fps24)
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 2, m: 3, s: 4, f: 8)
         ) // new TC
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 2, m: 3, s: 4, f: 8)
         ) // unchanged
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 2, m: 3, s: 4, f: 8)
         ) // unchanged
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 2, m: 3, s: 4, f: 8)
         ) // unchanged
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 2, m: 3, s: 4, f: 9)
         ) // new TC
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 2, m: 3, s: 4, f: 9)
         ) // unchanged
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 2, m: 3, s: 4, f: 9)
         ) // unchanged
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 2, m: 3, s: 4, f: 9)
         ) // unchanged
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010)) // QF 0
         
         XCTAssertEqual(
-            mtcDec.timecode,
-            Timecode(.components(h: 2, m: 3, s: 4, f: 10), at: .fps24, by: .allowingInvalid)
+            mtcDec.timecode.components,
+            Timecode.Components(h: 2, m: 3, s: 4, f: 10)
         ) // new TC
         XCTAssertEqual(mtcDec.mtcFrameRate, .mtc24)
     }
