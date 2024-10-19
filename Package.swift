@@ -1,13 +1,16 @@
-// swift-tools-version: 5.6
+// swift-tools-version: 5.9
 // (be sure to update the .swift-version file when this Swift version changes)
 
 import PackageDescription
 
 let package = Package(
     name: "MIDIKit",
-    
-    platforms: platforms(),
-        
+    platforms: [
+        .macOS(.v10_13),
+        .iOS(.v12),
+        .tvOS(.v12), // builds, but no MIDI features
+        .watchOS(.v4) // builds, but no MIDI features
+    ],
     products: [
         .library(
             name: "MIDIKit",
@@ -45,14 +48,12 @@ let package = Package(
             targets: ["MIDIKitUI"]
         )
     ],
-    
     dependencies: [
         .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.3.0"),
         
         // testing only:
         .package(url: "https://github.com/orchetect/XCTestUtils", from: "1.0.3")
     ],
-    
     targets: [
         .target(
             name: "MIDIKit",
@@ -155,38 +156,8 @@ let package = Package(
                 .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         )
-    ],
-    
-    swiftLanguageVersions: [.v5]
+    ]
 )
-
-// MARK: - Platforms
-
-/// Return a set of platforms depending on the version of Swift/Xcode being used
-/// just so we can suppress compile warnings for older operating system versions.
-///
-/// - Note: See [Apple Xcode Requirements](https://developer.apple.com/support/xcode/)
-func platforms() -> [SupportedPlatform] {
-    #if swift(>=5.7)
-    // Xcode 14.0.x
-    // - added Swift 5.7 support
-    // - pushed minimum macOS SDK to 10.13
-    // - pushed minimum iOS SDK to 11.0
-    [
-        .macOS(.v10_13),
-        .iOS(.v11),
-        .tvOS(.v11), // builds, but no MIDI features
-        .watchOS(.v4) // builds, but no MIDI features
-    ]
-    #else // Swift 5.6 (oldest Swift toolchain supported for the Package)
-    [
-        .macOS(.v10_12),
-        .iOS(.v10),
-        .tvOS(.v10), // builds, but no MIDI features
-        .watchOS(.v3) // builds, but no MIDI features
-    ]
-    #endif
-}
 
 // MARK: - Unit Testing
 
