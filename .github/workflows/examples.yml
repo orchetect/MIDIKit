@@ -30,29 +30,21 @@ jobs:
       with:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     
-    - name: BluetoothMIDI - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -branch ${{ github.ref }}
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: BluetoothMIDI - Build
       run: xcodebuild build -project "Examples/UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
     
-    - name: EventParsing - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: EventParsing - Build
       run: xcodebuild build -project "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
 
-    - name: VirtualInput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: VirtualInput - Build
       run: xcodebuild build -project "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
 
-    - name: VirtualOutput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/UIKit/VirtualOutput/VirtualOutput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/UIKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: VirtualOutput - Build
@@ -67,15 +59,11 @@ jobs:
       with:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     
-    - name: BluetoothMIDI - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -branch ${{ github.ref }}
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: BluetoothMIDI - Build
       run: xcodebuild build -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
 
-    - name: USB iOS to Mac - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -branch ${{ github.ref }}
     - name: USB iOS to Mac - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: USB iOS to Mac - Build
@@ -90,8 +78,6 @@ jobs:
       with:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
 
-    - name: EndpointPickers - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -branch ${{ github.ref }}
     - name: EndpointPickers - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: EndpointPickers - Build (iOS)
@@ -99,8 +85,6 @@ jobs:
     - name: EndpointPickers - Build (macOS)
       run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
 
-    - name: EventParsing - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: EventParsing - Build (iOS)
@@ -109,8 +93,6 @@ jobs:
       run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
       
 #   commented out while working on the project, because it doesn't use a SPM dependency so the xcpBranch script will fail.
-#    - name: MIDIKitUIExample - Set dependency branch
-#      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -branch ${{ github.ref }}
 #    - name: MIDIKitUIExample - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
 #      run: xcodebuild -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
 #    - name: MIDIKitUIExample - Build (iOS)
@@ -118,8 +100,6 @@ jobs:
 #    - name: MIDIKitUIExample - Build (macOS)
 #      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -scheme "MIDIKitUIExample" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
       
-    - name: MIDISystemInfo - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/MIDISystemInfo/MIDISystemInfo.xcodeproj" -branch ${{ github.ref }}
     - name: MIDISystemInfo - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/MIDISystemInfo/MIDISystemInfo.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: MIDISystemInfo - Build (iOS)
@@ -127,8 +107,6 @@ jobs:
     - name: MIDISystemInfo - Build (macOS)
       run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDISystemInfo/MIDISystemInfo.xcodeproj" -scheme "MIDISystemInfo macOS" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
     
-    - name: SystemNotifications - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -branch ${{ github.ref }}
     - name: SystemNotifications - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: SystemNotifications - Build (iOS)
@@ -136,8 +114,6 @@ jobs:
     - name: SystemNotifications - Build (macOS)
       run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
 
-    - name: VirtualInput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: VirtualInput - Build (iOS)
@@ -145,8 +121,6 @@ jobs:
     - name: VirtualInput - Build (macOS)
       run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
 
-    - name: VirtualOutput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: VirtualOutput - Build (iOS)
@@ -163,29 +137,21 @@ jobs:
       with:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     
-    - name: EndpointMenus - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/AppKit/EndpointMenus/EndpointMenus.xcodeproj" -branch ${{ github.ref }}
     - name: EndpointMenus - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/AppKit/EndpointMenus/EndpointMenus.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: EndpointMenus - Build
       run: xcodebuild build -project "Examples/AppKit/EndpointMenus/EndpointMenus.xcodeproj" -scheme "EndpointMenus" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
 
-    - name: EventParsing - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/AppKit/EventParsing/EventParsing.xcodeproj" -branch ${{ github.ref }}
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/AppKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: EventParsing - Build
       run: xcodebuild build -project "Examples/AppKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
 
-    - name: VirtualInput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/AppKit/VirtualInput/VirtualInput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/AppKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: VirtualInput - Build
       run: xcodebuild build -project "Examples/AppKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
 
-    - name: VirtualOutput - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/AppKit/VirtualOutput/VirtualOutput.xcodeproj" -branch ${{ github.ref }}
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/AppKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: VirtualOutput - Build
@@ -200,22 +166,16 @@ jobs:
       with:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     
-    - name: HUITest - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/Advanced/HUITest/HUITest.xcodeproj" -branch ${{ github.ref }}
     - name: HUITest - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/Advanced/HUITest/HUITest.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: HUITest - Build
       run: xcodebuild build -project "Examples/Advanced/HUITest/HUITest.xcodeproj" -scheme "HUITest" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
     
-    - name: MIDIEventLogger - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -branch ${{ github.ref }}
     - name: MIDIEventLogger - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: MIDIEventLogger - Build
       run: xcodebuild build -project "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -scheme "MIDIEventLogger" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
       
-    - name: MTCExample - Set dependency branch
-      run: swift .github/workflows/xcpBranch.swift set -go -p MIDIKit "Examples/Advanced/MTCExample/MTCExample.xcodeproj" -branch ${{ github.ref }}
     - name: MTCExample - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/Advanced/MTCExample/MTCExample.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
     - name: MTCExample - Build
