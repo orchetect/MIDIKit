@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitCore
 import XCTest
 
@@ -39,5 +37,3 @@ final class MIDIEvent_ChannelVoiceTests_Tests: XCTestCase {
     
     // TODO: Add unit tests for other Channel Voice events
 }
-
-#endif

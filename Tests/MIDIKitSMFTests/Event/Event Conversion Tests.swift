@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitSMF
 import XCTest
 
@@ -953,5 +951,3 @@ final class Event_Conversion_SMFEventToEvent_Tests: XCTestCase {
         XCTAssertNil(event)
     }
 }
-
-#endif

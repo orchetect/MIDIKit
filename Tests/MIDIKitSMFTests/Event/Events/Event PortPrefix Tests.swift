@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitSMF
 import XCTest
 
@@ -29,5 +27,3 @@ final class Event_PortPrefix_Tests: XCTestCase {
         XCTAssertEqual(bytes, [0xFF, 0x21, 0x01, 0x02])
     }
 }
-
-#endif

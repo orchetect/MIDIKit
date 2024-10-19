@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitSMF
 import XCTest
 
@@ -99,5 +97,3 @@ final class MIDIFileUtilities_Tests: XCTestCase {
         XCTAssertNil(MIDIFile.decodeVariableLengthValue(from: [0x80]))
     }
 }
-
-#endif

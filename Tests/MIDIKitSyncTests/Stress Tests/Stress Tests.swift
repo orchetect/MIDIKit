@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import CoreMIDI
 @testable import MIDIKitSync
 import XCTest
@@ -98,5 +96,3 @@ final class StressTests: XCTestCase {
         }
     }
 }
-
-#endif

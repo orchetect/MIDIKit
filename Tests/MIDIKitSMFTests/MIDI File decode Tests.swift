@@ -4,13 +4,9 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitSMF
 import XCTest
 
 final class MIDIFileDecodeTests: XCTestCase {
     // empty for now
 }
-
-#endif

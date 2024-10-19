@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitCore
 import XCTest
 
@@ -329,5 +327,3 @@ final class SysEx7_Tests: XCTestCase {
         XCTAssertEqual(set2.count, 2)
     }
 }
-
-#endif

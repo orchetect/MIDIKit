@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import CoreMIDI
 @testable import MIDIKitControlSurfaces
 import XCTest
@@ -13,5 +11,3 @@ import XCTest
 final class MIDIKitControlSurfacesTests: XCTestCase {
     // no tests in this file, this is the module root test file
 }
-
-#endif

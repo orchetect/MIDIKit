@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitSMF
 import XCTest
 
@@ -283,5 +281,3 @@ final class Event_SysEx7_Tests: XCTestCase {
     // see RP-001_v1-0_Standard_MIDI_Files_Specification_96-1-4.pdf pages 6-7
     // TODO: SysEx7 0xF7 escape message handling
 }
-
-#endif

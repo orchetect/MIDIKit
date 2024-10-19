@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitCore
 
 enum kEvents {
@@ -207,5 +205,3 @@ enum kEvents {
         SysRealTime.oneOfEachEventType +
         Utility.oneOfEachEventType
 }
-
-#endif

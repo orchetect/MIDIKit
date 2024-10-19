@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitSMF
 import XCTest
 
@@ -57,5 +55,3 @@ final class Event_CC_Tests: XCTestCase {
         XCTAssertEqual(bytes, [0xB1, 0x0B, 0x7F])
     }
 }
-
-#endif

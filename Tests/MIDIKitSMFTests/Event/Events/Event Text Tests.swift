@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitSMF
 import XCTest
 
@@ -148,5 +146,3 @@ final class Event_Text_Tests: XCTestCase {
     
     // TODO: add tests - edge cases etc.
 }
-
-#endif

@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitCore
 import XCTest
 
@@ -140,5 +138,3 @@ final class MIDIEvent_CC_NRPN_Tests: XCTestCase {
     // MARK: - Raw MIDI 2.0 RPN UMP Words -> MIDIEvent.nrpn()
     // See MIDIKitIO - MIDI2Parser Tests.swift
 }
-
-#endif

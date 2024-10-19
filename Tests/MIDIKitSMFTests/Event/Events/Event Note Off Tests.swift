@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitSMF
 import XCTest
 
@@ -57,5 +55,3 @@ final class Event_NoteOff_Tests: XCTestCase {
         XCTAssertEqual(bytes, [0x81, 0x3C, 0x7F])
     }
 }
-
-#endif

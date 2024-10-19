@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitCore
 import XCTest
 
@@ -282,5 +280,3 @@ final class ChanVoiceValue_Conversions_Tests: XCTestCase {
         XCTAssertEqual(MIDIEvent.scaled32Bit(fromBipolarUnitInterval:  1.0), 0xFFFF_FFFF) // max
     }
 }
-
-#endif

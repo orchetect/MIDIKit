@@ -158,36 +158,3 @@ let package = Package(
         )
     ]
 )
-
-// MARK: - Unit Testing
-
-func addShouldTestFlag(toTarget targetName: String) {
-    // swiftSettings may be nil so we can't directly append to it
-    
-    var swiftSettings = package.targets
-        .first(where: { $0.name == targetName })?
-        .swiftSettings ?? []
-    
-    swiftSettings.append(.define("shouldTestCurrentPlatform"))
-    
-    package.targets
-        .first(where: { $0.name == targetName })?
-        .swiftSettings = swiftSettings
-}
-
-func addShouldTestFlags() {
-    addShouldTestFlag(toTarget: "MIDIKitCoreTests")
-    addShouldTestFlag(toTarget: "MIDIKitIOTests")
-    addShouldTestFlag(toTarget: "MIDIKitControlSurfacesTests")
-    addShouldTestFlag(toTarget: "MIDIKitSMFTests")
-    addShouldTestFlag(toTarget: "MIDIKitSyncTests")
-}
-
-// Swift version in Xcode 12.5.1 which introduced watchOS testing
-#if os(watchOS) && swift(>=5.4.2)
-addShouldTestFlags()
-#elseif os(watchOS)
-// don't add flag
-#else
-addShouldTestFlags()
-#endif

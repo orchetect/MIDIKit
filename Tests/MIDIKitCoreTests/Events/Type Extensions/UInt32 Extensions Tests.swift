@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitCore
 import XCTest
 
@@ -38,5 +36,3 @@ final class UInt32Extensions_Tests: XCTestCase {
         XCTAssertEqual(UInt32(_max).bipolarUnitIntervalValue, 1.0)
     }
 }
-
-#endif

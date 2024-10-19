@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitSync
 import TimecodeKitCore
 import XCTest
@@ -51,5 +49,3 @@ final class MTC_Direction_Tests: XCTestCase {
         XCTAssertEqual(MTCDirection(previousQF: 255, newQF: 0b111), .ambiguous)
     }
 }
-
-#endif

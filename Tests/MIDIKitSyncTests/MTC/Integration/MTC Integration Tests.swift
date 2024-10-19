@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitSync
 import TimecodeKitCore
 import XCTest
@@ -678,5 +676,3 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
             }
     }
 }
-
-#endif

@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitCore
 import XCTest
 
@@ -206,5 +204,3 @@ final class ChanVoice14Bit32BitValueTests: XCTestCase {
         XCTAssertEqual(Value.midi2(0xFFFF_FFFF).midi2Value, 0xFFFF_FFFF) // max
     }
 }
-
-#endif

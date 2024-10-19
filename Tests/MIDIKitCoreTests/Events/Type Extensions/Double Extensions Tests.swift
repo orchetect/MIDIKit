@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitCore
 import XCTest
 
@@ -34,5 +32,3 @@ final class DoubleExtensions_Tests: XCTestCase {
         XCTAssertEqual(1.00.bipolarUnitIntervalValue,  1.0)
     }
 }
-
-#endif

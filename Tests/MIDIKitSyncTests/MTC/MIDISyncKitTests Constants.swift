@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import Foundation
 @testable import MIDIKitSync
 
@@ -129,5 +127,3 @@ enum kMIDIEvent {
         }
     }
 }
-
-#endif

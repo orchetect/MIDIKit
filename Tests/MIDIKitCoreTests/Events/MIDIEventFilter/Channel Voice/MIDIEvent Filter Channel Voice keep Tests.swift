@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitCore
 import XCTest
 
@@ -1143,5 +1141,3 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         XCTAssertEqual(filteredEvents, expectedEvents)
     }
 }
-
-#endif

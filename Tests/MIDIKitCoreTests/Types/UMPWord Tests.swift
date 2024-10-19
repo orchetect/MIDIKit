@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitCore
 import XCTest
 
@@ -50,5 +48,3 @@ final class UMPWord_Tests: XCTestCase {
                                0x89, 0xAB, 0xCD, 0xEF])
     }
 }
-
-#endif

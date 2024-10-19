@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import CoreMIDI
 
 /// Constants and mocks for unit tests.
@@ -207,5 +205,3 @@ public enum kMIDIPacket {
         0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF
     ]
 }
-
-#endif

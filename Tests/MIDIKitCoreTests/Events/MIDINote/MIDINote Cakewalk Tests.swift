@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitCore
 import XCTest
 
@@ -303,5 +301,3 @@ final class MIDINote_Cakewalk_Tests: XCTestCase {
         XCTAssert(blackKeyNotes.allSatisfy { $0.isSharp })
     }
 }
-
-#endif

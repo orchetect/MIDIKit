@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitCore
 import XCTest
 
@@ -143,5 +141,3 @@ final class Int7_Tests: XCTestCase {
         XCTAssertEqual(Int7(bitPattern: UInt8(0b0111110)).intValue,  62) // wrap 62
     }
 }
-
-#endif

@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 @testable import MIDIKitSMF
 import XCTest
 
@@ -47,5 +45,3 @@ final class Event_KeySignature_Tests: XCTestCase {
         XCTAssertEqual(bytes, [0xFF, 0x59, 0x02, 0xFD, 0x01])
     }
 }
-
-#endif

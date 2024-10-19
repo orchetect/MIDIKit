@@ -6,7 +6,7 @@
 
 // iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI
 // ports, so skip these tests on iOS targets
-#if shouldTestCurrentPlatform && !targetEnvironment(simulator)
+#if !targetEnvironment(simulator)
 
 import CoreMIDI
 @testable import MIDIKitIO

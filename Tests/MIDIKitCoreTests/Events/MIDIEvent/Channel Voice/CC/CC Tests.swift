@@ -4,8 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if shouldTestCurrentPlatform
-
 import MIDIKitCore
 import XCTest
 
@@ -47,5 +45,3 @@ final class MIDIEvent_CC_Tests: XCTestCase {
         }
     }
 }
-
-#endif
