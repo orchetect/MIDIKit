@@ -28,7 +28,7 @@ struct MTCGenContentView: View {
     // MARK: - UI state
     
     @State var mtcGenState = false
-    @State var generatorTC: Timecode = .init(.zero, at: .fps24)
+    @TimecodeState var generatorTC: Timecode = .init(.zero, at: .fps24)
     
     // MARK: - Internal State
     
