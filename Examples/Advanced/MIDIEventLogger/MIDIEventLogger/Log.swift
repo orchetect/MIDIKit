@@ -4,16 +4,15 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-import OTCore
+import Foundation
+import os.log
 
-let logger = OSLogger {
-    $0.defaultTemplate = .withEmoji()
-}
+let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.orchetect.MIDIKit", category: "General")
 
-func logIfThrowsError(_ closure: (() throws -> Void)) {
+func logErrors(_ closure: (() throws -> Void)) {
     do {
         try closure()
     } catch {
-        logger.error(error)
+        logger.error("\(error.localizedDescription)")
     }
 }

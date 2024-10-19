@@ -7,7 +7,6 @@
 import Combine
 import MIDIKitIO
 import MIDIKitSync
-import OTCore
 import SwiftRadix
 import SwiftUI
 import TimecodeKit
@@ -54,7 +53,7 @@ struct MTCGenContentView: View {
                 uniqueID: .userDefaultsManaged(key: udKey)
             )
         } catch {
-            logger.error(error)
+            logger.error("\(error.localizedDescription)")
         }
         
         // set up new MTC receiver and configure it

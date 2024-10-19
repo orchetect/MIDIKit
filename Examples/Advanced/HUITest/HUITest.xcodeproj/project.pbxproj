@@ -3,10 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E20237FF2CC459E500661322 /* MIDIKitControlSurfaces in Frameworks */ = {isa = PBXBuildFile; productRef = E20237FE2CC459E500661322 /* MIDIKitControlSurfaces */; };
+		E20238012CC459E500661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E20238002CC459E500661322 /* MIDIKitCore */; };
+		E20238032CC459E500661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E20238022CC459E500661322 /* MIDIKitIO */; };
+		E20238052CC459E500661322 /* MIDIKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = E20238042CC459E500661322 /* MIDIKitUI */; };
 		E20BA82928E9B1BB00EA8774 /* Fader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20BA82828E9B1BB00EA8774 /* Fader.swift */; };
 		E21628E426E2DFF30022B66F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21628E326E2DFF30022B66F /* Logger.swift */; };
 		E232239D2914F44E005F0C12 /* LiveFormattedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E232239C2914F44E005F0C12 /* LiveFormattedTextField.swift */; };
@@ -34,15 +38,12 @@
 		E284EBB626AE018F0016AA0F /* HUITestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBB526AE018F0016AA0F /* HUITestApp.swift */; };
 		E284EBB826AE018F0016AA0F /* HUIClientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBB726AE018F0016AA0F /* HUIClientView.swift */; };
 		E284EBBA26AE01900016AA0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E284EBB926AE01900016AA0F /* Assets.xcassets */; };
-		E284EBBD26AE01900016AA0F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E284EBBC26AE01900016AA0F /* Preview Assets.xcassets */; };
 		E284EBCC26AE01EA0016AA0F /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBCB26AE01EA0016AA0F /* Buttons.swift */; };
 		E284EBD226AE01F00016AA0F /* HUISurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBCF26AE01F00016AA0F /* HUISurfaceView.swift */; };
 		E284EBD326AE01F00016AA0F /* MixerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD026AE01F00016AA0F /* MixerView.swift */; };
 		E284EBD426AE01F00016AA0F /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD126AE01F00016AA0F /* TopView.swift */; };
 		E284EBD826AE02090016AA0F /* HUISwitch Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD726AE02090016AA0F /* HUISwitch Wrapper.swift */; };
 		E2D5FB1B28D9198A0040A023 /* HUIHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5FB1A28D9198A0040A023 /* HUIHostView.swift */; };
-		E2E1FCCC28F6841600B4351E /* MIDIKitControlSurfaces in Frameworks */ = {isa = PBXBuildFile; productRef = E2E1FCCB28F6841600B4351E /* MIDIKitControlSurfaces */; };
-		E2E1FCCE28F6841600B4351E /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E2E1FCCD28F6841600B4351E /* MIDIKitIO */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,7 +74,6 @@
 		E284EBB526AE018F0016AA0F /* HUITestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUITestApp.swift; sourceTree = "<group>"; };
 		E284EBB726AE018F0016AA0F /* HUIClientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUIClientView.swift; sourceTree = "<group>"; };
 		E284EBB926AE01900016AA0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E284EBBC26AE01900016AA0F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E284EBC126AE01900016AA0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E284EBC226AE01900016AA0F /* HUITest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HUITest.entitlements; sourceTree = "<group>"; };
 		E284EBCB26AE01EA0016AA0F /* Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -89,8 +89,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2E1FCCC28F6841600B4351E /* MIDIKitControlSurfaces in Frameworks */,
-				E2E1FCCE28F6841600B4351E /* MIDIKitIO in Frameworks */,
+				E20238052CC459E500661322 /* MIDIKitUI in Frameworks */,
+				E20238032CC459E500661322 /* MIDIKitIO in Frameworks */,
+				E20238012CC459E500661322 /* MIDIKitCore in Frameworks */,
+				E20237FF2CC459E500661322 /* MIDIKitControlSurfaces in Frameworks */,
 				E261699428E9272400DEA000 /* Controls in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -179,17 +181,8 @@
 				E284EBC126AE01900016AA0F /* Info.plist */,
 				E284EBB926AE01900016AA0F /* Assets.xcassets */,
 				E284EBC226AE01900016AA0F /* HUITest.entitlements */,
-				E284EBBB26AE01900016AA0F /* Preview Content */,
 			);
 			path = HUITest;
-			sourceTree = "<group>";
-		};
-		E284EBBB26AE01900016AA0F /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				E284EBBC26AE01900016AA0F /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		E284EBCA26AE01EA0016AA0F /* Control Views */ = {
@@ -238,8 +231,10 @@
 			name = HUITest;
 			packageProductDependencies = (
 				E261699328E9272400DEA000 /* Controls */,
-				E2E1FCCB28F6841600B4351E /* MIDIKitControlSurfaces */,
-				E2E1FCCD28F6841600B4351E /* MIDIKitIO */,
+				E20237FE2CC459E500661322 /* MIDIKitControlSurfaces */,
+				E20238002CC459E500661322 /* MIDIKitCore */,
+				E20238022CC459E500661322 /* MIDIKitIO */,
+				E20238042CC459E500661322 /* MIDIKitUI */,
 			);
 			productName = HUISurface;
 			productReference = E284EBB226AE018F0016AA0F /* HUITest.app */;
@@ -271,7 +266,7 @@
 			mainGroup = E284EBA926AE018F0016AA0F;
 			packageReferences = (
 				E261699228E9272400DEA000 /* XCRemoteSwiftPackageReference "Controls" */,
-				E2E1FCCA28F6841600B4351E /* XCRemoteSwiftPackageReference "MIDIKit" */,
+				E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
 			);
 			productRefGroup = E284EBB326AE018F0016AA0F /* Products */;
 			projectDirPath = "";
@@ -287,7 +282,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E284EBBD26AE01900016AA0F /* Preview Assets.xcassets in Resources */,
 				E284EBBA26AE01900016AA0F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -467,7 +461,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"HUITest/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
@@ -480,7 +473,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.HUITest${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.HUITest${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -497,7 +490,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"HUITest/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
@@ -510,7 +502,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.HUITest${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.HUITest${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -540,6 +532,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../MIDIKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		E261699228E9272400DEA000 /* XCRemoteSwiftPackageReference "Controls" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -549,31 +548,33 @@
 				minimumVersion = 1.1.4;
 			};
 		};
-		E2E1FCCA28F6841600B4351E /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/MIDIKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.5;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E20237FE2CC459E500661322 /* MIDIKitControlSurfaces */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			productName = MIDIKitControlSurfaces;
+		};
+		E20238002CC459E500661322 /* MIDIKitCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			productName = MIDIKitCore;
+		};
+		E20238022CC459E500661322 /* MIDIKitIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			productName = MIDIKitIO;
+		};
+		E20238042CC459E500661322 /* MIDIKitUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E20237EB2CC4537000661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			productName = MIDIKitUI;
+		};
 		E261699328E9272400DEA000 /* Controls */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E261699228E9272400DEA000 /* XCRemoteSwiftPackageReference "Controls" */;
 			productName = Controls;
-		};
-		E2E1FCCB28F6841600B4351E /* MIDIKitControlSurfaces */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E2E1FCCA28F6841600B4351E /* XCRemoteSwiftPackageReference "MIDIKit" */;
-			productName = MIDIKitControlSurfaces;
-		};
-		E2E1FCCD28F6841600B4351E /* MIDIKitIO */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E2E1FCCA28F6841600B4351E /* XCRemoteSwiftPackageReference "MIDIKit" */;
-			productName = MIDIKitIO;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

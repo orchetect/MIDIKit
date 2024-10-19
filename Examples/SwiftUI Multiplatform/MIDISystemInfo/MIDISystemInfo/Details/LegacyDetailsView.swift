@@ -5,7 +5,7 @@
 //
 
 import Combine
-import MIDIKit
+import MIDIKitIO
 import SwiftUI
 
 /// Legacy details view for systems prior to macOS 12 / iOS 16.

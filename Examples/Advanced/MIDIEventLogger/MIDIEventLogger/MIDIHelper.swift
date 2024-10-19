@@ -5,7 +5,6 @@
 //
 
 import MIDIKitIO
-import OTCore
 import SwiftUI
 
 final class MIDIHelper: ObservableObject {
@@ -24,7 +23,7 @@ final class MIDIHelper: ObservableObject {
             print("Starting MIDI services.")
             try midiManager.start()
         } catch {
-            logger.default("Error starting MIDI services:", error.localizedDescription)
+            logger.error("Error starting MIDI services: \(error.localizedDescription)")
         }
         
         createVirtualEndpoints()
@@ -56,7 +55,7 @@ final class MIDIHelper: ObservableObject {
                 )
             }
         } catch {
-            logger.error(error)
+            logger.error("\(error.localizedDescription)")
         }
         
         do {
@@ -69,7 +68,7 @@ final class MIDIHelper: ObservableObject {
                 )
             }
         } catch {
-            logger.error(error)
+            logger.error("\(error.localizedDescription)")
         }
     }
     
@@ -99,7 +98,7 @@ final class MIDIHelper: ObservableObject {
                 )
             }
         } catch {
-            logger.error(error)
+            logger.error("\(error.localizedDescription)")
         }
         
         do {
@@ -113,7 +112,7 @@ final class MIDIHelper: ObservableObject {
                 )
             }
         } catch {
-            logger.error(error)
+            logger.error("\(error.localizedDescription)")
         }
     }
     

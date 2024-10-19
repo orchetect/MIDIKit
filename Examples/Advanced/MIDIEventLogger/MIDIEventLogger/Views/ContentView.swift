@@ -5,7 +5,6 @@
 //
 
 import MIDIKitIO
-import OTCore
 import SwiftUI
 
 struct ContentView: View {
@@ -78,7 +77,7 @@ struct ContentView: View {
     
     /// Send a MIDI event using our virtual output endpoint.
     func sendEvent(_ event: MIDIEvent) {
-        logIfThrowsError {
+        logErrors {
             try midiHelper.midiOutput?.send(event: event)
         }
     }

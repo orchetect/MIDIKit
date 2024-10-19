@@ -5,7 +5,6 @@
 //
 
 import MIDIKitIO
-import OTCore
 import SwiftRadix
 import SwiftUI
 
@@ -162,10 +161,7 @@ extension ContentView {
         
         /// Sample SysEx8 event generator.
         private func sysEx8(dataByteCount: Int, group: UInt4) -> MIDIEvent {
-            let dataBytes: [UInt8] = .init(
-                randomValuesBetween: UInt8.min ... UInt8.max,
-                count: dataByteCount
-            )
+            let dataBytes: [UInt8] = .randomValues(count: dataByteCount)
             
             return .sysEx8(
                 manufacturer: .educational(),
@@ -176,10 +172,7 @@ extension ContentView {
         
         /// Sample Universal SysEx8 event generator.
         private func universalSysEx8(dataByteCount: Int, group: UInt4) -> MIDIEvent {
-            let dataBytes: [UInt8] = .init(
-                randomValuesBetween: UInt8.min ... UInt8.max,
-                count: dataByteCount
-            )
+            let dataBytes: [UInt8] = .randomValues(count: dataByteCount)
             
             return .universalSysEx8(
                 universalType: Bool.random() ? .realTime : .nonRealTime,

@@ -3,15 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E20238562CC460CC00661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E20238552CC460CC00661322 /* MIDIKitCore */; };
+		E20238582CC460CC00661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E20238572CC460CC00661322 /* MIDIKitIO */; };
 		E27D0E63284F3FB600F43247 /* VirtualOutputApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E62284F3FB600F43247 /* VirtualOutputApp.swift */; };
 		E27D0E65284F3FB600F43247 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E64284F3FB600F43247 /* ContentView.swift */; };
-		E27D0E75284F409600F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E74284F409600F43247 /* MIDIKit */; };
 		E2908A672A039CEC0072F300 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2908A662A039CEC0072F300 /* MIDIHelper.swift */; };
-		E29AC918285BF0FD009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC917285BF0FD009D1C2C /* MIDIKit */; };
 		E29FF2932880BBC6005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2922880BBC6005E2BC2 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -31,8 +31,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E29AC918285BF0FD009D1C2C /* MIDIKit in Frameworks */,
-				E27D0E75284F409600F43247 /* MIDIKit in Frameworks */,
+				E20238582CC460CC00661322 /* MIDIKitIO in Frameworks */,
+				E20238562CC460CC00661322 /* MIDIKitCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,8 +86,8 @@
 			);
 			name = VirtualOutput;
 			packageProductDependencies = (
-				E27D0E74284F409600F43247 /* MIDIKit */,
-				E29AC917285BF0FD009D1C2C /* MIDIKit */,
+				E20238552CC460CC00661322 /* MIDIKitCore */,
+				E20238572CC460CC00661322 /* MIDIKitIO */,
 			);
 			productName = VirtualOutput;
 			productReference = E27D0E5F284F3FB600F43247 /* VirtualOutput.app */;
@@ -118,7 +118,7 @@
 			);
 			mainGroup = E27D0E56284F3FB600F43247;
 			packageReferences = (
-				E29AC916285BF0FD009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
+				E20238542CC460CC00661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
 			);
 			productRefGroup = E27D0E60284F3FB600F43247 /* Products */;
 			projectDirPath = "";
@@ -292,14 +292,13 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.midikit.VirtualOutput${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.VirtualOutput${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = YES;
@@ -328,14 +327,13 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.midikit.VirtualOutput${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.VirtualOutput${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = YES;
@@ -369,26 +367,21 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		E29AC916285BF0FD009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/MIDIKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.5;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		E20238542CC460CC00661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../MIDIKit;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E27D0E74284F409600F43247 /* MIDIKit */ = {
+		E20238552CC460CC00661322 /* MIDIKitCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MIDIKit;
+			productName = MIDIKitCore;
 		};
-		E29AC917285BF0FD009D1C2C /* MIDIKit */ = {
+		E20238572CC460CC00661322 /* MIDIKitIO */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E29AC916285BF0FD009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;
-			productName = MIDIKit;
+			productName = MIDIKitIO;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

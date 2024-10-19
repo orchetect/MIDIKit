@@ -7,7 +7,6 @@
 import Cocoa
 import MIDIKitIO
 import MIDIKitSync
-import OTCore
 import SwiftUI
 import TimecodeKit
 

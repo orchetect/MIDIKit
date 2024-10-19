@@ -7,7 +7,6 @@
 import Combine
 import MIDIKitIO
 import MIDIKitSync
-import OTCore
 import SwiftUI
 import TimecodeKit
 
@@ -43,9 +42,8 @@ struct MTCRecContentView: View {
         
             .onChange(of: localFrameRate) { _ in
                 if mtcRec.localFrameRate != localFrameRate {
-                    logger.default(
-                        "Setting MTC receiver's local frame rate to",
-                        localFrameRate?.stringValue ?? "None"
+                    logger.log(
+                        "Setting MTC receiver's local frame rate to \(localFrameRate?.stringValue ?? "None")"
                     )
                     mtcRec.localFrameRate = localFrameRate
                 }
@@ -78,7 +76,7 @@ struct MTCRecContentView: View {
             
         } stateChanged: { state in
             receiverState = state
-            logger.default("MTC Receiver state:", receiverState)
+            logger.log("MTC Receiver state: \(receiverState)")
             
             scheduledLock?.cancel()
             scheduledLock = nil
@@ -98,7 +96,7 @@ struct MTCRecContentView: View {
                         group: nil
                     )
                 ) {
-                    logger.default(">>> LOCAL SYNC: PLAYBACK START @", timecode)
+                    logger.log(">>> LOCAL SYNC: PLAYBACK START @\(timecode)")
                     scheduledLock?.cancel()
                     scheduledLock = nil
                 }
@@ -127,7 +125,7 @@ struct MTCRecContentView: View {
                 receiver: .weak(mtcRec)
             )
         } catch {
-            logger.error(error)
+            logger.error("\(error.localizedDescription)")
         }
         
         updateSelfGenListen(state: receiveFromSelfGen)

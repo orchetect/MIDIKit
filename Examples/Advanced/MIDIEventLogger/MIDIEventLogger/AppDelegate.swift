@@ -5,7 +5,6 @@
 //
 
 import MIDIKitIO
-import OTCore
 import SwiftUI
 
 // AppDelegate for legacy macOS versions support

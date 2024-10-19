@@ -3,15 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E202386A2CC4623B00661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E20238692CC4623B00661322 /* MIDIKitCore */; };
+		E202386C2CC4623B00661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E202386B2CC4623B00661322 /* MIDIKitIO */; };
 		E27D0E1E284F2A8900F43247 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E1D284F2A8900F43247 /* AppDelegate.swift */; };
 		E27D0E25284F2A8900F43247 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E27D0E23284F2A8900F43247 /* Main.storyboard */; };
 		E27D0E2A284F2A8900F43247 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E27D0E28284F2A8900F43247 /* LaunchScreen.storyboard */; };
-		E27D0E35284F2E0A00F43247 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E27D0E34284F2E0A00F43247 /* MIDIKit */; };
-		E29AC921285BF22C009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC920285BF22C009D1C2C /* MIDIKit */; };
 		E29FF29D2880BC84005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF29C2880BC84005E2BC2 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -30,8 +30,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E29AC921285BF22C009D1C2C /* MIDIKit in Frameworks */,
-				E27D0E35284F2E0A00F43247 /* MIDIKit in Frameworks */,
+				E202386C2CC4623B00661322 /* MIDIKitIO in Frameworks */,
+				E202386A2CC4623B00661322 /* MIDIKitCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,8 +84,8 @@
 			);
 			name = VirtualOutput;
 			packageProductDependencies = (
-				E27D0E34284F2E0A00F43247 /* MIDIKit */,
-				E29AC920285BF22C009D1C2C /* MIDIKit */,
+				E20238692CC4623B00661322 /* MIDIKitCore */,
+				E202386B2CC4623B00661322 /* MIDIKitIO */,
 			);
 			productName = VirtualOutput;
 			productReference = E27D0E1A284F2A8900F43247 /* VirtualOutput.app */;
@@ -116,7 +116,7 @@
 			);
 			mainGroup = E27D0E11284F2A8900F43247;
 			packageReferences = (
-				E29AC91F285BF22C009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
+				E20238682CC4623B00661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
 			);
 			productRefGroup = E27D0E1B284F2A8900F43247 /* Products */;
 			projectDirPath = "";
@@ -310,7 +310,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.midikit.VirtualOutput${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.VirtualOutput${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -339,7 +339,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.midikit.VirtualOutput${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.VirtualOutput${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -370,26 +370,21 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		E29AC91F285BF22C009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/MIDIKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.5;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		E20238682CC4623B00661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../MIDIKit;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E27D0E34284F2E0A00F43247 /* MIDIKit */ = {
+		E20238692CC4623B00661322 /* MIDIKitCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MIDIKit;
+			productName = MIDIKitCore;
 		};
-		E29AC920285BF22C009D1C2C /* MIDIKit */ = {
+		E202386B2CC4623B00661322 /* MIDIKitIO */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E29AC91F285BF22C009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;
-			productName = MIDIKit;
+			productName = MIDIKitIO;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

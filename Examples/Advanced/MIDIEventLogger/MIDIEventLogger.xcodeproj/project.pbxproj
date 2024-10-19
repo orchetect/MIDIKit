@@ -3,10 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E20237F52CC4584D00661322 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20237F42CC4584B00661322 /* Utilities.swift */; };
+		E20237F82CC4592100661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E20237F72CC4592100661322 /* MIDIKitCore */; };
+		E20237FA2CC4592100661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E20237F92CC4592100661322 /* MIDIKitIO */; };
+		E20237FC2CC4592100661322 /* MIDIKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = E20237FB2CC4592100661322 /* MIDIKitUI */; };
 		E24FD2A4298734DA00E076A7 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24FD2A3298734DA00E076A7 /* MIDIHelper.swift */; };
 		E24FD2A82987362000E076A7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24FD2A72987362000E076A7 /* Constants.swift */; };
 		E26604E029888DA500177FC9 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E26604DF29888DA500177FC9 /* SwiftRadix */; };
@@ -21,13 +25,12 @@
 		E26A25C226C5873B00FFCF40 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25BE26C5873B00FFCF40 /* AppDelegate.swift */; };
 		E26A25C326C5873B00FFCF40 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25BF26C5873B00FFCF40 /* Log.swift */; };
 		E26A25C426C5873B00FFCF40 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25C026C5873B00FFCF40 /* ContentView.swift */; };
-		E26A25C926C5875A00FFCF40 /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E26A25C826C5875A00FFCF40 /* OTCore */; };
-		E29AC90C285BEFB1009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC90B285BEFB1009D1C2C /* MIDIKit */; };
 		E2B099132880AE3800625201 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2B099122880AE3800625201 /* Images.xcassets */; };
 		E2E8BD89279F8DF4007A1AF0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E20237F42CC4584B00661322 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		E216886026C5E5A400BF7959 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E24FD2A3298734DA00E076A7 /* MIDIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
 		E24FD2A72987362000E076A7 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -54,9 +57,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E29AC90C285BEFB1009D1C2C /* MIDIKit in Frameworks */,
-				E26A25C926C5875A00FFCF40 /* OTCore in Frameworks */,
 				E26604E029888DA500177FC9 /* SwiftRadix in Frameworks */,
+				E20237FA2CC4592100661322 /* MIDIKitIO in Frameworks */,
+				E20237FC2CC4592100661322 /* MIDIKitUI in Frameworks */,
+				E20237F82CC4592100661322 /* MIDIKitCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +106,7 @@
 				E26604F12988982900177FC9 /* Views */,
 				E26A25BE26C5873B00FFCF40 /* AppDelegate.swift */,
 				E24FD2A3298734DA00E076A7 /* MIDIHelper.swift */,
+				E20237F42CC4584B00661322 /* Utilities.swift */,
 				E24FD2A72987362000E076A7 /* Constants.swift */,
 				E26A25BF26C5873B00FFCF40 /* Log.swift */,
 				E216886026C5E5A400BF7959 /* Info.plist */,
@@ -129,9 +134,10 @@
 			);
 			name = MIDIEventLogger;
 			packageProductDependencies = (
-				E26A25C826C5875A00FFCF40 /* OTCore */,
-				E29AC90B285BEFB1009D1C2C /* MIDIKit */,
 				E26604DF29888DA500177FC9 /* SwiftRadix */,
+				E20237F72CC4592100661322 /* MIDIKitCore */,
+				E20237F92CC4592100661322 /* MIDIKitIO */,
+				E20237FB2CC4592100661322 /* MIDIKitUI */,
 			);
 			productName = MIDIEventLogger;
 			productReference = E26A25AC26C586F600FFCF40 /* MIDIEventLogger.app */;
@@ -163,9 +169,8 @@
 			);
 			mainGroup = E26A25A326C586F600FFCF40;
 			packageReferences = (
-				E26A25C726C5875A00FFCF40 /* XCRemoteSwiftPackageReference "OTCore" */,
-				E29AC90A285BEFB1009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
 				E26604DE29888DA500177FC9 /* XCRemoteSwiftPackageReference "SwiftRadix" */,
+				E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
 			);
 			productRefGroup = E26A25AD26C586F600FFCF40 /* Products */;
 			projectDirPath = "";
@@ -195,6 +200,7 @@
 			files = (
 				E26604E42988941800177FC9 /* SendMIDIEventsView.swift in Sources */,
 				E26604F0298895D400177FC9 /* ReceiveMIDIEventsView.swift in Sources */,
+				E20237F52CC4584D00661322 /* Utilities.swift in Sources */,
 				E26A25C326C5873B00FFCF40 /* Log.swift in Sources */,
 				E26A25C426C5873B00FFCF40 /* ContentView.swift in Sources */,
 				E24FD2A4298734DA00E076A7 /* MIDIHelper.swift in Sources */,
@@ -360,7 +366,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIEventLogger${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDIEventLogger${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -395,7 +401,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIEventLogger${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDIEventLogger${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -425,48 +431,44 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../MIDIKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		E26604DE29888DA500177FC9 /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/SwiftRadix.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.1;
-			};
-		};
-		E26A25C726C5875A00FFCF40 /* XCRemoteSwiftPackageReference "OTCore" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/OTCore";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.13;
-			};
-		};
-		E29AC90A285BEFB1009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/MIDIKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.5;
+				minimumVersion = 1.3.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E20237F72CC4592100661322 /* MIDIKitCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			productName = MIDIKitCore;
+		};
+		E20237F92CC4592100661322 /* MIDIKitIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			productName = MIDIKitIO;
+		};
+		E20237FB2CC4592100661322 /* MIDIKitUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			productName = MIDIKitUI;
+		};
 		E26604DF29888DA500177FC9 /* SwiftRadix */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E26604DE29888DA500177FC9 /* XCRemoteSwiftPackageReference "SwiftRadix" */;
 			productName = SwiftRadix;
-		};
-		E26A25C826C5875A00FFCF40 /* OTCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E26A25C726C5875A00FFCF40 /* XCRemoteSwiftPackageReference "OTCore" */;
-			productName = OTCore;
-		};
-		E29AC90B285BEFB1009D1C2C /* MIDIKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E29AC90A285BEFB1009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;
-			productName = MIDIKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

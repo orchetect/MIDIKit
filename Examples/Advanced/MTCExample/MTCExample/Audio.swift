@@ -5,9 +5,8 @@
 //
 
 import AudioKit
-import DunneAudioKit // provides Synth()
+import DunneAudioKit
 import Foundation
-import OTCore
 
 let globalAudioEngine = AudioEngine()
 

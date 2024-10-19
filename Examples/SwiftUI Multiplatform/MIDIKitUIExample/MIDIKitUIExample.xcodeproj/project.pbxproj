@@ -3,17 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E23AD72D2AFE21A400A69A01 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E23AD72C2AFE21A400A69A01 /* MIDIKit */; };
+		E202383B2CC45F0E00661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E202383A2CC45F0E00661322 /* MIDIKitCore */; };
+		E202383D2CC45F0E00661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E202383C2CC45F0E00661322 /* MIDIKitIO */; };
+		E202383F2CC45F0E00661322 /* MIDIKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = E202383E2CC45F0E00661322 /* MIDIKitUI */; };
 		E2B8BD9E29B308D600B92BDF /* ListsExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */; };
 		E2B8BDA429B30B3200B92BDF /* PickersExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BDA329B30B3200B92BDF /* PickersExampleView.swift */; };
 		E2F1FE7429B2DF5800054467 /* MIDIKitUIExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE7329B2DF5800054467 /* MIDIKitUIExampleApp.swift */; };
 		E2F1FE7629B2DF5800054467 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE7529B2DF5800054467 /* ContentView.swift */; };
 		E2F1FE7829B2DF5A00054467 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F1FE7729B2DF5A00054467 /* Assets.xcassets */; };
-		E2F1FE7C29B2DF5A00054467 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F1FE7B29B2DF5A00054467 /* Preview Assets.xcassets */; };
 		E2F1FE8929B2E3F600054467 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE8829B2E3F600054467 /* MIDIHelper.swift */; };
 		E2F1FE8B29B2F2ED00054467 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE8A29B2F2ED00054467 /* Utilities.swift */; };
 /* End PBXBuildFile section */
@@ -28,7 +29,6 @@
 		E2F1FE7529B2DF5800054467 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E2F1FE7729B2DF5A00054467 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E2F1FE7929B2DF5A00054467 /* MIDIKitUIExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MIDIKitUIExample.entitlements; sourceTree = "<group>"; };
-		E2F1FE7B29B2DF5A00054467 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E2F1FE8829B2E3F600054467 /* MIDIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
 		E2F1FE8A29B2F2ED00054467 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -38,7 +38,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E23AD72D2AFE21A400A69A01 /* MIDIKit in Frameworks */,
+				E202383D2CC45F0E00661322 /* MIDIKitIO in Frameworks */,
+				E202383F2CC45F0E00661322 /* MIDIKitUI in Frameworks */,
+				E202383B2CC45F0E00661322 /* MIDIKitCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,17 +76,8 @@
 				E2F1FE7729B2DF5A00054467 /* Assets.xcassets */,
 				E2B8BDAA29B3301300B92BDF /* Info.plist */,
 				E2F1FE7929B2DF5A00054467 /* MIDIKitUIExample.entitlements */,
-				E2F1FE7A29B2DF5A00054467 /* Preview Content */,
 			);
 			path = MIDIKitUIExample;
-			sourceTree = "<group>";
-		};
-		E2F1FE7A29B2DF5A00054467 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				E2F1FE7B29B2DF5A00054467 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -104,7 +97,9 @@
 			);
 			name = MIDIKitUIExample;
 			packageProductDependencies = (
-				E23AD72C2AFE21A400A69A01 /* MIDIKit */,
+				E202383A2CC45F0E00661322 /* MIDIKitCore */,
+				E202383C2CC45F0E00661322 /* MIDIKitIO */,
+				E202383E2CC45F0E00661322 /* MIDIKitUI */,
 			);
 			productName = MIDIKitUI;
 			productReference = E2F1FE7029B2DF5800054467 /* MIDIKitUIExample.app */;
@@ -135,7 +130,7 @@
 			);
 			mainGroup = E2F1FE6729B2DF5800054467;
 			packageReferences = (
-				E23AD72A2AFE218A00A69A01 /* XCRemoteSwiftPackageReference "MIDIKit" */,
+				E20238392CC45F0E00661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
 			);
 			productRefGroup = E2F1FE7129B2DF5800054467 /* Products */;
 			projectDirPath = "";
@@ -151,7 +146,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2F1FE7C29B2DF5A00054467 /* Preview Assets.xcassets in Resources */,
 				E2F1FE7829B2DF5A00054467 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,7 +298,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"MIDIKitUIExample/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -324,7 +317,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKitUIExample${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDIKitUIExample${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -346,7 +339,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"MIDIKitUIExample/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -366,7 +358,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKitUIExample${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDIKitUIExample${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -401,22 +393,25 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		E23AD72A2AFE218A00A69A01 /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/MIDIKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.5;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		E20238392CC45F0E00661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../MIDIKit;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E23AD72C2AFE21A400A69A01 /* MIDIKit */ = {
+		E202383A2CC45F0E00661322 /* MIDIKitCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E23AD72A2AFE218A00A69A01 /* XCRemoteSwiftPackageReference "MIDIKit" */;
-			productName = MIDIKit;
+			productName = MIDIKitCore;
+		};
+		E202383C2CC45F0E00661322 /* MIDIKitIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MIDIKitIO;
+		};
+		E202383E2CC45F0E00661322 /* MIDIKitUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MIDIKitUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

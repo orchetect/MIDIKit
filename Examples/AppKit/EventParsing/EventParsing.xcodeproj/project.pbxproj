@@ -3,14 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E20238102CC45B5C00661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E202380F2CC45B5C00661322 /* MIDIKitCore */; };
+		E20238122CC45B5C00661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E20238112CC45B5C00661322 /* MIDIKitIO */; };
 		E24BA23E284F1A3300AA6767 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24BA23D284F1A3300AA6767 /* AppDelegate.swift */; };
 		E24BA245284F1A3400AA6767 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E24BA243284F1A3400AA6767 /* Main.storyboard */; };
-		E24BA251284F1C5B00AA6767 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E24BA250284F1C5B00AA6767 /* MIDIKit */; };
-		E29AC927285BF2A6009D1C2C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29AC926285BF2A6009D1C2C /* MIDIKit */; };
 		E29FF2A12880BCC5005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2A02880BCC5005E2BC2 /* Images.xcassets */; };
 		E2D7FF2229754A93003212AF /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E2D7FF2129754A93003212AF /* SwiftRadix */; };
 /* End PBXBuildFile section */
@@ -29,8 +29,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E29AC927285BF2A6009D1C2C /* MIDIKit in Frameworks */,
-				E24BA251284F1C5B00AA6767 /* MIDIKit in Frameworks */,
+				E20238122CC45B5C00661322 /* MIDIKitIO in Frameworks */,
+				E20238102CC45B5C00661322 /* MIDIKitCore in Frameworks */,
 				E2D7FF2229754A93003212AF /* SwiftRadix in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -83,9 +83,9 @@
 			);
 			name = EventParsing;
 			packageProductDependencies = (
-				E24BA250284F1C5B00AA6767 /* MIDIKit */,
-				E29AC926285BF2A6009D1C2C /* MIDIKit */,
 				E2D7FF2129754A93003212AF /* SwiftRadix */,
+				E202380F2CC45B5C00661322 /* MIDIKitCore */,
+				E20238112CC45B5C00661322 /* MIDIKitIO */,
 			);
 			productName = EventParsing;
 			productReference = E24BA23A284F1A3300AA6767 /* EventParsing.app */;
@@ -116,8 +116,8 @@
 			);
 			mainGroup = E24BA231284F1A3300AA6767;
 			packageReferences = (
-				E29AC925285BF2A6009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */,
 				E2D7FF2029754A93003212AF /* XCRemoteSwiftPackageReference "SwiftRadix" */,
+				E202380E2CC45B5C00661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
 			);
 			productRefGroup = E24BA23B284F1A3300AA6767 /* Products */;
 			projectDirPath = "";
@@ -305,7 +305,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.midikit.EventParsing${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.EventParsing${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -335,7 +335,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.midikit.EventParsing${DEVELOPMENT_TEAM}";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.EventParsing${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -365,34 +365,32 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		E29AC925285BF2A6009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/MIDIKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.5;
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		E202380E2CC45B5C00661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../MIDIKit;
 		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
 		E2D7FF2029754A93003212AF /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/SwiftRadix.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.0;
+				minimumVersion = 1.3.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E24BA250284F1C5B00AA6767 /* MIDIKit */ = {
+		E202380F2CC45B5C00661322 /* MIDIKitCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MIDIKit;
+			productName = MIDIKitCore;
 		};
-		E29AC926285BF2A6009D1C2C /* MIDIKit */ = {
+		E20238112CC45B5C00661322 /* MIDIKitIO */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E29AC925285BF2A6009D1C2C /* XCRemoteSwiftPackageReference "MIDIKit" */;
-			productName = MIDIKit;
+			productName = MIDIKitIO;
 		};
 		E2D7FF2129754A93003212AF /* SwiftRadix */ = {
 			isa = XCSwiftPackageProductDependency;

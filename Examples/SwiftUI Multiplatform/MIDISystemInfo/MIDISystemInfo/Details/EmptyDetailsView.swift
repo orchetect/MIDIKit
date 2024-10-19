@@ -4,7 +4,6 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
 import SwiftUI
 
 struct EmptyDetailsView: View {

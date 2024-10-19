@@ -4,7 +4,7 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKit
+import MIDIKitIO
 import SwiftUI
 
 struct ItemIcon<Content: View>: View {

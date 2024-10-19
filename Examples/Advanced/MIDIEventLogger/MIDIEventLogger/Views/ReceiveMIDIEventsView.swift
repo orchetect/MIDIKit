@@ -6,7 +6,6 @@
 
 import MIDIKitIO
 import MIDIKitUI
-import OTCore
 import SwiftRadix
 import SwiftUI
 

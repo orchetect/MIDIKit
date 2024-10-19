@@ -5,7 +5,7 @@
 //
 
 import SwiftUI
-import MIDIKit
+import MIDIKitIO
 
 struct ContentView: View {
     @EnvironmentObject var midiManager: ObservableMIDIManager
