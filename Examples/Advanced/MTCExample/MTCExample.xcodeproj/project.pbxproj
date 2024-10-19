@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		E202381F2CC45C6D00661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E202381E2CC45C6D00661322 /* MIDIKitCore */; };
 		E20238222CC45CB100661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E20238212CC45CB100661322 /* MIDIKitIO */; };
+		E202386F2CC4676000661322 /* TimecodeKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E202386E2CC4676000661322 /* TimecodeKitCore */; };
+		E20238712CC4676000661322 /* TimecodeKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = E20238702CC4676000661322 /* TimecodeKitUI */; };
 		E24FF24F28B9841E000A2055 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E24FF24E28B9841E000A2055 /* Assets.xcassets */; };
 		E2639D0726B145EE00AD0607 /* MIDIKitSync in Frameworks */ = {isa = PBXBuildFile; productRef = E2639D0626B145EE00AD0607 /* MIDIKitSync */; };
 		E275EAB02679A444008E396D /* MTCRecContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E275EAAF2679A444008E396D /* MTCRecContentView.swift */; };
@@ -46,9 +48,11 @@
 			files = (
 				E2639D0726B145EE00AD0607 /* MIDIKitSync in Frameworks */,
 				E20238222CC45CB100661322 /* MIDIKitIO in Frameworks */,
+				E202386F2CC4676000661322 /* TimecodeKitCore in Frameworks */,
 				E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */,
 				E2B82F4E26B7F2A3006AF638 /* SwiftRadix in Frameworks */,
 				E202381F2CC45C6D00661322 /* MIDIKitCore in Frameworks */,
+				E20238712CC4676000661322 /* TimecodeKitUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +116,8 @@
 				E2B82F4D26B7F2A3006AF638 /* SwiftRadix */,
 				E202381E2CC45C6D00661322 /* MIDIKitCore */,
 				E20238212CC45CB100661322 /* MIDIKitIO */,
+				E202386E2CC4676000661322 /* TimecodeKitCore */,
+				E20238702CC4676000661322 /* TimecodeKitUI */,
 			);
 			productName = MTCExample;
 			productReference = E2FAC4DA257884E000A6DD31 /* MTCExample.app */;
@@ -145,6 +151,7 @@
 				E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */,
 				E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */,
 				E20237F12CC454E500661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
+				E202386D2CC4676000661322 /* XCRemoteSwiftPackageReference "TimecodeKit" */,
 			);
 			productRefGroup = E2FAC4DB257884E000A6DD31 /* Products */;
 			projectDirPath = "";
@@ -408,6 +415,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E202386D2CC4676000661322 /* XCRemoteSwiftPackageReference "TimecodeKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/TimecodeKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
 		E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/SwiftRadix.git";
@@ -436,6 +451,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E20237F12CC454E500661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
 			productName = MIDIKitIO;
+		};
+		E202386E2CC4676000661322 /* TimecodeKitCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E202386D2CC4676000661322 /* XCRemoteSwiftPackageReference "TimecodeKit" */;
+			productName = TimecodeKitCore;
+		};
+		E20238702CC4676000661322 /* TimecodeKitUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E202386D2CC4676000661322 /* XCRemoteSwiftPackageReference "TimecodeKit" */;
+			productName = TimecodeKitUI;
 		};
 		E2639D0626B145EE00AD0607 /* MIDIKitSync */ = {
 			isa = XCSwiftPackageProductDependency;

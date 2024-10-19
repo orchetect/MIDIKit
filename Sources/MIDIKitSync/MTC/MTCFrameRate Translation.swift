@@ -5,7 +5,7 @@
 //
 
 import MIDIKitCore
-import TimecodeKit
+import TimecodeKitCore
 
 // MARK: - Derived rates
 

@@ -14,7 +14,7 @@ internal import MIDIKitInternals
 @_implementationOnly import MIDIKitInternals
 #endif
 
-import TimecodeKit
+import TimecodeKitCore
 
 // MARK: - Receiver
 

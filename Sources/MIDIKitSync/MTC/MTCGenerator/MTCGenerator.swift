@@ -13,7 +13,7 @@ internal import MIDIKitInternals
 @_implementationOnly import MIDIKitInternals
 #endif
 
-import TimecodeKit
+import TimecodeKitCore
 
 /// MTC sync generator.
 public final class MTCGenerator: SendsMIDIEvents {

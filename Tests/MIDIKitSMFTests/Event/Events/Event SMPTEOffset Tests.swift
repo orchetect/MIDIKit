@@ -7,7 +7,7 @@
 #if shouldTestCurrentPlatform
 
 @testable import MIDIKitSMF
-import TimecodeKit
+import TimecodeKitCore
 import XCTest
 
 final class Event_SMPTEOffset_Tests: XCTestCase {

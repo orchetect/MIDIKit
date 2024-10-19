@@ -47,7 +47,7 @@ let package = Package(
     ],
     
     dependencies: [
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.1.0"),
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.3.0"),
         
         // testing only:
         .package(url: "https://github.com/orchetect/XCTestUtils", from: "1.0.3")
@@ -99,7 +99,7 @@ let package = Package(
             name: "MIDIKitSMF",
             dependencies: [
                 .target(name: "MIDIKitCore"),
-                "TimecodeKit"
+                .product(name: "TimecodeKitCore", package: "TimecodeKit")
             ],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
@@ -107,7 +107,7 @@ let package = Package(
             name: "MIDIKitSync",
             dependencies: [
                 .target(name: "MIDIKitCore"),
-                "TimecodeKit"
+                .product(name: "TimecodeKitCore", package: "TimecodeKit")
             ],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),

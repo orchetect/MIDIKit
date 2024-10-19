@@ -7,7 +7,7 @@
 #if shouldTestCurrentPlatform
 
 @testable import MIDIKitSync
-@testable import TimecodeKit
+@testable import TimecodeKitCore
 import XCTest
 
 final class MTC_Generator_Encoder_Tests: XCTestCase {

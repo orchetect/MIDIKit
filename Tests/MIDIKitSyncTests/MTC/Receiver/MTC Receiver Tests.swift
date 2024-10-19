@@ -7,7 +7,7 @@
 #if shouldTestCurrentPlatform
 
 @testable import MIDIKitSync
-import TimecodeKit
+import TimecodeKitCore
 import XCTest
 import XCTestUtils
 

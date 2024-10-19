@@ -30,7 +30,7 @@
 //
 
 import MIDIKitCore
-import TimecodeKit
+import TimecodeKitCore
 
 /// MTC (MIDI Timecode) stream decoder object.
 ///

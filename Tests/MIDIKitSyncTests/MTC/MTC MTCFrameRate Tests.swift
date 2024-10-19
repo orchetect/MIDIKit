@@ -7,7 +7,7 @@
 #if shouldTestCurrentPlatform
 
 @testable import MIDIKitSync
-import TimecodeKit
+import TimecodeKitCore
 import XCTest
 
 final class MTC_MTCFrameRate_Tests: XCTestCase {

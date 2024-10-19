@@ -5,7 +5,7 @@
 //
 
 @_exported import MIDIKitCore
-@_exported import TimecodeKit
+@_exported import TimecodeKitCore
 
 // MARK: - MTC
 

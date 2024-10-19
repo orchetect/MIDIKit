@@ -17,7 +17,7 @@
 
 // MIDIKitSMF
 @_exported import MIDIKitSMF
-@_exported import TimecodeKit // must re-export target's exports here
+@_exported import TimecodeKitCore // must re-export target's exports here
 
 // MIDIKitSync
 @_exported import MIDIKitSync

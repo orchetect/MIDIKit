@@ -9,7 +9,8 @@ import MIDIKitIO
 import MIDIKitSync
 import SwiftRadix
 import SwiftUI
-import TimecodeKit
+import TimecodeKitCore
+import TimecodeKitUI
 
 struct MTCGenContentView: View {
     @EnvironmentObject private var midiManager: ObservableMIDIManager

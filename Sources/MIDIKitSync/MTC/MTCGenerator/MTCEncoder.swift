@@ -12,7 +12,7 @@ internal import MIDIKitInternals
 @_implementationOnly import MIDIKitInternals
 #endif
 
-import TimecodeKit
+import TimecodeKitCore
 
 /// MTC (MIDI Timecode) stream encoder object.
 ///

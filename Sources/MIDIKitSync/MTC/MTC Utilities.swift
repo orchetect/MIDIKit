@@ -5,7 +5,7 @@
 //
 
 import MIDIKitCore
-import TimecodeKit
+import TimecodeKitCore
 
 /// Internal:
 /// Returns `true` if both tuples are considered equal.

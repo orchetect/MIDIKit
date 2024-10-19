@@ -8,7 +8,7 @@ import Cocoa
 import MIDIKitIO
 import MIDIKitSync
 import SwiftUI
-import TimecodeKit
+import TimecodeKitCore
 
 // AppDelegate for legacy macOS versions support
 @main

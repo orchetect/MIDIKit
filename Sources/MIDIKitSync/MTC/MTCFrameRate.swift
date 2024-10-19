@@ -5,7 +5,7 @@
 //
 
 import MIDIKitCore
-import TimecodeKit
+import TimecodeKitCore
 
 // MTC hour byte includes frame rate information
 // Only 4 base frame rates are described according to the MTC spec
