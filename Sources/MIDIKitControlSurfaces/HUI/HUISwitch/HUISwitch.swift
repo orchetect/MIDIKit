@@ -81,7 +81,7 @@ public enum HUISwitch: Equatable, Hashable {
 extension HUISwitch: CaseIterable {
     public typealias AllCases = [Self]
     
-    public static var allCases: [HUISwitch] = [
+    public static let allCases: [HUISwitch] = [
         // Zones 0x00 - 0x07
         // Channel Strips
         .channelStrip(0, .faderTouched),

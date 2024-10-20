@@ -38,7 +38,7 @@ extension HUIVPotDisplay: Sendable { }
 
 extension HUIVPotDisplay {
     /// Initialize HUI V-Pot LED Ring Display state with all LEDs off.
-    public static var allOff: HUIVPotDisplay = .init(
+    public static let allOff: HUIVPotDisplay = .init(
         leds: .allOff,
         lowerLED: false
     )
