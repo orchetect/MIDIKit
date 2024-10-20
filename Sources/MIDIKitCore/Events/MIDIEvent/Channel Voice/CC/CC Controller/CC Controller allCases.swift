@@ -7,7 +7,7 @@
 extension MIDIEvent.CC.Controller: CaseIterable {
     public typealias AllCases = [Self]
     
-    public static var allCases: [Self] = [
+    public static let allCases: [Self] = [
         .bankSelect,                    //   0
         .modWheel,                      //   1
         .breath,                        //   2

@@ -7,7 +7,12 @@
 import Foundation
 import MIDIKitCore
 
-private let fileManager = FileManager.default
+extension FileManager {
+    // `FileManager` is thread-safe but doesn't yet conform to Sendable,
+    // so we can coerce it to be treated as Sendable.
+    fileprivate static func fileManager() -> @Sendable () -> FileManager { { Self.default } }
+    fileprivate static var sendableDefault: FileManager { Self.fileManager()() }
+}
 
 /// Standard MIDI Files (SMF) object. Read or write MIDI file contents.
 public struct MIDIFile {
@@ -71,7 +76,7 @@ public struct MIDIFile {
     
     /// Initialize by loading the contents of a MIDI file from disk.
     public init(midiFile path: String) throws {
-        guard fileManager.fileExists(atPath: path) else {
+        guard FileManager.sendableDefault.fileExists(atPath: path) else {
             throw DecodeError.fileNotFound
         }
         

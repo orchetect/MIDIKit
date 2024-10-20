@@ -48,8 +48,8 @@ final class EventHolder<T: MIDIParameterNumberEvent> {
         expirationTimer?.invalidate()
         expirationTimer = Timer
             .scheduledTimer(withTimeInterval: timeOut, repeats: false) { [self] timer in
-                defer { reset() }
                 callTimerExpired()
+                reset()
             }
     }
     

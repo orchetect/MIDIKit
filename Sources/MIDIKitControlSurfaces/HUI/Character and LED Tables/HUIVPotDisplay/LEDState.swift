@@ -36,7 +36,7 @@ extension HUIVPotDisplay {
 // MARK: - CaseIterable
 
 extension HUIVPotDisplay.LEDState: CaseIterable {
-    public static var allCases: [Self] =
+    public static let allCases: [Self] =
         [.allOff]
             + LED.allCases.map { .single($0) }
             + LED.allCases.map { .left(to: $0) }

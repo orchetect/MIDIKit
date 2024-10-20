@@ -8,7 +8,7 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered: CaseIterable {
     public typealias AllCases = [Self]
     
     // this looks scary but its heart is in the right place
-    public static var allCases: [Self] = [
+    public static let allCases: [Self] = [
         .modWheel,                      //   1
         .breath,                        //   2
         .pitch7_25,                     //   3
