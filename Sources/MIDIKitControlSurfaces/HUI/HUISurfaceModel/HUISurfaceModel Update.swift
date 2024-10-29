@@ -9,6 +9,7 @@ import MIDIKitCore
 
 // MARK: - Main Update Method
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModel {
     /// Updates HUI state from a received ``HUIHostEvent`` (returned from ``HUIHostEventDecoder``
     /// after parsing incoming HUI MIDI).
@@ -26,7 +27,7 @@ extension HUISurfaceModel {
     /// - Returns: The strongly-typed ``HUISurfaceModelNotification`` containing the result of the
     ///   state change.
     @discardableResult
-    public mutating func updateState(
+    public func updateState(
         from receivedEvent: HUIHostEvent,
         alwaysNotify: Bool = false
     ) -> HUISurfaceModelUpdateResult {
@@ -109,10 +110,11 @@ extension HUISurfaceModel {
 
 // MARK: - State Update Sub-Methods
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModel {
-    private mutating func updateStateFromLevelMeters(
+    private func updateStateFromLevelMeters(
         channelStrip: UInt4,
-        side: StereoLevelMeter.Side,
+        side: HUISurfaceModelState.StereoLevelMeter.Side,
         level: Int,
         alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
@@ -136,7 +138,7 @@ extension HUISurfaceModel {
         return .changed(notif)
     }
     
-    private mutating func updateStateFromFaderLevel(
+    private func updateStateFromFaderLevel(
         channelStrip: UInt4,
         level: UInt14,
         alwaysNotify: Bool
@@ -154,7 +156,7 @@ extension HUISurfaceModel {
         return .changed(notif)
     }
     
-    private mutating func updateStateFromVPot(
+    private func updateStateFromVPot(
         vPot: HUIVPot,
         display: HUIVPotDisplay,
         alwaysNotify: Bool
@@ -208,7 +210,7 @@ extension HUISurfaceModel {
         return .changed(notif)
     }
     
-    private mutating func updateStateFromLargeDisplay(
+    private func updateStateFromLargeDisplay(
         slices: HUILargeDisplaySlices,
         alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
@@ -229,7 +231,7 @@ extension HUISurfaceModel {
         return .changed(notif)
     }
     
-    private mutating func updateStateFromTimeDisplay(
+    private func updateStateFromTimeDisplay(
         charsRightToLeft: [HUITimeDisplayCharacter],
         alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
@@ -246,7 +248,7 @@ extension HUISurfaceModel {
         return .changed(notif)
     }
     
-    private mutating func updateStateFromAssign(
+    private func updateStateFromAssign(
         text: HUISmallDisplayString,
         alwaysNotify: Bool
     ) -> HUISurfaceModelUpdateResult {
@@ -263,7 +265,7 @@ extension HUISurfaceModel {
         return .changed(notif)
     }
     
-    private mutating func updateStateFromChannelText(
+    private func updateStateFromChannelText(
         text: HUISmallDisplayString,
         channelStrip: UInt4,
         alwaysNotify: Bool
@@ -282,7 +284,7 @@ extension HUISurfaceModel {
         return .changed(notif)
     }
     
-    private mutating func updateStateFromSwitch(
+    private func updateStateFromSwitch(
         huiSwitch: HUISwitch,
         state: Bool,
         alwaysNotify: Bool
