@@ -6,10 +6,10 @@ import PackageDescription
 let package = Package(
     name: "MIDIKit",
     platforms: [
-        .macOS(.v10_13),
-        .iOS(.v12),
-        .tvOS(.v12), // builds, but no MIDI features
-        .watchOS(.v4) // builds, but no MIDI features
+        .macOS(.v10_15),
+        .iOS(.v13),
+        .tvOS(.v13), // builds, but no MIDI features
+        .watchOS(.v6) // builds, but no MIDI features
     ],
     products: [
         .library(
