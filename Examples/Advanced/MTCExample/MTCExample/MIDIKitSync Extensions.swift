@@ -46,7 +46,7 @@ extension MTCEncoder.FullFrameBehavior: Codable {
 }
 
 // TODO: Can remove if/when Codable for this is implemented in MIDIKit
-extension MTCEncoder.FullFrameBehavior: RawRepresentable {
+extension MTCEncoder.FullFrameBehavior: @retroactive RawRepresentable {
     public typealias RawValue = String
     
     private var stringValue: String {

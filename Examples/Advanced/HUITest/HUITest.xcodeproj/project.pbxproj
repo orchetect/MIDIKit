@@ -42,7 +42,6 @@
 		E284EBD226AE01F00016AA0F /* HUISurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBCF26AE01F00016AA0F /* HUISurfaceView.swift */; };
 		E284EBD326AE01F00016AA0F /* MixerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD026AE01F00016AA0F /* MixerView.swift */; };
 		E284EBD426AE01F00016AA0F /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD126AE01F00016AA0F /* TopView.swift */; };
-		E284EBD826AE02090016AA0F /* HUISwitch Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284EBD726AE02090016AA0F /* HUISwitch Wrapper.swift */; };
 		E2D5FB1B28D9198A0040A023 /* HUIHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D5FB1A28D9198A0040A023 /* HUIHostView.swift */; };
 /* End PBXBuildFile section */
 
@@ -80,7 +79,6 @@
 		E284EBCF26AE01F00016AA0F /* HUISurfaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HUISurfaceView.swift; sourceTree = "<group>"; };
 		E284EBD026AE01F00016AA0F /* MixerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerView.swift; sourceTree = "<group>"; };
 		E284EBD126AE01F00016AA0F /* TopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
-		E284EBD726AE02090016AA0F /* HUISwitch Wrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HUISwitch Wrapper.swift"; sourceTree = "<group>"; };
 		E2D5FB1A28D9198A0040A023 /* HUIHostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUIHostView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -175,7 +173,6 @@
 				E284EBCE26AE01F00016AA0F /* HUISurfaceView */,
 				E284EBCA26AE01EA0016AA0F /* Control Views */,
 				E284EBB526AE018F0016AA0F /* HUITestApp.swift */,
-				E284EBD726AE02090016AA0F /* HUISwitch Wrapper.swift */,
 				E232239E2914F596005F0C12 /* Utilities.swift */,
 				E21628E326E2DFF30022B66F /* Logger.swift */,
 				E284EBC126AE01900016AA0F /* Info.plist */,
@@ -295,7 +292,6 @@
 			files = (
 				E283F0A3274101FD0037F199 /* LargeTextDisplayView.swift in Sources */,
 				E284EBCC26AE01EA0016AA0F /* Buttons.swift in Sources */,
-				E284EBD826AE02090016AA0F /* HUISwitch Wrapper.swift in Sources */,
 				E2D5FB1B28D9198A0040A023 /* HUIHostView.swift in Sources */,
 				E232239F2914F596005F0C12 /* Utilities.swift in Sources */,
 				E283F0B5274103E00037F199 /* TransportView.swift in Sources */,
@@ -384,7 +380,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -442,7 +438,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
