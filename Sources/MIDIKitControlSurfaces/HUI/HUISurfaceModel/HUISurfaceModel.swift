@@ -4,6 +4,8 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
+
 /// HUI State Model.
 ///
 /// Represents state of an entire HUI control surface (all controls, display elements, etc.).
@@ -11,13 +13,15 @@
 /// The same model is used for:
 /// - The main control surface unit (including extra functions and control room section)
 /// - Any additional 8-fader bank extension units (except that the extra functions that don't exist
-/// on these hardware units simply don't apply and are ignored)
-public struct HUISurfaceModel: Equatable, Hashable {
+///   on these hardware units simply don't apply and are ignored)
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@Observable public class HUISurfaceModel {
     // MARK: - State Storage
     
     /// State storage representing channel 8 strips and their components. (`0 ... 7`)
-    private var _channelStrips: [ChannelStrip] = (0 ... 7).map { _ in ChannelStrip() }
-    public var channelStrips: [ChannelStrip] {
+    private var _channelStrips: [HUISurfaceModelState.ChannelStrip] = (0 ... 7)
+        .map { _ in HUISurfaceModelState.ChannelStrip() }
+    public var channelStrips: [HUISurfaceModelState.ChannelStrip] {
         get {
             _channelStrips
         }
@@ -32,8 +36,8 @@ public struct HUISurfaceModel: Equatable, Hashable {
             // array count validation
             if _channelStrips.count < 8 {
                 _channelStrips.append(
-                    contentsOf: [ChannelStrip](
-                        repeating: ChannelStrip(),
+                    contentsOf: [HUISurfaceModelState.ChannelStrip](
+                        repeating: HUISurfaceModelState.ChannelStrip(),
                         count: 8 - _channelStrips.count
                     )
                 )
@@ -44,55 +48,55 @@ public struct HUISurfaceModel: Equatable, Hashable {
     }
     
     /// State storage representing the Main Time Display LCD and surrounding status LEDs.
-    public var timeDisplay = TimeDisplay()
+    public var timeDisplay = HUISurfaceModelState.TimeDisplay()
     
     /// State storage representing the Large Text Display (40 x 2 character matrix).
-    public var largeDisplay = LargeDisplay()
+    public var largeDisplay = HUISurfaceModelState.LargeDisplay()
     
     /// State storage representing the Transport section.
-    public var transport = Transport()
+    public var transport = HUISurfaceModelState.Transport()
     
     /// State storage representing HotKeys (keyboard shortcut keys).
-    public var hotKeys = HotKeys()
+    public var hotKeys = HUISurfaceModelState.HotKeys()
     
     /// State storage representing Window Functions.
-    public var windowFunctions = WindowFunctions()
+    public var windowFunctions = HUISurfaceModelState.WindowFunctions()
     
     /// State storage representing bank and channel navigation.
-    public var bankMove = BankMove()
+    public var bankMove = HUISurfaceModelState.BankMove()
     
     /// State storage representing the Assign controls.
-    public var assign = Assign()
+    public var assign = HUISurfaceModelState.Assign()
     
     /// State storage representing Cursor Movement / Mode / Scrub / Shuttle.
-    public var cursor = Cursor()
+    public var cursor = HUISurfaceModelState.Cursor()
     
     /// State storage representing the Control Room section.
-    public var controlRoom = ControlRoom()
+    public var controlRoom = HUISurfaceModelState.ControlRoom()
     
     /// State storage representing Number Pad Keys on the HUI surface.
-    public var numPad = NumPad()
+    public var numPad = HUISurfaceModelState.NumPad()
     
     /// State storage representing the Auto Enable section.
-    public var autoEnable = AutoEnable()
+    public var autoEnable = HUISurfaceModelState.AutoEnable()
     
     /// State storage representing the Auto Mode section.
-    public var autoMode = AutoMode()
+    public var autoMode = HUISurfaceModelState.AutoMode()
     
     /// State storage representing the Status/Group section.
-    public var statusAndGroup = StatusAndGroup()
+    public var statusAndGroup = HUISurfaceModelState.StatusAndGroup()
     
     /// State storage representing the Edit section.
-    public var edit = Edit()
+    public var edit = HUISurfaceModelState.Edit()
     
     /// State storage representing the Function Key section.
-    public var functionKey = FunctionKey()
+    public var functionKey = HUISurfaceModelState.FunctionKey()
     
     /// State storage representing the Parameter Edit section.
-    public var parameterEdit = ParameterEdit()
+    public var parameterEdit = HUISurfaceModelState.ParameterEdit()
     
     /// State storage representing footswitches and sounds.
-    public var footswitchesAndSounds = FootswitchesAndSounds()
+    public var footswitchesAndSounds = HUISurfaceModelState.FootswitchesAndSounds()
     
     // MARK: - Init
     
