@@ -25,7 +25,8 @@ internal import MIDIKitInternals
 /// >
 /// > References:
 /// > - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
-public final class HUISurface {
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@Observable public final class HUISurface {
     // MARK: - State Model
     
     /// HUI control surface state model.
@@ -33,16 +34,11 @@ public final class HUISurface {
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes
     /// when ``HUISurface`` is instanced as a `@StateObject var`.
-    public internal(set) var model: HUISurfaceModel {
-        willSet {
-            if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *) {
-                objectWillChange.send()
-            }
-        }
-    }
+    public internal(set) var model: HUISurfaceModel
     
     // MARK: - Decoder
     
+    @ObservationIgnored
     var decoder: HUIHostEventDecoder!
     
     // MARK: - Handlers
@@ -66,6 +62,7 @@ public final class HUISurface {
     /// Called when the remote presence state changes (when pings resume or cease after timeout).
     public var remotePresenceChangedHandler: PresenceChangedHandler?
     
+    @ObservationIgnored
     public var midiOutHandler: MIDIOutHandler?
     
     // MARK: - Presence
@@ -80,11 +77,14 @@ public final class HUISurface {
             // validate
             if remotePresenceTimeout < 1.1 { remotePresenceTimeout = 1.1 }
             // update timer interval
-            remotePresenceTimer?.setRate(.seconds(remotePresenceTimeout))
-            remotePresenceTimer?.restart()
+            Task {
+                await remotePresenceTimer?.setRate(.seconds(remotePresenceTimeout))
+                await remotePresenceTimer?.restart()
+            }
         }
     }
     
+    @ObservationIgnored
     var remotePresenceTimer: SafeDispatchTimer?
     
     func setupRemotePresenceTimer() {
@@ -92,11 +92,10 @@ public final class HUISurface {
         
         remotePresenceTimer = .init(
             rate: .seconds(remotePresenceTimeout),
-            queue: .global(),
             leeway: .milliseconds(50),
             eventHandler: { [weak self] in
                 self?.isRemotePresent = false
-                self?.remotePresenceTimer?.stop()
+                Task { await self?.remotePresenceTimer?.stop() }
             }
         )
     }
@@ -109,15 +108,6 @@ public final class HUISurface {
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes.
     public internal(set) var isRemotePresent: Bool = false {
-        willSet {
-            guard isRemotePresent != newValue else { return }
-            
-            if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *) {
-                DispatchQueue.main.async {
-                    self.objectWillChange.send()
-                }
-            }
-        }
         didSet {
             guard oldValue != isRemotePresent else { return }
             remotePresenceChangedHandler?(isRemotePresent)
@@ -125,7 +115,7 @@ public final class HUISurface {
     }
     
     func receivedPing() {
-        remotePresenceTimer?.restart(firingNow: false)
+        Task { await remotePresenceTimer?.restart(firingNow: false) }
         isRemotePresent = true
         
         // send ping-reply if ping request is received
@@ -189,6 +179,7 @@ public final class HUISurface {
     }
 }
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurface: ReceivesMIDIEvents {
     public func midiIn(event: MIDIEvent) {
         // capture MIDI Device Inquiry first
@@ -209,13 +200,5 @@ extension HUISurface: ReceivesMIDIEvents {
     }
 }
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurface: SendsMIDIEvents { }
-
-#if canImport(Combine)
-import Combine
-
-@available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *)
-extension HUISurface: ObservableObject {
-    // nothing here; just add ObservableObject conformance
-}
-#endif

@@ -7,6 +7,7 @@
 import MIDIKitCore
 
 /// Interprets HUI MIDI events and produces strongly-typed core HUI events.
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 final class HUICoreDecoder {
     /// Decoder role: the type of HUI MIDI messages expected to be received and decoded.
     public let role: HUIRole
@@ -48,6 +49,7 @@ final class HUICoreDecoder {
 
 // MARK: ReceivesMIDIEvents
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUICoreDecoder: ReceivesMIDIEvents {
     /// Process HUI MIDI message received from host.
     public func midiIn(event: MIDIEvent) {
@@ -114,6 +116,7 @@ extension HUICoreDecoder: ReceivesMIDIEvents {
 
 // MARK: Decoder
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUICoreDecoder {
     /// Internal: handles SysEx content.
     func parse(sysExPayload payload: MIDIEvent.SysEx7) throws -> [HUICoreEvent] {
@@ -444,7 +447,7 @@ extension HUICoreDecoder {
         
         // encodes both side and value
         let sideAndValue = payload.amount.midi1Value.uInt8Value.nibbles
-        let side: HUISurfaceModel.StereoLevelMeter.Side = sideAndValue.high == 0 ? .left : .right
+        let side: HUISurfaceModelState.StereoLevelMeter.Side = sideAndValue.high == 0 ? .left : .right
         let level: Int = sideAndValue.low.intValue
         
         return .levelMeter(
