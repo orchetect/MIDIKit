@@ -7,6 +7,7 @@
 @testable import MIDIKitControlSurfaces
 import XCTest
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 final class HUIHostEventDecoderTests: XCTestCase {
     /// Verifies that a HUI event encodes and decodes back to itself.
     func runHUIEventTest(
