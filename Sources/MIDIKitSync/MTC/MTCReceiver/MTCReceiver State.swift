@@ -46,7 +46,7 @@ extension MTCReceiver.State: Hashable {
         switch self {
         case .preSync(let predictedLockTime, let lockTimecode):
             let plt = predictedLockTime.uptimeNanoseconds
-            let tc = lockTimecode.stringValue(format: .showSubFrames)
+            let tc = lockTimecode.stringValue(format: [.showSubFrames])
             hasher.combine("preSync-\(plt)-\(tc)")
         default:
             hasher.combine(description)
