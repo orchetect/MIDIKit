@@ -23,7 +23,10 @@ on:
     
   schedule:
     - cron: '35 11 * * *'   # once a day @ 11:35am UTC (4:35am PST)
-    
+
+env:
+  SCHEME: "MIDIKit-CI"
+
 jobs:
   macOS-13:
     name: macOS 13 Ventura
@@ -31,9 +34,9 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=macOS" | xcpretty && exit ${PIPESTATUS[0]}
       
   macOS-14:
     name: macOS 14 Sonoma
@@ -42,11 +45,11 @@ jobs:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
+        xcode-version: latest-stable
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=macOS" | xcpretty && exit ${PIPESTATUS[0]}
   
   macOS-15:
     name: macOS 15 Sequoia
@@ -55,64 +58,78 @@ jobs:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
+        xcode-version: latest-stable
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=macOS" | xcpretty && exit ${PIPESTATUS[0]}
       
   macCatalyst:
     name: macCatalyst
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
+        xcode-version: latest-stable
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=macOS,variant=Mac Catalyst,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=macOS,variant=Mac Catalyst,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=macOS,variant=Mac Catalyst" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=macOS,variant=Mac Catalyst" | xcpretty && exit ${PIPESTATUS[0]}
 
   iOS:
     name: iOS
-    runs-on: macos-latest # this must be macos, GitHub does not offer iOS directly but we can use xcodebuild
+    runs-on: macos-15
     steps:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
+        xcode-version: latest-stable
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=iOS Simulator,name=Any iOS Device" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=iOS Simulator,name=Any iOS Device" | xcpretty && exit ${PIPESTATUS[0]}
+    - name: Prepare Destination Device Name
+      shell: bash
+      run: |
+        DESTNAME=$(xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" | perl -nle 'if (m/iOS\sSimulator.*(iPhone.*)\s\}\.*/g) { print $1; }' | head -n 1)
+        echo Using device \"$DESTNAME\"
+        echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=iOS Simulator,name=iPhone 15" | xcpretty && exit ${PIPESTATUS[0]}
-  
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=iOS Simulator,name=$DESTNAME" | xcpretty && exit ${PIPESTATUS[0]}
+
   tvOS:
     name: tvOS
-    runs-on: macos-latest # this must be macos, GitHub does not offer tvOS directly but we can use xcodebuild
+    runs-on: macos-15
     steps:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
+        xcode-version: latest-stable
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=tvOS Simulator,name=Any tvOS Simulator Device" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=tvOS Simulator,name=Any tvOS Simulator Device" | xcpretty && exit ${PIPESTATUS[0]}
+    - name: Prepare Destination Device Name
+      shell: bash
+      run: |
+        DESTNAME=$(xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" | perl -nle 'if (m/tvOS\sSimulator.*(Apple\sTV.*)\s\}\.*/g) { print $1; }' | head -n 1)
+        echo Using device \"$DESTNAME\"
+        echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=tvOS Simulator,name=Apple TV 4K (3rd generation)" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=tvOS Simulator,name=$DESTNAME" | xcpretty && exit ${PIPESTATUS[0]}
       
   watchOS:
     name: watchOS
-    runs-on: macos-latest # this must be macos, GitHub does not offer watchOS directly but we can use xcodebuild
+    runs-on: macos-15
     steps:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
+        xcode-version: latest-stable
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "generic/platform=watchOS Simulator,name=Any watchOS Simulator Device" | xcpretty && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=watchOS Simulator,name=Any watchOS Simulator Device" | xcpretty && exit ${PIPESTATUS[0]}
+    - name: Prepare Destination Device Name
+      shell: bash
+      run: |
+        DESTNAME=$(xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" | perl -nle 'if (m/watchOS\sSimulator.*(Apple\sWatch.*)\s\}\.*/g) { print $1; }' | head -n 1)
+        echo Using device \"$DESTNAME\"
+        echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKit-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 10 (46mm)" | xcpretty && exit ${PIPESTATUS[0]}
-
-
-# xcodebuild test reference:
-# https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/testing_with_xcode/chapters/08-automation.html
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=watchOS Simulator,name=$DESTNAME" | xcpretty && exit ${PIPESTATUS[0]}
