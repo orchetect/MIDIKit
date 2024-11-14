@@ -158,12 +158,12 @@ jobs:
 
   Advanced:
     name: Advanced
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
+        xcode-version: latest-stable
     
     - name: HUITest - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild -project "Examples/Advanced/HUITest/HUITest.xcodeproj" -resolvePackageDependencies | xcpretty && exit ${PIPESTATUS[0]}
