@@ -65,6 +65,7 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
                 .fps30,
                 .fps59_94,
                 .fps60,
+                .fps90,
                 .fps119_88,
                 .fps120
             ]

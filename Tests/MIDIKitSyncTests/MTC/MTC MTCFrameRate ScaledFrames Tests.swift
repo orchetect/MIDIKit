@@ -238,6 +238,34 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     )
                 }
                 
+            case .fps90:
+                for qf in UInt8(0) ... 7 {
+                    XCTAssertEqual(
+                        mtcRate.scaledFrames(
+                            fromRawMTCFrames: 0,
+                            quarterFrames: qf,
+                            to: realRate
+                        ),
+                        0  + (Double(qf) * 0.75)
+                    )
+                    XCTAssertEqual(
+                        mtcRate.scaledFrames(
+                            fromRawMTCFrames: 14,
+                            quarterFrames: qf,
+                            to: realRate
+                        ),
+                        42 + (Double(qf) * 0.75)
+                    )
+                    XCTAssertEqual(
+                        mtcRate.scaledFrames(
+                            fromRawMTCFrames: 28,
+                            quarterFrames: qf,
+                            to: realRate
+                        ),
+                        84 + (Double(qf) * 0.75)
+                    )
+                }
+                
             case .fps95_904, .fps96:
                 for qf in UInt8(0) ... 7 {
                     XCTAssertEqual(
@@ -469,6 +497,18 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                     XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
                 }
                 
+            case .fps90:
+                for qf in UInt8(0) ... 7 {
+                    let scaled = realRate.scaledFrames(fromTimecodeFrames: 42 + (Double(qf) * 0.75))
+                    XCTAssertEqual(scaled.rawMTCFrames, 14)
+                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                }
+                for qf in UInt8(0) ... 7 {
+                    let scaled = realRate.scaledFrames(fromTimecodeFrames: 84 + (Double(qf) * 0.75))
+                    XCTAssertEqual(scaled.rawMTCFrames, 28)
+                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                }
+                
             case .fps95_904, .fps96:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 48 + (Double(qf) * 1.0))
@@ -539,7 +579,8 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                             to: realRate
                         )!
                     
-                    XCTAssertEqual(Int(scaledToTimecode), frame, "at: \(realRate)")
+                    // .rounded() is needed to test for for odd `mtcScaleFactor` values
+                    XCTAssertEqual(Int(scaledToTimecode.rounded()), frame, "at: \(realRate)")
                 }
             }
         }

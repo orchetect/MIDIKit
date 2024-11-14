@@ -623,6 +623,14 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
                         Timecode(.components(h: 1, m: 00, s: 59, f: 04), at: frameRate, by: .allowingInvalid) ...
                             Timecode(.components(h: 1, m: 01, s: 01, f: 10), at: frameRate, by: .allowingInvalid)
                     ]
+                case 3:
+                    ranges = [
+                        Timecode(.components(h: 0, m: 00, s: 00, f: 06), at: frameRate, by: .allowingInvalid) ...
+                            Timecode(.components(h: 0, m: 00, s: 02, f: 10), at: frameRate, by: .allowingInvalid),
+                        
+                        Timecode(.components(h: 1, m: 00, s: 59, f: 06), at: frameRate, by: .allowingInvalid) ...
+                            Timecode(.components(h: 1, m: 01, s: 01, f: 10), at: frameRate, by: .allowingInvalid)
+                    ]
                 case 4:
                     ranges = [
                         Timecode(.components(h: 0, m: 00, s: 00, f: 08), at: frameRate, by: .allowingInvalid) ...
@@ -666,6 +674,9 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
                         case 2:
                             mtcEnc.increment()
                             mtcEnc.increment()
+                        case 3:
+                            mtcEnc.increment()
+                            if timecode.frames.isMultiple(of: 3) { mtcEnc.increment() }
                         case 4:
                             mtcEnc.increment()
                         default:
