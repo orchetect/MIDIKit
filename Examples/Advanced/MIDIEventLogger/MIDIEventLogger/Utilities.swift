@@ -10,3 +10,9 @@ extension Array where Element: FixedWidthInteger {
             .map { _ in Element.random(in: Element.min ... Element.max) }
     }
 }
+
+extension Comparable {
+    func clamped(to limits: ClosedRange<Self>) -> Self {
+        min(max(self, limits.lowerBound), limits.upperBound)
+    }
+}

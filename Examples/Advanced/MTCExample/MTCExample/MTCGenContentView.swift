@@ -17,7 +17,7 @@ struct MTCGenContentView: View {
     
     // MARK: - MIDI state
     
-    @State var mtcGen: MTCGenerator = .init()
+    @State var mtcGen = MTCGenerator()
     
     @AppStorage("mtcGen-localFrameRate")
     var localFrameRate: TimecodeFrameRate = .fps24
@@ -28,7 +28,7 @@ struct MTCGenContentView: View {
     // MARK: - UI state
     
     @State var mtcGenState = false
-    @TimecodeState var generatorTC: Timecode = .init(.zero, at: .fps24)
+    @TimecodeState var generatorTC = Timecode(.zero, at: .fps24)
     
     // MARK: - Internal State
     

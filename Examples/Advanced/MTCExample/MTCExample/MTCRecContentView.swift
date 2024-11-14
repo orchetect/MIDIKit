@@ -15,7 +15,7 @@ struct MTCRecContentView: View {
     
     // MARK: - MIDI state
     
-    @State var mtcRec: MTCReceiver = .init(name: "dummy - will be set in .onAppear{} below")
+    @State var mtcRec = MTCReceiver(name: "dummy - will be set in .onAppear{} below")
     
     // MARK: - UI state
     
@@ -59,7 +59,7 @@ struct MTCRecContentView: View {
         mtcRec = MTCReceiver(
             name: "main",
             initialLocalFrameRate: .fps24,
-            syncPolicy: .init(
+            syncPolicy: MTCReceiver.SyncPolicy(
                 lockFrames: 16,
                 dropOutFrames: 10
             )
@@ -90,7 +90,7 @@ struct MTCRecContentView: View {
                     after: DispatchQueue.SchedulerTimeType(lockTime),
                     interval: .seconds(1),
                     tolerance: .zero,
-                    options: .init(
+                    options: DispatchQueue.SchedulerOptions(
                         qos: .userInitiated,
                         flags: [],
                         group: nil
