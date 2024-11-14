@@ -424,6 +424,7 @@ extension TimecodeFrameRate {
         case .fps59_94d: return .fps29_97d // custom
         case .fps60: return .fps30 // custom
         case .fps60d: return .fps29_97d // custom
+        case .fps90: return .fps30 // custom
         case .fps95_904: return .fps24 // custom
         case .fps96: return .fps24 // custom
         case .fps100: return .fps25 // custom

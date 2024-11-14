@@ -166,6 +166,7 @@ public final class MTCGenerator: SendsMIDIEvents {
         case .fps59_94d:  rate = 0.008341666666666666 // _29_97_drop
         case .fps60:      rate = 0.008333333333333333 // _30
         case .fps60d:     rate = 0.008341666666666666 // _30_drop
+        case .fps90:      rate = 0.008333333333333333 // _30
         case .fps95_904:  rate = 0.010427083333333333 // _23_976
         case .fps96:      rate = 0.010416666666666666 // _24
         case .fps100:     rate = 0.01                 // _25

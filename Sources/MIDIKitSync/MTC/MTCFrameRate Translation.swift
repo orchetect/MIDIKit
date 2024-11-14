@@ -54,6 +54,7 @@ extension TimecodeFrameRate {
         case .fps59_94d:  return .mtc2997d
         case .fps60:      return .mtc30
         case .fps60d:     return .mtc2997d
+        case .fps90:      return .mtc30
         case .fps95_904:  return .mtc24
         case .fps96:      return .mtc24
         case .fps100:     return .mtc25
@@ -88,7 +89,7 @@ extension MTCFrameRate {
     ///   - timecodeRate: Real timecode frame rate to scale to.
     ///
     /// - Returns: A `Double` is returned with the integer part representing frame number and the
-    /// fractional part representing the fraction of the frame derived from quarter-frames.
+    ///   fractional part representing the fraction of the frame derived from quarter-frames.
     func scaledFrames(
         fromRawMTCFrames: Int,
         quarterFrames: UInt8,
@@ -192,6 +193,7 @@ extension TimecodeFrameRate {
         case .fps59_94d:  return 2
         case .fps60:      return 2
         case .fps60d:     return 2
+        case .fps90:      return 3
         case .fps95_904:  return 4
         case .fps96:      return 4
         case .fps100:     return 4
