@@ -109,7 +109,7 @@ jobs:
     - name: Prepare Destination Device Name
       shell: bash
       run: |
-        DESTNAME=$(xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" | perl -nle 'if (m/tvOS\sSimulator.*(Apple\sTV\s4k.*)\s\}\.*/g) { print $1; }' | sort -r | head -n 1)
+        DESTNAME=$(xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" | perl -nle 'if (m/tvOS\sSimulator.*(Apple\sTV\s4K.*)\s\}\.*/g) { print $1; }' | sort -r | head -n 1)
         echo Using device \"$DESTNAME\"
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
@@ -128,7 +128,7 @@ jobs:
     - name: Prepare Destination Device Name
       shell: bash
       run: |
-        DESTNAME=$(xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" | perl -nle 'if (m/watchOS\sSimulator.*(Apple\sWatch\sseries\s[\d]{2}.*)\s\}\.*/g) { print $1; }' | sort -r | head -n 1)
+        DESTNAME=$(xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" | perl -nle 'if (m/watchOS\sSimulator.*(Apple\sWatch\sSeries\s[\d]{2}.*)\s\}\.*/g) { print $1; }' | sort -r | head -n 1)
         echo Using device \"$DESTNAME\"
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
