@@ -32,13 +32,13 @@ struct HUITestApp: App {
     }
     
     var body: some Scene {
-        // Window("HUI Host", id: WindowID.huiHost) {
-        //     HUIHostView(midiManager: midiManager)
-        //         .frame(width: huiHostWidth, height: huiHostHeight)
-        //         .environmentObject(midiManager)
-        // }
-        // .windowResizability(.contentSize)
-        // .defaultPosition(UnitPoint(x: 0.25, y: 0.4))
+        Window("HUI Host", id: WindowID.huiHost) {
+            HUIHostView(midiManager: midiManager)
+                .frame(width: huiHostWidth, height: huiHostHeight)
+                .environmentObject(midiManager)
+        }
+        .windowResizability(.contentSize)
+        .defaultPosition(UnitPoint(x: 0.25, y: 0.4))
         
         Window("HUI Surface", id: WindowID.huiSurface) {
             HUIClientView(midiManager: midiManager)
@@ -54,7 +54,7 @@ struct HUITestApp: App {
     }
     
     private func onAppLaunch() {
-        // openWindow(id: WindowID.huiHost)
+        openWindow(id: WindowID.huiHost)
         openWindow(id: WindowID.huiSurface)
         
         orderAllWindowsFront()

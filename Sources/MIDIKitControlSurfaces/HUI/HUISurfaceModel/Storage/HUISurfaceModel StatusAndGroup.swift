@@ -1,12 +1,12 @@
 //
-//  HUISurfaceModelState StatusAndGroup.swift
+//  HUISurfaceModel StatusAndGroup.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurfaceModelState {
+extension HUISurfaceModel {
     /// State storage representing the Status/Group section.
     public struct StatusAndGroup: Equatable, Hashable {
         public var auto = false
@@ -18,7 +18,7 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.StatusAndGroup: HUISurfaceModelStateProtocol {
+extension HUISurfaceModel.StatusAndGroup: HUISurfaceModelState {
     public typealias Switch = HUISwitch.StatusAndGroup
 
     public func state(of huiSwitch: Switch) -> Bool {

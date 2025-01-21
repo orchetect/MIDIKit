@@ -5,7 +5,6 @@
 //
 
 import Dispatch
-import Foundation
 
 /// Simple custom safe `DispatchSourceTimer` wrapper.
 ///
@@ -18,8 +17,9 @@ import Foundation
 /// All timer methods are safe and can be called in any order without worrying about
 /// `DispatchSourceTimer`-related peculiarities (start/suspend balancing or cancelling without
 /// resuming).
-package final actor SafeDispatchTimer {
+public final class SafeDispatchTimer {
     var timer: DispatchSourceTimer
+    weak var queue: DispatchQueue?
     
     /// (Read-only) Frequency in Hz of the timer
     public internal(set) var rate: Rate = .seconds(1.0)
@@ -31,19 +31,23 @@ package final actor SafeDispatchTimer {
     
     /// Initialize a new timer.
     /// - Parameters:
-    ///   - rate: Frequency timer event intervals, expressed in Hertz
-    ///   - leeway: Optionally specify custom leeway; default is 0 nanoseconds
-    ///   - eventHandler: The closure to be called on each timer event
+    ///   - frequencyInHz: frequency timer event intervals, expressed in Hertz
+    ///   - queue: optionally specify the `DispatchQueue` for the timer (weak storage)
+    ///   - leeway: optionally specify custom leeway; default is 0 nanoseconds
+    ///   - eventHandler: the closure to be called on each timer event
     public init(
         rate: Rate,
+        queue: DispatchQueue = DispatchQueue.main,
         leeway: DispatchTimeInterval = .nanoseconds(0),
         eventHandler: @escaping DispatchSource.DispatchSourceHandler = { }
     ) {
         self.rate = rate
     
+        self.queue = queue
+    
         self.leeway = leeway
     
-        timer = DispatchSource.makeTimerSource(flags: .strict, queue: .global())
+        timer = DispatchSource.makeTimerSource(flags: .strict, queue: queue)
     
         // schedule the timer's start time to be the time of the class initialization
     
@@ -83,13 +87,13 @@ package final actor SafeDispatchTimer {
     public func restart(firingNow: Bool = true) {
         // if timer is already running, reschedule the currently running timer
         // if timer is not running, schedule the timer then start it
-        
+    
         timer.schedule(
             deadline: firingNow ? .now() : .now() + rate.secondsValue,
             repeating: rate.secondsValue,
             leeway: leeway
         )
-        
+    
         if !running {
             start()
         }
@@ -118,13 +122,13 @@ package final actor SafeDispatchTimer {
     
     deinit {
         timer.setEventHandler(handler: nil)
-        
+    
         // If the timer is suspended, calling cancel without resuming
         // triggers a crash. This is documented here:
         // https://forums.developer.apple.com/thread/15902
-        
+    
         if !running { timer.resume() }
-        
+    
         timer.cancel()
     }
 }

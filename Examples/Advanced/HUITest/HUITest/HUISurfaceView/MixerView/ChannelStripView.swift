@@ -14,7 +14,7 @@ extension HUISurfaceView {
 
 extension HUISurfaceView {
     struct ChannelStripView: View {
-        @Environment(HUISurface.self) var huiSurface
+        @EnvironmentObject var huiSurface: HUISurface
         
         let channel: UInt4
         

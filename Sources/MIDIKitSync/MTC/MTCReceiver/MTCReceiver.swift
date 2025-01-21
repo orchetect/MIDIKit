@@ -29,21 +29,25 @@ import TimecodeKitCore
 /// >
 /// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate
 /// > timecodes when scrubbing or locating to different times.
-public final actor MTCReceiver {
+public final class MTCReceiver {
     // MARK: - Public properties
     
     public private(set) var name: String
     
+    @ThreadSafeAccess
     public private(set) var state: State = .idle {
         didSet {
             if state != oldValue {
                 let newState = state
-                stateChangedHandler?(newState)
+                DispatchQueue.main.async {
+                    self.stateChangedHandler?(newState)
+                }
             }
         }
     }
     
     /// Property updated whenever incoming MTC timecode changes.
+    @ThreadSafeAccess
     public private(set) var timecode: Timecode
     
     /// The frame rate the local system is using.
@@ -51,18 +55,19 @@ public final actor MTCReceiver {
     /// interpret the incoming MTC accordingly.
     public var localFrameRate: TimecodeFrameRate? {
         get {
-            decoder.localFrameRate
+            var getMTCFrameRate: TimecodeFrameRate?
+            
+            queue.sync {
+                getMTCFrameRate = decoder.localFrameRate
+            }
+            
+            return getMTCFrameRate
         }
         set {
-            decoder.localFrameRate = newValue
+            queue.sync {
+                decoder.localFrameRate = newValue
+            }
         }
-    }
-    
-    /// The frame rate the local system is using.
-    /// Remember to also set this any time the local frame rate changes so the receiver can
-    /// interpret the incoming MTC accordingly.
-    public func setLocalFrameRate(_ newFrameRate: TimecodeFrameRate?) {
-        localFrameRate = newFrameRate
     }
     
     /// The SMPTE frame rate (24, 25, 29.97d, or 30) that was last received by the receiver.
@@ -72,21 +77,29 @@ public final actor MTCReceiver {
     /// ``localFrameRate`` property is used for automatic validation and scaling of incoming
     /// timecode.
     public var mtcFrameRate: MTCFrameRate {
-        decoder.mtcFrameRate
+        var getMTCFrameRate: MTCFrameRate!
+        
+        queue.sync {
+            getMTCFrameRate = decoder.mtcFrameRate
+        }
+        
+        return getMTCFrameRate
     }
     
-    /// Status of the direction of MTC quarter-frames received.
+    /// Status of the direction of MTC quarter-frames received
     public var direction: MTCDirection {
-        decoder.direction
+        var getDirection: MTCDirection!
+            
+        queue.sync {
+            getDirection = decoder.direction
+        }
+            
+        return getDirection
     }
     
-    /// Behavior governing how locking occurs prior to chase.
+    /// Behavior governing how locking occurs prior to chase
+    @ThreadSafeAccess
     public var syncPolicy: SyncPolicy = .init()
-    
-    /// Behavior governing how locking occurs prior to chase.
-    public func setSyncPolicy(_ newSyncPolicy: SyncPolicy) {
-        syncPolicy = newSyncPolicy
-    }
     
     // MARK: - Stored closures
     
@@ -101,22 +114,6 @@ public final actor MTCReceiver {
         _ direction: MTCDirection,
         _ displayNeedsUpdate: Bool
     ) -> Void)?
-    
-    /// Called when a meaningful change to the timecode has occurred which would require its display
-    /// to be updated.
-    ///
-    /// Implement this closure for when you only want to display timecode and do not need to sync to
-    /// MTC.
-    public func setTimecodeChangedHandler(
-        _ handler: ((
-            _ timecode: Timecode,
-            _ event: MTCMessageType,
-            _ direction: MTCDirection,
-            _ displayNeedsUpdate: Bool
-        ) -> Void)?
-    ) {
-        self.timecodeChangedHandler = handler
-    }
     
     /// Called when the MTC receiver's state changes
     public var stateChangedHandler: ((_ state: State) -> Void)?
@@ -151,14 +148,16 @@ public final actor MTCReceiver {
         
         timecode = Timecode(.zero, at: initialLocalFrameRate ?? .fps30)
         
-        if let syncPolicy {
-            self.syncPolicy = syncPolicy
+        if let unwrappedSyncPolicy = syncPolicy {
+            self.syncPolicy = unwrappedSyncPolicy
         }
         
-        // store handler closures
+        // queue
         
-        timecodeChangedHandler = timecodeChanged
-        stateChangedHandler = stateChanged
+        queue = DispatchQueue(
+            label: (Bundle.main.bundleIdentifier ?? "midikit") + ".mtcreceiver." + name,
+            qos: .userInitiated
+        )
         
         // set up decoder reset timer
         // we're accounting for the largest reasonable interval of time we are willing to wait until
@@ -171,36 +170,47 @@ public final actor MTCReceiver {
         
         timer = SafeDispatchTimer(
             rate: .hertz(200.0),
+            queue: queue,
             eventHandler: { }
         )
         
-        // decoder setup
-        
-        decoder = MTCDecoder(
-            initialLocalFrameRate: initialLocalFrameRate
-        )
-        
-        // set up handlers after self is initialized so we can capture reference to self
-        
-        Task {
-            await timer.setEventHandler { [weak self] in
-                Task { await self?.timerFired() }
-            }
-            
-            await decoder.setTimecodeChangedHandler { [weak self] timecode, messageType, direction, displayNeedsUpdate in
-                Task {
-                    await self?.timecodeDidChange(
-                        to: timecode,
-                        event: messageType,
-                        direction: direction,
-                        displayNeedsUpdate: displayNeedsUpdate
-                    )
-                }
+        timer.setEventHandler { [weak self] in
+            guard let strongSelf = self else { return }
+                
+            strongSelf.queue.async {
+                strongSelf.timerFired()
             }
         }
+        
+        // decoder setup
+        
+        decoder = MTCDecoder(initialLocalFrameRate: initialLocalFrameRate)
+        
+        decoder.setTimecodeChangedHandler { timecode,
+            messageType,
+            direction,
+            displayNeedsUpdate in
+                
+            self.timecodeDidChange(
+                to: timecode,
+                event: messageType,
+                direction: direction,
+                displayNeedsUpdate: displayNeedsUpdate
+            )
+        }
+        
+        decoder.localFrameRate = initialLocalFrameRate
+        
+        // store handler closures
+        
+        timecodeChangedHandler = timecodeChanged
+        stateChangedHandler = stateChanged
     }
     
     // MARK: - Queue (internal)
+    
+    /// Maintain a high-priority internal thread
+    var queue: DispatchQueue
     
     // MARK: - Decoder (internal)
     
@@ -213,10 +223,10 @@ public final actor MTCReceiver {
     
     // MARK: - Timer (internal)
     
-    let timer: SafeDispatchTimer!
+    let timer: SafeDispatchTimer
     
     /// Internal: Fired from our timer object.
-    func timerFired() async {
+    func timerFired() {
         // this will be called by the timer which operates on our internal queue, so we don't need
         // to wrap this in queue.async { }
         
@@ -262,7 +272,7 @@ public final actor MTCReceiver {
                 
         } else if clockDiff > freewheelTimeout {
             state = .idle
-            await timer.stop()
+            timer.stop()
         }
     }
 }
@@ -271,11 +281,13 @@ public final actor MTCReceiver {
 
 extension MTCReceiver: ReceivesMIDIEvents {
     /// Incoming MIDI messages (Async on MTCReceiver queue)
-    public nonisolated func midiIn(event: MIDIEvent) {
+    public func midiIn(event: MIDIEvent) {
         // The decoder's midiIn can trigger handler callbacks as a result, which will in turn all be
         // executed on the queue
         
-        Task { await self.decoder.midiIn(event: event) }
+        queue.sync {
+            self.decoder.midiIn(event: event)
+        }
     }
 }
 
@@ -288,7 +300,7 @@ extension MTCReceiver {
         event: MTCMessageType,
         direction: MTCDirection,
         displayNeedsUpdate: Bool
-    ) async {
+    ) {
         // determine frame rate compatibility
         var frameRateIsCompatible = true
         
@@ -322,8 +334,8 @@ extension MTCReceiver {
             }
             
             // start timer
-            if await !timer.running {
-                await timer.restart()
+            if !timer.running {
+                timer.restart()
             }
         }
         
@@ -331,12 +343,14 @@ extension MTCReceiver {
         timecode = incomingTC
         
         // notify handler to update display
-        self.timecodeChangedHandler?(
-            incomingTC,
-            event,
-            direction,
-            displayNeedsUpdate
-        )
+        DispatchQueue.main.async {
+            self.timecodeChangedHandler?(
+                incomingTC,
+                event,
+                direction,
+                displayNeedsUpdate
+            )
+        }
         
         if event == .quarterFrame {
             // update state

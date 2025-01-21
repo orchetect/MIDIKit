@@ -16,11 +16,11 @@ internal import MIDIKitInternals
 import TimecodeKitCore
 
 /// MTC sync generator.
-public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
+public final class MTCGenerator: SendsMIDIEvents {
     // MARK: - Public properties
-    
+        
     public private(set) var name: String
-    
+        
     /// The MTC SMPTE frame rate (24, 25, 29.97d, or 30) that was last transmitted by the generator.
     ///
     /// This property should only be inspected purely for developer informational or diagnostic
@@ -28,101 +28,121 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     /// local ``timecode``.`frameRate` property is used for automatic selection of MTC SMPTE frame
     /// rate and scaling of outgoing timecode accordingly.
     public var mtcFrameRate: MTCFrameRate {
-        encoder.mtcFrameRate
+        var getMTCFrameRate: MTCFrameRate!
+            
+        queue.sync {
+            getMTCFrameRate = encoder.mtcFrameRate
+        }
+            
+        return getMTCFrameRate
     }
-    
+        
+    @ThreadSafeAccess
     public private(set) var state: State = .idle
-    
+        
     /// Internal var
+    @ThreadSafeAccess
     private var shouldStart = true
-    
+        
     /// Property updated whenever outgoing MTC timecode changes.
     public var timecode: Timecode {
-        encoder.timecode
+        var getTimecode: Timecode!
+            
+        queue.sync {
+            getTimecode = encoder.timecode
+        }
+            
+        return getTimecode
     }
-    
+        
     public var localFrameRate: TimecodeFrameRate {
-        encoder.localFrameRate
+        var getFrameRate: TimecodeFrameRate!
+            
+        queue.sync {
+            getFrameRate = encoder.localFrameRate
+        }
+            
+        return getFrameRate
     }
-    
+        
     /// Behavior determining when MTC Full-Frame MIDI messages should be generated.
     ///
     /// ``MTCEncoder/FullFrameBehavior/ifDifferent`` is recommended and suitable for most
     /// implementations.
+    @ThreadSafeAccess
     public var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
-    
-    /// Behavior determining when MTC Full-Frame MIDI messages should be generated.
-    ///
-    /// ``MTCEncoder/FullFrameBehavior/ifDifferent`` is recommended and suitable for most
-    /// implementations.
-    public func setLocateBehavior(_ newLocateBehavior: MTCEncoder.FullFrameBehavior) {
-        locateBehavior = newLocateBehavior
-    }
-    
+        
     // MARK: - Stored closures
-    
+        
     /// Closure called every time a MIDI message needs to be transmitted by the generator.
     ///
     /// - Note: Handler is called on a dedicated thread so do not make UI updates from it.
     public var midiOutHandler: MIDIOutHandler?
-    
-    /// Set the closure called every time a MIDI message needs to be transmitted by the generator.
-    ///
-    /// - Note: Handler is called on a dedicated thread so do not make UI updates from it.
-    public func setMIDIOutHandler(_ handler: MIDIOutHandler?) {
-        midiOutHandler = handler
-    }
-    
+        
     // MARK: - init
-    
+        
     public init(
         name: String? = nil,
         midiOutHandler: MIDIOutHandler? = nil
     ) {
         // handle init arguments
-        
+            
         let name = name ?? UUID().uuidString
         self.name = name
-        
+            
         self.midiOutHandler = midiOutHandler
-        
+            
+        // queue
+            
+        queue = DispatchQueue(
+            label: "midikit.mtcgenerator.\(name)",
+            qos: .userInitiated
+        )
+            
         // timer
             
         timer = SafeDispatchTimer(
             rate: .seconds(1.0), // default, will be changed later
+            queue: queue,
             eventHandler: { }
         )
-        
-        // encoder setup
-        encoder = MTCEncoder()
-        
-        // set up handlers after self is initialized so we can capture reference to self
-        
-        Task {
-            await timer.setEventHandler { [weak self] in
-                Task { await self?.timerFired() }
-            }
-            await encoder.setMIDIOutHandler { [weak self] midiEvents in
-                self?.midiOut(midiEvents)
+            
+        timer.setEventHandler { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.timerFired()
+        }
+            
+        queue.sync {
+            // encoder setup
+            encoder = MTCEncoder()
+            encoder.midiOutHandler = { [weak self] midiEvents in
+                guard let strongSelf = self else { return }
+                    
+                strongSelf.midiOut(midiEvents)
             }
         }
     }
-    
+        
+    // MARK: - Queue (internal)
+        
+    /// Maintain a high-priority internal thread
+    var queue: DispatchQueue
+        
     // MARK: - Encoder (internal)
-    
-    let encoder: MTCEncoder
-    
+        
+    var encoder = MTCEncoder()
+        
     // MARK: - Timer (internal)
-    
-    let timer: SafeDispatchTimer
-    
+        
+    var timer: SafeDispatchTimer
+        
     /// Internal: Fired from our timer object.
     func timerFired() {
         encoder.increment()
     }
-    
+        
     /// Sets timer rate to corresponding MTC quarter-frame duration in Hz.
-    func setTimerRate(from frameRate: TimecodeFrameRate) async {
+    func setTimerRate(from frameRate: TimecodeFrameRate) {
         // const values generated from:
         // Timecode(.components(f: 1), at: frameRate).realTimeValue
         // double and quadruple rates use the same value as their 1x rate
@@ -156,7 +176,7 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
         case .fps120d:    rate = 0.008341666666666666 // _30_drop
         }
         
-        await timer.setRate(.seconds(rate))
+        timer.setRate(.seconds(rate))
     }
         
     // MARK: - Public methods
@@ -167,9 +187,11 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     /// - Note: `timecode` may contain `subframes > 0`. Subframes will be stripped prior to
     /// transmitting the full-frame message since the resolution of MTC full-frame messages is 1
     /// frame.
-    public func locate(to timecode: Timecode) async {
-        encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
-        await setTimerRate(from: encoder.localFrameRate)
+    public func locate(to timecode: Timecode) {
+        queue.sync {
+            encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
+            setTimerRate(from: encoder.localFrameRate)
+        }
     }
         
     /// Locate to a new timecode, while not generating continuous playback MIDI message stream.
@@ -178,9 +200,11 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     /// > Note: `components` may contain `subframes > 0`. Subframes will be stripped prior to
     /// > transmitting the full-frame message since the resolution of MTC full-frame messages is 1
     /// > frame.
-    public func locate(to components: Timecode.Components) async {
-        encoder.locate(to: components, transmitFullFrame: locateBehavior)
-        await setTimerRate(from: encoder.localFrameRate)
+    public func locate(to components: Timecode.Components) {
+        queue.sync {
+            encoder.locate(to: components, transmitFullFrame: locateBehavior)
+            setTimerRate(from: encoder.localFrameRate)
+        }
     }
         
     /// Starts generating MTC continuous playback MIDI message stream events.
@@ -192,25 +216,27 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     /// > immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
     /// Call ``stop()`` to stop generating events.
-    public func start(now timecode: Timecode) async {
-        shouldStart = true
-        
-        // if subframes == 0, no scheduling is required
-        
-        if timecode.subFrames == 0 {
-            await locateAndStart(
-                now: timecode.components,
-                frameRate: timecode.frameRate
-            )
-            return
+    public func start(now timecode: Timecode) {
+        queue.sync {
+            shouldStart = true
+                
+            // if subframes == 0, no scheduling is required
+                
+            if timecode.subFrames == 0 {
+                locateAndStart(
+                    now: timecode.components,
+                    frameRate: timecode.frameRate
+                )
+                return
+            }
         }
-        
+            
         // if subframes > 0, scheduling is required to synchronize
         // MTC generation start to be at the exact start of the next frame
             
         // pass it on to the start method that handles scheduling
             
-        await start(
+        start(
             now: timecode.realTimeValue,
             frameRate: timecode.frameRate
         )
@@ -227,17 +253,19 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
         now components: Timecode.Components,
         frameRate: TimecodeFrameRate,
         base: Timecode.SubFramesBase
-    ) async {
-        shouldStart = true
-        
+    ) {
+        queue.sync {
+            shouldStart = true
+        }
+            
         let tc = Timecode(
             .components(components),
             at: frameRate,
             base: base,
             by: .allowingInvalid
         )
-        
-        await start(now: tc)
+            
+        start(now: tc)
     }
         
     /// Starts generating MTC continuous playback MIDI message stream events.
@@ -250,15 +278,19 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     public func start(
         now realTime: TimeInterval,
         frameRate: TimecodeFrameRate
-    ) async {
+    ) {
         // since realTime can be between frames,
         // we need to ensure that MTC quarter-frames begin generating
         // on the start of an exact frame.
         // this may involve scheduling the start of MTC generation
         // to be in the near future (on the order of milliseconds)
-        
-        shouldStart = true
-        
+            
+        let nsInDispatchTime = DispatchTime.now().uptimeNanoseconds
+            
+        queue.sync {
+            shouldStart = true
+        }
+            
         // convert real time to timecode at the given frame rate
         guard let inRTtoTimecode = try? Timecode(
             .realTime(seconds: realTime),
@@ -266,43 +298,44 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
             base: .max100SubFrames, // base doesn't matter, just for calculation
             limit: .max24Hours
         ) else { return }
-        
+            
         // if subframes == 0, no scheduling is required
-        
+            
         if inRTtoTimecode.subFrames == 0 {
-            await locateAndStart(
+            locateAndStart(
                 now: inRTtoTimecode.components,
                 frameRate: inRTtoTimecode.frameRate
             )
             return
         }
-        
+            
         // otherwise, we have to schedule MTC start for the near future
         // (the exact start of the next frame)
-        
+            
         // truncate subframes and advance 1 frame
         var tcAtNextEvenFrame = inRTtoTimecode
         tcAtNextEvenFrame.subFrames = 0
         try? tcAtNextEvenFrame.add(.components(f: 1), by: .wrapping)
-        
+            
         let secsToStartOfNextFrame = tcAtNextEvenFrame.realTimeValue - realTime
-        
+            
         let nsecsToStartOfNextFrame = UInt64(secsToStartOfNextFrame * 1_000_000_000)
-        
-        do {
-            try await Task.sleep(nanoseconds: nsecsToStartOfNextFrame)
-        } catch {
-            // just fall through. error will only be thrown if task is cancelled.
+            
+        let nsecsDeadline = nsInDispatchTime + nsecsToStartOfNextFrame
+            
+        queue.asyncAfter(
+            deadline: .init(uptimeNanoseconds: nsecsDeadline),
+            qos: .userInitiated
+        ) {
+            guard self.shouldStart else { return }
+                
+            self.locateAndStart(
+                now: tcAtNextEvenFrame.components,
+                frameRate: tcAtNextEvenFrame.frameRate
+            )
         }
-        
-        guard self.shouldStart else { return }
-        
-        await self.locateAndStart(
-            now: tcAtNextEvenFrame.components,
-            frameRate: tcAtNextEvenFrame.frameRate
-        )
     }
-    
+        
     /// Internal: called from all other `start(...)` methods when they are finally ready to initiate
     /// the start of MTC generation.
     /// - Note: This method assumes `subframes == 0`.
@@ -310,7 +343,7 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     func locateAndStart(
         now components: Timecode.Components,
         frameRate: TimecodeFrameRate
-    ) async {
+    ) {
         encoder.locate(
             to: components,
             frameRate: frameRate,
@@ -318,20 +351,23 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
         )
             
         if state == .generating {
-            await timer.stop()
+            timer.stop()
         }
             
         state = .generating
             
-        await setTimerRate(from: encoder.localFrameRate)
-        await timer.restart()
+        setTimerRate(from: encoder.localFrameRate)
+        timer.restart()
     }
         
     /// Stops generating MTC continuous playback MIDI message stream events.
-    public func stop() async {
+    public func stop() {
         shouldStart = false
-        
-        state = .idle
-        await timer.stop()
+            
+        queue.sync {
+            state = .idle
+                
+            timer.stop()
+        }
     }
 }

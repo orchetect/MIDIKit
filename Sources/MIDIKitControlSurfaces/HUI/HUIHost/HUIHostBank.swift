@@ -18,11 +18,9 @@ internal import MIDIKitInternals
 /// This object is created and managed by ``HUIHost``. Do not instantiate this object directly.
 /// Instead, call ``HUIHost/addBank(huiEventHandler:midiOutHandler:remotePresenceChangedHandler:)``
 /// to add banks to your ``HUIHost`` instance.
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-@Observable public final class HUIHostBank {
+public final class HUIHostBank {
     // MARK: - Decoder
     
-    @ObservationIgnored
     var decoder: HUISurfaceEventDecoder!
     
     // MARK: - Handlers
@@ -31,7 +29,6 @@ internal import MIDIKitInternals
     public typealias HUIEventHandler = ((_ event: HUISurfaceEvent) -> Void)
     
     /// Event handler that is called when HUI events are received.
-    @ObservationIgnored
     public var huiEventHandler: HUIEventHandler?
     
     /// Remote presence state change handler (when pings resume or cease after timeout).
@@ -40,7 +37,6 @@ internal import MIDIKitInternals
     /// Called when the remote presence state changes (when pings resume or cease after timeout).
     public var remotePresenceChangedHandler: PresenceChangedHandler?
     
-    @ObservationIgnored
     public var midiOutHandler: MIDIOutHandler?
     
     // MARK: - Presence
@@ -55,14 +51,11 @@ internal import MIDIKitInternals
             // validate
             if remotePresenceTimeout < 1.1 { remotePresenceTimeout = 1.1 }
             // update timer interval
-            Task {
-                await remotePresenceTimer?.setRate(.seconds(remotePresenceTimeout))
-                await remotePresenceTimer?.restart()
-            }
+            remotePresenceTimer?.setRate(.seconds(remotePresenceTimeout))
+            remotePresenceTimer?.restart()
         }
     }
     
-    @ObservationIgnored
     var remotePresenceTimer: SafeDispatchTimer?
     
     func setupRemotePresenceTimer() {
@@ -70,10 +63,11 @@ internal import MIDIKitInternals
         
         remotePresenceTimer = .init(
             rate: .seconds(remotePresenceTimeout),
+            queue: .global(),
             leeway: .milliseconds(50),
             eventHandler: { [weak self] in
                 self?.isRemotePresent = false
-                Task { await self?.remotePresenceTimer?.stop() }
+                self?.remotePresenceTimer?.stop()
             }
         )
     }
@@ -86,6 +80,15 @@ internal import MIDIKitInternals
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes.
     public internal(set) var isRemotePresent: Bool = false {
+        willSet {
+            guard isRemotePresent != newValue else { return }
+            
+            if #available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *) {
+                DispatchQueue.main.async {
+                    self.objectWillChange.send()
+                }
+            }
+        }
         didSet {
             guard oldValue != isRemotePresent else { return }
             remotePresenceChangedHandler?(isRemotePresent)
@@ -93,7 +96,7 @@ internal import MIDIKitInternals
     }
     
     func receivedPing() {
-        Task { await remotePresenceTimer?.restart(firingNow: false) }
+        remotePresenceTimer?.restart(firingNow: false)
         isRemotePresent = true
     }
     
@@ -122,12 +125,19 @@ internal import MIDIKitInternals
     }
 }
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUIHostBank: ReceivesMIDIEvents {
     public func midiIn(event: MIDIEvent) {
         decoder.midiIn(event: event)
     }
 }
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUIHostBank: SendsMIDIEvents { }
+
+#if canImport(Combine)
+import Combine
+
+@available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13.0, watchOS 6.0, *)
+extension HUIHostBank: ObservableObject {
+    // nothing here; just add ObservableObject conformance
+}
+#endif

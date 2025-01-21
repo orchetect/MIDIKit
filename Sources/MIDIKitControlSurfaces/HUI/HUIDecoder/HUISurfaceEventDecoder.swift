@@ -8,7 +8,6 @@ import MIDIKitCore
 
 /// ``HUISurfaceEvent`` decoder.
 /// Parses received MIDI events and converts them to ``HUISurfaceEvent`` events.
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 public final class HUISurfaceEventDecoder: HUIDecoder {
     // HUIDecoder
     

@@ -8,7 +8,7 @@ import MIDIKitControlSurfaces
 import SwiftUI
 
 struct MainTimeDisplayView: View {
-    @Environment(HUISurface.self) var huiSurface
+    @EnvironmentObject var huiSurface: HUISurface
         
     var body: some View {
         HStack {

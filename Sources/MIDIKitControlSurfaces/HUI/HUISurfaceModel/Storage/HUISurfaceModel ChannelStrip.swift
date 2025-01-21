@@ -1,5 +1,5 @@
 //
-//  HUISurfaceModelState ChannelStrip.swift
+//  HUISurfaceModel ChannelStrip.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
@@ -7,7 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-extension HUISurfaceModelState {
+extension HUISurfaceModel {
     /// State storage representing an individual channel strip and its components.
     public struct ChannelStrip: Equatable, Hashable {
         /// Stereo Level Meter.
@@ -45,7 +45,7 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.ChannelStrip: HUISurfaceModelStateProtocol {
+extension HUISurfaceModel.ChannelStrip: HUISurfaceModelState {
     public typealias Switch = HUISwitch.ChannelStrip
 
     public func state(of huiSwitch: Switch) -> Bool {

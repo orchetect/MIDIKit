@@ -1,12 +1,12 @@
 //
-//  HUISurfaceModelState Edit.swift
+//  HUISurfaceModel Edit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurfaceModelState {
+extension HUISurfaceModel {
     /// State storage representing the Edit section.
     public struct Edit: Equatable, Hashable {
         public var capture = false
@@ -18,7 +18,7 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.Edit: HUISurfaceModelStateProtocol {
+extension HUISurfaceModel.Edit: HUISurfaceModelState {
     public typealias Switch = HUISwitch.Edit
 
     public func state(of huiSwitch: Switch) -> Bool {

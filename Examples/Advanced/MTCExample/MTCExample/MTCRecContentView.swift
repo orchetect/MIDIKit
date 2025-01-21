@@ -36,17 +36,16 @@ struct MTCRecContentView: View {
     
     var body: some View {
         mtcRecView
-            .task {
-                await setup()
+            .onAppear {
+                setup()
             }
+        
             .onChange(of: localFrameRate) { _ in
-                Task {
-                    if await mtcRec.localFrameRate != localFrameRate {
-                        logger.log(
-                            "Setting MTC receiver's local frame rate to \(localFrameRate?.stringValue ?? "None")"
-                        )
-                        await mtcRec.setLocalFrameRate(localFrameRate)
-                    }
+                if mtcRec.localFrameRate != localFrameRate {
+                    logger.log(
+                        "Setting MTC receiver's local frame rate to \(localFrameRate?.stringValue ?? "None")"
+                    )
+                    mtcRec.localFrameRate = localFrameRate
                 }
             }
         
@@ -55,7 +54,7 @@ struct MTCRecContentView: View {
             }
     }
     
-    private func setup() async {
+    private func setup() {
         // set up new MTC receiver and configure it
         mtcRec = MTCReceiver(
             name: "main",
@@ -66,7 +65,7 @@ struct MTCRecContentView: View {
             )
         ) { timecode, _, _, displayNeedsUpdate in
             receiverTC = timecode.stringValue()
-            Task { receiverFR = await mtcRec.mtcFrameRate }
+            receiverFR = mtcRec.mtcFrameRate
             
             guard displayNeedsUpdate else { return }
             

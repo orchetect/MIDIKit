@@ -167,10 +167,10 @@ func encodeHUIFader(
 /// - Returns: MIDI event.
 func encodeHUILevelMeter(
     channel: UInt4,
-    side: HUISurfaceModelState.StereoLevelMeter.Side,
+    side: HUISurfaceModel.StereoLevelMeter.Side,
     level: Int
 ) -> MIDIEvent {
-    let clampedLevel = level.clamped(to: HUISurfaceModelState.StereoLevelMeter.levelRange)
+    let clampedLevel = level.clamped(to: HUISurfaceModel.StereoLevelMeter.levelRange)
     let val = UInt8(high: side.rawValue.toUInt4, low: clampedLevel.toUInt4)
     return .notePressure(
         note: channel.toUInt7,
@@ -269,7 +269,7 @@ func encodeJogWheel(
 ///   - display: Top and bottom text line text, each 40 characters in length.
 /// - Returns: MIDI event.
 func encodeHUILargeDisplay(
-    display: HUISurfaceModelState.LargeDisplay
+    display: HUISurfaceModel.LargeDisplay
 ) -> [MIDIEvent] {
     encodeHUILargeDisplay(slices: display.slices)
 }

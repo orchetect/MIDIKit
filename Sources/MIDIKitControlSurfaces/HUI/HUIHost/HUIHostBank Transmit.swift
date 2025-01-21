@@ -6,7 +6,6 @@
 
 import MIDIKitCore
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUIHostBank {
     // MARK: - Ping
     
@@ -66,7 +65,7 @@ extension HUIHostBank {
     ///     Where `0x0` is off, `0x1 ... 0xB` is signal level, and `0xC` is clipping (red LED).
     public func transmitLevelMeter(
         channel: UInt4,
-        side: HUISurfaceModelState.StereoLevelMeter.Side,
+        side: HUISurfaceModel.StereoLevelMeter.Side,
         level: Int
     ) {
         let event = encodeHUILevelMeter(
@@ -105,7 +104,7 @@ extension HUIHostBank {
     /// - Parameters:
     ///   - display: Full display to transmit.
     public func transmitLargeDisplay(
-        _ display: HUISurfaceModelState.LargeDisplay
+        _ display: HUISurfaceModel.LargeDisplay
     ) {
         let event = encodeHUILargeDisplay(display: display)
         midiOut(event)

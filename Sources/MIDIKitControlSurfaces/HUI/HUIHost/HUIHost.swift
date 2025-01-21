@@ -26,7 +26,6 @@ internal import MIDIKitInternals
 /// >
 /// > References:
 /// > - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 public final class HUIHost {
     /// HUI banks that are configured for this HUI host instance.
     public internal(set) var banks: [HUIHostBank] = []
@@ -44,6 +43,10 @@ public final class HUIHost {
         startPingTimer()
     }
     
+    deinit {
+        pingTimer?.stop()
+    }
+    
     // MARK: - Ping
     
     /// Creates and starts the ping timer.
@@ -53,6 +56,7 @@ public final class HUIHost {
         
         pingTimer = .init(
             rate: .seconds(1.0),
+            queue: .global(),
             leeway: .milliseconds(50)
         ) { [weak self] in
             let event = encodeHUIPing(to: .surface)
@@ -61,7 +65,7 @@ public final class HUIHost {
             }
         }
         
-        Task { await pingTimer?.start() }
+        pingTimer?.start()
     }
     
     // MARK: - Methods

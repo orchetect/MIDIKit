@@ -1,12 +1,12 @@
 //
-//  HUISurfaceModelState NumPad.swift
+//  HUISurfaceModel NumPad.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurfaceModelState {
+extension HUISurfaceModel {
     /// State storage representing Number Pad Keys on the HUI surface.
     public struct NumPad: Equatable, Hashable {
         public var num0 = false
@@ -31,7 +31,7 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.NumPad: HUISurfaceModelStateProtocol {
+extension HUISurfaceModel.NumPad: HUISurfaceModelState {
     public typealias Switch = HUISwitch.NumPad
 
     public func state(of huiSwitch: Switch) -> Bool {

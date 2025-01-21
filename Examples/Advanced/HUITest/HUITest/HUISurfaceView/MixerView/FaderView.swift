@@ -11,7 +11,7 @@ import SwiftUI
 
 extension HUISurfaceView {
     struct FaderView: View {
-        @Environment(HUISurface.self) var huiSurface
+        @EnvironmentObject var huiSurface: HUISurface
 
         static let faderHeight: CGFloat = 200
         static let faderWidth: CGFloat = 5
@@ -38,11 +38,11 @@ extension HUISurfaceView {
                     guard !isTouched else { return }
                     level = Float(newValue)
                 }
-                .onChange(of: isTouched) { oldValue, newValue in
+                .onChange(of: isTouched) { newValue in
                     // transmit touch state to host
                     newValue ? pressedAction() : releasedAction()
                 }
-                .onChange(of: level) { oldValue, newValue in
+                .onChange(of: level) { newValue in
                     // transmit level to host but only if fader is touched by user
                     // so as to avoid a feedback loop of transmitting back fader changes to the host
                     // that were originally made by inbound level messages from the host

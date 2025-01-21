@@ -1,12 +1,12 @@
 //
-//  HUISurfaceModelState StereoLevelMeter.swift
+//  HUISurfaceModel StereoLevelMeter.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurfaceModelState {
+extension HUISurfaceModel {
     /// State storage representing the state of a channel strip's stereo level meter on the meter
     /// bridge.
     ///
@@ -105,9 +105,9 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.StereoLevelMeter: Sendable { }
+extension HUISurfaceModel.StereoLevelMeter: Sendable { }
 
-extension HUISurfaceModelState.StereoLevelMeter {
+extension HUISurfaceModel.StereoLevelMeter {
     /// Enum describing the side of a stereo level meter
     public enum Side: Equatable, Hashable, CustomStringConvertible {
         /// Left stereo channel.
@@ -140,4 +140,4 @@ extension HUISurfaceModelState.StereoLevelMeter {
     }
 }
 
-extension HUISurfaceModelState.StereoLevelMeter.Side: Sendable { }
+extension HUISurfaceModel.StereoLevelMeter.Side: Sendable { }

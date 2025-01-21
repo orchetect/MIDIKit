@@ -11,14 +11,14 @@ import SwiftUI
 
 struct HUIHostView: View {
     @EnvironmentObject var midiManager: ObservableMIDIManager
-    @State var huiHostHelper: HUIHostHelper
+    @StateObject var huiHostHelper: HUIHostHelper
     
     /// Convenience accessor for first HUI bank.
     private var huiBank0: HUIHostBank? { huiHostHelper.huiHost.banks.first }
     
     init(midiManager: ObservableMIDIManager) {
         // set up HUI Host object
-        _huiHostHelper = State(wrappedValue: HUIHostHelper(midiManager: midiManager))
+        _huiHostHelper = StateObject(wrappedValue: HUIHostHelper(midiManager: midiManager))
     }
     
     @State private var vPotDisplayFormat: VPotDisplayFormat = .single
@@ -60,12 +60,12 @@ struct HUIHostView: View {
                     huiBank0?.transmitLevelMeter(
                         channel: 0,
                         side: .left,
-                        level: HUISurfaceModelState.StereoLevelMeter.levelRange.randomElement()!
+                        level: HUISurfaceModel.StereoLevelMeter.levelRange.randomElement()!
                     )
                     huiBank0?.transmitLevelMeter(
                         channel: 0,
                         side: .right,
-                        level: HUISurfaceModelState.StereoLevelMeter.levelRange.randomElement()!
+                        level: HUISurfaceModel.StereoLevelMeter.levelRange.randomElement()!
                     )
                 }
                 GroupBox(label: Text("V-Pot")) {
@@ -77,7 +77,7 @@ struct HUIHostView: View {
                         Text("Center Radius (Width)").tag(VPotDisplayFormat.centerRadius)
                     }
                     .pickerStyle(.menu)
-                    .onChange(of: vPotDisplayFormat) { _, _ in
+                    .onChange(of: vPotDisplayFormat) { _ in
                         transmitVPot()
                     }
                     HStack {
@@ -89,24 +89,24 @@ struct HUIHostView: View {
                                 .frame(height: 20)
                                 .onChange(
                                     of: huiHostHelper.model.bank0.channel0.pan
-                                ) { oldValue, newValue in
+                                ) { newValue in
                                     transmitVPot(value: newValue)
                                 }
                         }
                         Toggle("Low", isOn: $huiHostHelper.model.bank0.channel0.vPotLowerLED)
                             .onChange(
                                 of: huiHostHelper.model.bank0.channel0.vPotLowerLED
-                            ) { oldValue, newValue in
+                            ) { newValue in
                                 transmitVPot(lowerLED: newValue)
                             }
                     }
                 }
                 Toggle("Solo", isOn: $huiHostHelper.model.bank0.channel0.solo)
-                    .onChange(of: huiHostHelper.model.bank0.channel0.solo) { oldValue, newValue in
+                    .onChange(of: huiHostHelper.model.bank0.channel0.solo) { newValue in
                         huiBank0?.transmitSwitch(.channelStrip(0, .solo), state: newValue)
                     }
                 Toggle("Mute", isOn: $huiHostHelper.model.bank0.channel0.mute)
-                    .onChange(of: huiHostHelper.model.bank0.channel0.mute) { oldValue, newValue in
+                    .onChange(of: huiHostHelper.model.bank0.channel0.mute) { newValue in
                         huiBank0?.transmitSwitch(.channelStrip(0, .mute), state: newValue)
                     }
                 GroupBox(label: Text("4-Character LCD")) {
@@ -115,7 +115,7 @@ struct HUIHostView: View {
                         formatter: MaxLengthFormatter(maxCharLength: 4)
                     )
                     .frame(width: 100)
-                    .onChange(of: huiHostHelper.model.bank0.channel0.name) { oldValue, newValue in
+                    .onChange(of: huiHostHelper.model.bank0.channel0.name) { newValue in
                         huiBank0?.transmitSmallDisplay(
                             .channel(0),
                             text: .init(lossy: newValue)
@@ -123,7 +123,7 @@ struct HUIHostView: View {
                     }
                 }
                 Toggle("Selected", isOn: $huiHostHelper.model.bank0.channel0.selected)
-                    .onChange(of: huiHostHelper.model.bank0.channel0.selected) { oldValue, newValue in
+                    .onChange(of: huiHostHelper.model.bank0.channel0.selected) { newValue in
                         huiBank0?.transmitSwitch(.channelStrip(0, .select), state: newValue)
                     }
                 GroupBox(label: Text("Fader")) {
@@ -138,7 +138,7 @@ struct HUIHostView: View {
                         .frame(height: 20)
                         .onChange(
                             of: huiHostHelper.model.bank0.channel0.faderLevel
-                        ) { oldValue, newValue in
+                        ) { newValue in
                             let scaledLevel = UInt14(newValue * Float(UInt14.max))
                             huiBank0?.transmitFader(level: scaledLevel, channel: 0)
                         }

@@ -10,26 +10,26 @@ import XCTest
 import XCTestUtils
 
 final class MTC_Receiver_Receiver_Tests: XCTestCase {
-    func testMTC_Receiver_Default() async {
+    func testMTC_Receiver_Default() {
         let mtcRec = MTCReceiver(name: "test")
         
         // check if defaults are nominal
         
-        await _XCTAssertEqual(await mtcRec.name, "test")
-        await _XCTAssertEqual(await mtcRec.state, .idle)
-        await _XCTAssertEqual(await mtcRec.timecode, Timecode(.zero, at: .fps30))
-        await _XCTAssertEqual(await mtcRec.localFrameRate, nil)
+        XCTAssertEqual(mtcRec.name, "test")
+        XCTAssertEqual(mtcRec.state, .idle)
+        XCTAssertEqual(mtcRec.timecode, Timecode(.zero, at: .fps30))
+        XCTAssertEqual(mtcRec.localFrameRate, nil)
         // (skip syncPolicy, it has its own unit tests)
         
         // basic properties mutation
         
         // localFrameRate
-        await mtcRec.setLocalFrameRate(.fps29_97)
-        await _XCTAssertEqual(await mtcRec.localFrameRate, .fps29_97)
-        await _XCTAssertEqual(await mtcRec.decoder.localFrameRate, .fps29_97)
+        mtcRec.localFrameRate = .fps29_97
+        XCTAssertEqual(mtcRec.localFrameRate, .fps29_97)
+        XCTAssertEqual(mtcRec.decoder.localFrameRate, .fps29_97)
     }
     
-    func testMTC_Receiver_Init_Arguments() async {
+    func testMTC_Receiver_Init_Arguments() {
         let mtcRec = MTCReceiver(
             name: "test",
             initialLocalFrameRate: .fps48,
@@ -41,17 +41,17 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         // check if defaults are nominal
         
-        await _XCTAssertEqual(await mtcRec.name, "test")
-        await _XCTAssertEqual(await mtcRec.timecode, Timecode(.zero, at: .fps48))
-        await _XCTAssertEqual(await mtcRec.localFrameRate, .fps48)
-        await _XCTAssertEqual(await mtcRec.decoder.localFrameRate, .fps48)
-        await _XCTAssertEqual(await mtcRec.syncPolicy, .init(
+        XCTAssertEqual(mtcRec.name, "test")
+        XCTAssertEqual(mtcRec.timecode, Timecode(.zero, at: .fps48))
+        XCTAssertEqual(mtcRec.localFrameRate, .fps48)
+        XCTAssertEqual(mtcRec.decoder.localFrameRate, .fps48)
+        XCTAssertEqual(mtcRec.syncPolicy, .init(
             lockFrames: 20,
             dropOutFrames: 22
         ))
     }
     
-    func testMTC_Receiver_InternalState_NoLocalFrameRate_FullFrameMessage() async {
+    func testMTC_Receiver_InternalState_NoLocalFrameRate_FullFrameMessage() {
         // test full frame MTC messages and check that properties get updated
         
         // init with no local frame rate
@@ -60,29 +60,29 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // 01:02:03:04 @ MTC 24fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps)
         wait(sec: 0.050)
-        await _XCTAssertEqual(
-            await mtcRec.timecode,
+        XCTAssertEqual(
+            mtcRec.timecode,
             Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
         )
         
         // 00:00:00:00 @ MTC 24fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._00_00_00_00_at_24fps)
         wait(sec: 0.050)
-        await _XCTAssertEqual(
-            await mtcRec.timecode,
+        XCTAssertEqual(
+            mtcRec.timecode,
             Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
         )
         
         // 02:11:17:20 @ MTC 25fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps)
         wait(sec: 0.050)
-        await _XCTAssertEqual(
-            await mtcRec.timecode,
+        XCTAssertEqual(
+            mtcRec.timecode,
             Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
         )
     }
     
-    func testMTC_Receiver_InternalState_FullFrameMessage() async {
+    func testMTC_Receiver_InternalState_FullFrameMessage() {
         // test full frame MTC messages and check that properties get updated
         
         // (Receiver.midiIn() is async internally so we need to wait for property
@@ -94,39 +94,39 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // 01:02:03:04 @ MTC 24fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps)
         wait(sec: 0.050)
-        await _XCTAssertEqual(
-            await mtcRec.timecode,
+        XCTAssertEqual(
+            mtcRec.timecode,
             Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
         )
         
         // 00:00:00:00 @ MTC 24fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._00_00_00_00_at_24fps)
         wait(sec: 0.050)
-        await _XCTAssertEqual(
-            await mtcRec.timecode,
+        XCTAssertEqual(
+            mtcRec.timecode,
             Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
         )
         
         // 02:11:17:20 @ MTC 25fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps)
         wait(sec: 0.050)
-        await _XCTAssertEqual(
-            await mtcRec.timecode,
+        XCTAssertEqual(
+            mtcRec.timecode,
             Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
         ) // local real rate still 24fps
         
-        await mtcRec.setLocalFrameRate(.fps25) // sync
+        mtcRec.localFrameRate = .fps25 // sync
         
         // 02:11:17:20 @ MTC 25fps
         mtcRec.midiIn(event: kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps)
         wait(sec: 0.050)
-        await _XCTAssertEqual(
-            await mtcRec.timecode,
+        XCTAssertEqual(
+            mtcRec.timecode,
             Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
         )
     }
     
-    func testMTC_Receiver_InternalState_FullFrameMessage_IncompatibleFrameRate() async {
+    func testMTC_Receiver_InternalState_FullFrameMessage_IncompatibleFrameRate() {
         // test state does not become .incompatibleFrameRate when localFrameRate is present
         // but not compatible with the MTC frame rate being received by the receiver
         
@@ -142,12 +142,12 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         // state should not change to .incompatibleFrameRate for full frame messages, only quarter
         // frames
-        await _XCTAssertEqual(await mtcRec.state, .idle)
+        XCTAssertEqual(mtcRec.state, .idle)
         
         // timecode remains unchanged
-        await _XCTAssertEqual(await mtcRec.timecode.frameRate, .fps29_97)
-        await _XCTAssertEqual(
-            await mtcRec.timecode,
+        XCTAssertEqual(mtcRec.timecode.frameRate, .fps29_97)
+        XCTAssertEqual(
+            mtcRec.timecode,
             Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps29_97, by: .allowingInvalid)
         ) // default MTC-30fps
     }
@@ -178,11 +178,11 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         let asyncDoneExp = expectation(description: "Async test completed")
         
         // elevate thread priority for latency-sensitive tests
-        Task { [self] in
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
             // init with local frame rate
             let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: .fps24)
         
-            await _XCTAssertEqual(await mtcRec.state, .idle)
+            XCTAssertEqual(mtcRec.state, .idle)
         
             // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
         
@@ -207,13 +207,13 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
             let waitTime = 0.005
             wait(sec: waitTime)
         
-            await _XCTAssertEqual(
-                await mtcRec.timecode,
+            XCTAssertEqual(
+                mtcRec.timecode,
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
             )
         
             let preSyncFrames = Timecode(
-                .components(f: await mtcRec.syncPolicy.lockFrames),
+                .components(f: mtcRec.syncPolicy.lockFrames),
                 at: .fps24,
                 by: .wrapping
             )
@@ -224,12 +224,12 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
             let futureTime = now + durationUntilLock
         
             let lockTimecode = Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-                .advanced(by: await mtcRec.syncPolicy.lockFrames)
+                .advanced(by: mtcRec.syncPolicy.lockFrames)
         
             guard case let .preSync(
                 predictedLockTime: preSyncLockTime,
                 lockTimecode: preSyncTimecode
-            ) = await mtcRec.state else {
+            ) = mtcRec.state else {
                 XCTFail("Expected preSync receiver state.")
                 asyncDoneExp.fulfill()
                 return
@@ -273,10 +273,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         var _state: MTCReceiver.State?
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(
-            name: "test",
-            initialLocalFrameRate: .fps24
-        ) { timecode, messageType, direction, displayNeedsUpdate in
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: .fps24) { timecode, messageType, direction, displayNeedsUpdate in
             _timecode = timecode
             _mType = messageType
             _direction = direction
@@ -327,10 +324,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         var _state: MTCReceiver.State?
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(
-            name: "test",
-            initialLocalFrameRate: .fps24
-        ) { timecode, messageType, direction, displayNeedsUpdate in
+        let mtcRec = MTCReceiver(name: "test", initialLocalFrameRate: .fps24) { timecode, messageType, direction, displayNeedsUpdate in
             _timecode = timecode
             _mType = messageType
             _direction = direction

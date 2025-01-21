@@ -91,14 +91,14 @@ struct MomentaryButton: View, MomentaryButtonProtocol {
 }
 
 struct HUIButton: View, MomentaryButtonProtocol {
-    @Environment(HUISurface.self) var huiSurface
+    @EnvironmentObject var huiSurface: HUISurface
 
     let image: Image?
     let title: String
     var fontSize: CGFloat?
     var width: CGFloat?
     var height: CGFloat?
-    private let huiSwitch: HUISwitch
+    private let huiSwitch: HUISwitch.Wrapper
     
     init(
         image: Image? = nil,
@@ -110,7 +110,7 @@ struct HUIButton: View, MomentaryButtonProtocol {
     ) {
         self.image = image
         self.title = title
-        huiSwitch = param
+        huiSwitch = .init(param)
         self.width = width
         self.height = height
         self.fontSize = fontSize
@@ -124,23 +124,23 @@ struct HUIButton: View, MomentaryButtonProtocol {
             width: width,
             height: height
         ) {
-            huiSurface.transmitSwitch(huiSwitch, state: true)
+            huiSurface.transmitSwitch(huiSwitch.wrapped, state: true)
         } releasedAction: {
-            huiSurface.transmitSwitch(huiSwitch, state: false)
+            huiSurface.transmitSwitch(huiSwitch.wrapped, state: false)
         }
         .foregroundColor(.black)
     }
 }
 
 struct HUIStateButton: View, MomentaryButtonProtocol  {
-    @Environment(HUISurface.self) var huiSurface
+    @EnvironmentObject var huiSurface: HUISurface
 
     let image: Image?
     let title: String
     var fontSize: CGFloat?
     var width: CGFloat?
     var height: CGFloat?
-    private let huiSwitch: HUISwitch
+    private let huiSwitch: HUISwitch.Wrapper
     let ledColor: Color
 
     init(
@@ -157,7 +157,7 @@ struct HUIStateButton: View, MomentaryButtonProtocol  {
         self.fontSize = fontSize
         self.width = width
         self.height = height
-        huiSwitch = param
+        huiSwitch = .init(param)
         self.ledColor = ledColor.color
     }
 
@@ -165,13 +165,13 @@ struct HUIStateButton: View, MomentaryButtonProtocol  {
         HUIButton(
             image: image,
             title: title,
-            param: huiSwitch,
+            param: huiSwitch.wrapped,
             width: width,
             height: height,
             fontSize: fontSize
         )
         .colorMultiply(
-            huiSurface.model.state(of: huiSwitch)
+            huiSurface.model.state(of: huiSwitch.wrapped)
                 ? ledColor
                 : Color(white: 1, opacity: 1)
         )
@@ -195,7 +195,7 @@ extension HUIStateButton {
 }
 
 struct HUINumPadButton: View, MomentaryButtonProtocol {
-    @Environment(HUISurface.self) var huiSurface
+    @EnvironmentObject var huiSurface: HUISurface
     
     static let kDefaultSize: CGFloat = 40
     
@@ -206,7 +206,7 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
     var spacing: CGFloat?
     let widthScale: CGFloat
     let heightScale: CGFloat
-    private let huiSwitch: HUISwitch
+    private let huiSwitch: HUISwitch.Wrapper
     
     init(
         image: Image? = nil,
@@ -220,7 +220,7 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
     ) {
         self.image = image
         self.title = title
-        huiSwitch = param
+        huiSwitch = .init(param)
         self.width = width
         self.spacing = spacing
         self.widthScale = widthScale
@@ -236,9 +236,9 @@ struct HUINumPadButton: View, MomentaryButtonProtocol {
             width: calculateWidth(),
             height: calculateHeight()
         ) {
-            huiSurface.transmitSwitch(huiSwitch, state: true)
+            huiSurface.transmitSwitch(huiSwitch.wrapped, state: true)
         } releasedAction: {
-            huiSurface.transmitSwitch(huiSwitch, state: false)
+            huiSurface.transmitSwitch(huiSwitch.wrapped, state: false)
         }
         .foregroundColor(.black)
         .cornerRadius(5)

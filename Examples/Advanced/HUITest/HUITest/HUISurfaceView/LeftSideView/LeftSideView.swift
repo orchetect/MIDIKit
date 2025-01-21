@@ -13,7 +13,7 @@ extension HUISurfaceView {
 
 extension HUISurfaceView {
     struct LeftSideView: View {
-        @Environment(HUISurface.self) var huiSurface
+        @EnvironmentObject var huiSurface: HUISurface
         
         var body: some View {
             VStack {

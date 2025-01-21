@@ -9,11 +9,11 @@ import TimecodeKitCore
 import XCTest
 
 final class MTC_Generator_Generator_Tests: XCTestCase {
-    func testMTC_Generator_Default() async {
+    func testMTC_Generator_Default() {
         // just testing variations on syntax
         
         let mtcGen1 = MTCGenerator()
-        await mtcGen1.setMIDIOutHandler { [weak self] (midiMessage) in
+        mtcGen1.midiOutHandler = { [weak self] (midiMessage) in
             _ = self
             _ = midiMessage
         }

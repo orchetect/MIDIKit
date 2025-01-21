@@ -28,7 +28,7 @@ public enum HUIHostEvent: Equatable, Hashable {
     /// Stereo LED level meters.
     case levelMeter(
         channelStrip: UInt4,
-        side: HUISurfaceModelState.StereoLevelMeter.Side,
+        side: HUISurfaceModel.StereoLevelMeter.Side,
         level: Int
     )
     

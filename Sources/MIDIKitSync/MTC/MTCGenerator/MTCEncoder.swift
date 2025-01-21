@@ -50,6 +50,7 @@ public final class MTCEncoder: SendsMIDIEvents {
     }
         
     /// Last internal MTC SPMTE timecode components formed from outgoing MTC data.
+    @ThreadSafeAccess
     public internal(set) var mtcComponents = Timecode.Components()
         
     func setMTCComponents(mtc newComponents: Timecode.Components) {
@@ -69,20 +70,18 @@ public final class MTCEncoder: SendsMIDIEvents {
     public internal(set) var mtcFrameRate: MTCFrameRate = .mtc30
         
     public var midiOutHandler: MIDIOutHandler?
-    
-    public func setMIDIOutHandler(_ handler: MIDIOutHandler?) {
-        midiOutHandler = handler
-    }
-    
+        
     // MARK: - Internal properties
         
     /// Last internal MTC quarter-frame formed. (`0 ... 7`)
+    @ThreadSafeAccess
     public internal(set) var mtcQuarterFrame: UInt8 = 0
         
     /// Internal:
     /// Flag indicating whether the quarter-frame output stream has already started since the last
     /// ``locate(to:transmitFullFrame:)`` (or since initializing the class if
     /// ``locate(to:transmitFullFrame:)`` has not yet been called).
+    @ThreadSafeAccess
     var mtcQuarterFrameStreamHasStartedSinceLastLocate = false
         
     /// Internal: track last full-frame message sent to the handler.
