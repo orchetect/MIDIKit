@@ -31,15 +31,15 @@ extension HUISurfaceView {
     }
     
     struct LevelMeterView: View {
-        @EnvironmentObject var huiSurface: HUISurface
+        @Environment(HUISurface.self) var huiSurface
 
         let channel: Int
-        let side: HUISurfaceModel.StereoLevelMeter.Side
+        let side: HUISurfaceModelState.StereoLevelMeter.Side
 
         static let segmentIndexes = Array(
             stride(
-                from: HUISurfaceModel.StereoLevelMeter.levelMax,
-                through: HUISurfaceModel.StereoLevelMeter.levelMin + 1,
+                from: HUISurfaceModelState.StereoLevelMeter.levelMax,
+                through: HUISurfaceModelState.StereoLevelMeter.levelMin + 1,
                 by: -1
             )
         )

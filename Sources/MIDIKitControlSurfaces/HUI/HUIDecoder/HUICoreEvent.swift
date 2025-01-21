@@ -11,18 +11,18 @@ import MIDIKitCore
 /// encoded.
 ///
 /// > This event can be used in either direction (to client surface or to host) but not all events
-/// are relevant.
+/// > are relevant.
 /// >
 /// > For example:
 /// >
 /// > - Both a host and client surface can send channel strip Solo state to each other. The host
-/// sends the state to the client surface, and the client surface updates its state and UI to
-/// reflect it. Then the user can interact with the client surface at any time to toggle the Solo
-/// button which sends the same message back to the host, causing the host to toggle the
-/// corresponding track Solo.
+/// > sends the state to the client surface, and the client surface updates its state and UI to
+/// > reflect it. Then the user can interact with the client surface at any time to toggle the Solo
+/// > button which sends the same message back to the host, causing the host to toggle the
+/// > corresponding track Solo.
 /// > - A host can send a time display change to a client surface, but a client surface cannot send
-/// any time display changes back to the host. It is a read-only display on the client surface and
-/// there is no way to interact with it.
+/// > any time display changes back to the host. It is a read-only display on the client surface and
+/// > there is no way to interact with it.
 enum HUICoreEvent: Equatable, Hashable {
     /// HUI ping message.
     case ping
@@ -30,7 +30,7 @@ enum HUICoreEvent: Equatable, Hashable {
     /// Stereo LED level meters.
     case levelMeter(
         channelStrip: UInt4,
-        side: HUISurfaceModel.StereoLevelMeter.Side,
+        side: HUISurfaceModelState.StereoLevelMeter.Side,
         level: Int
     )
     
@@ -87,6 +87,7 @@ enum HUICoreEvent: Equatable, Hashable {
     case systemReset
 }
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUICoreEvent: CustomStringConvertible {
     public var description: String {
         switch self {
@@ -143,4 +144,5 @@ extension HUICoreEvent: CustomStringConvertible {
     }
 }
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUICoreEvent: Sendable { }

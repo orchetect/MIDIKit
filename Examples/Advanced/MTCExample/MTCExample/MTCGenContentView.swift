@@ -69,8 +69,8 @@ struct MTCGenContentView: View {
                 // this is only being done here for sake of demonstration purposes.
                 // an activity watcher is not provided for the MTC Generator since
                 // it is not typical that you would watch the activity of your own gen.
-                DispatchQueue.main.async {
-                    let tc = mtcGen.timecode
+                Task { @MainActor in
+                    let tc = await mtcGen.timecode
                     generatorTC = tc
                     
                     if tc.seconds != lastSeconds {
@@ -81,7 +81,9 @@ struct MTCGenContentView: View {
             }
         )
         
-        mtcGen.locateBehavior = locateBehavior
+        Task {
+            await mtcGen.setLocateBehavior(locateBehavior)
+        }
         
         locate()
     }
@@ -141,9 +143,11 @@ struct MTCGenContentView: View {
             .onHover { _ in
                 guard !mtcGenState else { return }
                 
-                // this is a stupid SwiftUI workaround, but it works fine for our purposes
-                if mtcGen.localFrameRate != localFrameRate {
-                    locate()
+                // this is a SwiftUI workaround, but it works fine for our purposes
+                Task {
+                    if await mtcGen.localFrameRate != localFrameRate {
+                        locate()
+                    }
                 }
             }
             
@@ -167,8 +171,10 @@ struct MTCGenContentView: View {
                 guard !mtcGenState else { return }
                 
                 // this is a stupid SwiftUI workaround, but it works fine for our purposes
-                if mtcGen.locateBehavior != locateBehavior {
-                    mtcGen.locateBehavior = locateBehavior
+                Task {
+                    if await mtcGen.locateBehavior != locateBehavior {
+                        await mtcGen.setLocateBehavior(locateBehavior)
+                    }
                 }
             }
         }
@@ -185,7 +191,7 @@ struct MTCGenContentView: View {
     ) {
         let tc = Timecode(.components(components), at: localFrameRate, by: .allowingInvalid)
         generatorTC = tc
-        mtcGen.locate(to: tc)
+        Task { await mtcGen.locate(to: tc) }
     }
 }
 
@@ -210,13 +216,15 @@ extension MTCGenContentView {
     }
     
     private func startAtCurrentTimecode() {
-        mtcGenState = true
-        if mtcGen.localFrameRate != localFrameRate {
-            // update generator frame rate by triggering a locate
-            locate()
+        Task {
+            mtcGenState = true
+            if await mtcGen.localFrameRate != localFrameRate {
+                // update generator frame rate by triggering a locate
+                locate()
+            }
+            logger.debug("Starting at \(generatorTC.stringValue())")
+            await mtcGen.start(now: generatorTC)
         }
-        logger.debug("Starting at \(generatorTC.stringValue())")
-        mtcGen.start(now: generatorTC)
     }
     
     private var startAtTimecodeAsTimecodeTitle: String {
@@ -232,20 +240,22 @@ extension MTCGenContentView {
     }
     
     private func startAtTimecodeAsTimecode() {
-        mtcGenState = true
-        if mtcGen.localFrameRate != localFrameRate {
-            // update generator frame rate by triggering a locate
-            locate()
+        Task {
+            mtcGenState = true
+            if await mtcGen.localFrameRate != localFrameRate {
+                // update generator frame rate by triggering a locate
+                locate()
+            }
+            
+            let startTC = Timecode(
+                .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
+                at: localFrameRate,
+                base: .max100SubFrames,
+                by: .allowingInvalid
+            )
+            
+            await mtcGen.start(now: startTC)
         }
-        
-        let startTC = Timecode(
-            .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
-            at: localFrameRate,
-            base: .max100SubFrames,
-            by: .allowingInvalid
-        )
-        
-        mtcGen.start(now: startTC)
     }
     
     private var startAtTimecodeAsTimecodeComponentsTitle: String {
@@ -261,24 +271,26 @@ extension MTCGenContentView {
     }
     
     private func startAtTimecodeAsTimecodeComponents() {
-        mtcGenState = true
-        if mtcGen.localFrameRate != localFrameRate {
-            // update generator frame rate by triggering a locate
-            locate()
+        Task {
+            mtcGenState = true
+            if await mtcGen.localFrameRate != localFrameRate {
+                // update generator frame rate by triggering a locate
+                locate()
+            }
+            
+            let startTC = Timecode(
+                .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
+                at: localFrameRate,
+                base: .max100SubFrames,
+                by: .allowingInvalid
+            )
+            
+            await mtcGen.start(
+                now: startTC.components,
+                frameRate: startTC.frameRate,
+                base: startTC.subFramesBase
+            )
         }
-        
-        let startTC = Timecode(
-            .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
-            at: localFrameRate,
-            base: .max100SubFrames,
-            by: .allowingInvalid
-        )
-        
-        mtcGen.start(
-            now: startTC.components,
-            frameRate: startTC.frameRate,
-            base: startTC.subFramesBase
-        )
     }
     
     private var startAtTimecodeAsTimeIntervalTitle: String {
@@ -294,29 +306,33 @@ extension MTCGenContentView {
     }
     
     private func startAtTimecodeAsTimeInterval() {
-        mtcGenState = true
-        if mtcGen.localFrameRate != localFrameRate {
-            // update generator frame rate by triggering a locate
-            locate()
+        Task {
+            mtcGenState = true
+            if await mtcGen.localFrameRate != localFrameRate {
+                // update generator frame rate by triggering a locate
+                locate()
+            }
+            
+            let startRealTimeSeconds = Timecode(
+                .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
+                at: localFrameRate,
+                base: .max100SubFrames,
+                by: .allowingInvalid
+            )
+                .realTimeValue
+            
+            await mtcGen.start(
+                now: startRealTimeSeconds,
+                frameRate: localFrameRate
+            )
         }
-        
-        let startRealTimeSeconds = Timecode(
-            .components(h: 1, m: 00, s: 00, f: 00, sf: 35),
-            at: localFrameRate,
-            base: .max100SubFrames,
-            by: .allowingInvalid
-        )
-            .realTimeValue
-        
-        mtcGen.start(
-            now: startRealTimeSeconds,
-            frameRate: localFrameRate
-        )
     }
     
     private func stop() {
-        mtcGenState = false
-        mtcGen.stop()
+        Task {
+            mtcGenState = false
+            await mtcGen.stop()
+        }
     }
 }
 

@@ -1,12 +1,12 @@
 //
-//  HUISurfaceModel TimeDisplay.swift
+//  HUISurfaceModelState TimeDisplay.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurfaceModel {
+extension HUISurfaceModelState {
     /// State storage representing the Main Time Display LCD and surrounding status LEDs.
     public struct TimeDisplay: Equatable, Hashable {
         /// HUI time display string, comprised of 8 digits.
@@ -31,7 +31,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.TimeDisplay: HUISurfaceModelState {
+extension HUISurfaceModelState.TimeDisplay: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.TimeDisplayStatus
 
     public func state(of huiSwitch: Switch) -> Bool {

@@ -27,7 +27,7 @@ struct LiveFormattedTextField: View {
     
     var body: some View {
         TextField(titleKey, text: $liveText)
-            .onChange(of: liveText) { newValue in
+            .onChange(of: liveText) { oldValue, newValue in
                 let formatted = formatter.string(for: newValue) ?? ""
                 liveText = formatted
                 value = formatted
