@@ -18,16 +18,10 @@ body:
     description: The operating system version being used to build (not the target runtime OS version).
     multiple: true
     options:
-      - "macOS 13 Ventura"
-      - "macOS 12 Monterey"
-      - "macOS 11 Big Sur"
-      - "macOS 10.15 Catalina"
-      - "macOS 10.14 Mojave"
-      - "macOS 10.13 High Sierra"
-      - "macOS 10.12 Sierra"
-      - "macOS 10.11 El Capitan"
-      - "macOS 10.10 Yosemite"
-      - "macOS 10.9 Mavericks"
+      - "macOS 15.x Sequoia"
+      - "macOS 14.x Sonoma"
+      - "macOS 13.x Ventura"
+      - "Other"
   validations:
     required: true
 - type: dropdown
@@ -36,26 +30,15 @@ body:
     label: "Xcode Version(s)"
     multiple: true
     options:
-      - "Xcode 14"
-      - "Xcode 13.4.1"
-      - "Xcode 13.4"
-      - "Xcode 13.3.1"
-      - "Xcode 13.3"
-      - "Xcode 13.2.1"
-      - "Xcode 13.2"
-      - "Xcode 13.1"
-      - "Xcode 13.0"
+      - "Xcode 16.x"
+      - "Xcode 15.x"
+      - "Other"
   validations:
     required: true
 - type: textarea
   id: bug-description
   attributes:
     label: Description
-    description: "A clear and concise description of the bug and steps to reproduce."
+    description: "A clear description of the bug, steps to reproduce, console logs, screen shots, etc."
   validations:
     required: true
-- type: textarea
-  id: crash-logs-and-screenshots
-  attributes:
-    label: Crash Logs, Screenshots or Other Attachments (if applicable)
-    description: "A clear and concise description of the bug and steps to reproduce."
