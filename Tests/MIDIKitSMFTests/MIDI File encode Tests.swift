@@ -116,12 +116,12 @@ final class MIDIFileEncodeTests: XCTestCase {
         
         // test if midiFile structs are equal by way of Equatable
         
-        let dp8MarkersRawData = try MIDIFile(rawData: kMIDIFile.DP8Markers.data)
+        let dp8MarkersRawData = try MIDIFile(rawData: kMIDIFile.dp8Markers.data)
         XCTAssertEqual(midiFile, dp8MarkersRawData)
         
         // test if raw data is equal
         
         let constructedData = try midiFile.rawData()
-        XCTAssertEqual(constructedData, kMIDIFile.DP8Markers.data)
+        XCTAssertEqual(constructedData, kMIDIFile.dp8Markers.data)
     }
 }
