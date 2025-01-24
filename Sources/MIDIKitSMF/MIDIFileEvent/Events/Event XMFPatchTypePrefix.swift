@@ -38,7 +38,7 @@ extension MIDIFileEvent {
     /// > Track, it must be ignored.
     /// >
     /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
-    public struct XMFPatchTypePrefix: Equatable, Hashable {
+    public struct XMFPatchTypePrefix {
         /// Patch type.
         /// (0: GM1, 1: GM2, 2: DLS instruments, supplied in the XMF file)
         public var patchSet: PatchSet = .generalMIDI1
@@ -50,6 +50,10 @@ extension MIDIFileEvent {
         }
     }
 }
+
+extension MIDIFileEvent.XMFPatchTypePrefix: Equatable { }
+
+extension MIDIFileEvent.XMFPatchTypePrefix: Hashable { }
 
 extension MIDIFileEvent.XMFPatchTypePrefix: Sendable { }
 

@@ -20,7 +20,7 @@ import MIDIKitCore
 extension MIDIFileEvent {
     /// Sequencer-specific data.
     /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
-    public struct SequencerSpecific: Equatable, Hashable {
+    public struct SequencerSpecific {
         /// Data bytes.
         /// Typically begins with a 1 or 3 byte manufacturer ID, similar to SysEx.
         public var data: [UInt8] = []
@@ -32,6 +32,12 @@ extension MIDIFileEvent {
         }
     }
 }
+
+extension MIDIFileEvent.SequencerSpecific: Equatable { }
+
+extension MIDIFileEvent.SequencerSpecific: Hashable { }
+
+extension MIDIFileEvent.SequencerSpecific: Sendable { }
 
 // MARK: - Static Constructors
 

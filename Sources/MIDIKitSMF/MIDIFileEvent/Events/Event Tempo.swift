@@ -21,7 +21,7 @@ extension MIDIFileEvent {
     /// Tempo event.
     /// For a format 1 MIDI file, Tempo events should only occur within the first `MTrk` chunk.
     /// If there are no tempo events in a MIDI file, 120 bpm is assumed.
-    public struct Tempo: Equatable, Hashable {
+    public struct Tempo {
         /// Tempo.
         /// Defaults to 120 bpm. Minimum possible is 3.58 bpm and maximum is 60,000,000 bpm.
         public var bpm: Double = 120.0 {
@@ -61,6 +61,12 @@ extension MIDIFileEvent {
         }
     }
 }
+
+extension MIDIFileEvent.Tempo: Equatable { }
+
+extension MIDIFileEvent.Tempo: Hashable { }
+
+extension MIDIFileEvent.Tempo: Sendable { }
 
 // MARK: - Static Constructors
 

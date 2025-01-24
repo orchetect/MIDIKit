@@ -22,7 +22,7 @@ extension MIDIFileEvent {
     ///
     /// Specifies out of which MIDI Port (ie, buss) the MIDI events in the MIDI track go.
     /// The data byte is the port number, where 0 would be the first MIDI buss in the system.
-    public struct PortPrefix: Equatable, Hashable {
+    public struct PortPrefix {
         /// Port number (`0 ... 127`)
         public var port: UInt7 = 0
         
@@ -33,6 +33,12 @@ extension MIDIFileEvent {
         }
     }
 }
+
+extension MIDIFileEvent.PortPrefix: Equatable { }
+
+extension MIDIFileEvent.PortPrefix: Hashable { }
+
+extension MIDIFileEvent.PortPrefix: Sendable { }
 
 // MARK: - Static Constructors
 

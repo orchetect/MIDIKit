@@ -40,7 +40,7 @@ extension MIDIFileEvent {
     /// >
     /// > SysEx events and meta-events cancel any running status which was in effect. Running status
     /// > does not apply to and may not be used for these messages.
-    public struct UnrecognizedMeta: Equatable, Hashable {
+    public struct UnrecognizedMeta {
         // 0x00 is a known meta type, but just default to it here any way
         public var metaType: UInt8 = 0x00
         
@@ -59,6 +59,12 @@ extension MIDIFileEvent {
         }
     }
 }
+
+extension MIDIFileEvent.UnrecognizedMeta: Equatable { }
+
+extension MIDIFileEvent.UnrecognizedMeta: Hashable { }
+
+extension MIDIFileEvent.UnrecognizedMeta: Sendable { }
 
 // MARK: - Static Constructors
 
