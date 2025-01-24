@@ -9,7 +9,7 @@ import SwiftUI
 
 extension HUISurfaceView {
     struct TopView: View {
-        @EnvironmentObject var huiSurface: HUISurface
+        @Environment(HUISurface.self) var huiSurface
         
         var body: some View {
             VStack {

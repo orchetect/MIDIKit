@@ -9,7 +9,7 @@ import SwiftUI
 
 extension HUISurfaceView {
     struct LargeTextDisplayView: View {
-        @EnvironmentObject var huiSurface: HUISurface
+        @Environment(HUISurface.self) var huiSurface
         
         var body: some View {
             VStack(alignment: .leading, spacing: 5) {
