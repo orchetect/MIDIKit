@@ -5,10 +5,11 @@
 //
 
 import MIDIKitCore
-import XCTest
+import Testing
 
-final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
-    func testFilter_keepType() {
+@Suite struct MIDIEvent_Filter_ChannelVoiceKeep_Tests {
+    @Test
+    func filter_keepType() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepType(.noteOn))
@@ -22,10 +23,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepTypes() {
+    @Test
+    func filter_keepTypes() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepTypes([.noteOn, .noteOff]))
@@ -40,12 +42,13 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_keepChannel
     
-    func testFilter_keepChannel_0() {
+    @Test
+    func filter_keepChannel_0() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannel(0))
@@ -59,10 +62,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepChannel_1() {
+    @Test
+    func filter_keepChannel_1() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannel(1))
@@ -79,10 +83,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepChannel_2() {
+    @Test
+    func filter_keepChannel_2() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannel(2))
@@ -96,10 +101,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepChannel_3() {
+    @Test
+    func filter_keepChannel_3() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannel(3))
@@ -112,10 +118,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysEx.oneOfEachEventType
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepChannel_15() {
+    @Test
+    func filter_keepChannel_15() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannel(15))
@@ -127,12 +134,13 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_keepChannels
     
-    func testFilter_keepChannels_empty() {
+    @Test
+    func filter_keepChannels_empty() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannels([]))
@@ -144,10 +152,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepChannels_0() {
+    @Test
+    func filter_keepChannels_0() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannels([0]))
@@ -161,10 +170,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepChannels_1() {
+    @Test
+    func filter_keepChannels_1() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannels([1]))
@@ -181,10 +191,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepChannels_2() {
+    @Test
+    func filter_keepChannels_2() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannels([2]))
@@ -198,10 +209,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepChannels_3() {
+    @Test
+    func filter_keepChannels_3() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannels([3]))
@@ -215,10 +227,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepChannels_15() {
+    @Test
+    func filter_keepChannels_15() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannels([15]))
@@ -230,10 +243,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepChannels_0and1() {
+    @Test
+    func filter_keepChannels_0and1() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepChannels([0, 1]))
@@ -251,12 +265,13 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_keepCC
     
-    func testFilter_keepCC_A() {
+    @Test
+    func filter_keepCC_A() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepCC(.expression))
@@ -281,10 +296,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCC_B() {
+    @Test
+    func filter_keepCC_B() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepCC(.modWheel))
@@ -308,10 +324,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCC_C() {
+    @Test
+    func filter_keepCC_C() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [
@@ -344,10 +361,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCC_D() {
+    @Test
+    func filter_keepCC_D() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [
@@ -380,10 +398,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCC_E() {
+    @Test
+    func filter_keepCC_E() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [
@@ -415,12 +434,13 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_keepCCs
     
-    func testFilter_keepCCs_empty() {
+    @Test
+    func filter_keepCCs_empty() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepCCs([]))
@@ -444,10 +464,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCCs_11() {
+    @Test
+    func filter_keepCCs_11() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepCCs([.expression]))
@@ -472,10 +493,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCCs_1() {
+    @Test
+    func filter_keepCCs_1() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepCCs([.modWheel]))
@@ -499,10 +521,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCCs_emptyB() {
+    @Test
+    func filter_keepCCs_emptyB() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -532,10 +555,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCCs_11B() {
+    @Test
+    func filter_keepCCs_11B() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -566,10 +590,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCCs_1B() {
+    @Test
+    func filter_keepCCs_1B() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -600,10 +625,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCCs_64() {
+    @Test
+    func filter_keepCCs_64() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -633,10 +659,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCCs_1and11() {
+    @Test
+    func filter_keepCCs_1and11() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -668,10 +695,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepCCs_11and64() {
+    @Test
+    func filter_keepCCs_11and64() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -702,12 +730,13 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_keepNotesInRange
     
-    func testFilter_keepNotesInRange_all() {
+    @Test
+    func filter_keepNotesInRange_all() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRange(0 ... 127))
@@ -734,10 +763,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRange_60to61() {
+    @Test
+    func filter_keepNotesInRange_60to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRange(60 ... 61))
@@ -764,10 +794,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRange_60to60() {
+    @Test
+    func filter_keepNotesInRange_60to60() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRange(60 ... 60))
@@ -793,10 +824,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRange_61to61() {
+    @Test
+    func filter_keepNotesInRange_61to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRange(61 ... 61))
@@ -822,10 +854,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRange_0to59() {
+    @Test
+    func filter_keepNotesInRange_0to59() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRange(0 ... 59))
@@ -849,10 +882,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRange_62to127() {
+    @Test
+    func filter_keepNotesInRange_62to127() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRange(62 ... 127))
@@ -876,12 +910,13 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_keepNotesInRanges
     
-    func testFilter_keepNotesInRanges_empty() {
+    @Test
+    func filter_keepNotesInRanges_empty() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRanges([]))
@@ -905,10 +940,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRanges_all() {
+    @Test
+    func filter_keepNotesInRanges_all() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRanges([0 ... 127]))
@@ -935,10 +971,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRanges_60to61() {
+    @Test
+    func filter_keepNotesInRanges_60to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRanges([60 ... 61]))
@@ -965,10 +1002,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRanges_60to60() {
+    @Test
+    func filter_keepNotesInRanges_60to60() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRanges([60 ... 60]))
@@ -994,10 +1032,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRanges_61to61() {
+    @Test
+    func filter_keepNotesInRanges_61to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRanges([61 ... 61]))
@@ -1023,10 +1062,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRanges_0to59() {
+    @Test
+    func filter_keepNotesInRanges_0to59() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRanges([0 ... 59]))
@@ -1050,10 +1090,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRanges_62to127() {
+    @Test
+    func filter_keepNotesInRanges_62to127() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRanges([62 ... 127]))
@@ -1077,10 +1118,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRanges_0to10_60to61() {
+    @Test
+    func filter_keepNotesInRanges_0to10_60to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .keepNotesInRanges([0 ... 10, 60 ... 61]))
@@ -1107,10 +1149,11 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepNotesInRanges_60to60_61to61() {
+    @Test
+    func filter_keepNotesInRanges_60to60_61to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events
@@ -1138,6 +1181,6 @@ final class MIDIEvent_Filter_ChannelVoiceKeep_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
 }

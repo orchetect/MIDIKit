@@ -5,9 +5,9 @@
 //
 
 @testable import MIDIKitCore
-import XCTest
+import Testing
 
-final class MIDIEvent_NoteOff_Tests: XCTestCase {
+@Suite struct MIDIEvent_NoteOff_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets
     
@@ -15,7 +15,8 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
     
     // MARK: - Standard Note tests
     
-    func testMIDI1() {
+    @Test
+    func midi1() {
         for noteNum: UInt7 in 0 ... 127 {
             let cc: MIDIEvent = .noteOff(
                 noteNum,
@@ -23,15 +24,16 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
                 attribute: .none,
                 channel: 0x1
             )
-    
-            XCTAssertEqual(
-                cc.midi1RawBytes(),
+            
+            #expect(
+                cc.midi1RawBytes() ==
                 [0x81, noteNum.uInt8Value, 64]
             )
         }
     }
     
-    func testUMP_MIDI1_0() {
+    @Test
+    func ump_MIDI1_0() {
         for noteNum: UInt7 in 0 ... 127 {
             let cc: MIDIEvent = .noteOff(
                 noteNum,
@@ -40,9 +42,9 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
                 channel: 0x1,
                 group: 0x9
             )
-    
-            XCTAssertEqual(
-                cc.umpRawWords(protocol: .midi1_0),
+            
+            #expect(
+                cc.umpRawWords(protocol: .midi1_0) ==
                 [[
                     UMPWord(
                         0x29,
@@ -55,7 +57,8 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
         }
     }
     
-    func testUMP_MIDI2_0() {
+    @Test
+    func ump_MIDI2_0() {
         for noteNum: UInt7 in 0 ... 127 {
             let cc: MIDIEvent = .noteOff(
                 noteNum,
@@ -64,9 +67,9 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
                 channel: 0x1,
                 group: 0x9
             )
-    
-            XCTAssertEqual(
-                cc.umpRawWords(protocol: .midi2_0),
+            
+            #expect(
+                cc.umpRawWords(protocol: .midi2_0) ==
                 [[
                     UMPWord(
                         0x49,
@@ -85,7 +88,8 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
         }
     }
     
-    func testUMP_MIDI2_0_WithAttribute() {
+    @Test
+    func ump_MIDI2_0_WithAttribute() {
         for noteNum: UInt7 in 0 ... 127 {
             let cc: MIDIEvent = .noteOff(
                 noteNum,
@@ -97,9 +101,9 @@ final class MIDIEvent_NoteOff_Tests: XCTestCase {
                 channel: 0x1,
                 group: 0x9
             )
-    
-            XCTAssertEqual(
-                cc.umpRawWords(protocol: .midi2_0),
+            
+            #expect(
+                cc.umpRawWords(protocol: .midi2_0) ==
                 [[
                     UMPWord(
                         0x49,

@@ -5,14 +5,15 @@
 //
 
 @testable import MIDIKitCore
-import XCTest
+import Testing
 
-final class MIDIEvent_NoteOn_Tests: XCTestCase {
+@Suite struct MIDIEvent_NoteOn_Tests {
     typealias NoteOn = MIDIEvent.NoteOn
     
     // MARK: - Standard Note tests
     
-    func testUMP_MIDI1_0() {
+    @Test
+    func ump_MIDI1_0() {
         for noteNum: UInt7 in 0 ... 127 {
             let cc: MIDIEvent = .noteOn(
                 noteNum,
@@ -22,22 +23,23 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0x9,
                 midi1ZeroVelocityAsNoteOff: false
             )
-    
-            XCTAssertEqual(
-                cc.umpRawWords(protocol: .midi1_0),
-                [[
-                    UMPWord(
-                        0x29,
-                        0x91,
-                        noteNum.uInt8Value,
-                        64
-                    )
-                ]]
+            
+            #expect(
+                cc.umpRawWords(protocol: .midi1_0) ==
+                    [[
+                        UMPWord(
+                            0x29,
+                            0x91,
+                            noteNum.uInt8Value,
+                            64
+                        )
+                    ]]
             )
         }
     }
     
-    func testUMP_MIDI2_0() {
+    @Test
+    func ump_MIDI2_0() {
         for noteNum: UInt7 in 0 ... 127 {
             let cc: MIDIEvent = .noteOn(
                 noteNum,
@@ -47,28 +49,29 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0x9,
                 midi1ZeroVelocityAsNoteOff: false
             )
-    
-            XCTAssertEqual(
-                cc.umpRawWords(protocol: .midi2_0),
-                [[
-                    UMPWord(
-                        0x49,
-                        0x91,
-                        noteNum.uInt8Value,
-                        0x00
-                    ),
-                    UMPWord(
-                        0x80,
-                        0x00,
-                        0x00,
-                        0x00
-                    )
-                ]]
+            
+            #expect(
+                cc.umpRawWords(protocol: .midi2_0) ==
+                    [[
+                        UMPWord(
+                            0x49,
+                            0x91,
+                            noteNum.uInt8Value,
+                            0x00
+                        ),
+                        UMPWord(
+                            0x80,
+                            0x00,
+                            0x00,
+                            0x00
+                        )
+                    ]]
             )
         }
     }
     
-    func testUMP_MIDI2_0_WithAttribute() {
+    @Test
+    func ump_MIDI2_0_WithAttribute() {
         for noteNum: UInt7 in 0 ... 127 {
             let cc: MIDIEvent = .noteOn(
                 noteNum,
@@ -81,33 +84,34 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0x9,
                 midi1ZeroVelocityAsNoteOff: false
             )
-    
-            XCTAssertEqual(
-                cc.umpRawWords(protocol: .midi2_0),
-                [[
-                    UMPWord(
-                        0x49,
-                        0x91,
-                        noteNum.uInt8Value,
-                        0x03
-                    ),
-                    UMPWord(
-                        0xFF,
-                        0xFF,
-                        0b11011001,
-                        0b10011110
-                    )
-                ]]
+            
+            #expect(
+                cc.umpRawWords(protocol: .midi2_0) ==
+                    [[
+                        UMPWord(
+                            0x49,
+                            0x91,
+                            noteNum.uInt8Value,
+                            0x03
+                        ),
+                        UMPWord(
+                            0xFF,
+                            0xFF,
+                            0b11011001,
+                            0b10011110
+                        )
+                    ]]
             )
         }
     }
     
     // MARK: - Note On specific tests
     
-    func testZeroVelocityAsNoteOff_midi1RawBytes() {
+    @Test
+    func zeroVelocityAsNoteOff_midi1RawBytes() {
         // MIDI 1 Velocity Value
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi1(0),
@@ -116,11 +120,11 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             )
-            .midi1RawBytes(),
+            .midi1RawBytes() ==
             [0x80, 0x3C, 0x00] // note off
         )
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi1(0),
@@ -129,13 +133,13 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             )
-            .midi1RawBytes(),
+            .midi1RawBytes() ==
             [0x90, 0x3C, 0x00] // note on
         )
-    
+        
         // MIDI 2 Velocity Value
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi2(0),
@@ -144,11 +148,11 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             )
-            .midi1RawBytes(),
+            .midi1RawBytes() ==
             [0x90, 0x3C, 0x01] // note on, velocity 1 (as per MIDI 2.0 spec)
         )
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi2(0),
@@ -157,13 +161,13 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             )
-            .midi1RawBytes(),
+            .midi1RawBytes() ==
             [0x90, 0x3C, 0x01] // note on, velocity 1 (as per MIDI 2.0 spec)
         )
-    
+        
         // Unit Interval Velocity Value
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .unitInterval(0.0),
@@ -172,11 +176,11 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             )
-            .midi1RawBytes(),
+            .midi1RawBytes() ==
             [0x80, 0x3C, 0x00] // note off
         )
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .unitInterval(0.0),
@@ -185,15 +189,16 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             )
-            .midi1RawBytes(),
+            .midi1RawBytes() ==
             [0x90, 0x3C, 0x00] // note on
         )
     }
     
-    func testZeroVelocityAsNoteOff_umpRawWords_MIDI1_0() {
+    @Test
+    func zeroVelocityAsNoteOff_umpRawWords_MIDI1_0() {
         // MIDI 1 Velocity Value
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi1(0),
@@ -202,11 +207,11 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             )
-            .umpRawWords(protocol: .midi1_0),
+            .umpRawWords(protocol: .midi1_0) ==
             [0x2080_3C00] // note off
         )
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi1(0),
@@ -215,13 +220,13 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             )
-            .umpRawWords(protocol: .midi1_0),
+            .umpRawWords(protocol: .midi1_0) ==
             [0x2090_3C00] // note on
         )
-    
+        
         // MIDI 2 Velocity Value
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi2(0),
@@ -230,11 +235,11 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             )
-            .umpRawWords(protocol: .midi1_0),
+            .umpRawWords(protocol: .midi1_0) ==
             [0x2090_3C01] // note on, velocity 1 (as per MIDI 2.0 spec)
         )
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi2(0),
@@ -243,13 +248,13 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             )
-            .umpRawWords(protocol: .midi1_0),
+            .umpRawWords(protocol: .midi1_0) ==
             [0x2090_3C01] // note on, velocity 1 (as per MIDI 2.0 spec)
         )
-    
+        
         // Unit Interval Velocity Value
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .unitInterval(0.0),
@@ -258,11 +263,11 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             )
-            .umpRawWords(protocol: .midi1_0),
+            .umpRawWords(protocol: .midi1_0) ==
             [0x2080_3C00] // note off
         )
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .unitInterval(0.0),
@@ -271,15 +276,16 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             )
-            .umpRawWords(protocol: .midi1_0),
+            .umpRawWords(protocol: .midi1_0) ==
             [0x2090_3C00] // note on
         )
     }
     
-    func testZeroVelocityAsNoteOff_umpRawWords_MIDI2_0() {
+    @Test
+    func zeroVelocityAsNoteOff_umpRawWords_MIDI2_0() {
         // MIDI 1 Velocity Value
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi1(0),
@@ -288,14 +294,14 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: .midi2_0),
+            .umpRawWords(protocol: .midi2_0) ==
             [
                 0x4090_3C00, // note on
                 0x0000_0000
             ]
         )
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi1(0),
@@ -304,16 +310,16 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: .midi2_0),
+            .umpRawWords(protocol: .midi2_0) ==
             [
                 0x4090_3C00, // note on
                 0x0000_0000
             ]
         )
-    
+        
         // MIDI 2 Velocity Value
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi2(0),
@@ -322,14 +328,14 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: .midi2_0),
+            .umpRawWords(protocol: .midi2_0) ==
             [
                 0x4090_3C00, // note on
                 0x0000_0000
             ]
         )
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .midi2(0),
@@ -338,16 +344,16 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: .midi2_0),
+            .umpRawWords(protocol: .midi2_0) ==
             [
                 0x4090_3C00, // note on
                 0x0000_0000
             ]
         )
-    
+        
         // Unit Interval Velocity Value
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .unitInterval(0.0),
@@ -356,14 +362,14 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: true
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: .midi2_0),
+            .umpRawWords(protocol: .midi2_0) ==
             [
                 0x4090_3C00, // note on
                 0x0000_0000
             ]
         )
-    
-        XCTAssertEqual(
+        
+        #expect(
             NoteOn(
                 note: 60,
                 velocity: .unitInterval(0.0),
@@ -372,7 +378,7 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
                 group: 0,
                 midi1ZeroVelocityAsNoteOff: false
             ) // no effect for MIDI 2.0 note on
-            .umpRawWords(protocol: .midi2_0),
+            .umpRawWords(protocol: .midi2_0) ==
             [
                 0x4090_3C00, // note on
                 0x0000_0000
@@ -380,37 +386,38 @@ final class MIDIEvent_NoteOn_Tests: XCTestCase {
         )
     }
     
-    func testEquatable() {
+    @Test
+    func equatable() {
         // ensure midi1ZeroVelocityAsNoteOff is not factored into Equatable
-    
-        XCTAssertEqual(
+        
+        #expect(
             MIDIEvent.noteOn(
                 60,
                 velocity: .midi1(0),
                 channel: 0,
                 midi1ZeroVelocityAsNoteOff: false
-            ),
-            MIDIEvent.noteOn(
-                60,
-                velocity: .midi1(0),
-                channel: 0,
-                midi1ZeroVelocityAsNoteOff: true
-            )
+            ) ==
+                MIDIEvent.noteOn(
+                    60,
+                    velocity: .midi1(0),
+                    channel: 0,
+                    midi1ZeroVelocityAsNoteOff: true
+                )
         )
-    
-        XCTAssertEqual(
+        
+        #expect(
             MIDIEvent.noteOn(
                 60,
                 velocity: .midi1(1),
                 channel: 0,
                 midi1ZeroVelocityAsNoteOff: false
-            ),
-            MIDIEvent.noteOn(
-                60,
-                velocity: .midi1(1),
-                channel: 0,
-                midi1ZeroVelocityAsNoteOff: true
-            )
+            ) ==
+                MIDIEvent.noteOn(
+                    60,
+                    velocity: .midi1(1),
+                    channel: 0,
+                    midi1ZeroVelocityAsNoteOff: true
+                )
         )
     }
 }

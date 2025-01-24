@@ -5,15 +5,16 @@
 //
 
 import MIDIKitCore
-import XCTest
+import Testing
 
-final class MIDIEvent_CC_RPN_Tests: XCTestCase {
+@Suite struct MIDIEvent_CC_RPN_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets
     
     // MARK: - MIDIEvent.midi1RPN() -> Raw MIDI 1.0 Bytes
     
-    func testRPN_MIDI1_EventToBytes_NoDataEntry() {
+    @Test
+    func rpn_MIDI1_EventToBytes_NoDataEntry() {
         let rpn: [MIDIEvent] = MIDIEvent.midi1RPN(
             .raw(
                 parameter: .init(msb: 66, lsb: 103),
@@ -22,15 +23,16 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
             ),
             channel: 0x9
         )
-    
-        XCTAssertEqual(
-            rpn.flatMap { $0.midi1RawBytes() },
+        
+        #expect(
+            rpn.flatMap { $0.midi1RawBytes() } ==
             [0xB9, 0x65, 66,
              0xB9, 0x64, 103]
         )
     }
     
-    func testRPN_MIDI1_EventToBytes_DataEntryMSB() {
+    @Test
+    func rpn_MIDI1_EventToBytes_DataEntryMSB() {
         let rpn: [MIDIEvent] = MIDIEvent.midi1RPN(
             .raw(
                 parameter: .init(msb: 66, lsb: 103),
@@ -39,16 +41,17 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
             ),
             channel: 0x9
         )
-    
-        XCTAssertEqual(
-            rpn.flatMap { $0.midi1RawBytes() },
+        
+        #expect(
+            rpn.flatMap { $0.midi1RawBytes() } ==
             [0xB9, 0x65, 66,
              0xB9, 0x64, 103,
              0xB9, 0x06, 127]
         )
     }
     
-    func testRPN_MIDI1_EventToBytes_DataEntryMSBandLSB() {
+    @Test
+    func rpn_MIDI1_EventToBytes_DataEntryMSBandLSB() {
         let rpn: [MIDIEvent] = MIDIEvent.midi1RPN(
             .raw(
                 parameter: .init(msb: 66, lsb: 103),
@@ -57,9 +60,9 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
             ),
             channel: 0x9
         )
-    
-        XCTAssertEqual(
-            rpn.flatMap { $0.midi1RawBytes() },
+        
+        #expect(
+            rpn.flatMap { $0.midi1RawBytes() } ==
             [0xB9, 0x65, 66,
              0xB9, 0x64, 103,
              0xB9, 0x06, 127,
@@ -67,14 +70,15 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
         )
     }
     
-    func testRPN_MIDI1_EventToBytes_Null() {
+    @Test
+    func rpn_MIDI1_EventToBytes_Null() {
         let nrpn: [MIDIEvent] = MIDIEvent.midi1RPN(
             .null,
             channel: 0x9
         )
-    
-        XCTAssertEqual(
-            nrpn.flatMap { $0.midi1RawBytes() },
+        
+        #expect(
+            nrpn.flatMap { $0.midi1RawBytes() } ==
             [0xB9, 0x65, 0x7F,
              0xB9, 0x64, 0x7F]
         )
@@ -85,7 +89,8 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
     
     // MARK: - MIDIEvent.rpn() -> Raw MIDI 2.0 RPN UMP Words
     
-    func testRPN_MIDI2_EventToWords_Absolute() {
+    @Test
+    func rpn_MIDI2_EventToWords_Absolute() {
         let nrpn: MIDIEvent = .rpn(
             .raw(
                 parameter: .init(msb: 0x40, lsb: 0x01),
@@ -96,14 +101,15 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
             channel: 0x9
         )
         
-        XCTAssertEqual(
-            nrpn.umpRawWords(protocol: .midi2_0),
+        #expect(
+            nrpn.umpRawWords(protocol: .midi2_0) ==
             [[UMPWord(0x40, 0x29, 0x40, 0x01),
               UMPWord(0x24, 0x00, 0x00, 0x00)]]
         )
     }
     
-    func testRPN_MIDI2_EventToWords_Relative() {
+    @Test
+    func rpn_MIDI2_EventToWords_Relative() {
         let nrpn: MIDIEvent = .rpn(
             .raw(
                 parameter: .init(msb: 0x40, lsb: 0x01),
@@ -114,22 +120,23 @@ final class MIDIEvent_CC_RPN_Tests: XCTestCase {
             channel: 0x9
         )
         
-        XCTAssertEqual(
-            nrpn.umpRawWords(protocol: .midi2_0),
+        #expect(
+            nrpn.umpRawWords(protocol: .midi2_0) ==
             [[UMPWord(0x40, 0x49, 0x40, 0x01),
               UMPWord(0x24, 0x00, 0x00, 0x00)]]
         )
     }
     
-    func testRPN_MIDI2_EventToWords_Null() {
+    @Test
+    func rpn_MIDI2_EventToWords_Null() {
         let nrpn: MIDIEvent = .rpn(
             .null,
             change: .absolute,
             channel: 0x9
         )
         
-        XCTAssertEqual(
-            nrpn.umpRawWords(protocol: .midi2_0),
+        #expect(
+            nrpn.umpRawWords(protocol: .midi2_0) ==
             [[UMPWord(0x40, 0x29, 0x7F, 0x7F),
               UMPWord(0x00, 0x00, 0x00, 0x00)]]
         )

@@ -5,33 +5,37 @@
 //
 
 @testable import MIDIKitCore
-import XCTest
+import Testing
 
-final class MIDIEvent_ChannelVoiceTests_Tests: XCTestCase {
+@Suite struct MIDIEvent_ChannelVoiceTests_Tests {
     // MARK: - Channel Voice Event encoding
     
-    func testProgramChange_RawBytes_MIDI1_0() {
-        XCTAssertEqual(
-            MIDIEvent.programChange(program: 0x64, bank: .noBankSelect, channel: 10, group: 0).midi1RawBytes(),
-            [0xCA, 0x64]
+    @Test
+    func programChange_RawBytes_MIDI1_0() {
+        #expect(
+            MIDIEvent.programChange(program: 0x64, bank: .noBankSelect, channel: 10, group: 0)
+                .midi1RawBytes() ==
+                [0xCA, 0x64]
         )
         
-        XCTAssertEqual(
-            MIDIEvent.programChange(program: 0x64, bank: .bankSelect(msb: 0x10, lsb: 0x00), channel: 10, group: 0).midi1RawBytes(),
-            [
-                0xBA, 0x00, 0x10, // Bank Select MSB
-                0xBA, 0x20, 0x00, // Bank Select LSB
-                0xCA, 0x64 // Program Change
-            ]
+        #expect(
+            MIDIEvent.programChange(program: 0x64, bank: .bankSelect(msb: 0x10, lsb: 0x00), channel: 10, group: 0)
+                .midi1RawBytes() ==
+                [
+                    0xBA, 0x00, 0x10, // Bank Select MSB
+                    0xBA, 0x20, 0x00, // Bank Select LSB
+                    0xCA, 0x64 // Program Change
+                ]
         )
         
-        XCTAssertEqual(
-            MIDIEvent.programChange(program: 0x64, bank: .bankSelect(msb: 0x10, lsb: 0x01), channel: 10, group: 0).midi1RawBytes(),
-            [
-                0xBA, 0x00, 0x10, // Bank Select MSB
-                0xBA, 0x20, 0x01, // Bank Select LSB
-                0xCA, 0x64 // Program Change
-            ]
+        #expect(
+            MIDIEvent.programChange(program: 0x64, bank: .bankSelect(msb: 0x10, lsb: 0x01), channel: 10, group: 0)
+                .midi1RawBytes() ==
+                [
+                    0xBA, 0x00, 0x10, // Bank Select MSB
+                    0xBA, 0x20, 0x01, // Bank Select LSB
+                    0xCA, 0x64 // Program Change
+                ]
         )
     }
     

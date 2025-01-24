@@ -5,14 +5,15 @@
 //
 
 import MIDIKitCore
-import XCTest
+import Testing
 
-final class UInt7Pair_Tests: XCTestCase {
-    func testUInt14Value() {
+@Suite struct UInt7Pair_Tests {
+    @Test
+    func uInt14Value() {
         let pair = UInt7Pair(msb: 0x7F, lsb: 0x7F)
-    
+        
         let uInt14 = pair.uInt14Value
-    
-        XCTAssertEqual(uInt14, UInt14.max)
+        
+        #expect(uInt14 == UInt14.max)
     }
 }
