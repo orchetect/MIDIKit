@@ -6,7 +6,8 @@
 
 import Foundation
 
-extension HUISurfaceModel: HUISurfaceModelState {
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+extension HUISurfaceModel: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch
     
     /// Returns the current state in the model of the given HUI switch parameter.
@@ -76,7 +77,7 @@ extension HUISurfaceModel: HUISurfaceModelState {
     ///
     /// > Setting state for ``HUISwitch/undefined(zone:port:)`` has no effect and will not be
     /// > stored.
-    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+    public func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case let .channelStrip(channel, subParam):
             channelStrips[channel.intValue].setState(of: subParam, to: state)

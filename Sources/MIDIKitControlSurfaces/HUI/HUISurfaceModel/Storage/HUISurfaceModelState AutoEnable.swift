@@ -1,12 +1,12 @@
 //
-//  HUISurfaceModel AutoEnable.swift
+//  HUISurfaceModelState AutoEnable.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
-extension HUISurfaceModel {
+extension HUISurfaceModelState {
     /// State storage representing the Auto Enable section.
     public struct AutoEnable: Equatable, Hashable {
         public var fader = false
@@ -18,7 +18,7 @@ extension HUISurfaceModel {
     }
 }
 
-extension HUISurfaceModel.AutoEnable: HUISurfaceModelState {
+extension HUISurfaceModelState.AutoEnable: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.AutoEnable
 
     public func state(of huiSwitch: Switch) -> Bool {

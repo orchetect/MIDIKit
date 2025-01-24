@@ -9,7 +9,7 @@ import MIDIKitControlSurfaces
 import SwiftUI
 
 struct RotaryKnob: View {
-    @EnvironmentObject var huiSurface: HUISurface
+    @Environment(HUISurface.self) var huiSurface
     
     var label: String
     var size: CGFloat
@@ -80,7 +80,7 @@ struct RotaryKnob: View {
                 KnobShape(size: size)
             }
         }
-        .onChange(of: huiSurface.model.state(of: vPot)) { newValue in
+        .onChange(of: huiSurface.model.state(of: vPot)) { oldValue, newValue in
             updateDisplay(newValue)
         }
         .highPriorityGesture(
@@ -196,7 +196,7 @@ struct KnobShape: View {
 }
 
 struct JogWheel: View {
-    @EnvironmentObject var huiSurface: HUISurface
+    @Environment(HUISurface.self) var huiSurface
     
     var size: CGFloat
     
