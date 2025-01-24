@@ -790,54 +790,59 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         // swiftformat:enable wrapSingleLineComments
     }
     
+    @MainActor
     func testMTC_Decoder_Handlers_FullFrameMessage() {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
         
         // testing vars
         
-        var _timecode: Timecode?
-        var _mType: MTCMessageType?
-        var _direction: MTCDirection?
-        var _displayNeedsUpdate: Bool?
-        var _mtcFR: MTCFrameRate?
+        final class Receiver {
+            var timecode: Timecode?
+            var mType: MTCMessageType?
+            var direction: MTCDirection?
+            var displayNeedsUpdate: Bool?
+            var mtcFR: MTCFrameRate?
+        }
+        let receiver = Receiver()
         
         let mtcDec = MTCDecoder() { timecode, messageType, direction, displayNeedsUpdate in
-            _timecode = timecode
-            _mType = messageType
-            _direction = direction
-            _displayNeedsUpdate = displayNeedsUpdate
+            receiver.timecode = timecode
+            receiver.mType = messageType
+            receiver.direction = direction
+            receiver.displayNeedsUpdate = displayNeedsUpdate
         } mtcFrameRateChanged: { mtcFrameRate in
-            _mtcFR = mtcFrameRate
+            receiver.mtcFR = mtcFrameRate
         }
         
         // default / initial state
         
-        XCTAssertNil(_timecode)
-        XCTAssertNil(_mType)
-        XCTAssertNil(_direction)
-        XCTAssertNil(_displayNeedsUpdate)
-        XCTAssertNil(_mtcFR)
+        XCTAssertNil(receiver.timecode)
+        XCTAssertNil(receiver.mType)
+        XCTAssertNil(receiver.direction)
+        XCTAssertNil(receiver.displayNeedsUpdate)
+        XCTAssertNil(receiver.mtcFR)
         
         // full-frame MTC messages
         
         mtcDec.midiIn(event: kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps)
         
-        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 02, s: 03, f: 04), at: .fps24, by: .allowingInvalid))
-        XCTAssertEqual(_mType, .fullFrame)
-        XCTAssertEqual(_direction, .forwards)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_mtcFR, .mtc24)
+        XCTAssertEqual(receiver.timecode, Timecode(.components(h: 1, m: 02, s: 03, f: 04), at: .fps24, by: .allowingInvalid))
+        XCTAssertEqual(receiver.mType, .fullFrame)
+        XCTAssertEqual(receiver.direction, .forwards)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
         
         mtcDec.midiIn(event: kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps)
         
-        XCTAssertEqual(_timecode, Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid))
-        XCTAssertEqual(_mType, .fullFrame)
-        XCTAssertEqual(_direction, .forwards)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_mtcFR, .mtc25)
+        XCTAssertEqual(receiver.timecode, Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid))
+        XCTAssertEqual(receiver.mType, .fullFrame)
+        XCTAssertEqual(receiver.direction, .forwards)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.mtcFR, .mtc25)
     }
     
+    @MainActor
     func testMTC_Decoder_Handlers_QFMessages() {
         // swiftformat:disable wrapSingleLineComments
         
@@ -846,432 +851,435 @@ final class MTC_Receiver_Decoder_Tests: XCTestCase {
         
         // testing vars
         
-        var _timecode: Timecode?
-        var _mType: MTCMessageType?
-        var _direction: MTCDirection?
-        var _displayNeedsUpdate: Bool?
-        var _mtcFR: MTCFrameRate?
+        final class Receiver {
+            var timecode: Timecode?
+            var mType: MTCMessageType?
+            var direction: MTCDirection?
+            var displayNeedsUpdate: Bool?
+            var mtcFR: MTCFrameRate?
+        }
+        let receiver = Receiver()
         
         let mtcDec = MTCDecoder() { timecode, messageType, direction, displayNeedsUpdate in
-            _timecode = timecode
-            _mType = messageType
-            _direction = direction
-            _displayNeedsUpdate = displayNeedsUpdate
+            receiver.timecode = timecode
+            receiver.mType = messageType
+            receiver.direction = direction
+            receiver.displayNeedsUpdate = displayNeedsUpdate
         } mtcFrameRateChanged: { mtcFrameRate in
-            _mtcFR = mtcFrameRate
+            receiver.mtcFR = mtcFrameRate
         }
         
         // default / initial state
         
-        XCTAssertNil(_timecode)
-        XCTAssertNil(_mType)
-        XCTAssertNil(_direction)
-        XCTAssertNil(_displayNeedsUpdate)
-        XCTAssertNil(_mtcFR)
+        XCTAssertNil(receiver.timecode)
+        XCTAssertNil(receiver.mType)
+        XCTAssertNil(receiver.direction)
+        XCTAssertNil(receiver.displayNeedsUpdate)
+        XCTAssertNil(receiver.mtcFR)
         
         // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000110)) // QF 0
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_mtcFR, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.mtcFR, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_mtcFR, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.mtcFR, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_mtcFR, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.mtcFR, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_mtcFR, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.mtcFR, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_mtcFR, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.mtcFR, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_mtcFR, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.mtcFR, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_mtcFR, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.mtcFR, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001000)) // QF 0
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010)) // QF 0
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 10), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         // reverse
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         // forwards
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         // reverse
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001000)) // QF 0
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 7), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 7), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_mtcFR, .mtc24)
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.mtcFR, .mtc24)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         // non-sequential (discontinuous jumps)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
-        XCTAssertEqual(_direction, .ambiguous)
+        XCTAssertEqual(receiver.direction, .ambiguous)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
-        XCTAssertEqual(_direction, .ambiguous)
+        XCTAssertEqual(receiver.direction, .ambiguous)
         
         // swiftformat:enable wrapSingleLineComments
     }

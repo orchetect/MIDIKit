@@ -896,48 +896,56 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         }
     }
     
+    @MainActor
     func testMTC_Encoder_Handlers_FullFrameMessage() {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
         
         // testing vars
         
-        var _midiEvents: [MIDIEvent]?
+        final class Receiver {
+            var events: [MIDIEvent]?
+        }
+        let receiver = Receiver()
         
         let mtcEnc = MTCEncoder { midiEvents in
-            _midiEvents = midiEvents
+            receiver.events = midiEvents
         }
         
         // default / initial state
         
-        XCTAssertNil(_midiEvents)
+        XCTAssertNil(receiver.events)
         
         // full-frame MTC messages
         
         mtcEnc.locate(to: Timecode(.components(h: 1, m: 02, s: 03, f: 4), at: .fps24, by: .allowingInvalid))
         
-        XCTAssertEqual(_midiEvents, [kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps])
+        XCTAssertEqual(receiver.events, [kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps])
         
         mtcEnc.locate(to: Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid))
         
-        XCTAssertEqual(_midiEvents, [kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps])
+        XCTAssertEqual(receiver.events, [kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps])
     }
     
+    @MainActor
     func testMTC_Encoder_Handlers_QFMessages() {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
         
         // testing vars
         
-        var _midiEvents: [MIDIEvent]?
+        final class Receiver {
+            var events: [MIDIEvent]?
+        }
+        let receiver = Receiver()
         
         let mtcEnc = MTCEncoder { midiEvents in
-            _midiEvents = midiEvents
+            receiver.events = midiEvents
         }
         
         // default / initial state
         
-        XCTAssertNil(_midiEvents)
+        XCTAssertNil(receiver.events)
         
         // 24fps QFs starting at 02:03:04:06, locking at 02:03:04:08 (+ 2 MTC frame offset)
         
@@ -948,47 +956,47 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         mtcEnc.increment() // doesn't increment; sends first quarter-frame
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(mtcEnc.mtcComponents, .init(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b00000110)]) // QF 0
+        XCTAssertEqual(receiver.events, [.timecodeQuarterFrame(dataByte: 0b00000110)]) // QF 0
         
         mtcEnc.increment() // now it increments to QF 1
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 1)
         XCTAssertEqual(mtcEnc.mtcComponents, .init(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b00010000)]) // QF 1
+        XCTAssertEqual(receiver.events, [.timecodeQuarterFrame(dataByte: 0b00010000)]) // QF 1
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 2)
         XCTAssertEqual(mtcEnc.mtcComponents, .init(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b00100100)]) // QF 2
+        XCTAssertEqual(receiver.events, [.timecodeQuarterFrame(dataByte: 0b00100100)]) // QF 2
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 3)
         XCTAssertEqual(mtcEnc.mtcComponents, .init(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b00110000)]) // QF 3
+        XCTAssertEqual(receiver.events, [.timecodeQuarterFrame(dataByte: 0b00110000)]) // QF 3
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
         XCTAssertEqual(mtcEnc.mtcComponents, .init(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b01000011)]) // QF 4
+        XCTAssertEqual(receiver.events, [.timecodeQuarterFrame(dataByte: 0b01000011)]) // QF 4
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 5)
         XCTAssertEqual(mtcEnc.mtcComponents, .init(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b01010000)]) // QF 5
+        XCTAssertEqual(receiver.events, [.timecodeQuarterFrame(dataByte: 0b01010000)]) // QF 5
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 6)
         XCTAssertEqual(mtcEnc.mtcComponents, .init(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b01100010)]) // QF 6
+        XCTAssertEqual(receiver.events, [.timecodeQuarterFrame(dataByte: 0b01100010)]) // QF 6
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 7)
         XCTAssertEqual(mtcEnc.mtcComponents, .init(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b01110000)]) // QF 7
+        XCTAssertEqual(receiver.events, [.timecodeQuarterFrame(dataByte: 0b01110000)]) // QF 7
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(mtcEnc.mtcComponents, .init(h: 2, m: 03, s: 04, f: 08))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b00001000)]) // QF 0
+        XCTAssertEqual(receiver.events, [.timecodeQuarterFrame(dataByte: 0b00001000)]) // QF 0
     }
     
     func testMTC_Encoder_FullFrameMIDIMessage() {
@@ -1158,11 +1166,14 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
     func testMTC_Encoder_LocateBehavior() {
         var mtcEnc: MTCEncoder
         
-        var _midiEvents: [MIDIEvent]?
+        final class Receiver {
+            var events: [MIDIEvent]?
+        }
+        let receiver = Receiver()
         
         func initNewEnc() -> MTCEncoder {
             MTCEncoder { midiEvents in
-                _midiEvents = midiEvents
+                receiver.events = midiEvents
             }
         }
         
@@ -1174,7 +1185,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             .init(h: 0, m: 00, s: 00, f: 00)
         )
         XCTAssertEqual(
-            _midiEvents?.first?.midi1RawBytes(),
+            receiver.events?.first?.midi1RawBytes(),
             [
                 0xF0, 0x7F, 0x7F, 0x01, 0x01,
                 0b00000000, // 0rrh_hhhh
@@ -1193,7 +1204,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             .init(h: 0, m: 00, s: 00, f: 00)
         )
         XCTAssertEqual(
-            _midiEvents?.first?.midi1RawBytes(),
+            receiver.events?.first?.midi1RawBytes(),
             [
                 0xF0, 0x7F, 0x7F, 0x01, 0x01,
                 0b00100000, // 0rrh_hhhh
@@ -1212,7 +1223,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             .init(h: 1, m: 02, s: 03, f: 04)
         )
         XCTAssertEqual(
-            _midiEvents?.first?.midi1RawBytes(),
+            receiver.events?.first?.midi1RawBytes(),
             [
                 0xF0, 0x7F, 0x7F, 0x01, 0x01,
                 0b01000001, // 0rrh_hhhh
@@ -1230,7 +1241,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             .init(h: 1, m: 02, s: 03, f: 05)
         )
         XCTAssertEqual(
-            _midiEvents?.first?.midi1RawBytes(),
+            receiver.events?.first?.midi1RawBytes(),
             [
                 0xF0, 0x7F, 0x7F, 0x01, 0x01,
                 0b01000001, // 0rrh_hhhh
@@ -1249,7 +1260,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             .init(h: 2, m: 04, s: 06, f: 08)
         )
         XCTAssertEqual(
-            _midiEvents?.first?.midi1RawBytes(),
+            receiver.events?.first?.midi1RawBytes(),
             [
                 0xF0, 0x7F, 0x7F, 0x01, 0x01,
                 0b01100010, // 0rrh_hhhh
@@ -1272,7 +1283,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             .init(h: 2, m: 04, s: 06, f: 04)
         )
         XCTAssertEqual(
-            _midiEvents?.first?.midi1RawBytes(),
+            receiver.events?.first?.midi1RawBytes(),
             [
                 0xF0, 0x7F, 0x7F, 0x01, 0x01,
                 0b00000010, // 0rrh_hhhh
@@ -1291,7 +1302,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             .init(h: 2, m: 04, s: 06, f: 04)
         )
         XCTAssertEqual(
-            _midiEvents?.first?.midi1RawBytes(),
+            receiver.events?.first?.midi1RawBytes(),
             [
                 0xF0, 0x7F, 0x7F, 0x01, 0x01,
                 0b00000010, // 0rrh_hhhh
@@ -1310,7 +1321,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             .init(h: 2, m: 04, s: 06, f: 05)
         )
         XCTAssertEqual(
-            _midiEvents?.first?.midi1RawBytes(),
+            receiver.events?.first?.midi1RawBytes(),
             [
                 0xF0, 0x7F, 0x7F, 0x01, 0x01,
                 0b00000010, // 0rrh_hhhh

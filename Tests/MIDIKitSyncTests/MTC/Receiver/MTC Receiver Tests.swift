@@ -257,6 +257,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         // swiftformat:enable wrap
     }
     
+    @MainActor
     func testMTC_Receiver_Handlers_FullFrameMessage() {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
@@ -266,32 +267,35 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         // testing vars
         
-        var _timecode: Timecode?
-        var _mType: MTCMessageType?
-        var _direction: MTCDirection?
-        var _displayNeedsUpdate: Bool?
-        var _state: MTCReceiver.State?
+        final class Receiver {
+            var timecode: Timecode?
+            var mType: MTCMessageType?
+            var direction: MTCDirection?
+            var displayNeedsUpdate: Bool?
+            var state: MTCReceiver.State?
+        }
+        let receiver = Receiver()
         
         // init with local frame rate
         let mtcRec = MTCReceiver(
             name: "test",
             initialLocalFrameRate: .fps24
         ) { timecode, messageType, direction, displayNeedsUpdate in
-            _timecode = timecode
-            _mType = messageType
-            _direction = direction
-            _displayNeedsUpdate = displayNeedsUpdate
+            receiver.timecode = timecode
+            receiver.mType = messageType
+            receiver.direction = direction
+            receiver.displayNeedsUpdate = displayNeedsUpdate
         } stateChanged: { state in
-            _state = state
+            receiver.state = state
         }
         
         // default / initial state
         
-        XCTAssertNil(_timecode)
-        XCTAssertNil(_mType)
-        XCTAssertNil(_direction)
-        XCTAssertNil(_displayNeedsUpdate)
-        XCTAssertNil(_state)
+        XCTAssertNil(receiver.timecode)
+        XCTAssertNil(receiver.mType)
+        XCTAssertNil(receiver.direction)
+        XCTAssertNil(receiver.displayNeedsUpdate)
+        XCTAssertNil(receiver.state)
         
         // full-frame MTC message
         
@@ -299,12 +303,12 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         wait(sec: 0.050)
         
-        XCTAssertEqual(_timecode, Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid))
-        XCTAssertEqual(_mType, .fullFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_timecode?.frameRate, .fps24)
-        XCTAssertEqual(_direction, .forwards)
-        XCTAssertEqual(_state, nil)
+        XCTAssertEqual(receiver.timecode, Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid))
+        XCTAssertEqual(receiver.mType, .fullFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.timecode?.frameRate, .fps24)
+        XCTAssertEqual(receiver.direction, .forwards)
+        XCTAssertEqual(receiver.state, nil)
     }
     
     // skip this test on other platforms; flaky and we don't need to run it
@@ -320,214 +324,217 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         // testing vars
         
-        var _timecode: Timecode?
-        var _mType: MTCMessageType?
-        var _direction: MTCDirection?
-        var _displayNeedsUpdate: Bool?
-        var _state: MTCReceiver.State?
+        final class Receiver {
+            var timecode: Timecode?
+            var mType: MTCMessageType?
+            var direction: MTCDirection?
+            var displayNeedsUpdate: Bool?
+            var state: MTCReceiver.State?
+        }
+        let receiver = Receiver()
         
         // init with local frame rate
         let mtcRec = MTCReceiver(
             name: "test",
             initialLocalFrameRate: .fps24
         ) { timecode, messageType, direction, displayNeedsUpdate in
-            _timecode = timecode
-            _mType = messageType
-            _direction = direction
-            _displayNeedsUpdate = displayNeedsUpdate
+            receiver.timecode = timecode
+            receiver.mType = messageType
+            receiver.direction = direction
+            receiver.displayNeedsUpdate = displayNeedsUpdate
         } stateChanged: { state in
-            _state = state
+            receiver.state = state
         }
         
         // default / initial state
         
-        XCTAssertNil(_timecode)
-        XCTAssertNil(_mType)
-        XCTAssertNil(_direction)
-        XCTAssertNil(_displayNeedsUpdate)
-        XCTAssertNil(_state)
+        XCTAssertNil(receiver.timecode)
+        XCTAssertNil(receiver.mType)
+        XCTAssertNil(receiver.direction)
+        XCTAssertNil(receiver.displayNeedsUpdate)
+        XCTAssertNil(receiver.state)
         
         // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000110)) // QF 0
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_timecode, nil)
-        XCTAssertEqual(_direction, nil)
+        XCTAssertEqual(receiver.timecode, nil)
+        XCTAssertEqual(receiver.direction, nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001000)) // QF 0
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_timecode?.frameRate, .fps24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.timecode?.frameRate, .fps24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, .fps24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.timecode?.frameRate, .fps24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, .fps24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.timecode?.frameRate, .fps24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, .fps24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.timecode?.frameRate, .fps24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_timecode?.frameRate, .fps24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.timecode?.frameRate, .fps24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, .fps24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.timecode?.frameRate, .fps24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, .fps24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.timecode?.frameRate, .fps24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, false)
-        XCTAssertEqual(_timecode?.frameRate, .fps24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, false)
+        XCTAssertEqual(receiver.timecode?.frameRate, .fps24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010)) // QF 0
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(
-            _timecode,
+            receiver.timecode,
             Timecode(.components(h: 2, m: 3, s: 4, f: 10), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        XCTAssertEqual(_mType, .quarterFrame)
-        XCTAssertEqual(_displayNeedsUpdate, true)
-        XCTAssertEqual(_timecode?.frameRate, .fps24)
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.mType, .quarterFrame)
+        XCTAssertEqual(receiver.displayNeedsUpdate, true)
+        XCTAssertEqual(receiver.timecode?.frameRate, .fps24)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         // reverse
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_direction, .backwards)
+        XCTAssertEqual(receiver.direction, .backwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010)) // QF 0
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_direction, .forwards)
+        XCTAssertEqual(receiver.direction, .forwards)
         
         // non-sequential (jumps)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_direction, .ambiguous)
+        XCTAssertEqual(receiver.direction, .ambiguous)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         wait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        XCTAssertEqual(_direction, .ambiguous)
+        XCTAssertEqual(receiver.direction, .ambiguous)
         
         // swiftformat:enable wrap
         // swiftformat:enable wrapSingleLineComments
