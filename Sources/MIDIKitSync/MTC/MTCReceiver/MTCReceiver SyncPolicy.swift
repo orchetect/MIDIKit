@@ -10,7 +10,7 @@ import TimecodeKitCore
 
 extension MTCReceiver {
     /// Options defining behavior of the receiver.
-    public struct SyncPolicy: Equatable, Codable {
+    public struct SyncPolicy {
         // MARK: - Public properties
         
         /// Sets the number of received continuous timecode frames that must elapse prior to
@@ -53,5 +53,9 @@ extension MTCReceiver {
         }
     }
 }
+
+extension MTCReceiver.SyncPolicy: Equatable { }
+
+extension MTCReceiver.SyncPolicy: Codable { }
 
 extension MTCReceiver.SyncPolicy: Sendable { }

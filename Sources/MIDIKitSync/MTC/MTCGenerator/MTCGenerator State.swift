@@ -9,7 +9,7 @@ import MIDIKitCore
 // MARK: - State
 
 extension MTCGenerator {
-    public enum State: Equatable {
+    public enum State {
         /// Idle:
         /// No activity (outgoing continuous data stream stopped).
         case idle
@@ -19,6 +19,8 @@ extension MTCGenerator {
         case generating
     }
 }
+
+extension MTCGenerator.State: Equatable { }
 
 extension MTCGenerator.State: Identifiable {
     public var id: Self { self }

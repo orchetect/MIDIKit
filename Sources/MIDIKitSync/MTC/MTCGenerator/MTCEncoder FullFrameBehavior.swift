@@ -8,7 +8,7 @@ import MIDIKitCore
 
 extension MTCEncoder {
     /// Behavior determining when MTC Full-Frame MIDI messages should be generated.
-    public enum FullFrameBehavior: Hashable, CaseIterable {
+    public enum FullFrameBehavior {
         /// Always trigger a MTC Full-Frame MIDI message, with no data thinning.
         case always
         
@@ -27,6 +27,12 @@ extension MTCEncoder {
         case never
     }
 }
+
+extension MTCEncoder.FullFrameBehavior: Equatable { }
+
+extension MTCEncoder.FullFrameBehavior: Hashable { }
+
+extension MTCEncoder.FullFrameBehavior: CaseIterable { }
 
 extension MTCEncoder.FullFrameBehavior: Identifiable {
     public var id: Self { self }
