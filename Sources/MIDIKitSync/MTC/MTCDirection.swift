@@ -18,6 +18,10 @@ public enum MTCDirection {
     case ambiguous
 }
 
+extension MTCDirection: Equatable { }
+
+extension MTCDirection: Hashable { }
+
 extension MTCDirection: Sendable { }
 
 extension MTCDirection: Identifiable {
