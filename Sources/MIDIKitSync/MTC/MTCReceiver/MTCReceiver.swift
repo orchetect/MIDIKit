@@ -95,7 +95,7 @@ public final actor MTCReceiver {
     ///
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
-    public var timecodeChangedHandler: ((
+    var timecodeChangedHandler: (@Sendable (
         _ timecode: Timecode,
         _ event: MTCMessageType,
         _ direction: MTCDirection,
@@ -108,7 +108,7 @@ public final actor MTCReceiver {
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
     public func setTimecodeChangedHandler(
-        _ handler: ((
+        _ handler: (@Sendable (
             _ timecode: Timecode,
             _ event: MTCMessageType,
             _ direction: MTCDirection,
@@ -118,8 +118,15 @@ public final actor MTCReceiver {
         self.timecodeChangedHandler = handler
     }
     
-    /// Called when the MTC receiver's state changes
-    public var stateChangedHandler: ((_ state: State) -> Void)?
+    /// Called when the MTC receiver's state changes.
+    var stateChangedHandler: (@Sendable (_ state: State) -> Void)?
+    
+    /// Called when the MTC receiver's state changes.
+    public func setStateChangedHandler(
+        _ handler: (@Sendable (_ state: State) -> Void)?
+    ) {
+        self.stateChangedHandler = handler
+    }
     
     // MARK: - Init
     
@@ -136,13 +143,13 @@ public final actor MTCReceiver {
         name: String? = nil,
         initialLocalFrameRate: TimecodeFrameRate? = nil,
         syncPolicy: SyncPolicy? = nil,
-        timecodeChanged: ((
+        timecodeChanged: (@Sendable (
             _ timecode: Timecode,
             _ event: MTCMessageType,
             _ direction: MTCDirection,
             _ displayNeedsUpdate: Bool
         ) -> Void)? = nil,
-        stateChanged: ((_ state: State) -> Void)? = nil
+        stateChanged: (@Sendable (_ state: State) -> Void)? = nil
     ) {
         // handle init arguments
         
