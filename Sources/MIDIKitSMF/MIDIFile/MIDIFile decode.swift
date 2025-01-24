@@ -86,9 +86,7 @@ extension MIDIFile {
                             // as per Standard MIDI File 1.0 Spec:
                             // unrecognized chunks should be skipped and not throw an error
                             
-                            let newUnrecognizedChunk = try Chunk.UnrecognizedChunk(
-                                midi1SMFRawBytesStream: chunkData.bytes
-                            )
+                            let newUnrecognizedChunk = Chunk.UnrecognizedChunk(id: chunkTypeString, rawData: chunkData)
                             newChunk = .other(newUnrecognizedChunk)
                         }
                     } catch let error as DecodeError {
