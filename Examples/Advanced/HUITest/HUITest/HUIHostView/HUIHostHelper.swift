@@ -10,19 +10,21 @@ import MIDIKitInternals // only for utils
 import MIDIKitIO
 import SwiftUI
 
-class HUIHostHelper: ObservableObject {
+@Observable final class HUIHostHelper {
     // MARK: MIDI
-    @EnvironmentObject var midiManager: ObservableMIDIManager
+    @ObservationIgnored
+    @EnvironmentObject
+    var midiManager: ObservableMIDIManager
     
     static let kHUIInputConnectionTag = "HUIHostInputConnection"
     static let kHUIOutputConnectionTag = "HUIHostOutputConnection"
     
-    @Published var logPing: Bool = true
+    var logPing: Bool = true
     
     var huiHost: HUIHost
-    @Published var isRemotePresent: Bool = false
+    var isRemotePresent: Bool = false
     
-    @Published var model: HUIHostModel = .init()
+    var model: HUIHostModel = .init()
     
     init(midiManager: ObservableMIDIManager) {
         huiHost = HUIHost()

@@ -8,7 +8,7 @@ import MIDIKitControlSurfaces
 import SwiftUI
 
 struct HUISurfaceView: View {
-    @EnvironmentObject var huiSurface: HUISurface
+    @Environment(HUISurface.self) var huiSurface
     
     var body: some View {
         VStack {
