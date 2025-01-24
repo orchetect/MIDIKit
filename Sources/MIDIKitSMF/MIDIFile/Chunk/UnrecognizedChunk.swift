@@ -9,12 +9,7 @@ import MIDIKitCore
 
 extension MIDIFile.Chunk {
     /// Unrecognized MIDI File Chunk.
-    public struct UnrecognizedChunk: MIDIFileChunk, Equatable, Hashable {
-        static let disallowedIdentifiers: [String] = [
-            Header().identifier,
-            Track().identifier
-        ]
-        
+    public struct UnrecognizedChunk: MIDIFileChunk {
         public let identifier: String
 
         /// Contains the raw bytes of the chunk's data portion
@@ -50,6 +45,10 @@ extension MIDIFile.Chunk {
         }
     }
 }
+
+extension MIDIFile.Chunk.UnrecognizedChunk: Equatable { }
+
+extension MIDIFile.Chunk.UnrecognizedChunk: Hashable { }
 
 extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible {
     public var description: String {
@@ -88,6 +87,15 @@ extension MIDIFile.Chunk.UnrecognizedChunk: CustomDebugStringConvertible {
 }
 
 extension MIDIFile.Chunk.UnrecognizedChunk: Sendable { }
+
+// MARK: - Static
+
+extension MIDIFile.Chunk.UnrecognizedChunk {
+    static let disallowedIdentifiers: [String] = [
+        MIDIFile.Chunk.Header.staticIdentifier,
+        MIDIFile.Chunk.Track.staticIdentifier
+    ]
+}
 
 // MARK: - Static Constructors
 
