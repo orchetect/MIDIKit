@@ -42,17 +42,6 @@ let event: MIDIEvent = .tuneRequest()
 - See ``MIDIEvent/tuneRequest(group:)`` for more details.
 - Compatibility: MIDI 1.0 & 2.0
 
-### Bus Select (Unofficial)
-
-```swift
-let event: MIDIEvent = .unofficialBusSelect(bus: 0x03)
-```
-
-- See ``MIDIEvent/unofficialBusSelect(bus:group:)`` for more details.
-- Compatibility: MIDI 1.0 & 2.0
-
-- Warning: Bus Select (status `0xF5`) will be removed in a future version of MIDIKit. It is not a part of the official MIDI 1.0 or 2.0 Spec and was only previously included to support legacy devices. In newer versions of macOS and iOS, Core MIDI does not support this status message.
-
 ## Event Value Types
 
 For an overview of how event value types work (such as note velocity, CC value, etc.) see <doc:MIDIKitCore-Value-Types>.
@@ -69,8 +58,6 @@ For an overview of how event value types work (such as note velocity, CC value, 
 
 - ``MIDIEvent/tuneRequest(group:)``
 
-- ``MIDIEvent/unofficialBusSelect(bus:group:)``
-
 ### Switch Case Unwrapping
 
 - ``MIDIEvent/songPositionPointer(_:)``
@@ -84,6 +71,3 @@ For an overview of how event value types work (such as note velocity, CC value, 
 
 - ``MIDIEvent/tuneRequest(_:)``
 - ``MIDIEvent/TuneRequest``
-
-- ``MIDIEvent/unofficialBusSelect(_:)``
-- ``MIDIEvent/UnofficialBusSelect``

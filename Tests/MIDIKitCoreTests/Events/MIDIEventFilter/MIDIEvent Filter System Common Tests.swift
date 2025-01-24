@@ -161,8 +161,7 @@ final class MIDIEvent_Filter_SystemCommon_Tests: XCTestCase {
         expectedEvents += [
             kEvents.SysCommon.timecodeQuarterFrame,
             kEvents.SysCommon.songPositionPointer,
-            kEvents.SysCommon.songSelect,
-            kEvents.SysCommon.unofficialBusSelect
+            kEvents.SysCommon.songSelect
         ]
         expectedEvents += kEvents.SysEx.oneOfEachEventType
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
@@ -180,8 +179,7 @@ final class MIDIEvent_Filter_SystemCommon_Tests: XCTestCase {
         expectedEvents += kEvents.ChanVoice.oneOfEachEventType
         expectedEvents += [
             kEvents.SysCommon.timecodeQuarterFrame,
-            kEvents.SysCommon.songPositionPointer,
-            kEvents.SysCommon.unofficialBusSelect
+            kEvents.SysCommon.songPositionPointer
         ]
         expectedEvents += kEvents.SysEx.oneOfEachEventType
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType

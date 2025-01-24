@@ -402,19 +402,6 @@ final class Event_Conversion_EventToSMFEvent_Tests: XCTestCase {
         XCTAssertNil(smfEvent)
     }
     
-    func testMIDI_Event_UnofficialBusSelect_smfEvent() {
-        let event: MIDIEvent = .unofficialBusSelect(
-            bus: 4,
-            group: 2
-        )
-        
-        // convert MIDIEvent case to MIDIFileEvent case, preserving payloads
-        let smfEvent = event.smfEvent(delta: .ticks(120))
-        
-        // not an event that can be stored in a MIDI file, only applicable to live MIDI I/O
-        XCTAssertNil(smfEvent)
-    }
-    
     func testMIDI_Event_TuneRequest_smfEvent() {
         let event: MIDIEvent = .tuneRequest(group: 2)
         

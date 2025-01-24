@@ -69,7 +69,6 @@ extension MIDIEvent {
         case .timecodeQuarterFrame,
              .songPositionPointer,
              .songSelect,
-             .unofficialBusSelect,
              .tuneRequest,
              .timingClock,
              .start,
