@@ -4,23 +4,27 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI
+// iOS Simulator testing does not give enough permissions to allow creating virtual MIDI
 // ports, so skip these tests on iOS targets
 #if !targetEnvironment(simulator)
 
 import CoreMIDI
 import MIDIKitIO
-import XCTest
-import XCTestUtils
+import Testing
 
-final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
+@Suite(.serialized) @MainActor class MIDIManager_MIDIIONotification_Tests {
     fileprivate var notifications: [MIDIIONotification] = []
-    
-    func testSystemNotification_Add_Remove() throws {
+}
+
+// MARK: - Tests
+
+extension MIDIManager_MIDIIONotification_Tests {
+    @Test
+    func systemNotification_Add_Remove() async throws {
         // allow time for cleanup from previous unit tests, in case
         // MIDI endpoints are still being disposed of by Core MIDI
-        wait(sec: 0.5)
-    
+        try await Task.sleep(for: .milliseconds(500))
+        
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -30,15 +34,15 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
                 self.notifications.append(notification)
             }
         )
-    
+        
         // start midi client
         try manager.start()
-    
-        wait(sec: 0.5)
-        XCTAssertEqual(notifications, [])
-    
+        
+        try await Task.sleep(for: .milliseconds(500))
+        #expect(notifications == [])
+        
         notifications = []
-    
+        
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -46,12 +50,12 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-    
-        wait(for: notifications.count >= 3, timeout: 0.5)
-        wait(sec: 0.1)
-    
+        
+        try await wait(require: { await notifications.count >= 3 }, timeout: 0.5)
+        try await Task.sleep(for: .milliseconds(100))
+        
         var addedNotifFound = false
-        notifications.forEach { notif in
+        for notif in notifications {
             switch notif {
             case .added(object: let object, parent: _):
                 switch object {
@@ -60,23 +64,23 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
                         addedNotifFound = true
                     }
                 default:
-                    XCTFail()
+                    Issue.record()
                 }
             default: break
             }
         }
-        XCTAssertTrue(addedNotifFound)
-    
+        #expect(addedNotifFound)
+        
         notifications = []
-    
+        
         // remove output
         manager.remove(.output, .withTag(output1Tag))
-    
-        wait(for: notifications.count >= 2, timeout: 0.5)
-        wait(sec: 0.1)
-    
+        
+        try await wait(require: { await notifications.count >= 2 }, timeout: 0.5)
+        try await Task.sleep(for: .milliseconds(100))
+        
         var removedNotifFound = false
-        notifications.forEach { notif in
+        for notif in notifications {
             switch notif {
             case .removed(object: let object, parent: _):
                 switch object {
@@ -85,20 +89,21 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
                         removedNotifFound = true
                     }
                 default:
-                    XCTFail()
+                    Issue.record()
                 }
             default: break
             }
         }
-        XCTAssertTrue(removedNotifFound)
+        #expect(removedNotifFound)
     }
     
     /// Tests that the internal MIDI object cache works when receiving
     /// more than one `removed` notification sequentially.
-    func testSystemNotification_SequentialRemove() throws {
+    @Test
+    func systemNotification_SequentialRemove() async throws {
         // allow time for cleanup from previous unit tests, in case
         // MIDI endpoints are still being disposed of by Core MIDI
-        wait(sec: 0.5)
+        try await Task.sleep(for: .milliseconds(500))
         
         let manager = MIDIManager(
             clientName: UUID().uuidString,
@@ -113,8 +118,8 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
         // start midi client
         try manager.start()
         
-        wait(sec: 0.5)
-        XCTAssertEqual(notifications, [])
+        try await Task.sleep(for: .milliseconds(500))
+        #expect(notifications == [])
         
         notifications = []
         
@@ -136,8 +141,8 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
         )
         
         // each port produces at least 3 notifications, plus `setupChanged`
-        wait(for: notifications.count >= 6, timeout: 0.5)
-        wait(sec: 0.1)
+        try await wait(require: { await notifications.count >= 6 }, timeout: 0.5)
+        try await Task.sleep(for: .milliseconds(100))
         
         notifications = []
         
@@ -145,41 +150,42 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
         manager.remove(.output, .withTag(output1Tag))
         manager.remove(.output, .withTag(output2Tag))
         
-        wait(for: notifications.count >= 2, timeout: 0.5)
-        wait(sec: 0.1)
+        try await wait(require: { await notifications.count >= 2 }, timeout: 0.5)
+        try await Task.sleep(for: .milliseconds(100))
         
         var removedEndpoints: [MIDIOutputEndpoint] = []
-        notifications.forEach { notif in
+        for notif in notifications {
             switch notif {
             case .removed(object: let object, parent: _):
                 switch object {
                 case let .outputEndpoint(endpoint):
                     removedEndpoints.append(endpoint)
                 default:
-                    XCTFail()
+                    Issue.record()
                 }
             default: break
             }
         }
-        XCTAssertEqual(removedEndpoints.count, 2)
+        #expect(removedEndpoints.count == 2)
         
         // verify metadata is present and not empty/default
         let removedEndpoint1 = removedEndpoints[0]
         let removedEndpoint2 = removedEndpoints[1]
         
-        XCTAssertEqual(removedEndpoint1.name, output1Name)
-        XCTAssertNotEqual(removedEndpoint1.uniqueID, .invalidMIDIIdentifier)
+        #expect(removedEndpoint1.name == output1Name)
+        #expect(removedEndpoint1.uniqueID != .invalidMIDIIdentifier)
         
-        XCTAssertEqual(removedEndpoint2.name, output2Name)
-        XCTAssertNotEqual(removedEndpoint2.uniqueID, .invalidMIDIIdentifier)
+        #expect(removedEndpoint2.name == output2Name)
+        #expect(removedEndpoint2.uniqueID != .invalidMIDIIdentifier)
     }
     
     /// ⚠️ DEV TEST. This is NOT a unit test!
     /// ONLY uncomment to log Core MIDI notifications to the console as a diagnostic.
-    // func testSystemNotificationLogger() throws {
+    // @Test
+    // func systemNotificationLogger() async throws {
     //    // allow time for cleanup from previous unit tests, in case
     //    // MIDI endpoints are still being disposed of by Core MIDI
-    //    wait(sec: 0.5)
+    //    try await Task.sleep(for: .milliseconds(500))
     //
     //    let manager = MIDIManager(
     //        clientName: UUID().uuidString,
@@ -194,7 +200,7 @@ final class MIDIManager_MIDIIONotification_Tests: XCTestCase {
     //    try manager.start()
     //
     //    print("Listening for Core MIDI notifications...")
-    //    wait(sec: 120) // listen for 2 minutes so it doesn't run indefinitely
+    //    try await Task.sleep(for: .seconds(120)) // listen for 2 minutes so it doesn't run indefinitely
     // }
 }
 

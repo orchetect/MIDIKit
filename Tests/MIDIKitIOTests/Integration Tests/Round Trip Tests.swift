@@ -4,7 +4,7 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI
+// iOS Simulator testing does not give enough permissions to allow creating virtual MIDI
 // ports, so skip these tests on iOS targets
 #if !targetEnvironment(simulator)
 

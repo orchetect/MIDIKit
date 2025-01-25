@@ -4,38 +4,40 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI
+// iOS Simulator testing does not give enough permissions to allow creating virtual MIDI
 // ports, so skip these tests on iOS targets
 #if !targetEnvironment(simulator)
 
 import CoreMIDI
 import MIDIKitInternals
 import MIDIKitIO
-import XCTest
-import XCTestUtils
+import Testing
 
-final class MIDIInputConnection_Tests: XCTestCase {
+@Suite(.serialized) @MainActor class MIDIInputConnection_Tests: Sendable {
     // called before each method
-    override func setUpWithError() throws {
-        wait(sec: 0.2)
+    init() async throws {
+        try await Task.sleep(for: .milliseconds(200))
     }
     
     private var connEvents: [MIDIEvent] = []
-    
+}
+
+// MARK: - Tests
+
+extension MIDIInputConnection_Tests {
     /// Test initializing an InputConnection, adding/removing outputs, and receiving MIDI events.
-    func testInputConnection() throws {
+    @Test
+    func inputConnection() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-    
+        
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
-		
-        connEvents = []
-    
+        try await Task.sleep(for: .milliseconds(100))
+        
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -43,35 +45,35 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-        let output1ID = try XCTUnwrap(output1.uniqueID)
-        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
-    
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1ID = try #require(output1.uniqueID)
+        let output1Ref = try #require(output1.coreMIDIOutputPortRef)
+        
         // add new connection, connecting to output1
         let connTag = "testInputConnection"
         try manager.addInputConnection(
             to: .outputs(matching: [.uniqueID(output1ID)]),
             tag: connTag,
-            receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
-                    print(events)
-                    self.connEvents.append(contentsOf: events)
+            receiver: .events { [weak self] events, _, _ in
+                Task { @MainActor in
+                    // print(events)
+                    self?.connEvents.append(contentsOf: events)
                 }
             }
         )
-    
-        let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        wait(for: conn.coreMIDIOutputEndpointRefs, equals: [output1Ref], timeout: 1.0)
-    
-        XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID)])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref])
-        XCTAssertEqual(conn.endpoints, [output1.endpoint])
-    
+        
+        let conn = try #require(manager.managedInputConnections[connTag])
+        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: 1.0) // TODO: fix TSAN race
+        
+        #expect(conn.outputsCriteria == [.uniqueID(output1ID)])
+        #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref])
+        #expect(conn.endpoints == [output1.endpoint])
+        
         // send an event - it should be received by the connection
         try output1.send(event: .start())
-        wait(for: connEvents, equals: [.start()], timeout: 1.0)
+        try await wait(require: { await connEvents == [.start()] }, timeout: 1.0)
         connEvents = []
-    
+        
         // create a 2nd virtual output
         let output2Tag = "output2"
         try manager.addOutput(
@@ -79,78 +81,77 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: output2Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output2 = try XCTUnwrap(manager.managedOutputs[output2Tag])
-        let output2ID = try XCTUnwrap(output2.uniqueID)
-        let output2Ref = try XCTUnwrap(output2.coreMIDIOutputPortRef)
-    
+        let output2 = try #require(manager.managedOutputs[output2Tag])
+        let output2ID = try #require(output2.uniqueID)
+        let output2Ref = try #require(output2.coreMIDIOutputPortRef)
+        
         // connect to 2nd virtual output
         conn.add(outputs: [output2.endpoint])
-        wait(
-            for: conn.coreMIDIOutputEndpointRefs,
-            equals: [output1Ref, output2Ref],
+        try await wait(
+            require: {
+                conn.coreMIDIOutputEndpointRefs == [output1Ref, output2Ref]
+            },
             timeout: 1.0
         )
-        XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID), .uniqueID(output2ID)])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref, output2Ref])
-        XCTAssertEqual(Set(conn.endpoints), [output1.endpoint, output2.endpoint])
-    
+        #expect(conn.outputsCriteria == [.uniqueID(output1ID), .uniqueID(output2ID)])
+        #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref, output2Ref])
+        #expect(Set(conn.endpoints) == [output1.endpoint, output2.endpoint])
+        
         // send an event from 1st - it should be received by the connection
         try output1.send(event: .stop())
-        wait(for: connEvents, equals: [.stop()], timeout: 0.5)
+        try await wait(require: { await connEvents == [.stop()] }, timeout: 0.5)
         connEvents = []
-    
+        
         // send an event from 2nd - it should be received by the connection
         try output2.send(event: .continue())
-        wait(for: connEvents, equals: [.continue()], timeout: 0.5)
+        try await wait(require: { await connEvents == [.continue()] }, timeout: 0.5)
         connEvents = []
-    
+        
         // remove 1st virtual output from connection
         conn.remove(outputs: [output1.endpoint])
-        wait(for: conn.coreMIDIOutputEndpointRefs, equals: [output2Ref], timeout: 1.0)
-        XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output2ID)])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output2Ref])
-        XCTAssertEqual(conn.endpoints, [output2.endpoint])
-    
+        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output2Ref] }, timeout: 1.0)
+        #expect(conn.outputsCriteria == [.uniqueID(output2ID)])
+        #expect(conn.coreMIDIOutputEndpointRefs == [output2Ref])
+        #expect(conn.endpoints == [output2.endpoint])
+        
         // send an event from 1st - it should not be received by the connection
         try output1.send(event: .songPositionPointer(midiBeat: 3))
-        wait(sec: 0.2) // wait a bit in case an event is sent
-        XCTAssertEqual(connEvents, [])
+        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        #expect(connEvents == [])
         connEvents = []
-    
+        
         // send an event from 2nd - it should be received by the connection
         try output2.send(event: .songSelect(number: 2))
-        wait(for: connEvents, equals: [.songSelect(number: 2)], timeout: 0.5)
+        try await wait(require: { await connEvents == [.songSelect(number: 2)] }, timeout: 0.5)
         connEvents = []
-    
+        
         // remove 2nd virtual output from connection
         conn.remove(outputs: [output2.endpoint])
-        wait(for: conn.coreMIDIOutputEndpointRefs, equals: [], timeout: 1.0)
-        XCTAssertEqual(conn.outputsCriteria, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
-        XCTAssertEqual(conn.endpoints, [])
-    
+        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [] }, timeout: 1.0)
+        #expect(conn.outputsCriteria == [])
+        #expect(conn.coreMIDIOutputEndpointRefs == [])
+        #expect(conn.endpoints == [])
+        
         // send an event from 2nd - it should not be received by the connection
         try output2.send(event: .songSelect(number: 8))
-        wait(sec: 0.2) // wait a bit in case an event is sent
-        XCTAssertEqual(connEvents, [])
-        connEvents = []
+        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        #expect(connEvents == [])
     }
     
     /// Test to ensure a new output appearing in the system gets added to the connection. (Allowing
     /// manager-owned virtual outputs to be added)
-    func testInputConnection_allEndpoints() throws {
+    @Test
+    func inputConnection_allEndpoints() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-    
+        
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
-    
-        connEvents = []
-    
+        try await Task.sleep(for: .milliseconds(100))
+        
         // add new connection
         let connTag = "testInputConnection"
         try manager.addInputConnection(
@@ -158,20 +159,20 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: connTag,
             filter: .init(owned: false, criteria: .currentOutputs()),
             receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
-                    print(events)
+                Task { @MainActor in
+                    // print(events)
                     self.connEvents.append(contentsOf: events)
                 }
             }
         )
-    
-        let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        wait(sec: 0.5) // some time for connection to setup
-    
-        XCTAssertEqual(conn.outputsCriteria, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
-        XCTAssertEqual(conn.endpoints, [])
-    
+        
+        let conn = try #require(manager.managedInputConnections[connTag])
+        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
+        
+        #expect(conn.outputsCriteria == [])
+        #expect(conn.coreMIDIOutputEndpointRefs == [])
+        #expect(conn.endpoints == [])
+        
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -179,37 +180,36 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-        let output1ID = try XCTUnwrap(output1.uniqueID)
-        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
-    
-        wait(for: conn.coreMIDIOutputEndpointRefs, equals: [output1Ref], timeout: 1.0)
-    
-        XCTAssertEqual(conn.outputsCriteria, [.uniqueID(output1ID)])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [output1Ref])
-        XCTAssertEqual(conn.endpoints, [output1.endpoint])
-    
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1ID = try #require(output1.uniqueID)
+        let output1Ref = try #require(output1.coreMIDIOutputPortRef)
+        
+        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: 1.0) // TODO: fix TSAN race
+        
+        #expect(conn.outputsCriteria == [.uniqueID(output1ID)])
+        #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref])
+        #expect(conn.endpoints == [output1.endpoint])
+        
         // send an event - it should be received by the connection
         try output1.send(event: .start())
-        wait(for: connEvents, equals: [.start()], timeout: 0.5)
-        connEvents = []
+        try await wait(require: { await connEvents == [.start()] }, timeout: 0.5)
     }
     
     /// Test to ensure creating a new manager-owned virtual output does not get added to the
     /// connection if `filter.owned == true`
-    func testInputConnection_allEndpoints_filterOwned() throws {
+    @Test
+    func inputConnection_allEndpoints_filterOwned() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-    
+        
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
-    
-        connEvents = []
-    
+        try await Task.sleep(for: .milliseconds(100))
+        
+        
         // add new connection
         let connTag = "testInputConnection"
         try manager.addInputConnection(
@@ -223,14 +223,14 @@ final class MIDIInputConnection_Tests: XCTestCase {
                 }
             }
         )
-    
-        let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        wait(sec: 0.5) // some time for connection to setup
-    
-        XCTAssertEqual(conn.outputsCriteria, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
-        XCTAssertEqual(conn.endpoints, [])
-    
+        
+        let conn = try #require(manager.managedInputConnections[connTag])
+        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
+        
+        #expect(conn.outputsCriteria == [])
+        #expect(conn.coreMIDIOutputEndpointRefs == [])
+        #expect(conn.endpoints == [])
+        
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -238,38 +238,37 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-//        let output1ID = try XCTUnwrap(output1.uniqueID)
-//        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
-    
-        wait(sec: 0.5) // some time for connection to be notified of new output
-    
-        XCTAssertEqual(conn.outputsCriteria, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs, [])
-        XCTAssertEqual(conn.endpoints, [])
-    
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        //        let output1ID = try #require(output1.uniqueID)
+        //        let output1Ref = try #require(output1.coreMIDIOutputPortRef)
+        
+        try await Task.sleep(for: .milliseconds(500)) // some time for connection to be notified of new output
+        
+        #expect(conn.outputsCriteria == [])
+        #expect(conn.coreMIDIOutputEndpointRefs == [])
+        #expect(conn.endpoints == [])
+        
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        wait(sec: 0.2) // wait a bit in case an event is sent
-        XCTAssertEqual(connEvents, [])
-        connEvents = []
+        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        #expect(connEvents == [])
     }
     
     /// Test to ensure virtual output(s) owned by the manager do not get added to the connection
     /// when creating the connection.
-    func testInputConnection_filterOwned_onInit() throws {
+    @Test
+    func inputConnection_filterOwned_onInit() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-    
+        
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
-    
-        connEvents = []
-    
+        try await Task.sleep(for: .milliseconds(100))
+        
+        
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -277,12 +276,12 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-        let output1ID = try XCTUnwrap(output1.uniqueID)
-        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
-    
-        wait(sec: 0.2)
-    
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1ID = try #require(output1.uniqueID)
+        let output1Ref = try #require(output1.coreMIDIOutputPortRef)
+        
+        try await Task.sleep(for: .milliseconds(200))
+        
         // add new connection
         let connTag = "testInputConnection"
         try manager.addInputConnection(
@@ -293,55 +292,54 @@ final class MIDIInputConnection_Tests: XCTestCase {
                 criteria: manager.endpoints.outputsUnowned
             ),
             receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
-                    print(events)
+                Task { @MainActor in
+                    // print(events)
                     self.connEvents.append(contentsOf: events)
                 }
             }
         )
         
-        let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        wait(sec: 0.5) // some time for connection to setup
+        let conn = try #require(manager.managedInputConnections[connTag])
+        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
         
         // attempt to add output1
         conn.add(outputs: [output1.endpoint])
-        wait(sec: 0.5)
+        try await Task.sleep(for: .milliseconds(500))
         
         // assert output1 was not added to the connection
-        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
-        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
-    
+        #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
+        #expect(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref } == [])
+        #expect(conn.endpoints.filter { $0 == output1.endpoint } == [])
+        
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        wait(sec: 0.2) // wait a bit in case an event is sent
-        XCTAssertEqual(connEvents, [])
+        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        #expect(connEvents == [])
         connEvents = []
-    
+        
         // check that manually adding output1 is also not allowed
         conn.add(outputs: [output1.endpoint])
-    
+        
         // assert output1 was not added to the connection
-        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
-        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
+        #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
+        #expect(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref } == [])
+        #expect(conn.endpoints.filter { $0 == output1.endpoint } == [])
     }
     
     /// Test to ensure virtual output(s) owned by the manager
     /// are removed from the connection when updating mode and filter.
-    func testInputConnection_filterOwned_afterInit() throws {
+    @Test
+    func inputConnection_filterOwned_afterInit() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-    
+        
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
-    
-        connEvents = []
-    
+        try await Task.sleep(for: .milliseconds(100))
+        
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -349,67 +347,67 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-        let output1ID = try XCTUnwrap(output1.uniqueID)
-        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
-    
-        wait(sec: 0.2)
-    
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1ID = try #require(output1.uniqueID)
+        let output1Ref = try #require(output1.coreMIDIOutputPortRef)
+        
+        try await Task.sleep(for: .milliseconds(200))
+        
         // add new connection, attempting to connect to output1
         let connTag = "testInputConnection"
         try manager.addInputConnection(
             to: .outputs([output1.endpoint]),
             tag: connTag,
             receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
-                    print(events)
+                Task { @MainActor in
+                    // print(events)
                     self.connEvents.append(contentsOf: events)
                 }
             }
         )
-    
-        let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        wait(sec: 0.5) // some time for connection to setup
-    
+        
+        let conn = try #require(manager.managedInputConnections[connTag])
+        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
+        
         // set mode and filter
         conn.mode = .allOutputs
         conn.filter = .init(owned: true)
-        wait(sec: 0.5) // some time for connection to update
-    
+        try await Task.sleep(for: .milliseconds(500)) // some time for connection to update
+        
         // assert output1 is not present in connection targets
-        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
-        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
-    
+        #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
+        #expect(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref } == [])
+        #expect(conn.endpoints.filter { $0 == output1.endpoint } == [])
+        
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        wait(sec: 0.2) // wait a bit in case an event is sent
-        XCTAssertFalse(connEvents.contains(.start()))
+        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        #expect(!connEvents.contains(.start()))
         connEvents = []
-    
+        
         // check that manually adding output1 is also not allowed
         conn.add(outputs: [output1.endpoint])
-    
+        
         // assert output1 was not added to the connection
-        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
-        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
+        #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
+        #expect(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref } == [])
+        #expect(conn.endpoints.filter { $0 == output1.endpoint } == [])
     }
     
     /// Test to ensure filter works.
-    func testInputConnection_filterEndpoints_onInit() throws {
+    @Test
+    func inputConnection_filterEndpoints_onInit() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-    
+        
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
-    
-        connEvents = []
-    
+        try await Task.sleep(for: .milliseconds(100))
+        
+        
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -417,12 +415,12 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-        let output1ID = try XCTUnwrap(output1.uniqueID)
-        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
-    
-        wait(sec: 0.2)
-    
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1ID = try #require(output1.uniqueID)
+        let output1Ref = try #require(output1.coreMIDIOutputPortRef)
+        
+        try await Task.sleep(for: .milliseconds(200))
+        
         // add new connection
         let connTag = "testInputConnection"
         try manager.addInputConnection(
@@ -433,54 +431,53 @@ final class MIDIInputConnection_Tests: XCTestCase {
                 criteria: [.uniqueID(output1ID)]
             ),
             receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
-                    print(events)
+                Task { @MainActor in
+                    // print(events)
                     self.connEvents.append(contentsOf: events)
                 }
             }
         )
-    
-        let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        wait(sec: 0.5) // some time for connection to setup
+        
+        let conn = try #require(manager.managedInputConnections[connTag])
+        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
         
         // attempt to add output1
         conn.add(outputs: [output1.endpoint])
-        wait(sec: 0.5)
+        try await Task.sleep(for: .milliseconds(500))
         
         // assert output1 was not added to the connection
-        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
-        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
-    
+        #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
+        #expect(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref } == [])
+        #expect(conn.endpoints.filter { $0 == output1.endpoint } == [])
+        
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        wait(sec: 0.2) // wait a bit in case an event is sent
-        XCTAssert(!connEvents.contains(.start()))
+        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        #expect(!connEvents.contains(.start()))
         connEvents = []
-    
+        
         // check that manually adding output1 is also not allowed
         conn.add(outputs: [output1.endpoint])
-    
+        
         // assert output1 was not added to the connection
-        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
-        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
+        #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
+        #expect(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref } == [])
+        #expect(conn.endpoints.filter { $0 == output1.endpoint } == [])
     }
     
     /// Test to ensure filter works after creating a connection.
-    func testInputConnection_filterEndpoints_afterInit() throws {
+    @Test
+    func inputConnection_filterEndpoints_afterInit() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
-    
+        
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
-    
-        connEvents = []
-    
+        try await Task.sleep(for: .milliseconds(100))
+        
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -488,54 +485,54 @@ final class MIDIInputConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-        let output1ID = try XCTUnwrap(output1.uniqueID)
-        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
-    
-        wait(sec: 0.2)
-    
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1ID = try #require(output1.uniqueID)
+        let output1Ref = try #require(output1.coreMIDIOutputPortRef)
+        
+        try await Task.sleep(for: .milliseconds(200))
+        
         // add new connection, attempting to connect to output1
         let connTag = "testInputConnection"
         try manager.addInputConnection(
             to: .outputs([output1.endpoint]),
             tag: connTag,
             receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
-                    print(events)
+                Task { @MainActor in
+                    // print(events)
                     self.connEvents.append(contentsOf: events)
                 }
             }
         )
-    
-        let conn = try XCTUnwrap(manager.managedInputConnections[connTag])
-        wait(sec: 0.5) // some time for connection to setup
-    
+        
+        let conn = try #require(manager.managedInputConnections[connTag])
+        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
+        
         // set mode and filter
         conn.mode = .allOutputs
         conn.filter = .init(
             owned: false,
             criteria: [.uniqueID(output1ID)]
         )
-        wait(sec: 0.5) // some time for connection to update
-    
+        try await Task.sleep(for: .milliseconds(500)) // some time for connection to update
+        
         // assert output1 is not present in connection targets
-        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
-        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
-    
+        #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
+        #expect(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref } == [])
+        #expect(conn.endpoints.filter { $0 == output1.endpoint } == [])
+        
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        wait(sec: 0.2) // wait a bit in case an event is sent
-        XCTAssertFalse(connEvents.contains(.start()))
+        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        #expect(!connEvents.contains(.start()))
         connEvents = []
-    
+        
         // check that manually adding output1 is also not allowed
         conn.add(outputs: [output1.endpoint])
-    
+        
         // assert output1 was not added to the connection
-        XCTAssertEqual(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) }, [])
-        XCTAssertEqual(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref }, [])
-        XCTAssertEqual(conn.endpoints.filter { $0 == output1.endpoint }, [])
+        #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
+        #expect(conn.coreMIDIOutputEndpointRefs.filter { $0 == output1Ref } == [])
+        #expect(conn.endpoints.filter { $0 == output1.endpoint } == [])
     }
 }
 

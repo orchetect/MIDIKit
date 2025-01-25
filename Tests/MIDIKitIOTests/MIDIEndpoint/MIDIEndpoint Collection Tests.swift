@@ -7,44 +7,46 @@
 #if !os(tvOS) && !os(watchOS)
 
 @testable import MIDIKitIO
-import XCTest
+import Testing
 
-final class MIDIEndpoint_Collection_Tests: XCTestCase {
+@Suite struct MIDIEndpoint_Collection_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets
     // swiftformat:options --maxwidth none
     
     // MARK: - sorted
     
-    func testSortedByDisplayName() {
+    @Test
+    func sortedByDisplayName() {
         let elements: [MIDIInputEndpoint] = [
             .init(ref: 1000, name: "B", displayName: "C", uniqueID: -1000),
             .init(ref: 1001, name: "C", displayName: "A", uniqueID: -1001),
             .init(ref: 1002, name: "A", displayName: "B", uniqueID: -1002)
         ]
-    
-        XCTAssertEqual(
-            elements.sortedByName(),
-            [
-                .init(ref: 1002, name: "A", displayName: "B", uniqueID: -1002),
-                .init(ref: 1000, name: "B", displayName: "C", uniqueID: -1000),
-                .init(ref: 1001, name: "C", displayName: "A", uniqueID: -1001)
-            ]
+        
+        #expect(
+            elements.sortedByName() ==
+                [
+                    .init(ref: 1002, name: "A", displayName: "B", uniqueID: -1002),
+                    .init(ref: 1000, name: "B", displayName: "C", uniqueID: -1000),
+                    .init(ref: 1001, name: "C", displayName: "A", uniqueID: -1001)
+                ]
         )
-    
-        XCTAssertEqual(
-            elements.sortedByDisplayName(),
-            [
-                .init(ref: 1001, name: "C", displayName: "A", uniqueID: -1001),
-                .init(ref: 1002, name: "A", displayName: "B", uniqueID: -1002),
-                .init(ref: 1000, name: "B", displayName: "C", uniqueID: -1000)
-            ]
+        
+        #expect(
+            elements.sortedByDisplayName() ==
+                [
+                    .init(ref: 1001, name: "C", displayName: "A", uniqueID: -1001),
+                    .init(ref: 1002, name: "A", displayName: "B", uniqueID: -1002),
+                    .init(ref: 1000, name: "B", displayName: "C", uniqueID: -1000)
+                ]
         )
     }
     
     // MARK: - first
     
-    func testFirstWhereDisplayName() {
+    @Test
+    func firstWhereDisplayName() {
         let elements: [MIDIInputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "C", uniqueID: -1000),
             .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003),
@@ -52,23 +54,24 @@ final class MIDIEndpoint_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
             .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
         ]
-    
-        XCTAssertEqual(
-            elements.first(whereDisplayName: "A"),
-            .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003)
+        
+        #expect(
+            elements.first(whereDisplayName: "A") ==
+                .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003)
         )
-    
-        XCTAssertEqual(
-            elements.first(whereDisplayName: ""),
-            .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
+        
+        #expect(
+            elements.first(whereDisplayName: "") ==
+                .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
         )
-    
-        XCTAssertNil(
-            elements.first(whereDisplayName: "E")
+        
+        #expect(
+            elements.first(whereDisplayName: "E") == nil
         )
     }
     
-    func testFirstWhereDisplayNameIgnoringEmpty() {
+    @Test
+    func firstWhereDisplayNameIgnoringEmpty() {
         let elements: [MIDIInputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "C", uniqueID: -1000),
             .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003),
@@ -76,18 +79,19 @@ final class MIDIEndpoint_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
             .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
         ]
-    
-        XCTAssertEqual(
-            elements.first(whereDisplayName: "", ignoringEmpty: false),
-            .init(ref: 1004, name: "Port D", displayName: "", uniqueID: -1004)
+        
+        #expect(
+            elements.first(whereDisplayName: "", ignoringEmpty: false) ==
+                .init(ref: 1004, name: "Port D", displayName: "", uniqueID: -1004)
         )
-    
-        XCTAssertNil(
-            elements.first(whereDisplayName: "", ignoringEmpty: true)
+        
+        #expect(
+            elements.first(whereDisplayName: "", ignoringEmpty: true) == nil
         )
     }
     
-    func testFirstWhereUniqueID_fallbackDisplayName() {
+    @Test
+    func firstWhereUniqueID_fallbackDisplayName() {
         let elements: [MIDIInputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "1", uniqueID: -1000),
             .init(ref: 1003, name: "Port A", displayName: "2", uniqueID: -1003),
@@ -95,53 +99,54 @@ final class MIDIEndpoint_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "4", uniqueID: -1002),
             .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
         ]
-    
+        
         // prioritize unique ID
-        XCTAssertEqual(
-            elements.first(whereUniqueID: -1002, fallbackDisplayName: "2"),
-            .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002)
+        #expect(
+            elements.first(whereUniqueID: -1002, fallbackDisplayName: "2") ==
+                .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002)
         )
-    
-        XCTAssertEqual(
-            elements.first(whereUniqueID: -1002, fallbackDisplayName: "4"),
-            .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002)
+        
+        #expect(
+            elements.first(whereUniqueID: -1002, fallbackDisplayName: "4") ==
+                .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002)
         )
-    
-        XCTAssertEqual(
-            elements.first(whereUniqueID: -1002, fallbackDisplayName: ""),
-            .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002)
+        
+        #expect(
+            elements.first(whereUniqueID: -1002, fallbackDisplayName: "") ==
+                .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002)
         )
-    
+        
         // ID not found, fall back to display name
-        XCTAssertEqual(
-            elements.first(whereUniqueID: -2000, fallbackDisplayName: "4"),
-            .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002)
+        #expect(
+            elements.first(whereUniqueID: -2000, fallbackDisplayName: "4") ==
+                .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002)
         )
-    
+        
         // ID not found, fall back to display name
-        XCTAssertEqual(
-            elements.first(whereUniqueID: -2000, fallbackDisplayName: ""),
-            .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
+        #expect(
+            elements.first(whereUniqueID: -2000, fallbackDisplayName: "") ==
+                .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
         )
-    
+        
         // ID not found, display name not found
-        XCTAssertNil(
-            elements.first(whereUniqueID: -2000, fallbackDisplayName: "6")
+        #expect(
+            elements.first(whereUniqueID: -2000, fallbackDisplayName: "6") == nil
         )
-    
+        
         // ID not found, fall back to display name. but ignore empty strings.
-        XCTAssertNil(
+        #expect(
             elements.first(
                 whereUniqueID: -2000,
                 fallbackDisplayName: "",
                 ignoringEmpty: true
-            )
+            ) == nil
         )
     }
     
     // MARK: - first
     
-    func testContainsWhereDisplayName() {
+    @Test
+    func containsWhereDisplayName() {
         let elements: [MIDIInputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "C", uniqueID: -1000),
             .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003),
@@ -149,21 +154,22 @@ final class MIDIEndpoint_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
             .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
         ]
-    
-        XCTAssertTrue(
+        
+        #expect(
             elements.contains(whereDisplayName: "A")
         )
-    
-        XCTAssertTrue(
+        
+        #expect(
             elements.contains(whereDisplayName: "")
         )
-    
-        XCTAssertFalse(
-            elements.contains(whereDisplayName: "E")
+        
+        #expect(
+            !elements.contains(whereDisplayName: "E")
         )
     }
     
-    func testContainsWhereDisplayNameIgnoringEmpty() {
+    @Test
+    func containsWhereDisplayNameIgnoringEmpty() {
         let elements: [MIDIInputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "C", uniqueID: -1000),
             .init(ref: 1003, name: "Port A", displayName: "A", uniqueID: -1003),
@@ -171,17 +177,18 @@ final class MIDIEndpoint_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "B", uniqueID: -1002),
             .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
         ]
-    
-        XCTAssertTrue(
+        
+        #expect(
             elements.contains(whereDisplayName: "", ignoringEmpty: false)
         )
-    
-        XCTAssertFalse(
-            elements.contains(whereDisplayName: "", ignoringEmpty: true)
+        
+        #expect(
+            !elements.contains(whereDisplayName: "", ignoringEmpty: true)
         )
     }
     
-    func testContainsWhereUniqueID_fallbackDisplayName() {
+    @Test
+    func containsWhereUniqueID_fallbackDisplayName() {
         let elements: [MIDIInputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "1", uniqueID: -1000),
             .init(ref: 1003, name: "Port A", displayName: "2", uniqueID: -1003),
@@ -189,38 +196,38 @@ final class MIDIEndpoint_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "4", uniqueID: -1002),
             .init(ref: 1004, name: "",       displayName: "",  uniqueID: -1004)
         ]
-    
+        
         // prioritize unique ID
-        XCTAssertTrue(
+        #expect(
             elements.contains(whereUniqueID: -1002, fallbackDisplayName: "2")
         )
-    
-        XCTAssertTrue(
+        
+        #expect(
             elements.contains(whereUniqueID: -1002, fallbackDisplayName: "4")
         )
-    
-        XCTAssertTrue(
+        
+        #expect(
             elements.contains(whereUniqueID: -1002, fallbackDisplayName: "")
         )
-    
+        
         // ID not found, fall back to display name
-        XCTAssertTrue(
+        #expect(
             elements.contains(whereUniqueID: -2000, fallbackDisplayName: "4")
         )
-    
+        
         // ID not found, fall back to display name
-        XCTAssertTrue(
+        #expect(
             elements.contains(whereUniqueID: -2000, fallbackDisplayName: "")
         )
-    
+        
         // ID not found, display name not found
-        XCTAssertFalse(
-            elements.contains(whereUniqueID: -2000, fallbackDisplayName: "6")
+        #expect(
+            !elements.contains(whereUniqueID: -2000, fallbackDisplayName: "6")
         )
-    
+        
         // ID not found, fall back to display name. but ignore empty strings.
-        XCTAssertFalse(
-            elements.contains(
+        #expect(
+            !elements.contains(
                 whereUniqueID: -2000,
                 fallbackDisplayName: "",
                 ignoringEmpty: true
@@ -230,7 +237,8 @@ final class MIDIEndpoint_Collection_Tests: XCTestCase {
     
     // MARK: - filter
     
-    func testFilterDisplayName() {
+    @Test
+    func filterDisplayName() {
         let elements: [MIDIInputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "1", uniqueID: -1000),
             .init(ref: 1003, name: "Port A", displayName: "2", uniqueID: -1003),
@@ -238,29 +246,30 @@ final class MIDIEndpoint_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "2", uniqueID: -1002),
             .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
         ]
-    
-        XCTAssertEqual(
-            elements.filter(whereDisplayName: "2"),
-            [
-                .init(ref: 1003, name: "Port A", displayName: "2", uniqueID: -1003),
-                .init(ref: 1002, name: "Port A", displayName: "2", uniqueID: -1002)
-            ]
+        
+        #expect(
+            elements.filter(whereDisplayName: "2") ==
+                [
+                    .init(ref: 1003, name: "Port A", displayName: "2", uniqueID: -1003),
+                    .init(ref: 1002, name: "Port A", displayName: "2", uniqueID: -1002)
+                ]
         )
-    
-        XCTAssertEqual(
-            elements.filter(whereDisplayName: ""),
-            [
-                .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
-            ]
+        
+        #expect(
+            elements.filter(whereDisplayName: "") ==
+                [
+                    .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
+                ]
         )
-    
-        XCTAssertEqual(
-            elements.filter(whereDisplayName: "5"),
-            []
+        
+        #expect(
+            elements.filter(whereDisplayName: "5") ==
+                []
         )
     }
     
-    func testFilterWhereDisplayNameIgnoringEmpty() {
+    @Test
+    func filterWhereDisplayNameIgnoringEmpty() {
         let elements: [MIDIInputEndpoint] = [
             .init(ref: 1000, name: "Port B", displayName: "1", uniqueID: -1000),
             .init(ref: 1003, name: "Port A", displayName: "2", uniqueID: -1003),
@@ -268,25 +277,25 @@ final class MIDIEndpoint_Collection_Tests: XCTestCase {
             .init(ref: 1002, name: "Port A", displayName: "2", uniqueID: -1002),
             .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
         ]
-    
-        XCTAssertEqual(
-            elements.filter(whereDisplayName: "2", ignoringEmpty: true),
-            [
-                .init(ref: 1003, name: "Port A", displayName: "2", uniqueID: -1003),
-                .init(ref: 1002, name: "Port A", displayName: "2", uniqueID: -1002)
-            ]
+        
+        #expect(
+            elements.filter(whereDisplayName: "2", ignoringEmpty: true) ==
+                [
+                    .init(ref: 1003, name: "Port A", displayName: "2", uniqueID: -1003),
+                    .init(ref: 1002, name: "Port A", displayName: "2", uniqueID: -1002)
+                ]
         )
-    
-        XCTAssertEqual(
-            elements.filter(whereDisplayName: "", ignoringEmpty: false),
-            [
-                .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
-            ]
+        
+        #expect(
+            elements.filter(whereDisplayName: "", ignoringEmpty: false) ==
+                [
+                    .init(ref: 1004, name: "Port D", displayName: "",  uniqueID: -1004)
+                ]
         )
-    
-        XCTAssertEqual(
-            elements.filter(whereDisplayName: "", ignoringEmpty: true),
-            []
+        
+        #expect(
+            elements.filter(whereDisplayName: "", ignoringEmpty: true) ==
+                []
         )
     }
 }
