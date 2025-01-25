@@ -7,49 +7,52 @@
 #if !os(tvOS) && !os(watchOS)
 
 import MIDIKitIO
-import XCTest
+import Testing
 
-final class Errors_MIDIOSStatus_Tests: XCTestCase {
-    func testRawValue() {
+@Suite struct Errors_MIDIOSStatus_Tests {
+    @Test
+    func rawValue() {
         // spot check: known constant
 		
-        XCTAssertEqual(
-            MIDIOSStatus(rawValue: -10830),
+        #expect(
+            MIDIOSStatus(rawValue: -10830) ==
             .invalidClient
         )
 		
-        XCTAssertEqual(
-            MIDIOSStatus.invalidClient.rawValue,
+        #expect(
+            MIDIOSStatus.invalidClient.rawValue ==
             -10830
         )
 		
         // other
 		
-        XCTAssertEqual(
-            MIDIOSStatus(rawValue: 7777),
+        #expect(
+            MIDIOSStatus(rawValue: 7777) ==
             .other(7777)
         )
 		
-        XCTAssertEqual(
-            MIDIOSStatus.other(7777).rawValue,
+        #expect(
+            MIDIOSStatus.other(7777).rawValue ==
             7777
         )
     }
 	
-    func testCustomStringConvertible() {
+    @Test
+    func customStringConvertible() {
         // spot check expected output
         
         let desc = "\(MIDIOSStatus.invalidClient))"
-		print(desc)
-        XCTAssert(desc.contains("invalidClient"))
+		// print(desc)
+        #expect(desc.contains("invalidClient"))
     }
     
-    func testLocalizedDescription() {
+    @Test
+    func localizedDescription() {
         // spot check expected output
         
         let desc = MIDIOSStatus.invalidClient.localizedDescription
-        print(desc)
-        XCTAssert(desc.contains("kMIDIInvalidClient"))
+        // print(desc)
+        #expect(desc.contains("kMIDIInvalidClient"))
     }
 }
 
