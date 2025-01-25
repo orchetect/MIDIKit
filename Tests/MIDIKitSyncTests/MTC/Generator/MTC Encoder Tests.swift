@@ -939,19 +939,21 @@ import Testing
     
     @MainActor
     @Test
-    func mtcEncoder_Handlers_FullFrameMessage() {
+    func mtcEncoder_Handlers_FullFrameMessage() async throws {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
         
         // testing vars
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var events: [MIDIEvent]?
         }
         let receiver = Receiver()
         
         let mtcEnc = MTCEncoder { midiEvents in
-            receiver.events = midiEvents
+            Task { @MainActor in
+                receiver.events = midiEvents
+            }
         }
         
         // default / initial state
@@ -962,28 +964,35 @@ import Testing
         
         mtcEnc.locate(to: Timecode(.components(h: 1, m: 02, s: 03, f: 4), at: .fps24, by: .allowingInvalid))
         
-        #expect(receiver.events == [kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps])
+        try await wait(require: {
+            await receiver.events == [kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps]
+        }, timeout: 1.0)
         
         mtcEnc.locate(to: Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid))
         
-        #expect(receiver.events == [kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps])
+        try await wait(require: {
+            await receiver.events == [kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps]
+        }, timeout: 1.0)
     }
     
     @MainActor
     @Test
-    func mtcEncoder_Handlers_QFMessages() {
+    func mtcEncoder_Handlers_QFMessages() async throws {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
         
         // testing vars
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var events: [MIDIEvent]?
         }
         let receiver = Receiver()
         
         let mtcEnc = MTCEncoder { midiEvents in
-            receiver.events = midiEvents
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.events = midiEvents
+            }
         }
         
         // default / initial state
@@ -1208,17 +1217,21 @@ import Testing
     }
     
     @Test
+    @MainActor
     func mtcEncoder_LocateBehavior() {
         var mtcEnc: MTCEncoder
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var events: [MIDIEvent]?
         }
         let receiver = Receiver()
         
         func initNewEnc() -> MTCEncoder {
             MTCEncoder { midiEvents in
-                receiver.events = midiEvents
+                // MTCEncoder does not use Task or internal dispatch queues
+                MainActor.assumeIsolated {
+                    receiver.events = midiEvents
+                }
             }
         }
         

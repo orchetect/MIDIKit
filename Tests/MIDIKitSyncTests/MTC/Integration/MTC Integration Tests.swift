@@ -13,7 +13,7 @@ import TimecodeKitCore
     func mtcIntegration_EncoderDecoder_24fps() {
         // decoder
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
@@ -23,12 +23,18 @@ import TimecodeKitCore
         let receiver = Receiver()
         
         let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, displayNeedsUpdate in
-            receiver.timecode = timecode
-            receiver.mType = messageType
-            receiver.direction = direction
-            receiver.displayNeedsUpdate = displayNeedsUpdate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.timecode = timecode
+                receiver.mType = messageType
+                receiver.direction = direction
+                receiver.displayNeedsUpdate = displayNeedsUpdate
+            }
         } mtcFrameRateChanged: { mtcFrameRate in
-            receiver.mtcFR = mtcFrameRate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.mtcFR = mtcFrameRate
+            }
         }
         
         // encoder
@@ -106,7 +112,7 @@ import TimecodeKitCore
     func mtcIntegration_EncoderDecoder_29_97drop() {
         // decoder
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
@@ -116,12 +122,18 @@ import TimecodeKitCore
         let receiver = Receiver()
         
         let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, displayNeedsUpdate in
-            receiver.timecode = timecode
-            receiver.mType = messageType
-            receiver.direction = direction
-            receiver.displayNeedsUpdate = displayNeedsUpdate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.timecode = timecode
+                receiver.mType = messageType
+                receiver.direction = direction
+                receiver.displayNeedsUpdate = displayNeedsUpdate
+            }
         } mtcFrameRateChanged: { mtcFrameRate in
-            receiver.mtcFR = mtcFrameRate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.mtcFR = mtcFrameRate
+            }
         }
         
         // encoder
@@ -356,10 +368,11 @@ import TimecodeKitCore
     }
     
     @Test
+    @MainActor
     func mtcIntegration_EncoderDecoder_48fps() {
         // decoder
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
@@ -369,12 +382,18 @@ import TimecodeKitCore
         let receiver = Receiver()
         
         let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, displayNeedsUpdate in
-            receiver.timecode = timecode
-            receiver.mType = messageType
-            receiver.direction = direction
-            receiver.displayNeedsUpdate = displayNeedsUpdate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.timecode = timecode
+                receiver.mType = messageType
+                receiver.direction = direction
+                receiver.displayNeedsUpdate = displayNeedsUpdate
+            }
         } mtcFrameRateChanged: { mtcFrameRate in
-            receiver.mtcFR = mtcFrameRate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.mtcFR = mtcFrameRate
+            }
         }
         
         // encoder
@@ -466,13 +485,14 @@ import TimecodeKitCore
     }
     
     @Test
+    @MainActor
     func mtcIntegration_EncoderDecoder_fullFrameBehavior() {
         // test expected outcomes regarding Encoder.locate() and transmitting MTC full-frame
         // messages
         
         // decoder
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
@@ -482,12 +502,18 @@ import TimecodeKitCore
         let receiver = Receiver()
         
         let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, displayNeedsUpdate in
-            receiver.timecode = timecode
-            receiver.mType = messageType
-            receiver.direction = direction
-            receiver.displayNeedsUpdate = displayNeedsUpdate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.timecode = timecode
+                receiver.mType = messageType
+                receiver.direction = direction
+                receiver.displayNeedsUpdate = displayNeedsUpdate
+            }
         } mtcFrameRateChanged: { mtcFrameRate in
-            receiver.mtcFR = mtcFrameRate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.mtcFR = mtcFrameRate
+            }
         }
         
         // encoder
@@ -594,10 +620,11 @@ import TimecodeKitCore
     }
     
     @Test
+    @MainActor
     func bruteForce() throws {
         // decoder
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
@@ -607,12 +634,18 @@ import TimecodeKitCore
         let receiver = Receiver()
         
         let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, displayNeedsUpdate in
-            receiver.timecode = timecode
-            receiver.mType = messageType
-            receiver.direction = direction
-            receiver.displayNeedsUpdate = displayNeedsUpdate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.timecode = timecode
+                receiver.mType = messageType
+                receiver.direction = direction
+                receiver.displayNeedsUpdate = displayNeedsUpdate
+            }
         } mtcFrameRateChanged: { mtcFrameRate in
-            receiver.mtcFR = mtcFrameRate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.mtcFR = mtcFrameRate
+            }
         }
         
         // encoder

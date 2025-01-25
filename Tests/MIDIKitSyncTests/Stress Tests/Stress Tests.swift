@@ -13,7 +13,7 @@ import Testing
     func threadingMTCGenerator() async {
         // MARK: - Generator
         
-        let mtcGen = MTCGenerator { midiMessage in
+        let mtcGen = MTCGenerator { midiMessage in // TODO: fix TSAN race
             _ = midiMessage
         }
         

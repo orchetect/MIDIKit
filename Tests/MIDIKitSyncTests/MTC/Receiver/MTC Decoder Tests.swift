@@ -797,14 +797,15 @@ import TimecodeKitCore
         // swiftformat:enable wrapSingleLineComments
     }
     
-    @Test @MainActor
+    @Test
+    @MainActor
     func mtcDecoder_Handlers_FullFrameMessage() {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
         
         // testing vars
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
@@ -814,12 +815,18 @@ import TimecodeKitCore
         let receiver = Receiver()
         
         let mtcDec = MTCDecoder() { timecode, messageType, direction, displayNeedsUpdate in
-            receiver.timecode = timecode
-            receiver.mType = messageType
-            receiver.direction = direction
-            receiver.displayNeedsUpdate = displayNeedsUpdate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.timecode = timecode
+                receiver.mType = messageType
+                receiver.direction = direction
+                receiver.displayNeedsUpdate = displayNeedsUpdate
+            }
         } mtcFrameRateChanged: { mtcFrameRate in
-            receiver.mtcFR = mtcFrameRate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.mtcFR = mtcFrameRate
+            }
         }
         
         // default / initial state
@@ -849,7 +856,8 @@ import TimecodeKitCore
         #expect(receiver.mtcFR == .mtc25)
     }
     
-    @Test @MainActor
+    @Test
+    @MainActor
     func mtcDecoder_Handlers_QFMessages() {
         // swiftformat:disable wrapSingleLineComments
         
@@ -858,7 +866,7 @@ import TimecodeKitCore
         
         // testing vars
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
@@ -868,12 +876,18 @@ import TimecodeKitCore
         let receiver = Receiver()
         
         let mtcDec = MTCDecoder() { timecode, messageType, direction, displayNeedsUpdate in
-            receiver.timecode = timecode
-            receiver.mType = messageType
-            receiver.direction = direction
-            receiver.displayNeedsUpdate = displayNeedsUpdate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.timecode = timecode
+                receiver.mType = messageType
+                receiver.direction = direction
+                receiver.displayNeedsUpdate = displayNeedsUpdate
+            }
         } mtcFrameRateChanged: { mtcFrameRate in
-            receiver.mtcFR = mtcFrameRate
+            // MTCEncoder does not use Task or internal dispatch queues
+            MainActor.assumeIsolated {
+                receiver.mtcFR = mtcFrameRate
+            }
         }
         
         // default / initial state

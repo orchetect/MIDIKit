@@ -276,7 +276,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         // testing vars
         
-        final class Receiver {
+        @MainActor final class Receiver {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
@@ -290,12 +290,16 @@ extension MTC_Receiver_Receiver_Tests {
             name: "test",
             initialLocalFrameRate: .fps24
         ) { timecode, messageType, direction, displayNeedsUpdate in
-            receiver.timecode = timecode
-            receiver.mType = messageType
-            receiver.direction = direction
-            receiver.displayNeedsUpdate = displayNeedsUpdate
+            Task { @MainActor in
+                receiver.timecode = timecode
+                receiver.mType = messageType
+                receiver.direction = direction
+                receiver.displayNeedsUpdate = displayNeedsUpdate
+            }
         } stateChanged: { state in
-            receiver.state = state
+            Task { @MainActor in
+                receiver.state = state
+            }
         }
         
         // default / initial state
