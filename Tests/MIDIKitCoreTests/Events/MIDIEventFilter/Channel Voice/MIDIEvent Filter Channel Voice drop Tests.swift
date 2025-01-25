@@ -5,10 +5,11 @@
 //
 
 import MIDIKitCore
-import XCTest
+import Testing
 
-final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
-    func testFilter_drop() {
+@Suite struct MIDIEvent_Filter_ChannelVoiceDrop_Tests {
+    @Test
+    func filter_drop() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .drop)
@@ -19,10 +20,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropType() {
+    @Test
+    func filter_dropType() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropType(.noteOn))
@@ -46,10 +48,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropTypes() {
+    @Test
+    func filter_dropTypes() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropTypes([.noteOn, .noteOff]))
@@ -72,12 +75,13 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_dropChannel
     
-    func testFilter_dropChannel_0() {
+    @Test
+    func filter_dropChannel_0() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannel(0))
@@ -101,10 +105,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropChannel_1() {
+    @Test
+    func filter_dropChannel_1() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannel(1))
@@ -125,10 +130,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropChannel_2() {
+    @Test
+    func filter_dropChannel_2() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannel(2))
@@ -152,10 +158,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropChannel_3() {
+    @Test
+    func filter_dropChannel_3() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannel(3))
@@ -179,10 +186,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropChannel_15() {
+    @Test
+    func filter_dropChannel_15() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannel(15))
@@ -207,12 +215,13 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_dropChannels
     
-    func testFilter_dropChannels_empty() {
+    @Test
+    func filter_dropChannels_empty() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannels([]))
@@ -237,10 +246,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropChannels_0() {
+    @Test
+    func filter_dropChannels_0() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannels([0]))
@@ -264,10 +274,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropChannels_1() {
+    @Test
+    func filter_dropChannels_1() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannels([1]))
@@ -288,10 +299,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropChannels_2() {
+    @Test
+    func filter_dropChannels_2() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannels([2]))
@@ -315,10 +327,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropChannels_3() {
+    @Test
+    func filter_dropChannels_3() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannels([3]))
@@ -342,10 +355,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropChannels_15() {
+    @Test
+    func filter_dropChannels_15() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannels([15]))
@@ -370,10 +384,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropChannels_0and1() {
+    @Test
+    func filter_dropChannels_0and1() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropChannels([0, 1]))
@@ -393,12 +408,13 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_dropCC
     
-    func testFilter_dropCC_A() {
+    @Test
+    func filter_dropCC_A() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropCC(.expression))
@@ -422,10 +438,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCC_B() {
+    @Test
+    func filter_dropCC_B() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropCC(.modWheel))
@@ -450,10 +467,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCC_C() {
+    @Test
+    func filter_dropCC_C() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -484,10 +502,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCC_D() {
+    @Test
+    func filter_dropCC_D() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -518,10 +537,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCC_E() {
+    @Test
+    func filter_dropCC_E() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -553,12 +573,13 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_dropCCs
     
-    func testFilter_dropCCs_empty() {
+    @Test
+    func filter_dropCCs_empty() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropCCs([]))
@@ -583,10 +604,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCCs_11() {
+    @Test
+    func filter_dropCCs_11() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropCCs([.expression]))
@@ -610,10 +632,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCCs_1() {
+    @Test
+    func filter_dropCCs_1() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropCCs([.modWheel]))
@@ -638,10 +661,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCCs_emptyB() {
+    @Test
+    func filter_dropCCs_emptyB() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -673,10 +697,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCCs_11B() {
+    @Test
+    func filter_dropCCs_11B() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -707,10 +732,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCCs_1B() {
+    @Test
+    func filter_dropCCs_1B() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -741,10 +767,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCCs_64() {
+    @Test
+    func filter_dropCCs_64() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -776,10 +803,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCCs_1and11() {
+    @Test
+    func filter_dropCCs_1and11() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -809,10 +837,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropCCs_11and64() {
+    @Test
+    func filter_dropCCs_11and64() {
         var events: [MIDIEvent] = []
         events += kEvents.ChanVoice.oneOfEachEventType
         events += [kEvents.ChanVoice.cc1]
@@ -843,12 +872,13 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_dropNotesInRange
     
-    func testFilter_dropNotesInRange_all() {
+    @Test
+    func filter_dropNotesInRange_all() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRange(0 ... 127))
@@ -871,10 +901,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRange_60to61() {
+    @Test
+    func filter_dropNotesInRange_60to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRange(60 ... 61))
@@ -897,10 +928,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRange_60to60() {
+    @Test
+    func filter_dropNotesInRange_60to60() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRange(60 ... 60))
@@ -926,10 +958,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRange_61to61() {
+    @Test
+    func filter_dropNotesInRange_61to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRange(61 ... 61))
@@ -955,10 +988,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRange_0to59() {
+    @Test
+    func filter_dropNotesInRange_0to59() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRange(0 ... 59))
@@ -985,10 +1019,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRange_62to127() {
+    @Test
+    func filter_dropNotesInRange_62to127() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRange(62 ... 127))
@@ -1015,12 +1050,13 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - testFilter_dropNotesInRanges
     
-    func testFilter_dropNotesInRanges_empty() {
+    @Test
+    func filter_dropNotesInRanges_empty() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRanges([]))
@@ -1047,10 +1083,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRanges_all() {
+    @Test
+    func filter_dropNotesInRanges_all() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRanges([0 ... 127]))
@@ -1073,10 +1110,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRanges_60to61() {
+    @Test
+    func filter_dropNotesInRanges_60to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRanges([60 ... 61]))
@@ -1099,10 +1137,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRanges_60to60() {
+    @Test
+    func filter_dropNotesInRanges_60to60() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRanges([60 ... 60]))
@@ -1128,10 +1167,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRanges_61to61() {
+    @Test
+    func filter_dropNotesInRanges_61to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRanges([61 ... 61]))
@@ -1157,10 +1197,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRanges_0to59() {
+    @Test
+    func filter_dropNotesInRanges_0to59() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRanges([0 ... 59]))
@@ -1187,10 +1228,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRanges_62to127() {
+    @Test
+    func filter_dropNotesInRanges_62to127() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRanges([62 ... 127]))
@@ -1217,10 +1259,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRanges_0to10_60to61() {
+    @Test
+    func filter_dropNotesInRanges_0to10_60to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(chanVoice: .dropNotesInRanges([0 ... 10, 60 ... 61]))
@@ -1243,10 +1286,11 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropNotesInRanges_60to60_61to61() {
+    @Test
+    func filter_dropNotesInRanges_60to60_61to61() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events
@@ -1270,6 +1314,6 @@ final class MIDIEvent_Filter_ChannelVoiceDrop_Tests: XCTestCase {
         expectedEvents += kEvents.SysRealTime.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
 }

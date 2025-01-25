@@ -11,7 +11,7 @@ import os.log
 
 extension MIDIReceiver {
     /// Handler for the ``rawDataLogging(_:)`` MIDI receiver.
-    public typealias RawDataLoggingHandler = (_ packetBytesString: String) -> Void
+    public typealias RawDataLoggingHandler = @Sendable (_ packetBytesString: String) -> Void
     
     /// Raw data logging handler (hex byte strings).
     /// On systems that use legacy MIDI 1.0 packets, their raw bytes will be logged.

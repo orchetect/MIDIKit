@@ -5,18 +5,19 @@
 //
 
 @testable import MIDIKitSync
+import Testing
 import TimecodeKitCore
-import XCTest
 
-final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
+@Suite struct MTC_MTCFrameRate_ScaledFrames_Tests {
     // Local Constants
     
-    fileprivate var mtc24: MTCFrameRate { .mtc24 }
-    fileprivate var mtc25: MTCFrameRate { .mtc25 }
-    fileprivate var mtcDF: MTCFrameRate { .mtc2997d }
-    fileprivate var mtc30: MTCFrameRate { .mtc30 }
+    private var mtc24: MTCFrameRate { .mtc24 }
+    private var mtc25: MTCFrameRate { .mtc25 }
+    private var mtcDF: MTCFrameRate { .mtc2997d }
+    private var mtc30: MTCFrameRate { .mtc30 }
     
-    func testMTC_MTCFrameRate_ScaledFrames() {
+    @Test
+    func mtcFrameRate_ScaledFrames() {
         // we iterate on allCases here so that the compiler will
         // throw an error in future if additional frame rates get added to TimecodeKit,
         // prompting us to add unit test cases for them below
@@ -34,29 +35,29 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
             switch realRate {
             case .fps23_976, .fps24:
                 for qf in UInt8(0) ... 7 {
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 0,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        0  + (Double(qf) * 0.25)
+                        ) ==
+                            0  + (Double(qf) * 0.25)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 12,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        12 + (Double(qf) * 0.25)
+                        ) ==
+                            12 + (Double(qf) * 0.25)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 22,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        22 + (Double(qf) * 0.25)
+                        ) ==
+                            22 + (Double(qf) * 0.25)
                     )
                 }
                 
@@ -64,341 +65,343 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                 // MTC 24 -> realRate
                 // this one is the odd duck; Cubase transmits 24.98 as MTC 24
                 
-                XCTAssertEqual(
+                #expect(
                     mtcRate.scaledFrames(
                         fromRawMTCFrames: 0,
                         quarterFrames: 0,
                         to: realRate
-                    ),
-                    0
+                    ) ==
+                        0
                 )
-                XCTAssertEqual(
+                #expect(
                     mtcRate.scaledFrames(
                         fromRawMTCFrames: 12,
                         quarterFrames: 0,
                         to: realRate
-                    ),
-                    12.5
+                    ) ==
+                        12.5
                 )
-                XCTAssertEqual(
+                #expect(
                     mtcRate.scaledFrames(
                         fromRawMTCFrames: 22,
                         quarterFrames: 0,
                         to: realRate
-                    ) ?? 0.0,
-                    22.916666,
-                    accuracy: 0.00001
+                    ) ?? 0.0 ==
+                        22.916666
+                    // accuracy: 0.00001
                 )
-                XCTAssertEqual(
+                #expect(
                     mtcRate.scaledFrames(
                         fromRawMTCFrames: 24,
                         quarterFrames: 0,
                         to: realRate
-                    ) ?? 0.0,
-                    24.98
+                    ) ?? 0.0 ==
+                        24.98
                 )
                 
             case .fps25:
                 for qf in UInt8(0) ... 7 {
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 0,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        0  + (Double(qf) * 0.25)
+                        ) ==
+                            0  + (Double(qf) * 0.25)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 12,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        12 + (Double(qf) * 0.25)
+                        ) ==
+                            12 + (Double(qf) * 0.25)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 24,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        24 + (Double(qf) * 0.25)
+                        ) ==
+                            24 + (Double(qf) * 0.25)
                     )
                 }
                 
             case .fps29_97, .fps29_97d, .fps30, .fps30d:
                 for qf in UInt8(0) ... 7 {
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 0,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        0  + (Double(qf) * 0.25)
+                        ) ==
+                            0  + (Double(qf) * 0.25)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 14,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        14 + (Double(qf) * 0.25)
+                        ) ==
+                            14 + (Double(qf) * 0.25)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 28,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        28 + (Double(qf) * 0.25)
+                        ) ==
+                            28 + (Double(qf) * 0.25)
                     )
                 }
                 
             case .fps47_952, .fps48:
                 for qf in UInt8(0) ... 7 {
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 0,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        0  + (Double(qf) * 0.5)
+                        ) ==
+                            0  + (Double(qf) * 0.5)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 12,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        24 + (Double(qf) * 0.5)
+                        ) ==
+                            24 + (Double(qf) * 0.5)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 22,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        44 + (Double(qf) * 0.5)
+                        ) ==
+                            44 + (Double(qf) * 0.5)
                     )
                 }
                 
             case .fps50:
                 for qf in UInt8(0) ... 7 {
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 0,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        0  + (Double(qf) * 0.5)
+                        ) ==
+                            0  + (Double(qf) * 0.5)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 12,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        24 + (Double(qf) * 0.5)
+                        ) ==
+                            24 + (Double(qf) * 0.5)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 24,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        48 + (Double(qf) * 0.5)
+                        ) ==
+                            48 + (Double(qf) * 0.5)
                     )
                 }
                 
             case .fps59_94, .fps59_94d, .fps60, .fps60d:
                 for qf in UInt8(0) ... 7 {
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 0,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        0  + (Double(qf) * 0.5)
+                        ) ==
+                            0  + (Double(qf) * 0.5)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 14,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        28 + (Double(qf) * 0.5)
+                        ) ==
+                            28 + (Double(qf) * 0.5)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 28,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        56 + (Double(qf) * 0.5)
+                        ) ==
+                            56 + (Double(qf) * 0.5)
                     )
                 }
                 
             case .fps90:
                 for qf in UInt8(0) ... 7 {
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 0,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        0  + (Double(qf) * 0.75)
+                        ) ==
+                            0  + (Double(qf) * 0.75)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 14,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        42 + (Double(qf) * 0.75)
+                        ) ==
+                            42 + (Double(qf) * 0.75)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 28,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        84 + (Double(qf) * 0.75)
+                        ) ==
+                            84 + (Double(qf) * 0.75)
                     )
                 }
                 
             case .fps95_904, .fps96:
                 for qf in UInt8(0) ... 7 {
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 0,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        0  + (Double(qf) * 1.0)
+                        ) ==
+                            0  + (Double(qf) * 1.0)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 12,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        48 + (Double(qf) * 1.0)
+                        ) ==
+                            48 + (Double(qf) * 1.0)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 22,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        88 + (Double(qf) * 1.0)
+                        ) ==
+                            88 + (Double(qf) * 1.0)
                     )
                 }
                 
             case .fps100:
                 for qf in UInt8(0) ... 7 {
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 0,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        0  + (Double(qf) * 1.0)
+                        ) ==
+                            0  + (Double(qf) * 1.0)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 12,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        48 + (Double(qf) * 1.0)
+                        ) ==
+                            48 + (Double(qf) * 1.0)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 24,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        96 + (Double(qf) * 1.0)
+                        ) ==
+                            96 + (Double(qf) * 1.0)
                     )
                 }
                 
             case .fps119_88, .fps119_88d, .fps120, .fps120d:
                 for qf in UInt8(0) ... 7 {
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 0,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        0   + (Double(qf) * 1.0)
+                        ) ==
+                            0   + (Double(qf) * 1.0)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 14,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        56  + (Double(qf) * 1.0)
+                        ) ==
+                            56  + (Double(qf) * 1.0)
                     )
-                    XCTAssertEqual(
+                    #expect(
                         mtcRate.scaledFrames(
                             fromRawMTCFrames: 28,
                             quarterFrames: qf,
                             to: realRate
-                        ),
-                        112 + (Double(qf) * 1.0)
+                        ) ==
+                            112 + (Double(qf) * 1.0)
                     )
                 }
             }
         }
     }
     
-    func testMTC_MTCFrameRate_Scale_EdgeCases() {
+    @Test
+    func mtcFrameRate_Scale_EdgeCases() {
         // frames underflow clamped to 0
-        XCTAssertEqual(
+        #expect(
             mtc30.scaledFrames(
                 fromRawMTCFrames: -1,
                 quarterFrames: 0,
                 to: .fps30
-            ),
-            0
+            ) ==
+                0
         )
         
         // frames overflow allowed, even though it's not practical
-        XCTAssertEqual(
+        #expect(
             mtc30.scaledFrames(
                 fromRawMTCFrames: 60,
                 quarterFrames: 0,
                 to: .fps30
-            ),
-            60
+            ) ==
+                60
         )
         
         // quarter-frames > 7 clamped to 7
-        XCTAssertEqual(
+        #expect(
             mtc30.scaledFrames(
                 fromRawMTCFrames: 0,
                 quarterFrames: 8,
                 to: .fps30
-            ),
-            0.25 * 7
+            ) ==
+                0.25 * 7
         )
     }
     
-    func testMTC_TimecodeFrameRate_ScaledFrames() {
+    @Test
+    func mtcTimecodeFrameRate_ScaledFrames() {
         // zero
         
         for realRate in TimecodeFrameRate.allCases {
             let scaled = realRate.scaledFrames(fromTimecodeFrames: 0.0)
             
-            XCTAssertEqual(
-                scaled.rawMTCFrames,
-                0,
+            #expect(
+                scaled.rawMTCFrames ==
+                    0,
                 "at: \(realRate)"
             )
-            XCTAssertEqual(
-                scaled.rawMTCQuarterFrames,
-                0,
+            #expect(
+                scaled.rawMTCQuarterFrames ==
+                    0,
                 "at: \(realRate)"
             )
         }
@@ -410,13 +413,13 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
             case .fps23_976, .fps24:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 12 + (Double(qf) * 0.25))
-                    XCTAssertEqual(scaled.rawMTCFrames, 12)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 12)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 22 + (Double(qf) * 0.25))
-                    XCTAssertEqual(scaled.rawMTCFrames, 22)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 22)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 
             case .fps24_98:
@@ -425,137 +428,138 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                 // just do a spot-check, as testing all 8 quarter-frames is tricky
                 
                 let scaled1 = realRate.scaledFrames(fromTimecodeFrames: 12.5)
-                XCTAssertEqual(scaled1.rawMTCFrames, 12)
-                XCTAssertEqual(scaled1.rawMTCQuarterFrames, 0)
+                #expect(scaled1.rawMTCFrames == 12)
+                #expect(scaled1.rawMTCQuarterFrames == 0)
                 
                 let scaled2 = realRate.scaledFrames(fromTimecodeFrames: 22.916667)
-                XCTAssertEqual(scaled2.rawMTCFrames, 22)
-                XCTAssertEqual(scaled2.rawMTCQuarterFrames, 0)
+                #expect(scaled2.rawMTCFrames == 22)
+                #expect(scaled2.rawMTCQuarterFrames == 0)
                 
                 // due to the strange nature of 24.98fps, this rounds down to the previous QF
                 let scaled3 = realRate.scaledFrames(fromTimecodeFrames: 24.98)
-                XCTAssertEqual(scaled3.rawMTCFrames, 24)
-                XCTAssertEqual(scaled3.rawMTCQuarterFrames, 0)
+                #expect(scaled3.rawMTCFrames == 24)
+                #expect(scaled3.rawMTCQuarterFrames == 0)
                 
             case .fps25:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 12 + (Double(qf) * 0.25))
-                    XCTAssertEqual(scaled.rawMTCFrames, 12)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 12)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 24 + (Double(qf) * 0.25))
-                    XCTAssertEqual(scaled.rawMTCFrames, 24)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 24)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 
             case .fps29_97, .fps29_97d, .fps30, .fps30d:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 14 + (Double(qf) * 0.25))
-                    XCTAssertEqual(scaled.rawMTCFrames, 14)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 14)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 28 + (Double(qf) * 0.25))
-                    XCTAssertEqual(scaled.rawMTCFrames, 28)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 28)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 
             case .fps47_952, .fps48:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 24 + (Double(qf) * 0.5))
-                    XCTAssertEqual(scaled.rawMTCFrames, 12)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 12)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 44 + (Double(qf) * 0.5))
-                    XCTAssertEqual(scaled.rawMTCFrames, 22)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 22)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 
             case .fps50:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 24 + (Double(qf) * 0.5))
-                    XCTAssertEqual(scaled.rawMTCFrames, 12)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 12)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 48 + (Double(qf) * 0.5))
-                    XCTAssertEqual(scaled.rawMTCFrames, 24)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 24)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 
             case .fps59_94, .fps59_94d, .fps60, .fps60d:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 28 + (Double(qf) * 0.5))
-                    XCTAssertEqual(scaled.rawMTCFrames, 14)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 14)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 56 + (Double(qf) * 0.5))
-                    XCTAssertEqual(scaled.rawMTCFrames, 28)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 28)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 
             case .fps90:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 42 + (Double(qf) * 0.75))
-                    XCTAssertEqual(scaled.rawMTCFrames, 14)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 14)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 84 + (Double(qf) * 0.75))
-                    XCTAssertEqual(scaled.rawMTCFrames, 28)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 28)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 
             case .fps95_904, .fps96:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 48 + (Double(qf) * 1.0))
-                    XCTAssertEqual(scaled.rawMTCFrames, 12)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 12)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 88 + (Double(qf) * 1.0))
-                    XCTAssertEqual(scaled.rawMTCFrames, 22)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 22)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 
             case .fps100:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 48 + (Double(qf) * 1.0))
-                    XCTAssertEqual(scaled.rawMTCFrames, 12)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 12)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 96 + (Double(qf) * 1.0))
-                    XCTAssertEqual(scaled.rawMTCFrames, 24)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 24)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 
             case .fps119_88, .fps119_88d, .fps120, .fps120d:
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 56 + (Double(qf) * 1.0))
-                    XCTAssertEqual(scaled.rawMTCFrames, 14)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 14)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
                 for qf in UInt8(0) ... 7 {
                     let scaled = realRate.scaledFrames(fromTimecodeFrames: 112 + (Double(qf) * 1.0))
-                    XCTAssertEqual(scaled.rawMTCFrames, 28)
-                    XCTAssertEqual(scaled.rawMTCQuarterFrames, qf)
+                    #expect(scaled.rawMTCFrames == 28)
+                    #expect(scaled.rawMTCQuarterFrames == qf)
                 }
             }
         }
     }
     
-    func testMTC_RoundTrip_ScaledFrames() {
+    @Test
+    func mtcRoundTrip_ScaledFrames() {
         for realRate in TimecodeFrameRate.allCases {
             // zero
             do {
                 let scaledToMTC = realRate.scaledFrames(fromTimecodeFrames: 0.0)
                 
-                XCTAssertEqual(scaledToMTC.rawMTCFrames, 0)
-                XCTAssertEqual(scaledToMTC.rawMTCQuarterFrames, 0)
+                #expect(scaledToMTC.rawMTCFrames == 0)
+                #expect(scaledToMTC.rawMTCQuarterFrames == 0)
                 
                 let scaledToTimecode = realRate.mtcFrameRate
                     .scaledFrames(
@@ -564,7 +568,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                         to: realRate
                     )
                 
-                XCTAssertEqual(scaledToTimecode, 0.0)
+                #expect(scaledToTimecode == 0.0)
             }
             
             // test each frame round-trip scaled to MTC+QF and back to timecode frames
@@ -580,7 +584,7 @@ final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {
                         )!
                     
                     // .rounded() is needed to test for for odd `mtcScaleFactor` values
-                    XCTAssertEqual(Int(scaledToTimecode.rounded()), frame, "at: \(realRate)")
+                    #expect(Int(scaledToTimecode.rounded()) == frame, "at: \(realRate)")
                 }
             }
         }

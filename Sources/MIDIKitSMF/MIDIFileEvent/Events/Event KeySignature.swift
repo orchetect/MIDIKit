@@ -30,7 +30,7 @@ extension MIDIFileEvent {
     /// `MTrk` chunk.
     ///
     /// If there are no key signature events in a MIDI file, C major is assumed.
-    public struct KeySignature: Equatable, Hashable {
+    public struct KeySignature {
         /// Number of flats that identifies the key signature
         /// (-7 = 7 flats, -1 = 1 flat, 0 = key of C, 1 = 1 sharp, etc).
         public var flatsOrSharps: Int8 = 0 {
@@ -57,6 +57,12 @@ extension MIDIFileEvent {
         }
     }
 }
+
+extension MIDIFileEvent.KeySignature: Equatable { }
+
+extension MIDIFileEvent.KeySignature: Hashable { }
+
+extension MIDIFileEvent.KeySignature: Sendable { }
 
 // MARK: - Static Constructors
 

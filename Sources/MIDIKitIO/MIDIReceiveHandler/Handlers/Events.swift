@@ -10,7 +10,7 @@ extension MIDIReceiver {
     /// Handler for events-based MIDI receivers.
     /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
     /// `nil` when used with ``MIDIInput``.
-    public typealias EventsHandler = (
+    public typealias EventsHandler = @Sendable (
         _ events: [MIDIEvent],
         _ timeStamp: CoreMIDITimeStamp,
         _ source: MIDIOutputEndpoint?

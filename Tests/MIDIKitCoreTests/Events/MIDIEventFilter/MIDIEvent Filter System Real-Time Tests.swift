@@ -5,80 +5,84 @@
 //
 
 import MIDIKitCore
-import XCTest
+import Testing
 
-final class MIDIEvent_Filter_SystemRealTime_Tests: XCTestCase {
-    func testMetadata() {
+@Suite struct MIDIEvent_Filter_SystemRealTime_Tests {
+    @Test
+    func metadata() {
         // isSystemRealTime
     
         let events = kEvents.SysRealTime.oneOfEachEventType
     
         events.forEach {
-            XCTAssertFalse($0.isChannelVoice)
-            XCTAssertFalse($0.isSystemCommon)
-            XCTAssertFalse($0.isSystemExclusive)
-            XCTAssertTrue($0.isSystemRealTime)
-            XCTAssertFalse($0.isUtility)
+            #expect(!$0.isChannelVoice)
+            #expect(!$0.isSystemCommon)
+            #expect(!$0.isSystemExclusive)
+            #expect($0.isSystemRealTime)
+            #expect(!$0.isUtility)
         }
     
         // isSystemRealTime(ofType:)
     
-        XCTAssertTrue(
+        #expect(
             MIDIEvent.timingClock(group: 0)
                 .isSystemRealTime(ofType: .timingClock)
         )
     
-        XCTAssertFalse(
-            MIDIEvent.timingClock(group: 0)
+        #expect(
+            !MIDIEvent.timingClock(group: 0)
                 .isSystemRealTime(ofType: .start)
         )
     
         // isSystemRealTime(ofTypes:)
     
-        XCTAssertTrue(
+        #expect(
             MIDIEvent.timingClock(group: 0)
                 .isSystemRealTime(ofTypes: [.timingClock])
         )
     
-        XCTAssertTrue(
+        #expect(
             MIDIEvent.timingClock(group: 0)
                 .isSystemRealTime(ofTypes: [.timingClock, .start])
         )
     
-        XCTAssertFalse(
-            MIDIEvent.timingClock(group: 0)
+        #expect(
+            !MIDIEvent.timingClock(group: 0)
                 .isSystemRealTime(ofTypes: [.start])
         )
     
-        XCTAssertFalse(
-            MIDIEvent.timingClock(group: 0)
+        #expect(
+            !MIDIEvent.timingClock(group: 0)
                 .isSystemRealTime(ofTypes: [])
         )
     }
     
     // MARK: - only
     
-    func testFilter_only() {
+    @Test
+    func filter_only() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(sysRealTime: .only)
     
         let expectedEvents = kEvents.SysRealTime.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_onlyType() {
+    @Test
+    func filter_onlyType() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(sysRealTime: .onlyType(.start))
     
         let expectedEvents = [kEvents.SysRealTime.start]
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_onlyTypes() {
+    @Test
+    func filter_onlyTypes() {
         let events = kEvents.oneOfEachEventType
     
         var filteredEvents: [MIDIEvent]
@@ -86,20 +90,21 @@ final class MIDIEvent_Filter_SystemRealTime_Tests: XCTestCase {
     
         filteredEvents = events.filter(sysRealTime: .onlyTypes([.start]))
         expectedEvents = [kEvents.SysRealTime.start]
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     
         filteredEvents = events.filter(sysRealTime: .onlyTypes([.start, .stop]))
         expectedEvents = [kEvents.SysRealTime.start, kEvents.SysRealTime.stop]
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     
         filteredEvents = events.filter(sysRealTime: .onlyTypes([]))
         expectedEvents = []
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - keep
     
-    func testFilter_keepType() {
+    @Test
+    func filter_keepType() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(sysRealTime: .keepType(.start))
@@ -113,10 +118,11 @@ final class MIDIEvent_Filter_SystemRealTime_Tests: XCTestCase {
         ]
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_keepTypes() {
+    @Test
+    func filter_keepTypes() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(sysRealTime: .keepTypes([.start, .stop]))
@@ -131,12 +137,13 @@ final class MIDIEvent_Filter_SystemRealTime_Tests: XCTestCase {
         ]
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
     // MARK: - drop
     
-    func testFilter_drop() {
+    @Test
+    func filter_drop() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(sysRealTime: .drop)
@@ -147,10 +154,11 @@ final class MIDIEvent_Filter_SystemRealTime_Tests: XCTestCase {
         expectedEvents += kEvents.SysEx.oneOfEachEventType
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropType() {
+    @Test
+    func filter_dropType() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(sysRealTime: .dropType(.start))
@@ -168,10 +176,11 @@ final class MIDIEvent_Filter_SystemRealTime_Tests: XCTestCase {
         ]
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
     
-    func testFilter_dropTypes() {
+    @Test
+    func filter_dropTypes() {
         let events = kEvents.oneOfEachEventType
     
         let filteredEvents = events.filter(sysRealTime: .dropTypes([.start, .stop]))
@@ -188,6 +197,6 @@ final class MIDIEvent_Filter_SystemRealTime_Tests: XCTestCase {
         ]
         expectedEvents += kEvents.Utility.oneOfEachEventType
     
-        XCTAssertEqual(filteredEvents, expectedEvents)
+        #expect(filteredEvents == expectedEvents)
     }
 }

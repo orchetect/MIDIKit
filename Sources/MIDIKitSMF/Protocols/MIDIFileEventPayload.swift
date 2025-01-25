@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 
 /// Protocol describing a MIDI event payload for use in ``MIDIFileEvent`` cases.
-public protocol MIDIFileEventPayload: Sendable {
+public protocol MIDIFileEventPayload where Self: Sendable {
     /// MIDI File event type.
     static var smfEventType: MIDIFileEventType { get }
     

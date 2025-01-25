@@ -6,13 +6,14 @@
 
 import CoreMIDI
 @testable import MIDIKitSync
-import XCTest
+import Testing
 
-final class StressTests: XCTestCase {
-    func testThreadingMTCGenerator() async {
+@Suite struct StressTests {
+    @Test
+    func threadingMTCGenerator() async {
         // MARK: - Generator
         
-        let mtcGen = MTCGenerator { midiMessage in
+        let mtcGen = MTCGenerator { midiMessage in // TODO: fix TSAN race
             _ = midiMessage
         }
         
@@ -51,14 +52,15 @@ final class StressTests: XCTestCase {
         }.value
     }
     
-    func testThreadingMTCReceiver() async {
+    @Test
+    func threadingMTCReceiver() async {
         // MARK: - Receiver
         
         // (Receiver.midiIn() is async internally so we need to wait for
         // property updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(
+        let mtcRec = await MTCReceiver(
             name: "test",
             initialLocalFrameRate: .fps24
         ) { timecode, messageType, direction, displayNeedsUpdate in

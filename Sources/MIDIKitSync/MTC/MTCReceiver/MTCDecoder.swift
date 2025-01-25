@@ -84,7 +84,7 @@ public final class MTCDecoder {
     ///
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
-    var timecodeChangedHandler: ((
+    var timecodeChangedHandler: (@Sendable (
         _ timecode: Timecode,
         _ event: MTCMessageType,
         _ direction: MTCDirection,
@@ -97,7 +97,7 @@ public final class MTCDecoder {
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
     public func setTimecodeChangedHandler(
-        _ handler: ((
+        _ handler: (@Sendable (
             _ timecode: Timecode,
             _ event: MTCMessageType,
             _ direction: MTCDirection,
@@ -111,7 +111,7 @@ public final class MTCDecoder {
     ///
     /// This can usually be ignored, as the ``MTCDecoder`` can handle scaling and validation of the
     /// frame rate information from the stream transparently.
-    var mtcFrameRateChangedHandler: ((_ rate: MTCFrameRate) -> Void)?
+    var mtcFrameRateChangedHandler: (@Sendable (_ rate: MTCFrameRate) -> Void)?
         
     /// Sets the closure called only when the incoming MTC stream changes its frame rate
     /// classification.
@@ -119,7 +119,7 @@ public final class MTCDecoder {
     /// This can usually be ignored, as the ``MTCDecoder`` can handle scaling and validation of the
     /// frame rate information from the stream transparently.
     public func setMTCFrameRateChangedHandler(
-        _ handler: ((_ rate: MTCFrameRate) -> Void)?
+        _ handler: (@Sendable (_ rate: MTCFrameRate) -> Void)?
     ) {
         mtcFrameRateChangedHandler = handler
     }
@@ -164,20 +164,20 @@ public final class MTCDecoder {
         
     public init(
         initialLocalFrameRate: TimecodeFrameRate? = nil,
-        timecodeChanged: ((
+        timecodeChanged: (@Sendable (
             _ timecode: Timecode,
             _ event: MTCMessageType,
             _ direction: MTCDirection,
             _ displayNeedsUpdate: Bool
         ) -> Void)? = nil,
-        mtcFrameRateChanged: ((_ rate: MTCFrameRate) -> Void)? = nil
+        mtcFrameRateChanged: (@Sendable (_ rate: MTCFrameRate) -> Void)? = nil
     ) {
         // assign properties
-            
+        
         localFrameRate = initialLocalFrameRate
-            
+        
         // handlers
-            
+        
         timecodeChangedHandler = timecodeChanged
         mtcFrameRateChangedHandler = mtcFrameRateChanged
     }

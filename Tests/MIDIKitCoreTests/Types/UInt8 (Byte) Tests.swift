@@ -5,21 +5,23 @@
 //
 
 import MIDIKitCore
-import XCTest
+import Testing
 
-final class Byte_Tests: XCTestCase {
-    func testNibbles() {
+@Suite struct Byte_Tests {
+    @Test
+    func nibbles() {
         let byte = UInt8(0x12)
     
         let nibbles = byte.nibbles
     
-        XCTAssertEqual(nibbles.high, 0x1)
-        XCTAssertEqual(nibbles.low, 0x2)
+        #expect(nibbles.high == 0x1)
+        #expect(nibbles.low == 0x2)
     }
     
-    func testInit_Nibbles() {
+    @Test
+    func init_Nibbles() {
         let byte = UInt8(high: 0x1, low: 0x2)
     
-        XCTAssertEqual(byte, 0x12)
+        #expect(byte == 0x12)
     }
 }

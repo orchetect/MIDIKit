@@ -77,9 +77,7 @@ import MIDIKitCore
 
 extension MIDIFile.Chunk {
     /// Header: `MThd` chunk type.
-    public struct Header: Equatable, Hashable {
-        public static let staticIdentifier: String = "MThd"
-        
+    public struct Header {
         public var format: MIDIFile.Format = .multipleTracksSynchronous
         
         public var timeBase: MIDIFile.TimeBase = .default()
@@ -96,11 +94,23 @@ extension MIDIFile.Chunk {
     }
 }
 
+extension MIDIFile.Chunk.Header: Equatable { }
+
+extension MIDIFile.Chunk.Header: Hashable { }
+
 extension MIDIFile.Chunk.Header: Sendable { }
 
 extension MIDIFile.Chunk.Header: MIDIFileChunk {
     public var identifier: String { Self.staticIdentifier }
 }
+
+// MARK: - Static
+
+extension MIDIFile.Chunk.Header {
+    public static let staticIdentifier: String = "MThd"
+}
+
+// MARK: - Encoding
 
 extension MIDIFile.Chunk.Header {
     static let midi1SMFFixedRawBytesLength = 14

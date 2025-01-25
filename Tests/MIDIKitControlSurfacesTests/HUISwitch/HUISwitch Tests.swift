@@ -5,15 +5,16 @@
 //
 
 @testable import MIDIKitControlSurfaces
-import XCTest
+import Testing
 
-final class HUISwitchTests: XCTestCase {
+@Suite struct HUISwitchTests {
     /// Ensure all switches produce zone and port numbers that re-form the same switch case.
-    func testAllCases_InitZonePort() {
-        HUISwitch.allCases.forEach {
-            let (zone, port) = $0.zoneAndPort
+    @Test
+    func allCases_InitZonePort() {
+        for item in HUISwitch.allCases {
+            let (zone, port) = item.zoneAndPort
             let sw = HUISwitch(zone: zone, port: port)
-            XCTAssertEqual($0, sw)
+            #expect(item == sw)
         }
     }
 }

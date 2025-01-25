@@ -8,39 +8,43 @@
 
 import CoreMIDI
 @testable import MIDIKitIO
-import XCTest
+import Testing
 
-final class MIDIPacketData_Tests: XCTestCase {
-    func testEmptyBytes256Length() throws {
+@Suite struct MIDIPacketData_Tests {
+    @Test
+    func emptyBytes256Length() throws {
         var testPacket = kMIDIPacket.emptyBytes256Length
         let data = MIDIPacketData(&testPacket, refCon: nil, refConKnown: false)
         
-        XCTAssertEqual(data.bytes, [UInt8](repeating: 0x00, count: 256))
-        XCTAssertEqual(data.timeStamp, 123_456_789)
+        #expect(data.bytes == [UInt8](repeating: 0x00, count: 256))
+        #expect(data.timeStamp == 123_456_789)
     }
     
-    func testNoteOn60Vel65Chan1() throws {
+    @Test
+    func noteOn60Vel65Chan1() throws {
         var testPacket = kMIDIPacket.noteOn60Vel65Chan1
         let data = MIDIPacketData(&testPacket, refCon: nil, refConKnown: false)
         
-        XCTAssertEqual(data.bytes, [0x90, 0x3C, 0x41])
-        XCTAssertEqual(data.timeStamp, 123_456_789)
+        #expect(data.bytes == [0x90, 0x3C, 0x41])
+        #expect(data.timeStamp == 123_456_789)
     }
     
-    func testNoteOn60Vel65Chan1_CC12Val105Chan1() throws {
+    @Test
+    func noteOn60Vel65Chan1_CC12Val105Chan1() throws {
         var testPacket = kMIDIPacket.noteOn60Vel65Chan1_CC12Val105Chan1
         let data = MIDIPacketData(&testPacket, refCon: nil, refConKnown: false)
         
-        XCTAssertEqual(data.bytes, [0x90, 0x3C, 0x41, 0xB0, 0x08, 0x69])
-        XCTAssertEqual(data.timeStamp, 987_654_321)
+        #expect(data.bytes == [0x90, 0x3C, 0x41, 0xB0, 0x08, 0x69])
+        #expect(data.timeStamp == 987_654_321)
     }
     
-    func testFull256Bytes() throws {
+    @Test
+    func full256Bytes() throws {
         var testPacket = kMIDIPacket.full256Bytes
         let data = MIDIPacketData(&testPacket, refCon: nil, refConKnown: false)
         
-        XCTAssertEqual(data.bytes, kMIDIPacket.full256Bytes_rawBytes)
-        XCTAssertEqual(data.timeStamp, UInt64.max)
+        #expect(data.bytes == kMIDIPacket.full256Bytes_rawBytes)
+        #expect(data.timeStamp == UInt64.max)
     }
 }
 

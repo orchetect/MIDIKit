@@ -25,7 +25,7 @@ extension MIDIFileEvent {
     /// appear.
     ///
     /// - For MIDI file type 2, each track can contain a sequence number event.
-    public struct SequenceNumber: Equatable, Hashable {
+    public struct SequenceNumber {
         /// Sequence number (`0 ... 32767`)
         public var sequence: UInt16 = 0 {
             didSet {
@@ -44,6 +44,12 @@ extension MIDIFileEvent {
         }
     }
 }
+
+extension MIDIFileEvent.SequenceNumber: Equatable { }
+
+extension MIDIFileEvent.SequenceNumber: Hashable { }
+
+extension MIDIFileEvent.SequenceNumber: Sendable { }
 
 // MARK: - Static Constructors
 

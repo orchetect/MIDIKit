@@ -95,7 +95,7 @@ public final actor MTCReceiver {
     ///
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
-    public var timecodeChangedHandler: ((
+    var timecodeChangedHandler: (@Sendable (
         _ timecode: Timecode,
         _ event: MTCMessageType,
         _ direction: MTCDirection,
@@ -108,7 +108,7 @@ public final actor MTCReceiver {
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
     public func setTimecodeChangedHandler(
-        _ handler: ((
+        _ handler: (@Sendable (
             _ timecode: Timecode,
             _ event: MTCMessageType,
             _ direction: MTCDirection,
@@ -118,8 +118,15 @@ public final actor MTCReceiver {
         self.timecodeChangedHandler = handler
     }
     
-    /// Called when the MTC receiver's state changes
-    public var stateChangedHandler: ((_ state: State) -> Void)?
+    /// Called when the MTC receiver's state changes.
+    var stateChangedHandler: (@Sendable (_ state: State) -> Void)?
+    
+    /// Called when the MTC receiver's state changes.
+    public func setStateChangedHandler(
+        _ handler: (@Sendable (_ state: State) -> Void)?
+    ) {
+        self.stateChangedHandler = handler
+    }
     
     // MARK: - Init
     
@@ -136,14 +143,14 @@ public final actor MTCReceiver {
         name: String? = nil,
         initialLocalFrameRate: TimecodeFrameRate? = nil,
         syncPolicy: SyncPolicy? = nil,
-        timecodeChanged: ((
+        timecodeChanged: (@Sendable (
             _ timecode: Timecode,
             _ event: MTCMessageType,
             _ direction: MTCDirection,
             _ displayNeedsUpdate: Bool
         ) -> Void)? = nil,
-        stateChanged: ((_ state: State) -> Void)? = nil
-    ) {
+        stateChanged: (@Sendable (_ state: State) -> Void)? = nil
+    ) async {
         // handle init arguments
         
         let name = name ?? UUID().uuidString
@@ -182,20 +189,18 @@ public final actor MTCReceiver {
         
         // set up handlers after self is initialized so we can capture reference to self
         
-        Task {
-            await timer.setEventHandler { [weak self] in
-                Task { await self?.timerFired() }
-            }
-            
-            await decoder.setTimecodeChangedHandler { [weak self] timecode, messageType, direction, displayNeedsUpdate in
-                Task {
-                    await self?.timecodeDidChange(
-                        to: timecode,
-                        event: messageType,
-                        direction: direction,
-                        displayNeedsUpdate: displayNeedsUpdate
-                    )
-                }
+        await timer.setEventHandler { [weak self] in
+            Task { await self?.timerFired() }
+        }
+        
+        decoder.setTimecodeChangedHandler { [weak self] timecode, messageType, direction, displayNeedsUpdate in
+            Task {
+                await self?.timecodeDidChange(
+                    to: timecode,
+                    event: messageType,
+                    direction: direction,
+                    displayNeedsUpdate: displayNeedsUpdate
+                )
             }
         }
     }
@@ -269,13 +274,9 @@ public final actor MTCReceiver {
 
 // MARK: - ReceivesMIDIEvents
 
-extension MTCReceiver: ReceivesMIDIEvents {
-    /// Incoming MIDI messages (Async on MTCReceiver queue)
-    public nonisolated func midiIn(event: MIDIEvent) {
-        // The decoder's midiIn can trigger handler callbacks as a result, which will in turn all be
-        // executed on the queue
-        
-        Task { await self.decoder.midiIn(event: event) }
+extension MTCReceiver: @preconcurrency ReceivesMIDIEvents {
+    public func midiIn(event: MIDIEvent) {
+        decoder.midiIn(event: event)
     }
 }
 

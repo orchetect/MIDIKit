@@ -5,46 +5,51 @@
 //
 
 @testable import MIDIKitCore
-import XCTest
+import Testing
 
-final class UMPWord_Tests: XCTestCase {
+@Suite struct UMPWord_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets
     
-    func testInit_Four_Bytes() {
+    @Test
+    func init_Four_Bytes() {
         let word = UMPWord(0x12, 0x34, 0x56, 0x78)
-    
-        XCTAssertEqual(word, 0x1234_5678)
+        
+        #expect(word == 0x1234_5678)
     }
     
-    func testInit_Two_UInt16() {
+    @Test
+    func init_Two_UInt16() {
         let word = UMPWord(0x1234, 0x5678)
-    
-        XCTAssertEqual(word, 0x1234_5678)
+        
+        #expect(word == 0x1234_5678)
     }
     
-    func testUMPWordsToBytes_Empty() {
+    @Test
+    func umpWordsToBytes_Empty() {
         let words: [UMPWord] = []
-    
+        
         let bytes = words.umpWordsToBytes()
-    
-        XCTAssertEqual(bytes, [])
+        
+        #expect(bytes == [])
     }
     
-    func testUMPWordsToBytes_OneWord() {
+    @Test
+    func umpWordsToBytes_OneWord() {
         let words: [UMPWord] = [0x1234_5678]
-    
+        
         let bytes = words.umpWordsToBytes()
-    
-        XCTAssertEqual(bytes, [0x12, 0x34, 0x56, 0x78])
+        
+        #expect(bytes == [0x12, 0x34, 0x56, 0x78])
     }
     
-    func testUMPWordsToBytes_TwoWords() {
+    @Test
+    func umpWordsToBytes_TwoWords() {
         let words: [UMPWord] = [0x1234_5678, 0x89AB_CDEF]
-    
+        
         let bytes = words.umpWordsToBytes()
-    
-        XCTAssertEqual(bytes, [0x12, 0x34, 0x56, 0x78,
-                               0x89, 0xAB, 0xCD, 0xEF])
+        
+        #expect(bytes == [0x12, 0x34, 0x56, 0x78,
+                          0x89, 0xAB, 0xCD, 0xEF])
     }
 }

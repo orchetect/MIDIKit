@@ -7,30 +7,33 @@
 #if !os(tvOS) && !os(watchOS)
 
 @testable import MIDIKitIO
-import XCTest
+import Testing
 
-final class Endpoint_Hashable_Tests: XCTestCase {
-    func testInputEndpoint1() {
+@Suite struct Endpoint_Hashable_Tests {
+    @Test
+    func inputEndpoint1() {
         let same: Set<MIDIInputEndpoint> = [
             .init(from: 123),
             .init(from: 123)
         ]
-    
-        XCTAssertEqual(same.count, 1)
+        
+        #expect(same.count == 1)
     }
     
-    func testInputEndpoint1B() {
+    @Test
+    func inputEndpoint1B() {
         let same: Set<MIDIInputEndpoint> = [
             .init(from: 123),
             .init(from: 456)
         ]
-    
+        
         // even with different ref IDs, since these don't actually currently
         // exist in the system, their Unique IDs will both be 0 and thus equal
-        XCTAssertEqual(same.count, 1)
+        #expect(same.count == 1)
     }
     
-    func testInputEndpoint2() {
+    @Test
+    func inputEndpoint2() {
         let same: Set<MIDIInputEndpoint> = [
             MIDIInputEndpoint(
                 ref: 123,
@@ -45,11 +48,12 @@ final class Endpoint_Hashable_Tests: XCTestCase {
                 uniqueID: 12_345_678
             )
         ]
-    
-        XCTAssertEqual(same.count, 1)
+        
+        #expect(same.count == 1)
     }
     
-    func testInputEndpoint2Diff() {
+    @Test
+    func inputEndpoint2Diff() {
         let same: Set<MIDIInputEndpoint> = [
             MIDIInputEndpoint(
                 ref: 123,
@@ -64,31 +68,34 @@ final class Endpoint_Hashable_Tests: XCTestCase {
                 uniqueID: 987_654_321
             )
         ]
-    
-        XCTAssertEqual(same.count, 2)
+        
+        #expect(same.count == 2)
     }
     
-    func testOutputEndpoint1() {
+    @Test
+    func outputEndpoint1() {
         let same: Set<MIDIOutputEndpoint> = [
             .init(from: 123),
             .init(from: 123)
         ]
-    
-        XCTAssertEqual(same.count, 1)
+        
+        #expect(same.count == 1)
     }
     
-    func testOutputEndpoint1B() {
+    @Test
+    func outputEndpoint1B() {
         let same: Set<MIDIOutputEndpoint> = [
             .init(from: 123),
             .init(from: 456)
         ]
-    
+        
         // even with different ref IDs, since these don't actually currently
         // exist in the system, their Unique IDs will both be 0 and thus equal
-        XCTAssertEqual(same.count, 1)
+        #expect(same.count == 1)
     }
     
-    func testOutputEndpoint2() {
+    @Test
+    func outputEndpoint2() {
         let same: Set<MIDIOutputEndpoint> = [
             MIDIOutputEndpoint(
                 ref: 123,
@@ -103,11 +110,12 @@ final class Endpoint_Hashable_Tests: XCTestCase {
                 uniqueID: 12_345_678
             )
         ]
-    
-        XCTAssertEqual(same.count, 1)
+        
+        #expect(same.count == 1)
     }
     
-    func testOutputEndpoint2Diff() {
+    @Test
+    func outputEndpoint2Diff() {
         let same: Set<MIDIOutputEndpoint> = [
             MIDIOutputEndpoint(
                 ref: 123,
@@ -122,8 +130,8 @@ final class Endpoint_Hashable_Tests: XCTestCase {
                 uniqueID: 987_654_321
             )
         ]
-    
-        XCTAssertEqual(same.count, 2)
+        
+        #expect(same.count == 2)
     }
 }
 

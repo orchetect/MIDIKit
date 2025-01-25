@@ -5,27 +5,28 @@
 //
 
 @testable import MIDIKitCore
-import XCTest
+import Testing
 
-final class MIDIEventNoOp_Tests: XCTestCase {
+@Suite struct MIDIEventNoOp_Tests {
     // swiftformat:options --wrapcollections preserve
     
     typealias NoOp = MIDIEvent.NoOp
     
-    func testNoOp() {
+    @Test
+    func noOp() {
         for grp: UInt4 in 0x0 ... 0xF {
             let event: MIDIEvent = .noOp(group: grp)
-    
-            XCTAssertEqual(
-                event.umpRawWords(protocol: .midi2_0),
-                [[
-                    UMPWord(
-                        0x00 + grp.uInt8Value,
-                        0x00,
-                        0x00,
-                        0x00
-                    )
-                ]]
+            
+            #expect(
+                event.umpRawWords(protocol: .midi2_0) ==
+                    [[
+                        UMPWord(
+                            0x00 + grp.uInt8Value,
+                            0x00,
+                            0x00,
+                            0x00
+                        )
+                    ]]
             )
         }
     }

@@ -9,35 +9,39 @@
 import CoreMIDI
 import MIDIKitInternals
 @testable import MIDIKitIO
-import XCTest
+import Testing
 
-final class MIDIPacket_Tests: XCTestCase {
-    func testEmptyBytes256Length() throws {
+@Suite struct MIDIPacket_Tests {
+    @Test
+    func emptyBytes256Length() throws {
         let testPacket = kMIDIPacket.emptyBytes256Length
         
-        XCTAssertEqual(testPacket.rawBytes, [UInt8](repeating: 0x00, count: 256))
-        XCTAssertEqual(testPacket.rawTimeStamp, 123_456_789)
+        #expect(testPacket.rawBytes == [UInt8](repeating: 0x00, count: 256))
+        #expect(testPacket.rawTimeStamp == 123_456_789)
     }
     
-    func testNoteOn60Vel65Chan1() throws {
+    @Test
+    func noteOn60Vel65Chan1() throws {
         let testPacket = kMIDIPacket.noteOn60Vel65Chan1
         
-        XCTAssertEqual(testPacket.rawBytes, [0x90, 0x3C, 0x41])
-        XCTAssertEqual(testPacket.rawTimeStamp, 123_456_789)
+        #expect(testPacket.rawBytes == [0x90, 0x3C, 0x41])
+        #expect(testPacket.rawTimeStamp == 123_456_789)
     }
     
-    func testNoteOn60Vel65Chan1_CC12Val105Chan1() throws {
+    @Test
+    func noteOn60Vel65Chan1_CC12Val105Chan1() throws {
         let testPacket = kMIDIPacket.noteOn60Vel65Chan1_CC12Val105Chan1
         
-        XCTAssertEqual(testPacket.rawBytes, [0x90, 0x3C, 0x41, 0xB0, 0x08, 0x69])
-        XCTAssertEqual(testPacket.rawTimeStamp, 987_654_321)
+        #expect(testPacket.rawBytes == [0x90, 0x3C, 0x41, 0xB0, 0x08, 0x69])
+        #expect(testPacket.rawTimeStamp == 987_654_321)
     }
     
-    func testFull256Bytes() throws {
+    @Test
+    func full256Bytes() throws {
         let testPacket = kMIDIPacket.full256Bytes
         
-        XCTAssertEqual(testPacket.rawBytes, kMIDIPacket.full256Bytes_rawBytes)
-        XCTAssertEqual(testPacket.rawTimeStamp, UInt64.max)
+        #expect(testPacket.rawBytes == kMIDIPacket.full256Bytes_rawBytes)
+        #expect(testPacket.rawTimeStamp == UInt64.max)
     }
 }
 

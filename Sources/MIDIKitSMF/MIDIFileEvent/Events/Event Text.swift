@@ -24,7 +24,7 @@ extension MIDIFileEvent {
     ///
     /// Text is restricted to ASCII format only. If extended characters or encodings are used, it
     /// will be converted to ASCII lossily before encoding into the MIDI file.
-    public struct Text: Equatable, Hashable {
+    public struct Text {
         /// Type of text event.
         public var textType: EventType = .text
         
@@ -99,6 +99,12 @@ extension MIDIFileEvent {
         }
     }
 }
+
+extension MIDIFileEvent.Text: Equatable { }
+
+extension MIDIFileEvent.Text: Hashable { }
+
+extension MIDIFileEvent.Text: Sendable { }
 
 // MARK: - Static Constructors
 

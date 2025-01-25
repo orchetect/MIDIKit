@@ -8,7 +8,7 @@
 
 extension MIDIReceiver {
     /// Handler for the ``rawData(_:)`` MIDI receiver.
-    public typealias RawDataHandler = (_ packet: AnyMIDIPacket) -> Void
+    public typealias RawDataHandler = @Sendable (_ packet: AnyMIDIPacket) -> Void
     
     /// Raw packet data receive handler.
     /// This handler is provided for debugging and data introspection but is discouraged for

@@ -38,13 +38,6 @@ extension ContentView {
                     } label: { Text("Song Select") }
                     
                     Button {
-                        sendEvent(.unofficialBusSelect(
-                            bus: 2,
-                            group: midiGroup
-                        ))
-                    } label: { Text("Bus Select (Unofficial)") }
-                    
-                    Button {
                         sendEvent(.tuneRequest(group: midiGroup))
                     } label: { Text("Tune Request") }
                 }

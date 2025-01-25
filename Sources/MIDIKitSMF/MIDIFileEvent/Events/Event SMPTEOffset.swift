@@ -28,7 +28,7 @@ extension MIDIFileEvent {
     /// >
     /// > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in
     /// > SMPTE-based tracks which specify a different frame subdivision for delta-times.
-    public struct SMPTEOffset: Equatable, Hashable {
+    public struct SMPTEOffset {
         /// Timecode hour.
         /// Valid range: ` 0 ... 23`.
         public var hours: UInt8 = 0 {
@@ -158,6 +158,12 @@ extension MIDIFileEvent {
         // TODO: add an init from Timecode struct that can convert/scale timecode and subframes to 100 subframe divisor
     }
 }
+
+extension MIDIFileEvent.SMPTEOffset: Equatable { }
+
+extension MIDIFileEvent.SMPTEOffset: Hashable { }
+
+extension MIDIFileEvent.SMPTEOffset: Sendable { }
 
 // MARK: - Static Constructors
 

@@ -11,7 +11,7 @@ import MIDIKitCore
 
 extension MIDIFile {
     /// MIDI file timebase as described in the MIDI file header.
-    public enum TimeBase: Equatable, Hashable {
+    public enum TimeBase {
         /// Musical: Delta-time ticks per quarter note (PPQN / PPQ / PPQBase / TPQN).
         ///
         /// Common values: 96, 120, 480, 960. Cubase exports at 480 by default.
@@ -30,6 +30,34 @@ extension MIDIFile {
     }
 }
 
+extension MIDIFile.TimeBase: Equatable { }
+
+extension MIDIFile.TimeBase: Hashable { }
+
+extension MIDIFile.TimeBase: Identifiable {
+    public var id: Self { self }
+}
+
+extension MIDIFile.TimeBase: Sendable { }
+
+extension MIDIFile.TimeBase: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case let .musical(ticksPerQuarterNote):
+            return "Musical: \(ticksPerQuarterNote) ticks per quarter"
+            
+        case let .timecode(smpteFormat, ticksPerFrame):
+            return "Timecode: \(smpteFormat) \(ticksPerFrame) ticks per frame"
+        }
+    }
+}
+
+extension MIDIFile.TimeBase: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "timeBase(" + description + ")"
+    }
+}
+
 // MARK: - Static Constructors
 
 extension MIDIFile.TimeBase {
@@ -38,22 +66,7 @@ extension MIDIFile.TimeBase {
     }
 }
 
-extension MIDIFile.TimeBase {
-    var rawData: Data {
-        switch self {
-        case let .musical(ticksPerQuarterNote):
-            return (ticksPerQuarterNote & 0b01111111_11111111)
-                .toData(.bigEndian)
-            
-        case let .timecode(smpteFormat, ticksPerFrame):
-            return [
-                smpteFormat.rawValue + 0b10000000,
-                ticksPerFrame
-            ]
-            .data
-        }
-    }
-}
+// MARK: - Init
 
 extension MIDIFile.TimeBase {
     /// Initialize from raw data.
@@ -93,26 +106,21 @@ extension MIDIFile.TimeBase {
     }
 }
 
-extension MIDIFile.TimeBase: Identifiable {
-    public var id: Self { self }
-}
+// MARK: - Properties
 
-extension MIDIFile.TimeBase: Sendable { }
-
-extension MIDIFile.TimeBase: CustomStringConvertible {
-    public var description: String {
+extension MIDIFile.TimeBase {
+    var rawData: Data {
         switch self {
         case let .musical(ticksPerQuarterNote):
-            return "Musical: \(ticksPerQuarterNote) ticks per quarter"
+            return (ticksPerQuarterNote & 0b01111111_11111111)
+                .toData(.bigEndian)
             
         case let .timecode(smpteFormat, ticksPerFrame):
-            return "Timecode: \(smpteFormat) \(ticksPerFrame) ticks per frame"
+            return [
+                smpteFormat.rawValue + 0b10000000,
+                ticksPerFrame
+            ]
+                .data
         }
-    }
-}
-
-extension MIDIFile.TimeBase: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        "timeBase(" + description + ")"
     }
 }

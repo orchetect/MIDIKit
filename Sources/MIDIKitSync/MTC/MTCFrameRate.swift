@@ -64,28 +64,42 @@ import TimecodeKitCore
 /// When DAWs transmit MTC, the frame rate gets scaled down to one of the four base MTC frame rates.
 /// It is the job of the receiving DAW to scale the MTC frame data back up to the desired actual
 /// frame rate.
-public enum MTCFrameRate: Hashable, CaseIterable {
+public enum MTCFrameRate {
     /// MTC frame rate classification of 24 fps and related rates
     case mtc24
-        
+    
     /// MTC frame rate classification of 25 fps and related rates
     case mtc25
-        
+    
     /// MTC frame rate classification of 29.97 drop fps and related rates
     case mtc2997d
-        
+    
     /// MTC frame rate classification of 30 fps and related rates
     case mtc30
-        
-    // MARK: - Init
-        
+}
+
+extension MTCFrameRate: Equatable { }
+
+extension MTCFrameRate: Hashable { }
+
+extension MTCFrameRate: CaseIterable { }
+
+extension MTCFrameRate: Identifiable {
+    public var id: Self { self }
+}
+
+extension MTCFrameRate: Sendable { }
+
+// MARK: - Init
+
+extension MTCFrameRate {
     /// Construct based on the corresponding real timecode frame rate
-    init(_ timecodeFrameRate: TimecodeFrameRate) {
+    public init(_ timecodeFrameRate: TimecodeFrameRate) {
         self = timecodeFrameRate.mtcFrameRate
     }
-        
+    
     /// Construct from MTC bits
-    init?(_ bitValue: UInt8) {
+    public init?(_ bitValue: UInt8) {
         switch bitValue {
         case 0b00:      self = .mtc24
         case 0b01:      self = .mtc25
@@ -94,9 +108,11 @@ public enum MTCFrameRate: Hashable, CaseIterable {
         default:        return nil
         }
     }
-        
-    // MARK: - Public properties
-        
+}
+
+// MARK: - Public properties
+
+extension MTCFrameRate {
     /// Raw bit value transmitted in MTC messages
     public var bitValue: UInt8 {
         switch self {
@@ -106,7 +122,7 @@ public enum MTCFrameRate: Hashable, CaseIterable {
         case .mtc30:    return 0b11
         }
     }
-        
+    
     /// Human-readable descriptive string
     public var stringValue: String {
         switch self {
@@ -116,7 +132,7 @@ public enum MTCFrameRate: Hashable, CaseIterable {
         case .mtc30:    return "SMPTE-30"
         }
     }
-        
+    
     /// Returns true if the rate is drop-frame
     public var isDrop: Bool {
         switch self {
@@ -126,9 +142,11 @@ public enum MTCFrameRate: Hashable, CaseIterable {
         case .mtc30:    return false
         }
     }
-        
-    // MARK: - Internal properties
-        
+}
+
+// MARK: - Internal properties
+
+extension MTCFrameRate {
     /// FPS Value for scaling MTC frame rate
     var fpsValueForScaling: Int {
         switch self {
@@ -139,9 +157,3 @@ public enum MTCFrameRate: Hashable, CaseIterable {
         }
     }
 }
-
-extension MTCFrameRate: Identifiable {
-    public var id: Self { self }
-}
-
-extension MTCFrameRate: Sendable { }

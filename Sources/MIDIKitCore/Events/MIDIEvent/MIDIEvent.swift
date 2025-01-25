@@ -250,26 +250,6 @@ public enum MIDIEvent: Equatable, Hashable {
     /// > (MIDI Sync).
     case songSelect(SongSelect)
     
-    /// Unofficial Bus Select (Status `0xF5`)
-    ///
-    /// > Warning: This command is not officially supported and some MIDI subsystems will ignore it
-    /// > entirely. It is provided purely for legacy support and its use is discouraged. It will
-    /// > likely be removed in a future release of MIDIKit.
-    ///
-    /// > Reference:
-    /// >
-    /// > "Some vendors have produced boxes with a single MIDI input, and multiple MIDI outputs. The
-    /// > Bus Select message specifies which of the outputs further data should be sent to. This is
-    /// > not an official message; the vendors in question should have used a SysEx command." --
-    /// > [David Van Brink's MIDI
-    /// > Spec](https://www.cs.cmu.edu/~music/cmsip/readings/davids-midi-spec.htm)
-    @available(
-        *,
-        deprecated,
-        message: "Bus Select is not supported by Core MIDI and will be removed in the future."
-    )
-    case unofficialBusSelect(UnofficialBusSelect)
-    
     /// System Common: Tune Request
     /// (MIDI 1.0 / 2.0)
     ///

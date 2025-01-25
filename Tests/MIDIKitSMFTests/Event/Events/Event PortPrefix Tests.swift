@@ -5,25 +5,27 @@
 //
 
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class Event_PortPrefix_Tests: XCTestCase {
+@Suite struct Event_PortPrefix_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
-    func testInit_midi1SMFRawBytes() throws {
+    @Test
+    func init_midi1SMFRawBytes() throws {
         let bytes: [UInt8] = [0xFF, 0x21, 0x01, 0x02]
         
         let event = try MIDIFileEvent.PortPrefix(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.port, 2)
+        #expect(event.port == 2)
     }
     
-    func testMIDI1SMFRawBytes() {
+    @Test
+    func midi1SMFRawBytes() {
         let event = MIDIFileEvent.PortPrefix(port: 2)
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [0xFF, 0x21, 0x01, 0x02])
+        #expect(bytes == [0xFF, 0x21, 0x01, 0x02])
     }
 }

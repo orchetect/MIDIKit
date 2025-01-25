@@ -133,9 +133,6 @@ extension MIDIEvent {
         case let .songSelect(event):
             return event.group
     
-        case let .unofficialBusSelect(event):
-            return event.group
-    
         case let .tuneRequest(event):
             return event.group
     

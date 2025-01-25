@@ -86,9 +86,6 @@ extension MIDIEvent {
         case let .songSelect(event):
             return event.midi1RawBytes()
     
-        case let .unofficialBusSelect(event):
-            return event.midi1RawBytes()
-    
         case let .tuneRequest(event):
             return event.midi1RawBytes()
     
@@ -203,9 +200,6 @@ extension MIDIEvent {
             return event.midi1RawStatusByte()
             
         case let .songSelect(event):
-            return event.midi1RawStatusByte()
-            
-        case let .unofficialBusSelect(event):
             return event.midi1RawStatusByte()
             
         case let .tuneRequest(event):
@@ -323,9 +317,6 @@ extension MIDIEvent {
             return event.midi1RawDataBytes()
             
         case let .songSelect(event):
-            return (data1: event.midi1RawDataBytes(), data2: nil)
-            
-        case let .unofficialBusSelect(event):
             return (data1: event.midi1RawDataBytes(), data2: nil)
             
         case .tuneRequest:
@@ -449,9 +440,6 @@ extension MIDIEvent {
             return [event.umpRawWords()]
     
         case let .songSelect(event):
-            return [event.umpRawWords()]
-    
-        case let .unofficialBusSelect(event):
             return [event.umpRawWords()]
     
         case let .tuneRequest(event):

@@ -19,6 +19,10 @@ public enum MTCMessageType {
     case quarterFrame
 }
 
+extension MTCMessageType: Equatable { }
+
+extension MTCMessageType: Hashable { }
+
 extension MTCMessageType: Identifiable {
     public var id: Self { self }
 }

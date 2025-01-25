@@ -5,11 +5,12 @@
 //
 
 @testable import MIDIKitSync
+import Testing
 import TimecodeKitCore
-import XCTest
 
-final class MTC_Generator_Generator_Tests: XCTestCase {
-    func testMTC_Generator_Default() async {
+@Suite class MTC_Generator_Generator_Tests {
+    @Test
+    func mtcGenerator_Default() async {
         // just testing variations on syntax
         
         let mtcGen1 = MTCGenerator()

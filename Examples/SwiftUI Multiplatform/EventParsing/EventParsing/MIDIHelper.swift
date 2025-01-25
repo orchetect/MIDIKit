@@ -308,15 +308,6 @@ final class MIDIHelper: ObservableObject {
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
     
-        case let .unofficialBusSelect(payload):
-            print(
-                "Unofficial Bus Select (May be removed in a future MIDIKit release):",
-                "\n  Bus:",
-                payload.bus.intValue,
-                "\n  UMP Group (MIDI2):",
-                payload.group.intValue.hex.stringValue(prefix: true)
-            )
-    
         case let .tuneRequest(payload):
             print(
                 "Tune Request:",

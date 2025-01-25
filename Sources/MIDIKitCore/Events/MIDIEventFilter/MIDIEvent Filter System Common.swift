@@ -13,7 +13,6 @@ extension MIDIEvent {
         case .timecodeQuarterFrame,
              .songPositionPointer,
              .songSelect,
-             .unofficialBusSelect,
              .tuneRequest:
             return true
     
@@ -29,7 +28,6 @@ extension MIDIEvent {
         case .timecodeQuarterFrame : return sysCommonType == .timecodeQuarterFrame
         case .songPositionPointer  : return sysCommonType == .songPositionPointer
         case .songSelect           : return sysCommonType == .songSelect
-        case .unofficialBusSelect  : return sysCommonType == .unofficialBusSelect
         case .tuneRequest          : return sysCommonType == .tuneRequest
         default                    : return false
         }

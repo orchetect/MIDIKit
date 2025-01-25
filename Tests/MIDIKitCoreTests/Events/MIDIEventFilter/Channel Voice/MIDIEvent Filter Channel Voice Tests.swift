@@ -5,129 +5,131 @@
 //
 
 import MIDIKitCore
-import XCTest
+import Testing
 
-final class MIDIEvent_Filter_ChannelVoice_Tests: XCTestCase {
-    func testMetadata() {
+@Suite struct MIDIEvent_Filter_ChannelVoice_Tests {
+    @Test
+    func Metadata() {
         // isChannelVoice
-    
+        
         let events = kEvents.ChanVoice.oneOfEachEventType
-    
-        events.forEach {
-            XCTAssertTrue($0.isChannelVoice)
-            XCTAssertFalse($0.isSystemCommon)
-            XCTAssertFalse($0.isSystemExclusive)
-            XCTAssertFalse($0.isSystemRealTime)
-            XCTAssertFalse($0.isUtility)
+        
+        for event in events {
+            #expect(event.isChannelVoice)
+            #expect(!event.isSystemCommon)
+            #expect(!event.isSystemExclusive)
+            #expect(!event.isSystemRealTime)
+            #expect(!event.isUtility)
         }
-    
+        
         // isChannelVoice(ofType:)
-    
-        XCTAssertTrue(
+        
+        #expect(
             MIDIEvent.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofType: .noteOn)
         )
-    
-        XCTAssertFalse(
-            MIDIEvent.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
+        
+        #expect(
+            !MIDIEvent.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofType: .noteOff)
         )
-    
+        
         // isChannelVoice(ofTypes:)
-    
-        XCTAssertTrue(
+        
+        #expect(
             MIDIEvent.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofTypes: [.noteOn])
         )
-    
-        XCTAssertTrue(
+        
+        #expect(
             MIDIEvent.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofTypes: [.noteOn, .noteOff])
         )
-    
-        XCTAssertFalse(
-            MIDIEvent.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
+        
+        #expect(
+            !MIDIEvent.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofTypes: [.noteOff, .cc])
         )
-    
-        XCTAssertFalse(
-            MIDIEvent.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
+        
+        #expect(
+            !MIDIEvent.noteOn(1, velocity: .unitInterval(1.0), channel: 1, group: 0)
                 .isChannelVoice(ofTypes: [])
         )
     }
     
     // MARK: - Convenience Static Constructors
     
-    func testOnlyCC_ControllerNumber() {
+    @Test
+    func OnlyCC_ControllerNumber() {
         let events = [
             kEvents.ChanVoice.cc,
             kEvents.ChanVoice.noteOn
         ]
-    
-        XCTAssertEqual(
-            events.filter(chanVoice: .onlyCC(2)),
-            []
+        
+        #expect(
+            events.filter(chanVoice: .onlyCC(2)) ==
+                []
         )
-        XCTAssertEqual(
-            events.filter(chanVoice: .onlyCC(11)),
-            [kEvents.ChanVoice.cc]
+        #expect(
+            events.filter(chanVoice: .onlyCC(11)) ==
+                [kEvents.ChanVoice.cc]
         )
-    
-        XCTAssertEqual(
-            events.filter(chanVoice: .onlyCCs([2])),
-            []
+        
+        #expect(
+            events.filter(chanVoice: .onlyCCs([2])) ==
+                []
         )
-        XCTAssertEqual(
-            events.filter(chanVoice: .onlyCCs([11])),
-            [kEvents.ChanVoice.cc]
+        #expect(
+            events.filter(chanVoice: .onlyCCs([11])) ==
+                [kEvents.ChanVoice.cc]
         )
-    
-        XCTAssertEqual(
-            events.filter(chanVoice: .keepCC(2)),
-            [kEvents.ChanVoice.noteOn]
+        
+        #expect(
+            events.filter(chanVoice: .keepCC(2)) ==
+                [kEvents.ChanVoice.noteOn]
         )
-        XCTAssertEqual(
-            events.filter(chanVoice: .keepCC(11)),
-            [
-                kEvents.ChanVoice.cc,
-                kEvents.ChanVoice.noteOn
-            ]
+        #expect(
+            events.filter(chanVoice: .keepCC(11)) ==
+                [
+                    kEvents.ChanVoice.cc,
+                    kEvents.ChanVoice.noteOn
+                ]
         )
-    
-        XCTAssertEqual(
-            events.filter(chanVoice: .keepCCs([2])),
-            [kEvents.ChanVoice.noteOn]
+        
+        #expect(
+            events.filter(chanVoice: .keepCCs([2])) ==
+                [kEvents.ChanVoice.noteOn]
         )
-        XCTAssertEqual(
-            events.filter(chanVoice: .keepCCs([11])),
-            [
-                kEvents.ChanVoice.cc,
-                kEvents.ChanVoice.noteOn
-            ]
+        #expect(
+            events.filter(chanVoice: .keepCCs([11])) ==
+                [
+                    kEvents.ChanVoice.cc,
+                    kEvents.ChanVoice.noteOn
+                ]
         )
-    
-        XCTAssertEqual(
-            events.filter(chanVoice: .dropCC(2)),
-            [
-                kEvents.ChanVoice.cc,
-                kEvents.ChanVoice.noteOn
-            ]
+        
+        #expect(
+            events.filter(chanVoice: .dropCC(2)) ==
+                [
+                    kEvents.ChanVoice.cc,
+                    kEvents.ChanVoice.noteOn
+                ]
         )
-        XCTAssertEqual(
-            events.filter(chanVoice: .dropCC(11)),
-            [kEvents.ChanVoice.noteOn]
+        #expect(
+            events.filter(chanVoice: .dropCC(11)) ==
+                [kEvents.ChanVoice.noteOn]
         )
-    
-        XCTAssertEqual(
-            events.filter(chanVoice: .dropCCs([2])),
-            [
-                kEvents.ChanVoice.cc,
-                kEvents.ChanVoice.noteOn
-            ]
+        
+        #expect(
+            events.filter(chanVoice: .dropCCs([2])) ==
+                [
+                    kEvents.ChanVoice.cc,
+                    kEvents.ChanVoice.noteOn
+                ]
         )
-        XCTAssertEqual(
-            events.filter(chanVoice: .dropCCs([11])),
-            [kEvents.ChanVoice.noteOn]
+        #expect(
+            events.filter(chanVoice: .dropCCs([11])) ==
+                [kEvents.ChanVoice.noteOn]
         )
     }
 }

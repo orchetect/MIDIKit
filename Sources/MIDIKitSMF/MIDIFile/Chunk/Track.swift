@@ -11,11 +11,7 @@ import MIDIKitCore
 
 extension MIDIFile.Chunk {
     /// Track: `MTrk` chunk type.
-    public struct Track: Equatable, Hashable {
-        public static let staticIdentifier: String = "MTrk"
-        
-        static let chunkEnd: [UInt8] = [0xFF, 0x2F, 0x00]
-        
+    public struct Track {
         /// Storage for events in the track.
         public var events: [MIDIFileEvent] = []
         
@@ -27,6 +23,10 @@ extension MIDIFile.Chunk {
         }
     }
 }
+
+extension MIDIFile.Chunk.Track: Equatable { }
+
+extension MIDIFile.Chunk.Track: Hashable { }
 
 extension MIDIFile.Chunk.Track: CustomStringConvertible {
     public var description: String {
@@ -74,6 +74,14 @@ extension MIDIFile.Chunk.Track: Sendable { }
 
 extension MIDIFile.Chunk.Track: MIDIFileChunk {
     public var identifier: String { Self.staticIdentifier }
+}
+
+// MARK: - Static
+
+extension MIDIFile.Chunk.Track {
+    public static let staticIdentifier: String = "MTrk"
+    
+    static let chunkEnd: [UInt8] = [0xFF, 0x2F, 0x00]
 }
 
 // MARK: - Static Constructors

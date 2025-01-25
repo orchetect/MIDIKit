@@ -5,22 +5,24 @@
 //
 
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class Event_Pressure_Tests: XCTestCase {
+@Suite struct Event_Pressure_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
-    func testInit_midi1SMFRawBytes_A() throws {
+    @Test
+    func init_midi1SMFRawBytes_A() throws {
         let bytes: [UInt8] = [0xD0, 0x40]
         
         let event = try MIDIFileEvent.Pressure(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.amount, .midi1(0x40))
-        XCTAssertEqual(event.channel, 0)
+        #expect(event.amount == .midi1(0x40))
+        #expect(event.channel == 0)
     }
     
-    func testMIDI1SMFRawBytes_A() {
+    @Test
+    func midi1SMFRawBytes_A() {
         let event = MIDIFileEvent.Pressure(
             amount: .midi1(0x40),
             channel: 0
@@ -28,19 +30,21 @@ final class Event_Pressure_Tests: XCTestCase {
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [0xD0, 0x40])
+        #expect(bytes == [0xD0, 0x40])
     }
     
-    func testInit_midi1SMFRawBytes_B() throws {
+    @Test
+    func init_midi1SMFRawBytes_B() throws {
         let bytes: [UInt8] = [0xD1, 0x7F]
         
         let event = try MIDIFileEvent.Pressure(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.amount, .midi1(0x7F))
-        XCTAssertEqual(event.channel, 1)
+        #expect(event.amount == .midi1(0x7F))
+        #expect(event.channel == 1)
     }
     
-    func testMIDI1SMFRawBytes_B() {
+    @Test
+    func midi1SMFRawBytes_B() {
         let event = MIDIFileEvent.Pressure(
             amount: .midi1(0x7F),
             channel: 1
@@ -48,6 +52,6 @@ final class Event_Pressure_Tests: XCTestCase {
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [0xD1, 0x7F])
+        #expect(bytes == [0xD1, 0x7F])
     }
 }

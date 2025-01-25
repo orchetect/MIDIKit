@@ -19,9 +19,6 @@ extension MIDIEvent {
         /// (MIDI 1.0 / 2.0)
         case songSelect
         
-        /// Unofficial Bus Select (Status `0xF5`)
-        case unofficialBusSelect
-        
         /// System Common: Tune Request
         /// (MIDI 1.0 / 2.0)
         case tuneRequest

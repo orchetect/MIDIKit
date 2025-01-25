@@ -22,7 +22,7 @@ extension MIDIFileEvent {
     /// For a format 1 MIDI file, Time Signature meta events should only occur within the first
     /// `MTrk` chunk.
     /// If there are no Time Signature events in a MIDI file, 4/4 is assumed.
-    public struct TimeSignature: Equatable, Hashable {
+    public struct TimeSignature {
         /// Numerator in time signature fraction: Literal numerator
         public var numerator: UInt8 = 4
 
@@ -62,6 +62,12 @@ extension MIDIFileEvent {
         }
     }
 }
+
+extension MIDIFileEvent.TimeSignature: Equatable { }
+
+extension MIDIFileEvent.TimeSignature: Hashable { }
+
+extension MIDIFileEvent.TimeSignature: Sendable { }
 
 // MARK: - Static Constructors
 

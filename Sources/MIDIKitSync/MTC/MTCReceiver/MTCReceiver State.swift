@@ -12,7 +12,7 @@ import TimecodeKitCore
 
 extension MTCReceiver {
     /// MTC data stream receive state
-    public enum State: Equatable {
+    public enum State {
         /// Idle:
         /// No activity (incoming continuous data stream stopped).
         case idle
@@ -38,6 +38,8 @@ extension MTCReceiver {
         case incompatibleFrameRate
     }
 }
+
+extension MTCReceiver.State: Equatable { }
 
 extension MTCReceiver.State: Hashable {
     public func hash(into hasher: inout Hasher) {

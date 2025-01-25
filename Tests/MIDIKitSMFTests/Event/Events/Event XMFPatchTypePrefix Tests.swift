@@ -5,13 +5,14 @@
 //
 
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class Event_XMFPatchTypePrefix_Tests: XCTestCase {
+@Suite struct Event_XMFPatchTypePrefix_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
-    func testInit_midi1SMFRawBytes_A() throws {
+    @Test
+    func init_midi1SMFRawBytes_A() throws {
         let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
@@ -20,22 +21,24 @@ final class Event_XMFPatchTypePrefix_Tests: XCTestCase {
         
         let event = try MIDIFileEvent.XMFPatchTypePrefix(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.patchSet, .generalMIDI1)
+        #expect(event.patchSet == .generalMIDI1)
     }
     
-    func testMIDI1SMFRawBytes_A() {
+    @Test
+    func midi1SMFRawBytes_A() {
         let event = MIDIFileEvent.XMFPatchTypePrefix(patchSet: .generalMIDI1)
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [
+        #expect(bytes == [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
             0x01        // param
         ])
     }
     
-    func testInit_midi1SMFRawBytes_B() throws {
+    @Test
+    func init_midi1SMFRawBytes_B() throws {
         let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
@@ -44,15 +47,16 @@ final class Event_XMFPatchTypePrefix_Tests: XCTestCase {
         
         let event = try MIDIFileEvent.XMFPatchTypePrefix(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.patchSet, .generalMIDI2)
+        #expect(event.patchSet == .generalMIDI2)
     }
     
-    func testMIDI1SMFRawBytes_B() {
+    @Test
+    func midi1SMFRawBytes_B() {
         let event = MIDIFileEvent.XMFPatchTypePrefix(patchSet: .generalMIDI2)
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [
+        #expect(bytes == [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
             0x02       // param
@@ -61,15 +65,16 @@ final class Event_XMFPatchTypePrefix_Tests: XCTestCase {
     
     // MARK: - Edge Cases
     
-    func testUndefinedParam() {
+    @Test
+    func undefinedParam() {
         let bytes: [UInt8] = [
             0xFF, 0x60, // header
             0x01,       // length (always 1)
             0x20        // param (undefined)
         ]
         
-        XCTAssertThrowsError(
+        #expect(throws: (any Error).self) {
             try MIDIFileEvent.XMFPatchTypePrefix(midi1SMFRawBytes: bytes)
-        )
+        }
     }
 }

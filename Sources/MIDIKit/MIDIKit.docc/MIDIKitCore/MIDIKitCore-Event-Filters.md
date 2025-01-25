@@ -174,7 +174,6 @@ System Common filter type(s) (``MIDIEvent/SysCommonType``) available:
 - ``MIDIEvent/SysCommonType/songSelect``
 - ``MIDIEvent/SysCommonType/timecodeQuarterFrame``
 - ``MIDIEvent/SysCommonType/tuneRequest``
-- ``MIDIEvent/SysCommonType/unofficialBusSelect``
 
 ### Only
 

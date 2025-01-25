@@ -15,11 +15,15 @@ extension MIDIFile {
     ///
     /// In ``MIDIFile``, the ``Chunk/Header`` chunk is managed automatically and is not instanced as
     /// a ``MIDIFile/chunks`` member.
-    public enum Chunk: Equatable, Hashable {
+    public enum Chunk {
         case track(Track)
         case other(UnrecognizedChunk)
     }
 }
+
+extension MIDIFile.Chunk: Equatable { }
+
+extension MIDIFile.Chunk: Hashable { }
 
 extension MIDIFile.Chunk: CustomStringConvertible {
     public var description: String {

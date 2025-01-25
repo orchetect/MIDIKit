@@ -5,11 +5,12 @@
 //
 
 @testable import MIDIKitSync
+import Testing
 import TimecodeKitCore
-import XCTest
 
-final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
-    func testMTC_MTCFrameRate_derivedFrameRates() {
+@Suite struct MTC_MTCFrameRate_Translation_Tests {
+    @Test
+    func mtcFrameRate_derivedFrameRates() {
         // these tests may be pedantic, but we'll put them in any way
         // since this acts as our source of truth
         
@@ -18,57 +19,57 @@ final class MTC_MTCFrameRate_Translation_Tests: XCTestCase {
         
         // MTC: 24
         
-        XCTAssertEqual(
-            MTCFrameRate.mtc24.derivedFrameRates,
-            [
-                .fps23_976,
-                .fps24,
-                .fps24_98,
-                .fps47_952,
-                .fps48,
-                .fps95_904,
-                .fps96
-            ]
+        #expect(
+            MTCFrameRate.mtc24.derivedFrameRates ==
+                [
+                    .fps23_976,
+                    .fps24,
+                    .fps24_98,
+                    .fps47_952,
+                    .fps48,
+                    .fps95_904,
+                    .fps96
+                ]
         )
         
         // MTC: 25
         
-        XCTAssertEqual(
-            MTCFrameRate.mtc25.derivedFrameRates,
-            [
-                .fps25,
-                .fps50,
-                .fps100
-            ]
+        #expect(
+            MTCFrameRate.mtc25.derivedFrameRates ==
+                [
+                    .fps25,
+                    .fps50,
+                    .fps100
+                ]
         )
         
         // MTC: drop
         
-        XCTAssertEqual(
-            MTCFrameRate.mtc2997d.derivedFrameRates,
-            [
-                .fps29_97d,
-                .fps30d,
-                .fps59_94d,
-                .fps60d,
-                .fps119_88d,
-                .fps120d
-            ]
+        #expect(
+            MTCFrameRate.mtc2997d.derivedFrameRates ==
+                [
+                    .fps29_97d,
+                    .fps30d,
+                    .fps59_94d,
+                    .fps60d,
+                    .fps119_88d,
+                    .fps120d
+                ]
         )
         
         // MTC: drop
         
-        XCTAssertEqual(
-            MTCFrameRate.mtc30.derivedFrameRates,
-            [
-                .fps29_97,
-                .fps30,
-                .fps59_94,
-                .fps60,
-                .fps90,
-                .fps119_88,
-                .fps120
-            ]
+        #expect(
+            MTCFrameRate.mtc30.derivedFrameRates ==
+                [
+                    .fps29_97,
+                    .fps30,
+                    .fps59_94,
+                    .fps60,
+                    .fps90,
+                    .fps119_88,
+                    .fps120
+                ]
         )
     }
 }

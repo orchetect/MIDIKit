@@ -192,10 +192,6 @@ extension MIDIEvent: CustomStringConvertible {
             let groupString = event.group.hexString()
             return "songSelect(number: \(event.number), group: \(groupString))"
             
-        case let .unofficialBusSelect(event):
-            let groupString = event.group.hexString()
-            return "unofficialBusSelect(bus: \(event.bus), group: \(groupString))"
-            
         case let .tuneRequest(event):
             let groupString = event.group.hexString()
             return "tuneRequest(group: \(groupString))"

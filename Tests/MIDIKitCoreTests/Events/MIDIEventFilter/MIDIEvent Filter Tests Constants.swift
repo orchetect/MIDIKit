@@ -119,14 +119,12 @@ enum kEvents {
         )
         static let songPositionPointer: MIDIEvent = .songPositionPointer(midiBeat: 8, group: 0)
         static let songSelect: MIDIEvent = .songSelect(number: 4, group: 0)
-        static let unofficialBusSelect: MIDIEvent = .unofficialBusSelect(bus: 2, group: 0)
         static let tuneRequest: MIDIEvent = .tuneRequest(group: 0)
     
         static let oneOfEachEventType: [MIDIEvent] = [
             Self.timecodeQuarterFrame,
             Self.songPositionPointer,
             Self.songSelect,
-            Self.unofficialBusSelect,
             Self.tuneRequest
         ]
     }

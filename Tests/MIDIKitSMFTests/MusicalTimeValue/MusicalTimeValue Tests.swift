@@ -5,41 +5,44 @@
 //
 
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class MusicalTimeValueTests: XCTestCase {
-    func testEmpty() throws {
+@Suite struct MusicalTimeValueTests {
+    @Test
+    func empty() throws {
         let ppq = 480
         
         let mt = MusicalTimeValue(elapsedTicks: 0, beatsPerBar: 4, divisionsPerBeat: 0, ppq: ppq)
         
-        XCTAssertEqual(mt.bar, 0)
-        XCTAssertEqual(mt.beat, 0)
-        XCTAssertEqual(mt.beatDivision, 0)
-        XCTAssertEqual(mt.ticks, 0)
+        #expect(mt.bar == 0)
+        #expect(mt.beat == 0)
+        #expect(mt.beatDivision == 0)
+        #expect(mt.ticks == 0)
         
-        XCTAssertEqual(mt.elapsedTicks(), 0)
-        XCTAssertEqual(mt.elapsedBeats(), 0.0)
-        XCTAssertFalse(mt.isNegative)
+        #expect(mt.elapsedTicks() == 0)
+        #expect(mt.elapsedBeats() == 0.0)
+        #expect(!mt.isNegative)
     }
     
-    func testEighth() throws {
+    @Test
+    func eighth() throws {
         let ppq = 480
         
         let mt = MusicalTimeValue(elapsedTicks: 240, beatsPerBar: 4, divisionsPerBeat: 0, ppq: ppq)
         
-        XCTAssertEqual(mt.bar, 0)
-        XCTAssertEqual(mt.beat, 0)
-        XCTAssertEqual(mt.beatDivision, 0)
-        XCTAssertEqual(mt.ticks, 240)
+        #expect(mt.bar == 0)
+        #expect(mt.beat == 0)
+        #expect(mt.beatDivision == 0)
+        #expect(mt.ticks == 240)
         
-        XCTAssertEqual(mt.elapsedTicks(), 240)
-        XCTAssertEqual(mt.elapsedBeats(), 0.5)
-        XCTAssertFalse(mt.isNegative)
+        #expect(mt.elapsedTicks() == 240)
+        #expect(mt.elapsedBeats() == 0.5)
+        #expect(!mt.isNegative)
     }
     
     /// 0 beatsPerBar (invalid), but it internally clamps to 1
-    func test0BeatsPerBar() throws {
+    @Test
+    func zeroBeatsPerBar() throws {
         let ppq = 480
         
         let mt = MusicalTimeValue(
@@ -49,18 +52,19 @@ final class MusicalTimeValueTests: XCTestCase {
             ppq: ppq
         )
         
-        XCTAssertEqual(mt.bar, 8)
-        XCTAssertEqual(mt.beat, 0)
-        XCTAssertEqual(mt.beatDivision, 0)
-        XCTAssertEqual(mt.ticks, 00)
+        #expect(mt.bar == 8)
+        #expect(mt.beat == 0)
+        #expect(mt.beatDivision == 0)
+        #expect(mt.ticks == 00)
         
-        XCTAssertEqual(mt.elapsedTicks(), ppq * 8)
-        XCTAssertEqual(mt.elapsedBeats(), 8.0)
-        XCTAssertFalse(mt.isNegative)
+        #expect(mt.elapsedTicks() == ppq * 8)
+        #expect(mt.elapsedBeats() == 8.0)
+        #expect(!mt.isNegative)
     }
     
     /// 1 beatsPerBar (valid)
-    func test1BeatsPerBar() throws {
+    @Test
+    func oneBeatsPerBar() throws {
         let ppq = 480
         
         let elapsedTicks = (ppq * 9) + 240 + 60
@@ -71,17 +75,18 @@ final class MusicalTimeValueTests: XCTestCase {
             ppq: ppq
         )
         
-        XCTAssertEqual(mt.bar, 9)
-        XCTAssertEqual(mt.beat, 0)
-        XCTAssertEqual(mt.beatDivision, 0)
-        XCTAssertEqual(mt.ticks, 300)
+        #expect(mt.bar == 9)
+        #expect(mt.beat == 0)
+        #expect(mt.beatDivision == 0)
+        #expect(mt.ticks == 300)
         
-        XCTAssertEqual(mt.elapsedTicks(), elapsedTicks)
-        XCTAssertEqual(mt.elapsedBeats(), 9.625)
-        XCTAssertFalse(mt.isNegative)
+        #expect(mt.elapsedTicks() == elapsedTicks)
+        #expect(mt.elapsedBeats() == 9.625)
+        #expect(!mt.isNegative)
     }
     
-    func testNegativeElapsedTicks() throws {
+    @Test
+    func negativeElapsedTicks() throws {
         let ppq = 480
         
         let elapsedTicks = -((ppq * 9) + 240 + 60)
@@ -92,17 +97,18 @@ final class MusicalTimeValueTests: XCTestCase {
             ppq: ppq
         )
         
-        XCTAssertEqual(mt.bar, 2)
-        XCTAssertEqual(mt.beat, 1)
-        XCTAssertEqual(mt.beatDivision, 2)
-        XCTAssertEqual(mt.ticks, 60)
+        #expect(mt.bar == 2)
+        #expect(mt.beat == 1)
+        #expect(mt.beatDivision == 2)
+        #expect(mt.ticks == 60)
         
-        XCTAssertEqual(mt.elapsedTicks(), elapsedTicks)
-        XCTAssertEqual(mt.elapsedBeats(), -9.625)
-        XCTAssertTrue(mt.isNegative)
+        #expect(mt.elapsedTicks() == elapsedTicks)
+        #expect(mt.elapsedBeats() == -9.625)
+        #expect(mt.isNegative)
     }
     
-    func testElapsedTicks() throws {
+    @Test
+    func elapsedTicks() throws {
         let ppq = 480
         var midiFile = MIDIFile(timeBase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         
@@ -141,7 +147,7 @@ final class MusicalTimeValueTests: XCTestCase {
             ])
         ]
         
-        let trackOne = try XCTUnwrap(midiFile.tracks.first)
+        let trackOne = try #require(midiFile.tracks.first)
         
         let deltaTimes = trackOne.events.map {
             $0.delta.ticksValue(using: .musical(ticksPerQuarterNote: UInt16(ppq)))
@@ -158,14 +164,14 @@ final class MusicalTimeValueTests: XCTestCase {
                 ppq: ppq
             )
             
-            XCTAssertEqual(mt.bar, 1)
-            XCTAssertEqual(mt.beat, 1)
-            XCTAssertEqual(mt.beatDivision, 2)
-            XCTAssertEqual(mt.ticks, 60)
+            #expect(mt.bar == 1)
+            #expect(mt.beat == 1)
+            #expect(mt.beatDivision == 2)
+            #expect(mt.ticks == 60)
             
-            XCTAssertEqual(mt.elapsedTicks(), deltaSum)
-            XCTAssertEqual(mt.elapsedBeats(), 5.625)
-            XCTAssertFalse(mt.isNegative)
+            #expect(mt.elapsedTicks() == deltaSum)
+            #expect(mt.elapsedBeats() == 5.625)
+            #expect(!mt.isNegative)
         }
         
         // 8 divisions per beat
@@ -177,14 +183,14 @@ final class MusicalTimeValueTests: XCTestCase {
                 ppq: ppq
             )
             
-            XCTAssertEqual(mt.bar, 1)
-            XCTAssertEqual(mt.beat, 1)
-            XCTAssertEqual(mt.beatDivision, 5)
-            XCTAssertEqual(mt.ticks, 0)
+            #expect(mt.bar == 1)
+            #expect(mt.beat == 1)
+            #expect(mt.beatDivision == 5)
+            #expect(mt.ticks == 0)
             
-            XCTAssertEqual(mt.elapsedTicks(), deltaSum)
-            XCTAssertEqual(mt.elapsedBeats(), 5.625)
-            XCTAssertFalse(mt.isNegative)
+            #expect(mt.elapsedTicks() == deltaSum)
+            #expect(mt.elapsedBeats() == 5.625)
+            #expect(!mt.isNegative)
         }
         
         // 0 divisions per beat
@@ -196,14 +202,14 @@ final class MusicalTimeValueTests: XCTestCase {
                 ppq: ppq
             )
             
-            XCTAssertEqual(mt.bar, 1)
-            XCTAssertEqual(mt.beat, 1)
-            XCTAssertEqual(mt.beatDivision, 0)
-            XCTAssertEqual(mt.ticks, 300)
+            #expect(mt.bar == 1)
+            #expect(mt.beat == 1)
+            #expect(mt.beatDivision == 0)
+            #expect(mt.ticks == 300)
             
-            XCTAssertEqual(mt.elapsedTicks(), deltaSum)
-            XCTAssertEqual(mt.elapsedBeats(), 5.625)
-            XCTAssertFalse(mt.isNegative)
+            #expect(mt.elapsedTicks() == deltaSum)
+            #expect(mt.elapsedBeats() == 5.625)
+            #expect(!mt.isNegative)
         }
     }
 }

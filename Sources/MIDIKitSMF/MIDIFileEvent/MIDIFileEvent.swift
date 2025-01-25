@@ -7,7 +7,7 @@
 import MIDIKitCore
 
 /// MIDI File Track Event.
-public enum MIDIFileEvent: Equatable, Hashable {
+public enum MIDIFileEvent {
     // ------------------------------------
     // NOTE: When revising these documentation blocks, they are duplicated in:
     //   - MIDIFileEvent enum case (`case keySignature(delta:event:)`, etc.)
@@ -184,6 +184,10 @@ public enum MIDIFileEvent: Equatable, Hashable {
     /// > See [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
     case xmfPatchTypePrefix(delta: DeltaTime, event: XMFPatchTypePrefix)
 }
+
+extension MIDIFileEvent: Equatable { }
+
+extension MIDIFileEvent: Hashable { }
 
 // Sendable must be applied in the same file as the struct for it to be compiler-checked.
 extension MIDIFileEvent: Sendable { }

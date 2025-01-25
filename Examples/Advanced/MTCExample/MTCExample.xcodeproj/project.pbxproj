@@ -3,19 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E202381F2CC45C6D00661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E202381E2CC45C6D00661322 /* MIDIKitCore */; };
-		E20238222CC45CB100661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E20238212CC45CB100661322 /* MIDIKitIO */; };
 		E202386F2CC4676000661322 /* TimecodeKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E202386E2CC4676000661322 /* TimecodeKitCore */; };
 		E20238712CC4676000661322 /* TimecodeKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = E20238702CC4676000661322 /* TimecodeKitUI */; };
 		E24FF24F28B9841E000A2055 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E24FF24E28B9841E000A2055 /* Assets.xcassets */; };
-		E2639D0726B145EE00AD0607 /* MIDIKitSync in Frameworks */ = {isa = PBXBuildFile; productRef = E2639D0626B145EE00AD0607 /* MIDIKitSync */; };
-		E275EAB02679A444008E396D /* MTCRecContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E275EAAF2679A444008E396D /* MTCRecContentView.swift */; };
-		E275EAB42679A493008E396D /* MTCGenContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E275EAB32679A493008E396D /* MTCGenContentView.swift */; };
 		E27E3FA025A6E5C700F4B78E /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E3F9F25A6E5C700F4B78E /* Audio.swift */; };
+		E287C0782D44F76D00F8A47C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E287C0772D44F76D00F8A47C /* MIDIKit */; };
 		E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29EF038267BF71B00282F94 /* DunneAudioKit */; };
 		E2B82F4E26B7F2A3006AF638 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E2B82F4D26B7F2A3006AF638 /* SwiftRadix */; };
 		E2BE847F268BC6680034F62C /* MIDIKitSync Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BE847E268BC6680034F62C /* MIDIKitSync Extensions.swift */; };
@@ -27,8 +23,6 @@
 
 /* Begin PBXFileReference section */
 		E24FF24E28B9841E000A2055 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E275EAAF2679A444008E396D /* MTCRecContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MTCRecContentView.swift; sourceTree = "<group>"; };
-		E275EAB32679A493008E396D /* MTCGenContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MTCGenContentView.swift; sourceTree = "<group>"; };
 		E27E3F9F25A6E5C700F4B78E /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		E2BE847E268BC6680034F62C /* MIDIKitSync Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MIDIKitSync Extensions.swift"; sourceTree = "<group>"; };
 		E2CEA4982AFE49E700BE92F7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -41,17 +35,20 @@
 		E2FAC51D2578856F00A6DD31 /* MIDI Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MIDI Endpoints.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		E287C0502D44E9E900F8A47C /* Generator */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Generator; sourceTree = "<group>"; };
+		E287C0512D44E9F300F8A47C /* Receiver */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Receiver; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		E2FAC4D7257884DF00A6DD31 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2639D0726B145EE00AD0607 /* MIDIKitSync in Frameworks */,
-				E20238222CC45CB100661322 /* MIDIKitIO in Frameworks */,
 				E202386F2CC4676000661322 /* TimecodeKitCore in Frameworks */,
 				E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */,
 				E2B82F4E26B7F2A3006AF638 /* SwiftRadix in Frameworks */,
-				E202381F2CC45C6D00661322 /* MIDIKitCore in Frameworks */,
+				E287C0782D44F76D00F8A47C /* MIDIKit in Frameworks */,
 				E20238712CC4676000661322 /* TimecodeKitUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,9 +76,9 @@
 		E2FAC4DC257884E000A6DD31 /* MTCExample */ = {
 			isa = PBXGroup;
 			children = (
+				E287C0512D44E9F300F8A47C /* Receiver */,
+				E287C0502D44E9E900F8A47C /* Generator */,
 				E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */,
-				E275EAB32679A493008E396D /* MTCGenContentView.swift */,
-				E275EAAF2679A444008E396D /* MTCRecContentView.swift */,
 				E2FAC51D2578856F00A6DD31 /* MIDI Endpoints.swift */,
 				E2BE847E268BC6680034F62C /* MIDIKitSync Extensions.swift */,
 				E27E3F9F25A6E5C700F4B78E /* Audio.swift */,
@@ -109,15 +106,17 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				E287C0502D44E9E900F8A47C /* Generator */,
+				E287C0512D44E9F300F8A47C /* Receiver */,
+			);
 			name = MTCExample;
 			packageProductDependencies = (
 				E29EF038267BF71B00282F94 /* DunneAudioKit */,
-				E2639D0626B145EE00AD0607 /* MIDIKitSync */,
 				E2B82F4D26B7F2A3006AF638 /* SwiftRadix */,
-				E202381E2CC45C6D00661322 /* MIDIKitCore */,
-				E20238212CC45CB100661322 /* MIDIKitIO */,
 				E202386E2CC4676000661322 /* TimecodeKitCore */,
 				E20238702CC4676000661322 /* TimecodeKitUI */,
+				E287C0772D44F76D00F8A47C /* MIDIKit */,
 			);
 			productName = MTCExample;
 			productReference = E2FAC4DA257884E000A6DD31 /* MTCExample.app */;
@@ -150,8 +149,8 @@
 			packageReferences = (
 				E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */,
 				E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */,
-				E20237F12CC454E500661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
 				E202386D2CC4676000661322 /* XCRemoteSwiftPackageReference "TimecodeKit" */,
+				E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
 			);
 			productRefGroup = E2FAC4DB257884E000A6DD31 /* Products */;
 			projectDirPath = "";
@@ -181,9 +180,7 @@
 			files = (
 				E2BE847F268BC6680034F62C /* MIDIKitSync Extensions.swift in Sources */,
 				E2F71ED42758ED1E006254C0 /* Log.swift in Sources */,
-				E275EAB42679A493008E396D /* MTCGenContentView.swift in Sources */,
 				E27E3FA025A6E5C700F4B78E /* Audio.swift in Sources */,
-				E275EAB02679A444008E396D /* MTCRecContentView.swift in Sources */,
 				E2FAC4DE257884E000A6DD31 /* AppDelegate.swift in Sources */,
 				E2FAC51E2578856F00A6DD31 /* MIDI Endpoints.swift in Sources */,
 			);
@@ -257,7 +254,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -317,7 +314,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -408,7 +405,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E20237F12CC454E500661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+		E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../../../MIDIKit;
 		};
@@ -442,16 +439,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E202381E2CC45C6D00661322 /* MIDIKitCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E20237F12CC454E500661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
-			productName = MIDIKitCore;
-		};
-		E20238212CC45CB100661322 /* MIDIKitIO */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E20237F12CC454E500661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
-			productName = MIDIKitIO;
-		};
 		E202386E2CC4676000661322 /* TimecodeKitCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E202386D2CC4676000661322 /* XCRemoteSwiftPackageReference "TimecodeKit" */;
@@ -462,9 +449,10 @@
 			package = E202386D2CC4676000661322 /* XCRemoteSwiftPackageReference "TimecodeKit" */;
 			productName = TimecodeKitUI;
 		};
-		E2639D0626B145EE00AD0607 /* MIDIKitSync */ = {
+		E287C0772D44F76D00F8A47C /* MIDIKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MIDIKitSync;
+			package = E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			productName = MIDIKit;
 		};
 		E29EF038267BF71B00282F94 /* DunneAudioKit */ = {
 			isa = XCSwiftPackageProductDependency;

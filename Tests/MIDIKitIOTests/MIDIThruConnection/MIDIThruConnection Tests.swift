@@ -4,24 +4,29 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-// iOS Simulator XCTest testing does not give enough permissions to allow creating virtual MIDI
+// iOS Simulator testing does not give enough permissions to allow creating virtual MIDI
 // ports, so skip these tests on iOS targets
 #if !targetEnvironment(simulator)
 
 import CoreMIDI
 import MIDIKitInternals
 @testable import MIDIKitIO
-import XCTest
+import Testing
 
-final class MIDIThruConnection_Tests: XCTestCase {
+@Suite(.serialized) @MainActor class MIDIThruConnection_Tests: Sendable {
     // called before each method
-    override func setUpWithError() throws {
-        wait(sec: 0.2)
+    init() async throws {
+        try await Task.sleep(seconds: 0.200)
     }
     
     private var connEvents: [MIDIEvent] = []
-    
-    private func testNonPersistentThruConnection() throws {
+}
+
+// MARK: - Tests
+
+extension MIDIThruConnection_Tests {
+    @Test
+    func monPersistentThruConnection() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -30,7 +35,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
+        try await Task.sleep(seconds: 0.100)
         
         defer {
             // as a failsafe, clean up any persistent connections with an empty owner ID.
@@ -56,14 +61,14 @@ final class MIDIThruConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     self.connEvents.append(contentsOf: events)
                 }
             }
         )
-        let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
-        // let input1ID = try XCTUnwrap(input1.uniqueID)
-        // let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
+        let input1 = try #require(manager.managedInputs[input1Tag])
+        // let input1ID = try #require(input1.uniqueID)
+        // let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
         // create a virtual output
         let output1Tag = "output1"
@@ -72,11 +77,11 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-        // let output1ID = try XCTUnwrap(output1.uniqueID)
-        // let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        // let output1ID = try #require(output1.uniqueID)
+        // let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        wait(sec: 0.5) // needs to be long enough or test fails
+        try await Task.sleep(seconds: 0.500) // needs to be long enough or test fails
         
         // add new connection
         
@@ -88,34 +93,35 @@ final class MIDIThruConnection_Tests: XCTestCase {
             lifecycle: .nonPersistent
         )
         
-        XCTAssertNotNil(manager.managedThruConnections[connTag])
-        XCTAssert(manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
+        #expect(manager.managedThruConnections[connTag] != nil)
+        #expect(manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
         
-        wait(sec: 0.2)
+        try await Task.sleep(seconds: 0.200)
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
-        wait(for: connEvents, equals: [.start()], timeout: 1.0)
+        try await wait(require: { await connEvents == [.start()] }, timeout: 1.0)
         connEvents = []
         
         manager.remove(.nonPersistentThruConnection, .withTag(connTag))
         
-        XCTAssertNil(manager.managedThruConnections[connTag])
+        #expect(manager.managedThruConnections[connTag] == nil)
         
         // send an event - it should not be received by the input
         try output1.send(event: .start())
-        wait(sec: 0.2) // wait a bit in case an event is sent
-        XCTAssertEqual(connEvents, [])
+        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
+        #expect(connEvents == [])
         connEvents = []
         
         // Due to a Swift Core MIDI bug, all thru connections are created as persistent.
         // - See ThruConnection.swift for details
         let conns = try manager.unmanagedPersistentThruConnections(ownerID: "")
         
-        XCTAssert(conns.isEmpty)
+        #expect(conns.isEmpty)
     }
     
-    func testPersistentThruConnection() throws {
+    @Test
+    func persistentThruConnection() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -124,13 +130,13 @@ final class MIDIThruConnection_Tests: XCTestCase {
         
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
+        try await Task.sleep(seconds: 0.100)
         
         // initial state
         connEvents.removeAll()
         let ownerID = "com.orchetect.midikit.testNonPersistentThruConnection"
         manager.removeAllUnmanagedPersistentThruConnections(ownerID: ownerID)
-    
+        
         // create virtual input
         let input1Tag = "input1"
         try manager.addInput(
@@ -139,16 +145,16 @@ final class MIDIThruConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     self.connEvents.append(contentsOf: events)
                 }
             }
         )
-        let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
-        // let input1ID = try XCTUnwrap(input1.uniqueID)
-        // let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
+        let input1 = try #require(manager.managedInputs[input1Tag])
+        // let input1ID = try #require(input1.uniqueID)
+        // let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
-        wait(sec: 0.2)
+        try await Task.sleep(seconds: 0.200)
         
         // create a virtual output
         let output1Tag = "output1"
@@ -157,11 +163,11 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-        // let output1ID = try XCTUnwrap(output1.uniqueID)
-        // let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        // let output1ID = try #require(output1.uniqueID)
+        // let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        wait(sec: 0.5) // needs to be long enough or test fails
+        try await Task.sleep(seconds: 0.500) // needs to be long enough or test fails
         
         // add new connection
         
@@ -179,45 +185,45 @@ final class MIDIThruConnection_Tests: XCTestCase {
         if #available(macOS 13, iOS 16, *) {
             try addThru()
         } else if #available(macOS 11, iOS 14, *) {
-            XCTAssertThrowsError(try addThru())
-            throw XCTSkip(
-                "Can't test persistent thru connections on macOS 11 & 12 and iOS 14 & 15."
-            )
+            withKnownIssue("Can't test persistent thru connections on macOS 11 & 12 and iOS 14 & 15.") {
+                try addThru() // will throw
+            }
+            return
         } else { // macOS 10.15.x and earlier, or iOS 13.x and earlier
             try addThru()
         }
         
-        wait(sec: 0.2)
+        try await Task.sleep(seconds: 0.200)
         
-        XCTAssertEqual(
-            try manager.unmanagedPersistentThruConnections(ownerID: ownerID).count,
-            1
+        #expect(
+            try manager.unmanagedPersistentThruConnections(ownerID: ownerID).count ==
+                1
         )
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
-        wait(for: connEvents, equals: [.start()], timeout: 1.0)
+        try await wait(require: { await connEvents == [.start()] }, timeout: 1.0)
         connEvents = []
         
         manager.removeAllUnmanagedPersistentThruConnections(ownerID: ownerID)
         
-        XCTAssertEqual(
-            try manager.unmanagedPersistentThruConnections(ownerID: ownerID).count,
-            0
+        #expect(
+            try manager.unmanagedPersistentThruConnections(ownerID: ownerID).isEmpty
         )
         
-        XCTAssertEqual(manager.managedThruConnections.count, 0)
+        #expect(manager.managedThruConnections.isEmpty)
         
         // send an event - it should not be received by the input
         try output1.send(event: .start())
-        wait(sec: 0.2) // wait a bit in case an event is sent
-        XCTAssertEqual(connEvents, [])
+        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
+        #expect(connEvents == [])
         connEvents = []
     }
     
     /// Tests getting thru connection parameters from Core MIDI after creating the thru connection
     /// and verifying they are correct.
-    private func testGetParams() throws {
+    @Test
+    func getParams() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -226,7 +232,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
+        try await Task.sleep(seconds: 0.100)
         
         defer {
             // as a failsafe, clean up any persistent connections with an empty owner ID.
@@ -240,7 +246,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
             
             manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
         }
-    
+        
         // initial state
         connEvents.removeAll()
         
@@ -252,14 +258,14 @@ final class MIDIThruConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     self.connEvents.append(contentsOf: events)
                 }
             }
         )
-        let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
-        let input1ID = try XCTUnwrap(input1.uniqueID)
-        let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
+        let input1 = try #require(manager.managedInputs[input1Tag])
+        let input1ID = try #require(input1.uniqueID)
+        let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
         // create a virtual output
         let output1Tag = "output1"
@@ -268,11 +274,11 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-        let output1ID = try XCTUnwrap(output1.uniqueID)
-        let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1ID = try #require(output1.uniqueID)
+        let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        wait(sec: 0.2) // 0.2 seems enough here
+        try await Task.sleep(seconds: 0.200) // 0.2 seems enough here
         
         // add new connection
         
@@ -284,31 +290,32 @@ final class MIDIThruConnection_Tests: XCTestCase {
             lifecycle: .nonPersistent
         )
         
-        XCTAssertNotNil(manager.managedThruConnections[connTag])
-        XCTAssert(manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
+        #expect(manager.managedThruConnections[connTag] != nil)
+        #expect(manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
         
-        wait(sec: 0.2)
+        try await Task.sleep(seconds: 0.200)
         
         let connRef = manager.managedThruConnections[connTag]!.coreMIDIThruConnectionRef!
-        let getParams = try XCTUnwrap(getThruConnectionParameters(ref: connRef))
+        let getParams = try #require(try getThruConnectionParameters(ref: connRef))
         
-        XCTAssertEqual(getParams.numSources, 1)
-        XCTAssertEqual(getParams.sources.0.endpointRef, output1Ref)
-        XCTAssertEqual(getParams.sources.0.uniqueID, output1ID)
-        XCTAssertEqual(getParams.numDestinations, 1)
-        XCTAssertEqual(getParams.destinations.0.endpointRef, input1Ref)
-        XCTAssertEqual(getParams.destinations.0.uniqueID, input1ID)
+        #expect(getParams.numSources == 1)
+        #expect(getParams.sources.0.endpointRef == output1Ref)
+        #expect(getParams.sources.0.uniqueID == output1ID)
+        #expect(getParams.numDestinations == 1)
+        #expect(getParams.destinations.0.endpointRef == input1Ref)
+        #expect(getParams.destinations.0.uniqueID == input1ID)
         
         manager.remove(.nonPersistentThruConnection, .withTag(connTag))
         
-        XCTAssertNil(manager.managedThruConnections[connTag])
+        #expect(manager.managedThruConnections[connTag] == nil)
     }
     
     /// Test the thru connection proxy in isolation, so at least we can test its function in CI.
     /// `MIDIManager.addThruConnection` relies on platform to decide whether to use the proxy or
     /// not, and since affected macOS versions may not always be available to test on in a CI
     /// pipeline, this test allows testing of the proxy, albeit in isolation.
-    func testProxy() throws {
+    @Test
+    func proxy() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -317,7 +324,7 @@ final class MIDIThruConnection_Tests: XCTestCase {
         
         // start midi client
         try manager.start()
-        wait(sec: 0.1)
+        try await Task.sleep(seconds: 0.100)
         
         // initial state
         connEvents.removeAll()
@@ -330,14 +337,14 @@ final class MIDIThruConnection_Tests: XCTestCase {
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     self.connEvents.append(contentsOf: events)
                 }
             }
         )
-        let input1 = try XCTUnwrap(manager.managedInputs[input1Tag])
-        // let input1ID = try XCTUnwrap(input1.uniqueID)
-        // let input1Ref = try XCTUnwrap(input1.coreMIDIInputPortRef)
+        let input1 = try #require(manager.managedInputs[input1Tag])
+        // let input1ID = try #require(input1.uniqueID)
+        // let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
         // create a virtual output
         let output1Tag = "output1"
@@ -346,11 +353,11 @@ final class MIDIThruConnection_Tests: XCTestCase {
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try XCTUnwrap(manager.managedOutputs[output1Tag])
-        // let output1ID = try XCTUnwrap(output1.uniqueID)
-        // let output1Ref = try XCTUnwrap(output1.coreMIDIOutputPortRef)
+        let output1 = try #require(manager.managedOutputs[output1Tag])
+        // let output1ID = try #require(output1.uniqueID)
+        // let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        wait(sec: 0.5) // this needs to be long enough or test fails
+        try await Task.sleep(seconds: 0.500) // this needs to be long enough or test fails
         
         // create thru proxy (this internal only and is NOT added to the manager)
         
@@ -362,28 +369,28 @@ final class MIDIThruConnection_Tests: XCTestCase {
         )
         _ = thruProxy // silence warning
         
-        wait(sec: 0.2)
+        try await Task.sleep(seconds: 0.200)
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
-        wait(for: connEvents, equals: [.start()], timeout: 1.0)
+        try await wait(require: { await connEvents == [.start()] }, timeout: 2.0)
         connEvents = []
         
         thruProxy = nil
         
-        wait(sec: 0.2)
+        try await Task.sleep(seconds: 0.200)
         
         // send an event - it should not be received by the input
         try output1.send(event: .start())
-        wait(sec: 0.2) // wait a bit in case an event is sent
-        XCTAssertEqual(connEvents, [])
+        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
+        #expect(connEvents == [])
         connEvents = []
         
         // Due to a Swift Core MIDI bug, all thru connections are created as persistent.
         // - See ThruConnection.swift for details
         let conns = try manager.unmanagedPersistentThruConnections(ownerID: "")
         
-        XCTAssert(conns.isEmpty)
+        #expect(conns.isEmpty)
     }
 }
 

@@ -7,7 +7,7 @@
 import MIDIKitCore
 
 /// Cases describing MIDI file event types.
-public enum MIDIFileEventType: String, CaseIterable, Equatable, Hashable {
+public enum MIDIFileEventType: String {
     case cc
     case channelPrefix
     case keySignature
@@ -31,6 +31,12 @@ public enum MIDIFileEventType: String, CaseIterable, Equatable, Hashable {
     case unrecognizedMeta
     case xmfPatchTypePrefix
 }
+
+extension MIDIFileEventType: Equatable { }
+
+extension MIDIFileEventType: Hashable { }
+
+extension MIDIFileEventType: CaseIterable { }
 
 extension MIDIFileEventType: Sendable { }
 

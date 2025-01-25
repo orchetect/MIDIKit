@@ -5,49 +5,51 @@
 //
 
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class TimeBase_Tests: XCTestCase {
-    func testInitMusical() {
+@Suite struct TimeBase_Tests {
+    @Test
+    func initMusical() {
         let timeBase = MIDIFile.TimeBase.musical(ticksPerQuarterNote: 480)
         
         let rawData: [UInt8] = [0x01, 0xE0]
         
-        XCTAssertEqual(timeBase.rawData.bytes, rawData)
+        #expect(timeBase.rawData.bytes == rawData)
         
         do {
             guard case let .musical(tpq) = MIDIFile
                 .TimeBase(rawBytes: rawData)
-            else { XCTFail(); return }
+            else { Issue.record(); return }
             
-            XCTAssertEqual(tpq, 480)
+            #expect(tpq == 480)
         }
         
         do {
             guard case let .musical(tpq) = MIDIFile
                 .TimeBase(rawData: rawData.data)
-            else { XCTFail(); return }
+            else { Issue.record(); return }
             
-            XCTAssertEqual(tpq, 480)
+            #expect(tpq == 480)
         }
     }
     
-    func testInitTimecode() {
+    @Test
+    func initTimecode() {
         let timeBase = MIDIFile.TimeBase.timecode(smpteFormat: .fps25, ticksPerFrame: 80)
         
         let rawData: [UInt8] = [0b11100111, 0x50]
         
-        XCTAssertEqual(timeBase.rawData.bytes, rawData)
+        #expect(timeBase.rawData.bytes == rawData)
         
         do {
             guard case let .timecode(
                 smpteFormat,
                 ticksPerFrame
             ) = MIDIFile.TimeBase(rawBytes: rawData)
-            else { XCTFail(); return }
+            else { Issue.record(); return }
             
-            XCTAssertEqual(smpteFormat, .fps25)
-            XCTAssertEqual(ticksPerFrame, 80)
+            #expect(smpteFormat == .fps25)
+            #expect(ticksPerFrame == 80)
         }
         
         do {
@@ -55,10 +57,10 @@ final class TimeBase_Tests: XCTestCase {
                 smpteFormat,
                 ticksPerFrame
             ) = MIDIFile.TimeBase(rawData: rawData.data)
-            else { XCTFail(); return }
+            else { Issue.record(); return }
             
-            XCTAssertEqual(smpteFormat, .fps25)
-            XCTAssertEqual(ticksPerFrame, 80)
+            #expect(smpteFormat == .fps25)
+            #expect(ticksPerFrame == 80)
         }
     }
 }

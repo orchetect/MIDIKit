@@ -5,15 +5,16 @@
 //
 
 @testable import MIDIKitSync
+import Testing
 import TimecodeKitCore
-import XCTest
 
-final class MTC_MTCFrameRate_Tests: XCTestCase {
-    func testMTC_MTCFrameRate_Init_TimecodeFrameRate() {
+@Suite struct MTC_MTCFrameRate_Tests {
+    @Test
+    func mtcFrameRate_Init_TimecodeFrameRate() {
         // test is pedantic, but worth having
         
-        TimecodeFrameRate.allCases.forEach {
-            XCTAssertEqual(MTCFrameRate($0), $0.mtcFrameRate)
+        for item in TimecodeFrameRate.allCases {
+            #expect(MTCFrameRate(item) == item.mtcFrameRate)
         }
     }
 }
