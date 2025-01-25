@@ -33,6 +33,9 @@ jobs:
     runs-on: macos-13
     steps:
     - uses: actions/checkout@main
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
     - name: Build
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=macOS,name=Any Mac" | xcpretty && exit ${PIPESTATUS[0]}
     - name: Unit Tests
