@@ -150,7 +150,7 @@ public final actor MTCReceiver {
             _ displayNeedsUpdate: Bool
         ) -> Void)? = nil,
         stateChanged: (@Sendable (_ state: State) -> Void)? = nil
-    ) {
+    ) async {
         // handle init arguments
         
         let name = name ?? UUID().uuidString
@@ -189,20 +189,18 @@ public final actor MTCReceiver {
         
         // set up handlers after self is initialized so we can capture reference to self
         
-        Task {
-            await timer.setEventHandler { [weak self] in
-                Task { await self?.timerFired() }
-            }
-            
-            await decoder.setTimecodeChangedHandler { [weak self] timecode, messageType, direction, displayNeedsUpdate in
-                Task {
-                    await self?.timecodeDidChange(
-                        to: timecode,
-                        event: messageType,
-                        direction: direction,
-                        displayNeedsUpdate: displayNeedsUpdate
-                    )
-                }
+        await timer.setEventHandler { [weak self] in
+            Task { await self?.timerFired() }
+        }
+        
+        decoder.setTimecodeChangedHandler { [weak self] timecode, messageType, direction, displayNeedsUpdate in
+            Task {
+                await self?.timecodeDidChange(
+                    to: timecode,
+                    event: messageType,
+                    direction: direction,
+                    displayNeedsUpdate: displayNeedsUpdate
+                )
             }
         }
     }
@@ -276,13 +274,9 @@ public final actor MTCReceiver {
 
 // MARK: - ReceivesMIDIEvents
 
-extension MTCReceiver: ReceivesMIDIEvents {
-    /// Incoming MIDI messages (Async on MTCReceiver queue)
-    public nonisolated func midiIn(event: MIDIEvent) {
-        // The decoder's midiIn can trigger handler callbacks as a result, which will in turn all be
-        // executed on the queue
-        
-        Task { await self.decoder.midiIn(event: event) }
+extension MTCReceiver: @preconcurrency ReceivesMIDIEvents {
+    public func midiIn(event: MIDIEvent) {
+        decoder.midiIn(event: event)
     }
 }
 
