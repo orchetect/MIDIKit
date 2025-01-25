@@ -49,10 +49,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.3.3"),
-        
-        // testing only:
-        .package(url: "https://github.com/orchetect/XCTestUtils", from: "1.0.3")
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.3.3")
     ],
     targets: [
         .target(
@@ -124,36 +121,31 @@ let package = Package(
         .testTarget(
             name: "MIDIKitCoreTests",
             dependencies: [
-                .target(name: "MIDIKitCore"),
-                .product(name: "XCTestUtils", package: "XCTestUtils")
+                .target(name: "MIDIKitCore")
             ]
         ),
         .testTarget(
             name: "MIDIKitIOTests",
             dependencies: [
-                .target(name: "MIDIKitIO"),
-                .product(name: "XCTestUtils", package: "XCTestUtils")
+                .target(name: "MIDIKitIO")
             ]
         ),
         .testTarget(
             name: "MIDIKitControlSurfacesTests",
             dependencies: [
-                .target(name: "MIDIKitControlSurfaces"),
-                .product(name: "XCTestUtils", package: "XCTestUtils")
+                .target(name: "MIDIKitControlSurfaces")
             ]
         ),
         .testTarget(
             name: "MIDIKitSMFTests",
             dependencies: [
-                .target(name: "MIDIKitSMF"),
-                .product(name: "XCTestUtils", package: "XCTestUtils")
+                .target(name: "MIDIKitSMF")
             ]
         ),
         .testTarget(
             name: "MIDIKitSyncTests",
             dependencies: [
-                .target(name: "MIDIKitSync"),
-                .product(name: "XCTestUtils", package: "XCTestUtils")
+                .target(name: "MIDIKitSync")
             ]
         )
     ]
