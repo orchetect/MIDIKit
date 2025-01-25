@@ -326,7 +326,7 @@ extension MTC_Receiver_Receiver_Tests {
     
     // skip this test on other platforms; flaky and we don't need to run it
     #if os(macOS)
-    @Test.enabled(if: isSystemTimingStable())
+    @Test(.enabled(if: isSystemTimingStable()))
     @MainActor
     func mtcReceiver_Handlers_QFMessages() async throws {
         // swiftformat:disable wrap
