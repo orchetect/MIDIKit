@@ -52,7 +52,7 @@ extension AdvancedMIDI2Parser_Tests {
         var events = inputEvents
         parser.process(parsedEvents: &events)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
         
         #expect(receivedEvents == inputEvents)
@@ -72,7 +72,7 @@ extension AdvancedMIDI2Parser_Tests {
         var events = inputEvents
         parser.process(parsedEvents: &events)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 2 }, timeout: 1.0)
         
         // no bundling active, so events will just pass-thru as-is
@@ -93,7 +93,7 @@ extension AdvancedMIDI2Parser_Tests {
         var events = inputEvents
         parser.process(parsedEvents: &events)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
         
         // we never received a 2nd UMP with Data Entry LSB, so hold timer should have expired and
@@ -115,7 +115,7 @@ extension AdvancedMIDI2Parser_Tests {
         var events = inputEvents
         parser.process(parsedEvents: &events)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
         
         // bundleRPNAndNRPNDataEntryLSB should wait for 2nd UMP and bundle them together
@@ -140,7 +140,7 @@ extension AdvancedMIDI2Parser_Tests {
         ]
         parser.process(parsedEvents: &events2)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
         
         // bundleRPNAndNRPNDataEntryLSB should wait for 2nd UMP and bundle them together
@@ -162,7 +162,7 @@ extension AdvancedMIDI2Parser_Tests {
         var events = inputEvents
         parser.process(parsedEvents: &events)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 2 }, timeout: 1.0)
         
         // bundleRPNAndNRPNDataEntryLSB should wait for 2nd UMP and bundle them together
@@ -187,7 +187,7 @@ extension AdvancedMIDI2Parser_Tests {
         ]
         parser.process(parsedEvents: &events2)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 2 }, timeout: 1.0)
         
         // bundleRPNAndNRPNDataEntryLSB should wait for 2nd UMP and bundle them together
@@ -210,7 +210,7 @@ extension AdvancedMIDI2Parser_Tests {
         var events = inputEvents
         parser.process(parsedEvents: &events)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
         
         #expect(receivedEvents == inputEvents)
@@ -230,7 +230,7 @@ extension AdvancedMIDI2Parser_Tests {
         var events = inputEvents
         parser.process(parsedEvents: &events)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 2 }, timeout: 1.0)
         
         // no bundling active, so events will just pass-thru as-is
@@ -251,7 +251,7 @@ extension AdvancedMIDI2Parser_Tests {
         var events = inputEvents
         parser.process(parsedEvents: &events)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
         
         // we never received a 2nd UMP with Data Entry LSB, so hold timer should have expired and
@@ -273,7 +273,7 @@ extension AdvancedMIDI2Parser_Tests {
         var events = inputEvents
         parser.process(parsedEvents: &events)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
         
         // bundleRPNAndNRPNDataEntryLSB should wait for 2nd UMP and bundle them together
@@ -298,7 +298,7 @@ extension AdvancedMIDI2Parser_Tests {
         ]
         parser.process(parsedEvents: &events2)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
         
         // bundleRPNAndNRPNDataEntryLSB should wait for 2nd UMP and bundle them together
@@ -320,7 +320,7 @@ extension AdvancedMIDI2Parser_Tests {
         var events = inputEvents
         parser.process(parsedEvents: &events)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 2 }, timeout: 1.0)
         
         // bundleRPNAndNRPNDataEntryLSB should wait for 2nd UMP and bundle them together
@@ -345,7 +345,7 @@ extension AdvancedMIDI2Parser_Tests {
         ]
         parser.process(parsedEvents: &events2)
         
-        try await Task.sleep(for: .milliseconds(200)) // allow time for extra events if a bug exists
+        try await Task.sleep(seconds: 0.200) // allow time for extra events if a bug exists
         try await wait(require: { await receivedEvents.count == 2 }, timeout: 1.0)
         
         // bundleRPNAndNRPNDataEntryLSB should wait for 2nd UMP and bundle them together

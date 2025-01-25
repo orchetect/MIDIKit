@@ -16,7 +16,7 @@ import Testing
 @Suite(.serialized) @MainActor class MIDIInputConnection_Tests: Sendable {
     // called before each method
     init() async throws {
-        try await Task.sleep(for: .milliseconds(200))
+        try await Task.sleep(seconds: 0.200)
     }
     
     private var connEvents: [MIDIEvent] = []
@@ -36,7 +36,7 @@ extension MIDIInputConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         // create a virtual output
         let output1Tag = "output1"
@@ -116,7 +116,7 @@ extension MIDIInputConnection_Tests {
         
         // send an event from 1st - it should not be received by the connection
         try output1.send(event: .songPositionPointer(midiBeat: 3))
-        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
         #expect(connEvents == [])
         connEvents = []
         
@@ -134,7 +134,7 @@ extension MIDIInputConnection_Tests {
         
         // send an event from 2nd - it should not be received by the connection
         try output2.send(event: .songSelect(number: 8))
-        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
         #expect(connEvents == [])
     }
     
@@ -150,7 +150,7 @@ extension MIDIInputConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         // add new connection
         let connTag = "testInputConnection"
@@ -167,7 +167,7 @@ extension MIDIInputConnection_Tests {
         )
         
         let conn = try #require(manager.managedInputConnections[connTag])
-        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
+        try await Task.sleep(seconds: 0.500) // some time for connection to setup
         
         #expect(conn.outputsCriteria == [])
         #expect(conn.coreMIDIOutputEndpointRefs == [])
@@ -207,7 +207,7 @@ extension MIDIInputConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         // add new connection
         let connTag = "testInputConnection"
@@ -224,7 +224,7 @@ extension MIDIInputConnection_Tests {
         )
         
         let conn = try #require(manager.managedInputConnections[connTag])
-        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
+        try await Task.sleep(seconds: 0.500) // some time for connection to setup
         
         #expect(conn.outputsCriteria == [])
         #expect(conn.coreMIDIOutputEndpointRefs == [])
@@ -241,7 +241,7 @@ extension MIDIInputConnection_Tests {
         //        let output1ID = try #require(output1.uniqueID)
         //        let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await Task.sleep(for: .milliseconds(500)) // some time for connection to be notified of new output
+        try await Task.sleep(seconds: 0.500) // some time for connection to be notified of new output
         
         #expect(conn.outputsCriteria == [])
         #expect(conn.coreMIDIOutputEndpointRefs == [])
@@ -249,7 +249,7 @@ extension MIDIInputConnection_Tests {
         
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
         #expect(connEvents == [])
     }
     
@@ -265,7 +265,7 @@ extension MIDIInputConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         
         // create a virtual output
@@ -279,7 +279,7 @@ extension MIDIInputConnection_Tests {
         let output1ID = try #require(output1.uniqueID)
         let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await Task.sleep(for: .milliseconds(200))
+        try await Task.sleep(seconds: 0.200)
         
         // add new connection
         let connTag = "testInputConnection"
@@ -299,11 +299,11 @@ extension MIDIInputConnection_Tests {
         )
         
         let conn = try #require(manager.managedInputConnections[connTag])
-        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
+        try await Task.sleep(seconds: 0.500) // some time for connection to setup
         
         // attempt to add output1
         conn.add(outputs: [output1.endpoint])
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         
         // assert output1 was not added to the connection
         #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
@@ -312,7 +312,7 @@ extension MIDIInputConnection_Tests {
         
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
         #expect(connEvents == [])
         connEvents = []
         
@@ -337,7 +337,7 @@ extension MIDIInputConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         // create a virtual output
         let output1Tag = "output1"
@@ -350,7 +350,7 @@ extension MIDIInputConnection_Tests {
         let output1ID = try #require(output1.uniqueID)
         let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await Task.sleep(for: .milliseconds(200))
+        try await Task.sleep(seconds: 0.200)
         
         // add new connection, attempting to connect to output1
         let connTag = "testInputConnection"
@@ -366,12 +366,12 @@ extension MIDIInputConnection_Tests {
         )
         
         let conn = try #require(manager.managedInputConnections[connTag])
-        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
+        try await Task.sleep(seconds: 0.500) // some time for connection to setup
         
         // set mode and filter
         conn.mode = .allOutputs
         conn.filter = .init(owned: true)
-        try await Task.sleep(for: .milliseconds(500)) // some time for connection to update
+        try await Task.sleep(seconds: 0.500) // some time for connection to update
         
         // assert output1 is not present in connection targets
         #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
@@ -380,7 +380,7 @@ extension MIDIInputConnection_Tests {
         
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
         #expect(!connEvents.contains(.start()))
         connEvents = []
         
@@ -404,7 +404,7 @@ extension MIDIInputConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         
         // create a virtual output
@@ -418,7 +418,7 @@ extension MIDIInputConnection_Tests {
         let output1ID = try #require(output1.uniqueID)
         let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await Task.sleep(for: .milliseconds(200))
+        try await Task.sleep(seconds: 0.200)
         
         // add new connection
         let connTag = "testInputConnection"
@@ -438,11 +438,11 @@ extension MIDIInputConnection_Tests {
         )
         
         let conn = try #require(manager.managedInputConnections[connTag])
-        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
+        try await Task.sleep(seconds: 0.500) // some time for connection to setup
         
         // attempt to add output1
         conn.add(outputs: [output1.endpoint])
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         
         // assert output1 was not added to the connection
         #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
@@ -451,7 +451,7 @@ extension MIDIInputConnection_Tests {
         
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
         #expect(!connEvents.contains(.start()))
         connEvents = []
         
@@ -475,7 +475,7 @@ extension MIDIInputConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         // create a virtual output
         let output1Tag = "output1"
@@ -488,7 +488,7 @@ extension MIDIInputConnection_Tests {
         let output1ID = try #require(output1.uniqueID)
         let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await Task.sleep(for: .milliseconds(200))
+        try await Task.sleep(seconds: 0.200)
         
         // add new connection, attempting to connect to output1
         let connTag = "testInputConnection"
@@ -504,7 +504,7 @@ extension MIDIInputConnection_Tests {
         )
         
         let conn = try #require(manager.managedInputConnections[connTag])
-        try await Task.sleep(for: .milliseconds(500)) // some time for connection to setup
+        try await Task.sleep(seconds: 0.500) // some time for connection to setup
         
         // set mode and filter
         conn.mode = .allOutputs
@@ -512,7 +512,7 @@ extension MIDIInputConnection_Tests {
             owned: false,
             criteria: [.uniqueID(output1ID)]
         )
-        try await Task.sleep(for: .milliseconds(500)) // some time for connection to update
+        try await Task.sleep(seconds: 0.500) // some time for connection to update
         
         // assert output1 is not present in connection targets
         #expect(conn.outputsCriteria.filter { $0 == .uniqueID(output1ID) } == [])
@@ -521,7 +521,7 @@ extension MIDIInputConnection_Tests {
         
         // send an event - it should not be received by the connection
         try output1.send(event: .start())
-        try await Task.sleep(for: .milliseconds(200)) // wait a bit in case an event is sent
+        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
         #expect(!connEvents.contains(.start()))
         connEvents = []
         

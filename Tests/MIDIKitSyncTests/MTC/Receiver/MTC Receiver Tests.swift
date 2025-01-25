@@ -376,55 +376,55 @@ extension MTC_Receiver_Receiver_Tests {
         // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000110)) // QF 0
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.timecode == nil)
         #expect(receiver.direction == nil)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.timecode == nil)
         #expect(receiver.direction == nil)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.timecode == nil)
         #expect(receiver.direction == nil)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.timecode == nil)
         #expect(receiver.direction == nil)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.timecode == nil)
         #expect(receiver.direction == nil)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.timecode == nil)
         #expect(receiver.direction == nil)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.timecode == nil)
         #expect(receiver.direction == nil)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.timecode == nil)
         #expect(receiver.direction == nil)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001000)) // QF 0
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
             receiver.timecode ==
@@ -436,7 +436,7 @@ extension MTC_Receiver_Receiver_Tests {
         #expect(receiver.direction == .forwards)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
             receiver.timecode ==
@@ -448,7 +448,7 @@ extension MTC_Receiver_Receiver_Tests {
         #expect(receiver.direction == .forwards)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
             receiver.timecode ==
@@ -460,7 +460,7 @@ extension MTC_Receiver_Receiver_Tests {
         #expect(receiver.direction == .forwards)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
             receiver.timecode ==
@@ -472,7 +472,7 @@ extension MTC_Receiver_Receiver_Tests {
         #expect(receiver.direction == .forwards)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
             receiver.timecode ==
@@ -484,7 +484,7 @@ extension MTC_Receiver_Receiver_Tests {
         #expect(receiver.direction == .forwards)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
             receiver.timecode ==
@@ -496,7 +496,7 @@ extension MTC_Receiver_Receiver_Tests {
         #expect(receiver.direction == .forwards)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
             receiver.timecode ==
@@ -508,7 +508,7 @@ extension MTC_Receiver_Receiver_Tests {
         #expect(receiver.direction == .forwards)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
             receiver.timecode ==
@@ -520,7 +520,7 @@ extension MTC_Receiver_Receiver_Tests {
         #expect(receiver.direction == .forwards)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010)) // QF 0
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
             receiver.timecode ==
@@ -534,24 +534,24 @@ extension MTC_Receiver_Receiver_Tests {
         // reverse
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.direction == .backwards)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010)) // QF 0
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.direction == .forwards)
         
         // non-sequential (jumps)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.direction == .ambiguous)
         
         await mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
-        try await Task.sleep(for: .milliseconds(5)) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
+        try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(receiver.direction == .ambiguous)
         

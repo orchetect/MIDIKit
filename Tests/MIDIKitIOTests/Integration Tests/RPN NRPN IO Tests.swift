@@ -61,7 +61,7 @@ import Testing
         try managerLegacyAPI.start()
         try managerNewAPI.start()
         
-        try await Task.sleep(for: .milliseconds(300))
+        try await Task.sleep(seconds: 0.300)
         
         print("NRPN_IO_Tests setupManagers() done")
     }
@@ -104,7 +104,7 @@ extension RPN_NRPN_IO_Tests {
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(for: .milliseconds(300))
+        try await Task.sleep(seconds: 0.300)
         
         print("Sending test event")
         
@@ -137,7 +137,7 @@ extension RPN_NRPN_IO_Tests {
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(for: .milliseconds(300))
+        try await Task.sleep(seconds: 0.300)
         
         print("Sending test event")
         
@@ -177,7 +177,7 @@ extension RPN_NRPN_IO_Tests {
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(for: .milliseconds(300))
+        try await Task.sleep(seconds: 0.300)
         
         print("Sending test events")
         
@@ -244,7 +244,7 @@ extension RPN_NRPN_IO_Tests {
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(for: .milliseconds(300))
+        try await Task.sleep(seconds: 0.300)
         
         print("Sending test events")
         
@@ -324,7 +324,7 @@ extension RPN_NRPN_IO_Tests {
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(for: .milliseconds(300))
+        try await Task.sleep(seconds: 0.300)
         
         print("Sending test event")
         
@@ -358,7 +358,7 @@ extension RPN_NRPN_IO_Tests {
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(for: .milliseconds(300))
+        try await Task.sleep(seconds: 0.300)
         
         print("Sending test event")
         
@@ -398,7 +398,7 @@ extension RPN_NRPN_IO_Tests {
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(for: .milliseconds(300))
+        try await Task.sleep(seconds: 0.300)
         
         print("Sending test events")
         
@@ -464,7 +464,7 @@ extension RPN_NRPN_IO_Tests {
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(for: .milliseconds(300))
+        try await Task.sleep(seconds: 0.300)
         
         print("Sending test events")
         

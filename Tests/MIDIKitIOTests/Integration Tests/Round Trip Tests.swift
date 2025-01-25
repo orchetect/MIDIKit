@@ -26,7 +26,7 @@ import Testing
     init() async throws {
         print("RoundTrip_Tests init starting")
         
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         
         manager = .init(
             clientName: "MIDIKit_IO_RoundTrip_Input_Tests",
@@ -43,7 +43,7 @@ import Testing
             return
         }
         
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         
         try await createPorts()
         
@@ -51,7 +51,7 @@ import Testing
         
         receivedEvents = []
         
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         
         print("RoundTrip_Tests init done")
     }
@@ -71,7 +71,7 @@ import Testing
         
         let outputID = try #require(output.uniqueID)
         
-        try await Task.sleep(for: .milliseconds(200))
+        try await Task.sleep(seconds: 0.200)
         
         // output connection
         
@@ -288,7 +288,7 @@ import Testing
             try output.send(events: Array(eventGroup))
         }
         
-        try await Task.sleep(for: .seconds(1))
+        try await Task.sleep(seconds: 1.0)
         
         // ensure all events are received correctly
         
@@ -326,9 +326,9 @@ import Testing
     @Test(arguments: [.legacyCoreMIDI, .newCoreMIDI(.midi1_0), .newCoreMIDI(.midi2_0)] as [CoreMIDIAPIVersion])
     func rapidMIDIEvents(api: CoreMIDIAPIVersion) async throws {
         manager.preferredAPI = api
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         try await createPorts()
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         try await runRapidMIDIEvents()
     }
 }

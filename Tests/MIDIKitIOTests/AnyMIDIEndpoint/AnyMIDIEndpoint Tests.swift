@@ -23,7 +23,7 @@ import Testing
         
         // start midi client
         try manager.start()
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         // to properly test this, we need to actually
         // create a couple MIDI endpoints in the system first
@@ -46,7 +46,7 @@ import Testing
         )
         
         // have to give Core MIDI a bit of time to create the ports (async)
-        try await Task.sleep(for: .seconds(1))
+        try await Task.sleep(seconds: 1.0)
         
         // input
         

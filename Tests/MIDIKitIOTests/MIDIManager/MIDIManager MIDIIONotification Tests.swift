@@ -23,7 +23,7 @@ extension MIDIManager_MIDIIONotification_Tests {
     func systemNotification_Add_Remove() async throws {
         // allow time for cleanup from previous unit tests, in case
         // MIDI endpoints are still being disposed of by Core MIDI
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         
         let manager = MIDIManager(
             clientName: UUID().uuidString,
@@ -38,7 +38,7 @@ extension MIDIManager_MIDIIONotification_Tests {
         // start midi client
         try manager.start()
         
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         #expect(notifications == [])
         
         notifications = []
@@ -52,7 +52,7 @@ extension MIDIManager_MIDIIONotification_Tests {
         )
         
         try await wait(require: { await notifications.count >= 3 }, timeout: 0.5)
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         var addedNotifFound = false
         for notif in notifications {
@@ -77,7 +77,7 @@ extension MIDIManager_MIDIIONotification_Tests {
         manager.remove(.output, .withTag(output1Tag))
         
         try await wait(require: { await notifications.count >= 2 }, timeout: 0.5)
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         var removedNotifFound = false
         for notif in notifications {
@@ -103,7 +103,7 @@ extension MIDIManager_MIDIIONotification_Tests {
     func systemNotification_SequentialRemove() async throws {
         // allow time for cleanup from previous unit tests, in case
         // MIDI endpoints are still being disposed of by Core MIDI
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         
         let manager = MIDIManager(
             clientName: UUID().uuidString,
@@ -118,7 +118,7 @@ extension MIDIManager_MIDIIONotification_Tests {
         // start midi client
         try manager.start()
         
-        try await Task.sleep(for: .milliseconds(500))
+        try await Task.sleep(seconds: 0.500)
         #expect(notifications == [])
         
         notifications = []
@@ -142,7 +142,7 @@ extension MIDIManager_MIDIIONotification_Tests {
         
         // each port produces at least 3 notifications, plus `setupChanged`
         try await wait(require: { await notifications.count >= 6 }, timeout: 0.5)
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         notifications = []
         
@@ -151,7 +151,7 @@ extension MIDIManager_MIDIIONotification_Tests {
         manager.remove(.output, .withTag(output2Tag))
         
         try await wait(require: { await notifications.count >= 2 }, timeout: 0.5)
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         var removedEndpoints: [MIDIOutputEndpoint] = []
         for notif in notifications {
@@ -185,7 +185,7 @@ extension MIDIManager_MIDIIONotification_Tests {
     // func systemNotificationLogger() async throws {
     //    // allow time for cleanup from previous unit tests, in case
     //    // MIDI endpoints are still being disposed of by Core MIDI
-    //    try await Task.sleep(for: .milliseconds(500))
+    //    try await Task.sleep(seconds: 0.500)
     //
     //    let manager = MIDIManager(
     //        clientName: UUID().uuidString,
@@ -200,7 +200,7 @@ extension MIDIManager_MIDIIONotification_Tests {
     //    try manager.start()
     //
     //    print("Listening for Core MIDI notifications...")
-    //    try await Task.sleep(for: .seconds(120)) // listen for 2 minutes so it doesn't run indefinitely
+    //    try await Task.sleep(seconds: 120.0) // listen for 2 minutes so it doesn't run indefinitely
     // }
 }
 

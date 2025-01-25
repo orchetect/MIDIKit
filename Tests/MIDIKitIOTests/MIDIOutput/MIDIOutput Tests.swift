@@ -23,7 +23,7 @@ import Testing
         
         // start midi client
         try manager.start()
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         // add new endpoint
         
@@ -81,7 +81,7 @@ import Testing
         
         // start midi client
         try manager.start()
-        try await Task.sleep(for: .milliseconds(100))
+        try await Task.sleep(seconds: 0.100)
         
         // add new endpoint
         
@@ -107,7 +107,7 @@ import Testing
         
         let newName = "New Name"
         managedOutput.name = newName
-        try await Task.sleep(for: .milliseconds(200))
+        try await Task.sleep(seconds: 0.200)
         
         #expect(managedOutput.name == newName)
         #expect(try getString(forProperty: kMIDIPropertyName, of: ref1) == newName)
