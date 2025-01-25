@@ -5,13 +5,14 @@
 //
 
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class Event_Text_Tests: XCTestCase {
+@Suite struct Event_Text_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
-    func testInit_midi1SMFRawBytes_EmptyString() throws {
+    @Test
+    func init_midi1SMFRawBytes_EmptyString() throws {
         let bytes: [UInt8] = [
             0xFF, 0x01, // header
             0x00        // length: 0 bytes
@@ -19,22 +20,24 @@ final class Event_Text_Tests: XCTestCase {
         
         let event = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.textType, .text)
-        XCTAssertEqual(event.text, "")
+        #expect(event.textType == .text)
+        #expect(event.text == "")
     }
     
-    func testMIDI1SMFRawBytes_EmptyString() {
+    @Test
+    func midi1SMFRawBytes_EmptyString() {
         let event = MIDIFileEvent.Text(type: .text, string: "")
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [
+        #expect(bytes == [
             0xFF, 0x01, // header
             0x00        // length: 0 bytes
         ])
     }
     
-    func testInit_midi1SMFRawBytes_WithString() throws {
+    @Test
+    func init_midi1SMFRawBytes_WithString() throws {
         let bytes: [UInt8] = [
             0xFF, 0x01, // header
             0x04,       // length: 4 bytes
@@ -43,16 +46,17 @@ final class Event_Text_Tests: XCTestCase {
         
         let event = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.textType, .text)
-        XCTAssertEqual(event.text, "abcd")
+        #expect(event.textType == .text)
+        #expect(event.text == "abcd")
     }
     
-    func testMIDI1SMFRawBytes_WithString() {
+    @Test
+    func midi1SMFRawBytes_WithString() {
         let event = MIDIFileEvent.Text(type: .text, string: "abcd")
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [
+        #expect(bytes == [
             0xFF, 0x01, // header
             0x04,       // length: 4 bytes
             0x61, 0x62, 0x63, 0x64 // string characters
@@ -61,15 +65,17 @@ final class Event_Text_Tests: XCTestCase {
     
     // MARK: Text Types
     
-    func testTextHeaders() {
+    @Test
+    func textHeaders() {
         // ensure all text event header IDs exist
         
         MIDIFileEvent.Text.EventType.allCases.forEach {
-            XCTAssertNotNil(MIDIFile.kTextEventHeaders[$0])
+            #expect(MIDIFile.kTextEventHeaders[$0] != nil)
         }
     }
     
-    func testTextTypes() throws {
+    @Test
+    func textTypes() throws {
         func textTypeTest(
             eventType: MIDIFileEvent.Text.EventType,
             eventID: UInt8
@@ -81,10 +87,10 @@ final class Event_Text_Tests: XCTestCase {
             ]
             
             let event1 = MIDIFileEvent.Text(type: eventType, string: "a")
-            XCTAssertEqual(event1.midi1SMFRawBytes(), bytes)
+            #expect(event1.midi1SMFRawBytes() == bytes)
             
             let event2 = try MIDIFileEvent.Text(midi1SMFRawBytes: bytes)
-            XCTAssertEqual(event1, event2)
+            #expect(event1 == event2)
         }
         
         let textTypes: [MIDIFileEvent.Text.EventType: UInt8] = [
@@ -107,7 +113,8 @@ final class Event_Text_Tests: XCTestCase {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:options --maxwidth none
     
-    func testExtendedCharacters() throws {
+    @Test
+    func extendedCharacters() throws {
         let rawData: [UInt8] = [
             0xFF, 0x02, 0x22, 0x43, 0x6F, 0x70, 0x79, 0x72,
             0x69, 0x67, 0x68, 0x74, 0x20, 0xA9, 0x20, 0x32,
@@ -120,13 +127,14 @@ final class Event_Text_Tests: XCTestCase {
         
         // check string integrity
         let str = "Copyright © 2000 by Some Guy Hello"
-        XCTAssertEqual(text.text, str)
+        #expect(text.text == str)
         
         // check instance equality
-        XCTAssertEqual(text, MIDIFileEvent.Text(copyright: str))
+        #expect(text == MIDIFileEvent.Text(copyright: str))
     }
     
-    func testNewlineCharacter() throws {
+    @Test
+    func newlineCharacter() throws {
         let rawData: [UInt8] = [
             0xFF, 0x01, 0x1C, 0x53, 0x65, 0x71, 0x75, 0x65,
             0x6E, 0x63, 0x65, 0x64, 0x20, 0x62, 0x79, 0x20,
@@ -138,10 +146,10 @@ final class Event_Text_Tests: XCTestCase {
         
         // check string integrity
         let str = "Sequenced by Mr. Johnny Doe\n"
-        XCTAssertEqual(text.text, str)
+        #expect(text.text == str)
         
         // check instance equality
-        XCTAssertEqual(text, MIDIFileEvent.Text(text: str))
+        #expect(text == MIDIFileEvent.Text(text: str))
     }
     
     // TODO: add tests - edge cases etc.

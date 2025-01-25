@@ -5,22 +5,24 @@
 //
 
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class Event_PitchBend_Tests: XCTestCase {
+@Suite struct Event_PitchBend_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
-    func testInit_midi1SMFRawBytes_A() throws {
+    @Test
+    func init_midi1SMFRawBytes_A() throws {
         let bytes: [UInt8] = [0xE0, 0x00, 0x40]
         
         let event = try MIDIFileEvent.PitchBend(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.value, .midi1(.midpoint))
-        XCTAssertEqual(event.channel, 0)
+        #expect(event.value == .midi1(.midpoint))
+        #expect(event.channel == 0)
     }
     
-    func testMIDI1SMFRawBytes_A() {
+    @Test
+    func midi1SMFRawBytes_A() {
         let event = MIDIFileEvent.PitchBend(
             value: .midi1(.midpoint),
             channel: 0
@@ -28,19 +30,21 @@ final class Event_PitchBend_Tests: XCTestCase {
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [0xE0, 0x00, 0x40])
+        #expect(bytes == [0xE0, 0x00, 0x40])
     }
     
-    func testInit_midi1SMFRawBytes_B() throws {
+    @Test
+    func init_midi1SMFRawBytes_B() throws {
         let bytes: [UInt8] = [0xE1, 0x7F, 0x7F]
         
         let event = try MIDIFileEvent.PitchBend(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.value, .midi1(.max))
-        XCTAssertEqual(event.channel, 1)
+        #expect(event.value == .midi1(.max))
+        #expect(event.channel == 1)
     }
     
-    func testMIDI1SMFRawBytes_B() {
+    @Test
+    func midi1SMFRawBytes_B() {
         let event = MIDIFileEvent.PitchBend(
             value: .midi1(.max),
             channel: 1
@@ -48,6 +52,6 @@ final class Event_PitchBend_Tests: XCTestCase {
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [0xE1, 0x7F, 0x7F])
+        #expect(bytes == [0xE1, 0x7F, 0x7F])
     }
 }

@@ -5,64 +5,68 @@
 //
 
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class Event_SysEx7_Tests: XCTestCase {
+@Suite struct Event_SysEx7_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     // MARK: - MIDIEvent.sysEx7(midi1SMFRawBytes:)
     
-    func testMIDIEventSysEx7_midi1SMFRawBytes_Empty() {
-        XCTAssertThrowsError(
+    @Test
+    func midiEventSysEx7_midi1SMFRawBytes_Empty() {
+        #expect(throws: (any Error).self) {
             try MIDIEvent.sysEx7(midi1SMFRawBytes: [])
-        )
+        }
     }
     
-    func testMIDIEventSysEx7_midi1SMFRawBytes_EmptyOrShort() throws {
+    @Test
+    func midiEventSysEx7_midi1SMFRawBytes_EmptyOrShort() throws {
         // 0xF7 termination byte is required in SMF for all syntactically complete sysex messages
         
         // not syntactically complete, but could be valid in multi-part sysex context
-        XCTAssertThrowsError(
+        #expect(throws: (any Error).self) {
             try MIDIEvent.sysEx7(midi1SMFRawBytes: [
                 0xF0,  // start byte
                 0x00   // length: 0 bytes to follow
             ])
-        )
+        }
         
         // invalid length
-        XCTAssertThrowsError(
+        #expect(throws: (any Error).self) {
             try MIDIEvent.sysEx7(midi1SMFRawBytes: [
                 0xF0,  // start byte
                 0x00,  // length: 0 bytes to follow (wrong)
                 0xF7   // termination byte
             ])
-        )
+        }
         
         // not valid sysex (should contain at least one internal byte - the manufacturer ID)
-        XCTAssertThrowsError(
+        #expect(throws: (any Error).self) {
             try MIDIEvent.sysEx7(midi1SMFRawBytes: [
                 0xF0,  // start byte
                 0x01,  // length: 1 byte to follow
                 0xF7   // termination byte
             ])
-        )
+        }
     }
     
-    func testMIDIEventSysEx7_midi1SMFRawBytes_WrongLength() {
+    @Test
+    func midiEventSysEx7_midi1SMFRawBytes_WrongLength() {
         // length must include data length and termination byte
         
-        XCTAssertThrowsError(
+        #expect(throws: (any Error).self) {
             try MIDIEvent.sysEx7(midi1SMFRawBytes: [
                 0xF0,  // start byte
                 0x01,  // length: 1 byte to follow (wrong)
                 0x7D,  // manufacturer ID
                 0xF7   // termination byte
             ])
-        )
+        }
     }
     
-    func testMIDIEventSysEx7_midi1SMFRawBytes_SysEx_EmptyData() throws {
+    @Test
+    func midiEventSysEx7_midi1SMFRawBytes_SysEx_EmptyData() throws {
         let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x02,  // length: 2 bytes to follow
@@ -71,14 +75,15 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
         
         guard case let .sysEx7(event) = sysEx else {
-            XCTFail(); return
+            Issue.record(); return
         }
         
-        XCTAssertEqual(event.manufacturer, .oneByte(0x7D))
-        XCTAssertEqual(event.data, [])
+        #expect(event.manufacturer == .oneByte(0x7D))
+        #expect(event.data == [])
     }
     
-    func testMIDIEventSysEx7_midi1SMFRawBytes_SysEx_WithData() throws {
+    @Test
+    func midiEventSysEx7_midi1SMFRawBytes_SysEx_WithData() throws {
         let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x04,  // length: 4 bytes to follow
@@ -89,14 +94,15 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
         
         guard case let .sysEx7(event) = sysEx else {
-            XCTFail(); return
+            Issue.record(); return
         }
         
-        XCTAssertEqual(event.manufacturer, .oneByte(0x7D))
-        XCTAssertEqual(event.data, [0x12, 0x34])
+        #expect(event.manufacturer == .oneByte(0x7D))
+        #expect(event.data == [0x12, 0x34])
     }
     
-    func testMIDIEventSysEx7_midi1SMFRawBytes_UniversalSysEx_EmptyData() throws {
+    @Test
+    func midiEventSysEx7_midi1SMFRawBytes_UniversalSysEx_EmptyData() throws {
         let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x05,  // length: 5 bytes to follow
@@ -108,17 +114,18 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
         
         guard case let .universalSysEx7(event) = sysEx else {
-            XCTFail(); return
+            Issue.record(); return
         }
         
-        XCTAssertEqual(event.universalType, .realTime)
-        XCTAssertEqual(event.deviceID, 0x01)
-        XCTAssertEqual(event.subID1, 0x02)
-        XCTAssertEqual(event.subID2, 0x03)
-        XCTAssertEqual(event.data, [])
+        #expect(event.universalType == .realTime)
+        #expect(event.deviceID == 0x01)
+        #expect(event.subID1 == 0x02)
+        #expect(event.subID2 == 0x03)
+        #expect(event.data == [])
     }
     
-    func testMIDIEventSysEx7_midi1SMFRawBytes_UniversalSysEx_WithData() throws {
+    @Test
+    func midiEventSysEx7_midi1SMFRawBytes_UniversalSysEx_WithData() throws {
         let sysEx = try MIDIEvent.sysEx7(midi1SMFRawBytes: [
             0xF0,  // start byte
             0x07,  // length: 7 bytes to follow
@@ -132,19 +139,20 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
         
         guard case let .universalSysEx7(event) = sysEx else {
-            XCTFail(); return
+            Issue.record(); return
         }
         
-        XCTAssertEqual(event.universalType, .nonRealTime)
-        XCTAssertEqual(event.deviceID, 0x7F)
-        XCTAssertEqual(event.subID1, 0x00)
-        XCTAssertEqual(event.subID2, 0x00)
-        XCTAssertEqual(event.data, [0x12, 0x34])
+        #expect(event.universalType == .nonRealTime)
+        #expect(event.deviceID == 0x7F)
+        #expect(event.subID1 == 0x00)
+        #expect(event.subID2 == 0x00)
+        #expect(event.data == [0x12, 0x34])
     }
     
     // MARK: - MIDIFileEvent.SysEx7
     
-    func testSysEx7_midi1SMFRawBytes_EmptyData() throws {
+    @Test
+    func sysEx7_midi1SMFRawBytes_EmptyData() throws {
         let sysEx = try MIDIFileEvent.SysEx7(
             manufacturer: .oneByte(0x7D),
             data: []
@@ -152,7 +160,7 @@ final class Event_SysEx7_Tests: XCTestCase {
         
         let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [
+        #expect(bytes == [
             0xF0,  // start byte
             0x02,  // length: 2 bytes to follow
             0x7D,  // manufacturer ID
@@ -160,7 +168,8 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
     }
     
-    func testSysEx7_midi1SMFRawBytes_WithData() throws {
+    @Test
+    func sysEx7_midi1SMFRawBytes_WithData() throws {
         let sysEx = try MIDIFileEvent.SysEx7(
             manufacturer: .oneByte(0x7D),
             data: [0x12, 0x34]
@@ -168,7 +177,7 @@ final class Event_SysEx7_Tests: XCTestCase {
         
         let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [
+        #expect(bytes == [
             0xF0,  // start byte
             0x04,  // length: 4 bytes to follow
             0x7D,  // manufacturer ID
@@ -178,7 +187,8 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
     }
     
-    func testSysEx7_midi1SMFRawBytes_128Bytes() throws {
+    @Test
+    func sysEx7_midi1SMFRawBytes_128Bytes() throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128 - 2)
         
         let sysEx = try MIDIFileEvent.SysEx7(
@@ -188,13 +198,13 @@ final class Event_SysEx7_Tests: XCTestCase {
         
         let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
-        XCTAssertEqual(
-            bytes,
-            [
-                0xF0,       // start byte
-                0x81, 0x00, // length: 128 bytes to follow
-                0x7D        // manufacturer ID
-            ]
+        #expect(
+            bytes ==
+                [
+                    0xF0,       // start byte
+                    0x81, 0x00, // length: 128 bytes to follow
+                    0x7D        // manufacturer ID
+                ]
                 + data      // data bytes
                 + [0xF7]    // termination byte
         )
@@ -202,7 +212,8 @@ final class Event_SysEx7_Tests: XCTestCase {
     
     // MARK: - MIDIFileEvent.UniversalSysEx7
     
-    func testUniversalSysEx7_midi1SMFRawBytes_EmptyData() throws {
+    @Test
+    func universalSysEx7_midi1SMFRawBytes_EmptyData() throws {
         let sysEx = try MIDIFileEvent.UniversalSysEx7(
             universalType: .realTime,
             deviceID: 0x01,
@@ -213,7 +224,7 @@ final class Event_SysEx7_Tests: XCTestCase {
         
         let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [
+        #expect(bytes == [
             0xF0,  // start byte
             0x05,  // length: 5 bytes to follow
             0x7F,  // realtime universal sysex
@@ -224,7 +235,8 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
     }
     
-    func testUniversalSysEx7_midi1SMFRawBytes_WithData() throws {
+    @Test
+    func universalSysEx7_midi1SMFRawBytes_WithData() throws {
         let sysEx = try MIDIFileEvent.UniversalSysEx7(
             universalType: .nonRealTime,
             deviceID: 0x7F,
@@ -235,7 +247,7 @@ final class Event_SysEx7_Tests: XCTestCase {
         
         let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [
+        #expect(bytes == [
             0xF0,  // start byte
             0x07,  // length: 7 bytes to follow
             0x7E,  // non-realtime universal sysex
@@ -248,7 +260,8 @@ final class Event_SysEx7_Tests: XCTestCase {
         ])
     }
     
-    func testUniversalSysEx7_midi1SMFRawBytes_128Bytes() throws {
+    @Test
+    func universalSysEx7_midi1SMFRawBytes_128Bytes() throws {
         let data: [UInt8] = .init(repeating: 0x12, count: 128 - 5)
         
         let sysEx = try MIDIFileEvent.UniversalSysEx7(
@@ -261,16 +274,16 @@ final class Event_SysEx7_Tests: XCTestCase {
         
         let bytes: [UInt8] = sysEx.midi1SMFRawBytes()
         
-        XCTAssertEqual(
-            bytes,
-            [
-                0xF0,       // start byte
-                0x81, 0x00, // length: 128 bytes to follow
-                0x7E,       // non-realtime universal sysex
-                0x7F,       // device ID
-                0x01,       // subID 1
-                0x02        // subID 2
-            ]
+        #expect(
+            bytes ==
+                [
+                    0xF0,       // start byte
+                    0x81, 0x00, // length: 128 bytes to follow
+                    0x7E,       // non-realtime universal sysex
+                    0x7F,       // device ID
+                    0x01,       // subID 1
+                    0x02        // subID 2
+                ]
                 + data      // data bytes
                 + [0xF7]    // termination byte
         )

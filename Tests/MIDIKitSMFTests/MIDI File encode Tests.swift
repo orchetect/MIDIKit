@@ -5,10 +5,11 @@
 //
 
 import MIDIKitSMF
-import XCTest
+import Testing
 
-final class MIDIFileEncodeTests: XCTestCase {
-    func testType0() {
+@Suite struct MIDIFileEncodeTests {
+    @Test
+    func type0() {
         var midiFile = MIDIFile()
         
         midiFile.format = .singleTrack // Type 1
@@ -20,12 +21,13 @@ final class MIDIFileEncodeTests: XCTestCase {
             ])
         ]
         
-        XCTAssertNoThrow {
+        #expect(throws: Never.self) {
             try midiFile.rawData()
         }
     }
     
-    func testEncodeDP8Markers() throws {
+    @Test
+    func encodeDP8Markers() throws {
         var midiFile = MIDIFile()
         
         midiFile.timeBase = .musical(ticksPerQuarterNote: 480)
@@ -117,11 +119,11 @@ final class MIDIFileEncodeTests: XCTestCase {
         // test if midiFile structs are equal by way of Equatable
         
         let dp8MarkersRawData = try MIDIFile(rawData: kMIDIFile.dp8Markers.data)
-        XCTAssertEqual(midiFile, dp8MarkersRawData)
+        #expect(midiFile == dp8MarkersRawData)
         
         // test if raw data is equal
         
         let constructedData = try midiFile.rawData()
-        XCTAssertEqual(constructedData, kMIDIFile.dp8Markers.data)
+        #expect(constructedData == kMIDIFile.dp8Markers.data)
     }
 }

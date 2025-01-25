@@ -5,13 +5,14 @@
 //
 
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class Event_TimeSignature_Tests: XCTestCase {
+@Suite struct Event_TimeSignature_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
-    func testInit_midi1SMFRawBytes() throws {
+    @Test
+    func init_midi1SMFRawBytes() throws {
         let bytes: [UInt8] = [
             0xFF, 0x58, 0x04, // header
             0x02, // numerator
@@ -22,13 +23,14 @@ final class Event_TimeSignature_Tests: XCTestCase {
         
         let event = try MIDIFileEvent.TimeSignature(midi1SMFRawBytes: bytes)
         
-        XCTAssertEqual(event.numerator, 2)
-        XCTAssertEqual(event.denominator, 1)
-        XCTAssertEqual(event.midiClocksBetweenMetronomeClicks, 0x18)
-        XCTAssertEqual(event.numberOf32ndNotesInAQuarterNote, 0x08)
+        #expect(event.numerator == 2)
+        #expect(event.denominator == 1)
+        #expect(event.midiClocksBetweenMetronomeClicks == 0x18)
+        #expect(event.numberOf32ndNotesInAQuarterNote == 0x08)
     }
     
-    func testMIDI1SMFRawBytes() {
+    @Test
+    func midi1SMFRawBytes() {
         let event = MIDIFileEvent.TimeSignature(
             numerator: 2,
             denominator: 1
@@ -36,7 +38,7 @@ final class Event_TimeSignature_Tests: XCTestCase {
         
         let bytes: [UInt8] = event.midi1SMFRawBytes()
         
-        XCTAssertEqual(bytes, [
+        #expect(bytes == [
             0xFF, 0x58, 0x04, // header
             0x02, // numerator
             0x01, // denominator

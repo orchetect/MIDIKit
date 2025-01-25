@@ -4,34 +4,37 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class Chunk_Track_Tests: XCTestCase {
+@Suite struct Chunk_Track_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     // swiftformat:options --maxwidth none
     
     /// Ensure that event decode order contains all event types and that there are no duplicates.
-    func testEventDecodeOrder() {
+    @Test
+    func eventDecodeOrder() {
         // check count matches since an array can contain more than one of the same identical element
-        XCTAssertEqual(
-            Set(MIDIFile.Chunk.Track.eventDecodeOrder).count,
+        #expect(
+            Set(MIDIFile.Chunk.Track.eventDecodeOrder).count ==
             MIDIFileEventType.allCases.count
         )
         
         // ensure order contains all cases
         for eventType in MIDIFileEventType.allCases {
-            XCTAssertEqual(MIDIFile.Chunk.Track.eventDecodeOrder.filter { $0 == eventType }.count, 1)
+            #expect(MIDIFile.Chunk.Track.eventDecodeOrder.filter { $0 == eventType }.count == 1)
         }
     }
     
-    func testEmptyEvents() throws {
+    @Test
+    func emptyEvents() throws {
         let events: [MIDIFileEvent] = []
         
         let track = MIDIFile.Chunk.Track(events: events)
         
-        XCTAssertEqual(track.events, events)
+        #expect(track.events == events)
         
         let bytes: [UInt8] = [
             0x4D, 0x54, 0x72, 0x6B, // MTrk
@@ -46,16 +49,17 @@ final class Chunk_Track_Tests: XCTestCase {
             using: .musical(ticksPerQuarterNote: 960)
         )
         
-        XCTAssertEqual(generatedData.bytes, bytes)
+        #expect(generatedData.bytes == bytes)
         
         // parse raw bytes
         
         let parsedTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
         
-        XCTAssertEqual(parsedTrack, parsedTrack)
+        #expect(parsedTrack == parsedTrack)
     }
     
-    func testWithEvents() throws {
+    @Test
+    func withEvents() throws {
         let events: [MIDIFileEvent] = [
             .noteOn(delta: .none, note: 60, velocity: .midi1(64), channel: 0),
             .cc(delta: .ticks(240), controller: .expression, value: .midi1(20), channel: 1)
@@ -63,7 +67,7 @@ final class Chunk_Track_Tests: XCTestCase {
         
         let track = MIDIFile.Chunk.Track(events: events)
         
-        XCTAssertEqual(track.events, events)
+        #expect(track.events == events)
         
         let bytes: [UInt8] = [
             0x4D, 0x54, 0x72, 0x6B, // MTrk
@@ -82,18 +86,19 @@ final class Chunk_Track_Tests: XCTestCase {
             using: .musical(ticksPerQuarterNote: 960)
         )
         
-        XCTAssertEqual(generatedData.bytes, bytes)
+        #expect(generatedData.bytes == bytes)
         
         // parse raw bytes
         
         let parsedTrack = try MIDIFile.Chunk.Track(midi1SMFRawBytesStream: generatedData)
         
-        XCTAssertEqual(parsedTrack, parsedTrack)
+        #expect(parsedTrack == parsedTrack)
     }
     
     // MARK: - Events
     
-    func testEventsAtBeatPositions() throws {
+    @Test
+    func eventsAtBeatPositions() throws {
         let ppq: UInt16 = 480
         var midiFile = MIDIFile(timeBase: .musical(ticksPerQuarterNote: UInt16(ppq)))
         
@@ -132,22 +137,22 @@ final class Chunk_Track_Tests: XCTestCase {
             ])
         ]
         
-        let trackOne = try XCTUnwrap(midiFile.tracks.first)
+        let trackOne = try #require(midiFile.tracks.first)
         
         let eventsAtBeatPositions = trackOne.eventsAtBeatPositions(ppq: ppq)
         
-        XCTAssertEqual(eventsAtBeatPositions.count, 11)
+        #expect(eventsAtBeatPositions.count == 11)
         
-        XCTAssertEqual(eventsAtBeatPositions[0].beat, 0.0) // text
-        XCTAssertEqual(eventsAtBeatPositions[1].beat, 0.0) // smpte
-        XCTAssertEqual(eventsAtBeatPositions[2].beat, 0.0) // time sig
-        XCTAssertEqual(eventsAtBeatPositions[3].beat, 0.0) // tempo
-        XCTAssertEqual(eventsAtBeatPositions[4].beat, 1.0) // cc
-        XCTAssertEqual(eventsAtBeatPositions[5].beat, 2.0) // cc
-        XCTAssertEqual(eventsAtBeatPositions[6].beat, 3.0) // cc
-        XCTAssertEqual(eventsAtBeatPositions[7].beat, 4.0) // cc
-        XCTAssertEqual(eventsAtBeatPositions[8].beat, 5.0) // cc
-        XCTAssertEqual(eventsAtBeatPositions[9].beat, 5.5) // cc
-        XCTAssertEqual(eventsAtBeatPositions[10].beat, 5.625) // cc
+        #expect(eventsAtBeatPositions[0].beat == 0.0) // text
+        #expect(eventsAtBeatPositions[1].beat == 0.0) // smpte
+        #expect(eventsAtBeatPositions[2].beat == 0.0) // time sig
+        #expect(eventsAtBeatPositions[3].beat == 0.0) // tempo
+        #expect(eventsAtBeatPositions[4].beat == 1.0) // cc
+        #expect(eventsAtBeatPositions[5].beat == 2.0) // cc
+        #expect(eventsAtBeatPositions[6].beat == 3.0) // cc
+        #expect(eventsAtBeatPositions[7].beat == 4.0) // cc
+        #expect(eventsAtBeatPositions[8].beat == 5.0) // cc
+        #expect(eventsAtBeatPositions[9].beat == 5.5) // cc
+        #expect(eventsAtBeatPositions[10].beat == 5.625) // cc
     }
 }

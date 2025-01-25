@@ -5,19 +5,20 @@
 //
 
 @testable import MIDIKitSMF
-import XCTest
+import Testing
 
-final class Chunk_UnrecognizedChunk_Tests: XCTestCase {
+@Suite struct Chunk_UnrecognizedChunk_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     // swiftformat:options --maxwidth none
     
-    func testEmptyData() throws {
+    @Test
+    func emptyData() throws {
         let id = "ABCD"
         
         let track = MIDIFile.Chunk.UnrecognizedChunk(id: id)
         
-        XCTAssertEqual(track.identifier, id)
+        #expect(track.identifier == id)
         
         let bytes: [UInt8] = [
             0x41, 0x42, 0x43, 0x44, // ABCD
@@ -30,17 +31,18 @@ final class Chunk_UnrecognizedChunk_Tests: XCTestCase {
             using: .musical(ticksPerQuarterNote: 960)
         ).bytes
         
-        XCTAssertEqual(generatedBytes, bytes)
+        #expect(generatedBytes == bytes)
         
         // parse raw bytes
         
         let parsedTrack = try MIDIFile.Chunk
             .UnrecognizedChunk(midi1SMFRawBytesStream: generatedBytes)
 
-        XCTAssertEqual(parsedTrack, parsedTrack)
+        #expect(parsedTrack == parsedTrack)
     }
     
-    func testWithData() throws {
+    @Test
+    func withData() throws {
         let data: [UInt8] = [0x12, 0x34, 0x56, 0x78]
         
         let id = "ABCD"
@@ -50,7 +52,7 @@ final class Chunk_UnrecognizedChunk_Tests: XCTestCase {
             rawData: data.data
         )
         
-        XCTAssertEqual(track.identifier, id)
+        #expect(track.identifier == id)
         
         let bytes: [UInt8] = [
             0x41, 0x42, 0x43, 0x44, // ABCD
@@ -63,15 +65,13 @@ final class Chunk_UnrecognizedChunk_Tests: XCTestCase {
             using: .musical(ticksPerQuarterNote: 960)
         ).bytes
         
-        XCTAssertEqual(generatedBytes, bytes)
+        #expect(generatedBytes == bytes)
         
         // parse raw bytes
         
         let parsedTrack = try MIDIFile.Chunk
             .UnrecognizedChunk(midi1SMFRawBytesStream: generatedBytes)
 
-        XCTAssertEqual(parsedTrack, parsedTrack)
+        #expect(parsedTrack == parsedTrack)
     }
-    
-    // MARK: - Edge Cases
 }
