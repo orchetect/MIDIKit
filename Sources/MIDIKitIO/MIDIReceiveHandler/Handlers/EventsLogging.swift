@@ -10,7 +10,7 @@ import os.log
 
 extension MIDIReceiver {
     /// Handler for the ``eventsLogging(options:_:)`` MIDI receiver.
-    public typealias EventsLoggingHandler = (_ eventString: String) -> Void
+    public typealias EventsLoggingHandler = @Sendable (_ eventString: String) -> Void
     
     /// MIDI Event logging handler (event description strings).
     /// If `handler` is nil, all events are logged to the console (but only in `DEBUG` preprocessor
