@@ -12,7 +12,7 @@ import Foundation
 @testable import MIDIKitIO
 import Testing
 
-@Suite struct AnyMIDIEndpoint_Tests {
+@Suite(.serialized) struct AnyMIDIEndpoint_Tests {
     @Test @MainActor
     func anyMIDIEndpoint() async throws {
         let manager = MIDIManager(

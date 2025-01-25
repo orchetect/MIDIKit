@@ -60,7 +60,7 @@ import Testing
         // property updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = MTCReceiver(
+        let mtcRec = await MTCReceiver(
             name: "test",
             initialLocalFrameRate: .fps24
         ) { timecode, messageType, direction, displayNeedsUpdate in
