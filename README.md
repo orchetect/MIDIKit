@@ -2,7 +2,7 @@
 
 # MIDIKit
 
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2FMIDIKit%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/orchetect/MIDIKit) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2FMIDIKit%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/orchetect/MIDIKit) [![Xcode 15-16](https://img.shields.io/badge/Xcode-15–16-blue.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2FMIDIKit%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/orchetect/MIDIKit) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2FMIDIKit%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/orchetect/MIDIKit) [![Xcode 16](https://img.shields.io/badge/Xcode-16-blue.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKit/blob/main/LICENSE)
 
 An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MIDI 2.0.
 
@@ -37,10 +37,10 @@ This includes a getting started guide, links to examples, and troubleshooting ti
 
 ## System Compatibility
 
-- Xcode 15.0 is the minimum requirement to compile
-- Once compiled, MIDIKit supports macOS 10.13+, iOS 12.0+ and visionOS 1.0+.
+- Xcode 16.0 is the minimum requirement to compile
+- Once compiled, MIDIKit supports macOS 10.15+, iOS/iPadOS 13.0+ and visionOS 1.0+
 
-  tvOS and watchOS are not supported (as there is no Core MIDI implementation) but MIDIKit will build successfully on those platforms in the event it is included as a dependency in multi-platform projects.
+  *tvOS and watchOS platforms do not have MIDI support, as there is no Core MIDI implementation in the operating systems, but MIDIKit will build successfully on those platforms if used as a dependency in multi-platform projects*
 
 ## Author
 
