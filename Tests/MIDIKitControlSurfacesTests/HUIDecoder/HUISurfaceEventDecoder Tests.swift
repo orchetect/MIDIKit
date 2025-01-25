@@ -5,11 +5,68 @@
 //
 
 @testable import MIDIKitControlSurfaces
-import XCTest
+import Testing
+
+@Suite struct HUISurfaceEventDecoderTests {
+    /// Verifies that a HUI event encodes and decodes back to itself.
+    
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func ping() {
+        runHUIEventTest(.ping)
+    }
+    
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func huiSwitch() {
+        runHUIEventTest(
+            .switch(huiSwitch: .channelStrip(2, .solo), state: true)
+        )
+    }
+    
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func faderLevel() {
+        runHUIEventTest(
+            .faderLevel(channelStrip: 2, level: .midpoint)
+        )
+    }
+    
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func levelMeter() {
+        runHUIEventTest(
+            .levelMeter(channelStrip: 2, side: .right, level: 8)
+        )
+    }
+    
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func vPot() {
+        runHUIEventTest(
+            .vPot(vPot: .editAssignA, delta: 4)
+        )
+    }
+    
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func jogWheel() {
+        runHUIEventTest(
+            .jogWheel(delta: -4)
+        )
+    }
+    
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func systemReset() {
+        runHUIEventTest(
+            .systemReset
+        )
+    }
+}
 
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-final class HUISurfaceEventDecoderTests: XCTestCase {
-    /// Verifies that a HUI event encodes and decodes back to itself.
+extension HUISurfaceEventDecoderTests {
     func runHUIEventTest(
         _ sourceEvent: HUISurfaceEvent,
         matches outputEvents: [HUISurfaceEvent]? = nil
@@ -23,46 +80,6 @@ final class HUISurfaceEventDecoderTests: XCTestCase {
         
         let eventsToMatch = outputEvents ?? [sourceEvent]
         
-        XCTAssertEqual(decodedEvents, eventsToMatch)
-    }
-    
-    func testPing() {
-        runHUIEventTest(.ping)
-    }
-    
-    func testSwitch() {
-        runHUIEventTest(
-            .switch(huiSwitch: .channelStrip(2, .solo), state: true)
-        )
-    }
-    
-    func testFaderLevel() {
-        runHUIEventTest(
-            .faderLevel(channelStrip: 2, level: .midpoint)
-        )
-    }
-    
-    func testLevelMeter() {
-        runHUIEventTest(
-            .levelMeter(channelStrip: 2, side: .right, level: 8)
-        )
-    }
-    
-    func testVPot() {
-        runHUIEventTest(
-            .vPot(vPot: .editAssignA, delta: 4)
-        )
-    }
-    
-    func testJogWheel() {
-        runHUIEventTest(
-            .jogWheel(delta: -4)
-        )
-    }
-    
-    func testSystemReset() {
-        runHUIEventTest(
-            .systemReset
-        )
+        #expect(decodedEvents == eventsToMatch)
     }
 }

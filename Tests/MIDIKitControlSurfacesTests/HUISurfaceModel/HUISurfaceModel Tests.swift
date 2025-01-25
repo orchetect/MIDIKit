@@ -5,24 +5,25 @@
 //
 
 @testable import MIDIKitControlSurfaces
-import XCTest
+import Testing
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-final class HUISurfaceModelTests: XCTestCase {
-    func testChannelStripsValidation() {
+@Suite struct HUISurfaceModelTests {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func channelStripsValidation() {
         let model = HUISurfaceModel()
-        XCTAssertEqual(model.channelStrips.count, 8)
+        #expect(model.channelStrips.count == 8)
         
         // uses set { }
         model.channelStrips = [.init(), .init()]
-        XCTAssertEqual(model.channelStrips.count, 8)
+        #expect(model.channelStrips.count == 8)
         
         // uses _modify { }
         _ = model.channelStrips.removeLast()
-        XCTAssertEqual(model.channelStrips.count, 8)
+        #expect(model.channelStrips.count == 8)
         
         // uses _modify { }
         model.channelStrips.append(.init())
-        XCTAssertEqual(model.channelStrips.count, 8)
+        #expect(model.channelStrips.count == 8)
     }
 }

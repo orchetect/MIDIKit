@@ -5,63 +5,42 @@
 //
 
 @testable import MIDIKitControlSurfaces
-import XCTest
+import Testing
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-final class HUIHostEventDecoderTests: XCTestCase {
-    /// Verifies that a HUI event encodes and decodes back to itself.
-    func runHUIEventTest(
-        _ sourceEvent: HUIHostEvent,
-        matches outputEvents: [HUIHostEvent]? = nil
-    ) {
-        var decodedEvents: [HUIHostEvent] = []
-        let decoder = HUIHostEventDecoder { huiEvent in
-            decodedEvents.append(huiEvent)
-        }
-        let midiEvents = sourceEvent.encode()
-        decoder.midiIn(events: midiEvents)
-        
-        let eventsToMatch = outputEvents ?? [sourceEvent]
-        
-        XCTAssertEqual(decodedEvents, eventsToMatch)
-    }
-    
-    /// Verifies that a raw HUI MIDI message decodes back to the given HUI event(s).
-    func runHUIEventTest(
-        source sourceMIDI: MIDIEvent,
-        matches outputEvents: [HUIHostEvent]
-    ) {
-        var decodedEvents: [HUIHostEvent] = []
-        let decoder = HUIHostEventDecoder { huiEvent in
-            decodedEvents.append(huiEvent)
-        }
-        decoder.midiIn(event: sourceMIDI)
-        XCTAssertEqual(decodedEvents, outputEvents)
-    }
-    
-    func testPing() {
+@Suite struct HUIHostEventDecoderTests {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func ping() {
         runHUIEventTest(.ping)
     }
     
-    func testSwitch() {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func huiSwitch() {
         runHUIEventTest(
             .switch(huiSwitch: .channelStrip(2, .solo), state: true)
         )
     }
     
-    func testFaderLevel() {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func faderLevel() {
         runHUIEventTest(
             .faderLevel(channelStrip: 2, level: .midpoint)
         )
     }
     
-    func testLevelMeter() {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func levelMeter() {
         runHUIEventTest(
             .levelMeter(channelStrip: 2, side: .right, level: 8)
         )
     }
     
-    func testVPot() {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func vPot() {
         runHUIEventTest(
             .vPot(
                 vPot: .editAssignA,
@@ -70,7 +49,9 @@ final class HUIHostEventDecoderTests: XCTestCase {
         )
     }
     
-    func testLargeDisplay() {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func largeDisplay() {
         runHUIEventTest(
             .largeDisplay(slices: [
                 1: [.A, .B, .C, .D, .E, .F, .G, .H, .I, .J]
@@ -106,19 +87,25 @@ final class HUIHostEventDecoderTests: XCTestCase {
         )
     }
     
-    func testTimeDisplay() {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func timeDisplay() {
         runHUIEventTest(
             .timeDisplay(charsRightToLeft: [.num8, .num1, .num0, .num1])
         )
     }
     
-    func testSelectAssignDisplay() {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func selectAssignDisplay() {
         runHUIEventTest(
             .selectAssignDisplay(text: .init(chars: [.num1, .num2, .num3, .num4]))
         )
     }
     
-    func testChannelDisplay() {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func channelDisplay() {
         runHUIEventTest(
             .channelDisplay(channelStrip: 2, text: .init(chars: [.num1, .num2, .num3, .num4]))
         )
@@ -126,7 +113,9 @@ final class HUIHostEventDecoderTests: XCTestCase {
     
     // MARK: - Edge Cases
     
-    func testSmallText_MultipleInSingleSysEx() throws {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Test
+    func smallText_MultipleInSingleSysEx() throws {
         try runHUIEventTest(
             source: .sysEx7(
                 manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
@@ -144,5 +133,38 @@ final class HUIHostEventDecoderTests: XCTestCase {
                 .channelDisplay(channelStrip: 1, text: .init(chars: [.num5, .num6, .num7, .num8]))
             ]
         )
+    }
+}
+
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+extension HUIHostEventDecoderTests {
+    /// Verifies that a HUI event encodes and decodes back to itself.
+    func runHUIEventTest(
+        _ sourceEvent: HUIHostEvent,
+        matches outputEvents: [HUIHostEvent]? = nil
+    ) {
+        var decodedEvents: [HUIHostEvent] = []
+        let decoder = HUIHostEventDecoder { huiEvent in
+            decodedEvents.append(huiEvent)
+        }
+        let midiEvents = sourceEvent.encode()
+        decoder.midiIn(events: midiEvents)
+        
+        let eventsToMatch = outputEvents ?? [sourceEvent]
+        
+        #expect(decodedEvents == eventsToMatch)
+    }
+    
+    /// Verifies that a raw HUI MIDI message decodes back to the given HUI event(s).
+    func runHUIEventTest(
+        source sourceMIDI: MIDIEvent,
+        matches outputEvents: [HUIHostEvent]
+    ) {
+        var decodedEvents: [HUIHostEvent] = []
+        let decoder = HUIHostEventDecoder { huiEvent in
+            decodedEvents.append(huiEvent)
+        }
+        decoder.midiIn(event: sourceMIDI)
+        #expect(decodedEvents == outputEvents)
     }
 }
