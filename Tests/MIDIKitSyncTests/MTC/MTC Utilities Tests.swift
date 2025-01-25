@@ -5,59 +5,60 @@
 //
 
 @testable import MIDIKitSync
+import Testing
 import TimecodeKitCore
-import XCTest
 
-final class MTC_Utilities_Tests: XCTestCase {
-    func testMTCIsEqual() {
-        XCTAssertFalse(
-            mtcIsEqual(nil, nil)
+@Suite struct MTC_Utilities_Tests {
+    @Test
+    func global_mtcIsEqual() {
+        #expect(
+            !mtcIsEqual(nil, nil)
         )
         
         // test all MTC rates
-        MTCFrameRate.allCases.forEach {
-            XCTAssertFalse(
-                mtcIsEqual(
-                    (mtcComponents: .init(), mtcFrameRate: $0),
+        for fRate in MTCFrameRate.allCases {
+            #expect(
+                !mtcIsEqual(
+                    (mtcComponents: .init(), mtcFrameRate: fRate),
                     nil
                 )
             )
             
-            XCTAssertFalse(
-                mtcIsEqual(
+            #expect(
+                !mtcIsEqual(
                     nil,
-                    (mtcComponents: .init(), mtcFrameRate: $0)
+                    (mtcComponents: .init(), mtcFrameRate: fRate)
                 )
             )
             
             // == components, == frame rate
-            XCTAssertTrue(
+            #expect(
                 mtcIsEqual(
-                    (mtcComponents: .init(), mtcFrameRate: $0),
-                    (mtcComponents: .init(), mtcFrameRate: $0)
+                    (mtcComponents: .init(), mtcFrameRate: fRate),
+                    (mtcComponents: .init(), mtcFrameRate: fRate)
                 )
             )
             
             // == components, == frame rate
-            XCTAssertTrue(
+            #expect(
                 mtcIsEqual(
-                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: $0),
-                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: $0)
+                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: fRate),
+                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: fRate)
                 )
             )
             
             // != components, == frame rate
-            XCTAssertFalse(
-                mtcIsEqual(
-                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: $0),
-                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 05), mtcFrameRate: $0)
+            #expect(
+                !mtcIsEqual(
+                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: fRate),
+                    (mtcComponents: .init(h: 1, m: 02, s: 03, f: 05), mtcFrameRate: fRate)
                 )
             )
         }
         
         // == components, != frame rate
-        XCTAssertFalse(
-            mtcIsEqual(
+        #expect(
+            !mtcIsEqual(
                 (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: .mtc24),
                 (mtcComponents: .init(h: 1, m: 02, s: 03, f: 04), mtcFrameRate: .mtc25)
             )

@@ -6,10 +6,11 @@
 
 import CoreMIDI
 @testable import MIDIKitSync
-import XCTest
+import Testing
 
-final class StressTests: XCTestCase {
-    func testThreadingMTCGenerator() async {
+@Suite struct StressTests {
+    @Test
+    func threadingMTCGenerator() async {
         // MARK: - Generator
         
         let mtcGen = MTCGenerator { midiMessage in
@@ -51,7 +52,8 @@ final class StressTests: XCTestCase {
         }.value
     }
     
-    func testThreadingMTCReceiver() async {
+    @Test
+    func threadingMTCReceiver() async {
         // MARK: - Receiver
         
         // (Receiver.midiIn() is async internally so we need to wait for
