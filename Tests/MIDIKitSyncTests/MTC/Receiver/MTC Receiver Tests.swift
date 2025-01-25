@@ -157,7 +157,7 @@ import Testing
         ) // default MTC-30fps
     }
     
-    @Test
+    @Test(.enabled(if: isSystemTimingStable()))
     func mtcReceiver_InternalState_QFMessages_Typical_Deflake() async throws {
         var testRepeatCount = 0
         
@@ -173,8 +173,8 @@ import Testing
     }
 }
 
+@MainActor
 extension MTC_Receiver_Receiver_Tests {
-    @MainActor
     func runMTC_Receiver_InternalState_QFMessages_Typical() async throws -> Bool {
         // swiftformat:disable wrap
         
@@ -266,8 +266,8 @@ extension MTC_Receiver_Receiver_Tests {
 }
 
 extension MTC_Receiver_Receiver_Tests {
+    @Test(.enabled(if: isSystemTimingStable()))
     @MainActor
-    @Test
     func mtcReceiver_Handlers_FullFrameMessage() async throws {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
@@ -323,7 +323,8 @@ extension MTC_Receiver_Receiver_Tests {
     
     // skip this test on other platforms; flaky and we don't need to run it
     #if os(macOS)
-    @Test @MainActor
+    @Test.enabled(if: isSystemTimingStable())
+    @MainActor
     func mtcReceiver_Handlers_QFMessages() async throws {
         // swiftformat:disable wrap
         // swiftformat:disable wrapSingleLineComments

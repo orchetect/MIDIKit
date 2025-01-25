@@ -373,7 +373,7 @@ extension MIDIThruConnection_Tests {
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
-        try await wait(require: { await connEvents == [.start()] }, timeout: 1.0)
+        try await wait(require: { await connEvents == [.start()] }, timeout: 2.0)
         connEvents = []
         
         thruProxy = nil

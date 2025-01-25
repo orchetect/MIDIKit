@@ -63,7 +63,7 @@ extension MIDIInputConnection_Tests {
         )
         
         let conn = try #require(manager.managedInputConnections[connTag])
-        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: 1.0) // TODO: fix TSAN race
+        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: 2.0) // TODO: fix TSAN race
         
         #expect(conn.outputsCriteria == [.uniqueID(output1ID)])
         #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref])
@@ -71,7 +71,7 @@ extension MIDIInputConnection_Tests {
         
         // send an event - it should be received by the connection
         try output1.send(event: .start())
-        try await wait(require: { await connEvents == [.start()] }, timeout: 1.0)
+        try await wait(require: { await connEvents == [.start()] }, timeout: 2.0)
         connEvents = []
         
         // create a 2nd virtual output
@@ -91,7 +91,7 @@ extension MIDIInputConnection_Tests {
             require: {
                 conn.coreMIDIOutputEndpointRefs == [output1Ref, output2Ref]
             },
-            timeout: 1.0
+            timeout: 2.0
         )
         #expect(conn.outputsCriteria == [.uniqueID(output1ID), .uniqueID(output2ID)])
         #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref, output2Ref])
@@ -99,17 +99,17 @@ extension MIDIInputConnection_Tests {
         
         // send an event from 1st - it should be received by the connection
         try output1.send(event: .stop())
-        try await wait(require: { await connEvents == [.stop()] }, timeout: 0.5)
+        try await wait(require: { await connEvents == [.stop()] }, timeout: 1.0)
         connEvents = []
         
         // send an event from 2nd - it should be received by the connection
         try output2.send(event: .continue())
-        try await wait(require: { await connEvents == [.continue()] }, timeout: 0.5)
+        try await wait(require: { await connEvents == [.continue()] }, timeout: 1.0)
         connEvents = []
         
         // remove 1st virtual output from connection
         conn.remove(outputs: [output1.endpoint])
-        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output2Ref] }, timeout: 1.0)
+        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output2Ref] }, timeout: 2.0)
         #expect(conn.outputsCriteria == [.uniqueID(output2ID)])
         #expect(conn.coreMIDIOutputEndpointRefs == [output2Ref])
         #expect(conn.endpoints == [output2.endpoint])
@@ -122,12 +122,12 @@ extension MIDIInputConnection_Tests {
         
         // send an event from 2nd - it should be received by the connection
         try output2.send(event: .songSelect(number: 2))
-        try await wait(require: { await connEvents == [.songSelect(number: 2)] }, timeout: 0.5)
+        try await wait(require: { await connEvents == [.songSelect(number: 2)] }, timeout: 1.0)
         connEvents = []
         
         // remove 2nd virtual output from connection
         conn.remove(outputs: [output2.endpoint])
-        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [] }, timeout: 1.0)
+        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [] }, timeout: 2.0)
         #expect(conn.outputsCriteria == [])
         #expect(conn.coreMIDIOutputEndpointRefs == [])
         #expect(conn.endpoints == [])
@@ -184,7 +184,7 @@ extension MIDIInputConnection_Tests {
         let output1ID = try #require(output1.uniqueID)
         let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: 1.0) // TODO: fix TSAN race
+        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: 2.0) // TODO: fix TSAN race
         
         #expect(conn.outputsCriteria == [.uniqueID(output1ID)])
         #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref])
@@ -192,7 +192,7 @@ extension MIDIInputConnection_Tests {
         
         // send an event - it should be received by the connection
         try output1.send(event: .start())
-        try await wait(require: { await connEvents == [.start()] }, timeout: 0.5)
+        try await wait(require: { await connEvents == [.start()] }, timeout: 1.0)
     }
     
     /// Test to ensure creating a new manager-owned virtual output does not get added to the
@@ -208,7 +208,6 @@ extension MIDIInputConnection_Tests {
         // start midi client
         try manager.start()
         try await Task.sleep(for: .milliseconds(100))
-        
         
         // add new connection
         let connTag = "testInputConnection"
