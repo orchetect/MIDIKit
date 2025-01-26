@@ -8,27 +8,23 @@
 
 import Foundation
 
-#if compiler(>=6.0)
-internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
-
 extension MIDIManager {
     /// Managed port or connection type.
-    public enum ManagedType: CaseIterable, Hashable, Sendable {
+    public enum ManagedType {
         case inputConnection
         case outputConnection
         case input
         case output
         case nonPersistentThruConnection
     }
-    
-    /// Tag selection for managed input/connection operations.
-    public enum TagSelection: Hashable, Sendable {
-        case all
-        case withTag(String)
-    }
 }
+
+extension MIDIManager.ManagedType: Equatable { }
+
+extension MIDIManager.ManagedType: Hashable { }
+
+extension MIDIManager.ManagedType: CaseIterable { }
+
+extension MIDIManager.ManagedType: Sendable { }
 
 #endif
