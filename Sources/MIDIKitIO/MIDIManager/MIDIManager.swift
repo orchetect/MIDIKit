@@ -107,7 +107,7 @@ public class MIDIManager {
     // MARK: - Internal dispatch queue
     
     /// Thread for MIDI event I/O.
-    var eventQueue: DispatchQueue
+    let eventQueue: DispatchQueue
     
     // MARK: - Init
     
