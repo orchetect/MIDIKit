@@ -58,18 +58,16 @@ import Combine
 ///     }
 /// }
 /// ```
-@available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
-public final class ObservableMIDIManager: MIDIManager, ObservableObject {
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@Observable public final class ObservableMIDIManager: MIDIManager {
     // MARK: - Properties
     
     /// MIDI devices in the system.
     /// This is an observable implementation of ``MIDIManager/devices``.
-    @Published
     public internal(set) var observableDevices = MIDIDevices()
     
     /// MIDI input and output endpoints in the system.
     /// This is an observable implementation of ``MIDIManager/endpoints``.
-    @Published
     public internal(set) var observableEndpoints = MIDIEndpoints(manager: nil)
     
     /// Handler that is called when state has changed in the manager.
