@@ -87,24 +87,27 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
         self.midiOutHandler = midiOutHandler
         
         // timer
-            
-        timer = SafeDispatchTimer(
+        
+        let newTimer = SafeDispatchTimer(
             rate: .seconds(1.0), // default, will be changed later
             eventHandler: { }
         )
+        timer = newTimer
         
         // encoder setup
-        encoder = MTCEncoder()
+        let newEncoder = MTCEncoder()
+        encoder = newEncoder
         
         // set up handlers after self is initialized so we can capture reference to self
         
         Task {
-            await timer.setEventHandler { [weak self] in
+            await newTimer.setEventHandler { [weak self] in
                 Task { await self?.timerFired() }
             }
-            await encoder.setMIDIOutHandler { [weak self] midiEvents in
-                self?.midiOut(midiEvents)
-            }
+        }
+        
+        newEncoder.setMIDIOutHandler { [weak self] midiEvents in
+            self?.midiOut(midiEvents)
         }
     }
     

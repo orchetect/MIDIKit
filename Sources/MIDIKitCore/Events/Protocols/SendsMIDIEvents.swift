@@ -6,7 +6,7 @@
 
 public protocol SendsMIDIEvents {
     /// Handler used when calling `midiOut()` methods.
-    typealias MIDIOutHandler = (@Sendable (_ events: [MIDIEvent]) -> Void)
+    typealias MIDIOutHandler = @Sendable (_ events: [MIDIEvent]) -> Void
     
     /// Handler used when calling `midiOut()` methods.
     var midiOutHandler: MIDIOutHandler? { get set }
