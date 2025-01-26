@@ -183,7 +183,11 @@ extension MIDIOutputConnection_Tests {
         let input1ID = try #require(input1.uniqueID)
         let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
-        try await wait(require: { conn.coreMIDIInputEndpointRefs == [input1Ref] }, timeout: 2.0) // TODO: fix TSAN issue
+        try await wait(require: {
+            await MainActor.run {
+                conn.coreMIDIInputEndpointRefs == [input1Ref]
+            }
+        }, timeout: 2.0)
         
         // assert that input1 was automatically added to the connection
         #expect(conn.inputsCriteria == [.uniqueID(input1ID)])

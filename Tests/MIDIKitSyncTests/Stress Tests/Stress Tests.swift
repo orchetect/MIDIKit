@@ -10,10 +10,11 @@ import Testing
 
 @Suite struct StressTests {
     @Test
+    @MainActor
     func threadingMTCGenerator() async {
         // MARK: - Generator
         
-        let mtcGen = MTCGenerator { midiMessage in // TODO: fix TSAN race
+        let mtcGen = MTCGenerator { midiMessage in
             _ = midiMessage
         }
         
@@ -47,7 +48,7 @@ import Testing
         await access()
         
         // from different thread
-        _ = await Task {
+        _ = await Task { @MainActor in
             await access()
         }.value
     }

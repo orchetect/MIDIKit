@@ -63,7 +63,11 @@ extension MIDIInputConnection_Tests {
         )
         
         let conn = try #require(manager.managedInputConnections[connTag])
-        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: 2.0) // TODO: fix TSAN race
+        try await wait(require: {
+            await MainActor.run {
+                conn.coreMIDIOutputEndpointRefs == [output1Ref]
+            }
+        }, timeout: 2.0)
         
         #expect(conn.outputsCriteria == [.uniqueID(output1ID)])
         #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref])
@@ -184,7 +188,11 @@ extension MIDIInputConnection_Tests {
         let output1ID = try #require(output1.uniqueID)
         let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: 2.0) // TODO: fix TSAN race
+        try await wait(require: {
+            await MainActor.run {
+                conn.coreMIDIOutputEndpointRefs == [output1Ref]
+            }
+        }, timeout: 2.0)
         
         #expect(conn.outputsCriteria == [.uniqueID(output1ID)])
         #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref])
