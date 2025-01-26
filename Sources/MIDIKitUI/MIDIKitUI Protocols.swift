@@ -11,7 +11,7 @@ import MIDIKitIO
 
 // MARK: - MIDIEndpointsSelectable
 
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 public protocol MIDIEndpointsSelectable where Self: View, Endpoint.ID == MIDIIdentifier {
     associatedtype Endpoint: MIDIEndpoint & Hashable & Identifiable
     
@@ -23,7 +23,7 @@ public protocol MIDIEndpointsSelectable where Self: View, Endpoint.ID == MIDIIde
     var ids: [MIDIIdentifier] { get set }
 }
 
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 extension MIDIEndpointsSelectable {
     /// Returns non-nil if properties require updating.
     func updatedID(endpoints: [Endpoint]) -> (id: MIDIIdentifier?, displayName: String?)? {
@@ -73,17 +73,17 @@ extension MIDIEndpointsSelectable {
 
 // MARK: - MIDIInputsSelectable
 
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 public protocol MIDIInputsSelectable {
     func updatingOutputConnection(withTag tag: String?) -> Self
 }
 
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 protocol _MIDIInputsSelectable: MIDIInputsSelectable {
     var updatingOutputConnectionWithTag: String? { get set }
 }
 
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 extension _MIDIInputsSelectable {
     public func updatingOutputConnection(withTag tag: String?) -> Self {
         var copy = self
@@ -121,17 +121,17 @@ extension _MIDIInputsSelectable {
 
 // MARK: - MIDIOutputsSelectable
 
-@available(macOS 11.0, iOS 14.0, *)
-public protocol MIDIOutputsSelectable { 
+@available(macOS 14.0, iOS 17.0, *)
+public protocol MIDIOutputsSelectable {
     func updatingInputConnection(withTag tag: String?) -> Self
 }
 
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 protocol _MIDIOutputsSelectable: MIDIOutputsSelectable {
     var updatingInputConnectionWithTag: String? { get set }
 }
 
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 extension _MIDIOutputsSelectable {
     public func updatingInputConnection(withTag tag: String?) -> Self {
         var copy = self

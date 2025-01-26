@@ -9,7 +9,7 @@
 import MIDIKitIO
 import SwiftUI
 
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 struct MIDIEndpointsList<Endpoint>: View, MIDIEndpointsSelectable
 where Endpoint: MIDIEndpoint & Hashable & Identifiable, 
       Endpoint.ID == MIDIIdentifier 
@@ -146,15 +146,23 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable,
 
 /// SwiftUI `List` view for selecting MIDI input endpoints.
 ///
+/// This view requires that an ``ObservableMIDIManager`` instance exists in the environment.
+///
+/// ```swift
+/// MIDIInputsList( ... )
+///     .environment(midiManager)
+/// ```
+///
 /// Optionally supply a tag to auto-update an output connection in MIDIManager.
 ///
 /// ```swift
 /// MIDIInputsList( ... )
+///     .environment(midiManager)
 ///     .updatingOutputConnection(withTag: "MyConnection")
 /// ```
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 public struct MIDIInputsList: View, _MIDIInputsSelectable {
-    @EnvironmentObject private var midiManager: ObservableMIDIManager
+    @Environment(ObservableMIDIManager.self) private var midiManager
     
     @Binding public var selectionID: MIDIIdentifier?
     @Binding public var selectionDisplayName: String?
@@ -205,15 +213,23 @@ public struct MIDIInputsList: View, _MIDIInputsSelectable {
 
 /// SwiftUI `List` view for selecting MIDI output endpoints.
 ///
+/// This view requires that an ``ObservableMIDIManager`` instance exists in the environment.
+///
+/// ```swift
+/// MIDIOutputsList( ... )
+///     .environment(midiManager)
+/// ```
+///
 /// Optionally supply a tag to auto-update an input connection in MIDIManager.
 ///
 /// ```swift
 /// MIDIOutputsList( ... )
+///     .environment(midiManager)
 ///     .updatingInputConnection(withTag: "MyConnection")
 /// ```
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 public struct MIDIOutputsList: View, _MIDIOutputsSelectable {
-    @EnvironmentObject private var midiManager: ObservableMIDIManager
+    @Environment(ObservableMIDIManager.self) private var midiManager
     
     @Binding public var selectionID: MIDIIdentifier?
     @Binding public var selectionDisplayName: String?

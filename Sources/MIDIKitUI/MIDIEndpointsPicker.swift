@@ -9,7 +9,7 @@
 import MIDIKitIO
 import SwiftUI
 
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 struct MIDIEndpointsPicker<Endpoint>: View, MIDIEndpointsSelectable
 where Endpoint: MIDIEndpoint & Hashable & Identifiable, 
       Endpoint.ID == MIDIIdentifier
@@ -156,15 +156,23 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable,
 
 /// SwiftUI `Picker` view for selecting MIDI input endpoints.
 ///
+/// This view requires that an ``ObservableMIDIManager`` instance exists in the environment.
+///
+/// ```swift
+/// MIDIInputsPicker( ... )
+///     .environment(midiManager)
+/// ```
+///
 /// Optionally supply a tag to auto-update an output connection in MIDIManager.
 ///
 /// ```swift
 /// MIDIInputsPicker( ... )
+///     .environment(midiManager)
 ///     .updatingOutputConnection(withTag: "MyConnection")
 /// ```
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 public struct MIDIInputsPicker: View, _MIDIInputsSelectable {
-    @EnvironmentObject private var midiManager: ObservableMIDIManager
+    @Environment(ObservableMIDIManager.self) private var midiManager
     
     public var title: String
     @Binding public var selectionID: MIDIIdentifier?
@@ -219,15 +227,22 @@ public struct MIDIInputsPicker: View, _MIDIInputsSelectable {
 
 /// SwiftUI `Picker` view for selecting MIDI output endpoints.
 ///
+/// This view requires that an ``ObservableMIDIManager`` instance exists in the environment.
+///
+/// ```swift
+/// MIDIOutputsPicker( ... )
+///     .environment(midiManager)
+/// ```
+///
 /// Optionally supply a tag to auto-update an input connection in MIDIManager.
 ///
 /// ```swift
 /// MIDIOutputsPicker( ... )
 ///     .updatingInputConnection(withTag: "MyConnection")
 /// ```
-@available(macOS 11.0, iOS 14.0, *)
+@available(macOS 14.0, iOS 17.0, *)
 public struct MIDIOutputsPicker: View, _MIDIOutputsSelectable {
-    @EnvironmentObject private var midiManager: ObservableMIDIManager
+    @Environment(ObservableMIDIManager.self) private var midiManager
     
     public var title: String
     @Binding public var selectionID: MIDIIdentifier?
