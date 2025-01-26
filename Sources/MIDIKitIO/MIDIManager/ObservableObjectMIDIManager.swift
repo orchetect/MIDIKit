@@ -70,7 +70,7 @@ public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject {
     /// MIDI input and output endpoints in the system.
     /// This is an observable implementation of ``MIDIManager/endpoints``.
     @Published
-    public internal(set) var observableEndpoints = MIDIEndpoints(manager: nil)
+    public internal(set) var observableEndpoints = MIDIEndpoints()
     
     /// Handler that is called when state has changed in the manager.
     public typealias ObservableNotificationHandler = (
@@ -114,8 +114,6 @@ public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject {
             manufacturer: manufacturer,
             notificationHandler: notificationHandlerWrapper
         )
-        
-        observableEndpoints.manager = self
     }
     
     public override func updateObjectsCache() {
@@ -123,7 +121,7 @@ public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject {
         super.updateObjectsCache()
         
         observableDevices.updateCachedProperties()
-        observableEndpoints.updateCachedProperties()
+        observableEndpoints.updateCachedProperties(manager: self)
     }
 }
 

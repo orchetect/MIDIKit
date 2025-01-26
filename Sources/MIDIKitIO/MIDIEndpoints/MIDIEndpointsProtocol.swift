@@ -26,11 +26,11 @@ public protocol MIDIEndpointsProtocol where Self: Equatable, Self: Hashable, Sel
     /// Manually update the locally cached contents from the system.
     /// This method does not need to be manually invoked, as it is called automatically by the
     /// ``MIDIManager`` when MIDI system endpoints change.
-    mutating func updateCachedProperties()
+    mutating func updateCachedProperties(manager: MIDIManager)
 }
 
 extension MIDIEndpointsProtocol /* : Equatable */ {
-    public static func == (lhs: any MIDIEndpointsProtocol, rhs: any MIDIEndpointsProtocol) -> Bool {
+    public static func == (lhs: Self, rhs: some MIDIEndpointsProtocol) -> Bool {
         lhs.inputs == rhs.inputs &&
         lhs.inputsUnowned == rhs.inputsUnowned &&
         lhs.outputs == rhs.outputs &&

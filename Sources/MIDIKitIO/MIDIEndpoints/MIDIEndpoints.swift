@@ -10,18 +10,13 @@ import Foundation
 
 /// Manages system MIDI endpoints information cache.
 public struct MIDIEndpoints: MIDIEndpointsProtocol {
-    /// Weak reference to ``MIDIManager``.
-    weak var manager: MIDIManager?
-    
     public internal(set) var inputs: [MIDIInputEndpoint] = []
     public internal(set) var inputsUnowned: [MIDIInputEndpoint] = []
     
     public internal(set) var outputs: [MIDIOutputEndpoint] = []
     public internal(set) var outputsUnowned: [MIDIOutputEndpoint] = []
     
-    init(manager: MIDIManager?) {
-        self.manager = manager
-    }
+    init() { }
 }
 
 extension MIDIEndpoints {
@@ -29,7 +24,7 @@ extension MIDIEndpoints {
     ///
     /// It is not necessary to call this method as the ``MIDIManager`` will automate updating device
     /// cache.
-    public mutating func updateCachedProperties() {
+    public mutating func updateCachedProperties(manager: MIDIManager) {
         let fetched = _fetchProperties(manager: manager)
         
         inputs = fetched.inputs
