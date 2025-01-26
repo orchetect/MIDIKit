@@ -10,7 +10,7 @@ import SwiftUI
 /// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
 /// SwiftUI view state directly. Therefore, we need a helper class that conforms to
 /// `ObservableObject` which contains `@Published` properties that SwiftUI can use to update views.
-final class MIDIHelper: ObservableObject {
+@Observable final class MIDIHelper {
     private weak var midiManager: ObservableMIDIManager?
     
     let virtualInputName = "TestApp Input"
@@ -44,7 +44,6 @@ final class MIDIHelper: ObservableObject {
         "Test Output 4"
     ]
     
-    @Published
     public private(set) var virtualsExist: Bool = false
     
     public func createVirtuals() throws {
