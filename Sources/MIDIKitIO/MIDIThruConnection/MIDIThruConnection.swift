@@ -125,7 +125,6 @@ public final class MIDIThruConnection: _MIDIManaged {
 }
 
 extension MIDIThruConnection {
-    @objc
     func create(in manager: MIDIManager) throws {
         var newConnection = MIDIThruConnectionRef()
     

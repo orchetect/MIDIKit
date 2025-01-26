@@ -23,7 +23,7 @@ internal import CoreMIDI
 /// >
 /// > For SwiftUI and Combine environments, see the ``ObservableMIDIManager`` subclass which adds
 /// > published devices and endpoints properties.
-public class MIDIManager: NSObject {
+public class MIDIManager {
     // MARK: - Properties
     
     /// MIDI Client Name.
@@ -152,12 +152,7 @@ public class MIDIManager: NSObject {
         self.notificationHandler = notificationHandler
         
         // endpoints
-        endpoints = MIDIEndpoints(manager: nil)
-        
-        super.init()
-        
-        // we can only add manager reference to endpoints after manager is initialized
-        endpoints.manager = self
+        endpoints = MIDIEndpoints()
         
         addNetworkSessionObservers()
     }
@@ -188,7 +183,7 @@ public class MIDIManager: NSObject {
     /// Internal: updates cached properties for all objects.
     func updateObjectsCache() {
         devices.updateCachedProperties()
-        endpoints.updateCachedProperties()
+        endpoints.updateCachedProperties(manager: self)
     }
 }
 
