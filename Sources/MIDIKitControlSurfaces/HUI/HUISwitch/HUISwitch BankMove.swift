@@ -8,7 +8,7 @@ import Foundation
 
 extension HUISwitch {
     /// Bank and channel navigation.
-    public enum BankMove: Equatable, Hashable {
+    public enum BankMove {
         case channelLeft
         case channelRight
         
@@ -17,15 +17,21 @@ extension HUISwitch {
     }
 }
 
+extension HUISwitch.BankMove: Equatable { }
+
+extension HUISwitch.BankMove: Hashable { }
+
+extension HUISwitch.BankMove: Sendable { }
+
 extension HUISwitch.BankMove: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x0A
         // Channel Selection (scroll/bank channels in view)
-        case .channelLeft:   return (0x0A, 0x0)
-        case .bankLeft:      return (0x0A, 0x1)
-        case .channelRight:  return (0x0A, 0x2)
-        case .bankRight:     return (0x0A, 0x3)
+        case .channelLeft:  return (0x0A, 0x0)
+        case .bankLeft:     return (0x0A, 0x1)
+        case .channelRight: return (0x0A, 0x2)
+        case .bankRight:    return (0x0A, 0x3)
         }
     }
 }
@@ -35,12 +41,10 @@ extension HUISwitch.BankMove: CustomStringConvertible {
         switch self {
         // Zone 0x0A
         // Channel Selection (scroll/bank channels in view)
-        case .channelLeft:   return "channelLeft"
-        case .bankLeft:      return "bankLeft"
-        case .channelRight:  return "channelRight"
-        case .bankRight:     return "bankRight"
+        case .channelLeft:  return "channelLeft"
+        case .bankLeft:     return "bankLeft"
+        case .channelRight: return "channelRight"
+        case .bankRight:    return "bankRight"
         }
     }
 }
-
-extension HUISwitch.BankMove: Sendable { }

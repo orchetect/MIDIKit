@@ -9,7 +9,7 @@ import MIDIKitCore
 /// Notification returned as a result of updating ``HUISurfaceModel`` state. Strongly-typed event
 /// abstractions representing each control and display element of a HUI control surface along with
 /// its new state value.
-public enum HUISurfaceModelNotification: Hashable {
+public enum HUISurfaceModelNotification {
     // MARK: Ping
     
     /// HUI ping event.
@@ -114,6 +114,12 @@ public enum HUISurfaceModelNotification: Hashable {
     )
 }
 
+extension HUISurfaceModelNotification: Equatable { }
+
+extension HUISurfaceModelNotification: Hashable { }
+
+extension HUISurfaceModelNotification: Sendable { }
+
 extension HUISurfaceModelNotification: CustomStringConvertible {
     public var description: String {
         switch self {
@@ -187,5 +193,3 @@ extension HUISurfaceModelNotification: CustomStringConvertible {
         }
     }
 }
-
-extension HUISurfaceModelNotification: Sendable { }

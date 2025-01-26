@@ -17,3 +17,9 @@ public enum HUISurfaceModelUpdateResult {
     /// The HUI host event is unhandled, and no model changes occurred.
     case unhandled(HUIHostEvent)
 }
+
+extension HUISurfaceModelUpdateResult: Equatable { }
+
+extension HUISurfaceModelUpdateResult: Hashable { }
+
+extension HUISurfaceModelUpdateResult: Sendable { }

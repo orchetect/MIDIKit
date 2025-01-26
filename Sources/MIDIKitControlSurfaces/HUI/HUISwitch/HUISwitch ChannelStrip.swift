@@ -8,7 +8,7 @@ import Foundation
 
 extension HUISwitch {
     /// Channel Strip switches.
-    public enum ChannelStrip: Equatable, Hashable {
+    public enum ChannelStrip {
         case recordReady
         case insert
         case vPotSelect
@@ -20,20 +20,26 @@ extension HUISwitch {
     }
 }
 
+extension HUISwitch.ChannelStrip: Equatable { }
+
+extension HUISwitch.ChannelStrip: Hashable { }
+
+extension HUISwitch.ChannelStrip: Sendable { }
+
 extension HUISwitch.ChannelStrip: HUISwitchProtocol {
     /// HUI port constants.
     public var port: HUIPort {
         switch self {
         // Zones 0x00 - 0x07
         // Channel Strips
-        case .faderTouched:  return 0x0
-        case .select:        return 0x1
-        case .mute:          return 0x2
-        case .solo:          return 0x3
-        case .auto:          return 0x4
-        case .vPotSelect:    return 0x5
-        case .insert:        return 0x6
-        case .recordReady:   return 0x7
+        case .faderTouched: return 0x0
+        case .select:       return 0x1
+        case .mute:         return 0x2
+        case .solo:         return 0x3
+        case .auto:         return 0x4
+        case .vPotSelect:   return 0x5
+        case .insert:       return 0x6
+        case .recordReady:  return 0x7
         }
     }
     
@@ -54,16 +60,14 @@ extension HUISwitch.ChannelStrip: CustomStringConvertible {
         switch self {
         // Zones 0x00 - 0x07
         // Channel Strips
-        case .faderTouched:  return "faderTouched"
-        case .select:        return "select"
-        case .mute:          return "mute"
-        case .solo:          return "solo"
-        case .auto:          return "auto"
-        case .vPotSelect:    return "vPotSelect"
-        case .insert:        return "insert"
-        case .recordReady:   return "recordReady"
+        case .faderTouched: return "faderTouched"
+        case .select:       return "select"
+        case .mute:         return "mute"
+        case .solo:         return "solo"
+        case .auto:         return "auto"
+        case .vPotSelect:   return "vPotSelect"
+        case .insert:       return "insert"
+        case .recordReady:  return "recordReady"
         }
     }
 }
-
-extension HUISwitch.ChannelStrip: Sendable { }

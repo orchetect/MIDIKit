@@ -8,7 +8,7 @@ import Foundation
 
 extension HUISwitch {
     /// Keyboard hotkeys.
-    public enum HotKey: Equatable, Hashable {
+    public enum HotKey {
         case ctrl
         case shift
         case editMode
@@ -20,19 +20,25 @@ extension HUISwitch {
     }
 }
 
+extension HUISwitch.HotKey: Equatable { }
+
+extension HUISwitch.HotKey: Hashable { }
+
+extension HUISwitch.HotKey: Sendable { }
+
 extension HUISwitch.HotKey: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x08
         // Keyboard Shortcuts
-        case .ctrl:      return (0x08, 0x0)
-        case .shift:     return (0x08, 0x1)
-        case .editMode:  return (0x08, 0x2)
-        case .undo:      return (0x08, 0x3)
-        case .cmd:       return (0x08, 0x4)
-        case .option:    return (0x08, 0x5)
-        case .editTool:  return (0x08, 0x6)
-        case .save:      return (0x08, 0x7)
+        case .ctrl:     return (0x08, 0x0)
+        case .shift:    return (0x08, 0x1)
+        case .editMode: return (0x08, 0x2)
+        case .undo:     return (0x08, 0x3)
+        case .cmd:      return (0x08, 0x4)
+        case .option:   return (0x08, 0x5)
+        case .editTool: return (0x08, 0x6)
+        case .save:     return (0x08, 0x7)
         }
     }
 }
@@ -42,16 +48,14 @@ extension HUISwitch.HotKey: CustomStringConvertible {
         switch self {
         // Zone 0x08
         // Keyboard Shortcuts
-        case .ctrl:      return "ctrl"
-        case .shift:     return "shift"
-        case .editMode:  return "editMode"
-        case .undo:      return "undo"
-        case .cmd:       return "cmd"
-        case .option:    return "option"
-        case .editTool:  return "editTool"
-        case .save:      return "save"
+        case .ctrl:     return "ctrl"
+        case .shift:    return "shift"
+        case .editMode: return "editMode"
+        case .undo:     return "undo"
+        case .cmd:      return "cmd"
+        case .option:   return "option"
+        case .editTool: return "editTool"
+        case .save:     return "save"
         }
     }
 }
-
-extension HUISwitch.HotKey: Sendable { }

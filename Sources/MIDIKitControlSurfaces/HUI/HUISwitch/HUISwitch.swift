@@ -22,7 +22,7 @@ import MIDIKitCore
 /// >   immediately successive `true` then `false` state messages. If a user presses and holds a
 /// >   button, it will result in a `true` state message upon press and then the `false` state
 /// >   message only upon button release.
-public enum HUISwitch: Equatable, Hashable {
+public enum HUISwitch {
     /// Channel strip component.
     case channelStrip(UInt4, ChannelStrip)
     
@@ -77,6 +77,12 @@ public enum HUISwitch: Equatable, Hashable {
     /// Undefined HUI switch.
     case undefined(zone: HUIZone, port: HUIPort)
 }
+
+extension HUISwitch: Equatable { }
+
+extension HUISwitch: Hashable { }
+
+extension HUISwitch: Sendable { }
 
 extension HUISwitch: CaseIterable {
     public typealias AllCases = [Self]
@@ -492,5 +498,3 @@ extension HUISwitch {
         }
     }
 }
-
-extension HUISwitch: Sendable { }

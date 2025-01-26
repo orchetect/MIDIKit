@@ -8,7 +8,7 @@ import Foundation
 
 extension HUISwitch {
     /// Assign section (buttons to top left of channel strips).
-    public enum Assign: Equatable, Hashable {
+    public enum Assign {
         case sendA
         case sendB
         case sendC
@@ -27,6 +27,12 @@ extension HUISwitch {
         case output
     }
 }
+
+extension HUISwitch.Assign: Equatable { }
+
+extension HUISwitch.Assign: Hashable { }
+
+extension HUISwitch.Assign: Sendable { }
 
 extension HUISwitch.Assign: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
@@ -60,26 +66,24 @@ extension HUISwitch.Assign: CustomStringConvertible {
         switch self {
         // Zone 0x0B
         // Assign 1 (buttons to top left of channel strips)
-        case .output:          return "output"
-        case .input:           return "input"
-        case .pan:             return "pan"
-        case .sendE:           return "sendE"
-        case .sendD:           return "sendD"
-        case .sendC:           return "sendC"
-        case .sendB:           return "sendB"
-        case .sendA:           return "sendA"
+        case .output:         return "output"
+        case .input:          return "input"
+        case .pan:            return "pan"
+        case .sendE:          return "sendE"
+        case .sendD:          return "sendD"
+        case .sendC:          return "sendC"
+        case .sendB:          return "sendB"
+        case .sendA:          return "sendA"
             
         // Zone 0x0C
         // Assign 2 (buttons to top left of channel strips)
-        case .assign:          return "assign"
-        case .default:         return "default"
-        case .suspend:         return "suspend"
-        case .shift:           return "shift"
-        case .mute:            return "mute"
-        case .bypass:          return "bypass"
-        case .recordReadyAll:  return "recordReadyAll"
+        case .assign:         return "assign"
+        case .default:        return "default"
+        case .suspend:        return "suspend"
+        case .shift:          return "shift"
+        case .mute:           return "mute"
+        case .bypass:         return "bypass"
+        case .recordReadyAll: return "recordReadyAll"
         }
     }
 }
-
-extension HUISwitch.Assign: Sendable { }

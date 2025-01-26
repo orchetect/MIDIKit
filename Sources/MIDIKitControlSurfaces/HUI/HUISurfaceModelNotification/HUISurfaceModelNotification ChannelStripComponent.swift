@@ -8,7 +8,7 @@ import MIDIKitCore
 
 extension HUISurfaceModelNotification {
     /// A discrete component of a HUI channel strip and its state change.
-    public enum ChannelStripComponent: Equatable, Hashable {
+    public enum ChannelStripComponent {
         /// Stereo Level Meter.
         case levelMeter(side: HUISurfaceModelState.StereoLevelMeter.Side, level: Int)
         
@@ -43,6 +43,10 @@ extension HUISurfaceModelNotification {
         case faderLevel(level: UInt14)
     }
 }
+
+extension HUISurfaceModelNotification.ChannelStripComponent: Equatable { }
+
+extension HUISurfaceModelNotification.ChannelStripComponent: Hashable { }
 
 extension HUISurfaceModelNotification.ChannelStripComponent: Sendable { }
 

@@ -9,7 +9,7 @@ import MIDIKitCore
 
 extension HUISurfaceModelState.ChannelStrip {
     /// State storage representing the state of a channel strip fader.
-    public struct Fader: Equatable, Hashable {
+    public struct Fader {
         /// Raw level value.
         public var level: UInt14 = 0
         
@@ -35,6 +35,12 @@ extension HUISurfaceModelState.ChannelStrip {
         }
     }
 }
+
+extension HUISurfaceModelState.ChannelStrip.Fader: Equatable { }
+
+extension HUISurfaceModelState.ChannelStrip.Fader: Hashable { }
+
+extension HUISurfaceModelState.ChannelStrip.Fader: Sendable { }
 
 // HUISurfaceModelStateProtocol conformance is on HUISurfaceModelState.ChannelStrip and it handles the
 // `.touched` switch property there, so we don't need a setter/getter here

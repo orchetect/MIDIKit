@@ -29,7 +29,7 @@ extension HUISurfaceModelState {
     ///     0x1    >= -60dBFS  🟩 green
     ///     0x0    <  -60dBFS  (no LEDs on)
     ///
-    public struct StereoLevelMeter: Equatable, Hashable {
+    public struct StereoLevelMeter {
         /// Left Meter Channel.
         ///
         /// As value increases, all LEDs up to and including that value will illuminate,
@@ -89,49 +89,33 @@ extension HUISurfaceModelState {
                 }
             }
         }
-        
-        // constants
-        
-        /// Level value range minimum.
-        /// (0 means that no LEDs on the meter are lit up.)
-        public static let levelMin: Int = 0x0
-        
-        /// Level value range maximum.
-        public static let levelMax: Int = 0xC
-        
-        /// Range of possible level meter values.
-        /// (0 indicates that no LEDs on the meter are lit up.)
-        public static let levelRange = levelMin ... levelMax
     }
 }
 
+extension HUISurfaceModelState.StereoLevelMeter: Equatable { }
+
+extension HUISurfaceModelState.StereoLevelMeter: Hashable { }
+
 extension HUISurfaceModelState.StereoLevelMeter: Sendable { }
 
+// MARK: - Constants
+
 extension HUISurfaceModelState.StereoLevelMeter {
-    /// Enum describing the side of a stereo level meter
-    public enum Side: Equatable, Hashable, CustomStringConvertible {
-        /// Left stereo channel.
-        case left
-        
-        /// Right stereo channel.
-        case right
-        
-        /// Raw value for HUI message encoding.
-        var rawValue: UInt8 {
-            switch self {
-            case .left: return 0
-            case .right: return 1
-            }
-        }
-        
-        public var description: String {
-            switch self {
-            case .left: return "left"
-            case .right: return "right"
-            }
-        }
-    }
+    /// Level value range minimum value.
+    /// (`0` means that no LEDs on the meter are lit up.)
+    public static let levelMin: Int = 0x0
     
+    /// Level value range maximum value.
+    public static let levelMax: Int = 0xC
+    
+    /// Range of possible level meter values.
+    /// (`0` indicates that no LEDs on the meter are lit up.)
+    public static let levelRange = levelMin ... levelMax
+}
+
+// MARK: - Properties
+
+extension HUISurfaceModelState.StereoLevelMeter {
     public func level(of side: Side) -> Int {
         switch side {
         case .left:  return left
@@ -140,4 +124,40 @@ extension HUISurfaceModelState.StereoLevelMeter {
     }
 }
 
+// MARK: - StereoLevelMeter Side
+
+extension HUISurfaceModelState.StereoLevelMeter {
+    /// Enum describing the side of a stereo level meter
+    public enum Side {
+        /// Left stereo channel.
+        case left
+        
+        /// Right stereo channel.
+        case right
+    }
+}
+
+extension HUISurfaceModelState.StereoLevelMeter.Side: Equatable { }
+
+extension HUISurfaceModelState.StereoLevelMeter.Side: Hashable { }
+
 extension HUISurfaceModelState.StereoLevelMeter.Side: Sendable { }
+
+extension HUISurfaceModelState.StereoLevelMeter.Side: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .left: return "left"
+        case .right: return "right"
+        }
+    }
+}
+
+extension HUISurfaceModelState.StereoLevelMeter.Side {
+    /// Raw value for HUI message encoding.
+    var rawValue: UInt8 {
+        switch self {
+        case .left: return 0
+        case .right: return 1
+        }
+    }
+}

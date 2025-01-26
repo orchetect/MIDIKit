@@ -27,6 +27,7 @@ import Foundation
         }
         set {
             // array count validation
+            precondition(newValue.count == 8, "HUI Surface Model must have exactly 8 channel strips.")
             if newValue.count == 8 { _channelStrips = newValue }
         }
         _modify {

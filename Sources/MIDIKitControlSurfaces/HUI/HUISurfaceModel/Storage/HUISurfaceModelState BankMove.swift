@@ -8,7 +8,7 @@ import Foundation
 
 extension HUISurfaceModelState {
     /// State storage representing bank and channel navigation.
-    public struct BankMove: Equatable, Hashable {
+    public struct BankMove {
         public var channelLeft = false
         public var channelRight = false
         public var bankLeft = false
@@ -16,24 +16,30 @@ extension HUISurfaceModelState {
     }
 }
 
+extension HUISurfaceModelState.BankMove: Equatable { }
+
+extension HUISurfaceModelState.BankMove: Hashable { }
+
+extension HUISurfaceModelState.BankMove: Sendable { }
+
 extension HUISurfaceModelState.BankMove: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.BankMove
 
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .channelLeft:   return channelLeft
-        case .channelRight:  return channelRight
-        case .bankLeft:      return bankLeft
-        case .bankRight:     return bankRight
+        case .channelLeft:  return channelLeft
+        case .channelRight: return channelRight
+        case .bankLeft:     return bankLeft
+        case .bankRight:    return bankRight
         }
     }
     
     public mutating func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
-        case .channelLeft:   channelLeft = state
-        case .channelRight:  channelRight = state
-        case .bankLeft:      bankLeft = state
-        case .bankRight:     bankRight = state
+        case .channelLeft:  channelLeft = state
+        case .channelRight: channelRight = state
+        case .bankLeft:     bankLeft = state
+        case .bankRight:    bankRight = state
         }
     }
 }

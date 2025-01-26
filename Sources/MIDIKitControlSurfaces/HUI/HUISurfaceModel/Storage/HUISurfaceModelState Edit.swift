@@ -8,7 +8,7 @@ import Foundation
 
 extension HUISurfaceModelState {
     /// State storage representing the Edit section.
-    public struct Edit: Equatable, Hashable {
+    public struct Edit {
         public var capture = false
         public var cut = false
         public var paste = false
@@ -17,6 +17,12 @@ extension HUISurfaceModelState {
         public var delete = false
     }
 }
+
+extension HUISurfaceModelState.Edit: Equatable { }
+
+extension HUISurfaceModelState.Edit: Hashable { }
+
+extension HUISurfaceModelState.Edit: Sendable { }
 
 extension HUISurfaceModelState.Edit: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.Edit

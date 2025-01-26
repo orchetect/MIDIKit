@@ -8,7 +8,7 @@ import MIDIKitCore
 
 extension HUISurfaceModelNotification {
     /// A discrete component of a the Param Edit section and its state change.
-    public enum ParamEditComponent: Equatable, Hashable {
+    public enum ParamEditComponent {
         case assign(state: Bool)
         case compare(state: Bool)
         case bypass(state: Bool)
@@ -30,6 +30,10 @@ extension HUISurfaceModelNotification {
         // paramScroll rotary knob has no display, it's for surface → host user-input only
     }
 }
+
+extension HUISurfaceModelNotification.ParamEditComponent: Equatable { }
+
+extension HUISurfaceModelNotification.ParamEditComponent: Hashable { }
 
 extension HUISurfaceModelNotification.ParamEditComponent: Sendable { }
 

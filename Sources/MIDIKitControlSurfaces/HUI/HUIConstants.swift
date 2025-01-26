@@ -16,12 +16,12 @@ extension HUIConstants {
     enum kMIDI {
         // MARK: System messages
         
-        // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
-        // [0x90, 0x00, 0x00]
+        /// Status 0x9 is normally channel voice note-on, but HUI hijacks it.
+        /// [0x90, 0x00, 0x00]
         static let kPingToSurfaceMessage: MIDIEvent = .noteOn(0, velocity: .midi1(0x00), channel: 0)
         
-        // Status 0x9 is normally channel voice note-on, but HUI hijacks it.
-        // [0x90, 0x00, 0x7F]
+        /// Status 0x9 is normally channel voice note-on, but HUI hijacks it.
+        /// [0x90, 0x00, 0x7F]
         static let kPingReplyToHostMessage: MIDIEvent = .noteOn(
             0,
             velocity: .midi1(0x7F),
@@ -30,7 +30,7 @@ extension HUIConstants {
         
         static let kSystemResetMessage: MIDIEvent = .systemReset() // [0xFF]
         
-        // [0xF0, 0x00, 0x00, 0x66, 0x05, 0x00]
+        /// [0xF0, 0x00, 0x00, 0x66, 0x05, 0x00]
         enum kSysEx {
             /// Mackie SysEx Manufacturer ID
             public static let kManufacturer: MIDIEvent.SysExManufacturer = .threeByte(
@@ -50,18 +50,18 @@ extension HUIConstants {
             public static let largeByte: UInt7 = 0x12
         }
         
-        // Status 0xA is normally MIDI poly aftertouch, but HUI hijacks it.
+        /// Status 0xA is normally MIDI poly aftertouch, but HUI hijacks it.
         static let kLevelMetersStatus: UInt8 = 0xA0
         
         // MARK: Control events
         
-        // Status 0xB is normally channel voice control change, but HUI hijacks it.
-        // HUI only ever uses first channel, so the status byte will always be exactly 0xB0.
-        // HUI also uses running status for back-to-back 0xB status messages.
+        /// Status 0xB is normally channel voice control change, but HUI hijacks it.
+        /// HUI only ever uses first channel, so the status byte will always be exactly 0xB0.
+        /// HUI also uses running status for back-to-back 0xB status messages.
         static let kControlStatus: UInt8 = 0xB0
         
-        // For sending and receiving HUI, switch messages, the zone select
-        // and port byte uses a different lower nibble depending on transmit direction.
+        /// For sending and receiving HUI, switch messages, the zone select
+        /// and port byte uses a different lower nibble depending on transmit direction.
         enum kControlDataByte1 {
             public static let zoneSelectByteToSurface: UInt8 = 0x0C
             public static let zoneSelectByteToHost: UInt8 =    0x0F

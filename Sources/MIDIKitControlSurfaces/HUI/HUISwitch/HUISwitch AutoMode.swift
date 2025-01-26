@@ -8,7 +8,7 @@ import Foundation
 
 extension HUISwitch {
     /// Auto Mode section (to the right of the channel strips).
-    public enum AutoMode: Equatable, Hashable {
+    public enum AutoMode {
         case read
         case latch
         case trim
@@ -18,17 +18,23 @@ extension HUISwitch {
     }
 }
 
+extension HUISwitch.AutoMode: Equatable { }
+
+extension HUISwitch.AutoMode: Hashable { }
+
+extension HUISwitch.AutoMode: Sendable { }
+
 extension HUISwitch.AutoMode: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         // Zone 0x18
         // Auto Mode (To the right of the channel strips)
-        case .trim:   return (0x18, 0x0)
-        case .latch:  return (0x18, 0x1)
-        case .read:   return (0x18, 0x2)
-        case .off:    return (0x18, 0x3)
-        case .write:  return (0x18, 0x4)
-        case .touch:  return (0x18, 0x5)
+        case .trim:  return (0x18, 0x0)
+        case .latch: return (0x18, 0x1)
+        case .read:  return (0x18, 0x2)
+        case .off:   return (0x18, 0x3)
+        case .write: return (0x18, 0x4)
+        case .touch: return (0x18, 0x5)
         }
     }
 }
@@ -38,14 +44,12 @@ extension HUISwitch.AutoMode: CustomStringConvertible {
         switch self {
         // Zone 0x18
         // Auto Mode (To the right of the channel strips)
-        case .trim:   return "trim"
-        case .latch:  return "latch"
-        case .read:   return "read"
-        case .off:    return "off"
-        case .write:  return "write"
-        case .touch:  return "touch"
+        case .trim:  return "trim"
+        case .latch: return "latch"
+        case .read:  return "read"
+        case .off:   return "off"
+        case .write: return "write"
+        case .touch: return "touch"
         }
     }
 }
-
-extension HUISwitch.AutoMode: Sendable { }

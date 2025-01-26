@@ -9,7 +9,7 @@ import MIDIKitCore
 
 extension HUISurfaceModelState {
     /// State storage representing an individual channel strip and its components.
-    public struct ChannelStrip: Equatable, Hashable {
+    public struct ChannelStrip {
         /// Stereo Level Meter.
         public var levelMeter = StereoLevelMeter()
         
@@ -44,6 +44,12 @@ extension HUISurfaceModelState {
         public var fader = Fader()
     }
 }
+
+extension HUISurfaceModelState.ChannelStrip: Equatable { }
+
+extension HUISurfaceModelState.ChannelStrip: Hashable { }
+
+extension HUISurfaceModelState.ChannelStrip: Sendable { }
 
 extension HUISurfaceModelState.ChannelStrip: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.ChannelStrip

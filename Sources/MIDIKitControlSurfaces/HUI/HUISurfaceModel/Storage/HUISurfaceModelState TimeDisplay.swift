@@ -8,7 +8,7 @@ import Foundation
 
 extension HUISurfaceModelState {
     /// State storage representing the Main Time Display LCD and surrounding status LEDs.
-    public struct TimeDisplay: Equatable, Hashable {
+    public struct TimeDisplay {
         /// HUI time display string, comprised of 8 digits.
         ///
         /// The time display consists of eight 7-segment displays (called digits). Every digit
@@ -31,24 +31,30 @@ extension HUISurfaceModelState {
     }
 }
 
+extension HUISurfaceModelState.TimeDisplay: Equatable { }
+
+extension HUISurfaceModelState.TimeDisplay: Hashable { }
+
+extension HUISurfaceModelState.TimeDisplay: Sendable { }
+
 extension HUISurfaceModelState.TimeDisplay: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.TimeDisplayStatus
 
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .timecode:  return timecode
-        case .feet:      return feet
-        case .beats:     return beats
-        case .rudeSolo:  return rudeSolo
+        case .timecode: return timecode
+        case .feet:     return feet
+        case .beats:    return beats
+        case .rudeSolo: return rudeSolo
         }
     }
     
     public mutating func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
-        case .timecode:  timecode = state
-        case .feet:      feet = state
-        case .beats:     beats = state
-        case .rudeSolo:  rudeSolo = state
+        case .timecode: timecode = state
+        case .feet:     feet = state
+        case .beats:    beats = state
+        case .rudeSolo: rudeSolo = state
         }
     }
 }

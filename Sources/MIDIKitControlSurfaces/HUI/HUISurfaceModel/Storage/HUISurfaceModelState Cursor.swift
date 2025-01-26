@@ -8,7 +8,7 @@ import Foundation
 
 extension HUISurfaceModelState {
     /// State storage representing Cursor Movement / Mode / Scrub / Shuttle.
-    public struct Cursor: Equatable, Hashable {
+    public struct Cursor {
         // up    - no LED, just command button
         // left  - no LED, just command button
         // right - no LED, just command button
@@ -22,30 +22,36 @@ extension HUISurfaceModelState {
     }
 }
 
+extension HUISurfaceModelState.Cursor: Equatable { }
+
+extension HUISurfaceModelState.Cursor: Hashable { }
+
+extension HUISurfaceModelState.Cursor: Sendable { }
+
 extension HUISurfaceModelState.Cursor: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.Cursor
 
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .up:       return false
-        case .left:     return false
-        case .right:    return false
-        case .down:     return false
-        case .mode:     return mode
-        case .scrub:    return scrub
-        case .shuttle:  return shuttle
+        case .up:      return false
+        case .left:    return false
+        case .right:   return false
+        case .down:    return false
+        case .mode:    return mode
+        case .scrub:   return scrub
+        case .shuttle: return shuttle
         }
     }
     
     public mutating func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
-        case .up:       return
-        case .left:     return
-        case .right:    return
-        case .down:     return
-        case .mode:     mode = state
-        case .scrub:    scrub = state
-        case .shuttle:  shuttle = state
+        case .up:      return
+        case .left:    return
+        case .right:   return
+        case .down:    return
+        case .mode:    mode = state
+        case .scrub:   scrub = state
+        case .shuttle: shuttle = state
         }
     }
 }
