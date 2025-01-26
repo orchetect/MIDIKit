@@ -27,7 +27,7 @@ internal import MIDIKitInternals
 /// > References:
 /// > - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-public final class HUIHost {
+@Observable public final class HUIHost {
     /// HUI banks that are configured for this HUI host instance.
     public internal(set) var banks: [HUIHostBank] = []
     
@@ -35,6 +35,7 @@ public final class HUIHost {
     /// configured to connect to it. So each bank will receive pings individually. HUI surfaces
     /// should respond with a ping-reply after each ping so that the host can maintain connection
     /// presence.
+    @ObservationIgnored
     var pingTimer: SafeDispatchTimer?
     
     // MARK: - Init
