@@ -87,7 +87,6 @@ enum HUICoreEvent: Equatable, Hashable {
     case systemReset
 }
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUICoreEvent: CustomStringConvertible {
     public var description: String {
         switch self {
@@ -144,5 +143,4 @@ extension HUICoreEvent: CustomStringConvertible {
     }
 }
 
-@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUICoreEvent: Sendable { }
