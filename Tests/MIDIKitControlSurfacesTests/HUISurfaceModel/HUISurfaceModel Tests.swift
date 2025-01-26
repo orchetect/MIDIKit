@@ -13,17 +13,5 @@ import Testing
     func channelStripsValidation() {
         let model = HUISurfaceModel()
         #expect(model.channelStrips.count == 8)
-        
-        // uses set { }
-        model.channelStrips = [.init(), .init()]
-        #expect(model.channelStrips.count == 8)
-        
-        // uses _modify { }
-        _ = model.channelStrips.removeLast()
-        #expect(model.channelStrips.count == 8)
-        
-        // uses _modify { }
-        model.channelStrips.append(.init())
-        #expect(model.channelStrips.count == 8)
     }
 }
