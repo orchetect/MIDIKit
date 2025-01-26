@@ -42,14 +42,14 @@ import Testing
     private func setupManagers() async throws {
         print("NRPN_IO_Tests setupManagers() starting")
         
-        managerLegacyAPI = ObservableMIDIManager(
+        managerLegacyAPI = MIDIManager(
             clientName: "MIDIKit_IO_NRPN_Tests_LegacyAPI",
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
         managerLegacyAPI.preferredAPI = .legacyCoreMIDI
         
-        managerNewAPI = ObservableMIDIManager(
+        managerNewAPI = MIDIManager(
             clientName: "MIDIKit_IO_NRPN_Tests_NewAPI",
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
@@ -536,7 +536,7 @@ extension RPN_NRPN_IO_Tests {
 // MARK: - Helpers
 
 fileprivate var shouldSkip: Bool = {
-    let legacyManager = ObservableMIDIManager(
+    let legacyManager = MIDIManager(
         clientName: "MIDIKit_IO_NRPN_Tests_SkipCheck_LegacyAPI",
         model: "MIDIKit123",
         manufacturer: "MIDIKit"
@@ -547,7 +547,7 @@ fileprivate var shouldSkip: Bool = {
         return true
     }
     
-    let newManager = ObservableMIDIManager(
+    let newManager = MIDIManager(
         clientName: "MIDIKit_IO_NRPN_Tests_SkipCheck_NewAPI",
         model: "MIDIKit123",
         manufacturer: "MIDIKit"
