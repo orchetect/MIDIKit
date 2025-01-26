@@ -10,7 +10,7 @@ import Foundation
 
 extension MIDIThruConnection {
     /// ThruConnection lifecycle type.
-    public enum Lifecycle: Hashable {
+    public enum Lifecycle {
         /// The play-through connection exists as long as the ``MIDIManager`` exists.
         case nonPersistent
     
@@ -21,6 +21,10 @@ extension MIDIThruConnection {
         case persistent(ownerID: String)
     }
 }
+
+extension MIDIThruConnection.Lifecycle: Equatable { }
+
+extension MIDIThruConnection.Lifecycle: Hashable { }
 
 extension MIDIThruConnection.Lifecycle: Sendable { }
 

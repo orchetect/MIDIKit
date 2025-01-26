@@ -55,6 +55,8 @@ public struct UniversalMIDIPacketData {
     }
 }
 
+extension UniversalMIDIPacketData: Hashable { }
+
 extension UniversalMIDIPacketData: Sendable { }
 
 @available(macOS 11, iOS 14, macCatalyst 14, *)

@@ -12,7 +12,6 @@ internal import CoreMIDI
 @_implementationOnly import CoreMIDI
 #endif
 
-
 // MARK: - Public Protocol
 
 public protocol MIDIManagedSendsMessages: MIDIManaged {

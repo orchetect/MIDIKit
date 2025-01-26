@@ -20,14 +20,14 @@ internal import MIDIKitInternals
 
 /// Clean consolidated data encapsulation of raw data from a Core MIDI `MIDIPacket` (MIDI 1.0).
 public struct MIDIPacketData {
-    let bytes: [UInt8]
+    public let bytes: [UInt8]
     
     /// Core MIDI packet timestamp
-    let timeStamp: CoreMIDITimeStamp
+    public let timeStamp: CoreMIDITimeStamp
     
     /// The MIDI endpoint from which the packet originated.
     /// If this information is not available, it may be `nil`.
-    let source: MIDIOutputEndpoint?
+    public let source: MIDIOutputEndpoint?
     
     public init(
         bytes: [UInt8],
@@ -39,6 +39,7 @@ public struct MIDIPacketData {
         self.source = source
     }
 }
+extension MIDIPacketData: Hashable { }
 
 extension MIDIPacketData: Sendable { }
 

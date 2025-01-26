@@ -17,7 +17,7 @@ internal import CoreMIDI
 #if canImport(Combine)
 import Combine
 
-/// ``MIDIManager`` subclass that is observable in a SwiftUI or Combine context.
+/// ``MIDIManager`` subclass that is observable in a SwiftUI view.
 /// Two new properties are available: ``observableDevices`` and ``observableEndpoints``.
 ///
 /// Generally it is recommended to install the manager instance in the `App` struct.
@@ -25,7 +25,7 @@ import Combine
 /// ```swift
 /// @main
 /// struct MyApp: App {
-///     @ObservedObject var midiManager = ObservableMIDIManager(
+///     @State var midiManager = ObservableMIDIManager(
 ///         clientName: "MyApp",
 ///         model: "MyApp",
 ///         manufacturer: "MyCompany"
@@ -33,7 +33,7 @@ import Combine
 ///
 ///     WindowGroup {
 ///         ContentView()
-///             .environmentObject(midiManager)
+///             .environment(midiManager)
 ///     }
 /// }
 /// ```
@@ -43,7 +43,7 @@ import Combine
 ///
 /// ```swift
 /// struct ContentView: View {
-///     @EnvironmentObject var midiManager: ObservableMIDIManager
+///     @Environment(ObservableMIDIManager.self) private var midiManager
 ///
 ///     var body: some View {
 ///         List(midiManager.observableDevices.devices) { device in

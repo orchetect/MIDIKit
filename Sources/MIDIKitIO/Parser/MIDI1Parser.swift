@@ -29,9 +29,11 @@ public final class MIDI1Parser {
     // MARK: - Init
     
     public init() { }
-    
-    // MARK: - Public Parser Methods
-    
+}
+
+// MARK: - Public Parser Methods
+
+extension MIDI1Parser {
     /// Parses raw packet data into an array of MIDI Events.
     public func parsedEvents(
         in packetData: MIDIPacketData,
@@ -61,9 +63,11 @@ public final class MIDI1Parser {
         runningStatus = result.runningStatus
         return result.events
     }
-    
-    // MARK: - Internal Parser Methods
-    
+}
+
+// MARK: - Internal Parser Methods
+
+extension MIDI1Parser {
     enum ExpectedDataBytes {
         case none
         case exact(Int)

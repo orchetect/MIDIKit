@@ -27,9 +27,11 @@ public final class MIDI2Parser {
     // MARK: - Init
     
     public init() { }
-    
-    // MARK: - Public Parser Methods
-    
+}
+
+// MARK: - Public Parser Methods
+
+extension MIDI2Parser {
     /// Parses raw packet data into an array of MIDI Events.
     public func parsedEvents(
         in packetData: UniversalMIDIPacketData
@@ -45,18 +47,18 @@ public final class MIDI2Parser {
         guard !bytes.isEmpty,
               bytes.count % 4 == 0
         else { return [] }
-    
+        
         // MIDI 2.0 Spec Parser
-    
+        
         var events: [MIDIEvent] = []
-    
+        
         let byte0 = bytes[bytes.startIndex]
         let byte0Nibbles = byte0.nibbles
-    
+        
         guard let messageType = MIDIUMPMessageType(rawValue: byte0Nibbles.high)
         else { return events }
         let group = byte0Nibbles.low
-    
+        
         switch messageType {
         case .utility: // 0x0
             // These messages can be standalone 32-bit UMPs or prepend other UMP messages.
@@ -64,15 +66,15 @@ public final class MIDI2Parser {
             // byte 1: [high nibble: status, low nibble: part of data or reserved segment]
             // bytes 2&3: [continuation of data or reserved]
             // + [potential additional words comprising a UMP such as channel voice etc.]
-    
+            
             let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
-    
+            
             if let parsedEvent = parseMIDI2Utility(
                 bytes: midiBytes,
                 group: group
             ) {
                 events.append(parsedEvent.utilityEvent)
-    
+                
                 // if bytes follow a utility UMP, it may be any non-utility UMP
                 // so attempt to parse it like any normal UMP and add the event(s)
                 if !parsedEvent.followingBytes.isEmpty {
@@ -80,34 +82,34 @@ public final class MIDI2Parser {
                     events.append(contentsOf: followingEvent)
                 }
             }
-    
+            
         case .systemRealTimeAndCommon: // 0x1
             // always 32 bits (4 bytes)
             // byte 0: [high nibble: message type, low nibble: group]
             // byte 1: [status]
             // byte 2: [MIDI1 data byte 1, or 0x00 if not applicable]
             // byte 3: [MIDI1 data byte 2, or 0x00 if not applicable]
-    
+            
             let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
-    
+            
             if let parsedEvent = parseSystemRealTimeAndCommon(
                 bytes: midiBytes,
                 group: group
             ) {
                 events.append(parsedEvent)
             }
-    
+            
         case .midi1ChannelVoice: // 0x2
             // always 32 bits (4 bytes)
             // byte 0: [high nibble: message type, low nibble: group]
             // byte 1: [MIDI1 status & channel]
             // byte 2: [MIDI1 data byte 1, or 0x00 if not applicable]
             // byte 3: [MIDI1 data byte 2, or 0x00 if not applicable]
-    
+            
             let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
-    
+            
             let channel = bytes[1].nibbles.low
-    
+            
             if let parsedEvent = parseMIDI1ChannelVoice(
                 bytes: midiBytes,
                 channel: channel,
@@ -115,30 +117,30 @@ public final class MIDI2Parser {
             ) {
                 events.append(parsedEvent)
             }
-    
+            
         case .data64bit: // 0x3
             // SysEx7
-    
+            
             let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
-    
+            
             if let parsedEvent = parseData64Bit(
                 bytes: midiBytes,
                 group: group
             ) {
                 events.append(parsedEvent)
             }
-    
+            
         case .midi2ChannelVoice: // 0x4
             // always 64 bits (8 bytes)
             // byte 0: [high nibble: message type, low nibble: group]
             // byte 1: [status]
             // byte 2&3: [index]
             // byte 4...7: [data bytes]
-    
+            
             let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
-    
+            
             let channel = bytes[1].nibbles.low
-    
+            
             if let parsedEvent = parseMIDI2ChannelVoice(
                 bytes: midiBytes,
                 channel: channel,
@@ -146,13 +148,13 @@ public final class MIDI2Parser {
             ) {
                 events.append(parsedEvent)
             }
-    
+            
         case .data128bit: // 0x5
             // can contain a SysEx8 message
             // also used for Mixed Data Set Message (see UMP/MIDI 2.0 Spec page 38)
-    
+            
             let midiBytes = bytes[bytes.startIndex.advanced(by: 1)...]
-    
+            
             if let parsedEvent = parseData128Bit(
                 bytes: midiBytes,
                 group: group
@@ -160,12 +162,14 @@ public final class MIDI2Parser {
                 events.append(parsedEvent)
             }
         }
-    
+        
         return events
     }
-    
-    // MARK: - Internal Parser Methods
-    
+}
+
+// MARK: - Internal Parser Methods
+
+extension MIDI2Parser {
     /// Internal sub-parser: Parse System RealTime/Common UMP message.
     ///
     /// - Parameters:

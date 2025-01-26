@@ -113,6 +113,8 @@ extension MIDIEndpointIdentity: Hashable {
     }
 }
 
+extension MIDIEndpointIdentity: Sendable { }
+
 extension MIDIEndpointIdentity: CustomStringConvertible {
     public var description: String {
         switch self {
@@ -133,8 +135,6 @@ extension MIDIEndpointIdentity: CustomStringConvertible {
         }
     }
 }
-
-extension MIDIEndpointIdentity: Sendable { }
 
 extension MIDIEndpointIdentity {
     /// Returns endpoint identity criteria describing an endpoint.

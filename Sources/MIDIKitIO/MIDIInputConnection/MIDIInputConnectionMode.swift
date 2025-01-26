@@ -7,7 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 /// Behavior of a managed MIDI connection.
-public enum MIDIInputConnectionMode: Equatable, Hashable {
+public enum MIDIInputConnectionMode {
     /// Specific endpoint(s) criteria.
     case outputs(matching: Set<MIDIEndpointIdentity>)
     
@@ -17,6 +17,10 @@ public enum MIDIInputConnectionMode: Equatable, Hashable {
     /// Note that this mode overrides endpoints / identity criteria.
     case allOutputs
 }
+
+extension MIDIInputConnectionMode: Equatable { }
+
+extension MIDIInputConnectionMode: Hashable { }
 
 extension MIDIInputConnectionMode: Sendable { }
 

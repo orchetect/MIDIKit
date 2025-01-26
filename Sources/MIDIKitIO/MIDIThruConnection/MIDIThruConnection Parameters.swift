@@ -25,6 +25,10 @@ extension MIDIThruConnection {
     }
 }
 
+extension MIDIThruConnection.Parameters: Equatable { }
+
+extension MIDIThruConnection.Parameters: Hashable { }
+
 extension MIDIThruConnection.Parameters: Sendable { }
 
 extension MIDIThruConnection.Parameters {

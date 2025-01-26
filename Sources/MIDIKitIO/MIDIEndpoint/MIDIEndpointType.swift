@@ -7,10 +7,16 @@
 #if !os(tvOS) && !os(watchOS)
 
 /// The specialized type of a MIDI endpoint (input/output).
-public enum MIDIEndpointType: Equatable, Hashable, CaseIterable {
+public enum MIDIEndpointType {
     case input
     case output
 }
+
+extension MIDIEndpointType: Equatable { }
+
+extension MIDIEndpointType: Hashable { }
+
+extension MIDIEndpointType: CaseIterable { }
 
 extension MIDIEndpointType: Sendable { }
 

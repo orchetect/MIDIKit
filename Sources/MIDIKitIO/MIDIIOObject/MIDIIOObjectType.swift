@@ -9,12 +9,18 @@
 import Foundation
 
 /// Describes the type of a ``MIDIIOObject`` instance.
-public enum MIDIIOObjectType: CaseIterable, Equatable, Hashable {
+public enum MIDIIOObjectType {
     case device
     case entity
     case inputEndpoint
     case outputEndpoint
 }
+
+extension MIDIIOObjectType: Equatable { }
+
+extension MIDIIOObjectType: Hashable { }
+
+extension MIDIIOObjectType: CaseIterable { }
 
 extension MIDIIOObjectType: Sendable { }
 

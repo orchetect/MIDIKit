@@ -49,6 +49,8 @@ public enum AnyMIDIPacket {
     }
 }
 
+extension AnyMIDIPacket: Hashable { }
+
 extension AnyMIDIPacket: Sendable { }
 
 #endif

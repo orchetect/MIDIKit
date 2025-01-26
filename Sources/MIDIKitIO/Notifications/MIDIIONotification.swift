@@ -15,7 +15,7 @@ internal import CoreMIDI
 #endif
 
 /// Core MIDI subsystem notification.
-public enum MIDIIONotification: Equatable, Hashable {
+public enum MIDIIONotification {
     /// Some aspect of the current MIDI setup changed.
     ///
     /// This notification carries no data. This message is redundant if you’re explicitly handling
@@ -67,6 +67,10 @@ public enum MIDIIONotification: Equatable, Hashable {
     /// `MIDINotificationMessageID` enum.
     case other(messageIDRawValue: Int32)
 }
+
+extension MIDIIONotification: Equatable { }
+
+extension MIDIIONotification: Hashable { }
 
 extension MIDIIONotification: Sendable { }
 

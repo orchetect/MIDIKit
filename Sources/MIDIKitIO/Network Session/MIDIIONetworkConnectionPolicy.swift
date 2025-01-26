@@ -12,24 +12,32 @@ internal import CoreMIDI
 @_implementationOnly import CoreMIDI
 #endif
 
-// MARK: - NetworkConnectionPolicy
-
-public enum MIDIIONetworkConnectionPolicy: UInt, Equatable {
+public enum MIDIIONetworkConnectionPolicy: UInt {
     case noOne
     case hostsInContactList
     case anyone
-    
+}
+
+extension MIDIIONetworkConnectionPolicy: Equatable { }
+
+extension MIDIIONetworkConnectionPolicy: Hashable { }
+
+extension MIDIIONetworkConnectionPolicy: Sendable { }
+
+// MARK: - Internal
+
+extension MIDIIONetworkConnectionPolicy {
     init(_ coreMIDIPolicy: MIDINetworkConnectionPolicy) {
         switch coreMIDIPolicy {
         case .noOne:
             self = .noOne
-    
+            
         case .hostsInContactList:
             self = .hostsInContactList
-    
+            
         case .anyone:
             self = .anyone
-    
+            
         @unknown default:
             self = .noOne
         }
@@ -39,14 +47,12 @@ public enum MIDIIONetworkConnectionPolicy: UInt, Equatable {
         switch self {
         case .noOne:
             return .noOne
-    
+            
         case .hostsInContactList:
             return .hostsInContactList
-    
+            
         case .anyone:
             return .anyone
         }
     }
 }
-
-extension MIDIIONetworkConnectionPolicy: Sendable { }
