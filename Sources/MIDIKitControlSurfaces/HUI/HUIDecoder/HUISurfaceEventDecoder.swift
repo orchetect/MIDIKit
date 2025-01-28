@@ -8,11 +8,12 @@ import MIDIKitCore
 
 /// ``HUISurfaceEvent`` decoder.
 /// Parses received MIDI events and converts them to ``HUISurfaceEvent`` events.
-public final class HUISurfaceEventDecoder: HUIDecoder {
+public final class HUISurfaceEventDecoder: HUIDecoder, Sendable {
     // HUIDecoder
     
     public typealias Event = HUISurfaceEvent
     
+    nonisolated(unsafe)
     public var eventHandler: EventHandler?
     
     public init() {
@@ -28,6 +29,7 @@ public final class HUISurfaceEventDecoder: HUIDecoder {
     
     // MARK: local state variables
     
+    nonisolated(unsafe)
     var decoder: HUICoreDecoder!
     
     public func midiIn(event: MIDIEvent) {

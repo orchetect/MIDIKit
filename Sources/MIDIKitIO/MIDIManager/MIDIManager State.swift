@@ -22,21 +22,19 @@ extension MIDIManager {
     ///
     /// - Throws: `MIDIIOError.osStatus`
     public func start() throws {
-        try eventQueue.sync {
-            // if start() was already called, return
-            guard coreMIDIClientRef == MIDIClientRef() else { return }
-    
-            try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef) { [weak self] notificationPtr in
-                guard let self else { return }
-                let internalNotif = MIDIIOInternalNotification(notificationPtr)
-                self.internalNotificationHandler(internalNotif)
-            }
-            .throwIfOSStatusErr()
-    
-            // initial cache of endpoints
-    
-            updateObjectsCache()
+        // if start() was already called, return
+        guard coreMIDIClientRef == MIDIClientRef() else { return }
+        
+        try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef) { [weak self] notificationPtr in
+            guard let self else { return }
+            let internalNotif = MIDIIOInternalNotification(notificationPtr)
+            self.internalNotificationHandler(internalNotif)
         }
+        .throwIfOSStatusErr()
+        
+        // initial cache of endpoints
+        
+        updateObjectsCache()
     }
     
     private func internalNotificationHandler(_ internalNotif: MIDIIOInternalNotification) {
@@ -82,10 +80,9 @@ extension MIDIManager {
     }
     
     private func sendNotificationAsync(_ notif: MIDIIONotification) {
-        if let notificationHandler {
-            DispatchQueue.main.async {
-                notificationHandler(notif, self)
-            }
+        guard let notificationHandler else { return }
+        DispatchQueue.main.async {
+            notificationHandler(notif, self)
         }
     }
 }

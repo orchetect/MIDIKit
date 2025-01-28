@@ -29,7 +29,7 @@ internal import CoreMIDI
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/outputConnection`` or ``MIDIManager/removeAll()`` to destroy the
 /// > managed connection.)
-public final class MIDIOutputConnection: _MIDIManaged {
+public final class MIDIOutputConnection: _MIDIManaged, @unchecked Sendable {
     // _MIDIManaged
     weak var midiManager: MIDIManager?
     
@@ -338,7 +338,7 @@ extension MIDIOutputConnection: MIDIManagedSendsMessages {
 
 extension MIDIOutputConnection: _MIDIManagedSendsMessages {
     func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
-        guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else {
+        guard let coreMIDIOutputPortRef else {
             throw MIDIIOError.internalInconsistency(
                 "Output port reference is nil."
             )
@@ -351,7 +351,7 @@ extension MIDIOutputConnection: _MIDIManagedSendsMessages {
             // ignore errors with try? since we don't want to return early in the event that sending
             // to subsequent inputs may succeed
             try? MIDISend(
-                unwrappedOutputPortRef,
+                coreMIDIOutputPortRef,
                 inputEndpointRef,
                 packetList
             )
@@ -361,7 +361,7 @@ extension MIDIOutputConnection: _MIDIManagedSendsMessages {
     
     @available(macOS 11, iOS 14, macCatalyst 14, *)
     func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
-        guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else {
+        guard let coreMIDIOutputPortRef else {
             throw MIDIIOError.internalInconsistency(
                 "Output port reference is nil."
             )
@@ -374,7 +374,7 @@ extension MIDIOutputConnection: _MIDIManagedSendsMessages {
             // ignore errors with try? since we don't want to return early in the event that sending
             // to subsequent inputs may succeed
             try? MIDISendEventList(
-                unwrappedOutputPortRef,
+                coreMIDIOutputPortRef,
                 inputEndpointRef,
                 eventList
             )

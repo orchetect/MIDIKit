@@ -7,7 +7,7 @@
 import MIDIKitCore
 
 /// Interprets HUI MIDI events and produces strongly-typed core HUI events.
-final class HUICoreDecoder {
+final class HUICoreDecoder: @unchecked Sendable {
     /// Decoder role: the type of HUI MIDI messages expected to be received and decoded.
     public let role: HUIRole
     

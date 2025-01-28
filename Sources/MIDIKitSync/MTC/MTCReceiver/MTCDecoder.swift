@@ -29,6 +29,7 @@
 // - Logic Pro X (as of 10.4.1) does not send any full frame messages.
 //
 
+import Foundation
 import MIDIKitCore
 import TimecodeKitCore
 
@@ -50,21 +51,43 @@ import TimecodeKitCore
 /// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate
 /// > timecodes when scrubbing or locating to different times, but will be limited to the base frame
 /// > rates supported by MTC.
-public final class MTCDecoder {
+public final class MTCDecoder: Sendable {
     // MARK: - Public properties
         
     /// Last timecode formed from incoming MTC data.
-    public internal(set) var timecode = Timecode(.zero, at: .fps30)
-        
+    public internal(set) var timecode: Timecode {
+        get { return _timecodeLock.withLock { _timecode } }
+        _modify {
+            var valueCopy = _timecodeLock.withLock { _timecode }
+            yield &valueCopy
+            _timecodeLock.withLock { _timecode = valueCopy }
+        }
+        set { _timecodeLock.withLock { _timecode = newValue } }
+    }
+    private nonisolated(unsafe) var _timecode = Timecode(.zero, at: .fps30)
+    private let _timecodeLock = NSLock()
+    
     /// The base MTC frame rate last received.
-    public internal(set) var mtcFrameRate: MTCFrameRate = .mtc30 {
-        didSet {
-            if mtcFrameRate != oldValue {
+    public internal(set) var mtcFrameRate: MTCFrameRate {
+        get { return _mtcFrameRateLock.withLock { _mtcFrameRate } }
+        _modify {
+            var valueCopy = _mtcFrameRateLock.withLock { _mtcFrameRate }
+            yield &valueCopy
+            _mtcFrameRateLock.withLock { _mtcFrameRate = valueCopy }
+        }
+        set {
+            let isDiff = newValue != mtcFrameRate
+            
+            _mtcFrameRateLock.withLock { _mtcFrameRate = newValue }
+            
+            if isDiff {
                 mtcFrameRateChangedHandler?(mtcFrameRate)
             }
         }
     }
-        
+    private nonisolated(unsafe) var _mtcFrameRate: MTCFrameRate = .mtc30
+    private let _mtcFrameRateLock = NSLock()
+    
     /// The frame rate the local system is using.
     ///
     /// When set, MTC frame numbers will be scaled to real frame rate frame numbers, but only when
@@ -72,10 +95,30 @@ public final class MTCDecoder {
     ///
     /// Remember to also set this any time the local frame rate changes so the receiver can
     /// interpret the incoming MTC accordingly.
-    public var localFrameRate: TimecodeFrameRate?
+    public var localFrameRate: TimecodeFrameRate? {
+        get { return _localFrameRateLock.withLock { _localFrameRate } }
+        _modify {
+            var valueCopy = _localFrameRateLock.withLock { _localFrameRate }
+            yield &valueCopy
+            _localFrameRateLock.withLock { _localFrameRate = valueCopy }
+        }
+        set { _localFrameRateLock.withLock { _localFrameRate = newValue } }
+    }
+    private nonisolated(unsafe) var _localFrameRate: TimecodeFrameRate?
+    private let _localFrameRateLock = NSLock()
         
     /// Status of the direction of MTC quarter-frames received
-    public internal(set) var direction: MTCDirection = .forwards
+    public internal(set) var direction: MTCDirection {
+        get { return _directionLock.withLock { _direction } }
+        _modify {
+            var valueCopy = _directionLock.withLock { _direction }
+            yield &valueCopy
+            _directionLock.withLock { _direction = valueCopy }
+        }
+        set { _directionLock.withLock { _direction = newValue } }
+    }
+    private nonisolated(unsafe) var _direction: MTCDirection = .forwards
+    private let _directionLock = NSLock()
         
     // MARK: - Stored closures
         
@@ -84,7 +127,7 @@ public final class MTCDecoder {
     ///
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
-    var timecodeChangedHandler: (@Sendable (
+    nonisolated(unsafe) var timecodeChangedHandler: (@Sendable (
         _ timecode: Timecode,
         _ event: MTCMessageType,
         _ direction: MTCDirection,
@@ -111,7 +154,7 @@ public final class MTCDecoder {
     ///
     /// This can usually be ignored, as the ``MTCDecoder`` can handle scaling and validation of the
     /// frame rate information from the stream transparently.
-    var mtcFrameRateChangedHandler: (@Sendable (_ rate: MTCFrameRate) -> Void)?
+    nonisolated(unsafe) var mtcFrameRateChangedHandler: (@Sendable (_ rate: MTCFrameRate) -> Void)?
         
     /// Sets the closure called only when the incoming MTC stream changes its frame rate
     /// classification.
@@ -128,37 +171,37 @@ public final class MTCDecoder {
         
     // Quarter-Frame tracking registers
         
-    var TC_H_lsb: UInt8 = 0b00000000
-    var TC_H_msb: UInt8 = 0b00000000
-    var TC_M_lsb: UInt8 = 0b00000000
-    var TC_M_msb: UInt8 = 0b00000000
-    var TC_S_lsb: UInt8 = 0b00000000
-    var TC_S_msb: UInt8 = 0b00000000
-    var TC_F_lsb: UInt8 = 0b00000000
-    var TC_F_msb: UInt8 = 0b00000000
+    nonisolated(unsafe) var TC_H_lsb: UInt8 = 0b00000000
+    nonisolated(unsafe) var TC_H_msb: UInt8 = 0b00000000
+    nonisolated(unsafe) var TC_M_lsb: UInt8 = 0b00000000
+    nonisolated(unsafe) var TC_M_msb: UInt8 = 0b00000000
+    nonisolated(unsafe) var TC_S_lsb: UInt8 = 0b00000000
+    nonisolated(unsafe) var TC_S_msb: UInt8 = 0b00000000
+    nonisolated(unsafe) var TC_F_lsb: UInt8 = 0b00000000
+    nonisolated(unsafe) var TC_F_msb: UInt8 = 0b00000000
         
-    var TC_H_lsb_received = false
-    var TC_H_msb_received = false
-    var TC_M_lsb_received = false
-    var TC_M_msb_received = false
-    var TC_S_lsb_received = false
-    var TC_S_msb_received = false
-    var TC_F_lsb_received = false
-    var TC_F_msb_received = false
+    nonisolated(unsafe) var TC_H_lsb_received = false
+    nonisolated(unsafe) var TC_H_msb_received = false
+    nonisolated(unsafe) var TC_M_lsb_received = false
+    nonisolated(unsafe) var TC_M_msb_received = false
+    nonisolated(unsafe) var TC_S_lsb_received = false
+    nonisolated(unsafe) var TC_S_msb_received = false
+    nonisolated(unsafe) var TC_F_lsb_received = false
+    nonisolated(unsafe) var TC_F_msb_received = false
         
-    var quarterFrameBufferIsComplete = false
-    var lastQuarterFrameReceived: UInt8 = 0b000
-    var receivedSyncQFSinceQFBufferComplete = false
+    nonisolated(unsafe) var quarterFrameBufferIsComplete = false
+    nonisolated(unsafe) var lastQuarterFrameReceived: UInt8 = 0b000
+    nonisolated(unsafe) var receivedSyncQFSinceQFBufferComplete = false
         
-    var rawHours = 0
-    var rawMinutes = 0
-    var rawSeconds = 0
-    var rawFrames = 0
+    nonisolated(unsafe) var rawHours = 0
+    nonisolated(unsafe) var rawMinutes = 0
+    nonisolated(unsafe) var rawSeconds = 0
+    nonisolated(unsafe) var rawFrames = 0
         
-    var lastCapturedWholeTimecode: Timecode.Components = .zero
-    var lastCapturedWholeTimecodeDirection: MTCDirection = .ambiguous
-    var lastCapturedWholeTimecodeDeltaQFs: Int?
-    var lastTimecodeSentToHandler: Timecode.Components = .zero
+    nonisolated(unsafe) var lastCapturedWholeTimecode: Timecode.Components = .zero
+    nonisolated(unsafe) var lastCapturedWholeTimecodeDirection: MTCDirection = .ambiguous
+    nonisolated(unsafe) var lastCapturedWholeTimecodeDeltaQFs: Int?
+    nonisolated(unsafe) var lastTimecodeSentToHandler: Timecode.Components = .zero
         
     // MARK: - init
         

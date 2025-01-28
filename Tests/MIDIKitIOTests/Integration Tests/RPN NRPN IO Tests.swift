@@ -535,7 +535,7 @@ extension RPN_NRPN_IO_Tests {
 
 // MARK: - Helpers
 
-fileprivate var shouldSkip: Bool = {
+fileprivate let shouldSkip: Bool = {
     let legacyManager = MIDIManager(
         clientName: "MIDIKit_IO_NRPN_Tests_SkipCheck_LegacyAPI",
         model: "MIDIKit123",

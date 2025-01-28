@@ -27,8 +27,9 @@ internal import MIDIKitInternals
 /// > References:
 /// > - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-@Observable public final class HUIHost {
+@Observable public final class HUIHost: Sendable {
     /// HUI banks that are configured for this HUI host instance.
+    nonisolated(unsafe)
     public internal(set) var banks: [HUIHostBank] = []
     
     /// A HUI host transmits a ping message every 1 second to each of the remote surfaces that are
@@ -36,33 +37,32 @@ internal import MIDIKitInternals
     /// should respond with a ping-reply after each ping so that the host can maintain connection
     /// presence.
     @ObservationIgnored
-    var pingTimer: SafeDispatchTimer?
+    nonisolated(unsafe)
+    var pingTimer: Task<Void, any Error>!
     
     // MARK: - Init
     
     /// Initialize with defaults.
     public init() {
-        startPingTimer()
+        pingTimer = Task { [weak self] in
+            while !Task.isCancelled {
+                self?.pingTimerFired()
+                try await Task.sleep(for: .seconds(1.0))
+            }
+        }
+    }
+    
+    deinit {
+        pingTimer.cancel()
     }
     
     // MARK: - Ping
     
-    /// Creates and starts the ping timer.
-    /// This should be called once on class init.
-    func startPingTimer() {
-        guard pingTimer == nil else { return }
-        
-        pingTimer = .init(
-            rate: .seconds(1.0),
-            leeway: .milliseconds(50)
-        ) { [weak self] in
-            let event = encodeHUIPing(to: .surface)
-            self?.banks.forEach {
-                $0.midiOut(event)
-            }
+    func pingTimerFired() {
+        let event = encodeHUIPing(to: .surface)
+        banks.forEach {
+            $0.midiOut(event)
         }
-        
-        Task { await pingTimer?.start() }
     }
     
     // MARK: - Methods
@@ -71,12 +71,14 @@ internal import MIDIKitInternals
     public func addBank(
         huiEventHandler: HUIHostBank.HUIEventHandler?,
         midiOutHandler: SendsMIDIEvents.MIDIOutHandler? = nil,
+        remotePresenceTimeout: TimeInterval = 2.0,
         remotePresenceChangedHandler: HUIHostBank.PresenceChangedHandler? = nil
     ) {
         banks.append(
             HUIHostBank(
                 huiEventHandler: huiEventHandler,
                 midiOutHandler: midiOutHandler,
+                remotePresenceTimeout: remotePresenceTimeout,
                 remotePresenceChangedHandler: remotePresenceChangedHandler
             )
         )

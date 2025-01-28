@@ -16,7 +16,7 @@ internal import MIDIKitInternals
 import TimecodeKitCore
 
 /// MTC sync generator.
-public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
+public final actor MTCGenerator: SendsMIDIEvents, Sendable {
     // MARK: - Public properties
     
     public private(set) var name: String
@@ -64,12 +64,12 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     /// Closure called every time a MIDI message needs to be transmitted by the generator.
     ///
     /// - Note: Handler is called on a dedicated thread so do not make UI updates from it.
-    public var midiOutHandler: MIDIOutHandler?
+    public nonisolated(unsafe) var midiOutHandler: MIDIOutHandler?
     
     /// Set the closure called every time a MIDI message needs to be transmitted by the generator.
     ///
     /// - Note: Handler is called on a dedicated thread so do not make UI updates from it.
-    public func setMIDIOutHandler(_ handler: MIDIOutHandler?) {
+    public nonisolated func setMIDIOutHandler(_ handler: MIDIOutHandler?) {
         midiOutHandler = handler
     }
     
@@ -100,10 +100,8 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
         
         // set up handlers after self is initialized so we can capture reference to self
         
-        Task {
-            await newTimer.setEventHandler { [weak self] in
-                Task { await self?.timerFired() }
-            }
+        newTimer.setEventHandler { [weak self] in
+            Task { [weak self] in await self?.timerFired() }
         }
         
         newEncoder.setMIDIOutHandler { [weak self] midiEvents in
@@ -125,7 +123,7 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     }
     
     /// Sets timer rate to corresponding MTC quarter-frame duration in Hz.
-    func setTimerRate(from frameRate: TimecodeFrameRate) async {
+    func setTimerRate(from frameRate: TimecodeFrameRate) {
         // const values generated from:
         // Timecode(.components(f: 1), at: frameRate).realTimeValue
         // double and quadruple rates use the same value as their 1x rate
@@ -159,7 +157,7 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
         case .fps120d:    rate = 0.008341666666666666 // _30_drop
         }
         
-        await timer.setRate(.seconds(rate))
+        timer.setRate(.seconds(rate))
     }
         
     // MARK: - Public methods
@@ -170,9 +168,9 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     /// - Note: `timecode` may contain `subframes > 0`. Subframes will be stripped prior to
     /// transmitting the full-frame message since the resolution of MTC full-frame messages is 1
     /// frame.
-    public func locate(to timecode: Timecode) async {
+    public func locate(to timecode: Timecode) {
         encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
-        await setTimerRate(from: encoder.localFrameRate)
+        setTimerRate(from: encoder.localFrameRate)
     }
         
     /// Locate to a new timecode, while not generating continuous playback MIDI message stream.
@@ -181,9 +179,9 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     /// > Note: `components` may contain `subframes > 0`. Subframes will be stripped prior to
     /// > transmitting the full-frame message since the resolution of MTC full-frame messages is 1
     /// > frame.
-    public func locate(to components: Timecode.Components) async {
+    public func locate(to components: Timecode.Components) {
         encoder.locate(to: components, transmitFullFrame: locateBehavior)
-        await setTimerRate(from: encoder.localFrameRate)
+        setTimerRate(from: encoder.localFrameRate)
     }
         
     /// Starts generating MTC continuous playback MIDI message stream events.
@@ -195,13 +193,13 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     /// > immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
     /// Call ``stop()`` to stop generating events.
-    public func start(now timecode: Timecode) async {
+    public func start(now timecode: Timecode) {
         shouldStart = true
         
         // if subframes == 0, no scheduling is required
         
         if timecode.subFrames == 0 {
-            await locateAndStart(
+            locateAndStart(
                 now: timecode.components,
                 frameRate: timecode.frameRate
             )
@@ -213,7 +211,7 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
             
         // pass it on to the start method that handles scheduling
             
-        await start(
+        start(
             now: timecode.realTimeValue,
             frameRate: timecode.frameRate
         )
@@ -230,7 +228,7 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
         now components: Timecode.Components,
         frameRate: TimecodeFrameRate,
         base: Timecode.SubFramesBase
-    ) async {
+    ) {
         shouldStart = true
         
         let tc = Timecode(
@@ -240,7 +238,7 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
             by: .allowingInvalid
         )
         
-        await start(now: tc)
+        start(now: tc)
     }
         
     /// Starts generating MTC continuous playback MIDI message stream events.
@@ -253,7 +251,7 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     public func start(
         now realTime: TimeInterval,
         frameRate: TimecodeFrameRate
-    ) async {
+    ) {
         // since realTime can be between frames,
         // we need to ensure that MTC quarter-frames begin generating
         // on the start of an exact frame.
@@ -273,7 +271,7 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
         // if subframes == 0, no scheduling is required
         
         if inRTtoTimecode.subFrames == 0 {
-            await locateAndStart(
+            locateAndStart(
                 now: inRTtoTimecode.components,
                 frameRate: inRTtoTimecode.frameRate
             )
@@ -292,18 +290,20 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
         
         let nsecsToStartOfNextFrame = UInt64(secsToStartOfNextFrame * 1_000_000_000)
         
-        do {
-            try await Task.sleep(nanoseconds: nsecsToStartOfNextFrame)
-        } catch {
-            // just fall through. error will only be thrown if task is cancelled.
+        Task {
+            do {
+                try await Task.sleep(nanoseconds: nsecsToStartOfNextFrame)
+            } catch {
+                // just fall through. error will only be thrown if task is cancelled.
+            }
+            
+            guard self.shouldStart else { return }
+            
+            self.locateAndStart(
+                now: tcAtNextEvenFrame.components,
+                frameRate: tcAtNextEvenFrame.frameRate
+            )
         }
-        
-        guard self.shouldStart else { return }
-        
-        await self.locateAndStart(
-            now: tcAtNextEvenFrame.components,
-            frameRate: tcAtNextEvenFrame.frameRate
-        )
     }
     
     /// Internal: called from all other `start(...)` methods when they are finally ready to initiate
@@ -313,7 +313,7 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
     func locateAndStart(
         now components: Timecode.Components,
         frameRate: TimecodeFrameRate
-    ) async {
+    ) {
         encoder.locate(
             to: components,
             frameRate: frameRate,
@@ -321,20 +321,20 @@ public final actor MTCGenerator: @preconcurrency SendsMIDIEvents {
         )
             
         if state == .generating {
-            await timer.stop()
+            timer.stop()
         }
             
         state = .generating
             
-        await setTimerRate(from: encoder.localFrameRate)
-        await timer.restart()
+        setTimerRate(from: encoder.localFrameRate)
+        timer.restart()
     }
         
     /// Stops generating MTC continuous playback MIDI message stream events.
-    public func stop() async {
+    public func stop() {
         shouldStart = false
         
         state = .idle
-        await timer.stop()
+        timer.stop()
     }
 }

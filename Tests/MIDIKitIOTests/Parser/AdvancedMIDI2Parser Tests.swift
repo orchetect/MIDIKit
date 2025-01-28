@@ -9,7 +9,7 @@
 @testable import MIDIKitIO
 import Testing
 
-@Suite(.serialized) @MainActor class AdvancedMIDI2Parser_Tests: Sendable {
+@Suite @MainActor class AdvancedMIDI2Parser_Tests: Sendable {
     // MARK: - State
     
     fileprivate var parser: AdvancedMIDI2Parser!
@@ -17,7 +17,9 @@ import Testing
     
     init() throws {
         parser = AdvancedMIDI2Parser { [self] events, _, _ in
-            receivedEvents.append(contentsOf: events)
+            Task { @MainActor in
+                receivedEvents.append(contentsOf: events)
+            }
         }
     }
 }

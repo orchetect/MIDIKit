@@ -26,7 +26,7 @@ internal import MIDIKitInternals
 /// > References:
 /// > - [HUI Hardware Reference Guide](https://loudaudio.netx.net/portals/loud-public/#asset/9795)
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-@Observable public final class HUISurface {
+@Observable public final class HUISurface: @unchecked Sendable {
     // MARK: - State Model
     
     /// HUI control surface state model.
@@ -44,9 +44,7 @@ internal import MIDIKitInternals
     // MARK: - Handlers
     
     /// HUI event receive handler.
-    public typealias ModelNotificationHandler = (
-        (_ notification: HUISurfaceModelNotification) -> Void
-    )
+    public typealias ModelNotificationHandler = @Sendable (_ notification: HUISurfaceModelNotification) -> Void
     
     /// Notification handler that is called as a result of the ``model`` being updated from received
     /// HUI events.
@@ -57,7 +55,7 @@ internal import MIDIKitInternals
     public var alwaysNotify: Bool = false
     
     /// Remote presence state change handler (when pings resume or cease after timeout).
-    public typealias PresenceChangedHandler = (_ isPresent: Bool) -> Void
+    public typealias PresenceChangedHandler = @Sendable (_ isPresent: Bool) -> Void
     
     /// Called when the remote presence state changes (when pings resume or cease after timeout).
     public var remotePresenceChangedHandler: PresenceChangedHandler?
@@ -72,32 +70,26 @@ internal import MIDIKitInternals
     ///
     /// HUI pings are sent from the host to surface(s) every 1 second. A timeout duration between 2
     /// ... 5 seconds is reasonable depending on desired leeway.
-    public var remotePresenceTimeout: TimeInterval = 2.0 {
-        didSet {
-            // validate
-            if remotePresenceTimeout < 1.1 { remotePresenceTimeout = 1.1 }
-            // update timer interval
-            Task {
-                await remotePresenceTimer?.setRate(.seconds(remotePresenceTimeout))
-                await remotePresenceTimer?.restart()
+    public let remotePresenceTimeout: TimeInterval
+    
+    @ObservationIgnored
+    var remotePresenceTimer: Task<Void, any Error>?
+    
+    func setupRemotePresenceTimer() {
+        remotePresenceTimer = Task { [weak self] in
+            while let self, !Task.isCancelled {
+                try await Task.sleep(for: .seconds(remotePresenceTimeout))
+                self.isRemotePresent = false
+                self.remotePresenceTimer?.cancel()
+                self.remotePresenceTimer = nil
             }
         }
     }
     
-    @ObservationIgnored
-    var remotePresenceTimer: SafeDispatchTimer?
-    
-    func setupRemotePresenceTimer() {
-        guard remotePresenceTimer == nil else { return }
-        
-        remotePresenceTimer = .init(
-            rate: .seconds(remotePresenceTimeout),
-            leeway: .milliseconds(50),
-            eventHandler: { [weak self] in
-                self?.isRemotePresent = false
-                Task { await self?.remotePresenceTimer?.stop() }
-            }
-        )
+    func restartRemotePresenceTimer() {
+        self.remotePresenceTimer?.cancel()
+        self.remotePresenceTimer = nil
+        setupRemotePresenceTimer()
     }
     
     /// This property will be `true` while ping messages are being received.
@@ -115,7 +107,7 @@ internal import MIDIKitInternals
     }
     
     func receivedPing() {
-        Task { await remotePresenceTimer?.restart(firingNow: false) }
+        restartRemotePresenceTimer()
         isRemotePresent = true
         
         // send ping-reply if ping request is received
@@ -127,35 +119,21 @@ internal import MIDIKitInternals
     public init(
         alwaysNotify: Bool = false,
         modelNotificationHandler: ModelNotificationHandler? = nil,
+        remotePresenceTimeout: TimeInterval = 2.0,
         remotePresenceChangedHandler: PresenceChangedHandler? = nil,
         midiOutHandler: MIDIOutHandler? = nil
     ) {
         self.alwaysNotify = alwaysNotify
         self.modelNotificationHandler = modelNotificationHandler
+        self.remotePresenceTimeout = remotePresenceTimeout.clamped(to: 1.1...)
+        self.remotePresenceChangedHandler = remotePresenceChangedHandler
         self.midiOutHandler = midiOutHandler
         
         model = HUISurfaceModel()
         
         decoder = HUIHostEventDecoder { [weak self] hostEvent in
             guard let self else { return }
-            
-            if case .ping = hostEvent {
-                self.receivedPing()
-            }
-                
-            // process event
-            let result = self.model.updateState(
-                from: hostEvent,
-                alwaysNotify: self.alwaysNotify
-            )
-            switch result {
-            case let .changed(notification):
-                self.modelNotificationHandler?(notification)
-            case .unchanged:
-                break
-            case let .unhandled(hostEvent):
-                Logger.debug("Unhandled HUI event: \(hostEvent)")
-            }
+            handleDecoder(hostEvent: hostEvent)
         }
         
         // presence timer
@@ -176,6 +154,26 @@ internal import MIDIKitInternals
     public func reset() {
         model = HUISurfaceModel()
         decoder.reset()
+    }
+    
+    private func handleDecoder(hostEvent: HUIHostEventDecoder.Event) {
+        if case .ping = hostEvent {
+            self.receivedPing()
+        }
+        
+        // process event
+        let result = self.model.updateState(
+            from: hostEvent,
+            alwaysNotify: self.alwaysNotify
+        )
+        switch result {
+        case let .changed(notification):
+            self.modelNotificationHandler?(notification)
+        case .unchanged:
+            break
+        case let .unhandled(hostEvent):
+            Logger.debug("Unhandled HUI event: \(hostEvent)")
+        }
     }
 }
 

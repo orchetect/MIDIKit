@@ -18,15 +18,17 @@ import Foundation
 /// All timer methods are safe and can be called in any order without worrying about
 /// `DispatchSourceTimer`-related peculiarities (start/suspend balancing or cancelling without
 /// resuming).
-package final actor SafeDispatchTimer: Sendable {
+package final class SafeDispatchTimer /* : Sendable */ {
+    nonisolated(unsafe)
     var timer: DispatchSourceTimer
     
     /// (Read-only) Frequency in Hz of the timer
-    public internal(set) var rate: Rate = .seconds(1.0)
+    public internal(set) nonisolated(unsafe) var rate: Rate = .seconds(1.0)
     
-    public var leeway: DispatchTimeInterval = .nanoseconds(0)
+    public let leeway: DispatchTimeInterval
     
     /// (Read-only) State of whether timer is running or not
+    nonisolated(unsafe)
     public internal(set) var running = false
     
     /// Initialize a new timer.
@@ -116,17 +118,17 @@ package final actor SafeDispatchTimer: Sendable {
         timer.setEventHandler(handler: handler)
     }
     
-    // deinit {
-    //     timer.setEventHandler(handler: nil)
-    // 
-    //     // If the timer is suspended, calling cancel without resuming
-    //     // triggers a crash. This is documented here:
-    //     // https://forums.developer.apple.com/thread/15902
-    // 
-    //     if !running { timer.resume() }
-    // 
-    //     timer.cancel()
-    // }
+    deinit {
+        timer.setEventHandler(handler: nil)
+        
+        // If the timer is suspended, calling cancel without resuming
+        // triggers a crash. This is documented here:
+        // https://forums.developer.apple.com/thread/15902
+        
+        if !running { timer.resume() }
+        
+        timer.cancel()
+    }
 }
 
 extension SafeDispatchTimer {

@@ -30,8 +30,8 @@ import Testing
             _ = await mtcGen.localFrameRate
             _ = await mtcGen.locateBehavior
             await mtcGen.setLocateBehavior(.always)
-            _ = await mtcGen.midiOutHandler
-            await mtcGen.setMIDIOutHandler { _ in }
+            _ = mtcGen.midiOutHandler
+            mtcGen.setMIDIOutHandler { _ in }
             
             // public methods
             await mtcGen.locate(to: Timecode(.zero, at: .fps24))
@@ -61,7 +61,7 @@ import Testing
         // property updates to occur before reading them)
         
         // init with local frame rate
-        let mtcRec = await MTCReceiver(
+        let mtcRec = MTCReceiver(
             name: "test",
             initialLocalFrameRate: .fps24
         ) { timecode, messageType, direction, displayNeedsUpdate in

@@ -199,7 +199,7 @@ public struct MIDIInputsPicker: View, _MIDIInputsSelectable {
     public var body: some View {
         MIDIEndpointsPicker<MIDIInputEndpoint>(
             title: title,
-            endpoints: midiManager.observableEndpoints.inputs,
+            endpoints: midiManager.endpoints.inputs,
             maskedFilter: maskedFilter,
             selectionID: $selectionID,
             selectionDisplayName: $selectionDisplayName,
@@ -269,7 +269,7 @@ public struct MIDIOutputsPicker: View, _MIDIOutputsSelectable {
     public var body: some View {
         MIDIEndpointsPicker<MIDIOutputEndpoint>(
             title: title,
-            endpoints: midiManager.observableEndpoints.outputs,
+            endpoints: midiManager.endpoints.outputs,
             maskedFilter: maskedFilter,
             selectionID: $selectionID,
             selectionDisplayName: $selectionDisplayName,

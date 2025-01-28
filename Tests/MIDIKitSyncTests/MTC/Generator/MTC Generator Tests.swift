@@ -5,31 +5,39 @@
 //
 
 @testable import MIDIKitSync
+@testable import MIDIKitInternals
 import Testing
 import TimecodeKitCore
 
-@Suite class MTC_Generator_Generator_Tests {
+@Suite struct MTC_Generator_Generator_Tests {
+    private final class Sandbox: Sendable {
+        func foo() {
+            let mtcGen = MTCGenerator()
+            mtcGen.setMIDIOutHandler { [weak self] midiMessage in
+                _ = self
+                _ = midiMessage
+            }
+            
+            _ = MTCGenerator { [weak self] (midiMessage) in
+                _ = self
+                _ = midiMessage
+            }
+            
+            _ = MTCGenerator(midiOutHandler: { (midiMessage) in
+                _ = midiMessage
+            })
+            
+            _ = MTCGenerator { (midiMessage) in
+                _ = midiMessage
+            }
+        }
+    }
+    
     @Test
     func mtcGenerator_Default() async {
         // just testing variations on syntax
         
-        let mtcGen1 = MTCGenerator()
-        await mtcGen1.setMIDIOutHandler { [weak self] (midiMessage) in
-            _ = self
-            _ = midiMessage
-        }
-        
-        _ = MTCGenerator { [weak self] (midiMessage) in
-            _ = self
-            _ = midiMessage
-        }
-        
-        _ = MTCGenerator(midiOutHandler: { (midiMessage) in
-            _ = midiMessage
-        })
-        
-        _ = MTCGenerator { (midiMessage) in
-            _ = midiMessage
-        }
+        let sandbox = Sandbox()
+        sandbox.foo()
     }
 }

@@ -31,7 +31,9 @@ extension MIDIManager_MIDIIONotification_Tests {
             manufacturer: "MIDIKit",
             notificationHandler: { notification, manager in
                 // handler is called on main thread
-                self.notifications.append(notification)
+                MainActor.assumeIsolated {
+                    self.notifications.append(notification)
+                }
             }
         )
         
@@ -111,7 +113,9 @@ extension MIDIManager_MIDIIONotification_Tests {
             manufacturer: "MIDIKit",
             notificationHandler: { notification, manager in
                 // handler is called on main thread
-                self.notifications.append(notification)
+                MainActor.assumeIsolated {
+                    self.notifications.append(notification)
+                }
             }
         )
         

@@ -22,7 +22,7 @@ public protocol HUIDecoder: ReceivesMIDIEvents {
 }
 
 extension HUIDecoder {
-    public typealias EventHandler = (_ event: Event) -> Void
+    public typealias EventHandler = @Sendable (_ event: Event) -> Void
     
     public init(eventHandler: EventHandler? = nil) {
         self.init()

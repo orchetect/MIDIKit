@@ -26,7 +26,7 @@ internal import CoreMIDI
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/input`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// > endpoint.)
-public final class MIDIInput: _MIDIManaged {
+public final class MIDIInput: _MIDIManaged, @unchecked Sendable {
     // _MIDIManaged
     weak var midiManager: MIDIManager?
     
@@ -139,15 +139,13 @@ extension MIDIInput {
                 manager.coreMIDIClientRef,
                 name as CFString,
                 &newPortRef,
-                { [weak q = midiManager?.eventQueue, weak h = receiveHandler] packetListPtr, srcConnRefCon in
+                { [weak receiveHandler] packetListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
                     // otherwise we run into data races when Thread Sanitizer is on
                     
                     let packets = packetListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
-    
-                    q?.async {
-                        h?.packetListReceived(packets)
-                    }
+                    
+                    receiveHandler?.packetListReceived(packets)
                 }
             )
             .throwIfOSStatusErr()
@@ -164,19 +162,17 @@ extension MIDIInput {
                 name as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newPortRef,
-                { [weak q = midiManager?.eventQueue, weak h = receiveHandler] eventListPtr, srcConnRefCon in
+                { [weak receiveHandler] eventListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
                     // otherwise we run into data races when Thread Sanitizer is on
                     
                     let packets = eventListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    q?.async {
-                        h?.eventListReceived(
-                            packets,
-                            protocol: midiProtocol
-                        )
-                    }
+                    receiveHandler?.eventListReceived(
+                        packets,
+                        protocol: midiProtocol
+                    )
                 }
             )
             .throwIfOSStatusErr()

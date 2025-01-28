@@ -20,47 +20,45 @@ extension MIDIManager {
         _ type: ManagedType,
         _ tagSelection: TagSelection
     ) {
-        eventQueue.sync {
-            switch type {
-            case .inputConnection:
-                switch tagSelection {
-                case .all:
-                    managedInputConnections.removeAll()
-                case let .withTag(tag):
-                    managedInputConnections[tag] = nil
-                }
-    
-            case .outputConnection:
-                switch tagSelection {
-                case .all:
-                    managedOutputConnections.removeAll()
-                case let .withTag(tag):
-                    managedOutputConnections[tag] = nil
-                }
-    
-            case .input:
-                switch tagSelection {
-                case .all:
-                    managedInputs.removeAll()
-                case let .withTag(tag):
-                    managedInputs[tag] = nil
-                }
-    
-            case .output:
-                switch tagSelection {
-                case .all:
-                    managedOutputs.removeAll()
-                case let .withTag(tag):
-                    managedOutputs[tag] = nil
-                }
-    
-            case .nonPersistentThruConnection:
-                switch tagSelection {
-                case .all:
-                    managedThruConnections.removeAll()
-                case let .withTag(tag):
-                    managedThruConnections[tag] = nil
-                }
+        switch type {
+        case .inputConnection:
+            switch tagSelection {
+            case .all:
+                managedInputConnections.removeAll()
+            case let .withTag(tag):
+                managedInputConnections[tag] = nil
+            }
+            
+        case .outputConnection:
+            switch tagSelection {
+            case .all:
+                managedOutputConnections.removeAll()
+            case let .withTag(tag):
+                managedOutputConnections[tag] = nil
+            }
+            
+        case .input:
+            switch tagSelection {
+            case .all:
+                managedInputs.removeAll()
+            case let .withTag(tag):
+                managedInputs[tag] = nil
+            }
+            
+        case .output:
+            switch tagSelection {
+            case .all:
+                managedOutputs.removeAll()
+            case let .withTag(tag):
+                managedOutputs[tag] = nil
+            }
+            
+        case .nonPersistentThruConnection:
+            switch tagSelection {
+            case .all:
+                managedThruConnections.removeAll()
+            case let .withTag(tag):
+                managedThruConnections[tag] = nil
             }
         }
     }
@@ -87,7 +85,7 @@ extension MIDIManager {
     public func removeAll() {
         // `self.remove(...)` internally uses operationQueue.sync{}
         // so don't need to wrap this with it here
-    
+        
         for managedEndpointType in ManagedType.allCases {
             remove(managedEndpointType, .all)
         }

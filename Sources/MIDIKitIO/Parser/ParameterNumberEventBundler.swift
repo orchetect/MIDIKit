@@ -13,7 +13,7 @@ public class ParameterNumberEventBundler {
     // MARK: - Options
     
     public var bundleRPNAndNRPNDataEntryLSB: Bool = false
-    public typealias EventsHandler = (
+    public typealias EventsHandler = @Sendable (
         _ events: [MIDIEvent],
         _ timeStamp: CoreMIDITimeStamp,
         _ source: MIDIOutputEndpoint?
@@ -35,8 +35,8 @@ public class ParameterNumberEventBundler {
             storedEventWrapper: { event in
                 .rpn(event)
             },
-            timerExpired: { [weak self] storedEvent in
-                self?.handleEvents(
+            timerExpired: { [handleEvents] storedEvent in
+                handleEvents(
                     [storedEvent.event],
                     storedEvent.timeStamp,
                     storedEvent.source
@@ -48,8 +48,8 @@ public class ParameterNumberEventBundler {
             storedEventWrapper: { event in
                 .nrpn(event)
             },
-            timerExpired: { [weak self] storedEvent in
-                self?.handleEvents(
+            timerExpired: { [handleEvents] storedEvent in
+                handleEvents(
                     [storedEvent.event],
                     storedEvent.timeStamp,
                     storedEvent.source

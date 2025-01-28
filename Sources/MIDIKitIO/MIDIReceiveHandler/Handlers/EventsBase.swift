@@ -8,11 +8,11 @@
 
 extension MIDIReceiver {
     /// Foundational receiver class which other events receivers subclass.
-    class EventsBase: MIDIReceiverProtocol {
+    class EventsBase: MIDIReceiverProtocol, @unchecked Sendable {
         let midi1Parser: MIDI1Parser
         
-        var midi2Parser: MIDI2Parser? = nil
-        var advancedMIDI2Parser: AdvancedMIDI2Parser? = nil
+        let midi2Parser: MIDI2Parser?
+        var advancedMIDI2Parser: AdvancedMIDI2Parser?
         
         let options: MIDIReceiverOptions
         
@@ -57,6 +57,7 @@ extension MIDIReceiver {
             
             // MIDI 2
             if options.contains(.bundleRPNAndNRPNDataEntryLSB) {
+                midi2Parser = nil
                 advancedMIDI2Parser = AdvancedMIDI2Parser { [weak self] events, timeStamp, source in
                     self?.handle(events: events, timeStamp: timeStamp, source: source)
                 }

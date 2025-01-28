@@ -26,7 +26,7 @@ internal import CoreMIDI
 /// > de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/output`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// > endpoint.)
-public final class MIDIOutput: _MIDIManaged {
+public final class MIDIOutput: _MIDIManaged, @unchecked Sendable {
     // _MIDIManaged
     weak var midiManager: MIDIManager?
     
@@ -207,25 +207,25 @@ extension MIDIOutput: MIDIManagedSendsMessages { }
 
 extension MIDIOutput: _MIDIManagedSendsMessages {
     func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
-        guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else {
+        guard let coreMIDIOutputPortRef else {
             throw MIDIIOError.internalInconsistency(
                 "Port reference is nil."
             )
         }
     
-        try MIDIReceived(unwrappedOutputPortRef, packetList)
+        try MIDIReceived(coreMIDIOutputPortRef, packetList)
             .throwIfOSStatusErr()
     }
     
     @available(macOS 11, iOS 14, macCatalyst 14, *)
     func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
-        guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else {
+        guard let coreMIDIOutputPortRef else {
             throw MIDIIOError.internalInconsistency(
                 "Port reference is nil."
             )
         }
     
-        try MIDIReceivedEventList(unwrappedOutputPortRef, eventList)
+        try MIDIReceivedEventList(coreMIDIOutputPortRef, eventList)
             .throwIfOSStatusErr()
     }
 }

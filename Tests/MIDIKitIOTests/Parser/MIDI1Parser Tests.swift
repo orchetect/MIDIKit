@@ -9,15 +9,17 @@
 @testable import MIDIKitIO
 import Testing
 
-@Suite(.serialized) struct MIDI1Parser_Tests {
+@Suite struct MIDI1Parser_Tests {
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     
     @Test
     func packetData_parsedEvents_Empty() {
+        let parser = MIDI1Parser()
+        
         #expect(
             MIDIPacketData(bytes: [], timeStamp: .zero)
-                .parsedEvents() ==
+                .parsedEvents(using: parser) ==
                 []
         )
     }
@@ -26,9 +28,11 @@ import Testing
     func packetData_parsedEvents_SingleEvents() throws {
         // template method
         
+        let parser = MIDI1Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         // - channel voice
@@ -195,6 +199,8 @@ import Testing
     
     @Test
     func packetData_parsedEvents_MultipleEvents() {
+        let parser = MIDI1Parser()
+        
         // channel voice
         
         #expect(
@@ -205,7 +211,7 @@ import Testing
                 ],
                 timeStamp: .zero
             )
-            .parsedEvents() ==
+            .parsedEvents(using: parser) ==
             
             [.noteOff(60, velocity: .midi1(64), channel: 0),
              .noteOn(60, velocity: .midi1(64), channel: 0)]
@@ -220,7 +226,7 @@ import Testing
                 ],
                 timeStamp: .zero
             )
-            .parsedEvents() ==
+            .parsedEvents(using: parser) ==
             
             [.cc(1, value: .midi1(127), channel: 1),
              .noteOn(60, velocity: .midi1(64), channel: 6),
@@ -230,6 +236,8 @@ import Testing
     
     @Test
     func packetData_parsedEvents_RunningStatus_SinglePacket() {
+        let parser = MIDI1Parser()
+        
         #expect(
             MIDIPacketData(
                 bytes: [
@@ -239,7 +247,7 @@ import Testing
                 ],
                 timeStamp: .zero
             )
-            .parsedEvents() ==
+            .parsedEvents(using: parser) ==
             
             [.noteOn(60, velocity: .midi1(64), channel: 0),
              .noteOn(61, velocity: .midi1(65), channel: 0)]
@@ -255,7 +263,7 @@ import Testing
                 ],
                 timeStamp: .zero
             )
-            .parsedEvents() ==
+            .parsedEvents(using: parser) ==
             
             [.noteOn(60, velocity: .midi1(64), channel: 15),
              .noteOn(61, velocity: .midi1(65), channel: 15),
@@ -265,7 +273,7 @@ import Testing
     
     @Test
     func packetData_parsedEvents_RunningStatus_SeparatePackets_Simple() {
-        MIDI1Parser.default.runningStatus = nil
+        let parser = MIDI1Parser()
         
         var parsed = MIDIPacketData(
             bytes: [
@@ -274,7 +282,7 @@ import Testing
             ],
             timeStamp: .zero
         )
-        .parsedEvents()
+        .parsedEvents(using: parser)
         
         #expect(
             parsed ==
@@ -282,7 +290,7 @@ import Testing
         )
         
         #expect(
-            MIDI1Parser.default.runningStatus ==
+            parser.runningStatus ==
                 0x92
         )
         
@@ -292,7 +300,7 @@ import Testing
             ],
             timeStamp: .zero
         )
-        .parsedEvents()
+        .parsedEvents(using: parser)
         
         #expect(
             parsed ==
@@ -300,7 +308,7 @@ import Testing
         )
         
         #expect(
-            MIDI1Parser.default.runningStatus ==
+            parser.runningStatus ==
                 0x92
         )
         
@@ -311,7 +319,7 @@ import Testing
             ],
             timeStamp: .zero
         )
-        .parsedEvents()
+        .parsedEvents(using: parser)
         
         #expect(
             parsed ==
@@ -319,7 +327,7 @@ import Testing
         )
         
         #expect(
-            MIDI1Parser.default.runningStatus ==
+            parser.runningStatus ==
                 0x84
         )
     }
@@ -328,9 +336,11 @@ import Testing
     func packetData_parsedEvents_MidstreamRealTimeMessages_SinglePacket() {
         // template method
         
+        let parser = MIDI1Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         let systemRealTimeMessages: [UInt8 : [MIDIEvent]] = [
@@ -384,9 +394,11 @@ import Testing
     func packetData_parsedEvents_RunningStatus_SystemRealTime() throws {
         // template method
         
+        let parser = MIDI1Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         let systemRealTimeMessages: [UInt8 : [MIDIEvent]] = [
@@ -446,9 +458,11 @@ import Testing
     func packetData_parsedEvents_RunningStatus_SystemCommon() {
         // template method
         
+        let parser = MIDI1Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         let systemCommonMessages: [[UInt8] : [MIDIEvent]] = [
@@ -509,9 +523,11 @@ import Testing
     func packetData_parsedEvents_Malformed() {
         // template method
         
+        let parser = MIDI1Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         // tests
@@ -717,9 +733,11 @@ import Testing
     func packetData_parsedEvents_SysEx() throws {
         // template method
         
+        let parser = MIDI1Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             MIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         // tests

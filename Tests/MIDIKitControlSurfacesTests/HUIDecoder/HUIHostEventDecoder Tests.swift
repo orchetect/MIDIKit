@@ -138,21 +138,26 @@ import Testing
 
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUIHostEventDecoderTests {
+    private final class Receiver: @unchecked Sendable {
+        var decodedEvents: [HUIHostEvent] = []
+    }
+    
     /// Verifies that a HUI event encodes and decodes back to itself.
     func runHUIEventTest(
         _ sourceEvent: HUIHostEvent,
         matches outputEvents: [HUIHostEvent]? = nil
     ) {
-        var decodedEvents: [HUIHostEvent] = []
+        let receiver = Receiver()
+        
         let decoder = HUIHostEventDecoder { huiEvent in
-            decodedEvents.append(huiEvent)
+            receiver.decodedEvents.append(huiEvent)
         }
         let midiEvents = sourceEvent.encode()
         decoder.midiIn(events: midiEvents)
         
         let eventsToMatch = outputEvents ?? [sourceEvent]
         
-        #expect(decodedEvents == eventsToMatch)
+        #expect(receiver.decodedEvents == eventsToMatch)
     }
     
     /// Verifies that a raw HUI MIDI message decodes back to the given HUI event(s).
@@ -160,11 +165,12 @@ extension HUIHostEventDecoderTests {
         source sourceMIDI: MIDIEvent,
         matches outputEvents: [HUIHostEvent]
     ) {
-        var decodedEvents: [HUIHostEvent] = []
+        let receiver = Receiver()
+        
         let decoder = HUIHostEventDecoder { huiEvent in
-            decodedEvents.append(huiEvent)
+            receiver.decodedEvents.append(huiEvent)
         }
         decoder.midiIn(event: sourceMIDI)
-        #expect(decodedEvents == outputEvents)
+        #expect(receiver.decodedEvents == outputEvents)
     }
 }

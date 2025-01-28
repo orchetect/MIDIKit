@@ -9,8 +9,8 @@
 extension MIDIReceiver {
     /// MIDI Event receive handler that holds a strong reference to a receiver object that conforms
     /// to the ``ReceivesMIDIEvents`` protocol.
-    final class StrongEventsReceiver: EventsBase {
-        var receiver: ReceivesMIDIEvents
+    final class StrongEventsReceiver: EventsBase, @unchecked Sendable {
+        let receiver: ReceivesMIDIEvents
         
         init(
             options: MIDIReceiverOptions,

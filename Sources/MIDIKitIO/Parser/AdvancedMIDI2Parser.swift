@@ -14,7 +14,7 @@ public class AdvancedMIDI2Parser {
     
     public var bundleRPNAndNRPNDataEntryLSB: Bool = false
     
-    public typealias EventsHandler = (
+    public typealias EventsHandler = @Sendable (
         _ events: [MIDIEvent],
         _ timeStamp: CoreMIDITimeStamp,
         _ source: MIDIOutputEndpoint?

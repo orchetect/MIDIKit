@@ -9,26 +9,26 @@
 import Foundation
 
 /// Event Holder.
-final class EventHolder<T: MIDIParameterNumberEvent> {
+final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable {
     // MARK: - Options
     
-    public typealias TimerExpiredHandler = (_ storedEvent: ReturnedStoredEvent) -> Void
-    public var timerExpired: TimerExpiredHandler?
-    public let timeOut: TimeInterval
-    public var storedEventWrapper: (T) -> MIDIEvent
+    typealias TimerExpiredHandler = @Sendable (_ storedEvent: ReturnedStoredEvent) -> Void
+    var timerExpired: TimerExpiredHandler?
+    let timeOut: TimeInterval
+    var storedEventWrapper: @Sendable (T) -> MIDIEvent
     
     // MARK: - Parser State
     
     private var expirationTimer: Timer?
     
-    public typealias StoredEvent = (
+    typealias StoredEvent = (
         event: T,
         timeStamp: CoreMIDITimeStamp,
         source: MIDIOutputEndpoint?
     )
     var storedEvent: StoredEvent?
     
-    public typealias ReturnedStoredEvent = (
+    typealias ReturnedStoredEvent = (
         event: MIDIEvent,
         timeStamp: CoreMIDITimeStamp,
         source: MIDIOutputEndpoint?
@@ -36,7 +36,7 @@ final class EventHolder<T: MIDIParameterNumberEvent> {
     
     init(
         timeOut: TimeInterval = 0.05,
-        storedEventWrapper: @escaping (T) -> MIDIEvent,
+        storedEventWrapper: @Sendable @escaping (T) -> MIDIEvent,
         timerExpired: TimerExpiredHandler? = nil
     ) {
         self.timeOut = timeOut
@@ -46,11 +46,13 @@ final class EventHolder<T: MIDIParameterNumberEvent> {
     
     func restartTimer() {
         expirationTimer?.invalidate()
-        expirationTimer = Timer
-            .scheduledTimer(withTimeInterval: timeOut, repeats: false) { [self] timer in
-                callTimerExpired()
-                reset()
-            }
+        expirationTimer = Timer.scheduledTimer(
+            withTimeInterval: timeOut,
+            repeats: false
+        ) { [self] timer in
+            callTimerExpired()
+            reset()
+        }
     }
     
     func reset() {

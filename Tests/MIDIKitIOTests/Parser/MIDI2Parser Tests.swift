@@ -15,9 +15,11 @@ import Testing
     
     @Test
     func universalPacketData_parsedEvents_Empty() {
+        let parser = MIDI2Parser()
+        
         #expect(
             UniversalMIDIPacketData(bytes: [], timeStamp: .zero)
-                .parsedEvents() ==
+                .parsedEvents(using: parser) ==
                 []
         )
     }
@@ -26,9 +28,11 @@ import Testing
     func universalPacketData_parsedEvents_SingleEvents_MIDI1_0_ChannelVoice() {
         // template method
         
+        let parser = MIDI2Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         // - UMP MIDI 1.0 Channel Voice
@@ -80,9 +84,11 @@ import Testing
     func universalPacketData_parsedEvents_SingleEvents_MIDI2_0_ChannelVoice() {
         // template method
         
+        let parser = MIDI2Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         // - UMP MIDI 2.0 Channel Voice
@@ -205,9 +211,11 @@ import Testing
     func universalPacketData_parsedEvents_SingleEvents_System() throws {
         // template method
         
+        let parser = MIDI2Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         // UMP System Events
@@ -363,9 +371,11 @@ import Testing
     func universalPacketData_parsedEvents_Malformed() {
         // template method
         
+        let parser = MIDI2Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         // tests
@@ -1379,9 +1389,11 @@ import Testing
     func universalPacketData_parsedEvents_SingleEvents_MIDI2_0_Utility() {
         // template method
         
+        let parser = MIDI2Parser()
+        
         func parsedEvents(bytes: [UInt8]) -> [MIDIEvent] {
             UniversalMIDIPacketData(bytes: bytes, timeStamp: .zero)
-                .parsedEvents()
+                .parsedEvents(using: parser)
         }
         
         // UMP Utility Events

@@ -29,7 +29,7 @@ import TimecodeKitCore
 /// >
 /// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate
 /// > timecodes when scrubbing or locating to different times.
-public final actor MTCReceiver {
+public final actor MTCReceiver: Sendable {
     // MARK: - Public properties
     
     public private(set) var name: String
@@ -150,7 +150,7 @@ public final actor MTCReceiver {
             _ displayNeedsUpdate: Bool
         ) -> Void)? = nil,
         stateChanged: (@Sendable (_ state: State) -> Void)? = nil
-    ) async {
+    ) {
         // handle init arguments
         
         let name = name ?? UUID().uuidString
@@ -189,12 +189,12 @@ public final actor MTCReceiver {
         
         // set up handlers after self is initialized so we can capture reference to self
         
-        await timer.setEventHandler { [weak self] in
-            Task { await self?.timerFired() }
+        timer.setEventHandler { [weak self] in
+            Task { [weak self] in await self?.timerFired() }
         }
         
         decoder.setTimecodeChangedHandler { [weak self] timecode, messageType, direction, displayNeedsUpdate in
-            Task {
+            Task { [weak self] in
                 await self?.timecodeDidChange(
                     to: timecode,
                     event: messageType,
@@ -209,6 +209,7 @@ public final actor MTCReceiver {
     
     // MARK: - Decoder (internal)
     
+    nonisolated(unsafe)
     var decoder: MTCDecoder!
     
     var timeLastQuarterFrameReceived: timespec = .init()
@@ -221,7 +222,7 @@ public final actor MTCReceiver {
     let timer: SafeDispatchTimer!
     
     /// Internal: Fired from our timer object.
-    func timerFired() async {
+    func timerFired() {
         // this will be called by the timer which operates on our internal queue, so we don't need
         // to wrap this in queue.async { }
         
@@ -267,15 +268,15 @@ public final actor MTCReceiver {
                 
         } else if clockDiff > freewheelTimeout {
             state = .idle
-            await timer.stop()
+            timer.stop()
         }
     }
 }
 
 // MARK: - ReceivesMIDIEvents
 
-extension MTCReceiver: @preconcurrency ReceivesMIDIEvents {
-    public func midiIn(event: MIDIEvent) {
+extension MTCReceiver: ReceivesMIDIEvents {
+    public nonisolated func midiIn(event: MIDIEvent) {
         decoder.midiIn(event: event)
     }
 }
@@ -289,7 +290,7 @@ extension MTCReceiver {
         event: MTCMessageType,
         direction: MTCDirection,
         displayNeedsUpdate: Bool
-    ) async {
+    ) {
         // determine frame rate compatibility
         var frameRateIsCompatible = true
         
@@ -323,8 +324,8 @@ extension MTCReceiver {
             }
             
             // start timer
-            if await !timer.running {
-                await timer.restart()
+            if !timer.running {
+                timer.restart()
             }
         }
         

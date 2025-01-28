@@ -47,26 +47,24 @@ extension MIDIManager {
         tag: String,
         uniqueID: MIDIIdentifierPersistence
     ) throws {
-        try eventQueue.sync {
-            let newVS = MIDIOutput(
-                name: name,
-                uniqueID: uniqueID.readID(),
-                midiManager: self,
-                api: preferredAPI
+        let newVS = MIDIOutput(
+            name: name,
+            uniqueID: uniqueID.readID(),
+            midiManager: self,
+            api: preferredAPI
+        )
+        
+        managedOutputs[tag] = newVS
+        
+        try newVS.create(in: self)
+        
+        guard let successfulID = newVS.uniqueID else {
+            throw MIDIIOError.connectionError(
+                "Could not read virtual MIDI endpoint unique ID."
             )
-    
-            managedOutputs[tag] = newVS
-    
-            try newVS.create(in: self)
-    
-            guard let successfulID = newVS.uniqueID else {
-                throw MIDIIOError.connectionError(
-                    "Could not read virtual MIDI endpoint unique ID."
-                )
-            }
-    
-            uniqueID.writeID(successfulID)
         }
+        
+        uniqueID.writeID(successfulID)
     }
 }
 

@@ -4,15 +4,15 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
 import MIDIKitCore
+import TimecodeKitCore
 
 #if compiler(>=6.0)
 internal import MIDIKitInternals
 #else
 @_implementationOnly import MIDIKitInternals
 #endif
-
-import TimecodeKitCore
 
 /// MTC (MIDI Timecode) stream encoder object.
 ///
@@ -21,7 +21,7 @@ import TimecodeKitCore
 /// > Tip: This object is not affected by or reliant on timing at all and simply processes events as
 /// > they are received. For outbound MTC sync, use the ``MTCGenerator`` wrapper object which adds
 /// > additional abstraction for generating MTC sync.
-public final class MTCEncoder: SendsMIDIEvents {
+public final class MTCEncoder: SendsMIDIEvents, Sendable {
     // MARK: - Public properties
         
     /// Returns current `Timecode` at ``localFrameRate``, scaling if necessary.
@@ -50,14 +50,34 @@ public final class MTCEncoder: SendsMIDIEvents {
     }
         
     /// Last internal MTC SPMTE timecode components formed from outgoing MTC data.
-    public internal(set) var mtcComponents = Timecode.Components()
-        
+    public internal(set) var mtcComponents: Timecode.Components {
+        get { return _mtcComponentsLock.withLock { _mtcComponents } }
+        _modify {
+            var valueCopy = _mtcComponentsLock.withLock { _mtcComponents }
+            yield &valueCopy
+            _mtcComponentsLock.withLock { _mtcComponents = valueCopy }
+        }
+        set { _mtcComponentsLock.withLock { _mtcComponents = newValue } }
+    }
+    private nonisolated(unsafe) var _mtcComponents = Timecode.Components()
+    private let _mtcComponentsLock = NSLock()
+    
     func setMTCComponents(mtc newComponents: Timecode.Components) {
         mtcComponents = newComponents
     }
         
     /// Local frame rate (desired rate, not internal MTC SMPTE frame rate).
-    public internal(set) var localFrameRate: TimecodeFrameRate = .fps30
+    public internal(set) var localFrameRate: TimecodeFrameRate {
+        get { return _localFrameRateLock.withLock { _localFrameRate } }
+        _modify {
+            var valueCopy = _localFrameRateLock.withLock { _localFrameRate }
+            yield &valueCopy
+            _localFrameRateLock.withLock { _localFrameRate = valueCopy }
+        }
+        set { _localFrameRateLock.withLock { _localFrameRate = newValue } }
+    }
+    private nonisolated(unsafe) var _localFrameRate: TimecodeFrameRate = .fps30
+    private let _localFrameRateLock = NSLock()
         
     /// Set local frame rate (desired rate, not internal MTC SMPTE frame rate).
     func setLocalFrameRate(_ newFrameRate: TimecodeFrameRate) {
@@ -66,9 +86,19 @@ public final class MTCEncoder: SendsMIDIEvents {
     }
         
     /// The base MTC frame rate last transmitted.
-    public internal(set) var mtcFrameRate: MTCFrameRate = .mtc30
+    public internal(set) var mtcFrameRate: MTCFrameRate {
+        get { return _mtcFrameRateLock.withLock { _mtcFrameRate } }
+        _modify {
+            var valueCopy = _mtcFrameRateLock.withLock { _mtcFrameRate }
+            yield &valueCopy
+            _mtcFrameRateLock.withLock { _mtcFrameRate = valueCopy }
+        }
+        set { _mtcFrameRateLock.withLock { _mtcFrameRate = newValue } }
+    }
+    private nonisolated(unsafe) var _mtcFrameRate: MTCFrameRate = .mtc30
+    private let _mtcFrameRateLock = NSLock()
         
-    public var midiOutHandler: MIDIOutHandler?
+    public nonisolated(unsafe) var midiOutHandler: MIDIOutHandler?
     
     public func setMIDIOutHandler(_ handler: MIDIOutHandler?) {
         midiOutHandler = handler
@@ -77,16 +107,16 @@ public final class MTCEncoder: SendsMIDIEvents {
     // MARK: - Internal properties
         
     /// Last internal MTC quarter-frame formed. (`0 ... 7`)
-    public internal(set) var mtcQuarterFrame: UInt8 = 0
+    public internal(set) nonisolated(unsafe) var mtcQuarterFrame: UInt8 = 0
         
     /// Internal:
     /// Flag indicating whether the quarter-frame output stream has already started since the last
     /// ``locate(to:transmitFullFrame:)`` (or since initializing the class if
     /// ``locate(to:transmitFullFrame:)`` has not yet been called).
-    var mtcQuarterFrameStreamHasStartedSinceLastLocate = false
+    nonisolated(unsafe) var mtcQuarterFrameStreamHasStartedSinceLastLocate = false
         
     /// Internal: track last full-frame message sent to the handler.
-    var lastTransmitFullFrame: (
+    nonisolated(unsafe) var lastTransmitFullFrame: (
         mtcComponents: Timecode.Components,
         mtcFrameRate: MTCFrameRate
     )?

@@ -30,7 +30,7 @@ internal import CoreMIDI
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/inputConnection`` or ``MIDIManager/removeAll()`` to destroy the
 /// > managed connection.)
-public final class MIDIInputConnection: _MIDIManaged {
+public final class MIDIInputConnection: _MIDIManaged, @unchecked Sendable {
     // _MIDIManaged
     weak var midiManager: MIDIManager?
     
@@ -198,7 +198,7 @@ extension MIDIInputConnection {
                 manager.coreMIDIClientRef,
                 UUID().uuidString as CFString,
                 &newInputPortRef,
-                { [weak q = midiManager?.eventQueue, weak h = receiveHandler] packetListPtr, srcConnRefCon in
+                { [weak receiveHandler] packetListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
                     // otherwise we run into data races when Thread Sanitizer is on
                     
@@ -207,9 +207,7 @@ extension MIDIInputConnection {
                         refConKnown: true
                     )
                     
-                    q?.async {
-                        h?.packetListReceived(packets)
-                    }
+                    receiveHandler?.packetListReceived(packets)
                 }
             )
             .throwIfOSStatusErr()
@@ -226,7 +224,7 @@ extension MIDIInputConnection {
                 UUID().uuidString as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newInputPortRef,
-                { [weak q = midiManager?.eventQueue, weak h = receiveHandler] eventListPtr, srcConnRefCon in
+                { [weak receiveHandler] eventListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
                     // otherwise we run into data races when Thread Sanitizer is on
                     
@@ -236,12 +234,10 @@ extension MIDIInputConnection {
                     )
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    q?.async {
-                        h?.eventListReceived(
-                            packets,
-                            protocol: midiProtocol
-                        )
-                    }
+                    receiveHandler?.eventListReceived(
+                        packets,
+                        protocol: midiProtocol
+                    )
                 }
             )
             .throwIfOSStatusErr()

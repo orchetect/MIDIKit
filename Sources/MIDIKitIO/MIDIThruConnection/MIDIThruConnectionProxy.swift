@@ -18,8 +18,11 @@ internal import CoreMIDI
 /// Internal class.
 /// Used as a stand-in replacement for Core MIDI's `MIDIThruConnectionCreate` on macOS versions that
 /// are affected by the thru-connection bug.
-final class MIDIThruConnectionProxy {
+final class MIDIThruConnectionProxy: Sendable {
+    nonisolated(unsafe)
     private var inputConnection: MIDIInputConnection!
+    
+    nonisolated(unsafe)
     private var outputConnection: MIDIOutputConnection!
     
     init(

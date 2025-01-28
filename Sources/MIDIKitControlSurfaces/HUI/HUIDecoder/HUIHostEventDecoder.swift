@@ -13,6 +13,7 @@ public final class HUIHostEventDecoder: HUIDecoder {
     
     public typealias Event = HUIHostEvent
     
+    nonisolated(unsafe)
     public var eventHandler: EventHandler?
     
     public init() {
@@ -21,6 +22,11 @@ public final class HUIHostEventDecoder: HUIDecoder {
             self?.eventHandler?(huiEvent)
         }
     }
+    
+    public convenience init(eventHandler: EventHandler?) {
+        self.init()
+        self.eventHandler = eventHandler
+    }
 
     public func reset() {
         decoder.reset()
@@ -28,6 +34,7 @@ public final class HUIHostEventDecoder: HUIDecoder {
     
     // MARK: local state variables
     
+    nonisolated(unsafe)
     var decoder: HUICoreDecoder!
     
     public func midiIn(event: MIDIEvent) {

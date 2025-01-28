@@ -32,7 +32,7 @@ extension MIDIManager {
     /// - Note: Max 8 outputs and max 8 inputs are allowed when forming a thru connection.
     ///
     /// - Warning: Be careful when creating persistent thru connections, as they can become stale
-    /// and orphaned if the endpoints used to create them cease to be relevant at any point in time.
+    ///   and orphaned if the endpoints used to create them cease to be relevant at any point in time.
     ///
     /// - Warning: Due to a Core MIDI bug, persistent thru connections are not functional on macOS
     ///   11 & 12 and iOS 14 & 15. On these systems, an error will be thrown. There is no known
@@ -42,11 +42,10 @@ extension MIDIManager {
     ///   - outputs: Maximum of 8 ``MIDIOutputEndpoint``.
     ///   - inputs: Maximum of 8 ``MIDIInputEndpoint``.
     ///   - tag: Unique `String` key to refer to the new object that gets added to
-    /// ``MIDIManager/managedThruConnections`` dictionary.
+    ///     ``MIDIManager/managedThruConnections`` dictionary.
     ///   - lifecycle: If ``MIDIThruConnection/Lifecycle-swift.enum/nonPersistent``, thru connection
-    ///   will expire when the app terminates. If
-    /// ``MIDIThruConnection/Lifecycle-swift.enum/persistent(ownerID:)``, the connection persists in
-    ///   the system indefinitely (even after system reboots) until explicitly removed.
+    ///     will expire when the app terminates. If ``MIDIThruConnection/Lifecycle-swift.enum/persistent(ownerID:)``,
+    ///     the connection persists in the system indefinitely (even after system reboots) until explicitly removed.
     ///   - params: Optionally define custom ``MIDIThruConnection/Parameters-swift.struct``.
     ///
     /// - Throws: ``MIDIIOError``
@@ -57,30 +56,28 @@ extension MIDIManager {
         lifecycle: MIDIThruConnection.Lifecycle = .nonPersistent,
         params: MIDIThruConnection.Parameters = .init()
     ) throws {
-        try eventQueue.sync {
-            let newCT = MIDIThruConnection(
-                outputs: outputs,
-                inputs: inputs,
-                lifecycle: lifecycle,
-                params: params,
-                midiManager: self,
-                api: preferredAPI
-            )
-    
-            // if non-persistent, add to managed array
-            if lifecycle == .nonPersistent {
-                // store the connection object in the manager,
-                // even if subsequent connection fails
-                managedThruConnections[tag] = newCT
-            }
-    
-            // otherwise, we won't store a reference to a persistent thru connection
-            // persistent connections are stored by the system
-            // to analyze or delete a persistent connection,
-            // access the `unmanagedPersistentThruConnections(ownerID:)` method.
-    
-            try newCT.create(in: self)
+        let newCT = MIDIThruConnection(
+            outputs: outputs,
+            inputs: inputs,
+            lifecycle: lifecycle,
+            params: params,
+            midiManager: self,
+            api: preferredAPI
+        )
+        
+        // if non-persistent, add to managed array
+        if lifecycle == .nonPersistent {
+            // store the connection object in the manager,
+            // even if subsequent connection fails
+            managedThruConnections[tag] = newCT
         }
+        
+        // otherwise, we won't store a reference to a persistent thru connection
+        // persistent connections are stored by the system
+        // to analyze or delete a persistent connection,
+        // access the `unmanagedPersistentThruConnections(ownerID:)` method.
+        
+        try newCT.create(in: self)
     }
 }
 
