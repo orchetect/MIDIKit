@@ -172,14 +172,6 @@ public class MIDIManager {
     
     // MARK: - Helper methods
     
-    func sendNotificationAsync(_ notif: MIDIIONotification) {
-        if let notificationHandler {
-            DispatchQueue.main.async {
-                notificationHandler(notif, self)
-            }
-        }
-    }
-    
     /// Internal: updates cached properties for all objects.
     func updateObjectsCache() {
         devices.updateCachedProperties()

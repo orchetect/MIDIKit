@@ -28,7 +28,8 @@ extension MIDIManager {
     
             try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef) { [weak self] notificationPtr in
                 guard let self else { return }
-                self.internalNotificationHandler(notificationPtr)
+                let internalNotif = MIDIIOInternalNotification(notificationPtr)
+                self.internalNotificationHandler(internalNotif)
             }
             .throwIfOSStatusErr()
     
@@ -38,9 +39,7 @@ extension MIDIManager {
         }
     }
     
-    func internalNotificationHandler(_ pointer: UnsafePointer<MIDINotification>) {
-        let internalNotif = MIDIIOInternalNotification(pointer)
-        
+    private func internalNotificationHandler(_ internalNotif: MIDIIOInternalNotification) {
         let cache = MIDIIOObjectCache(from: self)
         
         switch internalNotif {
@@ -79,6 +78,14 @@ extension MIDIManager {
         
         for thruConnection in managedThruConnections.values {
             thruConnection.notification(internalNotif)
+        }
+    }
+    
+    private func sendNotificationAsync(_ notif: MIDIIONotification) {
+        if let notificationHandler {
+            DispatchQueue.main.async {
+                notificationHandler(notif, self)
+            }
         }
     }
 }
