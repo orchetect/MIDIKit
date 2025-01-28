@@ -7,12 +7,7 @@
 import Foundation
 import MIDIKitCore
 import TimecodeKitCore
-
-#if compiler(>=6.0)
 internal import MIDIKitInternals
-#else
-@_implementationOnly import MIDIKitInternals
-#endif
 
 /// MTC (MIDI Timecode) stream encoder object.
 ///

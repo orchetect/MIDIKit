@@ -6,11 +6,7 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
 
 /// Internal:
 /// Retrieves the object type for the given Core MIDI unique ID.

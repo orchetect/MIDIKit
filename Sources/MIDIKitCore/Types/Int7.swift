@@ -5,12 +5,7 @@
 //
 
 import Foundation
-
-#if compiler(>=6.0)
 internal import MIDIKitInternals
-#else
-@_implementationOnly import MIDIKitInternals
-#endif
 
 /// A 7-bit signed integer value type used in `MIDIKit`. (`-64 ... 63`)
 public struct Int7 {

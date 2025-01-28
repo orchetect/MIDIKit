@@ -7,14 +7,8 @@
 import Darwin
 import Foundation
 import MIDIKitCore
-
-#if compiler(>=6.0)
-internal import MIDIKitInternals
-#else
-@_implementationOnly import MIDIKitInternals
-#endif
-
 import TimecodeKitCore
+internal import MIDIKitInternals
 
 // MARK: - Receiver
 

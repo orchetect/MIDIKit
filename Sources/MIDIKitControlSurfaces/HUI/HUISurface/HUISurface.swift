@@ -6,12 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-
-#if compiler(>=6.0)
 internal import MIDIKitInternals
-#else
-@_implementationOnly import MIDIKitInternals
-#endif
 
 /// Object representing a single HUI control surface device, holding a model of its state and
 /// providing granular update notifications.

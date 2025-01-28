@@ -7,12 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
-
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
 
 /// Internal:
 /// List of MIDI entities in the system (computed property)

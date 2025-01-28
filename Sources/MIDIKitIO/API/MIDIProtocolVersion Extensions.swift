@@ -4,11 +4,7 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
 
 extension MIDIProtocolVersion {
     /// Initializes from the corresponding Core MIDI `MIDIProtocolID`.

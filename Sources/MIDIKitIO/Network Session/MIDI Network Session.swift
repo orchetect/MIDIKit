@@ -7,12 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
-
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
 
 /// Sets the application's MIDI Network Session connection policy.
 /// Passing `nil` disables network MIDI connections.

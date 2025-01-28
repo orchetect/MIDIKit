@@ -34,13 +34,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
-
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
-
 import MIDIKitCore
 
 /// A managed MIDI thru connection created in the system by the MIDI I/O ``MIDIManager``.

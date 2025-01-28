@@ -8,12 +8,7 @@
 
 import Foundation
 import MIDIKitCore
-
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
 
 /// Internal class.
 /// Used as a stand-in replacement for Core MIDI's `MIDIThruConnectionCreate` on macOS versions that

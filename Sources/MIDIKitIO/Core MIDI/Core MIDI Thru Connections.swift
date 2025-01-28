@@ -6,11 +6,7 @@
 
 #if !os(tvOS) && !os(watchOS)
 
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
 
 /// Internal:
 /// Queries Core MIDI for existing persistent play-thru connections stored in the system matching

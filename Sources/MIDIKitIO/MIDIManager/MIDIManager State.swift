@@ -8,12 +8,7 @@
 
 import Foundation
 import MIDIKitCore
-
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
 
 extension MIDIManager {
     /// Starts the manager and registers itself with the Core MIDI subsystem.

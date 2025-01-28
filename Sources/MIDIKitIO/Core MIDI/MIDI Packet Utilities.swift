@@ -7,12 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
-
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
 
 /// Utility:
 /// Attempts to extract data from a refCon pointer supplied by `CoreMIDI.MIDIReceiveBlock` and

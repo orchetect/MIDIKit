@@ -5,12 +5,7 @@
 //
 
 import Foundation
-
-#if compiler(>=6.0)
 internal import MIDIKitInternals
-#else
-@_implementationOnly import MIDIKitInternals
-#endif
 
 // Protocol inheritance tree (not exhaustive):
 //

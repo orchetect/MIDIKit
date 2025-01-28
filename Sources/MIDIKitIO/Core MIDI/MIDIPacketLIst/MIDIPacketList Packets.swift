@@ -7,18 +7,8 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
-
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
-
-#if compiler(>=6.0)
 internal import MIDIKitInternals
-#else
-@_implementationOnly import MIDIKitInternals
-#endif
 
 extension UnsafePointer where Pointee == CoreMIDI.MIDIPacketList {
     /// Internal:

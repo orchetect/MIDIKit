@@ -7,14 +7,8 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
-
-#if compiler(>=6.0)
 internal import CoreMIDI
 internal import MIDIKitInternals
-#else
-@_implementationOnly import CoreMIDI
-@_implementationOnly import MIDIKitInternals
-#endif
 
 /// Central MIDI Port and Connection Manager and MIDI system data provider.
 ///

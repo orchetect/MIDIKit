@@ -7,11 +7,7 @@
 import Foundation
 import MIDIKitCore
 
-#if compiler(>=6.0)
 internal import MIDIKitInternals
-#else
-@_implementationOnly import MIDIKitInternals
-#endif
 
 /// Object representing a HUI host which can provide one or more HUI banks.
 /// Each bank can service a single HUI device and requires a MIDI input and output for each bank.

@@ -7,12 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
-
-#if compiler(>=6.0)
 internal import CoreMIDI
-#else
-@_implementationOnly import CoreMIDI
-#endif
 
 /// An enumeration representing `CoreMIDI.MIDIServices` `OSStatus` error codes, with verbose
 /// descriptions.
