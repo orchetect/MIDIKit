@@ -60,8 +60,6 @@ import Combine
 /// ```
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
 public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject, @unchecked Sendable {
-    // MARK: - Properties
-    
     public internal(set) override var devices: MIDIDevices {
         get { return _devicesLock.withLock { _devices } }
         _modify {
@@ -71,7 +69,6 @@ public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject, @
         }
         set { _devicesLock.withLock { _devices = newValue } }
     }
-//    @Published
     private nonisolated(unsafe) var _devices = MIDIDevices()
     private let _devicesLock = NSLock()
     
@@ -84,60 +81,12 @@ public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject, @
         }
         set { _endpointsLock.withLock { _endpoints = newValue } }
     }
-//    @Published
     private nonisolated(unsafe) var _endpoints = MIDIEndpoints()
     private let _endpointsLock = NSLock()
     
-//    /// Handler that is called when state has changed in the manager.
-//    public typealias ObservableNotificationHandler = @Sendable (
-//        _ notification: MIDIIONotification,
-//        _ manager: ObservableObjectMIDIManager
-//    ) -> Void
-//    
-//    // MARK: - Init
-//    
-//    /// Initialize the MIDI manager (and Core MIDI client).
-//    ///
-//    /// - Parameters:
-//    ///   - clientName: Name identifying this instance, used as Core MIDI client ID.
-//    ///     This is internal and not visible to the end-user.
-//    ///   - model: The name of your software, which will be visible to the end-user in ports created
-//    ///     by the manager.
-//    ///   - manufacturer: The name of your company, which may be visible to the end-user in ports
-//    ///     created by the manager.
-//    ///   - notificationHandler: Optionally supply a callback handler for MIDI system notifications.
-//    public override init(
-//        clientName: String,
-//        model: String,
-//        manufacturer: String,
-//        notificationHandler: ObservableNotificationHandler? = nil
-//    ) {
-//        // wrap base MIDIManager handler with one that supplies an observable manager reference
-//        var notificationHandlerWrapper: NotificationHandler? = nil
-//        if let notificationHandler = notificationHandler {
-//            notificationHandlerWrapper = { notif, manager in
-//                guard let typedManager = manager as? ObservableObjectMIDIManager else {
-//                    assertionFailure("MIDI Manager is not expected type ObservableObjectMIDIManager.")
-//                    return
-//                }
-//                notificationHandler(notif, typedManager)
-//            }
-//        }
-//        
-//        super.init(
-//            clientName: clientName,
-//            model: model,
-//            manufacturer: manufacturer,
-//            notificationHandler: notificationHandlerWrapper
-//        )
-//    }
-//    
     public override func updateObjectsCache() {
         objectWillChange.send()
         super.updateObjectsCache()
-//        
-//        observableDevices.updateCachedProperties()
-//        observableEndpoints.updateCachedProperties(manager: self)
     }
 }
 
