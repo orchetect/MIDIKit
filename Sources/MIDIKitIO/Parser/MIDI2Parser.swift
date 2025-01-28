@@ -12,13 +12,6 @@
 /// lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and
 /// do not use a single global parser class instance for all MIDI endpoints.)
 public final class MIDI2Parser {
-    // MARK: - Internal Default Instance
-    
-    /// Internal:
-    /// Default static instance for MIDIKit objects that support parsing events without requiring a
-    /// parser to be instanced first.
-    static let `default` = MIDI2Parser()
-    
     // MARK: - Parser State
     
     private var sysEx7MultiPartUMPBuffer: [UInt8] = []
@@ -954,11 +947,6 @@ extension MIDI2Parser {
 // MARK: - MIDIPacket Extensions
 
 extension UniversalMIDIPacketData {
-    /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
-    func parsedEvents() -> [MIDIEvent] {
-        MIDI2Parser.default.parsedEvents(in: bytes)
-    }
-    
     /// Parse this instance's raw packet data into an array of MIDI Events.
     func parsedEvents(using parser: MIDI2Parser) -> [MIDIEvent] {
         parser.parsedEvents(in: self)
@@ -967,8 +955,8 @@ extension UniversalMIDIPacketData {
 
 extension AnyMIDIPacket {
     /// Parse raw packet data into an array of MIDI Events, without instancing a MIDI parser object.
-    func parsedMIDI2Events() -> [MIDIEvent] {
-        MIDI2Parser.default.parsedEvents(in: bytes)
+    func parsedMIDI2Events(using parser: MIDI2Parser) -> [MIDIEvent] {
+        parser.parsedEvents(in: bytes)
     }
 }
 
