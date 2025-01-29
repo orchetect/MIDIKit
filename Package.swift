@@ -19,32 +19,26 @@ let package = Package(
         ),
         .library(
             name: "MIDIKitCore",
-            type: .static,
             targets: ["MIDIKitCore"]
         ),
         .library(
             name: "MIDIKitIO",
-            type: .static,
             targets: ["MIDIKitIO"]
         ),
         .library(
             name: "MIDIKitControlSurfaces",
-            type: .static,
             targets: ["MIDIKitControlSurfaces"]
         ),
         .library(
             name: "MIDIKitSMF",
-            type: .static,
             targets: ["MIDIKitSMF"]
         ),
         .library(
             name: "MIDIKitSync",
-            type: .static,
             targets: ["MIDIKitSync"]
         ),
         .library(
             name: "MIDIKitUI",
-            type: .static,
             targets: ["MIDIKitUI"]
         )
     ],
