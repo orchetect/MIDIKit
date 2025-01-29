@@ -52,6 +52,7 @@ public enum HUIVPot: Equatable, Hashable {
     
     /// Internal:
     /// Raw value for encoding/decoding HUI message.
+    @inlinable
     var rawValue: UInt8 {
         switch self {
         case let .channel(uInt4):
@@ -70,6 +71,7 @@ public enum HUIVPot: Equatable, Hashable {
     }
     
     /// Returns `true` if the V-Pot has an LED ring display.
+    @inlinable
     public var hasDisplay: Bool {
         switch self {
         case .editAssignScroll:
@@ -97,6 +99,7 @@ enum HUIVPotValue: Equatable, Hashable {
     
     /// Internal:
     /// Raw value for encoding/decoding HUI message.
+    @inlinable
     var rawValue: UInt7 {
         switch self {
         case let .display(display):
@@ -108,6 +111,7 @@ enum HUIVPotValue: Equatable, Hashable {
     
     /// Internal:
     /// Returns wrapped `Int7` value.
+    @inlinable
     var wrappedValue: Int7 {
         switch self {
         case let .display(display):

@@ -62,7 +62,7 @@ public struct HUITimeDisplayString: HUIString, Equatable, Hashable {
     /// - Parameters:
     ///   - charsRightToLeft: Between 1 and 8 characters, in sequence order from right to left.
     /// - Returns: `true` if update resulted in a string that is different from the previous string.
-    @discardableResult
+    @inlinable @discardableResult
     mutating func update(charsRightToLeft: [Element]) -> Bool {
         guard !charsRightToLeft.isEmpty else { return false }
         

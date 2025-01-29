@@ -9,67 +9,99 @@ import MIDIKitCore
 // MARK: - HUI System Constants
 
 /// Namespace for HUI constants.
+@usableFromInline
 enum HUIConstants { }
 
 extension HUIConstants {
     /// HUI MIDI constants.
+    @usableFromInline
     enum kMIDI {
         // MARK: System messages
         
         /// Status 0x9 is normally channel voice note-on, but HUI hijacks it.
         /// [0x90, 0x00, 0x00]
-        static let kPingToSurfaceMessage: MIDIEvent = .noteOn(0, velocity: .midi1(0x00), channel: 0)
+        @inlinable
+        static var kPingToSurfaceMessage: MIDIEvent {
+            .noteOn(0, velocity: .midi1(0x00), channel: 0)
+        }
         
         /// Status 0x9 is normally channel voice note-on, but HUI hijacks it.
         /// [0x90, 0x00, 0x7F]
-        static let kPingReplyToHostMessage: MIDIEvent = .noteOn(
-            0,
-            velocity: .midi1(0x7F),
-            channel: 0
-        )
-        
-        static let kSystemResetMessage: MIDIEvent = .systemReset() // [0xFF]
-        
-        /// [0xF0, 0x00, 0x00, 0x66, 0x05, 0x00]
-        enum kSysEx {
-            /// Mackie SysEx Manufacturer ID
-            public static let kManufacturer: MIDIEvent.SysExManufacturer = .threeByte(
-                byte2: 0x00,
-                byte3: 0x66
+        @inlinable
+        static var kPingReplyToHostMessage: MIDIEvent {
+            .noteOn(
+                0,
+                velocity: .midi1(0x7F),
+                channel: 0
             )
-            public static let kSubID1: UInt7 = 0x05 // product ID?
-            public static let kSubID2: UInt7 = 0x00
         }
         
+        @inlinable
+        static var kSystemResetMessage: MIDIEvent { .systemReset() } // [0xFF]
+        
+        /// [0xF0, 0x00, 0x00, 0x66, 0x05, 0x00]
+        @usableFromInline
+        enum kSysEx {
+            /// Mackie SysEx Manufacturer ID
+            @inlinable
+            static var kManufacturer: MIDIEvent.SysExManufacturer {
+                .threeByte(
+                    byte2: 0x00,
+                    byte3: 0x66
+                )
+            }
+            @inlinable
+            static var kSubID1: UInt7 { 0x05 } // product ID?
+            
+            @inlinable
+            static var kSubID2: UInt7 { 0x00 }
+        }
+        
+        @usableFromInline
         enum kDisplayType {
             /// 4-character channel name displays, and Select-Assign displays.
-            public static let smallByte: UInt7 = 0x10
+            @inlinable
+            static var smallByte: UInt7 { 0x10 }
+            
             /// Main time display.
-            public static let timeDisplayByte: UInt7 = 0x11
+            @inlinable
+            static var timeDisplayByte: UInt7 { 0x11 }
+            
             /// Main 40 x 2 character display.
-            public static let largeByte: UInt7 = 0x12
+            @inlinable
+            static var largeByte: UInt7 { 0x12 }
         }
         
         /// Status 0xA is normally MIDI poly aftertouch, but HUI hijacks it.
-        static let kLevelMetersStatus: UInt8 = 0xA0
+        @inlinable
+        static var kLevelMetersStatus: UInt8 { 0xA0 }
         
         // MARK: Control events
         
         /// Status 0xB is normally channel voice control change, but HUI hijacks it.
         /// HUI only ever uses first channel, so the status byte will always be exactly 0xB0.
         /// HUI also uses running status for back-to-back 0xB status messages.
-        static let kControlStatus: UInt8 = 0xB0
+        @inlinable
+        static var kControlStatus: UInt8 { 0xB0 }
         
         /// For sending and receiving HUI, switch messages, the zone select
         /// and port byte uses a different lower nibble depending on transmit direction.
+        @usableFromInline
         enum kControlDataByte1 {
-            public static let zoneSelectByteToSurface: UInt8 = 0x0C
-            public static let zoneSelectByteToHost: UInt8 =    0x0F
+            @inlinable
+            static var zoneSelectByteToSurface: UInt8 { 0x0C }
             
-            public static let portOnOffByteToSurface: UInt8 =  0x2C
-            public static let portOnOffByteToHost: UInt8 =     0x2F
+            @inlinable
+            static var zoneSelectByteToHost: UInt8 { 0x0F }
+            
+            @inlinable
+            static var portOnOffByteToSurface: UInt8 { 0x2C }
+            
+            @inlinable
+            static var portOnOffByteToHost: UInt8 { 0x2F }
         }
         
+        @usableFromInline
         enum kChannelStripElement: UInt4, Equatable, Hashable {
             case fader  = 0x0
             case select = 0x1
@@ -81,7 +113,9 @@ extension HUIConstants {
             case rec    = 0x7
         }
         
-        static let kSysExStartByte: UInt8 = 0xF0
-        static let kSysExEndByte: UInt8 = 0xF7
+        @inlinable
+        static var kSysExStartByte: UInt8 { 0xF0 }
+        @inlinable
+        static var kSysExEndByte: UInt8 { 0xF7 }
     }
 }

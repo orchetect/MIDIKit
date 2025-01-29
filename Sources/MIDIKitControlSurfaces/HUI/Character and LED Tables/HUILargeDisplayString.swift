@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import MIDIKitInternals
 
 /// HUI large text display 40-character string.
 public struct HUILargeDisplayString: HUIString, Equatable, Hashable {
@@ -26,9 +27,8 @@ extension HUILargeDisplayString: Sendable { }
 // MARK: - Additional Methods
 
 extension HUILargeDisplayString {
-    /// Internal:
     /// Returns the 40-character sequence as four 10-character slices.
-    var slices: [[HUILargeDisplayCharacter]] {
+    public func slices() -> [[HUILargeDisplayCharacter]] {
         chars.split(every: 10).map { Array($0) }
     }
     
@@ -39,7 +39,7 @@ extension HUILargeDisplayString {
     ///   - slice: Slice index (`0 ... 3`)
     ///   - newChars: 10 character array
     /// - Returns: `true` if update resulted in a string that is different from the previous string.
-    @discardableResult
+    @inlinable @discardableResult
     mutating func update(slice: UInt4, newChars: [Element]) -> Bool {
         guard newChars.count == 10 else { return false }
         guard (0 ... 3).contains(slice) else { return false }

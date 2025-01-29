@@ -49,6 +49,7 @@ extension HUIVPotDisplay {
 extension HUIVPotDisplay {
     /// Internal:
     /// Init from raw encoded preset index.
+    @inlinable
     init(rawIndex: UInt8) {
         switch rawIndex {
         case 0x00 ... 0x3B:
@@ -65,6 +66,7 @@ extension HUIVPotDisplay {
     
     /// Internal:
     /// Returns raw encoded preset index.
+    @inlinable
     var rawIndex: UInt7 {
         leds.rawValue.toUInt7 + (lowerLED ? 0x40 : 0x00)
     }

@@ -13,6 +13,7 @@ public enum HUISmallDisplay: Equatable, Hashable {
     case selectAssign
     
     /// Initialize from raw value for encoding/decoding HUI message.
+    @inlinable
     init?(rawValue: UInt8) {
         switch rawValue {
         case 0x0 ... 0x7:
@@ -26,6 +27,7 @@ public enum HUISmallDisplay: Equatable, Hashable {
     }
     
     /// Raw value for encoding/decoding HUI message.
+    @inlinable
     var rawValue: UInt7 {
         switch self {
         case let .channel(uInt4):

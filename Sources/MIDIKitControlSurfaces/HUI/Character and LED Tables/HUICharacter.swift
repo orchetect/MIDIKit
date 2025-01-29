@@ -31,11 +31,13 @@ protocol _HUICharacter: HUICharacter {
 
 extension _HUICharacter {
     /// Returns the user-facing display string of the character.
+    @inlinable
     public var string: String {
         Self.stringTable[Int(rawValue)]
     }
     
     /// Initialize from the user-facing display string of the character.
+    @inlinable
     public init?(_ string: some StringProtocol) {
         guard let idx = Self.stringTable.firstIndex(of: String(string))
         else { return nil }
@@ -55,6 +57,7 @@ extension HUICharacter /* : CustomStringConvertible */ {
 
 extension HUICharacter {
     /// Convenience initializer for `UInt8` raw value.
+    @inlinable
     public init?(rawValue: UInt8) {
         guard let uInt7 = rawValue.toUInt7Exactly else { return nil }
         self.init(rawValue: uInt7)
@@ -65,6 +68,7 @@ extension HUICharacter {
 
 extension RangeReplaceableCollection where Element: HUICharacter {
     /// Returns the HUI character sequence as a single concatenated string of characters.
+    @inlinable
     public var stringValue: String {
         map { $0.string }.joined()
     }

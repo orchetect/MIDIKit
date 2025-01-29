@@ -10,7 +10,7 @@ extension HUISurfaceModelNotification {
     /// A discrete component of a HUI channel strip and its state change.
     public enum ChannelStripComponent {
         /// Stereo Level Meter.
-        case levelMeter(side: HUISurfaceModelState.StereoLevelMeter.Side, level: Int)
+        case levelMeter(side: HUISurfaceModelState.StereoLevelMeterSide, level: Int)
         
         /// Record Ready Button LED.
         case recordReady(state: Bool)

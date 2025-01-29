@@ -444,7 +444,7 @@ extension HUICoreDecoder {
         
         // encodes both side and value
         let sideAndValue = payload.amount.midi1Value.uInt8Value.nibbles
-        let side: HUISurfaceModelState.StereoLevelMeter.Side = sideAndValue.high == 0 ? .left : .right
+        let side: HUISurfaceModelState.StereoLevelMeterSide = sideAndValue.high == 0 ? .left : .right
         let level: Int = sideAndValue.low.intValue
         
         return .levelMeter(

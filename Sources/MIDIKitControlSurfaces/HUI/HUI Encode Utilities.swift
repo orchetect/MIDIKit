@@ -5,6 +5,7 @@
 //
 
 import MIDIKitCore
+internal import MIDIKitInternals
 
 // MARK: - Ping
 
@@ -14,6 +15,7 @@ import MIDIKitCore
 /// - Parameters:
 ///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI events.
+@inlinable
 func encodeHUIPing(
     to role: HUIRole
 ) -> MIDIEvent {
@@ -36,6 +38,7 @@ func encodeHUIPing(
 ///   - state: Switch state.
 ///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI events.
+@inlinable
 func encodeHUISwitch(
     zone: HUIZone,
     port: HUIPort,
@@ -82,6 +85,7 @@ func encodeHUISwitch(
 ///   - state: Switch state.
 ///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI events.
+@inlinable
 func encodeHUISwitch(
     _ huiSwitch: HUISwitch,
     state: Bool,
@@ -106,6 +110,7 @@ func encodeHUISwitch(
 ///   - level: Fader level (`0 ... 16383`).
 ///   - channel: Channel strip number (`0 ... 7`).
 /// - Returns: MIDI events.
+@inlinable
 func encodeHUIFader(
     level: UInt14,
     channel: UInt4
@@ -133,6 +138,7 @@ func encodeHUIFader(
 ///   - isTouched: `true` sends touch message, `false` sends release message.
 ///   - channel: `0 ... 7`
 /// - Returns: MIDI events.
+@inlinable
 func encodeHUIFader(
     isTouched: Bool,
     channel: UInt4
@@ -165,12 +171,13 @@ func encodeHUIFader(
 ///   - level: Level amount (`0x0 ... 0xC`).
 ///     Where `0x0` is off, `0x1 ... 0xB` is signal level, and `0xC` is clipping (red LED).
 /// - Returns: MIDI event.
+@usableFromInline
 func encodeHUILevelMeter(
     channel: UInt4,
-    side: HUISurfaceModelState.StereoLevelMeter.Side,
+    side: HUISurfaceModelState.StereoLevelMeterSide,
     level: Int
 ) -> MIDIEvent {
-    let clampedLevel = level.clamped(to: HUISurfaceModelState.StereoLevelMeter.levelRange)
+    let clampedLevel = level.clamped(to: HUISurfaceModelState.StereoLevelMeterSide.levelRange)
     let val = UInt8(high: side.rawValue.toUInt4, low: clampedLevel.toUInt4)
     return .notePressure(
         note: channel.toUInt7,
@@ -192,6 +199,7 @@ func encodeHUILevelMeter(
 ///     value -/+ when the user turns the knob.
 ///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI event.
+@inlinable
 func encodeHUIVPot(
     rawValue: UInt7,
     for vPot: HUIVPot,
@@ -215,6 +223,7 @@ func encodeHUIVPot(
 ///     value -/+ when the user turns the knob.
 ///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI event.
+@inlinable
 func encodeHUIVPot(
     display: HUIVPotDisplay,
     for vPot: HUIVPot
@@ -232,6 +241,7 @@ func encodeHUIVPot(
 ///   - vPot: V-Pot identity.
 ///   - delta: Delta -/+ value (will be clamped to `-63 ... 63`).
 /// - Returns: MIDI event.
+@inlinable
 func encodeHUIVPot(
     delta: Int7,
     for vPot: HUIVPot
@@ -248,6 +258,7 @@ func encodeHUIVPot(
 /// - Parameters:
 ///   - rawDelta: Encoded delta -/+ value (7-bit signed integer bit pattern).
 /// - Returns: MIDI event.
+@inlinable
 func encodeJogWheel(
     delta: Int7
 ) -> MIDIEvent {
@@ -268,6 +279,8 @@ func encodeJogWheel(
 /// - Parameters:
 ///   - display: Top and bottom text line text, each 40 characters in length.
 /// - Returns: MIDI event.
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+@inlinable
 func encodeHUILargeDisplay(
     display: HUISurfaceModelState.LargeDisplay
 ) -> [MIDIEvent] {
@@ -283,6 +296,7 @@ func encodeHUILargeDisplay(
 ///   - top: Top text line text of 40 characters in length.
 ///   - bottom: Bottom text line text of 40 characters in length.
 /// - Returns: MIDI event.
+@inlinable
 func encodeHUILargeDisplay(
     top: HUILargeDisplayString,
     bottom: HUILargeDisplayString
@@ -304,6 +318,7 @@ func encodeHUILargeDisplay(
 /// - Parameters:
 ///   - slices: Between 1 and 8 text slices of 10 characters each.
 /// - Returns: MIDI event.
+@inlinable
 func encodeHUILargeDisplay(
     slices: HUILargeDisplaySlices
 ) -> [MIDIEvent] {
@@ -328,6 +343,7 @@ func encodeHUILargeDisplay(
 ///   - sliceIndex: Text slice index (`0 ... 7`). Each slice contains 10 characters.
 ///   - text: Slice text, up to 10 characters.
 /// - Returns: MIDI event.
+@inlinable
 func encodeHUILargeDisplay(
     sliceIndex: UInt4,
     text: [HUILargeDisplayCharacter]
@@ -350,6 +366,7 @@ func encodeHUILargeDisplay(
 /// - Parameters:
 ///   - text: 8 digits, the first seven with optional trailing dots.
 /// - Returns: MIDI event.
+@inlinable
 func encodeHUITimeDisplay(
     text: HUITimeDisplayString
 ) -> MIDIEvent {
@@ -369,6 +386,7 @@ func encodeHUITimeDisplay(
 ///   - charsRightToLeft: Between 1 and 8 characters in reverse sequence order (first array element
 /// is rightmost digit). More than 8 characters will discarded and truncated to 8 characters.
 /// - Returns: MIDI event.
+@inlinable
 func encodeHUITimeDisplay(
     charsRightToLeft: [HUITimeDisplayCharacter]
 ) -> MIDIEvent {
@@ -390,6 +408,7 @@ func encodeHUITimeDisplay(
 ///   - channel: Channel `0 ... 7`, Select Assign text display.
 ///   - text: 4-character HUI-encoded text.
 /// - Returns: MIDI event.
+@inlinable
 func encodeHUISmallDisplay(
     for display: HUISmallDisplay,
     text: HUISmallDisplayString
@@ -412,6 +431,7 @@ func encodeHUISmallDisplay(
 /// - Parameters:
 ///   - body: Data bytes, not including the manufacturer or sub ID 1/2.
 /// - Returns: MIDI event.
+@inlinable
 func huiSysExTemplate(body: [UInt8]) throws -> MIDIEvent {
     try .sysEx7(
         manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
@@ -428,7 +448,7 @@ func huiSysExTemplate(body: [UInt8]) throws -> MIDIEvent {
 /// - Parameters:
 ///   - body: Data bytes, not including the manufacturer or sub ID 1/2.
 /// - Returns: MIDI event.
-@_disfavoredOverload
+@_disfavoredOverload @inlinable
 func huiSysExTemplate(body: [UInt7]) -> MIDIEvent {
     .sysEx7(
         manufacturer: HUIConstants.kMIDI.kSysEx.kManufacturer,
@@ -443,6 +463,7 @@ func huiSysExTemplate(body: [UInt7]) -> MIDIEvent {
 /// Encode HUI system reset message. (To host)
 ///
 /// - Returns: MIDI event.
+@inlinable
 func encodeHUISystemReset() -> MIDIEvent {
     HUIConstants.kMIDI.kSystemResetMessage
 }
@@ -459,6 +480,7 @@ func encodeHUISystemReset() -> MIDIEvent {
 /// - Parameters:
 ///   - delta: Delta -/+ value (will be clamped to `-63 ... 63`).
 /// - Returns: Encoded `UInt7` byte ready to be packed into a HUI MIDI message.
+@inlinable
 func encodeHUIDelta(from delta: Int7) -> UInt7 {
     let isNegative = delta < 0
     let delta = abs(delta.intValue) & 0b111111
@@ -479,6 +501,7 @@ func encodeHUIDelta(from delta: Int7) -> UInt7 {
 /// - Parameters:
 ///   - delta: Encoded `UInt7` byte from a HUI MIDI message.
 /// - Returns: Delta -/+ value (`-63 ... 63`).
+@inlinable
 func decodeHUIDelta(from delta: UInt7) -> Int7 {
     let isNegative = ((delta & 0b1000000) >> 6) == 0b0
     let delta = Int8(delta & 0b111111)
