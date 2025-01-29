@@ -11,13 +11,13 @@ import Foundation
 
 extension UnsafePointer where Pointee == MIDIPacket {
     /// Returns the raw bytes of the `MIDIPacket`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public var rawBytes: [UInt8] {
         MIDIPacket.extractBytes(from: self)
     }
     
     /// Returns the time stamp of the `MIDIPacket`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public var rawTimeStamp: MIDITimeStamp {
         MIDIPacket.extractTimeStamp(from: self)
     }
@@ -25,13 +25,13 @@ extension UnsafePointer where Pointee == MIDIPacket {
 
 extension UnsafeMutablePointer where Pointee == MIDIPacket {
     /// Returns the raw bytes of the `MIDIPacket`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public var rawBytes: [UInt8] {
         UnsafePointer(self).rawBytes
     }
     
     /// Returns the time stamp of the `MIDIPacket`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public var rawTimeStamp: MIDITimeStamp {
         UnsafePointer(self).rawTimeStamp
     }
@@ -39,13 +39,13 @@ extension UnsafeMutablePointer where Pointee == MIDIPacket {
 
 extension MIDIPacket {
     /// Returns the raw bytes of the `MIDIPacket`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public var rawBytes: [UInt8] {
         withUnsafePointer(to: self) { $0.rawBytes }
     }
     
     /// Returns the time stamp of the `MIDIPacket`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public var rawTimeStamp: MIDITimeStamp {
         withUnsafePointer(to: self) { $0.rawTimeStamp }
     }
@@ -54,11 +54,17 @@ extension MIDIPacket {
 // MARK: - Helpers
 
 extension MIDIPacket {
-    fileprivate static let midiPacketLengthOffset: Int = MemoryLayout.offset(of: \MIDIPacket.length)!
-    fileprivate static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
-    fileprivate static let midiPacketTimeStamp: Int = MemoryLayout.offset(of: \MIDIPacket.timeStamp)!
+    @inline(__always) @usableFromInline
+    static let midiPacketLengthOffset: Int = MemoryLayout.offset(of: \MIDIPacket.length)!
     
-    fileprivate static func extractBytes(from ptr: UnsafeRawPointer) -> [UInt8] {
+    @inline(__always) @usableFromInline
+    static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
+    
+    @inline(__always) @usableFromInline
+    static let midiPacketTimeStamp: Int = MemoryLayout.offset(of: \MIDIPacket.timeStamp)!
+    
+    @inlinable
+    static func extractBytes(from ptr: UnsafeRawPointer) -> [UInt8] {
         // Access the raw memory instead of using the .pointee
         // This workaround is needed due to a variety of crashes that can occur when either the
         // thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
@@ -76,7 +82,8 @@ extension MIDIPacket {
         return [UInt8](rawMIDIPacketDataPtr)
     }
     
-    fileprivate static func extractTimeStamp(from ptr: UnsafeRawPointer) -> MIDITimeStamp {
+    @inlinable
+    static func extractTimeStamp(from ptr: UnsafeRawPointer) -> MIDITimeStamp {
         // Access the raw memory instead of using the .pointee
         // This workaround is needed due to a variety of crashes that can occur when either the
         // thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive

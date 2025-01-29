@@ -12,7 +12,7 @@ import Foundation
 @available(macOS 11, iOS 14, macCatalyst 14, *)
 extension UnsafePointer where Pointee == MIDIEventPacket {
     /// Returns the raw words contained in the `MIDIEventPacket`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public var rawWords: [UInt32] {
         let wordCollection = words()
         
@@ -34,7 +34,7 @@ extension UnsafePointer where Pointee == MIDIEventPacket {
 @available(macOS 11, iOS 14, macCatalyst 14, *)
 extension UnsafeMutablePointer where Pointee == MIDIEventPacket {
     /// Returns the raw words contained in the `MIDIEventPacket`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public var rawWords: [UInt32] {
         UnsafePointer(self).rawWords
     }
@@ -43,7 +43,7 @@ extension UnsafeMutablePointer where Pointee == MIDIEventPacket {
 @available(macOS 11, iOS 14, macCatalyst 14, *)
 extension MIDIEventPacket {
     /// Returns the raw words contained in the `MIDIEventPacket`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public var rawWords: [UInt32] {
         withUnsafePointer(to: self) { $0.rawWords }
     }

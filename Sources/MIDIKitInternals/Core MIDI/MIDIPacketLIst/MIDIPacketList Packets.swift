@@ -14,7 +14,7 @@ extension CoreMIDI.MIDIPacketList {
     /// This is confirmed working on macOS Mojave thru macOS Ventura.
     /// There were numerous difficulties in reading `MIDIPacketList` on Mojave and earlier and this
     /// solution was stable.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public func packetPointerIterator(_ closure: (UnsafeMutablePointer<MIDIPacket>) -> Void) {
         withUnsafePointer(to: packet) { ptr in
             var idx: UInt32 = 0

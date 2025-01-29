@@ -10,7 +10,7 @@ import CoreMIDI
 
 extension CoreMIDI.MIDIEventPacket {
     /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     @available(macOS 11, iOS 14, macCatalyst 14, *)
     public init(
         words: [UInt32],
@@ -51,7 +51,7 @@ extension CoreMIDI.MIDIEventPacket {
     // It implements Apple's built-in Core MIDI event packet builder.
     
     /// Assembles a Core MIDI `MIDIEventPacket` (Universal MIDI Packet) from a `UInt32` word array.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     @available(macOS 11, iOS 14, macCatalyst 14, *)
     public init(
         wordsUsingBuilder words: [UInt32],
@@ -90,7 +90,7 @@ extension CoreMIDI.MIDIEventPacket {
 extension CoreMIDI.MIDIEventList {
     /// Assembles a single Core MIDI `MIDIEventPacket` from a Universal MIDI Packet `UInt32` word
     /// array and wraps it in a Core MIDI `MIDIEventList`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     @available(macOS 11, iOS 14, macCatalyst 14, *)
     public init(
         protocol midiProtocol: CoreMIDI.MIDIProtocolID,
