@@ -10,13 +10,13 @@ import Combine
 
 @main
 struct EndpointPickersApp: App {
-    @ObservedObject var midiManager = ObservableMIDIManager(
+    @State var midiManager = ObservableMIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    @ObservedObject var midiHelper = MIDIHelper()
+    @State var midiHelper = MIDIHelper()
     
     @AppStorage(MIDIHelper.PrefKeys.midiInID)
     var midiInSelectedID: MIDIIdentifier?
@@ -42,8 +42,8 @@ struct EndpointPickersApp: App {
                 midiOutSelectedID: $midiOutSelectedID,
                 midiOutSelectedDisplayName: $midiOutSelectedDisplayName
             )
-            .environmentObject(midiManager)
-            .environmentObject(midiHelper)
+            .environment(midiManager)
+            .environment(midiHelper)
         }
     }
 }

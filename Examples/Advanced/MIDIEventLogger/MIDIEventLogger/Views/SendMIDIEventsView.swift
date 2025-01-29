@@ -10,7 +10,7 @@ import SwiftUI
 
 extension ContentView {
     struct SendMIDIEventsView: View {
-        @EnvironmentObject var midiManager: ObservableMIDIManager
+        @Environment(ObservableMIDIManager.self) private var midiManager
         
         @Binding var midiGroup: UInt4
         var sendEvent: (MIDIEvent) -> Void

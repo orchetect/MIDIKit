@@ -1,4 +1,12 @@
-# Endpoint Pickers Example (SwiftUI macOS/iOS)
+# Endpoint Pickers Example (SwiftUI)
+
+## Supported Platforms
+
+- macOS
+- iOS / iPadOS
+- visionOS
+
+## Overview
 
 This example demonstrates best practises when creating MIDI input and output selection menus.
 
@@ -8,11 +16,11 @@ This example demonstrates best practises when creating MIDI input and output sel
   
   > In SwiftUI, this happens automatically when using certain data-source properties of the `ObservableMIDIManager` class.
   >
-  > - `midiManager.observableEndpoints.inputs` or `midiManager.observableEndpoints.outputs`
+  > - `midiManager.endpoints.inputs` or `midiManager.endpoints.outputs`
   >   
   >   Changes in MIDI endpoints in the system will trigger these arrays to refresh your view.
   >
-  > - `midiManager.observableDevices.devices`
+  > - `midiManager.devices.devices`
   >   
   >   Changes in MIDI devices in the system will trigger this array to refresh your view.
   
@@ -36,16 +44,14 @@ This example demonstrates best practises when creating MIDI input and output sel
 
 ## Special Notes
 
-- Due to SwiftUI limitations, it is necessary (and beneficial) to abstract MIDI setup and maintenance functions inside a custom helper class instance (called `MIDIHelper` in this example) while also keeping the MIDI manager separate.
-  - This ensures the use of Combine features of the `ObservableMIDIManager` remain available, which would be lost if the manager was bundled inside the custom helper class due to lack of propagation of nested `ObservableObject`s.
-  - Since MIDI event receiver handlers are escaping closures, it's impossible to mutate SwiftUI `App` or `View` state from within them. By creating these handlers inside the helper class, we can update a `@Published` variable inside the helper class which can be observed by any view in the SwiftUI hierarchy if desired.
-  - This way the manager and helper become central services with an app-scoped lifecycle that can be passed into subviews using `.environmentObject()`
 - For testing purposes, try clicking the **Create Test Virtual Endpoints** button, selecting them as MIDI In and MIDI Out, then destroying them. They appear as missing but their selection is retained. Then create them again, and they will appear normally once again and connection will resume. They are remembered even if you quit the app.
 
 ## Troubleshooting
 
 > [!TIP]
+> 
 > If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
 
 > [!TIP]
+> 
 > When building for a physical iOS device or "Designed for iPad", you must select your Team ID in the app target's code signing.

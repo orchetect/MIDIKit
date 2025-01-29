@@ -38,7 +38,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 tag: virtualInputName,
                 uniqueID: .userDefaultsManaged(key: virtualInputName),
                 receiver: .events { [weak self] events, timeStamp, source in
-                    events.forEach { self?.handleMIDI(event: $0) }
+                    Task { @MainActor in
+                        events.forEach { self?.handleMIDI(event: $0) }
+                    }
                 }
             )
         } catch {

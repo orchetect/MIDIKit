@@ -9,7 +9,7 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    static let midiManager = ObservableMIDIManager(
+    static let midiManager = ObservableObjectMIDIManager(
         clientName: "MIDISystemInfo",
         model: "TestApp",
         manufacturer: "MyCompany"
@@ -22,17 +22,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // set up midi manager
         
         do {
-            print("Starting MIDI manager")
+            print("Starting MIDI services.")
             try Self.midiManager.start()
         } catch {
-            print(error)
+            print("Error starting MIDI services: \(error.localizedDescription)")
         }
         
         return true
     }
-
+    
     // MARK: UISceneSession Lifecycle
-
+    
     func application(
         _ application: UIApplication,
         configurationForConnecting connectingSceneSession: UISceneSession,
@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             sessionRole: connectingSceneSession.role
         )
     }
-
+    
     func application(
         _ application: UIApplication,
         didDiscardSceneSessions sceneSessions: Set<UISceneSession>

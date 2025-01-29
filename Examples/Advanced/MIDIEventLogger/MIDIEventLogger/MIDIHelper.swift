@@ -7,7 +7,7 @@
 import MIDIKitIO
 import SwiftUI
 
-final class MIDIHelper: ObservableObject {
+@Observable final class MIDIHelper {
     private weak var midiManager: ObservableMIDIManager?
     
     public init() { }

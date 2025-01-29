@@ -8,12 +8,18 @@ import MIDIKitIO
 import SwiftUI
 
 struct DeviceTreeView<DetailsContent: View>: View {
-    @EnvironmentObject private var midiManager: ObservableMIDIManager
+    @EnvironmentObject private var midiManager: ObservableObjectMIDIManager
     
-    let detailsContent: (
+    typealias Details = @Sendable (
         _ object: AnyMIDIIOObject?,
         _ showAllBinding: Binding<Bool>
     ) -> DetailsContent
+    
+    let detailsContent: Details
+    
+    init(detailsContent: @escaping Details) {
+        self.detailsContent = detailsContent
+    }
     
     var body: some View {
         Section(header: Text("Device Tree")) {

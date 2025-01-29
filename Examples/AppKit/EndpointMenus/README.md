@@ -1,5 +1,11 @@
 # Endpoint Menus Example (AppKit)
 
+## Supported Platforms
+
+- macOS
+
+## Overview
+
 This example demonstrates best practises when creating MIDI input and output selection menus.
 
 ## Key Features
@@ -29,4 +35,5 @@ This example demonstrates best practises when creating MIDI input and output sel
 ## Troubleshooting
 
 > [!TIP]
+>
 > If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.

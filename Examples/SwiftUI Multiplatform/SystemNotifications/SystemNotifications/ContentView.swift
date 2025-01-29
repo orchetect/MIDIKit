@@ -8,8 +8,8 @@ import MIDIKitIO
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: ObservableMIDIManager
-    @EnvironmentObject var midiHelper: MIDIHelper
+    @Environment(ObservableMIDIManager.self) private var midiManager
+    @Environment(MIDIHelper.self) private var midiHelper
     
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
@@ -27,12 +27,12 @@ struct ContentView: View {
             Button("Destroy a Virtual Input") {
                 midiHelper.removeVirtualInput()
             }
-            .disabled(midiManager.managedInputs.isEmpty)
+            .disabled(midiManager.endpoints.inputsOwned.isEmpty)
             
             Button("Destroy a Virtual Output") {
                 midiHelper.removeVirtualOutput()
             }
-            .disabled(midiManager.managedOutputs.isEmpty)
+            .disabled(midiManager.endpoints.outputsOwned.isEmpty)
         }
         #if os(iOS)
         .font(.system(size: 18))

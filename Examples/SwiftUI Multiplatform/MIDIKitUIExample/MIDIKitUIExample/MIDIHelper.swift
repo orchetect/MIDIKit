@@ -7,9 +7,9 @@
 import MIDIKitIO
 import SwiftUI
 
-/// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
-/// SwiftUI view state directly. Therefore, we need a helper class that conforms to
-/// `ObservableObject` which contains `@Published` properties that SwiftUI can use to update views.
+/// Receiving MIDI happens on an asynchronous background thread. That means it cannot update
+/// SwiftUI view state directly. Therefore, we need a helper class marked with `@Observable`
+/// which contains properties that SwiftUI can use to update views.
 @Observable final class MIDIHelper {
     private weak var midiManager: ObservableMIDIManager?
     

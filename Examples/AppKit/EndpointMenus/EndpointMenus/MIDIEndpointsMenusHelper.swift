@@ -34,9 +34,7 @@ final class MIDIEndpointsMenusHelper {
 
 extension MIDIEndpointsMenusHelper {
     public func setup() {
-        if let midiManager = midiManager { self.midiManager = midiManager }
-        
-        guard let midiManager = midiManager else { return }
+        guard let midiManager else { return }
         
         do {
             print("Starting MIDI services.")

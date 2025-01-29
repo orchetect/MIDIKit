@@ -94,7 +94,7 @@ import SwiftUI
     
     private func receiverFactory() async -> MTCReceiver {
         // set up new MTC receiver and configure it
-        await MTCReceiver(
+        MTCReceiver(
             name: "main",
             initialLocalFrameRate: .fps24,
             syncPolicy: MTCReceiver.SyncPolicy(

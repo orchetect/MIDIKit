@@ -7,16 +7,14 @@
 import MIDIKitIO
 import SwiftUI
 
-/// Receiving MIDI happens as an asynchronous background callback. That means it cannot update
-/// SwiftUI view state directly. Therefore, we need a helper class that conforms to
-/// `ObservableObject` which contains `@Published` properties that SwiftUI can use to update views.
-final class MIDIHelper: ObservableObject {
+/// Receiving MIDI happens on an asynchronous background thread. That means it cannot update
+/// SwiftUI view state directly. Therefore, we need a helper class marked with `@Observable`
+/// which contains properties that SwiftUI can use to update views.
+@Observable final class MIDIHelper {
     private weak var midiManager: ObservableMIDIManager?
     
-    @Published
     public private(set) var receivedEvents: [MIDIEvent] = []
     
-    @Published
     public var filterActiveSensingAndClock = false
     
     public init() { }
@@ -24,7 +22,7 @@ final class MIDIHelper: ObservableObject {
     public func setup(midiManager: ObservableMIDIManager) {
         self.midiManager = midiManager
         
-        // update a local `@Published` property in response to when
+        // update a local property in response to when
         // MIDI devices/endpoints change in system
         midiManager.notificationHandler = { [weak self] notif, _ in
             switch notif {
@@ -68,7 +66,7 @@ final class MIDIHelper: ObservableObject {
             : events
         
         // must update properties that result in UI changes on main thread
-        DispatchQueue.main.async {
+        Task { @MainActor in
             self.receivedEvents.append(contentsOf: events)
         }
     }
@@ -135,7 +133,7 @@ final class MIDIHelper: ObservableObject {
                 uniqueID: .userDefaultsManaged(key: Tags.midiTestOut2)
             )
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
     }
     
@@ -144,7 +142,6 @@ final class MIDIHelper: ObservableObject {
         midiManager?.remove(.output, .all)
     }
     
-    @Published
     public private(set) var virtualsExist: Bool = false
     
     private func updateVirtualsExist() {

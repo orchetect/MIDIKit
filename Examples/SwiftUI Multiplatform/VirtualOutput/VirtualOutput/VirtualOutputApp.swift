@@ -9,13 +9,13 @@ import SwiftUI
 
 @main
 struct VirtualOutputApp: App {
-    @ObservedObject var midiManager = ObservableMIDIManager(
+    @State var midiManager = ObservableMIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    @ObservedObject var midiHelper = MIDIHelper()
+    @State var midiHelper = MIDIHelper()
     
     init() {
         midiHelper.setup(midiManager: midiManager)
@@ -24,8 +24,8 @@ struct VirtualOutputApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(midiManager)
-                .environmentObject(midiHelper)
+                .environment(midiManager)
+                .environment(midiHelper)
         }
     }
 }

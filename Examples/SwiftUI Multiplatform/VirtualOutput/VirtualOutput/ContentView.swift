@@ -8,8 +8,8 @@ import MIDIKitIO
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: ObservableMIDIManager
-    @EnvironmentObject var midiHelper: MIDIHelper
+    @Environment(ObservableMIDIManager.self) private var midiManager
+    @Environment(MIDIHelper.self) private var midiHelper
     
     var body: some View {
         VStack(alignment: .center, spacing: 20) {

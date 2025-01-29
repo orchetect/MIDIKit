@@ -11,8 +11,8 @@ import MIDIKitUI
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: ObservableMIDIManager
-    @EnvironmentObject var midiHelper: MIDIHelper
+    @Environment(ObservableMIDIManager.self) private var midiManager
+    @Environment(MIDIHelper.self) private var midiHelper
     
     @Binding var midiInSelectedID: MIDIIdentifier?
     @Binding var midiInSelectedDisplayName: String?
@@ -53,7 +53,10 @@ struct ContentView: View {
         .font(.system(size: 14))
     }
     
+    @ViewBuilder
     private var midiInConnectionView: some View {
+        @Bindable var midiHelper = midiHelper
+        
         GroupBox(label: Text("MIDI In Connection")) {
             MIDIOutputsPicker(
                 title: "MIDI In",

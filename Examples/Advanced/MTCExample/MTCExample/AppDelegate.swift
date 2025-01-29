@@ -40,7 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func createMTCGenWindow() {
         let contentView = MTCGenContentView()
-            .environmentObject(midiManager)
+            .environment(midiManager)
         
         // (X,Y coord 0,0 origin is bottom left of screen)
         let scrW = NSScreen.main?.frame.width ?? 0
@@ -65,7 +65,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func createMTCRecWindow() {
         let contentView = MTCRecContentView()
-            .environmentObject(midiManager)
+            .environment(midiManager)
         
         // (X,Y coord 0,0 origin is bottom left of screen)
         let scrW = NSScreen.main?.frame.width ?? 0

@@ -10,7 +10,7 @@ import SwiftUI
 
 extension ContentView {
     struct MIDISubsystemStatusView: View {
-        @EnvironmentObject var midiManager: ObservableMIDIManager
+        @Environment(ObservableMIDIManager.self) private var midiManager
         
         var body: some View {
             GroupBox(label: Text("MIDI Subsystem")) {

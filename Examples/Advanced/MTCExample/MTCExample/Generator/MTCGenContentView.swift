@@ -13,7 +13,7 @@ import TimecodeKitCore
 import TimecodeKitUI
 
 struct MTCGenContentView: View {
-    @EnvironmentObject private var midiManager: ObservableMIDIManager
+    @Environment(ObservableMIDIManager.self) private var midiManager
     @State private var mtcGenHost = MTCGenHost()
     
     // MARK: - Prefs
@@ -223,15 +223,13 @@ extension MTCGenContentView {
     }
 }
 
-struct MTCGenContentViewPreviews: PreviewProvider {
-    private static let midiManager = ObservableMIDIManager(
+#Preview {
+    @Previewable @State var midiManager = ObservableMIDIManager(
         clientName: "Preview",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    static var previews: some View {
-        MTCGenContentView()
-            .environmentObject(midiManager)
-    }
+    MTCGenContentView()
+        .environment(midiManager)
 }

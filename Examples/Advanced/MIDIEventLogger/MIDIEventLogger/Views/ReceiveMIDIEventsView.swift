@@ -11,7 +11,7 @@ import SwiftUI
 
 extension ContentView {
     struct ReceiveMIDIEventsView: View {
-        @EnvironmentObject var midiManager: ObservableMIDIManager
+        @Environment(ObservableMIDIManager.self) private var midiManager
         
         var inputName: String
         @Binding var midiInputConnectionID: MIDIIdentifier?

@@ -1,4 +1,10 @@
-# VirtualOutput Example (SwiftUI macOS/iOS)
+# VirtualOutput Example (SwiftUI)
+
+## Supported Platforms
+
+- macOS
+- iOS / iPadOS
+- visionOS
 
 This example demonstrates creating a virtual MIDI output and sending events through it.
 
@@ -10,7 +16,9 @@ This example demonstrates creating a virtual MIDI output and sending events thro
 ## Troubleshooting
 
 > [!TIP]
+> 
 > If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
 
 > [!TIP]
+> 
 > When building for a physical iOS device or "Designed for iPad", you must select your Team ID in the app target's code signing.

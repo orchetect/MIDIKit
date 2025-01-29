@@ -1,11 +1,18 @@
-# BluetoothMIDI Example (SwiftUI iOS)
+# BluetoothMIDI Example (SwiftUI)
+
+## Supported Platforms
+
+- iOS / iPadOS
+
+> [!NOTE]
+> 
+> This project must be run on a physical iOS device. Bluetooth does not function in an iOS Simulator.
+
+## Overview
 
 This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiving events.
 
 Events received from all MIDI output endpoints are automatically logged to the console.
-
-> [!NOTE]
-> This project must be run on a physical iOS device. Bluetooth does not function in an iOS Simulator.
 
 ## Key Features
 
@@ -20,13 +27,15 @@ Events received from all MIDI output endpoints are automatically logged to the c
 
 Once Bluetooth connectivity is implemented (see examples above), Bluetooth MIDI devices' ports simply show up as MIDI input or output endpoints in the system. Access them by getting these properties on your `MIDIManager` instance:
 
-- `midiManager.observableEndpoints.inputs`
-- `midiManager.observableEndpoints.outputs`
+- `midiManager.endpoints.inputs`
+- `midiManager.endpoints.outputs`
 
 ## Troubleshooting
 
 > [!TIP]
+> 
 > If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
 
 > [!TIP]
+> 
 > When building for a physical iOS device, you must select your Team ID in the app target's code signing.

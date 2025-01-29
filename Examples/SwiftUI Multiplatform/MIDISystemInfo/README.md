@@ -1,8 +1,16 @@
-# MIDI System Info (SwiftUI macOS/iOS)
+# MIDI System Info (SwiftUI)
+
+## Supported Platforms
+
+- macOS
+- iOS / iPadOS
+- visionOS
+
+## Overview
 
 This example demonstrates reading MIDI device/port information from the system. It is also a useful diagnostic workbench.
 
-The example app's structure is using legacy `NSApplicationDelegate`/`UIApplicationDelegate` in order to maintain backwards compatibility with macOS 10.10 and iOS 13. 
+The example app's structure uses legacy `NSApplicationDelegate`/`UIApplicationDelegate` in order to maintain backwards compatibility with macOS 10.15 and iOS 13. 
 
 ## Key Features
 
@@ -13,7 +21,9 @@ The example app's structure is using legacy `NSApplicationDelegate`/`UIApplicati
 ## Troubleshooting
 
 > [!TIP]
+> 
 > If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
 
 > [!TIP]
+> 
 > When building for a physical iOS device or "Designed for iPad", you must select your Team ID in the app target's code signing.

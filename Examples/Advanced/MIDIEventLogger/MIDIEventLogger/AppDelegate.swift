@@ -34,8 +34,8 @@ extension AppDelegate {
     func createAndShowWindow() {
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView()
-            .environmentObject(midiManager)
-            .environmentObject(midiHelper)
+            .environment(midiManager)
+            .environment(midiHelper)
         
         // Create the window and set the content view.
         window = NSWindow(

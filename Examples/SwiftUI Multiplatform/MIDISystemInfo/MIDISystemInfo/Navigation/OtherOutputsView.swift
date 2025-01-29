@@ -8,12 +8,18 @@ import MIDIKitIO
 import SwiftUI
 
 struct OtherOutputsView<DetailsContent: View>: View {
-    @EnvironmentObject private var midiManager: ObservableMIDIManager
+    @EnvironmentObject private var midiManager: ObservableObjectMIDIManager
     
-    let detailsContent: (
+    typealias Details = @Sendable (
         _ object: AnyMIDIIOObject?,
         _ showAllBinding: Binding<Bool>
     ) -> DetailsContent
+    
+    let detailsContent: Details
+    
+    init(detailsContent: @escaping Details) {
+        self.detailsContent = detailsContent
+    }
     
     var body: some View {
         Section(header: Text("Other Outputs")) {
@@ -36,7 +42,7 @@ struct OtherOutputsView<DetailsContent: View>: View {
     private var otherOutputs: [MIDIOutputEndpoint] {
         // filter out endpoints that have an entity because
         // they are already being displayed in the Devices tree
-        midiManager.observableEndpoints.outputs.sortedByName()
+        midiManager.endpoints.outputs.sortedByName()
             .filter { $0.entity == nil }
     }
 }

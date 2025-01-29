@@ -9,13 +9,13 @@ import SwiftUI
 
 @main
 struct VirtualInputApp: App {
-    @ObservedObject var midiManager = ObservableMIDIManager(
+    @State var midiManager = ObservableMIDIManager(
         clientName: "TestAppMIDIManager",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    @ObservedObject var midiHelper = MIDIHelper()
+    @State var midiHelper = MIDIHelper()
     
     init() {
         midiHelper.setup(midiManager: midiManager)

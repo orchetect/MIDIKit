@@ -11,7 +11,7 @@ import SwiftUI
 import TimecodeKitCore
 
 struct MTCRecContentView: View {
-    @EnvironmentObject private var midiManager: ObservableMIDIManager
+    @Environment(ObservableMIDIManager.self) private var midiManager
     @State private var mtcRecHost = MTCRecHost()
     
     // MARK: - Prefs
@@ -230,15 +230,13 @@ extension MTCReceiver.State {
     }
 }
 
-struct MTCRecContentViewPreviews: PreviewProvider {
-    private static let midiManager = ObservableMIDIManager(
+#Preview {
+    @Previewable @State var midiManager = ObservableMIDIManager(
         clientName: "Preview",
         model: "TestApp",
         manufacturer: "MyCompany"
     )
     
-    static var previews: some View {
-        MTCRecContentView()
-            .environmentObject(midiManager)
-    }
+    MTCRecContentView()
+        .environment(midiManager)
 }

@@ -21,7 +21,7 @@ extension MTCEncoder.FullFrameBehavior {
 }
 
 // TODO: Can remove if/when Codable for this is implemented in MIDIKit
-extension MTCEncoder.FullFrameBehavior: Codable {
+extension MTCEncoder.FullFrameBehavior: @retroactive Codable {
     private enum Values: String {
         case always
         case ifDifferent

@@ -4,15 +4,15 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if os(iOS)
+#if os(iOS) || os(visionOS)
 
 import MIDIKitIO
 import MIDIKitUI
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var midiManager: ObservableMIDIManager
-    @EnvironmentObject var midiHelper: MIDIHelper
+    @Environment(ObservableMIDIManager.self) private var midiManager
+    @Environment(MIDIHelper.self) private var midiHelper
     
     @Binding var midiInSelectedID: MIDIIdentifier?
     @Binding var midiInSelectedDisplayName: String?
@@ -64,7 +64,7 @@ struct ContentView: View {
     }
     
     private var endpointSelectionSection: some View {
-        Section() {
+        Section {
             MIDIOutputsPicker(
                 title: "MIDI In",
                 selectionID: $midiInSelectedID,
@@ -129,7 +129,10 @@ struct ContentView: View {
         }
     }
     
+    @ViewBuilder
     private var eventLogSection: some View {
+        @Bindable var midiHelper = midiHelper
+        
         Section(header: Text("Received Events")) {
             Toggle(
                 "Filter Active Sensing and Clock",

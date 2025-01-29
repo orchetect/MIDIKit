@@ -4,7 +4,7 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-#if os(iOS)
+#if os(iOS) || os(visionOS)
 
 import CoreAudioKit
 import UIKit

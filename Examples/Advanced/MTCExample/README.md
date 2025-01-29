@@ -1,8 +1,14 @@
 # MTC Example
 
+## Supported Platforms
+
+- macOS
+
+## Overview
+
 This project demonstrates both MTC generation and chase (receive).
 
-### Usage
+## Usage
 
 By default, this demo will transmit MTC to itself in order to demonstrate it in action.
 

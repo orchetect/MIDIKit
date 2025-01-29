@@ -1,5 +1,12 @@
 # BluetoothMIDI Example (UIKit)
 
+## Supported Platforms
+
+- iOS / iPadOS
+- visionOS (Note that this example code still needs tweaking on visionOS, as the sheet windows cannot be dismissed as-is)
+
+## Overview
+
 This example demonstrates connecting to Bluetooth MIDI devices on iOS and receiving events.
 
 Events received from all MIDI output endpoints are automatically logged to the console.
@@ -26,7 +33,9 @@ Once Bluetooth connectivity is implemented (see examples above), Bluetooth MIDI 
 ## Troubleshooting
 
 > [!TIP]
+> 
 > If Xcode builds but the app does not run, it may be because Xcode is defaulting to the wrong Scheme. Ensure the example app's Scheme is selected then try again.
 
 > [!TIP]
+> 
 > When building for a physical iOS device, you must select your Team ID in the app target's code signing.
