@@ -8,7 +8,7 @@ import Foundation
 
 extension StringProtocol {
     /// Converts the string to ASCII-compatible raw `Data`.
-    public func toASCIIData(lossy: Bool = false) -> Data {
+    package func toASCIIData(lossy: Bool = false) -> Data {
         lossy
             ? data(using: .nonLossyASCII)
                 ?? data(using: .ascii)
@@ -19,7 +19,7 @@ extension StringProtocol {
     }
     
     /// Converts the string to ASCII-compatible raw bytes.
-    public func toASCIIBytes(lossy: Bool = false) -> [UInt8] {
+    package func toASCIIBytes(lossy: Bool = false) -> [UInt8] {
         [UInt8](toASCIIData(lossy: lossy))
     }
 }
@@ -27,7 +27,7 @@ extension StringProtocol {
 extension Data {
     /// Converts ASCII data to `String`.
     /// Returns `nil` if data is not valid ASCII.
-    public func asciiDataToString() -> String? {
+    package func asciiDataToString() -> String? {
         String(
             data: self,
             encoding: .nonLossyASCII
@@ -36,7 +36,7 @@ extension Data {
     
     /// Converts ASCII data to `String`.
     /// Attempts to lossily convert the data if it is not valid ASCII.
-    public func asciiDataToStringLossy() -> String {
+    package func asciiDataToStringLossy() -> String {
         String(
             data: self,
             encoding: .nonLossyASCII
@@ -56,7 +56,7 @@ extension Data {
 extension DataProtocol {
     /// Converts ASCII data to `String`.
     /// Returns `nil` if data is not valid ASCII.
-    public func asciiDataToString() -> String? {
+    package func asciiDataToString() -> String? {
         String(
             data: Data(self),
             encoding: .nonLossyASCII
@@ -65,7 +65,7 @@ extension DataProtocol {
     
     /// Converts ASCII data to `String`.
     /// Attempts to lossily convert the data if it is not valid ASCII.
-    public func asciiDataToStringLossy() -> String {
+    package func asciiDataToStringLossy() -> String {
         let data = Data(self)
         
         // try standard String encoding inits first

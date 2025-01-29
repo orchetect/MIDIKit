@@ -23,20 +23,20 @@ package final class SafeDispatchTimer /* : Sendable */ {
     var timer: DispatchSourceTimer
     
     /// (Read-only) Frequency in Hz of the timer
-    public internal(set) nonisolated(unsafe) var rate: Rate = .seconds(1.0)
+    package internal(set) nonisolated(unsafe) var rate: Rate = .seconds(1.0)
     
-    public let leeway: DispatchTimeInterval
+    package let leeway: DispatchTimeInterval
     
     /// (Read-only) State of whether timer is running or not
     nonisolated(unsafe)
-    public internal(set) var running = false
+    package internal(set) var running = false
     
     /// Initialize a new timer.
     /// - Parameters:
     ///   - rate: Frequency timer event intervals, expressed in Hertz
     ///   - leeway: Optionally specify custom leeway; default is 0 nanoseconds
     ///   - eventHandler: The closure to be called on each timer event
-    public init(
+    package init(
         rate: Rate,
         leeway: DispatchTimeInterval = .nanoseconds(0),
         eventHandler: @escaping DispatchSource.DispatchSourceHandler = { }
@@ -62,7 +62,7 @@ package final class SafeDispatchTimer /* : Sendable */ {
     /// timer, regardless of when ``start()`` is called.
     ///
     /// If the timer has already started, this will have no effect.
-    public func start() {
+    package func start() {
         guard !running else { return }
         running = true
         
@@ -82,7 +82,7 @@ package final class SafeDispatchTimer /* : Sendable */ {
     ///   - immediate: If `true`, restarts timer and fires immediately then again at each interval.
     ///     If `false`, restarts timer but first fire does not happen until the first interval is
     ///     reached then again at each subsequent interval.
-    public func restart(firingNow: Bool = true) {
+    package func restart(firingNow: Bool = true) {
         // if timer is already running, reschedule the currently running timer
         // if timer is not running, schedule the timer then start it
         
@@ -101,7 +101,7 @@ package final class SafeDispatchTimer /* : Sendable */ {
     ///
     /// The timer can be started again by calling ``start()``, preserving the origin time, or
     /// ``restart(firingNow:)`` to reset the origin time to "now".
-    public func stop() {
+    package func stop() {
         guard running else { return }
         running = false
         timer.suspend()
@@ -109,12 +109,12 @@ package final class SafeDispatchTimer /* : Sendable */ {
     
     /// Sets the timer rate in Hz.
     /// Change only takes effect the next time `restart()` is called.
-    public func setRate(_ newRate: Rate) {
+    package func setRate(_ newRate: Rate) {
         rate = newRate
     }
     
     /// Set the event handler closure that the timer executes
-    public func setEventHandler(handler: @escaping DispatchSource.DispatchSourceHandler) {
+    package func setEventHandler(handler: @escaping DispatchSource.DispatchSourceHandler) {
         timer.setEventHandler(handler: handler)
     }
     
@@ -132,11 +132,11 @@ package final class SafeDispatchTimer /* : Sendable */ {
 }
 
 extension SafeDispatchTimer {
-    public enum Rate: Hashable {
+    package enum Rate: Hashable {
         case hertz(Double)
         case seconds(Double)
     
-        public var secondsValue: Double {
+        package var secondsValue: Double {
             let value: Double
     
             switch self {

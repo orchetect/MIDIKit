@@ -42,7 +42,7 @@ import Darwin
 /// nanoseconds.
 @available(OSX 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *)
 @_disfavoredOverload
-public func clock_gettime_monotonic_raw() -> timespec {
+package func clock_gettime_monotonic_raw() -> timespec {
     var uptime = timespec()
     
     if clock_gettime(CLOCK_MONOTONIC_RAW, &uptime) != 0 {
@@ -57,7 +57,7 @@ public func clock_gettime_monotonic_raw() -> timespec {
 extension timespec {
     /// Convenience constructor from floating point seconds value
     @_disfavoredOverload
-    public init(seconds floatingPoint: some BinaryFloatingPoint) {
+    package init(seconds floatingPoint: some BinaryFloatingPoint) {
         self.init()
         
         let intVal = Int(floatingPoint * 1_000_000_000)
@@ -72,7 +72,7 @@ extension timespec {
 extension timespec {
     /// Add two instances of `timespec`.
     @_disfavoredOverload
-    public static func + (lhs: timespec, rhs: timespec) -> timespec {
+    package static func + (lhs: timespec, rhs: timespec) -> timespec {
         let nsRaw = rhs.tv_nsec + lhs.tv_nsec
         let ns = nsRaw % 1_000_000_000
         let s = lhs.tv_sec + rhs.tv_sec + (nsRaw / 1_000_000_000)
@@ -81,7 +81,7 @@ extension timespec {
     
     /// Subtract two instances of `timespec`.
     @_disfavoredOverload
-    public static func - (lhs: timespec, rhs: timespec) -> timespec {
+    package static func - (lhs: timespec, rhs: timespec) -> timespec {
         let nsRaw = lhs.tv_nsec - rhs.tv_nsec
         
         if nsRaw >= 0 {
@@ -99,20 +99,20 @@ extension timespec {
 
 extension timespec /* : Equatable */ {
     @_disfavoredOverload
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+    package static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.tv_sec == rhs.tv_sec &&
             lhs.tv_nsec == rhs.tv_nsec
     }
     
     @_disfavoredOverload
-    public static func != (lhs: Self, rhs: Self) -> Bool {
+    package static func != (lhs: Self, rhs: Self) -> Bool {
         !(lhs == rhs)
     }
 }
 
 extension timespec /* : Comparable */ {
     @_disfavoredOverload
-    public static func < (lhs: timespec, rhs: timespec) -> Bool {
+    package static func < (lhs: timespec, rhs: timespec) -> Bool {
         if lhs.tv_sec < rhs.tv_sec { return true }
         if lhs.tv_sec > rhs.tv_sec { return false }
         
@@ -123,7 +123,7 @@ extension timespec /* : Comparable */ {
     }
     
     @_disfavoredOverload
-    public static func > (lhs: timespec, rhs: timespec) -> Bool {
+    package static func > (lhs: timespec, rhs: timespec) -> Bool {
         !(lhs < rhs)
     }
 }
@@ -137,7 +137,7 @@ import Foundation
 extension timespec {
     /// Convenience constructor from `TimeInterval`.
     @_disfavoredOverload
-    public init(_ interval: TimeInterval) {
+    package init(_ interval: TimeInterval) {
         self.init(seconds: interval)
     }
 }
@@ -145,7 +145,7 @@ extension timespec {
 extension timespec {
     /// Return a `TimeInterval`.
     @_disfavoredOverload
-    public var doubleValue: TimeInterval {
+    package var doubleValue: TimeInterval {
         Double(tv_sec) + (Double(tv_nsec) / 1_000_000_000)
     }
 }

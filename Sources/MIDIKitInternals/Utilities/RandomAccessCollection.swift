@@ -9,7 +9,7 @@ import Foundation
 extension RandomAccessCollection {
     /// Utility
     @_disfavoredOverload
-    public func range(ofOffsets range: ClosedRange<Int>) -> ClosedRange<Index> {
+    package func range(ofOffsets range: ClosedRange<Int>) -> ClosedRange<Index> {
         let inIndex = index(startIndex, offsetBy: range.lowerBound)
         let outIndex = index(startIndex, offsetBy: range.upperBound)
         return inIndex ... outIndex
@@ -17,7 +17,7 @@ extension RandomAccessCollection {
     
     /// Utility
     @_disfavoredOverload
-    public subscript(atOffsets range: ClosedRange<Int>) -> Self.SubSequence {
+    package subscript(atOffsets range: ClosedRange<Int>) -> Self.SubSequence {
         let inIndex = index(startIndex, offsetBy: range.lowerBound)
         let outIndex = index(startIndex, offsetBy: range.upperBound)
         return self[inIndex ... outIndex]
@@ -25,7 +25,7 @@ extension RandomAccessCollection {
     
     /// Utility
     @_disfavoredOverload
-    public subscript(atOffset offset: Int) -> Element {
+    package subscript(atOffset offset: Int) -> Element {
         self[index(startIndex, offsetBy: offset)]
     }
 }

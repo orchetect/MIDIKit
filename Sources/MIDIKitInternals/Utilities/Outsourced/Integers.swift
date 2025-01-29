@@ -17,11 +17,11 @@ extension BinaryInteger {
     /// Same as `String(describing: self)`
     /// (Functional convenience method)
     @_disfavoredOverload
-    public var string: String { String(describing: self) }
+    package var string: String { String(describing: self) }
     
     /// Convenience method to return a String, padded to `paddedTo` number of leading zeros
     @_disfavoredOverload
-    public func string(paddedTo: Int) -> String {
+    package func string(paddedTo: Int) -> String {
         if let cVarArg = self as? CVarArg {
             return String(format: "%0\(paddedTo)d", cVarArg)
         } else {
@@ -40,7 +40,7 @@ extension BinaryInteger {
 extension UnsignedInteger {
     /// Access binary bits, zero-based from right-to-left
     @_disfavoredOverload
-    public func bit(_ position: Int) -> Int {
+    package func bit(_ position: Int) -> Int {
         Int((self & (0b1 << position)) >> position)
     }
 }
@@ -48,7 +48,7 @@ extension UnsignedInteger {
 extension Int8 {
     /// Returns a two's complement bit format of an `Int8` so it can be stored as a byte (`UInt8`)
     @_disfavoredOverload
-    public var twosComplement: UInt8 {
+    package var twosComplement: UInt8 {
         UInt8(bitPattern: self)
     }
 }

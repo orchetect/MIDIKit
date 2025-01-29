@@ -17,32 +17,32 @@ import Foundation
 /// Usage:
 ///
 ///     var data = Data( ... )
-///     var dr = DataReader { $0(&data) }
+///     var dr = PassiveDataReader { $0(&data) }
 ///
 ///     if let bytes = dr.read(bytes: 4) { ... }
 ///
-public struct PassiveDataReader<D: DataProtocol> {
-    public typealias DataAccess = (inout D) -> Void
-    public typealias Closure = (_ block: DataAccess) -> Void
+package struct PassiveDataReader<D: DataProtocol> {
+    package typealias DataAccess = (inout D) -> Void
+    package typealias Closure = (_ block: DataAccess) -> Void
     
     let closure: Closure
     
     // MARK: - Init
     
-    public init(_ closure: @escaping Closure) {
+    package init(_ closure: @escaping Closure) {
         self.closure = closure
     }
     
     // MARK: - State
     
     /// Current byte index of read offset (byte position).
-    public internal(set) var readOffset = 0
+    package internal(set) var readOffset = 0
     
     /// Returns number of available remaining bytes.
-    public var remainingByteCount: Int { withData(\.count) - readOffset }
+    package var remainingByteCount: Int { withData(\.count) - readOffset }
     
     /// Resets read offset back to 0.
-    public mutating func reset() {
+    package mutating func reset() {
         readOffset = 0
     }
     
@@ -50,14 +50,14 @@ public struct PassiveDataReader<D: DataProtocol> {
     
     /// Manually advance by _n_ number of bytes from current read offset.
     /// Note that this method is unchecked which may result in an offset beyond the end of the data stream.
-    public mutating func advanceBy(_ count: Int) {
+    package mutating func advanceBy(_ count: Int) {
         readOffset += count
     }
     
     /// Return the next byte and increment the read offset.
     ///
     /// If no bytes remain, `nil` will be returned.
-    public mutating func readByte() throws -> D.Element {
+    package mutating func readByte() throws -> D.Element {
         let d = try dataByte()
         defer { readOffset += 1 }
         return d
@@ -65,7 +65,7 @@ public struct PassiveDataReader<D: DataProtocol> {
     
     /// Read the next byte without advancing the read offset.
     /// If no bytes remain, `nil` will be returned.
-    public func nonAdvancingReadByte() throws -> D.Element {
+    package func nonAdvancingReadByte() throws -> D.Element {
         try dataByte()
     }
     
@@ -74,7 +74,7 @@ public struct PassiveDataReader<D: DataProtocol> {
     /// If `bytes` parameter is nil, the remainder of the data will be returned.
     ///
     /// If fewer bytes remain than are requested, `nil` will be returned.
-    public mutating func read(bytes count: Int? = nil) throws -> D.SubSequence {
+    package mutating func read(bytes count: Int? = nil) throws -> D.SubSequence {
         let d = try data(bytes: count)
         defer { readOffset += d.advanceCount }
         return d.data
@@ -83,7 +83,7 @@ public struct PassiveDataReader<D: DataProtocol> {
     /// Read _n_ number of bytes from the current read offset, without advancing the read offset.
     /// If `bytes count` passed is `nil`, the remainder of the data will be returned.
     /// If fewer bytes remain than are requested, `nil` will be returned.
-    public func nonAdvancingRead(bytes count: Int? = nil) throws -> D.SubSequence {
+    package func nonAdvancingRead(bytes count: Int? = nil) throws -> D.SubSequence {
         try data(bytes: count).data
     }
     
@@ -106,7 +106,7 @@ public struct PassiveDataReader<D: DataProtocol> {
             return (data: withData { $0[$0.startIndex ..< $0.startIndex] }, advanceCount: 0)
         }
         
-        if let count,
+        if let count = count,
            count < 0 { throw ReadError.invalidByteCount }
         
         let readPosStartIndex = withData { $0.index($0.startIndex, offsetBy: readOffset) }
@@ -135,7 +135,7 @@ public struct PassiveDataReader<D: DataProtocol> {
 
 extension PassiveDataReader {
     /// Error returned by `PassiveDataReader` methods.
-    public enum ReadError: Error {
+    package enum ReadError: Error {
         case pastEndOfStream
         case invalidByteCount
     }
@@ -144,7 +144,7 @@ extension PassiveDataReader {
 extension DataProtocol {
     /// Accesses the data by providing a `PassiveDataReader` instance to a closure.
     @_disfavoredOverload @discardableResult
-    public func withDataReader<Result>(
+    package func withDataReader<Result>(
         _ block: (_ dataReader: inout PassiveDataReader<Self>) throws -> Result
     ) rethrows -> Result {
         var mutableSelf = self

@@ -19,7 +19,7 @@ import Foundation
 extension String {
     /// Wraps a string with double-quotes (`"`)
     @_disfavoredOverload
-    public var quoted: Self {
+    package var quoted: Self {
         "\"\(self)\""
     }
 }
@@ -29,25 +29,25 @@ extension String {
 extension String {
     /// Returns a new String appending a newline character to the end.
     @_disfavoredOverload
-    public var newLined: Self {
+    package var newLined: Self {
         self + "\n"
     }
     
     /// Returns a new String appending a tab character to the end.
     @_disfavoredOverload
-    public var tabbed: Self {
+    package var tabbed: Self {
         self + "\t"
     }
     
     /// Appends a newline character to the end of the string.
     @_disfavoredOverload
-    public mutating func newLine() {
+    package mutating func newLine() {
         self += "\n"
     }
     
     /// Appends a tab character to the end of the string.
     @_disfavoredOverload
-    public mutating func tab() {
+    package mutating func tab() {
         self += "\t"
     }
 }
@@ -55,13 +55,13 @@ extension String {
 extension Substring {
     /// Returns a new String appending a newline character to the end.
     @_disfavoredOverload
-    public var newLined: String {
+    package var newLined: String {
         String(self) + "\n"
     }
     
     /// Returns a new String appending a tab character to the end.
     @_disfavoredOverload
-    public var tabbed: String {
+    package var tabbed: String {
         String(self) + "\t"
     }
 }
@@ -81,7 +81,7 @@ extension StringProtocol {
     ///     "A string 123".only(.letters, .decimalDigits)`
     ///
     @_disfavoredOverload
-    public func only(
+    package func only(
         _ characterSet: CharacterSet,
         _ characterSets: CharacterSet...
     ) -> String {
@@ -98,13 +98,13 @@ extension StringProtocol {
     /// Returns a string preserving only characters from the passed string and removing all other
     /// characters.
     @_disfavoredOverload
-    public func only(characters: String) -> String {
+    package func only(characters: String) -> String {
         only(CharacterSet(charactersIn: characters))
     }
     
     /// Returns a string containing only alphanumeric characters and removing all other characters.
     @_disfavoredOverload
-    public var onlyAlphanumerics: String {
+    package var onlyAlphanumerics: String {
         only(.alphanumerics)
     }
     
@@ -116,7 +116,7 @@ extension StringProtocol {
     ///     "A string 123".removing(.letters, .decimalDigits)`
     ///
     @_disfavoredOverload
-    public func removing(
+    package func removing(
         _ characterSet: CharacterSet,
         _ characterSets: CharacterSet...
     ) -> String {
@@ -130,7 +130,7 @@ extension StringProtocol {
     
     /// Returns a string removing all characters from the passed string.
     @_disfavoredOverload
-    public func removing(characters: String) -> String {
+    package func removing(characters: String) -> String {
         components(separatedBy: CharacterSet(charactersIn: characters))
             .joined()
     }

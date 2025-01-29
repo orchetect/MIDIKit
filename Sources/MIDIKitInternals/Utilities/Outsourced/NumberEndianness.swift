@@ -12,7 +12,7 @@
 // MARK: - NumberEndianness
 
 /// Enum describing endianness when stored in data form.
-public enum NumberEndianness: Sendable {
+package enum NumberEndianness: Sendable {
     case platformDefault
     case littleEndian
     case bigEndian
@@ -23,7 +23,7 @@ import CoreFoundation
 
 extension NumberEndianness {
     /// Returns the current system hardware's byte order endianness.
-    public static let system: NumberEndianness =
+    package static let system: NumberEndianness =
         CFByteOrderGetCurrent() == CFByteOrderBigEndian.rawValue
             ? .bigEndian
             : .littleEndian

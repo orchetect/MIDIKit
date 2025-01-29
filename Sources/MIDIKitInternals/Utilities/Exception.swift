@@ -7,7 +7,7 @@
 import Foundation
 
 /// Raises an `NSException`
-public func raiseException(
+package func raiseException(
     _ exceptionName: NSExceptionName,
     reason: String? = nil
 ) {
@@ -16,7 +16,7 @@ public func raiseException(
 }
 
 /// Pre-formed `NSException` cases.
-public enum Exception {
+package enum Exception {
     case overflow
     case underflow
     case divisionByZero

@@ -11,7 +11,7 @@ extension Double {
     ///
     /// If `decimalPlaces <= 0`, then `trunc(self)` is returned.
     @_disfavoredOverload
-    public func rounded(
+    package func rounded(
         _ rule: FloatingPointRoundingRule = .toNearestOrAwayFromZero,
         decimalPlaces: Int
     ) -> Self {
