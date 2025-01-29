@@ -9,15 +9,21 @@
 import Foundation
 
 public protocol MIDIEndpointsProtocol where Self: Equatable, Self: Hashable, Self: Sendable {
-    /// List of MIDI input endpoints in the system.
+    /// List of all MIDI input endpoints in the system.
     var inputs: [MIDIInputEndpoint] { get }
+    
+    /// List of MIDI input endpoints in the system owned by the ``MIDIManager`` instance.
+    var inputsOwned: [MIDIInputEndpoint] { get }
     
     /// List of MIDI input endpoints in the system omitting virtual endpoints owned by the
     /// ``MIDIManager`` instance.
     var inputsUnowned: [MIDIInputEndpoint] { get }
     
-    /// List of MIDI output endpoints in the system.
+    /// List of all MIDI output endpoints in the system.
     var outputs: [MIDIOutputEndpoint] { get }
+    
+    /// List of MIDI output endpoints in the system owned by the ``MIDIManager`` instance.
+    var outputsOwned: [MIDIOutputEndpoint] { get }
     
     /// List of MIDI output endpoints in the system omitting virtual endpoints owned by the
     /// ``MIDIManager`` instance.

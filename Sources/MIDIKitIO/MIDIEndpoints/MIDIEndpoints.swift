@@ -11,9 +11,11 @@ import Foundation
 /// Manages system MIDI endpoints information cache.
 public struct MIDIEndpoints: MIDIEndpointsProtocol {
     public internal(set) var inputs: [MIDIInputEndpoint] = []
+    public internal(set) var inputsOwned: [MIDIInputEndpoint] = []
     public internal(set) var inputsUnowned: [MIDIInputEndpoint] = []
     
     public internal(set) var outputs: [MIDIOutputEndpoint] = []
+    public internal(set) var outputsOwned: [MIDIOutputEndpoint] = []
     public internal(set) var outputsUnowned: [MIDIOutputEndpoint] = []
     
     init() { }
@@ -28,8 +30,19 @@ extension MIDIEndpoints {
         let fetched = _fetchProperties(manager: manager)
         
         inputs = fetched.inputs
+        
+        var inputsOwned = inputs
+        inputsOwned.removeAll(where: { fetched.inputsUnowned.contains($0) })
+        self.inputsOwned = inputsOwned
+        
         inputsUnowned = fetched.inputsUnowned
+        
         outputs = fetched.outputs
+        
+        var outputsUnowned = outputs
+        outputsUnowned.removeAll(where: { fetched.outputsUnowned.contains($0) })
+        self.outputsUnowned = outputsUnowned
+        
         outputsUnowned = fetched.outputsUnowned
     }
 }
