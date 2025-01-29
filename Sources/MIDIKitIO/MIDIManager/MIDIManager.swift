@@ -17,8 +17,8 @@ internal import MIDIKitInternals
 ///
 /// > Tip:
 /// >
-/// > For SwiftUI and Combine environments, see the ``ObservableMIDIManager`` subclass which adds
-/// > published devices and endpoints properties.
+/// > For SwiftUI environments, see the ``ObservableMIDIManager`` or ``ObservableObjectMIDIManager``
+/// > subclass which makes ``devices`` and ``endpoints`` properties observable.
 public class MIDIManager: @unchecked Sendable {
     // MARK: - Properties
     

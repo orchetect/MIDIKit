@@ -12,7 +12,7 @@ internal import CoreMIDI
 #if canImport(Combine)
 import Combine
 
-/// ``MIDIManager`` subclass that is observable in a SwiftUI or Combine context.
+/// ``MIDIManager`` subclass that is an `ObservableObject` in a SwiftUI or Combine context.
 /// This makes the ``devices`` and ``endpoints`` properties observable.
 ///
 /// Generally it is recommended to install the manager instance in the `App` struct.
