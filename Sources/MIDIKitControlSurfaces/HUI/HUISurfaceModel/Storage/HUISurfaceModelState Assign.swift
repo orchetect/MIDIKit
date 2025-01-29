@@ -8,7 +8,8 @@ import Foundation
 
 extension HUISurfaceModelState {
     /// State storage representing the Assign controls.
-    public struct Assign {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class Assign {
         /// 4-character text display.
         public var textDisplay: HUISmallDisplayString = .init()
         
@@ -30,19 +31,15 @@ extension HUISurfaceModelState {
         public var assign = false
         
         public var suspend = false
-        public var `default` = false
+        public var defaultBtn = false
     }
 }
 
-extension HUISurfaceModelState.Assign: Equatable { }
-
-extension HUISurfaceModelState.Assign: Hashable { }
-
-extension HUISurfaceModelState.Assign: Sendable { }
-
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModelState.Assign: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.Assign
     
+    @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case .sendA:          return sendA
@@ -57,14 +54,15 @@ extension HUISurfaceModelState.Assign: HUISurfaceModelStateProtocol {
         case .mute:           return mute
         case .shift:          return shift
         case .suspend:        return suspend
-        case .default:        return `default`
+        case .default:        return defaultBtn
         case .assign:         return assign
         case .input:          return input
         case .output:         return output
         }
     }
     
-    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+    @inlinable
+    public func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case .sendA:          sendA = state
         case .sendB:          sendB = state
@@ -78,7 +76,7 @@ extension HUISurfaceModelState.Assign: HUISurfaceModelStateProtocol {
         case .mute:           mute = state
         case .shift:          shift = state
         case .suspend:        suspend = state
-        case .default:        `default` = state
+        case .default:        defaultBtn = state
         case .assign:         assign = state
         case .input:          input = state
         case .output:         output = state

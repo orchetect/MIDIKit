@@ -8,7 +8,8 @@ import Foundation
 
 extension HUISurfaceModelState {
     /// State storage representing the Edit section.
-    public struct Edit {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class Edit {
         public var capture = false
         public var cut = false
         public var paste = false
@@ -18,15 +19,11 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.Edit: Equatable { }
-
-extension HUISurfaceModelState.Edit: Hashable { }
-
-extension HUISurfaceModelState.Edit: Sendable { }
-
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModelState.Edit: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.Edit
-
+    
+    @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case .capture:  return capture
@@ -38,7 +35,8 @@ extension HUISurfaceModelState.Edit: HUISurfaceModelStateProtocol {
         }
     }
     
-    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+    @inlinable
+    public func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case .capture:  capture = state
         case .cut:      cut = state

@@ -9,13 +9,15 @@ import MIDIKitCore
 
 extension HUISurfaceModelState {
     /// State storage representing the Large Text Display (40 x 2 character matrix).
-    public struct LargeDisplay {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class LargeDisplay {
         /// Top 40-character character readout.
         public var top: HUILargeDisplayString
         
         /// Bottom 40-character character readout.
         public var bottom: HUILargeDisplayString
         
+        @usableFromInline
         init(
             top: HUILargeDisplayString = .init(),
             bottom: HUILargeDisplayString = .init()
@@ -26,19 +28,15 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.LargeDisplay: Equatable { }
-
-extension HUISurfaceModelState.LargeDisplay: Hashable { }
-
-extension HUISurfaceModelState.LargeDisplay: Sendable { }
-
 // MARK: - Internal Methods
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModelState.LargeDisplay {
     /// Internal:
     /// Get or set the 8 individual 10-character string slices that make up
     /// the large display contents.
     /// When encoded in a HUI message, these are indexed 0 through 7.
+    @inlinable
     var slices: HUILargeDisplaySlices {
         get {
             .init(top: top, bottom: bottom)
@@ -52,8 +50,8 @@ extension HUISurfaceModelState.LargeDisplay {
     /// Update HUI string storage by merging string slices atomically.
     ///
     /// - Returns: `true` if characters were different and replaced with new characters.
-    @discardableResult
-    mutating func update(mergingFrom slices: HUILargeDisplaySlices) -> Bool {
+    @inlinable @discardableResult
+    func update(mergingFrom slices: HUILargeDisplaySlices) -> Bool {
         guard !slices.isEmpty else { return false }
         
         let topSlices = slices.filter { (0 ... 3).contains($0.key) }
@@ -82,15 +80,19 @@ extension HUISurfaceModelState.LargeDisplay {
         
         return isTopDiff || isBottomDiff
     }
-    
+}
+
+extension HUISurfaceModelState {
     /// Internal:
     /// Converts two 40-char large display strings to a dictionary of slices.
     /// Keyed by slice index (`0 ... 7`).
-    static func slices(
+    @inlinable
+    static func largeDisplaySlices(
         top: HUILargeDisplayString,
         bottom: HUILargeDisplayString
     ) -> HUILargeDisplaySlices {
-        (top.slices + bottom.slices).enumerated()
+        (top.slices() + bottom.slices())
+            .enumerated()
             .reduce(into: HUILargeDisplaySlices()) {
                 $0[$1.0.toUInt4] = $1.1
             }
@@ -107,10 +109,11 @@ extension HUILargeDisplaySlices {
     /// Internal:
     /// Converts two 40-char large display strings to a dictionary of slices.
     /// Keyed by slice index (`0 ... 7`).
+    @inlinable
     init(
         top: HUILargeDisplayString,
         bottom: HUILargeDisplayString
     ) {
-        self = HUISurfaceModelState.LargeDisplay.slices(top: top, bottom: bottom)
+        self = HUISurfaceModelState.largeDisplaySlices(top: top, bottom: bottom)
     }
 }

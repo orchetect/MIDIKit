@@ -8,7 +8,8 @@ import Foundation
 
 extension HUISurfaceModelState {
     /// State storage representing HotKeys (keyboard shortcut keys).
-    public struct HotKeys {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class HotKeys {
         public var shift = false
         public var ctrl = false
         public var option = false
@@ -22,15 +23,11 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.HotKeys: Equatable { }
-
-extension HUISurfaceModelState.HotKeys: Hashable { }
-
-extension HUISurfaceModelState.HotKeys: Sendable { }
-
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModelState.HotKeys: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.HotKey
-
+    
+    @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case .ctrl:     return ctrl
@@ -44,7 +41,8 @@ extension HUISurfaceModelState.HotKeys: HUISurfaceModelStateProtocol {
         }
     }
     
-    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+    @inlinable
+    public func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case .ctrl:     ctrl = state
         case .shift:    shift = state

@@ -19,34 +19,9 @@ import Foundation
     // MARK: - State Storage
     
     /// State storage representing channel 8 strips and their components. (`0 ... 7`)
-    private var _channelStrips: [HUISurfaceModelState.ChannelStrip] = (0 ... 7)
+    @ObservationIgnored
+    public internal(set) var channelStrips: [HUISurfaceModelState.ChannelStrip] = (0 ... 7)
         .map { _ in HUISurfaceModelState.ChannelStrip() }
-    public var channelStrips: [HUISurfaceModelState.ChannelStrip] {
-        get {
-            _channelStrips
-        }
-        set {
-            // array count validation
-            precondition(newValue.count == 8, "HUI Surface Model must have exactly 8 channel strips.")
-            if newValue.count == 8 { _channelStrips = newValue }
-        }
-        _modify {
-            // mutate
-            yield &_channelStrips
-
-            // array count validation
-            if _channelStrips.count < 8 {
-                _channelStrips.append(
-                    contentsOf: [HUISurfaceModelState.ChannelStrip](
-                        repeating: HUISurfaceModelState.ChannelStrip(),
-                        count: 8 - _channelStrips.count
-                    )
-                )
-            } else if _channelStrips.count > 8 {
-                _channelStrips.removeLast(_channelStrips.count - 8)
-            }
-        }
-    }
     
     /// State storage representing the Main Time Display LCD and surrounding status LEDs.
     public var timeDisplay = HUISurfaceModelState.TimeDisplay()

@@ -7,25 +7,16 @@
 import Foundation
 import MIDIKitCore
 
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModelState.ChannelStrip {
     /// State storage representing the state of a channel strip fader.
-    public struct Fader {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class Fader {
         /// Raw level value.
         public var level: UInt14 = 0
         
         /// Touch status (`true` indicates the fader is being touched by the user).
         public var touched: Bool = false
-        
-        // constants
-        
-        /// Constant: minimum ``level`` value.
-        public static let levelMin: UInt14 = 0
-        
-        /// Constant: maximum ``level`` value.
-        public static let levelMax: UInt14 = 0x3FFF // 16383
-        
-        /// Constant: Range of possible ``level`` values.
-        public static let levelRange: ClosedRange<UInt14> = 0 ... 0x3FFF
         
         // convenience
         
@@ -36,11 +27,19 @@ extension HUISurfaceModelState.ChannelStrip {
     }
 }
 
-extension HUISurfaceModelState.ChannelStrip.Fader: Equatable { }
+// MARK: - Constants
 
-extension HUISurfaceModelState.ChannelStrip.Fader: Hashable { }
-
-extension HUISurfaceModelState.ChannelStrip.Fader: Sendable { }
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+extension HUISurfaceModelState.ChannelStrip.Fader {
+    /// Constant: minimum ``level`` value.
+    public static let levelMin: UInt14 = 0
+    
+    /// Constant: maximum ``level`` value.
+    public static let levelMax: UInt14 = 0x3FFF // 16383
+    
+    /// Constant: Range of possible ``level`` values.
+    public static let levelRange: ClosedRange<UInt14> = 0 ... 0x3FFF
+}
 
 // HUISurfaceModelStateProtocol conformance is on HUISurfaceModelState.ChannelStrip and it handles the
 // `.touched` switch property there, so we don't need a setter/getter here

@@ -29,7 +29,8 @@ extension HUISurfaceModelState {
     ///     0x1    >= -60dBFS  🟩 green
     ///     0x0    <  -60dBFS  (no LEDs on)
     ///
-    public struct StereoLevelMeter {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class StereoLevelMeter {
         /// Left Meter Channel.
         ///
         /// As value increases, all LEDs up to and including that value will illuminate,
@@ -54,8 +55,8 @@ extension HUISurfaceModelState {
         ///
         public var left: Int = 0 {
             didSet {
-                if !Self.levelRange.contains(left) {
-                    left = left.clamped(to: Self.levelRange)
+                if !StereoLevelMeterSide.levelRange.contains(left) {
+                    left = left.clamped(to: StereoLevelMeterSide.levelRange)
                 }
             }
         }
@@ -84,23 +85,69 @@ extension HUISurfaceModelState {
         ///
         public var right: Int = 0 {
             didSet {
-                if !Self.levelRange.contains(right) {
-                    right = right.clamped(to: Self.levelRange)
+                if !StereoLevelMeterSide.levelRange.contains(right) {
+                    right = right.clamped(to: StereoLevelMeterSide.levelRange)
                 }
             }
         }
     }
 }
 
-extension HUISurfaceModelState.StereoLevelMeter: Equatable { }
+// MARK: - Properties
 
-extension HUISurfaceModelState.StereoLevelMeter: Hashable { }
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+extension HUISurfaceModelState.StereoLevelMeter {
+    @inlinable
+    public func level(of side: HUISurfaceModelState.StereoLevelMeterSide) -> Int {
+        switch side {
+        case .left:  return left
+        case .right: return right
+        }
+    }
+}
 
-extension HUISurfaceModelState.StereoLevelMeter: Sendable { }
+// MARK: - StereoLevelMeter Side
+
+extension HUISurfaceModelState {
+    /// Enum describing the side of a stereo level meter
+    public enum StereoLevelMeterSide {
+        /// Left stereo channel.
+        case left
+        
+        /// Right stereo channel.
+        case right
+    }
+}
+
+extension HUISurfaceModelState.StereoLevelMeterSide: Equatable { }
+
+extension HUISurfaceModelState.StereoLevelMeterSide: Hashable { }
+
+extension HUISurfaceModelState.StereoLevelMeterSide: Sendable { }
+
+extension HUISurfaceModelState.StereoLevelMeterSide: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .left: return "left"
+        case .right: return "right"
+        }
+    }
+}
+
+extension HUISurfaceModelState.StereoLevelMeterSide {
+    /// Raw value for HUI message encoding.
+    @inlinable
+    var rawValue: UInt8 {
+        switch self {
+        case .left: return 0
+        case .right: return 1
+        }
+    }
+}
 
 // MARK: - Constants
 
-extension HUISurfaceModelState.StereoLevelMeter {
+extension HUISurfaceModelState.StereoLevelMeterSide {
     /// Level value range minimum value.
     /// (`0` means that no LEDs on the meter are lit up.)
     public static let levelMin: Int = 0x0
@@ -111,53 +158,4 @@ extension HUISurfaceModelState.StereoLevelMeter {
     /// Range of possible level meter values.
     /// (`0` indicates that no LEDs on the meter are lit up.)
     public static let levelRange = levelMin ... levelMax
-}
-
-// MARK: - Properties
-
-extension HUISurfaceModelState.StereoLevelMeter {
-    public func level(of side: Side) -> Int {
-        switch side {
-        case .left:  return left
-        case .right: return right
-        }
-    }
-}
-
-// MARK: - StereoLevelMeter Side
-
-extension HUISurfaceModelState.StereoLevelMeter {
-    /// Enum describing the side of a stereo level meter
-    public enum Side {
-        /// Left stereo channel.
-        case left
-        
-        /// Right stereo channel.
-        case right
-    }
-}
-
-extension HUISurfaceModelState.StereoLevelMeter.Side: Equatable { }
-
-extension HUISurfaceModelState.StereoLevelMeter.Side: Hashable { }
-
-extension HUISurfaceModelState.StereoLevelMeter.Side: Sendable { }
-
-extension HUISurfaceModelState.StereoLevelMeter.Side: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .left: return "left"
-        case .right: return "right"
-        }
-    }
-}
-
-extension HUISurfaceModelState.StereoLevelMeter.Side {
-    /// Raw value for HUI message encoding.
-    var rawValue: UInt8 {
-        switch self {
-        case .left: return 0
-        case .right: return 1
-        }
-    }
 }

@@ -68,23 +68,29 @@ internal import MIDIKitInternals
     public let remotePresenceTimeout: TimeInterval
     
     @ObservationIgnored
-    var remotePresenceTimer: Task<Void, any Error>?
+    var remotePresenceTimer: Task<Void, any Error>? {
+        get { _remotePresenceTimerLock.withLock { _remotePresenceTimer } }
+        _modify {
+            var valueCopy = _remotePresenceTimerLock.withLock { _remotePresenceTimer }
+            yield &valueCopy
+            _remotePresenceTimerLock.withLock { _remotePresenceTimer = valueCopy }
+        }
+        set { _remotePresenceTimerLock.withLock { _remotePresenceTimer = newValue } }
+    }
+    private nonisolated(unsafe) var _remotePresenceTimer: Task<Void, any Error>?
+    @ObservationIgnored private let _remotePresenceTimerLock = NSLock()
     
-    func setupRemotePresenceTimer() {
+    func restartRemotePresenceTimer() {
+        remotePresenceTimer?.cancel()
         remotePresenceTimer = Task { [weak self] in
             while let self, !Task.isCancelled {
                 try await Task.sleep(for: .seconds(remotePresenceTimeout))
-                self.isRemotePresent = false
-                self.remotePresenceTimer?.cancel()
-                self.remotePresenceTimer = nil
+                // make changes on main actor in case it results in UI updates
+                Task { @MainActor in
+                    self.isRemotePresent = false
+                }
             }
         }
-    }
-    
-    func restartRemotePresenceTimer() {
-        self.remotePresenceTimer?.cancel()
-        self.remotePresenceTimer = nil
-        setupRemotePresenceTimer()
     }
     
     /// This property will be `true` while ping messages are being received.
@@ -94,16 +100,29 @@ internal import MIDIKitInternals
     /// Ping timeout can be set to a custom value by setting the ``remotePresenceTimeout`` property.
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes.
-    public internal(set) var isRemotePresent: Bool = false {
-        didSet {
-            guard oldValue != isRemotePresent else { return }
-            remotePresenceChangedHandler?(isRemotePresent)
+    @ObservationIgnored
+    public internal(set) var isRemotePresent: Bool {
+        get { _isRemotePresentLock.withLock { _isRemotePresent } }
+        _modify {
+            var valueCopy = _isRemotePresentLock.withLock { _isRemotePresent }
+            yield &valueCopy
+            _isRemotePresentLock.withLock { _isRemotePresent = valueCopy }
         }
+        set { _isRemotePresentLock.withLock { _isRemotePresent = newValue } }
     }
+    private nonisolated(unsafe) var _isRemotePresent: Bool = false
+    @ObservationIgnored private let _isRemotePresentLock = NSLock()
     
-    func receivedPing() {
+    private func receivedPing() {
         restartRemotePresenceTimer()
+        
+        let oldValue = isRemotePresent
+        // note that we want to make observable property changes on main, but this method
+        // is only ever called from the main actor so we don't need to push it to main here
         isRemotePresent = true
+        if !oldValue {
+            remotePresenceChangedHandler?(true)
+        }
         
         // send ping-reply if ping request is received
         transmitPing()
@@ -132,7 +151,7 @@ internal import MIDIKitInternals
         }
         
         // presence timer
-        setupRemotePresenceTimer()
+        restartRemotePresenceTimer()
         
         // HUI control surfaces send a System Reset message when they are powered on
         transmitSystemReset()
@@ -152,22 +171,24 @@ internal import MIDIKitInternals
     }
     
     private func handleDecoder(hostEvent: HUIHostEventDecoder.Event) {
-        if case .ping = hostEvent {
-            self.receivedPing()
-        }
-        
-        // process event
-        let result = self.model.updateState(
-            from: hostEvent,
-            alwaysNotify: self.alwaysNotify
-        )
-        switch result {
-        case let .changed(notification):
-            self.modelNotificationHandler?(notification)
-        case .unchanged:
-            break
-        case let .unhandled(hostEvent):
-            Logger.debug("Unhandled HUI event: \(hostEvent)")
+        // process event on main actor in case it results in UI updates
+        Task { @MainActor in
+            if case .ping = hostEvent {
+                self.receivedPing()
+            }
+            
+            let result = self.model.updateState(
+                from: hostEvent,
+                alwaysNotify: self.alwaysNotify
+            )
+            switch result {
+            case let .changed(notification):
+                self.modelNotificationHandler?(notification)
+            case .unchanged:
+                break
+            case let .unhandled(hostEvent):
+                Logger.debug("Unhandled HUI event: \(hostEvent)")
+            }
         }
     }
 }

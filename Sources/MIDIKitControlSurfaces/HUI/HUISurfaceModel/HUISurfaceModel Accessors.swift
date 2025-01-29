@@ -14,6 +14,7 @@ extension HUISurfaceModel: HUISurfaceModelStateProtocol {
     ///
     /// > Reading state of ``HUISwitch/undefined(zone:port:)`` will always return `false` as state
     /// > is not stored for undefined switches.
+    @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case let .channelStrip(channel, subParam):
@@ -77,6 +78,7 @@ extension HUISurfaceModel: HUISurfaceModelStateProtocol {
     ///
     /// > Setting state for ``HUISwitch/undefined(zone:port:)`` has no effect and will not be
     /// > stored.
+    @inlinable
     public func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case let .channelStrip(channel, subParam):
@@ -140,6 +142,7 @@ extension HUISurfaceModel: HUISurfaceModelStateProtocol {
     ///
     /// > The rotary scroll knob in the DSP Edit/Assign section does not have an LED ring display,
     /// > so default will always be returned.
+    @inlinable
     public func state(of vPot: HUIVPot) -> HUIVPotDisplay {
         switch vPot {
         case let .channel(channel):

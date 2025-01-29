@@ -8,7 +8,8 @@ import Foundation
 
 extension HUISurfaceModelState {
     /// State storage representing the Transport section.
-    public struct Transport {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class Transport {
         public var rewind = false
         public var stop = false
         public var play = false
@@ -30,15 +31,11 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.Transport: Equatable { }
-
-extension HUISurfaceModelState.Transport: Hashable { }
-
-extension HUISurfaceModelState.Transport: Sendable { }
-
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModelState.Transport: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.Transport
-
+    
+    @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case .talkback:      return talkback
@@ -60,7 +57,8 @@ extension HUISurfaceModelState.Transport: HUISurfaceModelStateProtocol {
         }
     }
     
-    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+    @inlinable
+    public func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case .talkback:      talkback = state
         case .rewind:        rewind = state

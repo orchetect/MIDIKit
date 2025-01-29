@@ -8,7 +8,8 @@ import Foundation
 
 extension HUISurfaceModelState {
     /// State storage representing footswitches and sounds.
-    public struct FootswitchesAndSounds {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class FootswitchesAndSounds {
         public var footswitchRelay1 = false
         public var footswitchRelay2 = false
         public var click = false
@@ -16,15 +17,11 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.FootswitchesAndSounds: Equatable { }
-
-extension HUISurfaceModelState.FootswitchesAndSounds: Hashable { }
-
-extension HUISurfaceModelState.FootswitchesAndSounds: Sendable { }
-
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModelState.FootswitchesAndSounds: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.FootswitchesAndSounds
-
+    
+    @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case .footswitchRelay1: return footswitchRelay1
@@ -34,7 +31,8 @@ extension HUISurfaceModelState.FootswitchesAndSounds: HUISurfaceModelStateProtoc
         }
     }
     
-    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+    @inlinable
+    public func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case .footswitchRelay1: footswitchRelay1 = state
         case .footswitchRelay2: footswitchRelay2 = state

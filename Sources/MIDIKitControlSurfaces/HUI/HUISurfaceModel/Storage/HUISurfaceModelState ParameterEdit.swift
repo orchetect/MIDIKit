@@ -9,7 +9,8 @@ import MIDIKitCore
 
 extension HUISurfaceModelState {
     /// State storage representing the Parameter Edit section.
-    public struct ParameterEdit {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class ParameterEdit {
         public var assign = false
         public var compare = false
         public var bypass = false
@@ -39,15 +40,11 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.ParameterEdit: Equatable { }
-
-extension HUISurfaceModelState.ParameterEdit: Hashable { }
-
-extension HUISurfaceModelState.ParameterEdit: Sendable { }
-
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModelState.ParameterEdit: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.ParameterEdit
-
+    
+    @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case .assign:        return assign
@@ -61,7 +58,8 @@ extension HUISurfaceModelState.ParameterEdit: HUISurfaceModelStateProtocol {
         }
     }
     
-    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+    @inlinable
+    public func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case .assign:        assign = state
         case .compare:       compare = state

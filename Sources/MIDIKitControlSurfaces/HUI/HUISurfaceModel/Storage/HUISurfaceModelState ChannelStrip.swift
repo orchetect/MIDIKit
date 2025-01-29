@@ -9,7 +9,8 @@ import MIDIKitCore
 
 extension HUISurfaceModelState {
     /// State storage representing an individual channel strip and its components.
-    public struct ChannelStrip {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class ChannelStrip {
         /// Stereo Level Meter.
         public var levelMeter = StereoLevelMeter()
         
@@ -45,15 +46,11 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.ChannelStrip: Equatable { }
-
-extension HUISurfaceModelState.ChannelStrip: Hashable { }
-
-extension HUISurfaceModelState.ChannelStrip: Sendable { }
-
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModelState.ChannelStrip: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.ChannelStrip
-
+    
+    @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case .recordReady:  return recordReady
@@ -67,7 +64,8 @@ extension HUISurfaceModelState.ChannelStrip: HUISurfaceModelStateProtocol {
         }
     }
     
-    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+    @inlinable
+    public func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case .recordReady:  recordReady = state
         case .insert:       insert = state

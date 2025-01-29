@@ -8,7 +8,8 @@ import Foundation
 
 extension HUISurfaceModelState {
     /// State storage representing the Status/Group section.
-    public struct StatusAndGroup {
+    @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+    @Observable public class StatusAndGroup {
         public var auto = false
         public var monitor = false
         public var phase = false
@@ -18,15 +19,11 @@ extension HUISurfaceModelState {
     }
 }
 
-extension HUISurfaceModelState.StatusAndGroup: Equatable { }
-
-extension HUISurfaceModelState.StatusAndGroup: Hashable { }
-
-extension HUISurfaceModelState.StatusAndGroup: Sendable { }
-
+@available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUISurfaceModelState.StatusAndGroup: HUISurfaceModelStateProtocol {
     public typealias Switch = HUISwitch.StatusAndGroup
-
+    
+    @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case .auto:    return auto
@@ -38,7 +35,8 @@ extension HUISurfaceModelState.StatusAndGroup: HUISurfaceModelStateProtocol {
         }
     }
     
-    public mutating func setState(of huiSwitch: Switch, to state: Bool) {
+    @inlinable
+    public func setState(of huiSwitch: Switch, to state: Bool) {
         switch huiSwitch {
         case .auto:    auto = state
         case .monitor: monitor = state
