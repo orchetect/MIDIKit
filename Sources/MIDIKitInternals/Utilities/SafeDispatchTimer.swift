@@ -22,6 +22,8 @@ package final class SafeDispatchTimer /* : Sendable */ {
     nonisolated(unsafe)
     var timer: DispatchSourceTimer
     
+    weak var queue: DispatchQueue?
+    
     /// (Read-only) Frequency in Hz of the timer
     package internal(set) nonisolated(unsafe) var rate: Rate = .seconds(1.0)
     
@@ -39,22 +41,23 @@ package final class SafeDispatchTimer /* : Sendable */ {
     package init(
         rate: Rate,
         leeway: DispatchTimeInterval = .nanoseconds(0),
+        queue: DispatchQueue = .global(),
         eventHandler: @escaping DispatchSource.DispatchSourceHandler = { }
     ) {
         self.rate = rate
-    
         self.leeway = leeway
-    
-        timer = DispatchSource.makeTimerSource(flags: .strict, queue: .global())
-    
+        self.queue = queue
+        
+        timer = DispatchSource.makeTimerSource(flags: .strict, queue: queue)
+        
         // schedule the timer's start time to be the time of the class initialization
-    
+        
         timer.schedule(
             deadline: .now(),
             repeating: rate.secondsValue,
             leeway: leeway
         )
-    
+        
         timer.setEventHandler(handler: eventHandler)
     }
     
@@ -135,18 +138,18 @@ extension SafeDispatchTimer {
     package enum Rate: Hashable {
         case hertz(Double)
         case seconds(Double)
-    
+        
         package var secondsValue: Double {
             let value: Double
-    
+            
             switch self {
             case let .hertz(hz):
                 value = 1.0 / hz.clamped(to: 0.00001...)
-    
+                
             case let .seconds(secs):
                 value = secs
             }
-    
+            
             return value.clamped(to: 0.000_000_001...) // 1 nanosecond min
         }
     }

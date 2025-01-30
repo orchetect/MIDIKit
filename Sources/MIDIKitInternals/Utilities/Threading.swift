@@ -6,21 +6,6 @@
 
 import Foundation
 
-extension DispatchQueue {
-    /// Same as `sync { }` but reuses current context if execution is already on the queue.
-    @inline(__always)
-    @discardableResult
-    package func syncNonNesting<T>(execute work: () throws -> T) rethrows -> T {
-        if Thread.current == self {
-            return try work()
-        } else {
-            return try self.sync {
-                try work()
-            }
-        }
-    }
-}
-
 /// Synchronizes access to a property on a specified dispatch queue.
 ///
 /// > Note:
@@ -42,19 +27,19 @@ package struct SyncAccess<Value>: Sendable {
             value = newValue
         }
         get {
-            return queue.syncNonNesting {
+            return queue.sync {
                 value
             }
         }
         _modify {
-            var valueCopy = queue.syncNonNesting { value }
+            var valueCopy = queue.sync { value }
             yield &valueCopy
-            queue.syncNonNesting {
+            queue.sync {
                 value = valueCopy
             }
         }
         set {
-            queue.syncNonNesting {
+            queue.sync {
                 value = newValue
             }
         }
