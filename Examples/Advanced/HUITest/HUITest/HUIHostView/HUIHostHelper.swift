@@ -13,39 +13,56 @@ import SwiftUI
 @Observable final class HUIHostHelper {
     // MARK: MIDI
     @ObservationIgnored
-    @EnvironmentObject
-    var midiManager: ObservableMIDIManager
+    weak var midiManager: ObservableMIDIManager?
     
     static let kHUIInputConnectionTag = "HUIHostInputConnection"
     static let kHUIOutputConnectionTag = "HUIHostOutputConnection"
     
-    var logPing: Bool = true
+    var logPing: Bool = false
     
     var huiHost: HUIHost
+    
     var isRemotePresent: Bool = false
     
-    var model: HUIHostModel = .init()
+    var model = HUIHostModel()
     
     init(midiManager: ObservableMIDIManager) {
+        self.midiManager = midiManager
+        
         huiHost = HUIHost()
         
         setupSingleBank(midiManager: midiManager)
+    }
+    
+    deinit {
+        stopConnections()
+    }
+    
+    func startConnections() {
+        guard let midiManager else { return }
         
-        // set up MIDI connections
         do {
-            try midiManager.addInputConnection(
-                to: .outputs(matching: [.name(HUIClientView.kHUIOutputName)]),
-                tag: Self.kHUIInputConnectionTag,
-                receiver: .weak(huiHost.banks[0])
-            )
-            
-            try midiManager.addOutputConnection(
-                to: .inputs(matching: [.name(HUIClientView.kHUIInputName)]),
-                tag: Self.kHUIOutputConnectionTag
-            )
+            if midiManager.managedInputConnections.isEmpty {
+                try midiManager.addInputConnection(
+                    to: .outputs(matching: [.name(HUIClientView.kHUIOutputName)]),
+                    tag: Self.kHUIInputConnectionTag,
+                    receiver: .weak(huiHost.banks[0])
+                )
+            }
+            if midiManager.managedOutputConnections.isEmpty {
+                try midiManager.addOutputConnection(
+                    to: .inputs(matching: [.name(HUIClientView.kHUIInputName)]),
+                    tag: Self.kHUIOutputConnectionTag
+                )
+            }
         } catch {
             Logger.debug("Error setting up MIDI.")
         }
+    }
+    
+    func stopConnections() {
+        midiManager?.remove(.inputConnection, .withTag(Self.kHUIInputConnectionTag))
+        midiManager?.remove(.outputConnection, .withTag(Self.kHUIOutputConnectionTag))
     }
     
     func setupSingleBank(midiManager: ObservableMIDIManager) {
@@ -54,12 +71,17 @@ import SwiftUI
         huiHost.addBank(
             huiEventHandler: { [weak self] event in
                 guard let self else { return }
-                if !(event == .ping && !self.logPing) {
+                switch event {
+                case .ping:
+                    if self.logPing {
+                        Logger.debug("Host received ping")
+                    }
+                default:
                     Logger.debug("Host received: \(event)")
                 }
                 
-                // update host state model
-                DispatchQueue.main.async {
+                // update host state model on main
+                Task { @MainActor in
                     self.handle(inboundEvent: event)
                 }
             },
@@ -71,7 +93,8 @@ import SwiftUI
             },
             remotePresenceChangedHandler: { [weak self] isPresent in
                 Logger.debug("Surface presence is now \(isPresent)")
-                DispatchQueue.main.async {
+                // update host state model on main
+                Task { @MainActor in
                     self?.isRemotePresent = isPresent
                 }
             }
@@ -121,12 +144,12 @@ import SwiftUI
 
 /// Host model. Can contain one or more banks.
 /// Each bank corresponds to an entire HUI device (remote control surface).
-struct HUIHostModel {
+@Observable class HUIHostModel {
     public var bank0 = Bank()
 }
 
 extension HUIHostModel {
-    struct Bank {
+    @Observable class Bank {
         public var channel0: ChannelStrip = .init()
         public var channel1: ChannelStrip = .init()
         public var channel2: ChannelStrip = .init()
@@ -139,7 +162,7 @@ extension HUIHostModel {
 }
 
 extension HUIHostModel.Bank {
-    struct ChannelStrip {
+    @Observable class ChannelStrip {
         public var pan: Float = 0.5
         public var vPotLowerLED: Bool = false
         public var solo: Bool = false

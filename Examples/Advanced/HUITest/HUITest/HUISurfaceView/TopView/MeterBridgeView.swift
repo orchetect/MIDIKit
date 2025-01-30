@@ -34,12 +34,12 @@ extension HUISurfaceView {
         @Environment(HUISurface.self) var huiSurface
 
         let channel: Int
-        let side: HUISurfaceModelState.StereoLevelMeter.Side
+        let side: HUISurfaceModelState.StereoLevelMeterSide
 
         static let segmentIndexes = Array(
             stride(
-                from: HUISurfaceModelState.StereoLevelMeter.levelMax,
-                through: HUISurfaceModelState.StereoLevelMeter.levelMin + 1,
+                from: HUISurfaceModelState.StereoLevelMeterSide.levelMax,
+                through: HUISurfaceModelState.StereoLevelMeterSide.levelMin + 1,
                 by: -1
             )
         )

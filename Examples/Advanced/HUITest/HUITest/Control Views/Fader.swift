@@ -6,7 +6,7 @@
 
 // TODO: this struct could be moved to AudioKit/Controls repo
 
-@testable import Controls // TODO: remove testable
+import Controls
 import SwiftUI
 
 /// Fader

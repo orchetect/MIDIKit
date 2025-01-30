@@ -63,8 +63,22 @@ class MaxLengthFormatter: Formatter {
 
 extension Scene {
     /// Scene modifier to run arbitrary code when the scene's body is evaluated.
-    public func onSceneBody(_ block: @escaping () -> Void) -> some Scene {
-        DispatchQueue.main.async { block() }
+    func onSceneBody(_ block: @escaping () -> Void) -> some Scene {
+        Task { @MainActor in block() }
         return self
+    }
+}
+
+extension CGRect {
+    func offset(by off: CGSize) -> CGRect {
+        offsetBy(dx: off.width, dy: off.height)
+    }
+}
+
+extension Comparable {
+    /// Returns the value clamped to the passed range.
+    @_disfavoredOverload @inlinable
+    func clamped(to limits: ClosedRange<Self>) -> Self {
+        min(max(self, limits.lowerBound), limits.upperBound)
     }
 }

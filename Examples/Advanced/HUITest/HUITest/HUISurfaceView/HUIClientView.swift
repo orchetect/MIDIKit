@@ -9,11 +9,11 @@ import MIDIKitIO
 import SwiftUI
 
 struct HUIClientView: View {
-    @EnvironmentObject var midiManager: ObservableMIDIManager
+    @Environment(ObservableMIDIManager.self) private var midiManager
     @State private var huiSurface: HUISurface
     
-    static let kHUIInputName = "MIDIKit HUI Input"
-    static let kHUIOutputName = "MIDIKit HUI Output"
+    static nonisolated let kHUIInputName = "MIDIKit HUI Input"
+    static nonisolated let kHUIOutputName = "MIDIKit HUI Output"
     
     init(midiManager: ObservableMIDIManager) {
         // set up HUI Surface object
@@ -37,43 +37,42 @@ struct HUIClientView: View {
             }
         }
         
-        _huiSurface = State(wrappedValue: huiSurface)
+        _huiSurface = State(initialValue: huiSurface)
     }
     
     var body: some View {
         HUISurfaceView()
             .frame(maxWidth: .infinity)
             .environment(huiSurface)
-        
-            .onAppear {
-                setupVirtualPorts()
-            }
+            .onAppear { startVirtualPorts() }
+            .onDisappear { stopVirtualPorts() }
     }
     
-    private func setupVirtualPorts() {
+    private func startVirtualPorts() {
         do {
-            try midiManager.addInput(
-                name: Self.kHUIInputName,
-                tag: Self.kHUIInputName,
-                uniqueID: .userDefaultsManaged(key: Self.kHUIInputName),
-                receiver: .events { [weak huiSurface] events, timeStamp, source in
-                    // since handler callbacks from MIDI are on a CoreMIDI thread,
-                    // parse the MIDI on the main thread because SwiftUI state in
-                    // this app will be updated as a result
-                    DispatchQueue.main.async {
-                        huiSurface?.midiIn(events: events)
-                    }
-                }
-            )
-            
-            try midiManager.addOutput(
-                name: Self.kHUIOutputName,
-                tag: Self.kHUIOutputName,
-                uniqueID: .userDefaultsManaged(key: Self.kHUIOutputName)
-            )
+            if midiManager.managedInputs.isEmpty {
+                try midiManager.addInput(
+                    name: Self.kHUIInputName,
+                    tag: Self.kHUIInputName,
+                    uniqueID: .userDefaultsManaged(key: Self.kHUIInputName),
+                    receiver: .weak(huiSurface)
+                )
+            }
+            if midiManager.managedOutputs.isEmpty {
+                try midiManager.addOutput(
+                    name: Self.kHUIOutputName,
+                    tag: Self.kHUIOutputName,
+                    uniqueID: .userDefaultsManaged(key: Self.kHUIOutputName)
+                )
+            }
         } catch {
             Logger.debug("Error setting up MIDI.")
         }
+    }
+    
+    private func stopVirtualPorts() {
+        midiManager.remove(.input, .withTag(Self.kHUIInputName))
+        midiManager.remove(.output, .withTag(Self.kHUIOutputName))
     }
 }
 

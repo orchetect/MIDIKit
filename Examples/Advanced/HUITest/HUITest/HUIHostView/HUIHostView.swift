@@ -10,15 +10,15 @@ import MIDIKitIO
 import SwiftUI
 
 struct HUIHostView: View {
-    @EnvironmentObject var midiManager: ObservableMIDIManager
-    @State var huiHostHelper: HUIHostHelper
+    @Environment(ObservableMIDIManager.self) private var midiManager
+    @State private var huiHostHelper: HUIHostHelper
     
     /// Convenience accessor for first HUI bank.
     private var huiBank0: HUIHostBank? { huiHostHelper.huiHost.banks.first }
     
     init(midiManager: ObservableMIDIManager) {
         // set up HUI Host object
-        _huiHostHelper = State(wrappedValue: HUIHostHelper(midiManager: midiManager))
+        _huiHostHelper = State(initialValue: HUIHostHelper(midiManager: midiManager))
     }
     
     @State private var vPotDisplayFormat: VPotDisplayFormat = .single
@@ -42,6 +42,8 @@ struct HUIHostView: View {
         .multilineTextAlignment(.center)
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear { huiHostHelper.startConnections() }
+        .onDisappear { huiHostHelper.stopConnections() }
     }
     
     var surfaceStatus: some View {
@@ -60,12 +62,12 @@ struct HUIHostView: View {
                     huiBank0?.transmitLevelMeter(
                         channel: 0,
                         side: .left,
-                        level: HUISurfaceModelState.StereoLevelMeter.levelRange.randomElement()!
+                        level: HUISurfaceModelState.StereoLevelMeterSide.levelRange.randomElement()!
                     )
                     huiBank0?.transmitLevelMeter(
                         channel: 0,
                         side: .right,
-                        level: HUISurfaceModelState.StereoLevelMeter.levelRange.randomElement()!
+                        level: HUISurfaceModelState.StereoLevelMeterSide.levelRange.randomElement()!
                     )
                 }
                 GroupBox(label: Text("V-Pot")) {

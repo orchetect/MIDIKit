@@ -30,9 +30,10 @@ extension HUISurfaceView {
                 .frame(minHeight: Self.faderHeight, alignment: .center)
                 .padding([.leading, .trailing], 5)
                 
-                .onReceive(
-                    Just(huiSurface.model.channelStrips[channel.intValue].fader.levelUnitInterval)
-                ) { newValue in
+                .onChange(
+                    of: huiSurface.model.channelStrips[channel.intValue].fader.levelUnitInterval,
+                    initial: true
+                ) { _, newValue in
                     // update fader level as result of received level from host
                     // but only if fader is not currently touched by user
                     guard !isTouched else { return }

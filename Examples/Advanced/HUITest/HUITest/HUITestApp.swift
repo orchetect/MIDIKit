@@ -11,7 +11,7 @@ import SwiftUI
 struct HUITestApp: App {
     @Environment(\.openWindow) private var openWindow
     
-    @ObservedObject private var midiManager = ObservableMIDIManager(
+    @State private var midiManager = ObservableMIDIManager(
         clientName: "HUITest",
         model: "HUITest",
         manufacturer: "MyCompany"
@@ -32,18 +32,18 @@ struct HUITestApp: App {
     }
     
     var body: some Scene {
-        // Window("HUI Host", id: WindowID.huiHost) {
-        //     HUIHostView(midiManager: midiManager)
-        //         .frame(width: huiHostWidth, height: huiHostHeight)
-        //         .environmentObject(midiManager)
-        // }
-        // .windowResizability(.contentSize)
-        // .defaultPosition(UnitPoint(x: 0.25, y: 0.4))
+        Window("HUI Host", id: WindowID.huiHost) {
+            HUIHostView(midiManager: midiManager)
+                .frame(width: huiHostWidth, height: huiHostHeight)
+                .environment(midiManager)
+        }
+        .windowResizability(.contentSize)
+        .defaultPosition(UnitPoint(x: 0.25, y: 0.4))
         
         Window("HUI Surface", id: WindowID.huiSurface) {
             HUIClientView(midiManager: midiManager)
                 .frame(width: huiSurfaceWidth, height: huiSurfaceHeight)
-                .environmentObject(midiManager)
+                .environment(midiManager)
         }
         .windowResizability(.contentSize)
         .defaultPosition(UnitPoint(x: 0.5, y: 0.4))
@@ -54,15 +54,16 @@ struct HUITestApp: App {
     }
     
     private func onAppLaunch() {
-        // openWindow(id: WindowID.huiHost)
+        openWindow(id: WindowID.huiHost)
         openWindow(id: WindowID.huiSurface)
         
         orderAllWindowsFront()
     }
     
     private func orderAllWindowsFront() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-             NSApp.windows.forEach { $0.makeKeyAndOrderFront(self) }
+        Task { @MainActor in
+            try await Task.sleep(for: .milliseconds(500))
+            NSApp.windows.forEach { $0.makeKeyAndOrderFront(self) }
         }
     }
 }
