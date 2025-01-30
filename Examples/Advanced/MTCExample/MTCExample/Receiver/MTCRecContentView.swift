@@ -31,13 +31,11 @@ struct MTCRecContentView: View {
                 await setup()
             }
             .onChange(of: localFrameRate) { oldValue, newValue in
-                Task {
-                    if await mtcRecHost.mtcRec?.localFrameRate != newValue {
-                        logger.log(
-                            "Setting MTC receiver's local frame rate to \(newValue?.stringValue ?? "None")"
-                        )
-                        await mtcRecHost.mtcRec?.setLocalFrameRate(newValue)
-                    }
+                if mtcRecHost.mtcRec?.localFrameRate != newValue {
+                    logger.log(
+                        "Setting MTC receiver's local frame rate to \(newValue?.stringValue ?? "None")"
+                    )
+                    mtcRecHost.mtcRec?.setLocalFrameRate(newValue)
                 }
             }
             .onChange(of: receiveFromSelfGen) { oldValue, newValue in

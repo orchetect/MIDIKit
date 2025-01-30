@@ -28,16 +28,14 @@ struct MTCGenContentView: View {
     
     var body: some View {
         mtcGenView
-            .task {
-                await setup()
-            }
+            .onAppear { setup() }
     }
     
-    private func setup() async {
+    private func setup() {
         mtcGenHost.midiManager = midiManager
         mtcGenHost.addPort(to: midiManager)
         
-        await mtcGenHost.mtcGen?.setLocateBehavior(locateBehavior)
+        mtcGenHost.mtcGen?.locateBehavior = locateBehavior
         
         locate()
     }
@@ -98,10 +96,8 @@ struct MTCGenContentView: View {
                 guard !mtcGenHost.mtcGenState else { return }
                 
                 // this is a SwiftUI workaround, but it works fine for our purposes
-                Task {
-                    if await mtcGenHost.mtcGen?.localFrameRate != localFrameRate {
-                        locate()
-                    }
+                if mtcGenHost.mtcGen?.localFrameRate != localFrameRate {
+                    locate()
                 }
             }
             
@@ -125,10 +121,8 @@ struct MTCGenContentView: View {
                 guard !mtcGenHost.mtcGenState else { return }
                 
                 // this is a stupid SwiftUI workaround, but it works fine for our purposes
-                Task {
-                    if await mtcGenHost.mtcGen?.locateBehavior != locateBehavior {
-                        await mtcGenHost.mtcGen?.setLocateBehavior(locateBehavior)
-                    }
+                if mtcGenHost.mtcGen?.locateBehavior != locateBehavior {
+                    mtcGenHost.mtcGen?.locateBehavior = locateBehavior
                 }
             }
         }

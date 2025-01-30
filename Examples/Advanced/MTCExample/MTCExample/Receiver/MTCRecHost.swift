@@ -26,74 +26,71 @@ import SwiftUI
     private var lastSeconds = 0
     
     init() {
-        Task {
-            let rec = await receiverFactory()
-            mtcRec = rec
-            
-            await rec.setTimecodeChangedHandler { timecode, event, direction, displayNeedsUpdate in
-                Task { @MainActor [weak self] in
-                    guard let self else { return }
-                    
-                    receiverTC = timecode.stringValue()
-                    receiverFR = await mtcRec?.mtcFrameRate
-                    
-                    guard displayNeedsUpdate else { return }
-                    
-                    if timecode.seconds != lastSeconds {
-                        playClickB()
-                        lastSeconds = timecode.seconds
-                    }
+        let rec = receiverFactory()
+        mtcRec = rec
+        
+        rec.setTimecodeChangedHandler { timecode, event, direction, displayNeedsUpdate in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                
+                receiverTC = timecode.stringValue()
+                receiverFR = mtcRec?.mtcFrameRate
+                
+                guard displayNeedsUpdate else { return }
+                
+                if timecode.seconds != lastSeconds {
+                    playClickB()
+                    lastSeconds = timecode.seconds
                 }
             }
-            
-            await rec.setStateChangedHandler { state in
-                Task { @MainActor [weak self] in
-                    guard let self else { return }
+        }
+        
+        rec.setStateChangedHandler { state in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                
+                receiverState = state
+                logger.log("MTC Receiver state: \(receiverState)")
+                
+                scheduledLock?.cancel()
+                scheduledLock = nil
+                
+                switch state {
+                case .idle:
+                    break
                     
-                    receiverState = state
-                    logger.log("MTC Receiver state: \(receiverState)")
-                    
-                    scheduledLock?.cancel()
-                    scheduledLock = nil
-                    
-                    switch state {
-                    case .idle:
-                        break
-                        
-                    case let .preSync(lockTime, timecode):
-                        let scheduled = DispatchQueue.main.schedule(
-                            after: DispatchQueue.SchedulerTimeType(lockTime),
-                            interval: .seconds(1),
-                            tolerance: .zero,
-                            options: DispatchQueue.SchedulerOptions(
-                                qos: .userInitiated,
-                                flags: [],
-                                group: nil
-                            )
-                        ) { [weak self] in
-                            logger.log(">>> LOCAL SYNC: PLAYBACK START @\(timecode)")
-                            self?.scheduledLock?.cancel()
-                            self?.scheduledLock = nil
-                        }
-                        
-                        scheduledLock = scheduled
-                        
-                    case .sync:
-                        break
-                        
-                    case .freewheeling:
-                        break
-                        
-                    case .incompatibleFrameRate:
-                        break
+                case let .preSync(lockTime, timecode):
+                    let scheduled = DispatchQueue.main.schedule(
+                        after: DispatchQueue.SchedulerTimeType(lockTime),
+                        interval: .seconds(1),
+                        tolerance: .zero,
+                        options: DispatchQueue.SchedulerOptions(
+                            qos: .userInitiated,
+                            flags: [],
+                            group: nil
+                        )
+                    ) { [weak self] in
+                        logger.log(">>> LOCAL SYNC: PLAYBACK START @\(timecode)")
+                        self?.scheduledLock?.cancel()
+                        self?.scheduledLock = nil
                     }
+                    
+                    scheduledLock = scheduled
+                    
+                case .sync:
+                    break
+                    
+                case .freewheeling:
+                    break
+                    
+                case .incompatibleFrameRate:
+                    break
                 }
             }
         }
     }
     
-    private func receiverFactory() async -> MTCReceiver {
-        // set up new MTC receiver and configure it
+    private func receiverFactory() -> MTCReceiver {
         MTCReceiver(
             name: "main",
             initialLocalFrameRate: .fps24,
