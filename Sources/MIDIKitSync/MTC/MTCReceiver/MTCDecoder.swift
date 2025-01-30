@@ -57,11 +57,6 @@ public final class MTCDecoder: Sendable {
     /// Last timecode formed from incoming MTC data.
     public internal(set) var timecode: Timecode {
         get { return _timecodeLock.withLock { _timecode } }
-        _modify {
-            var valueCopy = _timecodeLock.withLock { _timecode }
-            yield &valueCopy
-            _timecodeLock.withLock { _timecode = valueCopy }
-        }
         set { _timecodeLock.withLock { _timecode = newValue } }
     }
     private nonisolated(unsafe) var _timecode = Timecode(.zero, at: .fps30)
@@ -70,11 +65,6 @@ public final class MTCDecoder: Sendable {
     /// The base MTC frame rate last received.
     public internal(set) var mtcFrameRate: MTCFrameRate {
         get { return _mtcFrameRateLock.withLock { _mtcFrameRate } }
-        _modify {
-            var valueCopy = _mtcFrameRateLock.withLock { _mtcFrameRate }
-            yield &valueCopy
-            _mtcFrameRateLock.withLock { _mtcFrameRate = valueCopy }
-        }
         set {
             let isDiff = newValue != mtcFrameRate
             
@@ -97,11 +87,6 @@ public final class MTCDecoder: Sendable {
     /// interpret the incoming MTC accordingly.
     public var localFrameRate: TimecodeFrameRate? {
         get { return _localFrameRateLock.withLock { _localFrameRate } }
-        _modify {
-            var valueCopy = _localFrameRateLock.withLock { _localFrameRate }
-            yield &valueCopy
-            _localFrameRateLock.withLock { _localFrameRate = valueCopy }
-        }
         set { _localFrameRateLock.withLock { _localFrameRate = newValue } }
     }
     private nonisolated(unsafe) var _localFrameRate: TimecodeFrameRate?
@@ -110,11 +95,6 @@ public final class MTCDecoder: Sendable {
     /// Status of the direction of MTC quarter-frames received
     public internal(set) var direction: MTCDirection {
         get { return _directionLock.withLock { _direction } }
-        _modify {
-            var valueCopy = _directionLock.withLock { _direction }
-            yield &valueCopy
-            _directionLock.withLock { _direction = valueCopy }
-        }
         set { _directionLock.withLock { _direction = newValue } }
     }
     private nonisolated(unsafe) var _direction: MTCDirection = .forwards

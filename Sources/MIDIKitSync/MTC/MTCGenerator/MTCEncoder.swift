@@ -47,11 +47,6 @@ public final class MTCEncoder: SendsMIDIEvents, Sendable {
     /// Last internal MTC SPMTE timecode components formed from outgoing MTC data.
     public internal(set) var mtcComponents: Timecode.Components {
         get { return _mtcComponentsLock.withLock { _mtcComponents } }
-        _modify {
-            var valueCopy = _mtcComponentsLock.withLock { _mtcComponents }
-            yield &valueCopy
-            _mtcComponentsLock.withLock { _mtcComponents = valueCopy }
-        }
         set { _mtcComponentsLock.withLock { _mtcComponents = newValue } }
     }
     private nonisolated(unsafe) var _mtcComponents = Timecode.Components()
@@ -64,11 +59,6 @@ public final class MTCEncoder: SendsMIDIEvents, Sendable {
     /// Local frame rate (desired rate, not internal MTC SMPTE frame rate).
     public internal(set) var localFrameRate: TimecodeFrameRate {
         get { return _localFrameRateLock.withLock { _localFrameRate } }
-        _modify {
-            var valueCopy = _localFrameRateLock.withLock { _localFrameRate }
-            yield &valueCopy
-            _localFrameRateLock.withLock { _localFrameRate = valueCopy }
-        }
         set { _localFrameRateLock.withLock { _localFrameRate = newValue } }
     }
     private nonisolated(unsafe) var _localFrameRate: TimecodeFrameRate = .fps30
@@ -83,11 +73,6 @@ public final class MTCEncoder: SendsMIDIEvents, Sendable {
     /// The base MTC frame rate last transmitted.
     public internal(set) var mtcFrameRate: MTCFrameRate {
         get { return _mtcFrameRateLock.withLock { _mtcFrameRate } }
-        _modify {
-            var valueCopy = _mtcFrameRateLock.withLock { _mtcFrameRate }
-            yield &valueCopy
-            _mtcFrameRateLock.withLock { _mtcFrameRate = valueCopy }
-        }
         set { _mtcFrameRateLock.withLock { _mtcFrameRate = newValue } }
     }
     private nonisolated(unsafe) var _mtcFrameRate: MTCFrameRate = .mtc30

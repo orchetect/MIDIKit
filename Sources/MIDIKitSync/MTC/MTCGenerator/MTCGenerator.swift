@@ -10,10 +10,10 @@ import TimecodeKitCore
 internal import MIDIKitInternals
 
 /// MTC sync generator.
-public final actor MTCGenerator: SendsMIDIEvents, Sendable {
+public final class MTCGenerator: SendsMIDIEvents, Sendable {
     // MARK: - Public properties
     
-    public private(set) var name: String
+    public let name: String
     
     /// The MTC SMPTE frame rate (24, 25, 29.97d, or 30) that was last transmitted by the generator.
     ///
@@ -22,36 +22,41 @@ public final actor MTCGenerator: SendsMIDIEvents, Sendable {
     /// local ``timecode``.`frameRate` property is used for automatic selection of MTC SMPTE frame
     /// rate and scaling of outgoing timecode accordingly.
     public var mtcFrameRate: MTCFrameRate {
-        encoder.mtcFrameRate
+        generateQueue.sync { encoder.mtcFrameRate }
     }
     
-    public private(set) var state: State = .idle
+    /// Generator state.
+    public private(set) var state: State {
+        get { return accessQueue.sync { _state } }
+        set { accessQueue.sync { _state = newValue } }
+    }
+    private nonisolated(unsafe) var _state: State = .idle
     
     /// Internal var
-    private var shouldStart = true
+    private var shouldStart: Bool {
+        get { return accessQueue.sync { _shouldStart } }
+        set { accessQueue.sync { _shouldStart = newValue } }
+    }
+    private nonisolated(unsafe) var _shouldStart: Bool = true
     
     /// Property updated whenever outgoing MTC timecode changes.
     public var timecode: Timecode {
-        encoder.timecode
+        generateQueue.sync { encoder.timecode }
     }
     
     public var localFrameRate: TimecodeFrameRate {
-        encoder.localFrameRate
+        generateQueue.sync { encoder.localFrameRate }
     }
     
     /// Behavior determining when MTC Full-Frame MIDI messages should be generated.
     ///
     /// ``MTCEncoder/FullFrameBehavior/ifDifferent`` is recommended and suitable for most
     /// implementations.
-    public var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
-    
-    /// Behavior determining when MTC Full-Frame MIDI messages should be generated.
-    ///
-    /// ``MTCEncoder/FullFrameBehavior/ifDifferent`` is recommended and suitable for most
-    /// implementations.
-    public func setLocateBehavior(_ newLocateBehavior: MTCEncoder.FullFrameBehavior) {
-        locateBehavior = newLocateBehavior
+    public var locateBehavior: MTCEncoder.FullFrameBehavior {
+        get { return accessQueue.sync { _locateBehavior } }
+        set { accessQueue.sync { _locateBehavior = newValue } }
     }
+    private nonisolated(unsafe) var _locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
     
     // MARK: - Stored closures
     
@@ -80,36 +85,51 @@ public final actor MTCGenerator: SendsMIDIEvents, Sendable {
         
         self.midiOutHandler = midiOutHandler
         
+        // queues
+        
+        let accessQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
+            + ".mtcGenerator." + name + ".access"
+        accessQueue = DispatchQueue(label: accessQueueName, qos: .userInitiated)
+        
+        let generateQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
+            + ".mtcGenerator." + name + ".generate"
+        generateQueue = DispatchQueue(label: generateQueueName, qos: .userInitiated)
+        
         // timer
         
         let newTimer = SafeDispatchTimer(
             rate: .seconds(1.0), // default, will be changed later
+            queue: generateQueue,
             eventHandler: { }
         )
         timer = newTimer
         
         // encoder setup
-        let newEncoder = MTCEncoder()
-        encoder = newEncoder
+        encoder = generateQueue.sync { MTCEncoder() }
         
         // set up handlers after self is initialized so we can capture reference to self
         
         newTimer.setEventHandler { [weak self] in
-            Task { [weak self] in await self?.timerFired() }
+            self?.timerFired()
         }
         
-        newEncoder.setMIDIOutHandler { [weak self] midiEvents in
+        encoder.setMIDIOutHandler { [weak self] midiEvents in
             self?.midiOut(midiEvents)
         }
     }
     
+    // MARK: - Queue (internal)
+    
+    private let accessQueue: DispatchQueue
+    private let generateQueue: DispatchQueue
+    
     // MARK: - Encoder (internal)
     
-    let encoder: MTCEncoder
+    private let encoder: MTCEncoder
     
     // MARK: - Timer (internal)
     
-    let timer: SafeDispatchTimer
+    private nonisolated(unsafe) let timer: SafeDispatchTimer
     
     /// Internal: Fired from our timer object.
     func timerFired() {
@@ -153,9 +173,9 @@ public final actor MTCGenerator: SendsMIDIEvents, Sendable {
         
         timer.setRate(.seconds(rate))
     }
-        
+    
     // MARK: - Public methods
-        
+    
     /// Locate to a new timecode, while not generating continuous playback MIDI message stream.
     /// Sends a MTC full-frame message.
     ///
@@ -166,7 +186,7 @@ public final actor MTCGenerator: SendsMIDIEvents, Sendable {
         encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
         setTimerRate(from: encoder.localFrameRate)
     }
-        
+    
     /// Locate to a new timecode, while not generating continuous playback MIDI message stream.
     /// Sends a MTC full-frame message.
     ///
@@ -177,7 +197,7 @@ public final actor MTCGenerator: SendsMIDIEvents, Sendable {
         encoder.locate(to: components, transmitFullFrame: locateBehavior)
         setTimerRate(from: encoder.localFrameRate)
     }
-        
+    
     /// Starts generating MTC continuous playback MIDI message stream events.
     /// Call this method at the exact time that `timecode` occurs.
     ///
@@ -202,15 +222,15 @@ public final actor MTCGenerator: SendsMIDIEvents, Sendable {
         
         // if subframes > 0, scheduling is required to synchronize
         // MTC generation start to be at the exact start of the next frame
-            
+        
         // pass it on to the start method that handles scheduling
-            
+        
         start(
             now: timecode.realTimeValue,
             frameRate: timecode.frameRate
         )
     }
-        
+    
     /// Starts generating MTC continuous playback MIDI message stream events.
     /// Call this method at the exact time that `realTime` occurs.
     ///
@@ -234,7 +254,7 @@ public final actor MTCGenerator: SendsMIDIEvents, Sendable {
         
         start(now: tc)
     }
-        
+    
     /// Starts generating MTC continuous playback MIDI message stream events.
     /// Call this method at the exact time that `realTime` occurs.
     ///
@@ -308,22 +328,24 @@ public final actor MTCGenerator: SendsMIDIEvents, Sendable {
         now components: Timecode.Components,
         frameRate: TimecodeFrameRate
     ) {
-        encoder.locate(
-            to: components,
-            frameRate: frameRate,
-            transmitFullFrame: .never
-        )
-            
+        generateQueue.sync {
+            encoder.locate(
+                to: components,
+                frameRate: frameRate,
+                transmitFullFrame: .never
+            )
+        }
+        
         if state == .generating {
             timer.stop()
         }
-            
+        
         state = .generating
-            
+        
         setTimerRate(from: encoder.localFrameRate)
         timer.restart()
     }
-        
+    
     /// Stops generating MTC continuous playback MIDI message stream events.
     public func stop() {
         shouldStart = false
