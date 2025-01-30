@@ -25,8 +25,18 @@ internal import MIDIKitInternals
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 @Observable public final class HUIHost: Sendable {
     /// HUI banks that are configured for this HUI host instance.
-    nonisolated(unsafe)
-    public internal(set) var banks: [HUIHostBank] = []
+    @ObservationIgnored
+    public internal(set) var banks: [HUIHostBank] {
+        get { _banksLock.withLock { _banks } }
+        _modify {
+            var valueCopy = _banksLock.withLock { _banks }
+            yield &valueCopy
+            _banksLock.withLock { _banks = valueCopy }
+        }
+        set { _banksLock.withLock { _banks = newValue } }
+    }
+    private nonisolated(unsafe) var _banks: [HUIHostBank] = []
+    @ObservationIgnored private let _banksLock = NSLock()
     
     /// A HUI host transmits a ping message every 1 second to each of the remote surfaces that are
     /// configured to connect to it. So each bank will receive pings individually. HUI surfaces

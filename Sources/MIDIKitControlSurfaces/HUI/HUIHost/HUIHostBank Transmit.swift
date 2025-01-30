@@ -66,7 +66,7 @@ extension HUIHostBank {
     ///     Where `0x0` is off, `0x1 ... 0xB` is signal level, and `0xC` is clipping (red LED).
     public func transmitLevelMeter(
         channel: UInt4,
-        side: HUISurfaceModelState.StereoLevelMeter.Side,
+        side: HUISurfaceModelState.StereoLevelMeterSide,
         level: Int
     ) {
         let event = encodeHUILevelMeter(

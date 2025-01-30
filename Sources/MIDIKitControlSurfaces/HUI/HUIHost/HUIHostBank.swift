@@ -53,16 +53,30 @@ internal import MIDIKitInternals
     public let remotePresenceTimeout: TimeInterval
     
     @ObservationIgnored
-    nonisolated(unsafe)
-    var remotePresenceTimer: Task<Void, any Error>?
+    var remotePresenceTimer: Task<Void, any Error>? {
+        get { _remotePresenceTimerLock.withLock { _remotePresenceTimer } }
+        _modify {
+            var valueCopy = _remotePresenceTimerLock.withLock { _remotePresenceTimer }
+            yield &valueCopy
+            _remotePresenceTimerLock.withLock { _remotePresenceTimer = valueCopy }
+        }
+        set { _remotePresenceTimerLock.withLock { _remotePresenceTimer = newValue } }
+    }
+    private nonisolated(unsafe) var _remotePresenceTimer: Task<Void, any Error>?
+    @ObservationIgnored private let _remotePresenceTimerLock = NSLock()
     
     func restartRemotePresenceTimer() {
+        remotePresenceTimer?.cancel()
+        remotePresenceTimer = nil
+        
         remotePresenceTimer = Task { [weak self] in
             guard let self else { return }
             try await Task.sleep(for: .seconds(remotePresenceTimeout))
+            try Task.checkCancellation()
             self.isRemotePresent = false
             self.remotePresenceTimer?.cancel()
             self.remotePresenceTimer = nil
+            remotePresenceChangedHandler?(false)
         }
     }
     
@@ -73,15 +87,26 @@ internal import MIDIKitInternals
     /// Ping timeout can be set to a custom value by setting the ``remotePresenceTimeout`` property.
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes.
-    public internal(set) nonisolated(unsafe) var isRemotePresent: Bool = false
+    @ObservationIgnored
+    public internal(set) var isRemotePresent: Bool {
+        get { _isRemotePresentLock.withLock { _isRemotePresent } }
+        _modify {
+            var valueCopy = _isRemotePresentLock.withLock { _isRemotePresent }
+            yield &valueCopy
+            _isRemotePresentLock.withLock { _isRemotePresent = valueCopy }
+        }
+        set { _isRemotePresentLock.withLock { _isRemotePresent = newValue } }
+    }
+    private nonisolated(unsafe) var _isRemotePresent: Bool = false
+    @ObservationIgnored private let _isRemotePresentLock = NSLock()
     
-    func receivedPing() {
-        restartRemotePresenceTimer()
-        
+    private func receivedPing() {
         let oldValue = isRemotePresent
+        restartRemotePresenceTimer()
         isRemotePresent = true
-        guard oldValue != isRemotePresent else { return }
-        remotePresenceChangedHandler?(isRemotePresent)
+        if !oldValue {
+            remotePresenceChangedHandler?(true)
+        }
     }
     
     // MARK: - Init
