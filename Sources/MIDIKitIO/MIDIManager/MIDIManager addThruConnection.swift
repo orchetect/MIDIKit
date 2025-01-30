@@ -51,28 +51,31 @@ extension MIDIManager {
         lifecycle: MIDIThruConnection.Lifecycle = .nonPersistent,
         params: MIDIThruConnection.Parameters = .init()
     ) throws {
-        let newCT = MIDIThruConnection(
-            outputs: outputs,
-            inputs: inputs,
-            lifecycle: lifecycle,
-            params: params,
-            midiManager: self,
-            api: preferredAPI
-        )
-        
-        // if non-persistent, add to managed array
-        if lifecycle == .nonPersistent {
-            // store the connection object in the manager,
-            // even if subsequent connection fails
-            managedThruConnections[tag] = newCT
+        try managementQueue.sync {
+            let newCT = MIDIThruConnection(
+                outputs: outputs,
+                inputs: inputs,
+                lifecycle: lifecycle,
+                params: params,
+                midiManager: self,
+                api: preferredAPI
+            )
+            
+            // if non-persistent, add to managed array
+            if lifecycle == .nonPersistent {
+                // store the connection object in the manager,
+                // even if subsequent connection fails
+                managedThruConnections[tag] = newCT
+            }
+            
+            // otherwise, we won't store a reference to a persistent thru connection
+            // persistent connections are stored by the system
+            // to analyze or delete a persistent connection,
+            // access the `unmanagedPersistentThruConnections(ownerID:)` method.
+            
+            
+            try newCT.create(in: self)
         }
-        
-        // otherwise, we won't store a reference to a persistent thru connection
-        // persistent connections are stored by the system
-        // to analyze or delete a persistent connection,
-        // access the `unmanagedPersistentThruConnections(ownerID:)` method.
-        
-        try newCT.create(in: self)
     }
 }
 

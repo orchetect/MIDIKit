@@ -20,12 +20,14 @@ extension MIDIManager {
         // if start() was already called, return
         guard coreMIDIClientRef == MIDIClientRef() else { return }
         
-        try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef) { [weak self] notificationPtr in
-            guard let self else { return }
-            let internalNotif = MIDIIOInternalNotification(notificationPtr)
-            self.internalNotificationHandler(internalNotif)
+        try accessQueue.sync {
+            try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef) { [weak self] notificationPtr in
+                guard let self else { return }
+                let internalNotif = MIDIIOInternalNotification(notificationPtr)
+                self.internalNotificationHandler(internalNotif)
+            }
+            .throwIfOSStatusErr()
         }
-        .throwIfOSStatusErr()
         
         // initial cache of endpoints
         
@@ -33,8 +35,6 @@ extension MIDIManager {
     }
     
     private func internalNotificationHandler(_ internalNotif: MIDIIOInternalNotification) {
-        let cache = MIDIIOObjectCache(from: self)
-        
         switch internalNotif {
         case .setupChanged, .added, .removed, .propertyChanged:
             updateObjectsCache()
@@ -49,6 +49,7 @@ extension MIDIManager {
                 // one .removed notification in a row so we have metadata on hand
                 return MIDIIONotification(internalNotif, cache: notificationCache)
             default:
+                let cache = MIDIIOObjectCache(from: self)
                 notificationCache = cache
                 return MIDIIONotification(internalNotif, cache: cache)
             }
@@ -61,16 +62,18 @@ extension MIDIManager {
         
         // propagate notification to managed objects
         
-        for outputConnection in managedOutputConnections.values {
-            outputConnection.notification(internalNotif)
-        }
-        
-        for inputConnection in managedInputConnections.values {
-            inputConnection.notification(internalNotif)
-        }
-        
-        for thruConnection in managedThruConnections.values {
-            thruConnection.notification(internalNotif)
+        managementQueue.async {
+            for outputConnection in self.managedOutputConnections.values {
+                outputConnection.notification(internalNotif)
+            }
+            
+            for inputConnection in self.managedInputConnections.values {
+                inputConnection.notification(internalNotif)
+            }
+            
+            for thruConnection in self.managedThruConnections.values {
+                thruConnection.notification(internalNotif)
+            }
         }
     }
     

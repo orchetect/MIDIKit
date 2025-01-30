@@ -30,19 +30,22 @@ extension MIDIManager {
         tag: String,
         filter: MIDIEndpointFilter = .default()
     ) throws {
-        let newCS = MIDIOutputConnection(
-            mode: inputs,
-            filter: filter,
-            midiManager: self,
-            api: preferredAPI
-        )
-        
-        // store the connection object in the manager,
-        // even if subsequent operations fail
-        managedOutputConnections[tag] = newCS
-        
-        try newCS.setupOutput(in: self)
-        try newCS.resolveEndpoints(in: self)
+        try managementQueue.sync {
+            let newCS = MIDIOutputConnection(
+                mode: inputs,
+                filter: filter,
+                midiManager: self,
+                midiManagerManagedInputs: managedInputs,
+                api: preferredAPI
+            )
+            
+            // store the connection object in the manager,
+            // even if subsequent operations fail
+            managedOutputConnections[tag] = newCS
+            
+            try newCS.setupOutput(in: self)
+            try newCS.resolveEndpoints(in: self)
+        }
     }
 }
 

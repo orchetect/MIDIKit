@@ -39,13 +39,16 @@ public final class MIDIInputConnection: _MIDIManaged, @unchecked Sendable {
     
     /// Stores criteria after applying any filters that have been set in the ``filter`` property.
     /// Passing nil will re-use existing criteria, re-applying the filters.
-    private func updateCriteria(_ criteria: Set<MIDIEndpointIdentity>? = nil) {
+    private func updateCriteria(
+        _ criteria: Set<MIDIEndpointIdentity>? = nil,
+        managedOutputs: [String: MIDIOutput]? = nil
+    ) {
         var newCriteria = criteria ?? outputsCriteria
     
         if filter.owned,
            let midiManager
         {
-            let managedOutputs: [MIDIEndpointIdentity] = midiManager.managedOutputs
+            let managedOutputs: [MIDIEndpointIdentity] = (managedOutputs ?? midiManager.managedOutputs)
                 .compactMap { $0.value.uniqueID }
                 .map { .uniqueID($0) }
     
@@ -85,13 +88,13 @@ public final class MIDIInputConnection: _MIDIManaged, @unchecked Sendable {
     }
     
     /// Reads the ``mode`` property and applies it to the stored criteria.
-    private func updateCriteriaFromMode() {
+    private func updateCriteriaFromMode(managedOutputs: [String: MIDIOutput]? = nil) {
         switch mode {
         case .outputs:
-            updateCriteria()
+            updateCriteria(managedOutputs: managedOutputs)
     
         case .allOutputs:
-            updateCriteria(.currentOutputs())
+            updateCriteria(.currentOutputs(), managedOutputs: managedOutputs)
         }
     }
     
@@ -132,6 +135,7 @@ public final class MIDIInputConnection: _MIDIManaged, @unchecked Sendable {
         filter: MIDIEndpointFilter,
         receiver: MIDIReceiver,
         midiManager: MIDIManager,
+        midiManagerManagedOutputs managedOutputs: [String: MIDIOutput]? = nil,
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
         self.midiManager = midiManager
@@ -139,13 +143,13 @@ public final class MIDIInputConnection: _MIDIManaged, @unchecked Sendable {
         self.filter = filter
         receiveHandler = receiver.create()
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-    
-        // relies on midiManager, mode, and filter being set first
+        
+        updateCriteriaFromMode(managedOutputs: managedOutputs)
         switch mode {
         case let .outputs(criteria):
-            updateCriteria(criteria)
+            updateCriteria(criteria, managedOutputs: managedOutputs)
         case .allOutputs:
-            updateCriteriaFromMode()
+            updateCriteriaFromMode(managedOutputs: managedOutputs)
         }
     }
     

@@ -42,85 +42,75 @@ public class MIDIManager: @unchecked Sendable {
     /// The preferred API will be used where possible, unless operating system requirements force
     /// the use of a specific.
     public var preferredAPI: CoreMIDIAPIVersion {
-        get { _preferredAPILock.withLock { _preferredAPI } }
+        get { accessQueue.sync { _preferredAPI } }
         set {
-            _preferredAPILock.withLock {
+            accessQueue.sync {
                 // prevent setting of an invalid API
-                if !newValue.isValidOnCurrentPlatform {
-                    _preferredAPI = .bestForPlatform()
-                } else {
-                    _preferredAPI = newValue
-                }
+                _preferredAPI = newValue.isValidOnCurrentPlatform ? newValue : .bestForPlatform()
             }
         }
     }
     private nonisolated(unsafe) var _preferredAPI: CoreMIDIAPIVersion
-    private let _preferredAPILock = NSLock()
     
     /// Dictionary of MIDI input connections managed by this instance.
     public internal(set) var managedInputConnections: [String: MIDIInputConnection] {
-        get { return _managedInputConnectionsLock.withLock { _managedInputConnections } }
+        get { return accessQueue.sync { _managedInputConnections } }
         _modify {
-            var valueCopy = _managedInputConnectionsLock.withLock { _managedInputConnections }
+            var valueCopy = accessQueue.sync { _managedInputConnections }
             yield &valueCopy
-            _managedInputConnectionsLock.withLock { _managedInputConnections = valueCopy }
+            accessQueue.sync { _managedInputConnections = valueCopy }
         }
-        set { _managedInputConnectionsLock.withLock { _managedInputConnections = newValue } }
+        set { accessQueue.sync { _managedInputConnections = newValue } }
     }
     private nonisolated(unsafe) var _managedInputConnections: [String: MIDIInputConnection] = [:]
-    private let _managedInputConnectionsLock = NSLock()
     
     /// Dictionary of MIDI output connections managed by this instance.
     public internal(set) var managedOutputConnections: [String: MIDIOutputConnection] {
-        get { return _managedOutputConnectionsLock.withLock { _managedOutputConnections } }
+        get { return accessQueue.sync { _managedOutputConnections } }
         _modify {
-            var valueCopy = _managedOutputConnectionsLock.withLock { _managedOutputConnections }
+            var valueCopy = accessQueue.sync { _managedOutputConnections }
             yield &valueCopy
-            _managedOutputConnectionsLock.withLock { _managedOutputConnections = valueCopy }
+            accessQueue.sync { _managedOutputConnections = valueCopy }
         }
-        set { _managedOutputConnectionsLock.withLock { _managedOutputConnections = newValue } }
+        set { accessQueue.sync { _managedOutputConnections = newValue } }
     }
     private nonisolated(unsafe) var _managedOutputConnections: [String: MIDIOutputConnection] = [:]
-    private let _managedOutputConnectionsLock = NSLock()
     
     /// Dictionary of virtual MIDI inputs managed by this instance.
     public internal(set) var managedInputs: [String: MIDIInput] {
-        get { return _managedInputsLock.withLock { _managedInputs } }
+        get { return accessQueue.sync { _managedInputs } }
         _modify {
-            var valueCopy = _managedInputsLock.withLock { _managedInputs }
+            var valueCopy = accessQueue.sync { _managedInputs }
             yield &valueCopy
-            _managedInputsLock.withLock { _managedInputs = valueCopy }
+            accessQueue.sync { _managedInputs = valueCopy }
         }
-        set { _managedInputsLock.withLock { _managedInputs = newValue } }
+        set { accessQueue.sync { _managedInputs = newValue } }
     }
     private nonisolated(unsafe) var _managedInputs: [String: MIDIInput] = [:]
-    private let _managedInputsLock = NSLock()
     
     /// Dictionary of virtual MIDI outputs managed by this instance.
     public internal(set) var managedOutputs: [String: MIDIOutput] {
-        get { return _managedOutputsLock.withLock { _managedOutputs } }
+        get { return accessQueue.sync { _managedOutputs } }
         _modify {
-            var valueCopy = _managedOutputsLock.withLock { _managedOutputs }
+            var valueCopy = accessQueue.sync { _managedOutputs }
             yield &valueCopy
-            _managedOutputsLock.withLock { _managedOutputs = valueCopy }
+            accessQueue.sync { _managedOutputs = valueCopy }
         }
-        set { _managedOutputsLock.withLock { _managedOutputs = newValue } }
+        set { accessQueue.sync { _managedOutputs = newValue } }
     }
     private nonisolated(unsafe) var _managedOutputs: [String: MIDIOutput] = [:]
-    private let _managedOutputsLock = NSLock()
     
     /// Dictionary of non-persistent MIDI thru connections managed by this instance.
     public internal(set) var managedThruConnections: [String: MIDIThruConnection] {
-        get { return _managedThruConnectionsLock.withLock { _managedThruConnections } }
+        get { return accessQueue.sync { _managedThruConnections } }
         _modify {
-            var valueCopy = _managedThruConnectionsLock.withLock { _managedThruConnections }
+            var valueCopy = accessQueue.sync { _managedThruConnections }
             yield &valueCopy
-            _managedThruConnectionsLock.withLock { _managedThruConnections = valueCopy }
+            accessQueue.sync { _managedThruConnections = valueCopy }
         }
-        set { _managedThruConnectionsLock.withLock { _managedThruConnections = newValue } }
+        set { accessQueue.sync { _managedThruConnections = newValue } }
     }
     private nonisolated(unsafe) var _managedThruConnections: [String: MIDIThruConnection] = [:]
-    private let _managedThruConnectionsLock = NSLock()
     
     /// Array of persistent MIDI thru connections which persist indefinitely (even after system
     /// reboots) until explicitly removed.
@@ -141,29 +131,27 @@ public class MIDIManager: @unchecked Sendable {
     
     /// MIDI devices in the system.
     public internal(set) var devices: MIDIDevices {
-        get { return _devicesLock.withLock { _devices } }
+        get { return accessQueue.sync { _devices } }
         _modify {
-            var valueCopy = _devicesLock.withLock { _devices }
+            var valueCopy = accessQueue.sync { _devices }
             yield &valueCopy
-            _devicesLock.withLock { _devices = valueCopy }
+            accessQueue.sync { _devices = valueCopy }
         }
-        set { _devicesLock.withLock { _devices = newValue } }
+        set { accessQueue.sync { _devices = newValue } }
     }
     private nonisolated(unsafe) var _devices = MIDIDevices()
-    private let _devicesLock = NSLock()
     
     /// MIDI input and output endpoints in the system.
     public internal(set) var endpoints: MIDIEndpoints {
-        get { return _endpointsLock.withLock { _endpoints } }
+        get { return accessQueue.sync { _endpoints } }
         _modify {
-            var valueCopy = _endpointsLock.withLock { _endpoints }
+            var valueCopy = accessQueue.sync { _endpoints }
             yield &valueCopy
-            _endpointsLock.withLock { _endpoints = valueCopy }
+            accessQueue.sync { _endpoints = valueCopy }
         }
-        set { _endpointsLock.withLock { _endpoints = newValue } }
+        set { accessQueue.sync { _endpoints = newValue } }
     }
     private nonisolated(unsafe) var _endpoints = MIDIEndpoints()
-    private let _endpointsLock = NSLock()
     
     /// Handler that is called when state has changed in the manager.
     public typealias NotificationHandler = @Sendable (
@@ -176,16 +164,20 @@ public class MIDIManager: @unchecked Sendable {
     
     /// Internal: system state cache for notification handling.
     var notificationCache: MIDIIOObjectCache? {
-        get { return _notificationCacheLock.withLock { _notificationCache } }
+        get { return accessQueue.sync { _notificationCache } }
         _modify {
-            var valueCopy = _notificationCacheLock.withLock { _notificationCache }
+            var valueCopy = accessQueue.sync { _notificationCache }
             yield &valueCopy
-            _notificationCacheLock.withLock { _notificationCache = valueCopy }
+            accessQueue.sync { _notificationCache = valueCopy }
         }
-        set { _notificationCacheLock.withLock { _notificationCache = newValue } }
+        set { accessQueue.sync { _notificationCache = newValue } }
     }
     private nonisolated(unsafe) var _notificationCache: MIDIIOObjectCache?
-    private let _notificationCacheLock = NSLock()
+    
+    // MARK: - Internal dispatch queue
+    
+    let accessQueue: DispatchQueue
+    let managementQueue: DispatchQueue
     
     // MARK: - Init
     
@@ -205,12 +197,34 @@ public class MIDIManager: @unchecked Sendable {
         manufacturer: String,
         notificationHandler: NotificationHandler? = nil
     ) {
-        // API version
-        _preferredAPI = .bestForPlatform()
-        
         // queue client name
         var clientNameForQueue = clientName.onlyAlphanumerics
         if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
+        
+        // API version
+        _preferredAPI = .bestForPlatform()
+        
+        // access queue
+        let accessQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
+            + ".midiManager." + clientNameForQueue + ".access"
+        accessQueue = DispatchQueue(
+            label: accessQueueName,
+            qos: .userInitiated,
+            attributes: [],
+            autoreleaseFrequency: .workItem,
+            target: .global(qos: .userInitiated)
+        )
+        
+        // management queue
+        let managementQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
+            + ".midiManager." + clientNameForQueue + ".management"
+        managementQueue = DispatchQueue(
+            label: managementQueueName,
+            qos: .default,
+            attributes: [],
+            autoreleaseFrequency: .workItem,
+            target: .global(qos: .default)
+        )
         
         // assign other properties
         self.clientName = clientName
