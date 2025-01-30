@@ -63,7 +63,7 @@ import Testing
     func huiLargeDisplayString_Slices() {
         let str = HUILargeDisplayString(chars: [.A, .B, .space, .num9])
         #expect(
-            str.slices ==
+            str.slices() ==
                 [
                     [.A, .B, .space, .num9] + .init(repeating: .space, count: 6),
                     .init(repeating: .space, count: 10),
