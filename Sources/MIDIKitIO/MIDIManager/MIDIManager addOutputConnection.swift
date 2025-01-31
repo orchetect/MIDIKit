@@ -35,7 +35,6 @@ extension MIDIManager {
                 mode: inputs,
                 filter: filter,
                 midiManager: self,
-                midiManagerManagedInputs: managedInputs,
                 api: preferredAPI
             )
             

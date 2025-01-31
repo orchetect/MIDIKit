@@ -38,7 +38,6 @@ extension MIDIManager {
                 filter: filter,
                 receiver: receiver,
                 midiManager: self,
-                midiManagerManagedOutputs: managedOutputs,
                 api: preferredAPI
             )
             

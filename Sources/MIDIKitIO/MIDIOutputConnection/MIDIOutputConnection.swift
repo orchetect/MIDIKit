@@ -44,15 +44,14 @@ public final class MIDIOutputConnection: _MIDIManaged, @unchecked Sendable {
     /// Stores criteria after applying any filters that have been set in the ``filter`` property.
     /// Passing nil will re-use existing criteria, re-applying the filters.
     private func updateCriteria(
-        _ criteria: Set<MIDIEndpointIdentity>? = nil,
-        managedInputs: [String: MIDIInput]? = nil
+        _ criteria: Set<MIDIEndpointIdentity>? = nil
     ) {
         var newCriteria = criteria ?? inputsCriteria
     
         if filter.owned,
            let midiManager
         {
-            let managedInputs: [MIDIEndpointIdentity] = (managedInputs ?? midiManager.managedInputs)
+            let managedInputs: [MIDIEndpointIdentity] = midiManager.managedInputs
                 .compactMap { $0.value.uniqueID }
                 .map { .uniqueID($0) }
     
@@ -84,13 +83,13 @@ public final class MIDIOutputConnection: _MIDIManaged, @unchecked Sendable {
     }
     
     /// Reads the ``mode`` property and applies it to the stored criteria.
-    private func updateCriteriaFromMode(managedInputs: [String: MIDIInput]? = nil) {
+    private func updateCriteriaFromMode() {
         switch mode {
         case .inputs:
-            updateCriteria(managedInputs: managedInputs)
+            updateCriteria()
     
         case .allInputs:
-            updateCriteria(.currentInputs(), managedInputs: managedInputs)
+            updateCriteria(.currentInputs())
         }
     }
     
@@ -126,7 +125,6 @@ public final class MIDIOutputConnection: _MIDIManaged, @unchecked Sendable {
         mode: MIDIOutputConnectionMode,
         filter: MIDIEndpointFilter,
         midiManager: MIDIManager,
-        midiManagerManagedInputs managedInputs: [String: MIDIInput]? = nil,
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
         self.midiManager = midiManager
@@ -137,9 +135,9 @@ public final class MIDIOutputConnection: _MIDIManaged, @unchecked Sendable {
         // relies on midiManager, mode, and filter being set first
         switch mode {
         case let .inputs(criteria):
-            updateCriteria(criteria, managedInputs: managedInputs)
+            updateCriteria(criteria)
         case .allInputs:
-            updateCriteriaFromMode(managedInputs: managedInputs)
+            updateCriteriaFromMode()
         }
     }
     
