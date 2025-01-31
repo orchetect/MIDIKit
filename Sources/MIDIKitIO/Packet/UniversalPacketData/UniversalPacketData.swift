@@ -16,14 +16,14 @@ public struct UniversalMIDIPacketData {
     // public let words: [UInt32]
     
     /// Flat array of raw bytes
-    public var bytes: [UInt8]
+    public let bytes: [UInt8]
     
     /// Core MIDI packet timestamp
     public let timeStamp: CoreMIDITimeStamp
     
     /// The MIDI endpoint from which the packet originated.
     /// If this information is not available, it may be `nil`.
-    let source: MIDIOutputEndpoint?
+    public let source: MIDIOutputEndpoint?
     
     public init(
         bytes: [UInt8],

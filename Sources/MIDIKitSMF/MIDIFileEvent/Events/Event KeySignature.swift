@@ -173,6 +173,7 @@ extension MIDIFileEvent.KeySignature: MIDIFileEventPayload {
 }
 
 extension MIDIFileEvent.KeySignature {
+    /// Returns the key signature description suitable for UI display.
     public var stringValue: String {
         var outputString = ""
 

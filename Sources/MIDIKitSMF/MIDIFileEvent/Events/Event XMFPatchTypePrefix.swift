@@ -172,7 +172,7 @@ extension MIDIFileEvent.XMFPatchTypePrefix: MIDIFileEventPayload {
 
 extension MIDIFileEvent.XMFPatchTypePrefix {
     /// XMF Patch Set.
-    public enum PatchSet: UInt8, CaseIterable, Equatable, Hashable, CustomStringConvertible {
+    public enum PatchSet: UInt8 {
         /// General MIDI 1.
         ///
         /// > Standard MIDI File 1.0 Spec, RP-032:
@@ -207,13 +207,21 @@ extension MIDIFileEvent.XMFPatchTypePrefix {
         /// > See
         /// > [RP-032](https://www.midi.org/specifications/file-format-specifications/standard-midi-files/xmf-patch-type-prefix-meta-event).
         case DLS = 0x03
-        
-        public var description: String {
-            switch self {
-            case .generalMIDI1: return "General MIDI 1"
-            case .generalMIDI2: return "General MIDI 2"
-            case .DLS: return "DLS"
-            }
+    }
+}
+
+extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: Equatable { }
+
+extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: Hashable { }
+
+extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: CaseIterable { }
+
+extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .generalMIDI1: return "General MIDI 1"
+        case .generalMIDI2: return "General MIDI 2"
+        case .DLS: return "DLS"
         }
     }
 }

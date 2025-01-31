@@ -224,7 +224,7 @@ extension MIDIFileEvent.Text: MIDIFileEventPayload {
 // MARK: - TextEventType
 
 extension MIDIFileEvent.Text {
-    public enum EventType: String, CaseIterable, Equatable, Hashable {
+    public enum EventType: String {
         // MARK: Track Events - First track
         // MARK: ... head of track
         case copyright
@@ -243,5 +243,11 @@ extension MIDIFileEvent.Text {
         case lyric
     }
 }
+
+extension MIDIFileEvent.Text.EventType: Equatable { }
+
+extension MIDIFileEvent.Text.EventType: Hashable { }
+
+extension MIDIFileEvent.Text.EventType: CaseIterable { }
 
 extension MIDIFileEvent.Text.EventType: Sendable { }
