@@ -203,7 +203,7 @@ extension HUISwitch: CaseIterable {
         // Zone 0x0C
         // Assign 2 (buttons to top left of channel strips)
         .assign(.assign),
-        .assign(.default),
+        .assign(.defaultBtn),
         .assign(.suspend),
         .assign(.shift),
         .assign(.mute),

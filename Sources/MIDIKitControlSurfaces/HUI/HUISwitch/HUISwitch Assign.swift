@@ -21,7 +21,7 @@ extension HUISwitch {
         case mute
         case shift
         case suspend
-        case `default`
+        case defaultBtn
         case assign
         case input
         case output
@@ -51,7 +51,7 @@ extension HUISwitch.Assign: HUISwitchProtocol {
         // Zone 0x0C
         // Assign 2 (buttons to top left of channel strips)
         case .assign:          return (0x0C, 0x0)
-        case .default:         return (0x0C, 0x1)
+        case .defaultBtn:      return (0x0C, 0x1)
         case .suspend:         return (0x0C, 0x2)
         case .shift:           return (0x0C, 0x3)
         case .mute:            return (0x0C, 0x4)
@@ -78,7 +78,7 @@ extension HUISwitch.Assign: CustomStringConvertible {
         // Zone 0x0C
         // Assign 2 (buttons to top left of channel strips)
         case .assign:         return "assign"
-        case .default:        return "default"
+        case .defaultBtn:     return "default"
         case .suspend:        return "suspend"
         case .shift:          return "shift"
         case .mute:           return "mute"

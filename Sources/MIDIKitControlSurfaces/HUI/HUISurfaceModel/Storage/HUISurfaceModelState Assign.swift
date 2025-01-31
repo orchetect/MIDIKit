@@ -54,7 +54,7 @@ extension HUISurfaceModelState.Assign: HUISurfaceModelStateProtocol {
         case .mute:           return mute
         case .shift:          return shift
         case .suspend:        return suspend
-        case .default:        return defaultBtn
+        case .defaultBtn:     return defaultBtn
         case .assign:         return assign
         case .input:          return input
         case .output:         return output
@@ -76,7 +76,7 @@ extension HUISurfaceModelState.Assign: HUISurfaceModelStateProtocol {
         case .mute:           mute = state
         case .shift:          shift = state
         case .suspend:        suspend = state
-        case .default:        defaultBtn = state
+        case .defaultBtn:     defaultBtn = state
         case .assign:         assign = state
         case .input:          input = state
         case .output:         output = state
