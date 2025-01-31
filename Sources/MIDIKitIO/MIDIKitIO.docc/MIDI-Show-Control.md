@@ -4,6 +4,8 @@ Construct MIDI Show Control messages.
 
 ## Background
 
+MIDIKit does not currently provide any special abstractions for MIDI Show Control.
+
 The MIDI Show Control spec says:
 
 > MIDI Show Control uses a single Universal Real Time System Exclusive ID number (sub-ID #1 = 0x02) for all Show commands (transmissions from Controller to Controlled Device).
@@ -14,7 +16,7 @@ The MIDI Show Control spec says:
 
 ## Constructing Events
 
-For details on how to construct System Exclusive messages, see <doc:MIDIEvent-System-Exclusive>.
+For details on how to construct System Exclusive messages, see <doc://MIDIKitIO/MIDIKitCore/MIDIEvent-System-Exclusive>.
 
 ## See Also
 

@@ -30,10 +30,6 @@ See the Getting Started guide in **MIDIKitIO** docs for essential information on
 
 - <doc:MIDIKitCore-Value-Types>
 
-### Additional Guides
-
-- <doc:MIDI-Show-Control>
-
 ### Internals
 
 - <doc:MIDIKitCore-Internals>

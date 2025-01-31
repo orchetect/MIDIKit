@@ -10,7 +10,7 @@ import Foundation
 internal import CoreMIDI
 
 extension MIDIManager {
-    /// Adds a new managed connected output to the ``MIDIManager/managedOutputConnections``
+    /// Creates a new managed output connection in the system and adds it to the ``MIDIManager/managedOutputConnections``
     /// dictionary of the ``MIDIManager``.
     ///
     /// This connects to one or more inputs in the system and outputs MIDI events to them. It can
@@ -19,10 +19,10 @@ extension MIDIManager {
     ///
     /// - Parameters:
     ///   - inputs: Criteria for identifying target MIDI endpoint(s). These may be added or
-    /// removed later.
+    ///     removed later.
     ///   - tag: Internal unique tag to reference the managed item in the ``MIDIManager``.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to
-    /// the connection.
+    ///     the connection.
     ///
     /// - Throws: ``MIDIIOError``
     public func addOutputConnection(

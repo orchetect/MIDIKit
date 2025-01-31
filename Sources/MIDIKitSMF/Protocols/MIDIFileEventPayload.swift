@@ -37,9 +37,11 @@ public protocol MIDIFileEventPayload where Self: Sendable {
 }
 
 extension MIDIFileEventPayload /* : CustomStringConvertible */ {
+    @_disfavoredOverload
     public var description: String { smfDescription }
 }
 
 extension MIDIFileEventPayload /* : CustomDebugStringConvertible */ {
+    @_disfavoredOverload
     public var debugDescription: String { smfDebugDescription }
 }

@@ -129,10 +129,10 @@ MIDIKit contains additional objects and value types.
 - term <doc://MIDIKit/MIDIKitCore/MIDINote>: Struct representing a MIDI note with constructors and getters for note number, note name (ie: `"A#-1"`), and frequency in Hz and other metadata. This can be useful for generating UI labels with note names or calculating frequency for synthesis.
 - term <doc://MIDIKit/MIDIKitCore/MIDIEventFilterGroup>: Struct allowing the configuration of zero or more MIDI event filters in series, capable of applying the filters to arrays of MIDI events.
 
-## 9. Additional Guides
+## 9. Additional Topics
 
-- <doc://MIDIKit/MIDIKitCore/MIDI-Show-Control>
 - <doc://MIDIKit/MIDIKitIO/Send-and-Receive-on-iOS-in-Background>
+- <doc://MIDIKit/MIDIKitIO/MIDI-Show-Control>
 
 ## Examples
 

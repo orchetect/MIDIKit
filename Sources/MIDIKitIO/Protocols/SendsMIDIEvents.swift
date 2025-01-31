@@ -4,7 +4,10 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-public protocol SendsMIDIEvents {
+/// Protocol that objects can adopt so MIDIKit knows they are capable of sending MIDI events.
+///
+/// Adoption of this protocol is a convenience and not required.
+public protocol SendsMIDIEvents: AnyObject {
     /// Handler used when calling `midiOut()` methods.
     typealias MIDIOutHandler = @Sendable (_ events: [MIDIEvent]) -> Void
     

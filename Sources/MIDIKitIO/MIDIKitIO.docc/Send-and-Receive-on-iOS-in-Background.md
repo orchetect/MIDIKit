@@ -16,7 +16,7 @@ If the application generates audio in response to receiving MIDI, you may add a 
 
 However be aware that an audio stream must be playing to keep the app alive. The Apple docs state:
 
-> As long as [the app] is playing audio or video content or recording audio content, the app continues to run in the background. However, if recording or playback stops, the system suspends the app.
+> As long as the app is playing audio or video content or recording audio content, the app continues to run in the background. However, if recording or playback stops, the system suspends the app.
 
 1. Add the _Background Modes -> Audio, Airplay, and Picture in Picture_ app entitlement.
 

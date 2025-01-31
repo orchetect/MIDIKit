@@ -28,3 +28,4 @@
 - ``HUIEvent``
 - ``HUISwitchProtocol``
 - ``HUISurfaceModelState``
+- ``HUISurfaceModelStateProtocol``

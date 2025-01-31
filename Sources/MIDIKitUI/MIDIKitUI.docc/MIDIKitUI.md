@@ -8,6 +8,10 @@ MIDIKitUI adds convenient reusable user interface controls to simplify building 
 
 ## Topics
 
+### Introduction
+
+- <doc:MIDIKitUI-Getting-Started>
+
 ### SwiftUI Views
 
 - ``MIDIInputsList``

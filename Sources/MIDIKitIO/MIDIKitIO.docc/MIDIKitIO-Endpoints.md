@@ -4,10 +4,16 @@ Endpoints represent both virtual and physical MIDI inputs (destinations) and out
 
 ## Topics
 
-### Endpoints in the System
+### Endpoints (MIDIManager)
 
 - ``MIDIManager/endpoints``
+
+### Endpoints (ObservableMIDIManager)
+
 - ``ObservableMIDIManager/endpoints``
+
+### Endpoints (ObservableObjectMIDIManager)
+
 - ``ObservableObjectMIDIManager/endpoints``
 
 ### Endpoint Identification

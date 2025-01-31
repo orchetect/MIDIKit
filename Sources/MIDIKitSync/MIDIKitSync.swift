@@ -7,7 +7,7 @@
 @_documentation(visibility: internal)
 @_exported import MIDIKitCore
 
-// @_documentation(visibility: internal)
+@_documentation(visibility: internal)
 @_exported import TimecodeKitCore
 
 // MARK: - MTC

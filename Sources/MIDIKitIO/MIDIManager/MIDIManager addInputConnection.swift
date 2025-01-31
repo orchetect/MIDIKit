@@ -10,7 +10,7 @@ import Foundation
 internal import CoreMIDI
 
 extension MIDIManager {
-    /// Adds a new managed input connection to the ``MIDIManager/managedInputConnections``
+    /// Creates a new managed input connection in the system and adds it to the ``MIDIManager/managedInputConnections``
     /// dictionary of the ``MIDIManager``.
     ///
     /// This connects to one or more outputs in the system and subscribes to receive their MIDI
@@ -19,10 +19,10 @@ extension MIDIManager {
     ///
     /// - Parameters:
     ///   - outputs: Criteria for identifying target MIDI endpoint(s). These may be added or
-    /// removed later.
+    ///     removed later.
     ///   - tag: Internal unique tag to reference the managed item in the ``MIDIManager``.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to
-    /// the connection.
+    ///     the connection.
     ///   - receiver: Receive handler to use for incoming MIDI messages.
     ///
     /// - Throws: ``MIDIIOError``

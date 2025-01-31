@@ -4,7 +4,7 @@ Certain ``MIDIManager`` properties are made observable by using subclasses.
 
 ## @Observable
 
-``ObservableMIDIManager`` is a ``MIDIManager`` subclass that makes several instance properties that observable in a SwiftUI context.
+``ObservableMIDIManager`` is a ``MIDIManager`` subclass that makes several instance properties observable in a SwiftUI context.
 
 This can be useful in updating user interface displaying a list of MIDI endpoints updated in real-time as they are added or removed from the system.
 
@@ -17,7 +17,7 @@ This can be useful in updating user interface displaying a list of MIDI endpoint
 
 ## ObservableObject
 
-``ObservableObjectMIDIManager`` is a ``MIDIManager`` subclass that makes several instance properties that observable in a SwiftUI or Combine context.
+``ObservableObjectMIDIManager`` is a ``MIDIManager`` subclass that makes several instance properties observable in a SwiftUI or Combine context.
 
 This can be useful in updating user interface displaying a list of MIDI endpoints updated in real-time as they are added or removed from the system.
 

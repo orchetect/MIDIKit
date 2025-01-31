@@ -10,8 +10,8 @@ import Foundation
 internal import CoreMIDI
 
 extension MIDIManager {
-    /// Adds a new managed virtual input to the ``MIDIManager/managedInputs`` dictionary of the
-    /// ``MIDIManager`` and creates the MIDI port in the system.
+    /// Creates a new managed virtual input in the system and adds it to the ``MIDIManager/managedInputs``
+    /// dictionary of the ``MIDIManager``.
     ///
     /// The lifecycle of the MIDI port exists for as long as the ``MIDIManager`` instance exists, or
     /// until ``MIDIManager/remove(_:_:)`` is called.

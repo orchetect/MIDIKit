@@ -4,8 +4,9 @@
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
 
-// ugh. Swift won't let us declare self-contained static funcs on a protocol (ie:
-// MIDIParameterNumber) and then call them on the protocol; it forces us to call them on a concrete
+// This is a namespace implemented for MIDI Parameter Number utility functions since
+// Swift won't let us declare self-contained static funcs on a protocol (ie: MIDIParameterNumber)
+// and then call them on the protocol; it forces us to call them on a concrete
 // type that conforms to the protocol which is unnecessary for these util methods.
 public enum MIDIParameterNumberUtils {
     /// Utility:

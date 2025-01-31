@@ -15,6 +15,12 @@ import Combine
 /// ``MIDIManager`` subclass that is an `ObservableObject` in a SwiftUI or Combine context.
 /// This makes the ``devices`` and ``endpoints`` properties observable.
 ///
+/// > Tip:
+/// >
+/// > For general usage information, see the base ``MIDIManager`` class documentation.
+///
+/// ## Observation Features
+///
 /// Generally it is recommended to install the manager instance in the `App` struct.
 ///
 /// ```swift
@@ -79,7 +85,7 @@ public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject, @
     private nonisolated(unsafe) var _endpoints = MIDIEndpoints()
     private let _endpointsLock = NSLock()
     
-    public override func updateObjectsCache() {
+    override func updateObjectsCache() {
         objectWillChange.send()
         super.updateObjectsCache()
     }

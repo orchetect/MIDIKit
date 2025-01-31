@@ -15,11 +15,12 @@ To add additional functionality, import extension modules or import the MIDIKit 
 ### Manager
 
 - ``MIDIManager``
+- ``ObservableMIDIManager``
+- ``ObservableObjectMIDIManager``
 - <doc:MIDIManager-Creating-Ports>
 - <doc:MIDIManager-Creating-Connections>
 - <doc:MIDIManager-Removing-Ports-and-Connections>
 - <doc:MIDIManager-Receiving-Notifications>
-- ``ObservableMIDIManager``
 - <doc:MIDIKitIO-SwiftUI-and-Combine-Features>
 
 ### Devices & Entities
@@ -41,9 +42,11 @@ To add additional functionality, import extension modules or import the MIDIKit 
 - <doc:MIDIKitIO-MIDI-Over-Network>
 - <doc:MIDIKitIO-MIDI-Over-USB>
 
-### Additional Guides
+### Additional Topics
 
 - <doc:Send-and-Receive-on-iOS-in-Background>
+- <doc:MIDI-Show-Control>
+- <doc:Simple-MIDI-Listener-Class-Example>
 
 ### Internals
 

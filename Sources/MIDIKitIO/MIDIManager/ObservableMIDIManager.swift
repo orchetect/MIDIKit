@@ -15,6 +15,12 @@ import Combine
 /// ``MIDIManager`` subclass that is `@Observable` in a SwiftUI view.
 /// This makes the ``devices`` and ``endpoints`` properties observable.
 ///
+/// > Tip:
+/// >
+/// > For general usage information, see the base ``MIDIManager`` class documentation.
+///
+/// ## Observation Features
+///
 /// Generally it is recommended to install the manager instance in the `App` struct.
 ///
 /// ```swift

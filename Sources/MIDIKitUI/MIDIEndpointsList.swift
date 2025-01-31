@@ -164,10 +164,10 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable,
 public struct MIDIInputsList: View, _MIDIInputsSelectable {
     @Environment(ObservableMIDIManager.self) private var midiManager
     
-    @Binding public var selectionID: MIDIIdentifier?
-    @Binding public var selectionDisplayName: String?
-    public var showIcons: Bool
-    public var hideOwned: Bool
+    @Binding private var selectionID: MIDIIdentifier?
+    @Binding private var selectionDisplayName: String?
+    private var showIcons: Bool
+    private var hideOwned: Bool
     
     internal var updatingOutputConnectionWithTag: String?
     
@@ -231,12 +231,12 @@ public struct MIDIInputsList: View, _MIDIInputsSelectable {
 public struct MIDIOutputsList: View, _MIDIOutputsSelectable {
     @Environment(ObservableMIDIManager.self) private var midiManager
     
-    @Binding public var selectionID: MIDIIdentifier?
-    @Binding public var selectionDisplayName: String?
-    public var showIcons: Bool
-    public var hideOwned: Bool
+    @Binding private var selectionID: MIDIIdentifier?
+    @Binding private var selectionDisplayName: String?
+    private var showIcons: Bool
+    private var hideOwned: Bool
     
-    internal var updatingInputConnectionWithTag: String?
+    var updatingInputConnectionWithTag: String?
     
     public init(
         selectionID: Binding<MIDIIdentifier?>,
