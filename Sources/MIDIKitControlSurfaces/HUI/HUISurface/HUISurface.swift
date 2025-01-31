@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+import MIDIKitIO
 internal import MIDIKitInternals
 
 /// Object representing a single HUI control surface device, holding a model of its state and

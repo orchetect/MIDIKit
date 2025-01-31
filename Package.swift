@@ -1,6 +1,7 @@
 // swift-tools-version: 5.9
 // (be sure to update the .swift-version file when this Swift version changes)
 
+import Foundation
 import PackageDescription
 
 let package = Package(
@@ -44,7 +45,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.3.3")
-    ],
+    ] + doccPluginDependency(),
     targets: [
         .target(
             name: "MIDIKit",
@@ -83,7 +84,8 @@ let package = Package(
         .target(
             name: "MIDIKitControlSurfaces",
             dependencies: [
-                .target(name: "MIDIKitCore")
+                .target(name: "MIDIKitCore"),
+                .target(name: "MIDIKitIO")
             ],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
@@ -99,6 +101,7 @@ let package = Package(
             name: "MIDIKitSync",
             dependencies: [
                 .target(name: "MIDIKitCore"),
+                .target(name: "MIDIKitIO"),
                 .product(name: "TimecodeKitCore", package: "TimecodeKit")
             ],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
@@ -106,6 +109,7 @@ let package = Package(
         .target(
             name: "MIDIKitUI",
             dependencies: [
+                .target(name: "MIDIKitCore"),
                 .target(name: "MIDIKitIO")
             ],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
@@ -144,3 +148,10 @@ let package = Package(
         )
     ]
 )
+
+/// Conditionally opt-in to Swift DocC Plugin when an environment flag is present.
+func doccPluginDependency() -> [Package.Dependency] {
+    ProcessInfo.processInfo.environment["ENABLE_DOCC_PLUGIN"] != nil
+        ? [.package(url: "https://github.com/apple/swift-docc-plugin.git", from: "1.4.3")]
+        : []
+}

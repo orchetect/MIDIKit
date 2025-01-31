@@ -25,7 +25,8 @@ In most use cases, it is not necessary work with devices and entities. A single 
 ### Devices in the System
 
 - ``MIDIManager/devices``
-- ``ObservableMIDIManager/observableDevices``
+- ``ObservableMIDIManager/devices``
+- ``ObservableObjectMIDIManager/devices``
 
 ### Device and Entity Objects
 

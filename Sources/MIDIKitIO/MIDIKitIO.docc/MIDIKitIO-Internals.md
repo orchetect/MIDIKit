@@ -19,23 +19,18 @@
 
 - ``MIDIInputConnectionMode``
 - ``MIDIOutputConnectionMode``
-- ``MIDIConnectionMode``
+- ``MIDIInputConnectionMode``
+- ``MIDIOutputConnectionMode``
 - ``MIDIEndpointType``
 
 ### MIDI Packets and Parsing
 
 - ``MIDIPacketData``
 - ``UniversalMIDIPacketData``
-- ``MIDIUMPMessageType``
-- ``MIDIUMPSysExStatusField``
-- ``MIDIUMPUtilityStatusField``
-- ``MIDIUMPMixedDataSetStatusField``
 - ``AnyMIDIPacket``
 - ``MIDI1Parser``
 - ``MIDI2Parser``
 - ``AdvancedMIDI2Parser``
-- ``ParameterNumberEventBundler``
-- ``MIDIProtocolVersion``
 
 ### Core MIDI Related
 
@@ -48,7 +43,6 @@
 - ``CoreMIDIEndpointRef``
 - ``CoreMIDIThruConnectionRef``
 - ``CoreMIDITimeStamp``
-- ``CoreMIDIOSStatus``
 
 ### Errors
 
@@ -60,7 +54,6 @@
 - ``MIDIIOObject``
 - ``MIDIIOObjectType``
 - ``AnyMIDIIOObject``
-
 - ``MIDIEndpoint``
 - ``MIDIDevicesProtocol``
 - ``MIDIEndpointsProtocol``

@@ -176,9 +176,6 @@ For an overview of how event value types work (such as note velocity, CC value, 
 - ``MIDIEvent/cc(_:value:channel:group:)-1r3oe``
 - ``MIDIEvent/cc(_:value:channel:group:)-7k06z``
 
-- ``MIDIEvent/ccRPN(_:channel:group:)``
-- ``MIDIEvent/ccNRPN(_:channel:group:)``
-
 - ``MIDIEvent/pitchBend(value:channel:group:)``
 
 - ``MIDIEvent/pressure(amount:channel:group:)``

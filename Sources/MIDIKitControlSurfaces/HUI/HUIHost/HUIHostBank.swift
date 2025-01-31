@@ -6,13 +6,14 @@
 
 import Foundation
 import MIDIKitCore
+import MIDIKitIO
 
 internal import MIDIKitInternals
 
 /// Object representing a ``HUIHost`` bank (connectable to one HUI surface over bidirectional MIDI).
 ///
 /// This object is created and managed by ``HUIHost``. Do not instantiate this object directly.
-/// Instead, call ``HUIHost/addBank(huiEventHandler:midiOutHandler:remotePresenceChangedHandler:)``
+/// Instead, call ``HUIHost/addBank(huiEventHandler:midiOutHandler:remotePresenceTimeout:remotePresenceChangedHandler:)``
 /// to add banks to your ``HUIHost`` instance.
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 @Observable public final class HUIHostBank: Sendable {

@@ -90,7 +90,7 @@ extension MIDIEvent {
 
 extension MIDIFileEvent {
     /// Convert the MIDIKitSMF event case (``MIDIFileEvent``) to a MIDIKit I/O event case
-    /// (``MIDIEvent``).
+    /// <doc://MIDIKitSMF/MIDIKitCore/MIDIEvent>.
     ///
     /// Not all MIDI File events translate to MIDI I/O events, in which case `nil` will be returned.
     public func event() -> MIDIEvent? {

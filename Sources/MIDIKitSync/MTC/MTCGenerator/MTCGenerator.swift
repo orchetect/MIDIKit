@@ -6,8 +6,9 @@
 
 import Foundation
 import MIDIKitCore
-import TimecodeKitCore
+import MIDIKitIO
 internal import MIDIKitInternals
+import TimecodeKitCore
 
 /// MTC sync generator.
 public final class MTCGenerator: SendsMIDIEvents, Sendable {
@@ -203,7 +204,7 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
     ///
     /// Frame rate will be derived from the `timecode` instance passed in.
     ///
-    /// > Note: It is not necessary to send a ``locate(to:)-1u162`` message simultaneously or
+    /// > Note: It is not necessary to send a ``locate(to:)-18i4`` message simultaneously or
     /// > immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
     /// Call ``stop()`` to stop generating events.
@@ -234,7 +235,7 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
     /// Starts generating MTC continuous playback MIDI message stream events.
     /// Call this method at the exact time that `realTime` occurs.
     ///
-    /// > Note: It is not necessary to send a ``locate(to:)-1u162`` message simultaneously or
+    /// > Note: It is not necessary to send a ``locate(to:)-18i4`` message simultaneously or
     /// > immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
     /// Call ``stop()`` to stop generating events.
@@ -258,7 +259,7 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
     /// Starts generating MTC continuous playback MIDI message stream events.
     /// Call this method at the exact time that `realTime` occurs.
     ///
-    /// > Note: It is not necessary to send a ``locate(to:)-1u162`` message simultaneously or
+    /// > Note: It is not necessary to send a ``locate(to:)-18i4`` message simultaneously or
     /// > immediately prior, and is actually undesirable as it can confuse the receiving entity.
     ///
     /// Call ``stop()`` to stop generating events.

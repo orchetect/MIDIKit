@@ -5,6 +5,7 @@
 //
 
 import MIDIKitCore
+import MIDIKitIO
 
 /// Interprets HUI MIDI events and produces strongly-typed core HUI events.
 final class HUICoreDecoder: @unchecked Sendable {

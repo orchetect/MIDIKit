@@ -27,16 +27,10 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 - ``MIDIFile``
 - ``MIDIFileEvent``
 - ``MIDIFileEvent/DeltaTime``
-- ``MIDINote``
 
 ### Protocols
 
 - ``MIDIFileChunk``
-
-### MIDIKit Protocol Conformances
-
-- ``SendsMIDIEvents``
-- ``ReceivesMIDIEvents``
 
 ### Related Types
 
@@ -45,4 +39,3 @@ Refer to MIDIKit's own package documentation for information on using MIDI I/O a
 ### Internals
 
 - <doc:MIDIKitSMF-Internals>
-- <doc:Internals-From-MIDIKitCore>

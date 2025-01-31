@@ -5,6 +5,7 @@
 //
 
 import MIDIKitCore
+import MIDIKitIO
 
 /// Protocol that all HUI decoders conform to.
 public protocol HUIDecoder: ReceivesMIDIEvents {

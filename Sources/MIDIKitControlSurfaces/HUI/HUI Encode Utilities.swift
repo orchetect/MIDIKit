@@ -219,8 +219,6 @@ func encodeHUIVPot(
 ///   - vPot: V-Pot identity.
 ///   - rawValue: Encoded value.
 ///     When encoding host → surface, this is the LED preset index.
-///     When encoding surface → host, this is the delta rotary knob change
-///     value -/+ when the user turns the knob.
 ///   - role: Transmission direction (to host or to remote client surface).
 /// - Returns: MIDI event.
 @inlinable
@@ -240,6 +238,8 @@ func encodeHUIVPot(
 /// - Parameters:
 ///   - vPot: V-Pot identity.
 ///   - delta: Delta -/+ value (will be clamped to `-63 ... 63`).
+///     When encoding surface → host, this is the delta rotary knob change
+///     value -/+ when the user turns the knob.
 /// - Returns: MIDI event.
 @inlinable
 func encodeHUIVPot(

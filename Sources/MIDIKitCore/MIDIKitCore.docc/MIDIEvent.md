@@ -1,9 +1,5 @@
 # ``MIDIKitCore/MIDIEvent``
 
-@Metadata {
-    @DocumentationExtension(mergeBehavior: append)
-}
-
 ## Constructing Events
 
 It is recommended to use the parameterized static methods to construct these events:

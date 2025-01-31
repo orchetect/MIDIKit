@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-
+import MIDIKitIO
 internal import MIDIKitInternals
 
 /// Object representing a HUI host which can provide one or more HUI banks.

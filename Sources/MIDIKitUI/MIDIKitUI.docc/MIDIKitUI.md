@@ -18,4 +18,3 @@ MIDIKitUI adds convenient reusable user interface controls to simplify building 
 ### Internals
 
 - <doc:MIDIKitUI-Internals>
-- <doc:Internals-From-MIDIKitCore>

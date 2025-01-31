@@ -7,8 +7,9 @@
 import Darwin
 import Foundation
 import MIDIKitCore
-import TimecodeKitCore
+import MIDIKitIO
 internal import MIDIKitInternals
+import TimecodeKitCore
 
 // MARK: - Receiver
 

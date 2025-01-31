@@ -18,9 +18,9 @@ For more detailed documentation on each area of MIDIKit, see the appropriate sub
 
 ### Modules
 
-- <doc:MIDIKitCore>
-- <doc:MIDIKitIO>
-- <doc:MIDIKitUI>
-- <doc:MIDIKitSMF>
-- <doc:MIDIKitSync>
-- <doc:MIDIKitControlSurfaces>
+- <doc://MIDIKit/MIDIKitCore>
+- <doc://MIDIKit/MIDIKitIO>
+- <doc://MIDIKit/MIDIKitUI>
+- <doc://MIDIKit/MIDIKitSMF>
+- <doc://MIDIKit/MIDIKitSync>
+- <doc://MIDIKit/MIDIKitControlSurfaces>

@@ -156,7 +156,7 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable,
 
 /// SwiftUI `Picker` view for selecting MIDI input endpoints.
 ///
-/// This view requires that an ``ObservableMIDIManager`` instance exists in the environment.
+/// This view requires that an <doc://MIDIKitUI/MIDIKitIO/ObservableMIDIManager> instance exists in the environment.
 ///
 /// ```swift
 /// MIDIInputsPicker( ... )
@@ -227,7 +227,7 @@ public struct MIDIInputsPicker: View, _MIDIInputsSelectable {
 
 /// SwiftUI `Picker` view for selecting MIDI output endpoints.
 ///
-/// This view requires that an ``ObservableMIDIManager`` instance exists in the environment.
+/// This view requires that an <doc://MIDIKitUI/MIDIKitIO/ObservableMIDIManager> instance exists in the environment.
 ///
 /// ```swift
 /// MIDIOutputsPicker( ... )

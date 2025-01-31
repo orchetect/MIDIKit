@@ -20,6 +20,10 @@ Defaults to `00:00:00:00 @ 24fps`.
 >
 > MIDI SMPTE Offset subframes (fractional frames) are always in 100ths of a frame, even in SMPTE-based tracks which specify a different frame subdivision for delta-times.
 
+## Timecode
+
+For documentation on the `Timecode` type, see TimecodeKit documentation.
+
 ## Topics
 
 ### Constructors
@@ -31,8 +35,3 @@ Defaults to `00:00:00:00 @ 24fps`.
 
 - ``MIDIFileEvent/smpteOffset(delta:event:)``
 - ``MIDIFileEvent/SMPTEOffset``
-
-### Types
-
-- ``Timecode``
-- ``Timecode/Components``

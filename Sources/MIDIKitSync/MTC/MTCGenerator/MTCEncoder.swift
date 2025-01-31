@@ -6,8 +6,9 @@
 
 import Foundation
 import MIDIKitCore
-import TimecodeKitCore
+import MIDIKitIO
 internal import MIDIKitInternals
+import TimecodeKitCore
 
 /// MTC (MIDI Timecode) stream encoder object.
 ///
@@ -117,7 +118,7 @@ public final class MTCEncoder: SendsMIDIEvents, Sendable {
     ///
     /// - Parameters:
     ///   - timecode: Timecode; frame rate is derived as well.
-    ///   - triggerFullFrame: Triggers the MIDI handler to send a full-frame message.
+    ///   - transmitFullFrame: Triggers the MIDI handler to send a full-frame message.
     public func locate(
         to timecode: Timecode,
         transmitFullFrame: FullFrameBehavior = .ifDifferent
@@ -135,7 +136,7 @@ public final class MTCEncoder: SendsMIDIEvents, Sendable {
     /// - Parameters:
     ///   - components: Timecode components.
     ///   - frameRate: Frame rate.
-    ///   - triggerFullFrame: Triggers the MIDI handler to send a full-frame message.
+    ///   - transmitFullFrame: Triggers the MIDI handler to send a full-frame message.
     public func locate(
         to components: Timecode.Components,
         frameRate: TimecodeFrameRate? = nil,

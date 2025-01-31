@@ -31,6 +31,7 @@
 
 import Foundation
 import MIDIKitCore
+import MIDIKitIO
 import TimecodeKitCore
 
 /// MTC (MIDI Timecode) stream decoder object.

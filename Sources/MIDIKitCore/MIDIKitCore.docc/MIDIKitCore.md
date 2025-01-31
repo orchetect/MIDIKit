@@ -34,11 +34,6 @@ See the Getting Started guide in **MIDIKitIO** docs for essential information on
 
 - <doc:MIDI-Show-Control>
 
-### MIDIKitIO-Interop Protocols
-
-- ``ReceivesMIDIEvents``
-- ``SendsMIDIEvents``
-
 ### Internals
 
 - <doc:MIDIKitCore-Internals>

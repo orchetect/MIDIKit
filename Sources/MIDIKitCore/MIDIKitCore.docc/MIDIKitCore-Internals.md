@@ -18,11 +18,8 @@
 
 ### Errors and Status
 
-- ``MIDIIOError``
-- ``MIDIOSStatus``
 - ``CoreMIDIOSStatus``
 
 ### Utilities
 
-- ``ThreadSafeAccess``
 - ``MIDIParameterNumberUtils``

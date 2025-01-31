@@ -34,13 +34,11 @@ MIDI control surface protocol abstractions (HUI, etc.) for MIDIKit.
 - ``HUIVPot``
 - ``HUIVPotDisplay``
 
+### MIDIKitIO Protocol Conformances
 
-### MIDIKit Protocol Conformances
-
-- ``SendsMIDIEvents``
-- ``ReceivesMIDIEvents``
+- <doc://MIDIKitControlSurfaces/MIDIKitIO/SendsMIDIEvents>
+- <doc://MIDIKitControlSurfaces/MIDIKitIO/ReceivesMIDIEvents>
 
 ### Internals
 
 - <doc:MIDIKitControlSurfaces-Internals>
-- <doc:Internals-From-MIDIKitCore>

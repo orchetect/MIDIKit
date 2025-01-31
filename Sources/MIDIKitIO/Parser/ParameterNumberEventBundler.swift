@@ -9,6 +9,7 @@
 import Foundation
 
 /// RPN/NRPN bundling.
+@_documentation(visibility: internal)
 public class ParameterNumberEventBundler {
     // MARK: - Options
     

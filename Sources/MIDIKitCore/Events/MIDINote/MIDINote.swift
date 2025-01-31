@@ -101,9 +101,8 @@ public struct MIDINote: Equatable, Hashable {
     /// This string reflects the naming style that was set at time of initialization.
     ///
     /// - Parameters:
-    ///   - namingStandard: Note naming standard (octave offset).
     ///   - respellSharpAsFlat: If note is sharp, respell enharmonically as a flat (ie: G♯ becomes
-    /// A♭). Otherwise, sharp is always used, which is typical convention for MIDI note names.
+    ///     A♭). Otherwise, sharp is always used, which is typical convention for MIDI note names.
     ///   - unicodeAccidental: Use stylized unicode character for sharp (♯) and flat (♭).
     ///
     /// - Returns: MIDI note name string.

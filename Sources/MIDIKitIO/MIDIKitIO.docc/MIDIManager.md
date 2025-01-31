@@ -1,9 +1,5 @@
 # ``MIDIKitIO/MIDIManager``
 
-@Metadata {
-    @DocumentationExtension(mergeBehavior: append)
-}
-
 ## 1. Create a Manager Instance
 
 Create an instance of `MIDIManager` within a lifecycle scope that makes sense for your app. 

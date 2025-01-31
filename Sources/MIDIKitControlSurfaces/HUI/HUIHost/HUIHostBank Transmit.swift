@@ -5,6 +5,7 @@
 //
 
 import MIDIKitCore
+import MIDIKitIO
 
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 extension HUIHostBank {
@@ -83,10 +84,7 @@ extension HUIHostBank {
     ///
     /// - Parameters:
     ///   - vPot: V-Pot identity.
-    ///   - value: Encoded value.
-    ///     When encoding host → surface, this is the LED preset index.
-    ///     When encoding surface → host, this is the delta rotary knob change
-    ///     value -/+ when the user turns the knob.
+    ///   - display: Encoded display value.
     public func transmitVPot(
         _ vPot: HUIVPot,
         display: HUIVPotDisplay

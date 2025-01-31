@@ -20,7 +20,7 @@ To add additional functionality, import extension modules or import the MIDIKit 
 - <doc:MIDIManager-Removing-Ports-and-Connections>
 - <doc:MIDIManager-Receiving-Notifications>
 - ``ObservableMIDIManager``
-- <doc:MIDIKitIO-Combine-and-SwiftUI-Features>
+- <doc:MIDIKitIO-SwiftUI-and-Combine-Features>
 
 ### Devices & Entities
 
@@ -48,4 +48,3 @@ To add additional functionality, import extension modules or import the MIDIKit 
 ### Internals
 
 - <doc:MIDIKitIO-Internals>
-- <doc:Internals-From-MIDIKitCore>

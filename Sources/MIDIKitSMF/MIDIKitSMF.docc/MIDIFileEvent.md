@@ -1,17 +1,18 @@
 # ``MIDIKitSMF/MIDIFileEvent``
 
-@Metadata {
-    @DocumentationExtension(mergeBehavior: append)
-}
+Channel Voice and System Exclusive events are interchangeable between `MIDIEvent` and `MIDIFileEvent`. A convenient API is provided to convert between them when it is appropriate:
 
-Channel Voice and System Exclusive events are interchangeable between ``MIDIEvent`` and ``MIDIFileEvent``. A convenient API is provided to convert between them when it is appropriate:
+Converting <doc://MIDIKitSMF/MIDIKitCore/MIDIEvent> → `MIDIFileEvent`:
 
-- term ``MIDIEvent`` → ``MIDIFileEvent``: ``MIDIEvent/smfEvent(delta:)``
-- term ``MIDIFileEvent`` → ``MIDIEvent``: ``MIDIFileEvent/event()``
+- ``MIDIKitSMF/MIDIKitCore/MIDIEvent/smfEvent(delta:)``
 
-The remainder of ``MIDIFileEvent`` event types are only relevant to MIDI files and have no MIDI I/O event equivalent.
+Converting `MIDIFileEvent` → <doc://MIDIKitSMF/MIDIKitCore/MIDIEvent>:
 
-For more information on ``MIDIEvent``, refer to MIDIKit's own documentation.
+- ``event()``
+
+The remainder of `MIDIFileEvent` event types are only relevant to MIDI files and have no MIDI I/O event equivalent.
+
+For more information on <doc://MIDIKitSMF/MIDIKitCore/MIDIEvent>, refer to its documentation.
 
 ## Topics
 
@@ -56,7 +57,7 @@ For more information on ``MIDIEvent``, refer to MIDIKit's own documentation.
 
 - <doc:MIDIFileEvent-UnrecognizedMeta>
 
-### Translation between MIDIKit.MIDIEvent
+### Translation between MIDIEvent
 
 - ``event()``
-- ``MIDIEvent/smfEvent(delta:)``
+- ``MIDIKitSMF/MIDIKitCore/MIDIEvent/smfEvent(delta:)``
