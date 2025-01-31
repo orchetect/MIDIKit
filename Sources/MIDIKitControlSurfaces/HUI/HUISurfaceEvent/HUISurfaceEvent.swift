@@ -10,7 +10,7 @@ import MIDIKitCore
 /// These events are sent from the client surface to the host as a result of user interaction with
 /// the surface: when the user moves a fader, turns a V-Pot knob, presses a button, or otherwise
 /// interacts with any aspect of the surface.
-public enum HUISurfaceEvent: Equatable, Hashable {
+public enum HUISurfaceEvent {
     /// HUI ping message.
     case ping
     
@@ -46,6 +46,12 @@ public enum HUISurfaceEvent: Equatable, Hashable {
     /// Whenever a HUI surface is turned on or off it should transmit this message to the host.
     case systemReset
 }
+
+extension HUISurfaceEvent: Equatable { }
+
+extension HUISurfaceEvent: Hashable { }
+
+extension HUISurfaceEvent: Sendable { }
 
 extension HUISurfaceEvent: CustomStringConvertible {
     public var description: String {
@@ -86,5 +92,3 @@ extension HUISurfaceEvent: CustomStringConvertible {
         }
     }
 }
-
-extension HUISurfaceEvent: Sendable { }

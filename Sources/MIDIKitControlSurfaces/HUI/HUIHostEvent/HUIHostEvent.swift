@@ -9,7 +9,7 @@ import MIDIKitCore
 /// HUI Host Event: basic HUI host message definition.
 /// These events are sent from the host to the client surface to update state of the surface: fader
 /// levels, text displays, LEDs, and even triggering beep sounds.
-public enum HUIHostEvent: Equatable, Hashable {
+public enum HUIHostEvent {
     /// HUI ping message.
     case ping
     
@@ -63,6 +63,12 @@ public enum HUIHostEvent: Equatable, Hashable {
     )
 }
 
+extension HUIHostEvent: Equatable { }
+
+extension HUIHostEvent: Hashable { }
+
+extension HUIHostEvent: Sendable { }
+
 extension HUIHostEvent: CustomStringConvertible {
     public var description: String {
         switch self {
@@ -112,5 +118,3 @@ extension HUIHostEvent: CustomStringConvertible {
         }
     }
 }
-
-extension HUIHostEvent: Sendable { }
