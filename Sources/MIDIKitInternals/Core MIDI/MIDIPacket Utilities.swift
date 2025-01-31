@@ -9,35 +9,7 @@
 import CoreMIDI
 import Foundation
 
-extension UnsafePointer where Pointee == MIDIPacket {
-    /// Returns the raw bytes of the `MIDIPacket`.
-    @_disfavoredOverload @inlinable
-    public var rawBytes: [UInt8] {
-        MIDIPacket.extractBytes(from: self)
-    }
-    
-    /// Returns the time stamp of the `MIDIPacket`.
-    @_disfavoredOverload @inlinable
-    public var rawTimeStamp: MIDITimeStamp {
-        MIDIPacket.extractTimeStamp(from: self)
-    }
-}
-
-extension UnsafeMutablePointer where Pointee == MIDIPacket {
-    /// Returns the raw bytes of the `MIDIPacket`.
-    @_disfavoredOverload @inlinable
-    public var rawBytes: [UInt8] {
-        UnsafePointer(self).rawBytes
-    }
-    
-    /// Returns the time stamp of the `MIDIPacket`.
-    @_disfavoredOverload @inlinable
-    public var rawTimeStamp: MIDITimeStamp {
-        UnsafePointer(self).rawTimeStamp
-    }
-}
-
-extension MIDIPacket {
+extension CoreMIDI.MIDIPacket {
     /// Returns the raw bytes of the `MIDIPacket`.
     @_disfavoredOverload @inlinable
     public var rawBytes: [UInt8] {
@@ -51,17 +23,45 @@ extension MIDIPacket {
     }
 }
 
+extension UnsafePointer where Pointee == CoreMIDI.MIDIPacket {
+    /// Returns the raw bytes of the `MIDIPacket` (`UnsafePointer`).
+    @_disfavoredOverload @inlinable
+    public var rawBytes: [UInt8] {
+        CoreMIDI.MIDIPacket.extractBytes(from: self)
+    }
+    
+    /// Returns the time stamp of the `MIDIPacket` (`UnsafePointer`).
+    @_disfavoredOverload @inlinable
+    public var rawTimeStamp: MIDITimeStamp {
+        CoreMIDI.MIDIPacket.extractTimeStamp(from: self)
+    }
+}
+
+extension UnsafeMutablePointer where Pointee == CoreMIDI.MIDIPacket {
+    /// Returns the raw bytes of the `MIDIPacket` (`UnsafeMutablePointer`).
+    @_disfavoredOverload @inlinable
+    public var rawBytes: [UInt8] {
+        UnsafePointer(self).rawBytes
+    }
+    
+    /// Returns the time stamp of the `MIDIPacket` (`UnsafeMutablePointer`).
+    @_disfavoredOverload @inlinable
+    public var rawTimeStamp: MIDITimeStamp {
+        UnsafePointer(self).rawTimeStamp
+    }
+}
+
 // MARK: - Helpers
 
-extension MIDIPacket {
+extension CoreMIDI.MIDIPacket {
     @inline(__always) @usableFromInline
-    static let midiPacketLengthOffset: Int = MemoryLayout.offset(of: \MIDIPacket.length)!
+    static let midiPacketLengthOffset: Int = MemoryLayout.offset(of: \CoreMIDI.MIDIPacket.length)!
     
     @inline(__always) @usableFromInline
-    static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \MIDIPacket.data)!
+    static let midiPacketDataOffset: Int = MemoryLayout.offset(of: \CoreMIDI.MIDIPacket.data)!
     
     @inline(__always) @usableFromInline
-    static let midiPacketTimeStamp: Int = MemoryLayout.offset(of: \MIDIPacket.timeStamp)!
+    static let midiPacketTimeStamp: Int = MemoryLayout.offset(of: \CoreMIDI.MIDIPacket.timeStamp)!
     
     @inlinable
     static func extractBytes(from ptr: UnsafeRawPointer) -> [UInt8] {
@@ -83,7 +83,7 @@ extension MIDIPacket {
     }
     
     @inlinable
-    static func extractTimeStamp(from ptr: UnsafeRawPointer) -> MIDITimeStamp {
+    static func extractTimeStamp(from ptr: UnsafeRawPointer) -> CoreMIDI.MIDITimeStamp {
         // Access the raw memory instead of using the .pointee
         // This workaround is needed due to a variety of crashes that can occur when either the
         // thread sanitizer is on, or large/malformed MIDI packet lists / packets arrive
