@@ -20,7 +20,7 @@ extension MIDIEvent {
     /// > To avoid ambiguity of the 2.09712 seconds wrap, and to provide sufficient JR Clock
     /// > messages for the Receiver, the Sender shall send a JR Clock message at least once every
     /// > 250 milliseconds.
-    public struct JRClock: Equatable, Hashable {
+    public struct JRClock {
         /// 16-Bit Time Value
         ///
         /// > MIDI 2.0 Spec:
@@ -62,6 +62,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.JRClock: Equatable { }
+
+extension MIDIEvent.JRClock: Hashable { }
 
 extension MIDIEvent.JRClock: Sendable { }
 

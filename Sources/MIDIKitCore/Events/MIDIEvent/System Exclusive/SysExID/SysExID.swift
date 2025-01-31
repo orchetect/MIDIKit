@@ -7,11 +7,15 @@
 import Foundation
 
 extension MIDIEvent {
-    public enum SysExID: Hashable, Equatable {
+    public enum SysExID {
         case manufacturer(SysExManufacturer)
         case universal(UniversalSysExType)
     }
 }
+
+extension MIDIEvent.SysExID: Equatable { }
+
+extension MIDIEvent.SysExID: Hashable { }
 
 extension MIDIEvent.SysExID: CustomStringConvertible {
     public var description: String {

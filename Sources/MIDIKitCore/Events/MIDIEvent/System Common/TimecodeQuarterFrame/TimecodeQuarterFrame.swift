@@ -15,7 +15,7 @@ extension MIDIEvent {
     /// > bits. The Quarter Frame message communicates the Frame, Seconds, Minutes and Hours Count
     /// > in an 8-message sequence. There is also an MTC FULL FRAME message which is a MIDI System
     /// > Exclusive Message.
-    public struct TimecodeQuarterFrame: Equatable, Hashable {
+    public struct TimecodeQuarterFrame {
         /// Data Byte containing quarter-frame bits
         public var dataByte: UInt7
         
@@ -31,6 +31,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.TimecodeQuarterFrame: Equatable { }
+
+extension MIDIEvent.TimecodeQuarterFrame: Hashable { }
 
 extension MIDIEvent.TimecodeQuarterFrame: Sendable { }
 

@@ -9,6 +9,7 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
     /// (MIDI 2.0)
     ///
     /// Initialize an enum case from the controller number.
+    @inlinable
     public init(number: UInt8) {
         // this looks scary but its heart is in the right place
     

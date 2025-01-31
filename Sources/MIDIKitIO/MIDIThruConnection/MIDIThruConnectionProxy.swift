@@ -13,7 +13,7 @@ internal import CoreMIDI
 /// Internal class.
 /// Used as a stand-in replacement for Core MIDI's `MIDIThruConnectionCreate` on macOS versions that
 /// are affected by the thru-connection bug.
-final class MIDIThruConnectionProxy: Sendable {
+final class MIDIThruConnectionProxy {
     nonisolated(unsafe)
     private var inputConnection: MIDIInputConnection!
     
@@ -50,6 +50,8 @@ final class MIDIThruConnectionProxy: Sendable {
         try inputConnection.connect(in: midiManager)
     }
 }
+
+extension MIDIThruConnectionProxy: Sendable { }
 
 extension MIDIThruConnectionProxy {
     func notification(_ internalNotification: MIDIIOInternalNotification) {

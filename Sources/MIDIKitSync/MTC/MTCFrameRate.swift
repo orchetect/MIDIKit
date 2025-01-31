@@ -94,18 +94,21 @@ extension MTCFrameRate: Sendable { }
 
 extension MTCFrameRate {
     /// Construct based on the corresponding real timecode frame rate
+    
+    @inline(__always)
     public init(_ timecodeFrameRate: TimecodeFrameRate) {
         self = timecodeFrameRate.mtcFrameRate
     }
     
     /// Construct from MTC bits
+    @inline(__always)
     public init?(_ bitValue: UInt8) {
         switch bitValue {
-        case 0b00:      self = .mtc24
-        case 0b01:      self = .mtc25
-        case 0b10:      self = .mtc2997d
-        case 0b11:      self = .mtc30
-        default:        return nil
+        case 0b00: self = .mtc24
+        case 0b01: self = .mtc25
+        case 0b10: self = .mtc2997d
+        case 0b11: self = .mtc30
+        default:   return nil
         }
     }
 }
@@ -114,6 +117,7 @@ extension MTCFrameRate {
 
 extension MTCFrameRate {
     /// Raw bit value transmitted in MTC messages
+    @inline(__always)
     public var bitValue: UInt8 {
         switch self {
         case .mtc24:    return 0b00
@@ -134,6 +138,7 @@ extension MTCFrameRate {
     }
     
     /// Returns true if the rate is drop-frame
+    @inline(__always)
     public var isDrop: Bool {
         switch self {
         case .mtc24:    return false
@@ -148,6 +153,7 @@ extension MTCFrameRate {
 
 extension MTCFrameRate {
     /// FPS Value for scaling MTC frame rate
+    @inline(__always)
     var fpsValueForScaling: Int {
         switch self {
         case .mtc24:    return 24

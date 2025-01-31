@@ -10,6 +10,7 @@ internal import CoreMIDI
 
 // MARK: - Public Protocol
 
+/// ``MIDIManager`` object trait adopted by objects that send MIDI messages.
 public protocol MIDIManagedSendsMessages: MIDIManaged {
     /// The Core MIDI output port ref.
     /* public private(set) */ var coreMIDIOutputPortRef: CoreMIDIPortRef? { get }

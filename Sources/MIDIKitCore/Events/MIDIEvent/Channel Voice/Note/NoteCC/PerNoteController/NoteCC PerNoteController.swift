@@ -7,7 +7,7 @@
 extension MIDIEvent.NoteCC {
     /// Per-Note Controller
     /// (MIDI 2.0)
-    public enum PerNoteController: Equatable, Hashable {
+    public enum PerNoteController {
         /// Registered Per-Note Controller
         case registered(Registered)
     
@@ -15,6 +15,10 @@ extension MIDIEvent.NoteCC {
         case assignable(Assignable)
     }
 }
+
+extension MIDIEvent.NoteCC.PerNoteController: Equatable { }
+
+extension MIDIEvent.NoteCC.PerNoteController: Hashable { }
 
 extension MIDIEvent.NoteCC.PerNoteController: Identifiable {
     public var id: Self { self }
@@ -36,6 +40,7 @@ extension MIDIEvent.NoteCC.PerNoteController: CustomStringConvertible {
 
 extension MIDIEvent.NoteCC.PerNoteController {
     /// Returns the controller number.
+    @inlinable
     public var number: UInt8 {
         switch self {
         case let .registered(cc):

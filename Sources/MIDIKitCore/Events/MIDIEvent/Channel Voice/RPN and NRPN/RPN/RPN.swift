@@ -55,7 +55,7 @@ extension MIDIEvent {
     /// > If it appears you are receiving duplicate RPN messages, it has to do with Core MIDI
     /// > implementing MIDI 1.0 to MIDI 2.0 translation as defined by the MIDI 2.0 Spec.
     /// > See [this thread](https://github.com/orchetect/MIDIKit/discussions/198) for more details.
-    public struct RPN: Equatable, Hashable {
+    public struct RPN {
         /// Registered Parameter Number (Registered Controller).
         public var parameter: RegisteredController
         
@@ -84,9 +84,13 @@ extension MIDIEvent {
     }
 }
 
-extension MIDIEvent.RPN: MIDIParameterNumberEvent { }
+extension MIDIEvent.RPN: Equatable { }
+
+extension MIDIEvent.RPN: Hashable { }
 
 extension MIDIEvent.RPN: Sendable { }
+
+extension MIDIEvent.RPN: MIDIParameterNumberEvent { }
 
 extension MIDIEvent {
     // note: this comment block should be duplicated to the places noted at the top of this file

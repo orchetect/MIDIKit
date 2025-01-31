@@ -6,7 +6,7 @@
 
 extension MIDIEvent {
     /// System Exclusive MIDI Event types.
-    public enum SysExType: Equatable, Hashable {
+    public enum SysExType {
         /// System Exclusive: Manufacturer-specific (7-bit)
         /// (MIDI 1.0 / 2.0)
         case sysEx7
@@ -25,6 +25,10 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.SysExType: Equatable { }
+
+extension MIDIEvent.SysExType: Hashable { }
+
 extension MIDIEvent.SysExType: Identifiable {
     public var id: Self { self }
 }
@@ -33,7 +37,7 @@ extension MIDIEvent.SysExType: Sendable { }
 
 extension MIDIEvent {
     /// Declarative System Exclusive MIDI Event types used in event filters.
-    public enum SysExTypes: Equatable, Hashable {
+    public enum SysExTypes {
         /// Return only System Exclusive events.
         case only
         /// Return only System Exclusive events matching a certain event type.
@@ -58,5 +62,9 @@ extension MIDIEvent {
         case dropTypes(Set<SysExType>)
     }
 }
+
+extension MIDIEvent.SysExTypes: Equatable { }
+
+extension MIDIEvent.SysExTypes: Hashable { }
 
 extension MIDIEvent.SysExTypes: Sendable { }

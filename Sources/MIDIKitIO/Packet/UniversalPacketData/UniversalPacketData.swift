@@ -46,6 +46,8 @@ public struct UniversalMIDIPacketData {
     }
 }
 
+extension UniversalMIDIPacketData: Equatable { }
+
 extension UniversalMIDIPacketData: Hashable { }
 
 extension UniversalMIDIPacketData: Sendable { }

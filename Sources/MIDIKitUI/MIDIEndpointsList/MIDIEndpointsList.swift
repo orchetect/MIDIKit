@@ -9,6 +9,7 @@
 import MIDIKitIO
 import SwiftUI
 
+/// Internal generic MIDI endpoints SwiftUI list view that can be specialized for either inputs or outputs.
 @available(macOS 14.0, iOS 17.0, *)
 struct MIDIEndpointsList<Endpoint>: View, MIDIEndpointsSelectable
 where Endpoint: MIDIEndpoint & Hashable & Identifiable, 
@@ -141,140 +142,6 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable,
                 #endif
             }
         }
-    }
-}
-
-/// SwiftUI `List` view for selecting MIDI input endpoints.
-///
-/// This view requires that an <doc://MIDIKitUI/MIDIKitIO/ObservableMIDIManager> instance exists in the environment.
-///
-/// ```swift
-/// MIDIInputsList( ... )
-///     .environment(midiManager)
-/// ```
-///
-/// Optionally supply a tag to auto-update an output connection in MIDIManager.
-///
-/// ```swift
-/// MIDIInputsList( ... )
-///     .environment(midiManager)
-///     .updatingOutputConnection(withTag: "MyConnection")
-/// ```
-@available(macOS 14.0, iOS 17.0, *)
-public struct MIDIInputsList: View, _MIDIInputsSelectable {
-    @Environment(ObservableMIDIManager.self) private var midiManager
-    
-    @Binding private var selectionID: MIDIIdentifier?
-    @Binding private var selectionDisplayName: String?
-    private var showIcons: Bool
-    private var hideOwned: Bool
-    
-    internal var updatingOutputConnectionWithTag: String?
-    
-    public init(
-        selectionID: Binding<MIDIIdentifier?>,
-        selectionDisplayName: Binding<String?>,
-        showIcons: Bool = true,
-        hideOwned: Bool = false
-    ) {
-        _selectionID = selectionID
-        _selectionDisplayName = selectionDisplayName
-        self.showIcons = showIcons
-        self.hideOwned = hideOwned
-    }
-    
-    public var body: some View {
-        MIDIEndpointsList<MIDIInputEndpoint>(
-            endpoints: midiManager.endpoints.inputs,
-            maskedFilter: maskedFilter,
-            selectionID: $selectionID,
-            selectionDisplayName: $selectionDisplayName,
-            showIcons: showIcons,
-            midiManager: midiManager
-        )
-        .onAppear {
-            updateOutputConnection(id: selectionID)
-        }
-        .onChange(of: selectionID) { newValue in
-            updateOutputConnection(id: newValue)
-        }
-    }
-    
-    private var maskedFilter: MIDIEndpointMaskedFilter? {
-        hideOwned ? .drop(.owned()) : nil
-    }
-    
-    private func updateOutputConnection(id: MIDIIdentifier?) {
-        updateOutputConnection(selectedUniqueID: id,
-                               selectedDisplayName: selectionDisplayName,
-                               midiManager: midiManager)
-    }
-}
-
-/// SwiftUI `List` view for selecting MIDI output endpoints.
-///
-/// This view requires that an <doc://MIDIKitUI/MIDIKitIO/ObservableMIDIManager> instance exists in the environment.
-///
-/// ```swift
-/// MIDIOutputsList( ... )
-///     .environment(midiManager)
-/// ```
-///
-/// Optionally supply a tag to auto-update an input connection in MIDIManager.
-///
-/// ```swift
-/// MIDIOutputsList( ... )
-///     .environment(midiManager)
-///     .updatingInputConnection(withTag: "MyConnection")
-/// ```
-@available(macOS 14.0, iOS 17.0, *)
-public struct MIDIOutputsList: View, _MIDIOutputsSelectable {
-    @Environment(ObservableMIDIManager.self) private var midiManager
-    
-    @Binding private var selectionID: MIDIIdentifier?
-    @Binding private var selectionDisplayName: String?
-    private var showIcons: Bool
-    private var hideOwned: Bool
-    
-    var updatingInputConnectionWithTag: String?
-    
-    public init(
-        selectionID: Binding<MIDIIdentifier?>,
-        selectionDisplayName: Binding<String?>,
-        showIcons: Bool = true,
-        hideOwned: Bool = false
-    ) {
-        _selectionID = selectionID
-        _selectionDisplayName = selectionDisplayName
-        self.showIcons = showIcons
-        self.hideOwned = hideOwned
-    }
-    
-    public var body: some View {
-        MIDIEndpointsList<MIDIOutputEndpoint>(
-            endpoints: midiManager.endpoints.outputs,
-            maskedFilter: maskedFilter,
-            selectionID: $selectionID,
-            selectionDisplayName: $selectionDisplayName,
-            showIcons: showIcons,
-            midiManager: midiManager
-        )
-        .onAppear {
-            updateInputConnection(id: selectionID)
-        }
-        .onChange(of: selectionID) { newValue in
-            updateInputConnection(id: newValue)
-        }
-    }
-    
-    private var maskedFilter: MIDIEndpointMaskedFilter? {
-        hideOwned ? .drop(.owned()) : nil
-    }
-    
-    private func updateInputConnection(id: MIDIIdentifier?) {
-        updateInputConnection(selectedUniqueID: id,
-                              selectedDisplayName: selectionDisplayName,
-                              midiManager: midiManager)
     }
 }
 

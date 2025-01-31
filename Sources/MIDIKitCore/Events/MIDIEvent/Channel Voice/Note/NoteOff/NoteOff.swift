@@ -7,7 +7,7 @@
 extension MIDIEvent {
     /// Channel Voice Message: Note Off
     /// (MIDI 1.0 / 2.0)
-    public struct NoteOff: Equatable, Hashable {
+    public struct NoteOff {
         /// Note Number
         ///
         /// If MIDI 2.0 attribute is set to Pitch 7.9, then this value represents the note index.
@@ -74,6 +74,12 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.NoteOff: Equatable { }
+
+extension MIDIEvent.NoteOff: Hashable { }
+
+extension MIDIEvent.NoteOff: Sendable { }
+
 extension MIDIEvent {
     /// Channel Voice Message: Note Off
     /// (MIDI 1.0 / 2.0)
@@ -129,8 +135,6 @@ extension MIDIEvent {
         )
     }
 }
-
-extension MIDIEvent.NoteOff: Sendable { }
 
 extension MIDIEvent.NoteOff {
     /// Returns the raw MIDI 1.0 status byte for the event.

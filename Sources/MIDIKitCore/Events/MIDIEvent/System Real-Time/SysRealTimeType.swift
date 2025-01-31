@@ -6,7 +6,7 @@
 
 extension MIDIEvent {
     /// System Real-Time MIDI Event types.
-    public enum SysRealTimeType: Equatable, Hashable {
+    public enum SysRealTimeType {
         /// System Real-Time: Timing Clock
         /// (MIDI 1.0 / 2.0)
         case timingClock
@@ -33,6 +33,10 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.SysRealTimeType: Equatable { }
+
+extension MIDIEvent.SysRealTimeType: Hashable { }
+
 extension MIDIEvent.SysRealTimeType: Identifiable {
     public var id: Self { self }
 }
@@ -41,7 +45,7 @@ extension MIDIEvent.SysRealTimeType: Sendable { }
 
 extension MIDIEvent {
     /// Declarative System Real-Time MIDI Event types used in event filters.
-    public enum SysRealTimeTypes: Equatable, Hashable {
+    public enum SysRealTimeTypes {
         /// Return only System Real-Time events.
         case only
         /// Return only System Real-Time events matching a certain event type.
@@ -66,5 +70,9 @@ extension MIDIEvent {
         case dropTypes(Set<SysRealTimeType>)
     }
 }
+
+extension MIDIEvent.SysRealTimeTypes: Equatable { }
+
+extension MIDIEvent.SysRealTimeTypes: Hashable { }
 
 extension MIDIEvent.SysRealTimeTypes: Sendable { }

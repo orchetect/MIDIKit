@@ -42,6 +42,7 @@ extension MIDIFileEventType: Sendable { }
 
 extension MIDIFileEventType {
     /// Returns the concrete type associated with the MIDI file event.
+    @inline(__always)
     public var concreteType: MIDIFileEventPayload.Type {
         switch self {
         case .cc:                 return MIDIFileEvent.CC.self

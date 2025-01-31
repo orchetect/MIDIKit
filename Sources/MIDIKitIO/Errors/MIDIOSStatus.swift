@@ -12,7 +12,7 @@ internal import CoreMIDI
 
 /// An enumeration representing `CoreMIDI.MIDIServices` `OSStatus` error codes, with verbose
 /// descriptions.
-public enum MIDIOSStatus: LocalizedError, Equatable, Hashable {
+public enum MIDIOSStatus: LocalizedError {
     /// `CoreMIDI.kMIDIInvalidClient`:
     /// An invalid `MIDIClientRef` was passed.
     case invalidClient
@@ -95,6 +95,12 @@ public enum MIDIOSStatus: LocalizedError, Equatable, Hashable {
     /// Other `OSStatus`
     case other(CoreMIDIOSStatus)
 }
+
+extension MIDIOSStatus: Equatable { }
+
+extension MIDIOSStatus: Hashable { }
+
+extension MIDIOSStatus: Sendable { }
 
 extension MIDIOSStatus {
     /// Returns the corresponding Core MIDI `OSStatus` raw value.
@@ -217,8 +223,6 @@ extension MIDIOSStatus {
         }
     }
 }
-
-extension MIDIOSStatus: Sendable { }
 
 /// Throws an error of type ``MIDIIOError/osStatus(_:)-swift.enum.case`` if `OSStatus` return value
 /// `!= noErr`.

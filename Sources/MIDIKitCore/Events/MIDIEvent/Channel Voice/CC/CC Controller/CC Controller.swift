@@ -9,7 +9,7 @@ extension MIDIEvent.CC {
     
     /// MIDI Control Change Controller
     /// (MIDI 1.0 / MIDI 2.0)
-    public enum Controller: Equatable, Hashable {
+    public enum Controller {
         /// Bank Select
         /// (Int: 0, Hex: 0x00)
         case bankSelect
@@ -277,6 +277,10 @@ extension MIDIEvent.CC {
     }
     // swiftformat:enable wrap
 }
+
+extension MIDIEvent.CC.Controller: Equatable { }
+
+extension MIDIEvent.CC.Controller: Hashable { }
 
 extension MIDIEvent.CC.Controller: Identifiable {
     public var id: Self { self }

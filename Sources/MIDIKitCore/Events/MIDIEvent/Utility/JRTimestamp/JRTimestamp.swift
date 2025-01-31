@@ -15,7 +15,7 @@ extension MIDIEvent {
     /// >
     /// > A 16-bit time value in clock ticks of 1/31250 of one second (32 μsec, clock frequency of 1
     /// > MHz / 32).
-    public struct JRTimestamp: Equatable, Hashable {
+    public struct JRTimestamp {
         /// 16-Bit Time Value
         ///
         /// > MIDI 2.0 Spec:
@@ -49,6 +49,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.JRTimestamp: Equatable { }
+
+extension MIDIEvent.JRTimestamp: Hashable { }
 
 extension MIDIEvent.JRTimestamp: Sendable { }
 

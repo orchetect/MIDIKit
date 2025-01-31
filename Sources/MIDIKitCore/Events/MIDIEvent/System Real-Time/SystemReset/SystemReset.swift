@@ -14,7 +14,7 @@ extension MIDIEvent {
     /// > condition. This message should be used sparingly, and should typically be sent by manual
     /// > control only. It should not be sent automatically upon power-up and under no condition
     /// > should this message be echoed.
-    public struct SystemReset: Equatable, Hashable {
+    public struct SystemReset {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
         
@@ -23,6 +23,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.SystemReset: Equatable { }
+
+extension MIDIEvent.SystemReset: Hashable { }
 
 extension MIDIEvent.SystemReset: Sendable { }
 

@@ -8,6 +8,7 @@
 
 // MARK: - Public Protocol
 
+/// ``MIDIManager`` object trait adopted by objects that the manager manages.
 public protocol MIDIManaged: AnyObject {
     /// Core MIDI API version used to create the endpoint
     /// and send/receive MIDI messages (if applicable).

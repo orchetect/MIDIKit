@@ -9,7 +9,7 @@ extension MIDIEvent {
     /// (MIDI 2.0 only)
     ///
     /// - `deviceID` of `0x7F` indicates "All Devices".
-    public struct UniversalSysEx8: Equatable, Hashable {
+    public struct UniversalSysEx8 {
         /// Universal SysEx type:
         /// realtime or non-realtime
         public var universalType: UniversalSysExType
@@ -69,6 +69,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.UniversalSysEx8: Equatable { }
+
+extension MIDIEvent.UniversalSysEx8: Hashable { }
 
 extension MIDIEvent.UniversalSysEx8: Sendable { }
 

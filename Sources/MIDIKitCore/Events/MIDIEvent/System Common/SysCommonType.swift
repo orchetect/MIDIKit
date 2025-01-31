@@ -6,7 +6,7 @@
 
 extension MIDIEvent {
     /// System Common MIDI Event types.
-    public enum SysCommonType: Equatable, Hashable {
+    public enum SysCommonType {
         /// System Common: Timecode Quarter-Frame
         /// (MIDI 1.0 / 2.0)
         case timecodeQuarterFrame
@@ -25,6 +25,10 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.SysCommonType: Equatable { }
+
+extension MIDIEvent.SysCommonType: Hashable { }
+
 extension MIDIEvent.SysCommonType: Identifiable {
     public var id: Self { self }
 }
@@ -33,7 +37,7 @@ extension MIDIEvent.SysCommonType: Sendable { }
 
 extension MIDIEvent {
     /// Declarative System Common MIDI Event types used in event filters.
-    public enum SysCommonTypes: Equatable, Hashable {
+    public enum SysCommonTypes {
         /// Return only System Common events.
         case only
         /// Return only System Common events matching a certain event type.
@@ -58,5 +62,9 @@ extension MIDIEvent {
         case dropTypes(Set<SysCommonType>)
     }
 }
+
+extension MIDIEvent.SysCommonTypes: Equatable { }
+
+extension MIDIEvent.SysCommonTypes: Hashable { }
 
 extension MIDIEvent.SysCommonTypes: Sendable { }

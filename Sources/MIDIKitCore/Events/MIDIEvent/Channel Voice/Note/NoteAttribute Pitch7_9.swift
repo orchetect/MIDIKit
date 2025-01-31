@@ -13,7 +13,7 @@ extension MIDIEvent.NoteAttribute {
     /// A Q7.9 fixed-point unsigned integer that specifies a pitch in semitones.
     ///
     /// Range: `0+(0/512) ... 127+(511/512)`
-    public struct Pitch7_9: Equatable, Hashable {
+    public struct Pitch7_9 {
         /// 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
         public var coarse: UInt7
     
@@ -40,6 +40,10 @@ extension MIDIEvent.NoteAttribute {
         }
     }
 }
+
+extension MIDIEvent.NoteAttribute.Pitch7_9: Equatable { }
+
+extension MIDIEvent.NoteAttribute.Pitch7_9: Hashable { }
 
 extension MIDIEvent.NoteAttribute.Pitch7_9: Sendable { }
 
@@ -68,6 +72,7 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     }
     
     /// `UInt16` representation as a byte pair.
+    @inlinable
     public var bytePair: BytePair {
         let msb = UInt8(coarse.uInt8Value << 1)
             + UInt8((fine.uInt16Value & 0b1_00000000) >> 8)
@@ -92,6 +97,7 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     }
     
     /// UInt16 representation.
+    @inlinable
     public var uInt16Value: UInt16 {
         (UInt16(coarse.uInt8Value) << 9) + fine.uInt16Value
     }
@@ -116,6 +122,7 @@ extension MIDIEvent.NoteAttribute.Pitch7_9 {
     }
     
     /// Converted to a Double value (`0.0 ... 127.998046875`)
+    @inlinable
     public var doubleValue: Double {
         Double(coarse.uInt8Value) + (Double(fine.uInt16Value) / 0b10_00000000)
     }

@@ -6,10 +6,23 @@
 
 /// MIDI Parameter Number classification.
 /// Determines whether a message is an RPN (registered) or an NRPN (assignable).
-public enum MIDIParameterNumberType: Equatable, Hashable, CaseIterable {
+public enum MIDIParameterNumberType {
+    /// Cases describing RPNs (Registered Parameter Numbers),
+    /// also referred to as Registered Controllers in MIDI 2.0.
+    /// (MIDI 1.0 / MIDI 2.0)
     case registered
+    
+    /// Cases describing NRPNs (Non-Registered Parameter Numbers),
+    /// also referred to as Assignable Controllers in MIDI 2.0.
+    /// (MIDI 1.0 / MIDI 2.0)
     case assignable
 }
+
+extension MIDIParameterNumberType: Equatable { }
+
+extension MIDIParameterNumberType: Hashable { }
+
+extension MIDIParameterNumberType: CaseIterable { }
 
 extension MIDIParameterNumberType: CustomStringConvertible {
     public var description: String {

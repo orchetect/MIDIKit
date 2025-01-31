@@ -12,7 +12,7 @@ extension MIDIEvent {
     /// - Pro Tools: "Polyphonic Aftertouch"
     /// - Logic Pro: "Polyphonic Aftertouch"
     /// - Cubase: "Poly Pressure"
-    public struct NotePressure: Equatable, Hashable {
+    public struct NotePressure {
         /// Note Number for which pressure is applied
         public var note: MIDINote
     
@@ -65,6 +65,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.NotePressure: Equatable { }
+
+extension MIDIEvent.NotePressure: Hashable { }
 
 extension MIDIEvent.NotePressure: Sendable { }
 

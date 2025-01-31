@@ -22,6 +22,8 @@ extension MTCGenerator {
 
 extension MTCGenerator.State: Equatable { }
 
+extension MTCGenerator.State: Hashable { }
+
 extension MTCGenerator.State: Identifiable {
     public var id: Self { self }
 }

@@ -10,7 +10,7 @@ import Foundation
 import MIDIKitCore
 
 /// Error type returned by MIDIKit I/O operations.
-public enum MIDIIOError: LocalizedError, Hashable {
+public enum MIDIIOError: LocalizedError {
     // General
     case internalInconsistency(_ verboseError: String)
     case malformed(_ verboseError: String)
@@ -23,6 +23,8 @@ public enum MIDIIOError: LocalizedError, Hashable {
     // Core MIDI.OSStatus
     case osStatus(MIDIOSStatus)
 }
+
+extension MIDIIOError: Hashable { }
 
 extension MIDIIOError {
     /// Convenience to return a case of ``osStatus(_:)-swift.enum.case`` with its associated

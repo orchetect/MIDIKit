@@ -23,7 +23,7 @@
 ///
 /// MIDIKit provides type-safe abstractions for all possible events and values. For this reason, it
 /// is not necessary (and is discouraged) to use raw bytes when constructing or parsing events.
-public enum MIDIEvent: Equatable, Hashable {
+public enum MIDIEvent {
     // -------------------
     // MARK: Channel Voice
     // -------------------
@@ -376,5 +376,8 @@ public enum MIDIEvent: Equatable, Hashable {
     case jrTimestamp(JRTimestamp)
 }
 
-// Sendable must be applied in the same file as the struct for it to be compiler-checked.
+extension MIDIEvent: Equatable { }
+
+extension MIDIEvent: Hashable { }
+
 extension MIDIEvent: Sendable { }

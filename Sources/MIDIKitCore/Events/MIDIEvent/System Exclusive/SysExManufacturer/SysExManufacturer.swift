@@ -22,7 +22,7 @@ extension MIDIEvent {
     /// > - Special IDs `0x7E` and `0x7F` are the Universal System Exclusive IDs.
     ///
     /// For these special IDs, use MIDIKit's ``UniversalSysEx7`` type instead of ``SysEx7``.
-    public enum SysExManufacturer: Equatable, Hashable {
+    public enum SysExManufacturer {
         /// Valid range: `0x01 ... 0x7D`
         ///
         /// `0x00` is reserved to prefix a 2-byte ID (3 total bytes)
@@ -34,6 +34,10 @@ extension MIDIEvent {
         case threeByte(byte2: UInt7, byte3: UInt7)
     }
 }
+
+extension MIDIEvent.SysExManufacturer: Equatable { }
+
+extension MIDIEvent.SysExManufacturer: Hashable { }
 
 extension MIDIEvent.SysExManufacturer: Sendable { }
 
@@ -827,11 +831,11 @@ extension MIDIEvent.SysExManufacturer {
         [0x00, 0x40, 0x06]: "Pioneer Corporation",
         [0x00, 0x40, 0x07]: "Slik Corporation",
         
-        [0x00, 0x48, 0x00]: "sigboost Co., Ltd.",         // expiration date: 2021.50.30
-        [0x00, 0x48, 0x01]: "Lost Technology",            // expiration date: 2021.06.19
-        [0x00, 0x48, 0x02]: "Uchiwa Fujin",               // expiration date: 2021.06.30
-        [0x00, 0x48, 0x03]: "Tsukuba Science Co., Ltd.",  // expiration date: 2021.10.04
-        [0x00, 0x48, 0x04]: "Sonicware Co., Ltd.",        // expiration date: 2021.11.06
-        [0x00, 0x48, 0x05]: "Poppy only workshop"         // expiration date: 2021.10.20
+        [0x00, 0x48, 0x00]: "sigboost Co., Ltd.",        // expiration date: 2021.50.30
+        [0x00, 0x48, 0x01]: "Lost Technology",           // expiration date: 2021.06.19
+        [0x00, 0x48, 0x02]: "Uchiwa Fujin",              // expiration date: 2021.06.30
+        [0x00, 0x48, 0x03]: "Tsukuba Science Co., Ltd.", // expiration date: 2021.10.04
+        [0x00, 0x48, 0x04]: "Sonicware Co., Ltd.",       // expiration date: 2021.11.06
+        [0x00, 0x48, 0x05]: "Poppy only workshop"        // expiration date: 2021.10.20
     ]
 }

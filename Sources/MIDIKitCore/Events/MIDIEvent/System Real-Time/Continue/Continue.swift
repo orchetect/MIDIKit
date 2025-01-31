@@ -12,7 +12,7 @@ extension MIDIEvent {
     /// >
     /// > Continue (`0xFB`) is sent when a CONTINUE button is hit. A sequence will continue from its
     /// > current location upon receipt of the next Timing Clock (`0xF8`).
-    public struct Continue: Equatable, Hashable {
+    public struct Continue {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
         
@@ -21,6 +21,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.Continue: Equatable { }
+
+extension MIDIEvent.Continue: Hashable { }
 
 extension MIDIEvent.Continue: Sendable { }
 

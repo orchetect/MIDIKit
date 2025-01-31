@@ -25,6 +25,8 @@ extension MIDIFile.Chunk: Equatable { }
 
 extension MIDIFile.Chunk: Hashable { }
 
+extension MIDIFile.Chunk: Sendable { }
+
 extension MIDIFile.Chunk: CustomStringConvertible {
     public var description: String {
         switch self {
@@ -48,8 +50,6 @@ extension MIDIFile.Chunk: CustomDebugStringConvertible {
         }
     }
 }
-
-extension MIDIFile.Chunk: Sendable { }
 
 extension MIDIFile.Chunk {
     /// Unwraps the enum case and returns the ``MIDIFile/Chunk`` contained within, typed as

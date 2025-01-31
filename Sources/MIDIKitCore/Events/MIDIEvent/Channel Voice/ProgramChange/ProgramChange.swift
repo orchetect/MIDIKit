@@ -19,7 +19,7 @@ extension MIDIEvent {
     /// > Protocol mechanism for selecting Banks and Programs requires sending three MIDI separate
     /// > 1.0 Messages. The MIDI 1.0 Protocol’s existing 16,384 Banks, each with 128 Programs, are
     /// > preserved and translate directly to the MIDI 2.0 Protocol.
-    public struct ProgramChange: Equatable, Hashable {
+    public struct ProgramChange {
         /// Program Number
         public var program: UInt7
     
@@ -102,6 +102,10 @@ extension MIDIEvent {
         )
     }
 }
+
+extension MIDIEvent.ProgramChange: Equatable { }
+
+extension MIDIEvent.ProgramChange: Hashable { }
 
 extension MIDIEvent.ProgramChange: Sendable { }
 

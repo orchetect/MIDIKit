@@ -10,7 +10,7 @@ extension MIDIEvent {
     ///
     /// The MIDI 2.0 Protocol introduces a Per-Note Management message to enable independent control
     /// from Per-Note Controllers to multiple Notes on the same Note Number.
-    public struct NoteManagement: Equatable, Hashable {
+    public struct NoteManagement {
         /// Note Number
         ///
         /// If MIDI 2.0 attribute is set to Pitch 7.9, then this value represents the note index.
@@ -72,6 +72,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.NoteManagement: Equatable { }
+
+extension MIDIEvent.NoteManagement: Hashable { }
 
 extension MIDIEvent.NoteManagement: Sendable { }
 
@@ -161,7 +165,7 @@ extension MIDIEvent.NoteManagement {
 extension MIDIEvent.NoteManagement {
     /// Per-Note Management Option Flag
     /// (MIDI 2.0)
-    public enum OptionFlag: Equatable, Hashable {
+    public enum OptionFlag {
         /// Detach Per-Note Controllers from previously received Note(s) (`D`)
         ///
         /// > MIDI 2.0 Spec:
@@ -182,6 +186,10 @@ extension MIDIEvent.NoteManagement {
     }
 }
 
+extension MIDIEvent.NoteManagement.OptionFlag: Equatable { }
+
+extension MIDIEvent.NoteManagement.OptionFlag: Hashable { }
+
 extension MIDIEvent.NoteManagement.OptionFlag: Sendable { }
 
 extension Set<MIDIEvent.NoteManagement.OptionFlag> {
@@ -189,6 +197,7 @@ extension Set<MIDIEvent.NoteManagement.OptionFlag> {
     /// (MIDI 2.0)
     ///
     /// Initialize flags from a raw option flags byte.
+    @inlinable
     public init(byte: UInt8) {
         self.init()
         
@@ -202,6 +211,7 @@ extension Set<MIDIEvent.NoteManagement.OptionFlag> {
     }
     
     /// Returns the flags as a raw option flags byte.
+    @inlinable
     public var byte: UInt8 {
         var byte: UInt8 = 0b00000000
         

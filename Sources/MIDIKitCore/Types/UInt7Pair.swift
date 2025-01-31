@@ -5,7 +5,7 @@
 //
 
 /// Type that holds a pair of `UInt7`s - one MSB `UInt7`, one LSB `UInt7`.
-public struct UInt7Pair: Equatable, Hashable {
+public struct UInt7Pair {
     public let msb: UInt7
     public let lsb: UInt7
     
@@ -18,6 +18,10 @@ public struct UInt7Pair: Equatable, Hashable {
         .init(uInt7Pair: self)
     }
 }
+
+extension UInt7Pair: Equatable { }
+
+extension UInt7Pair: Hashable { }
 
 extension UInt7Pair: Sendable { }
 

@@ -13,7 +13,7 @@ internal import CoreMIDI
 
 extension AnyMIDIIOObject {
     /// MIDI object property keys, analogous to Core MIDI property keys.
-    public enum Property: CaseIterable, Hashable {
+    public enum Property {
         // MARK: Identification
         case name
         case model
@@ -90,6 +90,14 @@ extension AnyMIDIIOObject {
         case transmitsProgramChanges
     }
 }
+
+extension AnyMIDIIOObject.Property: Equatable { }
+
+extension AnyMIDIIOObject.Property: Hashable { }
+
+extension AnyMIDIIOObject.Property: CaseIterable { }
+
+extension AnyMIDIIOObject.Property: Sendable { }
 
 // MARK: - Name
 
@@ -249,8 +257,6 @@ extension AnyMIDIIOObject.Property {
         }
     }
 }
-
-extension AnyMIDIIOObject.Property: Sendable { }
 
 // MARK: - Property Keys
 

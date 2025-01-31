@@ -12,7 +12,7 @@ extension MIDIEvent {
     /// - Pro Tools: "Mono Aftertouch"
     /// - Logic Pro: "Aftertouch"
     /// - Cubase: "Aftertouch"
-    public struct Pressure: Equatable, Hashable {
+    public struct Pressure {
         /// Pressure Amount
         @AmountValidated
         public var amount: Amount
@@ -60,6 +60,10 @@ extension MIDIEvent {
         )
     }
 }
+
+extension MIDIEvent.Pressure: Equatable { }
+
+extension MIDIEvent.Pressure: Hashable { }
 
 extension MIDIEvent.Pressure: Sendable { }
 

@@ -7,7 +7,7 @@
 extension MIDIEvent {
     /// Note Attribute
     /// (MIDI 2.0)
-    public enum NoteAttribute: Equatable, Hashable {
+    public enum NoteAttribute {
         /// None:
         /// When sending, Attribute Value will be `0x0000` and receiver should ignore Attribute
         /// Value.
@@ -41,6 +41,10 @@ extension MIDIEvent {
         case undefined(attributeType: UInt8, data: UInt16)
     }
 }
+
+extension MIDIEvent.NoteAttribute: Equatable { }
+
+extension MIDIEvent.NoteAttribute: Hashable { }
 
 extension MIDIEvent.NoteAttribute: Sendable { }
 
@@ -115,6 +119,7 @@ extension MIDIEvent.NoteAttribute: CustomStringConvertible {
 
 extension MIDIEvent.NoteAttribute {
     /// Attribute Type Byte
+    @inlinable
     public var attributeType: UInt8 {
         switch self {
         case .none:
@@ -135,6 +140,7 @@ extension MIDIEvent.NoteAttribute {
     }
     
     /// Attribute Data
+    @inlinable
     public var attributeData: UInt16 {
         switch self {
         case .none:

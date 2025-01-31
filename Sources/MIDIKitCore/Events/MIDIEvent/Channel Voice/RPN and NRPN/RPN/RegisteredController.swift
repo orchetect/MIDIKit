@@ -46,7 +46,7 @@ extension MIDIEvent {
     /// - Note: See Recommended Practise
     /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
-    public enum RegisteredController: Equatable, Hashable {
+    public enum RegisteredController {
         // MIDI Spec
     
         /// Pitch Bend Sensitivity
@@ -190,11 +190,16 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.RegisteredController: Equatable { }
+
+extension MIDIEvent.RegisteredController: Hashable { }
+
 extension MIDIEvent.RegisteredController: Sendable { }
 
 extension MIDIEvent.RegisteredController: MIDIParameterNumber {
     public static let type: MIDIParameterNumberType = .registered
     
+    @inlinable
     public var parameterBytes: UInt7Pair {
         switch self {
         // MIDI Spec
@@ -261,6 +266,7 @@ extension MIDIEvent.RegisteredController: MIDIParameterNumber {
         }
     }
     
+    @inlinable
     public var dataEntryBytes: (msb: UInt7?, lsb: UInt7?) {
         switch self {
         // MIDI Spec

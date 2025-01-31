@@ -19,7 +19,7 @@ extension MIDIEvent {
     /// > published by the designer. Once published, an Exclusive format is treated like any other
     /// > part of the instruments MIDI implementation — so long as the new instrument remains within
     /// > the definitions of the published specification.
-    public struct SysEx7: Equatable, Hashable {
+    public struct SysEx7 {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
         
@@ -60,6 +60,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.SysEx7: Equatable { }
+
+extension MIDIEvent.SysEx7: Hashable { }
 
 extension MIDIEvent.SysEx7: Sendable { }
 

@@ -8,7 +8,7 @@
 
 internal import CoreMIDI
 
-// MARK: sources
+// MARK: - Sources
     
 /// Internal:
 /// List of MIDI endpoints in the system (computed property)
@@ -27,7 +27,7 @@ func getSystemSourceEndpoints() -> [MIDIOutputEndpoint] {
     return endpoints
 }
     
-// MARK: destinations
+// MARK: - Destinations
     
 /// Internal:
 /// Dictionary of destination names & endpoint unique IDs (computed property)

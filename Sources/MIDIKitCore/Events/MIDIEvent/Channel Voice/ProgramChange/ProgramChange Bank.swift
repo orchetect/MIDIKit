@@ -30,7 +30,7 @@ extension MIDIEvent.ProgramChange {
     ///
     /// Bank numbers in MIDI 2.0 are expressed by combining the two MIDI 1.0 7-bit bytes into a
     /// 14-bit number (`0 ... 16383`). They correlate exactly to MIDI 1.0 bank numbers.
-    public enum Bank: Equatable, Hashable {
+    public enum Bank {
         /// No Bank Select operation will occur; only a Program Change event will happen.
         /// (MIDI 1.0 / 2.0)
         case noBankSelect
@@ -61,6 +61,10 @@ extension MIDIEvent.ProgramChange {
         case bankSelect(UInt14)
     }
 }
+
+extension MIDIEvent.ProgramChange.Bank: Equatable { }
+
+extension MIDIEvent.ProgramChange.Bank: Hashable { }
 
 extension MIDIEvent.ProgramChange.Bank: Sendable { }
 

@@ -15,7 +15,7 @@ extension MIDIEvent {
     /// > at the current tempo setting of the transmitter even while it is not playing. Receivers
     /// > which are synchronized to incoming Real-Time messages (MIDI Sync mode) can thus phase lock
     /// > their internal clocks while waiting for a Start (`0xFA`) or Continue (`0xFB`) command.
-    public struct TimingClock: Equatable, Hashable {
+    public struct TimingClock {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
         
@@ -24,6 +24,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.TimingClock: Equatable { }
+
+extension MIDIEvent.TimingClock: Hashable { }
 
 extension MIDIEvent.TimingClock: Sendable { }
 

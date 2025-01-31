@@ -13,7 +13,7 @@ extension MIDIEvent {
     /// > The UMP Format provides a set of Utility Messages. Utility Messages include but are not
     /// > limited to NOOP and timestamps, and might in the future include UMP transport-related
     /// > functions.
-    public struct NoOp: Equatable, Hashable {
+    public struct NoOp {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
         
@@ -22,6 +22,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.NoOp: Equatable { }
+
+extension MIDIEvent.NoOp: Hashable { }
 
 extension MIDIEvent.NoOp: Sendable { }
 

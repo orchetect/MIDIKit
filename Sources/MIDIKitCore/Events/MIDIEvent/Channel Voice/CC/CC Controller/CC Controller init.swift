@@ -9,6 +9,7 @@ extension MIDIEvent.CC.Controller {
     /// (MIDI 1.0 / MIDI 2.0)
     ///
     /// Initialize an enum case from the controller number.
+    @inlinable
     public init(number: UInt7) {
         switch number {
         case   0: self = .bankSelect

@@ -15,7 +15,7 @@ extension MIDIEvent {
     /// > data byte to be used. By contrast, MIDI 1.0 Protocol System Exclusive requires a 0 in the
     /// > high bit of every data byte, leaving only 7 bits to carry actual data. A System Exclusive
     /// > 8 Message is carried in one or more 128-bit UMPs.
-    public struct SysEx8: Equatable, Hashable {
+    public struct SysEx8 {
         /// SysEx Manufacturer ID
         public var manufacturer: SysExManufacturer
         
@@ -59,6 +59,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.SysEx8: Equatable { }
+
+extension MIDIEvent.SysEx8: Hashable { }
 
 extension MIDIEvent.SysEx8: Sendable { }
 

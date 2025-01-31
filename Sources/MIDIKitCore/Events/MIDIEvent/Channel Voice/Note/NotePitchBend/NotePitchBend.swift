@@ -7,7 +7,7 @@
 extension MIDIEvent {
     /// Channel Voice Message: Per-Note Pitch Bend
     /// (MIDI 2.0)
-    public struct NotePitchBend: Equatable, Hashable {
+    public struct NotePitchBend {
         /// Note Number
         ///
         /// If attribute is set to Pitch 7.9, then this value represents the note index.
@@ -64,6 +64,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.NotePitchBend: Equatable { }
+
+extension MIDIEvent.NotePitchBend: Hashable { }
 
 extension MIDIEvent.NotePitchBend: Sendable { }
 

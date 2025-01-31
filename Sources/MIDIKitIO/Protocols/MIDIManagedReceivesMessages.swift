@@ -6,6 +6,7 @@
 
 #if !os(tvOS) && !os(watchOS)
 
+/// ``MIDIManager`` object trait adopted by objects that receive MIDI messages.
 public protocol MIDIManagedReceivesMessages: MIDIManaged {
     /// MIDI Protocol version used for this endpoint.
     /* public private(set) */ var midiProtocol: MIDIProtocolVersion { get }

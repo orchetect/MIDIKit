@@ -12,7 +12,7 @@
 // and this implementation will be used)
 
 extension MIDIEndpoint {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+    public static func == (lhs: Self, rhs: some MIDIEndpoint) -> Bool {
         lhs.uniqueID == rhs.uniqueID
     }
 }

@@ -6,7 +6,7 @@
 
 extension MIDIEvent {
     /// Channel Voice MIDI Event types.
-    public enum ChanVoiceType: Equatable, Hashable {
+    public enum ChanVoiceType {
         /// Channel Voice Message: Note On
         /// (MIDI 1.0 / 2.0)
         case noteOn
@@ -72,6 +72,10 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.ChanVoiceType: Equatable { }
+
+extension MIDIEvent.ChanVoiceType: Hashable { }
+
 extension MIDIEvent.ChanVoiceType: Identifiable {
     public var id: Self { self }
 }
@@ -80,7 +84,7 @@ extension MIDIEvent.ChanVoiceType: Sendable { }
 
 extension MIDIEvent {
     /// Declarative Channel Voice MIDI Event types used in event filters.
-    public enum ChanVoiceTypes: Equatable, Hashable {
+    public enum ChanVoiceTypes {
         /// Return only Channel Voice events.
         case only
         /// Return only Channel Voice events matching a certain event type.
@@ -154,6 +158,10 @@ extension MIDIEvent {
         case dropNotesInRanges([ClosedRange<UInt7>])
     }
 }
+
+extension MIDIEvent.ChanVoiceTypes: Equatable { }
+
+extension MIDIEvent.ChanVoiceTypes: Hashable { }
 
 extension MIDIEvent.ChanVoiceTypes: Sendable { }
 

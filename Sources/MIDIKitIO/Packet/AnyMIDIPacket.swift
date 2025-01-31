@@ -13,13 +13,21 @@ public enum AnyMIDIPacket {
     
     /// MIDI 2.0 Universal MIDI Packet.
     case universalPacket(UniversalMIDIPacketData)
-    
+}
+
+extension AnyMIDIPacket: Equatable { }
+
+extension AnyMIDIPacket: Hashable { }
+
+extension AnyMIDIPacket: Sendable { }
+
+extension AnyMIDIPacket {
     /// Flat array of raw bytes.
     public var bytes: [UInt8] {
         switch self {
         case let .packet(packetData):
             return packetData.bytes
-    
+            
         case let .universalPacket(universalPacketData):
             return universalPacketData.bytes
         }
@@ -30,7 +38,7 @@ public enum AnyMIDIPacket {
         switch self {
         case let .packet(packetData):
             return packetData.timeStamp
-    
+            
         case let .universalPacket(universalPacketData):
             return universalPacketData.timeStamp
         }
@@ -48,9 +56,5 @@ public enum AnyMIDIPacket {
         }
     }
 }
-
-extension AnyMIDIPacket: Hashable { }
-
-extension AnyMIDIPacket: Sendable { }
 
 #endif

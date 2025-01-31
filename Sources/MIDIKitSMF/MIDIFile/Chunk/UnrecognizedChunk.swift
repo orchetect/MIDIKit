@@ -50,6 +50,8 @@ extension MIDIFile.Chunk.UnrecognizedChunk: Equatable { }
 
 extension MIDIFile.Chunk.UnrecognizedChunk: Hashable { }
 
+extension MIDIFile.Chunk.UnrecognizedChunk: Sendable { }
+
 extension MIDIFile.Chunk.UnrecognizedChunk: CustomStringConvertible {
     public var description: String {
         var outputString = ""
@@ -85,8 +87,6 @@ extension MIDIFile.Chunk.UnrecognizedChunk: CustomDebugStringConvertible {
         return outputString
     }
 }
-
-extension MIDIFile.Chunk.UnrecognizedChunk: Sendable { }
 
 // MARK: - Static
 

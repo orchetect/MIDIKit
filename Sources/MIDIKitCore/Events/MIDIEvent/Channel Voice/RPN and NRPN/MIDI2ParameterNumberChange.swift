@@ -15,10 +15,16 @@
 /// > Relative messages act upon the same address space as the MIDI 2.0 Protocol’s Registered
 /// > Controllers (RPNs) and MIDI 2.0 Assignable Controllers (NRPNs), and use the same controller
 /// > Banks. However, these Relative controllers cannot be translated to the MIDI 1.0 Protocol.
-public enum MIDI2ParameterNumberChange: Equatable, Hashable, CaseIterable {
+public enum MIDI2ParameterNumberChange {
     case absolute
     case relative
 }
+
+extension MIDI2ParameterNumberChange: Equatable { }
+
+extension MIDI2ParameterNumberChange: Hashable { }
+
+extension MIDI2ParameterNumberChange: CaseIterable { }
 
 extension MIDI2ParameterNumberChange: CustomStringConvertible {
     public var description: String {

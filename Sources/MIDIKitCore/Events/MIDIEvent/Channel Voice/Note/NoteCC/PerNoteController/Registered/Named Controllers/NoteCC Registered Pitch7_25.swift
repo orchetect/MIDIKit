@@ -16,7 +16,7 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
     /// > field contains:
     /// > - 7 bits: Pitch in semitones, based on default Note Number equal temperament scale
     /// > - 25 bits: Fractional Pitch above Note Number (i.e., fraction of one semitone)
-    public struct Pitch7_25: Equatable, Hashable {
+    public struct Pitch7_25 {
         /// 7-Bit coarse pitch in semitones, based on default Note Number equal temperament scale.
         public var coarse: UInt7
     
@@ -24,6 +24,10 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
         public var fine: UInt25
     }
 }
+
+extension MIDIEvent.NoteCC.PerNoteController.Registered.Pitch7_25: Equatable { }
+
+extension MIDIEvent.NoteCC.PerNoteController.Registered.Pitch7_25: Hashable { }
 
 extension MIDIEvent.NoteCC.PerNoteController.Registered.Pitch7_25: Identifiable {
     public var id: Self { self }

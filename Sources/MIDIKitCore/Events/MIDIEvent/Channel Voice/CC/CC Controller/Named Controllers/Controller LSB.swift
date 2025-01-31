@@ -7,7 +7,7 @@
 extension MIDIEvent.CC.Controller {
     /// MIDI Controller Change LSB
     /// (MIDI 1.0 / MIDI 2.0)
-    public enum LSB: Equatable, Hashable {
+    public enum LSB {
         /// LSB for Control 0 (Bank Select)
         /// (Int: 32, Hex: 0x20)
         case bankSelect
@@ -87,6 +87,10 @@ extension MIDIEvent.CC.Controller {
     }
 }
 
+extension MIDIEvent.CC.Controller.LSB: Equatable { }
+
+extension MIDIEvent.CC.Controller.LSB: Hashable { }
+
 extension MIDIEvent.CC.Controller.LSB: Identifiable {
     public var id: Self { self }
 }
@@ -95,6 +99,7 @@ extension MIDIEvent.CC.Controller.LSB: Sendable { }
 
 extension MIDIEvent.CC.Controller.LSB {
     /// Returns the controller number.
+    @inlinable
     public var controller: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {

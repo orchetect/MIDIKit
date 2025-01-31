@@ -28,6 +28,8 @@ extension MIDIFile.Chunk.Track: Equatable { }
 
 extension MIDIFile.Chunk.Track: Hashable { }
 
+extension MIDIFile.Chunk.Track: Sendable { }
+
 extension MIDIFile.Chunk.Track: CustomStringConvertible {
     public var description: String {
         var outputString = ""
@@ -69,8 +71,6 @@ extension MIDIFile.Chunk.Track: CustomDebugStringConvertible {
         return outputString
     }
 }
-
-extension MIDIFile.Chunk.Track: Sendable { }
 
 extension MIDIFile.Chunk.Track: MIDIFileChunk {
     public var identifier: String { Self.staticIdentifier }

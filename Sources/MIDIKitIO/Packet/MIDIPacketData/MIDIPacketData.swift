@@ -30,6 +30,9 @@ public struct MIDIPacketData {
         self.source = source
     }
 }
+
+extension MIDIPacketData: Equatable { }
+
 extension MIDIPacketData: Hashable { }
 
 extension MIDIPacketData: Sendable { }

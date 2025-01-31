@@ -11,7 +11,7 @@ extension MIDIEvent {
     /// > MIDI 1.0 Spec:
     /// >
     /// > Used with analog synthesizers to request that all oscillators be tuned.
-    public struct TuneRequest: Equatable, Hashable {
+    public struct TuneRequest {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
         
@@ -20,6 +20,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.TuneRequest: Equatable { }
+
+extension MIDIEvent.TuneRequest: Hashable { }
 
 extension MIDIEvent.TuneRequest: Sendable { }
 

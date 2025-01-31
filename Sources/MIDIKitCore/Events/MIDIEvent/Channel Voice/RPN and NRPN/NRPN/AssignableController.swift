@@ -43,7 +43,7 @@ extension MIDIEvent {
     /// See Recommended Practise
     /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
     /// of the MIDI 1.0 Spec Addenda.
-    public enum AssignableController: Equatable, Hashable {
+    public enum AssignableController {
         /// Form an NRPN message from a raw parameter number byte pair.
         ///
         /// - Parameters:
@@ -64,11 +64,16 @@ extension MIDIEvent {
     }
 }
 
+extension MIDIEvent.AssignableController: Equatable { }
+
+extension MIDIEvent.AssignableController: Hashable { }
+
 extension MIDIEvent.AssignableController: Sendable { }
 
 extension MIDIEvent.AssignableController: MIDIParameterNumber {
     public static let type: MIDIParameterNumberType = .assignable
     
+    @inlinable
     public var parameterBytes: UInt7Pair {
         switch self {
         case let .raw(parameter, _, _):
@@ -79,6 +84,7 @@ extension MIDIEvent.AssignableController: MIDIParameterNumber {
         }
     }
     
+    @inlinable
     public var dataEntryBytes: (msb: UInt7?, lsb: UInt7?) {
         switch self {
         case let .raw(_, dataEntryMSB, dataEntryLSB):

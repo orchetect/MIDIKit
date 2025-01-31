@@ -12,6 +12,12 @@ import Foundation
 public struct MIDIReceiverOptions: OptionSet {
     public let rawValue: Int
     
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+    
+    // MARK: - Options
+    
     /// For MIDI 1.0 note-on events, translate a velocity value of 0 to be a note-off event instead.
     public static let translateMIDI1NoteOnZeroVelocityToNoteOff = MIDIReceiverOptions(rawValue: 1 << 0)
     
@@ -35,10 +41,6 @@ public struct MIDIReceiverOptions: OptionSet {
     ///
     /// For details see [this thread](https://github.com/orchetect/MIDIKit/discussions/198).
     public static let bundleRPNAndNRPNDataEntryLSB = MIDIReceiverOptions(rawValue: 1 << 2)
-    
-    public init(rawValue: Int) {
-        self.rawValue = rawValue
-    }
 }
 
 extension MIDIReceiverOptions: Sendable { }

@@ -9,7 +9,7 @@ public typealias UMPWord = UInt32
 
 extension UMPWord {
     /// Internal: Pack a `UInt32` with four 8-bit bytes.
-    @_disfavoredOverload
+    @_disfavoredOverload @inlinable
     public init(
         _ byte0: UInt8,
         _ byte1: UInt8,
@@ -37,6 +37,7 @@ extension UMPWord {
 
 extension Collection<UMPWord> {
     /// Internal: Flattens an array of `UInt32` UMP words into an array of bytes.
+    @inlinable
     public func umpWordsToBytes() -> [UInt8] {
         var bytes: [UInt8] = []
         bytes.reserveCapacity(4 * count)

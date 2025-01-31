@@ -7,7 +7,7 @@
 extension MIDIEvent {
     /// Channel Voice Message: Per-Note Control Change (CC)
     /// (MIDI 2.0)
-    public struct NoteCC: Equatable, Hashable {
+    public struct NoteCC {
         /// Note Number
         ///
         /// If attribute is set to Pitch 7.9, then this value represents the note index.
@@ -73,6 +73,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.NoteCC: Equatable { }
+
+extension MIDIEvent.NoteCC: Hashable { }
 
 extension MIDIEvent.NoteCC: Sendable { }
 

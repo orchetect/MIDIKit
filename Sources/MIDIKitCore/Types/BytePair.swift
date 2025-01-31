@@ -5,7 +5,7 @@
 //
 
 /// Type that holds a pair of `UInt8` bytes representing MSB and LSB.
-public struct BytePair: Equatable, Hashable {
+public struct BytePair {
     public let msb: UInt8
     public let lsb: UInt8
     
@@ -27,15 +27,21 @@ public struct BytePair: Equatable, Hashable {
     }
 }
 
+extension BytePair: Equatable { }
+
+extension BytePair: Hashable { }
+
 extension BytePair: Sendable { }
 
 extension UInt16 {
     /// Initialize by combining a byte pair.
+    @inlinable
     public init(bytePair: BytePair) {
         self = bytePair.uInt16Value
     }
     
     /// Returns a struct that holds a pair of `UInt8`s - one MSB `UInt8`, one LSB `UInt8`.
+    @inlinable
     public var bytePair: BytePair {
         BytePair(self)
     }

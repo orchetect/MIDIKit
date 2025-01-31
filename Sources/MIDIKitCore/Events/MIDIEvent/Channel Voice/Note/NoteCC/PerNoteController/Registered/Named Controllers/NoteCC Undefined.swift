@@ -946,6 +946,10 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
     }
 }
 
+extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined: Equatable { }
+
+extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined: Hashable { }
+
 extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined: Identifiable {
     public var id: Self { self }
 }
@@ -954,245 +958,246 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined: Sendable { }
 
 extension MIDIEvent.NoteCC.PerNoteController.Registered.Undefined {
     /// Returns the controller number.
+    @inlinable
     public var controller: UInt8 {
         // this looks scary but its heart is in the right place
     
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .cc0   : return 0
-        case .cc4   : return 4
-        case .cc5   : return 5
-        case .cc6   : return 6
-        case .cc9   : return 9
-        case .cc12  : return 12
-        case .cc13  : return 13
-        case .cc14  : return 14
-        case .cc15  : return 15
-        case .cc16  : return 16
-        case .cc17  : return 17
-        case .cc18  : return 18
-        case .cc19  : return 19
-        case .cc20  : return 20
-        case .cc21  : return 21
-        case .cc22  : return 22
-        case .cc23  : return 23
-        case .cc24  : return 24
-        case .cc25  : return 25
-        case .cc26  : return 26
-        case .cc27  : return 27
-        case .cc28  : return 28
-        case .cc29  : return 29
-        case .cc30  : return 30
-        case .cc31  : return 31
-        case .cc32  : return 32
-        case .cc33  : return 33
-        case .cc34  : return 34
-        case .cc35  : return 35
-        case .cc36  : return 36
-        case .cc37  : return 37
-        case .cc38  : return 38
-        case .cc39  : return 39
-        case .cc40  : return 40
-        case .cc41  : return 41
-        case .cc42  : return 42
-        case .cc43  : return 43
-        case .cc44  : return 44
-        case .cc45  : return 45
-        case .cc46  : return 46
-        case .cc47  : return 47
-        case .cc48  : return 48
-        case .cc49  : return 49
-        case .cc50  : return 50
-        case .cc51  : return 51
-        case .cc52  : return 52
-        case .cc53  : return 53
-        case .cc54  : return 54
-        case .cc55  : return 55
-        case .cc56  : return 56
-        case .cc57  : return 57
-        case .cc58  : return 58
-        case .cc59  : return 59
-        case .cc60  : return 60
-        case .cc61  : return 61
-        case .cc62  : return 62
-        case .cc63  : return 63
-        case .cc64  : return 64
-        case .cc65  : return 65
-        case .cc66  : return 66
-        case .cc67  : return 67
-        case .cc68  : return 68
-        case .cc69  : return 69
-        case .cc80  : return 80
-        case .cc81  : return 81
-        case .cc82  : return 82
-        case .cc83  : return 83
-        case .cc84  : return 84
-        case .cc85  : return 85
-        case .cc86  : return 86
-        case .cc87  : return 87
-        case .cc88  : return 88
-        case .cc89  : return 89
-        case .cc90  : return 90
-        case .cc96  : return 96
-        case .cc97  : return 97
-        case .cc98  : return 98
-        case .cc99  : return 99
-        case .cc100 : return 100
-        case .cc101 : return 101
-        case .cc102 : return 102
-        case .cc103 : return 103
-        case .cc104 : return 104
-        case .cc105 : return 105
-        case .cc106 : return 106
-        case .cc107 : return 107
-        case .cc108 : return 108
-        case .cc109 : return 109
-        case .cc110 : return 110
-        case .cc111 : return 111
-        case .cc112 : return 112
-        case .cc113 : return 113
-        case .cc114 : return 114
-        case .cc115 : return 115
-        case .cc116 : return 116
-        case .cc117 : return 117
-        case .cc118 : return 118
-        case .cc119 : return 119
-        case .cc120 : return 120
-        case .cc121 : return 121
-        case .cc122 : return 122
-        case .cc123 : return 123
-        case .cc124 : return 124
-        case .cc125 : return 125
-        case .cc126 : return 126
-        case .cc127 : return 127
-        case .cc128 : return 128
-        case .cc129 : return 129
-        case .cc130 : return 130
-        case .cc131 : return 131
-        case .cc132 : return 132
-        case .cc133 : return 133
-        case .cc134 : return 134
-        case .cc135 : return 135
-        case .cc136 : return 136
-        case .cc137 : return 137
-        case .cc138 : return 138
-        case .cc139 : return 139
-        case .cc140 : return 140
-        case .cc141 : return 141
-        case .cc142 : return 142
-        case .cc143 : return 143
-        case .cc144 : return 144
-        case .cc145 : return 145
-        case .cc146 : return 146
-        case .cc147 : return 147
-        case .cc148 : return 148
-        case .cc149 : return 149
-        case .cc150 : return 150
-        case .cc151 : return 151
-        case .cc152 : return 152
-        case .cc153 : return 153
-        case .cc154 : return 154
-        case .cc155 : return 155
-        case .cc156 : return 156
-        case .cc157 : return 157
-        case .cc158 : return 158
-        case .cc159 : return 159
-        case .cc160 : return 160
-        case .cc161 : return 161
-        case .cc162 : return 162
-        case .cc163 : return 163
-        case .cc164 : return 164
-        case .cc165 : return 165
-        case .cc166 : return 166
-        case .cc167 : return 167
-        case .cc168 : return 168
-        case .cc169 : return 169
-        case .cc170 : return 170
-        case .cc171 : return 171
-        case .cc172 : return 172
-        case .cc173 : return 173
-        case .cc174 : return 174
-        case .cc175 : return 175
-        case .cc176 : return 176
-        case .cc177 : return 177
-        case .cc178 : return 178
-        case .cc179 : return 179
-        case .cc180 : return 180
-        case .cc181 : return 181
-        case .cc182 : return 182
-        case .cc183 : return 183
-        case .cc184 : return 184
-        case .cc185 : return 185
-        case .cc186 : return 186
-        case .cc187 : return 187
-        case .cc188 : return 188
-        case .cc189 : return 189
-        case .cc190 : return 190
-        case .cc191 : return 191
-        case .cc192 : return 192
-        case .cc193 : return 193
-        case .cc194 : return 194
-        case .cc195 : return 195
-        case .cc196 : return 196
-        case .cc197 : return 197
-        case .cc198 : return 198
-        case .cc199 : return 199
-        case .cc200 : return 200
-        case .cc201 : return 201
-        case .cc202 : return 202
-        case .cc203 : return 203
-        case .cc204 : return 204
-        case .cc205 : return 205
-        case .cc206 : return 206
-        case .cc207 : return 207
-        case .cc208 : return 208
-        case .cc209 : return 209
-        case .cc210 : return 210
-        case .cc211 : return 211
-        case .cc212 : return 212
-        case .cc213 : return 213
-        case .cc214 : return 214
-        case .cc215 : return 215
-        case .cc216 : return 216
-        case .cc217 : return 217
-        case .cc218 : return 218
-        case .cc219 : return 219
-        case .cc220 : return 220
-        case .cc221 : return 221
-        case .cc222 : return 222
-        case .cc223 : return 223
-        case .cc224 : return 224
-        case .cc225 : return 225
-        case .cc226 : return 226
-        case .cc227 : return 227
-        case .cc228 : return 228
-        case .cc229 : return 229
-        case .cc230 : return 230
-        case .cc231 : return 231
-        case .cc232 : return 232
-        case .cc233 : return 233
-        case .cc234 : return 234
-        case .cc235 : return 235
-        case .cc236 : return 236
-        case .cc237 : return 237
-        case .cc238 : return 238
-        case .cc239 : return 239
-        case .cc240 : return 240
-        case .cc241 : return 241
-        case .cc242 : return 242
-        case .cc243 : return 243
-        case .cc244 : return 244
-        case .cc245 : return 245
-        case .cc246 : return 246
-        case .cc247 : return 247
-        case .cc248 : return 248
-        case .cc249 : return 249
-        case .cc250 : return 250
-        case .cc251 : return 251
-        case .cc252 : return 252
-        case .cc253 : return 253
-        case .cc254 : return 254
-        case .cc255 : return 255
+        case .cc0  : return 0
+        case .cc4  : return 4
+        case .cc5  : return 5
+        case .cc6  : return 6
+        case .cc9  : return 9
+        case .cc12 : return 12
+        case .cc13 : return 13
+        case .cc14 : return 14
+        case .cc15 : return 15
+        case .cc16 : return 16
+        case .cc17 : return 17
+        case .cc18 : return 18
+        case .cc19 : return 19
+        case .cc20 : return 20
+        case .cc21 : return 21
+        case .cc22 : return 22
+        case .cc23 : return 23
+        case .cc24 : return 24
+        case .cc25 : return 25
+        case .cc26 : return 26
+        case .cc27 : return 27
+        case .cc28 : return 28
+        case .cc29 : return 29
+        case .cc30 : return 30
+        case .cc31 : return 31
+        case .cc32 : return 32
+        case .cc33 : return 33
+        case .cc34 : return 34
+        case .cc35 : return 35
+        case .cc36 : return 36
+        case .cc37 : return 37
+        case .cc38 : return 38
+        case .cc39 : return 39
+        case .cc40 : return 40
+        case .cc41 : return 41
+        case .cc42 : return 42
+        case .cc43 : return 43
+        case .cc44 : return 44
+        case .cc45 : return 45
+        case .cc46 : return 46
+        case .cc47 : return 47
+        case .cc48 : return 48
+        case .cc49 : return 49
+        case .cc50 : return 50
+        case .cc51 : return 51
+        case .cc52 : return 52
+        case .cc53 : return 53
+        case .cc54 : return 54
+        case .cc55 : return 55
+        case .cc56 : return 56
+        case .cc57 : return 57
+        case .cc58 : return 58
+        case .cc59 : return 59
+        case .cc60 : return 60
+        case .cc61 : return 61
+        case .cc62 : return 62
+        case .cc63 : return 63
+        case .cc64 : return 64
+        case .cc65 : return 65
+        case .cc66 : return 66
+        case .cc67 : return 67
+        case .cc68 : return 68
+        case .cc69 : return 69
+        case .cc80 : return 80
+        case .cc81 : return 81
+        case .cc82 : return 82
+        case .cc83 : return 83
+        case .cc84 : return 84
+        case .cc85 : return 85
+        case .cc86 : return 86
+        case .cc87 : return 87
+        case .cc88 : return 88
+        case .cc89 : return 89
+        case .cc90 : return 90
+        case .cc96 : return 96
+        case .cc97 : return 97
+        case .cc98 : return 98
+        case .cc99 : return 99
+        case .cc100: return 100
+        case .cc101: return 101
+        case .cc102: return 102
+        case .cc103: return 103
+        case .cc104: return 104
+        case .cc105: return 105
+        case .cc106: return 106
+        case .cc107: return 107
+        case .cc108: return 108
+        case .cc109: return 109
+        case .cc110: return 110
+        case .cc111: return 111
+        case .cc112: return 112
+        case .cc113: return 113
+        case .cc114: return 114
+        case .cc115: return 115
+        case .cc116: return 116
+        case .cc117: return 117
+        case .cc118: return 118
+        case .cc119: return 119
+        case .cc120: return 120
+        case .cc121: return 121
+        case .cc122: return 122
+        case .cc123: return 123
+        case .cc124: return 124
+        case .cc125: return 125
+        case .cc126: return 126
+        case .cc127: return 127
+        case .cc128: return 128
+        case .cc129: return 129
+        case .cc130: return 130
+        case .cc131: return 131
+        case .cc132: return 132
+        case .cc133: return 133
+        case .cc134: return 134
+        case .cc135: return 135
+        case .cc136: return 136
+        case .cc137: return 137
+        case .cc138: return 138
+        case .cc139: return 139
+        case .cc140: return 140
+        case .cc141: return 141
+        case .cc142: return 142
+        case .cc143: return 143
+        case .cc144: return 144
+        case .cc145: return 145
+        case .cc146: return 146
+        case .cc147: return 147
+        case .cc148: return 148
+        case .cc149: return 149
+        case .cc150: return 150
+        case .cc151: return 151
+        case .cc152: return 152
+        case .cc153: return 153
+        case .cc154: return 154
+        case .cc155: return 155
+        case .cc156: return 156
+        case .cc157: return 157
+        case .cc158: return 158
+        case .cc159: return 159
+        case .cc160: return 160
+        case .cc161: return 161
+        case .cc162: return 162
+        case .cc163: return 163
+        case .cc164: return 164
+        case .cc165: return 165
+        case .cc166: return 166
+        case .cc167: return 167
+        case .cc168: return 168
+        case .cc169: return 169
+        case .cc170: return 170
+        case .cc171: return 171
+        case .cc172: return 172
+        case .cc173: return 173
+        case .cc174: return 174
+        case .cc175: return 175
+        case .cc176: return 176
+        case .cc177: return 177
+        case .cc178: return 178
+        case .cc179: return 179
+        case .cc180: return 180
+        case .cc181: return 181
+        case .cc182: return 182
+        case .cc183: return 183
+        case .cc184: return 184
+        case .cc185: return 185
+        case .cc186: return 186
+        case .cc187: return 187
+        case .cc188: return 188
+        case .cc189: return 189
+        case .cc190: return 190
+        case .cc191: return 191
+        case .cc192: return 192
+        case .cc193: return 193
+        case .cc194: return 194
+        case .cc195: return 195
+        case .cc196: return 196
+        case .cc197: return 197
+        case .cc198: return 198
+        case .cc199: return 199
+        case .cc200: return 200
+        case .cc201: return 201
+        case .cc202: return 202
+        case .cc203: return 203
+        case .cc204: return 204
+        case .cc205: return 205
+        case .cc206: return 206
+        case .cc207: return 207
+        case .cc208: return 208
+        case .cc209: return 209
+        case .cc210: return 210
+        case .cc211: return 211
+        case .cc212: return 212
+        case .cc213: return 213
+        case .cc214: return 214
+        case .cc215: return 215
+        case .cc216: return 216
+        case .cc217: return 217
+        case .cc218: return 218
+        case .cc219: return 219
+        case .cc220: return 220
+        case .cc221: return 221
+        case .cc222: return 222
+        case .cc223: return 223
+        case .cc224: return 224
+        case .cc225: return 225
+        case .cc226: return 226
+        case .cc227: return 227
+        case .cc228: return 228
+        case .cc229: return 229
+        case .cc230: return 230
+        case .cc231: return 231
+        case .cc232: return 232
+        case .cc233: return 233
+        case .cc234: return 234
+        case .cc235: return 235
+        case .cc236: return 236
+        case .cc237: return 237
+        case .cc238: return 238
+        case .cc239: return 239
+        case .cc240: return 240
+        case .cc241: return 241
+        case .cc242: return 242
+        case .cc243: return 243
+        case .cc244: return 244
+        case .cc245: return 245
+        case .cc246: return 246
+        case .cc247: return 247
+        case .cc248: return 248
+        case .cc249: return 249
+        case .cc250: return 250
+        case .cc251: return 251
+        case .cc252: return 252
+        case .cc253: return 253
+        case .cc254: return 254
+        case .cc255: return 255
         }
         // swiftformat:enable spacearoundoperators
     }

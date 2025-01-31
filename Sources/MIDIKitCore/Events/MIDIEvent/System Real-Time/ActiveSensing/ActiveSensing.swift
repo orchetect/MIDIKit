@@ -22,7 +22,7 @@ extension MIDIEvent {
     ///
     /// - Note: Use of Active Sensing in modern MIDI devices is uncommon and the use of this
     ///   standard has been deprecated as of MIDI 2.0.
-    public struct ActiveSensing: Equatable, Hashable {
+    public struct ActiveSensing {
         /// UMP Group (`0x0 ... 0xF`)
         public var group: UInt4 = 0x0
         
@@ -31,6 +31,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.ActiveSensing: Equatable { }
+
+extension MIDIEvent.ActiveSensing: Hashable { }
 
 extension MIDIEvent.ActiveSensing: Sendable { }
 

@@ -7,7 +7,7 @@
 extension MIDIEvent {
     /// Channel Voice Message: Control Change (CC)
     /// (MIDI 1.0 / 2.0)
-    public struct CC: Equatable, Hashable {
+    public struct CC {
         /// Controller
         public var controller: Controller
     
@@ -62,6 +62,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.CC: Equatable { }
+
+extension MIDIEvent.CC: Hashable { }
 
 extension MIDIEvent.CC: Sendable { }
 

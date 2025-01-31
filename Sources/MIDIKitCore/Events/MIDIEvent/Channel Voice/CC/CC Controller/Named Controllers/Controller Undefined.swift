@@ -165,6 +165,10 @@ extension MIDIEvent.CC.Controller {
     }
 }
 
+extension MIDIEvent.CC.Controller.Undefined: Equatable { }
+
+extension MIDIEvent.CC.Controller.Undefined: Hashable { }
+
 extension MIDIEvent.CC.Controller.Undefined: Identifiable {
     public var id: Self { self }
 }
@@ -173,48 +177,49 @@ extension MIDIEvent.CC.Controller.Undefined: Sendable { }
 
 extension MIDIEvent.CC.Controller.Undefined {
     /// Returns the controller number.
+    @inlinable
     public var controller: UInt7 {
         // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
         switch self {
-        case .cc3   : return 3
-        case .cc9   : return 9
-        case .cc14  : return 14
-        case .cc15  : return 15
-        case .cc20  : return 20
-        case .cc21  : return 21
-        case .cc22  : return 22
-        case .cc23  : return 23
-        case .cc24  : return 24
-        case .cc25  : return 25
-        case .cc26  : return 26
-        case .cc27  : return 27
-        case .cc28  : return 28
-        case .cc29  : return 29
-        case .cc30  : return 30
-        case .cc31  : return 31
-        case .cc85  : return 85
-        case .cc86  : return 86
-        case .cc87  : return 87
-        case .cc89  : return 89
-        case .cc90  : return 90
-        case .cc102 : return 102
-        case .cc103 : return 103
-        case .cc104 : return 104
-        case .cc105 : return 105
-        case .cc106 : return 106
-        case .cc107 : return 107
-        case .cc108 : return 108
-        case .cc109 : return 109
-        case .cc110 : return 110
-        case .cc111 : return 111
-        case .cc112 : return 112
-        case .cc113 : return 113
-        case .cc114 : return 114
-        case .cc115 : return 115
-        case .cc116 : return 116
-        case .cc117 : return 117
-        case .cc118 : return 118
-        case .cc119 : return 119
+        case .cc3:   return 3
+        case .cc9:   return 9
+        case .cc14:  return 14
+        case .cc15:  return 15
+        case .cc20:  return 20
+        case .cc21:  return 21
+        case .cc22:  return 22
+        case .cc23:  return 23
+        case .cc24:  return 24
+        case .cc25:  return 25
+        case .cc26:  return 26
+        case .cc27:  return 27
+        case .cc28:  return 28
+        case .cc29:  return 29
+        case .cc30:  return 30
+        case .cc31:  return 31
+        case .cc85:  return 85
+        case .cc86:  return 86
+        case .cc87:  return 87
+        case .cc89:  return 89
+        case .cc90:  return 90
+        case .cc102: return 102
+        case .cc103: return 103
+        case .cc104: return 104
+        case .cc105: return 105
+        case .cc106: return 106
+        case .cc107: return 107
+        case .cc108: return 108
+        case .cc109: return 109
+        case .cc110: return 110
+        case .cc111: return 111
+        case .cc112: return 112
+        case .cc113: return 113
+        case .cc114: return 114
+        case .cc115: return 115
+        case .cc116: return 116
+        case .cc117: return 117
+        case .cc118: return 118
+        case .cc119: return 119
         }
         // swiftformat:enable spaceInsideParens spaceInsideBrackets spacearoundoperators
     }

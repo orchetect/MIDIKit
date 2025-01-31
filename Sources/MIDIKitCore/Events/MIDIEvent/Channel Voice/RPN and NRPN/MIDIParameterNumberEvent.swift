@@ -19,6 +19,3 @@ public protocol MIDIParameterNumberEvent: Sendable {
     /// (MIDI 1.0 will always be absolute and this property is ignored.)
     var change: MIDI2ParameterNumberChange { get set }
 }
-
-extension MIDIParameterNumberEvent {
-}

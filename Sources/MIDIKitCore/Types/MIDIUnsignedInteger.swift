@@ -43,6 +43,8 @@ public protocol MIDIUnsignedInteger: UnsignedInteger, Codable, Sendable
     static var max: Self { get }
 }
 
+// MARK: - Internal Protocol
+
 protocol _MIDIUnsignedInteger: MIDIUnsignedInteger {
     /// Internal: Type name for use in debugging and exceptions.
     static var integerName: StaticString { get }

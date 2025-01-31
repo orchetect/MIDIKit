@@ -8,12 +8,16 @@ import Foundation
 
 extension MIDIEvent {
     /// Utility MIDI Event types.
-    public enum UtilityType: Equatable, Hashable {
+    public enum UtilityType {
         case noOp
         case jrClock
         case jrTimestamp
     }
 }
+
+extension MIDIEvent.UtilityType: Equatable { }
+
+extension MIDIEvent.UtilityType: Hashable { }
 
 extension MIDIEvent.UtilityType: Identifiable {
     public var id: Self { self }
@@ -23,7 +27,7 @@ extension MIDIEvent.UtilityType: Sendable { }
 
 extension MIDIEvent {
     /// Declarative Utility MIDI Event types used in event filters.
-    public enum UtilityTypes: Equatable, Hashable {
+    public enum UtilityTypes {
         /// Return only Utility events.
         case only
         /// Return only Utility events matching a certain event type.
@@ -48,5 +52,9 @@ extension MIDIEvent {
         case dropTypes(Set<UtilityType>)
     }
 }
+
+extension MIDIEvent.UtilityTypes: Equatable { }
+
+extension MIDIEvent.UtilityTypes: Hashable { }
 
 extension MIDIEvent.UtilityTypes: Sendable { }

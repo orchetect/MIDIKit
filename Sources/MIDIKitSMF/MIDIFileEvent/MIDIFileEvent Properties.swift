@@ -9,6 +9,7 @@ import MIDIKitCore
 
 extension MIDIFileEvent {
     /// Returns the ``MIDIFileEventType`` case describing the type of the MIDI File event.
+    @inline(__always)
     public var eventType: MIDIFileEventType {
         switch self {
         case .cc:                 return .cc
@@ -40,6 +41,7 @@ extension MIDIFileEvent {
 extension MIDIFileEvent {
     /// Returns the concrete type that contains the event payload, typed as ``MIDIFileEventPayload``
     /// protocol.
+    @inline(__always)
     public var concreteType: MIDIFileEventPayload.Type {
         switch self {
         case .cc:                 return CC.self
@@ -72,6 +74,7 @@ extension MIDIFileEvent {
     /// Unwraps the enum case and returns the ``MIDIFileEvent`` contained within, typed as
     /// ``MIDIFileEventPayload`` protocol. (Convenience)
     /// To unwrap the concrete event type, use switch case unwrapping instead.
+    @inlinable
     public var smfUnwrappedEvent: (
         delta: DeltaTime,
         event: MIDIFileEventPayload

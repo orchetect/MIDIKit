@@ -14,7 +14,7 @@ extension MIDIEvent {
     /// > sequencers and drum machines capable of holding multiple songs or sequences. This message
     /// > should be ignored if the receiver is not set to respond to incoming Real-Time messages
     /// > (MIDI Sync).
-    public struct SongSelect: Equatable, Hashable {
+    public struct SongSelect {
         /// Song Number
         public var number: UInt7
         
@@ -30,6 +30,10 @@ extension MIDIEvent {
         }
     }
 }
+
+extension MIDIEvent.SongSelect: Equatable { }
+
+extension MIDIEvent.SongSelect: Hashable { }
 
 extension MIDIEvent.SongSelect: Sendable { }
 

@@ -10,7 +10,7 @@ extension MIDIEvent.CC.Controller {
     ///
     /// These messages are originally defined in the MIDI 1.0 Spec as channel-wide settings
     /// modifying the operation of the channel.
-    public enum Mode: Equatable, Hashable {
+    public enum Mode {
         /// [Channel Mode Message] All Sound Off
         /// (Int: 120, Hex: 0x78)
         case allSoundOff
@@ -46,6 +46,10 @@ extension MIDIEvent.CC.Controller {
     }
 }
 
+extension MIDIEvent.CC.Controller.Mode: Equatable { }
+
+extension MIDIEvent.CC.Controller.Mode: Hashable { }
+
 extension MIDIEvent.CC.Controller.Mode: Identifiable {
     public var id: Self { self }
 }
@@ -54,6 +58,7 @@ extension MIDIEvent.CC.Controller.Mode: Sendable { }
 
 extension MIDIEvent.CC.Controller.Mode {
     /// Returns the controller number.
+    @inlinable
     public var controller: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {

@@ -6,7 +6,7 @@
 
 extension MIDIEvent {
     /// Channel Voice Message: Pitch Bend
-    public struct PitchBend: Equatable, Hashable {
+    public struct PitchBend {
         /// Value
         @ValueValidated
         public var value: Value
@@ -48,6 +48,10 @@ extension MIDIEvent {
         )
     }
 }
+
+extension MIDIEvent.PitchBend: Equatable { }
+
+extension MIDIEvent.PitchBend: Hashable { }
 
 extension MIDIEvent.PitchBend: Sendable { }
 

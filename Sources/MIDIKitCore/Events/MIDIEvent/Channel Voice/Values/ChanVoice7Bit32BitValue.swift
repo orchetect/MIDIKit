@@ -6,7 +6,7 @@
 
 extension MIDIEvent {
     /// Channel Voice 7-Bit (MIDI 1.0) / 32-Bit (MIDI 2.0) Value.
-    public enum ChanVoice7Bit32BitValue: Hashable {
+    public enum ChanVoice7Bit32BitValue {
         /// Protocol-agnostic unit interval (`0.0 ... 1.0`)
         /// Scaled automatically depending on MIDI protocol (1.0/2.0) in use.
         case unitInterval(Double)
@@ -61,6 +61,8 @@ extension MIDIEvent.ChanVoice7Bit32BitValue: Equatable {
     }
 }
 
+extension MIDIEvent.ChanVoice7Bit32BitValue: Hashable { }
+
 extension MIDIEvent.ChanVoice7Bit32BitValue: Sendable { }
 
 extension MIDIEvent.ChanVoice7Bit32BitValue {
@@ -107,9 +109,11 @@ extension MIDIEvent.ChanVoice7Bit32BitValue {
     }
 }
 
+// MARK: - Validated PropertyWrapper
+
 extension MIDIEvent.ChanVoice7Bit32BitValue {
     @propertyWrapper
-    public struct Validated: Equatable, Hashable, Sendable {
+    public struct Validated {
         public typealias Value = MIDIEvent.ChanVoice7Bit32BitValue
     
         private var value: Value
@@ -137,3 +141,9 @@ extension MIDIEvent.ChanVoice7Bit32BitValue {
         }
     }
 }
+
+extension MIDIEvent.ChanVoice7Bit32BitValue.Validated: Equatable { }
+
+extension MIDIEvent.ChanVoice7Bit32BitValue.Validated: Hashable { }
+
+extension MIDIEvent.ChanVoice7Bit32BitValue.Validated: Sendable { }

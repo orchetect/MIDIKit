@@ -9,7 +9,7 @@ extension MIDIEvent.NoteCC.PerNoteController {
     
     /// Registered Per-Note Controller
     /// (MIDI 2.0)
-    public enum Registered: Equatable, Hashable {
+    public enum Registered {
         // Registered Per-Note CC 0 undefined
     
         /// Modulation Wheel
@@ -134,6 +134,10 @@ extension MIDIEvent.NoteCC.PerNoteController {
     }
     // swiftformat:enable wrapSingleLineComments
 }
+
+extension MIDIEvent.NoteCC.PerNoteController.Registered: Equatable { }
+
+extension MIDIEvent.NoteCC.PerNoteController.Registered: Hashable { }
 
 extension MIDIEvent.NoteCC.PerNoteController.Registered: Identifiable {
     public var id: Self { self }

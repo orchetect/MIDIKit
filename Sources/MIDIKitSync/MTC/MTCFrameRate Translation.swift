@@ -24,6 +24,7 @@ extension MTCFrameRate {
     /// Useful for internal calculations.
     ///
     /// To get all timecode frame rates that are compatible, use ``derivedFrameRates`` instead.
+    @inline(__always)
     public var directEquivalentFrameRate: TimecodeFrameRate {
         switch self {
         case .mtc24:    return .fps24
@@ -37,6 +38,7 @@ extension MTCFrameRate {
 extension TimecodeFrameRate {
     /// Returns the base MTC frame rate that DAWs use to transmit timecode (scaling frame number if
     /// necessary)
+    @inline(__always)
     public var mtcFrameRate: MTCFrameRate {
         switch self {
         case .fps23_976:  return .mtc24
@@ -66,6 +68,7 @@ extension TimecodeFrameRate {
     }
     
     /// Returns true if the timecode frame rate is derived from the MTC frame rate.
+    @inlinable
     public func transmitsMTC(using mtcFrameRate: MTCFrameRate) -> Bool {
         self.mtcFrameRate == mtcFrameRate
     }
@@ -173,6 +176,7 @@ extension TimecodeFrameRate {
 
 extension TimecodeFrameRate {
     /// Internal: scale factor used when scaling timecode frame rate to/from MTC SMPTE frame rates
+    @inline(__always)
     var mtcScaleFactor: Double {
         // calculated from:
         // (self.maxFrameNumberDisplayable + 1) / self.mtcFrameRate.fpsValueForScaling

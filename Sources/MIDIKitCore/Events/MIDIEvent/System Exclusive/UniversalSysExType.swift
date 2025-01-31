@@ -6,27 +6,18 @@
 
 extension MIDIEvent {
     /// Universal System Exclusive message type.
-    public enum UniversalSysExType: UInt7, Equatable, Hashable {
+    public enum UniversalSysExType: UInt7 {
         /// Real-Time System Exclusive ID number (`0x7F`).
         case realTime = 0x7F
     
         /// Non- Real-Time System Exclusive ID number (`0x7E`).
         case nonRealTime = 0x7E
-    
-        // Note: this cannot be implemented as `init?(rawValue: UInt8)` because
-        // Xcode 12.4 won't compile (Xcode 13 compiles fine however).
-        // It seems the parameter name "rawValue:" confuses the compiler
-        // and prevents it from synthesizing its own `init?(rawValue: UInt7)` init.
-        /// Universal System Exclusive message type.
-        ///
-        /// Initialize from raw UInt8 byte.
-        public init?(rawUInt8Value: UInt8) {
-            guard let uInt7 = UInt7(exactly: rawUInt8Value) else { return nil }
-    
-            self.init(rawValue: uInt7)
-        }
     }
 }
+
+extension MIDIEvent.UniversalSysExType: Equatable { }
+
+extension MIDIEvent.UniversalSysExType: Hashable { }
 
 extension MIDIEvent.UniversalSysExType: CustomStringConvertible {
     public var description: String {
@@ -42,6 +33,21 @@ extension MIDIEvent.UniversalSysExType: Identifiable {
 }
 
 extension MIDIEvent.UniversalSysExType: Sendable { }
+
+extension MIDIEvent.UniversalSysExType {
+    // Note: this cannot be implemented as `init?(rawValue: UInt8)` because
+    // Xcode 12.4 won't compile (Xcode 13 compiles fine however).
+    // It seems the parameter name "rawValue:" confuses the compiler
+    // and prevents it from synthesizing its own `init?(rawValue: UInt7)` init.
+    /// Universal System Exclusive message type.
+    ///
+    /// Initialize from raw UInt8 byte.
+    public init?(rawUInt8Value: UInt8) {
+        guard let uInt7 = UInt7(exactly: rawUInt8Value) else { return nil }
+        
+        self.init(rawValue: uInt7)
+    }
+}
 
 extension MIDIEvent {
     /// SysEx: Device Inquiry request message.

@@ -5,7 +5,7 @@
 //
 
 /// Describes the Core MIDI API used internally in all MIDIKit I/O operations.
-public enum CoreMIDIAPIVersion: Equatable, Hashable {
+public enum CoreMIDIAPIVersion {
     /// Legacy Core MIDI API first introduced in early versions of OSX.
     ///
     /// Internally using `MIDIPacketList` / `MIDIPacket`.
@@ -16,6 +16,10 @@ public enum CoreMIDIAPIVersion: Equatable, Hashable {
     /// Internally using `MIDIEventList` / `MIDIEventPacket`.
     case newCoreMIDI(MIDIProtocolVersion)
 }
+
+extension CoreMIDIAPIVersion: Equatable { }
+
+extension CoreMIDIAPIVersion: Hashable { }
 
 extension CoreMIDIAPIVersion: Sendable { }
 

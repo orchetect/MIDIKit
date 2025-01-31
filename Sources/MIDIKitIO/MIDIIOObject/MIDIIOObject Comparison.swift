@@ -12,7 +12,7 @@
 // and this implementation will be used)
 
 extension MIDIIOObject {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+    public static func == (lhs: Self, rhs: some MIDIIOObject) -> Bool {
         lhs.coreMIDIObjectRef == rhs.coreMIDIObjectRef
     }
 }
