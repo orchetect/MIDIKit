@@ -7,6 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
+import MIDIKitCore
 
 /// Error type returned by MIDIKit I/O operations.
 public enum MIDIIOError: LocalizedError, Hashable {
@@ -25,7 +26,7 @@ public enum MIDIIOError: LocalizedError, Hashable {
 
 extension MIDIIOError {
     /// Convenience to return a case of ``osStatus(_:)-swift.enum.case`` with its associated
-    /// ``CoreMIDIOSStatus`` formed from a raw Core MIDI `OSStatus` (Int32) integer value.
+    /// <doc://MIDIKitIO/MIDIKitCore/CoreMIDIOSStatus> formed from a raw Core MIDI `OSStatus` (Int32) integer value.
     public static func osStatus(_ rawValue: CoreMIDIOSStatus) -> Self {
         .osStatus(.init(rawValue: rawValue))
     }

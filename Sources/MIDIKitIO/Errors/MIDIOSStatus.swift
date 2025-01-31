@@ -7,6 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
+import MIDIKitCore
 internal import CoreMIDI
 
 /// An enumeration representing `CoreMIDI.MIDIServices` `OSStatus` error codes, with verbose
