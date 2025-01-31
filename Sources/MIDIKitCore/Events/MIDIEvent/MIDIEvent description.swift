@@ -85,7 +85,7 @@ extension MIDIEvent: CustomStringConvertible {
             let channelString = event.channel.hexString()
             let groupString = event.group.hexString()
             
-            return "noteManagement(options: \(event.optionFlags), chan: \(channelString), group: \(groupString))"
+            return "noteManagement(flags: \(event.flags), chan: \(channelString), group: \(groupString))"
             
         case let .cc(event):
             let midi1ValString = "midi1(\(event.value.midi1Value))"

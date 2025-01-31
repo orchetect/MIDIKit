@@ -17,7 +17,7 @@ extension MIDIEvent {
         public var note: MIDINote
         
         /// Option Flags
-        public var optionFlags: Set<OptionFlag> = []
+        public var flags: Set<OptionFlag> = []
         
         /// Channel Number (`0x0 ... 0xF`)
         public var channel: UInt4
@@ -33,18 +33,17 @@ extension MIDIEvent {
         ///
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
-        ///   - velocity: Velocity
+        ///   - flags: Option flags
         ///   - channel: Channel Number (`0x0 ... 0xF`)
-        ///   - attribute: MIDI 2.0 Channel Voice Attribute
         ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             note: UInt7,
-            optionFlags: Set<OptionFlag> = [],
+            flags: Set<OptionFlag> = [],
             channel: UInt4,
             group: UInt4 = 0x0
         ) {
             self.note = MIDINote(note)
-            self.optionFlags = optionFlags
+            self.flags = flags
             self.channel = channel
             self.group = group
         }
@@ -57,18 +56,17 @@ extension MIDIEvent {
         ///
         /// - Parameters:
         ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
-        ///   - velocity: Velocity
+        ///   - flags: Option flags
         ///   - channel: Channel Number (`0x0 ... 0xF`)
-        ///   - attribute: MIDI 2.0 Channel Voice Attribute
         ///   - group: UMP Group (`0x0 ... 0xF`)
         public init(
             note: MIDINote,
-            optionFlags: Set<OptionFlag> = [],
+            flags: Set<OptionFlag> = [],
             channel: UInt4,
             group: UInt4 = 0x0
         ) {
             self.note = note
-            self.optionFlags = optionFlags
+            self.flags = flags
             self.channel = channel
             self.group = group
         }
@@ -86,9 +84,8 @@ extension MIDIEvent {
     ///
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
-    ///   - velocity: Velocity
+    ///   - flags: Option flags
     ///   - channel: Channel Number (`0x0 ... 0xF`)
-    ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func noteManagement(
         note: UInt7,
@@ -99,7 +96,7 @@ extension MIDIEvent {
         .noteManagement(
             .init(
                 note: note,
-                optionFlags: flags,
+                flags: flags,
                 channel: channel,
                 group: group
             )
@@ -114,9 +111,8 @@ extension MIDIEvent {
     ///
     /// - Parameters:
     ///   - note: Note Number (or Note Index if using MIDI 2.0 Pitch 7.9)
-    ///   - velocity: Velocity
+    ///   - flags: Option flags
     ///   - channel: Channel Number (`0x0 ... 0xF`)
-    ///   - attribute: MIDI 2.0 Channel Voice Attribute
     ///   - group: UMP Group (`0x0 ... 0xF`)
     public static func noteManagement(
         note: MIDINote,
@@ -127,7 +123,7 @@ extension MIDIEvent {
         .noteManagement(
             .init(
                 note: note.number,
-                optionFlags: flags,
+                flags: flags,
                 channel: channel,
                 group: group
             )
@@ -151,7 +147,7 @@ extension MIDIEvent.NoteManagement {
             mtAndGroup,
             0xF0 + channel.uInt8Value,
             note.number.uInt8Value,
-            optionFlags.byte
+            flags.byte
         )
         
         let word2: UInt32 = 0x0000_0000 // reserved
@@ -166,21 +162,21 @@ extension MIDIEvent.NoteManagement {
     /// Per-Note Management Option Flag
     /// (MIDI 2.0)
     public enum OptionFlag: Equatable, Hashable {
-        /// [D] Detach Per-Note Controllers from previously received Note(s)
+        /// Detach Per-Note Controllers from previously received Note(s) (`D`)
         ///
         /// > MIDI 2.0 Spec:
         /// >
-        /// > When a device receives a Per-Note Management message with D = 1 (Detach), all
+        /// > When a device receives a Per-Note Management message with `D` = 1 (Detach), all
         /// > currently playing notes and previous notes on the referenced Note Number shall no
         /// > longer respond to any Per-Note controllers. Currently playing notes shall maintain the
         /// > current values for all Per-Note controllers until the end of the note life cycle.
         case detachPerNoteControllers
         
-        /// [S] Reset/Set Per-Note Controllers to default values
+        /// Reset/Set Per-Note Controllers to default values (`S`)
         ///
         /// > MIDI 2.0 Spec:
         /// >
-        /// > When a device receives a Per-Note Management message with S = 1, all Per-Note
+        /// > When a device receives a Per-Note Management message with `S` = 1, all Per-Note
         /// > controllers on the referenced Note Number should be reset to their default values.
         case resetPerNoteControllers
     }

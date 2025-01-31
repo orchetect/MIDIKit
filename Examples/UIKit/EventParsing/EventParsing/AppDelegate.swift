@@ -141,7 +141,7 @@ extension AppDelegate {
                 "Per-Note Management (MIDI 2.0 Only):",
                 "\n  Note: \(payload.note.number.intValue) (\(payload.note.stringValue()))",
                 "\n  Option Flags:",
-                payload.optionFlags,
+                payload.flags,
                 "\n  Channel:",
                 payload.channel.intValue.hex.stringValue(prefix: true),
                 "\n  UMP Group (MIDI2):",
