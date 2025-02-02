@@ -71,7 +71,7 @@ extension MIDIParameterNumber {
     /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes(
         channel: UInt4,
         group: UInt4 = 0
@@ -100,7 +100,7 @@ extension MIDIParameterNumber {
     /// Each inner array contains words for one packet.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords(
         protocol midiProtocol: MIDIProtocolVersion,
         change: MIDI2ParameterNumberChange,

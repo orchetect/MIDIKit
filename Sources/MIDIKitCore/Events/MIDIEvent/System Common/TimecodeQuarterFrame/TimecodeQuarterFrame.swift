@@ -70,7 +70,7 @@ extension MIDIEvent.TimecodeQuarterFrame {
     /// Returns the raw MIDI 1.0 status byte for the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawStatusByte() -> UInt8 {
         0xF1
     }
@@ -83,7 +83,7 @@ extension MIDIEvent.TimecodeQuarterFrame {
     /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
         [midi1RawStatusByte(), midi1RawDataBytes()]
     }
@@ -91,7 +91,7 @@ extension MIDIEvent.TimecodeQuarterFrame {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [UMPWord] {
         let umpMessageType: MIDIUMPMessageType = .systemRealTimeAndCommon
     

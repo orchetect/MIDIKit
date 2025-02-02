@@ -15,7 +15,7 @@ internal import CoreMIDI
 /// To delete them all, see sister function `removeAllSystemThruConnectionsPersistentEntries(:)`.
 ///
 /// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first
-/// made
+///   made
 ///
 /// - Throws: ``MIDIIOError/osStatus(_:)``
 func getSystemThruConnectionsPersistentEntries(
@@ -58,7 +58,7 @@ func getSystemThruConnectionsPersistentEntries(
 /// Deletes all system-held Core MIDI MIDI play-thru connections matching an owner ID.
 ///
 /// - Parameter persistentOwnerID: Reverse-DNS domain that was used when the connection was first
-/// made.
+///   made.
 ///
 /// - Throws: ``MIDIIOError/osStatus(_:)``
 ///

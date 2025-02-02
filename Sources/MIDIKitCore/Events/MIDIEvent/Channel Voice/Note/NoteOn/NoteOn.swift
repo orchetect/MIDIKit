@@ -38,8 +38,7 @@ extension MIDIEvent {
         ///   - channel: Channel Number (`0x0 ... 0xF`)
         ///   - attribute: MIDI 2.0 Channel Voice Attribute
         ///   - group: UMP Group (`0x0 ... 0xF`)
-        ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, translate velocity of 0 as a Note Off
-        /// event.
+        ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, translate velocity of 0 as a Note Off event.
         public init(
             note: UInt7,
             velocity: MIDIEvent.NoteVelocity,
@@ -65,8 +64,7 @@ extension MIDIEvent {
         ///   - channel: Channel Number (`0x0 ... 0xF`)
         ///   - attribute: MIDI 2.0 Channel Voice Attribute
         ///   - group: UMP Group (`0x0 ... 0xF`)
-        ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, translate velocity of 0 as a Note Off
-        /// event.
+        ///   - midi1ZeroVelocityAsNoteOff: For MIDI 1.0, translate velocity of 0 as a Note Off event.
         public init(
             note: MIDINote,
             velocity: MIDIEvent.NoteVelocity,
@@ -177,7 +175,7 @@ extension MIDIEvent.NoteOn {
     /// Returns the raw MIDI 1.0 status byte for the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawStatusByte() -> UInt8 {
         switch velocity {
         case .midi1, .unitInterval:
@@ -214,7 +212,7 @@ extension MIDIEvent.NoteOn {
     /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
         let dataBytes = midi1RawDataBytes()
         return [midi1RawStatusByte(), dataBytes.data1, dataBytes.data2]
@@ -235,7 +233,7 @@ extension MIDIEvent.NoteOn {
     /// Returns the raw MIDI 2.0 UMP (Universal MIDI Packet) message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [UMPWord] {

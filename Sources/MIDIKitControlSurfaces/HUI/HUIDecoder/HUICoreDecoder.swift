@@ -64,8 +64,8 @@ extension HUICoreDecoder: ReceivesMIDIEvents {
     /// Decodes a MIDI event.
     ///
     /// - Returns: One or more HUI core events if the MIDI event results in decoded HUI event(s).
-    /// Not all MIDI events will generate HUI event(s); some merely update the decoder's internal
-    /// state, in which case an empty array will be returned. This is not an error condition.
+    ///   Not all MIDI events will generate HUI event(s); some merely update the decoder's internal
+    ///   state, in which case an empty array will be returned. This is not an error condition.
     ///
     /// - Throws: An error if the MIDI event was malformed or contained unexpected data.
     func decode(event: MIDIEvent) throws -> [HUICoreEvent] {

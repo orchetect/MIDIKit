@@ -7,12 +7,11 @@
 import Foundation
 
 extension HUIVPotDisplay {
-    // swiftformat:options --wrapcollections preserve
-    // swiftformat:options --maxwidth none
-    
     /// Preset HUI V-Pot LED states.
     ///
-    /// For HUI V-Pot LED ring displays, it is not possible to toggle individual LEDs arbitrarily. Instead, the HUI protocol defines a set of LED state presets that are individually indexed. This index set is abstracted here as an enumeration of clearly defined preset configuration cases.
+    /// For HUI V-Pot LED ring displays, it is not possible to toggle individual LEDs arbitrarily.
+    /// Instead, the HUI protocol defines a set of LED state presets that are individually indexed.
+    /// This index set is abstracted here as an enumeration of clearly defined preset configuration cases.
     public enum LEDState: Equatable, Hashable {
         case allOff
         
@@ -25,15 +24,20 @@ extension HUIVPotDisplay {
         /// A range of LED(s) are illuminated starting from the left and extending to the given LED.
         case left(to: LED)
         
-        /// A range of LED(s) are illuminated starting from the center and extending symmetrically to both left and right by the given radius (count) of LEDs.
+        /// A range of LED(s) are illuminated starting from the center and extending symmetrically to both
+        /// left and right by the given radius (count) of LEDs.
         ///
         /// - Parameters:
-        ///   - radius: The LED to use as a radius reference. It doesn't matter if this is a Left or Right LED, its distance from center defines the symmetrical radius from center.
+        ///   - radius: The LED to use as a radius reference. It doesn't matter if this is a Left or Right LED,
+        ///     its distance from center defines the symmetrical radius from center.
         case centerRadius(radius: LED)
     }
 }
 
 // MARK: - CaseIterable
+
+// swiftformat:options --wrapcollections preserve
+// swiftformat:options --maxwidth none
 
 extension HUIVPotDisplay.LEDState: CaseIterable {
     public static let allCases: [Self] =

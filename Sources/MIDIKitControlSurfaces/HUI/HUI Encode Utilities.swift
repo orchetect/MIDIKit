@@ -384,7 +384,7 @@ func encodeHUITimeDisplay(
 ///
 /// - Parameters:
 ///   - charsRightToLeft: Between 1 and 8 characters in reverse sequence order (first array element
-/// is rightmost digit). More than 8 characters will discarded and truncated to 8 characters.
+///     is rightmost digit). More than 8 characters will discarded and truncated to 8 characters.
 /// - Returns: MIDI event.
 @inlinable
 func encodeHUITimeDisplay(

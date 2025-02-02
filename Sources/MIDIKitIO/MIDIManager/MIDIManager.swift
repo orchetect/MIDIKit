@@ -78,7 +78,7 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     /// persistent ID (domain) so they can be managed or removed in future.
     ///
     /// - Warning: Be careful when creating persistent thru connections, as they can become stale
-    /// and orphaned if the endpoints used to create them cease to be relevant at any point in time.
+    ///   and orphaned if the endpoints used to create them cease to be relevant at any point in time.
     ///
     /// - Parameter ownerID: reverse-DNS domain that was used when the connection was first made
     /// - Throws: ``MIDIIOError``

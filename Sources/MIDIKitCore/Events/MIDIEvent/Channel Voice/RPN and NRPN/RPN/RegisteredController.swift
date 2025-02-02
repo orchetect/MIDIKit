@@ -44,8 +44,8 @@ extension MIDIEvent {
     /// > controllers per Bank (corresponds to RPN LSB).
     ///
     /// - Note: See Recommended Practise
-    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
-    /// of the MIDI 1.0 Spec Addenda.
+    ///   [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    ///   of the MIDI 1.0 Spec Addenda.
     public enum RegisteredController {
         // MIDI Spec
     

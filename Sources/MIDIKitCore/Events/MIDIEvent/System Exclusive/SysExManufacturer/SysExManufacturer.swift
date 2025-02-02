@@ -175,7 +175,7 @@ extension MIDIEvent.SysExManufacturer {
     /// Returns a new instance containing the Educational Use ID.
     ///
     /// - Note: Reserved for use only in educational institutions or for unit testing; not public
-    /// release.
+    ///   release.
     public static func educational() -> Self {
         .oneByte(0x7D)
     }

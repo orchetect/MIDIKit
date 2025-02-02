@@ -39,7 +39,7 @@ import Darwin
 /// This is preferable to using `mach_absolute_time()` since it is macOS-only.
 ///
 /// - Returns: `timespec(tv_sec: Int, tv_nsec: Int)` where `tv_sec` is seconds and `tc_nsec` is
-/// nanoseconds.
+///   nanoseconds.
 @available(OSX 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *)
 @_disfavoredOverload
 package func clock_gettime_monotonic_raw() -> timespec {

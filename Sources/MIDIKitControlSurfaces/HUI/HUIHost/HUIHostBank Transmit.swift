@@ -143,8 +143,8 @@ extension HUIHostBank {
     ///
     /// - Parameters:
     ///   - charsRightToLeft: Between 1 and 8 characters in reverse sequence order (first array
-    /// element is rightmost digit). More than 8 characters will discarded and truncated to 8
-    /// characters.
+    ///     element is rightmost digit). More than 8 characters will discarded and truncated to 8
+    ///     characters.
     public func transmitTimeDisplay(
         charsRightToLeft: [HUITimeDisplayCharacter]
     ) {

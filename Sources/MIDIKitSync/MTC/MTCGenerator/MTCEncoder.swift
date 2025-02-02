@@ -176,8 +176,8 @@ public final class MTCEncoder: SendsMIDIEvents, @unchecked Sendable { // @unchec
     /// MIDI handler.
     ///
     /// - Note: If it is the first time ``increment()`` is being called since the last call to
-    /// ``locate(to:transmitFullFrame:)`` (or since initializing the class), this method will
-    /// transmit the current quarter-frame without incrementing.
+    ///   ``locate(to:transmitFullFrame:)`` (or since initializing the class), this method will
+    ///   transmit the current quarter-frame without incrementing.
     ///
     /// Used when playhead is moving later in time.
     public func increment() {
@@ -205,8 +205,8 @@ public final class MTCEncoder: SendsMIDIEvents, @unchecked Sendable { // @unchec
     /// the MIDI handler.
     ///
     /// - Note: If it is the first time ``decrement()`` is being called since the last call to
-    /// ``locate(to:transmitFullFrame:)`` (or since initializing the class), this method will
-    /// transmit the current quarter-frame without decrementing.
+    ///   ``locate(to:transmitFullFrame:)`` (or since initializing the class), this method will
+    ///   transmit the current quarter-frame without decrementing.
     ///
     /// Used when playhead is moving earlier in time.
     public func decrement() {

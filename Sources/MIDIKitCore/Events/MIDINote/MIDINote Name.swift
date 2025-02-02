@@ -172,8 +172,8 @@ extension MIDINote {
         ///
         /// - Parameters:
         ///   - respellSharpAsFlat: If note is sharp, respell enharmonically as a flat (ie: G♯
-        /// becomes A♭) Otherwise, sharp is always used, which is typical convention for MIDI note
-        /// names.
+        ///     becomes A♭) Otherwise, sharp is always used, which is typical convention for MIDI
+        ///     note names.
         ///   - unicodeAccidental: Use stylized unicode character for sharp (♯) and flat (♭).
         public func stringValue(
             respellSharpAsFlat: Bool = false,

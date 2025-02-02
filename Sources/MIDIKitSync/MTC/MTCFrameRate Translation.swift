@@ -80,7 +80,7 @@ extension MTCFrameRate {
     /// Scales MTC frames at `self` MTC base rate to frames at other timecode frame rate.
     ///
     /// - Note: This is a specialized calculation, and is intended to act upon raw MTC frames as
-    /// decoded from quarter-frame messages; not intended to be a generalized scale function.
+    ///   decoded from quarter-frame messages; not intended to be a generalized scale function.
     ///
     /// This is a double-duty function which first checks frame rate compatibility (and returns
     /// `nil` if rates are not H:MM:SS stable), then returns the scaled frames value if they are
@@ -141,14 +141,14 @@ extension TimecodeFrameRate {
     /// Scales frames at other timecode frame rate to MTC frames at `self` MTC base rate.
     ///
     /// - Note: This is a specialized calculation, and is intended to produce raw MTC frames and
-    /// quarter-frame messages; not intended to be a generalized scale function.
+    ///   quarter-frame messages; not intended to be a generalized scale function.
     ///
     /// - Parameter fromTimecodeFrames: A `Double` with the integer part representing frame number
-    /// and the fractional part representing the fraction of the frame.
+    ///   and the fractional part representing the fraction of the frame.
     ///
     /// - Returns: `(rawMTCFrames: Int, rawMTCQuarterFrames: UInt8)` where `rawMTCFrames` is raw MTC
-    /// frame number, as decoded from quarter-frame messages and `rawMTCQuarterFrames` is number of
-    /// QFs elapsed (`0 ... 7`).
+    ///   frame number, as decoded from quarter-frame messages and `rawMTCQuarterFrames` is number of
+    ///   QFs elapsed (`0 ... 7`).
     func scaledFrames(
         fromTimecodeFrames: Double
     ) -> (

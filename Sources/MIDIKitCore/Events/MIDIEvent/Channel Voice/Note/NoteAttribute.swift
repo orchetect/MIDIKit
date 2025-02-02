@@ -84,7 +84,7 @@ extension MIDIEvent.NoteAttribute {
     ///
     /// - Parameters:
     ///   - coarse: 7-Bit coarse pitch in semitones, based on default Note Number equal temperament
-    /// scale.
+    ///     scale.
     ///   - fine: 9-Bit fractional pitch above Note Number (i.e., fraction of one semitone).
     public static func pitch7_9(
         coarse: UInt7,

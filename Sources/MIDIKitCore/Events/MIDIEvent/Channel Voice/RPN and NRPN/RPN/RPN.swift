@@ -47,8 +47,8 @@ extension MIDIEvent {
     /// > controllers per Bank (corresponds to RPN LSB).
     ///
     /// - Note: See Recommended Practise
-    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
-    /// of the MIDI 1.0 Spec Addenda.
+    ///   [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    ///   of the MIDI 1.0 Spec Addenda.
     ///
     /// > Tip:
     /// >
@@ -132,8 +132,8 @@ extension MIDIEvent {
     /// > controllers per Bank (corresponds to RPN LSB).
     ///
     /// - Note: See Recommended Practise
-    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
-    /// of the MIDI 1.0 Spec Addenda.
+    ///   [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    ///   of the MIDI 1.0 Spec Addenda.
     ///
     /// - Parameters:
     ///   - parameter: Registered Parameter Number (Registered Controller).
@@ -196,8 +196,8 @@ extension MIDIEvent {
     /// > controllers per Bank (corresponds to RPN LSB).
     ///
     /// - Note: See Recommended Practise
-    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
-    /// of the MIDI 1.0 Spec Addenda.
+    ///   [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    ///   of the MIDI 1.0 Spec Addenda.
     ///
     /// - Parameters:
     ///   - parameter: Registered Parameter Number (Registered Controller).
@@ -260,8 +260,8 @@ extension MIDIEvent {
     /// > controllers per Bank (corresponds to RPN LSB).
     ///
     /// - Note: See Recommended Practise
-    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
-    /// of the MIDI 1.0 Spec Addenda.
+    ///   [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    ///   of the MIDI 1.0 Spec Addenda.
     ///
     /// - Parameters:
     ///   - parameter: Registered Parameter Number (Registered Controller).
@@ -326,8 +326,8 @@ extension MIDIEvent {
     /// > controllers per Bank (corresponds to RPN LSB).
     ///
     /// - Note: See Recommended Practise
-    /// [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
-    /// of the MIDI 1.0 Spec Addenda.
+    ///   [RP-018](https://www.midi.org/specifications/midi1-specifications/midi-1-addenda/response-to-data-increment-decrement-controllers)
+    ///   of the MIDI 1.0 Spec Addenda.
     ///
     /// - Parameters:
     ///   - parameter: Registered Parameter Number (Registered Controller).
@@ -375,7 +375,7 @@ extension MIDIEvent.RPN {
     /// Returns the complete raw MIDI 1.0 message bytes that comprise the event.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func midi1RawBytes() -> [UInt8] {
         parameter.midi1RawBytes(channel: channel, group: group)
     }
@@ -385,7 +385,7 @@ extension MIDIEvent.RPN {
     /// Each inner array contains words for one packet.
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords(
         protocol midiProtocol: MIDIProtocolVersion
     ) -> [[UMPWord]] {

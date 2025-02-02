@@ -104,7 +104,7 @@ extension MIDIEvent.SysEx8 {
     /// packet comprised of two UInt32 words).
     ///
     /// - Note: This is mainly for internal use and is not necessary to access during typical usage
-    /// of MIDIKit, but is provided publicly for introspection and debugging purposes.
+    ///   of MIDIKit, but is provided publicly for introspection and debugging purposes.
     public func umpRawWords() -> [[UMPWord]] {
         let rawData = manufacturer.sysEx8RawBytes() + data
     
