@@ -124,6 +124,20 @@ internal import MIDIKitInternals
     
     // MARK: - Init
     
+    /// Initialize HUI control surface (client) object.
+    ///
+    /// - Parameters:
+    ///   - alwaysNotify: When true, the notification handler will always be called even
+    ///     when a received HUI MIDI event from host does not result in a change to the HUI
+    ///     surface state model. Useful for debugging.
+    ///   - modelNotificationHandler: Notification handler that is called as a result of the
+    ///     ``model`` being updated from received HUI events.
+    ///   - remotePresenceTimeout: Time duration to wait since the last ping received before
+    ///     transitioning ``isRemotePresent`` to `false`.
+    ///   - remotePresenceChangedHandler: Handler that is called when the remote presence state
+    ///     changes (when pings resume or cease after timeout).
+    ///   - midiOutHandler: Handler used when sending MIDI events. Pass these events to the MIDI
+    ///     output or output connection.
     public init(
         alwaysNotify: Bool = false,
         modelNotificationHandler: ModelNotificationHandler? = nil,
