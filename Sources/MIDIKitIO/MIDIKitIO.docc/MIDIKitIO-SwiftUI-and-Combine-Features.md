@@ -32,7 +32,7 @@ This can be useful in updating user interface displaying a list of MIDI endpoint
 
 Manual observation can be implemented by use of a notification handler closure.
 
-``MIDIManager`` offers a ``MIDIManager/notificationHandler`` closure that may be assigned either during initialization or by calling ``MIDIManager/init(clientName:model:manufacturer:notificationHandler:)``. 
+``MIDIManager`` offers a ``MIDIManager/notificationHandler`` closure that may be assigned either during initialization or by calling ``MIDIManager/init(clientName:model:manufacturer:notificationHandler:)-20rxd``. 
 
 ## Key-Value Observation
 
