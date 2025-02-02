@@ -8,7 +8,7 @@
 extension UInt8 {
     /// Returns a `UInt8` as its 4-bit nibbles:
     /// High `((& 0xF0) >> 4)` and low `(& 0x0F)`.
-    @_disfavoredOverload
+    @_disfavoredOverload @inline(__always)
     public var nibbles: (high: UInt4, low: UInt4) {
         let high = (self & 0xF0) >> 4
         let low = self & 0xF
@@ -17,7 +17,7 @@ extension UInt8 {
     }
     
     /// Convenience initializer from high and low 4-bit nibbles.
-    @_disfavoredOverload
+    @_disfavoredOverload @inline(__always)
     public init(high: UInt4, low: UInt4) {
         self = (high.uInt8Value << 4) + low.uInt8Value
     }

@@ -35,12 +35,18 @@ public protocol MIDIUnsignedInteger: UnsignedInteger, Codable, Sendable
     // Public conveniences
     
     /// Returns the integer as an `Int` instance
-    var intValue: Int { get }
+    @inlinable var intValue: Int { get }
     
     // FixedWidthInteger types declared without conforming to FixedWidthInteger
     static var bitWidth: Int { get }
     static var min: Self { get }
     static var max: Self { get }
+    
+    // implemented in _MIDIUnsignedInteger
+    @inlinable init(_ source: some BinaryInteger)
+    @inlinable init(truncatingIfNeeded source: some BinaryInteger)
+    @inlinable init<T: BinaryFloatingPoint>(_ source: T)
+    @inlinable init?<T: BinaryFloatingPoint>(exactly source: T)
 }
 
 // MARK: - Internal Protocol
@@ -63,6 +69,7 @@ protocol _MIDIUnsignedInteger: MIDIUnsignedInteger {
 }
 
 extension _MIDIUnsignedInteger {
+    @inlinable
     public init(_ source: some BinaryInteger) {
         if source < Self.min(as: Storage.self) {
             Exception.underflow.raise(reason: "\(Self.integerName) integer underflowed")
@@ -73,10 +80,12 @@ extension _MIDIUnsignedInteger {
         self.init(unchecked: Storage(source))
     }
     
+    @inlinable
     public init(truncatingIfNeeded source: some BinaryInteger) {
         self.init(Storage(truncatingIfNeeded: source))
     }
     
+    @inlinable
     public init(clamping source: some BinaryInteger) {
         let clamped = Storage(
             Int(source)
@@ -85,6 +94,7 @@ extension _MIDIUnsignedInteger {
         self.init(clamped)
     }
     
+    @inlinable
     public init<T: BinaryFloatingPoint>(_ source: T) {
         // it should be safe to cast as T.self since it's virtually impossible
         // that we will encounter a BinaryFloatingPoint type that cannot fit UInt4.max
@@ -101,6 +111,7 @@ extension _MIDIUnsignedInteger {
         self.init(unchecked: Storage(source))
     }
     
+    @inlinable
     public init?<T: BinaryFloatingPoint>(exactly source: T) {
         // it should be safe to cast as T.self since it's virtually impossible
         // that we will encounter a BinaryFloatingPoint type less than the
@@ -134,6 +145,7 @@ extension MIDIUnsignedInteger /*: ExpressibleByIntegerLiteral */ {
     // public typealias IntegerLiteralType = Storage
     // IntegerLiteralType is already expressed as same-type constraint on MIDIUnsignedInteger
     
+    @inlinable
     public init(integerLiteral value: Storage) {
         self.init(value)
     }

@@ -10,7 +10,7 @@ internal import MIDIKitInternals
 /// A 4-bit unsigned integer value type used in `MIDIKit`.
 public struct UInt4: MIDIUnsignedInteger, _MIDIUnsignedInteger {
     public typealias Storage = UInt8
-    var storage: Storage
+    @usableFromInline var storage: Storage
 }
 
 // MARK: - MIDIUnsignedInteger
@@ -18,6 +18,7 @@ public struct UInt4: MIDIUnsignedInteger, _MIDIUnsignedInteger {
 extension UInt4 {
     static let integerName: StaticString = "UInt4"
     
+    @inline(__always)
     init(unchecked value: Storage) {
         storage = value
     }
@@ -36,11 +37,13 @@ extension UInt4 {
 
 extension BinaryInteger {
     /// Convenience initializer for `UInt4`.
+    @inline(__always)
     public var toUInt4: UInt4 {
         UInt4(self)
     }
     
     /// Convenience initializer for `UInt4(exactly:)`.
+    @inline(__always)
     public var toUInt4Exactly: UInt4? {
         UInt4(exactly: self)
     }
@@ -48,11 +51,13 @@ extension BinaryInteger {
 
 extension BinaryFloatingPoint {
     /// Convenience initializer for `UInt4`.
+    @inline(__always)
     public var toUInt4: UInt4 {
         UInt4(self)
     }
     
     /// Convenience initializer for `UInt4(exactly:)`.
+    @inline(__always)
     public var toUInt4Exactly: UInt4? {
         UInt4(exactly: self)
     }
@@ -62,6 +67,7 @@ extension BinaryFloatingPoint {
 
 extension UInt4 {
     /// Returns the integer as a `UInt8` instance.
+    @inline(__always)
     public var uInt8Value: UInt8 { storage }
 }
 
@@ -72,6 +78,7 @@ extension UInt4 {
 // MARK: - Equatable
 
 extension UInt4 /*: Equatable */ {
+    @inlinable
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.storage == rhs.storage
     }
@@ -80,6 +87,7 @@ extension UInt4 /*: Equatable */ {
 // MARK: - Comparable
 
 extension UInt4 /*: Comparable */ {
+    @inlinable
     public static func < (lhs: Self, rhs: Self) -> Bool {
         lhs.storage < rhs.storage
     }
@@ -154,6 +162,7 @@ extension UInt4 {
 
 extension UInt4 {
     /// Returns the integer converted to an `Int` instance (convenience).
+    @inline(__always)
     public var intValue: Int { Int(storage) }
 }
 
@@ -181,10 +190,12 @@ extension UInt4 /*: Numeric */ {
     // public typealias Magnitude = Storage.Magnitude
     // Magnitude is already expressed as same-type constraint on MIDIUnsignedInteger
     
+    @inlinable
     public var magnitude: Storage.Magnitude {
         storage.magnitude
     }
     
+    @inline(__always)
     public init?(exactly source: some BinaryInteger) {
         if source < Self.min(as: Storage.self) ||
             source > Self.max(as: Storage.self)

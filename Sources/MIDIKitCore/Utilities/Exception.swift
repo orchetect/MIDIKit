@@ -7,7 +7,8 @@
 import Foundation
 
 /// Raises an `NSException`
-package func raiseException(
+@inlinable
+func raiseException(
     _ exceptionName: NSExceptionName,
     reason: String? = nil
 ) {
@@ -16,12 +17,14 @@ package func raiseException(
 }
 
 /// Pre-formed `NSException` cases.
-package enum Exception {
+@usableFromInline
+enum Exception {
     case overflow
     case underflow
     case divisionByZero
     
-    public func raise(reason: String? = nil) {
+    @inlinable
+    func raise(reason: String? = nil) {
         switch self {
         case .overflow:
             raiseException(.decimalNumberOverflowException, reason: reason)

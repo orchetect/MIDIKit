@@ -10,14 +10,15 @@ internal import MIDIKitInternals
 /// A 25-bit unsigned integer value type used in `MIDIKit`.
 public struct UInt25: MIDIUnsignedInteger, _MIDIUnsignedInteger {
     public typealias Storage = UInt32
-    var storage: Storage
+    @usableFromInline var storage: Storage
 }
 
 // MARK: - MIDIUnsignedInteger
 
 extension UInt25 {
-    static let integerName: StaticString = "UInt25"
+    @usableFromInline static let integerName: StaticString = "UInt25"
     
+    @inline(__always)
     init(unchecked value: Storage) {
         storage = value
     }
@@ -36,11 +37,13 @@ extension UInt25 {
 
 extension BinaryInteger {
     /// Convenience initializer for `UInt25`.
+    @inline(__always)
     public var toUInt25: UInt25 {
         UInt25(self)
     }
     
     /// Convenience initializer for `UInt25(exactly:)`.
+    @inline(__always)
     public var toUInt25Exactly: UInt25? {
         UInt25(exactly: self)
     }
@@ -48,11 +51,13 @@ extension BinaryInteger {
 
 extension BinaryFloatingPoint {
     /// Convenience initializer for `UInt25`.
+    @inline(__always)
     public var toUInt25: UInt25 {
         UInt25(self)
     }
     
     /// Convenience initializer for `UInt25(exactly:)`.
+    @inline(__always)
     public var toUInt25Exactly: UInt25? {
         UInt25(exactly: self)
     }
@@ -67,6 +72,7 @@ extension UInt25 {
     static func midpoint<T: BinaryInteger>(as ofType: T.Type) -> T { 16_777_216 }
     
     /// Returns the integer as a `UInt32` instance
+    @inline(__always)
     public var uInt32Value: UInt32 { storage }
 }
 
@@ -159,6 +165,7 @@ extension UInt25 {
 
 extension UInt25 {
     /// Returns the integer converted to an `Int` instance (convenience).
+    @inline(__always)
     public var intValue: Int { Int(storage) }
 }
 
@@ -186,10 +193,12 @@ extension UInt25 /*: Numeric */ {
     // public typealias Magnitude = Storage.Magnitude
     // Magnitude is already expressed as same-type constraint on MIDIUnsignedInteger
     
+    @inlinable
     public var magnitude: Storage.Magnitude {
         storage.magnitude
     }
     
+    @inline(__always)
     public init?(exactly source: some BinaryInteger) {
         if source < Self.min(as: Storage.self) ||
             source > Self.max(as: Storage.self)

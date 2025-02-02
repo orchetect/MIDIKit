@@ -12,14 +12,15 @@ internal import MIDIKitInternals
 /// Formed as from two bytes (MSB, LSB) as `(MSB << 7) + LSB` where MSB and LSB are 7-bit values.
 public struct UInt14: MIDIUnsignedInteger, _MIDIUnsignedInteger {
     public typealias Storage = UInt16
-    var storage: Storage
+    @usableFromInline var storage: Storage
 }
 
 // MARK: - MIDIUnsignedInteger
 
 extension UInt14 {
-    static let integerName: StaticString = "UInt14"
+    @usableFromInline static let integerName: StaticString = "UInt14"
     
+    @inline(__always)
     init(unchecked value: Storage) {
         storage = value
     }
@@ -38,11 +39,13 @@ extension UInt14 {
 
 extension BinaryInteger {
     /// Convenience initializer for `UInt14`.
+    @inline(__always)
     public var toUInt14: UInt14 {
         UInt14(self)
     }
     
     /// Convenience initializer for `UInt14(exactly:)`.
+    @inline(__always)
     public var toUInt14Exactly: UInt14? {
         UInt14(exactly: self)
     }
@@ -50,11 +53,13 @@ extension BinaryInteger {
 
 extension BinaryFloatingPoint {
     /// Convenience initializer for `UInt14`.
+    @inline(__always)
     public var toUInt14: UInt14 {
         UInt14(self)
     }
     
     /// Convenience initializer for `UInt14(exactly:)`.
+    @inline(__always)
     public var toUInt14Exactly: UInt14? {
         UInt14(exactly: self)
     }
@@ -93,6 +98,7 @@ extension UInt14 {
     
     /// Initialize the raw 14-bit value from two 7-bit value bytes.
     /// The top bit of each byte (`0b1000_0000`) will be truncated (set to 0).
+    @inlinable
     public init(bytePair: BytePair) {
         let msb = Storage(bytePair.msb & 0b1111111) << 7
         let lsb = Storage(bytePair.lsb & 0b1111111)
@@ -100,6 +106,7 @@ extension UInt14 {
     }
     
     /// Initialize the raw 14-bit value from two 7-bit value bytes.
+    @inlinable
     public init(uInt7Pair: UInt7Pair) {
         let msb = Storage(uInt7Pair.msb.storage) << 7
         let lsb = Storage(uInt7Pair.lsb.storage)
@@ -109,11 +116,13 @@ extension UInt14 {
     // MARK: - Computed properties
     
     /// Returns the integer as a `UInt16` instance.
+    @inline(__always)
     public var uInt16Value: UInt16 { storage }
     
     /// Converts from integer to a bipolar floating-point unit interval (having a 0.0 neutral
     /// midpoint at 8192).
     /// (`0 ... 8192 ... 16383` == `-1.0 ... 0.0 ... 1.0`)
+    @inlinable
     public var bipolarUnitIntervalValue: Double {
         // account for non-symmetry and round up. (This is how MIDI 1.0 Spec pitchbend works)
         if storage > 8192 {
@@ -124,17 +133,18 @@ extension UInt14 {
     }
     
     /// Returns the raw 14-bit value as two 7-bit value bytes.
+    @inlinable
     public var bytePair: BytePair {
         let msb = (storage & 0b111111_10000000) >> 7
         let lsb = storage & 0b1111111
-        return .init(msb: UInt8(msb), lsb: UInt8(lsb))
+        return BytePair(msb: UInt8(msb), lsb: UInt8(lsb))
     }
     
     /// Returns the raw 14-bit value as two 7-bit value bytes.
     public var midiUInt7Pair: UInt7Pair {
         let msb = (storage & 0b111111_10000000) >> 7
         let lsb = storage & 0b1111111
-        return .init(msb: UInt7(msb), lsb: UInt7(lsb))
+        return UInt7Pair(msb: UInt7(msb), lsb: UInt7(lsb))
     }
 }
 
@@ -227,6 +237,7 @@ extension UInt14 {
 
 extension UInt14 {
     /// Returns the integer converted to an `Int` instance (convenience).
+    @inline(__always)
     public var intValue: Int { Int(storage) }
 }
 
@@ -254,10 +265,12 @@ extension UInt14 /*: Numeric */ {
     // public typealias Magnitude = Storage.Magnitude
     // Magnitude is already expressed as same-type constraint on MIDIUnsignedInteger
     
+    @inlinable
     public var magnitude: Storage.Magnitude {
         storage.magnitude
     }
     
+    @inline(__always)
     public init?(exactly source: some BinaryInteger) {
         if source < Self.min(as: Storage.self) ||
             source > Self.max(as: Storage.self)

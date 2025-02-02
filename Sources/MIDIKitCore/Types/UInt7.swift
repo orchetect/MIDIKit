@@ -10,14 +10,15 @@ internal import MIDIKitInternals
 /// A 7-bit unsigned integer value type used in `MIDIKit`.
 public struct UInt7: MIDIUnsignedInteger, _MIDIUnsignedInteger {
     public typealias Storage = UInt8
-    var storage: Storage
+    @usableFromInline var storage: Storage
 }
 
 // MARK: - MIDIUnsignedInteger
 
 extension UInt7 {
-    static let integerName: StaticString = "UInt7"
+    @usableFromInline static let integerName: StaticString = "UInt7"
     
+    @inline(__always)
     init(unchecked value: Storage) {
         storage = value
     }
@@ -36,11 +37,13 @@ extension UInt7 {
 
 extension BinaryInteger {
     /// Convenience initializer for `UInt7`.
+    @inline(__always)
     public var toUInt7: UInt7 {
         UInt7(self)
     }
     
     /// Convenience initializer for `UInt7(exactly:)`.
+    @inline(__always)
     public var toUInt7Exactly: UInt7? {
         UInt7(exactly: self)
     }
@@ -48,11 +51,13 @@ extension BinaryInteger {
 
 extension BinaryFloatingPoint {
     /// Convenience initializer for `UInt7`.
+    @inline(__always)
     public var toUInt7: UInt7 {
         UInt7(self)
     }
     
     /// Convenience initializer for `UInt7(exactly:)`.
+    @inline(__always)
     public var toUInt7Exactly: UInt7? {
         UInt7(exactly: self)
     }
@@ -67,6 +72,7 @@ extension UInt7 {
     static func midpoint<T: BinaryInteger>(as ofType: T.Type) -> T { 0b1000000 }
     
     /// Returns the integer as a `UInt8` instance.
+    @inline(__always)
     public var uInt8Value: UInt8 { storage }
 }
 
@@ -159,6 +165,7 @@ extension UInt7 {
 
 extension UInt7 {
     /// Returns the integer converted to an `Int` instance (convenience).
+    @inline(__always)
     public var intValue: Int { Int(storage) }
 }
 
@@ -186,10 +193,12 @@ extension UInt7 /*: Numeric */ {
     // public typealias Magnitude = Storage.Magnitude
     // Magnitude is already expressed as same-type constraint on MIDIUnsignedInteger
     
+    @inlinable
     public var magnitude: Storage.Magnitude {
         storage.magnitude
     }
     
+    @inline(__always)
     public init?(exactly source: some BinaryInteger) {
         if source < Self.min(as: Storage.self) ||
             source > Self.max(as: Storage.self)

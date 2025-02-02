@@ -9,13 +9,14 @@ internal import MIDIKitInternals
 
 /// A 7-bit signed integer value type used in `MIDIKit`. (`-64 ... 63`)
 public struct Int7 {
-    static let integerName = "Int7"
+    @usableFromInline static let integerName = "Int7"
     
-    var sixBitStorage: UInt8
-    var isNegative: Bool
+    @usableFromInline var sixBitStorage: UInt8
+    @usableFromInline var isNegative: Bool
     
     /// Initializes from an unsigned integer value, throwing an exception in the event of overflow
     /// or underflow.
+    @inlinable
     public init(_ source: some UnsignedInteger) {
         switch source {
         case 0 ... 63:
@@ -23,6 +24,7 @@ public struct Int7 {
             isNegative = false
         case 64...:
             Exception.overflow.raise(reason: "\(Self.integerName) integer overflowed")
+            raiseException(.decimalNumberOverflowException, reason: "")
             // default value
             sixBitStorage = 0
             isNegative = false
@@ -33,6 +35,7 @@ public struct Int7 {
     
     /// Initializes from a signed integer value, throwing an exception in the event of overflow or
     /// underflow.
+    @inlinable
     public init(_ source: some SignedInteger) {
         switch source {
         case ...(-65):
@@ -59,6 +62,7 @@ public struct Int7 {
     
     /// Initializes from an unsigned integer value, returning nil if the value cannot be preserved
     /// because it would otherwise overflow or underflow.
+    @inlinable
     public init?(exactly source: some UnsignedInteger) {
         guard (-64 ... 63).contains(source) else { return nil }
         self.init(truncatingIfNecessary: source)
@@ -66,28 +70,33 @@ public struct Int7 {
     
     /// Initializes from a signed integer value, returning nil if the value cannot be preserved
     /// because it would otherwise overflow or underflow.
+    @inlinable
     public init?(exactly source: some SignedInteger) {
         guard (-64 ... 63).contains(source) else { return nil }
         self.init(truncatingIfNecessary: source)
     }
     
+    @inlinable
     public init(truncatingIfNecessary uint: some UnsignedInteger) {
         sixBitStorage = UInt8(uint & 0b111111)
         isNegative = false
     }
     
+    @inlinable
     public init(truncatingIfNecessary int: some SignedInteger) {
         let truncated = Self.literalBits(truncatingIfNecessary: int)
         sixBitStorage = truncated.sixBitStorage
         isNegative = truncated.isNegative
     }
     
+    @inlinable
     public init(bitPattern source: some UnsignedInteger) {
         let truncated = Self.literalBits(truncatingIfNecessary: source)
         sixBitStorage = truncated.sixBitStorage
         isNegative = truncated.isNegative
     }
     
+    @inlinable
     static func literalBits(
         truncatingIfNecessary int: some BinaryInteger
     ) -> (sixBitStorage: UInt8, isNegative: Bool) {
@@ -101,6 +110,7 @@ public struct Int7 {
     
     /// Returns the 7-bit signed integer as a raw `UInt8` byte bit pattern.
     /// The top (8th) bit will always be `0`.
+    @inlinable
     public var rawByte: UInt8 {
         isNegative
             ? sixBitStorage + 0b1000000
@@ -108,11 +118,13 @@ public struct Int7 {
     }
     
     /// Returns the 7-bit signed integer as a raw `UInt7` byte bit pattern.
+    @inline(__always)
     public var rawUInt7Byte: UInt7 {
         UInt7(rawByte)
     }
     
     /// Returns the integer as `Int`.
+    @inlinable
     public var intValue: Int {
         isNegative
             ? -Int((~(sixBitStorage) & 0b111111) + 1)
@@ -155,6 +167,7 @@ extension Int7: Comparable {
 extension Int7: ExpressibleByIntegerLiteral {
     public typealias IntegerLiteralType = Int8
     
+    @inlinable
     public init(integerLiteral value: IntegerLiteralType) {
         self.init(truncatingIfNecessary: value)
     }
