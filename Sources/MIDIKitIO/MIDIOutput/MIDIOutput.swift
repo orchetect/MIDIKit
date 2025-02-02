@@ -21,16 +21,17 @@ internal import CoreMIDI
 /// > de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/output`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// > endpoint.)
-public final class MIDIOutput: _MIDIManaged, Sendable {
-    // _MIDIManaged
+public final class MIDIOutput: MIDIManaged, Sendable {
     weak nonisolated(unsafe) var midiManager: MIDIManager?
     
     // MIDIManaged
+    
     public private(set) nonisolated(unsafe) var api: CoreMIDIAPIVersion
-    public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
     
     // MIDIManagedSendsMessages
     
+    public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
+        
     /// The Core MIDI output port reference.
     public private(set) var coreMIDIOutputPortRef: CoreMIDIPortRef? {
         get { accessQueue.sync { _coreMIDIOutputPortRef } }

@@ -21,12 +21,14 @@ internal import CoreMIDI
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/input`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// > endpoint.)
-public final class MIDIInput: _MIDIManaged, Sendable {
-    // _MIDIManaged
+public final class MIDIInput: MIDIManaged, Sendable {
     weak nonisolated(unsafe) var midiManager: MIDIManager?
     
     // MIDIManaged
     public private(set) nonisolated(unsafe) var api: CoreMIDIAPIVersion
+    
+    // MIDIManagedReceivesMessages
+    
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
     
     // class-specific

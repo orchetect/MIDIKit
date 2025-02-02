@@ -25,12 +25,15 @@ internal import CoreMIDI
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/inputConnection`` or ``MIDIManager/removeAll()`` to destroy the
 /// > managed connection.)
-public final class MIDIInputConnection: _MIDIManaged, Sendable {
-    // _MIDIManaged
+public final class MIDIInputConnection: MIDIManaged, Sendable {
     weak nonisolated(unsafe) var midiManager: MIDIManager?
     
     // MIDIManaged
+    
     public private(set) nonisolated(unsafe) var api: CoreMIDIAPIVersion
+    
+    // MIDIManagedReceivesMessages
+    
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
     
     // class-specific

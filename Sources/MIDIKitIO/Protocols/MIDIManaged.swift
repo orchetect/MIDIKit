@@ -15,12 +15,4 @@ public protocol MIDIManaged: AnyObject {
     /* public private(set) */ var api: CoreMIDIAPIVersion { get }
 }
 
-// MARK: - Internal Protocol
-
-protocol _MIDIManaged: MIDIManaged {
-    /// Internal:
-    /// Reference to owning ``MIDIManager``
-    /* weak */ var midiManager: MIDIManager? { get set }
-}
-
 #endif
