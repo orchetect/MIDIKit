@@ -1,7 +1,7 @@
 //
 //  ObservableObjectMIDIManager.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -62,17 +62,19 @@ import Combine
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
 public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject, @unchecked Sendable {
     // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
-    public internal(set) override var devices: MIDIDevices {
+    override public internal(set) var devices: MIDIDevices {
         get { observableDevices }
         set { observableDevices = newValue }
     }
+
     private var observableDevices = MIDIDevices()
     
     // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
-    public internal(set) override var endpoints: MIDIEndpoints {
+    override public internal(set) var endpoints: MIDIEndpoints {
         get { observableEndpoints }
         set { observableEndpoints = newValue }
     }
+
     private var observableEndpoints = MIDIEndpoints()
     
     override func updateObjectsCache() {

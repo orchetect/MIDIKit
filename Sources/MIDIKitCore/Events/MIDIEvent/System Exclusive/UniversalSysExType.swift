@@ -1,7 +1,7 @@
 //
 //  UniversalSysExType.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -22,8 +22,8 @@ extension MIDIEvent.UniversalSysExType: Hashable { }
 extension MIDIEvent.UniversalSysExType: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .realTime: return "realTime"
-        case .nonRealTime: return "nonRealTime"
+        case .realTime: "realTime"
+        case .nonRealTime: "nonRealTime"
         }
     }
 }

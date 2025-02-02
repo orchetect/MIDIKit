@@ -1,7 +1,7 @@
 //
 //  Track Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -19,7 +19,7 @@ import Testing
         // check count matches since an array can contain more than one of the same identical element
         #expect(
             Set(MIDIFile.Chunk.Track.eventDecodeOrder).count ==
-            MIDIFileEventType.allCases.count
+                MIDIFileEventType.allCases.count
         )
         
         // ensure order contains all cases

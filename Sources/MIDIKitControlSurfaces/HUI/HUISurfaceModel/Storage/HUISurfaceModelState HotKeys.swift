@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState HotKeys.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -30,14 +30,14 @@ extension HUISurfaceModelState.HotKeys: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .ctrl:     return ctrl
-        case .shift:    return shift
-        case .editMode: return editMode
-        case .undo:     return undo
-        case .cmd:      return cmd
-        case .option:   return option
-        case .editTool: return editTool
-        case .save:     return save
+        case .ctrl:     ctrl
+        case .shift:    shift
+        case .editMode: editMode
+        case .undo:     undo
+        case .cmd:      cmd
+        case .option:   option
+        case .editTool: editTool
+        case .save:     save
         }
     }
     

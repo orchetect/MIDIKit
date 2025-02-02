@@ -1,7 +1,7 @@
 //
 //  Controller LSB Undefined.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.CC.Controller.LSB {
@@ -90,22 +90,22 @@ extension MIDIEvent.CC.Controller.LSB.Undefined {
     public var controller: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .cc3:  return 35
-        case .cc9:  return 41
-        case .cc14: return 46
-        case .cc15: return 47
-        case .cc20: return 52
-        case .cc21: return 53
-        case .cc22: return 54
-        case .cc23: return 55
-        case .cc24: return 56
-        case .cc25: return 57
-        case .cc26: return 58
-        case .cc27: return 59
-        case .cc28: return 60
-        case .cc29: return 61
-        case .cc30: return 62
-        case .cc31: return 63
+        case .cc3:  35
+        case .cc9:  41
+        case .cc14: 46
+        case .cc15: 47
+        case .cc20: 52
+        case .cc21: 53
+        case .cc22: 54
+        case .cc23: 55
+        case .cc24: 56
+        case .cc25: 57
+        case .cc26: 58
+        case .cc27: 59
+        case .cc28: 60
+        case .cc29: 61
+        case .cc30: 62
+        case .cc31: 63
         }
         // swiftformat:enable spacearoundoperators
     }
@@ -115,22 +115,22 @@ extension MIDIEvent.CC.Controller.LSB.Undefined {
     public var msbController: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .cc3:  return 3
-        case .cc9:  return 9
-        case .cc14: return 14
-        case .cc15: return 15
-        case .cc20: return 20
-        case .cc21: return 21
-        case .cc22: return 22
-        case .cc23: return 23
-        case .cc24: return 24
-        case .cc25: return 25
-        case .cc26: return 26
-        case .cc27: return 27
-        case .cc28: return 28
-        case .cc29: return 29
-        case .cc30: return 30
-        case .cc31: return 31
+        case .cc3:  3
+        case .cc9:  9
+        case .cc14: 14
+        case .cc15: 15
+        case .cc20: 20
+        case .cc21: 21
+        case .cc22: 22
+        case .cc23: 23
+        case .cc24: 24
+        case .cc25: 25
+        case .cc26: 26
+        case .cc27: 27
+        case .cc28: 28
+        case .cc29: 29
+        case .cc30: 30
+        case .cc31: 31
         }
         // swiftformat:enable spacearoundoperators
     }

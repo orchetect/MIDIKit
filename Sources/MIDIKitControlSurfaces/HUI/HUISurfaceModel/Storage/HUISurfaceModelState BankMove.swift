@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState BankMove.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -24,10 +24,10 @@ extension HUISurfaceModelState.BankMove: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .channelLeft:  return channelLeft
-        case .channelRight: return channelRight
-        case .bankLeft:     return bankLeft
-        case .bankRight:    return bankRight
+        case .channelLeft:  channelLeft
+        case .channelRight: channelRight
+        case .bankLeft:     bankLeft
+        case .bankRight:    bankRight
         }
     }
     

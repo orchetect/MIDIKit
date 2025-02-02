@@ -1,7 +1,7 @@
 //
 //  MIDIFile Errors.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -18,15 +18,15 @@ extension MIDIFile {
         public var errorDescription: String? {
             switch self {
             case .fileNotFound:
-                return "File not found."
+                "File not found."
             case .malformedURL:
-                return "Malformed URL."
+                "Malformed URL."
             case .fileReadError:
-                return "File read error."
-            case .malformed(let verboseError):
-                return "Malformed: \(verboseError)"
+                "File read error."
+            case let .malformed(verboseError):
+                "Malformed: \(verboseError)"
             case .notImplemented:
-                return "Not implemented."
+                "Not implemented."
             }
         }
     }
@@ -37,8 +37,8 @@ extension MIDIFile {
         
         public var errorDescription: String? {
             switch self {
-            case .internalInconsistency(let verboseError):
-                return "Internal inconsistency: \(verboseError)"
+            case let .internalInconsistency(verboseError):
+                "Internal inconsistency: \(verboseError)"
             }
         }
     }

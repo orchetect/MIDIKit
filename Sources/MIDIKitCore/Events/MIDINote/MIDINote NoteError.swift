@@ -1,7 +1,7 @@
 //
 //  MIDINote NoteError.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -21,9 +21,9 @@ extension MIDINote.NoteError {
     public var errorDescription: String? {
         switch self {
         case .outOfBounds:
-            return "MIDI note is out of bounds (invalid)."
+            "MIDI note is out of bounds (invalid)."
         case .malformedNoteName:
-            return "An unexpected or malformed note name was encountered."
+            "An unexpected or malformed note name was encountered."
         }
     }
 }

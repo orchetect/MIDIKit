@@ -1,7 +1,7 @@
 //
 //  NoteOn.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -181,14 +181,14 @@ extension MIDIEvent.NoteOn {
         case .midi1, .unitInterval:
             if velocity.midi1Value == 0, midi1ZeroVelocityAsNoteOff {
                 // send as Note Off event
-                return 0x80 + channel.uInt8Value
+                0x80 + channel.uInt8Value
             } else {
                 // send as Note On event
-                return 0x90 + channel.uInt8Value
+                0x90 + channel.uInt8Value
             }
         case .midi2:
             // send as Note On event
-            return 0x90 + channel.uInt8Value
+            0x90 + channel.uInt8Value
         }
     }
     
@@ -223,10 +223,10 @@ extension MIDIEvent.NoteOn {
     ) -> MIDIUMPMessageType {
         switch midiProtocol {
         case .midi1_0:
-            return .midi1ChannelVoice
+            .midi1ChannelVoice
     
         case .midi2_0:
-            return .midi2ChannelVoice
+            .midi2ChannelVoice
         }
     }
     

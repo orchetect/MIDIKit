@@ -1,7 +1,7 @@
 //
 //  MIDIEndpointIdentity.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -115,19 +115,19 @@ extension MIDIEndpointIdentity: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .name(name):
-            return "Endpoint Name: \(name.quoted)"
+            "Endpoint Name: \(name.quoted)"
     
         case let .displayName(displayName):
-            return "Endpoint Display Name: \(displayName.quoted))"
+            "Endpoint Display Name: \(displayName.quoted))"
     
         case let .uniqueID(uniqueID):
-            return "UniqueID: \(uniqueID)"
+            "UniqueID: \(uniqueID)"
     
         case let .uniqueIDWithFallback(
             id: uniqueID,
             fallbackDisplayName: fallbackDisplayName
         ):
-            return "UniqueID: \(uniqueID) with fallback EndpointDisplayName: \(fallbackDisplayName.quoted)"
+            "UniqueID: \(uniqueID) with fallback EndpointDisplayName: \(fallbackDisplayName.quoted)"
         }
     }
 }
@@ -136,12 +136,12 @@ extension MIDIEndpointIdentity {
     /// Returns endpoint identity criteria describing an endpoint.
     public static func endpoint(_ endpoint: some MIDIEndpoint) -> Self {
         if !endpoint.displayName.isEmpty {
-            return .uniqueIDWithFallback(
+            .uniqueIDWithFallback(
                 id: endpoint.uniqueID,
                 fallbackDisplayName: endpoint.displayName
             )
         } else {
-            return .uniqueID(endpoint.uniqueID)
+            .uniqueID(endpoint.uniqueID)
         }
     }
 }
@@ -152,19 +152,19 @@ extension MIDIEndpointIdentity {
     public func locate<T: MIDIEndpoint>(in endpoints: [T]) -> T? {
         switch self {
         case let .name(name):
-            return endpoints.first(whereName: name)
+            endpoints.first(whereName: name)
     
         case let .displayName(name):
-            return endpoints.first(whereDisplayName: name)
+            endpoints.first(whereDisplayName: name)
     
         case let .uniqueID(uniqueID):
-            return endpoints.first(whereUniqueID: uniqueID)
+            endpoints.first(whereUniqueID: uniqueID)
     
         case let .uniqueIDWithFallback(
             id: uniqueID,
             fallbackDisplayName: fallbackDisplayName
         ):
-            return endpoints.first(
+            endpoints.first(
                 whereUniqueID: uniqueID,
                 fallbackDisplayName: fallbackDisplayName,
                 ignoringEmpty: true
@@ -176,19 +176,19 @@ extension MIDIEndpointIdentity {
     public func matches(endpoint: some MIDIEndpoint) -> Bool {
         switch self {
         case let .name(name):
-            return [endpoint].first(whereName: name) != nil
+            [endpoint].first(whereName: name) != nil
             
         case let .displayName(name):
-            return [endpoint].first(whereDisplayName: name) != nil
+            [endpoint].first(whereDisplayName: name) != nil
             
         case let .uniqueID(uniqueID):
-            return [endpoint].first(whereUniqueID: uniqueID) != nil
+            [endpoint].first(whereUniqueID: uniqueID) != nil
             
         case let .uniqueIDWithFallback(
             id: uniqueID,
             fallbackDisplayName: fallbackDisplayName
         ):
-            return [endpoint].first(
+            [endpoint].first(
                 whereUniqueID: uniqueID,
                 fallbackDisplayName: fallbackDisplayName,
                 ignoringEmpty: true

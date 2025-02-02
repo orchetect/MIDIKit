@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState ControlRoom.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -31,16 +31,16 @@ extension HUISurfaceModelState.ControlRoom: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .input1:            return input1
-        case .input2:            return input2
-        case .input3:            return input3
-        case .discreteInput1to1: return discreteInput1to1
-        case .mute:              return mute
-        case .dim:               return dim
-        case .mono:              return mono
-        case .output1:           return output1
-        case .output2:           return output2
-        case .output3:           return output3
+        case .input1:            input1
+        case .input2:            input2
+        case .input3:            input3
+        case .discreteInput1to1: discreteInput1to1
+        case .mute:              mute
+        case .dim:               dim
+        case .mono:              mono
+        case .output1:           output1
+        case .output2:           output2
+        case .output3:           output3
         }
     }
     

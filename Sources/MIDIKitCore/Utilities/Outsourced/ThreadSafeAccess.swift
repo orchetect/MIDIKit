@@ -49,9 +49,9 @@ public final class ThreadSafeAccess<T> /* : @unchecked Sendable where T: Sendabl
         // which allows get-then-set operations such as collection subscripts
         // to be performed in a single thread-locked operation
         _modify {
-            self.lock.writeLock()
+            lock.writeLock()
             yield &value
-            self.lock.unlock()
+            lock.unlock()
         }
     }
 }

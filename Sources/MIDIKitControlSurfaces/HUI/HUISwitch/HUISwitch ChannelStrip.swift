@@ -1,7 +1,7 @@
 //
 //  HUISwitch ChannelStrip.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -32,14 +32,14 @@ extension HUISwitch.ChannelStrip: HUISwitchProtocol {
         switch self {
         // Zones 0x00 - 0x07
         // Channel Strips
-        case .faderTouched: return 0x0
-        case .select:       return 0x1
-        case .mute:         return 0x2
-        case .solo:         return 0x3
-        case .auto:         return 0x4
-        case .vPotSelect:   return 0x5
-        case .insert:       return 0x6
-        case .recordReady:  return 0x7
+        case .faderTouched: 0x0
+        case .select:       0x1
+        case .mute:         0x2
+        case .solo:         0x3
+        case .auto:         0x4
+        case .vPotSelect:   0x5
+        case .insert:       0x6
+        case .recordReady:  0x7
         }
     }
     
@@ -60,14 +60,14 @@ extension HUISwitch.ChannelStrip: CustomStringConvertible {
         switch self {
         // Zones 0x00 - 0x07
         // Channel Strips
-        case .faderTouched: return "faderTouched"
-        case .select:       return "select"
-        case .mute:         return "mute"
-        case .solo:         return "solo"
-        case .auto:         return "auto"
-        case .vPotSelect:   return "vPotSelect"
-        case .insert:       return "insert"
-        case .recordReady:  return "recordReady"
+        case .faderTouched: "faderTouched"
+        case .select:       "select"
+        case .mute:         "mute"
+        case .solo:         "solo"
+        case .auto:         "auto"
+        case .vPotSelect:   "vPotSelect"
+        case .insert:       "insert"
+        case .recordReady:  "recordReady"
         }
     }
 }

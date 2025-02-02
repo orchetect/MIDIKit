@@ -1,7 +1,7 @@
 //
 //  MIDIProtocolVersion Extensions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 internal import CoreMIDI
@@ -27,10 +27,10 @@ extension MIDIProtocolVersion {
     var coreMIDIProtocol: CoreMIDI.MIDIProtocolID {
         switch self {
         case .midi1_0:
-            return ._1_0
+            ._1_0
     
         case .midi2_0:
-            return ._2_0
+            ._2_0
         }
     }
 }

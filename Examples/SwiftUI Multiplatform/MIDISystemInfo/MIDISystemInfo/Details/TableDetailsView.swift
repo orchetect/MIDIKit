@@ -1,7 +1,7 @@
 //
 //  TableDetailsView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitIO
@@ -26,20 +26,20 @@ struct TableDetailsView: View, DetailsContent {
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             table
-            .onAppear {
-                refreshProperties()
-            }
-            .onChange(of: showAll) { _ in
-                refreshProperties()
-            }
-            #if os(macOS)
-            .tableStyle(.inset(alternatesRowBackgrounds: true))
-            .onCopyCommand {
-                selectedItemsProviders()
-            }
-            #elseif os(iOS)
-            .tableStyle(InsetTableStyle())
-            #endif
+                .onAppear {
+                    refreshProperties()
+                }
+                .onChange(of: showAll) { _ in
+                    refreshProperties()
+                }
+                #if os(macOS)
+                .tableStyle(.inset(alternatesRowBackgrounds: true))
+                .onCopyCommand {
+                    selectedItemsProviders()
+                }
+                #elseif os(iOS)
+                .tableStyle(InsetTableStyle())
+                #endif
         }
     }
     

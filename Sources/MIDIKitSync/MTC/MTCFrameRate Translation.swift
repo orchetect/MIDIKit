@@ -1,7 +1,7 @@
 //
 //  MTCFrameRate Translation.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -27,10 +27,10 @@ extension MTCFrameRate {
     @inline(__always)
     public var directEquivalentFrameRate: TimecodeFrameRate {
         switch self {
-        case .mtc24:    return .fps24
-        case .mtc25:    return .fps25
-        case .mtc2997d: return .fps29_97d
-        case .mtc30:    return .fps30
+        case .mtc24:    .fps24
+        case .mtc25:    .fps25
+        case .mtc2997d: .fps29_97d
+        case .mtc30:    .fps30
         }
     }
 }
@@ -41,29 +41,29 @@ extension TimecodeFrameRate {
     @inline(__always)
     public var mtcFrameRate: MTCFrameRate {
         switch self {
-        case .fps23_976:  return .mtc24
-        case .fps24:      return .mtc24
-        case .fps24_98:   return .mtc24
-        case .fps25:      return .mtc25
-        case .fps29_97:   return .mtc30
-        case .fps29_97d:  return .mtc2997d
-        case .fps30:      return .mtc30
-        case .fps30d:     return .mtc2997d
-        case .fps47_952:  return .mtc24
-        case .fps48:      return .mtc24
-        case .fps50:      return .mtc25
-        case .fps59_94:   return .mtc30
-        case .fps59_94d:  return .mtc2997d
-        case .fps60:      return .mtc30
-        case .fps60d:     return .mtc2997d
-        case .fps90:      return .mtc30
-        case .fps95_904:  return .mtc24
-        case .fps96:      return .mtc24
-        case .fps100:     return .mtc25
-        case .fps119_88:  return .mtc30
-        case .fps119_88d: return .mtc2997d
-        case .fps120:     return .mtc30
-        case .fps120d:    return .mtc2997d
+        case .fps23_976:  .mtc24
+        case .fps24:      .mtc24
+        case .fps24_98:   .mtc24
+        case .fps25:      .mtc25
+        case .fps29_97:   .mtc30
+        case .fps29_97d:  .mtc2997d
+        case .fps30:      .mtc30
+        case .fps30d:     .mtc2997d
+        case .fps47_952:  .mtc24
+        case .fps48:      .mtc24
+        case .fps50:      .mtc25
+        case .fps59_94:   .mtc30
+        case .fps59_94d:  .mtc2997d
+        case .fps60:      .mtc30
+        case .fps60d:     .mtc2997d
+        case .fps90:      .mtc30
+        case .fps95_904:  .mtc24
+        case .fps96:      .mtc24
+        case .fps100:     .mtc25
+        case .fps119_88:  .mtc30
+        case .fps119_88d: .mtc2997d
+        case .fps120:     .mtc30
+        case .fps120d:    .mtc2997d
         }
     }
     
@@ -182,29 +182,29 @@ extension TimecodeFrameRate {
         // (self.maxFrameNumberDisplayable + 1) / self.mtcFrameRate.fpsValueForScaling
         
         switch self {
-        case .fps23_976:  return 1
-        case .fps24:      return 1
-        case .fps24_98:   return 1.0416666666666666666666 // 25.0/24.0
-        case .fps25:      return 1
-        case .fps29_97:   return 1
-        case .fps29_97d:  return 1
-        case .fps30:      return 1
-        case .fps30d:     return 1
-        case .fps47_952:  return 2
-        case .fps48:      return 2
-        case .fps50:      return 2
-        case .fps59_94:   return 2
-        case .fps59_94d:  return 2
-        case .fps60:      return 2
-        case .fps60d:     return 2
-        case .fps90:      return 3
-        case .fps95_904:  return 4
-        case .fps96:      return 4
-        case .fps100:     return 4
-        case .fps119_88:  return 4
-        case .fps119_88d: return 4
-        case .fps120:     return 4
-        case .fps120d:    return 4
+        case .fps23_976:  1
+        case .fps24:      1
+        case .fps24_98:   1.0416666666666666666666 // 25.0/24.0
+        case .fps25:      1
+        case .fps29_97:   1
+        case .fps29_97d:  1
+        case .fps30:      1
+        case .fps30d:     1
+        case .fps47_952:  2
+        case .fps48:      2
+        case .fps50:      2
+        case .fps59_94:   2
+        case .fps59_94d:  2
+        case .fps60:      2
+        case .fps60d:     2
+        case .fps90:      3
+        case .fps95_904:  4
+        case .fps96:      4
+        case .fps100:     4
+        case .fps119_88:  4
+        case .fps119_88d: 4
+        case .fps120:     4
+        case .fps120d:    4
         }
     }
 }

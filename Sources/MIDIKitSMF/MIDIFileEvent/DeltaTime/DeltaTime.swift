@@ -1,7 +1,7 @@
 //
 //  DeltaTime.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Darwin
@@ -51,17 +51,17 @@ extension MIDIFileEvent.DeltaTime: Sendable { }
 extension MIDIFileEvent.DeltaTime: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .none:             return "none"
-        case let .ticks(ticks): return "ticks:\(ticks)"
-        case .noteWhole:        return "whole note"
-        case .noteHalf:         return "half note"
-        case .noteQuarter:      return "quarter note"
-        case .note8th:          return "8th note"
-        case .note16th:         return "16th note"
-        case .note32nd:         return "32nd note"
-        case .note64th:         return "64th note"
-        case .note128th:        return "128th note"
-        case .note256th:        return "256th note"
+        case .none:             "none"
+        case let .ticks(ticks): "ticks:\(ticks)"
+        case .noteWhole:        "whole note"
+        case .noteHalf:         "half note"
+        case .noteQuarter:      "quarter note"
+        case .note8th:          "8th note"
+        case .note16th:         "16th note"
+        case .note32nd:         "32nd note"
+        case .note64th:         "64th note"
+        case .note128th:        "128th note"
+        case .note256th:        "256th note"
         }
     }
 }

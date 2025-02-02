@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState StatusAndGroup.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -26,12 +26,12 @@ extension HUISurfaceModelState.StatusAndGroup: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .auto:    return auto
-        case .monitor: return monitor
-        case .phase:   return phase
-        case .group:   return group
-        case .create:  return create
-        case .suspend: return suspend
+        case .auto:    auto
+        case .monitor: monitor
+        case .phase:   phase
+        case .group:   group
+        case .create:  create
+        case .suspend: suspend
         }
     }
     

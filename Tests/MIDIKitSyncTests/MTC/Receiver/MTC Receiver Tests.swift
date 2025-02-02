@@ -1,13 +1,13 @@
 //
 //  MTC Receiver Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 @testable import MIDIKitSync
-import TimecodeKitCore
 import Testing
+import TimecodeKitCore
 
 @Suite @MainActor struct MTC_Receiver_Receiver_Tests {
     @Test
@@ -65,7 +65,7 @@ import Testing
         try await Task.sleep(seconds: 0.050)
         #expect(
             mtcRec.timecode ==
-            Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
         )
         
         // 00:00:00:00 @ MTC 24fps
@@ -73,7 +73,7 @@ import Testing
         try await Task.sleep(seconds: 0.050)
         #expect(
             mtcRec.timecode ==
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
         )
         
         // 02:11:17:20 @ MTC 25fps
@@ -81,7 +81,7 @@ import Testing
         try await Task.sleep(seconds: 0.050)
         #expect(
             mtcRec.timecode ==
-            Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
         )
     }
     
@@ -100,7 +100,7 @@ import Testing
         try await Task.sleep(seconds: 0.050)
         #expect(
             mtcRec.timecode ==
-            Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid)
         )
         
         // 00:00:00:00 @ MTC 24fps
@@ -108,7 +108,7 @@ import Testing
         try await Task.sleep(seconds: 0.050)
         #expect(
             mtcRec.timecode ==
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps24, by: .allowingInvalid)
         )
         
         // 02:11:17:20 @ MTC 25fps
@@ -116,7 +116,7 @@ import Testing
         try await Task.sleep(seconds: 0.050)
         #expect(
             mtcRec.timecode ==
-            Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
         ) // local real rate still 24fps
         
         mtcRec.setLocalFrameRate(.fps25) // sync
@@ -126,7 +126,7 @@ import Testing
         try await Task.sleep(seconds: 0.050)
         #expect(
             mtcRec.timecode ==
-            Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid)
         )
     }
     
@@ -153,7 +153,7 @@ import Testing
         #expect(mtcRec.timecode.frameRate == .fps29_97)
         #expect(
             mtcRec.timecode ==
-            Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps29_97, by: .allowingInvalid)
+                Timecode(.components(h: 0, m: 0, s: 0, f: 0), at: .fps29_97, by: .allowingInvalid)
         ) // default MTC-30fps
     }
     
@@ -216,7 +216,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             mtcRec.timecode ==
-            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         )
         
         let preSyncFrames = Timecode(
@@ -428,7 +428,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // new TC
         #expect(receiver.mType == .quarterFrame)
         #expect(receiver.displayNeedsUpdate == true)
@@ -440,7 +440,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
         #expect(receiver.displayNeedsUpdate == false)
@@ -452,7 +452,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
         #expect(receiver.displayNeedsUpdate == false)
@@ -464,7 +464,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-            Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
         #expect(receiver.displayNeedsUpdate == false)
@@ -476,7 +476,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // new TC
         #expect(receiver.mType == .quarterFrame)
         #expect(receiver.displayNeedsUpdate == true)
@@ -488,7 +488,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
         #expect(receiver.displayNeedsUpdate == false)
@@ -500,7 +500,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
         #expect(receiver.displayNeedsUpdate == false)
@@ -512,7 +512,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-            Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
         #expect(receiver.displayNeedsUpdate == false)
@@ -524,7 +524,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-            Timecode(.components(h: 2, m: 3, s: 4, f: 10), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 10), at: .fps24, by: .allowingInvalid)
         ) // new TC
         #expect(receiver.mType == .quarterFrame)
         #expect(receiver.displayNeedsUpdate == true)

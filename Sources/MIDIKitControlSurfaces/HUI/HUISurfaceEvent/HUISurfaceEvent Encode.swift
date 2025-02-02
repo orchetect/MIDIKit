@@ -1,7 +1,7 @@
 //
 //  HUISurfaceEvent Encode.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -11,29 +11,29 @@ extension HUISurfaceEvent {
     public func encode() -> [MIDIEvent] {
         switch self {
         case .ping:
-            return [encodeHUIPing(to: .host)]
+            [encodeHUIPing(to: .host)]
         
         case let .levelMeter(channelStrip, side, level):
-            return [encodeHUILevelMeter(
+            [encodeHUILevelMeter(
                 channel: channelStrip,
                 side: side,
                 level: level
             )]
         
         case let .faderLevel(channelStrip, level):
-            return encodeHUIFader(level: level, channel: channelStrip)
+            encodeHUIFader(level: level, channel: channelStrip)
         
         case let .vPot(vPot, delta):
-            return [encodeHUIVPot(delta: delta, for: vPot)]
+            [encodeHUIVPot(delta: delta, for: vPot)]
         
         case let .jogWheel(delta):
-            return [encodeJogWheel(delta: delta)]
+            [encodeJogWheel(delta: delta)]
             
         case let .switch(huiSwitch, state):
-            return encodeHUISwitch(huiSwitch, state: state, to: .host)
+            encodeHUISwitch(huiSwitch, state: state, to: .host)
         
         case .systemReset:
-            return [encodeHUISystemReset()]
+            [encodeHUISystemReset()]
         }
     }
 }

@@ -1,7 +1,7 @@
 //
 //  MIDIThruConnection.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 // Apple Core MIDI play-through connection documentation:
@@ -62,7 +62,7 @@ import MIDIKitCore
 /// > iOS 14 & 15. On these systems, an error will be thrown. There is no known solution or
 /// > workaround.
 public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
-    weak nonisolated(unsafe) var midiManager: MIDIManager?
+    nonisolated(unsafe) weak var midiManager: MIDIManager?
     
     // MIDIManaged
     

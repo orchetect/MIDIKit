@@ -1,7 +1,7 @@
 //
 //  HUI Encode Utilities.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -21,9 +21,9 @@ func encodeHUIPing(
 ) -> MIDIEvent {
     switch role {
     case .host:
-        return HUIConstants.kMIDI.kPingReplyToHostMessage
+        HUIConstants.kMIDI.kPingReplyToHostMessage
     case .surface:
-        return HUIConstants.kMIDI.kPingToSurfaceMessage
+        HUIConstants.kMIDI.kPingToSurfaceMessage
     }
 }
 

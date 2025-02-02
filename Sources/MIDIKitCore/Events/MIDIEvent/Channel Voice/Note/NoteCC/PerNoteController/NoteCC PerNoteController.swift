@@ -1,7 +1,7 @@
 //
 //  NoteCC PerNoteController.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.NoteCC {
@@ -30,10 +30,10 @@ extension MIDIEvent.NoteCC.PerNoteController: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .registered(cc):
-            return "registered(\(cc.number))"
+            "registered(\(cc.number))"
     
         case let .assignable(cc):
-            return "assignable(\(cc))"
+            "assignable(\(cc))"
         }
     }
 }
@@ -44,10 +44,10 @@ extension MIDIEvent.NoteCC.PerNoteController {
     public var number: UInt8 {
         switch self {
         case let .registered(cc):
-            return cc.number
+            cc.number
     
         case let .assignable(cc):
-            return cc
+            cc
         }
     }
 }

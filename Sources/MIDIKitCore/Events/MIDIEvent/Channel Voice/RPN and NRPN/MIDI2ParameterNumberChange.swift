@@ -1,7 +1,7 @@
 //
 //  MIDI2ParameterNumberChange.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 /// MIDI 2.0 Parameter Number value change type.
@@ -30,9 +30,9 @@ extension MIDI2ParameterNumberChange: CustomStringConvertible {
     public var description: String {
         switch self {
         case .absolute:
-            return "absolute"
+            "absolute"
         case .relative:
-            return "relative"
+            "relative"
         }
     }
 }

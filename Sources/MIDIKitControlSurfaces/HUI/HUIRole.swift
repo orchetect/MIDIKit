@@ -1,7 +1,7 @@
 //
 //  HUIRole.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 /// Enum describing the HUI role (host or client surface).
@@ -29,8 +29,8 @@ extension HUIRole {
     /// (ie: for ``host``, returns ``surface``. And vice-versa.)
     public func inverted() -> Self {
         switch self {
-        case .host: return .surface
-        case .surface: return .host
+        case .host: .surface
+        case .surface: .host
         }
     }
 }

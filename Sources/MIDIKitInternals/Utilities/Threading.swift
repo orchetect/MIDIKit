@@ -1,7 +1,7 @@
 //
 //  Threading.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -17,8 +17,8 @@ import Foundation
 package struct SyncAccess<Value>: Sendable {
     private let queue: DispatchQueue
     
-    nonisolated(unsafe)
-    private var value: Value
+    private nonisolated(unsafe)
+    var value: Value
     
     // nonisolated
     package var wrappedValue: Value {
@@ -27,7 +27,7 @@ package struct SyncAccess<Value>: Sendable {
             value = newValue
         }
         get {
-            return queue.sync {
+            queue.sync {
                 value
             }
         }

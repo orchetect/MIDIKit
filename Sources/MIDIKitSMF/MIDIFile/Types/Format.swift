@@ -1,7 +1,7 @@
 //
 //  Format.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -43,13 +43,13 @@ extension MIDIFile.Format: CustomStringConvertible {
     public var description: String {
         switch self {
         case .singleTrack:
-            return "Type 0 (single track)"
+            "Type 0 (single track)"
             
         case .multipleTracksSynchronous:
-            return "Type 1 (multiple tracks synchronous)"
+            "Type 1 (multiple tracks synchronous)"
             
         case .multipleTracksAsynchronous:
-            return "Type 2 (multiple tracks asynchronous)"
+            "Type 2 (multiple tracks asynchronous)"
         }
     }
 }

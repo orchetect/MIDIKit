@@ -1,7 +1,7 @@
 //
 //  MIDIUMPMessageType.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 /// Universal MIDI Packet Message Type
@@ -35,12 +35,12 @@ extension MIDIUMPMessageType {
     @inlinable
     public var wordLength: Int {
         switch self {
-        case .utility: return 1
-        case .systemRealTimeAndCommon: return 1
-        case .midi1ChannelVoice: return 1
-        case .data64bit: return 2
-        case .midi2ChannelVoice: return 2
-        case .data128bit: return 4
+        case .utility: 1
+        case .systemRealTimeAndCommon: 1
+        case .midi1ChannelVoice: 1
+        case .data64bit: 2
+        case .midi2ChannelVoice: 2
+        case .data128bit: 4
         }
     }
 }

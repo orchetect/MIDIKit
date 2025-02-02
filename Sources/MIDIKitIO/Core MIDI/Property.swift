@@ -1,7 +1,7 @@
 //
 //  Property.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -107,153 +107,153 @@ extension AnyMIDIIOObject.Property {
         switch self {
         // MARK: Identification
         case .name:
-            return "Name"
+            "Name"
             
         case .model:
-            return "Model"
+            "Model"
             
         case .manufacturer:
-            return "Manufacturer"
+            "Manufacturer"
             
         case .uniqueID:
-            return "Unique ID"
+            "Unique ID"
             
         case .deviceID:
-            return "Device ID"
+            "Device ID"
             
         // MARK: Capabilities
         case .supportsMMC:
-            return "Supports MMC"
+            "Supports MMC"
             
         case .supportsGeneralMIDI:
-            return "Supports General MIDI"
+            "Supports General MIDI"
             
         case .supportsShowControl:
-            return "Supports Show Control"
+            "Supports Show Control"
             
         // MARK: Configuration
         case .nameConfigurationDictionary:
-            return "Name Configuration Dictionary"
+            "Name Configuration Dictionary"
             
         case .maxSysExSpeed:
-            return "Max SysEx Speed"
+            "Max SysEx Speed"
             
         case .driverDeviceEditorApp:
-            return "Driver Device Editor App"
+            "Driver Device Editor App"
             
         // MARK: Presentation
         case .image:
-            return "Image (File URL)"
+            "Image (File URL)"
             
         case .displayName:
-            return "Display Name"
+            "Display Name"
             
         // MARK: Audio
         case .panDisruptsStereo:
-            return "Pan Disrupts Stereo"
+            "Pan Disrupts Stereo"
             
         // MARK: Protocols
         case .protocolID:
-            return "Protocol ID"
+            "Protocol ID"
             
         // MARK: Timing
         case .transmitsMTC:
-            return "Transmits MTC"
+            "Transmits MTC"
             
         case .receivesMTC:
-            return "Receives MTC"
+            "Receives MTC"
             
         case .transmitsClock:
-            return "Transmits Clock"
+            "Transmits Clock"
             
         case .receivesClock:
-            return "Receives Clock"
+            "Receives Clock"
             
         case .advanceScheduleTimeMuSec:
-            return "Advance Schedule Time (μs)"
+            "Advance Schedule Time (μs)"
             
         // MARK: Roles
         case .isMixer:
-            return "Is Mixer"
+            "Is Mixer"
             
         case .isSampler:
-            return "Is Sampler"
+            "Is Sampler"
             
         case .isEffectUnit:
-            return "Is Effect Unit"
+            "Is Effect Unit"
             
         case .isDrumMachine:
-            return "Is Drum Machine"
+            "Is Drum Machine"
             
         // MARK: Status
         case .isOffline:
-            return "Is Offline"
+            "Is Offline"
             
         case .isPrivate:
-            return "Is Private"
+            "Is Private"
             
         // MARK: Drivers
         case .driverOwner:
-            return "Driver Owner"
+            "Driver Owner"
             
         case .driverVersion:
-            return "Driver Version"
+            "Driver Version"
             
         // MARK: Connections
         case .canRoute:
-            return "Can Route"
+            "Can Route"
             
         case .isBroadcast:
-            return "Is Broadcast"
+            "Is Broadcast"
             
         case .connectionUniqueID:
-            return "Connection Unique ID"
+            "Connection Unique ID"
             
         case .isEmbeddedEntity:
-            return "Is Embedded Entity"
+            "Is Embedded Entity"
             
         case .singleRealtimeEntity:
-            return "Single Realtime Entity"
+            "Single Realtime Entity"
             
         // MARK: Channels
         case .receiveChannels:
-            return "Receive Channels"
+            "Receive Channels"
             
         case .transmitChannels:
-            return "Transmit Channels"
+            "Transmit Channels"
             
         case .maxReceiveChannels:
-            return "Max Receive Channels"
+            "Max Receive Channels"
             
         case .maxTransmitChannels:
-            return "Max Transmit Channels"
+            "Max Transmit Channels"
             
         // MARK: Banks
         case .receivesBankSelectLSB:
-            return "Receives Bank Select LSB"
+            "Receives Bank Select LSB"
             
         case .receivesBankSelectMSB:
-            return "Receives Bank Select MSB"
+            "Receives Bank Select MSB"
             
         case .transmitsBankSelectLSB:
-            return "Transmits Bank Select LSB"
+            "Transmits Bank Select LSB"
             
         case .transmitsBankSelectMSB:
-            return "Transmits Bank Select MSB"
+            "Transmits Bank Select MSB"
             
         // MARK: Notes
         case .receivesNotes:
-            return "Receives Notes"
+            "Receives Notes"
             
         case .transmitsNotes:
-            return "Transmits Notes"
+            "Transmits Notes"
             
         // MARK: Program Changes
         case .receivesProgramChanges:
-            return "Receives Program Changes"
+            "Receives Program Changes"
             
         case .transmitsProgramChanges:
-            return "Transmits Program Changes"
+            "Transmits Program Changes"
         }
     }
 }
@@ -265,90 +265,75 @@ extension AnyMIDIIOObject.Property {
     public var coreMIDICFString: CFString {
         switch self {
         // MARK: Identification
-        case .name: return kMIDIPropertyName
-        case .model: return kMIDIPropertyModel
-        case .manufacturer: return kMIDIPropertyManufacturer
-        case .uniqueID: return kMIDIPropertyUniqueID
-        case .deviceID: return kMIDIPropertyDeviceID
-    
+        case .name: kMIDIPropertyName
+        case .model: kMIDIPropertyModel
+        case .manufacturer: kMIDIPropertyManufacturer
+        case .uniqueID: kMIDIPropertyUniqueID
+        case .deviceID: kMIDIPropertyDeviceID
         // MARK: Capabilities
-        case .supportsMMC: return kMIDIPropertySupportsMMC
-        case .supportsGeneralMIDI: return kMIDIPropertySupportsGeneralMIDI
-        case .supportsShowControl: return kMIDIPropertySupportsShowControl
-    
+        case .supportsMMC: kMIDIPropertySupportsMMC
+        case .supportsGeneralMIDI: kMIDIPropertySupportsGeneralMIDI
+        case .supportsShowControl: kMIDIPropertySupportsShowControl
         // MARK: Configuration
         case .nameConfigurationDictionary:
             if #available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *) {
-                return kMIDIPropertyNameConfigurationDictionary
+                kMIDIPropertyNameConfigurationDictionary
             } else {
-                return "" as CFString
+                "" as CFString
             }
-    
-        case .maxSysExSpeed: return kMIDIPropertyMaxSysExSpeed
-        case .driverDeviceEditorApp: return kMIDIPropertyDriverDeviceEditorApp
-    
+        case .maxSysExSpeed: kMIDIPropertyMaxSysExSpeed
+        case .driverDeviceEditorApp: kMIDIPropertyDriverDeviceEditorApp
         // MARK: Presentation
-        case .image: return kMIDIPropertyImage
-        case .displayName: return kMIDIPropertyDisplayName
-    
+        case .image: kMIDIPropertyImage
+        case .displayName: kMIDIPropertyDisplayName
         // MARK: Audio
-        case .panDisruptsStereo: return kMIDIPropertyPanDisruptsStereo
-    
+        case .panDisruptsStereo: kMIDIPropertyPanDisruptsStereo
         // MARK: Protocols
         case .protocolID:
             if #available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *) {
-                return kMIDIPropertyProtocolID
+                kMIDIPropertyProtocolID
             } else {
-                return "" as CFString
+                "" as CFString
             }
-    
         // MARK: Timing
-        case .transmitsMTC: return kMIDIPropertyTransmitsMTC
-        case .receivesMTC: return kMIDIPropertyReceivesMTC
-        case .transmitsClock: return kMIDIPropertyTransmitsClock
-        case .receivesClock: return kMIDIPropertyReceivesClock
-        case .advanceScheduleTimeMuSec: return kMIDIPropertyAdvanceScheduleTimeMuSec
-    
+        case .transmitsMTC: kMIDIPropertyTransmitsMTC
+        case .receivesMTC: kMIDIPropertyReceivesMTC
+        case .transmitsClock: kMIDIPropertyTransmitsClock
+        case .receivesClock: kMIDIPropertyReceivesClock
+        case .advanceScheduleTimeMuSec: kMIDIPropertyAdvanceScheduleTimeMuSec
         // MARK: Roles
-        case .isMixer: return kMIDIPropertyIsMixer
-        case .isSampler: return kMIDIPropertyIsSampler
-        case .isEffectUnit: return kMIDIPropertyIsEffectUnit
-        case .isDrumMachine: return kMIDIPropertyIsDrumMachine
-    
+        case .isMixer: kMIDIPropertyIsMixer
+        case .isSampler: kMIDIPropertyIsSampler
+        case .isEffectUnit: kMIDIPropertyIsEffectUnit
+        case .isDrumMachine: kMIDIPropertyIsDrumMachine
         // MARK: Status
-        case .isOffline: return kMIDIPropertyOffline
-        case .isPrivate: return kMIDIPropertyPrivate
-    
+        case .isOffline: kMIDIPropertyOffline
+        case .isPrivate: kMIDIPropertyPrivate
         // MARK: Drivers
-        case .driverOwner: return kMIDIPropertyDriverOwner
-        case .driverVersion: return kMIDIPropertyDriverVersion
-    
+        case .driverOwner: kMIDIPropertyDriverOwner
+        case .driverVersion: kMIDIPropertyDriverVersion
         // MARK: Connections
-        case .canRoute: return kMIDIPropertyCanRoute
-        case .isBroadcast: return kMIDIPropertyIsBroadcast
-        case .connectionUniqueID: return kMIDIPropertyConnectionUniqueID
-        case .isEmbeddedEntity: return kMIDIPropertyIsEmbeddedEntity
-        case .singleRealtimeEntity: return kMIDIPropertySingleRealtimeEntity
-    
+        case .canRoute: kMIDIPropertyCanRoute
+        case .isBroadcast: kMIDIPropertyIsBroadcast
+        case .connectionUniqueID: kMIDIPropertyConnectionUniqueID
+        case .isEmbeddedEntity: kMIDIPropertyIsEmbeddedEntity
+        case .singleRealtimeEntity: kMIDIPropertySingleRealtimeEntity
         // MARK: Channels
-        case .receiveChannels: return kMIDIPropertyReceiveChannels
-        case .transmitChannels: return kMIDIPropertyTransmitChannels
-        case .maxReceiveChannels: return kMIDIPropertyMaxReceiveChannels
-        case .maxTransmitChannels: return kMIDIPropertyMaxTransmitChannels
-    
+        case .receiveChannels: kMIDIPropertyReceiveChannels
+        case .transmitChannels: kMIDIPropertyTransmitChannels
+        case .maxReceiveChannels: kMIDIPropertyMaxReceiveChannels
+        case .maxTransmitChannels: kMIDIPropertyMaxTransmitChannels
         // MARK: Banks
-        case .receivesBankSelectLSB: return  kMIDIPropertyReceivesBankSelectLSB
-        case .receivesBankSelectMSB: return  kMIDIPropertyReceivesBankSelectMSB
-        case .transmitsBankSelectLSB: return kMIDIPropertyTransmitsBankSelectLSB
-        case .transmitsBankSelectMSB: return kMIDIPropertyTransmitsBankSelectMSB
-    
+        case .receivesBankSelectLSB: kMIDIPropertyReceivesBankSelectLSB
+        case .receivesBankSelectMSB: kMIDIPropertyReceivesBankSelectMSB
+        case .transmitsBankSelectLSB: kMIDIPropertyTransmitsBankSelectLSB
+        case .transmitsBankSelectMSB: kMIDIPropertyTransmitsBankSelectMSB
         // MARK: Notes
-        case .receivesNotes: return kMIDIPropertyReceivesNotes
-        case .transmitsNotes: return kMIDIPropertyTransmitsNotes
-    
+        case .receivesNotes: kMIDIPropertyReceivesNotes
+        case .transmitsNotes: kMIDIPropertyTransmitsNotes
         // MARK: Program Changes
-        case .receivesProgramChanges: return kMIDIPropertyReceivesProgramChanges
-        case .transmitsProgramChanges: return kMIDIPropertyTransmitsProgramChanges
+        case .receivesProgramChanges: kMIDIPropertyReceivesProgramChanges
+        case .transmitsProgramChanges: kMIDIPropertyTransmitsProgramChanges
         }
     }
     
@@ -375,77 +360,62 @@ extension AnyMIDIIOObject.Property {
         case kMIDIPropertyManufacturer: self = .manufacturer
         case kMIDIPropertyUniqueID: self = .uniqueID
         case kMIDIPropertyDeviceID: self = .deviceID
-    
         // MARK: Capabilities
         case kMIDIPropertySupportsMMC: self = .supportsMMC
         case kMIDIPropertySupportsGeneralMIDI: self = .supportsGeneralMIDI
         case kMIDIPropertySupportsShowControl: self = .supportsShowControl
-    
         // MARK: Configuration
         // case kMIDIPropertyNameConfigurationDictionary: self = .nameConfigurationDictionary
         //   --> has OS requirements, handled separately
         case kMIDIPropertyMaxSysExSpeed: self = .maxSysExSpeed
         case kMIDIPropertyDriverDeviceEditorApp: self = .driverDeviceEditorApp
-    
         // MARK: Presentation
         case kMIDIPropertyImage: self = .image
         case kMIDIPropertyDisplayName: self = .displayName
-    
         // MARK: Audio
         case kMIDIPropertyPanDisruptsStereo: self = .panDisruptsStereo
-    
         // MARK: Protocols
         // case kMIDIPropertyProtocolID: self = .protocolID
         //    --> has OS requirements, handled separately
-    
         // MARK: Timing
         case kMIDIPropertyTransmitsMTC: self = .transmitsMTC
         case kMIDIPropertyReceivesMTC: self = .receivesMTC
         case kMIDIPropertyTransmitsClock: self = .transmitsClock
         case kMIDIPropertyReceivesClock: self = .receivesClock
         case kMIDIPropertyAdvanceScheduleTimeMuSec: self = .advanceScheduleTimeMuSec
-    
         // MARK: Roles
         case kMIDIPropertyIsMixer: self = .isMixer
         case kMIDIPropertyIsSampler: self = .isSampler
         case kMIDIPropertyIsEffectUnit: self = .isEffectUnit
         case kMIDIPropertyIsDrumMachine: self = .isDrumMachine
-    
         // MARK: Status
         case kMIDIPropertyOffline: self = .isOffline
         case kMIDIPropertyPrivate: self = .isPrivate
-    
         // MARK: Drivers
         case kMIDIPropertyDriverOwner: self = .driverOwner
         case kMIDIPropertyDriverVersion: self = .driverVersion
-    
         // MARK: Connections
         case kMIDIPropertyCanRoute: self = .canRoute
         case kMIDIPropertyIsBroadcast: self = .isBroadcast
         case kMIDIPropertyConnectionUniqueID: self = .connectionUniqueID
         case kMIDIPropertyIsEmbeddedEntity: self = .isEmbeddedEntity
         case kMIDIPropertySingleRealtimeEntity: self = .singleRealtimeEntity
-    
         // MARK: Channels
         case kMIDIPropertyReceiveChannels: self = .receiveChannels
         case kMIDIPropertyTransmitChannels: self = .transmitChannels
         case kMIDIPropertyMaxReceiveChannels: self = .maxReceiveChannels
         case kMIDIPropertyMaxTransmitChannels: self = .maxTransmitChannels
-    
         // MARK: Banks
         case kMIDIPropertyReceivesBankSelectLSB: self = .receivesBankSelectLSB
         case kMIDIPropertyReceivesBankSelectMSB: self = .receivesBankSelectMSB
         case kMIDIPropertyTransmitsBankSelectLSB: self = .transmitsBankSelectLSB
         case kMIDIPropertyTransmitsBankSelectMSB: self = .transmitsBankSelectMSB
-    
         // MARK: Notes
         case kMIDIPropertyReceivesNotes: self = .receivesNotes
         case kMIDIPropertyTransmitsNotes: self = .transmitsNotes
-    
         // MARK: Program Changes
         case kMIDIPropertyReceivesProgramChanges: self = .receivesProgramChanges
         case kMIDIPropertyTransmitsProgramChanges: self = .transmitsProgramChanges
-    
         default:
             return nil
         }
@@ -459,82 +429,68 @@ extension AnyMIDIIOObject.Property {
     var relevantObjects: Set<MIDIIOObjectType> {
         switch self {
         // MARK: Identification
-        case .name: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .model: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .manufacturer: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .uniqueID: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .deviceID: return [.device, .entity]
-    
+        case .name: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .model: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .manufacturer: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .uniqueID: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .deviceID: [.device, .entity]
         // MARK: Capabilities
-        case .supportsMMC: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .supportsGeneralMIDI: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .supportsShowControl: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-    
+        case .supportsMMC: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .supportsGeneralMIDI: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .supportsShowControl: [.device, .entity, .inputEndpoint, .outputEndpoint]
         // MARK: Configuration
-        case .nameConfigurationDictionary: return [.device]
-        case .maxSysExSpeed: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .driverDeviceEditorApp: return [.device]
-    
+        case .nameConfigurationDictionary: [.device]
+        case .maxSysExSpeed: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .driverDeviceEditorApp: [.device]
         // MARK: Presentation
-        case .image: return [.device]
-        case .displayName: return [.inputEndpoint, .outputEndpoint]
-    
+        case .image: [.device]
+        case .displayName: [.inputEndpoint, .outputEndpoint]
         // MARK: Audio
-        case .panDisruptsStereo: return [.device, .entity]
-    
+        case .panDisruptsStereo: [.device, .entity]
         // MARK: Protocols
-        case .protocolID: return [.inputEndpoint, .outputEndpoint]
-    
+        case .protocolID: [.inputEndpoint, .outputEndpoint]
         // MARK: Timing
-        case .transmitsMTC: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .receivesMTC: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .transmitsClock: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .receivesClock: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .advanceScheduleTimeMuSec: return [
+        case .transmitsMTC: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .receivesMTC: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .transmitsClock: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .receivesClock: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .advanceScheduleTimeMuSec: [
                 .device,
                 .entity
             ] // + .inputEndpoint, .outputEndpoint?
-    
         // MARK: Roles
-        case .isMixer: return [.device, .entity]
-        case .isSampler: return [.device, .entity]
-        case .isEffectUnit: return [.device, .entity]
-        case .isDrumMachine: return [.device, .entity]
-    
+        case .isMixer: [.device, .entity]
+        case .isSampler: [.device, .entity]
+        case .isEffectUnit: [.device, .entity]
+        case .isDrumMachine: [.device, .entity]
         // MARK: Status
-        case .isOffline: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .isPrivate: return [.inputEndpoint, .outputEndpoint]
-    
+        case .isOffline: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .isPrivate: [.inputEndpoint, .outputEndpoint]
         // MARK: Drivers
-        case .driverOwner: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-        case .driverVersion: return [.device, .entity, .inputEndpoint, .outputEndpoint]
-    
+        case .driverOwner: [.device, .entity, .inputEndpoint, .outputEndpoint]
+        case .driverVersion: [.device, .entity, .inputEndpoint, .outputEndpoint]
         // MARK: Connections
-        case .canRoute: return [.device, .entity]
-        case .isBroadcast: return [.inputEndpoint, .outputEndpoint]
-        case .connectionUniqueID: return [.inputEndpoint, .outputEndpoint] // ?
-        case .isEmbeddedEntity: return [.entity, .inputEndpoint, .outputEndpoint]
-        case .singleRealtimeEntity: return [.device, .inputEndpoint, .outputEndpoint] // ?
-    
+        case .canRoute: [.device, .entity]
+        case .isBroadcast: [.inputEndpoint, .outputEndpoint]
+        case .connectionUniqueID: [.inputEndpoint, .outputEndpoint] // ?
+        case .isEmbeddedEntity: [.entity, .inputEndpoint, .outputEndpoint]
+        case .singleRealtimeEntity: [.device, .inputEndpoint, .outputEndpoint] // ?
         // MARK: Channels
-        case .receiveChannels: return [.device, .entity, .inputEndpoint, .outputEndpoint] // ?
-        case .transmitChannels: return [.device, .entity, .inputEndpoint, .outputEndpoint] // ?
-        case .maxReceiveChannels: return [.device]
-        case .maxTransmitChannels: return [.device]
-    
+        case .receiveChannels: [.device, .entity, .inputEndpoint, .outputEndpoint] // ?
+        case .transmitChannels: [.device, .entity, .inputEndpoint, .outputEndpoint] // ?
+        case .maxReceiveChannels: [.device]
+        case .maxTransmitChannels: [.device]
         // MARK: Banks
-        case .receivesBankSelectLSB: return [.device, .entity]
-        case .receivesBankSelectMSB: return [.device, .entity]
-        case .transmitsBankSelectLSB: return [.device, .entity]
-        case .transmitsBankSelectMSB: return [.device, .entity]
-    
+        case .receivesBankSelectLSB: [.device, .entity]
+        case .receivesBankSelectMSB: [.device, .entity]
+        case .transmitsBankSelectLSB: [.device, .entity]
+        case .transmitsBankSelectMSB: [.device, .entity]
         // MARK: Notes
-        case .receivesNotes: return [.device, .entity]
-        case .transmitsNotes: return [.device, .entity]
-    
+        case .receivesNotes: [.device, .entity]
+        case .transmitsNotes: [.device, .entity]
         // MARK: Program Changes
-        case .receivesProgramChanges: return [.device, .entity]
-        case .transmitsProgramChanges: return [.device, .entity]
+        case .receivesProgramChanges: [.device, .entity]
+        case .transmitsProgramChanges: [.device, .entity]
         }
     }
 }

@@ -1,7 +1,7 @@
 //
 //  ItemIcon.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitIO
@@ -27,6 +27,7 @@ struct ItemIcon<Content: View>: View {
         guard let img = item.imageAsNSImage else { return nil }
         return Image(nsImage: img).resizable()
     }
+
     #elseif os(iOS)
     private var image: Image? {
         guard let img = item.imageAsUIImage else { return nil }

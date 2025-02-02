@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState Assign.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -42,22 +42,21 @@ extension HUISurfaceModelState.Assign: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .sendA:          return sendA
-        case .sendB:          return sendB
-        case .sendC:          return sendC
-        case .sendD:          return sendD
-        case .sendE:          return sendE
-        case .pan:            return pan
-        
-        case .recordReadyAll: return recordReadyAll
-        case .bypass:         return bypass
-        case .mute:           return mute
-        case .shift:          return shift
-        case .suspend:        return suspend
-        case .defaultBtn:     return defaultBtn
-        case .assign:         return assign
-        case .input:          return input
-        case .output:         return output
+        case .sendA:          sendA
+        case .sendB:          sendB
+        case .sendC:          sendC
+        case .sendD:          sendD
+        case .sendE:          sendE
+        case .pan:            pan
+        case .recordReadyAll: recordReadyAll
+        case .bypass:         bypass
+        case .mute:           mute
+        case .shift:          shift
+        case .suspend:        suspend
+        case .defaultBtn:     defaultBtn
+        case .assign:         assign
+        case .input:          input
+        case .output:         output
         }
     }
     
@@ -70,7 +69,6 @@ extension HUISurfaceModelState.Assign: HUISurfaceModelStateProtocol {
         case .sendD:          sendD = state
         case .sendE:          sendE = state
         case .pan:            pan = state
-            
         case .recordReadyAll: recordReadyAll = state
         case .bypass:         bypass = state
         case .mute:           mute = state

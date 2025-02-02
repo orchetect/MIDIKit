@@ -1,7 +1,7 @@
 //
 //  Event Text Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 @testable import MIDIKitSMF
@@ -69,8 +69,8 @@ import Testing
     func textHeaders() {
         // ensure all text event header IDs exist
         
-        MIDIFileEvent.Text.EventType.allCases.forEach {
-            #expect(MIDIFile.kTextEventHeaders[$0] != nil)
+        for eventType in MIDIFileEvent.Text.EventType.allCases {
+            #expect(MIDIFile.kTextEventHeaders[eventType] != nil)
         }
     }
     

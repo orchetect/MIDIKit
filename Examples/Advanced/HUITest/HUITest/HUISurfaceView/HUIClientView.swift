@@ -1,7 +1,7 @@
 //
 //  HUIClientView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitControlSurfaces
@@ -12,8 +12,8 @@ struct HUIClientView: View {
     @Environment(ObservableMIDIManager.self) private var midiManager
     @State private var huiSurface: HUISurface
     
-    static nonisolated let kHUIInputName = "MIDIKit HUI Input"
-    static nonisolated let kHUIOutputName = "MIDIKit HUI Output"
+    nonisolated static let kHUIInputName = "MIDIKit HUI Input"
+    nonisolated static let kHUIOutputName = "MIDIKit HUI Output"
     
     init(midiManager: ObservableMIDIManager) {
         // set up HUI Surface object

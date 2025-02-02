@@ -1,7 +1,7 @@
 //
 //  MusicalTimeValue.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -185,8 +185,8 @@ extension MusicalTimeValue {
     public func stringValue(delimiter: String = " ", forceBeatDivision: Bool = false) -> String {
         (isNegative ? "-" : "") + (
             divisionsPerBeat > 0 || forceBeatDivision
-            ? [bar, beat, beatDivision, ticks]
-            : [bar, beat, ticks]
+                ? [bar, beat, beatDivision, ticks]
+                : [bar, beat, ticks]
         )
         .map { String($0) }
         .joined(separator: delimiter)

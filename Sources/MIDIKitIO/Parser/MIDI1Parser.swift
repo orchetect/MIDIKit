@@ -1,7 +1,7 @@
 //
 //  MIDI1Parser.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -442,20 +442,18 @@ extension MIDI1Parser {
                   let velocity = dataByte2?.toUInt7Exactly
             else { return events }
     
-            let newEvent: MIDIEvent
-    
-            if velocity == 0,
-               translateNoteOnZeroVelocityToNoteOff
+            let newEvent: MIDIEvent = if velocity == 0,
+                                         translateNoteOnZeroVelocityToNoteOff
             {
                 // interpret Note On with velocity 0 as a Note Off event instead
-                newEvent = .noteOff(
+                .noteOff(
                     note,
                     velocity: .midi1(velocity),
                     channel: channel,
                     group: umpGroup
                 )
             } else {
-                newEvent = .noteOn(
+                .noteOn(
                     note,
                     velocity: .midi1(velocity),
                     channel: channel,

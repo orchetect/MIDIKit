@@ -1,7 +1,7 @@
 //
 //  TimeBase.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -44,10 +44,10 @@ extension MIDIFile.TimeBase: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .musical(ticksPerQuarterNote):
-            return "Musical: \(ticksPerQuarterNote) ticks per quarter"
+            "Musical: \(ticksPerQuarterNote) ticks per quarter"
             
         case let .timecode(smpteFormat, ticksPerFrame):
-            return "Timecode: \(smpteFormat) \(ticksPerFrame) ticks per frame"
+            "Timecode: \(smpteFormat) \(ticksPerFrame) ticks per frame"
         }
     }
 }
@@ -112,11 +112,11 @@ extension MIDIFile.TimeBase {
     var rawData: Data {
         switch self {
         case let .musical(ticksPerQuarterNote):
-            return (ticksPerQuarterNote & 0b01111111_11111111)
+            (ticksPerQuarterNote & 0b01111111_11111111)
                 .toData(.bigEndian)
             
         case let .timecode(smpteFormat, ticksPerFrame):
-            return [
+            [
                 smpteFormat.rawValue + 0b10000000,
                 ticksPerFrame
             ]

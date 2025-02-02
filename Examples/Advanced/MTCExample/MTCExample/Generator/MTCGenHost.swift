@@ -1,7 +1,7 @@
 //
 //  MTCGenHost.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Combine
@@ -91,7 +91,7 @@ import SwiftUI
             // update generator frame rate by triggering a locate
             locate(localFrameRate: localFrameRate)
         }
-        logger.debug("Starting at \(self.generatorTC.stringValue())")
+        logger.debug("Starting at \(generatorTC.stringValue())")
         mtcGen.start(now: generatorTC)
     }
     
@@ -152,7 +152,7 @@ import SwiftUI
             base: .max100SubFrames,
             by: .allowingInvalid
         )
-            .realTimeValue
+        .realTimeValue
         
         mtcGen.start(
             now: startRealTimeSeconds,

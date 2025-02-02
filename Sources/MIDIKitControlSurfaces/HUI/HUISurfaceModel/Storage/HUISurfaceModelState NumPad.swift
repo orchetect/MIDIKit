@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState NumPad.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -39,25 +39,24 @@ extension HUISurfaceModelState.NumPad: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .num0:         return num0
-        case .num1:         return num1
-        case .num2:         return num2
-        case .num3:         return num3
-        case .num4:         return num4
-        case .num5:         return num5
-        case .num6:         return num6
-        case .num7:         return num7
-        case .num8:         return num8
-        case .num9:         return num9
-        
-        case .period:       return period
-        case .plus:         return plus
-        case .minus:        return minus
-        case .enter:        return enter
-        case .clr:          return clr
-        case .equals:       return equals
-        case .forwardSlash: return forwardSlash
-        case .asterisk:     return asterisk
+        case .num0:         num0
+        case .num1:         num1
+        case .num2:         num2
+        case .num3:         num3
+        case .num4:         num4
+        case .num5:         num5
+        case .num6:         num6
+        case .num7:         num7
+        case .num8:         num8
+        case .num9:         num9
+        case .period:       period
+        case .plus:         plus
+        case .minus:        minus
+        case .enter:        enter
+        case .clr:          clr
+        case .equals:       equals
+        case .forwardSlash: forwardSlash
+        case .asterisk:     asterisk
         }
     }
     
@@ -74,7 +73,6 @@ extension HUISurfaceModelState.NumPad: HUISurfaceModelStateProtocol {
         case .num7:         num7 = state
         case .num8:         num8 = state
         case .num9:         num9 = state
-        
         case .period:       period = state
         case .plus:         plus = state
         case .minus:        minus = state

@@ -1,7 +1,7 @@
 //
 //  RegisteredController.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -205,64 +205,64 @@ extension MIDIEvent.RegisteredController: MIDIParameterNumber {
         // MIDI Spec
     
         case .pitchBendSensitivity:
-            return .init(msb: 0x00, lsb: 0x00)
+            .init(msb: 0x00, lsb: 0x00)
     
         case .channelFineTuning:
-            return .init(msb: 0x00, lsb: 0x01)
+            .init(msb: 0x00, lsb: 0x01)
     
         case .channelCoarseTuning:
-            return .init(msb: 0x00, lsb: 0x02)
+            .init(msb: 0x00, lsb: 0x02)
     
         case .tuningProgramChange:
-            return .init(msb: 0x00, lsb: 0x03)
+            .init(msb: 0x00, lsb: 0x03)
     
         case .tuningBankSelect:
-            return .init(msb: 0x00, lsb: 0x04)
+            .init(msb: 0x00, lsb: 0x04)
     
         case .modulationDepthRange:
-            return .init(msb: 0x00, lsb: 0x05)
+            .init(msb: 0x00, lsb: 0x05)
     
         case .mpeConfigurationMessage:
-            return .init(msb: 0x00, lsb: 0x06)
+            .init(msb: 0x00, lsb: 0x06)
     
         case .null:
-            return .init(msb: 0x7F, lsb: 0x7F)
+            .init(msb: 0x7F, lsb: 0x7F)
     
         case .raw(
             parameter: let parameter,
             dataEntryMSB: _,
             dataEntryLSB: _
         ):
-            return parameter
+            parameter
     
         // 3D Sound Controllers
     
         case .threeDimensionalAzimuthAngle:
-            return .init(msb: 0x3D, lsb: 0x00)
+            .init(msb: 0x3D, lsb: 0x00)
     
         case .threeDimensionalElevationAngle:
-            return .init(msb: 0x3D, lsb: 0x01)
+            .init(msb: 0x3D, lsb: 0x01)
     
         case .threeDimensionalGain:
-            return .init(msb: 0x3D, lsb: 0x02)
+            .init(msb: 0x3D, lsb: 0x02)
     
         case .threeDimensionalDistanceRatio:
-            return .init(msb: 0x3D, lsb: 0x03)
+            .init(msb: 0x3D, lsb: 0x03)
     
         case .threeDimensionalMaximumDistance:
-            return .init(msb: 0x3D, lsb: 0x04)
+            .init(msb: 0x3D, lsb: 0x04)
     
         case .threeDimensionalGainAtMaximumDistance:
-            return .init(msb: 0x3D, lsb: 0x05)
+            .init(msb: 0x3D, lsb: 0x05)
     
         case .threeDimensionalReferenceDistanceRatio:
-            return .init(msb: 0x3D, lsb: 0x06)
+            .init(msb: 0x3D, lsb: 0x06)
     
         case .threeDimensionalPanSpreadAngle:
-            return .init(msb: 0x3D, lsb: 0x07)
+            .init(msb: 0x3D, lsb: 0x07)
     
         case .threeDimensionalRollAngle:
-            return .init(msb: 0x3D, lsb: 0x08)
+            .init(msb: 0x3D, lsb: 0x08)
         }
     }
     

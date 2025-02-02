@@ -1,7 +1,7 @@
 //
 //  MIDIEndpointFilter Collection.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -24,9 +24,9 @@ extension Collection where Element: MIDIEndpoint {
     ) -> [Element] {
         switch mask {
         case .only:
-            return filter(endpointFilter, in: manager)
+            filter(endpointFilter, in: manager)
         case .drop:
-            return filter(dropping: endpointFilter, in: manager)
+            filter(dropping: endpointFilter, in: manager)
         }
     }
     
@@ -41,9 +41,9 @@ extension Collection where Element: MIDIEndpoint {
     ) -> [Element] {
         switch maskedFilter {
         case let .only(endpointFilter):
-            return filter(endpointFilter, in: manager)
+            filter(endpointFilter, in: manager)
         case let .drop(endpointFilter):
-            return filter(dropping: endpointFilter, in: manager)
+            filter(dropping: endpointFilter, in: manager)
         }
     }
     

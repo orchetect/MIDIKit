@@ -1,7 +1,7 @@
 //
 //  MIDIThruConnection Support.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -13,15 +13,15 @@ extension MIDIThruConnection {
     static var isThruConnectionsSupported: Bool {
         if #available(macOS 13.0, iOS 16.0, *) {
             // Apple fixed the Core MIDI bug in macOS 13.0 and iOS 16.0
-            return true
+            true
         } else if #available(macOS 11.0, iOS 14.0, *) {
             // Thru Connections is broken on macOS 11 & 12 and iOS 14 & 15
             // We can use a proxy to add support for non-persistent thru connections,
             // however we can't help that persistent connections are broken.
-            return false
+            false
         } else {
             // macOS 10.15.x Catalina and older, or iOS 13.x or older
-            return true
+            true
         }
     }
     

@@ -1,7 +1,7 @@
 //
 //  MIDIFile.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -11,7 +11,7 @@ extension FileManager {
     // `FileManager` is thread-safe but doesn't yet conform to Sendable,
     // so we can coerce it to be treated as Sendable.
     fileprivate static func fileManager() -> @Sendable () -> FileManager { { Self.default } }
-    fileprivate static var sendableDefault: FileManager { Self.fileManager()() }
+    fileprivate static var sendableDefault: FileManager { fileManager()() }
 }
 
 /// Standard MIDI Files (SMF) object. Read or write MIDI file contents.
@@ -49,7 +49,7 @@ public struct MIDIFile {
     }
     
     // Identifiable protocol conformance fulfilment
-    public let id: UUID = UUID()
+    public let id: UUID = .init()
     
     // MARK: - Init
     

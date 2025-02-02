@@ -1,7 +1,7 @@
 //
 //  Int7 Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -11,9 +11,9 @@ import Testing
     // swiftformat:disable spaceInsideParens spaceInsideBrackets spacearoundoperators
     // swiftformat:disable spacearoundoperators
     
-    fileprivate let _min      = 0b1111111 // int -64
-    fileprivate let _midpoint = 0b0000000 // int   0
-    fileprivate let _max      = 0b0111111 // int  63
+    private let _min      = 0b1111111 // int -64
+    private let _midpoint = 0b0000000 // int   0
+    private let _max      = 0b0111111 // int  63
     
     @Test
     func init_SignedInteger() {

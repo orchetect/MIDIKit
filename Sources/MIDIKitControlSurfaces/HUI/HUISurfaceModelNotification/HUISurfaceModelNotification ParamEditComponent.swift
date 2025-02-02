@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelNotification ParamEditComponent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -41,29 +41,29 @@ extension HUISurfaceModelNotification.ParamEditComponent: CustomStringConvertibl
     public var description: String {
         switch self {
         case let .assign(state):
-            return "assign(state: \(state))"
+            "assign(state: \(state))"
         case let .compare(state):
-            return "compare(state: \(state))"
+            "compare(state: \(state))"
         case let .bypass(state):
-            return "bypass(state: \(state))"
+            "bypass(state: \(state))"
         case let .param1Select(state):
-            return "param1Select(state: \(state))"
+            "param1Select(state: \(state))"
         case let .param1VPot(display):
-            return "param1VPot(\(display))"
+            "param1VPot(\(display))"
         case let .param2Select(state):
-            return "param2Select(state: \(state))"
+            "param2Select(state: \(state))"
         case let .param2VPot(display):
-            return "param2VPot(\(display))"
+            "param2VPot(\(display))"
         case let .param3Select(state):
-            return "param3Select(state: \(state))"
+            "param3Select(state: \(state))"
         case let .param3VPot(display):
-            return "param3VPot(\(display))"
+            "param3VPot(\(display))"
         case let .param4Select(state):
-            return "param4Select(state: \(state))"
+            "param4Select(state: \(state))"
         case let .param4VPot(display):
-            return "param4VPot(\(display))"
+            "param4VPot(\(display))"
         case let .insertOrParam(state):
-            return "insertOrParam(state: \(state))"
+            "insertOrParam(state: \(state))"
         }
     }
 }

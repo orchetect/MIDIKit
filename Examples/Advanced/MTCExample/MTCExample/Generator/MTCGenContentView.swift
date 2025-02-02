@@ -1,7 +1,7 @@
 //
 //  MTCGenContentView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Combine
@@ -143,13 +143,13 @@ struct MTCGenContentView: View {
 extension MTCGenContentView {
     private var locateTo1HourTimecodeTitle: String {
         "Locate to "
-        + Timecode(
-            .components(h: 1, m: 00, s: 00, f: 00, sf: 00),
-            at: localFrameRate,
-            base: .max100SubFrames,
-            by: .allowingInvalid
-        )
-        .stringValue(format: [.showSubFrames])
+            + Timecode(
+                .components(h: 1, m: 00, s: 00, f: 00, sf: 00),
+                at: localFrameRate,
+                base: .max100SubFrames,
+                by: .allowingInvalid
+            )
+            .stringValue(format: [.showSubFrames])
     }
     
     private func locateTo1HourTimecode() {

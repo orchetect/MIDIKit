@@ -1,7 +1,7 @@
 //
 //  ThreadSafeAccessValue.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -22,7 +22,7 @@ public struct ThreadSafeAccessValue<T> /* : @unchecked Sendable where T: Sendabl
     private let lock = RWThreadLock()
     
     public init(value: T) {
-        self.storage = value
+        storage = value
     }
     
     public var value: T {
@@ -43,9 +43,9 @@ public struct ThreadSafeAccessValue<T> /* : @unchecked Sendable where T: Sendabl
         // which allows get-then-set operations such as collection subscripts
         // to be performed in a single thread-locked operation
         _modify {
-            self.lock.writeLock()
+            lock.writeLock()
             yield &storage
-            self.lock.unlock()
+            lock.unlock()
         }
     }
     

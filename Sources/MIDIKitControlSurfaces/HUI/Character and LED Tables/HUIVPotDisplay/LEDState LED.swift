@@ -1,7 +1,7 @@
 //
 //  LEDState LED.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -37,17 +37,17 @@ extension HUIVPotDisplay.LEDState.LED: Comparable {
 extension HUIVPotDisplay.LEDState.LED: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .L5: return "L5"
-        case .L4: return "L4"
-        case .L3: return "L3"
-        case .L2: return "L2"
-        case .L1: return "L1"
-        case .C:  return "C"
-        case .R1: return "R1"
-        case .R2: return "R2"
-        case .R3: return "R3"
-        case .R4: return "R4"
-        case .R5: return "R5"
+        case .L5: "L5"
+        case .L4: "L4"
+        case .L3: "L3"
+        case .L2: "L2"
+        case .L1: "L1"
+        case .C:  "C"
+        case .R1: "R1"
+        case .R2: "R2"
+        case .R3: "R3"
+        case .R4: "R4"
+        case .R5: "R5"
         }
     }
 }
@@ -75,12 +75,12 @@ extension HUIVPotDisplay.LEDState.LED {
     /// Returns the LED count from center as an absolute (positive) radius (`0 ... 5`).
     public var radius: Int {
         switch self {
-        case .C:       return 0
-        case .L1, .R1: return 1
-        case .L2, .R2: return 2
-        case .L3, .R3: return 3
-        case .L4, .R4: return 4
-        case .L5, .R5: return 5
+        case .C:       0
+        case .L1, .R1: 1
+        case .L2, .R2: 2
+        case .L3, .R3: 3
+        case .L4, .R4: 4
+        case .L5, .R5: 5
         }
     }
     

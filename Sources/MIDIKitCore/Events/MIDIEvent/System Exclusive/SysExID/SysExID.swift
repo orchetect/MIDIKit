@@ -1,7 +1,7 @@
 //
 //  SysExID.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -21,10 +21,10 @@ extension MIDIEvent.SysExID: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .universal(universalType):
-            return "universal(\(universalType))"
+            "universal(\(universalType))"
     
         case let .manufacturer(mfr):
-            return "manufacturer(\(mfr))"
+            "manufacturer(\(mfr))"
         }
     }
 }
@@ -72,10 +72,10 @@ extension MIDIEvent.SysExID {
     public func sysEx7RawBytes() -> [UInt8] {
         switch self {
         case let .manufacturer(mfr):
-            return mfr.sysEx7RawBytes()
+            mfr.sysEx7RawBytes()
     
         case let .universal(uSysEx):
-            return [uSysEx.rawValue.uInt8Value]
+            [uSysEx.rawValue.uInt8Value]
         }
     }
     
@@ -83,10 +83,10 @@ extension MIDIEvent.SysExID {
     public func sysEx8RawBytes() -> [UInt8] {
         switch self {
         case let .manufacturer(mfr):
-            return mfr.sysEx8RawBytes()
+            mfr.sysEx8RawBytes()
     
         case let .universal(uSysEx):
-            return [0x00, uSysEx.rawValue.uInt8Value]
+            [0x00, uSysEx.rawValue.uInt8Value]
         }
     }
 }

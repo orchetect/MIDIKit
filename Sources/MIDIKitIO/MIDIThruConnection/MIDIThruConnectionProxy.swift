@@ -1,7 +1,7 @@
 //
 //  MIDIThruConnectionProxy.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -14,11 +14,11 @@ internal import CoreMIDI
 /// Used as a stand-in replacement for Core MIDI's `MIDIThruConnectionCreate` on macOS versions that
 /// are affected by the thru-connection bug.
 final class MIDIThruConnectionProxy {
-    nonisolated(unsafe)
-    private var inputConnection: MIDIInputConnection!
+    private nonisolated(unsafe)
+    var inputConnection: MIDIInputConnection!
     
-    nonisolated(unsafe)
-    private var outputConnection: MIDIOutputConnection!
+    private nonisolated(unsafe)
+    var outputConnection: MIDIOutputConnection!
     
     init(
         outputs: [MIDIOutputEndpoint],

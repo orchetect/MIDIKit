@@ -1,7 +1,7 @@
 //
 //  AnyMIDIPacket.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -26,10 +26,10 @@ extension AnyMIDIPacket {
     public var bytes: [UInt8] {
         switch self {
         case let .packet(packetData):
-            return packetData.bytes
+            packetData.bytes
             
         case let .universalPacket(universalPacketData):
-            return universalPacketData.bytes
+            universalPacketData.bytes
         }
     }
     
@@ -37,10 +37,10 @@ extension AnyMIDIPacket {
     public var timeStamp: CoreMIDITimeStamp {
         switch self {
         case let .packet(packetData):
-            return packetData.timeStamp
+            packetData.timeStamp
             
         case let .universalPacket(universalPacketData):
-            return universalPacketData.timeStamp
+            universalPacketData.timeStamp
         }
     }
     
@@ -49,10 +49,10 @@ extension AnyMIDIPacket {
     public var source: MIDIOutputEndpoint? {
         switch self {
         case let .packet(packetData):
-            return packetData.source
+            packetData.source
             
         case let .universalPacket(universalPacketData):
-            return universalPacketData.source
+            universalPacketData.source
         }
     }
 }

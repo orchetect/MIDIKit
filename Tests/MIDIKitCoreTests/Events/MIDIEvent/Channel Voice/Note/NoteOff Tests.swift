@@ -1,7 +1,7 @@
 //
 //  NoteOff Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 @testable import MIDIKitCore
@@ -27,7 +27,7 @@ import Testing
             
             #expect(
                 cc.midi1RawBytes() ==
-                [0x81, noteNum.uInt8Value, 64]
+                    [0x81, noteNum.uInt8Value, 64]
             )
         }
     }
@@ -45,14 +45,14 @@ import Testing
             
             #expect(
                 cc.umpRawWords(protocol: .midi1_0) ==
-                [[
-                    UMPWord(
-                        0x29,
-                        0x81,
-                        noteNum.uInt8Value,
-                        64
-                    )
-                ]]
+                    [[
+                        UMPWord(
+                            0x29,
+                            0x81,
+                            noteNum.uInt8Value,
+                            64
+                        )
+                    ]]
             )
         }
     }
@@ -70,20 +70,20 @@ import Testing
             
             #expect(
                 cc.umpRawWords(protocol: .midi2_0) ==
-                [[
-                    UMPWord(
-                        0x49,
-                        0x81,
-                        noteNum.uInt8Value,
-                        0x00
-                    ),
-                    UMPWord(
-                        0x80,
-                        0x00,
-                        0x00,
-                        0x00
-                    )
-                ]]
+                    [[
+                        UMPWord(
+                            0x49,
+                            0x81,
+                            noteNum.uInt8Value,
+                            0x00
+                        ),
+                        UMPWord(
+                            0x80,
+                            0x00,
+                            0x00,
+                            0x00
+                        )
+                    ]]
             )
         }
     }
@@ -104,20 +104,20 @@ import Testing
             
             #expect(
                 cc.umpRawWords(protocol: .midi2_0) ==
-                [[
-                    UMPWord(
-                        0x49,
-                        0x81,
-                        noteNum.uInt8Value,
-                        0x03
-                    ),
-                    UMPWord(
-                        0xFF,
-                        0xFF,
-                        0b11011001,
-                        0b10011110
-                    )
-                ]]
+                    [[
+                        UMPWord(
+                            0x49,
+                            0x81,
+                            noteNum.uInt8Value,
+                            0x03
+                        ),
+                        UMPWord(
+                            0xFF,
+                            0xFF,
+                            0b11011001,
+                            0b10011110
+                        )
+                    ]]
             )
         }
     }

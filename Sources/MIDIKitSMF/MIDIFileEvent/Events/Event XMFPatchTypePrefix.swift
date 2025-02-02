@@ -1,7 +1,7 @@
 //
 //  Event XMFPatchTypePrefix.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -219,9 +219,9 @@ extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: CaseIterable { }
 extension MIDIFileEvent.XMFPatchTypePrefix.PatchSet: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .generalMIDI1: return "General MIDI 1"
-        case .generalMIDI2: return "General MIDI 2"
-        case .DLS: return "DLS"
+        case .generalMIDI1: "General MIDI 1"
+        case .generalMIDI2: "General MIDI 2"
+        case .DLS: "DLS"
         }
     }
 }

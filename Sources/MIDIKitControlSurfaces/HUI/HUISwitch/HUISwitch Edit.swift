@@ -1,7 +1,7 @@
 //
 //  HUISwitch Edit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -29,12 +29,12 @@ extension HUISwitch.Edit: HUISwitchProtocol {
         switch self {
         // Zone 0x1A
         // Edit (To the right of the channel strips)
-        case .paste:    return (0x1A, 0x0)
-        case .cut:      return (0x1A, 0x1)
-        case .capture:  return (0x1A, 0x2)
-        case .delete:   return (0x1A, 0x3)
-        case .copy:     return (0x1A, 0x4)
-        case .separate: return (0x1A, 0x5)
+        case .paste:    (0x1A, 0x0)
+        case .cut:      (0x1A, 0x1)
+        case .capture:  (0x1A, 0x2)
+        case .delete:   (0x1A, 0x3)
+        case .copy:     (0x1A, 0x4)
+        case .separate: (0x1A, 0x5)
         }
     }
 }
@@ -44,12 +44,12 @@ extension HUISwitch.Edit: CustomStringConvertible {
         switch self {
         // Zone 0x1A
         // Edit (To the right of the channel strips)
-        case .paste:    return "paste"
-        case .cut:      return "cut"
-        case .capture:  return "capture"
-        case .delete:   return "delete"
-        case .copy:     return "copy"
-        case .separate: return "separate"
+        case .paste:    "paste"
+        case .cut:      "cut"
+        case .capture:  "capture"
+        case .delete:   "delete"
+        case .copy:     "copy"
+        case .separate: "separate"
         }
     }
 }

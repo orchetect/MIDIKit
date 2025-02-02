@@ -1,7 +1,7 @@
 //
 //  MIDIIdentifierPersistence.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -47,7 +47,7 @@ public enum MIDIIdentifierPersistence {
     )
      
     /// Managed with custom storage backing (recommended only if ``userDefaultsManaged(key:suite:)``
-    /// is not suitable). Supply handlers to facilitate persistently reading and storing the MIDI 
+    /// is not suitable). Supply handlers to facilitate persistently reading and storing the MIDI
     /// endpoint's unique ID.
     ///
     /// This is useful if you need more control over where you want to persist this information in

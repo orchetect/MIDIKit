@@ -1,7 +1,7 @@
 //
 //  HUISwitch.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -366,58 +366,58 @@ extension HUISwitch: HUISwitchProtocol {
     public var zoneAndPort: HUIZoneAndPort {
         switch self {
         case let .channelStrip(channelStrip, channelParameter):
-            return (UInt8(exactly: channelStrip) ?? 0, channelParameter.port)
+            (UInt8(exactly: channelStrip) ?? 0, channelParameter.port)
 
         case let .hotKey(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .window(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .bankMove(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .assign(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .cursor(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .transport(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .controlRoom(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .numPad(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .timeDisplayStatus(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .autoEnable(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .autoMode(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .statusAndGroup(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .edit(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .functionKey(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .paramEdit(param):
-            return param.zoneAndPort
+            param.zoneAndPort
 
         case let .footswitchesAndSounds(param):
-            return param.zoneAndPort
+            param.zoneAndPort
             
         case let .undefined(zone: zone, port: port):
-            return (zone: zone, port: port)
+            (zone: zone, port: port)
         }
     }
 }
@@ -426,58 +426,58 @@ extension HUISwitch: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .channelStrip(channelStrip, param):
-            return "channelStrip(\(channelStrip), \(param))"
+            "channelStrip(\(channelStrip), \(param))"
 
         case let .hotKey(param):
-            return "hotKey(\(param))"
+            "hotKey(\(param))"
 
         case let .window(param):
-            return "window(\(param))"
+            "window(\(param))"
 
         case let .bankMove(param):
-            return "bankMove(\(param))"
+            "bankMove(\(param))"
 
         case let .assign(param):
-            return "assign(\(param))"
+            "assign(\(param))"
 
         case let .cursor(param):
-            return "cursor(\(param))"
+            "cursor(\(param))"
 
         case let .transport(param):
-            return "transport(\(param))"
+            "transport(\(param))"
 
         case let .controlRoom(param):
-            return "controlRoom(\(param))"
+            "controlRoom(\(param))"
 
         case let .numPad(param):
-            return "numPad(\(param))"
+            "numPad(\(param))"
 
         case let .timeDisplayStatus(param):
-            return "timeDisplayStatus(\(param))"
+            "timeDisplayStatus(\(param))"
 
         case let .autoEnable(param):
-            return "autoEnable(\(param))"
+            "autoEnable(\(param))"
 
         case let .autoMode(param):
-            return "autoMode(\(param))"
+            "autoMode(\(param))"
 
         case let .statusAndGroup(param):
-            return "statusAndGroup(\(param))"
+            "statusAndGroup(\(param))"
 
         case let .edit(param):
-            return "edit(\(param))"
+            "edit(\(param))"
 
         case let .functionKey(param):
-            return "functionKey(\(param))"
+            "functionKey(\(param))"
 
         case let .paramEdit(param):
-            return "paramEdit(\(param))"
+            "paramEdit(\(param))"
 
         case let .footswitchesAndSounds(param):
-            return "footswitchesAndSounds(\(param))"
+            "footswitchesAndSounds(\(param))"
             
         case let .undefined(zone: zone, port: port):
-            return "undefined(zone: \(zone), port: \(port))"
+            "undefined(zone: \(zone), port: \(port))"
         }
     }
 }

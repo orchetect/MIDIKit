@@ -1,7 +1,7 @@
 //
 //  MIDIEvent Filter System Exclusive.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 // MARK: - Metadata properties
@@ -14,10 +14,10 @@ extension MIDIEvent {
              .universalSysEx7,
              .sysEx8,
              .universalSysEx8:
-            return true
+            true
     
         default:
-            return false
+            false
         }
     }
     
@@ -25,11 +25,11 @@ extension MIDIEvent {
     public func isSystemExclusive(ofType sysExType: SysExType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .sysEx7          : return sysExType == .sysEx7
-        case .universalSysEx7 : return sysExType == .universalSysEx7
-        case .sysEx8          : return sysExType == .sysEx8
-        case .universalSysEx8 : return sysExType == .universalSysEx8
-        default               : return false
+        case .sysEx7          : sysExType == .sysEx7
+        case .universalSysEx7 : sysExType == .universalSysEx7
+        case .sysEx8          : sysExType == .sysEx8
+        case .universalSysEx8 : sysExType == .universalSysEx8
+        default               : false
         }
         // swiftformat:enable spacearoundoperators
     }
@@ -51,37 +51,37 @@ extension Collection<MIDIEvent> {
     public func filter(sysEx types: MIDIEvent.SysExTypes) -> [Element] {
         switch types {
         case .only:
-            return filter { $0.isSystemExclusive }
+            filter { $0.isSystemExclusive }
     
         case let .onlyType(specificType):
-            return filter { $0.isSystemExclusive(ofType: specificType) }
+            filter { $0.isSystemExclusive(ofType: specificType) }
     
         case let .onlyTypes(specificTypes):
-            return filter { $0.isSystemExclusive(ofTypes: specificTypes) }
+            filter { $0.isSystemExclusive(ofTypes: specificTypes) }
     
         case let .keepType(specificType):
-            return filter {
+            filter {
                 guard $0.isSystemExclusive else { return true }
                 return $0.isSystemExclusive(ofType: specificType)
             }
     
         case let .keepTypes(specificTypes):
-            return filter {
+            filter {
                 guard $0.isSystemExclusive else { return true }
                 return $0.isSystemExclusive(ofTypes: specificTypes)
             }
     
         case .drop:
-            return filter { !$0.isSystemExclusive }
+            filter { !$0.isSystemExclusive }
     
         case let .dropType(specificType):
-            return filter {
+            filter {
                 guard $0.isSystemExclusive else { return true }
                 return !$0.isSystemExclusive(ofType: specificType)
             }
     
         case let .dropTypes(specificTypes):
-            return filter {
+            filter {
                 guard $0.isSystemExclusive else { return true }
                 return !$0.isSystemExclusive(ofTypes: specificTypes)
             }

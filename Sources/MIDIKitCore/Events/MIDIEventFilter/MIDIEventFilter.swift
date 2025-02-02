@@ -1,7 +1,7 @@
 //
 //  MIDIEventFilter.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 /// MIDI event filter definition.
@@ -23,25 +23,25 @@ extension MIDIEventFilter {
     public func apply(to events: [MIDIEvent]) -> [MIDIEvent] {
         switch self {
         case let .chanVoice(types):
-            return events.filter(chanVoice: types)
+            events.filter(chanVoice: types)
     
         case let .sysEx(types):
-            return events.filter(sysEx: types)
+            events.filter(sysEx: types)
     
         case let .sysCommon(types):
-            return events.filter(sysCommon: types)
+            events.filter(sysCommon: types)
     
         case let .sysRealTime(types):
-            return events.filter(sysRealTime: types)
+            events.filter(sysRealTime: types)
     
         case let .utility(types):
-            return events.filter(utility: types)
+            events.filter(utility: types)
     
         case let .group(group):
-            return events.filter(group: group)
+            events.filter(group: group)
     
         case let .groups(groups):
-            return events.filter(groups: groups)
+            events.filter(groups: groups)
         }
     }
 }

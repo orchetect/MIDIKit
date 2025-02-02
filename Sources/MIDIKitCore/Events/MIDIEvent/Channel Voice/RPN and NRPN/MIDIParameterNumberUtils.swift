@@ -1,7 +1,7 @@
 //
 //  MIDIParameterNumberUtils.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 // This is a namespace implemented for MIDI Parameter Number utility functions since
@@ -19,17 +19,17 @@ public enum MIDIParameterNumberUtils {
         case .registered:
             switch change {
             case .absolute:
-                return 0x2
+                0x2
             case .relative:
-                return 0x4
+                0x4
             }
             
         case .assignable:
             switch change {
             case .absolute:
-                return 0x3
+                0x3
             case .relative:
-                return 0x5
+                0x5
             }
         }
     }
@@ -45,15 +45,15 @@ public enum MIDIParameterNumberUtils {
     )? {
         switch fromUMPStatusNibble {
         case 0x2:
-            return (type: .registered, change: .absolute)
+            (type: .registered, change: .absolute)
         case 0x3:
-            return (type: .assignable, change: .absolute)
+            (type: .assignable, change: .absolute)
         case 0x4:
-            return (type: .registered, change: .relative)
+            (type: .registered, change: .relative)
         case 0x5:
-            return (type: .assignable, change: .relative)
+            (type: .assignable, change: .relative)
         default:
-            return nil
+            nil
         }
     }
 }

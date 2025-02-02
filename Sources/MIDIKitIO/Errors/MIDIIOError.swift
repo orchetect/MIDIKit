@@ -1,7 +1,7 @@
 //
 //  MIDIIOError.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -38,22 +38,22 @@ extension MIDIIOError {
     public var errorDescription: String? {
         switch self {
         case let .internalInconsistency(verboseError):
-            return "Internal inconsistency: \(verboseError)"
+            "Internal inconsistency: \(verboseError)"
     
         case let .malformed(verboseError):
-            return "Malformed: \(verboseError)"
+            "Malformed: \(verboseError)"
     
         case let .notSupported(verboseError):
-            return "Not Supported: \(verboseError)"
+            "Not Supported: \(verboseError)"
     
         case let .connectionError(verboseError):
-            return "Connection Error: \(verboseError)"
+            "Connection Error: \(verboseError)"
     
         case let .readError(verboseError):
-            return "Read Error: \(verboseError)"
+            "Read Error: \(verboseError)"
     
         case let .osStatus(midiOSStatus):
-            return midiOSStatus.errorDescription
+            midiOSStatus.errorDescription
         }
     }
 }

@@ -1,7 +1,7 @@
 //
 //  HUIHostBank.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -40,8 +40,8 @@ internal import MIDIKitInternals
     public let remotePresenceChangedHandler: PresenceChangedHandler?
     
     @ObservationIgnored
-    nonisolated(unsafe)
-    public var midiOutHandler: MIDIOutHandler?
+    public nonisolated(unsafe)
+    var midiOutHandler: MIDIOutHandler?
     
     // MARK: - Presence
     
@@ -58,6 +58,7 @@ internal import MIDIKitInternals
         _modify { yield &_remotePresenceTimer.value }
         set { _remotePresenceTimer.value = newValue }
     }
+
     @ObservationIgnored
     private nonisolated(unsafe) var _remotePresenceTimer = ThreadSafeAccessValue(value: nil as Task<Void, any Error>?)
     
@@ -69,9 +70,9 @@ internal import MIDIKitInternals
             guard let self else { return }
             try await Task.sleep(for: .seconds(remotePresenceTimeout))
             try Task.checkCancellation()
-            self.isRemotePresent = false
-            self.remotePresenceTimer?.cancel()
-            self.remotePresenceTimer = nil
+            isRemotePresent = false
+            remotePresenceTimer?.cancel()
+            remotePresenceTimer = nil
             remotePresenceChangedHandler?(false)
         }
     }
@@ -88,6 +89,7 @@ internal import MIDIKitInternals
         _modify { yield &_isRemotePresent.value }
         set { _isRemotePresent.value = newValue }
     }
+
     private nonisolated(unsafe) var _isRemotePresent = ThreadSafeAccessValue(value: false)
     
     private func receivedPing() {

@@ -23,14 +23,14 @@ extension BinaryInteger {
     @_disfavoredOverload
     package func string(paddedTo: Int) -> String {
         if let cVarArg = self as? CVarArg {
-            return String(format: "%0\(paddedTo)d", cVarArg)
+            String(format: "%0\(paddedTo)d", cVarArg)
         } else {
             // Typically this will never happen,
             // but BinaryInteger does not implicitly conform to CVarArg,
             // and we can't assume all concrete types that conform
             // to BinaryInteger CVarArg now or in the future.
             // Just return a string as-is as a failsafe:
-            return String(describing: self)
+            String(describing: self)
         }
     }
 }

@@ -1,7 +1,7 @@
 //
 //  MTCRecHost.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Combine
@@ -16,7 +16,7 @@ import SwiftUI
     // MARK: - State
     
     private(set) var receiverTC = "--:--:--:--"
-    private(set) var receiverFR: MTCFrameRate? = nil
+    private(set) var receiverFR: MTCFrameRate?
     private(set) var receiverState: MTCReceiver.State = .idle
     
     // MARK: - Internal State

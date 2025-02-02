@@ -1,7 +1,7 @@
 //
 //  HUIHostHelper.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Controls
@@ -73,7 +73,7 @@ import SwiftUI
                 guard let self else { return }
                 switch event {
                 case .ping:
-                    if self.logPing {
+                    if logPing {
                         Logger.debug("Host received ping")
                     }
                 default:

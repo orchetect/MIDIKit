@@ -1,11 +1,11 @@
 //
 //  MTC Generator Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-@testable import MIDIKitSync
 @testable import MIDIKitInternals
+@testable import MIDIKitSync
 import Testing
 import TimecodeKitCore
 

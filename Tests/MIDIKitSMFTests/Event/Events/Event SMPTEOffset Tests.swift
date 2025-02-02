@@ -1,12 +1,12 @@
 //
 //  Event SMPTEOffset Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 @testable import MIDIKitSMF
-import TimecodeKitCore
 import Testing
+import TimecodeKitCore
 
 @Suite struct Event_SMPTEOffset_Tests {
     // swiftformat:options --wrapcollections preserve
@@ -224,7 +224,7 @@ import Testing
             
             #expect(
                 scaled.scaledTimecode?.components ==
-                .init(d: 0, h: 1, m: 0, s: 3, f: 14, sf: 40)
+                    .init(d: 0, h: 1, m: 0, s: 3, f: 14, sf: 40)
             )
             #expect(scaled.scaledTimecode?.frameRate == .fps24)
             #expect(scaled.scaledTimecode?.subFramesBase == .max100SubFrames)

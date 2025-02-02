@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState AutoEnable.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -26,12 +26,12 @@ extension HUISurfaceModelState.AutoEnable: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .fader:    return fader
-        case .pan:      return pan
-        case .plugin:   return plugin
-        case .mute:     return mute
-        case .send:     return send
-        case .sendMute: return sendMute
+        case .fader:    fader
+        case .pan:      pan
+        case .plugin:   plugin
+        case .mute:     mute
+        case .send:     send
+        case .sendMute: sendMute
         }
     }
     

@@ -1,7 +1,7 @@
 //
 //  MIDIManager.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -90,11 +90,11 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     
     /// MIDI devices in the system.
     @ThreadSafeAccess
-    public internal(set) var devices: MIDIDevices = MIDIDevices()
+    public internal(set) var devices: MIDIDevices = .init()
     
     /// MIDI input and output endpoints in the system.
     @ThreadSafeAccess
-    public internal(set) var endpoints: MIDIEndpoints = MIDIEndpoints()
+    public internal(set) var endpoints: MIDIEndpoints = .init()
     
     /// Handler that is called when state has changed in the manager.
     public typealias NotificationHandler = @Sendable (

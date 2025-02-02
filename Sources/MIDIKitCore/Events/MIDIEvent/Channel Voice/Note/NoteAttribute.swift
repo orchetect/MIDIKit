@@ -1,7 +1,7 @@
 //
 //  NoteAttribute.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -123,19 +123,19 @@ extension MIDIEvent.NoteAttribute {
     public var attributeType: UInt8 {
         switch self {
         case .none:
-            return 0x00
+            0x00
     
         case .manufacturerSpecific:
-            return 0x01
+            0x01
     
         case .profileSpecific:
-            return 0x02
+            0x02
     
         case .pitch7_9:
-            return 0x03
+            0x03
     
         case .undefined(attributeType: let attributeType, data: _):
-            return attributeType
+            attributeType
         }
     }
     
@@ -144,19 +144,19 @@ extension MIDIEvent.NoteAttribute {
     public var attributeData: UInt16 {
         switch self {
         case .none:
-            return 0x0000
+            0x0000
     
         case let .manufacturerSpecific(data):
-            return data
+            data
     
         case let .profileSpecific(data):
-            return data
+            data
     
         case let .pitch7_9(pitch):
-            return pitch.uInt16Value
+            pitch.uInt16Value
     
         case .undefined(attributeType: _, data: let data):
-            return data
+            data
         }
     }
 }

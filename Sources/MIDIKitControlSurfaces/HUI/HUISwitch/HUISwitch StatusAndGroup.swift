@@ -1,7 +1,7 @@
 //
 //  HUISwitch StatusAndGroup.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -29,12 +29,12 @@ extension HUISwitch.StatusAndGroup: HUISwitchProtocol {
         switch self {
         // Zone 0x19
         // Status/Group (To the right of the channel strips)
-        case .phase:   return (0x19, 0x0)
-        case .monitor: return (0x19, 0x1)
-        case .auto:    return (0x19, 0x2)
-        case .suspend: return (0x19, 0x3)
-        case .create:  return (0x19, 0x4)
-        case .group:   return (0x19, 0x5)
+        case .phase:   (0x19, 0x0)
+        case .monitor: (0x19, 0x1)
+        case .auto:    (0x19, 0x2)
+        case .suspend: (0x19, 0x3)
+        case .create:  (0x19, 0x4)
+        case .group:   (0x19, 0x5)
         }
     }
 }
@@ -44,12 +44,12 @@ extension HUISwitch.StatusAndGroup: CustomStringConvertible {
         switch self {
         // Zone 0x19
         // Status/Group (To the right of the channel strips)
-        case .phase:   return "phase"
-        case .monitor: return "monitor"
-        case .auto:    return "auto"
-        case .suspend: return "suspend"
-        case .create:  return "create"
-        case .group:   return "group"
+        case .phase:   "phase"
+        case .monitor: "monitor"
+        case .auto:    "auto"
+        case .suspend: "suspend"
+        case .create:  "create"
+        case .group:   "group"
         }
     }
 }

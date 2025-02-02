@@ -1,7 +1,7 @@
 //
 //  CC NRPN Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -26,8 +26,8 @@ import Testing
         
         #expect(
             nrpn.flatMap { $0.midi1RawBytes() } ==
-            [0xB9, 0x63, 66,
-             0xB9, 0x62, 103]
+                [0xB9, 0x63, 66,
+                 0xB9, 0x62, 103]
         )
     }
     
@@ -44,9 +44,9 @@ import Testing
         
         #expect(
             nrpn.flatMap { $0.midi1RawBytes() } ==
-            [0xB9, 0x63, 66,
-             0xB9, 0x62, 103,
-             0xB9, 0x06, 127]
+                [0xB9, 0x63, 66,
+                 0xB9, 0x62, 103,
+                 0xB9, 0x06, 127]
         )
     }
     
@@ -63,10 +63,10 @@ import Testing
         
         #expect(
             nrpn.flatMap { $0.midi1RawBytes() } ==
-            [0xB9, 0x63, 66,
-             0xB9, 0x62, 103,
-             0xB9, 0x06, 127,
-             0xB9, 0x26, 2]
+                [0xB9, 0x63, 66,
+                 0xB9, 0x62, 103,
+                 0xB9, 0x06, 127,
+                 0xB9, 0x26, 2]
         )
     }
     
@@ -79,8 +79,8 @@ import Testing
         
         #expect(
             nrpn.flatMap { $0.midi1RawBytes() } ==
-            [0xB9, 0x63, 0x7F,
-             0xB9, 0x62, 0x7F]
+                [0xB9, 0x63, 0x7F,
+                 0xB9, 0x62, 0x7F]
         )
     }
     
@@ -103,8 +103,8 @@ import Testing
         
         #expect(
             nrpn.umpRawWords(protocol: .midi2_0) ==
-            [[UMPWord(0x40, 0x39, 0x40, 0x01),
-              UMPWord(0x24, 0x00, 0x00, 0x00)]]
+                [[UMPWord(0x40, 0x39, 0x40, 0x01),
+                  UMPWord(0x24, 0x00, 0x00, 0x00)]]
         )
     }
     
@@ -122,8 +122,8 @@ import Testing
         
         #expect(
             nrpn.umpRawWords(protocol: .midi2_0) ==
-            [[UMPWord(0x40, 0x59, 0x40, 0x01),
-              UMPWord(0x24, 0x00, 0x00, 0x00)]]
+                [[UMPWord(0x40, 0x59, 0x40, 0x01),
+                  UMPWord(0x24, 0x00, 0x00, 0x00)]]
         )
     }
     
@@ -137,8 +137,8 @@ import Testing
         
         #expect(
             nrpn.umpRawWords(protocol: .midi2_0) ==
-            [[UMPWord(0x40, 0x39, 0x7F, 0x7F),
-              UMPWord(0x00, 0x00, 0x00, 0x00)]]
+                [[UMPWord(0x40, 0x39, 0x7F, 0x7F),
+                  UMPWord(0x00, 0x00, 0x00, 0x00)]]
         )
     }
     

@@ -1,7 +1,7 @@
 //
 //  MIDIEvent Filter System Real-Time.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 // MARK: - Metadata properties
@@ -16,10 +16,10 @@ extension MIDIEvent {
              .stop,
              .activeSensing,
              .systemReset:
-            return true
+            true
     
         default:
-            return false
+            false
         }
     }
     
@@ -27,13 +27,13 @@ extension MIDIEvent {
     public func isSystemRealTime(ofType sysRealTimeType: SysRealTimeType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .timingClock   : return sysRealTimeType == .timingClock
-        case .start         : return sysRealTimeType == .start
-        case .continue      : return sysRealTimeType == .continue
-        case .stop          : return sysRealTimeType == .stop
-        case .activeSensing : return sysRealTimeType == .activeSensing
-        case .systemReset   : return sysRealTimeType == .systemReset
-        default             : return false
+        case .timingClock   : sysRealTimeType == .timingClock
+        case .start         : sysRealTimeType == .start
+        case .continue      : sysRealTimeType == .continue
+        case .stop          : sysRealTimeType == .stop
+        case .activeSensing : sysRealTimeType == .activeSensing
+        case .systemReset   : sysRealTimeType == .systemReset
+        default             : false
         }
         // swiftformat:enable spacearoundoperators
     }
@@ -55,37 +55,37 @@ extension Collection<MIDIEvent> {
     public func filter(sysRealTime types: MIDIEvent.SysRealTimeTypes) -> [Element] {
         switch types {
         case .only:
-            return filter { $0.isSystemRealTime }
+            filter { $0.isSystemRealTime }
     
         case let .onlyType(specificType):
-            return filter { $0.isSystemRealTime(ofType: specificType) }
+            filter { $0.isSystemRealTime(ofType: specificType) }
     
         case let .onlyTypes(specificTypes):
-            return filter { $0.isSystemRealTime(ofTypes: specificTypes) }
+            filter { $0.isSystemRealTime(ofTypes: specificTypes) }
     
         case let .keepType(specificType):
-            return filter {
+            filter {
                 guard $0.isSystemRealTime else { return true }
                 return $0.isSystemRealTime(ofType: specificType)
             }
     
         case let .keepTypes(specificTypes):
-            return filter {
+            filter {
                 guard $0.isSystemRealTime else { return true }
                 return $0.isSystemRealTime(ofTypes: specificTypes)
             }
     
         case .drop:
-            return filter { !$0.isSystemRealTime }
+            filter { !$0.isSystemRealTime }
     
         case let .dropType(specificType):
-            return filter {
+            filter {
                 guard $0.isSystemRealTime else { return true }
                 return !$0.isSystemRealTime(ofType: specificType)
             }
     
         case let .dropTypes(specificTypes):
-            return filter {
+            filter {
                 guard $0.isSystemRealTime else { return true }
                 return !$0.isSystemRealTime(ofTypes: specificTypes)
             }

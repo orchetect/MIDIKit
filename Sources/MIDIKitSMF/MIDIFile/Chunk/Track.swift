@@ -1,7 +1,7 @@
 //
 //  Track.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -37,11 +37,11 @@ extension MIDIFile.Chunk.Track: CustomStringConvertible {
         outputString += "Track(".newLined
         outputString += "  events (\(events.count)): ".newLined
         
-        events.forEach {
-            let deltaString = $0.smfUnwrappedEvent.delta.description
+        for event in events {
+            let deltaString = event.smfUnwrappedEvent.delta.description
                 .padding(toLength: 15, withPad: " ", startingAt: 0)
             
-            outputString += "    \(deltaString) \($0.smfUnwrappedEvent.event.smfDescription)"
+            outputString += "    \(deltaString) \(event.smfUnwrappedEvent.event.smfDescription)"
                 .newLined
         }
         
@@ -58,11 +58,11 @@ extension MIDIFile.Chunk.Track: CustomDebugStringConvertible {
         outputString += "Track(".newLined
         outputString += "  events (\(events.count)): ".newLined
         
-        events.forEach {
-            let deltaString = $0.smfUnwrappedEvent.delta.debugDescription
+        for event in events {
+            let deltaString = event.smfUnwrappedEvent.delta.debugDescription
                 .padding(toLength: 15 + 11, withPad: " ", startingAt: 0)
             
-            outputString += "    \(deltaString) \($0.smfUnwrappedEvent.event.smfDebugDescription)"
+            outputString += "    \(deltaString) \(event.smfUnwrappedEvent.event.smfDebugDescription)"
                 .newLined
         }
         

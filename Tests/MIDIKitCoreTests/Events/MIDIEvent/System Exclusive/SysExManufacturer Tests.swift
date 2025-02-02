@@ -1,7 +1,7 @@
 //
 //  SysExManufacturer Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -64,59 +64,59 @@ import Testing
         
         #expect(
             MIDIEvent.SysExManufacturer.oneByte(0x01).name ==
-            "Sequential Circuits"
+                "Sequential Circuits"
         )
         
         #expect(
             MIDIEvent.SysExManufacturer.oneByte(0x3F).name ==
-            "Quasimidi"
+                "Quasimidi"
         )
         
         #expect(
             MIDIEvent.SysExManufacturer.oneByte(0x40).name ==
-            "Kawai Musical Instruments MFG. CO. Ltd"
+                "Kawai Musical Instruments MFG. CO. Ltd"
         )
         
         #expect(
             MIDIEvent.SysExManufacturer.oneByte(0x5F).name ==
-            "SD Card Association"
+                "SD Card Association"
         )
         
         // 3-byte ID
         
         #expect(
             MIDIEvent.SysExManufacturer.threeByte(byte2: 0x00, byte3: 0x58).name ==
-            "Atari Corporation"
+                "Atari Corporation"
         )
         
         #expect(
             MIDIEvent.SysExManufacturer.threeByte(byte2: 0x00, byte3: 0x58).name ==
-            "Atari Corporation"
+                "Atari Corporation"
         )
         
         #expect(
             MIDIEvent.SysExManufacturer.threeByte(byte2: 0x02, byte3: 0x3B).name ==
-            "Sonoclast, LLC"
+                "Sonoclast, LLC"
         )
         
         #expect(
             MIDIEvent.SysExManufacturer.threeByte(byte2: 0x20, byte3: 0x00).name ==
-            "Dream SAS"
+                "Dream SAS"
         )
         
         #expect(
             MIDIEvent.SysExManufacturer.threeByte(byte2: 0x21, byte3: 0x59).name ==
-            "Robkoo Information & Technologies Co., Ltd."
+                "Robkoo Information & Technologies Co., Ltd."
         )
         
         #expect(
             MIDIEvent.SysExManufacturer.threeByte(byte2: 0x40, byte3: 0x00).name ==
-            "Crimson Technology Inc."
+                "Crimson Technology Inc."
         )
         
         #expect(
             MIDIEvent.SysExManufacturer.threeByte(byte2: 0x40, byte3: 0x07).name ==
-            "Slik Corporation"
+                "Slik Corporation"
         )
     }
 }

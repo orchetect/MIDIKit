@@ -1,7 +1,7 @@
 //
 //  AssignableController.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -77,10 +77,10 @@ extension MIDIEvent.AssignableController: MIDIParameterNumber {
     public var parameterBytes: UInt7Pair {
         switch self {
         case let .raw(parameter, _, _):
-            return parameter
+            parameter
             
         case .null:
-            return .init(msb: 0x7F, lsb: 0x7F)
+            .init(msb: 0x7F, lsb: 0x7F)
         }
     }
     
@@ -88,10 +88,10 @@ extension MIDIEvent.AssignableController: MIDIParameterNumber {
     public var dataEntryBytes: (msb: UInt7?, lsb: UInt7?) {
         switch self {
         case let .raw(_, dataEntryMSB, dataEntryLSB):
-            return (msb: dataEntryMSB, lsb: dataEntryLSB)
+            (msb: dataEntryMSB, lsb: dataEntryLSB)
             
         case .null:
-            return (msb: nil, lsb: nil)
+            (msb: nil, lsb: nil)
         }
     }
     

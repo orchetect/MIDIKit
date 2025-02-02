@@ -1,7 +1,7 @@
 //
 //  UInt14.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -126,9 +126,9 @@ extension UInt14 {
     public var bipolarUnitIntervalValue: Double {
         // account for non-symmetry and round up. (This is how MIDI 1.0 Spec pitchbend works)
         if storage > 8192 {
-            return (Double(storage) - 8192) / 8191
+            (Double(storage) - 8192) / 8191
         } else {
-            return (Double(storage) - 8192) / 8192
+            (Double(storage) - 8192) / 8192
         }
     }
     

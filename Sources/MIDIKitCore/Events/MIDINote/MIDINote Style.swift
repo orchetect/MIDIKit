@@ -1,7 +1,7 @@
 //
 //  MIDINote Style.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -35,13 +35,13 @@ extension MIDINote.Style {
     public var firstOctaveOffset: Int {
         switch self {
         case .yamaha:
-            return -2
+            -2
     
         case .roland:
-            return -1
+            -1
     
         case .cakewalk:
-            return 0
+            0
         }
     }
 }
@@ -54,13 +54,13 @@ extension MIDINote.Style: CustomStringConvertible {
     public var description: String {
         switch self {
         case .yamaha:
-            return "Yamaha (Middle C == C3)"
+            "Yamaha (Middle C == C3)"
     
         case .roland:
-            return "Roland (Middle C == C4)"
+            "Roland (Middle C == C4)"
     
         case .cakewalk:
-            return "Cakewalk (Middle C == C5)"
+            "Cakewalk (Middle C == C5)"
         }
     }
 }

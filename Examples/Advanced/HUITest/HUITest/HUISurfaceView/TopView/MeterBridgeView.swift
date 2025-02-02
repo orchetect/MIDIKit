@@ -1,7 +1,7 @@
 //
 //  MeterBridgeView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitControlSurfaces
@@ -64,10 +64,10 @@ extension HUISurfaceView {
 
         func segmentColor(_ segment: Int) -> Color {
             switch segment {
-            case 0x1 ... 0x8: return .green
-            case 0x9 ... 0xB: return .yellow
-            case 0xC: return .red
-            default: return .black
+            case 0x1 ... 0x8: .green
+            case 0x9 ... 0xB: .yellow
+            case 0xC: .red
+            default: .black
             }
         }
     }

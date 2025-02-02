@@ -1,7 +1,7 @@
 //
 //  AnyMIDIIOObject.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -40,52 +40,52 @@ extension AnyMIDIIOObject: MIDIIOObject {
     public var objectType: MIDIIOObjectType {
         switch self {
         case let .device(device):
-            return device.objectType
+            device.objectType
         case let .entity(entity):
-            return entity.objectType
+            entity.objectType
         case let .inputEndpoint(endpoint):
-            return endpoint.objectType
+            endpoint.objectType
         case let .outputEndpoint(endpoint):
-            return endpoint.objectType
+            endpoint.objectType
         }
     }
     
     public var name: String {
         switch self {
         case let .device(device):
-            return device.name
+            device.name
         case let .entity(entity):
-            return entity.name
+            entity.name
         case let .inputEndpoint(endpoint):
-            return endpoint.name
+            endpoint.name
         case let .outputEndpoint(endpoint):
-            return endpoint.name
+            endpoint.name
         }
     }
     
     public var uniqueID: MIDIIdentifier {
         switch self {
         case let .device(device):
-            return device.uniqueID
+            device.uniqueID
         case let .entity(entity):
-            return entity.uniqueID
+            entity.uniqueID
         case let .inputEndpoint(endpoint):
-            return endpoint.uniqueID
+            endpoint.uniqueID
         case let .outputEndpoint(endpoint):
-            return endpoint.uniqueID
+            endpoint.uniqueID
         }
     }
     
     public var coreMIDIObjectRef: CoreMIDIObjectRef {
         switch self {
         case let .device(device):
-            return device.coreMIDIObjectRef
+            device.coreMIDIObjectRef
         case let .entity(entity):
-            return entity.coreMIDIObjectRef
+            entity.coreMIDIObjectRef
         case let .inputEndpoint(endpoint):
-            return endpoint.coreMIDIObjectRef
+            endpoint.coreMIDIObjectRef
         case let .outputEndpoint(endpoint):
-            return endpoint.coreMIDIObjectRef
+            endpoint.coreMIDIObjectRef
         }
     }
     
@@ -171,16 +171,16 @@ extension AnyMIDIIOObject: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .device(device):
-            return "\(device)"
+            "\(device)"
     
         case let .entity(entity):
-            return "\(entity)"
+            "\(entity)"
     
         case let .inputEndpoint(endpoint):
-            return "\(endpoint)"
+            "\(endpoint)"
     
         case let .outputEndpoint(endpoint):
-            return "\(endpoint)"
+            "\(endpoint)"
         }
     }
 }

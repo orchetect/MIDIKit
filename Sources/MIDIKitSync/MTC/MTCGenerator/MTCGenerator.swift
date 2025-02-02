@@ -1,7 +1,7 @@
 //
 //  MTCGenerator.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -130,32 +130,30 @@ public final class MTCGenerator: SendsMIDIEvents, @unchecked Sendable { // @unch
         // double and quadruple rates use the same value as their 1x rate
         
         // duration in seconds for one quarter-frame
-        let rate: Double
-        
-        switch frameRate {
-        case .fps23_976:  rate = 0.010427083333333333
-        case .fps24:      rate = 0.010416666666666666
-        case .fps24_98:   rate = 0.010009999999999998
-        case .fps25:      rate = 0.01
-        case .fps29_97:   rate = 0.008341666666666666
-        case .fps29_97d:  rate = 0.008341666666666666
-        case .fps30:      rate = 0.008333333333333333
-        case .fps30d:     rate = 0.008341666666666666
-        case .fps47_952:  rate = 0.010427083333333333 // _23_976
-        case .fps48:      rate = 0.010416666666666666 // _24
-        case .fps50:      rate = 0.01                 // _25
-        case .fps59_94:   rate = 0.008341666666666666 // _29_97
-        case .fps59_94d:  rate = 0.008341666666666666 // _29_97_drop
-        case .fps60:      rate = 0.008333333333333333 // _30
-        case .fps60d:     rate = 0.008341666666666666 // _30_drop
-        case .fps90:      rate = 0.008333333333333333 // _30
-        case .fps95_904:  rate = 0.010427083333333333 // _23_976
-        case .fps96:      rate = 0.010416666666666666 // _24
-        case .fps100:     rate = 0.01                 // _25
-        case .fps119_88:  rate = 0.008341666666666666 // _29_97
-        case .fps119_88d: rate = 0.008341666666666666 // _29_97_drop
-        case .fps120:     rate = 0.008333333333333333 // _30
-        case .fps120d:    rate = 0.008341666666666666 // _30_drop
+        let rate = switch frameRate {
+        case .fps23_976:  0.010427083333333333
+        case .fps24:      0.010416666666666666
+        case .fps24_98:   0.010009999999999998
+        case .fps25:      0.01
+        case .fps29_97:   0.008341666666666666
+        case .fps29_97d:  0.008341666666666666
+        case .fps30:      0.008333333333333333
+        case .fps30d:     0.008341666666666666
+        case .fps47_952:  0.010427083333333333 // _23_976
+        case .fps48:      0.010416666666666666 // _24
+        case .fps50:      0.01                 // _25
+        case .fps59_94:   0.008341666666666666 // _29_97
+        case .fps59_94d:  0.008341666666666666 // _29_97_drop
+        case .fps60:      0.008333333333333333 // _30
+        case .fps60d:     0.008341666666666666 // _30_drop
+        case .fps90:      0.008333333333333333 // _30
+        case .fps95_904:  0.010427083333333333 // _23_976
+        case .fps96:      0.010416666666666666 // _24
+        case .fps100:     0.01                 // _25
+        case .fps119_88:  0.008341666666666666 // _29_97
+        case .fps119_88d: 0.008341666666666666 // _29_97_drop
+        case .fps120:     0.008333333333333333 // _30
+        case .fps120d:    0.008341666666666666 // _30_drop
         }
         
         timer.setRate(.seconds(rate))

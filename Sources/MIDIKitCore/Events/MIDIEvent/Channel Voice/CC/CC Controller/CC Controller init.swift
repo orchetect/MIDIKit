@@ -1,7 +1,7 @@
 //
 //  CC Controller init.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.CC.Controller {
@@ -140,7 +140,6 @@ extension MIDIEvent.CC.Controller {
         case 125: self = .mode(.omniModeOn)
         case 126: self = .mode(.monoModeOn)
         case 127: self = .mode(.polyModeOn)
-    
         default:
             // should never happen since the switch case covers all 128 values of UInt7
             assertionFailure("Unhandled MIDI CC controller number: \(number).")

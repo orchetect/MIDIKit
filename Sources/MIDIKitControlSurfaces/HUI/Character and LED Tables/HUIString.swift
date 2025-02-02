@@ -1,13 +1,13 @@
 //
 //  HUIString.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
 
 public protocol HUIString: Equatable, Hashable, Sendable, CustomStringConvertible
-where Element: Equatable & Hashable & Sendable
+    where Element: Equatable & Hashable & Sendable
 {
     associatedtype Element: HUICharacter
     static var defaultChars: [Element] { get }

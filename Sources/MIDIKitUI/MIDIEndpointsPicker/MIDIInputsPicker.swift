@@ -1,7 +1,7 @@
 //
 //  MIDIInputsPicker.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if canImport(SwiftUI) && !os(tvOS) && !os(watchOS)
@@ -74,9 +74,11 @@ public struct MIDIInputsPicker: View, _MIDIInputsSelectable {
     }
     
     private func updateOutputConnection(id: MIDIIdentifier?) {
-        updateOutputConnection(selectedUniqueID: id,
-                               selectedDisplayName: selectionDisplayName,
-                               midiManager: midiManager)
+        updateOutputConnection(
+            selectedUniqueID: id,
+            selectedDisplayName: selectionDisplayName,
+            midiManager: midiManager
+        )
     }
 }
 

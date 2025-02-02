@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState FootswitchesAndSounds.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -24,10 +24,10 @@ extension HUISurfaceModelState.FootswitchesAndSounds: HUISurfaceModelStateProtoc
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .footswitchRelay1: return footswitchRelay1
-        case .footswitchRelay2: return footswitchRelay2
-        case .click:            return click
-        case .beep:             return beep
+        case .footswitchRelay1: footswitchRelay1
+        case .footswitchRelay2: footswitchRelay2
+        case .click:            click
+        case .beep:             beep
         }
     }
     

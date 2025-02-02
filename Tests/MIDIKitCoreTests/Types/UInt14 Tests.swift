@@ -1,7 +1,7 @@
 //
 //  UInt14 Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -9,9 +9,9 @@ import MIDIKitCore
 import Testing
 
 @Suite struct UInt14_Tests {
-    fileprivate let _min      = 0b000000_00000000 // int     0, hex 0x0000
-    fileprivate let _midpoint = 0b100000_00000000 // int  8192, hex 0x2000
-    fileprivate let _max      = 0b111111_11111111 // int 16383, hex 0x3FFF
+    private let _min      = 0b000000_00000000 // int     0, hex 0x0000
+    private let _midpoint = 0b100000_00000000 // int  8192, hex 0x2000
+    private let _max      = 0b111111_11111111 // int 16383, hex 0x3FFF
     
     @Test
     func init_BinaryInteger() {
@@ -133,15 +133,15 @@ import Testing
     func initBytePair() {
         #expect(
             UInt14(bytePair: BytePair(msb: 0x00, lsb: 0x00)).intValue ==
-            _min
+                _min
         )
         #expect(
             UInt14(bytePair: BytePair(msb: 0x40, lsb: 0x00)).intValue ==
-            _midpoint
+                _midpoint
         )
         #expect(
             UInt14(bytePair: BytePair(msb: 0x7F, lsb: 0x7F)).intValue ==
-            _max
+                _max
         )
     }
     
@@ -149,15 +149,15 @@ import Testing
     func initUInt7Pair() {
         #expect(
             UInt14(uInt7Pair: UInt7Pair(msb: 0x00, lsb: 0x00)).intValue ==
-            _min
+                _min
         )
         #expect(
             UInt14(uInt7Pair: UInt7Pair(msb: 0x40, lsb: 0x00)).intValue ==
-            _midpoint
+                _midpoint
         )
         #expect(
             UInt14(uInt7Pair: UInt7Pair(msb: 0x7F, lsb: 0x7F)).intValue ==
-            _max
+                _max
         )
     }
     

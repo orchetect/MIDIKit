@@ -1,7 +1,7 @@
 //
 //  HUISurfaceEvent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -57,38 +57,38 @@ extension HUISurfaceEvent: CustomStringConvertible {
     public var description: String {
         switch self {
         case .ping:
-            return "ping"
+            "ping"
             
         case let .switch(
             huiSwitch: huiSwitch,
             state: state
         ):
-            return "switch(\(huiSwitch), state: \(state ? "on" : "off"))"
+            "switch(\(huiSwitch), state: \(state ? "on" : "off"))"
             
         case let .faderLevel(
             channelStrip: channelStrip,
             level: level
         ):
-            return "faderLevel(channelStrip: \(channelStrip), level: \(level))"
+            "faderLevel(channelStrip: \(channelStrip), level: \(level))"
             
         case let .levelMeter(
             channelStrip: channelStrip,
             side: side,
             level: level
         ):
-            return "levelMeter(channelStrip: \(channelStrip), side: \(side), level: \(level))"
+            "levelMeter(channelStrip: \(channelStrip), side: \(side), level: \(level))"
             
         case let .vPot(
             vPot: vPot,
             delta: delta
         ):
-            return "vPot(\(vPot), delta: \(delta))"
+            "vPot(\(vPot), delta: \(delta))"
             
         case let .jogWheel(delta):
-            return "jogWheel(delta: \(delta))"
+            "jogWheel(delta: \(delta))"
             
         case .systemReset:
-            return "systemReset"
+            "systemReset"
         }
     }
 }

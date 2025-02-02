@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState ChannelStrip.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -53,14 +53,14 @@ extension HUISurfaceModelState.ChannelStrip: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .recordReady:  return recordReady
-        case .insert:       return insert
-        case .vPotSelect:   return vPotSelect
-        case .auto:         return auto
-        case .solo:         return solo
-        case .mute:         return mute
-        case .select:       return select
-        case .faderTouched: return fader.touched
+        case .recordReady:  recordReady
+        case .insert:       insert
+        case .vPotSelect:   vPotSelect
+        case .auto:         auto
+        case .solo:         solo
+        case .mute:         mute
+        case .select:       select
+        case .faderTouched: fader.touched
         }
     }
     

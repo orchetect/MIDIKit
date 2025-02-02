@@ -1,7 +1,7 @@
 //
 //  ChanVoice Value Conversions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -94,11 +94,11 @@ extension MIDIEvent {
     /// Scales a 7-bit value to a unit interval value.
     static func scaledUnitInterval(from7Bit source: UInt7) -> Double {
         if source <= 0x40 {
-            return Double(source.uInt8Value) / 0x80
+            Double(source.uInt8Value) / 0x80
         } else if source == 0x7F {
-            return 1.0
+            1.0
         } else {
-            return 0.5000000000023283 + (Double(source.uInt8Value - 0x40) / 0x7E)
+            0.5000000000023283 + (Double(source.uInt8Value - 0x40) / 0x7E)
         }
     }
     
@@ -122,11 +122,11 @@ extension MIDIEvent {
     /// Scales a 14-bit value to a unit interval value.
     static func scaledUnitInterval(from14Bit source: UInt14) -> Double {
         if source <= 0x2000 {
-            return Double(source.uInt16Value) / 0x4000
+            Double(source.uInt16Value) / 0x4000
         } else if source == 0x3FFF {
-            return 1.0
+            1.0
         } else {
-            return 0.5000000000023283 + (Double(source.uInt16Value - 0x2000) / 0x3FFE)
+            0.5000000000023283 + (Double(source.uInt16Value - 0x2000) / 0x3FFE)
         }
     }
     
@@ -150,11 +150,11 @@ extension MIDIEvent {
     /// Scales a 16-bit value to a unit interval value.
     static func scaledUnitInterval(from16Bit source: UInt16) -> Double {
         if source <= 0x8000 {
-            return Double(source) / 0x10000
+            Double(source) / 0x10000
         } else if source == 0xFFFF {
-            return 1.0
+            1.0
         } else {
-            return 0.5000000000023283 + (Double(source - 0x8000) / 0xFFFE)
+            0.5000000000023283 + (Double(source - 0x8000) / 0xFFFE)
         }
     }
     
@@ -178,11 +178,11 @@ extension MIDIEvent {
     /// Scales a 32-bit value to a unit interval value.
     static func scaledUnitInterval(from32Bit source: UInt32) -> Double {
         if source <= 0x8000_0000 {
-            return Double(source) / 0x1_0000_0000
+            Double(source) / 0x1_0000_0000
         } else if source == 0xFFFF_FFFF {
-            return 1.0
+            1.0
         } else {
-            return 0.5000000000023283 + (Double(source - 0x8000_0000) / 0xFFFF_FFFE)
+            0.5000000000023283 + (Double(source - 0x8000_0000) / 0xFFFF_FFFE)
         }
     }
     

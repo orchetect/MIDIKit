@@ -1,7 +1,7 @@
 //
 //  MIDIEvent Filter Channel Voice.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 // MARK: - Metadata properties
@@ -22,10 +22,10 @@ extension MIDIEvent {
              .pressure,
              .rpn,
              .nrpn:
-            return true
+            true
     
         default:
-            return false
+            false
         }
     }
     
@@ -33,19 +33,19 @@ extension MIDIEvent {
     public func isChannelVoice(ofType chanVoiceType: ChanVoiceType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .noteOn:         return chanVoiceType == .noteOn
-        case .noteOff:        return chanVoiceType == .noteOff
-        case .noteCC:         return chanVoiceType == .noteCC
-        case .notePitchBend:  return chanVoiceType == .notePitchBend
-        case .notePressure:   return chanVoiceType == .notePressure
-        case .noteManagement: return chanVoiceType == .noteManagement
-        case .cc:             return chanVoiceType == .cc
-        case .programChange:  return chanVoiceType == .programChange
-        case .pitchBend:      return chanVoiceType == .pitchBend
-        case .pressure:       return chanVoiceType == .pressure
-        case .rpn:            return chanVoiceType == .rpn
-        case .nrpn:           return chanVoiceType == .nrpn
-        default:              return false
+        case .noteOn:         chanVoiceType == .noteOn
+        case .noteOff:        chanVoiceType == .noteOff
+        case .noteCC:         chanVoiceType == .noteCC
+        case .notePitchBend:  chanVoiceType == .notePitchBend
+        case .notePressure:   chanVoiceType == .notePressure
+        case .noteManagement: chanVoiceType == .noteManagement
+        case .cc:             chanVoiceType == .cc
+        case .programChange:  chanVoiceType == .programChange
+        case .pitchBend:      chanVoiceType == .pitchBend
+        case .pressure:       chanVoiceType == .pressure
+        case .rpn:            chanVoiceType == .rpn
+        case .nrpn:           chanVoiceType == .nrpn
+        default:              false
         }
         // swiftformat:enable spacearoundoperators
     }
@@ -67,25 +67,25 @@ extension Collection<MIDIEvent> {
     public func filter(chanVoice types: MIDIEvent.ChanVoiceTypes) -> [Element] {
         switch types {
         case .only:
-            return filter { $0.isChannelVoice }
+            filter { $0.isChannelVoice }
     
         case let .onlyType(specificType):
-            return filter { $0.isChannelVoice(ofType: specificType) }
+            filter { $0.isChannelVoice(ofType: specificType) }
     
         case let .onlyTypes(specificTypes):
-            return filter { $0.isChannelVoice(ofTypes: specificTypes) }
+            filter { $0.isChannelVoice(ofTypes: specificTypes) }
     
         case let .onlyChannel(channel):
-            return filter { $0.channel == channel }
+            filter { $0.channel == channel }
     
         case let .onlyChannels(channels):
-            return filter {
+            filter {
                 guard let channel = $0.channel else { return false }
                 return channels.contains(channel)
             }
     
         case let .onlyCC(cc):
-            return filter {
+            filter {
                 guard case let .cc(event) = $0
                 else { return false }
     
@@ -93,7 +93,7 @@ extension Collection<MIDIEvent> {
             }
     
         case let .onlyCCs(ccs):
-            return filter {
+            filter {
                 guard case let .cc(event) = $0
                 else { return false }
     
@@ -101,21 +101,21 @@ extension Collection<MIDIEvent> {
             }
     
         case let .onlyNotesInRange(noteRange):
-            return filter {
+            filter {
                 switch $0 {
                 case let .noteOn(noteOn):
-                    return noteRange.contains(noteOn.note.number)
+                    noteRange.contains(noteOn.note.number)
     
                 case let .noteOff(noteOff):
-                    return noteRange.contains(noteOff.note.number)
+                    noteRange.contains(noteOff.note.number)
     
                 default:
-                    return false
+                    false
                 }
             }
     
         case let .onlyNotesInRanges(noteRanges):
-            return filter {
+            filter {
                 switch $0 {
                 case let .noteOn(noteOn):
                     for noteRange in noteRanges {
@@ -135,31 +135,31 @@ extension Collection<MIDIEvent> {
             }
     
         case let .keepChannel(channel):
-            return filter {
+            filter {
                 guard let _ = $0.channel else { return true }
                 return $0.channel == channel
             }
     
         case let .keepChannels(channels):
-            return filter {
+            filter {
                 guard let channel = $0.channel else { return true }
                 return channels.contains(channel)
             }
     
         case let .keepType(specificType):
-            return filter {
+            filter {
                 guard $0.isChannelVoice else { return true }
                 return $0.isChannelVoice(ofType: specificType)
             }
     
         case let .keepTypes(specificTypes):
-            return filter {
+            filter {
                 guard $0.isChannelVoice else { return true }
                 return $0.isChannelVoice(ofTypes: specificTypes)
             }
     
         case let .keepCC(cc):
-            return filter {
+            filter {
                 guard $0.isChannelVoice else { return true }
     
                 guard case let .cc(event) = $0
@@ -169,7 +169,7 @@ extension Collection<MIDIEvent> {
             }
     
         case let .keepCCs(ccs):
-            return filter {
+            filter {
                 guard $0.isChannelVoice else { return true }
     
                 guard case let .cc(event) = $0
@@ -179,21 +179,21 @@ extension Collection<MIDIEvent> {
             }
     
         case let .keepNotesInRange(noteRange):
-            return filter {
+            filter {
                 switch $0 {
                 case let .noteOn(noteOn):
-                    return noteRange.contains(noteOn.note.number)
+                    noteRange.contains(noteOn.note.number)
     
                 case let .noteOff(noteOff):
-                    return noteRange.contains(noteOff.note.number)
+                    noteRange.contains(noteOff.note.number)
     
                 default:
-                    return true
+                    true
                 }
             }
     
         case let .keepNotesInRanges(noteRanges):
-            return filter {
+            filter {
                 switch $0 {
                 case let .noteOn(noteOn):
                     for noteRange in noteRanges {
@@ -213,31 +213,31 @@ extension Collection<MIDIEvent> {
             }
     
         case .drop:
-            return filter { !$0.isChannelVoice }
+            filter { !$0.isChannelVoice }
     
         case let .dropChannel(channel):
-            return filter { $0.channel != channel }
+            filter { $0.channel != channel }
     
         case let .dropChannels(channels):
-            return filter {
+            filter {
                 guard let channel = $0.channel else { return true }
                 return !channels.contains(channel)
             }
     
         case let .dropType(specificType):
-            return filter {
+            filter {
                 guard $0.isChannelVoice else { return true }
                 return !$0.isChannelVoice(ofType: specificType)
             }
     
         case let .dropTypes(specificTypes):
-            return filter {
+            filter {
                 guard $0.isChannelVoice else { return true }
                 return !$0.isChannelVoice(ofTypes: specificTypes)
             }
     
         case let .dropCC(cc):
-            return filter {
+            filter {
                 guard case let .cc(event) = $0
                 else { return true }
     
@@ -245,7 +245,7 @@ extension Collection<MIDIEvent> {
             }
     
         case let .dropCCs(ccs):
-            return filter {
+            filter {
                 guard case let .cc(event) = $0
                 else { return true }
     
@@ -253,21 +253,21 @@ extension Collection<MIDIEvent> {
             }
          
         case let .dropNotesInRange(noteRange):
-            return filter {
+            filter {
                 switch $0 {
                 case let .noteOn(noteOn):
-                    return !noteRange.contains(noteOn.note.number)
+                    !noteRange.contains(noteOn.note.number)
     
                 case let .noteOff(noteOff):
-                    return !noteRange.contains(noteOff.note.number)
+                    !noteRange.contains(noteOff.note.number)
     
                 default:
-                    return true
+                    true
                 }
             }
     
         case let .dropNotesInRanges(noteRanges):
-            return filter {
+            filter {
                 switch $0 {
                 case let .noteOn(noteOn):
                     for noteRange in noteRanges {

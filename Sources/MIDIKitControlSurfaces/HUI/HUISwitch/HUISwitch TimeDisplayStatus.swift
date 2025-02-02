@@ -1,7 +1,7 @@
 //
 //  HUISwitch TimeDisplayStatus.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -41,10 +41,10 @@ extension HUISwitch.TimeDisplayStatus: HUISwitchProtocol {
         switch self {
         // Zone 0x16
         // Timecode LEDs (no buttons, LEDs only)
-        case .timecode: return (0x16, 0x0)
-        case .feet:     return (0x16, 0x1)
-        case .beats:    return (0x16, 0x2)
-        case .rudeSolo: return (0x16, 0x3)
+        case .timecode: (0x16, 0x0)
+        case .feet:     (0x16, 0x1)
+        case .beats:    (0x16, 0x2)
+        case .rudeSolo: (0x16, 0x3)
         }
     }
 }
@@ -54,10 +54,10 @@ extension HUISwitch.TimeDisplayStatus: CustomStringConvertible {
         switch self {
         // Zone 0x16
         // Timecode LEDs (no buttons, LEDs only)
-        case .timecode: return "timecode"
-        case .feet:     return "feet"
-        case .beats:    return "beats"
-        case .rudeSolo: return "rudeSolo"
+        case .timecode: "timecode"
+        case .feet:     "feet"
+        case .beats:    "beats"
+        case .rudeSolo: "rudeSolo"
         }
     }
 }

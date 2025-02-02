@@ -1,7 +1,7 @@
 //
 //  UInt9 Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -9,9 +9,9 @@ import MIDIKitCore
 import Testing
 
 @Suite struct UInt9_Tests {
-    fileprivate let _min      = 0b0_00000000 // int   0, hex 0x000
-    fileprivate let _midpoint = 0b1_00000000 // int 256, hex 0x0FF
-    fileprivate let _max      = 0b1_11111111 // int 511, hex 0x1FF
+    private let _min      = 0b0_00000000 // int   0, hex 0x000
+    private let _midpoint = 0b1_00000000 // int 256, hex 0x0FF
+    private let _max      = 0b1_11111111 // int 511, hex 0x1FF
     
     @Test
     func init_BinaryInteger() {

@@ -1,7 +1,7 @@
 //
 //  MIDIFileEventType.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -45,28 +45,28 @@ extension MIDIFileEventType {
     @inline(__always)
     public var concreteType: MIDIFileEventPayload.Type {
         switch self {
-        case .cc:                 return MIDIFileEvent.CC.self
-        case .channelPrefix:      return MIDIFileEvent.ChannelPrefix.self
-        case .keySignature:       return MIDIFileEvent.KeySignature.self
-        case .noteOff:            return MIDIFileEvent.NoteOff.self
-        case .noteOn:             return MIDIFileEvent.NoteOn.self
-        case .notePressure:       return MIDIFileEvent.NotePressure.self
-        case .pitchBend:          return MIDIFileEvent.PitchBend.self
-        case .portPrefix:         return MIDIFileEvent.PortPrefix.self
-        case .pressure:           return MIDIFileEvent.Pressure.self
-        case .programChange:      return MIDIFileEvent.ProgramChange.self
-        case .rpn:                return MIDIFileEvent.RPN.self
-        case .nrpn:               return MIDIFileEvent.NRPN.self
-        case .sequenceNumber:     return MIDIFileEvent.SequenceNumber.self
-        case .sequencerSpecific:  return MIDIFileEvent.SequencerSpecific.self
-        case .smpteOffset:        return MIDIFileEvent.SMPTEOffset.self
-        case .sysEx7:             return MIDIFileEvent.SysEx7.self
-        case .tempo:              return MIDIFileEvent.Tempo.self
-        case .text:               return MIDIFileEvent.Text.self
-        case .timeSignature:      return MIDIFileEvent.TimeSignature.self
-        case .universalSysEx7:    return MIDIFileEvent.UniversalSysEx7.self
-        case .unrecognizedMeta:   return MIDIFileEvent.UnrecognizedMeta.self
-        case .xmfPatchTypePrefix: return MIDIFileEvent.XMFPatchTypePrefix.self
+        case .cc:                 MIDIFileEvent.CC.self
+        case .channelPrefix:      MIDIFileEvent.ChannelPrefix.self
+        case .keySignature:       MIDIFileEvent.KeySignature.self
+        case .noteOff:            MIDIFileEvent.NoteOff.self
+        case .noteOn:             MIDIFileEvent.NoteOn.self
+        case .notePressure:       MIDIFileEvent.NotePressure.self
+        case .pitchBend:          MIDIFileEvent.PitchBend.self
+        case .portPrefix:         MIDIFileEvent.PortPrefix.self
+        case .pressure:           MIDIFileEvent.Pressure.self
+        case .programChange:      MIDIFileEvent.ProgramChange.self
+        case .rpn:                MIDIFileEvent.RPN.self
+        case .nrpn:               MIDIFileEvent.NRPN.self
+        case .sequenceNumber:     MIDIFileEvent.SequenceNumber.self
+        case .sequencerSpecific:  MIDIFileEvent.SequencerSpecific.self
+        case .smpteOffset:        MIDIFileEvent.SMPTEOffset.self
+        case .sysEx7:             MIDIFileEvent.SysEx7.self
+        case .tempo:              MIDIFileEvent.Tempo.self
+        case .text:               MIDIFileEvent.Text.self
+        case .timeSignature:      MIDIFileEvent.TimeSignature.self
+        case .universalSysEx7:    MIDIFileEvent.UniversalSysEx7.self
+        case .unrecognizedMeta:   MIDIFileEvent.UnrecognizedMeta.self
+        case .xmfPatchTypePrefix: MIDIFileEvent.XMFPatchTypePrefix.self
         }
     }
 }

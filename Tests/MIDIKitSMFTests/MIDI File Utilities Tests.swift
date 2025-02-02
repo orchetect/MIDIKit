@@ -1,7 +1,7 @@
 //
 //  MIDI File Utilities Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 @testable import MIDIKitSMF
@@ -41,7 +41,7 @@ import Testing
         
         let trailingBytesCases: [[UInt8]] = [[], [0x80], [0x12, 0x23]]
         
-        trailingBytesCases.forEach { trailingBytes in
+        for trailingBytes in trailingBytesCases {
             let decode = { MIDIFile.decodeVariableLengthValue(from: $0 + trailingBytes) }
             
             // 1 byte: max 7-bit value

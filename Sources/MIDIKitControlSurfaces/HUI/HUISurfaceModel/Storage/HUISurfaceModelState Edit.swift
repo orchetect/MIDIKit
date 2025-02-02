@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState Edit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -26,12 +26,12 @@ extension HUISurfaceModelState.Edit: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .capture:  return capture
-        case .cut:      return cut
-        case .paste:    return paste
-        case .separate: return separate
-        case .copy:     return copy
-        case .delete:   return delete
+        case .capture:  capture
+        case .cut:      cut
+        case .paste:    paste
+        case .separate: separate
+        case .copy:     copy
+        case .delete:   delete
         }
     }
     

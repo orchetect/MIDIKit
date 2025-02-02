@@ -1,7 +1,7 @@
 //
 //  ContentView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitIO
@@ -11,11 +11,11 @@ import SwiftUI
 struct ContentViewForCurrentPlatform: View {
     var body: some View {
         if #available(macOS 12, iOS 16, *) {
-            return ContentView { object, showAll in
+            ContentView { object, showAll in
                 TableDetailsView(object: object, showAll: showAll)
             }
         } else {
-            return ContentView { object, showAll in
+            ContentView { object, showAll in
                 LegacyDetailsView(object: object, showAll: showAll)
             }
         }

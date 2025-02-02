@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState ParameterEdit.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -47,14 +47,14 @@ extension HUISurfaceModelState.ParameterEdit: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .assign:        return assign
-        case .compare:       return compare
-        case .bypass:        return bypass
-        case .param1Select:  return param1Select
-        case .param2Select:  return param2Select
-        case .param3Select:  return param3Select
-        case .param4Select:  return param4Select
-        case .insertOrParam: return insertOrParam
+        case .assign:        assign
+        case .compare:       compare
+        case .bypass:        bypass
+        case .param1Select:  param1Select
+        case .param2Select:  param2Select
+        case .param3Select:  param3Select
+        case .param4Select:  param4Select
+        case .insertOrParam: insertOrParam
         }
     }
     

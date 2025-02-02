@@ -1,7 +1,7 @@
 //
 //  ContentView-iOS.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if os(iOS) || os(visionOS)
@@ -158,7 +158,7 @@ struct ContentView: View {
 extension ContentView {
     private var isMIDIOutDisabled: Bool {
         midiOutSelectedID == .invalidMIDIIdentifier ||
-        midiOutSelectedID == nil
+            midiOutSelectedID == nil
     }
     
     func sendToConnection(_ event: MIDIEvent) {
@@ -172,10 +172,10 @@ extension ContentView {
     
     func color(for event: MIDIEvent) -> Color? {
         switch event {
-        case .noteOn: return .green
-        case .noteOff: return .red
-        case .cc: return .orange
-        default: return nil
+        case .noteOn: .green
+        case .noteOff: .red
+        case .cc: .orange
+        default: nil
         }
     }
 }

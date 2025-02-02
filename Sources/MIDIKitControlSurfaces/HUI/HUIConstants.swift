@@ -1,7 +1,7 @@
 //
 //  HUIConstants.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -50,6 +50,7 @@ extension HUIConstants {
                     byte3: 0x66
                 )
             }
+
             @inlinable
             static var kSubID1: UInt7 { 0x05 } // product ID?
             

@@ -1,7 +1,7 @@
 //
 //  EventsLogging.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -35,14 +35,14 @@ extension MIDIReceiver {
             }
         
         return Events(options: options) { events, timeStamp, source in
-                let logString = generateLogString(
-                    events: events,
-                    timeStamp: timeStamp,
-                    source: source,
-                    options: options
-                )
-                stringLogHandler(logString)
-            }
+            let logString = generateLogString(
+                events: events,
+                timeStamp: timeStamp,
+                source: source,
+                options: options
+            )
+            stringLogHandler(logString)
+        }
     }
     
     fileprivate static func generateLogString(

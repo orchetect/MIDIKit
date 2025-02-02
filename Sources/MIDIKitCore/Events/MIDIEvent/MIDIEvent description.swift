@@ -1,7 +1,7 @@
 //
 //  MIDIEvent description.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -14,12 +14,11 @@ extension MIDIEvent: CustomStringConvertible {
             // -------------------
             
         case let .noteOn(event):
-            let attrStr: String
-            switch event.attribute {
+            let attrStr = switch event.attribute {
             case .none:
-                attrStr = ""
+                ""
             default:
-                attrStr = "\(event.attribute), "
+                "\(event.attribute), "
             }
             
             let noteString = "\(event.note.number) (\(event.note.stringValue()))"
@@ -34,12 +33,11 @@ extension MIDIEvent: CustomStringConvertible {
             return "noteOn(\(noteString), vel: \(velString), \(attrStr)chan: \(channelString), group: \(groupString))"
             
         case let .noteOff(event):
-            let attrStr: String
-            switch event.attribute {
+            let attrStr = switch event.attribute {
             case .none:
-                attrStr = ""
+                ""
             default:
-                attrStr = "\(event.attribute), "
+                "\(event.attribute), "
             }
             
             let noteString = "\(event.note.number) (\(event.note.stringValue()))"

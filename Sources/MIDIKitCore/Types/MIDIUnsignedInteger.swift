@@ -1,7 +1,7 @@
 //
 //  MIDIUnsignedInteger.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -35,7 +35,8 @@ public protocol MIDIUnsignedInteger: UnsignedInteger, Codable, Sendable
     // Public conveniences
     
     /// Returns the integer as an `Int` instance
-    @inlinable var intValue: Int { get }
+    @inlinable
+    var intValue: Int { get }
     
     // FixedWidthInteger types declared without conforming to FixedWidthInteger
     static var bitWidth: Int { get }
@@ -43,10 +44,17 @@ public protocol MIDIUnsignedInteger: UnsignedInteger, Codable, Sendable
     static var max: Self { get }
     
     // implemented in _MIDIUnsignedInteger
-    @inlinable init(_ source: some BinaryInteger)
-    @inlinable init(truncatingIfNeeded source: some BinaryInteger)
-    @inlinable init<T: BinaryFloatingPoint>(_ source: T)
-    @inlinable init?<T: BinaryFloatingPoint>(exactly source: T)
+    @inlinable
+    init(_ source: some BinaryInteger)
+    
+    @inlinable
+    init(truncatingIfNeeded source: some BinaryInteger)
+    
+    @inlinable
+    init<T: BinaryFloatingPoint>(_ source: T)
+    
+    @inlinable
+    init?<T: BinaryFloatingPoint>(exactly source: T)
 }
 
 // MARK: - Internal Protocol

@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelNotification ChannelStripComponent.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -54,27 +54,27 @@ extension HUISurfaceModelNotification.ChannelStripComponent: CustomStringConvert
     public var description: String {
         switch self {
         case let .levelMeter(side, level):
-            return "levelMeter(side: \(side), level: \(level))"
+            "levelMeter(side: \(side), level: \(level))"
         case let .recordReady(state):
-            return "recordReady(state: \(state))"
+            "recordReady(state: \(state))"
         case let .insert(state):
-            return "insert(state: \(state))"
+            "insert(state: \(state))"
         case let .vPotSelect(state):
-            return "vPotSelect(state: \(state))"
+            "vPotSelect(state: \(state))"
         case let .vPot(display):
-            return "vPot(\(display))"
+            "vPot(\(display))"
         case let .auto(state):
-            return "auto(state: \(state))"
+            "auto(state: \(state))"
         case let .solo(state):
-            return "solo(state: \(state))"
+            "solo(state: \(state))"
         case let .mute(state):
-            return "mute(state: \(state))"
+            "mute(state: \(state))"
         case let .nameDisplay(text):
-            return "nameDisplay(text: \(text))"
+            "nameDisplay(text: \(text))"
         case let .select(state):
-            return "select(state: \(state))"
+            "select(state: \(state))"
         case let .faderLevel(level):
-            return "faderLevel(\(level))"
+            "faderLevel(\(level))"
         }
     }
 }

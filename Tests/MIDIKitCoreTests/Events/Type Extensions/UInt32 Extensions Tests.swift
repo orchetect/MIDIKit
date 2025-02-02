@@ -1,16 +1,16 @@
 //
 //  UInt32 Extensions Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
 import Testing
 
 @Suite struct UInt32Extensions_Tests {
-    fileprivate let _min: UInt32      = 0x0000_0000
-    fileprivate let _midpoint: UInt32 = 0x8000_0000
-    fileprivate let _max: UInt32      = 0xFFFF_FFFF
+    private let _min: UInt32      = 0x0000_0000
+    private let _midpoint: UInt32 = 0x8000_0000
+    private let _max: UInt32      = 0xFFFF_FFFF
     
     @Test
     func initBipolarUnitInterval_Float() {

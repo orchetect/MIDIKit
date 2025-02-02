@@ -1,7 +1,7 @@
 //
 //  MIDIIONotification.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -151,39 +151,39 @@ extension MIDIIONotification: CustomStringConvertible {
     public var description: String {
         switch self {
         case .setupChanged:
-            return "setupChanged"
+            "setupChanged"
     
         case let .added(object: object, parent: parent):
             if let parent {
-                return "added(\(object), parent: \(parent))"
+                "added(\(object), parent: \(parent))"
             } else {
-                return "added(\(object))"
+                "added(\(object))"
             }
     
         case let .removed(object: object, parent: parent):
             if let parent {
-                return "removed(\(object), parent: \(parent))"
+                "removed(\(object), parent: \(parent))"
             } else {
-                return "removed(\(object))"
+                "removed(\(object))"
             }
     
         case let .propertyChanged(object, property):
-            return "propertyChanged(\(property), for: \(object))"
+            "propertyChanged(\(property), for: \(object))"
     
         case .thruConnectionChanged:
-            return "thruConnectionChanged"
+            "thruConnectionChanged"
     
         case .serialPortOwnerChanged:
-            return "serialPortOwnerChanged"
+            "serialPortOwnerChanged"
     
         case let .ioError(device, error):
-            return "ioError(device: \(device), error: \(error))"
+            "ioError(device: \(device), error: \(error))"
     
         case .internalStart:
-            return "internalStart"
+            "internalStart"
             
         case let .other(messageIDRawValue):
-            return "other(ID: \(messageIDRawValue))"
+            "other(ID: \(messageIDRawValue))"
         }
     }
 }

@@ -1,7 +1,7 @@
 //
 //  HUISurface.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -77,6 +77,7 @@ internal import MIDIKitInternals
         _modify { yield &_remotePresenceTimer.value }
         set { _remotePresenceTimer.value = newValue }
     }
+
     @ObservationIgnored
     private nonisolated(unsafe) var _remotePresenceTimer = ThreadSafeAccessValue(value: nil as Task<Void, any Error>?)
     
@@ -105,6 +106,7 @@ internal import MIDIKitInternals
         _modify { yield &_isRemotePresent.value }
         set { _isRemotePresent.value = newValue }
     }
+
     private nonisolated(unsafe) var _isRemotePresent = ThreadSafeAccessValue(value: false)
     
     private func receivedPing() {

@@ -1,7 +1,7 @@
 //
 //  RPN NRPN IO Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 // iOS Simulator testing does not give enough permissions to allow creating virtual MIDI
@@ -119,9 +119,11 @@ extension RPN_NRPN_IO_Tests {
         try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
         
         #expect(receivedEvents == [
-            .rpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                 data: (msb: 0x10, lsb: 0x00),
-                 channel: 0x02)
+            .rpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x00),
+                channel: 0x02
+            )
         ])
         
         // dump(receivedEvents)
@@ -156,12 +158,16 @@ extension RPN_NRPN_IO_Tests {
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
         #expect(receivedEvents == [
-            .rpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                 data: (msb: 0x10, lsb: 0x00),
-                 channel: 0x02),
-            .rpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                 data: (msb: 0x10, lsb: 0x20), // adds LSB
-                 channel: 0x02)
+            .rpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x00),
+                channel: 0x02
+            ),
+            .rpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x20), // adds LSB
+                channel: 0x02
+            )
         ])
         
         // dump(receivedEvents)
@@ -226,9 +232,11 @@ extension RPN_NRPN_IO_Tests {
         )
         
         #expect(receivedEvents.filter(chanVoice: .keepType(.rpn)) == [
-            .rpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                 data: (msb: 0x10, lsb: 0x00),
-                 channel: 0x02)
+            .rpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x00),
+                channel: 0x02
+            )
         ])
         
         // dump(receivedEvents)
@@ -299,12 +307,16 @@ extension RPN_NRPN_IO_Tests {
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
         #expect(receivedEvents.filter(chanVoice: .keepType(.rpn)) == [
-            .rpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                 data: (msb: 0x10, lsb: 0x00),
-                 channel: 0x02),
-            .rpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                 data: (msb: 0x10, lsb: 0x20), // adds LSB
-                 channel: 0x02)
+            .rpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x00),
+                channel: 0x02
+            ),
+            .rpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x20), // adds LSB
+                channel: 0x02
+            )
         ])
         
         // dump(receivedEvents)
@@ -340,9 +352,11 @@ extension RPN_NRPN_IO_Tests {
         try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
         
         #expect(receivedEvents == [
-            .nrpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                  data: (msb: 0x10, lsb: 0x00),
-                  channel: 0x02)
+            .nrpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x00),
+                channel: 0x02
+            )
         ])
         
         // dump(receivedEvents)
@@ -377,12 +391,16 @@ extension RPN_NRPN_IO_Tests {
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
         #expect(receivedEvents == [
-            .nrpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                  data: (msb: 0x10, lsb: 0x00),
-                  channel: 0x02),
-            .nrpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                  data: (msb: 0x10, lsb: 0x20), // adds LSB
-                  channel: 0x02)
+            .nrpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x00),
+                channel: 0x02
+            ),
+            .nrpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x20), // adds LSB
+                channel: 0x02
+            )
         ])
         
         // dump(receivedEvents)
@@ -446,9 +464,11 @@ extension RPN_NRPN_IO_Tests {
         )
         
         #expect(receivedEvents.filter(chanVoice: .keepType(.nrpn)) == [
-            .nrpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                  data: (msb: 0x10, lsb: 0x00),
-                  channel: 0x02)
+            .nrpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x00),
+                channel: 0x02
+            )
         ])
         
         // dump(receivedEvents)
@@ -519,12 +539,16 @@ extension RPN_NRPN_IO_Tests {
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
         #expect(receivedEvents.filter(chanVoice: .keepType(.nrpn)) == [
-            .nrpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                  data: (msb: 0x10, lsb: 0x00),
-                  channel: 0x02),
-            .nrpn(parameter: .init(msb: 0x40, lsb: 0x41),
-                  data: (msb: 0x10, lsb: 0x20), // adds LSB
-                  channel: 0x02)
+            .nrpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x00),
+                channel: 0x02
+            ),
+            .nrpn(
+                parameter: .init(msb: 0x40, lsb: 0x41),
+                data: (msb: 0x10, lsb: 0x20), // adds LSB
+                channel: 0x02
+            )
         ])
         
         // dump(receivedEvents)

@@ -1,7 +1,7 @@
 //
 //  MIDIThruConnection Lifecycle.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -32,10 +32,10 @@ extension MIDIThruConnection.Lifecycle: CustomStringConvertible {
     public var description: String {
         switch self {
         case .nonPersistent:
-            return "nonPersistent"
+            "nonPersistent"
     
         case let .persistent(ownerID):
-            return "persistent(\(ownerID)"
+            "persistent(\(ownerID)"
         }
     }
 }
@@ -45,9 +45,9 @@ extension MIDIThruConnection.Lifecycle {
     public var isPersistent: Bool {
         switch self {
         case .nonPersistent:
-            return false
+            false
         case .persistent:
-            return true
+            true
         }
     }
 }

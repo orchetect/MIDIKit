@@ -1,7 +1,7 @@
 //
 //  Event NRPN Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 @testable import MIDIKitSMF
@@ -26,7 +26,7 @@ import Testing
         
         #expect(
             event.parameter ==
-            .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03)
+                .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03)
         )
         #expect(event.channel == 1)
     }
@@ -44,7 +44,7 @@ import Testing
         
         #expect(
             event.parameter ==
-            .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03)
+                .raw(parameter: .init(msb: 0x00, lsb: 0x01), dataEntryMSB: 0x02, dataEntryLSB: 0x03)
         )
         #expect(event.channel == 1)
     }
@@ -81,7 +81,7 @@ import Testing
         
         #expect(
             event.parameter ==
-            .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil)
+                .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil)
         )
         #expect(event.channel == 2)
     }
@@ -98,7 +98,7 @@ import Testing
         
         #expect(
             event.parameter ==
-            .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil)
+                .raw(parameter: .init(msb: 0x05, lsb: 0x10), dataEntryMSB: 0x08, dataEntryLSB: nil)
         )
         #expect(event.channel == 2)
     }

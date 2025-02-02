@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModel Update.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -33,14 +33,14 @@ extension HUISurfaceModel {
     ) -> HUISurfaceModelUpdateResult {
         switch receivedEvent {
         case .ping:
-            return .changed(.ping)
+            .changed(.ping)
             
         case let .levelMeter(
             channelStrip: channelStrip,
             side: side,
             level: level
         ):
-            return updateStateFromLevelMeters(
+            updateStateFromLevelMeters(
                 channelStrip: channelStrip,
                 side: side,
                 level: level,
@@ -51,7 +51,7 @@ extension HUISurfaceModel {
             channelStrip: channelStrip,
             level: level
         ):
-            return updateStateFromFaderLevel(
+            updateStateFromFaderLevel(
                 channelStrip: channelStrip,
                 level: level,
                 alwaysNotify: alwaysNotify
@@ -61,26 +61,26 @@ extension HUISurfaceModel {
             vPot: vPot,
             display: display
         ):
-            return updateStateFromVPot(
+            updateStateFromVPot(
                 vPot: vPot,
                 display: display,
                 alwaysNotify: alwaysNotify
             )
             
         case let .largeDisplay(slices: slices):
-            return updateStateFromLargeDisplay(
+            updateStateFromLargeDisplay(
                 slices: slices,
                 alwaysNotify: alwaysNotify
             )
             
         case let .timeDisplay(charsRightToLeft: chars):
-            return updateStateFromTimeDisplay(
+            updateStateFromTimeDisplay(
                 charsRightToLeft: chars,
                 alwaysNotify: alwaysNotify
             )
             
         case let .selectAssignDisplay(text: text):
-            return updateStateFromAssign(
+            updateStateFromAssign(
                 text: text,
                 alwaysNotify: alwaysNotify
             )
@@ -89,7 +89,7 @@ extension HUISurfaceModel {
             channelStrip: channelStrip,
             text: text
         ):
-            return updateStateFromChannelText(
+            updateStateFromChannelText(
                 text: text,
                 channelStrip: channelStrip,
                 alwaysNotify: alwaysNotify
@@ -99,7 +99,7 @@ extension HUISurfaceModel {
             huiSwitch: huiSwitch,
             state: state
         ):
-            return updateStateFromSwitch(
+            updateStateFromSwitch(
                 huiSwitch: huiSwitch,
                 state: state,
                 alwaysNotify: alwaysNotify

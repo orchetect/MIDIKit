@@ -166,14 +166,14 @@ extension Float32 {
                 .withMemoryRebound(to: UInt8.self) { buffer in
                     switch endianness {
                     case .platformDefault:
-                        return Data(buffer: buffer)
+                        Data(buffer: buffer)
                         
                     case .littleEndian:
                         switch NumberEndianness.system {
                         case .littleEndian:
-                            return Data(buffer: buffer)
+                            Data(buffer: buffer)
                         case .bigEndian:
-                            return Data(Data(buffer: buffer).reversed())
+                            Data(Data(buffer: buffer).reversed())
                         default:
                             fatalError() // should never happen
                         }
@@ -181,9 +181,9 @@ extension Float32 {
                     case .bigEndian:
                         switch NumberEndianness.system {
                         case .littleEndian:
-                            return Data(Data(buffer: buffer).reversed())
+                            Data(Data(buffer: buffer).reversed())
                         case .bigEndian:
-                            return Data(buffer: buffer)
+                            Data(buffer: buffer)
                         default:
                             fatalError() // should never happen
                         }
@@ -274,14 +274,14 @@ extension Double {
                 .withMemoryRebound(to: UInt8.self) { buffer in
                     switch endianness {
                     case .platformDefault:
-                        return Data(buffer: buffer)
+                        Data(buffer: buffer)
                         
                     case .littleEndian:
                         switch NumberEndianness.system {
                         case .littleEndian:
-                            return Data(buffer: buffer)
+                            Data(buffer: buffer)
                         case .bigEndian:
-                            return Data(Data(buffer: buffer).reversed())
+                            Data(Data(buffer: buffer).reversed())
                         default:
                             fatalError() // should never happen
                         }
@@ -289,9 +289,9 @@ extension Double {
                     case .bigEndian:
                         switch NumberEndianness.system {
                         case .littleEndian:
-                            return Data(Data(buffer: buffer).reversed())
+                            Data(Data(buffer: buffer).reversed())
                         case .bigEndian:
-                            return Data(buffer: buffer)
+                            Data(buffer: buffer)
                         default:
                             fatalError() // should never happen
                         }
@@ -371,12 +371,10 @@ extension FixedWidthInteger {
     /// integers.)
     @_disfavoredOverload
     package func toData(_ endianness: NumberEndianness = .platformDefault) -> Data {
-        var int: Self
-        
-        switch endianness {
-        case .platformDefault: int = self
-        case .littleEndian:    int = littleEndian
-        case .bigEndian:       int = bigEndian
+        var int: Self = switch endianness {
+        case .platformDefault: self
+        case .littleEndian:    littleEndian
+        case .bigEndian:       bigEndian
         }
         
         // TODO: Remove bindMemory(to:)

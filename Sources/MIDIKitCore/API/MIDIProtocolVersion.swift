@@ -1,7 +1,7 @@
 //
 //  MIDIProtocolVersion.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 /// MIDI protocol version.
@@ -28,10 +28,10 @@ extension MIDIProtocolVersion: CustomStringConvertible {
     public var description: String {
         switch self {
         case .midi1_0:
-            return "MIDI 1.0"
+            "MIDI 1.0"
     
         case .midi2_0:
-            return "MIDI 2.0"
+            "MIDI 2.0"
         }
     }
 }

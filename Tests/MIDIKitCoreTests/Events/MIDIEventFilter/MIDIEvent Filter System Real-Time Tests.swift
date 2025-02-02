@@ -1,7 +1,7 @@
 //
 //  MIDIEvent Filter System Real-Time Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -14,12 +14,12 @@ import Testing
     
         let events = kEvents.SysRealTime.oneOfEachEventType
     
-        events.forEach {
-            #expect(!$0.isChannelVoice)
-            #expect(!$0.isSystemCommon)
-            #expect(!$0.isSystemExclusive)
-            #expect($0.isSystemRealTime)
-            #expect(!$0.isUtility)
+        for event in events {
+            #expect(!event.isChannelVoice)
+            #expect(!event.isSystemCommon)
+            #expect(!event.isSystemExclusive)
+            #expect(event.isSystemRealTime)
+            #expect(!event.isUtility)
         }
     
         // isSystemRealTime(ofType:)

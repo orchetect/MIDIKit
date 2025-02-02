@@ -1,7 +1,7 @@
 //
 //  HUIHostEvent Encode.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -11,35 +11,35 @@ extension HUIHostEvent {
     public func encode() -> [MIDIEvent] {
         switch self {
         case .ping:
-            return [encodeHUIPing(to: .surface)]
+            [encodeHUIPing(to: .surface)]
 
         case let .levelMeter(channelStrip, side, level):
-            return [encodeHUILevelMeter(
+            [encodeHUILevelMeter(
                 channel: channelStrip,
                 side: side,
                 level: level
             )]
             
         case let .faderLevel(channelStrip, level):
-            return encodeHUIFader(level: level, channel: channelStrip)
+            encodeHUIFader(level: level, channel: channelStrip)
             
         case let .vPot(vPot, display):
-            return [encodeHUIVPot(display: display, for: vPot)]
+            [encodeHUIVPot(display: display, for: vPot)]
             
         case let .largeDisplay(slices):
-            return encodeHUILargeDisplay(slices: slices)
+            encodeHUILargeDisplay(slices: slices)
 
         case let .timeDisplay(charsRightToLeft):
-            return [encodeHUITimeDisplay(charsRightToLeft: charsRightToLeft)]
+            [encodeHUITimeDisplay(charsRightToLeft: charsRightToLeft)]
             
         case let .selectAssignDisplay(text):
-            return [encodeHUISmallDisplay(for: .selectAssign, text: text)]
+            [encodeHUISmallDisplay(for: .selectAssign, text: text)]
             
         case let .channelDisplay(channelStrip, text):
-            return [encodeHUISmallDisplay(for: .channel(channelStrip), text: text)]
+            [encodeHUISmallDisplay(for: .channel(channelStrip), text: text)]
             
         case let .switch(huiSwitch, state):
-            return encodeHUISwitch(huiSwitch, state: state, to: .surface)
+            encodeHUISwitch(huiSwitch, state: state, to: .surface)
         }
     }
 }

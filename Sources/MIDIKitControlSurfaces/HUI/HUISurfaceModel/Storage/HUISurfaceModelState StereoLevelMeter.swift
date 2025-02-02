@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState StereoLevelMeter.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -100,8 +100,8 @@ extension HUISurfaceModelState.StereoLevelMeter {
     @inlinable
     public func level(of side: HUISurfaceModelState.StereoLevelMeterSide) -> Int {
         switch side {
-        case .left:  return left
-        case .right: return right
+        case .left:  left
+        case .right: right
         }
     }
 }
@@ -128,8 +128,8 @@ extension HUISurfaceModelState.StereoLevelMeterSide: Sendable { }
 extension HUISurfaceModelState.StereoLevelMeterSide: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .left: return "left"
-        case .right: return "right"
+        case .left: "left"
+        case .right: "right"
         }
     }
 }
@@ -139,8 +139,8 @@ extension HUISurfaceModelState.StereoLevelMeterSide {
     @inlinable
     var rawValue: UInt8 {
         switch self {
-        case .left: return 0
-        case .right: return 1
+        case .left: 0
+        case .right: 1
         }
     }
 }

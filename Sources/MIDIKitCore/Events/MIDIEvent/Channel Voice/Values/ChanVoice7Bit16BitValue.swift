@@ -1,7 +1,7 @@
 //
 //  ChanVoice7Bit16BitValue.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -27,37 +27,37 @@ extension MIDIEvent.ChanVoice7Bit16BitValue: Equatable {
         case let .unitInterval(lhsInterval):
             switch rhs {
             case let .unitInterval(rhsInterval):
-                return lhsInterval == rhsInterval
+                lhsInterval == rhsInterval
     
             case let .midi1(rhsUInt7):
-                return lhs.midi1Value == rhsUInt7
+                lhs.midi1Value == rhsUInt7
     
             case let .midi2(rhsUInt16):
-                return lhs.midi2Value == rhsUInt16
+                lhs.midi2Value == rhsUInt16
             }
     
         case let .midi1(lhsUInt7):
             switch rhs {
             case .unitInterval:
-                return lhsUInt7 == rhs.midi1Value
+                lhsUInt7 == rhs.midi1Value
     
             case let .midi1(rhsUInt7):
-                return lhsUInt7 == rhsUInt7
+                lhsUInt7 == rhsUInt7
     
             case let .midi2(rhsUInt16):
-                return lhs.midi2Value == rhsUInt16
+                lhs.midi2Value == rhsUInt16
             }
     
         case let .midi2(lhsUInt16):
             switch rhs {
             case .unitInterval:
-                return lhsUInt16 == rhs.midi2Value
+                lhsUInt16 == rhs.midi2Value
     
             case let .midi1(rhsUInt7):
-                return lhs.midi1Value == rhsUInt7
+                lhs.midi1Value == rhsUInt7
     
             case let .midi2(rhsUInt16):
-                return lhsUInt16 == rhsUInt16
+                lhsUInt16 == rhsUInt16
             }
         }
     }
@@ -72,13 +72,13 @@ extension MIDIEvent.ChanVoice7Bit16BitValue {
     public var unitIntervalValue: Double {
         switch self {
         case let .unitInterval(interval):
-            return interval.clamped(to: 0.0 ... 1.0)
+            interval.clamped(to: 0.0 ... 1.0)
     
         case let .midi1(uInt7):
-            return MIDIEvent.scaledUnitInterval(from7Bit: uInt7)
+            MIDIEvent.scaledUnitInterval(from7Bit: uInt7)
     
         case let .midi2(uInt16):
-            return MIDIEvent.scaledUnitInterval(from16Bit: uInt16)
+            MIDIEvent.scaledUnitInterval(from16Bit: uInt16)
         }
     }
     
@@ -86,13 +86,13 @@ extension MIDIEvent.ChanVoice7Bit16BitValue {
     public var midi1Value: UInt7 {
         switch self {
         case let .unitInterval(interval):
-            return MIDIEvent.scaled7Bit(fromUnitInterval: interval)
+            MIDIEvent.scaled7Bit(fromUnitInterval: interval)
     
         case let .midi1(uInt7):
-            return uInt7
+            uInt7
     
         case let .midi2(uInt16):
-            return MIDIEvent.scaled7Bit(from16Bit: uInt16)
+            MIDIEvent.scaled7Bit(from16Bit: uInt16)
         }
     }
     
@@ -100,13 +100,13 @@ extension MIDIEvent.ChanVoice7Bit16BitValue {
     public var midi2Value: UInt16 {
         switch self {
         case let .unitInterval(interval):
-            return MIDIEvent.scaled16Bit(fromUnitInterval: interval)
+            MIDIEvent.scaled16Bit(fromUnitInterval: interval)
     
         case let .midi1(uInt7):
-            return MIDIEvent.scaled16Bit(from7Bit: uInt7)
+            MIDIEvent.scaled16Bit(from7Bit: uInt7)
     
         case let .midi2(uInt16):
-            return uInt16
+            uInt16
         }
     }
 }

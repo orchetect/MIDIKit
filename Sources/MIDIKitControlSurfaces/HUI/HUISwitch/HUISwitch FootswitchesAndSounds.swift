@@ -1,7 +1,7 @@
 //
 //  HUISwitch FootswitchesAndSounds.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -27,10 +27,10 @@ extension HUISwitch.FootswitchesAndSounds: HUISwitchProtocol {
         switch self {
         // Zone 0x1D
         // Functions only - no LEDs or buttons
-        case .footswitchRelay1: return (0x1D, 0x0)
-        case .footswitchRelay2: return (0x1D, 0x1)
-        case .click:            return (0x1D, 0x2)
-        case .beep:             return (0x1D, 0x3)
+        case .footswitchRelay1: (0x1D, 0x0)
+        case .footswitchRelay2: (0x1D, 0x1)
+        case .click:            (0x1D, 0x2)
+        case .beep:             (0x1D, 0x3)
         }
     }
 }
@@ -40,10 +40,10 @@ extension HUISwitch.FootswitchesAndSounds: CustomStringConvertible {
         switch self {
         // Zone 0x1D
         // Functions only - no LEDs or buttons
-        case .footswitchRelay1: return "footswitchRelay1"
-        case .footswitchRelay2: return "footswitchRelay2"
-        case .click:            return "click"
-        case .beep:             return "beep"
+        case .footswitchRelay1: "footswitchRelay1"
+        case .footswitchRelay2: "footswitchRelay2"
+        case .click:            "click"
+        case .beep:             "beep"
         }
     }
 }

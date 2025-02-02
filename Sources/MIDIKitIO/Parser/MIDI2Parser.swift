@@ -1,7 +1,7 @@
 //
 //  MIDI2Parser.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -480,18 +480,17 @@ extension MIDI2Parser {
                 .midiUInt7Pair
             let dataTuple = (msb: downscaledData.msb, lsb: downscaledData.lsb)
             
-            let newEvent: MIDIEvent
-            switch pnTypes.type {
+            let newEvent: MIDIEvent = switch pnTypes.type {
             case .registered:
                 // TODO: add RPN init and additional MIDIEvent static constructor to derive more granular RegisteredController enum case from raw parameter value.
-                newEvent = .rpn(
+                .rpn(
                     .init(parameter: param, data: dataTuple),
                     change: pnTypes.change,
                     channel: channel,
                     group: group
                 )
             case .assignable:
-                newEvent = .nrpn(
+                .nrpn(
                     .init(parameter: param, data: dataTuple),
                     change: pnTypes.change,
                     channel: channel,

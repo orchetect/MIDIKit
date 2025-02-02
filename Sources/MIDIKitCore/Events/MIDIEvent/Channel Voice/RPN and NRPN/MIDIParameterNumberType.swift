@@ -1,7 +1,7 @@
 //
 //  MIDIParameterNumberType.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 /// MIDI Parameter Number classification.
@@ -28,9 +28,9 @@ extension MIDIParameterNumberType: CustomStringConvertible {
     public var description: String {
         switch self {
         case .registered:
-            return "registered"
+            "registered"
         case .assignable:
-            return "assignable"
+            "assignable"
         }
     }
 }
@@ -58,9 +58,9 @@ extension MIDIParameterNumberType {
     ) {
         switch self {
         case .registered:
-            return MIDIEvent.RegisteredController.controllers
+            MIDIEvent.RegisteredController.controllers
         case .assignable:
-            return MIDIEvent.AssignableController.controllers
+            MIDIEvent.AssignableController.controllers
         }
     }
 }

@@ -1,7 +1,7 @@
 //
 //  Buttons.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitControlSurfaces
@@ -186,9 +186,9 @@ extension HUIStateButton {
 
         var color: Color {
             switch self {
-            case .yellow: return Color.yellow
-            case .green: return Color.green
-            case .red: return Color.red
+            case .yellow: Color.yellow
+            case .green: Color.green
+            case .red: Color.red
             }
         }
     }

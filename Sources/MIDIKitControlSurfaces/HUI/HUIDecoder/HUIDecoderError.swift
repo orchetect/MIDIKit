@@ -1,7 +1,7 @@
 //
 //  HUIDecoderError.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -18,10 +18,10 @@ public enum HUIDecoderError: LocalizedError {
 extension HUIDecoderError {
     public var errorDescription: String? {
         switch self {
-        case .malformed(let verboseError):
-            return "Malformed: \(verboseError)"
-        case .unhandled(let verboseError):
-            return "Unhandled: \(verboseError)"
+        case let .malformed(verboseError):
+            "Malformed: \(verboseError)"
+        case let .unhandled(verboseError):
+            "Unhandled: \(verboseError)"
         }
     }
 }

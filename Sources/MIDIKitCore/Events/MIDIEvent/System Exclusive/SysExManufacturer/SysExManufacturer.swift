@@ -1,7 +1,7 @@
 //
 //  SysExManufacturer.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -112,10 +112,10 @@ extension MIDIEvent.SysExManufacturer {
     public func sysEx7RawBytes() -> [UInt8] {
         switch self {
         case let .oneByte(byte):
-            return [byte.uInt8Value]
+            [byte.uInt8Value]
     
         case let .threeByte(byte2: byte2, byte3: byte3):
-            return [0x00, byte2.uInt8Value, byte3.uInt8Value]
+            [0x00, byte2.uInt8Value, byte3.uInt8Value]
         }
     }
     
@@ -123,10 +123,10 @@ extension MIDIEvent.SysExManufacturer {
     public func sysEx8RawBytes() -> [UInt8] {
         switch self {
         case let .oneByte(byte):
-            return [0x00, byte.uInt8Value]
+            [0x00, byte.uInt8Value]
     
         case let .threeByte(byte2: byte2, byte3: byte3):
-            return [
+            [
                 0b10000000 + byte2.uInt8Value,
                 byte3.uInt8Value
             ]
@@ -145,12 +145,12 @@ extension MIDIEvent.SysExManufacturer {
     public var isValid: Bool {
         switch self {
         case let .oneByte(byte):
-            return (0x01 ... 0x7D).contains(byte)
+            (0x01 ... 0x7D).contains(byte)
     
         case let .threeByte(byte2: byte2, byte3: byte3):
             // both can't be 0x00, at least one has to be non-zero.
             // all other scenarios are valid
-            return !(byte2 == 0x00 && byte3 == 0x00)
+            !(byte2 == 0x00 && byte3 == 0x00)
         }
     }
     

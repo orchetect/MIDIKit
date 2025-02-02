@@ -1,7 +1,7 @@
 //
 //  SafeDispatchTimer.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Dispatch
@@ -30,8 +30,8 @@ package final class SafeDispatchTimer /* : Sendable */ {
     package let leeway: DispatchTimeInterval
     
     /// (Read-only) State of whether timer is running or not
-    nonisolated(unsafe)
-    package internal(set) var running = false
+    package internal(set) nonisolated(unsafe)
+    var running = false
     
     /// Initialize a new timer.
     /// - Parameters:
@@ -140,14 +140,12 @@ extension SafeDispatchTimer {
         case seconds(Double)
         
         package var secondsValue: Double {
-            let value: Double
-            
-            switch self {
+            let value: Double = switch self {
             case let .hertz(hz):
-                value = 1.0 / hz.clamped(to: 0.00001...)
+                1.0 / hz.clamped(to: 0.00001...)
                 
             case let .seconds(secs):
-                value = secs
+                secs
             }
             
             return value.clamped(to: 0.000_000_001...) // 1 nanosecond min

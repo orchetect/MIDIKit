@@ -106,7 +106,7 @@ package struct PassiveDataReader<D: DataProtocol> {
             return (data: withData { $0[$0.startIndex ..< $0.startIndex] }, advanceCount: 0)
         }
         
-        if let count = count,
+        if let count,
            count < 0 { throw ReadError.invalidByteCount }
         
         let readPosStartIndex = withData { $0.index($0.startIndex, offsetBy: readOffset) }

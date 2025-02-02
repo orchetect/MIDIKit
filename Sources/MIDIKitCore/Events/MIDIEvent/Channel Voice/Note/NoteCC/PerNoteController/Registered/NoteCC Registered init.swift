@@ -1,7 +1,7 @@
 //
 //  NoteCC Registered init.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.NoteCC.PerNoteController.Registered {
@@ -269,7 +269,6 @@ extension MIDIEvent.NoteCC.PerNoteController.Registered {
         case 253: self = .undefined(.cc253)
         case 254: self = .undefined(.cc254)
         case 255: self = .undefined(.cc255)
-    
         default:
             // should never happen since the switch case covers all 256 values of UInt8
             assertionFailure("Unhandled MIDI Per-Note CC controller number: \(number).")

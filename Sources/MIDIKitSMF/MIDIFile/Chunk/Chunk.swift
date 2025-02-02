@@ -1,7 +1,7 @@
 //
 //  Chunk.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -31,10 +31,10 @@ extension MIDIFile.Chunk: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .track(track):
-            return track.description
+            track.description
             
         case let .other(unrecognizedChunk):
-            return unrecognizedChunk.description
+            unrecognizedChunk.description
         }
     }
 }
@@ -43,10 +43,10 @@ extension MIDIFile.Chunk: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case let .track(track):
-            return track.debugDescription
+            track.debugDescription
             
         case let .other(unrecognizedChunk):
-            return unrecognizedChunk.debugDescription
+            unrecognizedChunk.debugDescription
         }
     }
 }
@@ -57,10 +57,10 @@ extension MIDIFile.Chunk {
     public var unwrappedChunk: MIDIFileChunk {
         switch self {
         case let .track(chunk):
-            return chunk
+            chunk
             
         case let .other(chunk):
-            return chunk
+            chunk
         }
     }
 }
@@ -70,10 +70,10 @@ extension MIDIFileChunk {
     public var wrappedChunk: MIDIFile.Chunk {
         switch self {
         case let chunk as MIDIFile.Chunk.Track:
-            return .track(chunk)
+            .track(chunk)
             
         case let chunk as MIDIFile.Chunk.UnrecognizedChunk:
-            return .other(chunk)
+            .other(chunk)
             
         default:
             fatalError()

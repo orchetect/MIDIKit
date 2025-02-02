@@ -1,7 +1,7 @@
 //
 //  HUIHostEventDecoder.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -13,8 +13,8 @@ public final class HUIHostEventDecoder: HUIDecoder {
     
     public typealias Event = HUIHostEvent
     
-    nonisolated(unsafe)
-    public var eventHandler: EventHandler?
+    public nonisolated(unsafe)
+    var eventHandler: EventHandler?
     
     public init() {
         decoder = HUICoreDecoder(role: .host) { [weak self] coreEvent in

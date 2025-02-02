@@ -1,7 +1,7 @@
 //
 //  MTC Encoder Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 @testable import MIDIKitSync
@@ -425,14 +425,13 @@ import Testing
             
             mtcEnc.locate(to: .init(h: 1, m: 00, s: 59, f: originFrame))
             
-            let expectedFrameA: Int
-            switch mtcEnc.mtcFrameRate {
+            let expectedFrameA = switch mtcEnc.mtcFrameRate {
             case .mtc24:
-                expectedFrameA = 22
+                22
             case .mtc25:
-                expectedFrameA = 24
+                24
             case .mtc2997d, .mtc30:
-                expectedFrameA = 28
+                28
             }
             
             let expectedFrameB = 2
@@ -1445,12 +1444,11 @@ import Testing
             )
             
             mtcEnc.mtcQuarterFrame = 7
-            let dataByte: UInt8
-            switch item.mtcFrameRate {
-            case .mtc24:    dataByte = 0b01110000
-            case .mtc25:    dataByte = 0b01110010
-            case .mtc2997d: dataByte = 0b01110100
-            case .mtc30:    dataByte = 0b01110110
+            let dataByte: UInt8 = switch item.mtcFrameRate {
+            case .mtc24:    0b01110000
+            case .mtc25:    0b01110010
+            case .mtc2997d: 0b01110100
+            case .mtc30:    0b01110110
             }
             #expect(
                 mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes() ==

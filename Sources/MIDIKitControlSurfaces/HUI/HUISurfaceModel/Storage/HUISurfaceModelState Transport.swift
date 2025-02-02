@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState Transport.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -38,22 +38,22 @@ extension HUISurfaceModelState.Transport: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .talkback:      return talkback
-        case .rewind:        return rewind
-        case .fastFwd:       return fastFwd
-        case .stop:          return stop
-        case .play:          return play
-        case .record:        return record
-        case .punchAudition: return punch_audition
-        case .punchPre:      return punch_pre
-        case .punchIn:       return punch_in
-        case .punchOut:      return punch_out
-        case .punchPost:     return punch_post
-        case .rtz:           return rtz
-        case .end:           return end
-        case .online:        return online
-        case .loop:          return loop
-        case .quickPunch:    return quickPunch
+        case .talkback:      talkback
+        case .rewind:        rewind
+        case .fastFwd:       fastFwd
+        case .stop:          stop
+        case .play:          play
+        case .record:        record
+        case .punchAudition: punch_audition
+        case .punchPre:      punch_pre
+        case .punchIn:       punch_in
+        case .punchOut:      punch_out
+        case .punchPost:     punch_post
+        case .rtz:           rtz
+        case .end:           end
+        case .online:        online
+        case .loop:          loop
+        case .quickPunch:    quickPunch
         }
     }
     

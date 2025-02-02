@@ -1,7 +1,7 @@
 //
 //  DeviceTreeView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitIO
@@ -70,11 +70,11 @@ struct DeviceTreeView<DetailsContent: View>: View {
             .sortedByName()
             .flatMap {
                 [$0.asAnyMIDIIOObject()]
-                + $0.entities
+                    + $0.entities
                     .flatMap {
                         [$0.asAnyMIDIIOObject()]
-                        + $0.inputs.asAnyMIDIIOObjects()
-                        + $0.outputs.asAnyMIDIIOObjects()
+                            + $0.inputs.asAnyMIDIIOObjects()
+                            + $0.outputs.asAnyMIDIIOObjects()
                     }
             }
     }

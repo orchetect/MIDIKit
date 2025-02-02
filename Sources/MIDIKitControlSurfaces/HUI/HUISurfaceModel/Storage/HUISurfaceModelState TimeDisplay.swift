@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState TimeDisplay.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -39,10 +39,10 @@ extension HUISurfaceModelState.TimeDisplay: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .timecode: return timecode
-        case .feet:     return feet
-        case .beats:    return beats
-        case .rudeSolo: return rudeSolo
+        case .timecode: timecode
+        case .feet:     feet
+        case .beats:    beats
+        case .rudeSolo: rudeSolo
         }
     }
     

@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState WindowFunctions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -26,12 +26,12 @@ extension HUISurfaceModelState.WindowFunctions: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .mix:       return mix
-        case .edit:      return edit
-        case .transport: return transport
-        case .memLoc:    return memLoc
-        case .status:    return status
-        case .alt:       return alt
+        case .mix:       mix
+        case .edit:      edit
+        case .transport: transport
+        case .memLoc:    memLoc
+        case .status:    status
+        case .alt:       alt
         }
     }
     

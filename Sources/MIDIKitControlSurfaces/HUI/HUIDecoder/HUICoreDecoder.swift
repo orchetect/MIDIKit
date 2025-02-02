@@ -1,7 +1,7 @@
 //
 //  HUICoreDecoder.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -100,6 +100,7 @@ extension HUICoreDecoder: ReceivesMIDIEvents {
             } else {
                 return []
             }
+
         case let .notePressure(payload):
             return [parse(levelMetersPayload: payload)]
             

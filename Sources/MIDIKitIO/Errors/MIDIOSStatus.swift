@@ -1,7 +1,7 @@
 //
 //  MIDIOSStatus.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -110,25 +110,25 @@ extension MIDIOSStatus {
     public var rawValue: CoreMIDIOSStatus {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .invalidClient:     return kMIDIInvalidClient     // -10830
-        case .invalidPort:       return kMIDIInvalidPort       // -10831
-        case .wrongEndpointType: return kMIDIWrongEndpointType // -10832
-        case .noConnection:      return kMIDINoConnection      // -10833
-        case .unknownEndpoint:   return kMIDIUnknownEndpoint   // -10834
-        case .unknownProperty:   return kMIDIUnknownProperty   // -10835
-        case .wrongPropertyType: return kMIDIWrongPropertyType // -10836
-        case .noCurrentSetup:    return kMIDINoCurrentSetup    // -10837
-        case .messageSendErr:    return kMIDIMessageSendErr    // -10838
-        case .serverStartErr:    return kMIDIServerStartErr    // -10839
-        case .setupFormatErr:    return kMIDISetupFormatErr    // -10840
-        case .wrongThread:       return kMIDIWrongThread       // -10841
-        case .objectNotFound:    return kMIDIObjectNotFound    // -10842
-        case .idNotUnique:       return kMIDIIDNotUnique       // -10843
-        case .notPermitted:      return kMIDINotPermitted      // -10844
-        case .unknownError:      return kMIDIUnknownError      // -10845
-        case .ioError:           return 7 // no Core MIDI constant exists
-        case .internalError:     return -50 // no Core MIDI constant exists
-        case let .other(val):    return val
+        case .invalidClient:     kMIDIInvalidClient     // -10830
+        case .invalidPort:       kMIDIInvalidPort       // -10831
+        case .wrongEndpointType: kMIDIWrongEndpointType // -10832
+        case .noConnection:      kMIDINoConnection      // -10833
+        case .unknownEndpoint:   kMIDIUnknownEndpoint   // -10834
+        case .unknownProperty:   kMIDIUnknownProperty   // -10835
+        case .wrongPropertyType: kMIDIWrongPropertyType // -10836
+        case .noCurrentSetup:    kMIDINoCurrentSetup    // -10837
+        case .messageSendErr:    kMIDIMessageSendErr    // -10838
+        case .serverStartErr:    kMIDIServerStartErr    // -10839
+        case .setupFormatErr:    kMIDISetupFormatErr    // -10840
+        case .wrongThread:       kMIDIWrongThread       // -10841
+        case .objectNotFound:    kMIDIObjectNotFound    // -10842
+        case .idNotUnique:       kMIDIIDNotUnique       // -10843
+        case .notPermitted:      kMIDINotPermitted      // -10844
+        case .unknownError:      kMIDIUnknownError      // -10845
+        case .ioError:           7 // no Core MIDI constant exists
+        case .internalError:     -50 // no Core MIDI constant exists
+        case let .other(val):    val
         }
         // swiftformat:enable spacearoundoperators
     }
@@ -165,61 +165,61 @@ extension MIDIOSStatus {
     public var errorDescription: String? {
         switch self {
         case .invalidClient:
-            return "An invalid MIDIClientRef was passed. (kMIDIInvalidClient)"
+            "An invalid MIDIClientRef was passed. (kMIDIInvalidClient)"
     
         case .invalidPort:
-            return "An invalid MIDIPortRef was passed. (kMIDIInvalidPort)"
+            "An invalid MIDIPortRef was passed. (kMIDIInvalidPort)"
     
         case .wrongEndpointType:
-            return "A source endpoint was passed to a function expecting a destination, or vice versa. (kMIDIWrongEndpointType)"
+            "A source endpoint was passed to a function expecting a destination, or vice versa. (kMIDIWrongEndpointType)"
     
         case .noConnection:
-            return "Attempt to close a non-existent connection. (kMIDINoConnection)"
+            "Attempt to close a non-existent connection. (kMIDINoConnection)"
     
         case .unknownEndpoint:
-            return "An invalid MIDIEndpointRef was passed. (kMIDIUnknownEndpoint)"
+            "An invalid MIDIEndpointRef was passed. (kMIDIUnknownEndpoint)"
     
         case .unknownProperty:
-            return "Attempt to query a property not set on the object. (kMIDIUnknownProperty)"
+            "Attempt to query a property not set on the object. (kMIDIUnknownProperty)"
     
         case .wrongPropertyType:
-            return "Attempt to set a property with a value not of the correct type. (kMIDIWrongPropertyType)"
+            "Attempt to set a property with a value not of the correct type. (kMIDIWrongPropertyType)"
     
         case .noCurrentSetup:
-            return "Internal error; there is no current MIDI setup object. (kMIDINoCurrentSetup)"
+            "Internal error; there is no current MIDI setup object. (kMIDINoCurrentSetup)"
     
         case .messageSendErr:
-            return "Communication with MIDIServer failed. (kMIDIMessageSendErr)"
+            "Communication with MIDIServer failed. (kMIDIMessageSendErr)"
     
         case .serverStartErr:
-            return "Unable to start MIDIServer. (kMIDIServerStartErr)"
+            "Unable to start MIDIServer. (kMIDIServerStartErr)"
     
         case .setupFormatErr:
-            return "Unable to read the saved state. (kMIDISetupFormatErr)"
+            "Unable to read the saved state. (kMIDISetupFormatErr)"
     
         case .wrongThread:
-            return "A driver is calling a non-I/O function in the server from a thread other than the server's main thread. (kMIDIWrongThread)"
+            "A driver is calling a non-I/O function in the server from a thread other than the server's main thread. (kMIDIWrongThread)"
     
         case .objectNotFound:
-            return "The requested object does not exist. (kMIDIObjectNotFound)"
+            "The requested object does not exist. (kMIDIObjectNotFound)"
     
         case .idNotUnique:
-            return "Attempt to set a non-unique kMIDIPropertyUniqueID on an object. (kMIDIIDNotUnique)"
+            "Attempt to set a non-unique kMIDIPropertyUniqueID on an object. (kMIDIIDNotUnique)"
     
         case .notPermitted:
-            return "The process does not have privileges for the requested operation. (kMIDINotPermitted)"
+            "The process does not have privileges for the requested operation. (kMIDINotPermitted)"
     
         case .unknownError:
-            return "Internal error; unable to perform the requested operation. (kMIDIUnknownError)"
+            "Internal error; unable to perform the requested operation. (kMIDIUnknownError)"
     
         case .ioError:
-            return "I/O Error. (kMIDIMsgIOError)"
+            "I/O Error. (kMIDIMsgIOError)"
     
         case .internalError:
-            return "Internal OSStatus error -50."
+            "Internal OSStatus error -50."
     
         case let .other(osStatus):
-            return "Unknown OSStatus error: \(osStatus)"
+            "Unknown OSStatus error: \(osStatus)"
         }
     }
 }

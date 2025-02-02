@@ -1,8 +1,7 @@
 //
 //  DetailsContent.swift
-//  MIDISystemInfo
-//
-//  Created by Steffan Andrews on 2023-11-10.
+//  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitIO

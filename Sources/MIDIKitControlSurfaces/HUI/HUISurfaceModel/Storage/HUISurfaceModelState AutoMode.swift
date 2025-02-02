@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState AutoMode.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -26,12 +26,12 @@ extension HUISurfaceModelState.AutoMode: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .read:  return read
-        case .latch: return latch
-        case .trim:  return trim
-        case .touch: return touch
-        case .write: return write
-        case .off:   return off
+        case .read:  read
+        case .latch: latch
+        case .trim:  trim
+        case .touch: touch
+        case .write: write
+        case .off:   off
         }
     }
     

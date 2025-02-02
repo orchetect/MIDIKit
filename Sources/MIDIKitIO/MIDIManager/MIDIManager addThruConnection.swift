@@ -1,7 +1,7 @@
 //
 //  MIDIManager addThruConnection.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -72,7 +72,6 @@ extension MIDIManager {
             // persistent connections are stored by the system
             // to analyze or delete a persistent connection,
             // access the `unmanagedPersistentThruConnections(ownerID:)` method.
-            
             
             try newCT.create(in: self)
         }

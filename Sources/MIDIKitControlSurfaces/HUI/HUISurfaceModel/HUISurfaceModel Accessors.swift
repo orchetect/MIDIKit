@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModel Accessors.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -18,59 +18,59 @@ extension HUISurfaceModel: HUISurfaceModelStateProtocol {
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
         case let .channelStrip(channel, subParam):
-            return channelStrips[channel.intValue].state(of: subParam)
+            channelStrips[channel.intValue].state(of: subParam)
             
         case let .hotKey(subParam):
-            return hotKeys.state(of: subParam)
+            hotKeys.state(of: subParam)
             
         case let .window(subParam):
-            return windowFunctions.state(of: subParam)
+            windowFunctions.state(of: subParam)
             
         case let .bankMove(subParam):
-            return bankMove.state(of: subParam)
+            bankMove.state(of: subParam)
             
         case let .assign(subParam):
-            return assign.state(of: subParam)
+            assign.state(of: subParam)
             
         case let .cursor(subParam):
-            return cursor.state(of: subParam)
+            cursor.state(of: subParam)
             
         case let .transport(subParam):
-            return transport.state(of: subParam)
+            transport.state(of: subParam)
             
         case let .controlRoom(subParam):
-            return controlRoom.state(of: subParam)
+            controlRoom.state(of: subParam)
             
         case let .numPad(subParam):
-            return numPad.state(of: subParam)
+            numPad.state(of: subParam)
             
         case let .timeDisplayStatus(subParam):
-            return timeDisplay.state(of: subParam)
+            timeDisplay.state(of: subParam)
             
         case let .autoEnable(subParam):
-            return autoEnable.state(of: subParam)
+            autoEnable.state(of: subParam)
             
         case let .autoMode(subParam):
-            return autoMode.state(of: subParam)
+            autoMode.state(of: subParam)
             
         case let .statusAndGroup(subParam):
-            return statusAndGroup.state(of: subParam)
+            statusAndGroup.state(of: subParam)
             
         case let .edit(subParam):
-            return edit.state(of: subParam)
+            edit.state(of: subParam)
             
         case let .functionKey(subParam):
-            return functionKey.state(of: subParam)
+            functionKey.state(of: subParam)
             
         case let .paramEdit(subParam):
-            return parameterEdit.state(of: subParam)
+            parameterEdit.state(of: subParam)
             
         case let .footswitchesAndSounds(subParam):
-            return footswitchesAndSounds.state(of: subParam)
+            footswitchesAndSounds.state(of: subParam)
             
         case .undefined(zone: _, port: _):
             // no actual state - just return false as a default
-            return false
+            false
         }
     }
     
@@ -146,18 +146,18 @@ extension HUISurfaceModel: HUISurfaceModelStateProtocol {
     public func state(of vPot: HUIVPot) -> HUIVPotDisplay {
         switch vPot {
         case let .channel(channel):
-            return channelStrips[channel.intValue].vPotDisplay
+            channelStrips[channel.intValue].vPotDisplay
         case .editAssignA:
-            return parameterEdit.param1VPotDisplay
+            parameterEdit.param1VPotDisplay
         case .editAssignB:
-            return parameterEdit.param2VPotDisplay
+            parameterEdit.param2VPotDisplay
         case .editAssignC:
-            return parameterEdit.param3VPotDisplay
+            parameterEdit.param3VPotDisplay
         case .editAssignD:
-            return parameterEdit.param4VPotDisplay
+            parameterEdit.param4VPotDisplay
         case .editAssignScroll:
             // scroll knob has no LED ring display, just return empty LED config
-            return .init(leds: .allOff, lowerLED: false)
+            .init(leds: .allOff, lowerLED: false)
         }
     }
 }

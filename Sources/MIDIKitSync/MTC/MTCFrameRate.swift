@@ -1,7 +1,7 @@
 //
 //  MTCFrameRate.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -120,20 +120,20 @@ extension MTCFrameRate {
     @inline(__always)
     public var bitValue: UInt8 {
         switch self {
-        case .mtc24:    return 0b00
-        case .mtc25:    return 0b01
-        case .mtc2997d: return 0b10
-        case .mtc30:    return 0b11
+        case .mtc24:    0b00
+        case .mtc25:    0b01
+        case .mtc2997d: 0b10
+        case .mtc30:    0b11
         }
     }
     
     /// Human-readable descriptive string
     public var stringValue: String {
         switch self {
-        case .mtc24:    return "SMPTE-24"
-        case .mtc25:    return "SMPTE-25"
-        case .mtc2997d: return "SMPTE-29.97d"
-        case .mtc30:    return "SMPTE-30"
+        case .mtc24:    "SMPTE-24"
+        case .mtc25:    "SMPTE-25"
+        case .mtc2997d: "SMPTE-29.97d"
+        case .mtc30:    "SMPTE-30"
         }
     }
     
@@ -141,10 +141,10 @@ extension MTCFrameRate {
     @inline(__always)
     public var isDrop: Bool {
         switch self {
-        case .mtc24:    return false
-        case .mtc25:    return false
-        case .mtc2997d: return true
-        case .mtc30:    return false
+        case .mtc24:    false
+        case .mtc25:    false
+        case .mtc2997d: true
+        case .mtc30:    false
         }
     }
 }
@@ -156,10 +156,10 @@ extension MTCFrameRate {
     @inline(__always)
     var fpsValueForScaling: Int {
         switch self {
-        case .mtc24:    return 24
-        case .mtc25:    return 25
-        case .mtc2997d: return 30
-        case .mtc30:    return 30
+        case .mtc24:    24
+        case .mtc25:    25
+        case .mtc2997d: 30
+        case .mtc30:    30
         }
     }
 }

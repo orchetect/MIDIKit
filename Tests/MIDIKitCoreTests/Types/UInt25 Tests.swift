@@ -1,7 +1,7 @@
 //
 //  UInt25 Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -9,9 +9,9 @@ import MIDIKitCore
 import Testing
 
 @Suite struct UInt25_Tests {
-    fileprivate let _min      = 0b0_00000000_00000000_00000000 // int        0, hex 0x0000000
-    fileprivate let _midpoint = 0b1_00000000_00000000_00000000 // int 16777216, hex 0x1000000
-    fileprivate let _max      = 0b1_11111111_11111111_11111111 // int 33554431, hex 0x1FFFFFF
+    private let _min      = 0b0_00000000_00000000_00000000 // int        0, hex 0x0000000
+    private let _midpoint = 0b1_00000000_00000000_00000000 // int 16777216, hex 0x1000000
+    private let _max      = 0b1_11111111_11111111_11111111 // int 33554431, hex 0x1FFFFFF
     
     @Test
     func init_BinaryInteger() {
@@ -209,11 +209,11 @@ import Testing
     func binaryInteger_UInt25Exactly() {
         #expect(
             0b0_00000000_00000000_00000000.toUInt25Exactly ==
-            0b0_00000000_00000000_00000000
+                0b0_00000000_00000000_00000000
         )
         #expect(
             0b1_11111111_11111111_11111111.toUInt25Exactly ==
-            0b1_11111111_11111111_11111111
+                0b1_11111111_11111111_11111111
         )
         
         #expect(Int8(10).toUInt25Exactly == 10)
@@ -234,7 +234,7 @@ import Testing
         
         #expect(
             Int(exactly: 0b1_11111111_11111111_11111111.toUInt25) ==
-            0b1_11111111_11111111_11111111
+                0b1_11111111_11111111_11111111
         )
         #expect(UInt8(exactly: 0b1_11111111.toUInt25) == nil)
     }

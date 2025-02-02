@@ -1,7 +1,7 @@
 //
 //  MIDIInputConnection Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 // iOS Simulator testing does not give enough permissions to allow creating virtual MIDI
@@ -88,7 +88,7 @@ extension MIDIInputConnection_Tests {
         
         // connect to 2nd virtual output
         conn.add(outputs: [output2.endpoint])
-        //try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref, output2Ref] }, timeout: 2.0)
+        // try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref, output2Ref] }, timeout: 2.0)
         try await Task.sleep(seconds: 1.0)
         
         #expect(conn.outputsCriteria == [.uniqueID(output1ID), .uniqueID(output2ID)])
@@ -270,7 +270,6 @@ extension MIDIInputConnection_Tests {
         try manager.start()
         try await Task.sleep(seconds: 0.100)
         
-        
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -408,7 +407,6 @@ extension MIDIInputConnection_Tests {
         // start midi client
         try manager.start()
         try await Task.sleep(seconds: 0.100)
-        
         
         // create a virtual output
         let output1Tag = "output1"

@@ -1,7 +1,7 @@
 //
 //  HUISmallDisplay.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -31,9 +31,9 @@ public enum HUISmallDisplay: Equatable, Hashable {
     var rawValue: UInt7 {
         switch self {
         case let .channel(uInt4):
-            return uInt4.toUInt7
+            uInt4.toUInt7
         case .selectAssign:
-            return 8
+            8
         }
     }
 }

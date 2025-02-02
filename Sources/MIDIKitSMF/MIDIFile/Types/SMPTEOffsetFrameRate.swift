@@ -1,7 +1,7 @@
 //
 //  SMPTEOffsetFrameRate.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -34,16 +34,16 @@ extension MIDIFile.SMPTEOffsetFrameRate: CustomStringConvertible {
     public var description: String {
         switch self {
         case .fps24:
-            return "24fps"
+            "24fps"
             
         case .fps25:
-            return "25fps"
+            "25fps"
             
         case .fps29_97d:
-            return "29.97dfps"
+            "29.97dfps"
             
         case .fps30:
-            return "30fps"
+            "30fps"
         }
     }
 }

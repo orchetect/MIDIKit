@@ -1,7 +1,7 @@
 //
 //  HUIHost.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -29,6 +29,7 @@ internal import MIDIKitInternals
         get { accessQueue.sync { _banks } }
         set { accessQueue.sync { _banks = newValue } }
     }
+
     private nonisolated(unsafe) var _banks: [HUIHostBank] = []
     
     /// A HUI host transmits a ping message every 1 second to each of the remote surfaces that are

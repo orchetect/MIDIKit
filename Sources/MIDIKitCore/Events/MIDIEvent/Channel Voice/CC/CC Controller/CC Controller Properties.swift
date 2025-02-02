@@ -1,7 +1,7 @@
 //
 //  CC Controller Properties.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.CC.Controller {
@@ -10,62 +10,58 @@ extension MIDIEvent.CC.Controller {
     public var number: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .bankSelect:                    return 0
-        case .modWheel:                      return 1
-        case .breath:                        return 2
-        case .footController:                return 4
-        case .portamentoTime:                return 5
-        case .dataEntry:                     return 6
-        case .volume:                        return 7
-        case .balance:                       return 8
-        case .pan:                           return 10
-        case .expression:                    return 11
-        case .effectControl1:                return 12
-        case .effectControl2:                return 13
-        case .generalPurpose1:               return 16
-        case .generalPurpose2:               return 17
-        case .generalPurpose3:               return 18
-        case .generalPurpose4:               return 19
-    
-        case let .lsb(lsb):                  return lsb.controller
-    
-        case .sustainPedal:                  return 64
-        case .portamento:                    return 65
-        case .sostenutoPedal:                return 66
-        case .softPedal:                     return 67
-        case .legatoFootswitch:              return 68
-        case .hold2:                         return 69
-        case .soundCtrl1_soundVariation:     return 70
-        case .soundCtrl2_timbreIntensity:    return 71
-        case .soundCtrl3_releaseTime:        return 72
-        case .soundCtrl4_attackTime:         return 73
-        case .soundCtrl5_brightness:         return 74
-        case .soundCtrl6_decayTime:          return 75
-        case .soundCtrl7_vibratoRate:        return 76
-        case .soundCtrl8_vibratoDepth:       return 77
-        case .soundCtrl9_vibratoDelay:       return 78
-        case .soundCtrl10_defaultUndefined:  return 79
-        case .generalPurpose5:               return 80
-        case .generalPurpose6:               return 81
-        case .generalPurpose7:               return 82
-        case .generalPurpose8:               return 83
-        case .portamentoControl:             return 84
-        case .highResolutionVelocityPrefix:  return 88
-        case .effects1Depth_reverbSendLevel: return 91
-        case .effects2Depth:                 return 92
-        case .effects3Depth_chorusSendLevel: return 93
-        case .effects4Depth:                 return 94
-        case .effects5Depth:                 return 95
-        case .dataIncrement:                 return 96
-        case .dataDecrement:                 return 97
-        case .nrpnLSB:                       return 98
-        case .nrpnMSB:                       return 99
-        case .rpnLSB:                        return 100
-        case .rpnMSB:                        return 101
-    
-        case let .mode(mode):                return mode.controller
-    
-        case let .undefined(cc):             return cc.controller
+        case .bankSelect:                    0
+        case .modWheel:                      1
+        case .breath:                        2
+        case .footController:                4
+        case .portamentoTime:                5
+        case .dataEntry:                     6
+        case .volume:                        7
+        case .balance:                       8
+        case .pan:                           10
+        case .expression:                    11
+        case .effectControl1:                12
+        case .effectControl2:                13
+        case .generalPurpose1:               16
+        case .generalPurpose2:               17
+        case .generalPurpose3:               18
+        case .generalPurpose4:               19
+        case let .lsb(lsb):                  lsb.controller
+        case .sustainPedal:                  64
+        case .portamento:                    65
+        case .sostenutoPedal:                66
+        case .softPedal:                     67
+        case .legatoFootswitch:              68
+        case .hold2:                         69
+        case .soundCtrl1_soundVariation:     70
+        case .soundCtrl2_timbreIntensity:    71
+        case .soundCtrl3_releaseTime:        72
+        case .soundCtrl4_attackTime:         73
+        case .soundCtrl5_brightness:         74
+        case .soundCtrl6_decayTime:          75
+        case .soundCtrl7_vibratoRate:        76
+        case .soundCtrl8_vibratoDepth:       77
+        case .soundCtrl9_vibratoDelay:       78
+        case .soundCtrl10_defaultUndefined:  79
+        case .generalPurpose5:               80
+        case .generalPurpose6:               81
+        case .generalPurpose7:               82
+        case .generalPurpose8:               83
+        case .portamentoControl:             84
+        case .highResolutionVelocityPrefix:  88
+        case .effects1Depth_reverbSendLevel: 91
+        case .effects2Depth:                 92
+        case .effects3Depth_chorusSendLevel: 93
+        case .effects4Depth:                 94
+        case .effects5Depth:                 95
+        case .dataIncrement:                 96
+        case .dataDecrement:                 97
+        case .nrpnLSB:                       98
+        case .nrpnMSB:                       99
+        case .rpnLSB:                        100
+        case .rpnMSB:                        101
+        case let .mode(mode):                mode.controller
+        case let .undefined(cc):             cc.controller
         }
         // swiftformat:enable spacearoundoperators
     }

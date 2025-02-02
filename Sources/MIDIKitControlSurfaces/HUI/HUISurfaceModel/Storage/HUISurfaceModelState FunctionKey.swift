@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState FunctionKey.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -28,14 +28,14 @@ extension HUISurfaceModelState.FunctionKey: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .f1:      return f1
-        case .f2:      return f2
-        case .f3:      return f3
-        case .f4:      return f4
-        case .f5:      return f5
-        case .f6:      return f6
-        case .f7:      return f7
-        case .f8OrEsc: return f8OrEsc
+        case .f1:      f1
+        case .f2:      f2
+        case .f3:      f3
+        case .f4:      f4
+        case .f5:      f5
+        case .f6:      f6
+        case .f7:      f7
+        case .f8OrEsc: f8OrEsc
         }
     }
     

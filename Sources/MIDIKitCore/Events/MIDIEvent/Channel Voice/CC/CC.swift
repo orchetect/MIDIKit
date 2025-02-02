@@ -1,7 +1,7 @@
 //
 //  CC.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent {
@@ -147,10 +147,10 @@ extension MIDIEvent.CC {
     ) -> MIDIUMPMessageType {
         switch midiProtocol {
         case .midi1_0:
-            return .midi1ChannelVoice
+            .midi1ChannelVoice
     
         case .midi2_0:
-            return .midi2ChannelVoice
+            .midi2ChannelVoice
         }
     }
     

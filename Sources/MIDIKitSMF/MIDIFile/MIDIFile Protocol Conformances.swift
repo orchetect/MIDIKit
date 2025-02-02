@@ -1,7 +1,7 @@
 //
 //  MIDIFile Protocol Conformances.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -33,9 +33,9 @@ extension MIDIFile: CustomStringConvertible {
         outputString += "  timebase: \(timeBase)".newLined
         outputString += "  chunks (\(chunks.count)): ".newLined
         
-        chunks.enumerated().forEach {
+        for chunk in chunks.enumerated() {
             // indent each line with additional spaces
-            outputString += "Chunk #\($0.offset + 1): \($0.element.description)"
+            outputString += "Chunk #\(chunk.offset + 1): \(chunk.element.description)"
                 .split(separator: "\n")
                 .reduce("") { $0 + "    \($1)".newLined }
         }
@@ -55,9 +55,9 @@ extension MIDIFile: CustomDebugStringConvertible {
         outputString += "  timebase: \(timeBase.debugDescription)".newLined
         outputString += "  chunks (\(chunks.count)): ".newLined
 
-        chunks.enumerated().forEach {
+        for chunk in chunks.enumerated() {
             // indent each line with additional spaces
-            outputString += "#\($0.offset + 1): \($0.element.debugDescription)"
+            outputString += "#\(chunk.offset + 1): \(chunk.element.debugDescription)"
                 .split(separator: "\n")
                 .reduce("") { $0 + "    \($1)".newLined }
         }

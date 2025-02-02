@@ -1,7 +1,7 @@
 //
 //  MIDIEndpointsProtocol.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -38,9 +38,9 @@ public protocol MIDIEndpointsProtocol where Self: Equatable, Self: Hashable, Sel
 extension MIDIEndpointsProtocol /* : Equatable */ {
     public static func == (lhs: Self, rhs: some MIDIEndpointsProtocol) -> Bool {
         lhs.inputs == rhs.inputs &&
-        lhs.inputsUnowned == rhs.inputsUnowned &&
-        lhs.outputs == rhs.outputs &&
-        lhs.outputsUnowned == rhs.outputsUnowned
+            lhs.inputsUnowned == rhs.inputsUnowned &&
+            lhs.outputs == rhs.outputs &&
+            lhs.outputsUnowned == rhs.outputsUnowned
     }
 }
 
@@ -54,7 +54,7 @@ extension MIDIEndpointsProtocol /* : Hashable */ {
 }
 
 extension MIDIEndpointsProtocol {
-    internal func _fetchProperties(manager: MIDIManager?) -> (
+    func _fetchProperties(manager: MIDIManager?) -> (
         inputs: [MIDIInputEndpoint],
         inputsUnowned: [MIDIInputEndpoint],
         outputs: [MIDIOutputEndpoint],

@@ -1,7 +1,7 @@
 //
 //  MTCReceiver State.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Dispatch
@@ -46,7 +46,7 @@ extension MTCReceiver.State: Hashable {
         // `preSync` requires custom Hashable because DispatchTime does not conform to Hashable
         
         switch self {
-        case .preSync(let predictedLockTime, let lockTimecode):
+        case let .preSync(predictedLockTime, lockTimecode):
             let plt = predictedLockTime.uptimeNanoseconds
             let tc = lockTimecode.stringValue(format: [.showSubFrames])
             hasher.combine("preSync-\(plt)-\(tc)")
@@ -66,15 +66,15 @@ extension MTCReceiver.State: CustomStringConvertible {
     public var description: String {
         switch self {
         case .idle:
-            return "idle"
+            "idle"
         case .preSync:
-            return "preSync"
+            "preSync"
         case .sync:
-            return "chasing"
+            "chasing"
         case .freewheeling:
-            return "freewheeling"
+            "freewheeling"
         case .incompatibleFrameRate:
-            return "incompatibleFrameRate"
+            "incompatibleFrameRate"
         }
     }
 }

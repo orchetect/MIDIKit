@@ -1,7 +1,7 @@
 //
 //  HUIVPot.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -56,17 +56,17 @@ public enum HUIVPot: Equatable, Hashable {
     var rawValue: UInt8 {
         switch self {
         case let .channel(uInt4):
-            return uInt4.uInt8Value
+            uInt4.uInt8Value
         case .editAssignA:
-            return 0x8
+            0x8
         case .editAssignB:
-            return 0x9
+            0x9
         case .editAssignC:
-            return 0xA
+            0xA
         case .editAssignD:
-            return 0xB
+            0xB
         case .editAssignScroll:
-            return 0xC
+            0xC
         }
     }
     
@@ -75,9 +75,9 @@ public enum HUIVPot: Equatable, Hashable {
     public var hasDisplay: Bool {
         switch self {
         case .editAssignScroll:
-            return false
+            false
         default:
-            return true
+            true
         }
     }
 }
@@ -103,9 +103,9 @@ enum HUIVPotValue: Equatable, Hashable {
     var rawValue: UInt7 {
         switch self {
         case let .display(display):
-            return display.rawIndex
+            display.rawIndex
         case let .delta(delta):
-            return delta.rawUInt7Byte
+            delta.rawUInt7Byte
         }
     }
     
@@ -115,9 +115,9 @@ enum HUIVPotValue: Equatable, Hashable {
     var wrappedValue: Int7 {
         switch self {
         case let .display(display):
-            return Int7(display.rawIndex)
+            Int7(display.rawIndex)
         case let .delta(delta):
-            return delta
+            delta
         }
     }
 }

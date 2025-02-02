@@ -1,7 +1,7 @@
 //
 //  NoteAttribute Pitch7_9 Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -75,17 +75,17 @@ import Testing
     func uInt16() {
         #expect(
             Pitch7_9(coarse:   0, fine:   0).uInt16Value ==
-            0b00000000_00000000
+                0b00000000_00000000
         )
         
         #expect(
             Pitch7_9(coarse:   1, fine:   1).uInt16Value ==
-            0b00000010_00000001
+                0b00000010_00000001
         )
         
         #expect(
             Pitch7_9(coarse: 127, fine: 511).uInt16Value ==
-            0b11111111_11111111
+                0b11111111_11111111
         )
     }
     
@@ -116,22 +116,22 @@ import Testing
     func double() {
         #expect(
             Pitch7_9(coarse: 0, fine: 0).doubleValue ==
-            0.0
+                0.0
         )
         
         #expect(
             Pitch7_9(coarse: 1, fine: 256).doubleValue ==
-            1.5
+                1.5
         )
         
         #expect(
             Pitch7_9(coarse: 127, fine: 0).doubleValue ==
-            127.0
+                127.0
         )
         
         #expect(
             Pitch7_9(coarse: 127, fine: 511).doubleValue ==
-            127.998046875
+                127.998046875
         )
     }
 }

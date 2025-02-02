@@ -1,7 +1,7 @@
 //
 //  UInt32 Extensions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -61,9 +61,9 @@ extension UInt32 {
         // Account for non-symmetry and round up.
         // (This is how MIDI 2.0 Spec pitch bend works.)
         if self > 0x8000_0000 {
-            return (Double(self) - 0x8000_0000) / 0x7FFF_FFFF
+            (Double(self) - 0x8000_0000) / 0x7FFF_FFFF
         } else {
-            return (Double(self) - 0x8000_0000) / 0x8000_0000
+            (Double(self) - 0x8000_0000) / 0x8000_0000
         }
     }
 }

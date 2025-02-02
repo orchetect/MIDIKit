@@ -1,7 +1,7 @@
 //
 //  MTCRecContentView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Combine
@@ -135,7 +135,7 @@ struct MTCRecContentView: View {
                 } else {
                     Text(
                         "Scaled to local rate: " + (localFrameRate?.stringValue ?? "--") +
-                        " fps"
+                            " fps"
                     )
                 }
                 
@@ -219,11 +219,11 @@ struct MTCRecContentView: View {
 extension MTCReceiver.State {
     var stateColor: Color {
         switch self {
-        case .idle: return .clear
-        case .preSync: return .orange
-        case .sync: return .green
-        case .freewheeling: return .purple
-        case .incompatibleFrameRate: return .red
+        case .idle: .clear
+        case .preSync: .orange
+        case .sync: .green
+        case .freewheeling: .purple
+        case .incompatibleFrameRate: .red
         }
     }
 }

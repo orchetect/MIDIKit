@@ -1,7 +1,7 @@
 //
 //  SysEx8 Parser.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -72,13 +72,11 @@ extension MIDIEvent {
             guard let subID2 = UInt7(exactly: rawBytes[readPos])
             else { throw ParseError.malformed }
     
-            let data: [UInt8] = {
-                if (try? readPosAdvance(by: 1)) != nil {
-                    return readData()
-                } else {
-                    return []
-                }
-            }()
+            let data: [UInt8] = if (try? readPosAdvance(by: 1)) != nil {
+                readData()
+            } else {
+                []
+            }
     
             return .universalSysEx8(
                 .init(

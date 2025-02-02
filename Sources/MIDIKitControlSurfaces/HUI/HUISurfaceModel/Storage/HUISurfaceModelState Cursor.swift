@@ -1,7 +1,7 @@
 //
 //  HUISurfaceModelState Cursor.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -30,13 +30,13 @@ extension HUISurfaceModelState.Cursor: HUISurfaceModelStateProtocol {
     @inlinable
     public func state(of huiSwitch: Switch) -> Bool {
         switch huiSwitch {
-        case .up:      return false
-        case .left:    return false
-        case .right:   return false
-        case .down:    return false
-        case .mode:    return mode
-        case .scrub:   return scrub
-        case .shuttle: return shuttle
+        case .up:      false
+        case .left:    false
+        case .right:   false
+        case .down:    false
+        case .mode:    mode
+        case .scrub:   scrub
+        case .shuttle: shuttle
         }
     }
     

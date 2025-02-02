@@ -1,7 +1,7 @@
 //
 //  ObservableMIDIManager.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -62,19 +62,21 @@ import Combine
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 @Observable public final class ObservableMIDIManager: MIDIManager, @unchecked Sendable {
     // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
-    public internal(set) override var devices: MIDIDevices {
-         get { observableDevices }
+    override public internal(set) var devices: MIDIDevices {
+        get { observableDevices }
         _modify { yield &observableDevices }
         set { observableDevices = newValue }
     }
+
     private var observableDevices = MIDIDevices()
     
     // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
-    public internal(set) override var endpoints: MIDIEndpoints {
+    override public internal(set) var endpoints: MIDIEndpoints {
         get { observableEndpoints }
         _modify { yield &observableEndpoints }
         set { observableEndpoints = newValue }
     }
+
     private var observableEndpoints = MIDIEndpoints()
 }
 

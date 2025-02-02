@@ -1,7 +1,7 @@
 //
 //  MIDIOutput Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 // iOS Simulator testing does not give enough permissions to allow creating virtual MIDI
@@ -95,7 +95,7 @@ import Testing
         )
         
         let managedOutput = try #require(manager.managedOutputs[tag1])
-        let id1 = try #require(managedOutput.uniqueID) ; _ = id1
+        let id1 = try #require(managedOutput.uniqueID); _ = id1
         let ref1 = try #require(managedOutput.coreMIDIOutputPortRef)
         
         // check initial conditions

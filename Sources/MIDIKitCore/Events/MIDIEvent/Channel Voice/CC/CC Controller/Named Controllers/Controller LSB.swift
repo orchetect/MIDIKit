@@ -1,7 +1,7 @@
 //
 //  Controller LSB.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.CC.Controller {
@@ -103,25 +103,24 @@ extension MIDIEvent.CC.Controller.LSB {
     public var controller: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .bankSelect:      return 32
-        case .modWheel:        return 33
-        case .breath:          return 34
-        case .footController:  return 36
-        case .portamentoTime:  return 37
-        case .dataEntry:       return 38
-        case .channelVolume:   return 39
-        case .balance:         return 40
-        case .pan:             return 42
-        case .expression:      return 43
-        case .effectControl1:  return 44
-        case .effectControl2:  return 45
-        case .generalPurpose1: return 48
-        case .generalPurpose2: return 49
-        case .generalPurpose3: return 50
-        case .generalPurpose4: return 51
-    
+        case .bankSelect:      32
+        case .modWheel:        33
+        case .breath:          34
+        case .footController:  36
+        case .portamentoTime:  37
+        case .dataEntry:       38
+        case .channelVolume:   39
+        case .balance:         40
+        case .pan:             42
+        case .expression:      43
+        case .effectControl1:  44
+        case .effectControl2:  45
+        case .generalPurpose1: 48
+        case .generalPurpose2: 49
+        case .generalPurpose3: 50
+        case .generalPurpose4: 51
         case let .undefined(undefinedCC):
-            return undefinedCC.controller
+            undefinedCC.controller
         }
         // swiftformat:enable spacearoundoperators
     }
@@ -132,25 +131,24 @@ extension MIDIEvent.CC.Controller.LSB {
     public var name: String {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .bankSelect:      return "Bank Select LSB"
-        case .modWheel:        return "Mod Wheel LSB"
-        case .breath:          return "Breath Controller LSB"
-        case .footController:  return "Foot Controller LSB"
-        case .portamentoTime:  return "PortamentoTime LSB"
-        case .dataEntry:       return "Data Entry LSB"
-        case .channelVolume:   return "Volume LSB"
-        case .balance:         return "Balance LSB"
-        case .pan:             return "Pan LSB"
-        case .expression:      return "Expression LSB"
-        case .effectControl1:  return "Effect Control 1 LSB"
-        case .effectControl2:  return "Effect Control 2 LSB"
-        case .generalPurpose1: return "General Purpose 1 LSB"
-        case .generalPurpose2: return "General Purpose 2 LSB"
-        case .generalPurpose3: return "General Purpose 3 LSB"
-        case .generalPurpose4: return "General Purpose 4 LSB"
-    
+        case .bankSelect:      "Bank Select LSB"
+        case .modWheel:        "Mod Wheel LSB"
+        case .breath:          "Breath Controller LSB"
+        case .footController:  "Foot Controller LSB"
+        case .portamentoTime:  "PortamentoTime LSB"
+        case .dataEntry:       "Data Entry LSB"
+        case .channelVolume:   "Volume LSB"
+        case .balance:         "Balance LSB"
+        case .pan:             "Pan LSB"
+        case .expression:      "Expression LSB"
+        case .effectControl1:  "Effect Control 1 LSB"
+        case .effectControl2:  "Effect Control 2 LSB"
+        case .generalPurpose1: "General Purpose 1 LSB"
+        case .generalPurpose2: "General Purpose 2 LSB"
+        case .generalPurpose3: "General Purpose 3 LSB"
+        case .generalPurpose4: "General Purpose 4 LSB"
         case let .undefined(undefinedCC):
-            return undefinedCC.name
+            undefinedCC.name
         }
         // swiftformat:enable spacearoundoperators
     }

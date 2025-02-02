@@ -1,7 +1,7 @@
 //
 //  HUIHostView.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Controls
@@ -154,15 +154,15 @@ struct HUIHostView: View {
     func ledState(_ value: Float) -> HUIVPotDisplay.LEDState {
         switch vPotDisplayFormat {
         case .allOff:
-            return .allOff
+            .allOff
         case .single:
-            return .single(unitInterval: Double(value))
+            .single(unitInterval: Double(value))
         case .leftTo:
-            return .left(toUnitInterval: Double(value))
+            .left(toUnitInterval: Double(value))
         case .centerTo:
-            return .center(toUnitInterval: Double(value))
+            .center(toUnitInterval: Double(value))
         case .centerRadius:
-            return .centerRadius(unitInterval: Double(value))
+            .centerRadius(unitInterval: Double(value))
         }
     }
     

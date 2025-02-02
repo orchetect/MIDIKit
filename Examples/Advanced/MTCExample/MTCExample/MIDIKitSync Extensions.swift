@@ -1,7 +1,7 @@
 //
 //  MIDIKitSync Extensions.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import Foundation
@@ -11,11 +11,11 @@ extension MTCEncoder.FullFrameBehavior {
     public var nameForUI: String {
         switch self {
         case .always:
-            return "Always"
+            "Always"
         case .ifDifferent:
-            return "If Different"
+            "If Different"
         case .never:
-            return "Never"
+            "Never"
         }
     }
 }
@@ -51,9 +51,9 @@ extension MTCEncoder.FullFrameBehavior: @retroactive RawRepresentable {
     
     private var stringValue: String {
         switch self {
-        case .always: return "always"
-        case .ifDifferent: return "ifDifferent"
-        case .never: return "never"
+        case .always: "always"
+        case .ifDifferent: "ifDifferent"
+        case .never: "never"
         }
     }
     

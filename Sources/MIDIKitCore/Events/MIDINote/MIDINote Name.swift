@@ -1,7 +1,7 @@
 //
 //  MIDINote Name.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDINote {
@@ -207,18 +207,18 @@ extension MIDINote {
         public var scaleOffset: Int {
             // swiftformat:disable spacearoundoperators
             switch self {
-            case .A       : return 9
-            case .A_sharp : return 10
-            case .B       : return 11
-            case .C       : return 0
-            case .C_sharp : return 1
-            case .D       : return 2
-            case .D_sharp : return 3
-            case .E       : return 4
-            case .F       : return 5
-            case .F_sharp : return 6
-            case .G       : return 7
-            case .G_sharp : return 8
+            case .A       : 9
+            case .A_sharp : 10
+            case .B       : 11
+            case .C       : 0
+            case .C_sharp : 1
+            case .D       : 2
+            case .D_sharp : 3
+            case .E       : 4
+            case .F       : 5
+            case .F_sharp : 6
+            case .G       : 7
+            case .G_sharp : 8
             }
             // swiftformat:enable spacearoundoperators
         }
@@ -234,14 +234,14 @@ extension MIDINote {
                  .E,
                  .F,
                  .G:
-                return false
+                false
     
             case .A_sharp,
                  .C_sharp,
                  .D_sharp,
                  .F_sharp,
                  .G_sharp:
-                return true
+                true
             }
         }
     

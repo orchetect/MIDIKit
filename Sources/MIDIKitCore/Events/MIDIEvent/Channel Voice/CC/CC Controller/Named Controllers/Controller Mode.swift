@@ -1,7 +1,7 @@
 //
 //  Controller Mode.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 extension MIDIEvent.CC.Controller {
@@ -62,14 +62,14 @@ extension MIDIEvent.CC.Controller.Mode {
     public var controller: UInt7 {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .allSoundOff:         return 120
-        case .resetAllControllers: return 121
-        case .localControl:        return 122
-        case .allNotesOff:         return 123
-        case .omniModeOff:         return 124
-        case .omniModeOn:          return 125
-        case .monoModeOn:          return 126
-        case .polyModeOn:          return 127
+        case .allSoundOff:         120
+        case .resetAllControllers: 121
+        case .localControl:        122
+        case .allNotesOff:         123
+        case .omniModeOff:         124
+        case .omniModeOn:          125
+        case .monoModeOn:          126
+        case .polyModeOn:          127
         }
         // swiftformat:enable spacearoundoperators
     }
@@ -80,14 +80,14 @@ extension MIDIEvent.CC.Controller.Mode {
     public var name: String {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .allSoundOff:         return "All Sound Off"
-        case .resetAllControllers: return "Reset All Controllers"
-        case .localControl:        return "Local Control"
-        case .allNotesOff:         return "All Notes Off"
-        case .omniModeOff:         return "Omni Mode Off"
-        case .omniModeOn:          return "Omni Mode On"
-        case .monoModeOn:          return "Mono Mode On"
-        case .polyModeOn:          return "Poly Mode On"
+        case .allSoundOff:         "All Sound Off"
+        case .resetAllControllers: "Reset All Controllers"
+        case .localControl:        "Local Control"
+        case .allNotesOff:         "All Notes Off"
+        case .omniModeOff:         "Omni Mode Off"
+        case .omniModeOn:          "Omni Mode On"
+        case .monoModeOn:          "Mono Mode On"
+        case .polyModeOn:          "Poly Mode On"
         }
         // swiftformat:enable spacearoundoperators
     }

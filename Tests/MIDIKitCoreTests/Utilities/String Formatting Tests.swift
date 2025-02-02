@@ -1,7 +1,7 @@
 //
 //  String Formatting Tests.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import MIDIKitCore
@@ -107,7 +107,7 @@ import Testing
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(prefixes: true) ==
-            "0x0 0x1 0x9 0xF 0xFF 0xFFF"
+                "0x0 0x1 0x9 0xF 0xFF 0xFFF"
         )
     }
     
@@ -116,7 +116,7 @@ import Testing
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(prefixes: false) ==
-            "0 1 9 F FF FFF"
+                "0 1 9 F FF FFF"
         )
     }
     
@@ -125,25 +125,25 @@ import Testing
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(padEachTo: 0, prefixes: true) ==
-            "0x0 0x1 0x9 0xF 0xFF 0xFFF"
+                "0x0 0x1 0x9 0xF 0xFF 0xFFF"
         )
         
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(padEachTo: 1, prefixes: true) ==
-            "0x0 0x1 0x9 0xF 0xFF 0xFFF"
+                "0x0 0x1 0x9 0xF 0xFF 0xFFF"
         )
         
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(padEachTo: 2, prefixes: true) ==
-            "0x00 0x01 0x09 0x0F 0xFF 0xFFF"
+                "0x00 0x01 0x09 0x0F 0xFF 0xFFF"
         )
         
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(padEachTo: 3, prefixes: true) ==
-            "0x000 0x001 0x009 0x00F 0x0FF 0xFFF"
+                "0x000 0x001 0x009 0x00F 0x0FF 0xFFF"
         )
         
         // edge cases
@@ -151,7 +151,7 @@ import Testing
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(padEachTo: -1, prefixes: true) ==
-            "0x0 0x1 0x9 0xF 0xFF 0xFFF"
+                "0x0 0x1 0x9 0xF 0xFF 0xFFF"
         )
     }
     
@@ -160,25 +160,25 @@ import Testing
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(padEachTo: 0, prefixes: false) ==
-            "0 1 9 F FF FFF"
+                "0 1 9 F FF FFF"
         )
         
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(padEachTo: 1, prefixes: false) ==
-            "0 1 9 F FF FFF"
+                "0 1 9 F FF FFF"
         )
         
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(padEachTo: 2, prefixes: false) ==
-            "00 01 09 0F FF FFF"
+                "00 01 09 0F FF FFF"
         )
         
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(padEachTo: 3, prefixes: false) ==
-            "000 001 009 00F 0FF FFF"
+                "000 001 009 00F 0FF FFF"
         )
         
         // edge cases
@@ -186,7 +186,7 @@ import Testing
         #expect(
             [0x0, 0x1, 0x9, 0xF, 0xFF, 0xFFF]
                 .hexString(padEachTo: -1, prefixes: false) ==
-            "0 1 9 F FF FFF"
+                "0 1 9 F FF FFF"
         )
     }
     
@@ -279,7 +279,7 @@ import Testing
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(prefixes: true) ==
-            "0b0 0b1 0b11 0b110"
+                "0b0 0b1 0b11 0b110"
         )
     }
     
@@ -288,7 +288,7 @@ import Testing
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(prefixes: false) ==
-            "0 1 11 110"
+                "0 1 11 110"
         )
     }
     
@@ -297,25 +297,25 @@ import Testing
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(padEachTo: 0, prefixes: true) ==
-            "0b0 0b1 0b11 0b110"
+                "0b0 0b1 0b11 0b110"
         )
         
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(padEachTo: 1, prefixes: true) ==
-            "0b0 0b1 0b11 0b110"
+                "0b0 0b1 0b11 0b110"
         )
         
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(padEachTo: 2, prefixes: true) ==
-            "0b00 0b01 0b11 0b110"
+                "0b00 0b01 0b11 0b110"
         )
         
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(padEachTo: 3, prefixes: true) ==
-            "0b000 0b001 0b011 0b110"
+                "0b000 0b001 0b011 0b110"
         )
         
         // edge cases
@@ -323,7 +323,7 @@ import Testing
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(padEachTo: -1, prefixes: true) ==
-            "0b0 0b1 0b11 0b110"
+                "0b0 0b1 0b11 0b110"
         )
     }
     
@@ -332,25 +332,25 @@ import Testing
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(padEachTo: 0, prefixes: false) ==
-            "0 1 11 110"
+                "0 1 11 110"
         )
         
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(padEachTo: 1, prefixes: false) ==
-            "0 1 11 110"
+                "0 1 11 110"
         )
         
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(padEachTo: 2, prefixes: false) ==
-            "00 01 11 110"
+                "00 01 11 110"
         )
         
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(padEachTo: 3, prefixes: false) ==
-            "000 001 011 110"
+                "000 001 011 110"
         )
         
         // edge cases
@@ -358,7 +358,7 @@ import Testing
         #expect(
             [0b0, 0b1, 0b11, 0b110]
                 .binaryString(padEachTo: -1, prefixes: false) ==
-            "0 1 11 110"
+                "0 1 11 110"
         )
     }
 }

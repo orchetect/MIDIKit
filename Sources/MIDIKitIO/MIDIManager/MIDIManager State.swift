@@ -1,7 +1,7 @@
 //
 //  MIDIManager State.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -27,7 +27,7 @@ extension MIDIManager {
                 try MIDIClientCreateWithBlock(clientName as CFString, &newCoreMIDIClientRef) { [weak self] notificationPtr in
                     guard let self else { return }
                     let internalNotif = MIDIIOInternalNotification(notificationPtr)
-                    self.internalNotificationHandler(internalNotif)
+                    internalNotificationHandler(internalNotif)
                 }
                 .throwIfOSStatusErr()
             }

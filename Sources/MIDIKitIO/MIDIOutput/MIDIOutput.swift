@@ -1,7 +1,7 @@
 //
 //  MIDIOutput.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if !os(tvOS) && !os(watchOS)
@@ -23,7 +23,7 @@ import MIDIKitCore
 /// > ``MIDIManager/ManagedType/output`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// > endpoint.)
 public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
-    weak nonisolated(unsafe) var midiManager: MIDIManager?
+    nonisolated(unsafe) weak var midiManager: MIDIManager?
     
     // MIDIManaged
     

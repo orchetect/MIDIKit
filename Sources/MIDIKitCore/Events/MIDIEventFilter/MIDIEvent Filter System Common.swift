@@ -1,7 +1,7 @@
 //
 //  MIDIEvent Filter System Common.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 // MARK: - Metadata properties
@@ -14,10 +14,10 @@ extension MIDIEvent {
              .songPositionPointer,
              .songSelect,
              .tuneRequest:
-            return true
+            true
     
         default:
-            return false
+            false
         }
     }
     
@@ -25,11 +25,11 @@ extension MIDIEvent {
     public func isSystemCommon(ofType sysCommonType: SysCommonType) -> Bool {
         // swiftformat:disable spacearoundoperators
         switch self {
-        case .timecodeQuarterFrame : return sysCommonType == .timecodeQuarterFrame
-        case .songPositionPointer  : return sysCommonType == .songPositionPointer
-        case .songSelect           : return sysCommonType == .songSelect
-        case .tuneRequest          : return sysCommonType == .tuneRequest
-        default                    : return false
+        case .timecodeQuarterFrame : sysCommonType == .timecodeQuarterFrame
+        case .songPositionPointer  : sysCommonType == .songPositionPointer
+        case .songSelect           : sysCommonType == .songSelect
+        case .tuneRequest          : sysCommonType == .tuneRequest
+        default                    : false
         }
         // swiftformat:enable spacearoundoperators
     }
@@ -51,37 +51,37 @@ extension Collection<MIDIEvent> {
     public func filter(sysCommon types: MIDIEvent.SysCommonTypes) -> [Element] {
         switch types {
         case .only:
-            return filter { $0.isSystemCommon }
+            filter { $0.isSystemCommon }
     
         case let .onlyType(specificType):
-            return filter { $0.isSystemCommon(ofType: specificType) }
+            filter { $0.isSystemCommon(ofType: specificType) }
     
         case let .onlyTypes(specificTypes):
-            return filter { $0.isSystemCommon(ofTypes: specificTypes) }
+            filter { $0.isSystemCommon(ofTypes: specificTypes) }
     
         case let .keepType(specificType):
-            return filter {
+            filter {
                 guard $0.isSystemCommon else { return true }
                 return $0.isSystemCommon(ofType: specificType)
             }
     
         case let .keepTypes(specificTypes):
-            return filter {
+            filter {
                 guard $0.isSystemCommon else { return true }
                 return $0.isSystemCommon(ofTypes: specificTypes)
             }
     
         case .drop:
-            return filter { !$0.isSystemCommon }
+            filter { !$0.isSystemCommon }
     
         case let .dropType(specificType):
-            return filter {
+            filter {
                 guard $0.isSystemCommon else { return true }
                 return !$0.isSystemCommon(ofType: specificType)
             }
     
         case let .dropTypes(specificTypes):
-            return filter {
+            filter {
                 guard $0.isSystemCommon else { return true }
                 return !$0.isSystemCommon(ofTypes: specificTypes)
             }

@@ -1,7 +1,7 @@
 //
 //  MIDIEndpointsPicker.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2024 Steffan Andrews • Licensed under MIT License
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 #if canImport(SwiftUI) && !os(tvOS) && !os(watchOS)
@@ -12,8 +12,8 @@ import SwiftUI
 /// Internal generic MIDI endpoints SwiftUI picker view that can be specialized for either inputs or outputs.
 @available(macOS 14.0, iOS 17.0, *)
 struct MIDIEndpointsPicker<Endpoint>: View, MIDIEndpointsSelectable
-where Endpoint: MIDIEndpoint & Hashable & Identifiable, 
-      Endpoint.ID == MIDIIdentifier
+    where Endpoint: MIDIEndpoint & Hashable & Identifiable,
+    Endpoint.ID == MIDIIdentifier
 {
     private weak var midiManager: ObservableMIDIManager?
     
@@ -89,9 +89,9 @@ where Endpoint: MIDIEndpoint & Hashable & Identifiable,
             return
         }
         
-        self.selectionDisplayName = updatedDetails.displayName
+        selectionDisplayName = updatedDetails.displayName
         // update ID in case it changed
-        if self.selectionID != updatedDetails.id { self.selectionID = updatedDetails.id }
+        if selectionID != updatedDetails.id { selectionID = updatedDetails.id }
     }
     
     private struct EndpointRow: View {
