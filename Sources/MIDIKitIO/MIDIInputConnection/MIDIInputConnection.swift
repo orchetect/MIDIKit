@@ -257,11 +257,11 @@ extension MIDIInputConnection {
     
     /// Disposes of the listening port if it exists.
     func stopListening() throws {
-        guard let unwrappedInputPortRef = coreMIDIInputPortRef else { return }
+        guard let coreMIDIInputPortRef else { return }
     
         defer { self.coreMIDIInputPortRef = nil }
     
-        try MIDIPortDispose(unwrappedInputPortRef)
+        try MIDIPortDispose(coreMIDIInputPortRef)
             .throwIfOSStatusErr()
     }
     
@@ -280,7 +280,7 @@ extension MIDIInputConnection {
             try listen(in: manager)
         }
         
-        guard let unwrappedInputPortRef = coreMIDIInputPortRef else {
+        guard let coreMIDIInputPortRef else {
             throw MIDIIOError.connectionError(
                 "Not in a listening state; can't connect to endpoints."
             )
@@ -306,7 +306,7 @@ extension MIDIInputConnection {
             // supply the endpoint object ref
             // FYI: this method does not hold a strong reference to refCon. you MUST have a strong stable reference even for value types. or we get lovely crashes.
             try? MIDIPortConnectSource(
-                unwrappedInputPortRef,
+                coreMIDIInputPortRef,
                 nsNumRef.uint32Value,
                 Unmanaged.passUnretained(nsNumRef).toOpaque()
             )
@@ -321,7 +321,7 @@ extension MIDIInputConnection {
     func disconnect(
         endpointRefs: Set<MIDIEndpointRef>? = nil
     ) throws {
-        guard let unwrappedInputPortRef = coreMIDIInputPortRef else {
+        guard let coreMIDIInputPortRef else {
             throw MIDIIOError.connectionError(
                 "Attempted to disconnect outputs but was not in a listening state; nothing to disconnect."
             )
@@ -332,7 +332,7 @@ extension MIDIInputConnection {
         for outputEndpointRef in refs {
             do {
                 try MIDIPortDisconnectSource(
-                    unwrappedInputPortRef,
+                    coreMIDIInputPortRef,
                     outputEndpointRef
                 )
                 .throwIfOSStatusErr()
@@ -465,8 +465,8 @@ extension MIDIInputConnection: CustomStringConvertible {
         }
     
         var inputPortRefString = "nil"
-        if let unwrappedInputPortRef = coreMIDIInputPortRef {
-            inputPortRefString = "\(unwrappedInputPortRef)"
+        if let coreMIDIInputPortRef {
+            inputPortRefString = "\(coreMIDIInputPortRef)"
         }
         
         return "MIDIInputConnection(criteria: \(outputsCriteria), outputEndpointRefs: \(outputEndpointsString), inputPortRef: \(inputPortRefString))"

@@ -18,9 +18,9 @@ protocol DetailsContent where Self: View {
 
 extension DetailsContent {
     func refreshProperties() {
-        guard let unwrappedObject = object else { return }
+        guard let object else { return }
         
-        properties = unwrappedObject.propertyStringValues(relevantOnly: !showAll)
+        properties = object.propertyStringValues(relevantOnly: !showAll)
             .map { Property(key: $0.key, value: $0.value) }
     }
     

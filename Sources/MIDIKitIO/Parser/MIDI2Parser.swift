@@ -356,13 +356,13 @@ extension MIDI2Parser {
             return newEvent
     
         case 0xE: // pitch bend
-            guard let unwrappedDataByte1 = dataByte1.toUInt7Exactly,
-                  let unwrappedDataByte2 = dataByte2.toUInt7Exactly
+            guard let dataByte1 = dataByte1.toUInt7Exactly,
+                  let dataByte2 = dataByte2.toUInt7Exactly
             else { return nil }
     
             let uint14 = UInt14(uInt7Pair: .init(
-                msb: unwrappedDataByte2,
-                lsb: unwrappedDataByte1
+                msb: dataByte2,
+                lsb: dataByte1
             ))
     
             let newEvent: MIDIEvent = .pitchBend(

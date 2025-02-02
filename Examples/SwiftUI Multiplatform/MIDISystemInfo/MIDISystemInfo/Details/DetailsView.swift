@@ -18,8 +18,8 @@ struct DetailsView<Content: View>: View {
     @State private var showAll: Bool = false
     
     var body: some View {
-        if let unwrappedObject = object {
-            detailsContent(unwrappedObject, $showAll)
+        if let object {
+            detailsContent(object, $showAll)
             
             Group {
                 if showAll {

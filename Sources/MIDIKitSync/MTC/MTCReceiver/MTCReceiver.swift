@@ -323,8 +323,8 @@ extension MTCReceiver {
         // determine frame rate compatibility
         var frameRateIsCompatible = true
         
-        if let unwrappedLocalFrameRate = decoder.localFrameRate,
-           !incomingTC.frameRate.isCompatible(with: unwrappedLocalFrameRate)
+        if let localFrameRate = decoder.localFrameRate,
+           !incomingTC.frameRate.isCompatible(with: localFrameRate)
         {
             frameRateIsCompatible = false
         }

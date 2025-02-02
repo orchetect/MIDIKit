@@ -187,11 +187,11 @@ extension MIDIOutputConnection {
     
     /// Disposes of the output port if it exists.
     func closeOutput() throws {
-        guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else { return }
+        guard let coreMIDIOutputPortRef else { return }
     
         defer { self.coreMIDIOutputPortRef = nil }
     
-        try MIDIPortDispose(unwrappedOutputPortRef)
+        try MIDIPortDispose(coreMIDIOutputPortRef)
             .throwIfOSStatusErr()
     }
     
@@ -327,8 +327,8 @@ extension MIDIOutputConnection: CustomStringConvertible {
             }
     
         var outputPortRefString = "nil"
-        if let unwrappedOutputPortRef = coreMIDIOutputPortRef {
-            outputPortRefString = "\(unwrappedOutputPortRef)"
+        if let coreMIDIOutputPortRef {
+            outputPortRefString = "\(coreMIDIOutputPortRef)"
         }
     
         return "MIDIOutputConnection(criteria: \(inputsCriteria), inputEndpointRefs: \(inputEndpointsString), outputPortRef: \(outputPortRefString))"

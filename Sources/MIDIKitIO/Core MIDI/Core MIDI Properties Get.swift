@@ -22,14 +22,14 @@ func getProperties(
     of ref: CoreMIDI.MIDIObjectRef,
     deep: Bool = false
 ) throws -> CFPropertyList {
-    var props: Unmanaged<CFPropertyList>?
-    let result = MIDIObjectGetProperties(ref, &props, deep)
+    var propsPtr: Unmanaged<CFPropertyList>?
+    let result = MIDIObjectGetProperties(ref, &propsPtr, deep)
     
     guard result == noErr else {
         throw MIDIIOError.osStatus(result)
     }
     
-    guard let unwrappedProps = props?.takeRetainedValue() else {
+    guard let properties = propsPtr?.takeRetainedValue() else {
         throw MIDIIOError.readError(
             "Got nil while reading MIDIEndpointRef property list."
         )
@@ -41,7 +41,7 @@ func getProperties(
     // the MIDI Services Reference."
     // -- https://stackoverflow.com/a/27171498/2805570
     
-    return unwrappedProps
+    return properties
 }
     
 /// Internal:
@@ -56,14 +56,14 @@ func getDictionary(
     forProperty property: CFString,
     of ref: CoreMIDI.MIDIObjectRef
 ) throws -> NSDictionary {
-    var dict: Unmanaged<CFDictionary>?
-    let result = MIDIObjectGetDictionaryProperty(ref, property, &dict)
+    var dictPtr: Unmanaged<CFDictionary>?
+    let result = MIDIObjectGetDictionaryProperty(ref, property, &dictPtr)
     
     guard result == noErr else {
         throw MIDIIOError.osStatus(result)
     }
     
-    guard let unwrappedDict = dict?.takeRetainedValue() else {
+    guard let dictionary = dictPtr?.takeRetainedValue() else {
         throw MIDIIOError.readError(
             "Got nil while reading MIDIEndpointRef property list."
         )
@@ -75,7 +75,7 @@ func getDictionary(
     // the MIDI Services Reference."
     // -- https://stackoverflow.com/a/27171498/2805570
     
-    return unwrappedDict as NSDictionary
+    return dictionary as NSDictionary
 }
     
 /// Internal:
@@ -90,14 +90,14 @@ func getString(
     forProperty property: CFString,
     of ref: CoreMIDI.MIDIObjectRef
 ) throws -> String {
-    var val: Unmanaged<CFString>?
-    let result = MIDIObjectGetStringProperty(ref, property, &val)
+    var valPtr: Unmanaged<CFString>?
+    let result = MIDIObjectGetStringProperty(ref, property, &valPtr)
     
     guard result == noErr else {
         throw MIDIIOError.osStatus(result)
     }
     
-    guard let unwrappedVal = val?.takeRetainedValue() else {
+    guard let value = valPtr?.takeRetainedValue() else {
         throw MIDIIOError.readError(
             "Got nil while reading MIDIEndpointRef property value \((property as String).quoted)"
         )
@@ -109,7 +109,7 @@ func getString(
     // the MIDI Services Reference."
     // -- https://stackoverflow.com/a/27171498/2805570
     
-    return unwrappedVal as String
+    return value as String
 }
     
 /// Internal:

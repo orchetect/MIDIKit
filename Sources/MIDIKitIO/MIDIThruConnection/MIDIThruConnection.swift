@@ -287,13 +287,13 @@ extension MIDIThruConnection {
         // ref will be nil if either:
         // - connection has already been disposed
         // - we're using the custom thru proxy
-        guard let unwrappedThruConnectionRef = coreMIDIThruConnectionRef else { return }
+        guard let coreMIDIThruConnectionRef else { return }
         
         defer {
             self.coreMIDIThruConnectionRef = nil
         }
         
-        try MIDIThruConnectionDispose(unwrappedThruConnectionRef)
+        try MIDIThruConnectionDispose(coreMIDIThruConnectionRef)
             .throwIfOSStatusErr()
     }
 }
@@ -309,8 +309,8 @@ extension MIDIThruConnection {
 extension MIDIThruConnection: CustomStringConvertible {
     public var description: String {
         var thruConnectionRefString = "nil"
-        if let unwrappedThruConnectionRef = coreMIDIThruConnectionRef {
-            thruConnectionRefString = "\(unwrappedThruConnectionRef)"
+        if let coreMIDIThruConnectionRef {
+            thruConnectionRefString = "\(coreMIDIThruConnectionRef)"
         }
     
         return "MIDIThruConnection(ref: \(thruConnectionRefString), outputs: \(outputs), inputs: \(inputs), \(lifecycle)"

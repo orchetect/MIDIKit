@@ -130,8 +130,8 @@ public final class MTCEncoder: SendsMIDIEvents, @unchecked Sendable { // @unchec
         frameRate: TimecodeFrameRate? = nil,
         transmitFullFrame: FullFrameBehavior = .ifDifferent
     ) {
-        if let unwrappedFrameRate = frameRate {
-            setLocalFrameRate(unwrappedFrameRate)
+        if let frameRate {
+            setLocalFrameRate(frameRate)
         }
             
         // Step 1: set Encoder's internal MTC components

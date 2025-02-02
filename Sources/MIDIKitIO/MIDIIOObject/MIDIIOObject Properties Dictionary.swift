@@ -82,8 +82,8 @@ extension MIDIIOObject {
         case .protocolID:
             var valueString = "-"
             if #available(macOS 11, iOS 14, macCatalyst 14, *) {
-                if let unwrappedProtocolID = protocolID {
-                    valueString = "\(unwrappedProtocolID)"
+                if let protocolID {
+                    valueString = "\(protocolID)"
                 }
             } else {
                 valueString =

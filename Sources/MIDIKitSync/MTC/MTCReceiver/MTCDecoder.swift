@@ -258,18 +258,18 @@ extension MTCDecoder: ReceivesMIDIEvents {
         
         // scale frames if local frame rate is set
         // scaling will return nil if frame rates are not compatible
-        if let unwrappedLocalFrameRate = localFrameRate,
+        if let localFrameRate,
            let scaledFramesDouble = mtcFrameRate.scaledFrames(
                fromRawMTCFrames: tcc.frames,
                quarterFrames: 0,
-               to: unwrappedLocalFrameRate
+               to: localFrameRate
            )
         {
             let scaledFrameInt = Int(scaledFramesDouble)
             tcc.frames = scaledFrameInt
             
             // since scaling succeeded, we know we are outputting the localFrameRate
-            outputFrameRate = unwrappedLocalFrameRate
+            outputFrameRate = localFrameRate
         } else {
             outputFrameRate = mtcFrameRate.directEquivalentFrameRate
         }
@@ -454,14 +454,13 @@ extension MTCDecoder: ReceivesMIDIEvents {
         {
             var tcc = lastCapturedWholeTimecode
             
-            guard let unwrappedLastCapturedWholeTimecodeDeltaQFs =
-                lastCapturedWholeTimecodeDeltaQFs
+            guard let lastCapturedWholeTimecodeDeltaQFs
             else {
                 preconditionFailure("lastCapturedWholeTimecodeDeltaQFs should not be nil.")
             }
             
             // perform 2-frame offsets depending on direction
-            if unwrappedLastCapturedWholeTimecodeDeltaQFs >= 0,
+            if lastCapturedWholeTimecodeDeltaQFs >= 0,
                lastCapturedWholeTimecodeDirection != .backwards
             {
                 if let tc = try? Timecode(.components(tcc), at: mtcFrameRate.directEquivalentFrameRate)
@@ -469,7 +468,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
                 {
                     tcc = tc.components
                 }
-            } else if unwrappedLastCapturedWholeTimecodeDeltaQFs < 0,
+            } else if lastCapturedWholeTimecodeDeltaQFs < 0,
                       lastCapturedWholeTimecodeDirection == .backwards
             {
                 if let tc = try? Timecode(.components(tcc), at: mtcFrameRate.directEquivalentFrameRate)
@@ -484,18 +483,18 @@ extension MTCDecoder: ReceivesMIDIEvents {
             
             // scale or interpolate based on if local frame rate is set
             // scaling will return nil if frame rates are not compatible
-            if let unwrappedLocalFrameRate = localFrameRate,
+            if let localFrameRate,
                let scaledFramesDouble = mtcFrameRate.scaledFrames(
                    fromRawMTCFrames: tcc.frames,
                    quarterFrames: quarterFrameReceived,
-                   to: unwrappedLocalFrameRate
+                   to: localFrameRate
                )
             {
                 let scaledFramesInt = Int(scaledFramesDouble)
                 tcc.frames = scaledFramesInt
                 
                 // since scaling succeeded, we know we are outputting the localFrameRate
-                outputFrameRate = unwrappedLocalFrameRate
+                outputFrameRate = localFrameRate
             } else {
                 // use raw MTC frames and interpolate to produce sequential frame numbers
                 

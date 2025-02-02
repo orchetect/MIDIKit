@@ -96,11 +96,11 @@ extension MIDIOutput {
     /// Queries the system and returns the endpoint ref if the endpoint exists (by matching port
     /// name and unique ID)
     var uniqueIDExistsInSystem: MIDIEndpointRef? {
-        guard let unwrappedUniqueID = uniqueID else {
+        guard let uniqueID else {
             return nil
         }
     
-        if let endpoint = getSystemSourceEndpoint(matching: unwrappedUniqueID) {
+        if let endpoint = getSystemSourceEndpoint(matching: uniqueID) {
             return endpoint
         }
     
@@ -151,11 +151,11 @@ extension MIDIOutput {
         try? setModel(of: newPortRef, to: manager.model)
         try? setManufacturer(of: newPortRef, to: manager.manufacturer)
         
-        if let unwrappedUniqueID = uniqueID {
+        if let uniqueID {
             // inject previously-stored unique ID into port
             try setUniqueID(
                 of: newPortRef,
-                to: unwrappedUniqueID
+                to: uniqueID
             )
         } else {
             // if managed ID is nil, either it was not supplied or it was already in use
@@ -169,11 +169,11 @@ extension MIDIOutput {
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     func dispose() throws {
-        guard let unwrappedOutputPortRef = coreMIDIOutputPortRef else { return }
+        guard let coreMIDIOutputPortRef else { return }
     
         defer { self.coreMIDIOutputPortRef = nil }
     
-        try MIDIEndpointDispose(unwrappedOutputPortRef)
+        try MIDIEndpointDispose(coreMIDIOutputPortRef)
             .throwIfOSStatusErr()
     }
 }
@@ -193,8 +193,8 @@ extension MIDIOutput {
 extension MIDIOutput: CustomStringConvertible {
     public var description: String {
         var uniqueIDString = "nil"
-        if let unwrappedUniqueID = uniqueID {
-            uniqueIDString = "\(unwrappedUniqueID)"
+        if let uniqueID {
+            uniqueIDString = "\(uniqueID)"
         }
     
         return "MIDIOutput(name: \(name.quoted), uniqueID: \(uniqueIDString))"

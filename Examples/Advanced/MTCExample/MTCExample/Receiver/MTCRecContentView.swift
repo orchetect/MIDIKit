@@ -171,16 +171,16 @@ struct MTCRecContentView: View {
     
     private var frameRateInfo: some View {
         HStack {
-            if let unwrappedLocalFrameRate = localFrameRate {
+            if let localFrameRate {
                 VStack {
                     Text(
-                        "Compatible remote frame rates (\(unwrappedLocalFrameRate.compatibleGroup.stringValue)):"
+                        "Compatible remote frame rates (\(localFrameRate.compatibleGroup.stringValue)):"
                     )
                     
                     HStack {
-                        ForEach(unwrappedLocalFrameRate.compatibleGroupRates, id: \.self) {
+                        ForEach(localFrameRate.compatibleGroupRates, id: \.self) {
                             Text($0.stringValue)
-                                .foregroundColor($0 == unwrappedLocalFrameRate ? .blue : nil)
+                                .foregroundColor($0 == localFrameRate ? .blue : nil)
                                 .padding(2)
                                 .border(
                                     Color.white,

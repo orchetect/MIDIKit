@@ -523,13 +523,13 @@ extension MIDI1Parser {
     
         case 0xE: // pitch bend
             let channel = statusByte.nibbles.low
-            guard let unwrappedDataByte1 = dataByte1,
-                  let unwrappedDataByte2 = dataByte2
+            guard let dataByte1,
+                  let dataByte2
             else { return events }
     
             let uint14 = UInt14(bytePair: .init(
-                msb: unwrappedDataByte2,
-                lsb: unwrappedDataByte1
+                msb: dataByte2,
+                lsb: dataByte1
             ))
     
             let newEvent: MIDIEvent = .pitchBend(
@@ -549,19 +549,19 @@ extension MIDI1Parser {
                 events.append(parsedSysEx)
     
             case 0x1: // System Common - timecode quarter-frame
-                guard let unwrappedDataByte1 = dataByte1?.toUInt7Exactly
+                guard let dataByte1 = dataByte1?.toUInt7Exactly
                 else { return events }
     
-                events.append(.timecodeQuarterFrame(dataByte: unwrappedDataByte1))
+                events.append(.timecodeQuarterFrame(dataByte: dataByte1))
     
             case 0x2: // System Common - Song Position Pointer
-                guard let unwrappedDataByte1 = dataByte1,
-                      let unwrappedDataByte2 = dataByte2
+                guard let dataByte1,
+                      let dataByte2
                 else { return events }
     
                 let uint14 = UInt14(bytePair: .init(
-                    msb: unwrappedDataByte2,
-                    lsb: unwrappedDataByte1
+                    msb: dataByte2,
+                    lsb: dataByte1
                 ))
                 events.append(.songPositionPointer(midiBeat: uint14))
     
