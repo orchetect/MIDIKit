@@ -24,4 +24,30 @@ extension MIDI2Parser {
     static let `default` = MIDI2Parser()
 }
 
+extension MIDIManager {
+    @available(
+        *,
+         deprecated,
+         message: "Notification handler now only takes 1 parameter: notification."
+    )
+    @_disfavoredOverload
+    public convenience init(
+        clientName: String,
+        model: String,
+        manufacturer: String,
+        notificationHandler: (@Sendable (
+            _ notification: MIDIIONotification,
+            _ manager: MIDIManager
+        ) -> Void)? = nil
+    ) {
+        self.init(
+            clientName: clientName,
+            model: model,
+            manufacturer: manufacturer,
+            notificationHandler: nil
+        )
+        self.notificationHandler = { notif in notificationHandler?(notif, self) }
+    }
+}
+
 #endif
