@@ -19,7 +19,7 @@ internal import MIDIKitInternals
 /// >
 /// > For SwiftUI environments, see the ``ObservableMIDIManager`` or ``ObservableObjectMIDIManager``
 /// > subclass which makes ``devices`` and ``endpoints`` properties observable.
-public class MIDIManager: @unchecked Sendable {
+public class MIDIManager: @unchecked Sendable { // forced to use @unchecked since class is not final
     // MARK: - Properties
     
     /// MIDI Client Name.
@@ -55,11 +55,6 @@ public class MIDIManager: @unchecked Sendable {
     /// Dictionary of MIDI input connections managed by this instance.
     public internal(set) var managedInputConnections: [String: MIDIInputConnection] {
         get { return accessQueue.sync { _managedInputConnections } }
-        _modify {
-            var valueCopy = accessQueue.sync { _managedInputConnections }
-            yield &valueCopy
-            accessQueue.sync { _managedInputConnections = valueCopy }
-        }
         set { accessQueue.sync { _managedInputConnections = newValue } }
     }
     private nonisolated(unsafe) var _managedInputConnections: [String: MIDIInputConnection] = [:]
@@ -67,11 +62,6 @@ public class MIDIManager: @unchecked Sendable {
     /// Dictionary of MIDI output connections managed by this instance.
     public internal(set) var managedOutputConnections: [String: MIDIOutputConnection] {
         get { return accessQueue.sync { _managedOutputConnections } }
-        _modify {
-            var valueCopy = accessQueue.sync { _managedOutputConnections }
-            yield &valueCopy
-            accessQueue.sync { _managedOutputConnections = valueCopy }
-        }
         set { accessQueue.sync { _managedOutputConnections = newValue } }
     }
     private nonisolated(unsafe) var _managedOutputConnections: [String: MIDIOutputConnection] = [:]
@@ -79,11 +69,6 @@ public class MIDIManager: @unchecked Sendable {
     /// Dictionary of virtual MIDI inputs managed by this instance.
     public internal(set) var managedInputs: [String: MIDIInput] {
         get { return accessQueue.sync { _managedInputs } }
-        _modify {
-            var valueCopy = accessQueue.sync { _managedInputs }
-            yield &valueCopy
-            accessQueue.sync { _managedInputs = valueCopy }
-        }
         set { accessQueue.sync { _managedInputs = newValue } }
     }
     private nonisolated(unsafe) var _managedInputs: [String: MIDIInput] = [:]
@@ -91,11 +76,6 @@ public class MIDIManager: @unchecked Sendable {
     /// Dictionary of virtual MIDI outputs managed by this instance.
     public internal(set) var managedOutputs: [String: MIDIOutput] {
         get { return accessQueue.sync { _managedOutputs } }
-        _modify {
-            var valueCopy = accessQueue.sync { _managedOutputs }
-            yield &valueCopy
-            accessQueue.sync { _managedOutputs = valueCopy }
-        }
         set { accessQueue.sync { _managedOutputs = newValue } }
     }
     private nonisolated(unsafe) var _managedOutputs: [String: MIDIOutput] = [:]
@@ -103,11 +83,6 @@ public class MIDIManager: @unchecked Sendable {
     /// Dictionary of non-persistent MIDI thru connections managed by this instance.
     public internal(set) var managedThruConnections: [String: MIDIThruConnection] {
         get { return accessQueue.sync { _managedThruConnections } }
-        _modify {
-            var valueCopy = accessQueue.sync { _managedThruConnections }
-            yield &valueCopy
-            accessQueue.sync { _managedThruConnections = valueCopy }
-        }
         set { accessQueue.sync { _managedThruConnections = newValue } }
     }
     private nonisolated(unsafe) var _managedThruConnections: [String: MIDIThruConnection] = [:]
@@ -155,12 +130,15 @@ public class MIDIManager: @unchecked Sendable {
     
     /// Handler that is called when state has changed in the manager.
     public typealias NotificationHandler = @Sendable (
-        _ notification: MIDIIONotification,
-        _ manager: MIDIManager
+        _ notification: MIDIIONotification
     ) -> Void
     
     /// Handler that is called when state has changed in the manager.
-    public nonisolated(unsafe) var notificationHandler: NotificationHandler?
+    public var notificationHandler: NotificationHandler? {
+        get { return accessQueue.sync { _notificationHandler } }
+        set { accessQueue.sync { _notificationHandler = newValue } }
+    }
+    private nonisolated(unsafe) var _notificationHandler: NotificationHandler?
     
     /// Internal: system state cache for notification handling.
     var notificationCache: MIDIIOObjectCache? {
@@ -220,10 +198,10 @@ public class MIDIManager: @unchecked Sendable {
             + ".midiManager." + clientNameForQueue + ".management"
         managementQueue = DispatchQueue(
             label: managementQueueName,
-            qos: .default,
+            qos: .userInitiated,
             attributes: [],
             autoreleaseFrequency: .workItem,
-            target: .global(qos: .default)
+            target: .global(qos: .userInitiated)
         )
         
         // assign other properties
@@ -252,8 +230,10 @@ public class MIDIManager: @unchecked Sendable {
     
     /// Internal: updates cached properties for all objects.
     func updateObjectsCache() {
-        devices.updateCachedProperties()
-        endpoints.updateCachedProperties(manager: self)
+        managementQueue.sync {
+            devices.updateCachedProperties()
+            endpoints.updateCachedProperties(manager: self)
+        }
     }
 }
 

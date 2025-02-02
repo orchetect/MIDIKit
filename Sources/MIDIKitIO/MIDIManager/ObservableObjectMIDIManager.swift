@@ -62,28 +62,26 @@ import Combine
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
 public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject, @unchecked Sendable {
     public internal(set) override var devices: MIDIDevices {
-        get { return _devicesLock.withLock { _devices } }
+        get { return accessQueue.sync { _devices } }
         _modify {
-            var valueCopy = _devicesLock.withLock { _devices }
+            var valueCopy = accessQueue.sync { _devices }
             yield &valueCopy
-            _devicesLock.withLock { _devices = valueCopy }
+            accessQueue.sync { _devices = valueCopy }
         }
-        set { _devicesLock.withLock { _devices = newValue } }
+        set { accessQueue.sync { _devices = newValue } }
     }
     private nonisolated(unsafe) var _devices = MIDIDevices()
-    private let _devicesLock = NSLock()
     
     public internal(set) override var endpoints: MIDIEndpoints {
-        get { return _endpointsLock.withLock { _endpoints } }
+        get { return accessQueue.sync { _endpoints } }
         _modify {
-            var valueCopy = _endpointsLock.withLock { _endpoints }
+            var valueCopy = accessQueue.sync { _endpoints }
             yield &valueCopy
-            _endpointsLock.withLock { _endpoints = valueCopy }
+            accessQueue.sync { _endpoints = valueCopy }
         }
-        set { _endpointsLock.withLock { _endpoints = newValue } }
+        set { accessQueue.sync { _endpoints = newValue } }
     }
     private nonisolated(unsafe) var _endpoints = MIDIEndpoints()
-    private let _endpointsLock = NSLock()
     
     override func updateObjectsCache() {
         objectWillChange.send()

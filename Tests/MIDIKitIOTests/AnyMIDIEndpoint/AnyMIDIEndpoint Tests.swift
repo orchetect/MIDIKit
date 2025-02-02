@@ -13,7 +13,7 @@ import Foundation
 import Testing
 
 @Suite(.serialized) struct AnyMIDIEndpoint_Tests {
-    @Test @MainActor
+    @Test
     func anyMIDIEndpoint() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
@@ -23,13 +23,13 @@ import Testing
         
         // start midi client
         try manager.start()
-        try await Task.sleep(seconds: 0.100)
+        try await Task.sleep(seconds: 0.200)
         
         // to properly test this, we need to actually
         // create a couple MIDI endpoints in the system first
         
-        let kInputName = "MIDIKit Test Input"
-        let kInputTag = "testInput"
+        let kInputTag = "testInput-\(UUID().uuidString)"
+        let kInputName = "MIDIKit Test Input \(kInputTag)"
         try manager.addInput(
             name: kInputName,
             tag: kInputTag,
@@ -37,8 +37,8 @@ import Testing
             receiver: .rawDataLogging()
         )
         
-        let kOutputName = "MIDIKit Test Output"
-        let kOutputTag = "testOutput"
+        let kOutputTag = "testOutput-\(UUID().uuidString)"
+        let kOutputName = "MIDIKit Test Output \(kInputTag)"
         try manager.addOutput(
             name: kOutputName,
             tag: kOutputTag,

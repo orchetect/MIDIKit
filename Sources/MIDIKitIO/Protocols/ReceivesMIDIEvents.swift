@@ -29,7 +29,7 @@
 /// ```
 ///
 /// Adoption of this protocol is a convenience and not required.
-public protocol ReceivesMIDIEvents: AnyObject {
+public protocol ReceivesMIDIEvents: AnyObject where Self: Sendable  {
     /// Process MIDI events.
     func midiIn(event: MIDIEvent)
     

@@ -6,18 +6,31 @@
 
 #if !os(tvOS) && !os(watchOS)
 
+import Foundation
+
 /// Parser for MIDI 1.0 events.
 ///
 /// State is maintained internally. Use one parser class instance per MIDI endpoint for the
 /// lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and
 /// do not use a single global parser class instance for all MIDI endpoints.)
-public final class MIDI1Parser {
+public final class MIDI1Parser: Sendable {
     // MARK: - Parser State
     
     /// Interpret received Note On events with a velocity value of 0 as a Note Off event instead.
-    var translateNoteOnZeroVelocityToNoteOff: Bool = true
+    var translateNoteOnZeroVelocityToNoteOff: Bool {
+        get { accessQueue.sync { _translateNoteOnZeroVelocityToNoteOff } }
+        set { accessQueue.sync { _translateNoteOnZeroVelocityToNoteOff = newValue } }
+    }
+    private nonisolated(unsafe) var _translateNoteOnZeroVelocityToNoteOff: Bool = true
     
-    var runningStatus: UInt8?
+    var runningStatus: UInt8? {
+        get { accessQueue.sync { _runningStatus } }
+        set { accessQueue.sync { _runningStatus = newValue } }
+    }
+    private nonisolated(unsafe) var _runningStatus: UInt8?
+    
+    /// Internal property synchronization queue.
+    let accessQueue: DispatchQueue = .global()
     
     // MARK: - Init
     

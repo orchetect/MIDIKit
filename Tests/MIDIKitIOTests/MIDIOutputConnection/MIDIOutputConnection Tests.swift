@@ -13,19 +13,17 @@ import MIDIKitInternals
 import MIDIKitIO
 import Testing
 
-@Suite(.serialized) @MainActor class MIDIOutputConnection_Tests: Sendable {
-    // called before each method
-    init() async throws {
-        try await Task.sleep(seconds: 0.200)
-    }
+private final actor Receiver {
+    var input1Events: [MIDIEvent] = []
+    func add(input1Events events: [MIDIEvent]) { input1Events.append(contentsOf: events) }
+    func resetInput1Events() { input1Events.removeAll() }
     
-    private var input1Events: [MIDIEvent] = []
-    private var input2Events: [MIDIEvent] = []
+    var input2Events: [MIDIEvent] = []
+    func add(input2Events events: [MIDIEvent]) { input2Events.append(contentsOf: events) }
+    func resetInput2Events() { input2Events.removeAll() }
 }
 
-// MARK: - Tests
-
-extension MIDIOutputConnection_Tests {
+@Suite /* @MainActor */ struct MIDIOutputConnection_Tests {
     @Test
     func outputConnection() async throws {
         let manager = MIDIManager(
@@ -34,28 +32,31 @@ extension MIDIOutputConnection_Tests {
             manufacturer: "MIDIKit"
         )
         
+        let receiver = Receiver()
+        
         // start midi client
         try manager.start()
-        try await Task.sleep(seconds: 0.100)
+        try await Task.sleep(seconds: 0.200)
         
         // create a virtual input
-        let input1Tag = "input1"
+        let input1Tag = "input1-\(UUID().uuidString)"
         try manager.addInput(
-            name: "MIDIKit IO Tests Input 1",
+            name: "MIDIKit IO Tests \(input1Tag)",
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
-            receiver: .events { [weak self] events, _, _ in
-                Task { @MainActor in
-                    self?.input1Events.append(contentsOf: events)
+            receiver: .events { [receiver] events, _, _ in
+                Task {
+                    await receiver.add(input1Events: events)
                 }
             }
         )
         let input1 = try #require(manager.managedInputs[input1Tag])
         let input1ID = try #require(input1.uniqueID)
+        #expect(input1ID != 0)
         let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
         // add new connection
-        let connTag = "testOutputConnection"
+        let connTag = "testOutputConnection-\(UUID().uuidString)"
         try manager.addOutputConnection(
             to: .inputs(matching: [.uniqueID(input1ID)]),
             tag: connTag
@@ -65,26 +66,26 @@ extension MIDIOutputConnection_Tests {
         try await Task.sleep(seconds: 0.500) // some time for connection to setup
         
         #expect(conn.inputsCriteria == [.uniqueID(input1ID)])
+        #expect(conn.coreMIDIOutputPortRef != nil)
         #expect(conn.coreMIDIInputEndpointRefs == [input1Ref])
         #expect(conn.endpoints == [input1.endpoint])
         
         // attempt to send a midi message
         try conn.send(event: .start())
-        try await Task.sleep(seconds: 0.200)
-        #expect(input1Events == [.start()])
-        #expect(input2Events == [])
-        input1Events = []
-        input2Events = []
+        try await wait(require: { await receiver.input1Events == [.start()] }, timeout: 1.0)
+        await #expect(receiver.input2Events == [])
+        await receiver.resetInput1Events()
+        await receiver.resetInput2Events()
         
         // create a 2nd virtual input
-        let input2Tag = "input2"
+        let input2Tag = "input2-\(UUID().uuidString)"
         try manager.addInput(
-            name: "MIDIKit IO Tests Input 2",
+            name: "MIDIKit IO Tests \(input2Tag)",
             tag: input2Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
-            receiver: .events { [weak self] events, _, _ in
-                Task { @MainActor in
-                    self?.input2Events.append(contentsOf: events)
+            receiver: .events { [receiver] events, _, _ in
+                Task {
+                    await receiver.add(input2Events: events)
                 }
             }
         )
@@ -101,11 +102,11 @@ extension MIDIOutputConnection_Tests {
         
         // attempt to send a midi message
         try conn.send(event: .stop())
-        try await Task.sleep(seconds: 0.200)
-        #expect(input1Events == [.stop()])
-        #expect(input2Events == [.stop()])
-        input1Events = []
-        input2Events = []
+        try await Task.sleep(seconds: 0.300)
+        await #expect(receiver.input1Events == [.stop()])
+        await #expect(receiver.input2Events == [.stop()])
+        await receiver.resetInput1Events()
+        await receiver.resetInput2Events()
         
         // remove 1st input from connection
         conn.remove(inputs: [.uniqueID(input1ID)])
@@ -117,10 +118,10 @@ extension MIDIOutputConnection_Tests {
         // attempt to send a midi message
         try conn.send(event: .continue())
         try await Task.sleep(seconds: 0.200)
-        #expect(input1Events == [])
-        #expect(input2Events == [.continue()])
-        input1Events = []
-        input2Events = []
+        await #expect(receiver.input1Events == [])
+        await #expect(receiver.input2Events == [.continue()])
+        await receiver.resetInput1Events()
+        await receiver.resetInput2Events()
         
         // remove 2nd input from connection
         conn.remove(inputs: [.uniqueID(input2ID)])
@@ -132,10 +133,10 @@ extension MIDIOutputConnection_Tests {
         // attempt to send a midi message
         try conn.send(event: .songSelect(number: 2))
         try await Task.sleep(seconds: 0.200)
-        #expect(input1Events == [])
-        #expect(input2Events == [])
-        input1Events = []
-        input2Events = []
+        await #expect(receiver.input1Events == [])
+        await #expect(receiver.input2Events == [])
+        await receiver.resetInput1Events()
+        await receiver.resetInput2Events()
     }
     
     /// Test to ensure a new input appearing in the system gets added to the connection. (Allowing
@@ -152,8 +153,10 @@ extension MIDIOutputConnection_Tests {
         try manager.start()
         try await Task.sleep(seconds: 0.100)
         
+        let receiver = Receiver()
+        
         // add new connection
-        let connTag = "testOutputConnection"
+        let connTag = "testOutputConnection-\(UUID().uuidString)"
         try manager.addOutputConnection(
             to: .allInputs,
             tag: connTag,
@@ -168,14 +171,14 @@ extension MIDIOutputConnection_Tests {
         #expect(conn.endpoints == [])
         
         // create a virtual input
-        let input1Tag = "input1"
+        let input1Tag = "input1-\(UUID().uuidString)"
         try manager.addInput(
-            name: "MIDIKit IO Tests Input 1",
+            name: "MIDIKit IO Tests \(input1Tag)",
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
-            receiver: .events { [weak self] events, _, _ in
-                Task { @MainActor in
-                    self?.input1Events.append(contentsOf: events)
+            receiver: .events { [receiver] events, _, _ in
+                Task {
+                    await receiver.add(input1Events: events)
                 }
             }
         )
@@ -183,11 +186,8 @@ extension MIDIOutputConnection_Tests {
         let input1ID = try #require(input1.uniqueID)
         let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
-        try await wait(require: {
-            await MainActor.run {
-                conn.coreMIDIInputEndpointRefs == [input1Ref]
-            }
-        }, timeout: 2.0)
+        // try await wait(require: { conn.coreMIDIInputEndpointRefs == [input1Ref] }, timeout: 2.0)
+        try await Task.sleep(seconds: 1.0)
         
         // assert that input1 was automatically added to the connection
         #expect(conn.inputsCriteria == [.uniqueID(input1ID)])
@@ -196,11 +196,11 @@ extension MIDIOutputConnection_Tests {
         
         // send an event - it should be received by the connection
         try conn.send(event: .start())
-        try await wait(require: { await input1Events == [.start()] }, timeout: 1.0)
-        #expect(input1Events == [.start()])
-        #expect(input2Events == [])
-        input1Events = []
-        input2Events = []
+        try await wait(require: { await receiver.input1Events == [.start()] }, timeout: 1.0)
+        await #expect(receiver.input1Events == [.start()])
+        await #expect(receiver.input2Events == [])
+        await receiver.resetInput1Events()
+        await receiver.resetInput2Events()
     }
     
     /// Test to ensure creating a new manager-owned virtual input does not get added to the
@@ -217,8 +217,10 @@ extension MIDIOutputConnection_Tests {
         try manager.start()
         try await Task.sleep(seconds: 0.100)
         
+        let receiver = Receiver()
+        
         // add new connection
-        let connTag = "testOutputConnection"
+        let connTag = "testOutputConnection-\(UUID().uuidString)"
         try manager.addOutputConnection(
             to: .allInputs,
             tag: connTag,
@@ -233,14 +235,14 @@ extension MIDIOutputConnection_Tests {
         #expect(conn.endpoints == [])
         
         // create a virtual input
-        let input1Tag = "input1"
+        let input1Tag = "input1-\(UUID().uuidString)"
         try manager.addInput(
-            name: "MIDIKit IO Tests Input 1",
+            name: "MIDIKit IO Tests \(input1Tag)",
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
-            receiver: .events { [weak self] events, _, _ in
-                Task { @MainActor in
-                    self?.input1Events.append(contentsOf: events)
+            receiver: .events { [receiver] events, _, _ in
+                Task {
+                    await receiver.add(input1Events: events)
                 }
             }
         )
@@ -258,10 +260,10 @@ extension MIDIOutputConnection_Tests {
         // send an event - it should not be received by the connection
         try conn.send(event: .start())
         try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
-        #expect(input1Events == [])
-        #expect(input2Events == [])
-        input1Events = []
-        input2Events = []
+        await #expect(receiver.input1Events == [])
+        await #expect(receiver.input2Events == [])
+        await receiver.resetInput1Events()
+        await receiver.resetInput2Events()
     }
     
     /// Test to ensure virtual input(s) owned by the manager do not get added to the connection when
@@ -278,15 +280,17 @@ extension MIDIOutputConnection_Tests {
         try manager.start()
         try await Task.sleep(seconds: 0.100)
         
+        let receiver = Receiver()
+        
         // create a virtual input
-        let input1Tag = "input1"
+        let input1Tag = "input1-\(UUID().uuidString)"
         try manager.addInput(
-            name: "MIDIKit IO Tests Input 1",
+            name: "MIDIKit IO Tests \(input1Tag)",
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
-            receiver: .events { [weak self] events, _, _ in
-                Task { @MainActor in
-                    self?.input1Events.append(contentsOf: events)
+            receiver: .events { [receiver] events, _, _ in
+                Task {
+                    await receiver.add(input1Events: events)
                 }
             }
         )
@@ -297,7 +301,7 @@ extension MIDIOutputConnection_Tests {
         try await Task.sleep(seconds: 0.200)
         
         // add new connection
-        let connTag = "testOutputConnection"
+        let connTag = "testOutputConnection-\(UUID().uuidString)"
         try manager.addOutputConnection(
             to: .allInputs,
             tag: connTag,
@@ -322,10 +326,10 @@ extension MIDIOutputConnection_Tests {
         // send an event - it should not be received by the connection
         try conn.send(event: .start())
         try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
-        #expect(input1Events == [])
-        #expect(input2Events == [])
-        input1Events = []
-        input2Events = []
+        await #expect(receiver.input1Events == [])
+        await #expect(receiver.input2Events == [])
+        await receiver.resetInput1Events()
+        await receiver.resetInput2Events()
         
         // check that manually adding input1 is also not allowed
         conn.add(inputs: [input1.endpoint])
@@ -350,15 +354,17 @@ extension MIDIOutputConnection_Tests {
         try manager.start()
         try await Task.sleep(seconds: 0.100)
         
+        let receiver = Receiver()
+        
         // create a virtual input
-        let input1Tag = "input1"
+        let input1Tag = "input1-\(UUID().uuidString)"
         try manager.addInput(
-            name: "MIDIKit IO Tests Input 1",
+            name: "MIDIKit IO Tests \(input1Tag)",
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
-            receiver: .events { [weak self] events, _, _ in
-                Task { @MainActor in
-                    self?.input1Events.append(contentsOf: events)
+            receiver: .events { [receiver] events, _, _ in
+                Task {
+                    await receiver.add(input1Events: events)
                 }
             }
         )
@@ -369,7 +375,7 @@ extension MIDIOutputConnection_Tests {
         try await Task.sleep(seconds: 0.200)
         
         // add new connection, attempting to connect to input1
-        let connTag = "testOutputConnection"
+        let connTag = "testOutputConnection-\(UUID().uuidString)"
         try manager.addOutputConnection(
             to: .inputs([input1.endpoint]),
             tag: connTag
@@ -394,10 +400,10 @@ extension MIDIOutputConnection_Tests {
         // send an event - it should not be received by the connection
         try conn.send(event: .start())
         try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
-        #expect(input1Events == [])
-        #expect(input2Events == [])
-        input1Events = []
-        input2Events = []
+        await #expect(receiver.input1Events == [])
+        await #expect(receiver.input2Events == [])
+        await receiver.resetInput1Events()
+        await receiver.resetInput2Events()
         
         // check that manually adding input1 is also not allowed
         conn.add(inputs: [input1.endpoint])
@@ -421,15 +427,17 @@ extension MIDIOutputConnection_Tests {
         try manager.start()
         try await Task.sleep(seconds: 0.100)
         
+        let receiver = Receiver()
+        
         // create a virtual input
-        let input1Tag = "input1"
+        let input1Tag = "input1-\(UUID().uuidString)"
         try manager.addInput(
-            name: "MIDIKit IO Tests Input 1",
+            name: "MIDIKit IO Tests \(input1Tag)",
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
-            receiver: .events { [weak self] events, _, _ in
-                Task { @MainActor in
-                    self?.input1Events.append(contentsOf: events)
+            receiver: .events { [receiver] events, _, _ in
+                Task {
+                    await receiver.add(input1Events: events)
                 }
             }
         )
@@ -440,7 +448,7 @@ extension MIDIOutputConnection_Tests {
         try await Task.sleep(seconds: 0.200)
         
         // add new connection
-        let connTag = "testOutputConnection"
+        let connTag = "testOutputConnection-\(UUID().uuidString)"
         try manager.addOutputConnection(
             to: .allInputs,
             tag: connTag,
@@ -465,10 +473,10 @@ extension MIDIOutputConnection_Tests {
         // send an event - it should not be received by the connection
         try conn.send(event: .start())
         try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
-        #expect(!input1Events.contains(.start()))
-        #expect(!input2Events.contains(.start()))
-        input1Events = []
-        input2Events = []
+        await #expect(!receiver.input1Events.contains(.start()))
+        await #expect(!receiver.input2Events.contains(.start()))
+        await receiver.resetInput1Events()
+        await receiver.resetInput2Events()
         
         // check that manually adding input1 is also not allowed
         conn.add(inputs: [input1.endpoint])
@@ -492,15 +500,17 @@ extension MIDIOutputConnection_Tests {
         try manager.start()
         try await Task.sleep(seconds: 0.100)
         
+        let receiver = Receiver()
+        
         // create a virtual input
-        let input1Tag = "input1"
+        let input1Tag = "input1-\(UUID().uuidString)"
         try manager.addInput(
-            name: "MIDIKit IO Tests Input 1",
+            name: "MIDIKit IO Tests \(input1Tag)",
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
-            receiver: .events { [weak self] events, _, _ in
-                Task { @MainActor in
-                    self?.input1Events.append(contentsOf: events)
+            receiver: .events { [receiver] events, _, _ in
+                Task {
+                    await receiver.add(input1Events: events)
                 }
             }
         )
@@ -511,7 +521,7 @@ extension MIDIOutputConnection_Tests {
         try await Task.sleep(seconds: 0.200)
         
         // add new connection, attempting to connect to input1
-        let connTag = "testOutputConnection"
+        let connTag = "testOutputConnection-\(UUID().uuidString)"
         try manager.addOutputConnection(
             to: .inputs([input1.endpoint]),
             tag: connTag
@@ -535,10 +545,10 @@ extension MIDIOutputConnection_Tests {
         // send an event - it should not be received by the connection
         try conn.send(event: .start())
         try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
-        #expect(!input1Events.contains(.start()))
-        #expect(!input2Events.contains(.start()))
-        input1Events = []
-        input2Events = []
+        await #expect(!receiver.input1Events.contains(.start()))
+        await #expect(!receiver.input2Events.contains(.start()))
+        await receiver.resetInput1Events()
+        await receiver.resetInput2Events()
         
         // check that manually adding input1 is also not allowed
         conn.add(inputs: [input1.endpoint])

@@ -19,7 +19,7 @@ extension MIDIReceiver {
     /// MIDI Event receive handler including packet timestamp and source endpoint.
     /// Source endpoint is only available when used with ``MIDIInputConnection`` and will always be
     /// `nil` when used with ``MIDIInput``.
-    final class Events: EventsBase, @unchecked Sendable {
+    final class Events: EventsBase, @unchecked Sendable { // forced to use @unchecked due to EventsBase
         let handler: MIDIReceiver.EventsHandler
         
         init(

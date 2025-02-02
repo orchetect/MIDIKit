@@ -11,7 +11,7 @@
 /// For backwards compatibility with older operating systems,
 /// both `MIDIReadBlock` (old Core MIDI API)
 /// and `MIDIReceiveBlock` (new Core MIDI API) must be handled.
-public protocol MIDIReceiverProtocol: AnyObject {
+public protocol MIDIReceiverProtocol: AnyObject where Self: Sendable {
     /// CoreMIDI `MIDIReadBlock`
     /// (deprecated after macOS 11 / iOS 14)
     func packetListReceived(

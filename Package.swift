@@ -15,7 +15,6 @@ let package = Package(
     products: [
         .library(
             name: "MIDIKit",
-            type: .static,
             targets: ["MIDIKit"]
         ),
         .library(

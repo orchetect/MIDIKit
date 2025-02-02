@@ -90,7 +90,7 @@ import Testing
         print("RoundTrip_Tests createPorts() done")
     }
     
-    deinit {
+    func takedown() {
         print("RoundTrip_Tests tearDown starting")
         
         // remove endpoints
@@ -330,6 +330,7 @@ import Testing
         try await createPorts()
         try await Task.sleep(seconds: 0.500)
         try await runRapidMIDIEvents()
+        takedown()
     }
 }
 

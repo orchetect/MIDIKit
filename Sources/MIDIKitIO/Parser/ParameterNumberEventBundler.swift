@@ -10,25 +10,39 @@ import Foundation
 
 /// RPN/NRPN bundling.
 @_documentation(visibility: internal)
-public class ParameterNumberEventBundler {
+public final class ParameterNumberEventBundler: Sendable {
     // MARK: - Options
     
-    public var bundleRPNAndNRPNDataEntryLSB: Bool = false
+    public var bundleRPNAndNRPNDataEntryLSB: Bool {
+        get { accessQueue.sync { _bundleRPNAndNRPNDataEntryLSB } }
+        set { accessQueue.sync { _bundleRPNAndNRPNDataEntryLSB = newValue } }
+    }
+    private nonisolated(unsafe) var _bundleRPNAndNRPNDataEntryLSB: Bool = false
+    
     public typealias EventsHandler = @Sendable (
         _ events: [MIDIEvent],
         _ timeStamp: CoreMIDITimeStamp,
         _ source: MIDIOutputEndpoint?
     ) -> Void
-    public var handleEvents: EventsHandler
+    public var handleEvents: EventsHandler? {
+        get { accessQueue.sync { _handleEvents } }
+        set { accessQueue.sync { _handleEvents = newValue } }
+    }
+    private nonisolated(unsafe) var _handleEvents: EventsHandler?
     
     // MARK: - Internal State
     
     private let parser = MIDI2Parser()
-    private var rpnHolder: EventHolder<MIDIEvent.RPN>!
-    private var nrpnHolder: EventHolder<MIDIEvent.NRPN>!
+    // `nonisolated` is only used because we're forced to use var here to set up handlers in class init
+    private nonisolated(unsafe) var rpnHolder: EventHolder<MIDIEvent.RPN>!
+    // `nonisolated` is only used because we're forced to use var here to set up handlers in class init
+    private nonisolated(unsafe) var nrpnHolder: EventHolder<MIDIEvent.NRPN>!
+    
+    /// Internal property synchronization queue.
+    let accessQueue: DispatchQueue = .global()
     
     public init(
-        handleEvents: @escaping EventsHandler
+        handleEvents: EventsHandler? = nil
     ) {
         self.handleEvents = handleEvents
         
@@ -36,8 +50,8 @@ public class ParameterNumberEventBundler {
             storedEventWrapper: { event in
                 .rpn(event)
             },
-            timerExpired: { [handleEvents] storedEvent in
-                handleEvents(
+            timerExpired: { [weak self] storedEvent in
+                self?.handleEvents?(
                     [storedEvent.event],
                     storedEvent.timeStamp,
                     storedEvent.source
@@ -49,8 +63,8 @@ public class ParameterNumberEventBundler {
             storedEventWrapper: { event in
                 .nrpn(event)
             },
-            timerExpired: { [handleEvents] storedEvent in
-                handleEvents(
+            timerExpired: { [weak self] storedEvent in
+                self?.handleEvents?(
                     [storedEvent.event],
                     storedEvent.timeStamp,
                     storedEvent.source

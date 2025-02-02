@@ -20,17 +20,30 @@ extension MIDIManager {
         // if start() was already called, return
         guard coreMIDIClientRef == MIDIClientRef() else { return }
         
-        try accessQueue.sync {
-            try MIDIClientCreateWithBlock(clientName as CFString, &coreMIDIClientRef) { [weak self] notificationPtr in
-                guard let self else { return }
-                let internalNotif = MIDIIOInternalNotification(notificationPtr)
-                self.internalNotificationHandler(internalNotif)
+        try managementQueue.sync {
+            var newCoreMIDIClientRef = MIDIClientRef()
+            
+            let block = { [self] in
+                try MIDIClientCreateWithBlock(clientName as CFString, &newCoreMIDIClientRef) { [weak self] notificationPtr in
+                    guard let self else { return }
+                    let internalNotif = MIDIIOInternalNotification(notificationPtr)
+                    self.internalNotificationHandler(internalNotif)
+                }
+                .throwIfOSStatusErr()
             }
-            .throwIfOSStatusErr()
+            // even though we're on managementQueue, check for main as a safety measure any way before running sync on main
+            if Thread.current.isMainThread {
+                try block()
+            } else {
+                try DispatchQueue.main.sync {
+                    try block()
+                }
+            }
+            assert(newCoreMIDIClientRef != MIDIClientRef())
+            self.coreMIDIClientRef = newCoreMIDIClientRef
         }
         
         // initial cache of endpoints
-        
         updateObjectsCache()
     }
     
@@ -62,7 +75,7 @@ extension MIDIManager {
         
         // propagate notification to managed objects
         
-        managementQueue.async {
+        managementQueue.sync {
             for outputConnection in self.managedOutputConnections.values {
                 outputConnection.notification(internalNotif)
             }
@@ -80,7 +93,7 @@ extension MIDIManager {
     private func sendNotificationAsync(_ notif: MIDIIONotification) {
         guard let notificationHandler else { return }
         DispatchQueue.main.async {
-            notificationHandler(notif, self)
+            notificationHandler(notif)
         }
     }
 }

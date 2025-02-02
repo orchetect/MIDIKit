@@ -63,11 +63,8 @@ extension MIDIInputConnection_Tests {
         )
         
         let conn = try #require(manager.managedInputConnections[connTag])
-        try await wait(require: {
-            await MainActor.run {
-                conn.coreMIDIOutputEndpointRefs == [output1Ref]
-            }
-        }, timeout: 2.0)
+        // try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: 2.0)
+        try await Task.sleep(seconds: 1.0)
         
         #expect(conn.outputsCriteria == [.uniqueID(output1ID)])
         #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref])
@@ -91,12 +88,9 @@ extension MIDIInputConnection_Tests {
         
         // connect to 2nd virtual output
         conn.add(outputs: [output2.endpoint])
-        try await wait(
-            require: {
-                conn.coreMIDIOutputEndpointRefs == [output1Ref, output2Ref]
-            },
-            timeout: 2.0
-        )
+        //try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref, output2Ref] }, timeout: 2.0)
+        try await Task.sleep(seconds: 1.0)
+        
         #expect(conn.outputsCriteria == [.uniqueID(output1ID), .uniqueID(output2ID)])
         #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref, output2Ref])
         #expect(Set(conn.endpoints) == [output1.endpoint, output2.endpoint])
@@ -113,7 +107,9 @@ extension MIDIInputConnection_Tests {
         
         // remove 1st virtual output from connection
         conn.remove(outputs: [output1.endpoint])
-        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output2Ref] }, timeout: 2.0)
+        // try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output2Ref] }, timeout: 2.0)
+        try await Task.sleep(seconds: 1.0)
+        
         #expect(conn.outputsCriteria == [.uniqueID(output2ID)])
         #expect(conn.coreMIDIOutputEndpointRefs == [output2Ref])
         #expect(conn.endpoints == [output2.endpoint])
@@ -131,7 +127,9 @@ extension MIDIInputConnection_Tests {
         
         // remove 2nd virtual output from connection
         conn.remove(outputs: [output2.endpoint])
-        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [] }, timeout: 2.0)
+        // try await wait(require: { conn.coreMIDIOutputEndpointRefs == [] }, timeout: 2.0)
+        try await Task.sleep(seconds: 1.0)
+        
         #expect(conn.outputsCriteria == [])
         #expect(conn.coreMIDIOutputEndpointRefs == [])
         #expect(conn.endpoints == [])
@@ -188,11 +186,8 @@ extension MIDIInputConnection_Tests {
         let output1ID = try #require(output1.uniqueID)
         let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await wait(require: {
-            await MainActor.run {
-                conn.coreMIDIOutputEndpointRefs == [output1Ref]
-            }
-        }, timeout: 2.0)
+        // try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: 2.0)
+        try await Task.sleep(seconds: 1.0)
         
         #expect(conn.outputsCriteria == [.uniqueID(output1ID)])
         #expect(conn.coreMIDIOutputEndpointRefs == [output1Ref])
@@ -252,7 +247,7 @@ extension MIDIInputConnection_Tests {
         try await Task.sleep(seconds: 0.500) // some time for connection to be notified of new output
         
         #expect(conn.outputsCriteria == [])
-        #expect(conn.coreMIDIOutputEndpointRefs == [])
+        #expect(await MainActor.run { conn.coreMIDIOutputEndpointRefs } == []) // TODO: fix TSAN
         #expect(conn.endpoints == [])
         
         // send an event - it should not be received by the connection

@@ -1,5 +1,5 @@
 //
-//  PNCombiner.swift
+//  EventHolder.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2024 Steffan Andrews • Licensed under MIT License
 //
@@ -9,24 +9,38 @@
 import Foundation
 
 /// Event Holder.
-final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable {
+final class EventHolder<T: MIDIParameterNumberEvent>: Sendable {
     // MARK: - Options
     
     typealias TimerExpiredHandler = @Sendable (_ storedEvent: ReturnedStoredEvent) -> Void
-    var timerExpired: TimerExpiredHandler?
+    let timerExpired: TimerExpiredHandler?
+    
     let timeOut: TimeInterval
-    var storedEventWrapper: @Sendable (T) -> MIDIEvent
+    
+    typealias StoredEventWrapper = @Sendable (T) -> MIDIEvent
+    let storedEventWrapper: StoredEventWrapper
     
     // MARK: - Parser State
     
-    private var expirationTimer: Timer?
+    private var expirationTimer: Timer? {
+        get { accessQueue.sync { _expirationTimer } }
+        set { accessQueue.sync { _expirationTimer = newValue } }
+    }
+    private nonisolated(unsafe) var _expirationTimer: Timer?
+    
+    /// Internal property synchronization queue.
+    let accessQueue: DispatchQueue = .global()
     
     typealias StoredEvent = (
         event: T,
         timeStamp: CoreMIDITimeStamp,
         source: MIDIOutputEndpoint?
     )
-    var storedEvent: StoredEvent?
+    var storedEvent: StoredEvent? {
+        get { accessQueue.sync { _storedEvent } }
+        set { accessQueue.sync { _storedEvent = newValue } }
+    }
+    private nonisolated(unsafe) var _storedEvent: StoredEvent?
     
     typealias ReturnedStoredEvent = (
         event: MIDIEvent,
@@ -36,7 +50,7 @@ final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable {
     
     init(
         timeOut: TimeInterval = 0.05,
-        storedEventWrapper: @Sendable @escaping (T) -> MIDIEvent,
+        storedEventWrapper: @escaping StoredEventWrapper,
         timerExpired: TimerExpiredHandler? = nil
     ) {
         self.timeOut = timeOut
@@ -84,7 +98,7 @@ final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable {
     }
     
     func returnedStoredEvent() -> ReturnedStoredEvent? {
-        guard let storedEvent = storedEvent else { return nil }
+        guard let storedEvent else { return nil }
         let wrapped = storedEventWrapper(storedEvent.event)
         return (
             event: wrapped,

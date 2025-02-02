@@ -88,7 +88,7 @@ public final class MTCEncoder: SendsMIDIEvents, Sendable {
     // MARK: - Internal properties
         
     /// Last internal MTC quarter-frame formed. (`0 ... 7`)
-    public internal(set) nonisolated(unsafe) var mtcQuarterFrame: UInt8 = 0
+    nonisolated(unsafe) var mtcQuarterFrame: UInt8 = 0
         
     /// Internal:
     /// Flag indicating whether the quarter-frame output stream has already started since the last

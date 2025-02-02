@@ -9,8 +9,7 @@
 extension MIDIReceiver {
     /// MIDI Event receive handler that holds a weak reference to a receiver object that conforms
     /// to the ``ReceivesMIDIEvents`` protocol.
-    final class WeakEventsReceiver: EventsBase, @unchecked Sendable {
-        nonisolated(unsafe)
+    final class WeakEventsReceiver: EventsBase, @unchecked Sendable { // forced to use @unchecked due to EventsBase
         weak var receiver: ReceivesMIDIEvents?
         
         init(

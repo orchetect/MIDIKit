@@ -214,10 +214,12 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
         // if subframes == 0, no scheduling is required
         
         if timecode.subFrames == 0 {
-            locateAndStart(
-                now: timecode.components,
-                frameRate: timecode.frameRate
-            )
+            generateQueue.sync {
+                locateAndStart(
+                    now: timecode.components,
+                    frameRate: timecode.frameRate
+                )
+            }
             return
         }
         
@@ -273,6 +275,8 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
         // this may involve scheduling the start of MTC generation
         // to be in the near future (on the order of milliseconds)
         
+        let nsInDispatchTime = DispatchTime.now().uptimeNanoseconds
+        
         shouldStart = true
         
         // convert real time to timecode at the given frame rate
@@ -286,10 +290,12 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
         // if subframes == 0, no scheduling is required
         
         if inRTtoTimecode.subFrames == 0 {
-            locateAndStart(
-                now: inRTtoTimecode.components,
-                frameRate: inRTtoTimecode.frameRate
-            )
+            generateQueue.sync {
+                locateAndStart(
+                    now: inRTtoTimecode.components,
+                    frameRate: inRTtoTimecode.frameRate
+                )
+            }
             return
         }
         
@@ -305,13 +311,12 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
         
         let nsecsToStartOfNextFrame = UInt64(secsToStartOfNextFrame * 1_000_000_000)
         
-        Task {
-            do {
-                try await Task.sleep(nanoseconds: nsecsToStartOfNextFrame)
-            } catch {
-                // just fall through. error will only be thrown if task is cancelled.
-            }
-            
+        let nsecsDeadline = nsInDispatchTime + nsecsToStartOfNextFrame
+        
+        generateQueue.asyncAfter(
+            deadline: DispatchTime(uptimeNanoseconds: nsecsDeadline),
+            qos: .userInitiated
+        ) { [tcAtNextEvenFrame] in
             guard self.shouldStart else { return }
             
             self.locateAndStart(
@@ -329,13 +334,11 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
         now components: Timecode.Components,
         frameRate: TimecodeFrameRate
     ) {
-        generateQueue.sync {
-            encoder.locate(
-                to: components,
-                frameRate: frameRate,
-                transmitFullFrame: .never
-            )
-        }
+        encoder.locate(
+            to: components,
+            frameRate: frameRate,
+            transmitFullFrame: .never
+        )
         
         if state == .generating {
             timer.stop()

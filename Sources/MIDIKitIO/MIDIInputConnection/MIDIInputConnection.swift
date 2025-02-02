@@ -25,17 +25,21 @@ internal import CoreMIDI
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/inputConnection`` or ``MIDIManager/removeAll()`` to destroy the
 /// > managed connection.)
-public final class MIDIInputConnection: _MIDIManaged, @unchecked Sendable {
+public final class MIDIInputConnection: _MIDIManaged, Sendable {
     // _MIDIManaged
-    weak var midiManager: MIDIManager?
+    weak nonisolated(unsafe) var midiManager: MIDIManager?
     
     // MIDIManaged
-    public private(set) var api: CoreMIDIAPIVersion
+    public private(set) nonisolated(unsafe) var api: CoreMIDIAPIVersion
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
     
     // class-specific
     
-    public private(set) var outputsCriteria: Set<MIDIEndpointIdentity> = []
+    public private(set) var outputsCriteria: Set<MIDIEndpointIdentity> {
+        get { accessQueue.sync { _outputsCriteria } }
+        set { accessQueue.sync { _outputsCriteria = newValue } }
+    }
+    private nonisolated(unsafe) var _outputsCriteria: Set<MIDIEndpointIdentity> = []
     
     /// Stores criteria after applying any filters that have been set in the ``filter`` property.
     /// Passing nil will re-use existing criteria, re-applying the filters.
@@ -64,27 +68,44 @@ public final class MIDIInputConnection: _MIDIManaged, @unchecked Sendable {
     }
     
     /// The Core MIDI input port reference.
-    public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
+    public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef? {
+        get { accessQueue.sync { _coreMIDIInputPortRef } }
+        set { accessQueue.sync { _coreMIDIInputPortRef = newValue } }
+    }
+    private nonisolated(unsafe) var _coreMIDIInputPortRef: CoreMIDIPortRef?
     
     /// The Core MIDI output endpoint(s) reference(s).
-    public private(set) var coreMIDIOutputEndpointRefs: Set<CoreMIDIEndpointRef> = []
+    public private(set) var coreMIDIOutputEndpointRefs: Set<CoreMIDIEndpointRef> {
+        get { accessQueue.sync { _coreMIDIOutputEndpointRefs } }
+        set { accessQueue.sync { _coreMIDIOutputEndpointRefs = newValue } }
+    }
+    private nonisolated(unsafe) var _coreMIDIOutputEndpointRefs: Set<CoreMIDIEndpointRef> = []
     
     /// Internal:
     /// The Core MIDI output endpoint(s) reference(s) stored as `NSNumber` classes.
     /// This is only so that `MIDIPortConnectSource()` can take stable pointer references.
-    var coreMIDIOutputEndpointRefCons: Set<NSNumber> = []
+    var coreMIDIOutputEndpointRefCons: Set<NSNumber> {
+        get { accessQueue.sync { _coreMIDIOutputEndpointRefCons } }
+        set { accessQueue.sync { _coreMIDIOutputEndpointRefCons = newValue } }
+    }
+    private nonisolated(unsafe) var _coreMIDIOutputEndpointRefCons: Set<NSNumber> = []
     
     /// Operating mode.
     ///
     /// Changes take effect immediately.
     public var mode: MIDIInputConnectionMode {
-        didSet {
-            guard oldValue != mode else { return }
+        get { accessQueue.sync { _mode } }
+        set {
+            let oldValue = accessQueue.sync { _mode }
+            accessQueue.sync { _mode = newValue }
+            
+            guard oldValue != newValue else { return }
             guard let midiManager else { return }
             updateCriteriaFromMode()
             try? refreshConnection(in: midiManager)
         }
     }
+    private nonisolated(unsafe) var _mode: MIDIInputConnectionMode!
     
     /// Reads the ``mode`` property and applies it to the stored criteria.
     private func updateCriteriaFromMode() {
@@ -101,16 +122,28 @@ public final class MIDIInputConnection: _MIDIManaged, @unchecked Sendable {
     ///
     /// Changes take effect immediately.
     public var filter: MIDIEndpointFilter {
-        didSet {
-            guard oldValue != filter else { return }
+        get { accessQueue.sync { _filter } }
+        set {
+            let oldValue = accessQueue.sync { _filter }
+            accessQueue.sync { _filter = newValue }
+            
+            guard oldValue != newValue else { return }
             guard let midiManager else { return }
             updateCriteria()
             try? refreshConnection(in: midiManager)
         }
     }
+    private nonisolated(unsafe) var _filter: MIDIEndpointFilter!
     
     /// Receive handler for inbound MIDI events.
-    var receiveHandler: MIDIReceiverProtocol
+    var receiveHandler: MIDIReceiverProtocol {
+        get { accessQueue.sync { _receiveHandler } }
+        set { accessQueue.sync { _receiveHandler = newValue } }
+    }
+    private nonisolated(unsafe) var _receiveHandler: MIDIReceiverProtocol!
+    
+    /// Internal property synchronization queue.
+    let accessQueue: DispatchQueue
     
     // init
     
@@ -137,10 +170,11 @@ public final class MIDIInputConnection: _MIDIManaged, @unchecked Sendable {
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
         self.midiManager = midiManager
-        self.mode = mode
-        self.filter = filter
-        receiveHandler = receiver.create()
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+        self.accessQueue = .global()
+        _mode = mode
+        _filter = filter
+        _receiveHandler = receiver.create()
         
         switch mode {
         case let .outputs(criteria):
@@ -194,7 +228,7 @@ extension MIDIInputConnection {
                 manager.coreMIDIClientRef,
                 UUID().uuidString as CFString,
                 &newInputPortRef,
-                { [weak receiveHandler] packetListPtr, srcConnRefCon in
+                { [weak midiManager, weak receiveHandler] packetListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
                     // otherwise we run into data races when Thread Sanitizer is on
                     
@@ -203,7 +237,9 @@ extension MIDIInputConnection {
                         refConKnown: true
                     )
                     
-                    receiveHandler?.packetListReceived(packets)
+                    midiManager?.managementQueue.sync { [weak receiveHandler] in
+                        receiveHandler?.packetListReceived(packets)
+                    }
                 }
             )
             .throwIfOSStatusErr()
@@ -220,7 +256,7 @@ extension MIDIInputConnection {
                 UUID().uuidString as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newInputPortRef,
-                { [weak receiveHandler] eventListPtr, srcConnRefCon in
+                { [weak midiManager, weak receiveHandler] eventListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
                     // otherwise we run into data races when Thread Sanitizer is on
                     
@@ -230,10 +266,12 @@ extension MIDIInputConnection {
                     )
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    receiveHandler?.eventListReceived(
-                        packets,
-                        protocol: midiProtocol
-                    )
+                    midiManager?.managementQueue.sync { [weak receiveHandler] in
+                        receiveHandler?.eventListReceived(
+                            packets,
+                            protocol: midiProtocol
+                        )
+                    }
                 }
             )
             .throwIfOSStatusErr()

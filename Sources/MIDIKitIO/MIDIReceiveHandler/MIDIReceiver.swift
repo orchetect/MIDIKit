@@ -54,7 +54,7 @@ public enum MIDIReceiver {
     /// ``ReceivesMIDIEvents`` protocol.
     /// The object is stored as a strong reference.
     case strong(
-        _ object: ReceivesMIDIEvents & Sendable,
+        _ object: ReceivesMIDIEvents,
         options: MIDIReceiverOptions = []
     )
     
@@ -63,12 +63,10 @@ public enum MIDIReceiver {
     /// ``ReceivesMIDIEvents`` protocol.
     /// The object is stored as a weak reference.
     case weak(
-        _ object: ReceivesMIDIEvents & Sendable,
+        _ object: ReceivesMIDIEvents,
         options: MIDIReceiverOptions = []
     )
 }
-
-extension MIDIReceiver: Sendable { }
 
 extension MIDIReceiver {
     /// Creates a concrete receive handler class instance from the definition parameters.

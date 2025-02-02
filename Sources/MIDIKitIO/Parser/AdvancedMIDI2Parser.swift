@@ -9,30 +9,42 @@
 import Foundation
 
 /// Wrapper for MIDI 2.0 event parser that adds certain heuristics, including RPN/NRPN bundling.
-public class AdvancedMIDI2Parser {
+public final class AdvancedMIDI2Parser: Sendable {
     // MARK: - Options
     
-    public var bundleRPNAndNRPNDataEntryLSB: Bool = false
+    public var bundleRPNAndNRPNDataEntryLSB: Bool {
+        get { accessQueue.sync { _bundleRPNAndNRPNDataEntryLSB } }
+        set { accessQueue.sync { _bundleRPNAndNRPNDataEntryLSB = newValue } }
+    }
+    private nonisolated(unsafe) var _bundleRPNAndNRPNDataEntryLSB: Bool = false
     
     public typealias EventsHandler = @Sendable (
         _ events: [MIDIEvent],
         _ timeStamp: CoreMIDITimeStamp,
         _ source: MIDIOutputEndpoint?
     ) -> Void
-    public var handleEvents: EventsHandler
+    public var handleEvents: EventsHandler? {
+        get { accessQueue.sync { _handleEvents } }
+        set { accessQueue.sync { _handleEvents = newValue } }
+    }
+    private nonisolated(unsafe) var _handleEvents: EventsHandler?
     
     // MARK: - Internal State
     
     private let parser = MIDI2Parser()
-    private var pnBundler: ParameterNumberEventBundler!
+    private let pnBundler: ParameterNumberEventBundler
+    
+    /// Internal property synchronization queue.
+    let accessQueue: DispatchQueue = .global()
     
     public init(
-        handleEvents: @escaping EventsHandler
+        handleEvents: EventsHandler? = nil
     ) {
-        self.handleEvents = handleEvents
+        _handleEvents = handleEvents
         
-        pnBundler = ParameterNumberEventBundler { events, timeStamp, source in
-            handleEvents(events, timeStamp, source)
+        pnBundler = ParameterNumberEventBundler()
+        pnBundler.handleEvents = { [weak self] events, timeStamp, source in
+            self?.handleEvents?(events, timeStamp, source)
         }
     }
 }
@@ -79,7 +91,7 @@ extension AdvancedMIDI2Parser {
             pnBundler.process(events: &events, timeStamp: timeStamp, source: source)
         }
         
-        handleEvents(events, timeStamp, source)
+        handleEvents?(events, timeStamp, source)
     }
 }
 

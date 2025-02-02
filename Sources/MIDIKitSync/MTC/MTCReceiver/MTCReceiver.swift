@@ -89,6 +89,11 @@ public final class MTCReceiver: Sendable {
     ///
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
+    ///
+    /// > Important:
+    /// >
+    /// > This closure may be executed on a background thread. If the logic in the closure results in
+    /// > user interface updates, ensure that they are performed on the main actor/thread.
     nonisolated(unsafe) var timecodeChangedHandler: (@Sendable (
         _ timecode: Timecode,
         _ event: MTCMessageType,
@@ -101,6 +106,11 @@ public final class MTCReceiver: Sendable {
     ///
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
+    ///
+    /// > Important:
+    /// >
+    /// > This closure may be executed on a background thread. If the logic in the closure results in
+    /// > user interface updates, ensure that they are performed on the main actor/thread.
     public func setTimecodeChangedHandler(
         _ handler: (@Sendable (
             _ timecode: Timecode,
@@ -113,9 +123,19 @@ public final class MTCReceiver: Sendable {
     }
     
     /// Called when the MTC receiver's state changes.
+    ///
+    /// > Important:
+    /// >
+    /// > This closure may be executed on a background thread. If the logic in the closure results in
+    /// > user interface updates, ensure that they are performed on the main actor/thread.
     nonisolated(unsafe) var stateChangedHandler: (@Sendable (_ state: State) -> Void)?
     
     /// Called when the MTC receiver's state changes.
+    ///
+    /// > Important:
+    /// >
+    /// > This closure may be executed on a background thread. If the logic in the closure results in
+    /// > user interface updates, ensure that they are performed on the main actor/thread.
     public func setStateChangedHandler(
         _ handler: (@Sendable (_ state: State) -> Void)?
     ) {
@@ -125,6 +145,12 @@ public final class MTCReceiver: Sendable {
     // MARK: - Init
     
     /// Initialize a new MTC Receiver instance.
+    ///
+    /// > Important:
+    /// >
+    /// > The handler closures may be executed on a background thread. If the logic in these
+    /// > closures results in user interface updates, ensure that they are performed on the main
+    /// > actor/thread.
     ///
     /// - Parameters:
     ///   - name: optionally supply a simple, unique alphanumeric name for the instance, used

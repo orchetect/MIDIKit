@@ -61,22 +61,53 @@ import MIDIKitCore
 /// > Due to a Core MIDI bug, persistent thru connections are not functional on macOS 11 & 12 and
 /// > iOS 14 & 15. On these systems, an error will be thrown. There is no known solution or
 /// > workaround.
-public final class MIDIThruConnection: _MIDIManaged, @unchecked Sendable {
+public final class MIDIThruConnection: _MIDIManaged, Sendable {
     // _MIDIManaged
-    weak var midiManager: MIDIManager?
+    weak nonisolated(unsafe) var midiManager: MIDIManager?
     
     // MIDIManaged
-    public private(set) var api: CoreMIDIAPIVersion
+    public private(set) nonisolated(unsafe) var api: CoreMIDIAPIVersion
     
     // class-specific
     
-    public private(set) var coreMIDIThruConnectionRef: CoreMIDIThruConnectionRef?
-    public private(set) var outputs: [MIDIOutputEndpoint]
-    public private(set) var inputs: [MIDIInputEndpoint]
-    public private(set) var lifecycle: Lifecycle
-    public private(set) var parameters: Parameters
+    public private(set) var coreMIDIThruConnectionRef: CoreMIDIThruConnectionRef? {
+        get { accessQueue.sync { _coreMIDIThruConnectionRef } }
+        set { accessQueue.sync { _coreMIDIThruConnectionRef = newValue } }
+    }
+    private nonisolated(unsafe) var _coreMIDIThruConnectionRef: CoreMIDIThruConnectionRef?
     
-    var proxy: MIDIThruConnectionProxy?
+    public private(set) var outputs: [MIDIOutputEndpoint] {
+        get { accessQueue.sync { _outputs } }
+        set { accessQueue.sync { _outputs = newValue } }
+    }
+    private nonisolated(unsafe) var _outputs: [MIDIOutputEndpoint]!
+    
+    public private(set) var inputs: [MIDIInputEndpoint] {
+        get { accessQueue.sync { _inputs } }
+        set { accessQueue.sync { _inputs = newValue } }
+    }
+    private nonisolated(unsafe) var _inputs: [MIDIInputEndpoint]!
+    
+    public private(set) var lifecycle: Lifecycle {
+        get { accessQueue.sync { _lifecycle } }
+        set { accessQueue.sync { _lifecycle = newValue } }
+    }
+    private nonisolated(unsafe) var _lifecycle: Lifecycle!
+    
+    public private(set) var parameters: Parameters {
+        get { accessQueue.sync { _parameters } }
+        set { accessQueue.sync { _parameters = newValue } }
+    }
+    private nonisolated(unsafe) var _parameters: Parameters!
+    
+    var proxy: MIDIThruConnectionProxy? {
+        get { accessQueue.sync { _proxy } }
+        set { accessQueue.sync { _proxy = newValue } }
+    }
+    private nonisolated(unsafe) var _proxy: MIDIThruConnectionProxy?
+    
+    /// Internal property synchronization queue.
+    let accessQueue: DispatchQueue
     
     // init
     
@@ -105,12 +136,13 @@ public final class MIDIThruConnection: _MIDIManaged, @unchecked Sendable {
         // truncate arrays to 8 members or less;
         // Core MIDI thru connections can only have up to 8 outputs and 8 inputs
     
-        self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-        self.outputs = Array(outputs.prefix(8))
-        self.inputs = Array(inputs.prefix(8))
-        self.lifecycle = lifecycle
         self.midiManager = midiManager
-        parameters = params
+        self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
+        self.accessQueue = .global()
+        _outputs = Array(outputs.prefix(8))
+        _inputs = Array(inputs.prefix(8))
+        _lifecycle = lifecycle
+        _parameters = params
     }
     
     deinit {
