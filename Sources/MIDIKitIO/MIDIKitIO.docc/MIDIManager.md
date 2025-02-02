@@ -50,7 +50,7 @@ All cleanup is done automatically in MIDIKit and no specific methods are require
 
 ### Instance the Manager
 
-- ``init(clientName:model:manufacturer:notificationHandler:)``
+- ``init(clientName:model:manufacturer:notificationHandler:)-(_,_,_,MIDIManager.NotificationHandler?)``
 
 ### Start the Manager
 

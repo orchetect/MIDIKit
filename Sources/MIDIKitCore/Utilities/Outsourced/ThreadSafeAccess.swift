@@ -21,6 +21,7 @@ import Foundation
 ///
 /// - Warning: Do not instantiate this wrapper on a variable declaration inside a function body or
 ///   closure body. Only wrap static or instance variables.
+@_documentation(visibility: internal)
 @propertyWrapper
 public final class ThreadSafeAccess<T> /* : @unchecked Sendable where T: Sendable */ {
     private var value: T
