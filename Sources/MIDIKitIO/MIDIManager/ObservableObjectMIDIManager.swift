@@ -61,27 +61,19 @@ import Combine
 /// ```
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
 public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject, @unchecked Sendable {
+    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
     public internal(set) override var devices: MIDIDevices {
-        get { return accessQueue.sync { _devices } }
-        _modify {
-            var valueCopy = accessQueue.sync { _devices }
-            yield &valueCopy
-            accessQueue.sync { _devices = valueCopy }
-        }
-        set { accessQueue.sync { _devices = newValue } }
+        get { observableDevices }
+        set { observableDevices = newValue }
     }
-    private nonisolated(unsafe) var _devices = MIDIDevices()
+    private var observableDevices = MIDIDevices()
     
+    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
     public internal(set) override var endpoints: MIDIEndpoints {
-        get { return accessQueue.sync { _endpoints } }
-        _modify {
-            var valueCopy = accessQueue.sync { _endpoints }
-            yield &valueCopy
-            accessQueue.sync { _endpoints = valueCopy }
-        }
-        set { accessQueue.sync { _endpoints = newValue } }
+        get { observableEndpoints }
+        set { observableEndpoints = newValue }
     }
-    private nonisolated(unsafe) var _endpoints = MIDIEndpoints()
+    private var observableEndpoints = MIDIEndpoints()
     
     override func updateObjectsCache() {
         objectWillChange.send()

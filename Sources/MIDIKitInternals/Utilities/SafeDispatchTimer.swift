@@ -41,7 +41,7 @@ package final class SafeDispatchTimer /* : Sendable */ {
     package init(
         rate: Rate,
         leeway: DispatchTimeInterval = .nanoseconds(0),
-        queue: DispatchQueue = .global(),
+        queue: DispatchQueue? = nil,
         eventHandler: @escaping DispatchSource.DispatchSourceHandler = { }
     ) {
         self.rate = rate

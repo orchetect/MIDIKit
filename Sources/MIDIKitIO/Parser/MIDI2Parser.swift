@@ -7,29 +7,21 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
+import MIDIKitCore
 
 /// Parser for MIDI 2.0 events.
 ///
 /// State is maintained internally. Use one parser class instance per MIDI endpoint for the
 /// lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and
 /// do not use a single global parser class instance for all MIDI endpoints.)
-public final class MIDI2Parser: Sendable {
+public final class MIDI2Parser: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     // MARK: - Parser State
     
-    private var sysEx7MultiPartUMPBuffer: [UInt8] {
-        get { accessQueue.sync { _sysEx7MultiPartUMPBuffer } }
-        set { accessQueue.sync { _sysEx7MultiPartUMPBuffer = newValue } }
-    }
-    private nonisolated(unsafe) var _sysEx7MultiPartUMPBuffer: [UInt8] = []
+    @ThreadSafeAccess
+    private var sysEx7MultiPartUMPBuffer: [UInt8] = []
     
-    private var sysEx8MultiPartUMPBuffer: [UInt8: [UInt8]] {
-        get { accessQueue.sync { _sysEx8MultiPartUMPBuffer } }
-        set { accessQueue.sync { _sysEx8MultiPartUMPBuffer = newValue } }
-    }
-    private nonisolated(unsafe) var _sysEx8MultiPartUMPBuffer: [UInt8: [UInt8]] = [:]
-    
-    /// Internal property synchronization queue.
-    let accessQueue: DispatchQueue = .global()
+    @ThreadSafeAccess
+    private var sysEx8MultiPartUMPBuffer: [UInt8: [UInt8]] = [:]
     
     // MARK: - Init
     

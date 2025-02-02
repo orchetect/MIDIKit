@@ -41,51 +41,35 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     ///
     /// The preferred API will be used where possible, unless operating system requirements force
     /// the use of a specific.
+    @ThreadSafeAccess
     public var preferredAPI: CoreMIDIAPIVersion {
-        get { accessQueue.sync { _preferredAPI } }
-        set {
-            accessQueue.sync {
-                // prevent setting of an invalid API
-                _preferredAPI = newValue.isValidOnCurrentPlatform ? newValue : .bestForPlatform()
+        didSet {
+            // prevent setting of an invalid API
+            if !preferredAPI.isValidOnCurrentPlatform {
+                preferredAPI = .bestForPlatform()
             }
         }
     }
-    private nonisolated(unsafe) var _preferredAPI: CoreMIDIAPIVersion
     
     /// Dictionary of MIDI input connections managed by this instance.
-    public internal(set) var managedInputConnections: [String: MIDIInputConnection] {
-        get { return accessQueue.sync { _managedInputConnections } }
-        set { accessQueue.sync { _managedInputConnections = newValue } }
-    }
-    private nonisolated(unsafe) var _managedInputConnections: [String: MIDIInputConnection] = [:]
+    @ThreadSafeAccess
+    public internal(set) var managedInputConnections: [String: MIDIInputConnection] = [:]
     
     /// Dictionary of MIDI output connections managed by this instance.
-    public internal(set) var managedOutputConnections: [String: MIDIOutputConnection] {
-        get { return accessQueue.sync { _managedOutputConnections } }
-        set { accessQueue.sync { _managedOutputConnections = newValue } }
-    }
-    private nonisolated(unsafe) var _managedOutputConnections: [String: MIDIOutputConnection] = [:]
+    @ThreadSafeAccess
+    public internal(set) var managedOutputConnections: [String: MIDIOutputConnection] = [:]
     
     /// Dictionary of virtual MIDI inputs managed by this instance.
-    public internal(set) var managedInputs: [String: MIDIInput] {
-        get { return accessQueue.sync { _managedInputs } }
-        set { accessQueue.sync { _managedInputs = newValue } }
-    }
-    private nonisolated(unsafe) var _managedInputs: [String: MIDIInput] = [:]
+    @ThreadSafeAccess
+    public internal(set) var managedInputs: [String: MIDIInput] = [:]
     
     /// Dictionary of virtual MIDI outputs managed by this instance.
-    public internal(set) var managedOutputs: [String: MIDIOutput] {
-        get { return accessQueue.sync { _managedOutputs } }
-        set { accessQueue.sync { _managedOutputs = newValue } }
-    }
-    private nonisolated(unsafe) var _managedOutputs: [String: MIDIOutput] = [:]
+    @ThreadSafeAccess
+    public internal(set) var managedOutputs: [String: MIDIOutput] = [:]
     
     /// Dictionary of non-persistent MIDI thru connections managed by this instance.
-    public internal(set) var managedThruConnections: [String: MIDIThruConnection] {
-        get { return accessQueue.sync { _managedThruConnections } }
-        set { accessQueue.sync { _managedThruConnections = newValue } }
-    }
-    private nonisolated(unsafe) var _managedThruConnections: [String: MIDIThruConnection] = [:]
+    @ThreadSafeAccess
+    public internal(set) var managedThruConnections: [String: MIDIThruConnection] = [:]
     
     /// Array of persistent MIDI thru connections which persist indefinitely (even after system
     /// reboots) until explicitly removed.
@@ -105,28 +89,12 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     }
     
     /// MIDI devices in the system.
-    public internal(set) var devices: MIDIDevices {
-        get { return accessQueue.sync { _devices } }
-        _modify {
-            var valueCopy = accessQueue.sync { _devices }
-            yield &valueCopy
-            accessQueue.sync { _devices = valueCopy }
-        }
-        set { accessQueue.sync { _devices = newValue } }
-    }
-    private nonisolated(unsafe) var _devices = MIDIDevices()
+    @ThreadSafeAccess
+    public internal(set) var devices: MIDIDevices = MIDIDevices()
     
     /// MIDI input and output endpoints in the system.
-    public internal(set) var endpoints: MIDIEndpoints {
-        get { return accessQueue.sync { _endpoints } }
-        _modify {
-            var valueCopy = accessQueue.sync { _endpoints }
-            yield &valueCopy
-            accessQueue.sync { _endpoints = valueCopy }
-        }
-        set { accessQueue.sync { _endpoints = newValue } }
-    }
-    private nonisolated(unsafe) var _endpoints = MIDIEndpoints()
+    @ThreadSafeAccess
+    public internal(set) var endpoints: MIDIEndpoints = MIDIEndpoints()
     
     /// Handler that is called when state has changed in the manager.
     public typealias NotificationHandler = @Sendable (
@@ -134,27 +102,15 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     ) -> Void
     
     /// Handler that is called when state has changed in the manager.
-    public var notificationHandler: NotificationHandler? {
-        get { return accessQueue.sync { _notificationHandler } }
-        set { accessQueue.sync { _notificationHandler = newValue } }
-    }
-    private nonisolated(unsafe) var _notificationHandler: NotificationHandler?
+    @ThreadSafeAccess
+    public var notificationHandler: NotificationHandler?
     
     /// Internal: system state cache for notification handling.
-    var notificationCache: MIDIIOObjectCache? {
-        get { return accessQueue.sync { _notificationCache } }
-        _modify {
-            var valueCopy = accessQueue.sync { _notificationCache }
-            yield &valueCopy
-            accessQueue.sync { _notificationCache = valueCopy }
-        }
-        set { accessQueue.sync { _notificationCache = newValue } }
-    }
-    private nonisolated(unsafe) var _notificationCache: MIDIIOObjectCache?
+    @ThreadSafeAccess
+    var notificationCache: MIDIIOObjectCache?
     
     // MARK: - Internal dispatch queue
     
-    let accessQueue: DispatchQueue
     let managementQueue: DispatchQueue
     
     // MARK: - Init
@@ -180,18 +136,7 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
         if clientNameForQueue.isEmpty { clientNameForQueue = UUID().uuidString }
         
         // API version
-        _preferredAPI = .bestForPlatform()
-        
-        // access queue
-        let accessQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
-            + ".midiManager." + clientNameForQueue + ".access"
-        accessQueue = DispatchQueue(
-            label: accessQueueName,
-            qos: .userInitiated,
-            attributes: [],
-            autoreleaseFrequency: .workItem,
-            target: .global(qos: .userInitiated)
-        )
+        preferredAPI = .bestForPlatform()
         
         // management queue
         let managementQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")

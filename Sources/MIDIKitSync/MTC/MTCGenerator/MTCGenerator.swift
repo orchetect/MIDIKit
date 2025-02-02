@@ -11,7 +11,7 @@ internal import MIDIKitInternals
 import TimecodeKitCore
 
 /// MTC sync generator.
-public final class MTCGenerator: SendsMIDIEvents, Sendable {
+public final class MTCGenerator: SendsMIDIEvents, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     // MARK: - Public properties
     
     public let name: String
@@ -27,18 +27,12 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
     }
     
     /// Generator state.
-    public private(set) var state: State {
-        get { return accessQueue.sync { _state } }
-        set { accessQueue.sync { _state = newValue } }
-    }
-    private nonisolated(unsafe) var _state: State = .idle
+    @ThreadSafeAccess
+    public private(set) var state: State = .idle
     
-    /// Internal var
-    private var shouldStart: Bool {
-        get { return accessQueue.sync { _shouldStart } }
-        set { accessQueue.sync { _shouldStart = newValue } }
-    }
-    private nonisolated(unsafe) var _shouldStart: Bool = true
+    /// Internal flag
+    @ThreadSafeAccess
+    private var shouldStart: Bool = true
     
     /// Property updated whenever outgoing MTC timecode changes.
     public var timecode: Timecode {
@@ -53,11 +47,8 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
     ///
     /// ``MTCEncoder/FullFrameBehavior/ifDifferent`` is recommended and suitable for most
     /// implementations.
-    public var locateBehavior: MTCEncoder.FullFrameBehavior {
-        get { return accessQueue.sync { _locateBehavior } }
-        set { accessQueue.sync { _locateBehavior = newValue } }
-    }
-    private nonisolated(unsafe) var _locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
+    @ThreadSafeAccess
+    public var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
     
     // MARK: - Stored closures
     
@@ -88,10 +79,6 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
         
         // queues
         
-        let accessQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
-            + ".mtcGenerator." + name + ".access"
-        accessQueue = DispatchQueue(label: accessQueueName, qos: .userInitiated)
-        
         let generateQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
             + ".mtcGenerator." + name + ".generate"
         generateQueue = DispatchQueue(label: generateQueueName, qos: .userInitiated)
@@ -121,7 +108,6 @@ public final class MTCGenerator: SendsMIDIEvents, Sendable {
     
     // MARK: - Queue (internal)
     
-    private let accessQueue: DispatchQueue
     private let generateQueue: DispatchQueue
     
     // MARK: - Encoder (internal)

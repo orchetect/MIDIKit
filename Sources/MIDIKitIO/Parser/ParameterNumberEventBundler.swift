@@ -7,28 +7,24 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
+import MIDIKitCore
 
 /// RPN/NRPN bundling.
 @_documentation(visibility: internal)
-public final class ParameterNumberEventBundler: Sendable {
+public final class ParameterNumberEventBundler: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     // MARK: - Options
     
-    public var bundleRPNAndNRPNDataEntryLSB: Bool {
-        get { accessQueue.sync { _bundleRPNAndNRPNDataEntryLSB } }
-        set { accessQueue.sync { _bundleRPNAndNRPNDataEntryLSB = newValue } }
-    }
-    private nonisolated(unsafe) var _bundleRPNAndNRPNDataEntryLSB: Bool = false
+    @ThreadSafeAccess
+    public var bundleRPNAndNRPNDataEntryLSB: Bool = false
     
     public typealias EventsHandler = @Sendable (
         _ events: [MIDIEvent],
         _ timeStamp: CoreMIDITimeStamp,
         _ source: MIDIOutputEndpoint?
     ) -> Void
-    public var handleEvents: EventsHandler? {
-        get { accessQueue.sync { _handleEvents } }
-        set { accessQueue.sync { _handleEvents = newValue } }
-    }
-    private nonisolated(unsafe) var _handleEvents: EventsHandler?
+    
+    @ThreadSafeAccess
+    public var handleEvents: EventsHandler?
     
     // MARK: - Internal State
     
@@ -37,9 +33,6 @@ public final class ParameterNumberEventBundler: Sendable {
     private nonisolated(unsafe) var rpnHolder: EventHolder<MIDIEvent.RPN>!
     // `nonisolated` is only used because we're forced to use var here to set up handlers in class init
     private nonisolated(unsafe) var nrpnHolder: EventHolder<MIDIEvent.NRPN>!
-    
-    /// Internal property synchronization queue.
-    let accessQueue: DispatchQueue = .global()
     
     public init(
         handleEvents: EventsHandler? = nil

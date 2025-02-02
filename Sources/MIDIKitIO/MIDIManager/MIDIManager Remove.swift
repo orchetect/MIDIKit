@@ -80,9 +80,6 @@ extension MIDIManager {
     /// - ``model`` property
     /// - ``manufacturer`` property
     public func removeAll() {
-        // `self.remove(...)` internally uses operationQueue.sync{}
-        // so don't need to wrap this with it here
-        
         for managedEndpointType in ManagedType.allCases {
             remove(managedEndpointType, .all)
         }

@@ -7,9 +7,10 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
+import MIDIKitCore
 
 /// Event Holder.
-final class EventHolder<T: MIDIParameterNumberEvent>: Sendable {
+final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     // MARK: - Options
     
     typealias TimerExpiredHandler = @Sendable (_ storedEvent: ReturnedStoredEvent) -> Void
@@ -22,25 +23,17 @@ final class EventHolder<T: MIDIParameterNumberEvent>: Sendable {
     
     // MARK: - Parser State
     
-    private var expirationTimer: Timer? {
-        get { accessQueue.sync { _expirationTimer } }
-        set { accessQueue.sync { _expirationTimer = newValue } }
-    }
-    private nonisolated(unsafe) var _expirationTimer: Timer?
-    
-    /// Internal property synchronization queue.
-    let accessQueue: DispatchQueue = .global()
+    @ThreadSafeAccess
+    private var expirationTimer: Timer?
     
     typealias StoredEvent = (
         event: T,
         timeStamp: CoreMIDITimeStamp,
         source: MIDIOutputEndpoint?
     )
-    var storedEvent: StoredEvent? {
-        get { accessQueue.sync { _storedEvent } }
-        set { accessQueue.sync { _storedEvent = newValue } }
-    }
-    private nonisolated(unsafe) var _storedEvent: StoredEvent?
+    
+    @ThreadSafeAccess
+    var storedEvent: StoredEvent?
     
     typealias ReturnedStoredEvent = (
         event: MIDIEvent,
@@ -57,7 +50,9 @@ final class EventHolder<T: MIDIParameterNumberEvent>: Sendable {
         self.storedEventWrapper = storedEventWrapper
         self.timerExpired = timerExpired
     }
-    
+}
+
+extension EventHolder {
     func restartTimer() {
         expirationTimer?.invalidate()
         expirationTimer = Timer.scheduledTimer(

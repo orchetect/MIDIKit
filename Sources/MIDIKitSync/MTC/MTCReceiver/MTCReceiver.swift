@@ -24,37 +24,31 @@ import TimecodeKitCore
 /// >
 /// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate
 /// > timecodes when scrubbing or locating to different times.
-public final class MTCReceiver: Sendable {
+public final class MTCReceiver: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     // MARK: - Public properties
     
     public let name: String
     
-    public private(set) var state: State {
-        get { return accessQueue.sync { _state } }
-        set {
-            let oldValue = accessQueue.sync { _state }
-            accessQueue.sync { _state = newValue }
-            
-            if newValue != oldValue {
-                stateChangedHandler?(newValue)
+    @ThreadSafeAccess
+    public private(set) var state: State = .idle {
+        didSet {
+            let state = state // read once to avoid engaging lock twice
+            if state != oldValue {
+                stateChangedHandler?(state)
             }
         }
     }
-    private nonisolated(unsafe) var _state: State = .idle
     
     /// Property updated whenever incoming MTC timecode changes.
-    public private(set) var timecode: Timecode {
-        get { return accessQueue.sync { _timecode } }
-        set { accessQueue.sync { _timecode = newValue } }
-    }
-    private nonisolated(unsafe) var _timecode: Timecode
+    @ThreadSafeAccess
+    public private(set) var timecode: Timecode
     
     /// The frame rate the local system is using.
     /// Remember to also set this any time the local frame rate changes so the receiver can
     /// interpret the incoming MTC accordingly.
     public var localFrameRate: TimecodeFrameRate? {
-        get { return accessQueue.sync { decoder.localFrameRate } }
-        set { accessQueue.sync { decoder.localFrameRate = newValue } }
+        get { receiveQueue.sync { decoder.localFrameRate } }
+        set { receiveQueue.sync { decoder.localFrameRate = newValue } }
     }
     
     /// The frame rate the local system is using.
@@ -119,7 +113,9 @@ public final class MTCReceiver: Sendable {
             _ displayNeedsUpdate: Bool
         ) -> Void)?
     ) {
-        self.timecodeChangedHandler = handler
+        receiveQueue.sync {
+            self.timecodeChangedHandler = handler
+        }
     }
     
     /// Called when the MTC receiver's state changes.
@@ -139,7 +135,9 @@ public final class MTCReceiver: Sendable {
     public func setStateChangedHandler(
         _ handler: (@Sendable (_ state: State) -> Void)?
     ) {
-        self.stateChangedHandler = handler
+        receiveQueue.sync {
+            self.stateChangedHandler = handler
+        }
     }
     
     // MARK: - Init
@@ -176,13 +174,9 @@ public final class MTCReceiver: Sendable {
         let name = name ?? UUID().uuidString
         self.name = name
         self.syncPolicy = syncPolicy
-        _timecode = Timecode(.zero, at: initialLocalFrameRate ?? .fps30)
+        timecode = Timecode(.zero, at: initialLocalFrameRate ?? .fps30)
         
         // queues
-        
-        let accessQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
-            + ".mtcReceiver." + name + ".access"
-        accessQueue = DispatchQueue(label: accessQueueName, qos: .userInitiated)
         
         let receiveQueueName = (Bundle.main.bundleIdentifier ?? "com.orchetect.midikit")
             + ".mtcReceiver." + name + ".receive"
@@ -190,8 +184,8 @@ public final class MTCReceiver: Sendable {
         
         // store handler closures
         
-        timecodeChangedHandler = timecodeChanged
-        stateChangedHandler = stateChanged
+        timecodeChangedHandler = receiveQueue.sync { timecodeChanged }
+        stateChangedHandler = receiveQueue.sync { stateChanged }
         
         // set up decoder reset timer
         // we're accounting for the largest reasonable interval of time we are willing to wait until
@@ -234,7 +228,6 @@ public final class MTCReceiver: Sendable {
     
     // MARK: - Queue (internal)
     
-    private let accessQueue: DispatchQueue
     private let receiveQueue: DispatchQueue
     
     // MARK: - Decoder (internal)
@@ -242,23 +235,14 @@ public final class MTCReceiver: Sendable {
     nonisolated(unsafe)
     var decoder: MTCDecoder!
     
-    public private(set) var timeLastQuarterFrameReceived: timespec {
-        get { return accessQueue.sync { _timeLastQuarterFrameReceived } }
-        set { accessQueue.sync { _timeLastQuarterFrameReceived = newValue } }
-    }
-    private nonisolated(unsafe) var _timeLastQuarterFrameReceived: timespec = .init()
+    @ThreadSafeAccess
+    public private(set) var timeLastQuarterFrameReceived: timespec = .init()
     
-    private var freewheelPreviousTimecode: Timecode {
-        get { return accessQueue.sync { _freewheelPreviousTimecode } }
-        set { accessQueue.sync { _freewheelPreviousTimecode = newValue } }
-    }
-    private nonisolated(unsafe) var _freewheelPreviousTimecode: Timecode = .init(.zero, at: .fps30)
+    @ThreadSafeAccess
+    private var freewheelPreviousTimecode: Timecode = .init(.zero, at: .fps30)
     
-    private var freewheelSequentialFrames: Int {
-        get { return accessQueue.sync { _freewheelSequentialFrames } }
-        set { accessQueue.sync { _freewheelSequentialFrames = newValue } }
-    }
-    private nonisolated(unsafe) var _freewheelSequentialFrames: Int = 0
+    @ThreadSafeAccess
+    private var freewheelSequentialFrames: Int = 0
     
     // MARK: - Timer (internal)
     

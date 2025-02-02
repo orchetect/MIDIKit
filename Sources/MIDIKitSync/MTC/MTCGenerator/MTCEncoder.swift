@@ -17,7 +17,7 @@ import TimecodeKitCore
 /// > Tip: This object is not affected by or reliant on timing at all and simply processes events as
 /// > they are received. For outbound MTC sync, use the ``MTCGenerator`` wrapper object which adds
 /// > additional abstraction for generating MTC sync.
-public final class MTCEncoder: SendsMIDIEvents, Sendable {
+public final class MTCEncoder: SendsMIDIEvents, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     // MARK: - Public properties
         
     /// Returns current `Timecode` at ``localFrameRate``, scaling if necessary.
@@ -46,24 +46,16 @@ public final class MTCEncoder: SendsMIDIEvents, Sendable {
     }
         
     /// Last internal MTC SPMTE timecode components formed from outgoing MTC data.
-    public internal(set) var mtcComponents: Timecode.Components {
-        get { return _mtcComponentsLock.withLock { _mtcComponents } }
-        set { _mtcComponentsLock.withLock { _mtcComponents = newValue } }
-    }
-    private nonisolated(unsafe) var _mtcComponents = Timecode.Components()
-    private let _mtcComponentsLock = NSLock()
+    @ThreadSafeAccess
+    public internal(set) var mtcComponents = Timecode.Components()
     
     func setMTCComponents(mtc newComponents: Timecode.Components) {
         mtcComponents = newComponents
     }
         
     /// Local frame rate (desired rate, not internal MTC SMPTE frame rate).
-    public internal(set) var localFrameRate: TimecodeFrameRate {
-        get { return _localFrameRateLock.withLock { _localFrameRate } }
-        set { _localFrameRateLock.withLock { _localFrameRate = newValue } }
-    }
-    private nonisolated(unsafe) var _localFrameRate: TimecodeFrameRate = .fps30
-    private let _localFrameRateLock = NSLock()
+    @ThreadSafeAccess
+    public internal(set) var localFrameRate: TimecodeFrameRate = .fps30
         
     /// Set local frame rate (desired rate, not internal MTC SMPTE frame rate).
     func setLocalFrameRate(_ newFrameRate: TimecodeFrameRate) {
@@ -72,12 +64,8 @@ public final class MTCEncoder: SendsMIDIEvents, Sendable {
     }
         
     /// The base MTC frame rate last transmitted.
-    public internal(set) var mtcFrameRate: MTCFrameRate {
-        get { return _mtcFrameRateLock.withLock { _mtcFrameRate } }
-        set { _mtcFrameRateLock.withLock { _mtcFrameRate = newValue } }
-    }
-    private nonisolated(unsafe) var _mtcFrameRate: MTCFrameRate = .mtc30
-    private let _mtcFrameRateLock = NSLock()
+    @ThreadSafeAccess
+    public internal(set) var mtcFrameRate: MTCFrameRate = .mtc30
         
     public nonisolated(unsafe) var midiOutHandler: MIDIOutHandler?
     

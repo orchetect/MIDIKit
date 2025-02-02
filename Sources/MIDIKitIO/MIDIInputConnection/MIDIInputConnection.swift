@@ -8,6 +8,7 @@
 
 import Foundation
 internal import CoreMIDI
+import MIDIKitCore
 
 /// A managed MIDI input connection created in the system by the MIDI I/O ``MIDIManager``.
 ///
@@ -25,7 +26,7 @@ internal import CoreMIDI
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/inputConnection`` or ``MIDIManager/removeAll()`` to destroy the
 /// > managed connection.)
-public final class MIDIInputConnection: MIDIManaged, Sendable {
+public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     weak nonisolated(unsafe) var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -38,11 +39,8 @@ public final class MIDIInputConnection: MIDIManaged, Sendable {
     
     // class-specific
     
-    public private(set) var outputsCriteria: Set<MIDIEndpointIdentity> {
-        get { accessQueue.sync { _outputsCriteria } }
-        set { accessQueue.sync { _outputsCriteria = newValue } }
-    }
-    private nonisolated(unsafe) var _outputsCriteria: Set<MIDIEndpointIdentity> = []
+    @ThreadSafeAccess
+    public private(set) var outputsCriteria: Set<MIDIEndpointIdentity> = []
     
     /// Stores criteria after applying any filters that have been set in the ``filter`` property.
     /// Passing nil will re-use existing criteria, re-applying the filters.
@@ -71,44 +69,31 @@ public final class MIDIInputConnection: MIDIManaged, Sendable {
     }
     
     /// The Core MIDI input port reference.
-    public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef? {
-        get { accessQueue.sync { _coreMIDIInputPortRef } }
-        set { accessQueue.sync { _coreMIDIInputPortRef = newValue } }
-    }
-    private nonisolated(unsafe) var _coreMIDIInputPortRef: CoreMIDIPortRef?
+    @ThreadSafeAccess
+    public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
     
     /// The Core MIDI output endpoint(s) reference(s).
-    public private(set) var coreMIDIOutputEndpointRefs: Set<CoreMIDIEndpointRef> {
-        get { accessQueue.sync { _coreMIDIOutputEndpointRefs } }
-        set { accessQueue.sync { _coreMIDIOutputEndpointRefs = newValue } }
-    }
-    private nonisolated(unsafe) var _coreMIDIOutputEndpointRefs: Set<CoreMIDIEndpointRef> = []
+    @ThreadSafeAccess
+    public private(set) var coreMIDIOutputEndpointRefs: Set<CoreMIDIEndpointRef> = []
     
     /// Internal:
     /// The Core MIDI output endpoint(s) reference(s) stored as `NSNumber` classes.
     /// This is only so that `MIDIPortConnectSource()` can take stable pointer references.
-    var coreMIDIOutputEndpointRefCons: Set<NSNumber> {
-        get { accessQueue.sync { _coreMIDIOutputEndpointRefCons } }
-        set { accessQueue.sync { _coreMIDIOutputEndpointRefCons = newValue } }
-    }
-    private nonisolated(unsafe) var _coreMIDIOutputEndpointRefCons: Set<NSNumber> = []
+    @ThreadSafeAccess
+    var coreMIDIOutputEndpointRefCons: Set<NSNumber> = []
     
     /// Operating mode.
     ///
     /// Changes take effect immediately.
+    @ThreadSafeAccess
     public var mode: MIDIInputConnectionMode {
-        get { accessQueue.sync { _mode } }
-        set {
-            let oldValue = accessQueue.sync { _mode }
-            accessQueue.sync { _mode = newValue }
-            
-            guard oldValue != newValue else { return }
+        didSet {
+            guard mode != oldValue else { return }
             guard let midiManager else { return }
             updateCriteriaFromMode()
             try? refreshConnection(in: midiManager)
         }
     }
-    private nonisolated(unsafe) var _mode: MIDIInputConnectionMode!
     
     /// Reads the ``mode`` property and applies it to the stored criteria.
     private func updateCriteriaFromMode() {
@@ -124,29 +109,19 @@ public final class MIDIInputConnection: MIDIManaged, Sendable {
     /// Endpoint filter.
     ///
     /// Changes take effect immediately.
+    @ThreadSafeAccess
     public var filter: MIDIEndpointFilter {
-        get { accessQueue.sync { _filter } }
-        set {
-            let oldValue = accessQueue.sync { _filter }
-            accessQueue.sync { _filter = newValue }
-            
-            guard oldValue != newValue else { return }
+        didSet {
+            guard filter != oldValue else { return }
             guard let midiManager else { return }
             updateCriteria()
             try? refreshConnection(in: midiManager)
         }
     }
-    private nonisolated(unsafe) var _filter: MIDIEndpointFilter!
     
     /// Receive handler for inbound MIDI events.
-    var receiveHandler: MIDIReceiverProtocol {
-        get { accessQueue.sync { _receiveHandler } }
-        set { accessQueue.sync { _receiveHandler = newValue } }
-    }
-    private nonisolated(unsafe) var _receiveHandler: MIDIReceiverProtocol!
-    
-    /// Internal property synchronization queue.
-    let accessQueue: DispatchQueue
+    @ThreadSafeAccess
+    var receiveHandler: MIDIReceiverProtocol
     
     // init
     
@@ -174,10 +149,9 @@ public final class MIDIInputConnection: MIDIManaged, Sendable {
     ) {
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-        self.accessQueue = .global()
-        _mode = mode
-        _filter = filter
-        _receiveHandler = receiver.create()
+        self.mode = mode
+        self.filter = filter
+        receiveHandler = receiver.create()
         
         switch mode {
         case let .outputs(criteria):
@@ -196,7 +170,9 @@ public final class MIDIInputConnection: MIDIManaged, Sendable {
 extension MIDIInputConnection {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: MIDIReceiver) {
-        receiveHandler = receiver.create()
+        midiManager?.managementQueue.sync {
+            receiveHandler = receiver.create()
+        }
     }
 }
 
@@ -231,7 +207,7 @@ extension MIDIInputConnection {
                 manager.coreMIDIClientRef,
                 UUID().uuidString as CFString,
                 &newInputPortRef,
-                { [weak midiManager, weak receiveHandler] packetListPtr, srcConnRefCon in
+                { [weak self, weak queue = midiManager?.managementQueue] packetListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
                     // otherwise we run into data races when Thread Sanitizer is on
                     
@@ -240,9 +216,10 @@ extension MIDIInputConnection {
                         refConKnown: true
                     )
                     
-                    midiManager?.managementQueue.sync { [weak receiveHandler] in
-                        receiveHandler?.packetListReceived(packets)
-                    }
+                    // we need to read the `receiveHandler` on the same queue that it was created on
+                    // to satisfy the thread sanitizer.
+                    let receiveHandler = queue?.sync { self?.receiveHandler }
+                    receiveHandler?.packetListReceived(packets)
                 }
             )
             .throwIfOSStatusErr()
@@ -259,7 +236,7 @@ extension MIDIInputConnection {
                 UUID().uuidString as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newInputPortRef,
-                { [weak midiManager, weak receiveHandler] eventListPtr, srcConnRefCon in
+                { [weak self, weak queue = midiManager?.managementQueue] eventListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
                     // otherwise we run into data races when Thread Sanitizer is on
                     
@@ -269,12 +246,13 @@ extension MIDIInputConnection {
                     )
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    midiManager?.managementQueue.sync { [weak receiveHandler] in
-                        receiveHandler?.eventListReceived(
-                            packets,
-                            protocol: midiProtocol
-                        )
-                    }
+                    // we need to read the `receiveHandler` on the same queue that it was created on
+                    // to satisfy the thread sanitizer.
+                    let receiveHandler = queue?.sync { self?.receiveHandler }
+                    receiveHandler?.eventListReceived(
+                        packets,
+                        protocol: midiProtocol
+                    )
                 }
             )
             .throwIfOSStatusErr()

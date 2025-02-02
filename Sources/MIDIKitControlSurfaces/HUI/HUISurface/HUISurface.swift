@@ -44,6 +44,7 @@ internal import MIDIKitInternals
     
     /// Notification handler that is called as a result of the ``model`` being updated from received
     /// HUI events.
+    @ObservationIgnored
     public var modelNotificationHandler: ModelNotificationHandler?
     
     /// Notification handler will always be called even when a received HUI MIDI event from host
@@ -54,6 +55,7 @@ internal import MIDIKitInternals
     public typealias PresenceChangedHandler = @Sendable (_ isPresent: Bool) -> Void
     
     /// Called when the remote presence state changes (when pings resume or cease after timeout).
+    @ObservationIgnored
     public var remotePresenceChangedHandler: PresenceChangedHandler?
     
     @ObservationIgnored
@@ -66,20 +68,17 @@ internal import MIDIKitInternals
     ///
     /// HUI pings are sent from the host to surface(s) every 1 second. A timeout duration between 2
     /// ... 5 seconds is reasonable depending on desired leeway.
+    @ObservationIgnored
     public let remotePresenceTimeout: TimeInterval
     
     @ObservationIgnored
     var remotePresenceTimer: Task<Void, any Error>? {
-        get { _remotePresenceTimerLock.withLock { _remotePresenceTimer } }
-        _modify {
-            var valueCopy = _remotePresenceTimerLock.withLock { _remotePresenceTimer }
-            yield &valueCopy
-            _remotePresenceTimerLock.withLock { _remotePresenceTimer = valueCopy }
-        }
-        set { _remotePresenceTimerLock.withLock { _remotePresenceTimer = newValue } }
+        get { _remotePresenceTimer.value }
+        _modify { yield &_remotePresenceTimer.value }
+        set { _remotePresenceTimer.value = newValue }
     }
-    private nonisolated(unsafe) var _remotePresenceTimer: Task<Void, any Error>?
-    @ObservationIgnored private let _remotePresenceTimerLock = NSLock()
+    @ObservationIgnored
+    private nonisolated(unsafe) var _remotePresenceTimer = ThreadSafeAccessValue(value: nil as Task<Void, any Error>?)
     
     func restartRemotePresenceTimer() {
         remotePresenceTimer?.cancel()
@@ -101,18 +100,12 @@ internal import MIDIKitInternals
     /// Ping timeout can be set to a custom value by setting the ``remotePresenceTimeout`` property.
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes.
-    @ObservationIgnored
     public internal(set) var isRemotePresent: Bool {
-        get { _isRemotePresentLock.withLock { _isRemotePresent } }
-        _modify {
-            var valueCopy = _isRemotePresentLock.withLock { _isRemotePresent }
-            yield &valueCopy
-            _isRemotePresentLock.withLock { _isRemotePresent = valueCopy }
-        }
-        set { _isRemotePresentLock.withLock { _isRemotePresent = newValue } }
+        get { _isRemotePresent.value }
+        _modify { yield &_isRemotePresent.value }
+        set { _isRemotePresent.value = newValue }
     }
-    private nonisolated(unsafe) var _isRemotePresent: Bool = false
-    @ObservationIgnored private let _isRemotePresentLock = NSLock()
+    private nonisolated(unsafe) var _isRemotePresent = ThreadSafeAccessValue(value: false)
     
     private func receivedPing() {
         restartRemotePresenceTimer()

@@ -25,18 +25,11 @@ internal import MIDIKitInternals
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 @Observable public final class HUIHost: Sendable {
     /// HUI banks that are configured for this HUI host instance.
-    @ObservationIgnored
     public internal(set) var banks: [HUIHostBank] {
-        get { _banksLock.withLock { _banks } }
-        _modify {
-            var valueCopy = _banksLock.withLock { _banks }
-            yield &valueCopy
-            _banksLock.withLock { _banks = valueCopy }
-        }
-        set { _banksLock.withLock { _banks = newValue } }
+        get { accessQueue.sync { _banks } }
+        set { accessQueue.sync { _banks = newValue } }
     }
     private nonisolated(unsafe) var _banks: [HUIHostBank] = []
-    @ObservationIgnored private let _banksLock = NSLock()
     
     /// A HUI host transmits a ping message every 1 second to each of the remote surfaces that are
     /// configured to connect to it. So each bank will receive pings individually. HUI surfaces
@@ -44,30 +37,35 @@ internal import MIDIKitInternals
     /// presence.
     @ObservationIgnored
     nonisolated(unsafe)
-    var pingTimer: Task<Void, any Error>!
+    var pingTimer: SafeDispatchTimer!
+    
+    @ObservationIgnored
+    let accessQueue = DispatchQueue(label: "HUIHost", target: .global())
     
     // MARK: - Init
     
     /// Initialize with defaults.
     public init() {
-        pingTimer = Task { [weak self] in
-            while !Task.isCancelled {
+        pingTimer = SafeDispatchTimer(
+            rate: .seconds(1.0),
+            leeway: .milliseconds(500),
+            queue: nil
+        ) { [weak self] in
                 self?.pingTimerFired()
-                try await Task.sleep(for: .seconds(1.0))
             }
-        }
+        pingTimer.start()
     }
     
     deinit {
-        pingTimer.cancel()
+        pingTimer.stop()
     }
     
     // MARK: - Ping
     
     func pingTimerFired() {
         let event = encodeHUIPing(to: .surface)
-        banks.forEach {
-            $0.midiOut(event)
+        for bank in banks {
+            bank.midiOut(event)
         }
     }
     

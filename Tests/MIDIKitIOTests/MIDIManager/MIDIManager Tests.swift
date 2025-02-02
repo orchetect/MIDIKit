@@ -58,7 +58,7 @@ import Testing
         
         // internal protocol
         
-        class Bar: _MIDIManaged {
+        class Bar: MIDIManaged {
             var midiManager: MIDIManager?
             var api: CoreMIDIAPIVersion = .legacyCoreMIDI
         }

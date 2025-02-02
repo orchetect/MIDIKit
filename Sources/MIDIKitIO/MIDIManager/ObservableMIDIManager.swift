@@ -61,27 +61,21 @@ import Combine
 /// ```
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
 @Observable public final class ObservableMIDIManager: MIDIManager, @unchecked Sendable {
+    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
     public internal(set) override var devices: MIDIDevices {
-        get { return accessQueue.sync { _devices } }
-        _modify {
-            var valueCopy = accessQueue.sync { _devices }
-            yield &valueCopy
-            accessQueue.sync { _devices = valueCopy }
-        }
-        set { accessQueue.sync { _devices = newValue } }
+         get { observableDevices }
+        _modify { yield &observableDevices }
+        set { observableDevices = newValue }
     }
-    private nonisolated(unsafe) var _devices = MIDIDevices()
+    private var observableDevices = MIDIDevices()
     
+    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
     public internal(set) override var endpoints: MIDIEndpoints {
-        get { return accessQueue.sync { _endpoints } }
-        _modify {
-            var valueCopy = accessQueue.sync { _endpoints }
-            yield &valueCopy
-            accessQueue.sync { _endpoints = valueCopy }
-        }
-        set { accessQueue.sync { _endpoints = newValue } }
+        get { observableEndpoints }
+        _modify { yield &observableEndpoints }
+        set { observableEndpoints = newValue }
     }
-    private nonisolated(unsafe) var _endpoints = MIDIEndpoints()
+    private var observableEndpoints = MIDIEndpoints()
 }
 
 #endif

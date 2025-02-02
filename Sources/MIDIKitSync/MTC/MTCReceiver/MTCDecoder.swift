@@ -52,32 +52,22 @@ import TimecodeKitCore
 /// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate
 /// > timecodes when scrubbing or locating to different times, but will be limited to the base frame
 /// > rates supported by MTC.
-public final class MTCDecoder: Sendable {
+public final class MTCDecoder: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     // MARK: - Public properties
         
     /// Last timecode formed from incoming MTC data.
-    public internal(set) var timecode: Timecode {
-        get { return _timecodeLock.withLock { _timecode } }
-        set { _timecodeLock.withLock { _timecode = newValue } }
-    }
-    private nonisolated(unsafe) var _timecode = Timecode(.zero, at: .fps30)
-    private let _timecodeLock = NSLock()
+    @ThreadSafeAccess
+    public internal(set) var timecode = Timecode(.zero, at: .fps30)
     
     /// The base MTC frame rate last received.
-    public internal(set) var mtcFrameRate: MTCFrameRate {
-        get { return _mtcFrameRateLock.withLock { _mtcFrameRate } }
-        set {
-            let isDiff = newValue != mtcFrameRate
-            
-            _mtcFrameRateLock.withLock { _mtcFrameRate = newValue }
-            
-            if isDiff {
+    @ThreadSafeAccess
+    public internal(set) var mtcFrameRate: MTCFrameRate = .mtc30 {
+        didSet {
+            if mtcFrameRate != oldValue {
                 mtcFrameRateChangedHandler?(mtcFrameRate)
             }
         }
     }
-    private nonisolated(unsafe) var _mtcFrameRate: MTCFrameRate = .mtc30
-    private let _mtcFrameRateLock = NSLock()
     
     /// The frame rate the local system is using.
     ///
@@ -86,20 +76,12 @@ public final class MTCDecoder: Sendable {
     ///
     /// Remember to also set this any time the local frame rate changes so the receiver can
     /// interpret the incoming MTC accordingly.
-    public var localFrameRate: TimecodeFrameRate? {
-        get { return _localFrameRateLock.withLock { _localFrameRate } }
-        set { _localFrameRateLock.withLock { _localFrameRate = newValue } }
-    }
-    private nonisolated(unsafe) var _localFrameRate: TimecodeFrameRate?
-    private let _localFrameRateLock = NSLock()
+    @ThreadSafeAccess
+    public var localFrameRate: TimecodeFrameRate?
         
     /// Status of the direction of MTC quarter-frames received
-    public internal(set) var direction: MTCDirection {
-        get { return _directionLock.withLock { _direction } }
-        set { _directionLock.withLock { _direction = newValue } }
-    }
-    private nonisolated(unsafe) var _direction: MTCDirection = .forwards
-    private let _directionLock = NSLock()
+    @ThreadSafeAccess
+    public internal(set) var direction: MTCDirection = .forwards
         
     // MARK: - Stored closures
         

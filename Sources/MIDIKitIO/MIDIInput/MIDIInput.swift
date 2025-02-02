@@ -8,6 +8,7 @@
 
 import Foundation
 internal import CoreMIDI
+import MIDIKitCore
 
 /// A managed virtual MIDI input endpoint created in the system by the MIDI I/O ``MIDIManager``.
 ///
@@ -21,7 +22,7 @@ internal import CoreMIDI
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/input`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// > endpoint.)
-public final class MIDIInput: MIDIManaged, Sendable {
+public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     weak nonisolated(unsafe) var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -34,14 +35,10 @@ public final class MIDIInput: MIDIManaged, Sendable {
     // class-specific
     
     /// The port name as displayed in the system.
+    @ThreadSafeAccess
     public var name: String {
-        get { accessQueue.sync { _name } }
-        set {
-            accessQueue.sync { _name = newValue }
-            setNameInSystem()
-        }
+        didSet { setNameInSystem() }
     }
-    private nonisolated(unsafe) var _name: String = ""
     
     /// Updates the endpoint's `name` property with Core MIDI.
     /// Core MIDI automatically updates the `displayName` property as well.
@@ -51,28 +48,16 @@ public final class MIDIInput: MIDIManaged, Sendable {
     }
     
     /// The port's unique ID in the system.
-    public private(set) var uniqueID: MIDIIdentifier? {
-        get { accessQueue.sync { _uniqueID } }
-        set { accessQueue.sync { _uniqueID = newValue } }
-    }
-    private nonisolated(unsafe) var _uniqueID: MIDIIdentifier?
+    @ThreadSafeAccess
+    public private(set) var uniqueID: MIDIIdentifier?
     
     /// The Core MIDI port reference.
-    public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef? {
-        get { accessQueue.sync { _coreMIDIInputPortRef } }
-        set { accessQueue.sync { _coreMIDIInputPortRef = newValue } }
-    }
-    private nonisolated(unsafe) var _coreMIDIInputPortRef: CoreMIDIPortRef?
+    @ThreadSafeAccess
+    public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
     
     /// Receive handler for inbound MIDI events.
-    var receiveHandler: MIDIReceiverProtocol {
-        get { accessQueue.sync { _receiveHandler } }
-        set { accessQueue.sync { _receiveHandler = newValue } }
-    }
-    private nonisolated(unsafe) var _receiveHandler: MIDIReceiverProtocol!
-    
-    /// Internal property synchronization queue.
-    let accessQueue: DispatchQueue
+    @ThreadSafeAccess
+    var receiveHandler: MIDIReceiverProtocol
     
     // init
     
@@ -98,10 +83,9 @@ public final class MIDIInput: MIDIManaged, Sendable {
     ) {
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-        self.accessQueue = .global()
-        _name = name
-        _uniqueID = uniqueID
-        _receiveHandler = receiver.create()
+        self.name = name
+        self.uniqueID = uniqueID
+        receiveHandler = receiver.create()
     }
     
     deinit {
@@ -155,15 +139,16 @@ extension MIDIInput {
                 manager.coreMIDIClientRef,
                 name as CFString,
                 &newPortRef,
-                { [weak midiManager, weak receiveHandler] packetListPtr, srcConnRefCon in
+                { [weak self, weak queue = midiManager?.managementQueue] packetListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
                     // otherwise we run into data races when Thread Sanitizer is on
                     
                     let packets = packetListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     
-                    midiManager?.managementQueue.sync { [weak receiveHandler] in
-                        receiveHandler?.packetListReceived(packets)
-                    }
+                    // we need to read the `receiveHandler` on the same queue that it was created on
+                    // to satisfy the thread sanitizer.
+                    let receiveHandler = queue?.sync { self?.receiveHandler }
+                    receiveHandler?.packetListReceived(packets)
                 }
             )
             .throwIfOSStatusErr()
@@ -180,19 +165,20 @@ extension MIDIInput {
                 name as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newPortRef,
-                { [weak midiManager, weak receiveHandler] eventListPtr, srcConnRefCon in
+                { [weak self, weak queue = midiManager?.managementQueue] eventListPtr, srcConnRefCon in
                     // we have to use weak captures of the objects directly, and NOT use [weak self]
                     // otherwise we run into data races when Thread Sanitizer is on
                     
                     let packets = eventListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    midiManager?.managementQueue.sync { [weak receiveHandler] in
-                        receiveHandler?.eventListReceived(
-                            packets,
-                            protocol: midiProtocol
-                        )
-                    }
+                    // we need to read the `receiveHandler` on the same queue that it was created on
+                    // to satisfy the thread sanitizer.
+                    let receiveHandler = queue?.sync { self?.receiveHandler }
+                    receiveHandler?.eventListReceived(
+                        packets,
+                        protocol: midiProtocol
+                    )
                 }
             )
             .throwIfOSStatusErr()

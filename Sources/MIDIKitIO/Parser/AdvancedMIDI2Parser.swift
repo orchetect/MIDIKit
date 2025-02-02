@@ -7,40 +7,33 @@
 #if !os(tvOS) && !os(watchOS)
 
 import Foundation
+import MIDIKitCore
 
 /// Wrapper for MIDI 2.0 event parser that adds certain heuristics, including RPN/NRPN bundling.
-public final class AdvancedMIDI2Parser: Sendable {
+public final class AdvancedMIDI2Parser: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     // MARK: - Options
     
-    public var bundleRPNAndNRPNDataEntryLSB: Bool {
-        get { accessQueue.sync { _bundleRPNAndNRPNDataEntryLSB } }
-        set { accessQueue.sync { _bundleRPNAndNRPNDataEntryLSB = newValue } }
-    }
-    private nonisolated(unsafe) var _bundleRPNAndNRPNDataEntryLSB: Bool = false
+    @ThreadSafeAccess
+    public var bundleRPNAndNRPNDataEntryLSB: Bool = false
     
     public typealias EventsHandler = @Sendable (
         _ events: [MIDIEvent],
         _ timeStamp: CoreMIDITimeStamp,
         _ source: MIDIOutputEndpoint?
     ) -> Void
-    public var handleEvents: EventsHandler? {
-        get { accessQueue.sync { _handleEvents } }
-        set { accessQueue.sync { _handleEvents = newValue } }
-    }
-    private nonisolated(unsafe) var _handleEvents: EventsHandler?
+    
+    @ThreadSafeAccess
+    public var handleEvents: EventsHandler?
     
     // MARK: - Internal State
     
     private let parser = MIDI2Parser()
     private let pnBundler: ParameterNumberEventBundler
     
-    /// Internal property synchronization queue.
-    let accessQueue: DispatchQueue = .global()
-    
     public init(
         handleEvents: EventsHandler? = nil
     ) {
-        _handleEvents = handleEvents
+        self.handleEvents = handleEvents
         
         pnBundler = ParameterNumberEventBundler()
         pnBundler.handleEvents = { [weak self] events, timeStamp, source in

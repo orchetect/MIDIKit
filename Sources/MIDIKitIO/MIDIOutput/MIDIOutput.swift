@@ -8,6 +8,7 @@
 
 import Foundation
 internal import CoreMIDI
+import MIDIKitCore
 
 /// A managed virtual MIDI output endpoint created in the system by the MIDI I/O ``MIDIManager``.
 ///
@@ -21,7 +22,7 @@ internal import CoreMIDI
 /// > de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/output`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// > endpoint.)
-public final class MIDIOutput: MIDIManaged, Sendable {
+public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     weak nonisolated(unsafe) var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -33,23 +34,16 @@ public final class MIDIOutput: MIDIManaged, Sendable {
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
         
     /// The Core MIDI output port reference.
-    public private(set) var coreMIDIOutputPortRef: CoreMIDIPortRef? {
-        get { accessQueue.sync { _coreMIDIOutputPortRef } }
-        set { accessQueue.sync { _coreMIDIOutputPortRef = newValue } }
-    }
-    private nonisolated(unsafe) var _coreMIDIOutputPortRef: CoreMIDIPortRef?
+    @ThreadSafeAccess
+    public private(set) var coreMIDIOutputPortRef: CoreMIDIPortRef?
     
     // class-specific
     
     /// The port name as displayed in the system.
+    @ThreadSafeAccess
     public var name: String {
-        get { accessQueue.sync { _name } }
-        set {
-            accessQueue.sync { _name = newValue }
-            setNameInSystem()
-        }
+        didSet { setNameInSystem() }
     }
-    private nonisolated(unsafe) var _name: String = ""
     
     /// Updates the endpoint's `name` property with Core MIDI.
     /// Core MIDI automatically updates the `displayName` property as well.
@@ -59,14 +53,8 @@ public final class MIDIOutput: MIDIManaged, Sendable {
     }
     
     /// The port's unique ID in the system.
-    public private(set) var uniqueID: MIDIIdentifier? {
-        get { accessQueue.sync { _uniqueID } }
-        set { accessQueue.sync { _uniqueID = newValue } }
-    }
-    private nonisolated(unsafe) var _uniqueID: MIDIIdentifier?
-    
-    /// Internal property synchronization queue.
-    let accessQueue: DispatchQueue
+    @ThreadSafeAccess
+    public private(set) var uniqueID: MIDIIdentifier?
     
     // init
     
@@ -90,9 +78,8 @@ public final class MIDIOutput: MIDIManaged, Sendable {
     ) {
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-        self.accessQueue = .global()
-        _name = name
-        _uniqueID = uniqueID
+        self.name = name
+        self.uniqueID = uniqueID
     }
     
     deinit {

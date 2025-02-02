@@ -8,6 +8,7 @@
 
 import Foundation
 internal import CoreMIDI
+import MIDIKitCore
 
 /// A managed MIDI output connection created in the system by the MIDI I/O ``MIDIManager``.
 ///
@@ -24,7 +25,7 @@ internal import CoreMIDI
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/outputConnection`` or ``MIDIManager/removeAll()`` to destroy the
 /// > managed connection.)
-public final class MIDIOutputConnection: MIDIManaged, Sendable {
+public final class MIDIOutputConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     weak nonisolated(unsafe) var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -36,19 +37,13 @@ public final class MIDIOutputConnection: MIDIManaged, Sendable {
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
     
     /// The Core MIDI output port reference.
-    public private(set) var coreMIDIOutputPortRef: CoreMIDIPortRef? {
-        get { accessQueue.sync { _coreMIDIOutputPortRef } }
-        set { accessQueue.sync { _coreMIDIOutputPortRef = newValue } }
-    }
-    private nonisolated(unsafe) var _coreMIDIOutputPortRef: CoreMIDIPortRef?
+    @ThreadSafeAccess
+    public private(set) var coreMIDIOutputPortRef: CoreMIDIPortRef?
     
     // class-specific
     
-    public private(set) var inputsCriteria: Set<MIDIEndpointIdentity> {
-        get { accessQueue.sync { _inputsCriteria } }
-        set { accessQueue.sync { _inputsCriteria = newValue } }
-    }
-    private nonisolated(unsafe) var _inputsCriteria: Set<MIDIEndpointIdentity> = []
+    @ThreadSafeAccess
+    public private(set) var inputsCriteria: Set<MIDIEndpointIdentity> = []
     
     /// Stores criteria after applying any filters that have been set in the ``filter`` property.
     /// Passing nil will re-use existing criteria, re-applying the filters.
@@ -77,28 +72,21 @@ public final class MIDIOutputConnection: MIDIManaged, Sendable {
     }
     
     /// The Core MIDI input endpoint(s) reference(s).
-    public private(set) var coreMIDIInputEndpointRefs: Set<CoreMIDIEndpointRef> {
-        get { accessQueue.sync { _coreMIDIInputEndpointRefs } }
-        set { accessQueue.sync { _coreMIDIInputEndpointRefs = newValue } }
-    }
-    private nonisolated(unsafe) var _coreMIDIInputEndpointRefs: Set<CoreMIDIEndpointRef> = []
+    @ThreadSafeAccess
+    public private(set) var coreMIDIInputEndpointRefs: Set<CoreMIDIEndpointRef> = []
     
     /// Operating mode.
     ///
     /// Changes take effect immediately.
+    @ThreadSafeAccess
     public var mode: MIDIOutputConnectionMode {
-        get { accessQueue.sync { _mode } }
-        set {
-            let oldValue = accessQueue.sync { _mode }
-            accessQueue.sync { _mode = newValue }
-            
-            guard oldValue != newValue else { return }
+        didSet {
+            guard mode != oldValue else { return }
             guard let midiManager else { return }
             updateCriteriaFromMode()
             try? refreshConnection(in: midiManager)
         }
     }
-    private nonisolated(unsafe) var _mode: MIDIOutputConnectionMode!
     
     /// Reads the ``mode`` property and applies it to the stored criteria.
     private func updateCriteriaFromMode() {
@@ -115,21 +103,13 @@ public final class MIDIOutputConnection: MIDIManaged, Sendable {
     ///
     /// Changes take effect immediately.
     public var filter: MIDIEndpointFilter {
-        get { accessQueue.sync { _filter } }
-        set {
-            let oldValue = accessQueue.sync { _filter }
-            accessQueue.sync { _filter = newValue }
-            
-            guard oldValue != newValue else { return }
+        didSet {
+            guard filter != oldValue else { return }
             guard let midiManager else { return }
             updateCriteria()
             try? refreshConnection(in: midiManager)
         }
     }
-    private nonisolated(unsafe) var _filter: MIDIEndpointFilter!
-    
-    /// Internal property synchronization queue.
-    let accessQueue: DispatchQueue
     
     // init
     
@@ -155,9 +135,8 @@ public final class MIDIOutputConnection: MIDIManaged, Sendable {
     ) {
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-        self.accessQueue = .global()
-        _mode = mode
-        _filter = filter
+        self.mode = mode
+        self.filter = filter
     
         // relies on midiManager, mode, and filter being set first
         switch mode {

@@ -61,7 +61,7 @@ import MIDIKitCore
 /// > Due to a Core MIDI bug, persistent thru connections are not functional on macOS 11 & 12 and
 /// > iOS 14 & 15. On these systems, an error will be thrown. There is no known solution or
 /// > workaround.
-public final class MIDIThruConnection: MIDIManaged, Sendable {
+public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
     weak nonisolated(unsafe) var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -70,44 +70,23 @@ public final class MIDIThruConnection: MIDIManaged, Sendable {
     
     // class-specific
     
-    public private(set) var coreMIDIThruConnectionRef: CoreMIDIThruConnectionRef? {
-        get { accessQueue.sync { _coreMIDIThruConnectionRef } }
-        set { accessQueue.sync { _coreMIDIThruConnectionRef = newValue } }
-    }
-    private nonisolated(unsafe) var _coreMIDIThruConnectionRef: CoreMIDIThruConnectionRef?
+    @ThreadSafeAccess
+    public private(set) var coreMIDIThruConnectionRef: CoreMIDIThruConnectionRef?
     
-    public private(set) var outputs: [MIDIOutputEndpoint] {
-        get { accessQueue.sync { _outputs } }
-        set { accessQueue.sync { _outputs = newValue } }
-    }
-    private nonisolated(unsafe) var _outputs: [MIDIOutputEndpoint]!
+    @ThreadSafeAccess
+    public private(set) var outputs: [MIDIOutputEndpoint]
     
-    public private(set) var inputs: [MIDIInputEndpoint] {
-        get { accessQueue.sync { _inputs } }
-        set { accessQueue.sync { _inputs = newValue } }
-    }
-    private nonisolated(unsafe) var _inputs: [MIDIInputEndpoint]!
+    @ThreadSafeAccess
+    public private(set) var inputs: [MIDIInputEndpoint]
     
-    public private(set) var lifecycle: Lifecycle {
-        get { accessQueue.sync { _lifecycle } }
-        set { accessQueue.sync { _lifecycle = newValue } }
-    }
-    private nonisolated(unsafe) var _lifecycle: Lifecycle!
+    @ThreadSafeAccess
+    public private(set) var lifecycle: Lifecycle
     
-    public private(set) var parameters: Parameters {
-        get { accessQueue.sync { _parameters } }
-        set { accessQueue.sync { _parameters = newValue } }
-    }
-    private nonisolated(unsafe) var _parameters: Parameters!
+    @ThreadSafeAccess
+    public private(set) var parameters: Parameters
     
-    var proxy: MIDIThruConnectionProxy? {
-        get { accessQueue.sync { _proxy } }
-        set { accessQueue.sync { _proxy = newValue } }
-    }
-    private nonisolated(unsafe) var _proxy: MIDIThruConnectionProxy?
-    
-    /// Internal property synchronization queue.
-    let accessQueue: DispatchQueue
+    @ThreadSafeAccess
+    var proxy: MIDIThruConnectionProxy?
     
     // init
     
@@ -129,7 +108,7 @@ public final class MIDIThruConnection: MIDIManaged, Sendable {
         outputs: [MIDIOutputEndpoint],
         inputs: [MIDIInputEndpoint],
         lifecycle: Lifecycle = .nonPersistent,
-        params: Parameters = .init(),
+        params parameters: Parameters = .init(),
         midiManager: MIDIManager,
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
@@ -138,11 +117,10 @@ public final class MIDIThruConnection: MIDIManaged, Sendable {
     
         self.midiManager = midiManager
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
-        self.accessQueue = .global()
-        _outputs = Array(outputs.prefix(8))
-        _inputs = Array(inputs.prefix(8))
-        _lifecycle = lifecycle
-        _parameters = params
+        self.outputs = Array(outputs.prefix(8))
+        self.inputs = Array(inputs.prefix(8))
+        self.lifecycle = lifecycle
+        self.parameters = parameters
     }
     
     deinit {
