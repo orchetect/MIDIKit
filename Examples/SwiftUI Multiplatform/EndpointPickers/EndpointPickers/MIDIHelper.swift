@@ -24,8 +24,8 @@ import SwiftUI
         
         // update a local property in response to when
         // MIDI devices/endpoints change in system
-        midiManager.notificationHandler = { [weak self] notif, _ in
-            switch notif {
+        midiManager.notificationHandler = { [weak self] notification in
+            switch notification {
             case .added, .removed, .propertyChanged:
                 self?.updateVirtualsExist()
             default:

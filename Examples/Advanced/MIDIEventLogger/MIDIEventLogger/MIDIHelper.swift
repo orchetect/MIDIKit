@@ -15,7 +15,7 @@ import SwiftUI
     public func setup(midiManager: ObservableMIDIManager) {
         self.midiManager = midiManager
         
-        midiManager.notificationHandler = { notification, manager in
+        midiManager.notificationHandler = { notification in
             print("Core MIDI notification:", notification)
         }
         

@@ -124,7 +124,7 @@ extension HUISurfaceView {
                     )
                     HUIStateButton(
                         title: "DEFAULT",
-                        param: .assign(.default),
+                        param: .assign(.defaultBtn),
                         ledColor: .red
                     )
                 }

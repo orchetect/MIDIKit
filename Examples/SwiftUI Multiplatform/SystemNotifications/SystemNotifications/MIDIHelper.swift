@@ -18,7 +18,7 @@ import SwiftUI
     public func setup(midiManager: ObservableMIDIManager) {
         self.midiManager = midiManager
         
-        midiManager.notificationHandler = { notification, manager in
+        midiManager.notificationHandler = { notification in
             self.logNotification(notification)
         }
         

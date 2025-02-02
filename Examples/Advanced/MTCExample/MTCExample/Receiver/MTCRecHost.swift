@@ -29,7 +29,7 @@ import SwiftUI
         let rec = receiverFactory()
         mtcRec = rec
         
-        rec.setTimecodeChangedHandler { timecode, event, direction, displayNeedsUpdate in
+        rec.setTimecodeChangedHandler { [weak self] timecode, event, direction, displayNeedsUpdate in
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 
@@ -45,7 +45,7 @@ import SwiftUI
             }
         }
         
-        rec.setStateChangedHandler { state in
+        rec.setStateChangedHandler { [weak self] state in
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 

@@ -195,7 +195,7 @@ extension MIDIManager_MIDIIONotification_Tests {
     //        clientName: UUID().uuidString,
     //        model: "MIDIKit123",
     //        manufacturer: "MIDIKit",
-    //        notificationHandler: { notification, manager in
+    //        notificationHandler: { notification in
     //            print(notification)
     //        }
     //    )

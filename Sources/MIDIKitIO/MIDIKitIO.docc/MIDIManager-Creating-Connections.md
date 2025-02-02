@@ -24,7 +24,7 @@ Target endpoint(s) can be supplied upon managed connection creation, or added la
 try midiManager.addInputConnection(
     to: .none,
     tag: "InputConnection1",
-    receiver: .events { [weak self] events in
+    receiver: .events { [weak self] events, timeStamp, source in
         // Note: this handler will be called on a background thread so be
         // sure to call anything that may result in UI updates on the main thread
         DispatchQueue.main.async {

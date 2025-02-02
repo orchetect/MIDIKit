@@ -18,12 +18,12 @@ import TimecodeKitCore
                 _ = midiMessage
             }
             
-            _ = MTCGenerator { [weak self] (midiMessage) in
+            _ = MTCGenerator { [weak self] midiMessage in
                 _ = self
                 _ = midiMessage
             }
             
-            _ = MTCGenerator(midiOutHandler: { (midiMessage) in
+            _ = MTCGenerator(midiOutHandler: { midiMessage in
                 _ = midiMessage
             })
             

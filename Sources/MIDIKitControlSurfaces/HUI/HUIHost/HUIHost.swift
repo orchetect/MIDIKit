@@ -51,8 +51,8 @@ internal import MIDIKitInternals
             leeway: .milliseconds(500),
             queue: nil
         ) { [weak self] in
-                self?.pingTimerFired()
-            }
+            self?.pingTimerFired()
+        }
         pingTimer.start()
     }
     

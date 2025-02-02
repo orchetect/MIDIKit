@@ -41,7 +41,7 @@ extension MIDIEndpointsMenusHelper {
             try midiManager.start()
             
             // set up MIDI subsystem notification handler
-            midiManager.notificationHandler = { [weak self] notification, manager in
+            midiManager.notificationHandler = { [weak self] notification in
                 self?.didReceiveMIDIIONotification(notification)
             }
             

@@ -140,9 +140,6 @@ extension MIDIInput {
                 name as CFString,
                 &newPortRef,
                 { [weak self, weak queue = midiManager?.managementQueue] packetListPtr, srcConnRefCon in
-                    // we have to use weak captures of the objects directly, and NOT use [weak self]
-                    // otherwise we run into data races when Thread Sanitizer is on
-                    
                     let packets = packetListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     
                     // we need to read the `receiveHandler` on the same queue that it was created on
@@ -166,9 +163,6 @@ extension MIDIInput {
                 api.midiProtocol.coreMIDIProtocol,
                 &newPortRef,
                 { [weak self, weak queue = midiManager?.managementQueue] eventListPtr, srcConnRefCon in
-                    // we have to use weak captures of the objects directly, and NOT use [weak self]
-                    // otherwise we run into data races when Thread Sanitizer is on
-                    
                     let packets = eventListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
