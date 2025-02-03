@@ -10,7 +10,7 @@ import SwiftUI
 /// Receiving MIDI happens on an asynchronous background thread. That means it cannot update
 /// SwiftUI view state directly. Therefore, we need a helper class marked with `@Observable`
 /// which contains properties that SwiftUI can use to update views.
-@Observable final class MIDIHelper {
+@Observable @MainActor final class MIDIHelper {
     private weak var midiManager: ObservableMIDIManager?
     
     public private(set) var receivedEvents: [MIDIEvent] = []
@@ -25,11 +25,13 @@ import SwiftUI
         // update a local property in response to when
         // MIDI devices/endpoints change in system
         midiManager.notificationHandler = { [weak self] notification in
-            switch notification {
-            case .added, .removed, .propertyChanged:
-                self?.updateVirtualsExist()
-            default:
-                break
+            Task { @MainActor in
+                switch notification {
+                case .added, .removed, .propertyChanged:
+                    self?.updateVirtualsExist()
+                default:
+                    break
+                }
             }
         }
         
@@ -45,7 +47,9 @@ import SwiftUI
                 to: .none,
                 tag: Tags.midiIn,
                 receiver: .events { [weak self] events, timeStamp, source in
-                    self?.received(events: events)
+                    Task { @MainActor in
+                        self?.received(events: events)
+                    }
                 }
             )
             
@@ -108,7 +112,9 @@ import SwiftUI
                 tag: Tags.midiTestIn1,
                 uniqueID: .userDefaultsManaged(key: Tags.midiTestIn1),
                 receiver: .events { [weak self] events, timeStamp, source in
-                    self?.received(events: events)
+                    Task { @MainActor in
+                        self?.received(events: events)
+                    }
                 }
             )
             
@@ -117,7 +123,9 @@ import SwiftUI
                 tag: Tags.midiTestIn2,
                 uniqueID: .userDefaultsManaged(key: Tags.midiTestIn2),
                 receiver: .events { [weak self] events, timeStamp, source in
-                    self?.received(events: events)
+                    Task { @MainActor in
+                        self?.received(events: events)
+                    }
                 }
             )
             

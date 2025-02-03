@@ -4,50 +4,11 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
 import MIDIKitIO
-import SwiftRadix
-import SwiftUI
 
-/// Receiving MIDI happens on an asynchronous background thread. That means it cannot update
-/// SwiftUI view state directly. Therefore, we need a helper class marked with `@Observable`
-/// which contains properties that SwiftUI can use to update views.
-@Observable @MainActor final class MIDIHelper {
-    private weak var midiManager: ObservableMIDIManager?
-    
-    let virtualInputName = "TestApp Input"
-    
-    public init() { }
-    
-    public func setup(midiManager: ObservableMIDIManager) {
-        self.midiManager = midiManager
-    
-        do {
-            print("Starting MIDI services.")
-            try midiManager.start()
-        } catch {
-            print("Error starting MIDI services:", error.localizedDescription)
-        }
-    
-        do {
-            print("Creating virtual MIDI input.")
-            try midiManager.addInput(
-                name: virtualInputName,
-                tag: virtualInputName,
-                uniqueID: .userDefaultsManaged(key: virtualInputName),
-                receiver: .events { [weak self] events, timeStamp, source in
-                    Task { @MainActor in
-                        for event in events {
-                            self?.received(event: event)
-                        }
-                    }
-                }
-            )
-        } catch {
-            print("Error creating virtual MIDI input:", error.localizedDescription)
-        }
-    }
-    
-    private func received(event: MIDIEvent) {
+final class MIDIHelper: Sendable {
+    func handleMIDI(event: MIDIEvent) {
         switch event {
         case let .noteOn(payload):
             print(
@@ -66,7 +27,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .noteOff(payload):
             print(
                 "Note Off:",
@@ -84,7 +45,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .noteCC(payload):
             print(
                 "Per-Note CC (MIDI 2.0 Only):",
@@ -100,7 +61,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .notePitchBend(payload):
             print(
                 "Per-Note Pitch Bend (MIDI 2.0 Only):",
@@ -114,7 +75,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .notePressure(payload):
             print(
                 "Per-Note Pressure (a.k.a. Polyphonic Aftertouch):",
@@ -130,7 +91,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .noteManagement(payload):
             print(
                 "Per-Note Management (MIDI 2.0 Only):",
@@ -142,7 +103,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .cc(payload):
             print(
                 "Control Change (CC):",
@@ -159,7 +120,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .programChange(payload):
             print(
                 "Program Change:",
@@ -172,7 +133,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .pitchBend(payload):
             print(
                 "Channel Pitch Bend:",
@@ -187,7 +148,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .pressure(payload):
             print(
                 "Channel Pressure (a.k.a. Aftertouch):",
@@ -202,7 +163,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-        
+            
         case let .rpn(payload):
             print(
                 "Registered Parameter Number (RPN) (a.k.a. Registered Controller):",
@@ -239,7 +200,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .universalSysEx7(payload):
             print(
                 "Universal System Exclusive 7:",
@@ -256,7 +217,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .sysEx8(payload):
             print(
                 "System Exclusive 8 (MIDI 2.0 Only):",
@@ -267,7 +228,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .universalSysEx8(payload):
             print(
                 "Universal System Exclusive 8 (MIDI 2.0 Only):",
@@ -284,7 +245,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .timecodeQuarterFrame(payload):
             print(
                 "Timecode Quarter-Frame:",
@@ -293,7 +254,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .songPositionPointer(payload):
             print(
                 "Song Position Pointer:",
@@ -302,7 +263,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .songSelect(payload):
             print(
                 "Song Select:",
@@ -311,63 +272,63 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .tuneRequest(payload):
             print(
                 "Tune Request:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .timingClock(payload):
             print(
                 "Timing Clock:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .start(payload):
             print(
                 "Start:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .continue(payload):
             print(
                 "Continue:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .stop(payload):
             print(
                 "Stop:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .activeSensing(payload):
             print(
                 "Active Sensing (Deprecated in MIDI 2.0):",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .systemReset(payload):
             print(
                 "System Reset:",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .noOp(payload):
             print(
                 "No-Op (MIDI 2.0 Only):",
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .jrClock(payload):
             print(
                 "JR Clock - Jitter-Reduction Clock (MIDI 2.0 Only):",
@@ -376,7 +337,7 @@ import SwiftUI
                 "\n  UMP Group (MIDI2):",
                 payload.group.intValue.hex.stringValue(prefix: true)
             )
-    
+            
         case let .jrTimestamp(payload):
             print(
                 "JR Timestamp - Jitter-Reduction Timestamp (MIDI 2.0 Only):",

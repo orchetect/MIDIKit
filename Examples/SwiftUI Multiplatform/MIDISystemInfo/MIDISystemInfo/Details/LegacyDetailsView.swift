@@ -47,9 +47,9 @@ struct LegacyDetailsView: View, DetailsContent {
 
 extension LegacyDetailsView {
     private struct Row: View, Identifiable {
-        let property: Property
+        nonisolated let property: Property
         
-        var id: Property.ID { property.id }
+        nonisolated var id: Property.ID { property.id }
         
         var body: some View {
             HStack(alignment: .top) {

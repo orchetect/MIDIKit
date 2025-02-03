@@ -45,12 +45,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 // MARK: - Menu Action First Responder Receivers
 
 extension AppDelegate {
-    @objc
+    @objc @MainActor
     func midiInMenuItemSelected(_ sender: NSMenuItem?) {
         midiEndpointsMenusHelper?.midiInMenuItemSelected(sender)
     }
     
-    @objc
+    @objc @MainActor
     func midiOutMenuItemSelected(_ sender: NSMenuItem?) {
         midiEndpointsMenusHelper?.midiOutMenuItemSelected(sender)
     }

@@ -4,8 +4,8 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-import AudioKit
-import DunneAudioKit
+@preconcurrency import AudioKit
+@preconcurrency import DunneAudioKit
 import Foundation
 
 let globalAudioEngine = AudioEngine()

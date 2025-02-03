@@ -38,6 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         createMTCRecWindow()
     }
     
+    @MainActor
     func createMTCGenWindow() {
         let contentView = MTCGenContentView()
             .environment(midiManager)
@@ -63,6 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         mtcGenWindow?.makeKeyAndOrderFront(nil)
     }
     
+    @MainActor
     func createMTCRecWindow() {
         let contentView = MTCRecContentView()
             .environment(midiManager)

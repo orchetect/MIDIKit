@@ -10,7 +10,7 @@ import SwiftUI
 /// Receiving MIDI happens on an asynchronous background thread. That means it cannot update
 /// SwiftUI view state directly. Therefore, we need a helper class marked with `@Observable`
 /// which contains properties that SwiftUI can use to update views.
-@Observable final class MIDIHelper {
+@Observable @MainActor final class MIDIHelper {
     private weak var midiManager: ObservableMIDIManager?
     
     public init() { }
@@ -18,8 +18,10 @@ import SwiftUI
     public func setup(midiManager: ObservableMIDIManager) {
         self.midiManager = midiManager
         
-        midiManager.notificationHandler = { notification in
-            self.logNotification(notification)
+        midiManager.notificationHandler = { [weak self] notification in
+            Task {
+                await self?.logNotification(notification)
+            }
         }
         
         do {

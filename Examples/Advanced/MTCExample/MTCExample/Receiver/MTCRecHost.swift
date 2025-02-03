@@ -9,7 +9,7 @@ import MIDIKitIO
 import MIDIKitSync
 import SwiftUI
 
-@Observable class MTCRecHost {
+@Observable @MainActor class MTCRecHost {
     @ObservationIgnored
     var mtcRec: MTCReceiver?
     
@@ -33,14 +33,14 @@ import SwiftUI
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 
-                receiverTC = timecode.stringValue()
-                receiverFR = mtcRec?.mtcFrameRate
+                self.receiverTC = timecode.stringValue()
+                self.receiverFR = self.mtcRec?.mtcFrameRate
                 
                 guard displayNeedsUpdate else { return }
                 
-                if timecode.seconds != lastSeconds {
+                if timecode.seconds != self.lastSeconds {
                     playClickB()
-                    lastSeconds = timecode.seconds
+                    self.lastSeconds = timecode.seconds
                 }
             }
         }
@@ -49,11 +49,11 @@ import SwiftUI
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 
-                receiverState = state
-                logger.log("MTC Receiver state: \(receiverState)")
+                self.receiverState = state
+                logger.log("MTC Receiver state: \(self.receiverState)")
                 
-                scheduledLock?.cancel()
-                scheduledLock = nil
+                self.scheduledLock?.cancel()
+                self.scheduledLock = nil
                 
                 switch state {
                 case .idle:
@@ -75,7 +75,7 @@ import SwiftUI
                         self?.scheduledLock = nil
                     }
                     
-                    scheduledLock = scheduled
+                    self.scheduledLock = scheduled
                     
                 case .sync:
                     break

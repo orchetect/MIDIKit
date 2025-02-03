@@ -9,7 +9,7 @@ import MIDIKitIO
 import MIDIKitSync
 import SwiftUI
 
-@Observable class MTCGenHost {
+@Observable @MainActor class MTCGenHost {
     @ObservationIgnored
     weak var midiManager: ObservableMIDIManager?
     
@@ -33,25 +33,25 @@ import SwiftUI
         MTCGenerator(
             name: "main",
             midiOutHandler: { [weak self] midiEvents in
-                guard let self else { return }
-                
-                try? midiManager?
-                    .managedOutputs[kMIDIPorts.MTCGen.tag]?
-                    .send(events: midiEvents)
-                
-                // NOTE: normally you should not run any UI updates from this handler;
-                // this is only being done here for sake of demonstration purposes.
-                // an activity watcher is not provided for the MTC Generator since
-                // it is not typical that you would watch the activity of your own gen.
                 Task { @MainActor [weak self] in
-                    guard let self, let mtcGen else { return }
+                    guard let self else { return }
+                    
+                    try? self.midiManager?
+                        .managedOutputs[kMIDIPorts.MTCGen.tag]?
+                        .send(events: midiEvents)
+                    
+                    // NOTE: normally you should not run any UI updates from this handler;
+                    // this is only being done here for sake of demonstration purposes.
+                    // an activity watcher is not provided for the MTC Generator since
+                    // it is not typical that you would watch the activity of your own gen.
+                    guard let mtcGen = self.mtcGen else { return }
                     
                     let tc = mtcGen.timecode
-                    generatorTC = tc
+                    self.generatorTC = tc
                     
-                    if tc.seconds != lastSeconds {
-                        if mtcGenState { playClickA() }
-                        lastSeconds = tc.seconds
+                    if tc.seconds != self.lastSeconds {
+                        if self.mtcGenState { playClickA() }
+                        self.lastSeconds = tc.seconds
                     }
                 }
             }

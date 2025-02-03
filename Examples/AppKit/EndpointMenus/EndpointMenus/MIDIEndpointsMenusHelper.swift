@@ -8,7 +8,7 @@ import AppKit
 import Foundation
 import MIDIKitIO
 
-final class MIDIEndpointsMenusHelper {
+@MainActor final class MIDIEndpointsMenusHelper {
     weak var midiManager: MIDIManager?
     weak var midiInMenu: NSMenu?
     weak var midiOutMenu: NSMenu?
@@ -42,7 +42,9 @@ extension MIDIEndpointsMenusHelper {
             
             // set up MIDI subsystem notification handler
             midiManager.notificationHandler = { [weak self] notification in
-                self?.didReceiveMIDIIONotification(notification)
+                Task { @MainActor in
+                    self?.didReceiveMIDIIONotification(notification)
+                }
             }
             
             // set up input connection

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E20238102CC45B5C00661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E202380F2CC45B5C00661322 /* MIDIKitCore */; };
 		E20238122CC45B5C00661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E20238112CC45B5C00661322 /* MIDIKitIO */; };
+		E216A46A2D504D6200DFA57C /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E216A4692D504D6000DFA57C /* MIDIHelper.swift */; };
 		E24BA23E284F1A3300AA6767 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24BA23D284F1A3300AA6767 /* AppDelegate.swift */; };
 		E24BA245284F1A3400AA6767 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E24BA243284F1A3400AA6767 /* Main.storyboard */; };
 		E29FF2A12880BCC5005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2A02880BCC5005E2BC2 /* Images.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E216A4692D504D6000DFA57C /* MIDIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
 		E24BA23A284F1A3300AA6767 /* EventParsing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventParsing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E24BA23D284F1A3300AA6767 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E24BA244284F1A3400AA6767 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				E24BA23D284F1A3300AA6767 /* AppDelegate.swift */,
+				E216A4692D504D6000DFA57C /* MIDIHelper.swift */,
 				E24BA243284F1A3400AA6767 /* Main.storyboard */,
 				E24BA246284F1A3400AA6767 /* EventParsing.entitlements */,
 				E29FF2A02880BCC5005E2BC2 /* Images.xcassets */,
@@ -145,6 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E216A46A2D504D6200DFA57C /* MIDIHelper.swift in Sources */,
 				E24BA23E284F1A3300AA6767 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -223,6 +227,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -279,6 +284,7 @@
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
@@ -308,7 +314,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.EventParsing${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -338,7 +343,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.EventParsing${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

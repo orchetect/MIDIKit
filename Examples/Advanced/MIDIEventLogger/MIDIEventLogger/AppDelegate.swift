@@ -31,6 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 extension AppDelegate {
+    @MainActor
     func createAndShowWindow() {
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView()

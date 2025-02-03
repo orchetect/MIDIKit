@@ -10,13 +10,13 @@ import MIDIKitInternals // only for utils
 import MIDIKitIO
 import SwiftUI
 
-@Observable final class HUIHostHelper {
+@Observable @MainActor final class HUIHostHelper {
     // MARK: MIDI
     @ObservationIgnored
-    weak var midiManager: ObservableMIDIManager?
+    nonisolated(unsafe) weak var midiManager: ObservableMIDIManager?
     
-    static let kHUIInputConnectionTag = "HUIHostInputConnection"
-    static let kHUIOutputConnectionTag = "HUIHostOutputConnection"
+    nonisolated static let kHUIInputConnectionTag = "HUIHostInputConnection"
+    nonisolated static let kHUIOutputConnectionTag = "HUIHostOutputConnection"
     
     var logPing: Bool = false
     
@@ -60,7 +60,7 @@ import SwiftUI
         }
     }
     
-    func stopConnections() {
+    nonisolated func stopConnections() {
         midiManager?.remove(.inputConnection, .withTag(Self.kHUIInputConnectionTag))
         midiManager?.remove(.outputConnection, .withTag(Self.kHUIOutputConnectionTag))
     }
@@ -70,18 +70,18 @@ import SwiftUI
         
         huiHost.addBank(
             huiEventHandler: { [weak self] event in
-                guard let self else { return }
-                switch event {
-                case .ping:
-                    if logPing {
-                        Logger.debug("Host received ping")
-                    }
-                default:
-                    Logger.debug("Host received: \(event)")
-                }
-                
                 // update host state model on main
-                Task { @MainActor in
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    switch event {
+                    case .ping:
+                        if self.logPing {
+                            Logger.debug("Host received ping")
+                        }
+                    default:
+                        Logger.debug("Host received: \(event)")
+                    }
+                    
                     self.handle(inboundEvent: event)
                 }
             },
@@ -92,9 +92,9 @@ import SwiftUI
                 try? conn?.send(events: events)
             },
             remotePresenceChangedHandler: { [weak self] isPresent in
-                Logger.debug("Surface presence is now \(isPresent)")
                 // update host state model on main
                 Task { @MainActor in
+                    Logger.debug("Surface presence is now \(isPresent)")
                     self?.isRemotePresent = isPresent
                 }
             }
