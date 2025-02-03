@@ -91,7 +91,10 @@ import SwiftUI
             // update generator frame rate by triggering a locate
             locate(localFrameRate: localFrameRate)
         }
-        logger.debug("Starting at \(generatorTC.stringValue())")
+        
+        let debugTimecode = generatorTC.stringValue()
+        logger.debug("Starting at \(debugTimecode)")
+        
         mtcGen.start(now: generatorTC)
     }
     
