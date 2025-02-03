@@ -11,7 +11,8 @@ An elegant and modern CoreMIDI wrapper in pure Swift supporting MIDI 1.0 and MID
 - Strongly-typed MIDI events that seamlessly interoperate between MIDI 1.0 and MIDI 2.0
 - Automatically uses appropriate Core MIDI API and defaults to MIDI 2.0 on platforms that support it
 - Supports Swift Playgrounds on iPad and macOS
-- Full documentation available in Xcode Documentation browser, including helpful guides and getting started information
+- Swift 6 strict concurrency compliant
+- Full documentation available online and in Xcode Documentation browser, including helpful guides and getting started information
 
 ## Abstractions
 
