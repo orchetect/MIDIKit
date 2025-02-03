@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("Starting MIDI services.")
             try midiManager.start()
         } catch {
-            "Error starting MIDI services: \(error.localizedDescription)"
+            print("Error starting MIDI services: \(error.localizedDescription)")
         }
         
         // Create the window and set the content view.
