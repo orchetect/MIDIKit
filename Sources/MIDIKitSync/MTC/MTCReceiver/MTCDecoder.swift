@@ -90,6 +90,13 @@ public final class MTCDecoder: @unchecked Sendable { // @unchecked required for 
     ///
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
+    ///
+    /// - Parameters:
+    ///   - timecode: Current display timecode.
+    ///   - event: The MTC event that triggered the callback.
+    ///   - direction: The current MTC playback or scrub direction.
+    ///   - isFrameChanged: Boolean indicating that there has been a change to the four main timecode
+    ///     components (`HH:MM:SS:FF`, ignoring subframes) since the last time this callback was called.
     nonisolated(unsafe) var timecodeChangedHandler: (@Sendable (
         _ timecode: Timecode,
         _ event: MTCMessageType,
@@ -102,6 +109,14 @@ public final class MTCDecoder: @unchecked Sendable { // @unchecked required for 
     ///
     /// Implement this closure for when you only want to display timecode and do not need to sync to
     /// MTC.
+    ///
+    /// - Parameters:
+    ///   - handler: Closure containing the following parameters:
+    ///     - `timecode`: Current display timecode.
+    ///     - `event`: The MTC event that triggered the callback.
+    ///     - `direction`: The current MTC playback or scrub direction.
+    ///     - `isFrameChanged`: Boolean indicating that there has been a change to the four main timecode
+    ///       components (`HH:MM:SS:FF`, ignoring subframes) since the last time this callback was called.
     public func setTimecodeChangedHandler(
         _ handler: (@Sendable (
             _ timecode: Timecode,
@@ -170,6 +185,16 @@ public final class MTCDecoder: @unchecked Sendable { // @unchecked required for 
     
     // MARK: - init
     
+    /// Initialize a new MTC decoder object, optionally supplying initial local frame rate and
+    /// callback handlers.
+    ///
+    /// - Parameters:
+    ///   - initialLocalFrameRate: Initial local timecode frame rate (scaled from MTC timecode and
+    ///     frame rate)
+    ///   - timecodeChanged: Timecode changed callback handler. See ``setTimecodeChangedHandler(_:)``
+    ///     for more information.
+    ///   - mtcFrameRateChanged: Callback called when the incoming MTC stream changes its frame rate
+    ///     classification. See ``setMTCFrameRateChangedHandler(_:)`` for more information.
     public init(
         initialLocalFrameRate: TimecodeFrameRate? = nil,
         timecodeChanged: (@Sendable (

@@ -88,6 +88,13 @@ public final class MTCReceiver: @unchecked Sendable { // @unchecked required for
     /// >
     /// > This closure may be executed on a background thread. If the logic in the closure results in
     /// > user interface updates, ensure that they are performed on the main actor/thread.
+    ///
+    /// - Parameters:
+    ///   - timecode: Current display timecode.
+    ///   - event: The MTC event that triggered the callback.
+    ///   - direction: The current MTC playback or scrub direction.
+    ///   - isFrameChanged: Boolean indicating that there has been a change to the four main timecode
+    ///     components (`HH:MM:SS:FF`, ignoring subframes) since the last time this callback was called.
     nonisolated(unsafe) var timecodeChangedHandler: (@Sendable (
         _ timecode: Timecode,
         _ event: MTCMessageType,
@@ -105,6 +112,14 @@ public final class MTCReceiver: @unchecked Sendable { // @unchecked required for
     /// >
     /// > This closure may be executed on a background thread. If the logic in the closure results in
     /// > user interface updates, ensure that they are performed on the main actor/thread.
+    ///
+    /// - Parameters:
+    ///   - handler: Closure containing the following parameters:
+    ///     - `timecode`: Current display timecode.
+    ///     - `event`: The MTC event that triggered the callback.
+    ///     - `direction`: The current MTC playback or scrub direction.
+    ///     - `isFrameChanged`: Boolean indicating that there has been a change to the four main timecode
+    ///       components (`HH:MM:SS:FF`, ignoring subframes) since the last time this callback was called.
     public func setTimecodeChangedHandler(
         _ handler: (@Sendable (
             _ timecode: Timecode,
@@ -151,12 +166,13 @@ public final class MTCReceiver: @unchecked Sendable { // @unchecked required for
     /// > actor/thread.
     ///
     /// - Parameters:
-    ///   - name: optionally supply a simple, unique alphanumeric name for the instance, used
-    ///     internally to identify the dispatch thread; random UUID will be used if `nil`
-    ///   - initialLocalFrameRate: set an initial local frame rate
-    ///   - syncPolicy: set the MTC sync policy
-    ///   - timecodeChanged: handle timecode change callbacks, pass `nil` if not needed
-    ///   - stateChanged: handle receiver state change callbacks, pass `nil` if not needed
+    ///   - name: Optionally supply a simple, unique alphanumeric name for the instance, used
+    ///     internally to identify the dispatch thread. A random UUID will be used if `nil`.
+    ///   - initialLocalFrameRate: Set an initial local frame rate.
+    ///   - syncPolicy: Set the MTC sync policy.
+    ///   - timecodeChanged: Timecode changed callback handler. See ``setTimecodeChangedHandler(_:)``
+    ///     for more information.
+    ///   - stateChanged: Receiver state change callback handler.
     public init(
         name: String? = nil,
         initialLocalFrameRate: TimecodeFrameRate? = nil,
