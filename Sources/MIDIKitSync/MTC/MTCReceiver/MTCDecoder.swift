@@ -181,6 +181,7 @@ public final class MTCDecoder: @unchecked Sendable { // @unchecked required for 
         // assign properties
         
         localFrameRate = initialLocalFrameRate
+        if let localFrameRate { timecode.frameRate = localFrameRate }
         
         // handlers
         
