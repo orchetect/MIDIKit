@@ -94,7 +94,7 @@ public final class MTCDecoder: @unchecked Sendable { // @unchecked required for 
         _ timecode: Timecode,
         _ event: MTCMessageType,
         _ direction: MTCDirection,
-        _ displayNeedsUpdate: Bool
+        _ isFrameChanged: Bool
     ) -> Void)?
     
     /// Sets the closure called when a meaningful change to the timecode has occurred which would
@@ -107,7 +107,7 @@ public final class MTCDecoder: @unchecked Sendable { // @unchecked required for 
             _ timecode: Timecode,
             _ event: MTCMessageType,
             _ direction: MTCDirection,
-            _ displayNeedsUpdate: Bool
+            _ isFrameChanged: Bool
         ) -> Void)?
     ) {
         timecodeChangedHandler = handler
@@ -176,7 +176,7 @@ public final class MTCDecoder: @unchecked Sendable { // @unchecked required for 
             _ timecode: Timecode,
             _ event: MTCMessageType,
             _ direction: MTCDirection,
-            _ displayNeedsUpdate: Bool
+            _ isFrameChanged: Bool
         ) -> Void)? = nil,
         mtcFrameRateChanged: (@Sendable (_ rate: MTCFrameRate) -> Void)? = nil
     ) {
@@ -282,7 +282,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
         // update raw timecode values property
         timecode = tc
         
-        let displayNeedsUpdate = lastTimecodeSentToHandler != tcc
+        let isFrameChanged = !lastTimecodeSentToHandler.isEqualIgnoringSubFrames(to: tcc)
         
         lastTimecodeSentToHandler = tcc
         
@@ -291,7 +291,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
             tc,
             .fullFrame,
             direction,
-            displayNeedsUpdate
+            isFrameChanged
         )
     }
     
@@ -526,7 +526,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
             // set local timecode property
             timecode = tc
             
-            let displayNeedsUpdate = lastTimecodeSentToHandler != tcc
+            let isFrameChanged = !lastTimecodeSentToHandler.isEqualIgnoringSubFrames(to: tcc)
             
             lastTimecodeSentToHandler = tcc
             
@@ -535,7 +535,7 @@ extension MTCDecoder: ReceivesMIDIEvents {
                 tc,
                 .quarterFrame,
                 direction,
-                displayNeedsUpdate
+                isFrameChanged
             )
         }
     }
@@ -612,5 +612,17 @@ extension MTCDecoder: ReceivesMIDIEvents {
             at: localFrameRate ?? mtcFrameRate.directEquivalentFrameRate,
             base: Self.subFramesBase
         )
+    }
+}
+
+// MARK: - Helpers
+
+extension Timecode.Components {
+    func isEqualIgnoringSubFrames(to other: Timecode.Components) -> Bool {
+        days == other.days &&
+            hours == other.hours &&
+            minutes == other.minutes &&
+            seconds == other.seconds &&
+            frames == other.frames
     }
 }

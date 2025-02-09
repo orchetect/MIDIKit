@@ -92,7 +92,7 @@ public final class MTCReceiver: @unchecked Sendable { // @unchecked required for
         _ timecode: Timecode,
         _ event: MTCMessageType,
         _ direction: MTCDirection,
-        _ displayNeedsUpdate: Bool
+        _ isFrameChanged: Bool
     ) -> Void)?
     
     /// Called when a meaningful change to the timecode has occurred which would require its display
@@ -110,7 +110,7 @@ public final class MTCReceiver: @unchecked Sendable { // @unchecked required for
             _ timecode: Timecode,
             _ event: MTCMessageType,
             _ direction: MTCDirection,
-            _ displayNeedsUpdate: Bool
+            _ isFrameChanged: Bool
         ) -> Void)?
     ) {
         receiveQueue.sync {
@@ -165,7 +165,7 @@ public final class MTCReceiver: @unchecked Sendable { // @unchecked required for
             _ timecode: Timecode,
             _ event: MTCMessageType,
             _ direction: MTCDirection,
-            _ displayNeedsUpdate: Bool
+            _ isFrameChanged: Bool
         ) -> Void)? = nil,
         stateChanged: (@Sendable (_ state: State) -> Void)? = nil
     ) {
@@ -216,12 +216,12 @@ public final class MTCReceiver: @unchecked Sendable { // @unchecked required for
             self?.timerFired()
         }
         
-        decoder.setTimecodeChangedHandler { [weak self] timecode, messageType, direction, displayNeedsUpdate in
+        decoder.setTimecodeChangedHandler { [weak self] timecode, messageType, direction, isFrameChanged in
             self?.timecodeDidChange(
                 to: timecode,
                 event: messageType,
                 direction: direction,
-                displayNeedsUpdate: displayNeedsUpdate
+                isFrameChanged: isFrameChanged
             )
         }
     }
@@ -318,7 +318,7 @@ extension MTCReceiver {
         to incomingTC: Timecode,
         event: MTCMessageType,
         direction: MTCDirection,
-        displayNeedsUpdate: Bool
+        isFrameChanged: Bool
     ) {
         // determine frame rate compatibility
         var frameRateIsCompatible = true
@@ -366,7 +366,7 @@ extension MTCReceiver {
             incomingTC,
             event,
             direction,
-            displayNeedsUpdate
+            isFrameChanged
         )
         
         if event == .quarterFrame {
