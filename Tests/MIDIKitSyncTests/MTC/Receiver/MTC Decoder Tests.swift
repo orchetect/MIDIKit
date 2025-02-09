@@ -167,7 +167,7 @@ import TimecodeKitCore
         #expect(mtcDec.timecode.frameRate == .fps24)
         #expect(
             mtcDec.timecode.components ==
-                Timecode.Components(h: 2, m: 3, s: 4, f: 8)
+                Timecode.Components(h: 2, m: 3, s: 4, f: 8, sf: 00)
         ) // new TC
         #expect(mtcDec.mtcFrameRate == .mtc24)
         
@@ -175,7 +175,7 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode.components ==
-                Timecode.Components(h: 2, m: 3, s: 4, f: 8)
+                Timecode.Components(h: 2, m: 3, s: 4, f: 8, sf: 25)
         ) // unchanged
         #expect(mtcDec.mtcFrameRate == .mtc24)
         
@@ -183,7 +183,7 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode.components ==
-                Timecode.Components(h: 2, m: 3, s: 4, f: 8)
+                Timecode.Components(h: 2, m: 3, s: 4, f: 8, sf: 50)
         ) // unchanged
         #expect(mtcDec.mtcFrameRate == .mtc24)
         
@@ -191,7 +191,7 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode.components ==
-                Timecode.Components(h: 2, m: 3, s: 4, f: 8)
+                Timecode.Components(h: 2, m: 3, s: 4, f: 8, sf: 75)
         ) // unchanged
         #expect(mtcDec.mtcFrameRate == .mtc24)
         
@@ -199,7 +199,7 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode.components ==
-                Timecode.Components(h: 2, m: 3, s: 4, f: 9)
+                Timecode.Components(h: 2, m: 3, s: 4, f: 9, sf: 00)
         ) // new TC
         #expect(mtcDec.mtcFrameRate == .mtc24)
         
@@ -207,7 +207,7 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode.components ==
-                Timecode.Components(h: 2, m: 3, s: 4, f: 9)
+                Timecode.Components(h: 2, m: 3, s: 4, f: 9, sf: 25)
         ) // unchanged
         #expect(mtcDec.mtcFrameRate == .mtc24)
         
@@ -215,7 +215,7 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode.components ==
-                Timecode.Components(h: 2, m: 3, s: 4, f: 9)
+                Timecode.Components(h: 2, m: 3, s: 4, f: 9, sf: 50)
         ) // unchanged
         #expect(mtcDec.mtcFrameRate == .mtc24)
         
@@ -223,7 +223,7 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode.components ==
-                Timecode.Components(h: 2, m: 3, s: 4, f: 9)
+                Timecode.Components(h: 2, m: 3, s: 4, f: 9, sf: 75)
         ) // unchanged
         #expect(mtcDec.mtcFrameRate == .mtc24)
         
@@ -231,7 +231,7 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode.components ==
-                Timecode.Components(h: 2, m: 3, s: 4, f: 10)
+                Timecode.Components(h: 2, m: 3, s: 4, f: 10, sf: 00)
         ) // new TC
         #expect(mtcDec.mtcFrameRate == .mtc24)
     }
@@ -258,7 +258,7 @@ import TimecodeKitCore
         #expect(mtcDec.qfBufferComplete() == true)
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 16), at: .fps48, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 16, sf: 00), at: .fps48, by: .allowingInvalid)
         ) // new TC
         #expect(mtcDec.mtcFrameRate == .mtc24)
         
@@ -266,56 +266,56 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 16), at: .fps48, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 16, sf: 50), at: .fps48, by: .allowingInvalid)
         ) // unchanged
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100))
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 17), at: .fps48, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 17, sf: 00), at: .fps48, by: .allowingInvalid)
         ) // new TC
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000))
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 17), at: .fps48, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 17, sf: 50), at: .fps48, by: .allowingInvalid)
         ) // unchanged
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011))
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 18), at: .fps48, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 18, sf: 00), at: .fps48, by: .allowingInvalid)
         ) // new TC
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000))
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 18), at: .fps48, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 18, sf: 50), at: .fps48, by: .allowingInvalid)
         ) // unchanged
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010))
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 19), at: .fps48, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 19, sf: 00), at: .fps48, by: .allowingInvalid)
         ) // new TC
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000))
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 19), at: .fps48, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 19, sf: 50), at: .fps48, by: .allowingInvalid)
         ) // unchanged
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010))
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 20), at: .fps48, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 20, sf: 00), at: .fps48, by: .allowingInvalid)
         ) // new TC
     }
     
@@ -698,14 +698,14 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 1, m: 01, s: 00, f: 02), at: .fps29_97d, by: .allowingInvalid)
+                Timecode(.components(h: 1, m: 01, s: 00, f: 02, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 1, m: 01, s: 00, f: 02), at: .fps29_97d, by: .allowingInvalid)
+                Timecode(.components(h: 1, m: 01, s: 00, f: 02, sf: 25), at: .fps29_97d, by: .allowingInvalid)
         )
         
         mtcDec
@@ -713,14 +713,14 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 1, m: 01, s: 00, f: 02), at: .fps29_97d, by: .allowingInvalid)
+                Timecode(.components(h: 1, m: 01, s: 00, f: 02, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110100)) // QF 7
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 1, m: 00, s: 59, f: 29), at: .fps29_97d, by: .allowingInvalid)
+                Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100001)) // QF 6
@@ -729,14 +729,14 @@ import TimecodeKitCore
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 1, m: 00, s: 59, f: 29), at: .fps29_97d, by: .allowingInvalid)
+                Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110011)) // QF 3
         
         #expect(
             mtcDec.timecode ==
-                Timecode(.components(h: 1, m: 00, s: 59, f: 28), at: .fps29_97d, by: .allowingInvalid)
+                Timecode(.components(h: 1, m: 00, s: 59, f: 28, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
         
         // swiftformat:enable wrap
@@ -797,8 +797,7 @@ import TimecodeKitCore
         // swiftformat:enable wrapSingleLineComments
     }
     
-    @Test
-    @MainActor
+    @Test @MainActor
     func mtcDecoder_Handlers_FullFrameMessage() {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
@@ -809,18 +808,18 @@ import TimecodeKitCore
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
-            var displayNeedsUpdate: Bool?
+            var isFrameChanged: Bool?
             var mtcFR: MTCFrameRate?
         }
         let receiver = Receiver()
         
-        let mtcDec = MTCDecoder() { timecode, messageType, direction, displayNeedsUpdate in
+        let mtcDec = MTCDecoder() { timecode, messageType, direction, isFrameChanged in
             // MTCEncoder does not use Task or internal dispatch queues
             MainActor.assumeIsolated {
                 receiver.timecode = timecode
                 receiver.mType = messageType
                 receiver.direction = direction
-                receiver.displayNeedsUpdate = displayNeedsUpdate
+                receiver.isFrameChanged = isFrameChanged
             }
         } mtcFrameRateChanged: { mtcFrameRate in
             // MTCEncoder does not use Task or internal dispatch queues
@@ -834,7 +833,7 @@ import TimecodeKitCore
         #expect(receiver.timecode == nil)
         #expect(receiver.mType == nil)
         #expect(receiver.direction == nil)
-        #expect(receiver.displayNeedsUpdate == nil)
+        #expect(receiver.isFrameChanged == nil)
         #expect(receiver.mtcFR == nil)
         
         // full-frame MTC messages
@@ -844,7 +843,7 @@ import TimecodeKitCore
         #expect(receiver.timecode == Timecode(.components(h: 1, m: 02, s: 03, f: 04), at: .fps24, by: .allowingInvalid))
         #expect(receiver.mType == .fullFrame)
         #expect(receiver.direction == .forwards)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.mtcFR == .mtc24)
         
         mtcDec.midiIn(event: kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps)
@@ -852,12 +851,11 @@ import TimecodeKitCore
         #expect(receiver.timecode == Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid))
         #expect(receiver.mType == .fullFrame)
         #expect(receiver.direction == .forwards)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.mtcFR == .mtc25)
     }
     
-    @Test
-    @MainActor
+    @Test @MainActor
     func mtcDecoder_Handlers_QFMessages() {
         // swiftformat:disable wrapSingleLineComments
         
@@ -870,18 +868,18 @@ import TimecodeKitCore
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
-            var displayNeedsUpdate: Bool?
+            var isFrameChanged: Bool?
             var mtcFR: MTCFrameRate?
         }
         let receiver = Receiver()
         
-        let mtcDec = MTCDecoder() { timecode, messageType, direction, displayNeedsUpdate in
+        let mtcDec = MTCDecoder() { timecode, messageType, direction, isFrameChanged in
             // MTCEncoder does not use Task or internal dispatch queues
             MainActor.assumeIsolated {
                 receiver.timecode = timecode
                 receiver.mType = messageType
                 receiver.direction = direction
-                receiver.displayNeedsUpdate = displayNeedsUpdate
+                receiver.isFrameChanged = isFrameChanged
             }
         } mtcFrameRateChanged: { mtcFrameRate in
             // MTCEncoder does not use Task or internal dispatch queues
@@ -895,7 +893,7 @@ import TimecodeKitCore
         #expect(receiver.timecode == nil)
         #expect(receiver.mType == nil)
         #expect(receiver.direction == nil)
-        #expect(receiver.displayNeedsUpdate == nil)
+        #expect(receiver.isFrameChanged == nil)
         #expect(receiver.mtcFR == nil)
         
         // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
@@ -952,10 +950,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // new TC
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 00), at: .fps24, by: .allowingInvalid)
+        ) // new TC frame
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -963,10 +961,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 25), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -974,10 +972,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 50), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -985,10 +983,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 75), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -996,10 +994,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // new TC
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 00), at: .fps24, by: .allowingInvalid)
+        ) // new TC frame
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1007,10 +1005,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 25), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1018,10 +1016,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 50), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1029,10 +1027,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 75), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1040,10 +1038,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 10), at: .fps24, by: .allowingInvalid)
-        ) // new TC
+                Timecode(.components(h: 2, m: 3, s: 4, f: 10, sf: 00), at: .fps24, by: .allowingInvalid)
+        ) // new TC frame
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1052,10 +1050,10 @@ import TimecodeKitCore
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // new TC
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 75), at: .fps24, by: .allowingInvalid)
+        ) // new TC frame
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1063,10 +1061,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 50), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1074,10 +1072,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 25), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1085,10 +1083,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 00), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1096,10 +1094,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // new TC
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 75), at: .fps24, by: .allowingInvalid)
+        ) // new TC frame
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1107,10 +1105,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 50), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1118,10 +1116,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 25), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1131,10 +1129,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 50), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1142,10 +1140,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 75), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1153,10 +1151,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // new TC
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 00), at: .fps24, by: .allowingInvalid)
+        ) // new TC frame
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1164,10 +1162,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 25), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1175,10 +1173,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 50), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1186,10 +1184,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 75), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .forwards)
         
@@ -1199,10 +1197,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 50), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1210,10 +1208,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 25), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1221,10 +1219,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 00), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1232,10 +1230,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // new TC
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 75), at: .fps24, by: .allowingInvalid)
+        ) // new TC frame
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1243,10 +1241,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 50), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1254,10 +1252,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
-        ) // unchanged
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 25), at: .fps24, by: .allowingInvalid)
+        )
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1265,10 +1263,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1276,10 +1274,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 7), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 7, sf: 75), at: .fps24, by: .allowingInvalid)
         ) // new TC
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         
@@ -1287,10 +1285,10 @@ import TimecodeKitCore
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 7), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 7, sf: 50), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.mtcFR == .mtc24)
         #expect(receiver.direction == .backwards)
         

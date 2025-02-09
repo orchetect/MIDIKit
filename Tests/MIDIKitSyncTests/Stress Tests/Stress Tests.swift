@@ -64,11 +64,11 @@ import Testing
         let mtcRec = MTCReceiver(
             name: "test",
             initialLocalFrameRate: .fps24
-        ) { timecode, messageType, direction, displayNeedsUpdate in
+        ) { timecode, messageType, direction, isFrameChanged in
             _ = timecode
             _ = messageType
             _ = direction
-            _ = displayNeedsUpdate
+            _ = isFrameChanged
         } stateChanged: { state in
             _ = state
         }

@@ -280,7 +280,7 @@ extension MTC_Receiver_Receiver_Tests {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
-            var displayNeedsUpdate: Bool?
+            var isFrameChanged: Bool?
             var state: MTCReceiver.State?
         }
         let receiver = Receiver()
@@ -289,12 +289,12 @@ extension MTC_Receiver_Receiver_Tests {
         let mtcRec = MTCReceiver(
             name: "test",
             initialLocalFrameRate: .fps24
-        ) { timecode, messageType, direction, displayNeedsUpdate in
+        ) { timecode, messageType, direction, isFrameChanged in
             Task { @MainActor in
                 receiver.timecode = timecode
                 receiver.mType = messageType
                 receiver.direction = direction
-                receiver.displayNeedsUpdate = displayNeedsUpdate
+                receiver.isFrameChanged = isFrameChanged
             }
         } stateChanged: { state in
             Task { @MainActor in
@@ -307,7 +307,7 @@ extension MTC_Receiver_Receiver_Tests {
         #expect(receiver.timecode == nil)
         #expect(receiver.mType == nil)
         #expect(receiver.direction == nil)
-        #expect(receiver.displayNeedsUpdate == nil)
+        #expect(receiver.isFrameChanged == nil)
         #expect(receiver.state == nil)
         
         // full-frame MTC message
@@ -318,7 +318,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(receiver.timecode == Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid))
         #expect(receiver.mType == .fullFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.timecode?.frameRate == .fps24)
         #expect(receiver.direction == .forwards)
         #expect(receiver.state == nil)
@@ -343,7 +343,7 @@ extension MTC_Receiver_Receiver_Tests {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
-            var displayNeedsUpdate: Bool?
+            var isFrameChanged: Bool?
             var state: MTCReceiver.State?
         }
         let receiver = Receiver()
@@ -352,12 +352,12 @@ extension MTC_Receiver_Receiver_Tests {
         let mtcRec = MTCReceiver(
             name: "test",
             initialLocalFrameRate: .fps24
-        ) { timecode, messageType, direction, displayNeedsUpdate in
+        ) { timecode, messageType, direction, isFrameChanged in
             Task { @MainActor in
                 receiver.timecode = timecode
                 receiver.mType = messageType
                 receiver.direction = direction
-                receiver.displayNeedsUpdate = displayNeedsUpdate
+                receiver.isFrameChanged = isFrameChanged
             }
         } stateChanged: { state in
             Task { @MainActor in
@@ -370,7 +370,7 @@ extension MTC_Receiver_Receiver_Tests {
         #expect(receiver.timecode == nil)
         #expect(receiver.mType == nil)
         #expect(receiver.direction == nil)
-        #expect(receiver.displayNeedsUpdate == nil)
+        #expect(receiver.isFrameChanged == nil)
         #expect(receiver.state == nil)
         
         // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
@@ -428,10 +428,10 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // new TC
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.timecode?.frameRate == .fps24)
         #expect(receiver.direction == .forwards)
         
@@ -440,10 +440,10 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 25), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.timecode?.frameRate == .fps24)
         #expect(receiver.direction == .forwards)
         
@@ -452,10 +452,10 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 50), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.timecode?.frameRate == .fps24)
         #expect(receiver.direction == .forwards)
         
@@ -464,10 +464,10 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 8), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 75), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.timecode?.frameRate == .fps24)
         #expect(receiver.direction == .forwards)
         
@@ -476,10 +476,10 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // new TC
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.timecode?.frameRate == .fps24)
         #expect(receiver.direction == .forwards)
         
@@ -488,10 +488,10 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 25), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.timecode?.frameRate == .fps24)
         #expect(receiver.direction == .forwards)
         
@@ -500,10 +500,10 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 50), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.timecode?.frameRate == .fps24)
         #expect(receiver.direction == .forwards)
         
@@ -512,10 +512,10 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 9), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 75), at: .fps24, by: .allowingInvalid)
         ) // unchanged
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == false)
+        #expect(receiver.isFrameChanged == false)
         #expect(receiver.timecode?.frameRate == .fps24)
         #expect(receiver.direction == .forwards)
         
@@ -524,10 +524,10 @@ extension MTC_Receiver_Receiver_Tests {
         
         #expect(
             receiver.timecode ==
-                Timecode(.components(h: 2, m: 3, s: 4, f: 10), at: .fps24, by: .allowingInvalid)
+                Timecode(.components(h: 2, m: 3, s: 4, f: 10, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // new TC
         #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.displayNeedsUpdate == true)
+        #expect(receiver.isFrameChanged == true)
         #expect(receiver.timecode?.frameRate == .fps24)
         #expect(receiver.direction == .forwards)
         
