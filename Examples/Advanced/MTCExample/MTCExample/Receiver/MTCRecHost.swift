@@ -29,15 +29,17 @@ import SwiftUI
         let rec = receiverFactory()
         mtcRec = rec
         
-        rec.setTimecodeChangedHandler { [weak self] timecode, event, direction, displayNeedsUpdate in
+        rec.setTimecodeChangedHandler { [weak self] timecode, event, direction, isFrameChanged in
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 
                 self.receiverTC = timecode.stringValue()
                 self.receiverFR = self.mtcRec?.mtcFrameRate
                 
-                guard displayNeedsUpdate else { return }
+                // don't update UI if only subframes have changed
+                guard isFrameChanged else { return }
                 
+                // play a sound when seconds value changes - rudimentary, but works for our needs
                 if timecode.seconds != self.lastSeconds {
                     playClickB()
                     self.lastSeconds = timecode.seconds

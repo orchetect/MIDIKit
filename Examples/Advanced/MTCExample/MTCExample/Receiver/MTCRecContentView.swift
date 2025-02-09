@@ -19,6 +19,11 @@ struct MTCRecContentView: View {
     @AppStorage("mtcRec-receiveFromSelfGen")
     var receiveFromSelfGen: Bool = true
     
+    // Note: @AppStorage doesn't work with an optional value
+    //
+    // @AppStorage("mtcRec-localFrameRate")
+    // var localFrameRate: TimecodeFrameRate? = nil
+    
     // MARK: - UI state
     
     @State var localFrameRate: TimecodeFrameRate? = nil
