@@ -34,7 +34,7 @@ public protocol MIDIEndpointsProtocol where Self: Equatable, Self: Hashable {
 }
 
 extension MIDIEndpointsProtocol /* : Equatable */ {
-    public static func == (lhs: any MIDIEndpointsProtocol, rhs: any MIDIEndpointsProtocol) -> Bool {
+    public static func == (lhs: Self, rhs: any MIDIEndpointsProtocol) -> Bool {
         lhs.inputs == rhs.inputs &&
         lhs.inputsUnowned == rhs.inputsUnowned &&
         lhs.outputs == rhs.outputs &&

@@ -26,7 +26,7 @@ public protocol MIDIDevicesProtocol where Self: Equatable, Self: Hashable {
 }
 
 extension MIDIDevicesProtocol /* : Equatable */ {
-    public static func == (lhs: any MIDIDevicesProtocol, rhs: any MIDIDevicesProtocol) -> Bool {
+    public static func == (lhs: Self, rhs: any MIDIDevicesProtocol) -> Bool {
         lhs.devices == rhs.devices
     }
 }
