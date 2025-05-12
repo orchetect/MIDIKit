@@ -18,7 +18,7 @@ There are many more features and aspects to the library that can be discovered t
 6. [Create Ports and Connections](#6-Create-Ports-and-Connections)
 7. [Example Projects](#7-Example-Projects)
 8. [Additional Features](#8-Additional-Features)
-9. [Additional Guides](#9-Additional-Guides)
+9. [Additional Topics](#9-Additional-Topics)
 
 ## 1. Import the Library
 
