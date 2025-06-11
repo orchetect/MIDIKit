@@ -57,7 +57,7 @@ If you enjoy using MIDIKit and want to contribute to open-source financially, Gi
 
 ## Community & Support
 
-Please do not email maintainers for technical support. Several options are available for questions and feature ideas:
+Please do not email maintainers for technical support. Several options are available for issues and questions:
 
 - Questions and feature ideas can be posted to [Discussions](https://github.com/orchetect/MIDIKit/discussions).
 - If an issue is a verifiable bug with reproducible steps it may be posted in [Issues](https://github.com/orchetect/MIDIKit/issues).
