@@ -35,15 +35,15 @@ extension MIDIEndpoints {
         inputsOwned.removeAll(where: { fetched.inputsUnowned.contains($0) })
         self.inputsOwned = inputsOwned
         
-        inputsUnowned = fetched.inputsUnowned
+        self.inputsUnowned = fetched.inputsUnowned
         
         outputs = fetched.outputs
         
-        var outputsUnowned = outputs
-        outputsUnowned.removeAll(where: { fetched.outputsUnowned.contains($0) })
-        self.outputsUnowned = outputsUnowned
+        var outputsOwned = outputs
+        outputsOwned.removeAll(where: { fetched.outputsUnowned.contains($0) })
+        self.outputsOwned = outputsOwned
         
-        outputsUnowned = fetched.outputsUnowned
+        self.outputsUnowned = fetched.outputsUnowned
     }
 }
 
