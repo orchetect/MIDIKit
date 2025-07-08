@@ -4,6 +4,8 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
+import MIDIKitInternals
 import MIDIKitSMF
 import Testing
 
@@ -39,7 +41,7 @@ import Testing
         
         #expect(unknownChunk.rawData.count == 35)
         #expect(
-            unknownChunk.rawData.bytes ==
+            unknownChunk.rawData.toUInt8Bytes ==
                 [0x0D, 0x00, 0x00, 0x80, 0x3F, 0x10, 0x01, 0x22,
                  0x14, 0x0D, 0x00, 0x00, 0xF0, 0x41, 0x15, 0x00,
                  0x00, 0x48, 0x42, 0x1D, 0x00, 0x00, 0xA0, 0x41,

@@ -4,6 +4,8 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
+import MIDIKitInternals
 @testable import MIDIKitSMF
 import Testing
 
@@ -14,7 +16,7 @@ import Testing
         
         let rawData: [UInt8] = [0x01, 0xE0]
         
-        #expect(timeBase.rawData.bytes == rawData)
+        #expect(timeBase.rawData.toUInt8Bytes == rawData)
         
         do {
             guard case let .musical(tpq) = MIDIFile
@@ -39,7 +41,7 @@ import Testing
         
         let rawData: [UInt8] = [0b11100111, 0x50]
         
-        #expect(timeBase.rawData.bytes == rawData)
+        #expect(timeBase.rawData.toUInt8Bytes == rawData)
         
         do {
             guard case let .timecode(

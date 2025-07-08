@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import MIDIKitInternals
 
 // MARK: - UnrecognizedMeta
 
@@ -147,7 +148,7 @@ extension MIDIFileEvent.UnrecognizedMeta: MIDIFileEventPayload {
             let readData = try dataReader.read(bytes: length.value)
             
             metaType = readMetaType
-            data = readData.data.bytes
+            data = readData.data.toUInt8Bytes
         }
     }
     

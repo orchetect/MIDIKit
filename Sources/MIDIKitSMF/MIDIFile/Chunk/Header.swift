@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import MIDIKitInternals
 
 // [Standard MIDI File 1.0 Spec]:
 //
@@ -125,7 +126,7 @@ extension MIDIFile.Chunk.Header {
         try midi1SMFRawBytes.withDataReader { dataReader in
             // Header descriptor
         
-            guard try dataReader.read(bytes: 4).bytes == Self.staticIdentifier.toASCIIBytes()
+            guard try dataReader.read(bytes: 4).toUInt8Bytes == Self.staticIdentifier.toASCIIBytes()
             else {
                 throw MIDIFile.DecodeError.malformed(
                     "Header is not correct. File may not be a MIDI file."
@@ -176,7 +177,7 @@ extension MIDIFile.Chunk.Header {
                 )
             }
         
-            guard let timeBase = MIDIFile.TimeBase(rawBytes: timeDivision.bytes) else {
+            guard let timeBase = MIDIFile.TimeBase(rawBytes: timeDivision.toUInt8Bytes) else {
                 throw MIDIFile.DecodeError.malformed(
                     "Could not decode timebase."
                 )

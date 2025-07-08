@@ -477,7 +477,7 @@ extension Data {
     /// Returns an array of bytes.
     /// Same as `[UInt8](self)`
     @_disfavoredOverload
-    package var bytes: [UInt8] {
+    package var toUInt8Bytes: [UInt8] {
         [UInt8](self)
     }
 }

@@ -4,6 +4,8 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
+import MIDIKitInternals
 @testable import MIDIKitSMF
 import Testing
 
@@ -29,7 +31,7 @@ import Testing
         
         let generatedBytes = try track.midi1SMFRawBytes(
             using: .musical(ticksPerQuarterNote: 960)
-        ).bytes
+        ).toUInt8Bytes
         
         #expect(generatedBytes == bytes)
         
@@ -63,7 +65,7 @@ import Testing
         
         let generatedBytes = try track.midi1SMFRawBytes(
             using: .musical(ticksPerQuarterNote: 960)
-        ).bytes
+        ).toUInt8Bytes
         
         #expect(generatedBytes == bytes)
         

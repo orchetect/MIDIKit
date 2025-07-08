@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import MIDIKitInternals
 
 // MARK: - timeBase
 
@@ -75,7 +76,7 @@ extension MIDIFile.TimeBase {
             return nil
         }
         
-        self.init(rawBytes: Array(rawData.bytes.prefix(2)))
+        self.init(rawBytes: Array(rawData.toUInt8Bytes.prefix(2)))
     }
     
     /// Initialize from raw data.

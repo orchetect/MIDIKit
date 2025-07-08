@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import MIDIKitInternals
 
 // MARK: - SequencerSpecific
 
@@ -95,7 +96,7 @@ extension MIDIFileEvent.SequencerSpecific: MIDIFileEventPayload {
             
             let readData = try dataReader.read(bytes: length.value)
             
-            data = readData.data.bytes
+            data = readData.data.toUInt8Bytes
         }
     }
     

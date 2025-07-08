@@ -6,6 +6,7 @@
 
 import Foundation
 import MIDIKitCore
+internal import MIDIKitInternals
 
 extension MIDIFile {
     mutating func decode(rawData data: Data) throws {
@@ -79,7 +80,7 @@ extension MIDIFile {
                         case MIDIFile.Chunk.Track.staticIdentifier:
                             tracksEncountered += 1
                             
-                            let newTrack = try Chunk.Track(midi1SMFRawBytes: chunkData.bytes)
+                            let newTrack = try Chunk.Track(midi1SMFRawBytes: chunkData.toUInt8Bytes)
                             newChunk = .track(newTrack)
                             
                         default:

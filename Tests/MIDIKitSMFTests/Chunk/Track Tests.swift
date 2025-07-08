@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import MIDIKitInternals
 @testable import MIDIKitSMF
 import Testing
 
@@ -49,7 +50,7 @@ import Testing
             using: .musical(ticksPerQuarterNote: 960)
         )
         
-        #expect(generatedData.bytes == bytes)
+        #expect(generatedData.toUInt8Bytes == bytes)
         
         // parse raw bytes
         
@@ -86,7 +87,7 @@ import Testing
             using: .musical(ticksPerQuarterNote: 960)
         )
         
-        #expect(generatedData.bytes == bytes)
+        #expect(generatedData.toUInt8Bytes == bytes)
         
         // parse raw bytes
         

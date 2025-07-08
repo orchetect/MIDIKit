@@ -4,6 +4,7 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
 import MIDIKitInternals
 @testable import MIDIKitSMF
 import Testing
@@ -29,7 +30,7 @@ import Testing
                                 0x00, 0x01, // track count
                                 0x02, 0xD0] // timebase
         
-        #expect(try header.midi1SMFRawBytes(withChunkCount: 1).bytes == rawData)
+        #expect(try header.midi1SMFRawBytes(withChunkCount: 1).toUInt8Bytes == rawData)
     }
     
     @Test
@@ -62,7 +63,7 @@ import Testing
                                 0x00, 0x02, // track count
                                 0x02, 0xD0] // timebase
         
-        #expect(try header.midi1SMFRawBytes(withChunkCount: 2).bytes == rawData)
+        #expect(try header.midi1SMFRawBytes(withChunkCount: 2).toUInt8Bytes == rawData)
     }
     
     @Test
@@ -95,7 +96,7 @@ import Testing
                                 0x00, 0x02, // track count
                                 0x02, 0xD0] // timebase
         
-        #expect(try header.midi1SMFRawBytes(withChunkCount: 2).bytes == rawData)
+        #expect(try header.midi1SMFRawBytes(withChunkCount: 2).toUInt8Bytes == rawData)
     }
     
     @Test
