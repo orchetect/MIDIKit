@@ -39,7 +39,7 @@ This includes a getting started guide, links to examples, and troubleshooting ti
 ## System Compatibility
 
 - Xcode 16.0 is the minimum requirement to compile
-- Once compiled, MIDIKit supports macOS 10.15+, iOS/iPadOS 13.0+ and visionOS 1.0+
+- Once compiled, MIDIKit supports macOS 10.13+, iOS/iPadOS 12.0+ and visionOS 1.0+
 
   *tvOS and watchOS platforms do not have MIDI support, as there is no Core MIDI implementation in the operating systems, but MIDIKit will build successfully on those platforms if used as a dependency in multi-platform projects*
 
