@@ -18,6 +18,7 @@ body:
     description: The operating system version being used to build (not the target runtime OS version).
     multiple: true
     options:
+      - "macOS 26.x Tahoe"
       - "macOS 15.x Sequoia"
       - "macOS 14.x Sonoma"
       - "macOS 13.x Ventura"
@@ -30,6 +31,7 @@ body:
     label: "Xcode Version(s)"
     multiple: true
     options:
+      - "Xcode 26.x"
       - "Xcode 16.x"
       - "Xcode 15.x"
       - "Other"
