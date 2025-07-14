@@ -1,6 +1,6 @@
+name: examples
 permissions:
   contents: read
-name: examples
 
 on:
   push:
