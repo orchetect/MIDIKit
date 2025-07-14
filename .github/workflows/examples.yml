@@ -1,4 +1,6 @@
 name: examples
+permissions:
+  contents: read
 
 on:
   push:
