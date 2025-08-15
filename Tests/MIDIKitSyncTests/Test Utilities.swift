@@ -1,8 +1,11 @@
-//
-//  Test Utilities.swift
-//  MIDIKit • https://github.com/orchetect/MIDIKit
-//  © 2021-2025 Steffan Andrews • Licensed under MIT License
-//
+/// ---------------------------------------------------------------
+/// ---------------------------------------------------------------
+/// Borrowed from swift-testing-extensions 0.2.3 under MIT license.
+/// https://github.com/orchetect/swift-testing-extensions
+/// Methods herein are unit tested at their source so no unit tests
+/// are necessary.
+/// ---------------------------------------------------------------
+/// ---------------------------------------------------------------
 
 import Foundation
 import Testing
@@ -21,6 +24,9 @@ func wait(
     _ comment: Testing.Comment? = nil,
     sourceLocation: Testing.SourceLocation = #_sourceLocation
 ) async rethrows {
+    let timeout = max(timeout, 0.001) // sanitize: clamp
+    let pollingInterval = max(pollingInterval, 0.001) // sanitize: clamp
+    
     let pollingIntervalNS = UInt64(pollingInterval * TimeInterval(NSEC_PER_SEC))
     
     let startTime = Date()
@@ -41,6 +47,9 @@ func wait(
     _ comment: Testing.Comment? = nil,
     sourceLocation: Testing.SourceLocation = #_sourceLocation
 ) async throws {
+    let timeout = max(timeout, 0.001) // sanitize: clamp
+    let pollingInterval = max(pollingInterval, 0.001) // sanitize: clamp
+    
     let pollingIntervalNS = UInt64(pollingInterval * TimeInterval(NSEC_PER_SEC))
     
     let startTime = Date()
