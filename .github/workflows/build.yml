@@ -97,8 +97,15 @@ jobs:
     - name: Prepare Destination Device Name
       shell: bash
       run: |
-        DESTNAME=$(xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" | perl -nle 'if (m/iOS\sSimulator.*(iPhone\s[\d]{2}.*)\s\}\.*/g) { print $1; }' | sort -r | head -n 1)
-        echo Using device \"$DESTNAME\"
+        xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" > destinations.txt
+        SIMPLATFORM="iOS"
+        SIMDEVICE="iPhone\s\d{2}\s"
+        REGEX="m/\{\splatform:(.*\sSimulator),.*OS:(\d{1,2}\.\d),.*name:([a-zA-Z0-9\(\)\s]*)\s\}/g"
+        SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($p =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print "- ${n} (${p}) (${os})"; } }')
+        echo "Available $SIMPLATFORM simulators:"
+        echo "$SIMPATFORMLIST"
+        DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($1 =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print $n; } }' | sort -r | head -n 1)
+        echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=iOS Simulator,name=$DESTNAME" | xcbeautify && exit ${PIPESTATUS[0]}
@@ -116,8 +123,15 @@ jobs:
     - name: Prepare Destination Device Name
       shell: bash
       run: |
-        DESTNAME=$(xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" | perl -nle 'if (m/tvOS\sSimulator.*(Apple\sTV\s4K.*)\s\}\.*/g) { print $1; }' | sort -r | head -n 1)
-        echo Using device \"$DESTNAME\"
+        xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" > destinations.txt
+        SIMPLATFORM="tvOS"
+        SIMDEVICE="Apple\sTV"
+        REGEX="m/\{\splatform:(.*\sSimulator),.*OS:(\d{1,2}\.\d),.*name:([a-zA-Z0-9\(\)\s]*)\s\}/g"
+        SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($p =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print "- ${n} (${p}) (${os})"; } }')
+        echo "Available $SIMPLATFORM simulators:"
+        echo "$SIMPATFORMLIST"
+        DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($1 =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print $n; } }' | sort -r | head -n 1)
+        echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=tvOS Simulator,name=$DESTNAME" | xcbeautify && exit ${PIPESTATUS[0]}
@@ -135,8 +149,15 @@ jobs:
     - name: Prepare Destination Device Name
       shell: bash
       run: |
-        DESTNAME=$(xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" | perl -nle 'if (m/watchOS\sSimulator.*(Apple\sWatch\sSeries\s[\d]{2}.*)\s\}\.*/g) { print $1; }' | sort -r | head -n 1)
-        echo Using device \"$DESTNAME\"
+        xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" > destinations.txt
+        SIMPLATFORM="watchOS"
+        SIMDEVICE="Apple\sWatch\sSeries"
+        REGEX="m/\{\splatform:(.*\sSimulator),.*OS:(\d{1,2}\.\d),.*name:([a-zA-Z0-9\(\)\s]*)\s\}/g"
+        SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($p =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print "- ${n} (${p}) (${os})"; } }')
+        echo "Available $SIMPLATFORM simulators:"
+        echo "$SIMPATFORMLIST"
+        DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($1 =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print $n; } }' | sort -r | head -n 1)
+        echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=watchOS Simulator,name=$DESTNAME" | xcbeautify && exit ${PIPESTATUS[0]}
