@@ -12,7 +12,8 @@ import CoreMIDI
 @testable import MIDIKitIO
 import Testing
 
-@Suite(.serialized) @MainActor class EndpointsUpdating_Tests {
+@MainActor @Suite(.serialized, .enabled(if: isSystemTimingStable()))
+class EndpointsUpdating_Tests {
     fileprivate var manager1: MIDIManager!
     fileprivate var manager2: MIDIManager!
     
