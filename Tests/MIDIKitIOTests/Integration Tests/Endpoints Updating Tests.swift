@@ -26,6 +26,8 @@ import Testing
     init() async throws {
         print("EndpointsUpdating_Tests init starting")
         
+        let isPerformant = isSystemTimingStable() // test de-flake for slow CI pipelines
+        
         try await Task.sleep(seconds: 0.500)
         
         manager1 = .init(
@@ -50,12 +52,13 @@ import Testing
             return
         }
         
-        try await Task.sleep(seconds: 0.500)
+        try await Task.sleep(seconds: isPerformant ? 0.5 : 2.0)
         
         print("EndpointsUpdating_Tests init done")
     }
     
-    @Test func endpointsUpdating() async throws {
+    @Test
+    func endpointsUpdating() async throws {
         let isPerformant = isSystemTimingStable() // test de-flake for slow CI pipelines
         
         // capture existing endpoints in the system, as these may vary depending on the CI system these tests run on.
@@ -80,7 +83,7 @@ import Testing
         
         // create an input in manager1
         try manager1.addInput(name: man1inputTag1, tag: man1inputTag1, uniqueID: .adHoc, receiver: .eventsLogging())
-        try await Task.sleep(seconds: isPerformant ? 0.3 : 0.5)
+        try await Task.sleep(seconds: isPerformant ? 0.3 : 2.0)
         let man1input1 = try #require(manager1.managedInputs[man1inputTag1]).endpoint
         
         // check owned and unowned are being populated correctly
@@ -100,7 +103,7 @@ import Testing
         
         // create an input in manager1
         try manager1.addInput(name: man1inputTag2, tag: man1inputTag2, uniqueID: .adHoc, receiver: .eventsLogging())
-        try await Task.sleep(seconds: isPerformant ? 0.3 : 0.5)
+        try await Task.sleep(seconds: isPerformant ? 0.3 : 2.0)
         let man1input2 = try #require(manager1.managedInputs[man1inputTag2]).endpoint
         
         // check owned and unowned are being populated correctly
@@ -120,7 +123,7 @@ import Testing
         
         // create an input in manager2
         try manager2.addInput(name: man2inputTag1, tag: man2inputTag1, uniqueID: .adHoc, receiver: .eventsLogging())
-        try await Task.sleep(seconds: isPerformant ? 0.3 : 0.5)
+        try await Task.sleep(seconds: isPerformant ? 0.3 : 2.0)
         let man2input1 = try #require(manager2.managedInputs[man2inputTag1]).endpoint
         
         // check owned and unowned are being populated correctly
@@ -140,7 +143,7 @@ import Testing
         
         // create an output in manager1
         try manager1.addOutput(name: man1outputTag1, tag: man1outputTag1, uniqueID: .adHoc)
-        try await Task.sleep(seconds: isPerformant ? 0.3 : 0.5)
+        try await Task.sleep(seconds: isPerformant ? 0.3 : 2.0)
         let man1output1 = try #require(manager1.managedOutputs[man1outputTag1]).endpoint
         
         // check owned and unowned are being populated correctly
@@ -160,7 +163,7 @@ import Testing
         
         // create an output in manager2
         try manager2.addOutput(name: man2outputTag1, tag: man2outputTag1, uniqueID: .adHoc)
-        try await Task.sleep(seconds: isPerformant ? 0.3 : 0.5)
+        try await Task.sleep(seconds: isPerformant ? 0.3 : 2.0)
         let man2output1 = try #require(manager2.managedOutputs[man2outputTag1]).endpoint
         
         // check owned and unowned are being populated correctly
@@ -184,7 +187,7 @@ import Testing
         manager1.remove(.output, .withTag(man1outputTag1))
         manager2.remove(.input, .withTag(man2inputTag1))
         manager2.remove(.output, .withTag(man2outputTag1))
-        try await Task.sleep(seconds: isPerformant ? 0.3 : 0.5)
+        try await Task.sleep(seconds: isPerformant ? 0.3 : 2.0)
         
         // check owned and unowned are being populated correctly
         #expect(Set(manager1.endpoints.inputs) == Set(existingInputs))
