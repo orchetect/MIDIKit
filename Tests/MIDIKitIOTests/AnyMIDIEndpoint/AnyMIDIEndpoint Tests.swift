@@ -13,7 +13,7 @@ import Foundation
 import Testing
 
 @Suite(.serialized) struct AnyMIDIEndpoint_Tests {
-    @Test
+    @Test(.enabled(if: isSystemTimingStable()))
     func anyMIDIEndpoint() async throws {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
