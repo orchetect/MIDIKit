@@ -101,10 +101,10 @@ jobs:
         SIMPLATFORM="iOS"
         SIMDEVICE="iPhone\s\d{2}\s"
         REGEX="m/\{\splatform:(.*\sSimulator),.*OS:(\d{1,2}\.\d),.*name:([a-zA-Z0-9\(\)\s]*)\s\}/g"
-        SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($p =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print "- ${n} (${p}) (${os})"; } }')
+        SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print "- ${name} (${plat}) (${os})"; } }')
         echo "Available $SIMPLATFORM simulators:"
         echo "$SIMPATFORMLIST"
-        DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($1 =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print $n; } }' | sort -r | head -n 1)
+        DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print $name; } }' | sort -rV | head -n 1)
         echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
@@ -127,10 +127,10 @@ jobs:
         SIMPLATFORM="tvOS"
         SIMDEVICE="Apple\sTV"
         REGEX="m/\{\splatform:(.*\sSimulator),.*OS:(\d{1,2}\.\d),.*name:([a-zA-Z0-9\(\)\s]*)\s\}/g"
-        SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($p =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print "- ${n} (${p}) (${os})"; } }')
+        SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print "- ${name} (${plat}) (${os})"; } }')
         echo "Available $SIMPLATFORM simulators:"
         echo "$SIMPATFORMLIST"
-        DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($1 =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print $n; } }' | sort -r | head -n 1)
+        DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print $name; } }' | sort -rV | head -n 1)
         echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
@@ -153,10 +153,10 @@ jobs:
         SIMPLATFORM="watchOS"
         SIMDEVICE="Apple\sWatch\sSeries"
         REGEX="m/\{\splatform:(.*\sSimulator),.*OS:(\d{1,2}\.\d),.*name:([a-zA-Z0-9\(\)\s]*)\s\}/g"
-        SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($p =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print "- ${n} (${p}) (${os})"; } }')
+        SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print "- ${name} (${plat}) (${os})"; } }')
         echo "Available $SIMPLATFORM simulators:"
         echo "$SIMPATFORMLIST"
-        DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { $p = $1; $os = $2; $n = $3; if ($1 =~ /'$SIMPLATFORM'/ and $n =~ /'$SIMDEVICE'/) { print $n; } }' | sort -r | head -n 1)
+        DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print $name; } }' | sort -rV | head -n 1)
         echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
