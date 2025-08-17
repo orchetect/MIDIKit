@@ -42,6 +42,8 @@ import Testing
     private func setupManagers() async throws {
         print("NRPN_IO_Tests setupManagers() starting")
         
+        let isStable = isSystemTimingStable()
+        
         managerLegacyAPI = MIDIManager(
             clientName: "MIDIKit_IO_NRPN_Tests_LegacyAPI",
             model: "MIDIKit123",
@@ -61,7 +63,7 @@ import Testing
         try managerLegacyAPI.start()
         try managerNewAPI.start()
         
-        try await Task.sleep(seconds: 0.300)
+        try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
         print("NRPN_IO_Tests setupManagers() done")
     }
@@ -98,13 +100,15 @@ import Testing
 extension RPN_NRPN_IO_Tests {
     @Test(.enabled(if: !shouldSkip))
     func legacyAPIToNewAPI_SinglePacketRPN_DataMSB() async throws {
+        let isStable = isSystemTimingStable()
+        
         try createOutput(on: managerLegacyAPI)
         
         let output = try output(on: managerLegacyAPI)
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(seconds: 0.300)
+        try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
         print("Sending test event")
         
@@ -116,7 +120,7 @@ extension RPN_NRPN_IO_Tests {
             0xB2, 0x06, 0x10 // data entry MSB value 0x10
         ])
         
-        try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
+        try await wait(require: { await receivedEvents.count == 1 }, timeout: isStable ? 1.0 : 5.0)
         
         #expect(receivedEvents == [
             .rpn(
@@ -133,13 +137,15 @@ extension RPN_NRPN_IO_Tests {
     
     @Test(.enabled(if: !shouldSkip))
     func legacyAPIToNewAPI_SinglePacketRPN_DataMSBLSB() async throws {
+        let isStable = isSystemTimingStable()
+        
         try createOutput(on: managerLegacyAPI)
         
         let output = try output(on: managerLegacyAPI)
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(seconds: 0.300)
+        try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
         print("Sending test event")
         
@@ -153,7 +159,7 @@ extension RPN_NRPN_IO_Tests {
         ])
         
         // wait(sec: 1.0)
-        try await wait(require: { await receivedEvents.count == 2 }, timeout: 1.0)
+        try await wait(require: { await receivedEvents.count == 2 }, timeout: isStable ? 1.0 : 5.0)
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
@@ -177,13 +183,15 @@ extension RPN_NRPN_IO_Tests {
     
     @Test(.enabled(if: !shouldSkip))
     func legacyAPIToNewAPI_MultiplePacketRPN_DataMSB() async throws {
+        let isStable = isSystemTimingStable()
+        
         try createOutput(on: managerLegacyAPI)
         
         let output = try output(on: managerLegacyAPI)
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(seconds: 0.300)
+        try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
         print("Sending test events")
         
@@ -228,7 +236,7 @@ extension RPN_NRPN_IO_Tests {
             require: {
                 await receivedEvents.filter(chanVoice: .keepType(.rpn)).count == 1
             },
-            timeout: 1.0
+            timeout: isStable ? 1.0 : 5.0
         )
         
         #expect(receivedEvents.filter(chanVoice: .keepType(.rpn)) == [
@@ -246,13 +254,15 @@ extension RPN_NRPN_IO_Tests {
     
     @Test(.enabled(if: !shouldSkip))
     func legacyAPIToNewAPI_MultiplePacketRPN_DataMSBLSB() async throws {
+        let isStable = isSystemTimingStable()
+        
         try createOutput(on: managerLegacyAPI)
         
         let output = try output(on: managerLegacyAPI)
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(seconds: 0.300)
+        try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
         print("Sending test events")
         
@@ -301,7 +311,7 @@ extension RPN_NRPN_IO_Tests {
             require: {
                 await receivedEvents.filter(chanVoice: .keepType(.rpn)).count == 2
             },
-            timeout: 1.0
+            timeout: isStable ? 1.0 : 5.0
         )
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
@@ -330,13 +340,15 @@ extension RPN_NRPN_IO_Tests {
 extension RPN_NRPN_IO_Tests {
     @Test(.enabled(if: !shouldSkip))
     func legacyAPIToNewAPI_SinglePacketNRPN_DataMSB() async throws {
+        let isStable = isSystemTimingStable()
+        
         try createOutput(on: managerLegacyAPI)
         
         let output = try output(on: managerLegacyAPI)
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(seconds: 0.300)
+        try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
         print("Sending test event")
         
@@ -349,7 +361,7 @@ extension RPN_NRPN_IO_Tests {
         ])
         
         // wait(sec: 1.0)
-        try await wait(require: { await receivedEvents.count == 1 }, timeout: 1.0)
+        try await wait(require: { await receivedEvents.count == 1 }, timeout: isStable ? 1.0 : 5.0)
         
         #expect(receivedEvents == [
             .nrpn(
@@ -366,13 +378,15 @@ extension RPN_NRPN_IO_Tests {
     
     @Test(.enabled(if: !shouldSkip))
     func legacyAPIToNewAPI_SinglePacketNRPN_DataMSBLSB() async throws {
+        let isStable = isSystemTimingStable()
+        
         try createOutput(on: managerLegacyAPI)
         
         let output = try output(on: managerLegacyAPI)
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(seconds: 0.300)
+        try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
         print("Sending test event")
         
@@ -386,7 +400,7 @@ extension RPN_NRPN_IO_Tests {
         ])
         
         // wait(sec: 1.0)
-        try await wait(require: { await receivedEvents.count == 2 }, timeout: 1.0)
+        try await wait(require: { await receivedEvents.count == 2 }, timeout: isStable ? 1.0 : 5.0)
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
@@ -410,13 +424,15 @@ extension RPN_NRPN_IO_Tests {
     
     @Test(.enabled(if: !shouldSkip))
     func legacyAPIToNewAPI_MultiplePacketNRPN_DataMSB() async throws {
+        let isStable = isSystemTimingStable()
+        
         try createOutput(on: managerLegacyAPI)
         
         let output = try output(on: managerLegacyAPI)
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(seconds: 0.300)
+        try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
         print("Sending test events")
         
@@ -460,7 +476,7 @@ extension RPN_NRPN_IO_Tests {
             require: {
                 await receivedEvents.filter(chanVoice: .keepType(.nrpn)).count == 1
             },
-            timeout: 1.0
+            timeout: isStable ? 1.0 : 5.0
         )
         
         #expect(receivedEvents.filter(chanVoice: .keepType(.nrpn)) == [
@@ -478,13 +494,15 @@ extension RPN_NRPN_IO_Tests {
     
     @Test(.enabled(if: !shouldSkip))
     func legacyAPIToNewAPI_MultiplePacketNRPN_DataMSBLSB() async throws {
+        let isStable = isSystemTimingStable()
+        
         try createOutput(on: managerLegacyAPI)
         
         let output = try output(on: managerLegacyAPI)
         
         try createInputConnection(on: managerNewAPI, to: output.endpoint)
         
-        try await Task.sleep(seconds: 0.300)
+        try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
         print("Sending test events")
         
@@ -533,7 +551,7 @@ extension RPN_NRPN_IO_Tests {
             require: {
                 await receivedEvents.filter(chanVoice: .keepType(.nrpn)).count == 2
             },
-            timeout: 1.0
+            timeout: isStable ? 1.0 : 5.0
         )
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,

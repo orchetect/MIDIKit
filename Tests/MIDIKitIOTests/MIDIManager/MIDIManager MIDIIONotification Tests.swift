@@ -21,9 +21,11 @@ import Testing
 extension MIDIManager_MIDIIONotification_Tests {
     @Test
     func systemNotification_Add_Remove() async throws {
+        let isStable = isSystemTimingStable()
+        
         // allow time for cleanup from previous unit tests, in case
         // MIDI endpoints are still being disposed of by Core MIDI
-        try await Task.sleep(seconds: 0.500)
+        try await Task.sleep(seconds: isStable ? 0.5 : 2.0)
         
         let manager = MIDIManager(
             clientName: UUID().uuidString,
@@ -40,7 +42,7 @@ extension MIDIManager_MIDIIONotification_Tests {
         // start midi client
         try manager.start()
         
-        try await Task.sleep(seconds: 0.500)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         #expect(notifications == [])
         
         notifications = []
@@ -53,8 +55,8 @@ extension MIDIManager_MIDIIONotification_Tests {
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
         
-        try await wait(require: { await notifications.count >= 3 }, timeout: 0.5)
-        try await Task.sleep(seconds: 0.100)
+        try await wait(require: { await notifications.count >= 3 }, timeout: isStable ? 0.5 : 5.0)
+        try await Task.sleep(seconds: isStable ? 0.1 : 1.0)
         
         var addedNotifFound = false
         for notif in notifications {
@@ -78,8 +80,8 @@ extension MIDIManager_MIDIIONotification_Tests {
         // remove output
         manager.remove(.output, .withTag(output1Tag))
         
-        try await wait(require: { await notifications.count >= 2 }, timeout: 0.5)
-        try await Task.sleep(seconds: 0.100)
+        try await wait(require: { await notifications.count >= 2 }, timeout: isStable ? 0.5 : 5.0)
+        try await Task.sleep(seconds: isStable ? 0.1 : 1.0)
         
         var removedNotifFound = false
         for notif in notifications {
@@ -103,9 +105,11 @@ extension MIDIManager_MIDIIONotification_Tests {
     /// more than one `removed` notification sequentially.
     @Test
     func systemNotification_SequentialRemove() async throws {
+        let isStable = isSystemTimingStable()
+        
         // allow time for cleanup from previous unit tests, in case
         // MIDI endpoints are still being disposed of by Core MIDI
-        try await Task.sleep(seconds: 0.500)
+        try await Task.sleep(seconds: isStable ? 0.5 : 2.0)
         
         let manager = MIDIManager(
             clientName: UUID().uuidString,
@@ -122,7 +126,7 @@ extension MIDIManager_MIDIIONotification_Tests {
         // start midi client
         try manager.start()
         
-        try await Task.sleep(seconds: 0.500)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         #expect(notifications == [])
         
         notifications = []
@@ -145,8 +149,8 @@ extension MIDIManager_MIDIIONotification_Tests {
         )
         
         // each port produces at least 3 notifications, plus `setupChanged`
-        try await wait(require: { await notifications.count >= 6 }, timeout: 0.5)
-        try await Task.sleep(seconds: 0.100)
+        try await wait(require: { await notifications.count >= 6 }, timeout: isStable ? 0.5 : 5.0)
+        try await Task.sleep(seconds: isStable ? 0.1 : 1.0)
         
         notifications = []
         
@@ -154,8 +158,8 @@ extension MIDIManager_MIDIIONotification_Tests {
         manager.remove(.output, .withTag(output1Tag))
         manager.remove(.output, .withTag(output2Tag))
         
-        try await wait(require: { await notifications.count >= 2 }, timeout: 0.5)
-        try await Task.sleep(seconds: 0.100)
+        try await wait(require: { await notifications.count >= 2 }, timeout: isStable ? 0.5 : 5.0)
+        try await Task.sleep(seconds: isStable ? 0.1 : 1.0)
         
         var removedEndpoints: [MIDIOutputEndpoint] = []
         for notif in notifications {

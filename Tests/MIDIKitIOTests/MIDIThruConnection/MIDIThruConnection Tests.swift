@@ -27,6 +27,8 @@ import Testing
 extension MIDIThruConnection_Tests {
     @Test
     func monPersistentThruConnection() async throws {
+        let isStable = isSystemTimingStable()
+        
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -35,7 +37,7 @@ extension MIDIThruConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(seconds: 0.100)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         defer {
             // as a failsafe, clean up any persistent connections with an empty owner ID.
@@ -70,6 +72,8 @@ extension MIDIThruConnection_Tests {
         // let input1ID = try #require(input1.uniqueID)
         // let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
+        
         // create a virtual output
         let output1Tag = "output1"
         try manager.addOutput(
@@ -81,7 +85,7 @@ extension MIDIThruConnection_Tests {
         // let output1ID = try #require(output1.uniqueID)
         // let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await Task.sleep(seconds: 0.500) // needs to be long enough or test fails
+        try await Task.sleep(seconds: isStable ? 0.5 : 2.0) // needs to be long enough or test fails
         
         // add new connection
         
@@ -96,11 +100,11 @@ extension MIDIThruConnection_Tests {
         #expect(manager.managedThruConnections[connTag] != nil)
         #expect(manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
         
-        try await Task.sleep(seconds: 0.200)
+        try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
-        try await wait(require: { await connEvents == [.start()] }, timeout: 1.0)
+        try await wait(require: { await connEvents == [.start()] }, timeout: isStable ? 1.0 : 5.0)
         connEvents = []
         
         manager.remove(.nonPersistentThruConnection, .withTag(connTag))
@@ -109,7 +113,7 @@ extension MIDIThruConnection_Tests {
         
         // send an event - it should not be received by the input
         try output1.send(event: .start())
-        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
+        try await Task.sleep(seconds: isStable ? 0.2 : 3.0) // wait a bit in case an event is sent
         #expect(connEvents == [])
         connEvents = []
         
@@ -122,6 +126,8 @@ extension MIDIThruConnection_Tests {
     
     @Test
     func persistentThruConnection() async throws {
+        let isStable = isSystemTimingStable()
+        
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -130,7 +136,7 @@ extension MIDIThruConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(seconds: 0.100)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         // initial state
         connEvents.removeAll()
@@ -154,7 +160,7 @@ extension MIDIThruConnection_Tests {
         // let input1ID = try #require(input1.uniqueID)
         // let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
-        try await Task.sleep(seconds: 0.200)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         // create a virtual output
         let output1Tag = "output1"
@@ -167,7 +173,7 @@ extension MIDIThruConnection_Tests {
         // let output1ID = try #require(output1.uniqueID)
         // let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await Task.sleep(seconds: 0.500) // needs to be long enough or test fails
+        try await Task.sleep(seconds: isStable ? 0.5 : 2.0) // needs to be long enough or test fails
         
         // add new connection
         
@@ -193,12 +199,9 @@ extension MIDIThruConnection_Tests {
             try addThru()
         }
         
-        try await Task.sleep(seconds: 0.200)
+        try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         
-        #expect(
-            try manager.unmanagedPersistentThruConnections(ownerID: ownerID).count ==
-                1
-        )
+        #expect(try manager.unmanagedPersistentThruConnections(ownerID: ownerID).count == 1)
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
@@ -207,15 +210,13 @@ extension MIDIThruConnection_Tests {
         
         manager.removeAllUnmanagedPersistentThruConnections(ownerID: ownerID)
         
-        #expect(
-            try manager.unmanagedPersistentThruConnections(ownerID: ownerID).isEmpty
-        )
+        #expect(try manager.unmanagedPersistentThruConnections(ownerID: ownerID).isEmpty)
         
         #expect(manager.managedThruConnections.isEmpty)
         
         // send an event - it should not be received by the input
         try output1.send(event: .start())
-        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
+        try await Task.sleep(seconds: isStable ? 0.2 : 3.0) // wait a bit in case an event is sent
         #expect(connEvents == [])
         connEvents = []
     }
@@ -224,6 +225,8 @@ extension MIDIThruConnection_Tests {
     /// and verifying they are correct.
     @Test
     func getParams() async throws {
+        let isStable = isSystemTimingStable()
+        
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -232,7 +235,7 @@ extension MIDIThruConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(seconds: 0.100)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         defer {
             // as a failsafe, clean up any persistent connections with an empty owner ID.
@@ -278,7 +281,7 @@ extension MIDIThruConnection_Tests {
         let output1ID = try #require(output1.uniqueID)
         let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await Task.sleep(seconds: 0.200) // 0.2 seems enough here
+        try await Task.sleep(seconds: isStable ? 0.2 : 2.0) // 0.2 seems enough here
         
         // add new connection
         
@@ -293,7 +296,7 @@ extension MIDIThruConnection_Tests {
         #expect(manager.managedThruConnections[connTag] != nil)
         #expect(manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
         
-        try await Task.sleep(seconds: 0.200)
+        try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         
         let connRef = manager.managedThruConnections[connTag]!.coreMIDIThruConnectionRef!
         let getParams = try #require(try getThruConnectionParameters(ref: connRef))
@@ -316,6 +319,8 @@ extension MIDIThruConnection_Tests {
     /// pipeline, this test allows testing of the proxy, albeit in isolation.
     @Test
     func proxy() async throws {
+        let isStable = isSystemTimingStable()
+        
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
@@ -324,7 +329,7 @@ extension MIDIThruConnection_Tests {
         
         // start midi client
         try manager.start()
-        try await Task.sleep(seconds: 0.100)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         // initial state
         connEvents.removeAll()
@@ -357,7 +362,7 @@ extension MIDIThruConnection_Tests {
         // let output1ID = try #require(output1.uniqueID)
         // let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
-        try await Task.sleep(seconds: 0.500) // this needs to be long enough or test fails
+        try await Task.sleep(seconds: isStable ? 0.5 : 2.0) // this needs to be long enough or test fails
         
         // create thru proxy (this internal only and is NOT added to the manager)
         
@@ -369,7 +374,7 @@ extension MIDIThruConnection_Tests {
         )
         _ = thruProxy // silence warning
         
-        try await Task.sleep(seconds: 0.200)
+        try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
@@ -378,11 +383,11 @@ extension MIDIThruConnection_Tests {
         
         thruProxy = nil
         
-        try await Task.sleep(seconds: 0.200)
+        try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         
         // send an event - it should not be received by the input
         try output1.send(event: .start())
-        try await Task.sleep(seconds: 0.200) // wait a bit in case an event is sent
+        try await Task.sleep(seconds: isStable ? 0.2 : 3.0) // wait a bit in case an event is sent
         #expect(connEvents == [])
         connEvents = []
         
