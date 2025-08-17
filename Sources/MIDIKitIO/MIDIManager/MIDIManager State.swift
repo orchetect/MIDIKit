@@ -75,7 +75,7 @@ extension MIDIManager {
         
         // propagate notification to managed objects
         
-        managementQueue.sync {
+        managementQueue.async {
             for outputConnection in self.managedOutputConnections.values {
                 outputConnection.notification(internalNotif)
             }
