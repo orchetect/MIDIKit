@@ -151,6 +151,8 @@ import Testing
         
         // remove outputs
         receiver.manager.remove(.output, .withTag(output1Tag))
+        // pause between, just in case notifications are processed out-of-order, since we want to test deterministic ordering of these
+        try await Task.sleep(seconds: isStable ? 0.3 : 1.0)
         receiver.manager.remove(.output, .withTag(output2Tag))
         
         try await wait(require: { await receiver.notifications.count >= 2 }, timeout: isStable ? 3.0 : 10.0)
