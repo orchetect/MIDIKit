@@ -26,6 +26,15 @@ final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable { // @
     @ThreadSafeAccess
     private var expirationTimer: Timer?
     
+    @ThreadSafeAccess
+    private var expirationTask: /* Task<Void, any Error> */ Any? // can't strongly type as Task because of package back-compat
+    
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    private var expirationTaskTyped: Task<Void, any Error>? {
+        get { expirationTask as? Task<Void, any Error> }
+        set { expirationTask = newValue }
+    }
+    
     typealias StoredEvent = (
         event: T,
         timeStamp: CoreMIDITimeStamp,
@@ -46,7 +55,7 @@ final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable { // @
         storedEventWrapper: @escaping StoredEventWrapper,
         timerExpired: TimerExpiredHandler? = nil
     ) {
-        self.timeOut = timeOut
+        self.timeOut = timeOut.clamped(to: 0...)
         self.storedEventWrapper = storedEventWrapper
         self.timerExpired = timerExpired
     }
@@ -54,18 +63,31 @@ final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable { // @
 
 extension EventHolder {
     func restartTimer() {
-        expirationTimer?.invalidate()
-        expirationTimer = Timer.scheduledTimer(
-            withTimeInterval: timeOut,
-            repeats: false
-        ) { [self] timer in
-            callTimerExpired()
-            reset()
+        invalidate()
+        
+        // prefer using Task over Timer.
+        // Timer uses old-school runloop which interferes with Swift Concurrency and in some contexts may not work correctly.
+        if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+            let nsec = UInt64(timeOut * TimeInterval(NSEC_PER_SEC))
+            expirationTaskTyped = Task { [weak self] in
+                try await Task.sleep(nanoseconds: nsec)
+                try Task.checkCancellation()
+                self?.callTimerExpired()
+                self?.reset()
+            }
+        } else {
+            expirationTimer = Timer.scheduledTimer(
+                withTimeInterval: timeOut,
+                repeats: false
+            ) { [weak self] timer in
+                self?.callTimerExpired()
+                self?.reset()
+            }
         }
     }
     
     func reset() {
-        expirationTimer?.invalidate()
+        invalidate()
         storedEvent = nil
     }
     
@@ -77,8 +99,17 @@ extension EventHolder {
     }
     
     func fireStoredAndReset() {
-        expirationTimer?.invalidate()
+        invalidate()
         fireStored()
+    }
+    
+    func invalidate() {
+        if #available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+            expirationTaskTyped?.cancel()
+            expirationTask = nil
+        } else {
+            expirationTimer?.invalidate()
+        }
     }
     
     func returnStoredAndReset() -> ReturnedStoredEvent? {
