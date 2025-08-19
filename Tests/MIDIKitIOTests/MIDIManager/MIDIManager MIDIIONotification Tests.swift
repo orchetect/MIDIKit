@@ -12,59 +12,69 @@ import CoreMIDI
 import MIDIKitIO
 import Testing
 
-@Suite(.serialized) @MainActor class MIDIManager_MIDIIONotification_Tests {
-    fileprivate var notifications: [MIDIIONotification] = []
-}
-
 // MARK: - Tests
 
-extension MIDIManager_MIDIIONotification_Tests {
-    @Test
-    func systemNotification_Add_Remove() async throws {
+@Suite(.serialized) struct MIDIManager_MIDIIONotification_Tests {
+    private final actor Receiver {
+        let manager: MIDIManager
+        var notifications: [MIDIIONotification] = []
+        
+        func add(notification: MIDIIONotification) { notifications.append(notification) }
+        func reset() { notifications.removeAll() }
+        
+        init() {
+            manager = MIDIManager(
+                clientName: UUID().uuidString,
+                model: "MIDIKit123",
+                manufacturer: "MIDIKit"
+            )
+            manager.notificationHandler = { [weak self] notification in
+                print(notification)
+                Task { await self?.add(notification: notification) }
+            }
+        }
+    }
+    
+    init() async throws {
         let isStable = isSystemTimingStable()
         
         // allow time for cleanup from previous unit tests, in case
         // MIDI endpoints are still being disposed of by Core MIDI
         try await Task.sleep(seconds: isStable ? 0.5 : 2.0)
+    }
+    
+    @Test
+    func systemNotification_Add_Remove() async throws {
+        let isStable = isSystemTimingStable()
         
-        let manager = MIDIManager(
-            clientName: UUID().uuidString,
-            model: "MIDIKit123",
-            manufacturer: "MIDIKit",
-            notificationHandler: { notification in
-                // handler is called on main thread
-                MainActor.assumeIsolated {
-                    self.notifications.append(notification)
-                }
-            }
-        )
+        let receiver = Receiver()
         
         // start midi client
-        try manager.start()
-        
+        try receiver.manager.start()
         try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
-        #expect(notifications == [])
         
-        notifications = []
+        // we don't expect any notifications to be generated simply by starting the manager
+        #expect(await receiver.notifications == [])
         
         // create a virtual output
-        let output1Tag = "output1"
-        try manager.addOutput(
-            name: "MIDIKit IO Tests Source 1",
+        let output1Tag = UUID().uuidString
+        let output1Name = UUID().uuidString
+        try receiver.manager.addOutput(
+            name: output1Name,
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
         
-        try await wait(require: { await notifications.count >= 3 }, timeout: isStable ? 0.5 : 5.0)
-        try await Task.sleep(seconds: isStable ? 0.1 : 1.0)
+        try await wait(require: { await receiver.notifications.count >= 3 }, timeout: isStable ? 3.0 : 10.0)
+        try await Task.sleep(seconds: isStable ? 0.1 : 1.0) // in case more than anticipated notifications arrive
         
         var addedNotifFound = false
-        for notif in notifications {
+        for notif in await receiver.notifications {
             switch notif {
             case .added(object: let object, parent: _):
                 switch object {
                 case let .outputEndpoint(endpoint):
-                    if endpoint.name == "MIDIKit IO Tests Source 1" {
+                    if endpoint.name == output1Name {
                         addedNotifFound = true
                     }
                 default:
@@ -75,21 +85,21 @@ extension MIDIManager_MIDIIONotification_Tests {
         }
         #expect(addedNotifFound)
         
-        notifications = []
+        await receiver.reset()
         
         // remove output
-        manager.remove(.output, .withTag(output1Tag))
+        receiver.manager.remove(.output, .withTag(output1Tag))
         
-        try await wait(require: { await notifications.count >= 2 }, timeout: isStable ? 0.5 : 5.0)
-        try await Task.sleep(seconds: isStable ? 0.1 : 1.0)
+        try await wait(require: { await receiver.notifications.count >= 2 }, timeout: isStable ? 3.0 : 10.0)
+        try await Task.sleep(seconds: isStable ? 0.1 : 1.0) // in case more than anticipated notifications arrive
         
         var removedNotifFound = false
-        for notif in notifications {
+        for notif in await receiver.notifications {
             switch notif {
             case .removed(object: let object, parent: _):
                 switch object {
                 case let .outputEndpoint(endpoint):
-                    if endpoint.name == "MIDIKit IO Tests Source 1" {
+                    if endpoint.name == output1Name {
                         removedNotifFound = true
                     }
                 default:
@@ -107,62 +117,47 @@ extension MIDIManager_MIDIIONotification_Tests {
     func systemNotification_SequentialRemove() async throws {
         let isStable = isSystemTimingStable()
         
-        // allow time for cleanup from previous unit tests, in case
-        // MIDI endpoints are still being disposed of by Core MIDI
-        try await Task.sleep(seconds: isStable ? 0.5 : 2.0)
-        
-        let manager = MIDIManager(
-            clientName: UUID().uuidString,
-            model: "MIDIKit123",
-            manufacturer: "MIDIKit",
-            notificationHandler: { notification in
-                // handler is called on main thread
-                MainActor.assumeIsolated {
-                    self.notifications.append(notification)
-                }
-            }
-        )
+        let receiver = Receiver()
         
         // start midi client
-        try manager.start()
-        
+        try receiver.manager.start()
         try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
-        #expect(notifications == [])
         
-        notifications = []
+        // we don't expect any notifications to be generated simply by starting the manager
+        #expect(await receiver.notifications == [])
         
         // create virtual outputs
-        let output1Tag = "output1"
-        let output1Name = "MIDIKit IO Tests Source 1"
-        try manager.addOutput(
+        let output1Tag = UUID().uuidString
+        let output1Name = UUID().uuidString
+        try receiver.manager.addOutput(
             name: output1Name,
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
         
-        let output2Tag = "output2"
-        let output2Name = "MIDIKit IO Tests Source 2"
-        try manager.addOutput(
+        let output2Tag = UUID().uuidString
+        let output2Name = UUID().uuidString
+        try receiver.manager.addOutput(
             name: output2Name,
             tag: output2Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
         
         // each port produces at least 3 notifications, plus `setupChanged`
-        try await wait(require: { await notifications.count >= 6 }, timeout: isStable ? 0.5 : 5.0)
-        try await Task.sleep(seconds: isStable ? 0.1 : 1.0)
+        try await wait(require: { await receiver.notifications.count >= 6 }, timeout: isStable ? 3.0 : 10.0)
+        try await Task.sleep(seconds: isStable ? 0.1 : 1.0) // in case more than anticipated notifications arrive
         
-        notifications = []
+        await receiver.reset()
         
         // remove outputs
-        manager.remove(.output, .withTag(output1Tag))
-        manager.remove(.output, .withTag(output2Tag))
+        receiver.manager.remove(.output, .withTag(output1Tag))
+        receiver.manager.remove(.output, .withTag(output2Tag))
         
-        try await wait(require: { await notifications.count >= 2 }, timeout: isStable ? 0.5 : 5.0)
-        try await Task.sleep(seconds: isStable ? 0.1 : 1.0)
+        try await wait(require: { await receiver.notifications.count >= 2 }, timeout: isStable ? 3.0 : 10.0)
+        try await Task.sleep(seconds: isStable ? 0.1 : 1.0) // in case more than anticipated notifications arrive
         
         var removedEndpoints: [MIDIOutputEndpoint] = []
-        for notif in notifications {
+        for notif in await receiver.notifications {
             switch notif {
             case .removed(object: let object, parent: _):
                 switch object {
@@ -191,21 +186,8 @@ extension MIDIManager_MIDIIONotification_Tests {
     /// ONLY uncomment to log Core MIDI notifications to the console as a diagnostic.
     // @Test
     // func systemNotificationLogger() async throws {
-    //    // allow time for cleanup from previous unit tests, in case
-    //    // MIDI endpoints are still being disposed of by Core MIDI
-    //    try await Task.sleep(seconds: 0.500)
-    //
-    //    let manager = MIDIManager(
-    //        clientName: UUID().uuidString,
-    //        model: "MIDIKit123",
-    //        manufacturer: "MIDIKit",
-    //        notificationHandler: { notification in
-    //            print(notification)
-    //        }
-    //    )
-    //
     //    // start midi client
-    //    try manager.start()
+    //    try receiver.manager.start()
     //
     //    print("Listening for Core MIDI notifications...")
     //    try await Task.sleep(seconds: 120.0) // listen for 2 minutes so it doesn't run indefinitely

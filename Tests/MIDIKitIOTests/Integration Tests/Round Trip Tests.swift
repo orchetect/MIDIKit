@@ -12,106 +12,89 @@ import CoreMIDI
 @testable import MIDIKitIO
 import Testing
 
-@Suite(.serialized) @MainActor class RoundTrip_Tests_Base {
+@Suite(.serialized) struct RoundTrip_Tests_Base {
     // swiftformat:options --wrapcollections preserve
     
-    fileprivate var manager: MIDIManager!
+    private static let outputTag = UUID().uuidString
+    private static let inputConnectionTag = UUID().uuidString
     
-    fileprivate let outputTag = "1"
-    fileprivate let inputConnectionTag = "2"
-    
-    fileprivate var receivedEvents: [MIDIEvent] = []
-    
-    // called before each method
-    init() async throws {
-        print("RoundTrip_Tests init starting")
+    private final actor Receiver {
+        var events: [MIDIEvent] = []
+        func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
+        func reset() { events.removeAll() }
         
-        try await Task.sleep(seconds: 0.500)
-        
-        manager = .init(
-            clientName: "MIDIKit_IO_RoundTrip_Input_Tests",
+        let manager = MIDIManager(
+            clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
         
-        // start midi client
-        
-        do {
-            try manager.start()
-        } catch {
-            Issue.record("Could not start MIDIManager. \(error.localizedDescription)")
-            return
+        func createPorts() async throws {
+            print("RoundTrip_Tests createPorts() starting")
+            
+            // add new output endpoint
+            
+            try manager.addOutput(
+                name: UUID().uuidString,
+                tag: outputTag,
+                uniqueID: .adHoc // allow system to generate random ID each time, no persistence
+            )
+            
+            let output = try #require(manager.managedOutputs[outputTag])
+            let outputID = try #require(output.uniqueID)
+            
+            try await Task.sleep(seconds: 0.2)
+            
+            // output connection
+            
+            try manager.addInputConnection(
+                to: .outputs(matching: [.uniqueID(outputID)]),
+                tag: inputConnectionTag,
+                receiver: .events { [weak self] events, _, _ in
+                    Task {
+                        await self?.add(events: events)
+                    }
+                }
+            )
+            
+            try await Task.sleep(seconds: 0.5)
+            
+            print("RoundTrip_Tests createPorts() done")
         }
         
-        try await Task.sleep(seconds: 0.500)
-        
-        try await createPorts()
-        
-        // reset local results
-        
-        receivedEvents = []
-        
-        try await Task.sleep(seconds: 0.500)
-        
-        print("RoundTrip_Tests init done")
+        func prep(forMessageCount count: Int) {
+            events.reserveCapacity(count)
+        }
     }
     
-    func createPorts() async throws {
-        print("RoundTrip_Tests createPorts() starting")
-        
-        // add new output endpoint
-        
-        try manager.addOutput(
-            name: "MIDIKit Round Trip Tests Output",
-            tag: outputTag,
-            uniqueID: .adHoc // allow system to generate random ID each time, no persistence
-        )
-        
-        let output = try #require(manager.managedOutputs[outputTag])
-        
-        let outputID = try #require(output.uniqueID)
-        
-        try await Task.sleep(seconds: 0.200)
-        
-        // output connection
-        
-        try manager.addInputConnection(
-            to: .outputs(matching: [.uniqueID(outputID)]),
-            tag: inputConnectionTag,
-            receiver: .events { events, _, _ in
-                DispatchQueue.main.async {
-                    self.receivedEvents.append(contentsOf: events)
-                }
-            }
-        )
-        
-        #expect(manager.managedInputConnections[inputConnectionTag] != nil)
-        
-        print("RoundTrip_Tests createPorts() done")
-    }
-    
-    func takedown() {
-        print("RoundTrip_Tests tearDown starting")
-        
-        // remove endpoints
-        
-        manager.remove(.output, .withTag(outputTag))
-        #expect(manager.managedOutputs[outputTag] == nil)
-        
-        manager.remove(.inputConnection, .withTag(inputConnectionTag))
-        #expect(manager.managedInputConnections[inputConnectionTag] == nil)
-        
-        manager = nil
-        
-        print("RoundTrip_Tests tearDown done")
+    // called before each method
+    init() async throws {
+        try await Task.sleep(seconds: 0.2)
     }
     
     // ------------------------------------------------------------
     
-    func runRapidMIDIEvents() async throws {
+    @Test(arguments: [.legacyCoreMIDI, .newCoreMIDI(.midi1_0), .newCoreMIDI(.midi2_0)] as [CoreMIDIAPIVersion])
+    func runRapidMIDIEvents(api: CoreMIDIAPIVersion) async throws {
         print("RoundTrip_Tests runRapidMIDIEvents() starting")
         
-        let output = try #require(manager.managedOutputs[outputTag])
+        let isStable = isSystemTimingStable()
+        
+        let receiver = Receiver()
+        receiver.manager.preferredAPI = api
+        try receiver.manager.start()
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
+        
+        try await receiver.createPorts()
+        try await Task.sleep(seconds: isStable ? 0.5 : 5.0)
+        
+        let output = try #require(receiver.manager.managedOutputs[Self.outputTag])
+        
+        // prepare - send one test event and wait for it to show up.
+        // once received, Core MIDI is ready to continue the test.
+        try output.send(event: .start())
+        try await wait(require: { await receiver.events.contains(.start()) }, timeout: isStable ? 2.0 : 10.0)
+        await receiver.reset() // remove test event
         
         // generate events list
         
@@ -280,7 +263,7 @@ import Testing
         // rapidly transmit events from output to input connection
         // to ensure rigor
         
-        receivedEvents.reserveCapacity(sourceEvents.count)
+        await receiver.prep(forMessageCount: sourceEvents.count)
         
         // send several events at once to test packing
         // multiple packets into a single MIDIPacketList / MIDIEventList
@@ -292,26 +275,28 @@ import Testing
         
         // ensure all events are received correctly
         
-        #expect(sourceEvents.count == receivedEvents.count)
+        let sourceEventCount = sourceEvents.count
+        await wait(expect: { await receiver.events.count >= sourceEventCount }, timeout: isStable ? 5.0 : 30.0)
+        let receivedEventCount = await receiver.events.count
         
-        let isEventsEqual = sourceEvents == receivedEvents
+        let isEventsEqual = await sourceEvents == receiver.events
         
         if !isEventsEqual {
             Issue.record("Source events and received events are not equal.")
-            print("Sent \(sourceEvents.count) events, received \(receivedEvents.count) events.")
+            print("Sent \(sourceEvents.count) events, received \(receivedEventCount) events.")
             
             // itemize which source event(s) are missing from the received events, if any.
             // this may reveal events that failed silently, were eaten by Core MIDI, or could not be
             // parsed by the receiver.
             for sourceEvent in sourceEvents {
-                if !receivedEvents.contains(sourceEvent) {
+                if await !receiver.events.contains(sourceEvent) {
                     print("Missing from received events:", sourceEvent)
                 }
             }
             
             // itemize which received events do not exist in source event(s), if any.
             // this may catch any potentially malformed events.
-            for receivedEvent in receivedEvents {
+            for receivedEvent in await receiver.events {
                 if !sourceEvents.contains(receivedEvent) {
                     print("Present in received events but not source events:", receivedEvent)
                 }
@@ -319,18 +304,6 @@ import Testing
         }
         
         print("RoundTrip_Tests runRapidMIDIEvents() done")
-    }
-    
-    // MARK: - Tests
-    
-    @Test(arguments: [.legacyCoreMIDI, .newCoreMIDI(.midi1_0), .newCoreMIDI(.midi2_0)] as [CoreMIDIAPIVersion])
-    func rapidMIDIEvents(api: CoreMIDIAPIVersion) async throws {
-        manager.preferredAPI = api
-        try await Task.sleep(seconds: 0.500)
-        try await createPorts()
-        try await Task.sleep(seconds: 0.500)
-        try await runRapidMIDIEvents()
-        takedown()
     }
 }
 

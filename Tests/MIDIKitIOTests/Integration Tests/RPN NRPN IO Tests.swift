@@ -9,104 +9,114 @@
 #if !targetEnvironment(simulator)
 
 import CoreMIDI
+import MIDIKitInternals
 @testable import MIDIKitIO
 import Testing
 
 /// These tests are meant to test the translation Core MIDI performs between legacy MIDI 1.0 packets
 /// and MIDI 2.0 UMP packets
-@Suite(.serialized) @MainActor class RPN_NRPN_IO_Tests {
-    fileprivate var managerLegacyAPI: MIDIManager!
-    fileprivate var managerNewAPI: MIDIManager!
+@Suite(.serialized) struct RPN_NRPN_IO_Tests {
+    private final actor Receiver {
+        var events: [MIDIEvent] = []
+        func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
+        func reset() { events.removeAll() }
+        
+        private var managerLegacyAPI: MIDIManager!
+        private var managerNewAPI: MIDIManager!
+        
+        /// Two managers are needed because we're testing sending events between
+        /// legacy MIDI 1.0 Core MIDI API and new MIDI 2.0 Core MIDI API.
+        func setupManagers() async throws {
+            print("NRPN_IO_Tests setupManagers() starting")
+            
+            let isStable = isSystemTimingStable()
+            
+            managerLegacyAPI = MIDIManager(
+                clientName: "MIDIKit_IO_NRPN_Tests_LegacyAPI",
+                model: "MIDIKit123",
+                manufacturer: "MIDIKit"
+            )
+            managerLegacyAPI.preferredAPI = .legacyCoreMIDI
+            
+            managerNewAPI = MIDIManager(
+                clientName: "MIDIKit_IO_NRPN_Tests_NewAPI",
+                model: "MIDIKit123",
+                manufacturer: "MIDIKit"
+            )
+            managerNewAPI.preferredAPI = .newCoreMIDI(.midi2_0)
+            
+            // start midi clients
+            
+            try managerLegacyAPI.start()
+            try managerNewAPI.start()
+            
+            try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
+            
+            print("NRPN_IO_Tests setupManagers() done")
+        }
+        
+        func createOutputNew() throws { try createOutput(on: managerNewAPI) }
+        func createOutputLegacy() throws { try createOutput(on: managerLegacyAPI) }
+        
+        private func createOutput(on manager: MIDIManager) throws {
+            print("Creating output \(outputName.quoted) on \(manager.clientName)")
+            try manager.addOutput(
+                name: outputName,
+                tag: outputTag,
+                uniqueID: .adHoc // allow system to generate random ID each time, no persistence
+            )
+        }
+        
+        func createInputConnectionNew(to endpoint: MIDIOutputEndpoint) throws {
+            try createInputConnection(on: managerNewAPI, to: endpoint)
+        }
+        
+        func createInputConnectionLegacy(to endpoint: MIDIOutputEndpoint) throws {
+            try createInputConnection(on: managerLegacyAPI, to: endpoint)
+        }
+        
+        private func createInputConnection(on manager: MIDIManager, to endpoint: MIDIOutputEndpoint) throws {
+            print("Creating input connection to \(endpoint.displayName.quoted) on \(manager.clientName)")
+            try manager.addInputConnection(
+                to: .outputs([endpoint]),
+                tag: inputConnectionTag,
+                receiver: .events { [weak self] events, _, _ in
+                    Task {
+                        await self?.add(events: events)
+                    }
+                }
+            )
+        }
+        
+        func outputNew() throws -> MIDIOutput { try output(on: managerNewAPI) }
+        func outputLegacy() throws -> MIDIOutput { try output(on: managerLegacyAPI) }
+        
+        private func output(on manager: MIDIManager) throws -> MIDIOutput {
+            try #require(manager.managedOutputs[outputTag])
+        }
+    }
     
-    let outputName = "MIDIKit NRPN Output"
-    fileprivate let outputTag = "1"
+    static let outputName = "MIDIKit NRPN Output \(UUID().uuidString)"
+    fileprivate static let outputTag = UUID().uuidString
     
-    fileprivate let inputConnectionTag = "2"
-    
-    fileprivate var receivedEvents: [MIDIEvent] = []
+    fileprivate static let inputConnectionTag = UUID().uuidString
     
     // called before each method
     init() async throws {
-        print("NRPN_IO_Tests init starting")
-        
-        // reset local results
-        receivedEvents = []
-        
-        // two managers are needed because we're testing sending events between
-        // legacy MIDI 1.0 Core MIDI API and new MIDI 2.0 Core MIDI API.
-        try await setupManagers()
-        
-        print("NRPN_IO_Tests init done")
+        try await Task.sleep(seconds: 0.5)
     }
     
-    private func setupManagers() async throws {
-        print("NRPN_IO_Tests setupManagers() starting")
-        
-        let isStable = isSystemTimingStable()
-        
-        managerLegacyAPI = MIDIManager(
-            clientName: "MIDIKit_IO_NRPN_Tests_LegacyAPI",
-            model: "MIDIKit123",
-            manufacturer: "MIDIKit"
-        )
-        managerLegacyAPI.preferredAPI = .legacyCoreMIDI
-        
-        managerNewAPI = MIDIManager(
-            clientName: "MIDIKit_IO_NRPN_Tests_NewAPI",
-            model: "MIDIKit123",
-            manufacturer: "MIDIKit"
-        )
-        managerNewAPI.preferredAPI = .newCoreMIDI(.midi2_0)
-        
-        // start midi clients
-        
-        try managerLegacyAPI.start()
-        try managerNewAPI.start()
-        
-        try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
-        
-        print("NRPN_IO_Tests setupManagers() done")
-    }
-    
-    private func createOutput(on manager: MIDIManager) throws {
-        print("Creating output \(outputName) on \(manager.clientName)")
-        try manager.addOutput(
-            name: outputName,
-            tag: outputTag,
-            uniqueID: .adHoc // allow system to generate random ID each time, no persistence
-        )
-    }
-    
-    private func createInputConnection(on manager: MIDIManager, to endpoint: MIDIOutputEndpoint) throws {
-        print("Creating input connection to \(endpoint.displayName) on \(manager.clientName)")
-        try manager.addInputConnection(
-            to: .outputs([endpoint]),
-            tag: inputConnectionTag,
-            receiver: .events { [weak self] events, _, _ in
-                Task { @MainActor in
-                    self?.receivedEvents.append(contentsOf: events)
-                }
-            }
-        )
-    }
-    
-    private func output(on manager: MIDIManager) throws -> MIDIOutput {
-        try #require(manager.managedOutputs[outputTag])
-    }
-}
-
-// MARK: - RPN Tests
-
-extension RPN_NRPN_IO_Tests {
     @Test(.enabled(if: !shouldSkip))
     func legacyAPIToNewAPI_SinglePacketRPN_DataMSB() async throws {
         let isStable = isSystemTimingStable()
         
-        try createOutput(on: managerLegacyAPI)
+        let receiver = Receiver()
+        try await receiver.setupManagers()
         
-        let output = try output(on: managerLegacyAPI)
+        try await receiver.createOutputLegacy()
+        let output = try await receiver.outputLegacy()
         
-        try createInputConnection(on: managerNewAPI, to: output.endpoint)
+        try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
@@ -120,17 +130,17 @@ extension RPN_NRPN_IO_Tests {
             0xB2, 0x06, 0x10 // data entry MSB value 0x10
         ])
         
-        try await wait(require: { await receivedEvents.count == 1 }, timeout: isStable ? 1.0 : 5.0)
+        await wait(expect: { await receiver.events.count == 1 }, timeout: isStable ? 2.0 : 10.0)
         
-        #expect(receivedEvents == [
+        #expect(await receiver.events == [
             .rpn(
                 parameter: .init(msb: 0x40, lsb: 0x41),
                 data: (msb: 0x10, lsb: 0x00),
                 channel: 0x02
-            )
+            ),
         ])
         
-        // dump(receivedEvents)
+        // dump(receiver.events)
         
         print("Done")
     }
@@ -139,11 +149,13 @@ extension RPN_NRPN_IO_Tests {
     func legacyAPIToNewAPI_SinglePacketRPN_DataMSBLSB() async throws {
         let isStable = isSystemTimingStable()
         
-        try createOutput(on: managerLegacyAPI)
+        let receiver = Receiver()
+        try await receiver.setupManagers()
         
-        let output = try output(on: managerLegacyAPI)
+        try await receiver.createOutputLegacy()
+        let output = try await receiver.outputLegacy()
         
-        try createInputConnection(on: managerNewAPI, to: output.endpoint)
+        try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
@@ -158,12 +170,11 @@ extension RPN_NRPN_IO_Tests {
             0xB2, 0x26, 0x20 // data entry LSB value 0x20
         ])
         
-        // wait(sec: 1.0)
-        try await wait(require: { await receivedEvents.count == 2 }, timeout: isStable ? 1.0 : 5.0)
+        await wait(expect: { await receiver.events.count == 2 }, timeout: isStable ? 2.0 : 10.0)
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
-        #expect(receivedEvents == [
+        #expect(await receiver.events == [
             .rpn(
                 parameter: .init(msb: 0x40, lsb: 0x41),
                 data: (msb: 0x10, lsb: 0x00),
@@ -176,7 +187,7 @@ extension RPN_NRPN_IO_Tests {
             )
         ])
         
-        // dump(receivedEvents)
+        // dump(receiver.events)
         
         print("Done")
     }
@@ -185,11 +196,13 @@ extension RPN_NRPN_IO_Tests {
     func legacyAPIToNewAPI_MultiplePacketRPN_DataMSB() async throws {
         let isStable = isSystemTimingStable()
         
-        try createOutput(on: managerLegacyAPI)
+        let receiver = Receiver()
+        try await receiver.setupManagers()
         
-        let output = try output(on: managerLegacyAPI)
+        try await receiver.createOutputLegacy()
+        let output = try await receiver.outputLegacy()
         
-        try createInputConnection(on: managerNewAPI, to: output.endpoint)
+        try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
@@ -232,22 +245,22 @@ extension RPN_NRPN_IO_Tests {
         // The solution for de-flaking the unit test is to just ignore all non-RPN/NRPN events.
         
         // wait(sec: 1.0)
-        try await wait(
-            require: {
-                await receivedEvents.filter(chanVoice: .keepType(.rpn)).count == 1
+        await wait(
+            expect: {
+                await receiver.events.filter(chanVoice: .keepType(.rpn)).count == 1
             },
-            timeout: isStable ? 1.0 : 5.0
+            timeout: isStable ? 2.0 : 10.0
         )
         
-        #expect(receivedEvents.filter(chanVoice: .keepType(.rpn)) == [
+        #expect(await receiver.events.filter(chanVoice: .keepType(.rpn)) == [
             .rpn(
                 parameter: .init(msb: 0x40, lsb: 0x41),
                 data: (msb: 0x10, lsb: 0x00),
                 channel: 0x02
-            )
+            ),
         ])
         
-        // dump(receivedEvents)
+        // dump(receiver.events)
         
         print("Done")
     }
@@ -256,11 +269,13 @@ extension RPN_NRPN_IO_Tests {
     func legacyAPIToNewAPI_MultiplePacketRPN_DataMSBLSB() async throws {
         let isStable = isSystemTimingStable()
         
-        try createOutput(on: managerLegacyAPI)
+        let receiver = Receiver()
+        try await receiver.setupManagers()
         
-        let output = try output(on: managerLegacyAPI)
+        try await receiver.createOutputLegacy()
+        let output = try await receiver.outputLegacy()
         
-        try createInputConnection(on: managerNewAPI, to: output.endpoint)
+        try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
@@ -307,16 +322,16 @@ extension RPN_NRPN_IO_Tests {
         // The solution for de-flaking the unit test is to just ignore all non-RPN/NRPN events.
         
         // wait(sec: 1.0)
-        try await wait(
-            require: {
-                await receivedEvents.filter(chanVoice: .keepType(.rpn)).count == 2
+        await wait(
+            expect: {
+                await receiver.events.filter(chanVoice: .keepType(.rpn)).count == 2
             },
             timeout: isStable ? 1.0 : 5.0
         )
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
-        #expect(receivedEvents.filter(chanVoice: .keepType(.rpn)) == [
+        #expect(await receiver.events.filter(chanVoice: .keepType(.rpn)) == [
             .rpn(
                 parameter: .init(msb: 0x40, lsb: 0x41),
                 data: (msb: 0x10, lsb: 0x00),
@@ -329,7 +344,7 @@ extension RPN_NRPN_IO_Tests {
             )
         ])
         
-        // dump(receivedEvents)
+        // dump(receiver.events)
         
         print("Done")
     }
@@ -342,11 +357,13 @@ extension RPN_NRPN_IO_Tests {
     func legacyAPIToNewAPI_SinglePacketNRPN_DataMSB() async throws {
         let isStable = isSystemTimingStable()
         
-        try createOutput(on: managerLegacyAPI)
+        let receiver = Receiver()
+        try await receiver.setupManagers()
         
-        let output = try output(on: managerLegacyAPI)
+        try await receiver.createOutputLegacy()
+        let output = try await receiver.outputLegacy()
         
-        try createInputConnection(on: managerNewAPI, to: output.endpoint)
+        try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
@@ -361,9 +378,9 @@ extension RPN_NRPN_IO_Tests {
         ])
         
         // wait(sec: 1.0)
-        try await wait(require: { await receivedEvents.count == 1 }, timeout: isStable ? 1.0 : 5.0)
+        await wait(expect: { await receiver.events.count == 1 }, timeout: isStable ? 2.0 : 10.0)
         
-        #expect(receivedEvents == [
+        #expect(await receiver.events == [
             .nrpn(
                 parameter: .init(msb: 0x40, lsb: 0x41),
                 data: (msb: 0x10, lsb: 0x00),
@@ -371,7 +388,7 @@ extension RPN_NRPN_IO_Tests {
             )
         ])
         
-        // dump(receivedEvents)
+        // dump(receiver.events)
         
         print("Done")
     }
@@ -380,11 +397,13 @@ extension RPN_NRPN_IO_Tests {
     func legacyAPIToNewAPI_SinglePacketNRPN_DataMSBLSB() async throws {
         let isStable = isSystemTimingStable()
         
-        try createOutput(on: managerLegacyAPI)
+        let receiver = Receiver()
+        try await receiver.setupManagers()
         
-        let output = try output(on: managerLegacyAPI)
+        try await receiver.createOutputLegacy()
+        let output = try await receiver.outputLegacy()
         
-        try createInputConnection(on: managerNewAPI, to: output.endpoint)
+        try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
@@ -399,12 +418,12 @@ extension RPN_NRPN_IO_Tests {
             0xB2, 0x26, 0x20 // data entry LSB value 0x20
         ])
         
-        // wait(sec: 1.0)
-        try await wait(require: { await receivedEvents.count == 2 }, timeout: isStable ? 1.0 : 5.0)
+        await wait(expect: { await receiver.events.count == 2 }, timeout: isStable ? 2.0 : 10.0)
+        print("Event received count:", await receiver.events.count)
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
-        #expect(receivedEvents == [
+        #expect(await receiver.events == [
             .nrpn(
                 parameter: .init(msb: 0x40, lsb: 0x41),
                 data: (msb: 0x10, lsb: 0x00),
@@ -417,7 +436,7 @@ extension RPN_NRPN_IO_Tests {
             )
         ])
         
-        // dump(receivedEvents)
+        // dump(receiver.events)
         
         print("Done")
     }
@@ -426,11 +445,13 @@ extension RPN_NRPN_IO_Tests {
     func legacyAPIToNewAPI_MultiplePacketNRPN_DataMSB() async throws {
         let isStable = isSystemTimingStable()
         
-        try createOutput(on: managerLegacyAPI)
+        let receiver = Receiver()
+        try await receiver.setupManagers()
         
-        let output = try output(on: managerLegacyAPI)
+        try await receiver.createOutputLegacy()
+        let output = try await receiver.outputLegacy()
         
-        try createInputConnection(on: managerNewAPI, to: output.endpoint)
+        try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
@@ -472,14 +493,14 @@ extension RPN_NRPN_IO_Tests {
         // event.
         // The solution for de-flaking the unit test is to just ignore all non-RPN/NRPN events.
         
-        try await wait(
-            require: {
-                await receivedEvents.filter(chanVoice: .keepType(.nrpn)).count == 1
+        await wait(
+            expect: {
+                await receiver.events.filter(chanVoice: .keepType(.nrpn)).count == 1
             },
-            timeout: isStable ? 1.0 : 5.0
+            timeout: isStable ? 2.0 : 10.0
         )
         
-        #expect(receivedEvents.filter(chanVoice: .keepType(.nrpn)) == [
+        #expect(await receiver.events.filter(chanVoice: .keepType(.nrpn)) == [
             .nrpn(
                 parameter: .init(msb: 0x40, lsb: 0x41),
                 data: (msb: 0x10, lsb: 0x00),
@@ -487,7 +508,7 @@ extension RPN_NRPN_IO_Tests {
             )
         ])
         
-        // dump(receivedEvents)
+        // dump(receiver.events)
         
         print("Done")
     }
@@ -496,11 +517,13 @@ extension RPN_NRPN_IO_Tests {
     func legacyAPIToNewAPI_MultiplePacketNRPN_DataMSBLSB() async throws {
         let isStable = isSystemTimingStable()
         
-        try createOutput(on: managerLegacyAPI)
+        let receiver = Receiver()
+        try await receiver.setupManagers()
         
-        let output = try output(on: managerLegacyAPI)
+        try await receiver.createOutputLegacy()
+        let output = try await receiver.outputLegacy()
         
-        try createInputConnection(on: managerNewAPI, to: output.endpoint)
+        try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
@@ -546,17 +569,16 @@ extension RPN_NRPN_IO_Tests {
         // event.
         // The solution for de-flaking the unit test is to just ignore all non-RPN/NRPN events.
         
-        // wait(sec: 1.0)
-        try await wait(
-            require: {
-                await receivedEvents.filter(chanVoice: .keepType(.nrpn)).count == 2
+        await wait(
+            expect: {
+                await receiver.events.filter(chanVoice: .keepType(.nrpn)).count == 2
             },
-            timeout: isStable ? 1.0 : 5.0
+            timeout: isStable ? 2.0 : 10.0
         )
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
-        #expect(receivedEvents.filter(chanVoice: .keepType(.nrpn)) == [
+        #expect(await receiver.events.filter(chanVoice: .keepType(.nrpn)) == [
             .nrpn(
                 parameter: .init(msb: 0x40, lsb: 0x41),
                 data: (msb: 0x10, lsb: 0x00),
@@ -569,7 +591,7 @@ extension RPN_NRPN_IO_Tests {
             )
         ])
         
-        // dump(receivedEvents)
+        // dump(receiver.events)
         
         print("Done")
     }

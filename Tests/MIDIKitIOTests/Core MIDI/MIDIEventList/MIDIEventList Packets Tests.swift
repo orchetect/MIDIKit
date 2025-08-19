@@ -14,11 +14,9 @@ import Testing
     // swiftformat:options --wrapcollections preserve
     // swiftformat:disable spaceInsideParens spaceInsideBrackets
     
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
     @Test
     func singlePacketWithOneUMP() throws {
-        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
-        else { return }
-        
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
         
         var eventList = try makeEventList(
@@ -44,11 +42,9 @@ import Testing
         check(&eventList)
     }
     
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
     @Test
     func singlePacketWithMultipleUMPs() throws {
-        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
-        else { return }
-        
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
         
         var eventList = try makeEventList(
@@ -78,11 +74,9 @@ import Testing
         check(&eventList)
     }
     
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
     @Test
     func multiplePacketsWithSingleUMPs() throws {
-        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
-        else { return }
-        
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
         
         var eventList = try makeEventList(
@@ -112,11 +106,9 @@ import Testing
         check(&eventList)
     }
     
+    @available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
     @Test
     func multiplePacketsWithMultipleUMPs() throws {
-        guard #available(macOS 11, iOS 14, macCatalyst 14, tvOS 15.0, watchOS 8.0, *)
-        else { return }
-        
         let timeStamp: MIDITimeStamp = 0 // mach_absolute_time()
         
         var eventList = try makeEventList(

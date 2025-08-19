@@ -13,75 +13,74 @@ import MIDIKitInternals
 @testable import MIDIKitIO
 import Testing
 
-@Suite(.serialized) @MainActor class MIDIThruConnection_Tests: Sendable {
-    // called before each method
-    init() async throws {
-        try await Task.sleep(seconds: 0.200)
-    }
-    
-    private var connEvents: [MIDIEvent] = []
-}
-
-// MARK: - Tests
-
-extension MIDIThruConnection_Tests {
-    @Test
-    func monPersistentThruConnection() async throws {
-        let isStable = isSystemTimingStable()
+@Suite(.serialized) struct MIDIThruConnection_Tests {
+    private final actor Receiver {
+        var events: [MIDIEvent] = []
+        func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
+        func reset() { events.removeAll() }
         
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
+    }
+    
+    // called before each method
+    init() async throws {
+        try await Task.sleep(seconds: 0.2)
+    }
+    
+    @Test
+    func monPersistentThruConnection() async throws {
+        let isStable = isSystemTimingStable()
+        
+        let receiver = Receiver()
         
         // start midi client
-        try manager.start()
+        try receiver.manager.start()
         try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         defer {
             // as a failsafe, clean up any persistent connections with an empty owner ID.
             // this is to account for the possible re-emergence of the Core MIDI thru bug
             
-            if let num = try? manager.unmanagedPersistentThruConnections(ownerID: "").count,
+            if let num = try? receiver.manager.unmanagedPersistentThruConnections(ownerID: "").count,
                num > 0
             {
                 print("Removing \(num) empty-ownerID persistent thru connections.")
             }
             
-            manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
+            receiver.manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
         }
         
-        // initial state
-        connEvents.removeAll()
-        
         // create virtual input
-        let input1Tag = "input1"
-        try manager.addInput(
-            name: "MIDIKit IO Tests thruConnection In",
+        let input1Tag = UUID().uuidString
+        try receiver.manager.addInput(
+            name: UUID().uuidString,
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiver: .events { events, _, _ in
-                Task { @MainActor in
-                    self.connEvents.append(contentsOf: events)
+            receiver: .events { [weak receiver] events, _, _ in
+                Task {
+                    await receiver?.add(events: events)
                 }
             }
         )
-        let input1 = try #require(manager.managedInputs[input1Tag])
+        let input1 = try #require(receiver.manager.managedInputs[input1Tag])
         // let input1ID = try #require(input1.uniqueID)
         // let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
         try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         // create a virtual output
-        let output1Tag = "output1"
-        try manager.addOutput(
-            name: "MIDIKit IO Tests thruConnection Out",
+        let output1Tag = UUID().uuidString
+        try receiver.manager.addOutput(
+            name: UUID().uuidString,
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1 = try #require(receiver.manager.managedOutputs[output1Tag])
         // let output1ID = try #require(output1.uniqueID)
         // let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
@@ -89,37 +88,37 @@ extension MIDIThruConnection_Tests {
         
         // add new connection
         
-        let connTag = "testThruConnection"
-        try manager.addThruConnection(
+        let connTag = UUID().uuidString
+        try receiver.manager.addThruConnection(
             outputs: [output1.endpoint],
             inputs: [input1.endpoint],
             tag: connTag,
             lifecycle: .nonPersistent
         )
         
-        #expect(manager.managedThruConnections[connTag] != nil)
-        #expect(manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
+        #expect(receiver.manager.managedThruConnections[connTag] != nil)
+        #expect(receiver.manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
         
         try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
-        try await wait(require: { await connEvents == [.start()] }, timeout: isStable ? 1.0 : 5.0)
-        connEvents = []
+        try await wait(require: { await receiver.events == [.start()] }, timeout: isStable ? 1.0 : 5.0)
+        await receiver.reset()
         
-        manager.remove(.nonPersistentThruConnection, .withTag(connTag))
+        receiver.manager.remove(.nonPersistentThruConnection, .withTag(connTag))
         
-        #expect(manager.managedThruConnections[connTag] == nil)
+        #expect(receiver.manager.managedThruConnections[connTag] == nil)
         
         // send an event - it should not be received by the input
         try output1.send(event: .start())
         try await Task.sleep(seconds: isStable ? 0.2 : 3.0) // wait a bit in case an event is sent
-        #expect(connEvents == [])
-        connEvents = []
+        #expect(await receiver.events == [])
+        await receiver.reset()
         
         // Due to a Swift Core MIDI bug, all thru connections are created as persistent.
         // - See ThruConnection.swift for details
-        let conns = try manager.unmanagedPersistentThruConnections(ownerID: "")
+        let conns = try receiver.manager.unmanagedPersistentThruConnections(ownerID: "")
         
         #expect(conns.isEmpty)
     }
@@ -128,48 +127,43 @@ extension MIDIThruConnection_Tests {
     func persistentThruConnection() async throws {
         let isStable = isSystemTimingStable()
         
-        let manager = MIDIManager(
-            clientName: UUID().uuidString,
-            model: "MIDIKit123",
-            manufacturer: "MIDIKit"
-        )
+        let receiver = Receiver()
         
         // start midi client
-        try manager.start()
+        try receiver.manager.start()
         try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         // initial state
-        connEvents.removeAll()
         let ownerID = "com.orchetect.midikit.testNonPersistentThruConnection"
-        manager.removeAllUnmanagedPersistentThruConnections(ownerID: ownerID)
+        receiver.manager.removeAllUnmanagedPersistentThruConnections(ownerID: ownerID)
         
         // create virtual input
-        let input1Tag = "input1"
-        try manager.addInput(
-            name: "MIDIKit IO Tests thruConnection In",
+        let input1Tag = UUID().uuidString
+        try receiver.manager.addInput(
+            name: UUID().uuidString,
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiver: .events { events, _, _ in
-                Task { @MainActor in
-                    self.connEvents.append(contentsOf: events)
+            receiver: .events { [weak receiver] events, _, _ in
+                Task {
+                    await receiver?.add(events: events)
                 }
             }
         )
-        let input1 = try #require(manager.managedInputs[input1Tag])
+        let input1 = try #require(receiver.manager.managedInputs[input1Tag])
         // let input1ID = try #require(input1.uniqueID)
         // let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
         try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         // create a virtual output
-        let output1Tag = "output1"
-        try manager.addOutput(
-            name: "MIDIKit IO Tests thruConnection Out",
+        let output1Tag = UUID().uuidString
+        try receiver.manager.addOutput(
+            name: UUID().uuidString,
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1 = try #require(receiver.manager.managedOutputs[output1Tag])
         // let output1ID = try #require(output1.uniqueID)
         // let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
@@ -177,9 +171,9 @@ extension MIDIThruConnection_Tests {
         
         // add new connection
         
-        let connTag = "testThruConnection"
+        let connTag = UUID().uuidString
         func addThru() throws {
-            try manager.addThruConnection(
+            try receiver.manager.addThruConnection(
                 outputs: [output1.endpoint],
                 inputs: [input1.endpoint],
                 tag: connTag,
@@ -201,24 +195,23 @@ extension MIDIThruConnection_Tests {
         
         try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         
-        #expect(try manager.unmanagedPersistentThruConnections(ownerID: ownerID).count == 1)
+        #expect(try receiver.manager.unmanagedPersistentThruConnections(ownerID: ownerID).count == 1)
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
-        try await wait(require: { await connEvents == [.start()] }, timeout: 1.0)
-        connEvents = []
+        try await wait(require: { await receiver.events == [.start()] }, timeout: 1.0)
+        await receiver.reset()
         
-        manager.removeAllUnmanagedPersistentThruConnections(ownerID: ownerID)
+        receiver.manager.removeAllUnmanagedPersistentThruConnections(ownerID: ownerID)
         
-        #expect(try manager.unmanagedPersistentThruConnections(ownerID: ownerID).isEmpty)
+        #expect(try receiver.manager.unmanagedPersistentThruConnections(ownerID: ownerID).isEmpty)
         
-        #expect(manager.managedThruConnections.isEmpty)
+        #expect(receiver.manager.managedThruConnections.isEmpty)
         
         // send an event - it should not be received by the input
         try output1.send(event: .start())
         try await Task.sleep(seconds: isStable ? 0.2 : 3.0) // wait a bit in case an event is sent
-        #expect(connEvents == [])
-        connEvents = []
+        #expect(await receiver.events == [])
     }
     
     /// Tests getting thru connection parameters from Core MIDI after creating the thru connection
@@ -227,57 +220,53 @@ extension MIDIThruConnection_Tests {
     func getParams() async throws {
         let isStable = isSystemTimingStable()
         
-        let manager = MIDIManager(
-            clientName: UUID().uuidString,
-            model: "MIDIKit123",
-            manufacturer: "MIDIKit"
-        )
+        let receiver = Receiver()
         
         // start midi client
-        try manager.start()
+        try receiver.manager.start()
         try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         defer {
             // as a failsafe, clean up any persistent connections with an empty owner ID.
             // this is to account for the possible re-emergence of the Core MIDI thru bug
             
-            if let num = try? manager.unmanagedPersistentThruConnections(ownerID: "").count,
+            if let num = try? receiver.manager.unmanagedPersistentThruConnections(ownerID: "").count,
                num > 0
             {
                 print("Removing \(num) empty-ownerID persistent thru connections.")
             }
             
-            manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
+            receiver.manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
         }
         
         // initial state
-        connEvents.removeAll()
+        await receiver.reset()
         
         // create virtual input
-        let input1Tag = "input1"
-        try manager.addInput(
-            name: "MIDIKit IO Tests thruConnection In",
+        let input1Tag = UUID().uuidString
+        try receiver.manager.addInput(
+            name: UUID().uuidString,
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiver: .events { events, _, _ in
-                Task { @MainActor in
-                    self.connEvents.append(contentsOf: events)
+            receiver: .events { [weak receiver] events, _, _ in
+                Task {
+                    await receiver?.add(events: events)
                 }
             }
         )
-        let input1 = try #require(manager.managedInputs[input1Tag])
+        let input1 = try #require(receiver.manager.managedInputs[input1Tag])
         let input1ID = try #require(input1.uniqueID)
         let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
         // create a virtual output
-        let output1Tag = "output1"
-        try manager.addOutput(
-            name: "MIDIKit IO Tests thruConnection Out",
+        let output1Tag = UUID().uuidString
+        try receiver.manager.addOutput(
+            name: UUID().uuidString,
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1 = try #require(receiver.manager.managedOutputs[output1Tag])
         let output1ID = try #require(output1.uniqueID)
         let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
@@ -285,20 +274,20 @@ extension MIDIThruConnection_Tests {
         
         // add new connection
         
-        let connTag = "testThruConnection"
-        try manager.addThruConnection(
+        let connTag = UUID().uuidString
+        try receiver.manager.addThruConnection(
             outputs: [output1.endpoint],
             inputs: [input1.endpoint],
             tag: connTag,
             lifecycle: .nonPersistent
         )
         
-        #expect(manager.managedThruConnections[connTag] != nil)
-        #expect(manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
+        #expect(receiver.manager.managedThruConnections[connTag] != nil)
+        #expect(receiver.manager.managedThruConnections[connTag]?.coreMIDIThruConnectionRef != .init())
         
         try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         
-        let connRef = manager.managedThruConnections[connTag]!.coreMIDIThruConnectionRef!
+        let connRef = receiver.manager.managedThruConnections[connTag]!.coreMIDIThruConnectionRef!
         let getParams = try #require(try getThruConnectionParameters(ref: connRef))
         
         #expect(getParams.numSources == 1)
@@ -308,9 +297,9 @@ extension MIDIThruConnection_Tests {
         #expect(getParams.destinations.0.endpointRef == input1Ref)
         #expect(getParams.destinations.0.uniqueID == input1ID)
         
-        manager.remove(.nonPersistentThruConnection, .withTag(connTag))
+        receiver.manager.remove(.nonPersistentThruConnection, .withTag(connTag))
         
-        #expect(manager.managedThruConnections[connTag] == nil)
+        #expect(receiver.manager.managedThruConnections[connTag] == nil)
     }
     
     /// Test the thru connection proxy in isolation, so at least we can test its function in CI.
@@ -321,44 +310,37 @@ extension MIDIThruConnection_Tests {
     func proxy() async throws {
         let isStable = isSystemTimingStable()
         
-        let manager = MIDIManager(
-            clientName: UUID().uuidString,
-            model: "MIDIKit123",
-            manufacturer: "MIDIKit"
-        )
+        let receiver = Receiver()
         
         // start midi client
-        try manager.start()
+        try receiver.manager.start()
         try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
-        // initial state
-        connEvents.removeAll()
-        
         // create virtual input
-        let input1Tag = "input1"
-        try manager.addInput(
-            name: "MIDIKit IO Tests thruConnection In",
+        let input1Tag = UUID().uuidString
+        try receiver.manager.addInput(
+            name: UUID().uuidString,
             tag: input1Tag,
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
-            receiver: .events { events, _, _ in
-                Task { @MainActor in
-                    self.connEvents.append(contentsOf: events)
+            receiver: .events { [weak receiver] events, _, _ in
+                Task {
+                    await receiver?.add(events: events)
                 }
             }
         )
-        let input1 = try #require(manager.managedInputs[input1Tag])
+        let input1 = try #require(receiver.manager.managedInputs[input1Tag])
         // let input1ID = try #require(input1.uniqueID)
         // let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
         // create a virtual output
-        let output1Tag = "output1"
-        try manager.addOutput(
-            name: "MIDIKit IO Tests thruConnection Out",
+        let output1Tag = UUID().uuidString
+        try receiver.manager.addOutput(
+            name: UUID().uuidString,
             tag: output1Tag,
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
-        let output1 = try #require(manager.managedOutputs[output1Tag])
+        let output1 = try #require(receiver.manager.managedOutputs[output1Tag])
         // let output1ID = try #require(output1.uniqueID)
         // let output1Ref = try #require(output1.coreMIDIOutputPortRef)
         
@@ -369,8 +351,8 @@ extension MIDIThruConnection_Tests {
         var thruProxy: MIDIThruConnectionProxy? = try MIDIThruConnectionProxy(
             outputs: [output1.endpoint],
             inputs: [input1.endpoint],
-            midiManager: manager,
-            api: manager.preferredAPI
+            midiManager: receiver.manager,
+            api: receiver.manager.preferredAPI
         )
         _ = thruProxy // silence warning
         
@@ -378,8 +360,8 @@ extension MIDIThruConnection_Tests {
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
-        try await wait(require: { await connEvents == [.start()] }, timeout: 2.0)
-        connEvents = []
+        try await wait(require: { await receiver.events == [.start()] }, timeout: 2.0)
+        await receiver.reset()
         
         thruProxy = nil
         
@@ -388,12 +370,12 @@ extension MIDIThruConnection_Tests {
         // send an event - it should not be received by the input
         try output1.send(event: .start())
         try await Task.sleep(seconds: isStable ? 0.2 : 3.0) // wait a bit in case an event is sent
-        #expect(connEvents == [])
-        connEvents = []
+        #expect(await receiver.events == [])
+        await receiver.reset()
         
         // Due to a Swift Core MIDI bug, all thru connections are created as persistent.
         // - See ThruConnection.swift for details
-        let conns = try manager.unmanagedPersistentThruConnections(ownerID: "")
+        let conns = try receiver.manager.unmanagedPersistentThruConnections(ownerID: "")
         
         #expect(conns.isEmpty)
     }

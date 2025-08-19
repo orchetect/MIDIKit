@@ -936,7 +936,7 @@ import Testing
         }
     }
     
-    @MainActor
+    
     @Test
     func mtcEncoder_Handlers_FullFrameMessage() async throws {
         // ensure expected callbacks are happening when they should,
@@ -944,20 +944,22 @@ import Testing
         
         // testing vars
         
-        @MainActor final class Receiver {
+        final actor Receiver {
             var events: [MIDIEvent]?
+            func set(events: [MIDIEvent]?) { self.events = events }
         }
         let receiver = Receiver()
         
-        let mtcEnc = MTCEncoder { midiEvents in
-            Task { @MainActor in
-                receiver.events = midiEvents
+        let mtcEnc = MTCEncoder { [weak receiver] midiEvents in
+            // MTCEncoder does not use Task or internal dispatch queues
+            Task {
+                await receiver?.set(events: midiEvents)
             }
         }
         
         // default / initial state
         
-        #expect(receiver.events == nil)
+        #expect(await receiver.events == nil)
         
         // full-frame MTC messages
         
@@ -974,8 +976,7 @@ import Testing
         }, timeout: 1.0)
     }
     
-    @MainActor
-    @Test
+    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
     func mtcEncoder_Handlers_QFMessages() async throws {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
@@ -987,10 +988,10 @@ import Testing
         }
         let receiver = Receiver()
         
-        let mtcEnc = MTCEncoder { midiEvents in
+        let mtcEnc = MTCEncoder { [weak receiver] midiEvents in
             // MTCEncoder does not use Task or internal dispatch queues
             MainActor.assumeIsolated {
-                receiver.events = midiEvents
+                receiver?.events = midiEvents
             }
         }
         
@@ -1215,8 +1216,7 @@ import Testing
         )
     }
     
-    @Test
-    @MainActor
+    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
     func mtcEncoder_LocateBehavior() {
         var mtcEnc: MTCEncoder
         
@@ -1226,10 +1226,10 @@ import Testing
         let receiver = Receiver()
         
         func initNewEnc() -> MTCEncoder {
-            MTCEncoder { midiEvents in
+            MTCEncoder { [weak receiver] midiEvents in
                 // MTCEncoder does not use Task or internal dispatch queues
                 MainActor.assumeIsolated {
-                    receiver.events = midiEvents
+                    receiver?.events = midiEvents
                 }
             }
         }

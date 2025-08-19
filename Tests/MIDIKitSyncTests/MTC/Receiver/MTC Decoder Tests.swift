@@ -797,7 +797,7 @@ import TimecodeKitCore
         // swiftformat:enable wrapSingleLineComments
     }
     
-    @Test @MainActor
+    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
     func mtcDecoder_Handlers_FullFrameMessage() {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
@@ -855,7 +855,7 @@ import TimecodeKitCore
         #expect(receiver.mtcFR == .mtc25)
     }
     
-    @Test @MainActor
+    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
     func mtcDecoder_Handlers_QFMessages() {
         // swiftformat:disable wrapSingleLineComments
         

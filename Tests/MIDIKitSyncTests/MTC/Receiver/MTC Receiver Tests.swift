@@ -9,7 +9,7 @@ import Foundation
 import Testing
 import TimecodeKitCore
 
-@Suite @MainActor struct MTC_Receiver_Receiver_Tests {
+@Suite struct MTC_Receiver_Receiver_Tests {
     @Test
     func mtcReceiver_Default() async {
         let mtcRec = MTCReceiver(name: "test")
@@ -85,7 +85,7 @@ import TimecodeKitCore
         )
     }
     
-    @Test @MainActor
+    @Test
     func mtcReceiver_InternalState_FullFrameMessage() async throws {
         // test full frame MTC messages and check that properties get updated
         
@@ -130,7 +130,7 @@ import TimecodeKitCore
         )
     }
     
-    @Test @MainActor
+    @Test
     func mtcReceiver_InternalState_FullFrameMessage_IncompatibleFrameRate() async throws {
         // test state does not become .incompatibleFrameRate when localFrameRate is present
         // but not compatible with the MTC frame rate being received by the receiver
@@ -173,7 +173,6 @@ import TimecodeKitCore
     }
 }
 
-@MainActor
 extension MTC_Receiver_Receiver_Tests {
     func runMTC_Receiver_InternalState_QFMessages_Typical() async throws -> Bool {
         // swiftformat:disable wrap
@@ -266,7 +265,6 @@ extension MTC_Receiver_Receiver_Tests {
 
 extension MTC_Receiver_Receiver_Tests {
     @Test(.enabled(if: isSystemTimingStable()))
-    @MainActor
     func mtcReceiver_Handlers_FullFrameMessage() async throws {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
@@ -276,12 +274,21 @@ extension MTC_Receiver_Receiver_Tests {
         
         // testing vars
         
-        @MainActor final class Receiver {
+        final actor Receiver {
             var timecode: Timecode?
+            func set(timecode: Timecode?) { self.timecode = timecode }
+            
             var mType: MTCMessageType?
+            func set(mType: MTCMessageType?) { self.mType = mType }
+            
             var direction: MTCDirection?
+            func set(direction: MTCDirection?) { self.direction = direction }
+            
             var isFrameChanged: Bool?
+            func set(isFrameChanged: Bool?) { self.isFrameChanged = isFrameChanged }
+            
             var state: MTCReceiver.State?
+            func set(state: MTCReceiver.State?) { self.state = state }
         }
         let receiver = Receiver()
         
@@ -290,25 +297,25 @@ extension MTC_Receiver_Receiver_Tests {
             name: "test",
             initialLocalFrameRate: .fps24
         ) { timecode, messageType, direction, isFrameChanged in
-            Task { @MainActor in
-                receiver.timecode = timecode
-                receiver.mType = messageType
-                receiver.direction = direction
-                receiver.isFrameChanged = isFrameChanged
+            Task {
+                await receiver.set(timecode: timecode)
+                await receiver.set(mType: messageType)
+                await receiver.set(direction: direction)
+                await receiver.set(isFrameChanged: isFrameChanged)
             }
         } stateChanged: { state in
-            Task { @MainActor in
-                receiver.state = state
+            Task {
+                await receiver.set(state: state)
             }
         }
         
         // default / initial state
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mType == nil)
-        #expect(receiver.direction == nil)
-        #expect(receiver.isFrameChanged == nil)
-        #expect(receiver.state == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mType == nil)
+        #expect(await receiver.direction == nil)
+        #expect(await receiver.isFrameChanged == nil)
+        #expect(await receiver.state == nil)
         
         // full-frame MTC message
         
@@ -316,18 +323,17 @@ extension MTC_Receiver_Receiver_Tests {
         
         try await Task.sleep(seconds: 0.050)
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid))
-        #expect(receiver.mType == .fullFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.timecode?.frameRate == .fps24)
-        #expect(receiver.direction == .forwards)
-        #expect(receiver.state == nil)
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 2, s: 3, f: 4), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.mType == .fullFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.timecode?.frameRate == .fps24)
+        #expect(await receiver.direction == .forwards)
+        #expect(await receiver.state == nil)
     }
     
     // skip this test on other platforms; flaky and we don't need to run it
     #if os(macOS)
     @Test(.enabled(if: isSystemTimingStable()))
-    @MainActor
     func mtcReceiver_Handlers_QFMessages() async throws {
         // swiftformat:disable wrap
         // swiftformat:disable wrapSingleLineComments
@@ -339,12 +345,21 @@ extension MTC_Receiver_Receiver_Tests {
         
         // testing vars
         
-        @MainActor final class Receiver {
+        final actor Receiver {
             var timecode: Timecode?
+            func set(timecode: Timecode?) { self.timecode = timecode }
+            
             var mType: MTCMessageType?
+            func set(mType: MTCMessageType?) { self.mType = mType }
+            
             var direction: MTCDirection?
+            func set(direction: MTCDirection?) { self.direction = direction }
+            
             var isFrameChanged: Bool?
+            func set(isFrameChanged: Bool?) { self.isFrameChanged = isFrameChanged }
+            
             var state: MTCReceiver.State?
+            func set(state: MTCReceiver.State?) { self.state = state }
         }
         let receiver = Receiver()
         
@@ -353,207 +368,207 @@ extension MTC_Receiver_Receiver_Tests {
             name: "test",
             initialLocalFrameRate: .fps24
         ) { timecode, messageType, direction, isFrameChanged in
-            Task { @MainActor in
-                receiver.timecode = timecode
-                receiver.mType = messageType
-                receiver.direction = direction
-                receiver.isFrameChanged = isFrameChanged
+            Task {
+                await receiver.set(timecode: timecode)
+                await receiver.set(mType: messageType)
+                await receiver.set(direction: direction)
+                await receiver.set(isFrameChanged: isFrameChanged)
             }
         } stateChanged: { state in
-            Task { @MainActor in
-                receiver.state = state
+            Task {
+                await receiver.set(state: state)
             }
         }
         
         // default / initial state
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mType == nil)
-        #expect(receiver.direction == nil)
-        #expect(receiver.isFrameChanged == nil)
-        #expect(receiver.state == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mType == nil)
+        #expect(await receiver.direction == nil)
+        #expect(await receiver.isFrameChanged == nil)
+        #expect(await receiver.state == nil)
         
         // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000110)) // QF 0
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.direction == nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.direction == nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.direction == nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.direction == nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.direction == nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.direction == nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.direction == nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.direction == nil)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001000)) // QF 0
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.timecode?.frameRate == .fps24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.timecode?.frameRate == .fps24)
+        #expect(await receiver.direction == .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 25), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.timecode?.frameRate == .fps24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.timecode?.frameRate == .fps24)
+        #expect(await receiver.direction == .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 50), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.timecode?.frameRate == .fps24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.timecode?.frameRate == .fps24)
+        #expect(await receiver.direction == .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 75), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.timecode?.frameRate == .fps24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.timecode?.frameRate == .fps24)
+        #expect(await receiver.direction == .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.timecode?.frameRate == .fps24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.timecode?.frameRate == .fps24)
+        #expect(await receiver.direction == .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 25), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.timecode?.frameRate == .fps24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.timecode?.frameRate == .fps24)
+        #expect(await receiver.direction == .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 50), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.timecode?.frameRate == .fps24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.timecode?.frameRate == .fps24)
+        #expect(await receiver.direction == .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 75), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.timecode?.frameRate == .fps24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.timecode?.frameRate == .fps24)
+        #expect(await receiver.direction == .forwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010)) // QF 0
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 10, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.timecode?.frameRate == .fps24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.timecode?.frameRate == .fps24)
+        #expect(await receiver.direction == .forwards)
         
         // reverse
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.direction == .backwards)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010)) // QF 0
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.direction == .forwards)
         
         // non-sequential (jumps)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.direction == .ambiguous)
+        #expect(await receiver.direction == .ambiguous)
         
         mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         try await Task.sleep(seconds: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
-        #expect(receiver.direction == .ambiguous)
+        #expect(await receiver.direction == .ambiguous)
         
         // swiftformat:enable wrap
         // swiftformat:enable wrapSingleLineComments

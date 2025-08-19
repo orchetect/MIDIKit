@@ -10,7 +10,7 @@ import Testing
 import TimecodeKitCore
 
 @Suite struct MTC_Generator_Generator_Tests {
-    private final class Sandbox: Sendable {
+    private final actor Sandbox {
         func foo() {
             let mtcGen = MTCGenerator()
             mtcGen.setMIDIOutHandler { [weak self] midiMessage in
@@ -38,6 +38,6 @@ import TimecodeKitCore
         // just testing variations on syntax
         
         let sandbox = Sandbox()
-        sandbox.foo()
+        await sandbox.foo()
     }
 }

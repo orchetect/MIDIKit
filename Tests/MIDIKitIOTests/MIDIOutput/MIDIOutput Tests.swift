@@ -12,30 +12,36 @@ import CoreMIDI
 @testable import MIDIKitIO
 import Testing
 
-@Suite(.serialized) @MainActor struct MIDIOutput_Tests {
-    @Test
-    func output() async throws {
+@Suite(.serialized) struct MIDIOutput_Tests {
+    private final actor ManagerWrapper {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
+    }
+    
+    @Test
+    func output() async throws {
+        let isStable = isSystemTimingStable()
+        
+        let mw = ManagerWrapper()
         
         // start midi client
-        try manager.start()
-        try await Task.sleep(seconds: 0.100)
+        try mw.manager.start()
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         // add new endpoint
         
-        let tag1 = "1"
+        let tag1 = UUID().uuidString
         
-        try manager.addOutput(
-            name: "MIDIKit IO Tests Source 1",
+        try mw.manager.addOutput(
+            name: UUID().uuidString,
             tag: tag1,
             uniqueID: .adHoc // allow system to generate random ID each time, no persistence
         )
         
-        let output = try #require(manager.managedOutputs[tag1])
+        let output = try #require(mw.manager.managedOutputs[tag1])
         let id1 = try #require(output.uniqueID)
         
         // send a midi message
@@ -49,52 +55,50 @@ import Testing
         
         // unique ID collision
         
-        let tag2 = "2"
+        let tag2 = UUID().uuidString
         
-        try manager.addOutput(
-            name: "MIDIKit IO Tests Source 2",
+        try mw.manager.addOutput(
+            name: UUID().uuidString,
             tag: tag2,
             uniqueID: .unmanaged(id1) // try to use existing ID
         )
         
-        let id2 = try #require(manager.managedOutputs[tag2]?.uniqueID)
+        let id2 = try #require(mw.manager.managedOutputs[tag2]?.uniqueID)
         
         // ensure ids are different
         #expect(id1 != id2)
         
         // remove endpoints
         
-        manager.remove(.output, .withTag(tag1))
-        #expect(manager.managedOutputs[tag1] == nil)
+        mw.manager.remove(.output, .withTag(tag1))
+        #expect(mw.manager.managedOutputs[tag1] == nil)
         
-        manager.remove(.output, .withTag(tag2))
-        #expect(manager.managedOutputs[tag2] == nil)
+        mw.manager.remove(.output, .withTag(tag2))
+        #expect(mw.manager.managedOutputs[tag2] == nil)
     }
     
     @Test
     func setProperties() async throws {
-        let manager = MIDIManager(
-            clientName: UUID().uuidString,
-            model: "MIDIKit123",
-            manufacturer: "MIDIKit"
-        )
+        let isStable = isSystemTimingStable()
+        
+        let mw = ManagerWrapper()
         
         // start midi client
-        try manager.start()
-        try await Task.sleep(seconds: 0.100)
+        try mw.manager.start()
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         // add new endpoint
         
-        let tag1 = "1"
-        let initialName = "MIDIKit IO Properties Tests 1"
+        let tag1 = UUID().uuidString
+        let initialName = UUID().uuidString
         
-        try manager.addOutput(
+        try mw.manager.addOutput(
             name: initialName,
             tag: tag1,
             uniqueID: .adHoc // allow system to generate random ID each time, no persistence
         )
         
-        let managedOutput = try #require(manager.managedOutputs[tag1])
+        let managedOutput = try #require(mw.manager.managedOutputs[tag1])
         let id1 = try #require(managedOutput.uniqueID); _ = id1
         let ref1 = try #require(managedOutput.coreMIDIOutputPortRef)
         
@@ -105,9 +109,8 @@ import Testing
         
         // set `name` - Core MIDI will also update `displayName` at the same time
         
-        let newName = "New Name"
+        let newName = UUID().uuidString
         managedOutput.name = newName
-        try await Task.sleep(seconds: 0.200)
         
         #expect(managedOutput.name == newName)
         #expect(try getString(forProperty: kMIDIPropertyName, of: ref1) == newName)

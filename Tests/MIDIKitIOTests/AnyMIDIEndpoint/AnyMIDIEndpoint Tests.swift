@@ -13,24 +13,30 @@ import Foundation
 import Testing
 
 @Suite(.serialized) struct AnyMIDIEndpoint_Tests {
-    @Test(.enabled(if: isSystemTimingStable()))
-    func anyMIDIEndpoint() async throws {
+    private final actor ManagerWrapper {
         let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
+    }
+    
+    @Test
+    func anyMIDIEndpoint() async throws {
+        let isStable = isSystemTimingStable()
+        
+        let mw = ManagerWrapper()
         
         // start midi client
-        try manager.start()
-        try await Task.sleep(seconds: 0.200)
+        try mw.manager.start()
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
         
         // to properly test this, we need to actually
         // create a couple MIDI endpoints in the system first
         
         let kInputTag = "testInput-\(UUID().uuidString)"
         let kInputName = "MIDIKit Test Input \(kInputTag)"
-        try manager.addInput(
+        try mw.manager.addInput(
             name: kInputName,
             tag: kInputTag,
             uniqueID: .adHoc,
@@ -39,20 +45,18 @@ import Testing
         
         let kOutputTag = "testOutput-\(UUID().uuidString)"
         let kOutputName = "MIDIKit Test Output \(kInputTag)"
-        try manager.addOutput(
+        try mw.manager.addOutput(
             name: kOutputName,
             tag: kOutputTag,
             uniqueID: .adHoc
         )
         
-        // have to give Core MIDI a bit of time to create the ports (async)
-        try await Task.sleep(seconds: 1.0)
-        
         // input
         
-        guard let inputUniqueID = manager.managedInputs[kInputTag]?.uniqueID,
-              let inputEndpoint = manager.endpoints.inputs.first(whereUniqueID: inputUniqueID)
-        else { Issue.record(); return }
+        let inputUniqueID = try #require(mw.manager.managedInputs[kInputTag]?.uniqueID)
+        #expect(inputUniqueID != .invalidMIDIIdentifier)
+        await wait(expect: { mw.manager.endpoints.inputs.contains(whereUniqueID: inputUniqueID) }, timeout: isStable ? 2.0 : 10.0)
+        let inputEndpoint = try #require(mw.manager.endpoints.inputs.first(whereUniqueID: inputUniqueID))
         
         let anyInput = AnyMIDIEndpoint(inputEndpoint)
         _ = inputEndpoint.asAnyEndpoint // also works
@@ -62,10 +66,10 @@ import Testing
         
         // output
         
-        guard let outputUniqueID = manager.managedOutputs[kOutputTag]?.uniqueID,
-              let outputEndpoint = manager.endpoints.outputs
-                  .first(whereUniqueID: outputUniqueID)
-        else { Issue.record(); return }
+        let outputUniqueID = try #require(mw.manager.managedOutputs[kOutputTag]?.uniqueID)
+        #expect(outputUniqueID != .invalidMIDIIdentifier)
+        await wait(expect: { mw.manager.endpoints.outputs.contains(whereUniqueID: outputUniqueID) }, timeout: isStable ? 2.0 : 10.0)
+        let outputEndpoint = try #require(mw.manager.endpoints.outputs.first(whereUniqueID: outputUniqueID))
         
         let anyOutput = AnyMIDIEndpoint(outputEndpoint)
         _ = outputEndpoint.asAnyEndpoint // also works
