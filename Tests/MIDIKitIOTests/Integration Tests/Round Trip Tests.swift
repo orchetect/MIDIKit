@@ -265,11 +265,18 @@ import Testing
         
         await receiver.prep(forMessageCount: sourceEvents.count)
         
-        // send several events at once to test packing
-        // multiple packets into a single MIDIPacketList / MIDIEventList
+        print("Using \(sourceEvents.count) source MIDI events. Sending...")
+        
+        // Send several events at once to test packing
+        // multiple packets into a single MIDIPacketList / MIDIEventList.
+        // Core MIDI will start dropping events if too many are sent too quickly, as a failsafe against things like feedback loops,
+        // so we want to throttle the send frequency.
         for eventGroup in sourceEvents.split(every: 2) {
             try output.send(events: Array(eventGroup))
+            try await Task.sleep(seconds: isStable ? 0.002 : 0.005)
         }
+        
+        print("Done sending.")
         
         try await Task.sleep(seconds: 1.0)
         
