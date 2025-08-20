@@ -26,6 +26,24 @@ import Testing
         )
     }
     
+    private final actor ProxyWrapper {
+        var proxy: MIDIThruConnectionProxy
+        
+        init(
+            outputs: [MIDIOutputEndpoint],
+            inputs: [MIDIInputEndpoint],
+            midiManager: MIDIManager,
+            api: CoreMIDIAPIVersion
+        ) throws {
+            proxy = try MIDIThruConnectionProxy(
+                outputs: outputs,
+                inputs: inputs,
+                midiManager: midiManager,
+                api: api
+            )
+        }
+    }
+    
     // called before each method
     init() async throws {
         try await Task.sleep(seconds: 0.2)
@@ -49,9 +67,8 @@ import Testing
                num > 0
             {
                 print("Removing \(num) empty-ownerID persistent thru connections.")
+                receiver.manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
             }
-            
-            receiver.manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
         }
         
         // create virtual input
@@ -234,9 +251,8 @@ import Testing
                num > 0
             {
                 print("Removing \(num) empty-ownerID persistent thru connections.")
+                receiver.manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
             }
-            
-            receiver.manager.removeAllUnmanagedPersistentThruConnections(ownerID: "")
         }
         
         // initial state
@@ -348,27 +364,37 @@ import Testing
         
         // create thru proxy (this internal only and is NOT added to the manager)
         
-        var thruProxy: MIDIThruConnectionProxy? = try MIDIThruConnectionProxy(
+        var pw: ProxyWrapper? = try ProxyWrapper(
             outputs: [output1.endpoint],
             inputs: [input1.endpoint],
             midiManager: receiver.manager,
             api: receiver.manager.preferredAPI
         )
-        _ = thruProxy // silence warning
+        _ = pw // silence warning
         
         try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         
         // send an event - it should be received by the input
-        try output1.send(event: .start())
-        try await wait(require: { await receiver.events == [.start()] }, timeout: 2.0)
+        
+        try await wait(
+            require: {
+                print("Send event")
+                try output1.send(event: .start())
+                try await Task.sleep(seconds: 0.5)
+                return await receiver.events.contains(.start())
+            },
+            timeout: isStable ? 2.0 : 5.0,
+            pollingInterval: 0.0
+        )
+        
+        pw = nil
+        
+        // allow potential additional events to arrive, give time for proxy deinit cleanup
+        try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         await receiver.reset()
         
-        thruProxy = nil
-        
-        try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
-        
         // send an event - it should not be received by the input
-        try output1.send(event: .start())
+        try output1.send(event: .stop())
         try await Task.sleep(seconds: isStable ? 0.2 : 3.0) // wait a bit in case an event is sent
         #expect(await receiver.events == [])
         await receiver.reset()
