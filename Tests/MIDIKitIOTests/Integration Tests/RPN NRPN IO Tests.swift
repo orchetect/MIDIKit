@@ -21,8 +21,8 @@ import Testing
         func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
         func reset() { events.removeAll() }
         
-        private var managerLegacyAPI: MIDIManager!
-        private var managerNewAPI: MIDIManager!
+        nonisolated(unsafe) private var managerLegacyAPI: MIDIManager!
+        nonisolated(unsafe) private var managerNewAPI: MIDIManager!
         
         nonisolated init() { }
         
@@ -122,6 +122,20 @@ import Testing
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
+        // prepare - send a test event until one is received.
+        // once received, Core MIDI is ready to continue the test.
+        try await wait(
+            require: {
+                print("Sending test event")
+                try output.send(event: .start())
+                try await Task.sleep(seconds: 0.5)
+                return await receiver.events.contains(.start())
+            },
+            timeout: 10.0,
+            pollingInterval: 0.1
+        )
+        await receiver.reset() // remove test event
+        
         print("Sending test event")
         
         // single packet containing RPN
@@ -160,6 +174,20 @@ import Testing
         try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
+        
+        // prepare - send a test event until one is received.
+        // once received, Core MIDI is ready to continue the test.
+        try await wait(
+            require: {
+                print("Sending test event")
+                try output.send(event: .start())
+                try await Task.sleep(seconds: 0.5)
+                return await receiver.events.contains(.start())
+            },
+            timeout: 10.0,
+            pollingInterval: 0.1
+        )
+        await receiver.reset() // remove test event
         
         print("Sending test event")
         
@@ -281,6 +309,20 @@ import Testing
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
+        // prepare - send a test event until one is received.
+        // once received, Core MIDI is ready to continue the test.
+        try await wait(
+            require: {
+                print("Sending test event")
+                try output.send(event: .start())
+                try await Task.sleep(seconds: 0.5)
+                return await receiver.events.contains(.start())
+            },
+            timeout: 10.0,
+            pollingInterval: 0.1
+        )
+        await receiver.reset() // remove test event
+        
         print("Sending test events")
         
         // multiple packets adding up to an RPN
@@ -369,6 +411,20 @@ extension RPN_NRPN_IO_Tests {
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
         
+        // prepare - send a test event until one is received.
+        // once received, Core MIDI is ready to continue the test.
+        try await wait(
+            require: {
+                print("Sending test event")
+                try output.send(event: .start())
+                try await Task.sleep(seconds: 0.5)
+                return await receiver.events.contains(.start())
+            },
+            timeout: 10.0,
+            pollingInterval: 0.1
+        )
+        await receiver.reset() // remove test event
+        
         print("Sending test event")
         
         // single packet containing NRPN
@@ -408,6 +464,20 @@ extension RPN_NRPN_IO_Tests {
         try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
+        
+        // prepare - send a test event until one is received.
+        // once received, Core MIDI is ready to continue the test.
+        try await wait(
+            require: {
+                print("Sending test event")
+                try output.send(event: .start())
+                try await Task.sleep(seconds: 0.5)
+                return await receiver.events.contains(.start())
+            },
+            timeout: 10.0,
+            pollingInterval: 0.1
+        )
+        await receiver.reset() // remove test event
         
         print("Sending test event")
         
@@ -456,6 +526,20 @@ extension RPN_NRPN_IO_Tests {
         try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
+        
+        // prepare - send a test event until one is received.
+        // once received, Core MIDI is ready to continue the test.
+        try await wait(
+            require: {
+                print("Sending test event")
+                try output.send(event: .start())
+                try await Task.sleep(seconds: 0.5)
+                return await receiver.events.contains(.start())
+            },
+            timeout: 10.0,
+            pollingInterval: 0.1
+        )
+        await receiver.reset() // remove test event
         
         print("Sending test events")
         
@@ -528,6 +612,20 @@ extension RPN_NRPN_IO_Tests {
         try await receiver.createInputConnectionNew(to: output.endpoint)
         
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
+        
+        // prepare - send a test event until one is received.
+        // once received, Core MIDI is ready to continue the test.
+        try await wait(
+            require: {
+                print("Sending test event")
+                try output.send(event: .start())
+                try await Task.sleep(seconds: 0.5)
+                return await receiver.events.contains(.start())
+            },
+            timeout: 10.0,
+            pollingInterval: 0.1
+        )
+        await receiver.reset() // remove test event
         
         print("Sending test events")
         

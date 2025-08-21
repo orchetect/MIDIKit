@@ -385,8 +385,8 @@ import Testing
                 try await Task.sleep(seconds: 0.5)
                 return await receiver.events.contains(.start())
             },
-            timeout: 5.0,
-            pollingInterval: 0.0
+            timeout: 10.0,
+            pollingInterval: 0.1
         )
         
         pw = nil

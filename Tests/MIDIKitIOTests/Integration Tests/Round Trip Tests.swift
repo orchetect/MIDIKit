@@ -28,7 +28,7 @@ import Testing
         func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
         func reset() { events.removeAll() }
         
-        let manager = MIDIManager(
+        nonisolated let manager = MIDIManager(
             clientName: UUID().uuidString,
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
@@ -64,7 +64,21 @@ import Testing
                 }
             )
             
+            // prepare - send a test event until one is received.
+            // once received, Core MIDI is ready to continue the test.
+            try await wait(
+                require: {
+                    print("Sending test event")
+                    try output.send(event: .start())
+                    try await Task.sleep(seconds: 0.5)
+                    return await events.contains(.start())
+                },
+                timeout: 10.0,
+                pollingInterval: 0.1
+            )
+            
             try await Task.sleep(seconds: 0.5)
+            reset() // remove test event
             
             print("RoundTrip_Tests createPorts() done")
         }
@@ -97,20 +111,6 @@ import Testing
         try await Task.sleep(seconds: isStable ? 0.5 : 5.0)
         
         let output = try #require(receiver.manager.managedOutputs[Self.outputTag])
-        
-        // prepare - send a test event until one is received.
-        // once received, Core MIDI is ready to continue the test.
-        try await wait(
-            require: {
-                print("Sending test event")
-                try output.send(event: .start())
-                try await Task.sleep(seconds: 0.5)
-                return await receiver.events.contains(.start())
-            },
-            timeout: 10.0,
-            pollingInterval: 0.1
-        )
-        await receiver.reset() // remove test event
         
         // generate events list
         
