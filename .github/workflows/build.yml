@@ -102,9 +102,11 @@ jobs:
         SIMDEVICE="iPhone\s\d{2}\s"
         REGEX="m/\{\splatform:(.*\sSimulator),.*OS:(\d{1,2}\.\d),.*name:([a-zA-Z0-9\(\)\s]*)\s\}/g"
         SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print "- ${name} (${plat}) (${os})"; } }')
+        if [[ -z $SIMPATFORMLIST ]]; then echo "Error: no matching simulators available."; exit 1; fi
         echo "Available $SIMPLATFORM simulators:"
         echo "$SIMPATFORMLIST"
         DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print $name; } }' | sort -rV | head -n 1)
+        if [[ -z $DESTNAME ]]; then echo "Error: no matching simulators available."; exit 1; fi
         echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
@@ -128,9 +130,11 @@ jobs:
         SIMDEVICE="Apple\sTV"
         REGEX="m/\{\splatform:(.*\sSimulator),.*OS:(\d{1,2}\.\d),.*name:([a-zA-Z0-9\(\)\s]*)\s\}/g"
         SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print "- ${name} (${plat}) (${os})"; } }')
+        if [[ -z $SIMPATFORMLIST ]]; then echo "Error: no matching simulators available."; exit 1; fi
         echo "Available $SIMPLATFORM simulators:"
         echo "$SIMPATFORMLIST"
         DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print $name; } }' | sort -rV | head -n 1)
+        if [[ -z $DESTNAME ]]; then echo "Error: no matching simulators available."; exit 1; fi
         echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
@@ -154,9 +158,11 @@ jobs:
         SIMDEVICE="Apple\sWatch\sSeries"
         REGEX="m/\{\splatform:(.*\sSimulator),.*OS:(\d{1,2}\.\d),.*name:([a-zA-Z0-9\(\)\s]*)\s\}/g"
         SIMPATFORMLIST=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print "- ${name} (${plat}) (${os})"; } }')
+        if [[ -z $SIMPATFORMLIST ]]; then echo "Error: no matching simulators available."; exit 1; fi
         echo "Available $SIMPLATFORM simulators:"
         echo "$SIMPATFORMLIST"
         DESTNAME=$(cat destinations.txt | perl -nle 'if ('$REGEX') { ($plat, $os, $name) = ($1, $2, $3); if ($plat =~ /'$SIMPLATFORM'/ and $name =~ /'$SIMDEVICE'/) { print $name; } }' | sort -rV | head -n 1)
+        if [[ -z $DESTNAME ]]; then echo "Error: no matching simulators available."; exit 1; fi
         echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
