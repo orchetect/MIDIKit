@@ -33,24 +33,24 @@ jobs:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: BluetoothMIDI - Build
-      run: xcodebuild build -project "Examples/UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/UIKit/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: EventParsing - Build
-      run: xcodebuild build -project "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/UIKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: VirtualInput - Build
-      run: xcodebuild build -project "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/UIKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/UIKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/UIKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: VirtualOutput - Build
-      run: xcodebuild build -project "Examples/UIKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/UIKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
   SwiftUI-iOS:
     name: SwiftUI iOS
@@ -62,14 +62,14 @@ jobs:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     
     - name: BluetoothMIDI - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: BluetoothMIDI - Build
-      run: xcodebuild build -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI iOS/BluetoothMIDI/BluetoothMIDI.xcodeproj" -scheme "BluetoothMIDI" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
     - name: USB iOS to Mac - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: USB iOS to Mac - Build
-      run: xcodebuild build -project "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -scheme "USB iOS to Mac" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI iOS/USB iOS to Mac/USB iOS to Mac.xcodeproj" -scheme "USB iOS to Mac" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
   SwiftUI-Multiplatform:
     name: SwiftUI Multiplatform
@@ -81,53 +81,53 @@ jobs:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
 
     - name: EndpointPickers - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: EndpointPickers - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: EndpointPickers - Build (macOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EndpointPickers/EndpointPickers.xcodeproj" -scheme "EndpointPickers" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: EventParsing - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: EventParsing - Build (macOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
       
     - name: MIDIKitUIExample - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: MIDIKitUIExample - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -scheme "MIDIKitUIExample" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -scheme "MIDIKitUIExample" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: MIDIKitUIExample - Build (macOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -scheme "MIDIKitUIExample" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDIKitUIExample/MIDIKitUIExample.xcodeproj" -scheme "MIDIKitUIExample" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
       
     - name: MIDISystemInfo - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/SwiftUI Multiplatform/MIDISystemInfo/MIDISystemInfo.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/MIDISystemInfo/MIDISystemInfo.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: MIDISystemInfo - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDISystemInfo/MIDISystemInfo.xcodeproj" -scheme "MIDISystemInfo iOS" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDISystemInfo/MIDISystemInfo.xcodeproj" -scheme "MIDISystemInfo iOS" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: MIDISystemInfo - Build (macOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDISystemInfo/MIDISystemInfo.xcodeproj" -scheme "MIDISystemInfo macOS" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/MIDISystemInfo/MIDISystemInfo.xcodeproj" -scheme "MIDISystemInfo macOS" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     
     - name: SystemNotifications - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: SystemNotifications - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: SystemNotifications - Build (macOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/SystemNotifications/SystemNotifications.xcodeproj" -scheme "SystemNotifications" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: VirtualInput - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: VirtualInput - Build (macOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: VirtualOutput - Build (iOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=iOS Simulator,name=Any iOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: VirtualOutput - Build (macOS)
-      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/SwiftUI Multiplatform/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
   
   AppKit:
     name: AppKit
@@ -139,24 +139,24 @@ jobs:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
     
     - name: EndpointMenus - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/AppKit/EndpointMenus/EndpointMenus.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/AppKit/EndpointMenus/EndpointMenus.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: EndpointMenus - Build
-      run: xcodebuild build -project "Examples/AppKit/EndpointMenus/EndpointMenus.xcodeproj" -scheme "EndpointMenus" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/AppKit/EndpointMenus/EndpointMenus.xcodeproj" -scheme "EndpointMenus" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
     - name: EventParsing - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/AppKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/AppKit/EventParsing/EventParsing.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: EventParsing - Build
-      run: xcodebuild build -project "Examples/AppKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/AppKit/EventParsing/EventParsing.xcodeproj" -scheme "EventParsing" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
     - name: VirtualInput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/AppKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/AppKit/VirtualInput/VirtualInput.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: VirtualInput - Build
-      run: xcodebuild build -project "Examples/AppKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/AppKit/VirtualInput/VirtualInput.xcodeproj" -scheme "VirtualInput" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
     - name: VirtualOutput - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/AppKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/AppKit/VirtualOutput/VirtualOutput.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: VirtualOutput - Build
-      run: xcodebuild build -project "Examples/AppKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/AppKit/VirtualOutput/VirtualOutput.xcodeproj" -scheme "VirtualOutput" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
   Advanced:
     name: Advanced
@@ -168,16 +168,16 @@ jobs:
         xcode-version: latest-stable
     
     - name: HUITest - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/Advanced/HUITest/HUITest.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/Advanced/HUITest/HUITest.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: HUITest - Build
-      run: xcodebuild build -project "Examples/Advanced/HUITest/HUITest.xcodeproj" -scheme "HUITest" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/Advanced/HUITest/HUITest.xcodeproj" -scheme "HUITest" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     
     - name: MIDIEventLogger - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: MIDIEventLogger - Build
-      run: xcodebuild build -project "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -scheme "MIDIEventLogger" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/Advanced/MIDIEventLogger/MIDIEventLogger.xcodeproj" -scheme "MIDIEventLogger" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
       
     - name: MTCExample - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
-      run: xcodebuild -project "Examples/Advanced/MTCExample/MTCExample.xcodeproj" -resolvePackageDependencies | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild -project "Examples/Advanced/MTCExample/MTCExample.xcodeproj" -resolvePackageDependencies | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: MTCExample - Build
-      run: xcodebuild build -project "Examples/Advanced/MTCExample/MTCExample.xcodeproj" -scheme "MTCExample" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify && exit ${PIPESTATUS[0]}
+      run: xcodebuild build -project "Examples/Advanced/MTCExample/MTCExample.xcodeproj" -scheme "MTCExample" -destination "generic/platform=macOS,name=Any Mac" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
