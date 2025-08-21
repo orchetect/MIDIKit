@@ -274,7 +274,7 @@ extension MTC_Receiver_Receiver_Tests {
         
         // testing vars
         
-        final actor Receiver {
+        @TestActor final class Receiver {
             var timecode: Timecode?
             func set(timecode: Timecode?) { self.timecode = timecode }
             
@@ -289,6 +289,8 @@ extension MTC_Receiver_Receiver_Tests {
             
             var state: MTCReceiver.State?
             func set(state: MTCReceiver.State?) { self.state = state }
+            
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
@@ -297,15 +299,15 @@ extension MTC_Receiver_Receiver_Tests {
             name: "test",
             initialLocalFrameRate: .fps24
         ) { timecode, messageType, direction, isFrameChanged in
-            Task {
-                await receiver.set(timecode: timecode)
-                await receiver.set(mType: messageType)
-                await receiver.set(direction: direction)
-                await receiver.set(isFrameChanged: isFrameChanged)
+            Task { @TestActor in
+                receiver.set(timecode: timecode)
+                receiver.set(mType: messageType)
+                receiver.set(direction: direction)
+                receiver.set(isFrameChanged: isFrameChanged)
             }
         } stateChanged: { state in
-            Task {
-                await receiver.set(state: state)
+            Task { @TestActor in
+                receiver.set(state: state)
             }
         }
         
@@ -341,11 +343,12 @@ extension MTC_Receiver_Receiver_Tests {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
         
-        // note: the only reason why this works reliably in a test case is because the MTCReceiver allows receiving quarter-frame messages as fast as possible. this may change in future or become more rigid depending on how the library evolves.
+        // note: the only reason why this works reliably in a test case is because the MTCReceiver allows receiving
+        // quarter-frame messages as fast as possible. this may change in future or become more rigid depending on how the library evolves.
         
         // testing vars
         
-        final actor Receiver {
+        @TestActor final class Receiver {
             var timecode: Timecode?
             func set(timecode: Timecode?) { self.timecode = timecode }
             
@@ -360,6 +363,8 @@ extension MTC_Receiver_Receiver_Tests {
             
             var state: MTCReceiver.State?
             func set(state: MTCReceiver.State?) { self.state = state }
+            
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
@@ -368,15 +373,15 @@ extension MTC_Receiver_Receiver_Tests {
             name: "test",
             initialLocalFrameRate: .fps24
         ) { timecode, messageType, direction, isFrameChanged in
-            Task {
-                await receiver.set(timecode: timecode)
-                await receiver.set(mType: messageType)
-                await receiver.set(direction: direction)
-                await receiver.set(isFrameChanged: isFrameChanged)
+            Task { @TestActor in
+                receiver.set(timecode: timecode)
+                receiver.set(mType: messageType)
+                receiver.set(direction: direction)
+                receiver.set(isFrameChanged: isFrameChanged)
             }
         } stateChanged: { state in
-            Task {
-                await receiver.set(state: state)
+            Task { @TestActor in
+                receiver.set(state: state)
             }
         }
         

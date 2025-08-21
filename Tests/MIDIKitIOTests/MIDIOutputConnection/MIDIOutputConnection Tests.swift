@@ -22,10 +22,11 @@ import Testing
         )
     }
     
-    private final actor Receiver {
+    @TestActor private final class Receiver {
         var events: [MIDIEvent] = []
         func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
         func reset() { events.removeAll() }
+        nonisolated init() { }
     }
     
     // called before each method
@@ -53,8 +54,8 @@ import Testing
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver1] events, _, _ in
-                Task {
-                    await receiver1?.add(events: events)
+                Task { @TestActor in
+                    receiver1?.add(events: events)
                 }
             }
         )
@@ -72,14 +73,14 @@ import Testing
         
         let conn = try #require(mw.manager.managedOutputConnections[connTag])
         
-        try await wait(require: { conn.inputsCriteria == [.uniqueID(input1ID)] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.coreMIDIOutputPortRef != nil }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.coreMIDIInputEndpointRefs == [input1Ref] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.endpoints == [input1.endpoint] }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { conn.inputsCriteria == [.uniqueID(input1ID)] }, timeout: 10.0)
+        try await wait(require: { conn.coreMIDIOutputPortRef != nil }, timeout: 10.0)
+        try await wait(require: { conn.coreMIDIInputEndpointRefs == [input1Ref] }, timeout: 10.0)
+        try await wait(require: { conn.endpoints == [input1.endpoint] }, timeout: 10.0)
         
         // attempt to send a midi message
         try conn.send(event: .start())
-        try await wait(require: { await receiver1.events == [.start()] }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { await receiver1.events == [.start()] }, timeout: 10.0)
         await #expect(receiver2.events == [])
         await receiver1.reset()
         await receiver2.reset()
@@ -91,8 +92,8 @@ import Testing
             tag: input2Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver2] events, _, _ in
-                Task {
-                    await receiver2?.add(events: events)
+                Task { @TestActor in
+                    receiver2?.add(events: events)
                 }
             }
         )
@@ -102,29 +103,29 @@ import Testing
         
         // add 2nd input to the connection
         conn.add(inputs: [.uniqueID(input2ID)])
-        try await wait(require: { conn.inputsCriteria == [.uniqueID(input1ID), .uniqueID(input2ID)] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.coreMIDIInputEndpointRefs == [input1Ref, input2Ref] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { Set(conn.endpoints) == [input1.endpoint, input2.endpoint] }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { conn.inputsCriteria == [.uniqueID(input1ID), .uniqueID(input2ID)] }, timeout: 10.0)
+        try await wait(require: { conn.coreMIDIInputEndpointRefs == [input1Ref, input2Ref] }, timeout: 10.0)
+        try await wait(require: { Set(conn.endpoints) == [input1.endpoint, input2.endpoint] }, timeout: 10.0)
         
         // attempt to send a midi message
         try conn.send(event: .stop())
         
-        try await wait(require: { await receiver1.events == [.stop()] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { await receiver2.events == [.stop()] }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { await receiver1.events == [.stop()] }, timeout: 10.0)
+        try await wait(require: { await receiver2.events == [.stop()] }, timeout: 10.0)
         await receiver1.reset()
         await receiver2.reset()
         
         // remove 1st input from connection
         conn.remove(inputs: [.uniqueID(input1ID)])
         
-        try await wait(require: { conn.inputsCriteria == [.uniqueID(input2ID)] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.coreMIDIInputEndpointRefs == [input2Ref] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.endpoints == [input2.endpoint] }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { conn.inputsCriteria == [.uniqueID(input2ID)] }, timeout: 10.0)
+        try await wait(require: { conn.coreMIDIInputEndpointRefs == [input2Ref] }, timeout: 10.0)
+        try await wait(require: { conn.endpoints == [input2.endpoint] }, timeout: 10.0)
         
         // attempt to send a midi message
         try conn.send(event: .continue())
         try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
-        try await wait(require: { await receiver2.events == [.continue()] }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { await receiver2.events == [.continue()] }, timeout: 10.0)
         await #expect(receiver1.events == [])
         await receiver1.reset()
         await receiver2.reset()
@@ -132,9 +133,9 @@ import Testing
         // remove 2nd input from connection
         conn.remove(inputs: [.uniqueID(input2ID)])
         try await Task.sleep(seconds: isStable ? 0.3 : 2.0)
-        try await wait(require: { conn.inputsCriteria == [] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.coreMIDIInputEndpointRefs == [] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.endpoints == [] }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { conn.inputsCriteria == [] }, timeout: 10.0)
+        try await wait(require: { conn.coreMIDIInputEndpointRefs == [] }, timeout: 10.0)
+        try await wait(require: { conn.endpoints == [] }, timeout: 10.0)
         
         // attempt to send a midi message
         try conn.send(event: .songSelect(number: 2))
@@ -182,8 +183,8 @@ import Testing
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver1] events, _, _ in
-                Task {
-                    await receiver1?.add(events: events)
+                Task { @TestActor in
+                    receiver1?.add(events: events)
                 }
             }
         )
@@ -192,13 +193,13 @@ import Testing
         let input1Ref = try #require(input1.coreMIDIInputPortRef)
         
         // assert that input1 was automatically added to the connection
-        try await wait(require: { conn.inputsCriteria == [.uniqueID(input1ID)] }, timeout: isStable ? 1.0 : 2.0)
-        try await wait(require: { conn.coreMIDIInputEndpointRefs == [input1Ref] }, timeout: isStable ? 1.0 : 2.0)
-        try await wait(require: { conn.endpoints == [input1.endpoint] }, timeout: isStable ? 1.0 : 2.0)
+        try await wait(require: { conn.inputsCriteria == [.uniqueID(input1ID)] }, timeout: 2.0)
+        try await wait(require: { conn.coreMIDIInputEndpointRefs == [input1Ref] }, timeout: 2.0)
+        try await wait(require: { conn.endpoints == [input1.endpoint] }, timeout: 2.0)
         
         // send an event - it should be received by the connection
         try conn.send(event: .start())
-        try await wait(require: { await receiver1.events == [.start()] }, timeout: isStable ? 1.0 : 2.0)
+        try await wait(require: { await receiver1.events == [.start()] }, timeout: 2.0)
         await #expect(receiver2.events == [])
         await receiver1.reset()
         await receiver2.reset()
@@ -241,8 +242,8 @@ import Testing
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver1] events, _, _ in
-                Task {
-                    await receiver1?.add(events: events)
+                Task { @TestActor in
+                    receiver1?.add(events: events)
                 }
             }
         )
@@ -288,8 +289,8 @@ import Testing
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver1] events, _, _ in
-                Task {
-                    await receiver1?.add(events: events)
+                Task { @TestActor in
+                    receiver1?.add(events: events)
                 }
             }
         )
@@ -362,8 +363,8 @@ import Testing
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver1] events, _, _ in
-                Task {
-                    await receiver1?.add(events: events)
+                Task { @TestActor in
+                    receiver1?.add(events: events)
                 }
             }
         )
@@ -435,8 +436,8 @@ import Testing
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver1] events, _, _ in
-                Task {
-                    await receiver1?.add(events: events)
+                Task { @TestActor in
+                    receiver1?.add(events: events)
                 }
             }
         )
@@ -508,8 +509,8 @@ import Testing
             tag: input1Tag,
             uniqueID: .adHoc, // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver1] events, _, _ in
-                Task {
-                    await receiver1?.add(events: events)
+                Task { @TestActor in
+                    receiver1?.add(events: events)
                 }
             }
         )
@@ -530,9 +531,9 @@ import Testing
         try await Task.sleep(seconds: isStable ? 0.5 : 2.0) // some time for connection to setup
         
         // double check that the input was connected
-        try await wait(require: { conn.inputsCriteria.contains { $0 == .uniqueID(input1ID) } }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.coreMIDIInputEndpointRefs.contains(input1Ref) }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.endpoints.contains(input1.endpoint) }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { conn.inputsCriteria.contains { $0 == .uniqueID(input1ID) } }, timeout: 10.0)
+        try await wait(require: { conn.coreMIDIInputEndpointRefs.contains(input1Ref) }, timeout: 10.0)
+        try await wait(require: { conn.endpoints.contains(input1.endpoint) }, timeout: 10.0)
         
         // set mode and filter
         conn.mode = .allInputs
@@ -542,9 +543,9 @@ import Testing
         )
         
         // assert input1 was removed from the connection
-        try await wait(require: { conn.inputsCriteria.filter { $0 == .uniqueID(input1ID) } == [] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.coreMIDIInputEndpointRefs.filter { $0 == input1Ref } == [] }, timeout: isStable ? 1.0 : 10.0)
-        try await wait(require: { conn.endpoints.filter { $0 == input1.endpoint } == [] }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { conn.inputsCriteria.filter { $0 == .uniqueID(input1ID) } == [] }, timeout: 10.0)
+        try await wait(require: { conn.coreMIDIInputEndpointRefs.filter { $0 == input1Ref } == [] }, timeout: 10.0)
+        try await wait(require: { conn.endpoints.filter { $0 == input1.endpoint } == [] }, timeout: 10.0)
         
         // send an event - it should not be received by the connection
         try conn.send(event: .start())

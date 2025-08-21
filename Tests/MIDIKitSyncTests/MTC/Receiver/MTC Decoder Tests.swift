@@ -797,66 +797,68 @@ import TimecodeKitCore
         // swiftformat:enable wrapSingleLineComments
     }
     
-    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
-    func mtcDecoder_Handlers_FullFrameMessage() {
+    @Test
+    func mtcDecoder_Handlers_FullFrameMessage() async {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
         
         // testing vars
         
-        @MainActor final class Receiver {
+        @TestActor final class Receiver {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
             var isFrameChanged: Bool?
             var mtcFR: MTCFrameRate?
+            
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
-        let mtcDec = MTCDecoder() { timecode, messageType, direction, isFrameChanged in
+        let mtcDec = MTCDecoder() { [weak receiver] timecode, messageType, direction, isFrameChanged in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.timecode = timecode
-                receiver.mType = messageType
-                receiver.direction = direction
-                receiver.isFrameChanged = isFrameChanged
+            Task { @TestActor in
+                receiver?.timecode = timecode
+                receiver?.mType = messageType
+                receiver?.direction = direction
+                receiver?.isFrameChanged = isFrameChanged
             }
-        } mtcFrameRateChanged: { mtcFrameRate in
+        } mtcFrameRateChanged: { [weak receiver] mtcFrameRate in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.mtcFR = mtcFrameRate
+            Task { @TestActor in
+                receiver?.mtcFR = mtcFrameRate
             }
         }
         
         // default / initial state
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mType == nil)
-        #expect(receiver.direction == nil)
-        #expect(receiver.isFrameChanged == nil)
-        #expect(receiver.mtcFR == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mType == nil)
+        #expect(await receiver.direction == nil)
+        #expect(await receiver.isFrameChanged == nil)
+        #expect(await receiver.mtcFR == nil)
         
         // full-frame MTC messages
         
         mtcDec.midiIn(event: kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps)
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 02, s: 03, f: 04), at: .fps24, by: .allowingInvalid))
-        #expect(receiver.mType == .fullFrame)
-        #expect(receiver.direction == .forwards)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.mtcFR == .mtc24)
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 02, s: 03, f: 04), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.mType == .fullFrame)
+        #expect(await receiver.direction == .forwards)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.mtcFR == .mtc24)
         
         mtcDec.midiIn(event: kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps)
         
-        #expect(receiver.timecode == Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid))
-        #expect(receiver.mType == .fullFrame)
-        #expect(receiver.direction == .forwards)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.mtcFR == .mtc25)
+        #expect(await receiver.timecode == Timecode(.components(h: 2, m: 11, s: 17, f: 20), at: .fps25, by: .allowingInvalid))
+        #expect(await receiver.mType == .fullFrame)
+        #expect(await receiver.direction == .forwards)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.mtcFR == .mtc25)
     }
     
-    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
-    func mtcDecoder_Handlers_QFMessages() {
+    @Test
+    func mtcDecoder_Handlers_QFMessages() async {
         // swiftformat:disable wrapSingleLineComments
         
         // ensure expected callbacks are happening when they should,
@@ -864,441 +866,443 @@ import TimecodeKitCore
         
         // testing vars
         
-        @MainActor final class Receiver {
+        @TestActor final class Receiver {
             var timecode: Timecode?
             var mType: MTCMessageType?
             var direction: MTCDirection?
             var isFrameChanged: Bool?
             var mtcFR: MTCFrameRate?
+            
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
-        let mtcDec = MTCDecoder() { timecode, messageType, direction, isFrameChanged in
+        let mtcDec = MTCDecoder() { [weak receiver] timecode, messageType, direction, isFrameChanged in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.timecode = timecode
-                receiver.mType = messageType
-                receiver.direction = direction
-                receiver.isFrameChanged = isFrameChanged
+            Task { @TestActor in
+                receiver?.timecode = timecode
+                receiver?.mType = messageType
+                receiver?.direction = direction
+                receiver?.isFrameChanged = isFrameChanged
             }
-        } mtcFrameRateChanged: { mtcFrameRate in
+        } mtcFrameRateChanged: { [weak receiver] mtcFrameRate in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.mtcFR = mtcFrameRate
+            Task { @TestActor in
+                receiver?.mtcFR = mtcFrameRate
             }
         }
         
         // default / initial state
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mType == nil)
-        #expect(receiver.direction == nil)
-        #expect(receiver.isFrameChanged == nil)
-        #expect(receiver.mtcFR == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mType == nil)
+        #expect(await receiver.direction == nil)
+        #expect(await receiver.isFrameChanged == nil)
+        #expect(await receiver.mtcFR == nil)
         
         // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 (+ 2 MTC frame offset)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00000110)) // QF 0
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mtcFR == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mtcFR == nil)
+        #expect(await receiver.direction == nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mtcFR == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mtcFR == nil)
+        #expect(await receiver.direction == nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mtcFR == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mtcFR == nil)
+        #expect(await receiver.direction == nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mtcFR == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mtcFR == nil)
+        #expect(await receiver.direction == nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mtcFR == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mtcFR == nil)
+        #expect(await receiver.direction == nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mtcFR == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mtcFR == nil)
+        #expect(await receiver.direction == nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mtcFR == nil)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mtcFR == nil)
+        #expect(await receiver.direction == nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         
-        #expect(receiver.timecode == nil)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == nil)
+        #expect(await receiver.timecode == nil)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == nil)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001000)) // QF 0
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // new TC frame
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 25), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 50), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 75), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // new TC frame
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 25), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 50), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 75), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001010)) // QF 0
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 10, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // new TC frame
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         // reverse
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 75), at: .fps24, by: .allowingInvalid)
         ) // new TC frame
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 50), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 25), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 00), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 75), at: .fps24, by: .allowingInvalid)
         ) // new TC frame
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 50), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 25), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         // forwards
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 50), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 75), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // new TC frame
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 25), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 50), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 75), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .forwards)
         
         // reverse
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 50), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 25), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01000011)) // QF 4
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 9, sf: 00), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 75), at: .fps24, by: .allowingInvalid)
         ) // new TC frame
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00100100)) // QF 2
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 50), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00010000)) // QF 1
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 25), at: .fps24, by: .allowingInvalid)
         )
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00001000)) // QF 0
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 8, sf: 00), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01110000)) // QF 7
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 7, sf: 75), at: .fps24, by: .allowingInvalid)
         ) // new TC
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == true)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == true)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01100010)) // QF 6
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 2, m: 3, s: 4, f: 7, sf: 50), at: .fps24, by: .allowingInvalid)
         ) // unchanged
-        #expect(receiver.mType == .quarterFrame)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mtcFR == .mtc24)
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.mType == .quarterFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mtcFR == .mtc24)
+        #expect(await receiver.direction == .backwards)
         
         // non-sequential (discontinuous jumps)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b00110000)) // QF 3
-        #expect(receiver.direction == .ambiguous)
+        #expect(await receiver.direction == .ambiguous)
         
         mtcDec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b01010000)) // QF 5
-        #expect(receiver.direction == .ambiguous)
+        #expect(await receiver.direction == .ambiguous)
         
         // swiftformat:enable wrapSingleLineComments
     }

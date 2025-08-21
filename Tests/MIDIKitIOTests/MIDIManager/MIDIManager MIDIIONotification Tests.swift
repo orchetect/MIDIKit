@@ -15,14 +15,14 @@ import Testing
 // MARK: - Tests
 
 @Suite(.serialized) struct MIDIManager_MIDIIONotification_Tests {
-    private final actor Receiver {
+    @TestActor private final class Receiver {
         let manager: MIDIManager
         var notifications: [MIDIIONotification] = []
         
         func add(notification: MIDIIONotification) { notifications.append(notification) }
         func reset() { notifications.removeAll() }
         
-        init() {
+        nonisolated init() {
             manager = MIDIManager(
                 clientName: UUID().uuidString,
                 model: "MIDIKit123",
@@ -30,7 +30,9 @@ import Testing
             )
             manager.notificationHandler = { [weak self] notification in
                 print(notification)
-                Task { await self?.add(notification: notification) }
+                Task { @TestActor in
+                    self?.add(notification: notification)
+                }
             }
         }
     }
@@ -65,8 +67,8 @@ import Testing
             uniqueID: .adHoc // allow system to generate random ID each time, without persistence
         )
         
-        try await wait(require: { await receiver.notifications.count >= 3 }, timeout: isStable ? 3.0 : 10.0)
-        try await Task.sleep(seconds: isStable ? 0.1 : 1.0) // in case more than anticipated notifications arrive
+        try await wait(require: { await receiver.notifications.count >= 3 }, timeout: 10.0)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0) // in case more than anticipated notifications arrive
         
         var addedNotifFound = false
         for notif in await receiver.notifications {
@@ -90,8 +92,8 @@ import Testing
         // remove output
         receiver.manager.remove(.output, .withTag(output1Tag))
         
-        try await wait(require: { await receiver.notifications.count >= 2 }, timeout: isStable ? 3.0 : 10.0)
-        try await Task.sleep(seconds: isStable ? 0.1 : 1.0) // in case more than anticipated notifications arrive
+        try await wait(require: { await receiver.notifications.count >= 2 }, timeout: 10.0)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0) // in case more than anticipated notifications arrive
         
         var removedNotifFound = false
         for notif in await receiver.notifications {
@@ -144,8 +146,8 @@ import Testing
         )
         
         // each port produces at least 3 notifications, plus `setupChanged`
-        try await wait(require: { await receiver.notifications.count >= 6 }, timeout: isStable ? 3.0 : 10.0)
-        try await Task.sleep(seconds: isStable ? 0.1 : 1.0) // in case more than anticipated notifications arrive
+        try await wait(require: { await receiver.notifications.count >= 6 }, timeout: 10.0)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0) // in case more than anticipated notifications arrive
         
         await receiver.reset()
         
@@ -155,8 +157,8 @@ import Testing
         try await Task.sleep(seconds: isStable ? 0.3 : 1.0)
         receiver.manager.remove(.output, .withTag(output2Tag))
         
-        try await wait(require: { await receiver.notifications.count >= 2 }, timeout: isStable ? 3.0 : 10.0)
-        try await Task.sleep(seconds: isStable ? 0.1 : 1.0) // in case more than anticipated notifications arrive
+        try await wait(require: { await receiver.notifications.count >= 2 }, timeout: 10.0)
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0) // in case more than anticipated notifications arrive
         
         var removedEndpoints: [MIDIOutputEndpoint] = []
         for notif in await receiver.notifications {

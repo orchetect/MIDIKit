@@ -16,13 +16,15 @@ import Testing
 /// These tests are meant to test the translation Core MIDI performs between legacy MIDI 1.0 packets
 /// and MIDI 2.0 UMP packets
 @Suite(.serialized) struct RPN_NRPN_IO_Tests {
-    private final actor Receiver {
+    @TestActor private final class Receiver {
         var events: [MIDIEvent] = []
         func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
         func reset() { events.removeAll() }
         
         private var managerLegacyAPI: MIDIManager!
         private var managerNewAPI: MIDIManager!
+        
+        nonisolated init() { }
         
         /// Two managers are needed because we're testing sending events between
         /// legacy MIDI 1.0 Core MIDI API and new MIDI 2.0 Core MIDI API.
@@ -81,8 +83,8 @@ import Testing
                 to: .outputs([endpoint]),
                 tag: inputConnectionTag,
                 receiver: .events { [weak self] events, _, _ in
-                    Task {
-                        await self?.add(events: events)
+                    Task { @TestActor in
+                        self?.add(events: events)
                     }
                 }
             )
@@ -130,7 +132,7 @@ import Testing
             0xB2, 0x06, 0x10 // data entry MSB value 0x10
         ])
         
-        await wait(expect: { await receiver.events.count == 1 }, timeout: isStable ? 2.0 : 10.0)
+        await wait(expect: { await receiver.events.count == 1 }, timeout: 10.0)
         
         #expect(await receiver.events == [
             .rpn(
@@ -170,7 +172,7 @@ import Testing
             0xB2, 0x26, 0x20 // data entry LSB value 0x20
         ])
         
-        await wait(expect: { await receiver.events.count == 2 }, timeout: isStable ? 2.0 : 10.0)
+        await wait(expect: { await receiver.events.count == 2 }, timeout: 10.0)
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
         // then a second UMP packet adding the LSB to the same base packet data.
@@ -249,7 +251,7 @@ import Testing
             expect: {
                 await receiver.events.filter(chanVoice: .keepType(.rpn)).count == 1
             },
-            timeout: isStable ? 2.0 : 10.0
+            timeout: 10.0
         )
         
         #expect(await receiver.events.filter(chanVoice: .keepType(.rpn)) == [
@@ -326,7 +328,7 @@ import Testing
             expect: {
                 await receiver.events.filter(chanVoice: .keepType(.rpn)).count == 2
             },
-            timeout: isStable ? 1.0 : 5.0
+            timeout: 5.0
         )
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
@@ -378,7 +380,7 @@ extension RPN_NRPN_IO_Tests {
         ])
         
         // wait(sec: 1.0)
-        await wait(expect: { await receiver.events.count == 1 }, timeout: isStable ? 2.0 : 10.0)
+        await wait(expect: { await receiver.events.count == 1 }, timeout: 10.0)
         
         #expect(await receiver.events == [
             .nrpn(
@@ -418,7 +420,7 @@ extension RPN_NRPN_IO_Tests {
             0xB2, 0x26, 0x20 // data entry LSB value 0x20
         ])
         
-        await wait(expect: { await receiver.events.count == 2 }, timeout: isStable ? 2.0 : 10.0)
+        await wait(expect: { await receiver.events.count == 2 }, timeout: 10.0)
         print("Event received count:", await receiver.events.count)
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,
@@ -497,7 +499,7 @@ extension RPN_NRPN_IO_Tests {
             expect: {
                 await receiver.events.filter(chanVoice: .keepType(.nrpn)).count == 1
             },
-            timeout: isStable ? 2.0 : 10.0
+            timeout: 10.0
         )
         
         #expect(await receiver.events.filter(chanVoice: .keepType(.nrpn)) == [
@@ -573,7 +575,7 @@ extension RPN_NRPN_IO_Tests {
             expect: {
                 await receiver.events.filter(chanVoice: .keepType(.nrpn)).count == 2
             },
-            timeout: isStable ? 2.0 : 10.0
+            timeout: 10.0
         )
         
         // Core MIDI translates MIDI 1.0 NRPN to a MIDI 2.0 UMP packet with MSB first,

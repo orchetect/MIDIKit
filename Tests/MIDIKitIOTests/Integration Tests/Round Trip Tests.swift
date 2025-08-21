@@ -18,7 +18,12 @@ import Testing
     private static let outputTag = UUID().uuidString
     private static let inputConnectionTag = UUID().uuidString
     
-    private final actor Receiver {
+    /// Note that there is an important distinction between making `Receiver` an actor itself,
+    /// versus making it a class bound to a serial global actor. Making it an actor itself
+    /// seems to imply concurrent (non-serial) behavior and the result is that calls to `Task { await ... }`
+    /// could execute out of order, thus failing our unit test with incorrect received MIDI event order.
+    /// `@MainActor` also works, but to keep it clean, we'll use our own actor.
+    @TestActor private final class Receiver {
         var events: [MIDIEvent] = []
         func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
         func reset() { events.removeAll() }
@@ -28,6 +33,8 @@ import Testing
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
+        
+        nonisolated init() { }
         
         func createPorts() async throws {
             print("RoundTrip_Tests createPorts() starting")
@@ -51,8 +58,8 @@ import Testing
                 to: .outputs(matching: [.uniqueID(outputID)]),
                 tag: inputConnectionTag,
                 receiver: .events { [weak self] events, _, _ in
-                    Task {
-                        await self?.add(events: events)
+                    Task { @TestActor in
+                        self?.add(events: events)
                     }
                 }
             )
@@ -81,6 +88,7 @@ import Testing
         let isStable = isSystemTimingStable()
         
         let receiver = Receiver()
+        
         receiver.manager.preferredAPI = api
         try receiver.manager.start()
         try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
@@ -90,10 +98,18 @@ import Testing
         
         let output = try #require(receiver.manager.managedOutputs[Self.outputTag])
         
-        // prepare - send one test event and wait for it to show up.
+        // prepare - send a test event until one is received.
         // once received, Core MIDI is ready to continue the test.
-        try output.send(event: .start())
-        try await wait(require: { await receiver.events.contains(.start()) }, timeout: isStable ? 2.0 : 10.0)
+        try await wait(
+            require: {
+                print("Sending test event")
+                try output.send(event: .start())
+                try await Task.sleep(seconds: 0.5)
+                return await receiver.events.contains(.start())
+            },
+            timeout: 10.0,
+            pollingInterval: 0.1
+        )
         await receiver.reset() // remove test event
         
         // generate events list
@@ -271,10 +287,14 @@ import Testing
         // multiple packets into a single MIDIPacketList / MIDIEventList.
         // Core MIDI will start dropping events if too many are sent too quickly, as a failsafe against things like feedback loops,
         // so we want to throttle the send frequency.
+        var sentEvents: [MIDIEvent] = []
         for eventGroup in sourceEvents.split(every: 2) {
             try output.send(events: Array(eventGroup))
+            sentEvents.append(contentsOf: eventGroup)
             try await Task.sleep(seconds: isStable ? 0.002 : 0.005)
         }
+        // sanity check - ensure events were sent in the correct order
+        #expect(sentEvents == sourceEvents)
         
         print("Done sending.")
         
@@ -283,13 +303,18 @@ import Testing
         // ensure all events are received correctly
         
         let sourceEventCount = sourceEvents.count
-        await wait(expect: { await receiver.events.count >= sourceEventCount }, timeout: isStable ? 5.0 : 30.0)
-        let receivedEventCount = await receiver.events.count
+        await wait(expect: { await receiver.events.count >= sourceEventCount }, timeout: 30.0)
         
-        let isEventsEqual = await sourceEvents == receiver.events
+        let receivedEventCount = await receiver.events.count
+        #expect(receivedEventCount == sourceEventCount)
+        
+        let isEventsEqual = await receiver.events == sourceEvents
+        
+        // sanity check - ensure there isn't something fundamentally wrong with event equatability
+        #expect(sourceEvents == sourceEvents)
         
         if !isEventsEqual {
-            Issue.record("Source events and received events are not equal.")
+            Issue.record("Source events and received events are not equal. (\(api))")
             print("Sent \(sourceEvents.count) events, received \(receivedEventCount) events.")
             
             // itemize which source event(s) are missing from the received events, if any.

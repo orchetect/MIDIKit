@@ -9,11 +9,11 @@ import Testing
 import TimecodeKitCore
 
 @Suite struct MTC_Integration_Integration_Tests {
-    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
+    @Test
     func mtcIntegration_EncoderDecoder_24fps() async {
         // decoder
         
-        @MainActor final class Receiver {
+        @TestActor final class Receiver {
             var timecode: Timecode?
             func set(timecode: Timecode?) { self.timecode = timecode }
             
@@ -28,21 +28,23 @@ import TimecodeKitCore
             
             var mtcFR: MTCFrameRate?
             func set(mtcFR: MTCFrameRate?) { self.mtcFR = mtcFR }
+            
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
-        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, isFrameChanged in
+        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { [weak receiver] timecode, messageType, direction, isFrameChanged in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.set(timecode: timecode)
-                receiver.set(mType: messageType)
-                receiver.set(direction: direction)
-                receiver.set(isFrameChanged: isFrameChanged)
+            Task { @TestActor in
+                receiver?.set(timecode: timecode)
+                receiver?.set(mType: messageType)
+                receiver?.set(direction: direction)
+                receiver?.set(isFrameChanged: isFrameChanged)
             }
-        } mtcFrameRateChanged: { mtcFrameRate in
+        } mtcFrameRateChanged: { [weak receiver] mtcFrameRate in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.set(mtcFR: mtcFrameRate)
+            Task { @TestActor in
+                receiver?.set(mtcFR: mtcFrameRate)
             }
         }
         
@@ -57,7 +59,7 @@ import TimecodeKitCore
         mtcDec.localFrameRate = .fps24
         mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         #expect(mtcEnc.mtcQuarterFrame == 0)
         mtcEnc.increment() // QF 0
         mtcEnc.increment() // QF 1
@@ -68,65 +70,65 @@ import TimecodeKitCore
         mtcEnc.increment() // QF 6
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps24, by: .allowingInvalid))
         mtcEnc.increment() // QF 1
         mtcEnc.increment() // QF 2
         mtcEnc.increment() // QF 3
         mtcEnc.increment() // QF 4
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 03), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 03), at: .fps24, by: .allowingInvalid))
         mtcEnc.increment() // QF 5
         mtcEnc.increment() // QF 6
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 04), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 04), at: .fps24, by: .allowingInvalid))
         for _ in 1 ... (19 * 4) {
             mtcEnc.increment()
         } // advance 19 frames (4 QF per frame)
         #expect(mtcEnc.mtcQuarterFrame == 4)
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 00), at: .fps24, by: .allowingInvalid))
         mtcEnc.increment() // QF 5
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 25), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 25), at: .fps24, by: .allowingInvalid))
         mtcEnc.increment() // QF 6
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 50), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 50), at: .fps24, by: .allowingInvalid))
         mtcEnc.increment() // QF 7
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 75), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 75), at: .fps24, by: .allowingInvalid))
         mtcEnc.increment() // QF 0
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 01, f: 00), at: .fps24, by: .allowingInvalid))
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 01, f: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.direction == .forwards)
         mtcEnc.decrement() // QF 7
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 75), at: .fps24, by: .allowingInvalid))
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 75), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.direction == .backwards)
         mtcEnc.decrement() // QF 6
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 50), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 50), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 5
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 25), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 25), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 4
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 23, sf: 00), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 3
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 22, sf: 75), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 22, sf: 75), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 22, sf: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 22, sf: 00), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 7
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 21, sf: 75), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 21, sf: 75), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 6
         mtcEnc.decrement() // QF 5
         mtcEnc.decrement() // QF 4
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 21, sf: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 21, sf: 00), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 3
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 20, sf: 75), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 20, sf: 75), at: .fps24, by: .allowingInvalid))
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 20, sf: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 20, sf: 00), at: .fps24, by: .allowingInvalid))
     }
     
-    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
+    @Test
     func mtcIntegration_EncoderDecoder_29_97drop() async {
         // decoder
         
-        @MainActor final class Receiver {
+        @TestActor final class Receiver {
             var timecode: Timecode?
             func set(timecode: Timecode?) { self.timecode = timecode }
             
@@ -141,21 +143,23 @@ import TimecodeKitCore
             
             var mtcFR: MTCFrameRate?
             func set(mtcFR: MTCFrameRate?) { self.mtcFR = mtcFR }
+            
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
-        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, isFrameChanged in
+        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { [weak receiver] timecode, messageType, direction, isFrameChanged in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.set(timecode: timecode)
-                receiver.set(mType: messageType)
-                receiver.set(direction: direction)
-                receiver.set(isFrameChanged: isFrameChanged)
+            Task { @TestActor in
+                receiver?.set(timecode: timecode)
+                receiver?.set(mType: messageType)
+                receiver?.set(direction: direction)
+                receiver?.set(isFrameChanged: isFrameChanged)
             }
-        } mtcFrameRateChanged: { mtcFrameRate in
+        } mtcFrameRateChanged: { [weak receiver] mtcFrameRate in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.set(mtcFR: mtcFrameRate)
+            Task { @TestActor in
+                receiver?.set(mtcFR: mtcFrameRate)
             }
         }
         
@@ -171,7 +175,7 @@ import TimecodeKitCore
         mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 59, f: 00), at: .fps29_97d, by: .allowingInvalid))
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         #expect(mtcEnc.mtcQuarterFrame == 0)
@@ -185,7 +189,7 @@ import TimecodeKitCore
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 02), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 1
@@ -193,7 +197,7 @@ import TimecodeKitCore
         mtcEnc.increment() // QF 3
         mtcEnc.increment() // QF 4
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 03), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 5
@@ -201,7 +205,7 @@ import TimecodeKitCore
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 04), at: .fps29_97d, by: .allowingInvalid)
         )
         for _ in 1 ... (25 * 4) {
@@ -209,85 +213,85 @@ import TimecodeKitCore
         } // advance 25 frames (4 QF per frame)
         #expect(mtcEnc.mtcQuarterFrame == 4)
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 5
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 25), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 6
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 50), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 7
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 01, s: 00, f: 02), at: .fps29_97d, by: .allowingInvalid)
         )
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.direction == .forwards)
         mtcEnc.decrement() // QF 7
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.direction == .backwards)
         mtcEnc.decrement() // QF 6
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 50), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 5
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 25), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 4
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 3
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 28, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 28, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 7
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 27, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 6
         mtcEnc.decrement() // QF 5
         mtcEnc.decrement() // QF 4
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 27, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 3
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 26, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 26, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         
@@ -297,7 +301,7 @@ import TimecodeKitCore
         mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 59, f: 00), at: .fps29_97d, by: .allowingInvalid))
         
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         #expect(mtcEnc.mtcQuarterFrame == 0)
@@ -311,7 +315,7 @@ import TimecodeKitCore
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 02), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 1
@@ -319,7 +323,7 @@ import TimecodeKitCore
         mtcEnc.increment() // QF 3
         mtcEnc.increment() // QF 4
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 03), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 5
@@ -327,7 +331,7 @@ import TimecodeKitCore
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 04), at: .fps29_97d, by: .allowingInvalid)
         )
         for _ in 1 ... (25 * 4) {
@@ -335,7 +339,7 @@ import TimecodeKitCore
         } // advance 25 frames (4 QF per frame)
         #expect(mtcEnc.mtcQuarterFrame == 4)
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.increment() // QF 5
@@ -343,78 +347,78 @@ import TimecodeKitCore
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 01, s: 00, f: 02), at: .fps29_97d, by: .allowingInvalid)
         )
         // ** START: additional lines added for test variant **
         mtcEnc.increment() // QF 1
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 01, s: 00, f: 02, sf: 25), at: .fps29_97d, by: .allowingInvalid)
         )
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.direction == .forwards)
         mtcEnc.decrement() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 01, s: 00, f: 02, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.direction == .backwards)
         // ** END: additional lines added for test variant **
         mtcEnc.decrement() // QF 7
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 6
         mtcEnc.decrement() // QF 5
         mtcEnc.decrement() // QF 4
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 29, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 3
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 28, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 28, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 7
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 27, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 6
         mtcEnc.decrement() // QF 5
         mtcEnc.decrement() // QF 4
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 27, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 3
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 26, sf: 75), at: .fps29_97d, by: .allowingInvalid)
         )
         mtcEnc.decrement() // QF 2
         mtcEnc.decrement() // QF 1
         mtcEnc.decrement() // QF 0
         #expect(
-            receiver.timecode ==
+            await receiver.timecode ==
                 Timecode(.components(h: 1, m: 00, s: 59, f: 26, sf: 00), at: .fps29_97d, by: .allowingInvalid)
         )
     }
     
-    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
+    @Test
     func mtcIntegration_EncoderDecoder_48fps() async {
         // decoder
         
-        @MainActor final class Receiver {
+        @TestActor final class Receiver {
             var timecode: Timecode?
             func set(timecode: Timecode?) { self.timecode = timecode }
             
@@ -429,21 +433,23 @@ import TimecodeKitCore
             
             var mtcFR: MTCFrameRate?
             func set(mtcFR: MTCFrameRate?) { self.mtcFR = mtcFR }
+            
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
-        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, isFrameChanged in
+        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { [weak receiver] timecode, messageType, direction, isFrameChanged in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.set(timecode: timecode)
-                receiver.set(mType: messageType)
-                receiver.set(direction: direction)
-                receiver.set(isFrameChanged: isFrameChanged)
+            Task { @TestActor in
+                receiver?.set(timecode: timecode)
+                receiver?.set(mType: messageType)
+                receiver?.set(direction: direction)
+                receiver?.set(isFrameChanged: isFrameChanged)
             }
-        } mtcFrameRateChanged: { mtcFrameRate in
+        } mtcFrameRateChanged: { [weak receiver] mtcFrameRate in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.set(mtcFR: mtcFrameRate)
+            Task { @TestActor in
+                receiver?.set(mtcFR: mtcFrameRate)
             }
         }
         
@@ -458,7 +464,7 @@ import TimecodeKitCore
         mtcDec.localFrameRate = .fps48
         mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps48, by: .allowingInvalid))
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps48, by: .allowingInvalid))
         #expect(mtcEnc.mtcQuarterFrame == 0)
         mtcEnc.increment() // QF 0
         mtcEnc.increment() // QF 1
@@ -469,80 +475,80 @@ import TimecodeKitCore
         mtcEnc.increment() // QF 6
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 04, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 04, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 1
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 04, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 04, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 2
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 05, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 05, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 3
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 05, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 05, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 4
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 06, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 06, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 5
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 06, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 06, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 6
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 07, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 07, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 7
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 07, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 07, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 0
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 08, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 08, sf: 00), at: .fps48, by: .allowingInvalid))
         for _ in 1 ... (19 * 4) {
             mtcEnc.increment()
         } // advance 19 frames (4 QF per frame)
         #expect(mtcEnc.mtcQuarterFrame == 4)
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 46, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 46, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 5
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 46, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 46, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 6
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 47, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 47, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 7
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 47, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 47, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.increment() // QF 0
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 01, f: 00, sf: 00), at: .fps48, by: .allowingInvalid))
-        #expect(receiver.direction == .forwards)
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 01, f: 00, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.direction == .forwards)
         mtcEnc.decrement() // QF 7
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 47, sf: 50), at: .fps48, by: .allowingInvalid))
-        #expect(receiver.direction == .backwards)
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 47, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.direction == .backwards)
         mtcEnc.decrement() // QF 6
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 47, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 47, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 5
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 46, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 46, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 4
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 46, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 46, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 3
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 45, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 45, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 2
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 45, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 45, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 1
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 44, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 44, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 0
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 44, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 44, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 7
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 43, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 43, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 6
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 43, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 43, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 5
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 42, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 42, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 4
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 42, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 42, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 3
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 41, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 41, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 2
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 41, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 41, sf: 00), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 1
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 40, sf: 50), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 40, sf: 50), at: .fps48, by: .allowingInvalid))
         mtcEnc.decrement() // QF 0
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 40, sf: 00), at: .fps48, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 40, sf: 00), at: .fps48, by: .allowingInvalid))
     }
     
-    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
+    @Test
     func mtcIntegration_EncoderDecoder_fullFrameBehavior() async {
         // test expected outcomes regarding Encoder.locate() and transmitting MTC full-frame
         // messages
         
         // decoder
         
-        @MainActor final class Receiver {
+        @TestActor final class Receiver {
             var timecode: Timecode?
             func set(timecode: Timecode?) { self.timecode = timecode }
             
@@ -557,21 +563,23 @@ import TimecodeKitCore
             
             var mtcFR: MTCFrameRate?
             func set(mtcFR: MTCFrameRate?) { self.mtcFR = mtcFR }
+            
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
-        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, isFrameChanged in
+        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { [weak receiver] timecode, messageType, direction, isFrameChanged in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.set(timecode: timecode)
-                receiver.set(mType: messageType)
-                receiver.set(direction: direction)
-                receiver.set(isFrameChanged: isFrameChanged)
+            Task { @TestActor in
+                receiver?.set(timecode: timecode)
+                receiver?.set(mType: messageType)
+                receiver?.set(direction: direction)
+                receiver?.set(isFrameChanged: isFrameChanged)
             }
-        } mtcFrameRateChanged: { mtcFrameRate in
+        } mtcFrameRateChanged: { [weak receiver] mtcFrameRate in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.set(mtcFR: mtcFrameRate)
+            Task { @TestActor in
+                receiver?.set(mtcFR: mtcFrameRate)
             }
         }
         
@@ -588,18 +596,18 @@ import TimecodeKitCore
         // locate
         mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         #expect(mtcEnc.mtcQuarterFrame == 0)
-        #expect(receiver.isFrameChanged == true)
+        #expect(await receiver.isFrameChanged == true)
         
-        receiver.set(isFrameChanged: nil)
+        await receiver.set(isFrameChanged: nil)
         
         // locate to same position
         mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         #expect(mtcEnc.mtcQuarterFrame == 0)
-        #expect(receiver.isFrameChanged == nil)
+        #expect(await receiver.isFrameChanged == nil)
         
         // locate to same position, but force a full-frame message to transmit
         mtcEnc.locate(
@@ -607,9 +615,9 @@ import TimecodeKitCore
             transmitFullFrame: .always
         )
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         #expect(mtcEnc.mtcQuarterFrame == 0)
-        #expect(receiver.isFrameChanged == false)
+        #expect(await receiver.isFrameChanged == false)
         
         // locate to new timecode
         mtcEnc.locate(
@@ -617,9 +625,9 @@ import TimecodeKitCore
             transmitFullFrame: .always
         )
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps24, by: .allowingInvalid))
         #expect(mtcEnc.mtcQuarterFrame == 0)
-        #expect(receiver.isFrameChanged == true)
+        #expect(await receiver.isFrameChanged == true)
         
         // locate to same timecode, but change frame rate
         mtcEnc.locate(
@@ -627,11 +635,11 @@ import TimecodeKitCore
             transmitFullFrame: .always
         )
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps25, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps25, by: .allowingInvalid))
         #expect(mtcEnc.mtcQuarterFrame == 0)
-        #expect(receiver.isFrameChanged == false)
+        #expect(await receiver.isFrameChanged == false)
         
-        receiver.set(isFrameChanged: nil)
+        await receiver.set(isFrameChanged: nil)
         
         // locate to new timecode, but request full-frame not be transmit
         
@@ -640,9 +648,9 @@ import TimecodeKitCore
             transmitFullFrame: .never
         )
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps25, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 02), at: .fps25, by: .allowingInvalid))
         #expect(mtcEnc.mtcQuarterFrame == 0)
-        #expect(receiver.isFrameChanged == nil)
+        #expect(await receiver.isFrameChanged == nil)
         
         // edge cases
         
@@ -658,11 +666,11 @@ import TimecodeKitCore
             transmitFullFrame: .always
         )
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         #expect(mtcEnc.mtcQuarterFrame == 0)
-        #expect(receiver.isFrameChanged == true)
+        #expect(await receiver.isFrameChanged == true)
         
-        #expect(receiver.mType == .fullFrame)
+        #expect(await receiver.mType == .fullFrame)
         
         mtcEnc.increment() // QF 0
         mtcEnc.increment() // QF 1
@@ -672,17 +680,17 @@ import TimecodeKitCore
         // locate to same timecode; full-frame should transmit
         mtcEnc.locate(to: Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         
-        #expect(receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
+        #expect(await receiver.timecode == Timecode(.components(h: 1, m: 00, s: 00, f: 00), at: .fps24, by: .allowingInvalid))
         #expect(mtcEnc.mtcQuarterFrame == 0)
-        #expect(receiver.isFrameChanged == false)
-        #expect(receiver.mType == .fullFrame)
+        #expect(await receiver.isFrameChanged == false)
+        #expect(await receiver.mType == .fullFrame)
     }
     
-    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
+    @Test
     func bruteForce() async throws {
         // decoder
         
-        @MainActor final class Receiver {
+        @TestActor final class Receiver {
             var timecode: Timecode?
             func set(timecode: Timecode?) { self.timecode = timecode }
             
@@ -697,21 +705,23 @@ import TimecodeKitCore
             
             var mtcFR: MTCFrameRate?
             func set(mtcFR: MTCFrameRate?) { self.mtcFR = mtcFR }
+            
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
-        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { timecode, messageType, direction, isFrameChanged in
+        let mtcDec = MTCDecoder(initialLocalFrameRate: nil) { [weak receiver] timecode, messageType, direction, isFrameChanged in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.set(timecode: timecode)
-                receiver.set(mType: messageType)
-                receiver.set(direction: direction)
-                receiver.set(isFrameChanged: isFrameChanged)
+            Task { @TestActor in
+                receiver?.set(timecode: timecode)
+                receiver?.set(mType: messageType)
+                receiver?.set(direction: direction)
+                receiver?.set(isFrameChanged: isFrameChanged)
             }
-        } mtcFrameRateChanged: { mtcFrameRate in
+        } mtcFrameRateChanged: { [weak receiver] mtcFrameRate in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
-                receiver.set(mtcFR: mtcFrameRate)
+            Task { @TestActor in
+                receiver?.set(mtcFR: mtcFrameRate)
             }
         }
         
@@ -788,7 +798,7 @@ import TimecodeKitCore
                     
                     // iterate: each individual timecode included in the span
                     for timecode in range {
-                        var receiverTimecodeTruncatedSubframes = try #require(receiver.timecode)
+                        var receiverTimecodeTruncatedSubframes = try #require(await receiver.timecode)
                         receiverTimecodeTruncatedSubframes.subFrames = 0
                         
                         #expect(receiverTimecodeTruncatedSubframes == timecode, "at: \(frameRate)")

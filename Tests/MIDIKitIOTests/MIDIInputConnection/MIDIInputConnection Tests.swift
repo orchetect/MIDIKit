@@ -14,7 +14,7 @@ import MIDIKitIO
 import Testing
 
 @Suite(.serialized) struct MIDIInputConnection_Tests {
-    private final actor Receiver {
+    @TestActor private final class Receiver {
         var events: [MIDIEvent] = []
         func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
         func reset() { events.removeAll() }
@@ -24,6 +24,8 @@ import Testing
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
+        
+        nonisolated init() { }
     }
     
     // called before each method
@@ -59,9 +61,9 @@ import Testing
             to: .outputs(matching: [.uniqueID(output1ID)]),
             tag: connTag,
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
+                Task { @TestActor in
                     // print(events)
-                    await receiver?.add(events: events)
+                    receiver?.add(events: events)
                 }
             }
         )
@@ -153,9 +155,9 @@ import Testing
             tag: connTag,
             filter: .init(owned: false, criteria: .currentOutputs()),
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
+                Task { @TestActor in
                     // print(events)
-                    await receiver?.add(events: events)
+                    receiver?.add(events: events)
                 }
             }
         )
@@ -205,9 +207,9 @@ import Testing
             tag: connTag,
             filter: .init(owned: true, criteria: .currentOutputs()),
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
+                Task { @TestActor in
                     // print(events)
-                    await receiver?.add(events: events)
+                    receiver?.add(events: events)
                 }
             }
         )
@@ -274,9 +276,9 @@ import Testing
                 criteria: receiver.manager.endpoints.outputsUnowned
             ),
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
+                Task { @TestActor in
                     // print(events)
-                    await receiver?.add(events: events)
+                    receiver?.add(events: events)
                 }
             }
         )
@@ -340,9 +342,9 @@ import Testing
             to: .outputs([output1.endpoint]),
             tag: connTag,
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
+                Task { @TestActor in
                     // print(events)
-                    await receiver?.add(events: events)
+                    receiver?.add(events: events)
                 }
             }
         )
@@ -410,9 +412,9 @@ import Testing
                 criteria: [.uniqueID(output1ID)]
             ),
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
+                Task { @TestActor in
                     // print(events)
-                    await receiver?.add(events: events)
+                    receiver?.add(events: events)
                 }
             }
         )
@@ -480,9 +482,9 @@ import Testing
             to: .outputs([output1.endpoint]),
             tag: connTag,
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
+                Task { @TestActor in
                     // print(events)
-                    await receiver?.add(events: events)
+                    receiver?.add(events: events)
                 }
             }
         )

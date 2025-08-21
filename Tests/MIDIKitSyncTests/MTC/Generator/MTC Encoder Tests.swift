@@ -944,16 +944,17 @@ import Testing
         
         // testing vars
         
-        final actor Receiver {
+        @TestActor final class Receiver {
             var events: [MIDIEvent]?
             func set(events: [MIDIEvent]?) { self.events = events }
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
         let mtcEnc = MTCEncoder { [weak receiver] midiEvents in
             // MTCEncoder does not use Task or internal dispatch queues
-            Task {
-                await receiver?.set(events: midiEvents)
+            Task { @TestActor in
+                receiver?.set(events: midiEvents)
             }
         }
         
@@ -976,28 +977,29 @@ import Testing
         }, timeout: 1.0)
     }
     
-    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
+    @Test
     func mtcEncoder_Handlers_QFMessages() async throws {
         // ensure expected callbacks are happening when they should,
         // and that they carry the data that they should
         
         // testing vars
         
-        @MainActor final class Receiver {
+        @TestActor final class Receiver {
             var events: [MIDIEvent]?
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
         let mtcEnc = MTCEncoder { [weak receiver] midiEvents in
             // MTCEncoder does not use Task or internal dispatch queues
-            MainActor.assumeIsolated {
+            Task { @TestActor in
                 receiver?.events = midiEvents
             }
         }
         
         // default / initial state
         
-        #expect(receiver.events == nil)
+        #expect(await receiver.events == nil)
         
         // 24fps QFs starting at 02:03:04:06, locking at 02:03:04:08 (+ 2 MTC frame offset)
         
@@ -1008,47 +1010,47 @@ import Testing
         mtcEnc.increment() // doesn't increment; sends first quarter-frame
         #expect(mtcEnc.mtcQuarterFrame == 0)
         #expect(mtcEnc.mtcComponents == .init(h: 2, m: 03, s: 04, f: 06))
-        #expect(receiver.events == [.timecodeQuarterFrame(dataByte: 0b00000110)]) // QF 0
+        #expect(await receiver.events == [.timecodeQuarterFrame(dataByte: 0b00000110)]) // QF 0
         
         mtcEnc.increment() // now it increments to QF 1
         #expect(mtcEnc.mtcQuarterFrame == 1)
         #expect(mtcEnc.mtcComponents == .init(h: 2, m: 03, s: 04, f: 06))
-        #expect(receiver.events == [.timecodeQuarterFrame(dataByte: 0b00010000)]) // QF 1
+        #expect(await receiver.events == [.timecodeQuarterFrame(dataByte: 0b00010000)]) // QF 1
         
         mtcEnc.increment()
         #expect(mtcEnc.mtcQuarterFrame == 2)
         #expect(mtcEnc.mtcComponents == .init(h: 2, m: 03, s: 04, f: 06))
-        #expect(receiver.events == [.timecodeQuarterFrame(dataByte: 0b00100100)]) // QF 2
+        #expect(await receiver.events == [.timecodeQuarterFrame(dataByte: 0b00100100)]) // QF 2
         
         mtcEnc.increment()
         #expect(mtcEnc.mtcQuarterFrame == 3)
         #expect(mtcEnc.mtcComponents == .init(h: 2, m: 03, s: 04, f: 06))
-        #expect(receiver.events == [.timecodeQuarterFrame(dataByte: 0b00110000)]) // QF 3
+        #expect(await receiver.events == [.timecodeQuarterFrame(dataByte: 0b00110000)]) // QF 3
         
         mtcEnc.increment()
         #expect(mtcEnc.mtcQuarterFrame == 4)
         #expect(mtcEnc.mtcComponents == .init(h: 2, m: 03, s: 04, f: 06))
-        #expect(receiver.events == [.timecodeQuarterFrame(dataByte: 0b01000011)]) // QF 4
+        #expect(await receiver.events == [.timecodeQuarterFrame(dataByte: 0b01000011)]) // QF 4
         
         mtcEnc.increment()
         #expect(mtcEnc.mtcQuarterFrame == 5)
         #expect(mtcEnc.mtcComponents == .init(h: 2, m: 03, s: 04, f: 06))
-        #expect(receiver.events == [.timecodeQuarterFrame(dataByte: 0b01010000)]) // QF 5
+        #expect(await receiver.events == [.timecodeQuarterFrame(dataByte: 0b01010000)]) // QF 5
         
         mtcEnc.increment()
         #expect(mtcEnc.mtcQuarterFrame == 6)
         #expect(mtcEnc.mtcComponents == .init(h: 2, m: 03, s: 04, f: 06))
-        #expect(receiver.events == [.timecodeQuarterFrame(dataByte: 0b01100010)]) // QF 6
+        #expect(await receiver.events == [.timecodeQuarterFrame(dataByte: 0b01100010)]) // QF 6
         
         mtcEnc.increment()
         #expect(mtcEnc.mtcQuarterFrame == 7)
         #expect(mtcEnc.mtcComponents == .init(h: 2, m: 03, s: 04, f: 06))
-        #expect(receiver.events == [.timecodeQuarterFrame(dataByte: 0b01110000)]) // QF 7
+        #expect(await receiver.events == [.timecodeQuarterFrame(dataByte: 0b01110000)]) // QF 7
         
         mtcEnc.increment()
         #expect(mtcEnc.mtcQuarterFrame == 0)
         #expect(mtcEnc.mtcComponents == .init(h: 2, m: 03, s: 04, f: 08))
-        #expect(receiver.events == [.timecodeQuarterFrame(dataByte: 0b00001000)]) // QF 0
+        #expect(await receiver.events == [.timecodeQuarterFrame(dataByte: 0b00001000)]) // QF 0
     }
     
     @Test
@@ -1216,19 +1218,20 @@ import Testing
         )
     }
     
-    @Test @MainActor // using main actor just for simplicity, otherwise we need to do a bunch of async waiting
-    func mtcEncoder_LocateBehavior() {
+    @Test
+    func mtcEncoder_LocateBehavior() async {
         var mtcEnc: MTCEncoder
         
-        @MainActor final class Receiver {
+        @TestActor final class Receiver {
             var events: [MIDIEvent]?
+            nonisolated init() { }
         }
         let receiver = Receiver()
         
         func initNewEnc() -> MTCEncoder {
             MTCEncoder { [weak receiver] midiEvents in
                 // MTCEncoder does not use Task or internal dispatch queues
-                MainActor.assumeIsolated {
+                Task { @TestActor in
                     receiver?.events = midiEvents
                 }
             }
@@ -1242,7 +1245,7 @@ import Testing
                 .init(h: 0, m: 00, s: 00, f: 00)
         )
         #expect(
-            receiver.events?.first?.midi1RawBytes() ==
+            await receiver.events?.first?.midi1RawBytes() ==
                 [
                     0xF0, 0x7F, 0x7F, 0x01, 0x01,
                     0b00000000, // 0rrh_hhhh
@@ -1261,7 +1264,7 @@ import Testing
                 .init(h: 0, m: 00, s: 00, f: 00)
         )
         #expect(
-            receiver.events?.first?.midi1RawBytes() ==
+            await receiver.events?.first?.midi1RawBytes() ==
                 [
                     0xF0, 0x7F, 0x7F, 0x01, 0x01,
                     0b00100000, // 0rrh_hhhh
@@ -1280,7 +1283,7 @@ import Testing
                 .init(h: 1, m: 02, s: 03, f: 04)
         )
         #expect(
-            receiver.events?.first?.midi1RawBytes() ==
+            await receiver.events?.first?.midi1RawBytes() ==
                 [
                     0xF0, 0x7F, 0x7F, 0x01, 0x01,
                     0b01000001, // 0rrh_hhhh
@@ -1298,7 +1301,7 @@ import Testing
                 .init(h: 1, m: 02, s: 03, f: 05)
         )
         #expect(
-            receiver.events?.first?.midi1RawBytes() ==
+            await receiver.events?.first?.midi1RawBytes() ==
                 [
                     0xF0, 0x7F, 0x7F, 0x01, 0x01,
                     0b01000001, // 0rrh_hhhh
@@ -1317,7 +1320,7 @@ import Testing
                 .init(h: 2, m: 04, s: 06, f: 08)
         )
         #expect(
-            receiver.events?.first?.midi1RawBytes() ==
+            await receiver.events?.first?.midi1RawBytes() ==
                 [
                     0xF0, 0x7F, 0x7F, 0x01, 0x01,
                     0b01100010, // 0rrh_hhhh
@@ -1340,7 +1343,7 @@ import Testing
                 .init(h: 2, m: 04, s: 06, f: 04)
         )
         #expect(
-            receiver.events?.first?.midi1RawBytes() ==
+            await receiver.events?.first?.midi1RawBytes() ==
                 [
                     0xF0, 0x7F, 0x7F, 0x01, 0x01,
                     0b00000010, // 0rrh_hhhh
@@ -1359,7 +1362,7 @@ import Testing
                 .init(h: 2, m: 04, s: 06, f: 04)
         )
         #expect(
-            receiver.events?.first?.midi1RawBytes() ==
+            await receiver.events?.first?.midi1RawBytes() ==
                 [
                     0xF0, 0x7F, 0x7F, 0x01, 0x01,
                     0b00000010, // 0rrh_hhhh
@@ -1378,7 +1381,7 @@ import Testing
                 .init(h: 2, m: 04, s: 06, f: 05)
         )
         #expect(
-            receiver.events?.first?.midi1RawBytes() ==
+            await receiver.events?.first?.midi1RawBytes() ==
                 [
                     0xF0, 0x7F, 0x7F, 0x01, 0x01,
                     0b00000010, // 0rrh_hhhh

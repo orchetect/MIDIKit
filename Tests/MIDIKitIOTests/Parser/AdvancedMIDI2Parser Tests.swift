@@ -10,7 +10,7 @@
 import Testing
 
 @Suite struct AdvancedMIDI2Parser_Tests {
-    private final actor Receiver {
+    @TestActor private final class Receiver {
         var parser: AdvancedMIDI2Parser
         func process(parsedEvents: inout [MIDIEvent]) { parser.process(parsedEvents: &parsedEvents) }
         
@@ -18,11 +18,11 @@ import Testing
         func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
         func reset() { events.removeAll() }
         
-        init() {
+        nonisolated init() {
             parser = AdvancedMIDI2Parser()
             parser.handleEvents = { [weak self] events, _, _ in
-                Task {
-                    await self?.add(events: events)
+                Task { @TestActor in
+                    self?.add(events: events)
                 }
             }
         }

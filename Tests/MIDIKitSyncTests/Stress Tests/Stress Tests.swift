@@ -9,8 +9,7 @@ import CoreMIDI
 import Testing
 
 @Suite struct StressTests {
-    @Test
-    @MainActor
+    @Test @TestActor
     func threadingMTCGenerator() async {
         // MARK: - Generator
         
@@ -48,7 +47,7 @@ import Testing
         access()
         
         // from different thread
-        _ = await Task { @MainActor in
+        _ = await Task { @TestActor in
             access()
         }.value
     }

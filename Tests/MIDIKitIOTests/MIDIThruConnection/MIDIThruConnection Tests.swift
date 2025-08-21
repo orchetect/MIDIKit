@@ -14,7 +14,7 @@ import MIDIKitInternals
 import Testing
 
 @Suite(.serialized) struct MIDIThruConnection_Tests {
-    private final actor Receiver {
+    @TestActor private final class Receiver {
         var events: [MIDIEvent] = []
         func add(events: [MIDIEvent]) { self.events.append(contentsOf: events) }
         func reset() { events.removeAll() }
@@ -24,6 +24,8 @@ import Testing
             model: "MIDIKit123",
             manufacturer: "MIDIKit"
         )
+        
+        nonisolated init() { }
     }
     
     private final actor ProxyWrapper {
@@ -79,8 +81,8 @@ import Testing
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
-                    await receiver?.add(events: events)
+                Task { @TestActor in
+                    receiver?.add(events: events)
                 }
             }
         )
@@ -120,7 +122,7 @@ import Testing
         
         // send an event - it should be received by the input
         try output1.send(event: .start())
-        try await wait(require: { await receiver.events == [.start()] }, timeout: isStable ? 1.0 : 5.0)
+        try await wait(require: { await receiver.events == [.start()] }, timeout: 5.0)
         await receiver.reset()
         
         receiver.manager.remove(.nonPersistentThruConnection, .withTag(connTag))
@@ -162,8 +164,8 @@ import Testing
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
-                    await receiver?.add(events: events)
+                Task { @TestActor in
+                    receiver?.add(events: events)
                 }
             }
         )
@@ -266,8 +268,8 @@ import Testing
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
-                    await receiver?.add(events: events)
+                Task { @TestActor in
+                    receiver?.add(events: events)
                 }
             }
         )
@@ -340,8 +342,8 @@ import Testing
             uniqueID: .adHoc,
             // allow system to generate random ID each time, without persistence
             receiver: .events { [weak receiver] events, _, _ in
-                Task {
-                    await receiver?.add(events: events)
+                Task { @TestActor in
+                    receiver?.add(events: events)
                 }
             }
         )
@@ -374,16 +376,16 @@ import Testing
         
         try await Task.sleep(seconds: isStable ? 0.2 : 2.0)
         
-        // send an event - it should be received by the input
+        // send a test event until one is received.
         
         try await wait(
             require: {
-                print("Send event")
+                print("Sending test event")
                 try output1.send(event: .start())
                 try await Task.sleep(seconds: 0.5)
                 return await receiver.events.contains(.start())
             },
-            timeout: isStable ? 2.0 : 5.0,
+            timeout: 5.0,
             pollingInterval: 0.0
         )
         
