@@ -95,6 +95,13 @@ jobs:
     - name: Build
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=iOS Simulator,name=Any iOS Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: Prepare Destination Device Name
+      id: destnameprep
+      # As of GitHub's updates to the macOS-15 runner summer 2025, randomly Xcode may not list any simulators.
+      # No idea why. Seems like a bug or runner config issue. So to prevent false-positive job failures, we'll skip
+      # the unit tests if no devices are found, but mark the unit test step as cancelled. The job is still marked as
+      # passed (green), but the Unit Tests step will show cancelled. This is the best we can do, as there appears to
+      # be no way to "cancel" an individual job programmatically.
+      continue-on-error: true
       shell: bash
       run: |
         xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" > destinations.txt
@@ -110,6 +117,7 @@ jobs:
         echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
+      if: steps.destnameprep.outcome != 'failure'
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=iOS Simulator,name=$DESTNAME" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
 
   tvOS:
@@ -123,6 +131,13 @@ jobs:
     - name: Build
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=tvOS Simulator,name=Any tvOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: Prepare Destination Device Name
+      id: destnameprep
+      # As of GitHub's updates to the macOS-15 runner summer 2025, randomly Xcode may not list any simulators.
+      # No idea why. Seems like a bug or runner config issue. So to prevent false-positive job failures, we'll skip
+      # the unit tests if no devices are found, but mark the unit test step as cancelled. The job is still marked as
+      # passed (green), but the Unit Tests step will show cancelled. This is the best we can do, as there appears to
+      # be no way to "cancel" an individual job programmatically.
+      continue-on-error: true
       shell: bash
       run: |
         xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" > destinations.txt
@@ -138,6 +153,7 @@ jobs:
         echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
+      if: steps.destnameprep.outcome != 'failure'
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=tvOS Simulator,name=$DESTNAME" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
       
   watchOS:
@@ -151,6 +167,13 @@ jobs:
     - name: Build
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "generic/platform=watchOS Simulator,name=Any watchOS Simulator Device" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
     - name: Prepare Destination Device Name
+      id: destnameprep
+      # As of GitHub's updates to the macOS-15 runner summer 2025, randomly Xcode may not list any simulators.
+      # No idea why. Seems like a bug or runner config issue. So to prevent false-positive job failures, we'll skip
+      # the unit tests if no devices are found, but mark the unit test step as cancelled. The job is still marked as
+      # passed (green), but the Unit Tests step will show cancelled. This is the best we can do, as there appears to
+      # be no way to "cancel" an individual job programmatically.
+      continue-on-error: true
       shell: bash
       run: |
         xcodebuild -showdestinations -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" > destinations.txt
@@ -166,4 +189,5 @@ jobs:
         echo "Using device name \"$DESTNAME\""
         echo "DESTNAME=$DESTNAME" >> "$GITHUB_ENV"
     - name: Unit Tests
+      if: steps.destnameprep.outcome != 'failure'
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "$SCHEME" -destination "platform=watchOS Simulator,name=$DESTNAME" | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
