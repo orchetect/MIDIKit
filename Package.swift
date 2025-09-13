@@ -43,7 +43,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.3.3")
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.3.4")
     ] + doccPluginDependency(),
     targets: [
         .target(
