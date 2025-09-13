@@ -151,14 +151,18 @@ import Testing
         
         await receiver.reset()
         
-        // remove outputs
+        // remove output1
         receiver.manager.remove(.output, .withTag(output1Tag))
+        
         // pause between, just in case notifications are processed out-of-order, since we want to test deterministic ordering of these
         try await Task.sleep(seconds: isStable ? 0.3 : 1.0)
+        
+        // remove output2
         receiver.manager.remove(.output, .withTag(output2Tag))
         
-        try await wait(require: { await receiver.notifications.count >= 2 }, timeout: 10.0)
-        try await Task.sleep(seconds: isStable ? 0.2 : 1.0) // in case more than anticipated notifications arrive
+        try await wait(require: {
+            await receiver.notifications.filter { $0.isCase(.removed) }.count >= 2
+        }, timeout: 10.0)
         
         var removedEndpoints: [MIDIOutputEndpoint] = []
         for notif in await receiver.notifications {
@@ -173,7 +177,7 @@ import Testing
             default: break
             }
         }
-        #expect(removedEndpoints.count == 2)
+        try #require(removedEndpoints.count == 2)
         
         // verify metadata is present and not empty/default
         let removedEndpoint1 = removedEndpoints[0]
