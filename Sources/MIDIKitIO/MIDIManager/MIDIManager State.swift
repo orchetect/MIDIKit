@@ -21,23 +21,22 @@ extension MIDIManager {
         guard coreMIDIClientRef == MIDIClientRef() else { return }
         
         try managementQueue.sync {
-            var newCoreMIDIClientRef = MIDIClientRef()
-            
-            let block = { [self] in
+            func block() throws -> MIDIClientRef {
+                var newCoreMIDIClientRef = MIDIClientRef()
                 try MIDIClientCreateWithBlock(clientName as CFString, &newCoreMIDIClientRef) { [weak self] notificationPtr in
                     guard let self else { return }
                     let internalNotif = MIDIIOInternalNotification(notificationPtr)
                     internalNotificationHandler(internalNotif)
                 }
                 .throwIfOSStatusErr()
+                return newCoreMIDIClientRef
             }
             // even though we're on managementQueue, check for main as a safety measure any way before running sync on main
+            let newCoreMIDIClientRef: MIDIClientRef
             if Thread.current.isMainThread {
-                try block()
+                newCoreMIDIClientRef = try block()
             } else {
-                try DispatchQueue.main.sync {
-                    try block()
-                }
+                newCoreMIDIClientRef = try DispatchQueue.main.sync { try block() }
             }
             assert(newCoreMIDIClientRef != MIDIClientRef())
             self.coreMIDIClientRef = newCoreMIDIClientRef
