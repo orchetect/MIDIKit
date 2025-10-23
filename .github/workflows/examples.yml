@@ -31,7 +31,7 @@ jobs:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
-    - name: Boostrap Platforms
+    - name: Bootstrap Platforms
       # Workaround for Xcode/GitHub runner issues finding simulators.
       # see https://github.com/actions/runner-images/issues/12758#issuecomment-3206748945
       run: xcrun simctl list
@@ -68,7 +68,7 @@ jobs:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
-    - name: Boostrap Platforms
+    - name: Bootstrap Platforms
       # Workaround for Xcode/GitHub runner issues finding simulators.
       # see https://github.com/actions/runner-images/issues/12758#issuecomment-3206748945
       run: xcrun simctl list
@@ -95,7 +95,7 @@ jobs:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: latest-stable # Sometimes a newer version of Xcode is available but isn't yet made default
-    - name: Boostrap Platforms
+    - name: Bootstrap Platforms
       # Workaround for Xcode/GitHub runner issues finding simulators.
       # see https://github.com/actions/runner-images/issues/12758#issuecomment-3206748945
       run: xcrun simctl list
