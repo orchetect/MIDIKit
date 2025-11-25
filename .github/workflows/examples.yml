@@ -26,6 +26,7 @@ jobs:
   UIKit:
     name: UIKit
     runs-on: macos-latest
+    timeout-minutes: 40
     steps:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
@@ -63,6 +64,7 @@ jobs:
   SwiftUI-iOS:
     name: SwiftUI iOS
     runs-on: macos-latest
+    timeout-minutes: 40
     steps:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
@@ -90,6 +92,7 @@ jobs:
   SwiftUI-Multiplatform:
     name: SwiftUI Multiplatform
     runs-on: macos-latest
+    timeout-minutes: 60
     steps:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
@@ -156,6 +159,7 @@ jobs:
   AppKit:
     name: AppKit
     runs-on: macos-latest
+    timeout-minutes: 40
     steps:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
@@ -185,6 +189,7 @@ jobs:
   Advanced:
     name: Advanced
     runs-on: macos-latest
+    timeout-minutes: 40
     steps:
     - uses: actions/checkout@main
     - uses: maxim-lobanov/setup-xcode@v1
