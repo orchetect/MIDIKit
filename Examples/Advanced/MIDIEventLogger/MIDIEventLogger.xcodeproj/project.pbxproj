@@ -13,7 +13,6 @@
 		E20237FC2CC4592100661322 /* MIDIKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = E20237FB2CC4592100661322 /* MIDIKitUI */; };
 		E24FD2A4298734DA00E076A7 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24FD2A3298734DA00E076A7 /* MIDIHelper.swift */; };
 		E24FD2A82987362000E076A7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24FD2A72987362000E076A7 /* Constants.swift */; };
-		E26604E029888DA500177FC9 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E26604DF29888DA500177FC9 /* SwiftRadix */; };
 		E26604E2298893E800177FC9 /* MIDISubsystemStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26604E1298893E800177FC9 /* MIDISubsystemStatusView.swift */; };
 		E26604E42988941800177FC9 /* SendMIDIEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26604E32988941800177FC9 /* SendMIDIEventsView.swift */; };
 		E26604E62988955C00177FC9 /* SendMIDIEventsChannelVoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26604E52988955C00177FC9 /* SendMIDIEventsChannelVoiceView.swift */; };
@@ -25,6 +24,7 @@
 		E26A25C226C5873B00FFCF40 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25BE26C5873B00FFCF40 /* AppDelegate.swift */; };
 		E26A25C326C5873B00FFCF40 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25BF26C5873B00FFCF40 /* Log.swift */; };
 		E26A25C426C5873B00FFCF40 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26A25C026C5873B00FFCF40 /* ContentView.swift */; };
+		E28B23282ED685B50089C0E7 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E28B23272ED685B50089C0E7 /* SwiftRadix */; };
 		E2B099132880AE3800625201 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2B099122880AE3800625201 /* Images.xcassets */; };
 		E2E8BD89279F8DF4007A1AF0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2E8BD88279F8DF3007A1AF0 /* Main.storyboard */; };
 /* End PBXBuildFile section */
@@ -57,10 +57,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E26604E029888DA500177FC9 /* SwiftRadix in Frameworks */,
 				E20237FA2CC4592100661322 /* MIDIKitIO in Frameworks */,
 				E20237FC2CC4592100661322 /* MIDIKitUI in Frameworks */,
 				E20237F82CC4592100661322 /* MIDIKitCore in Frameworks */,
+				E28B23282ED685B50089C0E7 /* SwiftRadix in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,10 +134,10 @@
 			);
 			name = MIDIEventLogger;
 			packageProductDependencies = (
-				E26604DF29888DA500177FC9 /* SwiftRadix */,
 				E20237F72CC4592100661322 /* MIDIKitCore */,
 				E20237F92CC4592100661322 /* MIDIKitIO */,
 				E20237FB2CC4592100661322 /* MIDIKitUI */,
+				E28B23272ED685B50089C0E7 /* SwiftRadix */,
 			);
 			productName = MIDIEventLogger;
 			productReference = E26A25AC26C586F600FFCF40 /* MIDIEventLogger.app */;
@@ -169,8 +169,8 @@
 			);
 			mainGroup = E26A25A326C586F600FFCF40;
 			packageReferences = (
-				E26604DE29888DA500177FC9 /* XCRemoteSwiftPackageReference "SwiftRadix" */,
 				E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
+				E28B23262ED685B50089C0E7 /* XCRemoteSwiftPackageReference "swift-radix" */,
 			);
 			productRefGroup = E26A25AD26C586F600FFCF40 /* Products */;
 			projectDirPath = "";
@@ -439,12 +439,12 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E26604DE29888DA500177FC9 /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
+		E28B23262ED685B50089C0E7 /* XCRemoteSwiftPackageReference "swift-radix" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/SwiftRadix.git";
+			repositoryURL = "https://github.com/orchetect/swift-radix";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.2;
+				minimumVersion = 1.4.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -465,9 +465,9 @@
 			package = E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
 			productName = MIDIKitUI;
 		};
-		E26604DF29888DA500177FC9 /* SwiftRadix */ = {
+		E28B23272ED685B50089C0E7 /* SwiftRadix */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E26604DE29888DA500177FC9 /* XCRemoteSwiftPackageReference "SwiftRadix" */;
+			package = E28B23262ED685B50089C0E7 /* XCRemoteSwiftPackageReference "swift-radix" */;
 			productName = SwiftRadix;
 		};
 /* End XCSwiftPackageProductDependency section */

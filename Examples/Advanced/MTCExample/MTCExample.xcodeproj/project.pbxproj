@@ -12,8 +12,8 @@
 		E24FF24F28B9841E000A2055 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E24FF24E28B9841E000A2055 /* Assets.xcassets */; };
 		E27E3FA025A6E5C700F4B78E /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E3F9F25A6E5C700F4B78E /* Audio.swift */; };
 		E287C0782D44F76D00F8A47C /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = E287C0772D44F76D00F8A47C /* MIDIKit */; };
+		E28B23332ED6860A0089C0E7 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E28B23322ED6860A0089C0E7 /* SwiftRadix */; };
 		E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29EF038267BF71B00282F94 /* DunneAudioKit */; };
-		E2B82F4E26B7F2A3006AF638 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E2B82F4D26B7F2A3006AF638 /* SwiftRadix */; };
 		E2BE847F268BC6680034F62C /* MIDIKitSync Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BE847E268BC6680034F62C /* MIDIKitSync Extensions.swift */; };
 		E2F71ED42758ED1E006254C0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F71ED32758ED1E006254C0 /* Log.swift */; };
 		E2FAC4DE257884E000A6DD31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */; };
@@ -47,8 +47,8 @@
 			files = (
 				E202386F2CC4676000661322 /* TimecodeKitCore in Frameworks */,
 				E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */,
-				E2B82F4E26B7F2A3006AF638 /* SwiftRadix in Frameworks */,
 				E287C0782D44F76D00F8A47C /* MIDIKit in Frameworks */,
+				E28B23332ED6860A0089C0E7 /* SwiftRadix in Frameworks */,
 				E20238712CC4676000661322 /* TimecodeKitUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -113,10 +113,10 @@
 			name = MTCExample;
 			packageProductDependencies = (
 				E29EF038267BF71B00282F94 /* DunneAudioKit */,
-				E2B82F4D26B7F2A3006AF638 /* SwiftRadix */,
 				E202386E2CC4676000661322 /* TimecodeKitCore */,
 				E20238702CC4676000661322 /* TimecodeKitUI */,
 				E287C0772D44F76D00F8A47C /* MIDIKit */,
+				E28B23322ED6860A0089C0E7 /* SwiftRadix */,
 			);
 			productName = MTCExample;
 			productReference = E2FAC4DA257884E000A6DD31 /* MTCExample.app */;
@@ -147,10 +147,10 @@
 			);
 			mainGroup = E2FAC4D1257884DF00A6DD31;
 			packageReferences = (
-				E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */,
 				E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */,
 				E202386D2CC4676000661322 /* XCRemoteSwiftPackageReference "TimecodeKit" */,
 				E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
+				E28B23312ED6860A0089C0E7 /* XCRemoteSwiftPackageReference "swift-radix" */,
 			);
 			productRefGroup = E2FAC4DB257884E000A6DD31 /* Products */;
 			projectDirPath = "";
@@ -417,15 +417,15 @@
 			repositoryURL = "https://github.com/orchetect/TimecodeKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.3.0;
+				minimumVersion = 2.3.4;
 			};
 		};
-		E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
+		E28B23312ED6860A0089C0E7 /* XCRemoteSwiftPackageReference "swift-radix" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/orchetect/SwiftRadix.git";
+			repositoryURL = "https://github.com/orchetect/swift-radix";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.2;
+				minimumVersion = 1.4.0;
 			};
 		};
 		E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */ = {
@@ -454,15 +454,15 @@
 			package = E287C0632D44F74000F8A47C /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
 			productName = MIDIKit;
 		};
+		E28B23322ED6860A0089C0E7 /* SwiftRadix */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E28B23312ED6860A0089C0E7 /* XCRemoteSwiftPackageReference "swift-radix" */;
+			productName = SwiftRadix;
+		};
 		E29EF038267BF71B00282F94 /* DunneAudioKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */;
 			productName = DunneAudioKit;
-		};
-		E2B82F4D26B7F2A3006AF638 /* SwiftRadix */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */;
-			productName = SwiftRadix;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
