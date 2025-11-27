@@ -1,7 +1,7 @@
 /// -------------------------------------------------
 /// -------------------------------------------------
-/// Borrowed from SwiftASCII 1.1.3 under MIT license.
-/// https://github.com/orchetect/SwiftASCII
+/// Borrowed from swift-ascii 1.3.0 under MIT license.
+/// https://github.com/orchetect/swift-ascii
 /// Methods herein are unit tested at their source
 /// so no unit tests are necessary.
 /// -------------------------------------------------
