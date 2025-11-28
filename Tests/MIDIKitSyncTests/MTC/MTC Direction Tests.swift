@@ -6,7 +6,7 @@
 
 @testable import MIDIKitSync
 import Testing
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 @Suite struct MTC_Direction_Tests {
     @Test

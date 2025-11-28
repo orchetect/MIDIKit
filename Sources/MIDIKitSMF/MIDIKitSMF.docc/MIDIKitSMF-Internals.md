@@ -9,5 +9,5 @@
 
 ### Timecode Related
 
-- ``TimecodeKitCore/Timecode/scaledToMIDIFileSMPTEFrameRate``
-- ``TimecodeKitCore/TimecodeFrameRate/midiFileSMPTEOffsetRate``
+- ``SwiftTimecodeCore/Timecode/scaledToMIDIFileSMPTEFrameRate``
+- ``SwiftTimecodeCore/TimecodeFrameRate/midiFileSMPTEOffsetRate``

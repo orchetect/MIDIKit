@@ -43,7 +43,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "2.3.4")
+        .package(url: "https://github.com/orchetect/swift-timecode", from: "3.0.0")
     ] + doccPluginDependency(),
     targets: [
         .target(
@@ -92,7 +92,7 @@ let package = Package(
             name: "MIDIKitSMF",
             dependencies: [
                 .target(name: "MIDIKitCore"),
-                .product(name: "TimecodeKitCore", package: "TimecodeKit")
+                .product(name: "SwiftTimecodeCore", package: "swift-timecode")
             ],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
@@ -101,7 +101,7 @@ let package = Package(
             dependencies: [
                 .target(name: "MIDIKitCore"),
                 .target(name: "MIDIKitIO"),
-                .product(name: "TimecodeKitCore", package: "TimecodeKit")
+                .product(name: "SwiftTimecodeCore", package: "swift-timecode")
             ],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),

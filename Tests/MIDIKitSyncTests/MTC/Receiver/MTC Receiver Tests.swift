@@ -7,7 +7,7 @@
 import Foundation
 @testable import MIDIKitSync
 import Testing
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 @Suite struct MTC_Receiver_Receiver_Tests {
     @Test

@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 // MARK: - SMPTEOffset
 

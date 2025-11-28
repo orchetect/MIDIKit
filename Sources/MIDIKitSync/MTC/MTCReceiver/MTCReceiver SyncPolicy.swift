@@ -6,7 +6,7 @@
 
 import Foundation
 import MIDIKitCore
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 extension MTCReceiver {
     /// Options defining behavior of the receiver.

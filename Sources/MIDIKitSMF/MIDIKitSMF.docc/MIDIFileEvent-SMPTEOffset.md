@@ -22,7 +22,7 @@ Defaults to `00:00:00:00 @ 24fps`.
 
 ## Timecode
 
-For documentation on the `Timecode` type, see TimecodeKit documentation.
+For documentation on the `Timecode` type, see swift-timecode documentation.
 
 ## Topics
 

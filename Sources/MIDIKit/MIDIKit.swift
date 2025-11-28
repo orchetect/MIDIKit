@@ -22,7 +22,7 @@
 @_documentation(visibility: internal)
 @_exported import MIDIKitSMF
 @_documentation(visibility: internal)
-@_exported import TimecodeKitCore // must re-export target's exports here
+@_exported import SwiftTimecodeCore // must re-export target's exports here
 
 // MIDIKitSync
 @_documentation(visibility: internal)

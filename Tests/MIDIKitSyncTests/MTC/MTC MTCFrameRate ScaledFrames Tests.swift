@@ -6,7 +6,7 @@
 
 @testable import MIDIKitSync
 import Testing
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 @Suite struct MTC_MTCFrameRate_ScaledFrames_Tests {
     // Local Constants
@@ -19,7 +19,7 @@ import TimecodeKitCore
     @Test
     func mtcFrameRate_ScaledFrames() {
         // we iterate on allCases here so that the compiler will
-        // throw an error in future if additional frame rates get added to TimecodeKit,
+        // throw an error in future if additional frame rates get added to swift-timecode,
         // prompting us to add unit test cases for them below
         
         // (reminder: MTC SMPTE frame numbers should only ever be even numbers,

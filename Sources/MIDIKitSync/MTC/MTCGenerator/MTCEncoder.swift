@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 import MIDIKitIO
 internal import MIDIKitInternals
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 /// MTC (MIDI Timecode) stream encoder object.
 ///

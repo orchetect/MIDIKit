@@ -8,7 +8,7 @@ import Foundation
 import MIDIKitCore
 import MIDIKitIO
 internal import MIDIKitInternals
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 /// MTC sync generator.
 public final class MTCGenerator: SendsMIDIEvents, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use

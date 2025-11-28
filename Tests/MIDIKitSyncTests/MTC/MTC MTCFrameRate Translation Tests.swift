@@ -6,7 +6,7 @@
 
 @testable import MIDIKitSync
 import Testing
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 @Suite struct MTC_MTCFrameRate_Translation_Tests {
     @Test

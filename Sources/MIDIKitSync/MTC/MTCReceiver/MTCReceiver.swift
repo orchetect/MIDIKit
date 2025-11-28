@@ -9,7 +9,7 @@ import Foundation
 import MIDIKitCore
 import MIDIKitIO
 internal import MIDIKitInternals
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 // MARK: - Receiver
 

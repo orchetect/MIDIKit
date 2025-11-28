@@ -7,7 +7,7 @@
 @testable import MIDIKitInternals
 @testable import MIDIKitSync
 import Testing
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 @Suite struct MTC_Generator_Generator_Tests {
     private final actor Sandbox {

@@ -6,7 +6,7 @@
 
 @testable import MIDIKitSync
 import Testing
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 @Suite struct MTC_Receiver_Decoder_Tests {
     // swiftformat:options --maxwidth none

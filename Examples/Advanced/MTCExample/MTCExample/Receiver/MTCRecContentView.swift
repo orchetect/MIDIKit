@@ -8,7 +8,7 @@ import Combine
 import MIDIKitIO
 import MIDIKitSync
 import SwiftUI
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 struct MTCRecContentView: View {
     @Environment(ObservableMIDIManager.self) private var midiManager

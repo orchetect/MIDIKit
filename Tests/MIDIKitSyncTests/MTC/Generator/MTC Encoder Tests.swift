@@ -6,7 +6,7 @@
 
 @testable import MIDIKitSync
 import Testing
-@testable import TimecodeKitCore
+@testable import SwiftTimecodeCore
 
 @Suite struct MTC_Generator_Encoder_Tests {
     @Test

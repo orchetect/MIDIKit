@@ -8,4 +8,4 @@
 @_exported import MIDIKitCore
 
 @_documentation(visibility: internal)
-@_exported import TimecodeKitCore
+@_exported import SwiftTimecodeCore

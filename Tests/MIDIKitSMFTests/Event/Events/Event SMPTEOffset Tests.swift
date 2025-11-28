@@ -6,7 +6,7 @@
 
 @testable import MIDIKitSMF
 import Testing
-import TimecodeKitCore
+import SwiftTimecodeCore
 
 @Suite struct Event_SMPTEOffset_Tests {
     // swiftformat:options --wrapcollections preserve
