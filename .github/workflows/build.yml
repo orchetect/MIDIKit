@@ -27,7 +27,7 @@ on:
     - cron: '35 11 * * *'   # once a day @ 11:35am UTC (4:35am PST)
 
 env:
-  SCHEME: "MIDIKit-CI"
+  SCHEME: "MIDIKit"
 
 jobs:
   macOS-14:
