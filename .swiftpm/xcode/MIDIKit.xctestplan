@@ -1,0 +1,54 @@
+{
+  "configurations" : [
+    {
+      "id" : "0A3601E3-C1C4-4E3F-B461-DB3844419852",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MIDIKitControlSurfacesTests",
+        "name" : "MIDIKitControlSurfacesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MIDIKitCoreTests",
+        "name" : "MIDIKitCoreTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MIDIKitIOTests",
+        "name" : "MIDIKitIOTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MIDIKitSMFTests",
+        "name" : "MIDIKitSMFTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MIDIKitSyncTests",
+        "name" : "MIDIKitSyncTests"
+      }
+    }
+  ],
+  "version" : 1
+}
