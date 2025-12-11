@@ -61,7 +61,6 @@ let package = Package(
         .target(
             name: "MIDIKitInternals",
             dependencies: [],
-            resources: [.process("PrivacyInfo.xcprivacy")],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         .target(
@@ -77,7 +76,6 @@ let package = Package(
                 .target(name: "MIDIKitInternals"),
                 .target(name: "MIDIKitCore")
             ],
-            resources: [.process("PrivacyInfo.xcprivacy")],
             swiftSettings: [.define("DEBUG", .when(configuration: .debug))]
         ),
         .target(
