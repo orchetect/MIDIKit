@@ -1,13 +1,8 @@
-/// ------------------------------------------------
-/// ------------------------------------------------
-/// OTAtomics/OTAtomicsThreadSafe.swift
-///
-/// Borrowed from OTAtomics 1.0.1 under MIT license.
-/// https://github.com/orchetect/OTAtomics
-/// Methods herein are unit tested at their source
-/// so no unit tests are necessary.
-/// ------------------------------------------------
-/// ------------------------------------------------
+//
+//  ThreadSafeAccess.swift
+//  MIDIKit • https://github.com/orchetect/MIDIKit
+//  © 2021-2025 Steffan Andrews • Licensed under MIT License
+//
 
 import Foundation
 
