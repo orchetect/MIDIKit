@@ -13,7 +13,7 @@ extension HUISurfaceView {
                 HStack(alignment: .center, spacing: 3) {
                     ForEach(0 ..< 7 + 1, id: \.self) { channel in
                         ChannelStripView(channel: channel.toUInt4)
-                            .frame(width: HUISurfaceView.channelStripWidth, alignment: .center)
+                            .frame(width: HUISurfaceView.MixerView.channelStripWidth, alignment: .center)
                     }
                 }
                 Spacer()

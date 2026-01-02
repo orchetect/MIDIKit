@@ -13,25 +13,14 @@ import SwiftTimecodeCore
 // AppDelegate for legacy macOS versions support
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    let midiManager = ObservableMIDIManager(
-        clientName: "MTCExample",
-        model: "TestApp",
-        manufacturer: "MyCompany"
-    )
+    let midiHelper = MIDIHelper(start: true)
     
     var mtcGenWindow: NSWindow?
     var mtcRecWindow: NSWindow?
     
     func applicationDidFinishLaunching(_: Notification) {
-        // audio engine setup
-        setupAudioEngine()
-        
-        // midi setup
-        do {
-            try midiManager.start()
-        } catch {
-            print(error)
-        }
+        // start audio engine
+        AudioHelper.shared.start()
         
         // create windows
         createMTCGenWindow()
@@ -41,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @MainActor
     func createMTCGenWindow() {
         let contentView = MTCGenContentView()
-            .environment(midiManager)
+            .environment(midiHelper)
         
         // (X,Y coord 0,0 origin is bottom left of screen)
         let scrW = NSScreen.main?.frame.width ?? 0
@@ -67,7 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @MainActor
     func createMTCRecWindow() {
         let contentView = MTCRecContentView()
-            .environment(midiManager)
+            .environment(midiHelper)
         
         // (X,Y coord 0,0 origin is bottom left of screen)
         let scrW = NSScreen.main?.frame.width ?? 0

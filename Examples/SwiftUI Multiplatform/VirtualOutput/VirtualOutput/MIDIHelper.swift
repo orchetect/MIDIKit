@@ -7,17 +7,32 @@
 import MIDIKitIO
 import SwiftUI
 
-/// Receiving MIDI happens on an asynchronous background thread. That means it cannot update
-/// SwiftUI view state directly. Therefore, we need a helper class marked with `@Observable`
-/// which contains properties that SwiftUI can use to update views.
-@Observable @MainActor final class MIDIHelper {
-    private weak var midiManager: ObservableMIDIManager?
+/// Object responsible for managing MIDI services, managing connections, and sending/receiving events.
+///
+/// Marking the class as `@Observable` allows us to install an instance of the class in a SwiftUI App or View
+/// and propagate it through the environment.
+@Observable public final class MIDIHelper: Sendable {
+    private let midiManager = MIDIManager(
+        clientName: "TestAppMIDIManager",
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
     
-    public init() { }
-    
-    public func setup(midiManager: ObservableMIDIManager) {
-        self.midiManager = midiManager
-        
+    public init(start: Bool = false) {
+        if start { self.start() }
+    }
+}
+
+// MARK: - Static
+
+extension MIDIHelper {
+    public var virtualOutputName: String { "TestApp Output" }
+}
+
+// MARK: - Lifecycle
+
+extension MIDIHelper {
+    public func start() {
         do {
             print("Starting MIDI services.")
             try midiManager.start()
@@ -25,55 +40,35 @@ import SwiftUI
             print("Error starting MIDI services:", error.localizedDescription)
         }
         
-        addVirtualOutput()
+        createOutput()
     }
     
-    // MARK: - Virtual Endpoints
-    
-    static let virtualOutputName = "TestApp Output"
-    
-    /// Convenience accessor for created virtual MIDI Output.
-    var virtualOutput: MIDIOutput? {
-        midiManager?.managedOutputs[MIDIHelper.virtualOutputName]
+    public func stop() {
+        removeOutput()
+    }
+}
+
+// MARK: - I/O
+
+extension MIDIHelper {
+    public var virtualOutput: MIDIOutput? {
+        midiManager.managedOutputs[virtualOutputName]
     }
     
-    func addVirtualOutput() {
-        guard let midiManager else { return }
+    private func createOutput() {
         do {
             print("Creating virtual MIDI output.")
             try midiManager.addOutput(
-                name: Self.virtualOutputName,
-                tag: Self.virtualOutputName,
-                uniqueID: .userDefaultsManaged(key: Self.virtualOutputName)
+                name: virtualOutputName,
+                tag: virtualOutputName,
+                uniqueID: .userDefaultsManaged(key: virtualOutputName)
             )
         } catch {
             print("Error creating virtual MIDI output:", error.localizedDescription)
         }
     }
     
-    // MARK: - Send
-    
-    func sendNoteOn() {
-        try? virtualOutput?.send(event: .noteOn(
-            60,
-            velocity: .midi1(127),
-            channel: 0
-        ))
-    }
-    
-    func sendNoteOff() {
-        try? virtualOutput?.send(event: .noteOff(
-            60,
-            velocity: .midi1(0),
-            channel: 0
-        ))
-    }
-    
-    func sendCC1() {
-        try? virtualOutput?.send(event: .cc(
-            1,
-            value: .midi1(64),
-            channel: 0
-        ))
+    private func removeOutput() {
+        midiManager.remove(.output, .withTag(virtualOutputName))
     }
 }

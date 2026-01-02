@@ -80,6 +80,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "MIDISystemInfo"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

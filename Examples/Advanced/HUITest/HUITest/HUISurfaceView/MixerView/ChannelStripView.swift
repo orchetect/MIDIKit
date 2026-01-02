@@ -8,11 +8,7 @@ import Controls
 import MIDIKitControlSurfaces
 import SwiftUI
 
-extension HUISurfaceView {
-    static let channelStripWidth: CGFloat = 58
-}
-
-extension HUISurfaceView {
+extension HUISurfaceView.MixerView {
     struct ChannelStripView: View {
         @Environment(HUISurface.self) var huiSurface
         
@@ -88,4 +84,10 @@ extension HUISurfaceView {
             }
         }
     }
+}
+
+// MARK: - Static
+
+extension HUISurfaceView.MixerView {
+    static let channelStripWidth: CGFloat = 58
 }

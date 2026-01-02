@@ -1,0 +1,465 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "-" : {
+
+    },
+    "." : {
+
+    },
+    "*" : {
+
+    },
+    "/" : {
+
+    },
+    "←" : {
+
+    },
+    "→" : {
+
+    },
+    "+" : {
+
+    },
+    "=" : {
+
+    },
+    "⌘ALT/FINE" : {
+
+    },
+    "▲" : {
+
+    },
+    "▶︎" : {
+
+    },
+    "▼" : {
+
+    },
+    "◀︎" : {
+
+    },
+    "0" : {
+
+    },
+    "1" : {
+
+    },
+    "1:1 DISCRETE" : {
+
+    },
+    "2" : {
+
+    },
+    "3" : {
+
+    },
+    "4" : {
+
+    },
+    "4-Character LCD" : {
+
+    },
+    "5" : {
+
+    },
+    "6" : {
+
+    },
+    "7" : {
+
+    },
+    "8" : {
+
+    },
+    "9" : {
+
+    },
+    "ALT" : {
+
+    },
+    "ASSIGN" : {
+
+    },
+    "AUDITION" : {
+
+    },
+    "AUTO" : {
+
+    },
+    "AUTO ENABLE" : {
+
+    },
+    "AUTO MODE" : {
+
+    },
+    "BANK" : {
+
+    },
+    "BEATS" : {
+
+    },
+    "BYPASS" : {
+
+    },
+    "CAPTURE" : {
+
+    },
+    "Center Anchor (Pan)" : {
+
+    },
+    "Center Radius (Width)" : {
+
+    },
+    "CHANNEL" : {
+
+    },
+    "Channel Strip 1" : {
+
+    },
+    "CLR" : {
+
+    },
+    "COMPARE" : {
+
+    },
+    "COPY" : {
+
+    },
+    "CREATE" : {
+
+    },
+    "CTRL/CLUTCH" : {
+
+    },
+    "CUT" : {
+
+    },
+    "DEFAULT" : {
+
+    },
+    "DELETE" : {
+
+    },
+    "DIM" : {
+
+    },
+    "E\nN\nT\nE\nR" : {
+
+    },
+    "EDIT" : {
+
+    },
+    "EDIT MODE" : {
+
+    },
+    "EDIT TOOL" : {
+
+    },
+    "F1" : {
+
+    },
+    "F2" : {
+
+    },
+    "F3" : {
+
+    },
+    "F4" : {
+
+    },
+    "F5" : {
+
+    },
+    "F6" : {
+
+    },
+    "F7" : {
+
+    },
+    "F8/ESC" : {
+
+    },
+    "Fader" : {
+
+    },
+    "FADER" : {
+
+    },
+    "FEET" : {
+
+    },
+    "GROUP" : {
+
+    },
+    "Host" : {
+
+    },
+    "hui" : {
+
+    },
+    "HUI Host" : {
+
+    },
+    "HUI Surface" : {
+
+    },
+    "IN" : {
+
+    },
+    "INPUT" : {
+
+    },
+    "INPUT 1" : {
+
+    },
+    "INPUT 2" : {
+
+    },
+    "INPUT 3" : {
+
+    },
+    "INSERT" : {
+
+    },
+    "INSERT ○\nPARAM ●" : {
+
+    },
+    "Jog Wheel" : {
+
+    },
+    "KEYBOARD SHORTCUTS" : {
+
+    },
+    "LATCH" : {
+
+    },
+    "Left Anchor (Send Level)" : {
+
+    },
+    "LEVEL" : {
+
+    },
+    "LIGHT" : {
+
+    },
+    "LOCATE/NUMERICS" : {
+
+    },
+    "Log Events" : {
+
+    },
+    "Log Pings" : {
+
+    },
+    "Low" : {
+
+    },
+    "MASTER VOLUME" : {
+
+    },
+    "MEM-LOC" : {
+
+    },
+    "MIC" : {
+
+    },
+    "MIX" : {
+
+    },
+    "MODE" : {
+
+    },
+    "MONITOR" : {
+
+    },
+    "MONO" : {
+
+    },
+    "Mute" : {
+
+    },
+    "MUTE" : {
+
+    },
+    "Off" : {
+
+    },
+    "OFF" : {
+
+    },
+    "ON LINE" : {
+
+    },
+    "OPTION/ALT" : {
+
+    },
+    "OUT" : {
+
+    },
+    "OUTPUT" : {
+
+    },
+    "OUTPUT 1" : {
+
+    },
+    "OUTPUT 2" : {
+
+    },
+    "OUTPUT 3\n/ PHONES" : {
+
+    },
+    "PAN" : {
+
+    },
+    "PAN/SEND" : {
+
+    },
+    "PASTE" : {
+
+    },
+    "PHASE" : {
+
+    },
+    "PLUG IN" : {
+
+    },
+    "Position" : {
+
+    },
+    "POST" : {
+
+    },
+    "PRE" : {
+
+    },
+    "QUICK\nPUNCH" : {
+
+    },
+    "READ" : {
+
+    },
+    "REC/RDY" : {
+
+    },
+    "REC/RDY ALL" : {
+
+    },
+    "RUDE" : {
+
+    },
+    "SAVE" : {
+
+    },
+    "SCROLL" : {
+
+    },
+    "SCRUB" : {
+
+    },
+    "SELECT" : {
+
+    },
+    "SELECT-ASSIGN" : {
+
+    },
+    "Selected" : {
+
+    },
+    "SEND" : {
+
+    },
+    "SEND A" : {
+
+    },
+    "SEND B" : {
+
+    },
+    "SEND C" : {
+
+    },
+    "SEND D" : {
+
+    },
+    "SEND E" : {
+
+    },
+    "SEND MUTE" : {
+
+    },
+    "Send Random Meter Level" : {
+
+    },
+    "SEPARATE" : {
+
+    },
+    "SHIFT" : {
+
+    },
+    "SHIFT/ADD" : {
+
+    },
+    "SHUTTLE" : {
+
+    },
+    "Solo" : {
+
+    },
+    "SOLO" : {
+
+    },
+    "STATUS" : {
+
+    },
+    "STATUS/GROUP" : {
+
+    },
+    "Style" : {
+
+    },
+    "Surface" : {
+
+    },
+    "SUSPEND" : {
+
+    },
+    "TALKBACK" : {
+
+    },
+    "This window acts as a HUI host (ie: a DAW) and connects to the HUI surface.\n\nTo test the HUI surface with an actual DAW instead (Pro Tools, Logic, Cubase, etc.), close this window. The HUI Surface window can be used as a standalone HUI device." : {
+
+    },
+    "TIME CODE" : {
+
+    },
+    "TOUCH" : {
+
+    },
+    "TRANS-PORT" : {
+
+    },
+    "TRIM" : {
+
+    },
+    "UNDO" : {
+
+    },
+    "V-Pot" : {
+
+    },
+    "V-SEL" : {
+
+    },
+    "WINDOW" : {
+
+    },
+    "WRITE" : {
+
+    }
+  },
+  "version" : "1.1"
+}

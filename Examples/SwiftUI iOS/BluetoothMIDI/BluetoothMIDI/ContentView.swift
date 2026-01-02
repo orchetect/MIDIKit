@@ -8,7 +8,6 @@ import MIDIKitIO
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(ObservableMIDIManager.self) private var midiManager
     @Environment(MIDIHelper.self) private var midiHelper
     
     var body: some View {
@@ -37,7 +36,7 @@ struct ContentView: View {
                 }
                 Section("Send Test Event") {
                     Button("Broadcast test MIDI Event to all MIDI Inputs") {
-                        midiHelper.sendTestMIDIEvent()
+                        sendTestMIDIEvent()
                     }
                 }
                 Section("Receive Events") {
@@ -52,6 +51,10 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .padding()
+    }
+    
+    private func sendTestMIDIEvent() {
+        try? midiHelper.outputConnection?.send(event: .cc(.expression, value: .midi1(64), channel: 0))
     }
 }
 

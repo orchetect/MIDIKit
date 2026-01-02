@@ -4,85 +4,68 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-import Controls
+import Foundation
 import MIDIKitControlSurfaces
 import MIDIKitInternals // only for utils
 import MIDIKitIO
-import SwiftUI
 
-@Observable @MainActor final class HUIHostHelper {
-    // MARK: MIDI
-    @ObservationIgnored
-    nonisolated(unsafe) weak var midiManager: ObservableMIDIManager?
+@Observable final class HUIHostHelper: Sendable {
+    @ObservationIgnored nonisolated(unsafe) weak var midiManager: ObservableMIDIManager? = nil
+    @HUIHostActor var huiHost: HUIHost = HUIHost()
     
-    nonisolated static let kHUIInputConnectionTag = "HUIHostInputConnection"
-    nonisolated static let kHUIOutputConnectionTag = "HUIHostOutputConnection"
+    // MARK: Observable Properties
+    @MainActor var model = HUIHostModel()
+    @MainActor var logEvents: Bool = false
+    @MainActor var logPing: Bool = false
+    @MainActor private(set) var isRemotePresent: Bool = false
     
-    var logPing: Bool = false
-    
-    var huiHost: HUIHost
-    
-    var isRemotePresent: Bool = false
-    
-    var model = HUIHostModel()
-    
-    init(midiManager: ObservableMIDIManager) {
-        self.midiManager = midiManager
-        
-        huiHost = HUIHost()
-        
-        setupSingleBank(midiManager: midiManager)
-    }
+    init() { }
     
     deinit {
         stopConnections()
     }
-    
-    func startConnections() {
+}
+
+// MARK: - Static
+
+extension HUIHostHelper {
+    nonisolated static let kHUIInputConnectionTag = "HUIHostInputConnection"
+    nonisolated static let kHUIOutputConnectionTag = "HUIHostOutputConnection"
+}
+
+// MARK: - Lifecycle
+
+extension HUIHostHelper {
+    @HUIHostActor func setup(midiManager: ObservableMIDIManager?) {
         guard let midiManager else { return }
         
-        do {
-            if midiManager.managedInputConnections.isEmpty {
-                try midiManager.addInputConnection(
-                    to: .outputs(matching: [.name(HUIClientView.kHUIOutputName)]),
-                    tag: Self.kHUIInputConnectionTag,
-                    receiver: .weak(huiHost.banks[0])
-                )
-            }
-            if midiManager.managedOutputConnections.isEmpty {
-                try midiManager.addOutputConnection(
-                    to: .inputs(matching: [.name(HUIClientView.kHUIInputName)]),
-                    tag: Self.kHUIOutputConnectionTag
-                )
-            }
-        } catch {
-            Logger.debug("Error setting up MIDI.")
-        }
+        self.midiManager = midiManager
+        huiHost = HUIHost()
+        setupSingleBank(midiManager: midiManager)
     }
     
-    nonisolated func stopConnections() {
-        midiManager?.remove(.inputConnection, .withTag(Self.kHUIInputConnectionTag))
-        midiManager?.remove(.outputConnection, .withTag(Self.kHUIOutputConnectionTag))
-    }
-    
-    func setupSingleBank(midiManager: ObservableMIDIManager) {
+    @HUIHostActor private func setupSingleBank(midiManager: ObservableMIDIManager) {
         guard huiHost.banks.isEmpty else { return }
         
         huiHost.addBank(
             huiEventHandler: { [weak self] event in
-                // update host state model on main
-                Task { @MainActor [weak self] in
-                    guard let self else { return }
+                guard let self else { return }
+                
+                Task { @MainActor in
+                    self.handle(inboundEvent: event)
+                }
+                
+                Task { @MainActor in
                     switch event {
                     case .ping:
                         if self.logPing {
-                            Logger.debug("Host received ping")
+                            logger.debug("Host received ping")
                         }
                     default:
-                        Logger.debug("Host received: \(event)")
+                        if self.logEvents {
+                            logger.debug("Host received: \(event)")
+                        }
                     }
-                    
-                    self.handle(inboundEvent: event)
                 }
             },
             midiOutHandler: { [weak midiManager] events in
@@ -94,14 +77,15 @@ import SwiftUI
             remotePresenceChangedHandler: { [weak self] isPresent in
                 // update host state model on main
                 Task { @MainActor in
-                    Logger.debug("Surface presence is now \(isPresent)")
                     self?.isRemotePresent = isPresent
+                    logger.debug("Surface presence is now \(isPresent)")
                 }
             }
         )
     }
     
-    func handle(inboundEvent event: HUISurfaceEvent) {
+    /// Changes to observable properties in this class must be pushed from main actor/thread if UI updates may happen as a result.
+    @MainActor private func handle(inboundEvent event: HUISurfaceEvent) {
         switch event {
         case let .faderLevel(channelStrip: 0, level):
             let scaledValue = Float(level) / Float(UInt14.max)
@@ -142,34 +126,36 @@ import SwiftUI
     }
 }
 
-/// Host model. Can contain one or more banks.
-/// Each bank corresponds to an entire HUI device (remote control surface).
-@Observable class HUIHostModel {
-    public var bank0 = Bank()
-}
+// MARK: - MIDI I/O
 
-extension HUIHostModel {
-    @Observable class Bank {
-        public var channel0: ChannelStrip = .init()
-        public var channel1: ChannelStrip = .init()
-        public var channel2: ChannelStrip = .init()
-        public var channel3: ChannelStrip = .init()
-        public var channel4: ChannelStrip = .init()
-        public var channel5: ChannelStrip = .init()
-        public var channel6: ChannelStrip = .init()
-        public var channel7: ChannelStrip = .init()
+extension HUIHostHelper {
+    func startConnections() async {
+        guard let midiManager else { return }
+        
+        let bank0 = await huiHost.banks[0]
+        
+        do {
+            if midiManager.managedInputConnections.isEmpty {
+                try midiManager.addInputConnection(
+                    to: .outputs(matching: [.name(HUIClientHelper.kHUIOutputName)]),
+                    tag: Self.kHUIInputConnectionTag,
+                    receiver: .weak(bank0)
+                )
+            }
+            if midiManager.managedOutputConnections.isEmpty {
+                try midiManager.addOutputConnection(
+                    to: .inputs(matching: [.name(HUIClientHelper.kHUIInputName)]),
+                    tag: Self.kHUIOutputConnectionTag
+                )
+            }
+        } catch {
+            logger.debug("Error setting up MIDI.")
+        }
     }
-}
-
-extension HUIHostModel.Bank {
-    @Observable class ChannelStrip {
-        public var pan: Float = 0.5
-        public var vPotLowerLED: Bool = false
-        public var solo: Bool = false
-        public var mute: Bool = false
-        public var name: String = ""
-        public var selected: Bool = false
-        public var faderTouched: Bool = false
-        public var faderLevel: Float = 0.0
+    
+    nonisolated func stopConnections() {
+        guard let midiManager else { return }
+        midiManager.remove(.inputConnection, .withTag(Self.kHUIInputConnectionTag))
+        midiManager.remove(.outputConnection, .withTag(Self.kHUIOutputConnectionTag))
     }
 }

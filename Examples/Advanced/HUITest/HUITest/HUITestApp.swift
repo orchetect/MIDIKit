@@ -11,39 +11,21 @@ import SwiftUI
 struct HUITestApp: App {
     @Environment(\.openWindow) private var openWindow
     
-    @State private var midiManager = ObservableMIDIManager(
-        clientName: "HUITest",
-        model: "HUITest",
-        manufacturer: "MyCompany"
-    )
-    
-    let huiHostWidth: CGFloat = 300
-    let huiHostHeight: CGFloat = 600
-    
-    let huiSurfaceWidth: CGFloat = 1180
-    let huiSurfaceHeight: CGFloat = 920
-    
-    init() {
-        do {
-            try midiManager.start()
-        } catch {
-            Logger.debug("Error setting up MIDI.")
-        }
-    }
+    @State private var midiHelper = MIDIHelper(start: true)
     
     var body: some Scene {
         Window("HUI Host", id: WindowID.huiHost) {
-            HUIHostView(midiManager: midiManager)
+            HUIHostView()
                 .frame(width: huiHostWidth, height: huiHostHeight)
-                .environment(midiManager)
+                .environment(midiHelper)
         }
         .windowResizability(.contentSize)
         .defaultPosition(UnitPoint(x: 0.25, y: 0.4))
         
         Window("HUI Surface", id: WindowID.huiSurface) {
-            HUIClientView(midiManager: midiManager)
+            HUIClientView()
                 .frame(width: huiSurfaceWidth, height: huiSurfaceHeight)
-                .environment(midiManager)
+                .environment(midiHelper)
         }
         .windowResizability(.contentSize)
         .defaultPosition(UnitPoint(x: 0.5, y: 0.4))
@@ -52,7 +34,21 @@ struct HUITestApp: App {
             onAppLaunch()
         }
     }
+}
+
+// MARK: - Static
+
+extension HUITestApp {
+    var huiHostWidth: CGFloat { 300 }
+    var huiHostHeight: CGFloat { 600 }
     
+    var huiSurfaceWidth: CGFloat { 1180 }
+    var huiSurfaceHeight: CGFloat { 920 }
+}
+
+// MARK: - ViewModel
+
+extension HUITestApp {
     private func onAppLaunch() {
         openWindow(id: WindowID.huiHost)
         openWindow(id: WindowID.huiSurface)
@@ -66,9 +62,4 @@ struct HUITestApp: App {
             NSApp.windows.forEach { $0.makeKeyAndOrderFront(self) }
         }
     }
-}
-
-enum WindowID {
-    static let huiHost = "huiHost"
-    static let huiSurface = "huiSurface"
 }

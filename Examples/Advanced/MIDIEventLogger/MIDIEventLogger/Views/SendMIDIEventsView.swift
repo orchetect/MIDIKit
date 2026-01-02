@@ -10,7 +10,7 @@ import SwiftUI
 
 extension ContentView {
     struct SendMIDIEventsView: View {
-        @Environment(ObservableMIDIManager.self) private var midiManager
+        @Environment(MIDIHelper.self) private var midiHelper
         
         @Binding var midiGroup: UInt4
         var sendEvent: (MIDIEvent) -> Void
@@ -32,11 +32,11 @@ extension ContentView {
                         }
                         .frame(maxWidth: 200)
                         
-                        if midiManager.preferredAPI == .legacyCoreMIDI {
+                        if midiHelper.midiManager.preferredAPI == .legacyCoreMIDI {
                             Text("(Universal MIDI Packet not usable with old API)")
                         }
                     }
-                    .disabled(midiManager.preferredAPI == .legacyCoreMIDI)
+                    .disabled(midiHelper.midiManager.preferredAPI == .legacyCoreMIDI)
                     
                     HStack(alignment: .top) {
                         GroupBox(label: Text("Channel Voice")) {

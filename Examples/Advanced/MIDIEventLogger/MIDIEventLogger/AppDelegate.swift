@@ -18,10 +18,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         manufacturer: "MyCompany"
     )
     
-    var midiHelper = MIDIHelper()
+    var midiHelper = MIDIHelper(start: true)
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        midiHelper.setup(midiManager: midiManager)
         createAndShowWindow()
     }
     
@@ -35,7 +34,6 @@ extension AppDelegate {
     func createAndShowWindow() {
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView()
-            .environment(midiManager)
             .environment(midiHelper)
         
         // Create the window and set the content view.

@@ -9,6 +9,8 @@ import MIDIKitUI
 import SwiftUI
 
 struct ListsExampleView: View {
+    @Environment(MIDIHelper.self) private var midiHelper
+    
     @AppStorage(MIDIHelper.PrefKeys.midiInID) private var midiInput: MIDIIdentifier?
     @AppStorage(MIDIHelper.PrefKeys.midiInName) private var midiInputName: String?
     @AppStorage(MIDIHelper.PrefKeys.midiOutID) private var midiOutput: MIDIIdentifier?
@@ -71,11 +73,11 @@ struct ListsExampleView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text("Input").font(.title)
-                inputsList
+                outputsList
             }
             VStack(alignment: .leading) {
                 Text("Output").font(.title)
-                outputsList
+                inputsList
             }
         }
     }
@@ -89,6 +91,8 @@ struct ListsExampleView: View {
         )
         // note: supply a non-nil tag to auto-update an output connection in MIDIManager
         .updatingOutputConnection(withTag: nil)
+        // the list view requires injecting the observable MIDI manager into the environment
+        .environment(midiHelper.midiManager)
         
         #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))
@@ -104,6 +108,8 @@ struct ListsExampleView: View {
         )
         // note: supply a non-nil tag to auto-update an input connection in MIDIManager
         .updatingInputConnection(withTag: nil)
+        // the list view requires injecting the observable MIDI manager into the environment
+        .environment(midiHelper.midiManager)
         
         #if os(macOS)
         .listStyle(.bordered(alternatesRowBackgrounds: true))

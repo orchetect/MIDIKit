@@ -7,11 +7,11 @@
 import MIDIKitControlSurfaces
 import SwiftUI
 
-/// "DSP EDIT/ASSIGN" Section
-struct ParameterEditAssignView: View {
-    var body: some View {
-        HStack(alignment: .top, spacing: nil) {
-            Group {
+extension HUISurfaceView.RightSideView {
+    /// "DSP EDIT/ASSIGN" Section
+    struct ParameterEditAssignView: View {
+        var body: some View {
+            HStack(alignment: .top) {
                 VStack {
                     HUIStateButton(
                         title: "ASSIGN",
@@ -30,10 +30,10 @@ struct ParameterEditAssignView: View {
                         ledColor: .green
                     )
                 }
-                    
+                
                 HStack {
                     HUISectionDivider(.vertical)
-                        
+                    
                     // Param 1
                     VStack {
                         HUIStateButton(
@@ -43,14 +43,14 @@ struct ParameterEditAssignView: View {
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: HUISurfaceView.channelStripWidth,
+                            size: HUISurfaceView.MixerView.channelStripWidth,
                             vPot: .editAssignA
                         )
                     }
                     .frame(width: 75)
-                        
+                    
                     HUISectionDivider(.vertical)
-                        
+                    
                     // Param 2
                     VStack {
                         HUIStateButton(
@@ -60,14 +60,14 @@ struct ParameterEditAssignView: View {
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: HUISurfaceView.channelStripWidth,
+                            size: HUISurfaceView.MixerView.channelStripWidth,
                             vPot: .editAssignB
                         )
                     }
                     .frame(width: 75)
-                        
+                    
                     HUISectionDivider(.vertical)
-                        
+                    
                     // Param 3
                     VStack {
                         HUIStateButton(
@@ -77,14 +77,14 @@ struct ParameterEditAssignView: View {
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: HUISurfaceView.channelStripWidth,
+                            size: HUISurfaceView.MixerView.channelStripWidth,
                             vPot: .editAssignC
                         )
                     }
                     .frame(width: 75)
-                        
+                    
                     HUISectionDivider(.vertical)
-                        
+                    
                     // Param 4
                     VStack {
                         HUIStateButton(
@@ -94,15 +94,15 @@ struct ParameterEditAssignView: View {
                         )
                         RotaryKnob(
                             label: "        ",
-                            size: HUISurfaceView.channelStripWidth,
+                            size: HUISurfaceView.MixerView.channelStripWidth,
                             vPot: .editAssignD
                         )
                     }
                     .frame(width: 75)
-                        
+                    
                     HUISectionDivider(.vertical)
                 }
-                    
+                
                 VStack {
                     HUIStateButton(
                         title: "INSERT ○\nPARAM ●",
@@ -112,7 +112,7 @@ struct ParameterEditAssignView: View {
                     )
                     RotaryKnob(
                         label: "",
-                        size: HUISurfaceView.channelStripWidth / 2,
+                        size: HUISurfaceView.MixerView.channelStripWidth / 2,
                         vPot: .editAssignScroll
                     )
                     Text("SCROLL")
@@ -120,8 +120,7 @@ struct ParameterEditAssignView: View {
                 }
             }
             .frame(maxWidth: .infinity)
+            .frame(height: 80)
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 80)
     }
 }

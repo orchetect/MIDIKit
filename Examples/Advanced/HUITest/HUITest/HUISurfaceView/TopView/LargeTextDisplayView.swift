@@ -7,7 +7,7 @@
 import MIDIKitControlSurfaces
 import SwiftUI
 
-extension HUISurfaceView {
+extension HUISurfaceView.TopView {
     struct LargeTextDisplayView: View {
         @Environment(HUISurface.self) var huiSurface
         
@@ -18,8 +18,8 @@ extension HUISurfaceView {
             }
             .font(.system(size: 14, weight: .regular, design: .monospaced))
             .foregroundColor(.white)
-            .frame(width: 360, height: 42)
             .background(.black)
+            .frame(width: 360, height: 42)
             .cornerRadius(3.0, antialiased: true)
         }
     }

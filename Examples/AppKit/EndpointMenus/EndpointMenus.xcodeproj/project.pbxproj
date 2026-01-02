@@ -9,20 +9,24 @@
 /* Begin PBXBuildFile section */
 		E202380B2CC45AD400661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E202380A2CC45AD400661322 /* MIDIKitCore */; };
 		E202380D2CC45AD400661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E202380C2CC45AD400661322 /* MIDIKitIO */; };
+		E246149E2F0A2AF2001CC75C /* MIDIMenusHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E246149D2F0A2AF2001CC75C /* MIDIMenusHelper.swift */; };
+		E24614A02F0A2B04001CC75C /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E246149F2F0A2B00001CC75C /* MIDIHelper.swift */; };
 		E24BA23E284F1A3300AA6767 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24BA23D284F1A3300AA6767 /* AppDelegate.swift */; };
 		E24BA245284F1A3400AA6767 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E24BA243284F1A3400AA6767 /* Main.storyboard */; };
 		E29FF29F2880BC99005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF29E2880BC99005E2BC2 /* Images.xcassets */; };
-		E2CEA4942AFE2E6400BE92F7 /* MIDIEndpointsMenusHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CEA4932AFE2E6400BE92F7 /* MIDIEndpointsMenusHelper.swift */; };
+		E2B4892D2F0A387E00FF4527 /* AppPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B4892C2F0A387B00FF4527 /* AppPrefs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E246149D2F0A2AF2001CC75C /* MIDIMenusHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIMenusHelper.swift; sourceTree = "<group>"; };
+		E246149F2F0A2B00001CC75C /* MIDIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
 		E24BA23A284F1A3300AA6767 /* EndpointMenus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EndpointMenus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E24BA23D284F1A3300AA6767 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E24BA244284F1A3400AA6767 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E24BA246284F1A3400AA6767 /* EndpointMenus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EndpointMenus.entitlements; sourceTree = "<group>"; };
 		E24CB06D285172CF00649B50 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E29FF29E2880BC99005E2BC2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		E2CEA4932AFE2E6400BE92F7 /* MIDIEndpointsMenusHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIEndpointsMenusHelper.swift; sourceTree = "<group>"; };
+		E2B4892C2F0A387B00FF4527 /* AppPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPrefs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +63,9 @@
 			isa = PBXGroup;
 			children = (
 				E24BA23D284F1A3300AA6767 /* AppDelegate.swift */,
-				E2CEA4932AFE2E6400BE92F7 /* MIDIEndpointsMenusHelper.swift */,
+				E2B4892C2F0A387B00FF4527 /* AppPrefs.swift */,
+				E246149F2F0A2B00001CC75C /* MIDIHelper.swift */,
+				E246149D2F0A2AF2001CC75C /* MIDIMenusHelper.swift */,
 				E24BA243284F1A3400AA6767 /* Main.storyboard */,
 				E24BA246284F1A3400AA6767 /* EndpointMenus.entitlements */,
 				E29FF29E2880BC99005E2BC2 /* Images.xcassets */,
@@ -144,8 +150,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2CEA4942AFE2E6400BE92F7 /* MIDIEndpointsMenusHelper.swift in Sources */,
+				E24614A02F0A2B04001CC75C /* MIDIHelper.swift in Sources */,
 				E24BA23E284F1A3300AA6767 /* AppDelegate.swift in Sources */,
+				E2B4892D2F0A387E00FF4527 /* AppPrefs.swift in Sources */,
+				E246149E2F0A2AF2001CC75C /* MIDIMenusHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

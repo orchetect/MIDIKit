@@ -9,13 +9,7 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    let midiManager = MIDIManager(
-        clientName: "TestAppMIDIManager",
-        model: "TestApp",
-        manufacturer: "MyCompany"
-    )
-    
-    let virtualOutputName = "TestApp Output"
+    let midiHelper = MIDIHelper(start: true)
     
     var window: UIWindow?
     
@@ -23,37 +17,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        do {
-            print("Starting MIDI services.")
-            try midiManager.start()
-        } catch {
-            print("Error starting MIDI services:", error.localizedDescription)
-        }
-        
-        do {
-            print("Creating virtual MIDI output.")
-            try midiManager.addOutput(
-                name: virtualOutputName,
-                tag: virtualOutputName,
-                uniqueID: .userDefaultsManaged(key: virtualOutputName)
-            )
-        } catch {
-            print("Error creating virtual MIDI output:", error.localizedDescription)
-        }
-        
         return true
     }
 }
 
 extension AppDelegate {
-    /// Convenience accessor for created virtual MIDI Output.
-    var virtualOutput: MIDIOutput? {
-        midiManager.managedOutputs[virtualOutputName]
+    func send(event: MIDIEvent) {
+        try? midiHelper.virtualOutput?.send(event: event)
     }
     
     @IBAction
     func sendNoteOn(_ sender: Any) {
-        try? virtualOutput?.send(event: .noteOn(
+        send(event: .noteOn(
             60,
             velocity: .midi1(127),
             channel: 0
@@ -62,7 +37,7 @@ extension AppDelegate {
     
     @IBAction
     func sendNoteOff(_ sender: Any) {
-        try? virtualOutput?.send(event: .noteOff(
+        send(event: .noteOff(
             60,
             velocity: .midi1(0),
             channel: 0
@@ -71,7 +46,7 @@ extension AppDelegate {
     
     @IBAction
     func sendCC1(_ sender: Any) {
-        try? virtualOutput?.send(event: .cc(
+        send(event: .cc(
             1,
             value: .midi1(64),
             channel: 0

@@ -9,6 +9,8 @@ import MIDIKitUI
 import SwiftUI
 
 struct PickersExampleView: View {
+    @Environment(MIDIHelper.self) private var midiHelper
+    
     @AppStorage(MIDIHelper.PrefKeys.midiInID) private var midiInput: MIDIIdentifier?
     @AppStorage(MIDIHelper.PrefKeys.midiInName) private var midiInputName: String?
     @AppStorage(MIDIHelper.PrefKeys.midiOutID) private var midiOutput: MIDIIdentifier?
@@ -68,18 +70,18 @@ struct PickersExampleView: View {
             Form {
                 Section("Input") {
                     if pickerStyle == .inline {
-                        inputsList
+                        outputsList
                             .labelsHidden()
                     } else {
-                        inputsList
+                        outputsList
                     }
                 }
                 Section("Output") {
                     if pickerStyle == .inline {
-                        outputsList
+                        inputsList
                             .labelsHidden()
                     } else {
-                        outputsList
+                        inputsList
                     }
                 }
             }
@@ -91,7 +93,7 @@ struct PickersExampleView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text("Input").font(.title)
-                    inputsList
+                    outputsList
                 }
                 Spacer()
             }
@@ -99,7 +101,7 @@ struct PickersExampleView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text("Output").font(.title)
-                    outputsList
+                    inputsList
                 }
                 Spacer()
             }
@@ -109,7 +111,7 @@ struct PickersExampleView: View {
     
     private var inputsList: some View {
         MIDIInputsPicker(
-            title: "Input",
+            title: "Output",
             selectionID: $midiInput,
             selectionDisplayName: $midiInputName,
             showIcons: showIcons,
@@ -118,11 +120,13 @@ struct PickersExampleView: View {
         // note: supply a non-nil tag to auto-update an output connection in MIDIManager
         .updatingOutputConnection(withTag: nil)
         .pickerStyle(selection: pickerStyle)
+        // the picker view requires injecting the observable MIDI manager into the environment
+        .environment(midiHelper.midiManager)
     }
     
     private var outputsList: some View {
         MIDIOutputsPicker(
-            title: "Output",
+            title: "Input",
             selectionID: $midiOutput,
             selectionDisplayName: $midiOutputName,
             showIcons: showIcons,
@@ -131,6 +135,8 @@ struct PickersExampleView: View {
         // note: supply a non-nil tag to auto-update an input connection in MIDIManager
         .updatingInputConnection(withTag: nil)
         .pickerStyle(selection: pickerStyle)
+        // the picker view requires injecting the observable MIDI manager into the environment
+        .environment(midiHelper.midiManager)
     }
 }
 

@@ -13,8 +13,8 @@ import SwiftTimecodeCore
 import SwiftTimecodeUI
 
 struct MTCGenContentView: View {
-    @Environment(ObservableMIDIManager.self) private var midiManager
-    @State private var mtcGenHost = MTCGenHost()
+    @Environment(MIDIHelper.self) private var midiHelper
+    @State private var mtcGeneratorHelper = MTCGeneratorHelper()
     
     // MARK: - Prefs
     
@@ -28,21 +28,18 @@ struct MTCGenContentView: View {
     
     var body: some View {
         mtcGenView
-            .onAppear { setup() }
+            .task { await setup() }
     }
     
-    private func setup() {
-        mtcGenHost.midiManager = midiManager
-        mtcGenHost.addPort(to: midiManager)
-        
-        mtcGenHost.mtcGen?.locateBehavior = locateBehavior
-        
+    private func setup() async {
+        await mtcGeneratorHelper.bootstrap(midiManager: midiHelper.midiManager)
+        await mtcGeneratorHelper.setLocateBehavior(locateBehavior)
         locate()
     }
     
     private var mtcGenView: some View {
         VStack(alignment: .center, spacing: 8) {
-            Text(mtcGenHost.generatorTC.stringValue())
+            Text(mtcGeneratorHelper.generatorTC.stringValue())
                 .font(.system(size: 48, weight: .regular, design: .monospaced))
                 .frame(maxWidth: .infinity)
             
@@ -53,32 +50,32 @@ struct MTCGenContentView: View {
                 Button(locateTo1HourTimecodeTitle) {
                     locateTo1HourTimecode()
                 }
-                .disabled(mtcGenHost.mtcGenState)
+                .disabled(mtcGeneratorHelper.mtcGenState)
                 
                 Button(startAtCurrentTimecodeTitle) {
                     startAtCurrentTimecode()
                 }
-                .disabled(mtcGenHost.mtcGenState)
+                .disabled(mtcGeneratorHelper.mtcGenState)
                 
                 Button(startAtTimecodeAsTimecodeTitle) {
                     startAtTimecodeAsTimecode()
                 }
-                .disabled(mtcGenHost.mtcGenState)
+                .disabled(mtcGeneratorHelper.mtcGenState)
                 
                 Button(startAtTimecodeAsTimecodeComponentsTitle) {
                     startAtTimecodeAsTimecodeComponents()
                 }
-                .disabled(mtcGenHost.mtcGenState)
+                .disabled(mtcGeneratorHelper.mtcGenState)
                 
                 Button(startAtTimecodeAsTimeIntervalTitle) {
                     startAtTimecodeAsTimeInterval()
                 }
-                .disabled(mtcGenHost.mtcGenState)
+                .disabled(mtcGeneratorHelper.mtcGenState)
                 
                 Button("Stop") {
                     stop()
                 }
-                .disabled(!mtcGenHost.mtcGenState)
+                .disabled(!mtcGeneratorHelper.mtcGenState)
             }
             
             Spacer()
@@ -91,13 +88,15 @@ struct MTCGenContentView: View {
                 }
             }
             .frame(width: 250)
-            .disabled(mtcGenHost.mtcGenState)
+            .disabled(mtcGeneratorHelper.mtcGenState)
             .onHover { _ in
-                guard !mtcGenHost.mtcGenState else { return }
+                guard !mtcGeneratorHelper.mtcGenState else { return }
                 
-                // this is a SwiftUI workaround, but it works fine for our purposes
-                if mtcGenHost.mtcGen?.localFrameRate != localFrameRate {
-                    locate()
+                Task {
+                    // this is a SwiftUI workaround, but it works fine for our purposes
+                    if await mtcGeneratorHelper.localFrameRate != localFrameRate {
+                        locate()
+                    }
                 }
             }
             
@@ -116,13 +115,15 @@ struct MTCGenContentView: View {
                 }
             }
             .frame(width: 250)
-            .disabled(mtcGenHost.mtcGenState)
+            .disabled(mtcGeneratorHelper.mtcGenState)
             .onHover { _ in
-                guard !mtcGenHost.mtcGenState else { return }
+                guard !mtcGeneratorHelper.mtcGenState else { return }
                 
-                // this is a stupid SwiftUI workaround, but it works fine for our purposes
-                if mtcGenHost.mtcGen?.locateBehavior != locateBehavior {
-                    mtcGenHost.mtcGen?.locateBehavior = locateBehavior
+                Task {
+                    // this is a stupid SwiftUI workaround, but it works fine for our purposes
+                    if await mtcGeneratorHelper.locateBehavior != locateBehavior {
+                        await mtcGeneratorHelper.setLocateBehavior(locateBehavior)
+                    }
                 }
             }
         }
@@ -136,7 +137,9 @@ struct MTCGenContentView: View {
     private func locate(
         to components: Timecode.Components = .init(h: 00, m: 00, s: 00, f: 00)
     ) {
-        mtcGenHost.locate(to: components, localFrameRate: localFrameRate)
+        Task {
+            await mtcGeneratorHelper.locate(to: components, localFrameRate: localFrameRate)
+        }
     }
 }
 
@@ -161,7 +164,9 @@ extension MTCGenContentView {
     }
     
     private func startAtCurrentTimecode() {
-        mtcGenHost.startAtCurrentTimecode(localFrameRate: localFrameRate)
+        Task {
+            await mtcGeneratorHelper.startAtCurrentTimecode(localFrameRate: localFrameRate)
+        }
     }
     
     private var startAtTimecodeAsTimecodeTitle: String {
@@ -177,7 +182,9 @@ extension MTCGenContentView {
     }
     
     private func startAtTimecodeAsTimecode() {
-        mtcGenHost.startAtTimecodeAsTimecode(localFrameRate: localFrameRate)
+        Task {
+            await mtcGeneratorHelper.startAtTimecodeAsTimecode(localFrameRate: localFrameRate)
+        }
     }
     
     private var startAtTimecodeAsTimecodeComponentsTitle: String {
@@ -193,7 +200,9 @@ extension MTCGenContentView {
     }
     
     private func startAtTimecodeAsTimecodeComponents() {
-        mtcGenHost.startAtTimecodeAsTimecodeComponents(localFrameRate: localFrameRate)
+        Task {
+            await mtcGeneratorHelper.startAtTimecodeAsTimecodeComponents(localFrameRate: localFrameRate)
+        }
     }
     
     private var startAtTimecodeAsTimeIntervalTitle: String {
@@ -209,21 +218,21 @@ extension MTCGenContentView {
     }
     
     private func startAtTimecodeAsTimeInterval() {
-        mtcGenHost.startAtTimecodeAsTimeInterval(localFrameRate: localFrameRate)
+        Task {
+            await mtcGeneratorHelper.startAtTimecodeAsTimeInterval(localFrameRate: localFrameRate)
+        }
     }
     
     private func stop() {
-        mtcGenHost.stop()
+        Task {
+            await mtcGeneratorHelper.stop()
+        }
     }
 }
 
 #Preview {
-    @Previewable @State var midiManager = ObservableMIDIManager(
-        clientName: "Preview",
-        model: "TestApp",
-        manufacturer: "MyCompany"
-    )
+    @Previewable @State var midiHelper = MIDIHelper(start: true)
     
     MTCGenContentView()
-        .environment(midiManager)
+        .environment(midiHelper)
 }

@@ -8,18 +8,18 @@ import MIDIKitIO
 import SwiftUI
 
 protocol DetailsContent where Self: View {
-    var object: AnyMIDIIOObject? { get set }
-    var showAll: Bool { get set }
+    var object: AnyMIDIIOObject { get set }
+    var isRelevantPropertiesOnlyShown: Bool { get set }
     
     var properties: [Property] { get nonmutating set }
     var selection: Set<Property.ID> { get set }
+    
+    init(object: AnyMIDIIOObject, isRelevantPropertiesOnlyShown: Binding<Bool>)
 }
 
 extension DetailsContent {
     func refreshProperties() {
-        guard let object else { return }
-        
-        properties = object.propertyStringValues(relevantOnly: !showAll)
+        properties = object.propertyStringValues(relevantOnly: isRelevantPropertiesOnlyShown)
             .map { Property(key: $0.key, value: $0.value) }
     }
     
@@ -44,7 +44,7 @@ extension DetailsContent {
                 .joined(separator: "\n")
         }
         
-        let provider: NSItemProvider = .init(object: str as NSString)
+        let provider = NSItemProvider(object: str as NSString)
         return [provider]
     }
 }

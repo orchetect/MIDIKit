@@ -7,35 +7,53 @@
 import MIDIKitIO
 import SwiftUI
 
-struct DetailsView<Content: View>: View {
-    let object: AnyMIDIIOObject?
-    
-    let detailsContent: (
-        _ object: AnyMIDIIOObject?,
-        _ showAllBinding: Binding<Bool>
-    ) -> Content
-    
-    @State private var showAll: Bool = false
-    
-    var body: some View {
-        if let object {
-            detailsContent(object, $showAll)
-            
-            Group {
-                if showAll {
-                    Button("Show Relevant Properties") {
-                        showAll.toggle()
+extension ContentView {
+    struct DetailsView: View {
+        var object: AnyMIDIIOObject
+        @Binding var isRelevantPropertiesOnlyShown: Bool
+        
+        var body: some View {
+            if #available(macOS 11.0, iOS 14.0, *) {
+                detailsBody
+                    .toolbar {
+                        Toggle(isOn: $isRelevantPropertiesOnlyShown.animation(.default)) {
+                            Label("Relevant Only", systemImage: filterImageName)
+                        }
+                        .help("Show Only Relevant Properties")
                     }
+            } else {
+                detailsBody
+            }
+        }
+        
+        private var filterImageName: String {
+            #if os(macOS)
+            return isRelevantPropertiesOnlyShown
+                ? "line.3.horizontal.decrease.circle.fill"
+                : "line.3.horizontal.decrease.circle"
+            #else
+            if #available(iOS 26.0, *) {
+                return "line.3.horizontal.decrease"
+            } else {
+                return "line.3.horizontal.decrease.circle"
+            }
+            #endif
+        }
+        
+        @ViewBuilder
+        private var detailsBody: some View {
+            VStack(alignment: .leading) {
+                Details(object: object, isRelevantPropertiesOnlyShown: $isRelevantPropertiesOnlyShown)
+                
+                // only show the toggle if it's not already present in the toolbar
+                if #available(macOS 11.0, iOS 14.0, *) {
+                    EmptyView()
                 } else {
-                    Button("Show All") {
-                        showAll.toggle()
-                    }
+                    Toggle("Relevant Only", isOn: $isRelevantPropertiesOnlyShown.animation(.default))
+                        .padding()
+                        .toggleStyle(.switch)
                 }
             }
-            .padding(.all, 10)
-            
-        } else {
-            EmptyDetailsView()
         }
     }
 }

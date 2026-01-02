@@ -11,25 +11,19 @@ import MIDIKitUI
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(ObservableMIDIManager.self) private var midiManager
     @Environment(MIDIHelper.self) private var midiHelper
     
-    @Binding var midiInSelectedID: MIDIIdentifier?
-    @Binding var midiInSelectedDisplayName: String?
-    
-    @Binding var midiOutSelectedID: MIDIIdentifier?
-    @Binding var midiOutSelectedDisplayName: String?
+    @AppStorage(MIDIHelper.PrefKeys.midiInID) var midiInSelectedID: MIDIIdentifier?
+    @AppStorage(MIDIHelper.PrefKeys.midiInDisplayName) var midiInSelectedDisplayName: String?
+    @AppStorage(MIDIHelper.PrefKeys.midiOutID) var midiOutSelectedID: MIDIIdentifier?
+    @AppStorage(MIDIHelper.PrefKeys.midiOutDisplayName) var midiOutSelectedDisplayName: String?
     
     var body: some View {
         NavigationView {
             Form {
                 infoSection
-                
                 endpointSelectionSection
-                
                 virtualEndpointsSection
-                
-                eventLogSection
             }
             .navigationBarTitle("Endpoint Pickers")
             
@@ -63,6 +57,7 @@ struct ContentView: View {
         .frame(maxWidth: 600)
     }
     
+    @ViewBuilder
     private var endpointSelectionSection: some View {
         Section {
             MIDIOutputsPicker(
@@ -73,7 +68,13 @@ struct ContentView: View {
                 hideOwned: false
             )
             .updatingInputConnection(withTag: MIDIHelper.Tags.midiIn)
+            // the picker view requires injecting the observable MIDI manager into the environment
+            .environment(midiHelper.midiManager)
             
+            eventLogSection
+        }
+        
+        Section {
             MIDIInputsPicker(
                 title: "MIDI Out",
                 selectionID: $midiOutSelectedID,
@@ -82,6 +83,8 @@ struct ContentView: View {
                 hideOwned: false
             )
             .updatingOutputConnection(withTag: MIDIHelper.Tags.midiOut)
+            // the picker view requires injecting the observable MIDI manager into the environment
+            .environment(midiHelper.midiManager)
             
             Group {
                 Button("Send Note On C3") {
@@ -105,12 +108,12 @@ struct ContentView: View {
             Button("Create Test Virtual Endpoints") {
                 midiHelper.createVirtualEndpoints()
             }
-            .disabled(midiHelper.virtualsExist)
+            .disabled(midiHelper.isVirtualEndpointsExist)
             
             Button("Destroy Test Virtual Endpoints") {
                 midiHelper.destroyVirtualInputs()
             }
-            .disabled(!midiHelper.virtualsExist)
+            .disabled(!midiHelper.isVirtualEndpointsExist)
             
             Group {
                 Button("Send Note On C3") {
@@ -125,7 +128,7 @@ struct ContentView: View {
                     sendToVirtuals(.cc(1, value: .midi1(UInt7.random()), channel: 0))
                 }
             }
-            .disabled(!midiHelper.virtualsExist)
+            .disabled(!midiHelper.isVirtualEndpointsExist)
         }
     }
     
@@ -133,32 +136,29 @@ struct ContentView: View {
     private var eventLogSection: some View {
         @Bindable var midiHelper = midiHelper
         
-        Section(header: Text("Received Events")) {
-            Toggle(
-                "Filter Active Sensing and Clock",
-                isOn: $midiHelper.filterActiveSensingAndClock
-            )
-            
-            let events = midiHelper.receivedEvents.reversed()
-            
-            // Since MIDIEvent doesn't conform to Identifiable (and won't ever), in a List
-            // or ForEach we need to either use an array index or a wrap MIDIEvent in a
-            // custom type that does conform to Identifiable. It's really up to your use
-            // case.
-            // Usually application interaction is driven by MIDI events and we aren't
-            // literally logging events, but this is for diagnostic purposes here.
-            List(events.indices, id: \.self) { index in
-                Text(events[index].description)
-                    .foregroundColor(color(for: events[index]))
-            }
+        Toggle(
+            "Filter Active Sensing and Clock",
+            isOn: $midiHelper.filterActiveSensingAndClock
+        )
+        
+        let events = midiHelper.receivedEvents.reversed().prefix(10)
+        
+        // Since MIDIEvent doesn't conform to Identifiable (and won't ever), in a List
+        // or ForEach we need to either use an array index or a wrap MIDIEvent in a
+        // custom type that does conform to Identifiable. It's really up to your use
+        // case.
+        // Usually application interaction is driven by MIDI events and we aren't
+        // literally logging events, but this is for diagnostic purposes here.
+        List(events.indices, id: \.self) { index in
+            Text(events[index].description)
+                .foregroundColor(color(for: events[index]))
         }
     }
 }
 
 extension ContentView {
     private var isMIDIOutDisabled: Bool {
-        midiOutSelectedID == .invalidMIDIIdentifier ||
-            midiOutSelectedID == nil
+        midiOutSelectedID == .invalidMIDIIdentifier || midiOutSelectedID == nil
     }
     
     func sendToConnection(_ event: MIDIEvent) {

@@ -48,6 +48,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.setFrameAutosaveName("Main Window")
         
         window.title = "MIDI System Info"
+        if #available(macOS 11.0, *) {
+            window.toolbarStyle = .unified
+            
+            // force window to take on a unified title/toolbar look in the absence of toolbar content
+            window.toolbar = .init()
+        }
         
         window.contentView = NSHostingView(
             rootView: ContentViewForCurrentPlatform()

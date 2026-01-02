@@ -7,11 +7,11 @@
 import MIDIKitControlSurfaces
 import SwiftUI
 
-struct NumPadView: View {
-    var body: some View {
-        Group {
-            let numPadSpacing: CGFloat = 1
-            
+extension HUISurfaceView.RightSideView {
+    struct NumPadView: View {
+        let numPadSpacing: CGFloat = 1
+        
+        var body: some View {
             VStack {
                 HUISectionLabel("LOCATE/NUMERICS")
                 
@@ -102,6 +102,7 @@ struct NumPadView: View {
                                 )
                             }
                         }
+                        
                         HUINumPadButton(
                             title: "E\nN\nT\nE\nR",
                             param: .numPad(.enter),

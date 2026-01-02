@@ -4,20 +4,36 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
 import MIDIKitIO
-import SwiftUI
 
-/// Receiving MIDI happens on an asynchronous background thread. That means it cannot update
-/// SwiftUI view state directly. Therefore, we need a helper class marked with `@Observable`
-/// which contains properties that SwiftUI can use to update views.
-@Observable final class MIDIHelper {
-    private weak var midiManager: ObservableMIDIManager?
+/// Object responsible for managing MIDI services, managing connections, and sending/receiving events.
+///
+/// Marking the class as `@Observable` allows us to install an instance of the class in a SwiftUI App or View
+/// and propagate it through the environment.
+@Observable public final class MIDIHelper {
+    private let midiManager = MIDIManager(
+        clientName: "TestAppMIDIManager",
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
     
-    public init() { }
-    
-    public func setup(midiManager: ObservableMIDIManager) {
-        self.midiManager = midiManager
-        
+    public init(start: Bool = false) {
+        if start { self.start() }
+    }
+}
+
+// MARK: - Static
+
+extension MIDIHelper {
+    public var listenerTag: String { "Listener" }
+    public var broadcasterTag: String { "Broadcaster" }
+}
+
+// MARK: - Lifecycle
+
+extension MIDIHelper {
+    public func start() {
         do {
             print("Starting MIDI services.")
             try midiManager.start()
@@ -25,21 +41,28 @@ import SwiftUI
             print("Error starting MIDI services:", error.localizedDescription)
         }
         
-        setupConnections()
+        createConnections()
     }
     
-    // MARK: - Connections
+    public func stop() {
+        removeConnections()
+    }
+}
+
+// MARK: - I/O
+
+extension MIDIHelper {
+    public var outputConnection: MIDIOutputConnection? {
+        midiManager.managedOutputConnections[broadcasterTag]
+    }
     
-    private func setupConnections() {
-        guard let midiManager else { return }
-        
+    private func createConnections() {
         // set up a listener that automatically connects to all MIDI outputs
         // and prints the events to the console
-        
         do {
             try midiManager.addInputConnection(
                 to: .allOutputs, // auto-connect to all outputs that may appear
-                tag: "Listener",
+                tag: listenerTag,
                 filter: .owned(), // don't allow self-created virtual endpoints
                 receiver: .eventsLogging(options: [
                     .bundleRPNAndNRPNDataEntryLSB,
@@ -54,11 +77,10 @@ import SwiftUI
         }
         
         // set up a broadcaster that can send events to all MIDI inputs
-        
         do {
             try midiManager.addOutputConnection(
                 to: .allInputs, // auto-connect to all inputs that may appear
-                tag: "Broadcaster",
+                tag: broadcasterTag,
                 filter: .owned() // don't allow self-created virtual endpoints
             )
         } catch {
@@ -69,8 +91,8 @@ import SwiftUI
         }
     }
     
-    func sendTestMIDIEvent() {
-        let conn = midiManager?.managedOutputConnections["Broadcaster"]
-        try? conn?.send(event: .cc(.expression, value: .midi1(64), channel: 0))
+    private func removeConnections() {
+        midiManager.remove(.inputConnection, .withTag(listenerTag))
+        midiManager.remove(.outputConnection, .withTag(broadcasterTag))
     }
 }

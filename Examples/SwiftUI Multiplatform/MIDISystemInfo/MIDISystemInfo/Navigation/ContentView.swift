@@ -9,31 +9,32 @@ import SwiftUI
 
 /// Dynamically uses modern UI elements when the platform supports it.
 struct ContentViewForCurrentPlatform: View {
+    @State private var showRelevantProperties: Bool = true
+    
     var body: some View {
         if #available(macOS 12, iOS 16, *) {
-            ContentView { object, showAll in
-                TableDetailsView(object: object, showAll: showAll)
+            if #available(macOS 13, *) {
+                ContentView<FormDetailsView>(showRelevantProperties: $showRelevantProperties)
+            } else {
+                ContentView<TableDetailsView>(showRelevantProperties: $showRelevantProperties)
             }
         } else {
-            ContentView { object, showAll in
-                LegacyDetailsView(object: object, showAll: showAll)
-            }
+            ContentView<LegacyDetailsView>(showRelevantProperties: $showRelevantProperties)
         }
     }
 }
 
-struct ContentView<DetailsContent: View>: View {
+struct ContentView<Details: DetailsContent>: View {
     @EnvironmentObject private var midiManager: ObservableObjectMIDIManager
     
-    let detailsContent: @Sendable (
-        _ object: AnyMIDIIOObject?,
-        _ showAllBinding: Binding<Bool>
-    ) -> DetailsContent
+    @Binding var showRelevantProperties: Bool
     
     var body: some View {
         NavigationView {
             sidebar
-                .frame(width: 300)
+            #if os(macOS)
+                .frame(minWidth: 300)
+            #endif
             
             EmptyDetailsView()
         }
@@ -44,9 +45,9 @@ struct ContentView<DetailsContent: View>: View {
     
     private var sidebar: some View {
         List {
-            DeviceTreeView(detailsContent: detailsContent)
-            OtherInputsView(detailsContent: detailsContent)
-            OtherOutputsView(detailsContent: detailsContent)
+            DeviceTreeView(showRelevantProperties: $showRelevantProperties)
+            OtherInputsView(showRelevantProperties: $showRelevantProperties)
+            OtherOutputsView(showRelevantProperties: $showRelevantProperties)
         }
         #if os(macOS)
         .listStyle(.sidebar)
@@ -54,6 +55,7 @@ struct ContentView<DetailsContent: View>: View {
     }
 }
 
+#if DEBUG
 struct ContentViewPreviews: PreviewProvider {
     static let midiManager = ObservableObjectMIDIManager(
         clientName: "Preview",
@@ -66,3 +68,4 @@ struct ContentViewPreviews: PreviewProvider {
             .environmentObject(midiManager)
     }
 }
+#endif

@@ -9,27 +9,27 @@ import Controls
 import MIDIKitControlSurfaces
 import SwiftUI
 
-extension HUISurfaceView {
+extension HUISurfaceView.MixerView.ChannelStripView {
     struct FaderView: View {
         @Environment(HUISurface.self) var huiSurface
-
+        
         static let faderHeight: CGFloat = 200
         static let faderWidth: CGFloat = 5
         static let faderCapsuleHeight: CGFloat = 40
         static let faderCapsuleWidth: CGFloat = 25
-
+        
         let channel: UInt4
-
+        
         @State private var isTouched = false
         @State private var level: Float = 0
-
+        
         var body: some View {
             Fader(value: $level, isTouched: $isTouched)
                 .foregroundColor(.secondary)
                 .backgroundColor(.init(nsColor: .tertiaryLabelColor))
                 .frame(minHeight: Self.faderHeight, alignment: .center)
                 .padding([.leading, .trailing], 5)
-                
+            
                 .onChange(
                     of: huiSurface.model.channelStrips[channel.intValue].fader.levelUnitInterval,
                     initial: true
@@ -52,13 +52,17 @@ extension HUISurfaceView {
                     huiSurface.transmitFader(level: rawLevel, channel: channel)
                 }
         }
+    }
+}
 
-        private func pressedAction() {
-            huiSurface.transmitSwitch(.channelStrip(channel, .faderTouched), state: true)
-        }
+// MARK: - ViewModel
 
-        private func releasedAction() {
-            huiSurface.transmitSwitch(.channelStrip(channel, .faderTouched), state: false)
-        }
+extension HUISurfaceView.MixerView.ChannelStripView.FaderView {
+    private func pressedAction() {
+        huiSurface.transmitSwitch(.channelStrip(channel, .faderTouched), state: true)
+    }
+    
+    private func releasedAction() {
+        huiSurface.transmitSwitch(.channelStrip(channel, .faderTouched), state: false)
     }
 }

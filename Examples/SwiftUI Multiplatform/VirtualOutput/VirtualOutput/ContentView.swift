@@ -8,26 +8,25 @@ import MIDIKitIO
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(ObservableMIDIManager.self) private var midiManager
     @Environment(MIDIHelper.self) private var midiHelper
     
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
             Text(
-                "This example creates a virtual MIDI output port named \"\(MIDIHelper.virtualOutputName)\"."
+                "This example creates a virtual MIDI output port named \"\(midiHelper.virtualOutputName)\"."
             )
             .multilineTextAlignment(.center)
             
             Button("Send Note On C3") {
-                midiHelper.sendNoteOn()
+                sendNoteOn()
             }
             
             Button("Send Note Off C3") {
-                midiHelper.sendNoteOff()
+                sendNoteOff()
             }
             
             Button("Send CC1") {
-                midiHelper.sendCC1()
+                sendCC1()
             }
         }
         #if os(iOS)
@@ -35,5 +34,37 @@ struct ContentView: View {
         #endif
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+    }
+}
+
+// MARK: - Events
+
+extension ContentView {
+    private func send(event: MIDIEvent) {
+        try? midiHelper.virtualOutput?.send(event: event)
+    }
+    
+    private func sendNoteOn() {
+        send(event: .noteOn(
+            60,
+            velocity: .midi1(127),
+            channel: 0
+        ))
+    }
+    
+    private func sendNoteOff() {
+        send(event: .noteOff(
+            60,
+            velocity: .midi1(0),
+            channel: 0
+        ))
+    }
+    
+    private func sendCC1() {
+        send(event: .cc(
+            1,
+            value: .midi1(64),
+            channel: 0
+        ))
     }
 }

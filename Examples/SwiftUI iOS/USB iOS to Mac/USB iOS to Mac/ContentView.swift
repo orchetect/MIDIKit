@@ -8,7 +8,6 @@ import MIDIKitIO
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(ObservableMIDIManager.self) private var midiManager
     @Environment(MIDIHelper.self) private var midiHelper
     
     var body: some View {
@@ -27,19 +26,51 @@ struct ContentView: View {
             .multilineTextAlignment(.center)
             
             Button("Send Note On C3") {
-                midiHelper.sendNoteOn()
+                sendNoteOn()
             }
             
             Button("Send Note Off C3") {
-                midiHelper.sendNoteOff()
+                sendNoteOff()
             }
             
             Button("Send CC1") {
-                midiHelper.sendCC1()
+                sendCC1()
             }
         }
         .font(.system(size: 18))
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+    }
+}
+
+// MARK: - MIDI Events
+
+extension ContentView {
+    private func send(event: MIDIEvent) {
+        try? midiHelper.outputConnection?.send(event: event)
+    }
+    
+    private func sendNoteOn() {
+        send(event: .noteOn(
+            60,
+            velocity: .midi1(127),
+            channel: 0
+        ))
+    }
+    
+    private func sendNoteOff() {
+        send(event: .noteOff(
+            60,
+            velocity: .midi1(0),
+            channel: 0
+        ))
+    }
+    
+    private func sendCC1() {
+        send(event: .cc(
+            1,
+            value: .midi1(64),
+            channel: 0
+        ))
     }
 }

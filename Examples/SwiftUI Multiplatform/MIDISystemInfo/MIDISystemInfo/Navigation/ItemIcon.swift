@@ -17,8 +17,10 @@ struct ItemIcon<Content: View>: View {
                 img
             } else {
                 Text("🎹")
+                    .minimumScaleFactor(0.7)
             }
         }
+        .scaledToFit()
         .frame(width: 18, height: 18, alignment: .center)
     }
     

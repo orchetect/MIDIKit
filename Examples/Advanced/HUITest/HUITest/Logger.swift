@@ -4,18 +4,10 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
+import Foundation
 import os.log
 
-enum Logger {
-    /// Prints a message to the console log. (`os_log`). Only outputs to log in a `DEBUG` build.
-    static func debug(_ message: String) {
-        #if DEBUG
-        os_log(
-            "%{public}@",
-            log: OSLog.default,
-            type: .debug,
-            message
-        )
-        #endif
-    }
-}
+let logger = Logger(
+    subsystem: Bundle.main.bundleIdentifier ?? "com.orchetect.MIDIKit.HUITest",
+    category: "General"
+)

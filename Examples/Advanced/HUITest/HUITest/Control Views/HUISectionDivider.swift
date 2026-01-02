@@ -1,22 +1,12 @@
 //
-//  Labels.swift
+//  HUISectionDivider.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
 import SwiftUI
 
-func HUISectionLabel(_ label: String) -> Text {
-    Text(label)
-        .font(.system(size: 10))
-}
-
 struct HUISectionDivider: View {
-    enum Orientation {
-        case vertical
-        case horizontal
-    }
-    
     var orientation: Orientation
     
     init(_ orientation: Orientation) {
@@ -31,5 +21,12 @@ struct HUISectionDivider: View {
         case .horizontal:
             Color.primary.frame(height: 1)
         }
+    }
+}
+
+extension HUISectionDivider {
+    enum Orientation {
+        case vertical
+        case horizontal
     }
 }

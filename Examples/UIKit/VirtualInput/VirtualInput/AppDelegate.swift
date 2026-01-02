@@ -4,18 +4,12 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-import MIDIKitIO
 import UIKit
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    let midiManager = MIDIManager(
-        clientName: "TestAppMIDIManager",
-        model: "TestApp",
-        manufacturer: "MyCompany"
-    )
-    
-    let virtualInputName = "TestApp Input"
+final class AppDelegate: UIResponder, UIApplicationDelegate, Sendable {
+    let midiHelper = MIDIHelper(start: true)
+    let model = Model()
     
     var window: UIWindow?
     
@@ -23,28 +17,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        do {
-            print("Starting MIDI services.")
-            try midiManager.start()
-        } catch {
-            print("Error starting MIDI services:", error.localizedDescription)
-        }
-    
-        do {
-            print("Creating virtual MIDI input.")
-            try midiManager.addInput(
-                name: virtualInputName,
-                tag: virtualInputName,
-                uniqueID: .userDefaultsManaged(key: virtualInputName),
-                receiver: .eventsLogging(options: [
-                    .bundleRPNAndNRPNDataEntryLSB,
-                    .filterActiveSensingAndClock
-                ])
-            )
-        } catch {
-            print("Error creating virtual MIDI input:", error.localizedDescription)
-        }
+        setupMIDIHelper()
     
         return true
+    }
+}
+
+extension AppDelegate {
+    private func setupMIDIHelper() {
+        midiHelper.setEventHandler { [weak self] event in
+            // if the event may result in UI changes, we need to put it on the main actor/thread
+            Task { @MainActor in
+                self?.model.handle(event: event)
+            }
+        }
     }
 }

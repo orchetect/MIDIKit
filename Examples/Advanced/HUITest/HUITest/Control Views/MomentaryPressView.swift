@@ -6,14 +6,6 @@
 
 import SwiftUI
 
-extension View {
-    func momentaryPressGesture(
-        action: @escaping (_ state: Bool) -> Void
-    ) -> some View {
-        MomentaryPressView(action: action, self)
-    }
-}
-
 struct MomentaryPressView<Content: View>: View {
     private let content: Content
     private let action: (_ state: Bool) -> Void
@@ -45,5 +37,15 @@ struct MomentaryPressView<Content: View>: View {
                         isPressed = false
                     }
             )
+    }
+}
+
+// MARK: - View Modifiers
+
+extension View {
+    func momentaryPressGesture(
+        action: @escaping (_ state: Bool) -> Void
+    ) -> some View {
+        MomentaryPressView(action: action, self)
     }
 }

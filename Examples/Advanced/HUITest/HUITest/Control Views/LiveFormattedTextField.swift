@@ -8,14 +8,14 @@ import SwiftUI
 
 /// Hacky workaround to make a live-formatted SwiftUI TextField possible.
 struct LiveFormattedTextField: View {
-    var titleKey: LocalizedStringKey
+    var titleKey: LocalizedStringKey?
     @Binding var value: String
     let formatter: Formatter
     
     @State private var liveText: String
     
     init(
-        _ titleKey: LocalizedStringKey = "",
+        _ titleKey: LocalizedStringKey? = nil,
         value: Binding<String>,
         formatter: Formatter
     ) {
@@ -26,7 +26,7 @@ struct LiveFormattedTextField: View {
     }
     
     var body: some View {
-        TextField(titleKey, text: $liveText)
+        TextField(titleKey ?? "", text: $liveText)
             .onChange(of: liveText) { oldValue, newValue in
                 let formatted = formatter.string(for: newValue) ?? ""
                 liveText = formatted

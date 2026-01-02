@@ -39,6 +39,8 @@
 		E23AD7282AFE1EE700A69A01 /* LegacyDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23AD7272AFE1EE700A69A01 /* LegacyDetailsView.swift */; };
 		E23AD7292AFE1EE700A69A01 /* LegacyDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23AD7272AFE1EE700A69A01 /* LegacyDetailsView.swift */; };
 		E24696C32880B69E00485518 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E24696C22880B69E00485518 /* Images.xcassets */; };
+		E24932F12F07A0E1006CB1D1 /* FormDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24932F02F07A0E1006CB1D1 /* FormDetailsView.swift */; };
+		E24932F22F07A0E1006CB1D1 /* FormDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24932F02F07A0E1006CB1D1 /* FormDetailsView.swift */; };
 		E26B849C25EDA4F400080052 /* TableDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26B849B25EDA4F400080052 /* TableDetailsView.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +66,7 @@
 		E23AD7242AFE1EC000A69A01 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 		E23AD7272AFE1EE700A69A01 /* LegacyDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyDetailsView.swift; sourceTree = "<group>"; };
 		E24696C22880B69E00485518 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		E24932F02F07A0E1006CB1D1 /* FormDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormDetailsView.swift; sourceTree = "<group>"; };
 		E26B849B25EDA4F400080052 /* TableDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableDetailsView.swift; sourceTree = "<group>"; };
 		E2CEA4962AFE3C6100BE92F7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -163,6 +166,7 @@
 				E23AD71B2AFE1E3800A69A01 /* EmptyDetailsView.swift */,
 				E23AD7272AFE1EE700A69A01 /* LegacyDetailsView.swift */,
 				E26B849B25EDA4F400080052 /* TableDetailsView.swift */,
+				E24932F02F07A0E1006CB1D1 /* FormDetailsView.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -279,6 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E20CF4CE299C7F8C00F0E003 /* AppDelegate.swift in Sources */,
+				E24932F22F07A0E1006CB1D1 /* FormDetailsView.swift in Sources */,
 				E23AD7182AFE1CF000A69A01 /* ItemIcon.swift in Sources */,
 				E23AD7122AFE1C8700A69A01 /* OtherInputsView.swift in Sources */,
 				E23AD7292AFE1EE700A69A01 /* LegacyDetailsView.swift in Sources */,
@@ -299,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E23AD7112AFE1C8700A69A01 /* OtherInputsView.swift in Sources */,
+				E24932F12F07A0E1006CB1D1 /* FormDetailsView.swift in Sources */,
 				E23AD7222AFE1E8700A69A01 /* DetailsContent.swift in Sources */,
 				E23AD7252AFE1EC000A69A01 /* Property.swift in Sources */,
 				E23AD71C2AFE1E3800A69A01 /* EmptyDetailsView.swift in Sources */,
@@ -342,7 +348,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MIDISystemInfo/iOS/Info.plist;
@@ -355,7 +361,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDISystemInfo${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -374,7 +380,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MIDISystemInfo/iOS/Info.plist;
@@ -387,7 +393,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDISystemInfo${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -533,7 +539,7 @@
 				CODE_SIGN_ENTITLEMENTS = MIDISystemInfo/macOS/MIDISystemInfo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -545,7 +551,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDISystemInfo${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = macosx;
@@ -562,7 +568,7 @@
 				CODE_SIGN_ENTITLEMENTS = MIDISystemInfo/macOS/MIDISystemInfo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -574,7 +580,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDISystemInfo${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = macosx;

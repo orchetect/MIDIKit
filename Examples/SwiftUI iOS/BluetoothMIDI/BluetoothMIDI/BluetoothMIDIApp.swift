@@ -9,23 +9,12 @@ import SwiftUI
 
 @main
 struct BluetoothMIDIApp: App {
-    @State var midiManager = ObservableMIDIManager(
-        clientName: "TestAppMIDIManager",
-        model: "TestApp",
-        manufacturer: "MyCompany"
-    )
-    
-    @State var midiHelper = MIDIHelper()
-    
-    init() {
-        midiHelper.setup(midiManager: midiManager)
-    }
+    @State var midiHelper = MIDIHelper(start: true)
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(midiManager)
-                .environment(midiHelper)
         }
+        .environment(midiHelper)
     }
 }

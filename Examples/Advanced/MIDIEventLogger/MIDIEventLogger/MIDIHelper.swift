@@ -7,15 +7,27 @@
 import MIDIKitIO
 import SwiftUI
 
+/// Object responsible for managing MIDI services, managing connections, and sending/receiving events.
+///
+/// Marking the class as `@Observable` allows us to install an instance of the class in a SwiftUI App or View
+/// and propagate it through the environment.
 @Observable final class MIDIHelper {
-    private weak var midiManager: ObservableMIDIManager?
+    public let midiManager = ObservableMIDIManager(
+        clientName: "TestAppMIDIManager",
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
     
-    public init() { }
-    
-    public func setup(midiManager: ObservableMIDIManager) {
-        self.midiManager = midiManager
-        
-        midiManager.notificationHandler = { notification in
+    public init(start: Bool = false) {
+        if start { self.start() }
+    }
+}
+
+// MARK: - Lifecycle
+
+extension MIDIHelper {
+    public func start() {
+        midiManager.notificationHandler = { /* [weak self] */ notification in
             print("Core MIDI notification:", notification)
         }
         
@@ -29,15 +41,17 @@ import SwiftUI
         createVirtualEndpoints()
         createConnections()
     }
-    
-    // MARK: - MIDI Connections
-    
+}
+
+// MARK: - I/O Connections
+
+extension MIDIHelper {
     public var midiInputConnection: MIDIInputConnection? {
-        midiManager?.managedInputConnections[ConnectionTags.inputConnectionTag]
+        midiManager.managedInputConnections[ConnectionTags.inputConnectionTag]
     }
     
     public var midiOutputConnection: MIDIOutputConnection? {
-        midiManager?.managedOutputConnections[ConnectionTags.outputConnectionTag]
+        midiManager.managedOutputConnections[ConnectionTags.outputConnectionTag]
     }
     
     private func createConnections() {
@@ -45,13 +59,12 @@ import SwiftUI
             if midiInputConnection == nil {
                 logger.debug("Adding MIDI input connection to the manager.")
                 
-                try midiManager?.addInputConnection(
+                try midiManager.addInputConnection(
                     to: .none,
                     tag: ConnectionTags.inputConnectionTag,
-                    receiver: .eventsLogging(options: [
-                        .bundleRPNAndNRPNDataEntryLSB,
-                        .filterActiveSensingAndClock
-                    ])
+                    receiver: .eventsLogging(
+                        options: [.bundleRPNAndNRPNDataEntryLSB, .filterActiveSensingAndClock]
+                    )
                 )
             }
         } catch {
@@ -62,7 +75,7 @@ import SwiftUI
             if midiOutputConnection == nil {
                 logger.debug("Adding MIDI output connection to the manager.")
                 
-                try midiManager?.addOutputConnection(
+                try midiManager.addOutputConnection(
                     to: .none,
                     tag: ConnectionTags.outputConnectionTag
                 )
@@ -71,15 +84,17 @@ import SwiftUI
             logger.error("\(error.localizedDescription)")
         }
     }
-    
-    // MARK: - Virtual Endpoints
-    
+}
+
+// MARK: - I/O Virtual Endpoints
+
+extension MIDIHelper {
     public var midiInput: MIDIInput? {
-        midiManager?.managedInputs[ConnectionTags.inputTag]
+        midiManager.managedInputs[ConnectionTags.inputTag]
     }
     
     public var midiOutput: MIDIOutput? {
-        midiManager?.managedOutputs[ConnectionTags.outputTag]
+        midiManager.managedOutputs[ConnectionTags.outputTag]
     }
     
     private func createVirtualEndpoints() {
@@ -87,14 +102,13 @@ import SwiftUI
             if midiInput == nil {
                 logger.debug("Adding virtual MIDI input port to the manager.")
                 
-                try midiManager?.addInput(
+                try midiManager.addInput(
                     name: ConnectionTags.inputName,
                     tag: ConnectionTags.inputTag,
                     uniqueID: .userDefaultsManaged(key: ConnectionTags.inputTag),
-                    receiver: .eventsLogging(options: [
-                        .bundleRPNAndNRPNDataEntryLSB,
-                        .filterActiveSensingAndClock
-                    ])
+                    receiver: .eventsLogging(
+                        options: [.bundleRPNAndNRPNDataEntryLSB, .filterActiveSensingAndClock]
+                    )
                 )
             }
         } catch {
@@ -105,7 +119,7 @@ import SwiftUI
             if midiOutput == nil {
                 logger.debug("Adding virtual MIDI output port to the manager.")
                 
-                try midiManager?.addOutput(
+                try midiManager.addOutput(
                     name: ConnectionTags.outputName,
                     tag: ConnectionTags.outputTag,
                     uniqueID: .userDefaultsManaged(key: ConnectionTags.outputTag)
@@ -117,12 +131,12 @@ import SwiftUI
     }
     
     public func destroyVirtualEndpoints() {
-        midiManager?.remove(.input, .all)
-        midiManager?.remove(.output, .all)
+        midiManager.remove(.input, .all)
+        midiManager.remove(.output, .all)
     }
     
     public var virtualEndpointsExist: Bool {
-        midiInput != nil &&
-            midiOutput != nil
+        midiInput != nil
+            && midiOutput != nil
     }
 }

@@ -10,11 +10,16 @@ import SwiftUI
 
 /// Legacy details view for systems prior to macOS 12 / iOS 16.
 struct LegacyDetailsView: View, DetailsContent {
-    public var object: AnyMIDIIOObject?
-    @Binding public var showAll: Bool
+    public var object: AnyMIDIIOObject
+    @Binding public var isRelevantPropertiesOnlyShown: Bool
     
     @State var properties: [Property] = []
     @State var selection: Set<Property.ID> = []
+    
+    init(object: AnyMIDIIOObject, isRelevantPropertiesOnlyShown: Binding<Bool>) {
+        self.object = object
+        _isRelevantPropertiesOnlyShown = isRelevantPropertiesOnlyShown
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -39,8 +44,8 @@ struct LegacyDetailsView: View, DetailsContent {
         .onAppear {
             refreshProperties()
         }
-        .onReceive(Just(showAll)) { _ in // workaround since we can't use onChange {}
-            refreshProperties()
+        .onReceive(Just(isRelevantPropertiesOnlyShown)) { _ in // workaround since we can't use `onChange {}` on macOS 10.15
+            withAnimation { refreshProperties() }
         }
     }
 }

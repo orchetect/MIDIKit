@@ -7,21 +7,28 @@
 import MIDIKitIO
 import SwiftUI
 
-/// Receiving MIDI happens on an asynchronous background thread. That means it cannot update
-/// SwiftUI view state directly. Therefore, we need a helper class marked with `@Observable`
-/// which contains properties that SwiftUI can use to update views.
-@Observable @MainActor final class MIDIHelper {
-    private weak var midiManager: ObservableMIDIManager?
+/// Object responsible for managing MIDI services, managing connections, and sending/receiving events.
+///
+/// Marking the class as `@Observable` allows us to install an instance of the class in a SwiftUI App or View
+/// and propagate it through the environment.
+@Observable public final class MIDIHelper: Sendable {
+    private let midiManager = ObservableMIDIManager(
+        clientName: "TestAppMIDIManager",
+        model: "TestApp",
+        manufacturer: "MyCompany"
+    )
     
-    public init() { }
-    
-    public func setup(midiManager: ObservableMIDIManager) {
-        self.midiManager = midiManager
-        
+    public init(start: Bool = false) {
+        if start { self.start() }
+    }
+}
+
+// MARK: - Lifecycle
+
+extension MIDIHelper {
+    public func start() {
         midiManager.notificationHandler = { [weak self] notification in
-            Task {
-                await self?.logNotification(notification)
-            }
+            self?.logNotification(notification)
         }
         
         do {
@@ -32,10 +39,15 @@ import SwiftUI
         }
     }
     
-    // MARK: - Virtual Endpoints
-    
-    func addVirtualInput() {
-        guard let midiManager else { return }
+    public func stop() {
+        midiManager.removeAll()
+    }
+}
+
+// MARK: - Virtual Endpoints
+
+extension MIDIHelper {
+    public func addVirtualInput() {
         let name = UUID().uuidString
         // we don't care about received MIDI events for this example project
         try? midiManager.addInput(
@@ -46,28 +58,27 @@ import SwiftUI
         )
     }
     
-    func addVirtualOutput() {
-        guard let midiManager else { return }
+    public func addVirtualOutput() {
         let name = UUID().uuidString
         // we won't be sending any events in this example project
         try? midiManager.addOutput(name: name, tag: name, uniqueID: .adHoc)
     }
     
-    func removeVirtualInput() {
-        guard let midiManager else { return }
+    public func removeVirtualInput() {
         guard let port = midiManager.managedInputs.randomElement() else { return }
         midiManager.remove(.input, .withTag(port.key))
     }
     
-    func removeVirtualOutput() {
-        guard let midiManager else { return }
+    public func removeVirtualOutput() {
         guard let port = midiManager.managedOutputs.randomElement() else { return }
         midiManager.remove(.output, .withTag(port.key))
     }
-    
-    // MARK: - Log MIDI Notification
-    
-    func logNotification(_ notification: MIDIIONotification) {
+}
+
+// MARK: - MIDI Notification Logging
+
+extension MIDIHelper {
+    private func logNotification(_ notification: MIDIIONotification) {
         switch notification {
         case .setupChanged:
             print("Setup changed")
@@ -85,9 +96,7 @@ import SwiftUI
         case let .propertyChanged(property, object):
             let objectDescription = description(for: object)
             let propertyValueDescription = object.propertyStringValue(for: property)
-            print(
-                "Property Changed: \(property) for \(objectDescription) to \(propertyValueDescription)"
-            )
+            print("Property Changed: \(property) for \(objectDescription) to \(propertyValueDescription)")
             
         case .thruConnectionChanged:
             // this notification carries no data
@@ -108,7 +117,7 @@ import SwiftUI
         }
     }
     
-    func description(for object: AnyMIDIIOObject?) -> String {
+    private func description(for object: AnyMIDIIOObject?) -> String {
         guard let object else { return "nil" }
         
         switch object {
@@ -124,5 +133,19 @@ import SwiftUI
         case let .outputEndpoint(endpoint):
             return "Output Endpoint \"\(endpoint.name)\" with ID \(endpoint.uniqueID)"
         }
+    }
+}
+
+// MARK: - ViewModel Proxies
+
+extension MIDIHelper {
+    /// This property is observable in SwiftUI views because it points to an observable property of the MIDI manager.
+    public var isVirtualInputsExist: Bool {
+        !midiManager.endpoints.inputsOwned.isEmpty
+    }
+    
+    /// This property is observable in SwiftUI views because it points to an observable property of the MIDI manager.
+    public var isVirtualOutputsExist: Bool {
+        !midiManager.endpoints.outputsOwned.isEmpty
     }
 }

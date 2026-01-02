@@ -8,7 +8,13 @@ import MIDIKitIO
 import UIKit
 
 class ViewController: UIViewController {
-    let appDelegate = UIApplication.shared.delegate as? AppDelegate
+    var appDelegate: AppDelegate? {
+        UIApplication.shared.delegate as? AppDelegate
+    }
+    
+    var outputConnection: MIDIOutputConnection? {
+        appDelegate?.midiHelper.outputConnection
+    }
     
     @IBAction
     func showBluetoothMIDIRemoteSetup(_ sender: Any) {
@@ -24,7 +30,6 @@ class ViewController: UIViewController {
     
     @IBAction
     func sendTestMIDIEvent(_ sender: Any) {
-        let conn = appDelegate?.midiManager.managedOutputConnections["Broadcaster"]
-        try? conn?.send(event: .cc(.expression, value: .midi1(64), channel: 0))
+        try? outputConnection?.send(event: .cc(.expression, value: .midi1(64), channel: 0))
     }
 }

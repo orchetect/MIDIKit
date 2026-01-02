@@ -11,7 +11,7 @@ import SwiftUI
 
 extension ContentView {
     struct ReceiveMIDIEventsView: View {
-        @Environment(ObservableMIDIManager.self) private var midiManager
+        @Environment(MIDIHelper.self) private var midiHelper
         
         var inputName: String
         @Binding var midiInputConnectionID: MIDIIdentifier?
@@ -41,6 +41,8 @@ extension ContentView {
                                         hideOwned: false
                                     )
                                     .updatingInputConnection(withTag: ConnectionTags.inputConnectionTag)
+                                    // the picker view requires injecting the observable MIDI manager into the environment
+                                    .environment(midiHelper.midiManager)
                                     .padding()
                                     .frame(maxWidth: 400)
                                     .frame(

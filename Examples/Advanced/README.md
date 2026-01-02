@@ -1,3 +1,3 @@
 # Advanced Examples
 
-The examples in this folder are for demonstrating advanced functionality of MIDIKit.
+The examples in this folder are demonstrate advanced functionality of MIDIKit.

@@ -12,4 +12,4 @@ Host host and client are modeled, fully functional and essentially feature-compl
 
 > [!NOTE]
 >
-> The SwiftUI interface may be very laggy and is experimental and not optimized.
+> The SwiftUI implementation is not fully optimized and may be laggy and/or CPU-intensive under heavy HUI activity.

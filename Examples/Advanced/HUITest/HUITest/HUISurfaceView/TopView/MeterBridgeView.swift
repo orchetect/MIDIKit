@@ -7,68 +7,29 @@
 import MIDIKitControlSurfaces
 import SwiftUI
 
-extension HUISurfaceView {
-    static let kMeterBridgeHeight: CGFloat = 100
-}
-
-extension HUISurfaceView {
+extension HUISurfaceView.TopView {
     struct MeterBridgeView: View {
         var body: some View {
             HStack(alignment: .center, spacing: 1) {
                 ForEach(0 ..< 7 + 1, id: \.self) { channel in
                     HStack(alignment: .center, spacing: 2) {
                         LevelMeterView(channel: channel, side: .left)
-                            .frame(width: 10, height: HUISurfaceView.kMeterBridgeHeight)
+                            .frame(width: 10, height: HUISurfaceView.TopView.kMeterBridgeHeight)
+                        
                         LevelMeterView(channel: channel, side: .right)
-                            .frame(width: 10, height: HUISurfaceView.kMeterBridgeHeight)
+                            .frame(width: 10, height: HUISurfaceView.TopView.kMeterBridgeHeight)
                     }
-                    .frame(width: 40, height: HUISurfaceView.kMeterBridgeHeight, alignment: .center)
+                    .frame(width: 40, height: HUISurfaceView.TopView.kMeterBridgeHeight, alignment: .center)
                     .border(Color.black)
                     .frame(width: 60)
                 }
             }
         }
     }
-    
-    struct LevelMeterView: View {
-        @Environment(HUISurface.self) var huiSurface
+}
 
-        let channel: Int
-        let side: HUISurfaceModelState.StereoLevelMeterSide
+// MARK: - Static
 
-        static let segmentIndexes = Array(
-            stride(
-                from: HUISurfaceModelState.StereoLevelMeterSide.levelMax,
-                through: HUISurfaceModelState.StereoLevelMeterSide.levelMin + 1,
-                by: -1
-            )
-        )
-
-        var body: some View {
-            VStack(alignment: .center, spacing: 1) {
-                ForEach(Self.segmentIndexes, id: \.self) { segment in
-                    Rectangle()
-                        .fill(color(forSegment: segment))
-                }
-            }
-            .background(Color(white: 0.25, opacity: 1.0))
-        }
-
-        func level() -> Int {
-            huiSurface.model.channelStrips[channel].levelMeter.level(of: side)
-        }
-
-        func color(forSegment segment: Int) -> Color {
-            segment <= level() ? segmentColor(segment) : Color.black
-        }
-
-        func segmentColor(_ segment: Int) -> Color {
-            switch segment {
-            case 0x1 ... 0x8: .green
-            case 0x9 ... 0xB: .yellow
-            case 0xC: .red
-            default: .black
-            }
-        }
-    }
+extension HUISurfaceView.TopView {
+    static let kMeterBridgeHeight: CGFloat = 100
 }

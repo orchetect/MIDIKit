@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E20238362CC45EA700661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E20238352CC45EA700661322 /* MIDIKitCore */; };
 		E20238382CC45EA700661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E20238372CC45EA700661322 /* MIDIKitIO */; };
+		E24932BE2F0745F3006CB1D1 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24932BD2F0745F1006CB1D1 /* Model.swift */; };
 		E254E8742ED686AC003CF193 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E254E8732ED686AC003CF193 /* SwiftRadix */; };
 		E26C0257285BFC8E00F64896 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26C0256285BFC8E00F64896 /* MIDIHelper.swift */; };
 		E27D0E63284F3FB600F43247 /* EventParsingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E62284F3FB600F43247 /* EventParsingApp.swift */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		E21317212989B5B8008269AF /* EventParsing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EventParsing.entitlements; sourceTree = "<group>"; };
+		E24932BD2F0745F1006CB1D1 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		E26C0256285BFC8E00F64896 /* MIDIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
 		E27D0E5F284F3FB600F43247 /* EventParsing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventParsing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27D0E62284F3FB600F43247 /* EventParsingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventParsingApp.swift; sourceTree = "<group>"; };
@@ -62,8 +64,9 @@
 			isa = PBXGroup;
 			children = (
 				E27D0E62284F3FB600F43247 /* EventParsingApp.swift */,
-				E26C0256285BFC8E00F64896 /* MIDIHelper.swift */,
 				E27D0E64284F3FB600F43247 /* ContentView.swift */,
+				E26C0256285BFC8E00F64896 /* MIDIHelper.swift */,
+				E24932BD2F0745F1006CB1D1 /* Model.swift */,
 				E29FF28E2880BB99005E2BC2 /* Images.xcassets */,
 				E27D0E70284F402C00F43247 /* Info.plist */,
 				E21317212989B5B8008269AF /* EventParsing.entitlements */,
@@ -152,6 +155,7 @@
 				E26C0257285BFC8E00F64896 /* MIDIHelper.swift in Sources */,
 				E27D0E65284F3FB600F43247 /* ContentView.swift in Sources */,
 				E27D0E63284F3FB600F43247 /* EventParsingApp.swift in Sources */,
+				E24932BE2F0745F3006CB1D1 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,8 +214,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.9;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -268,8 +272,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.9;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

@@ -10,40 +10,12 @@ import SwiftUI
 
 @main
 struct EndpointPickersApp: App {
-    @State var midiManager = ObservableMIDIManager(
-        clientName: "TestAppMIDIManager",
-        model: "TestApp",
-        manufacturer: "MyCompany"
-    )
-    
-    @State var midiHelper = MIDIHelper()
-    
-    @AppStorage(MIDIHelper.PrefKeys.midiInID)
-    var midiInSelectedID: MIDIIdentifier?
-    
-    @AppStorage(MIDIHelper.PrefKeys.midiInDisplayName)
-    var midiInSelectedDisplayName: String?
-    
-    @AppStorage(MIDIHelper.PrefKeys.midiOutID)
-    var midiOutSelectedID: MIDIIdentifier?
-    
-    @AppStorage(MIDIHelper.PrefKeys.midiOutDisplayName)
-    var midiOutSelectedDisplayName: String?
-    
-    init() {
-        midiHelper.setup(midiManager: midiManager)
-    }
+    @State var midiHelper = MIDIHelper(start: true)
     
     var body: some Scene {
         WindowGroup {
-            ContentView(
-                midiInSelectedID: $midiInSelectedID,
-                midiInSelectedDisplayName: $midiInSelectedDisplayName,
-                midiOutSelectedID: $midiOutSelectedID,
-                midiOutSelectedDisplayName: $midiOutSelectedDisplayName
-            )
-            .environment(midiManager)
-            .environment(midiHelper)
+            ContentView()
         }
+        .environment(midiHelper)
     }
 }

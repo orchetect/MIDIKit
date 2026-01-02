@@ -10,6 +10,8 @@
 		E202383B2CC45F0E00661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E202383A2CC45F0E00661322 /* MIDIKitCore */; };
 		E202383D2CC45F0E00661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E202383C2CC45F0E00661322 /* MIDIKitIO */; };
 		E202383F2CC45F0E00661322 /* MIDIKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = E202383E2CC45F0E00661322 /* MIDIKitUI */; };
+		E24932F42F07BB9D006CB1D1 /* EmptyDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24932F32F07BB9D006CB1D1 /* EmptyDetailsView.swift */; };
+		E24932F62F07BFB1006CB1D1 /* DetailsInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24932F52F07BFB1006CB1D1 /* DetailsInfoView.swift */; };
 		E2B8BD9E29B308D600B92BDF /* ListsExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */; };
 		E2B8BDA429B30B3200B92BDF /* PickersExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B8BDA329B30B3200B92BDF /* PickersExampleView.swift */; };
 		E2F1FE7429B2DF5800054467 /* MIDIKitUIExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F1FE7329B2DF5800054467 /* MIDIKitUIExampleApp.swift */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E24932F32F07BB9D006CB1D1 /* EmptyDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDetailsView.swift; sourceTree = "<group>"; };
+		E24932F52F07BFB1006CB1D1 /* DetailsInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsInfoView.swift; sourceTree = "<group>"; };
 		E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsExampleView.swift; sourceTree = "<group>"; };
 		E2B8BDA329B30B3200B92BDF /* PickersExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickersExampleView.swift; sourceTree = "<group>"; };
 		E2B8BDAA29B3301300B92BDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -69,6 +73,8 @@
 			children = (
 				E2F1FE7329B2DF5800054467 /* MIDIKitUIExampleApp.swift */,
 				E2F1FE7529B2DF5800054467 /* ContentView.swift */,
+				E24932F52F07BFB1006CB1D1 /* DetailsInfoView.swift */,
+				E24932F32F07BB9D006CB1D1 /* EmptyDetailsView.swift */,
 				E2B8BD9D29B308D600B92BDF /* ListsExampleView.swift */,
 				E2B8BDA329B30B3200B92BDF /* PickersExampleView.swift */,
 				E2F1FE8829B2E3F600054467 /* MIDIHelper.swift */,
@@ -157,10 +163,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E24932F42F07BB9D006CB1D1 /* EmptyDetailsView.swift in Sources */,
 				E2F1FE7629B2DF5800054467 /* ContentView.swift in Sources */,
 				E2B8BD9E29B308D600B92BDF /* ListsExampleView.swift in Sources */,
 				E2F1FE8929B2E3F600054467 /* MIDIHelper.swift in Sources */,
 				E2B8BDA429B30B3200B92BDF /* PickersExampleView.swift in Sources */,
+				E24932F62F07BFB1006CB1D1 /* DetailsInfoView.swift in Sources */,
 				E2F1FE8B29B2F2ED00054467 /* Utilities.swift in Sources */,
 				E2F1FE7429B2DF5800054467 /* MIDIKitUIExampleApp.swift in Sources */,
 			);

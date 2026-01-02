@@ -12,11 +12,13 @@ struct EmptyDetailsView: View {
             if #available(macOS 11.0, iOS 14.0, *) {
                 Image(systemName: "pianokeys")
                     .resizable()
+                    .scaledToFit()
                     .foregroundColor(.secondary)
-                    .frame(width: 200, height: 200)
+                    .frame(width: 140, height: 140)
                 Spacer()
                     .frame(height: 50)
             }
+            
             Text("Make a selection from the sidebar.")
         }
         .padding()

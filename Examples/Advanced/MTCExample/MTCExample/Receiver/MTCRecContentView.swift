@@ -11,8 +11,8 @@ import SwiftUI
 import SwiftTimecodeCore
 
 struct MTCRecContentView: View {
-    @Environment(ObservableMIDIManager.self) private var midiManager
-    @State private var mtcRecHost = MTCRecHost()
+    @Environment(MIDIHelper.self) private var midiHelper
+    @State private var mtcReceiverHelper = MTCReceiverHelper()
     
     // MARK: - Prefs
     
@@ -36,21 +36,25 @@ struct MTCRecContentView: View {
                 await setup()
             }
             .onChange(of: localFrameRate) { oldValue, newValue in
-                if mtcRecHost.mtcRec?.localFrameRate != newValue {
-                    logger.log(
-                        "Setting MTC receiver's local frame rate to \(newValue?.stringValue ?? "None")"
-                    )
-                    mtcRecHost.mtcRec?.setLocalFrameRate(newValue)
-                }
+                Task { await updateLocalFrameRate(to: newValue) }
             }
             .onChange(of: receiveFromSelfGen) { oldValue, newValue in
-                updateSelfGenListen(state: newValue)
+                Task { await mtcReceiverHelper.updateSelfGenListenConnection(state: newValue) }
             }
     }
     
     private func setup() async {
-        mtcRecHost.addPort(to: midiManager)
-        updateSelfGenListen(state: receiveFromSelfGen)
+        await mtcReceiverHelper.bootstrap(midiManager: midiHelper.midiManager)
+        await mtcReceiverHelper.updateSelfGenListenConnection(state: receiveFromSelfGen)
+    }
+    
+    private func updateLocalFrameRate(to newValue: TimecodeFrameRate?) async {
+        if await mtcReceiverHelper.localFrameRate != newValue {
+            logger.log(
+                "Setting MTC receiver's local frame rate to \(newValue?.stringValue ?? "None")"
+            )
+            mtcReceiverHelper.setLocalFrameRate(newValue)
+        }
     }
     
     private var mtcRecView: some View {
@@ -73,7 +77,7 @@ struct MTCRecContentView: View {
             frameRateInfo
                 .padding(.bottom, 10)
         }
-        .background(mtcRecHost.receiverState.stateColor)
+        .background(mtcReceiverHelper.receiverState.stateColor)
     }
     
     private var options: some View {
@@ -83,15 +87,15 @@ struct MTCRecContentView: View {
     }
     
     private var timecodeDisplay: some View {
-        Text(mtcRecHost.receiverTC)
+        Text(mtcReceiverHelper.receiverTC)
             .font(.system(size: 48, weight: .regular, design: .monospaced))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     private var mtcEncodedRateInfo: some View {
         Group {
-            if mtcRecHost.receiverState != .idle {
-                Text("MTC encoded rate: " + (mtcRecHost.receiverFR?.stringValue ?? "--") + " fps")
+            if mtcReceiverHelper.receiverState != .idle {
+                Text("MTC encoded rate: " + (mtcReceiverHelper.receiverFR?.stringValue ?? "--") + " fps")
             } else {
                 Text(" ")
             }
@@ -101,8 +105,8 @@ struct MTCRecContentView: View {
     
     @ViewBuilder
     private var derivedFrameRatesInfo: some View {
-        if mtcRecHost.receiverState != .idle,
-           let receiverFR = mtcRecHost.receiverFR
+        if mtcReceiverHelper.receiverState != .idle,
+           let receiverFR = mtcReceiverHelper.receiverFR
         {
             VStack {
                 Text("Derived frame rates of \(receiverFR.stringValue):")
@@ -130,12 +134,12 @@ struct MTCRecContentView: View {
     
     private var scalingInfo: some View {
         Group {
-            if mtcRecHost.receiverState != .idle,
+            if mtcReceiverHelper.receiverState != .idle,
                localFrameRate != nil
             {
-                if mtcRecHost.receiverState == .incompatibleFrameRate {
+                if mtcReceiverHelper.receiverState == .incompatibleFrameRate {
                     Text("Can't scale frame rate because rates are incompatible.")
-                } else if mtcRecHost.receiverFR?.directEquivalentFrameRate == localFrameRate {
+                } else if mtcReceiverHelper.receiverFR?.directEquivalentFrameRate == localFrameRate {
                     Text("Scaling not needed, rates are identical.")
                 } else {
                     Text(
@@ -152,7 +156,7 @@ struct MTCRecContentView: View {
     }
     
     private var receiverStateDisplay: some View {
-        Text(mtcRecHost.receiverState.description)
+        Text(mtcReceiverHelper.receiverState.description)
             .font(.system(size: 48, weight: .regular, design: .monospaced))
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -189,7 +193,7 @@ struct MTCRecContentView: View {
                                 .padding(2)
                                 .border(
                                     Color.white,
-                                    width: $0 == mtcRecHost.receiverFR?.directEquivalentFrameRate ? 2 : 0
+                                    width: $0 == mtcReceiverHelper.receiverFR?.directEquivalentFrameRate ? 2 : 0
                                 )
                         }
                     }
@@ -201,22 +205,6 @@ struct MTCRecContentView: View {
                         .padding(2)
                 }
             }
-        }
-    }
-    
-    private func updateSelfGenListen(state: Bool) {
-        guard let mtcRec = mtcRecHost.mtcRec else { fatalError() }
-        
-        let tag = kMIDIPorts.MTCGenConnection.tag
-        switch state {
-        case true:
-            try? midiManager.addInputConnection(
-                to: .outputs(matching: [.name(kMIDIPorts.MTCGen.name)]),
-                tag: tag,
-                receiver: .weak(mtcRec)
-            )
-        case false:
-            midiManager.remove(.inputConnection, .withTag(tag))
         }
     }
 }
@@ -234,12 +222,8 @@ extension MTCReceiver.State {
 }
 
 #Preview {
-    @Previewable @State var midiManager = ObservableMIDIManager(
-        clientName: "Preview",
-        model: "TestApp",
-        manufacturer: "MyCompany"
-    )
+    @Previewable @State var midiHelper = MIDIHelper(start: true)
     
     MTCRecContentView()
-        .environment(midiManager)
+        .environment(midiHelper)
 }

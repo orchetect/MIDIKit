@@ -13,12 +13,21 @@ struct HUISurfaceView: View {
     var body: some View {
         VStack {
             TopView()
-            Spacer().frame(height: 10)
+            
+            Spacer()
+                .frame(height: 10)
+            
             HStack {
                 LeftSideView()
-                Spacer().frame(width: 20)
+                
+                Spacer()
+                    .frame(width: 20)
+                
                 MixerView()
-                Spacer().frame(width: 20)
+                
+                Spacer()
+                    .frame(width: 20)
+                
                 RightSideView()
             }
             .padding([.leading, .trailing])

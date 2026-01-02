@@ -15,20 +15,29 @@ extension HUISurfaceView {
             VStack {
                 HStack {
                     Spacer()
+                    
                     VStack {
-                        Text((huiSurface.isRemotePresent ? "🟢" : "🔴") + " Host")
-                            .font(.system(size: 10))
-                            .foregroundColor(.white)
+                        HStack {
+                            Text(verbatim: huiSurface.isRemotePresent ? "🟢" : "🔴")
+                            Text("Host")
+                        }
+                        .font(.system(size: 10))
+                        .foregroundColor(.white)
+                        
                         Spacer()
                             .frame(height: 8)
+                        
                         Text("hui")
                             .font(.system(size: 36, weight: .bold, design: .rounded))
                             .frame(width: HUISurfaceView.kLeftSideViewWidth)
                             .foregroundColor(.white)
                     }
+                    
                     MeterBridgeView()
+                    
                     LargeTextDisplayView()
                         .frame(width: HUISurfaceView.kRightSideViewWidth)
+                    
                     Spacer()
                 }
                 .background(Color.black)

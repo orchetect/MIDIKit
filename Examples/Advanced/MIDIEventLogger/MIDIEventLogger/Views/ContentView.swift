@@ -8,7 +8,6 @@ import MIDIKitIO
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(ObservableMIDIManager.self) private var midiManager
     @Environment(MIDIHelper.self) private var midiHelper
     
     // MARK: - Constants
@@ -83,17 +82,11 @@ struct ContentView: View {
     }
 }
 
+#if DEBUG
 #Preview {
-    @Previewable @State var midiManager = ObservableMIDIManager(
-        clientName: "Preview",
-        model: "TestApp",
-        manufacturer: "MyCompany"
-    )
-    
-    @Previewable @State var midiHelper = MIDIHelper()
+    @Previewable @State var midiHelper = MIDIHelper(start: true)
     
     ContentView()
-        .environment(midiManager)
         .environment(midiHelper)
-        .onAppear { midiHelper.setup(midiManager: midiManager) }
 }
+#endif

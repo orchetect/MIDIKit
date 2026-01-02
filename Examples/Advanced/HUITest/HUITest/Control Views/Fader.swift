@@ -4,7 +4,7 @@
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
 
-// TODO: this struct could be moved to AudioKit/Controls repo
+// TODO: this view could be moved to AudioKit/Controls repo
 
 import Controls
 import SwiftUI
@@ -71,6 +71,8 @@ public struct Fader: View {
         }
     }
 }
+
+// MARK: - View Modifiers
 
 extension Fader {
     /// Modifier to change the background color of the fader.

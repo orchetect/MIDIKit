@@ -8,72 +8,77 @@
 @preconcurrency import DunneAudioKit
 import Foundation
 
-let globalAudioEngine = AudioEngine()
-
-private let synthClickA = Synth(
-    masterVolume: 1.0,
-    pitchBend: 12,
-    vibratoDepth: 0.0,
-    filterCutoff: 1.0,
-    filterStrength: 2.0,
-    filterResonance: 0.0,
-    attackDuration: 0.0,
-    decayDuration: 0.0,
-    sustainLevel: 1.0,
-    releaseDuration: 0.0,
-    filterEnable: false,
-    filterAttackDuration: 0.0,
-    filterDecayDuration: 0.0,
-    filterSustainLevel: 1.0,
-    filterReleaseDuration: 0.0
-)
-
-private let synthClickB = Synth(
-    masterVolume: 1.0,
-    pitchBend: 12,
-    vibratoDepth: 0.0,
-    filterCutoff: 1.0,
-    filterStrength: 2.0,
-    filterResonance: 0.0,
-    attackDuration: 0.0,
-    decayDuration: 0.0,
-    sustainLevel: 1.0,
-    releaseDuration: 0.0,
-    filterEnable: false,
-    filterAttackDuration: 0.0,
-    filterDecayDuration: 0.0,
-    filterSustainLevel: 1.0,
-    filterReleaseDuration: 0.0
-)
-
-func setupAudioEngine() {
-    // audio engine
-    AudioKit.Settings.bufferLength = .veryShort
-    globalAudioEngine.output = Mixer(synthClickA, synthClickB)
+final public class AudioHelper: Sendable {
+    /// Shared singleton instance.
+    public static let shared = AudioHelper()
     
-    _ = Settings()
+    private let audioEngine = AudioEngine()
     
-    if (try? globalAudioEngine.start()) == nil {
-        logger.error("Audio engine could not be started.")
-    }
+    private let synthClickA = Synth(
+        masterVolume: 1.0,
+        pitchBend: 12,
+        vibratoDepth: 0.0,
+        filterCutoff: 1.0,
+        filterStrength: 2.0,
+        filterResonance: 0.0,
+        attackDuration: 0.005,
+        decayDuration: 0.0,
+        sustainLevel: 1.0,
+        releaseDuration: 0.01,
+        filterEnable: false,
+        filterAttackDuration: 0.0,
+        filterDecayDuration: 0.0,
+        filterSustainLevel: 1.0,
+        filterReleaseDuration: 0.0
+    )
+    
+    private let synthClickB = Synth(
+        masterVolume: 1.0,
+        pitchBend: 12,
+        vibratoDepth: 0.0,
+        filterCutoff: 1.0,
+        filterStrength: 2.0,
+        filterResonance: 0.0,
+        attackDuration: 0.005,
+        decayDuration: 0.0,
+        sustainLevel: 1.0,
+        releaseDuration: 0.01,
+        filterEnable: false,
+        filterAttackDuration: 0.0,
+        filterDecayDuration: 0.0,
+        filterSustainLevel: 1.0,
+        filterReleaseDuration: 0.0
+    )
+    
+    private init() { }
 }
 
-func playClickA() {
-    let note: UInt8 = 60
+extension AudioHelper {
+    public func start() {
+        // audio engine
+        AudioKit.Settings.bufferLength = .veryShort
+        audioEngine.output = Mixer(synthClickA, synthClickB)
+        
+        _ = AudioKit.Settings()
+        
+        if (try? audioEngine.start()) == nil {
+            logger.error("Audio engine could not be started.")
+        }
+    }
     
-    synthClickA.play(noteNumber: note, velocity: 127)
-    
-    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) {
+    @concurrent public func playClickA() async {
+        let note: UInt8 = 60
+        
+        synthClickA.play(noteNumber: note, velocity: 127)
+        try? await Task.sleep(for: .milliseconds(50))
         synthClickA.stop(noteNumber: note)
     }
-}
-
-func playClickB() {
-    let note: UInt8 = 67
     
-    synthClickB.play(noteNumber: note, velocity: 127)
-    
-    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) {
+    @concurrent public func playClickB() async {
+        let note: UInt8 = 67
+        
+        synthClickB.play(noteNumber: note, velocity: 127)
+        try? await Task.sleep(for: .milliseconds(50))
         synthClickB.stop(noteNumber: note)
     }
 }

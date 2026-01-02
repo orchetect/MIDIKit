@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		E202381A2CC45BF800661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E20238192CC45BF800661322 /* MIDIKitCore */; };
 		E202381C2CC45BF800661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E202381B2CC45BF800661322 /* MIDIKitIO */; };
+		E21DF69F2F0A479D001E5CA6 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21DF69E2F0A479D001E5CA6 /* MIDIHelper.swift */; };
 		E24BA23E284F1A3300AA6767 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24BA23D284F1A3300AA6767 /* AppDelegate.swift */; };
 		E24BA245284F1A3400AA6767 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E24BA243284F1A3400AA6767 /* Main.storyboard */; };
 		E29FF2A52880BCE6005E2BC2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E29FF2A42880BCE6005E2BC2 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E21DF69E2F0A479D001E5CA6 /* MIDIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
 		E24BA23A284F1A3300AA6767 /* VirtualOutput.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualOutput.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E24BA23D284F1A3300AA6767 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E24BA244284F1A3400AA6767 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				E24BA23D284F1A3300AA6767 /* AppDelegate.swift */,
+				E21DF69E2F0A479D001E5CA6 /* MIDIHelper.swift */,
 				E24BA243284F1A3400AA6767 /* Main.storyboard */,
 				E24BA246284F1A3400AA6767 /* VirtualOutput.entitlements */,
 				E29FF2A42880BCE6005E2BC2 /* Images.xcassets */,
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E21DF69F2F0A479D001E5CA6 /* MIDIHelper.swift in Sources */,
 				E24BA23E284F1A3300AA6767 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

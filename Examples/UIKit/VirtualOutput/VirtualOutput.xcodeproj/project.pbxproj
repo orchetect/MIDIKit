@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E202386A2CC4623B00661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E20238692CC4623B00661322 /* MIDIKitCore */; };
 		E202386C2CC4623B00661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E202386B2CC4623B00661322 /* MIDIKitIO */; };
+		E24932E72F077ECD006CB1D1 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24932E62F077ECD006CB1D1 /* MIDIHelper.swift */; };
 		E27D0E1E284F2A8900F43247 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E1D284F2A8900F43247 /* AppDelegate.swift */; };
 		E27D0E25284F2A8900F43247 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E27D0E23284F2A8900F43247 /* Main.storyboard */; };
 		E27D0E2A284F2A8900F43247 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E27D0E28284F2A8900F43247 /* LaunchScreen.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E24932E62F077ECD006CB1D1 /* MIDIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDIHelper.swift; sourceTree = "<group>"; };
 		E27D0E1A284F2A8900F43247 /* VirtualOutput.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualOutput.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27D0E1D284F2A8900F43247 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E27D0E24284F2A8900F43247 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				E27D0E1D284F2A8900F43247 /* AppDelegate.swift */,
+				E24932E62F077ECD006CB1D1 /* MIDIHelper.swift */,
 				E27D0E23284F2A8900F43247 /* Main.storyboard */,
 				E27D0E28284F2A8900F43247 /* LaunchScreen.storyboard */,
 				E29FF29C2880BC84005E2BC2 /* Images.xcassets */,
@@ -145,6 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E24932E72F077ECD006CB1D1 /* MIDIHelper.swift in Sources */,
 				E27D0E1E284F2A8900F43247 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

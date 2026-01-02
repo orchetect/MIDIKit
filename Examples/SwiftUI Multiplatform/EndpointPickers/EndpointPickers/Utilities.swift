@@ -7,8 +7,6 @@
 import MIDIKitIO
 import SwiftUI
 
-// TODO: Add to MIDIKit?
-
 /// Allow use with `@AppStorage` by conforming to a supported `RawRepresentable` type.
 extension MIDIIdentifier: @retroactive RawRepresentable {
     public typealias RawValue = Int

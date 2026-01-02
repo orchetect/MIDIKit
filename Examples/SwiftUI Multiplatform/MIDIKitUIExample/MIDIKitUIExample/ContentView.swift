@@ -8,7 +8,6 @@ import MIDIKitIO
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(ObservableMIDIManager.self) private var midiManager
     @Environment(MIDIHelper.self) private var midiHelper
     
     var body: some View {
@@ -21,7 +20,8 @@ struct ContentView: View {
                             .navigationBarTitle("Endpoint List", displayMode: .inline)
                             .navigationBarBackButtonHidden(false)
                         #endif
-                    }.tag(0)
+                    }
+                    .tag(0)
                     
                     NavigationLink("Endpoint Picker") {
                         details(index: 1)
@@ -29,12 +29,13 @@ struct ContentView: View {
                             .navigationBarTitle("Endpoint Picker", displayMode: .inline)
                             .navigationBarBackButtonHidden(false)
                         #endif
-                    }.tag(1)
+                    }
+                    .tag(1)
                 }
             
                 #if os(iOS)
                 Section("Info") {
-                    EmptyDetailsView.textBody
+                    DetailsInfoView()
                         .foregroundColor(.secondary)
                 }
                 #endif
@@ -59,12 +60,12 @@ struct ContentView: View {
             VStack(spacing: 10) {
                 #if os(iOS)
                 if UIDevice.current.userInterfaceIdiom == .phone {
-                    VStack { virtualsButtons }
+                    VStack { virtualEndpointsButtons }
                 } else {
-                    HStack { virtualsButtons }
+                    HStack { virtualEndpointsButtons }
                 }
                 #else
-                HStack { virtualsButtons }
+                HStack { virtualEndpointsButtons }
                 #endif
             }
             .padding()
@@ -73,47 +74,18 @@ struct ContentView: View {
         }
     }
     
-    private var virtualsButtons: some View {
+    private var virtualEndpointsButtons: some View {
         Group {
             Button("Create Test Endpoints") {
-                try? midiHelper.createVirtuals()
+                midiHelper.createVirtualEndpoints()
             }
-            .disabled(midiHelper.virtualsExist)
+            .disabled(midiHelper.isVirtualEndpointsExist)
             
             Button("Remove Test Endpoints") {
-                try? midiHelper.destroyVirtuals()
+                midiHelper.removeVirtualEndpoints()
             }
-            .disabled(!midiHelper.virtualsExist)
+            .disabled(!midiHelper.isVirtualEndpointsExist)
         }
         .buttonStyle(.bordered)
-    }
-}
-
-struct EmptyDetailsView: View {
-    var body: some View {
-        VStack(spacing: 10) {
-            if #available(macOS 11.0, iOS 14.0, *) {
-                Image(systemName: "pianokeys")
-                    .resizable()
-                    .foregroundColor(.secondary)
-                    .frame(width: 200, height: 200)
-                Spacer().frame(height: 50)
-            }
-            Self.textBody
-        }
-        .padding()
-        .multilineTextAlignment(.center)
-        .frame(maxWidth: 600)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-    
-    @ViewBuilder
-    static var textBody: some View {
-        Group {
-            Text("Endpoint selections are saved persistently and restored after app relaunch.")
-            Text("If the selected endpoint is removed from the system, it is displayed as missing in the UI.")
-            Text("However it remains selected and will be restored when it reappears in the system.")
-        }
-        .lineLimit(10)
     }
 }

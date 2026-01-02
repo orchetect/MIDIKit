@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E20238512CC4608200661322 /* MIDIKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = E20238502CC4608200661322 /* MIDIKitCore */; };
 		E20238532CC4608200661322 /* MIDIKitIO in Frameworks */ = {isa = PBXBuildFile; productRef = E20238522CC4608200661322 /* MIDIKitIO */; };
+		E24932EF2F078DFD006CB1D1 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24932EE2F078DFD006CB1D1 /* Model.swift */; };
 		E27D0E63284F3FB600F43247 /* VirtualInputApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E62284F3FB600F43247 /* VirtualInputApp.swift */; };
 		E27D0E65284F3FB600F43247 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D0E64284F3FB600F43247 /* ContentView.swift */; };
 		E2908A652A039BE90072F300 /* MIDIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2908A642A039BE90072F300 /* MIDIHelper.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E24932EE2F078DFD006CB1D1 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		E27D0E5F284F3FB600F43247 /* VirtualInput.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualInput.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27D0E62284F3FB600F43247 /* VirtualInputApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualInputApp.swift; sourceTree = "<group>"; };
 		E27D0E64284F3FB600F43247 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 				E27D0E62284F3FB600F43247 /* VirtualInputApp.swift */,
 				E27D0E64284F3FB600F43247 /* ContentView.swift */,
 				E2908A642A039BE90072F300 /* MIDIHelper.swift */,
+				E24932EE2F078DFD006CB1D1 /* Model.swift */,
 				E29FF2902880BBB0005E2BC2 /* Images.xcassets */,
 				E27D0E70284F402C00F43247 /* Info.plist */,
 				E2841AB82989C8D3006907BD /* VirtualInput.entitlements */,
@@ -148,6 +151,7 @@
 				E2908A652A039BE90072F300 /* MIDIHelper.swift in Sources */,
 				E27D0E65284F3FB600F43247 /* ContentView.swift in Sources */,
 				E27D0E63284F3FB600F43247 /* VirtualInputApp.swift in Sources */,
+				E24932EF2F078DFD006CB1D1 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,8 +210,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -264,8 +268,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
