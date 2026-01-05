@@ -37,6 +37,13 @@
 // - 30 frame/s (non-drop timecode for NTSC video)"
 //
 // It is important to note that not all DAWs implement all features of MTC. For example, Pro Tools
-// can generate or slave to MTC quarter frames, but does not transmit or receive full-frame messages
+// can generate or chase MTC quarter frames, but does not transmit or receive full-frame messages
 // - meaning Pro Tools will not locate to new timecodes when the MTC stream is not running. However,
 // some other DAWs will.
+//
+// It is also important to note that MTC communication from source to target must be stable and
+// low-latency/low-jitter. This means that using physical MIDI cables, USB MIDI interfaces, orusing
+// virtual software-based MIDI ports, such as macOS's IAC (inter-app-communication) ports is ideal.
+// If sending MTC data over a network, it must be a physically wired network (copper ethernet LAN)
+// and not wireless protocols such as Wi-Fi or Bluetooth/BTLE. Wireless protocols introduce too much
+// latency and jitter and will not sustain reliable MTC timing.
