@@ -139,12 +139,9 @@ extension MIDIInput {
                 manager.coreMIDIClientRef,
                 name as CFString,
                 &newPortRef,
-                { [weak self, weak queue = midiManager?.managementQueue] packetListPtr, srcConnRefCon in
+                { [weak receiveHandler = receiveHandler] packetListPtr, srcConnRefCon in
                     let packets = packetListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     
-                    // we need to read the `receiveHandler` on the same queue that it was created on
-                    // to satisfy the thread sanitizer.
-                    let receiveHandler = queue?.sync { self?.receiveHandler }
                     receiveHandler?.packetListReceived(packets)
                 }
             )
@@ -162,13 +159,10 @@ extension MIDIInput {
                 name as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newPortRef,
-                { [weak self, weak queue = midiManager?.managementQueue] eventListPtr, srcConnRefCon in
+                { [weak receiveHandler = receiveHandler] eventListPtr, srcConnRefCon in
                     let packets = eventListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    // we need to read the `receiveHandler` on the same queue that it was created on
-                    // to satisfy the thread sanitizer.
-                    let receiveHandler = queue?.sync { self?.receiveHandler }
                     receiveHandler?.eventListReceived(
                         packets,
                         protocol: midiProtocol

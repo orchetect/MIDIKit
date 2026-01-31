@@ -170,8 +170,8 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
 extension MIDIInputConnection {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: MIDIReceiver) {
-        midiManager?.managementQueue.sync {
-            receiveHandler = receiver.create()
+        midiManager?.managementQueue.async {
+            self.receiveHandler = receiver.create()
         }
     }
 }
@@ -207,15 +207,12 @@ extension MIDIInputConnection {
                 manager.coreMIDIClientRef,
                 UUID().uuidString as CFString,
                 &newInputPortRef,
-                { [weak self, weak queue = midiManager?.managementQueue] packetListPtr, srcConnRefCon in
+                { [weak receiveHandler = receiveHandler] packetListPtr, srcConnRefCon in
                     let packets = packetListPtr.packets(
                         refCon: srcConnRefCon,
                         refConKnown: true
                     )
                     
-                    // we need to read the `receiveHandler` on the same queue that it was created on
-                    // to satisfy the thread sanitizer.
-                    let receiveHandler = queue?.sync { self?.receiveHandler }
                     receiveHandler?.packetListReceived(packets)
                 }
             )
@@ -233,16 +230,13 @@ extension MIDIInputConnection {
                 UUID().uuidString as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newInputPortRef,
-                { [weak self, weak queue = midiManager?.managementQueue] eventListPtr, srcConnRefCon in
+                { [weak receiveHandler = receiveHandler] eventListPtr, srcConnRefCon in
                     let packets = eventListPtr.packets(
                         refCon: srcConnRefCon,
                         refConKnown: true
                     )
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    // we need to read the `receiveHandler` on the same queue that it was created on
-                    // to satisfy the thread sanitizer.
-                    let receiveHandler = queue?.sync { self?.receiveHandler }
                     receiveHandler?.eventListReceived(
                         packets,
                         protocol: midiProtocol

@@ -175,10 +175,8 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     
     /// Internal: updates cached properties for all objects.
     func updateObjectsCache() {
-        managementQueue.sync {
-            devices.updateCachedProperties()
-            endpoints.updateCachedProperties(manager: self)
-        }
+        self.devices.updateCachedProperties()
+        self.endpoints.updateCachedProperties(manager: self)
     }
 }
 

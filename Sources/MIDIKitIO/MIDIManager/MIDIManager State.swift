@@ -40,16 +40,18 @@ extension MIDIManager {
             }
             assert(newCoreMIDIClientRef != MIDIClientRef())
             self.coreMIDIClientRef = newCoreMIDIClientRef
+            
+            // initial cache of endpoints
+            updateObjectsCache()
         }
-        
-        // initial cache of endpoints
-        updateObjectsCache()
     }
     
     private func internalNotificationHandler(_ internalNotif: MIDIIOInternalNotification) {
         switch internalNotif {
         case .setupChanged, .added, .removed, .propertyChanged:
-            updateObjectsCache()
+            managementQueue.async {
+                self.updateObjectsCache()
+            }
         default:
             break
         }
