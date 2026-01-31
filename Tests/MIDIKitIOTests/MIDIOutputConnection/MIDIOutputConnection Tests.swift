@@ -197,7 +197,7 @@ import Testing
         try await wait(require: { conn.coreMIDIInputEndpointRefs == [input1Ref] }, timeout: 2.0)
         try await wait(require: { conn.endpoints == [input1.endpoint] }, timeout: 2.0)
         
-        // send an event - it should be received by the connection
+        // send an event - it should be received by the input
         try conn.send(event: .start())
         try await wait(require: { await receiver1.events == [.start()] }, timeout: 2.0)
         await #expect(receiver2.events == [])
@@ -258,7 +258,7 @@ import Testing
         #expect(conn.coreMIDIInputEndpointRefs == [])
         #expect(conn.endpoints == [])
         
-        // send an event - it should not be received by the connection
+        // send an event - it should not be received by the input
         try conn.send(event: .start())
         try await Task.sleep(seconds: isStable ? 0.2 : 2.0) // wait a bit in case an event is sent
         await #expect(receiver1.events == [])

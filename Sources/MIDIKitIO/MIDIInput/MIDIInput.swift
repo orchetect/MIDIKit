@@ -139,10 +139,10 @@ extension MIDIInput {
                 manager.coreMIDIClientRef,
                 name as CFString,
                 &newPortRef,
-                { [weak receiveHandler = receiveHandler] packetListPtr, srcConnRefCon in
+                { [weak self] packetListPtr, srcConnRefCon in
                     let packets = packetListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     
-                    receiveHandler?.packetListReceived(packets)
+                    self?.receiveHandler.packetListReceived(packets)
                 }
             )
             .throwIfOSStatusErr()
@@ -159,11 +159,11 @@ extension MIDIInput {
                 name as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newPortRef,
-                { [weak receiveHandler = receiveHandler] eventListPtr, srcConnRefCon in
+                { [weak self] eventListPtr, srcConnRefCon in
                     let packets = eventListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    receiveHandler?.eventListReceived(
+                    self?.receiveHandler.eventListReceived(
                         packets,
                         protocol: midiProtocol
                     )
