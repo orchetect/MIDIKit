@@ -107,7 +107,7 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     
     /// Internal: Ephemeral MIDI object metadata cache for MIDI object removal notifications.
     @ThreadSafeAccess
-    var midiObjectCache = MIDIIOObjectCache()
+    var midiObjectCache = MIDIObjectCache()
     
     // MARK: - Internal dispatch queue
     

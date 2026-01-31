@@ -76,7 +76,7 @@ extension MIDIIONotification {
     /// notification, otherwise metadata will be missing.
     init?(
         _ internalNotification: MIDIIOInternalNotification,
-        cache: MIDIIOObjectCache?
+        cache: MIDIObjectCache?
     ) {
         switch internalNotification {
         case .setupChanged:

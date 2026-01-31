@@ -1,5 +1,5 @@
 //
-//  MIDIIOObjectCache.swift
+//  MIDIObjectCache.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -9,7 +9,7 @@
 import Foundation
 
 /// An ephemeral in-memory only cache for MIDI objects held through the lifespan of the `MIDIManager`.
-struct MIDIIOObjectCache {
+struct MIDIObjectCache {
     var devices: Set<MIDIDevice> = []
     var inputEndpoints: Set<MIDIInputEndpoint> = []
     var outputEndpoints: Set<MIDIOutputEndpoint> = []
@@ -21,7 +21,7 @@ struct MIDIIOObjectCache {
     }
 }
 
-extension MIDIIOObjectCache {
+extension MIDIObjectCache {
     /// Updates the cache with new or changed object metadata.
     /// All objects removed from the system will persist in the cache until it is pruned.
     mutating func update(from manager: MIDIManager, prune: Bool = false) {
