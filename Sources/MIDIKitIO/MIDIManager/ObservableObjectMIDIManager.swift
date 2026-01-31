@@ -77,9 +77,9 @@ public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject, @
 
     private var observableEndpoints = MIDIEndpoints()
     
-    override func updateObjectsCache() {
+    override func updateDevicesAndEndpoints() {
         objectWillChange.send()
-        super.updateObjectsCache()
+        super.updateDevicesAndEndpoints()
     }
 }
 

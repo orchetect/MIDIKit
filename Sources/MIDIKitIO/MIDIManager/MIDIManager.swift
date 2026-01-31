@@ -105,9 +105,9 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     @ThreadSafeAccess
     public var notificationHandler: NotificationHandler?
     
-    /// Internal: system state cache for notification handling.
+    /// Internal: Ephemeral MIDI object metadata cache for MIDI object removal notifications.
     @ThreadSafeAccess
-    var notificationCache: MIDIIOObjectCache?
+    var midiObjectCache = MIDIIOObjectCache()
     
     // MARK: - Internal dispatch queue
     
@@ -174,7 +174,7 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     // MARK: - Helper methods
     
     /// Internal: updates cached properties for all objects.
-    func updateObjectsCache() {
+    func updateDevicesAndEndpoints() {
         self.devices.updateCachedProperties()
         self.endpoints.updateCachedProperties(manager: self)
     }
