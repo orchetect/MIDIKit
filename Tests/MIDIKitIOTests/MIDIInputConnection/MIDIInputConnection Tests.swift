@@ -33,6 +33,8 @@ import Testing
         try await Task.sleep(seconds: 0.2)
     }
     
+    // MARK: - Tests
+    
     /// Test initializing an InputConnection, adding/removing outputs, and receiving MIDI events.
     @Test
     func inputConnection() async throws {
@@ -135,6 +137,61 @@ import Testing
         try output2.send(event: .songSelect(number: 8))
         try await Task.sleep(seconds: isStable ? 0.200 : 2.0) // wait a bit in case an event is sent
         #expect(await receiver.events == [])
+    }
+    
+    /// Test setting receive handler after initializing an InputConnection.
+    @Test
+    func inputConnection_setReceiver() async throws {
+        let isStable = isSystemTimingStable()
+        
+        let receiverA = Receiver()
+        let receiverB = Receiver()
+        
+        // start midi client
+        try receiverA.manager.start()
+        try await Task.sleep(seconds: isStable ? 0.2 : 1.0)
+        
+        // create a virtual output
+        let output1Tag = "output1"
+        try receiverA.manager.addOutput(
+            name: UUID().uuidString,
+            tag: output1Tag,
+            uniqueID: .adHoc // allow system to generate random ID each time, without persistence
+        )
+        let output1 = try #require(receiverA.manager.managedOutputs[output1Tag])
+        let output1ID = try #require(output1.uniqueID)
+        let output1Ref = try #require(output1.coreMIDIOutputPortRef)
+        
+        // add new connection, connecting to output1
+        let connTag = UUID().uuidString
+        try receiverA.manager.addInputConnection(
+            to: .outputs(matching: [.uniqueID(output1ID)]),
+            tag: connTag,
+            receiver: .events { [weak receiverA] events, _, _ in
+                Task { @TestActor in
+                    receiverA?.add(events: events)
+                }
+            }
+        )
+        
+        let conn = try #require(receiverA.manager.managedInputConnections[connTag])
+        try await wait(require: { conn.outputsCriteria == [.uniqueID(output1ID)] }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { conn.coreMIDIOutputEndpointRefs == [output1Ref] }, timeout: isStable ? 1.0 : 10.0)
+        try await wait(require: { conn.endpoints == [output1.endpoint] }, timeout: isStable ? 1.0 : 10.0)
+        
+        // set new receive handler
+        conn.setReceiver(.events { [weak receiverB] events, _, _ in
+            Task { @TestActor in
+                receiverB?.add(events: events)
+            }
+        })
+        
+        // send an event - it should be received by the new receive handler of the connection
+        try output1.send(event: .start())
+        try await wait(require: { await receiverB.events == [.start()] }, timeout: isStable ? 2.0 : 10.0)
+        #expect(await receiverA.events == [])
+        await receiverA.reset()
+        await receiverB.reset()
     }
     
     /// Test to ensure a new output appearing in the system gets added to the connection. (Allowing manager-owned virtual outputs to be added)
