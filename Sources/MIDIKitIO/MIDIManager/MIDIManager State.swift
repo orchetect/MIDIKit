@@ -42,7 +42,8 @@ extension MIDIManager {
             self.coreMIDIClientRef = newCoreMIDIClientRef
             
             // initial cache of endpoints
-            updateObjectsCache()
+            updateDevicesAndEndpoints()
+            midiObjectCache.update(from: self)
         }
     }
     
@@ -50,24 +51,16 @@ extension MIDIManager {
         switch internalNotif {
         case .setupChanged, .added, .removed, .propertyChanged:
             managementQueue.async {
-                self.updateObjectsCache()
+                self.updateDevicesAndEndpoints()
+                self.midiObjectCache.update(from: self)
             }
         default:
             break
         }
         
-        let notification: MIDIIONotification? = {
-            switch internalNotif {
-            case .removed:
-                // fall back on notificationCache in case we get more than
-                // one .removed notification in a row so we have metadata on hand
-                return MIDIIONotification(internalNotif, cache: notificationCache)
-            default:
-                let cache = MIDIIOObjectCache(from: self)
-                notificationCache = cache
-                return MIDIIONotification(internalNotif, cache: cache)
-            }
-        }()
+        // if needed, fall back on notification cache in case we get more than
+        // one `.removed` notification in a row. this way we have metadata on hand.
+        let notification = MIDIIONotification(internalNotif, cache: midiObjectCache)
         
         // send notification to handler after internal cache is updated
         if let notification {

@@ -118,7 +118,7 @@ extension AnyMIDIIOObject {
     init?(
         coreMIDIObjectRef: MIDIObjectRef,
         coreMIDIObjectType: MIDIObjectType,
-        using cache: MIDIIOObjectCache? = nil
+        using cache: MIDIObjectCache? = nil
     ) {
         guard coreMIDIObjectRef != 0 else { return nil }
     
