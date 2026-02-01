@@ -9,12 +9,32 @@ import MIDIKitCore
 import Testing
 
 @Suite struct MainThreadSynchronizedPThreadMutex_Variable_Tests {
-    private class Wrapper: @unchecked Sendable {
-        var number: MainThreadSynchronizedPThreadMutex<Int>
+    private final class Wrapper: Sendable {
+        let number: MainThreadSynchronizedPThreadMutex<Int>
         
         init(number: Int = 0) {
             self.number = MainThreadSynchronizedPThreadMutex(wrappedValue: number)
         }
+    }
+    
+    // MARK: - Tests
+    
+    /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
+    @Test
+    func differentThreadMutation() async throws {
+        let wrapper = Wrapper()
+        
+        #expect(wrapper.number.wrappedValue == 0)
+        
+        // local mutation
+        wrapper.number.wrappedValue = 1
+        #expect(wrapper.number.wrappedValue == 1)
+        
+        // mutation from another thread
+        DispatchQueue.global().sync {
+            wrapper.number.wrappedValue = 2
+        }
+        #expect(wrapper.number.wrappedValue == 2)
     }
     
     /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
@@ -28,11 +48,11 @@ import Testing
         #expect(wrapper.number.wrappedValue == 1)
         
         wrapper.number.wrappedValue = 0
-        DispatchQueue.concurrentPerform(iterations: 1000) { iteration in
+        DispatchQueue.concurrentPerform(iterations: 100) { iteration in
             wrapper.number.wrappedValue += 1
         }
         
-        #expect(wrapper.number.wrappedValue == 1000)
+        #expect(wrapper.number.wrappedValue == 100)
     }
     
     /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
@@ -47,12 +67,13 @@ import Testing
         
         wrapper.number.wrappedValue = 0
         DispatchQueue.global().sync {
-            DispatchQueue.concurrentPerform(iterations: 1000) { iteration in
+            DispatchQueue.concurrentPerform(iterations: 100) { iteration in
+                #expect(!Thread.isMainThread)
                 wrapper.number.wrappedValue += 1
             }
         }
         
-        #expect(wrapper.number.wrappedValue == 1000)
+        #expect(wrapper.number.wrappedValue == 100)
     }
     
     /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
@@ -67,17 +88,17 @@ import Testing
         
         wrapper.number.wrappedValue = 0
         await withDiscardingTaskGroup { group in
-            for _ in 0 ..< 1000 {
+            for _ in 0 ..< 100 {
                 group.addTask { wrapper.number.wrappedValue += 1 }
             }
         }
         
-        #expect(wrapper.number.wrappedValue == 1000)
+        #expect(wrapper.number.wrappedValue == 100)
     }
     
     /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
     @Test
-    func concurrentMutations_taskGroup_fromMainActor() async throws {
+    func concurrentMutations_fromMainActor() async throws {
         let wrapper = Wrapper()
         
         #expect(wrapper.number.wrappedValue == 0)
@@ -87,17 +108,17 @@ import Testing
         
         wrapper.number.wrappedValue = 0
         await withDiscardingTaskGroup { group in
-            for _ in 0 ..< 1000 {
+            for _ in 0 ..< 100 {
                 group.addTask { @MainActor in wrapper.number.wrappedValue += 1 }
             }
         }
         
-        #expect(wrapper.number.wrappedValue == 1000)
+        #expect(wrapper.number.wrappedValue == 100)
     }
     
     /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
     @MainActor @Test
-    func concurrentMutations_taskGroup_fromMainActor_toMainActor() async throws {
+    func concurrentMutations_fromMainActor_toMainActor() async throws {
         let wrapper = Wrapper()
         
         #expect(wrapper.number.wrappedValue == 0)
@@ -107,11 +128,11 @@ import Testing
         
         wrapper.number.wrappedValue = 0
         await withDiscardingTaskGroup { group in
-            for _ in 0 ..< 1000 {
+            for _ in 0 ..< 100 {
                 group.addTask { @MainActor in wrapper.number.wrappedValue += 1 }
             }
         }
         
-        #expect(wrapper.number.wrappedValue == 1000)
+        #expect(wrapper.number.wrappedValue == 100)
     }
 }

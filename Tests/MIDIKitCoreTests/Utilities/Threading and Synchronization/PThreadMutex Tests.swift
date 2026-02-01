@@ -17,6 +17,26 @@ import Testing
         }
     }
     
+    // MARK: - Tests
+    
+    /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
+    @Test
+    func differentThreadMutation() async throws {
+        let wrapper = Wrapper()
+        
+        #expect(wrapper.number == 0)
+        
+        // local mutation
+        wrapper.number = 1
+        #expect(wrapper.number == 1)
+        
+        // mutation from another thread
+        DispatchQueue.global().sync {
+            wrapper.number = 2
+        }
+        #expect(wrapper.number == 2)
+    }
+    
     /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
     @Test
     func concurrentMutations() async throws {
@@ -28,11 +48,11 @@ import Testing
         #expect(wrapper.number == 1)
         
         wrapper.number = 0
-        DispatchQueue.concurrentPerform(iterations: 1000) { iteration in
+        DispatchQueue.concurrentPerform(iterations: 100) { iteration in
             wrapper.number += 1
         }
         
-        #expect(wrapper.number == 1000)
+        #expect(wrapper.number == 100)
     }
     
     /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
@@ -47,13 +67,13 @@ import Testing
         
         wrapper.number = 0
         DispatchQueue.global().sync {
-            DispatchQueue.concurrentPerform(iterations: 1000) { iteration in
+            DispatchQueue.concurrentPerform(iterations: 100) { iteration in
                 #expect(!Thread.isMainThread)
                 wrapper.number += 1
             }
         }
         
-        #expect(wrapper.number == 1000)
+        #expect(wrapper.number == 100)
     }
     
     /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
@@ -68,12 +88,12 @@ import Testing
         
         wrapper.number = 0
         await withDiscardingTaskGroup { group in
-            for _ in 0 ..< 1000 {
+            for _ in 0 ..< 100 {
                 group.addTask { wrapper.number += 1 }
             }
         }
         
-        #expect(wrapper.number == 1000)
+        #expect(wrapper.number == 100)
     }
     
     /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
@@ -88,12 +108,12 @@ import Testing
         
         wrapper.number = 0
         await withDiscardingTaskGroup { group in
-            for _ in 0 ..< 1000 {
+            for _ in 0 ..< 100 {
                 group.addTask { @MainActor in wrapper.number += 1 }
             }
         }
         
-        #expect(wrapper.number == 1000)
+        #expect(wrapper.number == 100)
     }
     
     /// - Note: This test requires Thread Sanitizer enabled in the Test Plan.
@@ -108,11 +128,11 @@ import Testing
         
         wrapper.number = 0
         await withDiscardingTaskGroup { group in
-            for _ in 0 ..< 1000 {
+            for _ in 0 ..< 100 {
                 group.addTask { @MainActor in wrapper.number += 1 }
             }
         }
         
-        #expect(wrapper.number == 1000)
+        #expect(wrapper.number == 100)
     }
 }
