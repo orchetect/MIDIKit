@@ -63,20 +63,20 @@ public final class ObservableObjectMIDIManager: MIDIManager,
     @unchecked Sendable // must restate @unchecked from MIDIManager
 {
     override public internal(set) var devices: MIDIDevices {
-        get { observableDevices.value }
-        _modify { yield &observableDevices.value }
-        set { observableDevices.value = newValue }
+        get { observableDevices.wrappedValue }
+        _modify { yield &observableDevices.wrappedValue }
+        set { observableDevices.wrappedValue = newValue }
     }
 
-    private var observableDevices = ThreadSafeAccessValue(value: MIDIDevices())
+    private var observableDevices = ThreadSynchronizedPThreadMutex(wrappedValue: MIDIDevices())
 
     override public internal(set) var endpoints: MIDIEndpoints {
-        get { observableEndpoints.value }
-        _modify { yield &observableEndpoints.value }
-        set { observableEndpoints.value = newValue }
+        get { observableEndpoints.wrappedValue }
+        _modify { yield &observableEndpoints.wrappedValue }
+        set { observableEndpoints.wrappedValue = newValue }
     }
 
-    private var observableEndpoints = ThreadSafeAccessValue(value: MIDIEndpoints())
+    private var observableEndpoints = ThreadSynchronizedPThreadMutex(wrappedValue: MIDIEndpoints())
 
     override func updateDevicesAndEndpoints() {
         DispatchQueue.main.async {

@@ -26,7 +26,7 @@ import MIDIKitCore
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/inputConnection`` or ``MIDIManager/removeAll()`` to destroy the
 /// > managed connection.)
-public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @PThreadMutex use
     nonisolated(unsafe) weak var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -39,7 +39,7 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     
     // class-specific
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var outputsCriteria: Set<MIDIEndpointIdentity> = []
     
     /// Stores criteria after applying any filters that have been set in the ``filter`` property.
@@ -69,23 +69,23 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     }
     
     /// The Core MIDI input port reference.
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
     
     /// The Core MIDI output endpoint(s) reference(s).
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIOutputEndpointRefs: Set<CoreMIDIEndpointRef> = []
     
     /// Internal:
     /// The Core MIDI output endpoint(s) reference(s) stored as `NSNumber` classes.
     /// This is only so that `MIDIPortConnectSource()` can take stable pointer references.
-    @ThreadSafeAccess
+    @PThreadMutex
     var coreMIDIOutputEndpointRefCons: Set<NSNumber> = []
     
     /// Operating mode.
     ///
     /// Changes take effect immediately.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var mode: MIDIInputConnectionMode {
         didSet {
             guard mode != oldValue else { return }
@@ -109,7 +109,7 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     /// Endpoint filter.
     ///
     /// Changes take effect immediately.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var filter: MIDIEndpointFilter {
         didSet {
             guard filter != oldValue else { return }
@@ -120,7 +120,7 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     }
     
     /// Receive handler for inbound MIDI events.
-    @ThreadSafeAccess
+    @ThreadSynchronizedPThreadMutex
     var receiveHandler: MIDIReceiverProtocol
     
     // init

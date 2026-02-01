@@ -41,7 +41,7 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     ///
     /// The preferred API will be used where possible, unless operating system requirements force
     /// the use of a specific.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var preferredAPI: CoreMIDIAPIVersion {
         didSet {
             // prevent setting of an invalid API
@@ -52,23 +52,23 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     }
     
     /// Dictionary of MIDI input connections managed by this instance.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var managedInputConnections: [String: MIDIInputConnection] = [:]
     
     /// Dictionary of MIDI output connections managed by this instance.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var managedOutputConnections: [String: MIDIOutputConnection] = [:]
     
     /// Dictionary of virtual MIDI inputs managed by this instance.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var managedInputs: [String: MIDIInput] = [:]
     
     /// Dictionary of virtual MIDI outputs managed by this instance.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var managedOutputs: [String: MIDIOutput] = [:]
     
     /// Dictionary of non-persistent MIDI thru connections managed by this instance.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var managedThruConnections: [String: MIDIThruConnection] = [:]
     
     /// Array of persistent MIDI thru connections which persist indefinitely (even after system
@@ -89,11 +89,11 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     }
     
     /// MIDI devices in the system.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var devices: MIDIDevices = .init()
     
     /// MIDI input and output endpoints in the system.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var endpoints: MIDIEndpoints = .init()
     
     /// Handler that is called when state has changed in the manager.
@@ -102,11 +102,11 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     ) -> Void
     
     /// Handler that is called when state has changed in the manager.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var notificationHandler: NotificationHandler?
     
     /// Internal: Ephemeral MIDI object metadata cache for MIDI object removal notifications.
-    @ThreadSafeAccess
+    @PThreadMutex
     var midiObjectCache = MIDIObjectCache()
     
     // MARK: - Internal dispatch queue

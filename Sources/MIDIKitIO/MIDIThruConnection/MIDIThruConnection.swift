@@ -61,7 +61,7 @@ import MIDIKitCore
 /// > Due to a Core MIDI bug, persistent thru connections are not functional on macOS 11 & 12 and
 /// > iOS 14 & 15. On these systems, an error will be thrown. There is no known solution or
 /// > workaround.
-public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @PThreadMutex use
     nonisolated(unsafe) weak var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -70,22 +70,22 @@ public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @un
     
     // class-specific
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIThruConnectionRef: CoreMIDIThruConnectionRef?
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var outputs: [MIDIOutputEndpoint]
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var inputs: [MIDIInputEndpoint]
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var lifecycle: Lifecycle
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var parameters: Parameters
     
-    @ThreadSafeAccess
+    @PThreadMutex
     var proxy: MIDIThruConnectionProxy?
     
     // init

@@ -22,7 +22,7 @@ import MIDIKitCore
 /// > de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/output`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// > endpoint.)
-public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked required for @PThreadMutex use
     nonisolated(unsafe) weak var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -34,13 +34,13 @@ public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked 
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
         
     /// The Core MIDI output port reference.
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIOutputPortRef: CoreMIDIPortRef?
     
     // class-specific
     
     /// The port name as displayed in the system.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var name: String {
         didSet { setNameInSystem() }
     }
@@ -53,7 +53,7 @@ public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked 
     }
     
     /// The port's unique ID in the system.
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var uniqueID: MIDIIdentifier?
     
     // init

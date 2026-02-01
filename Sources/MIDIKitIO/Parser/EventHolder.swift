@@ -10,7 +10,7 @@ import Foundation
 import MIDIKitCore
 
 /// Event Holder.
-final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable { // @unchecked required for @PThreadMutex use
     // MARK: - Options
     
     typealias TimerExpiredHandler = @Sendable (_ storedEvent: ReturnedStoredEvent) -> Void
@@ -23,10 +23,10 @@ final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable { // @
     
     // MARK: - Parser State
     
-    @ThreadSafeAccess
+    @PThreadMutex
     private var expirationTimer: Timer?
     
-    @ThreadSafeAccess
+    @PThreadMutex
     private var expirationTask: /* Task<Void, any Error> */ Any? // can't strongly type as Task because of package back-compat
     
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
@@ -41,7 +41,7 @@ final class EventHolder<T: MIDIParameterNumberEvent>: @unchecked Sendable { // @
         source: MIDIOutputEndpoint?
     )
     
-    @ThreadSafeAccess
+    @PThreadMutex
     var storedEvent: StoredEvent?
     
     typealias ReturnedStoredEvent = (

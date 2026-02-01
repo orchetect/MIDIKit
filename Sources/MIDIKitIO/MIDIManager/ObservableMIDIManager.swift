@@ -61,20 +61,20 @@ internal import CoreMIDI
     @unchecked Sendable // must restate @unchecked from superclass
 {
     override public internal(set) var devices: MIDIDevices {
-        get { observableDevices.value }
+        get { observableDevices.wrappedValue }
         // _modify { yield &observableDevices.value }
-        set { observableDevices.value = newValue }
+        set { observableDevices.wrappedValue = newValue }
     }
 
-    private var observableDevices = SerialThreadSafeAccessValue(MIDIDevices(), target: .main)
+    private var observableDevices = MainThreadSynchronizedPThreadMutex(wrappedValue: MIDIDevices())
 
     override public internal(set) var endpoints: MIDIEndpoints {
-        get { observableEndpoints.value }
+        get { observableEndpoints.wrappedValue }
         // _modify { yield &observableEndpoints.value }
-        set { observableEndpoints.value = newValue }
+        set { observableEndpoints.wrappedValue = newValue }
     }
 
-    private var observableEndpoints = SerialThreadSafeAccessValue(MIDIEndpoints(), target: .main)
+    private var observableEndpoints = MainThreadSynchronizedPThreadMutex(wrappedValue: MIDIEndpoints())
 }
 
 #endif

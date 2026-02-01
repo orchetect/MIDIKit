@@ -22,7 +22,7 @@ import MIDIKitCore
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/input`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// > endpoint.)
-public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked required for @PThreadMutex use
     nonisolated(unsafe) weak var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -35,7 +35,7 @@ public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked r
     // class-specific
     
     /// The port name as displayed in the system.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var name: String {
         didSet { setNameInSystem() }
     }
@@ -48,15 +48,15 @@ public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked r
     }
     
     /// The port's unique ID in the system.
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var uniqueID: MIDIIdentifier?
     
     /// The Core MIDI port reference.
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
     
     /// Receive handler for inbound MIDI events.
-    @ThreadSafeAccess
+    @ThreadSynchronizedPThreadMutex
     var receiveHandler: MIDIReceiverProtocol
     
     // init
@@ -98,7 +98,9 @@ public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked r
 extension MIDIInput {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: MIDIReceiver) {
-        receiveHandler = receiver.create()
+        midiManager?.managementQueue.async {
+            self.receiveHandler = receiver.create()
+        }
     }
 }
 
