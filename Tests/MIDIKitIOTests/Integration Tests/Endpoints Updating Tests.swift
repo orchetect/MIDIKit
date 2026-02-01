@@ -203,10 +203,22 @@ struct EndpointsUpdating_Tests {
 
 @Suite(.serialized, .enabled(if: isSystemTimingStable()))
 struct EndpointsUpdating_Threading_Tests {
-    private final actor ManagerWrapper {
+    protocol ManagerWrapperProtocol: Sendable {
+        var manager: MIDIManager { get }
+        init(manager: MIDIManager)
+    }
+    
+    private final actor ManagerWrapperActor: ManagerWrapperProtocol {
         nonisolated let manager: MIDIManager
         init(manager: MIDIManager) { self.manager = manager }
     }
+    
+    @MainActor private final class MainActorManagerWrapper: ManagerWrapperProtocol {
+        nonisolated let manager: MIDIManager
+        nonisolated init(manager: MIDIManager) { self.manager = manager }
+    }
+    
+    static let wrappers: [any ManagerWrapperProtocol.Type] = [ManagerWrapperActor.self, MainActorManagerWrapper.self]
     
     @TestActor private final class NotificationReceiver {
         var notifications: [MIDIIONotification] = []
@@ -215,34 +227,38 @@ struct EndpointsUpdating_Threading_Tests {
         nonisolated init() { }
     }
     
+    let queue1 = DispatchQueue.global() // DispatchQueue(label: "midikit-endpoints-q1", target: .global())
+    let queue2 = DispatchQueue.main // DispatchQueue(label: "midikit-endpoints-q2", target: .main)
+    
     static let managerClasses: [() -> MIDIManager] = [
         { MIDIManager(clientName: "MIDIKit_Tests_1", model: "MIDIKit123", manufacturer: "MIDIKit") },
         { ObservableObjectMIDIManager(clientName: "MIDIKit_Tests_2", model: "MIDIKit123", manufacturer: "MIDIKit") },
         { ObservableMIDIManager(clientName: "MIDIKit_Tests_3", model: "MIDIKit123", manufacturer: "MIDIKit") }
     ]
     
+    // MARK: - Test
+    
     /// Test reading and writing endpoints from different threads.
     /// - Note: This test requires the Thread Sanitizer to be enabled in the Test Plan.
-    @Test(.serialized, arguments: managerClasses)
-    func endpointsUpdating_threading(managerGenerator: () -> MIDIManager) async throws {
+    @Test(arguments: wrappers.flatMap { wrapper in managerClasses.map { manager in (wrapper, manager) } })
+    func endpointsUpdating_threading(wrapper: any ManagerWrapperProtocol.Type, managerGenerator: () -> MIDIManager) async throws {
         let isStable = isSystemTimingStable() // test de-flake for slow CI pipelines
         let timeout: TimeInterval = isStable ? 2.0 : 10.0
         
-        let queue1 = DispatchQueue.global() // DispatchQueue(label: "midikit-endpoints-q1", target: .global())
-        let queue2 = DispatchQueue.main // DispatchQueue(label: "midikit-endpoints-q2", target: .main)
+        // ensure test does not continue if it's somehow being run on the main thread
+        func isMainThread() -> Bool { Thread.isMainThread }
+        try #require(!isMainThread())
         
+        let mw = wrapper.init(manager: managerGenerator())
         let notificationReceiver = NotificationReceiver()
         
-        let mw = ManagerWrapper(manager: managerGenerator())
-        
-        // start manager
-        try queue1.sync {
-            mw.manager.notificationHandler = { notification in
-                print(notification)
-                Task { await notificationReceiver.add(notification: notification) }
-            }
-            try mw.manager.start()
+        // set up manager
+        mw.manager.notificationHandler = { notification in
+            print("- \(notification)")
+            Task { await notificationReceiver.add(notification: notification) }
         }
+        // start manager
+        try mw.manager.start()
         
         // read endpoints & devices on queue 1
         let _ = queue1.sync { mw.manager.endpoints.inputs }
@@ -312,6 +328,5 @@ struct EndpointsUpdating_Threading_Tests {
         try await Task.sleep(seconds: 0.5)
     }
 }
-
 
 #endif
