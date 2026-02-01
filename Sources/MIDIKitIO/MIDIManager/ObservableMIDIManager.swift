@@ -62,19 +62,19 @@ internal import CoreMIDI
 {
     override public internal(set) var devices: MIDIDevices {
         get { observableDevices.value }
-        _modify { yield &observableDevices.value }
+        // _modify { yield &observableDevices.value }
         set { observableDevices.value = newValue }
     }
-    
-    private var observableDevices = ThreadSafeAccessValue(value: MIDIDevices())
-    
+
+    private var observableDevices = SerialThreadSafeAccessValue(MIDIDevices(), target: .main)
+
     override public internal(set) var endpoints: MIDIEndpoints {
         get { observableEndpoints.value }
-        _modify { yield &observableEndpoints.value }
+        // _modify { yield &observableEndpoints.value }
         set { observableEndpoints.value = newValue }
     }
-    
-    private var observableEndpoints = ThreadSafeAccessValue(value: MIDIEndpoints())
+
+    private var observableEndpoints = SerialThreadSafeAccessValue(MIDIEndpoints(), target: .main)
 }
 
 #endif

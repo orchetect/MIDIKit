@@ -62,7 +62,6 @@ public final class ObservableObjectMIDIManager: MIDIManager,
     ObservableObject,
     @unchecked Sendable // must restate @unchecked from MIDIManager
 {
-    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
     override public internal(set) var devices: MIDIDevices {
         get { observableDevices.value }
         _modify { yield &observableDevices.value }
@@ -71,7 +70,6 @@ public final class ObservableObjectMIDIManager: MIDIManager,
 
     private var observableDevices = ThreadSafeAccessValue(value: MIDIDevices())
 
-    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
     override public internal(set) var endpoints: MIDIEndpoints {
         get { observableEndpoints.value }
         _modify { yield &observableEndpoints.value }
@@ -81,8 +79,10 @@ public final class ObservableObjectMIDIManager: MIDIManager,
     private var observableEndpoints = ThreadSafeAccessValue(value: MIDIEndpoints())
 
     override func updateDevicesAndEndpoints() {
-        objectWillChange.send()
-        super.updateDevicesAndEndpoints()
+        DispatchQueue.main.async {
+            self.objectWillChange.send()
+            super.updateDevicesAndEndpoints()
+        }
     }
 }
 
