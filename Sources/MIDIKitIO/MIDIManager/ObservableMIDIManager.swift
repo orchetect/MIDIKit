@@ -74,10 +74,12 @@ internal import CoreMIDI
             yield &observableDevices.wrappedValue
         }
         set {
+            #if compiler(>=6.2)
             guard shouldNotifyObservers(observableDevices.wrappedValue, newValue) else {
                 observableDevices.wrappedValue = newValue
                 return
             }
+            #endif
             withMutation(keyPath: \.observableDevices) {
                 observableDevices.wrappedValue = newValue
             }
@@ -100,10 +102,12 @@ internal import CoreMIDI
             yield &observableEndpoints.wrappedValue
         }
         set {
+            #if compiler(>=6.2)
             guard shouldNotifyObservers(observableEndpoints.wrappedValue, newValue) else {
                 observableEndpoints.wrappedValue = newValue
                 return
             }
+            #endif
             withMutation(keyPath: \.observableEndpoints) {
                 observableEndpoints.wrappedValue = newValue
             }
