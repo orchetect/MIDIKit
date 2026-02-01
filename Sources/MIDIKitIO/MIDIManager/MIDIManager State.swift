@@ -43,7 +43,6 @@ extension MIDIManager {
             
             // initial cache of endpoints
             updateDevicesAndEndpoints()
-            midiObjectCache.update(from: self)
         }
     }
     
@@ -52,7 +51,6 @@ extension MIDIManager {
         case .setupChanged, .added, .removed, .propertyChanged:
             managementQueue.async {
                 self.updateDevicesAndEndpoints()
-                self.midiObjectCache.update(from: self)
             }
         default:
             break

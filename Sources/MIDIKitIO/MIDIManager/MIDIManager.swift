@@ -175,8 +175,12 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     
     /// Internal: updates cached properties for all objects.
     func updateDevicesAndEndpoints() {
+        // update from system
         self.devices.updateCachedProperties()
         self.endpoints.updateCachedProperties(manager: self)
+        
+        // update metadata cache
+        self.midiObjectCache.update(from: self)
     }
 }
 
