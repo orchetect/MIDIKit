@@ -231,11 +231,14 @@ struct EndpointsUpdating_Threading_Tests {
     let queue2 = DispatchQueue.main // DispatchQueue(label: "midikit-endpoints-q2", target: .main)
     
     static var managerClasses: [@Sendable () -> MIDIManager] {
-        [
+        var managers: [@Sendable () -> MIDIManager] = [
             { MIDIManager(clientName: "MIDIKit_Tests_1", model: "MIDIKit123", manufacturer: "MIDIKit") },
             { ObservableObjectMIDIManager(clientName: "MIDIKit_Tests_2", model: "MIDIKit123", manufacturer: "MIDIKit") },
-            { ObservableMIDIManager(clientName: "MIDIKit_Tests_3", model: "MIDIKit123", manufacturer: "MIDIKit") }
         ]
+        if #available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *) {
+            managers.append({ ObservableMIDIManager(clientName: "MIDIKit_Tests_3", model: "MIDIKit123", manufacturer: "MIDIKit") })
+        }
+        return managers
     }
     
     // MARK: - Test
