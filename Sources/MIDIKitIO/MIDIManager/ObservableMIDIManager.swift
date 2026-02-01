@@ -75,6 +75,12 @@ internal import CoreMIDI
     }
 
     private var observableEndpoints = MainThreadSynchronizedPThreadMutex(wrappedValue: MIDIEndpoints())
+    
+    override func updateDevicesAndEndpoints() {
+        DispatchQueue.main.async {
+            super.updateDevicesAndEndpoints()
+        }
+    }
 }
 
 #endif
