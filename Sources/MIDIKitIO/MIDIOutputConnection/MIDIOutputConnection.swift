@@ -148,7 +148,9 @@ public final class MIDIOutputConnection: MIDIManaged, @unchecked Sendable { // @
     }
     
     deinit {
-        try? closeOutput()
+        // note that we can't rely on deinit to dispose of the Core MIDI object, since it's possible the
+        // consumer has stored a strong reference to this class somewhere even though we discourage it
+        try? dispose()
     }
 }
 
@@ -226,6 +228,15 @@ extension MIDIOutputConnection {
         }
     
         try resolveEndpoints(in: manager)
+    }
+    
+    /// Disposes of the internal state and the Core MIDI object.
+    /// 
+    /// Only call when removing the connection from the MIDI manager.
+    ///
+    /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
+    func dispose() throws {
+        try closeOutput()
     }
 }
 

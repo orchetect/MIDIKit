@@ -124,6 +124,8 @@ public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @un
     }
     
     deinit {
+        // note that we can't rely on deinit to dispose of the Core MIDI object, since it's possible the
+        // consumer has stored a strong reference to this class somewhere even though we discourage it
         try? dispose()
     }
 }
@@ -273,6 +275,8 @@ extension MIDIThruConnection {
     
     /// Disposes of the the thru connection if it's already been created in the system via the
     /// ``create(in:)`` method.
+    ///
+    /// Only call when removing the connection from the MIDI manager.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     func dispose() throws {

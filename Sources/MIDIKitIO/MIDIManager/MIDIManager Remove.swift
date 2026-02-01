@@ -20,40 +20,50 @@ extension MIDIManager {
             case .inputConnection:
                 switch tagSelection {
                 case .all:
+                    managedInputConnections.values.forEach { try? $0.dispose() }
                     managedInputConnections.removeAll()
                 case let .withTag(tag):
+                    try? managedInputConnections[tag]?.dispose()
                     managedInputConnections[tag] = nil
                 }
                 
             case .outputConnection:
                 switch tagSelection {
                 case .all:
+                    managedOutputConnections.values.forEach { try? $0.dispose() }
                     managedOutputConnections.removeAll()
                 case let .withTag(tag):
+                    try? managedOutputConnections[tag]?.dispose()
                     managedOutputConnections[tag] = nil
                 }
                 
             case .input:
                 switch tagSelection {
                 case .all:
+                    managedInputs.values.forEach { try? $0.dispose() }
                     managedInputs.removeAll()
                 case let .withTag(tag):
+                    try? managedInputs[tag]?.dispose()
                     managedInputs[tag] = nil
                 }
                 
             case .output:
                 switch tagSelection {
                 case .all:
+                    managedOutputs.values.forEach { try? $0.dispose() }
                     managedOutputs.removeAll()
                 case let .withTag(tag):
+                    try? managedOutputs[tag]?.dispose()
                     managedOutputs[tag] = nil
                 }
                 
             case .nonPersistentThruConnection:
                 switch tagSelection {
                 case .all:
+                    managedThruConnections.values.forEach { try? $0.dispose() }
                     managedThruConnections.removeAll()
                 case let .withTag(tag):
+                    try? managedThruConnections[tag]?.dispose()
                     managedThruConnections[tag] = nil
                 }
             }

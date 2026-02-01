@@ -89,6 +89,8 @@ public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked r
     }
     
     deinit {
+        // note that we can't rely on deinit to dispose of the Core MIDI object, since it's possible the
+        // consumer has stored a strong reference to this class somewhere even though we discourage it
         try? dispose()
     }
 }
@@ -193,6 +195,8 @@ extension MIDIInput {
     
     /// Disposes of the the virtual port if it's already been created in the system via the
     /// ``create(in:)`` method.
+    ///
+    /// Only call when removing the input from the MIDI manager.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     func dispose() throws {
