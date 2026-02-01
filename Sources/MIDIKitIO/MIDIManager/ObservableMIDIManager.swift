@@ -9,9 +9,6 @@
 import Foundation
 internal import CoreMIDI
 
-#if canImport(Combine)
-import Combine
-
 /// ``MIDIManager`` subclass that is `@Observable` in a SwiftUI view.
 /// This makes the ``devices`` and ``endpoints`` properties observable.
 ///
@@ -60,26 +57,24 @@ import Combine
 /// }
 /// ```
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-@Observable public final class ObservableMIDIManager: MIDIManager, @unchecked Sendable {
-    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
+@Observable public final class ObservableMIDIManager: MIDIManager,
+    @unchecked Sendable // must restate @unchecked from superclass
+{
     override public internal(set) var devices: MIDIDevices {
-        get { observableDevices }
-        _modify { yield &observableDevices }
-        set { observableDevices = newValue }
+        get { observableDevices.value }
+        _modify { yield &observableDevices.value }
+        set { observableDevices.value = newValue }
     }
-
-    private var observableDevices = MIDIDevices()
     
-    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
+    private var observableDevices = ThreadSafeAccessValue(value: MIDIDevices())
+    
     override public internal(set) var endpoints: MIDIEndpoints {
-        get { observableEndpoints }
-        _modify { yield &observableEndpoints }
-        set { observableEndpoints = newValue }
+        get { observableEndpoints.value }
+        _modify { yield &observableEndpoints.value }
+        set { observableEndpoints.value = newValue }
     }
-
-    private var observableEndpoints = MIDIEndpoints()
+    
+    private var observableEndpoints = ThreadSafeAccessValue(value: MIDIEndpoints())
 }
-
-#endif
 
 #endif

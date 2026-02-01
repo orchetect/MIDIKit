@@ -6,11 +6,9 @@
 
 #if !os(tvOS) && !os(watchOS)
 
+import Combine
 import Foundation
 internal import CoreMIDI
-
-#if canImport(Combine)
-import Combine
 
 /// ``MIDIManager`` subclass that is an `ObservableObject` in a SwiftUI or Combine context.
 /// This makes the ``devices`` and ``endpoints`` properties observable.
@@ -60,29 +58,32 @@ import Combine
 /// }
 /// ```
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
-public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject, @unchecked Sendable {
+public final class ObservableObjectMIDIManager: MIDIManager,
+    ObservableObject,
+    @unchecked Sendable // must restate @unchecked from MIDIManager
+{
     // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
     override public internal(set) var devices: MIDIDevices {
-        get { observableDevices }
-        set { observableDevices = newValue }
+        get { observableDevices.value }
+        _modify { yield &observableDevices.value }
+        set { observableDevices.value = newValue }
     }
 
-    private var observableDevices = MIDIDevices()
-    
+    private var observableDevices = ThreadSafeAccessValue(value: MIDIDevices())
+
     // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
     override public internal(set) var endpoints: MIDIEndpoints {
-        get { observableEndpoints }
-        set { observableEndpoints = newValue }
+        get { observableEndpoints.value }
+        _modify { yield &observableEndpoints.value }
+        set { observableEndpoints.value = newValue }
     }
 
-    private var observableEndpoints = MIDIEndpoints()
-    
+    private var observableEndpoints = ThreadSafeAccessValue(value: MIDIEndpoints())
+
     override func updateDevicesAndEndpoints() {
         objectWillChange.send()
         super.updateDevicesAndEndpoints()
     }
 }
-
-#endif
 
 #endif
