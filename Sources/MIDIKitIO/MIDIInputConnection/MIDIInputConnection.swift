@@ -171,9 +171,7 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
 extension MIDIInputConnection {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: MIDIReceiver) {
-        midiManager?.managementQueue.async {
-            self.receiveHandler = receiver.create()
-        }
+        self.receiveHandler = receiver.create()
     }
 }
 

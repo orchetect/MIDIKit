@@ -89,11 +89,11 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     }
     
     /// MIDI devices in the system.
-    @PThreadMutex
+    @ThreadSynchronizedPThreadMutex
     public internal(set) var devices: MIDIDevices = .init()
     
     /// MIDI input and output endpoints in the system.
-    @PThreadMutex
+    @ThreadSynchronizedPThreadMutex
     public internal(set) var endpoints: MIDIEndpoints = .init()
     
     /// Handler that is called when state has changed in the manager.
@@ -106,7 +106,7 @@ public class MIDIManager: @unchecked Sendable { // forced to use @unchecked sinc
     public var notificationHandler: NotificationHandler?
     
     /// Internal: Ephemeral MIDI object metadata cache for MIDI object removal notifications.
-    @PThreadMutex
+    @ThreadSynchronizedPThreadMutex
     var midiObjectCache = MIDIObjectCache()
     
     // MARK: - Internal dispatch queue
