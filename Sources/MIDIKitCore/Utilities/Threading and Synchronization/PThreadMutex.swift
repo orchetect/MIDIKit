@@ -18,7 +18,7 @@ import Foundation
 ///   closure body. Only wrap static or instance variables.
 @_documentation(visibility: internal)
 @propertyWrapper
-public final class PThreadMutex<T> /* : @unchecked Sendable where T: Sendable */ {
+public struct PThreadMutex<T> /* : @unchecked Sendable where T: Sendable */ {
     private var value: T
     
     private let lock = PThreadRWLock()
@@ -65,7 +65,7 @@ extension PThreadMutex {
     }
     
     @discardableResult @_disfavoredOverload
-    public func withWriteLock<Result>(_ block: (inout T) throws -> Result) rethrows -> Result {
+    public mutating func withWriteLock<Result>(_ block: (inout T) throws -> Result) rethrows -> Result {
         try lock.withWriteLock {
             try block(&value)
         }

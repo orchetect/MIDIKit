@@ -9,7 +9,7 @@ import Foundation
 /// A property wrapper that ensures serialized thread-safe access to a value by synchronizing reads and writes on a queue.
 @_documentation(visibility: internal)
 @propertyWrapper
-public final class ThreadSynchronizedPThreadMutex<T> {
+public struct ThreadSynchronizedPThreadMutex<T> {
     private nonisolated let queue: DispatchQueue
     private let lock = PThreadRWLock()
     private var storage: ValueWrapper

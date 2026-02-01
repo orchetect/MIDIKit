@@ -10,7 +10,7 @@ import Foundation
 /// reads and writes on the main thread.
 @_documentation(visibility: internal)
 @propertyWrapper
-public final class MainThreadSynchronizedPThreadMutex<T> {
+public struct MainThreadSynchronizedPThreadMutex<T> {
     private var storage: ValueWrapper
     private let lock = PThreadRWLock()
     
