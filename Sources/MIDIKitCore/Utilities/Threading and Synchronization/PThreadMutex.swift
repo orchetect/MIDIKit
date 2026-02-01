@@ -6,7 +6,7 @@
 
 import Foundation
 
-/// `PThreadMutex`: A property wrapper that ensures thread-safe atomic access to a value.
+/// A property wrapper that ensures thread-safe atomic access to a value.
 /// Multiple read accesses can potentially read at the same time, just not during a write.
 ///
 /// By using `pthread` to do the locking, this safer than using a `DispatchQueue/barrier` as there
@@ -18,8 +18,8 @@ import Foundation
 ///   closure body. Only wrap static or instance variables.
 @_documentation(visibility: internal)
 @propertyWrapper
-public struct PThreadMutex<T> /* : @unchecked Sendable where T: Sendable */ {
-    private var value: T
+public final class PThreadMutex<T> /* : @unchecked Sendable where T: Sendable */ {
+    nonisolated(unsafe) private var value: T
     
     private let lock = PThreadRWLock()
     
@@ -29,15 +29,19 @@ public struct PThreadMutex<T> /* : @unchecked Sendable where T: Sendable */ {
     
     public var wrappedValue: T {
         get {
-            lock.withReadLock { value }
+            lock.readLock()
+            defer { lock.unlock() }
+            return value
         }
         _modify {
             lock.writeLock()
+            defer { lock.unlock() }
             yield &value
-            lock.unlock()
         }
         set {
-            lock.withWriteLock { value = newValue }
+            lock.writeLock()
+            defer { lock.unlock() }
+            value = newValue
         }
     }
 }
@@ -54,27 +58,29 @@ extension PThreadMutex: Hashable where T: Hashable {
     }
 }
 
+extension PThreadMutex: Sendable where T: Sendable { }
+
 // MARK: - Methods
 
 extension PThreadMutex {
     @discardableResult
     public func withReadLock<Result>(_ block: (T) throws -> Result) rethrows -> Result {
-        try lock.withReadLock {
-            try block(value)
-        }
+        lock.readLock()
+        defer { lock.unlock() }
+        return try block(value)
     }
     
     @discardableResult @_disfavoredOverload
-    public mutating func withWriteLock<Result>(_ block: (inout T) throws -> Result) rethrows -> Result {
-        try lock.withWriteLock {
-            try block(&value)
-        }
+    public func withWriteLock<Result>(_ block: (inout T) throws -> Result) rethrows -> Result {
+        lock.writeLock()
+        defer { lock.unlock() }
+        return try block(&value)
     }
 }
 
 // MARK: - Helpers
 
-final class PThreadRWLock {
+final class PThreadRWLock: @unchecked Sendable {
     private var lock = pthread_rwlock_t()
     
     init() {

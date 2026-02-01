@@ -1,5 +1,5 @@
 //
-//  MainThreadSynchronizedPThreadMutex.swift
+//  MainThreadSynchronizedPThreadMutexValue.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -8,13 +8,12 @@ import Foundation
 
 /// A property wrapper that ensures serialized thread-safe access to a value by synchronizing reads and writes on the main thread.
 @_documentation(visibility: internal)
-@propertyWrapper
-public final class MainThreadSynchronizedPThreadMutex<T> {
+public struct MainThreadSynchronizedPThreadMutexValue<T> {
     private nonisolated let queue: DispatchQueue = .main
     private let lock = PThreadRWLock()
     nonisolated(unsafe) private let storage: ValueWrapper
     
-    public init(wrappedValue value: T) {
+    public init(_ value: T) {
         if Thread.isMainThread {
             storage = ValueWrapper(value)
         } else {
@@ -22,7 +21,7 @@ public final class MainThreadSynchronizedPThreadMutex<T> {
         }
     }
     
-    public var wrappedValue: T {
+    public var value: T {
         get {
             lock.readLock()
             defer { lock.unlock() }
@@ -32,7 +31,7 @@ public final class MainThreadSynchronizedPThreadMutex<T> {
                 return queue.sync { storage.value }
             }
         }
-        _modify {
+        mutating _modify {
             lock.writeLock()
             defer { lock.unlock() }
             if Thread.isMainThread {
@@ -43,7 +42,7 @@ public final class MainThreadSynchronizedPThreadMutex<T> {
                 queue.sync { storage.value = value }
             }
         }
-        set {
+        mutating set {
             lock.writeLock()
             defer { lock.unlock() }
             if Thread.isMainThread {
@@ -55,24 +54,24 @@ public final class MainThreadSynchronizedPThreadMutex<T> {
     }
 }
 
-extension MainThreadSynchronizedPThreadMutex: Equatable where T: Equatable {
-    public static func == (lhs: MainThreadSynchronizedPThreadMutex<T>,
-                           rhs: MainThreadSynchronizedPThreadMutex<T>) -> Bool {
-        lhs.wrappedValue == rhs.wrappedValue
+extension MainThreadSynchronizedPThreadMutexValue: Equatable where T: Equatable {
+    public static func == (lhs: MainThreadSynchronizedPThreadMutexValue<T>,
+                           rhs: MainThreadSynchronizedPThreadMutexValue<T>) -> Bool {
+        lhs.value == rhs.value
     }
 }
 
-extension MainThreadSynchronizedPThreadMutex: Hashable where T: Hashable {
+extension MainThreadSynchronizedPThreadMutexValue: Hashable where T: Hashable {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(wrappedValue)
+        hasher.combine(value)
     }
 }
 
-extension MainThreadSynchronizedPThreadMutex: Sendable where T: Sendable { }
+extension MainThreadSynchronizedPThreadMutexValue: Sendable where T: Sendable { }
 
 // MARK: - Methods
 
-extension MainThreadSynchronizedPThreadMutex {
+extension MainThreadSynchronizedPThreadMutexValue {
     @discardableResult
     public func withReadLock<Result>(_ block: (T) throws -> Result) rethrows -> Result {
         lock.readLock()
@@ -86,7 +85,7 @@ extension MainThreadSynchronizedPThreadMutex {
     }
     
     @discardableResult @_disfavoredOverload
-    public func withWriteLock<Result>(_ block: (inout T) throws -> Result) rethrows -> Result {
+    public mutating func withWriteLock<Result>(_ block: (inout T) throws -> Result) rethrows -> Result {
         lock.writeLock()
         defer { lock.unlock() }
         
@@ -100,7 +99,7 @@ extension MainThreadSynchronizedPThreadMutex {
 
 // MARK: - Helpers
 
-extension MainThreadSynchronizedPThreadMutex {
+extension MainThreadSynchronizedPThreadMutexValue {
     fileprivate final class ValueWrapper {
         var value: T
         
@@ -110,14 +109,14 @@ extension MainThreadSynchronizedPThreadMutex {
     }
 }
 
-extension MainThreadSynchronizedPThreadMutex.ValueWrapper: Equatable where T: Equatable {
-    static func == (lhs: MainThreadSynchronizedPThreadMutex<T>.ValueWrapper,
-                    rhs: MainThreadSynchronizedPThreadMutex<T>.ValueWrapper) -> Bool {
+extension MainThreadSynchronizedPThreadMutexValue.ValueWrapper: Equatable where T: Equatable {
+    static func == (lhs: MainThreadSynchronizedPThreadMutexValue<T>.ValueWrapper,
+                    rhs: MainThreadSynchronizedPThreadMutexValue<T>.ValueWrapper) -> Bool {
         lhs.value == rhs.value
     }
 }
 
-extension MainThreadSynchronizedPThreadMutex.ValueWrapper: Hashable where T: Hashable {
+extension MainThreadSynchronizedPThreadMutexValue.ValueWrapper: Hashable where T: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(value)
     }
