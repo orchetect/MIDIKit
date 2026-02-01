@@ -12,7 +12,8 @@ import CoreMIDI
 @testable import MIDIKitIO
 import Testing
 
-@Suite(.serialized, .enabled(if: isSystemTimingStable())) struct EndpointsUpdating_Tests {
+@Suite(.serialized, .enabled(if: isSystemTimingStable()))
+struct EndpointsUpdating_Tests {
     fileprivate var manager1: MIDIManager!
     fileprivate var manager2: MIDIManager!
     
@@ -199,5 +200,118 @@ import Testing
         await wait(expect: { Set(manager2.endpoints.outputsOwned) == Set([]) }, timeout: timeout)
     }
 }
+
+@Suite(.serialized, .enabled(if: isSystemTimingStable()))
+struct EndpointsUpdating_Threading_Tests {
+    private final actor ManagerWrapper {
+        nonisolated let manager: MIDIManager
+        init(manager: MIDIManager) { self.manager = manager }
+    }
+    
+    @TestActor private final class NotificationReceiver {
+        var notifications: [MIDIIONotification] = []
+        func add(notification: MIDIIONotification) { notifications.append(notification) }
+        func reset() { notifications.removeAll() }
+        nonisolated init() { }
+    }
+    
+    static let managerClasses: [() -> MIDIManager] = [
+        { MIDIManager(clientName: "MIDIKit_Tests_1", model: "MIDIKit123", manufacturer: "MIDIKit") },
+        { ObservableObjectMIDIManager(clientName: "MIDIKit_Tests_2", model: "MIDIKit123", manufacturer: "MIDIKit") },
+        { ObservableMIDIManager(clientName: "MIDIKit_Tests_3", model: "MIDIKit123", manufacturer: "MIDIKit") }
+    ]
+    
+    /// Test reading and writing endpoints from different threads.
+    /// - Note: This test requires the Thread Sanitizer to be enabled in the Test Plan.
+    @Test(.serialized, arguments: managerClasses)
+    func endpointsUpdating_threading(managerGenerator: () -> MIDIManager) async throws {
+        let isStable = isSystemTimingStable() // test de-flake for slow CI pipelines
+        let timeout: TimeInterval = isStable ? 2.0 : 10.0
+        
+        let queue1 = DispatchQueue.global() // DispatchQueue(label: "midikit-endpoints-q1", target: .global())
+        let queue2 = DispatchQueue.main // DispatchQueue(label: "midikit-endpoints-q2", target: .main)
+        
+        let notificationReceiver = NotificationReceiver()
+        
+        let mw = ManagerWrapper(manager: managerGenerator())
+        
+        // start manager
+        try queue1.sync {
+            mw.manager.notificationHandler = { notification in
+                print(notification)
+                Task { await notificationReceiver.add(notification: notification) }
+            }
+            try mw.manager.start()
+        }
+        
+        // read endpoints & devices on queue 1
+        let _ = queue1.sync { mw.manager.endpoints.inputs }
+        let _ = queue1.sync { mw.manager.endpoints.outputs }
+        let _ = queue1.sync { mw.manager.devices.devices }
+        
+        // read endpoints & devices on queue 2
+        let _ = queue2.sync { mw.manager.endpoints.inputs }
+        let _ = queue2.sync { mw.manager.endpoints.outputs }
+        let _ = queue2.sync { mw.manager.devices.devices }
+        
+        // create an endpoint in the system to trigger a Core MIDI notification
+        print("Creating input")
+        let inputTag = "input"
+        try mw.manager.addInput(name: UUID().uuidString, tag: inputTag, uniqueID: .adHoc, receiver: .eventsLogging())
+        let inputEndpoint = try #require(mw.manager.managedInputs[inputTag]).endpoint
+        
+        // wait for MIDI manager's internal notifications to update its endpoints.
+        // this will happen on the thread that the manager was started on.
+        try await wait(require: { mw.manager.endpoints.inputs.contains(inputEndpoint) }, timeout: timeout)
+        
+        // wait for MIDI manager's notification handler to pass us notifications in turn:
+        print("Waiting for input creation notifications")
+        let inputAddNotifications: Set<MIDIIONotification> = [
+            .added(object: inputEndpoint.asAnyMIDIIOObject(), parent: nil),
+            .propertyChanged(property: .model, forObject: inputEndpoint.asAnyMIDIIOObject()),
+            .propertyChanged(property: .manufacturer, forObject: inputEndpoint.asAnyMIDIIOObject()),
+            .setupChanged
+        ]
+        await wait(
+            expect: { await Set(notificationReceiver.notifications) == inputAddNotifications },
+            timeout: timeout,
+            "\(await notificationReceiver.notifications)"
+        )
+        await notificationReceiver.reset()
+        
+        // attempt to read the endpoints from a different thread than the one that was used to update them.
+        
+        // read endpoints & devices on queue 1
+        let _ = queue1.sync { mw.manager.endpoints.inputs }
+        let _ = queue1.sync { mw.manager.endpoints.outputs }
+        let _ = queue1.sync { mw.manager.devices.devices }
+        
+        // read endpoints & devices on queue 2
+        let _ = queue2.sync { mw.manager.endpoints.inputs }
+        let _ = queue2.sync { mw.manager.endpoints.outputs }
+        let _ = queue2.sync { mw.manager.devices.devices }
+        
+        // cleanup and wait for notifications
+        #expect(await notificationReceiver.notifications == [])
+        print("Removing input")
+        mw.manager.remove(.input, .withTag(inputTag))
+        print("Waiting for removal notifications")
+        let removalNotifications: Set<MIDIIONotification> = [
+            .removed(object: inputEndpoint.asAnyMIDIIOObject(), parent: nil),
+            .setupChanged
+        ]
+        await wait(
+            expect: { await Set(notificationReceiver.notifications) == removalNotifications },
+            timeout: timeout,
+            "\(await notificationReceiver.notifications)"
+        )
+        await notificationReceiver.reset()
+        mw.manager.notificationHandler = nil
+        
+        // wait briefly for any additional Core MIDI clean-up
+        try await Task.sleep(seconds: 0.5)
+    }
+}
+
 
 #endif
