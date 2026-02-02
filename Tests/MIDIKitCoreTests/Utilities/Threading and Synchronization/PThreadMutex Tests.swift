@@ -87,7 +87,7 @@ import Testing
         #expect(wrapper.number == 1)
         
         wrapper.number = 0
-        await withTaskGroup { group in
+        await withTaskGroup(of: Void.self) { group in
             for _ in 0 ..< 100 {
                 group.addTask { wrapper.number += 1 }
             }
@@ -107,7 +107,7 @@ import Testing
         #expect(wrapper.number == 1)
         
         wrapper.number = 0
-        await withTaskGroup { group in
+        await withTaskGroup(of: Void.self) { group in
             for _ in 0 ..< 100 {
                 group.addTask { @MainActor in wrapper.number += 1 }
             }
@@ -127,7 +127,7 @@ import Testing
         #expect(wrapper.number == 1)
         
         wrapper.number = 0
-        await withTaskGroup { group in
+        await withTaskGroup(of: Void.self) { group in
             for _ in 0 ..< 100 {
                 group.addTask { @MainActor in wrapper.number += 1 }
             }

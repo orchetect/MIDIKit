@@ -218,7 +218,7 @@ struct EndpointsUpdating_Threading_Tests {
         nonisolated init(manager: @Sendable () -> MIDIManager) { self.manager = manager() }
     }
     
-    static let wrappers: [any ManagerWrapperProtocol.Type] = [ManagerWrapperActor.self, MainActorManagerWrapper.self]
+    static let managerWrappers: [any ManagerWrapperProtocol.Type] = [ManagerWrapperActor.self, MainActorManagerWrapper.self]
     
     @TestActor private final class NotificationReceiver {
         var notifications: [MIDIIONotification] = []
@@ -227,10 +227,7 @@ struct EndpointsUpdating_Threading_Tests {
         nonisolated init() { }
     }
     
-    let queue1 = DispatchQueue.global() // DispatchQueue(label: "midikit-endpoints-q1", target: .global())
-    let queue2 = DispatchQueue.main // DispatchQueue(label: "midikit-endpoints-q2", target: .main)
-    
-    static var managerClasses: [@Sendable () -> MIDIManager] {
+    static var managerGenerators: [@Sendable () -> MIDIManager] {
         var managers: [@Sendable () -> MIDIManager] = [
             { MIDIManager(clientName: "MIDIKit_Tests_1", model: "MIDIKit123", manufacturer: "MIDIKit") },
             { ObservableObjectMIDIManager(clientName: "MIDIKit_Tests_2", model: "MIDIKit123", manufacturer: "MIDIKit") },
@@ -241,17 +238,45 @@ struct EndpointsUpdating_Threading_Tests {
         return managers
     }
     
+    struct TestArgument: Sendable, CustomStringConvertible {
+        let name: String
+        var managerWrapper: any ManagerWrapperProtocol.Type
+        var managerGenerator: @Sendable () -> MIDIManager
+        
+        init(name: String, managerWrapper: any ManagerWrapperProtocol.Type, managerGenerator: @escaping @Sendable () -> MIDIManager) {
+            self.name = name
+            self.managerWrapper = managerWrapper
+            self.managerGenerator = managerGenerator
+        }
+        
+        var description: String { name }
+    }
+    
+    static var testArguments: [TestArgument] {
+        var args: [TestArgument] = []
+        for managerWrapper in managerWrappers {
+            for managerGenerator in managerGenerators {
+                let name = "\(managerWrapper.self) \(type(of: managerGenerator()))"
+                args.append(TestArgument(name: name, managerWrapper: managerWrapper, managerGenerator: managerGenerator))
+            }
+        }
+        return args
+    }
+    
+    let queue1 = DispatchQueue.global() // DispatchQueue(label: "midikit-endpoints-q1", target: .global())
+    let queue2 = DispatchQueue.main // DispatchQueue(label: "midikit-endpoints-q2", target: .main)
+    
     // MARK: - Test
     
     /// Test reading and writing endpoints from different threads.
     /// - Note: This test requires the Thread Sanitizer to be enabled in the Test Plan.
-    @Test(arguments: wrappers.flatMap { wrapper in managerClasses.map { manager in (wrapper, manager) } })
-    func endpointsUpdating_threading(
-        wrapper: any ManagerWrapperProtocol.Type,
-        managerGenerator: @Sendable () -> MIDIManager
-    ) async throws {
+    @Test(arguments: testArguments)
+    func endpointsUpdating_threading(arg: TestArgument) async throws {
         let isStable = isSystemTimingStable() // test de-flake for slow CI pipelines
         let timeout: TimeInterval = isStable ? 2.0 : 10.0
+        
+        let wrapper = arg.managerWrapper
+        let managerGenerator = arg.managerGenerator
         
         // ensure test does not continue if it's somehow being run on the main thread
         func isMainThread() -> Bool { Thread.isMainThread }
