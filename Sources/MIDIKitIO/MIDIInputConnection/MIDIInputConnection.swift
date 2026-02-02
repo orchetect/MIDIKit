@@ -152,7 +152,7 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
         self.mode = mode
         self.filter = filter
-        queue = DispatchQueue(label: "MIDIInputConnection-\(UUID().uuidString)")
+        queue = DispatchQueue(label: "MIDIInputConnection-\(UUID().uuidString)", attributes: [.concurrent])
         queue.sync { receiveHandler = receiver.create() }
         
         switch mode {
