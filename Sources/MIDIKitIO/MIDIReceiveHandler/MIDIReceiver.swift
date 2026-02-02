@@ -68,6 +68,8 @@ public enum MIDIReceiver {
     )
 }
 
+extension MIDIReceiver: Sendable { }
+
 extension MIDIReceiver {
     /// Creates a concrete receive handler class instance from the definition parameters.
     ///

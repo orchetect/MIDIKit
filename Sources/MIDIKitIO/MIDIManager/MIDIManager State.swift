@@ -20,40 +20,35 @@ extension MIDIManager {
         // if start() was already called, return
         guard coreMIDIClientRef == MIDIClientRef() else { return }
         
-        try managementQueue.sync {
-            func block() throws -> MIDIClientRef {
-                var newCoreMIDIClientRef = MIDIClientRef()
-                try MIDIClientCreateWithBlock(clientName as CFString, &newCoreMIDIClientRef) { [weak self] notificationPtr in
-                    guard let self else { return }
-                    let internalNotif = MIDIIOInternalNotification(notificationPtr)
-                    internalNotificationHandler(internalNotif)
-                }
-                .throwIfOSStatusErr()
-                return newCoreMIDIClientRef
+        func block() throws -> MIDIClientRef {
+            var newCoreMIDIClientRef = MIDIClientRef()
+            try MIDIClientCreateWithBlock(clientName as CFString, &newCoreMIDIClientRef) { [weak self] notificationPtr in
+                guard let self else { return }
+                let internalNotif = MIDIIOInternalNotification(notificationPtr)
+                internalNotificationHandler(internalNotif)
             }
-            // even though we're on managementQueue, check for main as a safety measure any way before running sync on main
-            let newCoreMIDIClientRef: MIDIClientRef
-            if Thread.current.isMainThread {
-                newCoreMIDIClientRef = try block()
-            } else {
-                newCoreMIDIClientRef = try DispatchQueue.main.sync { try block() }
-            }
-            assert(newCoreMIDIClientRef != MIDIClientRef())
-            self.coreMIDIClientRef = newCoreMIDIClientRef
-            
-            // initial cache of endpoints
-            updateDevicesAndEndpoints()
-            midiObjectCache.update(from: self)
+            .throwIfOSStatusErr()
+            return newCoreMIDIClientRef
         }
+        // `MIDIClientCreateWithBlock` must be called on the main thread,
+        // otherwise the notification block will never happen.
+        let newCoreMIDIClientRef: MIDIClientRef
+        if Thread.current.isMainThread {
+            newCoreMIDIClientRef = try block()
+        } else {
+            newCoreMIDIClientRef = try DispatchQueue.main.sync { try block() }
+        }
+        assert(newCoreMIDIClientRef != MIDIClientRef())
+        self.coreMIDIClientRef = newCoreMIDIClientRef
+        
+        // initial cache of endpoints
+        updateDevicesAndEndpoints()
     }
     
     private func internalNotificationHandler(_ internalNotif: MIDIIOInternalNotification) {
         switch internalNotif {
         case .setupChanged, .added, .removed, .propertyChanged:
-            managementQueue.async {
-                self.updateDevicesAndEndpoints()
-                self.midiObjectCache.update(from: self)
-            }
+            self.updateDevicesAndEndpoints()
         default:
             break
         }
@@ -62,25 +57,20 @@ extension MIDIManager {
         // one `.removed` notification in a row. this way we have metadata on hand.
         let notification = MIDIIONotification(internalNotif, cache: midiObjectCache)
         
+        // propagate notification to managed objects
+        for outputConnection in self.managedOutputConnections.values {
+            outputConnection.notification(internalNotif)
+        }
+        for inputConnection in self.managedInputConnections.values {
+            inputConnection.notification(internalNotif)
+        }
+        for thruConnection in self.managedThruConnections.values {
+            thruConnection.notification(internalNotif)
+        }
+        
         // send notification to handler after internal cache is updated
         if let notification {
             sendNotificationAsync(notification)
-        }
-        
-        // propagate notification to managed objects
-        
-        managementQueue.async {
-            for outputConnection in self.managedOutputConnections.values {
-                outputConnection.notification(internalNotif)
-            }
-            
-            for inputConnection in self.managedInputConnections.values {
-                inputConnection.notification(internalNotif)
-            }
-            
-            for thruConnection in self.managedThruConnections.values {
-                thruConnection.notification(internalNotif)
-            }
         }
     }
     

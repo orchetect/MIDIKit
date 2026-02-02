@@ -25,7 +25,7 @@ import MIDIKitCore
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/outputConnection`` or ``MIDIManager/removeAll()`` to destroy the
 /// > managed connection.)
-public final class MIDIOutputConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MIDIOutputConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @PThreadMutex use
     nonisolated(unsafe) weak var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -37,12 +37,12 @@ public final class MIDIOutputConnection: MIDIManaged, @unchecked Sendable { // @
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
     
     /// The Core MIDI output port reference.
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIOutputPortRef: CoreMIDIPortRef?
     
     // class-specific
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var inputsCriteria: Set<MIDIEndpointIdentity> = []
     
     /// Stores criteria after applying any filters that have been set in the ``filter`` property.
@@ -72,13 +72,13 @@ public final class MIDIOutputConnection: MIDIManaged, @unchecked Sendable { // @
     }
     
     /// The Core MIDI input endpoint(s) reference(s).
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIInputEndpointRefs: Set<CoreMIDIEndpointRef> = []
     
     /// Operating mode.
     ///
     /// Changes take effect immediately.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var mode: MIDIOutputConnectionMode {
         didSet {
             guard mode != oldValue else { return }
@@ -148,7 +148,9 @@ public final class MIDIOutputConnection: MIDIManaged, @unchecked Sendable { // @
     }
     
     deinit {
-        try? closeOutput()
+        // note that we can't rely on deinit to dispose of the Core MIDI object, since it's possible the
+        // consumer has stored a strong reference to this class somewhere even though we discourage it
+        try? dispose()
     }
 }
 
@@ -226,6 +228,15 @@ extension MIDIOutputConnection {
         }
     
         try resolveEndpoints(in: manager)
+    }
+    
+    /// Disposes of the internal state and the Core MIDI object.
+    /// 
+    /// Only call when removing the connection from the MIDI manager.
+    ///
+    /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
+    func dispose() throws {
+        try closeOutput()
     }
 }
 

@@ -14,14 +14,14 @@ import MIDIKitCore
 /// State is maintained internally. Use one parser class instance per MIDI endpoint for the
 /// lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and
 /// do not use a single global parser class instance for all MIDI endpoints.)
-public final class MIDI1Parser: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MIDI1Parser: @unchecked Sendable { // @unchecked required for @PThreadMutex use
     // MARK: - Parser State
     
     /// Interpret received Note On events with a velocity value of 0 as a Note Off event instead.
-    @ThreadSafeAccess
+    @PThreadMutex
     var translateNoteOnZeroVelocityToNoteOff: Bool = true
     
-    @ThreadSafeAccess
+    @PThreadMutex
     var runningStatus: UInt8?
     
     // MARK: - Init

@@ -61,7 +61,7 @@ import MIDIKitCore
 /// > Due to a Core MIDI bug, persistent thru connections are not functional on macOS 11 & 12 and
 /// > iOS 14 & 15. On these systems, an error will be thrown. There is no known solution or
 /// > workaround.
-public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @PThreadMutex use
     nonisolated(unsafe) weak var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -70,22 +70,22 @@ public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @un
     
     // class-specific
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIThruConnectionRef: CoreMIDIThruConnectionRef?
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var outputs: [MIDIOutputEndpoint]
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var inputs: [MIDIInputEndpoint]
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var lifecycle: Lifecycle
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var parameters: Parameters
     
-    @ThreadSafeAccess
+    @PThreadMutex
     var proxy: MIDIThruConnectionProxy?
     
     // init
@@ -124,6 +124,8 @@ public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @un
     }
     
     deinit {
+        // note that we can't rely on deinit to dispose of the Core MIDI object, since it's possible the
+        // consumer has stored a strong reference to this class somewhere even though we discourage it
         try? dispose()
     }
 }
@@ -273,6 +275,8 @@ extension MIDIThruConnection {
     
     /// Disposes of the the thru connection if it's already been created in the system via the
     /// ``create(in:)`` method.
+    ///
+    /// Only call when removing the connection from the MIDI manager.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     func dispose() throws {

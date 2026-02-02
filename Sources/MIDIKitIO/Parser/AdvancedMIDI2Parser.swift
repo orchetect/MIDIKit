@@ -10,10 +10,10 @@ import Foundation
 import MIDIKitCore
 
 /// Wrapper for MIDI 2.0 event parser that adds certain heuristics, including RPN/NRPN bundling.
-public final class AdvancedMIDI2Parser: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class AdvancedMIDI2Parser: @unchecked Sendable { // @unchecked required for @PThreadMutex use
     // MARK: - Options
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public var bundleRPNAndNRPNDataEntryLSB: Bool = false
     
     public typealias EventsHandler = @Sendable (
@@ -22,7 +22,7 @@ public final class AdvancedMIDI2Parser: @unchecked Sendable { // @unchecked requ
         _ source: MIDIOutputEndpoint?
     ) -> Void
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public var handleEvents: EventsHandler?
     
     // MARK: - Internal State

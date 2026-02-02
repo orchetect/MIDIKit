@@ -2,9 +2,9 @@
   "configurations" : [
     {
       "id" : "0A3601E3-C1C4-4E3F-B461-DB3844419852",
-      "name" : "Test Scheme Action",
+      "name" : "Standard",
       "options" : {
-
+        "threadSanitizerEnabled" : true
       }
     }
   ],

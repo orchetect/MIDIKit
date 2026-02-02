@@ -33,15 +33,16 @@ import Testing
     init() async throws {
         try await Task.sleep(seconds: 0.2)
     }
+    
+    // MARK: - Tests
 
     @Test
     func outputConnection() async throws {
         let isStable = isSystemTimingStable()
         
+        let mw = ManagerWrapper()
         let receiver1 = Receiver()
         let receiver2 = Receiver()
-        
-        let mw = ManagerWrapper()
         
         // start midi client
         try mw.manager.start()
@@ -152,10 +153,9 @@ import Testing
     func outputConnection_allEndpoints() async throws {
         let isStable = isSystemTimingStable()
         
+        let mw = ManagerWrapper()
         let receiver1 = Receiver()
         let receiver2 = Receiver()
-        
-        let mw = ManagerWrapper()
         
         // start midi client
         try mw.manager.start()
@@ -211,10 +211,9 @@ import Testing
     func outputConnection_allEndpoints_filterOwned() async throws {
         let isStable = isSystemTimingStable()
         
+        let mw = ManagerWrapper()
         let receiver1 = Receiver()
         let receiver2 = Receiver()
-        
-        let mw = ManagerWrapper()
         
         // start midi client
         try mw.manager.start()
@@ -273,10 +272,9 @@ import Testing
     func outputConnection_filterOwned_onInit() async throws {
         let isStable = isSystemTimingStable()
         
+        let mw = ManagerWrapper()
         let receiver1 = Receiver()
         let receiver2 = Receiver()
-        
-        let mw = ManagerWrapper()
         
         // start midi client
         try mw.manager.start()
@@ -347,10 +345,9 @@ import Testing
     func outputConnection_filterOwned_afterInit() async throws {
         let isStable = isSystemTimingStable()
         
+        let mw = ManagerWrapper()
         let receiver1 = Receiver()
         let receiver2 = Receiver()
-        
-        let mw = ManagerWrapper()
         
         // start midi client
         try mw.manager.start()
@@ -420,10 +417,9 @@ import Testing
     func outputConnection_filterEndpoints_onInit() async throws {
         let isStable = isSystemTimingStable()
         
+        let mw = ManagerWrapper()
         let receiver1 = Receiver()
         let receiver2 = Receiver()
-        
-        let mw = ManagerWrapper()
         
         // start midi client
         try mw.manager.start()
@@ -493,11 +489,10 @@ import Testing
     func outputConnection_filterEndpoints_afterInit() async throws {
         let isStable = isSystemTimingStable()
         
+        let mw = ManagerWrapper()
         let receiver1 = Receiver()
         let receiver2 = Receiver()
-        
-        let mw = ManagerWrapper()
-        
+                
         // start midi client
         try mw.manager.start()
         try await Task.sleep(seconds: isStable ? 0.2 : 1.0)

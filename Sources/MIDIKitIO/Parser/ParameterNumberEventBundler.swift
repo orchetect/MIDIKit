@@ -11,10 +11,10 @@ import MIDIKitCore
 
 /// RPN/NRPN bundling.
 @_documentation(visibility: internal)
-public final class ParameterNumberEventBundler: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class ParameterNumberEventBundler: @unchecked Sendable { // @unchecked required for @PThreadMutex use
     // MARK: - Options
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public var bundleRPNAndNRPNDataEntryLSB: Bool = false
     
     public typealias EventsHandler = @Sendable (
@@ -23,7 +23,7 @@ public final class ParameterNumberEventBundler: @unchecked Sendable { // @unchec
         _ source: MIDIOutputEndpoint?
     ) -> Void
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public var handleEvents: EventsHandler?
     
     // MARK: - Internal State

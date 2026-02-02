@@ -79,7 +79,7 @@ internal import MIDIKitInternals
     }
 
     @ObservationIgnored
-    private nonisolated(unsafe) var _remotePresenceTimer = ThreadSafeAccessValue(value: nil as Task<Void, any Error>?)
+    private nonisolated(unsafe) var _remotePresenceTimer = PThreadMutexValue<Task<Void, any Error>?>(nil)
     
     func restartRemotePresenceTimer() {
         remotePresenceTimer?.cancel()
@@ -107,7 +107,7 @@ internal import MIDIKitInternals
         set { _isRemotePresent.value = newValue }
     }
 
-    private nonisolated(unsafe) var _isRemotePresent = ThreadSafeAccessValue(value: false)
+    private nonisolated(unsafe) var _isRemotePresent = PThreadMutexValue(false)
     
     private func receivedPing() {
         restartRemotePresenceTimer()

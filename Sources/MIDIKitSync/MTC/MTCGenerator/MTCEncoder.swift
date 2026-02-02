@@ -17,7 +17,7 @@ import SwiftTimecodeCore
 /// > Tip: This object is not affected by or reliant on timing at all and simply processes events as
 /// > they are received. For outbound MTC sync, use the ``MTCGenerator`` wrapper object which adds
 /// > additional abstraction for generating MTC sync.
-public final class MTCEncoder: SendsMIDIEvents, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MTCEncoder: SendsMIDIEvents, @unchecked Sendable { // @unchecked required for @PThreadMutex use
     // MARK: - Public properties
         
     /// Returns current `Timecode` at ``localFrameRate``, scaling if necessary.
@@ -46,7 +46,7 @@ public final class MTCEncoder: SendsMIDIEvents, @unchecked Sendable { // @unchec
     }
         
     /// Last internal MTC SPMTE timecode components formed from outgoing MTC data.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var mtcComponents = Timecode.Components()
     
     func setMTCComponents(mtc newComponents: Timecode.Components) {
@@ -54,7 +54,7 @@ public final class MTCEncoder: SendsMIDIEvents, @unchecked Sendable { // @unchec
     }
         
     /// Local frame rate (desired rate, not internal MTC SMPTE frame rate).
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var localFrameRate: TimecodeFrameRate = .fps30
         
     /// Set local frame rate (desired rate, not internal MTC SMPTE frame rate).
@@ -64,7 +64,7 @@ public final class MTCEncoder: SendsMIDIEvents, @unchecked Sendable { // @unchec
     }
         
     /// The base MTC frame rate last transmitted.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var mtcFrameRate: MTCFrameRate = .mtc30
         
     public nonisolated(unsafe) var midiOutHandler: MIDIOutHandler?

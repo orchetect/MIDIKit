@@ -22,7 +22,7 @@ import MIDIKitCore
 /// > de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/output`` or ``MIDIManager/removeAll()`` to destroy the managed
 /// > endpoint.)
-public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked required for @PThreadMutex use
     nonisolated(unsafe) weak var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -34,13 +34,13 @@ public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked 
     public var midiProtocol: MIDIProtocolVersion { api.midiProtocol }
         
     /// The Core MIDI output port reference.
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIOutputPortRef: CoreMIDIPortRef?
     
     // class-specific
     
     /// The port name as displayed in the system.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var name: String {
         didSet { setNameInSystem() }
     }
@@ -53,7 +53,7 @@ public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked 
     }
     
     /// The port's unique ID in the system.
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var uniqueID: MIDIIdentifier?
     
     // init
@@ -83,6 +83,8 @@ public final class MIDIOutput: MIDIManaged, @unchecked Sendable { // @unchecked 
     }
     
     deinit {
+        // note that we can't rely on deinit to dispose of the Core MIDI object, since it's possible the
+        // consumer has stored a strong reference to this class somewhere even though we discourage it
         try? dispose()
     }
 }
@@ -166,6 +168,8 @@ extension MIDIOutput {
     
     /// Disposes of the the virtual port if it's already been created in the system via the
     /// `create()` method.
+    ///
+    /// Only call when removing the output from the MIDI manager.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
     func dispose() throws {

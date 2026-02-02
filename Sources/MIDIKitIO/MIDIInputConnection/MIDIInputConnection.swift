@@ -26,7 +26,7 @@ import MIDIKitCore
 /// > ``MIDIManager`` is de-initialized, or when calling ``MIDIManager/remove(_:_:)`` with
 /// > ``MIDIManager/ManagedType/inputConnection`` or ``MIDIManager/removeAll()`` to destroy the
 /// > managed connection.)
-public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @unchecked required for @PThreadMutex use
     nonisolated(unsafe) weak var midiManager: MIDIManager?
     
     // MIDIManaged
@@ -39,7 +39,7 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     
     // class-specific
     
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var outputsCriteria: Set<MIDIEndpointIdentity> = []
     
     /// Stores criteria after applying any filters that have been set in the ``filter`` property.
@@ -69,23 +69,23 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     }
     
     /// The Core MIDI input port reference.
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
     
     /// The Core MIDI output endpoint(s) reference(s).
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var coreMIDIOutputEndpointRefs: Set<CoreMIDIEndpointRef> = []
     
     /// Internal:
     /// The Core MIDI output endpoint(s) reference(s) stored as `NSNumber` classes.
     /// This is only so that `MIDIPortConnectSource()` can take stable pointer references.
-    @ThreadSafeAccess
+    @PThreadMutex
     var coreMIDIOutputEndpointRefCons: Set<NSNumber> = []
     
     /// Operating mode.
     ///
     /// Changes take effect immediately.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var mode: MIDIInputConnectionMode {
         didSet {
             guard mode != oldValue else { return }
@@ -109,7 +109,7 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     /// Endpoint filter.
     ///
     /// Changes take effect immediately.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var filter: MIDIEndpointFilter {
         didSet {
             guard filter != oldValue else { return }
@@ -120,8 +120,10 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     }
     
     /// Receive handler for inbound MIDI events.
-    @ThreadSafeAccess
-    var receiveHandler: MIDIReceiverProtocol
+    private var receiveHandler: (any MIDIReceiverProtocol)!
+    
+    /// I/O queue.
+    nonisolated let queue: DispatchQueue
     
     // init
     
@@ -133,7 +135,6 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     /// or ``MIDIManager/removeAll()``.
     ///
     /// - Parameters:
-    ///   - criteria: Output(s) to connect to.
     ///   - mode: Operation mode.
     ///   - filter: Optional filter allowing or disallowing certain endpoints from being added to
     ///     the connection.
@@ -143,7 +144,7 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     init(
         mode: MIDIInputConnectionMode,
         filter: MIDIEndpointFilter,
-        receiver: MIDIReceiver,
+        receiver: sending MIDIReceiver,
         midiManager: MIDIManager,
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
@@ -151,7 +152,8 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
         self.mode = mode
         self.filter = filter
-        receiveHandler = receiver.create()
+        queue = DispatchQueue(label: "MIDIInputConnection-\(UUID().uuidString)", attributes: []) // must be serial to ensure received event ordering
+        queue.sync { receiveHandler = receiver.create() }
         
         switch mode {
         case let .outputs(criteria):
@@ -162,17 +164,16 @@ public final class MIDIInputConnection: MIDIManaged, @unchecked Sendable { // @u
     }
     
     deinit {
-        try? disconnect()
-        try? stopListening()
+        // note that we can't rely on deinit to dispose of the Core MIDI object, since it's possible the
+        // consumer has stored a strong reference to this class somewhere even though we discourage it
+        try? dispose()
     }
 }
 
 extension MIDIInputConnection {
     /// Sets a new receiver.
-    public func setReceiver(_ receiver: MIDIReceiver) {
-        midiManager?.managementQueue.async {
-            self.receiveHandler = receiver.create()
-        }
+    public func setReceiver(_ receiver: sending MIDIReceiver) {
+        queue.async { [receiver] in self.receiveHandler = receiver.create() }
     }
 }
 
@@ -207,13 +208,16 @@ extension MIDIInputConnection {
                 manager.coreMIDIClientRef,
                 UUID().uuidString as CFString,
                 &newInputPortRef,
-                { [weak self] packetListPtr, srcConnRefCon in
+                { [weak self, queue] packetListPtr, srcConnRefCon in
                     let packets = packetListPtr.packets(
                         refCon: srcConnRefCon,
                         refConKnown: true
                     )
                     
-                    self?.receiveHandler.packetListReceived(packets)
+                    queue.async { [self] in
+                        let receiveHandler = self?.receiveHandler
+                        receiveHandler?.packetListReceived(packets)
+                    }
                 }
             )
             .throwIfOSStatusErr()
@@ -230,17 +234,20 @@ extension MIDIInputConnection {
                 UUID().uuidString as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newInputPortRef,
-                { [weak self] eventListPtr, srcConnRefCon in
+                { [weak self, queue] eventListPtr, srcConnRefCon in
                     let packets = eventListPtr.packets(
                         refCon: srcConnRefCon,
                         refConKnown: true
                     )
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    self?.receiveHandler.eventListReceived(
-                        packets,
-                        protocol: midiProtocol
-                    )
+                    queue.async { [self] in
+                        let receiveHandler = self?.receiveHandler
+                        receiveHandler?.eventListReceived(
+                            packets,
+                            protocol: midiProtocol
+                        )
+                    }
                 }
             )
             .throwIfOSStatusErr()
@@ -351,6 +358,16 @@ extension MIDIInputConnection {
         }
         
         try connect(in: manager)
+    }
+    
+    /// Disposes of the internal state and the Core MIDI object.
+    /// 
+    /// Only call when removing the connection from the MIDI manager.
+    ///
+    /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
+    func dispose() throws {
+        try disconnect()
+        try stopListening()
     }
 }
 

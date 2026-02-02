@@ -11,7 +11,7 @@ internal import MIDIKitInternals
 import SwiftTimecodeCore
 
 /// MTC sync generator.
-public final class MTCGenerator: SendsMIDIEvents, @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MTCGenerator: SendsMIDIEvents, @unchecked Sendable { // @unchecked required for @PThreadMutex use
     // MARK: - Public properties
     
     public let name: String
@@ -27,11 +27,11 @@ public final class MTCGenerator: SendsMIDIEvents, @unchecked Sendable { // @unch
     }
     
     /// Generator state.
-    @ThreadSafeAccess
+    @PThreadMutex
     public private(set) var state: State = .idle
     
     /// Internal flag
-    @ThreadSafeAccess
+    @PThreadMutex
     private var shouldStart: Bool = true
     
     /// Property updated whenever outgoing MTC timecode changes.
@@ -47,7 +47,7 @@ public final class MTCGenerator: SendsMIDIEvents, @unchecked Sendable { // @unch
     ///
     /// ``MTCEncoder/FullFrameBehavior/ifDifferent`` is recommended and suitable for most
     /// implementations.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var locateBehavior: MTCEncoder.FullFrameBehavior = .ifDifferent
     
     // MARK: - Stored closures

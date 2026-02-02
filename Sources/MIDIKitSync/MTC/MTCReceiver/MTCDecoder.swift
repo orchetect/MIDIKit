@@ -52,15 +52,15 @@ import SwiftTimecodeCore
 /// > - MTC full frame messages (which only some DAWs support) will however transmit frame-accurate
 /// > timecodes when scrubbing or locating to different times, but will be limited to the base frame
 /// > rates supported by MTC.
-public final class MTCDecoder: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MTCDecoder: @unchecked Sendable { // @unchecked required for @PThreadMutex use
     // MARK: - Public properties
     
     /// Last timecode formed from incoming MTC data.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var timecode = Timecode(.zero, at: .fps30, base: subFramesBase)
     
     /// The base MTC frame rate last received.
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var mtcFrameRate: MTCFrameRate = .mtc30 {
         didSet {
             if mtcFrameRate != oldValue {
@@ -76,11 +76,11 @@ public final class MTCDecoder: @unchecked Sendable { // @unchecked required for 
     ///
     /// Remember to also set this any time the local frame rate changes so the receiver can
     /// interpret the incoming MTC accordingly.
-    @ThreadSafeAccess
+    @PThreadMutex
     public var localFrameRate: TimecodeFrameRate?
     
     /// Status of the direction of MTC quarter-frames received
-    @ThreadSafeAccess
+    @PThreadMutex
     public internal(set) var direction: MTCDirection = .forwards
     
     // MARK: - Stored closures

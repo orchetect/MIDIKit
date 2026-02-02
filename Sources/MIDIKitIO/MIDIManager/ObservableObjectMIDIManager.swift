@@ -6,11 +6,9 @@
 
 #if !os(tvOS) && !os(watchOS)
 
+import Combine
 import Foundation
 internal import CoreMIDI
-
-#if canImport(Combine)
-import Combine
 
 /// ``MIDIManager`` subclass that is an `ObservableObject` in a SwiftUI or Combine context.
 /// This makes the ``devices`` and ``endpoints`` properties observable.
@@ -60,29 +58,32 @@ import Combine
 /// }
 /// ```
 @available(macOS 10.15, macCatalyst 13, iOS 13, /* tvOS 13, watchOS 6, */ *)
-public final class ObservableObjectMIDIManager: MIDIManager, ObservableObject, @unchecked Sendable {
-    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
+public final class ObservableObjectMIDIManager: MIDIManager,
+    ObservableObject,
+    @unchecked Sendable // must restate @unchecked from MIDIManager
+{
     override public internal(set) var devices: MIDIDevices {
-        get { observableDevices }
-        set { observableDevices = newValue }
+        get { observableDevices.wrappedValue }
+        _modify { yield &observableDevices.wrappedValue }
+        set { observableDevices.wrappedValue = newValue }
     }
 
-    private var observableDevices = MIDIDevices()
-    
-    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
+    private var observableDevices = ThreadSynchronizedPThreadMutex(wrappedValue: MIDIDevices())
+
     override public internal(set) var endpoints: MIDIEndpoints {
-        get { observableEndpoints }
-        set { observableEndpoints = newValue }
+        get { observableEndpoints.wrappedValue }
+        _modify { yield &observableEndpoints.wrappedValue }
+        set { observableEndpoints.wrappedValue = newValue }
     }
 
-    private var observableEndpoints = MIDIEndpoints()
-    
+    private var observableEndpoints = ThreadSynchronizedPThreadMutex(wrappedValue: MIDIEndpoints())
+
     override func updateDevicesAndEndpoints() {
-        objectWillChange.send()
-        super.updateDevicesAndEndpoints()
+        DispatchQueue.main.async {
+            self.objectWillChange.send()
+            super.updateDevicesAndEndpoints()
+        }
     }
 }
-
-#endif
 
 #endif

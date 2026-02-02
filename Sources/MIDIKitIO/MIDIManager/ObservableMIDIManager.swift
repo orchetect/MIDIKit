@@ -9,9 +9,6 @@
 import Foundation
 internal import CoreMIDI
 
-#if canImport(Combine)
-import Combine
-
 /// ``MIDIManager`` subclass that is `@Observable` in a SwiftUI view.
 /// This makes the ``devices`` and ``endpoints`` properties observable.
 ///
@@ -60,26 +57,70 @@ import Combine
 /// }
 /// ```
 @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-@Observable public final class ObservableMIDIManager: MIDIManager, @unchecked Sendable {
-    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
+@Observable public final class ObservableMIDIManager: MIDIManager,
+    @unchecked Sendable // must restate @unchecked from superclass
+{
     override public internal(set) var devices: MIDIDevices {
-        get { observableDevices }
-        _modify { yield &observableDevices }
-        set { observableDevices = newValue }
+        get {
+            access(keyPath: \.observableDevices)
+            return observableDevices.wrappedValue
+        }
+        _modify {
+            access(keyPath: \.observableDevices)
+            _$observationRegistrar.willSet(self, keyPath: \.observableDevices)
+            defer {
+                _$observationRegistrar.didSet(self, keyPath: \.observableDevices)
+            }
+            yield &observableDevices.wrappedValue
+        }
+        set {
+            #if compiler(>=6.2)
+            guard shouldNotifyObservers(observableDevices.wrappedValue, newValue) else {
+                observableDevices.wrappedValue = newValue
+                return
+            }
+            #endif
+            withMutation(keyPath: \.observableDevices) {
+                observableDevices.wrappedValue = newValue
+            }
+        }
     }
 
-    private var observableDevices = MIDIDevices()
-    
-    // note: @ThreadSafeAccess is not necessary as it's inherited from the base class
+    private let observableDevices = ThreadSynchronizedPThreadMutex(wrappedValue: MIDIDevices())
+
     override public internal(set) var endpoints: MIDIEndpoints {
-        get { observableEndpoints }
-        _modify { yield &observableEndpoints }
-        set { observableEndpoints = newValue }
+        get {
+            access(keyPath: \.observableEndpoints)
+            return observableEndpoints.wrappedValue
+        }
+        _modify {
+            access(keyPath: \.observableEndpoints)
+            _$observationRegistrar.willSet(self, keyPath: \.observableEndpoints)
+            defer {
+                _$observationRegistrar.didSet(self, keyPath: \.observableEndpoints)
+            }
+            yield &observableEndpoints.wrappedValue
+        }
+        set {
+            #if compiler(>=6.2)
+            guard shouldNotifyObservers(observableEndpoints.wrappedValue, newValue) else {
+                observableEndpoints.wrappedValue = newValue
+                return
+            }
+            #endif
+            withMutation(keyPath: \.observableEndpoints) {
+                observableEndpoints.wrappedValue = newValue
+            }
+        }
     }
 
-    private var observableEndpoints = MIDIEndpoints()
+    private let observableEndpoints = ThreadSynchronizedPThreadMutex(wrappedValue: MIDIEndpoints())
+    
+    // override func updateDevicesAndEndpoints() {
+    //     DispatchQueue.main.async {
+    //         super.updateDevicesAndEndpoints()
+    //     }
+    // }
 }
-
-#endif
 
 #endif

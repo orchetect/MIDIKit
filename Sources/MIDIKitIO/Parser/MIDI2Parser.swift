@@ -14,13 +14,13 @@ import MIDIKitCore
 /// State is maintained internally. Use one parser class instance per MIDI endpoint for the
 /// lifecycle of that endpoint. (ie: Do not generate new parser classes on every event received, and
 /// do not use a single global parser class instance for all MIDI endpoints.)
-public final class MIDI2Parser: @unchecked Sendable { // @unchecked required for @ThreadSafeAccess use
+public final class MIDI2Parser: @unchecked Sendable { // @unchecked required for @PThreadMutex use
     // MARK: - Parser State
     
-    @ThreadSafeAccess
+    @PThreadMutex
     private var sysEx7MultiPartUMPBuffer: [UInt8] = []
     
-    @ThreadSafeAccess
+    @PThreadMutex
     private var sysEx8MultiPartUMPBuffer: [UInt8: [UInt8]] = [:]
     
     // MARK: - Init
