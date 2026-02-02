@@ -188,7 +188,7 @@ import Testing
         
         // send an event - it should be received by the new receive handler of the connection
         try output1.send(event: .start())
-        try await wait(require: { await receiverB.events == [.start()] }, timeout: isStable ? 2.0 : 10.0)
+        await wait(expect: { await receiverB.events == [.start()] }, timeout: isStable ? 2.0 : 10.0)
         #expect(await receiverA.events == [])
         await receiverA.reset()
         await receiverB.reset()
