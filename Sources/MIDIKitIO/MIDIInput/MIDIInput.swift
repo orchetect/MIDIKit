@@ -101,7 +101,7 @@ public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked r
 extension MIDIInput {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: sending MIDIReceiver) {
-        queue.async { self.receiveHandler = receiver.create() }
+        queue.async { [receiver] in self.receiveHandler = receiver.create() }
     }
 }
 
@@ -147,7 +147,7 @@ extension MIDIInput {
                 { [weak self, queue] packetListPtr, srcConnRefCon in
                     let packets = packetListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     
-                    queue.async {
+                    queue.async { [self] in
                         let receiveHandler = self?.receiveHandler
                         receiveHandler?.packetListReceived(packets)
                     }
@@ -171,7 +171,7 @@ extension MIDIInput {
                     let packets = eventListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    queue.async {
+                    queue.async { [self] in
                         let receiveHandler = self?.receiveHandler
                         receiveHandler?.eventListReceived(
                             packets,
