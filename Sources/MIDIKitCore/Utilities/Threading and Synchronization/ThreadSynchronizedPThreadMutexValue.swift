@@ -14,7 +14,10 @@ public struct ThreadSynchronizedPThreadMutexValue<T> {
     nonisolated(unsafe) private let storage: ValueWrapper
     
     public init(_ value: T, target: DispatchQueue? = nil) {
-        let queue = DispatchQueue(label: "SerialPThreadMutexValue-\(type(of: T.self))-access", target: target)
+        let queue = DispatchQueue(
+            label: "ThreadSynchronizedPThreadMutexValue-\(type(of: T.self))-access",
+            target: target
+        )
         self.queue = queue
         storage = queue.sync { ValueWrapper(value) }
     }
