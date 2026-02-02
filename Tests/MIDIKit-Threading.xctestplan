@@ -248,6 +248,17 @@
               "concurrentMutations_taskGroup_fromMainActor_toMainActor()",
               "differentThreadMutation()"
             ]
+          },
+          {
+            "name" : "ThreadSynchronizedValue_Tests",
+            "testFunctions" : [
+              "concurrentMutations()",
+              "concurrentMutations_backgroundThread()",
+              "concurrentMutations_taskGroup()",
+              "concurrentMutations_taskGroup_fromMainActor()",
+              "concurrentMutations_taskGroup_fromMainActor_toMainActor()",
+              "differentThreadMutation()"
+            ]
           }
         ]
       },
