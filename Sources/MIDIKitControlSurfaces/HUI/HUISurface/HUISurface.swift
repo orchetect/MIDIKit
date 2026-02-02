@@ -73,13 +73,13 @@ internal import MIDIKitInternals
     
     @ObservationIgnored
     var remotePresenceTimer: Task<Void, any Error>? {
-        get { _remotePresenceTimer.wrappedValue }
-        _modify { yield &_remotePresenceTimer.wrappedValue }
-        set { _remotePresenceTimer.wrappedValue = newValue }
+        get { _remotePresenceTimer.value }
+        _modify { yield &_remotePresenceTimer.value }
+        set { _remotePresenceTimer.value = newValue }
     }
 
     @ObservationIgnored
-    private nonisolated(unsafe) var _remotePresenceTimer = PThreadMutex<Task<Void, any Error>?>(wrappedValue: nil)
+    private nonisolated(unsafe) var _remotePresenceTimer = PThreadMutexValue<Task<Void, any Error>?>(nil)
     
     func restartRemotePresenceTimer() {
         remotePresenceTimer?.cancel()
@@ -102,12 +102,12 @@ internal import MIDIKitInternals
     ///
     /// This property is observable with Combine/SwiftUI and can trigger UI updates upon changes.
     public internal(set) var isRemotePresent: Bool {
-        get { _isRemotePresent.wrappedValue }
-        _modify { yield &_isRemotePresent.wrappedValue }
-        set { _isRemotePresent.wrappedValue = newValue }
+        get { _isRemotePresent.value }
+        _modify { yield &_isRemotePresent.value }
+        set { _isRemotePresent.value = newValue }
     }
 
-    private nonisolated(unsafe) var _isRemotePresent = PThreadMutex(wrappedValue: false)
+    private nonisolated(unsafe) var _isRemotePresent = PThreadMutexValue(false)
     
     private func receivedPing() {
         restartRemotePresenceTimer()
