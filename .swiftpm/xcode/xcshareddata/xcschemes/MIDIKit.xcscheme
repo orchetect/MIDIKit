@@ -114,8 +114,11 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:.swiftpm/xcode/MIDIKit.xctestplan"
+            reference = "container:Tests/MIDIKit.xctestplan"
             default = "YES">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/MIDIKit-Threading.xctestplan">
          </TestPlanReference>
       </TestPlans>
       <Testables>

@@ -1,0 +1,251 @@
+{
+  "configurations" : [
+    {
+      "id" : "2F738A0F-C19E-409F-ACF1-0056307BC577",
+      "name" : "Standard",
+      "options" : {
+        "mainThreadCheckerDetectionPolicy" : {
+          "severity" : "failure"
+        },
+        "threadSanitizerEnabled" : true,
+        "userAttachmentLifetime" : "keepNever"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "selectedTests" : {
+        "suites" : [
+          {
+            "name" : "AnyMIDIEndpoint_Tests",
+            "testFunctions" : [
+              "anyMIDIEndpoint()"
+            ]
+          },
+          {
+            "name" : "CoreMIDIThruConnectionsTests_Tests",
+            "testFunctions" : [
+              "midiThruConnectionParams_initCFData_MaxByteSize()",
+              "midiThruConnectionParams_initCFData_TooManyBytes()",
+              "parameters_CFData()"
+            ]
+          },
+          {
+            "name" : "EndpointsUpdating_Tests",
+            "testFunctions" : [
+              "endpointsUpdating()"
+            ]
+          },
+          {
+            "name" : "EndpointsUpdating_Threading_Tests",
+            "testFunctions" : [
+              "endpointsUpdating_threading(wrapper:managerGenerator:)"
+            ]
+          },
+          {
+            "name" : "MIDIInput_Tests",
+            "testFunctions" : [
+              "input()",
+              "input_setReceiver()",
+              "setProperties()"
+            ]
+          },
+          {
+            "name" : "MIDIInputConnection_Tests",
+            "testFunctions" : [
+              "inputConnection()",
+              "inputConnection_allEndpoints()",
+              "inputConnection_allEndpoints_filterOwned()",
+              "inputConnection_filterEndpoints_afterInit()",
+              "inputConnection_filterEndpoints_onInit()",
+              "inputConnection_filterOwned_afterInit()",
+              "inputConnection_filterOwned_onInit()",
+              "inputConnection_setReceiver()"
+            ]
+          },
+          {
+            "name" : "MIDIManager_MIDIIONotification_Tests",
+            "testFunctions" : [
+              "systemNotification_Add_Remove()",
+              "systemNotification_SequentialRemove()"
+            ]
+          },
+          {
+            "name" : "MIDIManager_Public_Tests",
+            "testFunctions" : [
+              "managedInput_PublicMethods()",
+              "managedInputConnection_PublicMethods()",
+              "managedOutput_PublicMethods()",
+              "managedOutputConnection_PublicMethods()",
+              "managedThruConnection_PublicMethods()",
+              "manager_PublicMethods()",
+              "midiManaged()"
+            ]
+          },
+          {
+            "name" : "MIDIManager_Tests",
+            "testFunctions" : [
+              "midiIO_Manager_defaults()",
+              "midiManaged()"
+            ]
+          },
+          {
+            "name" : "MIDIOutput_Tests",
+            "testFunctions" : [
+              "output()",
+              "setProperties()"
+            ]
+          },
+          {
+            "name" : "MIDIOutputConnection_Tests",
+            "testFunctions" : [
+              "outputConnection()",
+              "outputConnection_allEndpoints()",
+              "outputConnection_allEndpoints_filterOwned()",
+              "outputConnection_filterEndpoints_afterInit()",
+              "outputConnection_filterEndpoints_onInit()",
+              "outputConnection_filterOwned_afterInit()",
+              "outputConnection_filterOwned_onInit()"
+            ]
+          },
+          {
+            "name" : "MIDIThruConnection_Tests",
+            "testFunctions" : [
+              "getParams()",
+              "monPersistentThruConnection()",
+              "persistentThruConnection()",
+              "proxy()"
+            ]
+          },
+          {
+            "name" : "RoundTrip_Tests_Base",
+            "testFunctions" : [
+              "runRapidMIDIEvents(api:)"
+            ]
+          }
+        ]
+      },
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MIDIKitIOTests",
+        "name" : "MIDIKitIOTests"
+      }
+    },
+    {
+      "parallelizable" : false,
+      "selectedTests" : {
+        "suites" : [
+          {
+            "name" : "MainThreadSynchronizedPThreadMutex_Tests",
+            "testFunctions" : [
+              "concurrentMutations()",
+              "concurrentMutations_backgroundThread()",
+              "concurrentMutations_taskGroup()",
+              "concurrentMutations_taskGroup_mainActor()",
+              "concurrentMutations_taskGroup_mainActor_onMainActor()",
+              "differentThreadMutation()"
+            ]
+          },
+          {
+            "name" : "MainThreadSynchronizedPThreadMutex_Variable_Tests",
+            "testFunctions" : [
+              "concurrentMutations()",
+              "concurrentMutations_backgroundThread()",
+              "concurrentMutations_fromMainActor()",
+              "concurrentMutations_fromMainActor_toMainActor()",
+              "concurrentMutations_taskGroup()",
+              "differentThreadMutation()"
+            ]
+          },
+          {
+            "name" : "MainThreadSynchronizedPThreadMutexValue_Tests",
+            "testFunctions" : [
+              "concurrentMutations()",
+              "concurrentMutations_backgroundThread()",
+              "concurrentMutations_taskGroup()",
+              "concurrentMutations_taskGroup_fromMainActor()",
+              "concurrentMutations_taskGroup_fromMainActor_toMainActor()",
+              "differentThreadMutation()"
+            ]
+          },
+          {
+            "name" : "Mutex_Tests",
+            "testFunctions" : [
+              "concurrentMutations()",
+              "concurrentMutations_backgroundThread()",
+              "concurrentMutations_taskGroup()",
+              "concurrentMutations_taskGroup_fromMainActor()",
+              "concurrentMutations_taskGroup_fromMainActor_toMainActor()",
+              "differentThreadMutation()"
+            ]
+          },
+          {
+            "name" : "PThreadMutex_Tests",
+            "testFunctions" : [
+              "concurrentMutations()",
+              "concurrentMutations_backgroundThread()",
+              "concurrentMutations_fromMainActor()",
+              "concurrentMutations_fromMainActor_toMainActor()",
+              "concurrentMutations_taskGroup()",
+              "differentThreadMutation()"
+            ]
+          },
+          {
+            "name" : "PThreadMutex_Variable_Tests",
+            "testFunctions" : [
+              "concurrentMutations()",
+              "concurrentMutations_backgroundThread()",
+              "concurrentMutations_fromMainActor()",
+              "concurrentMutations_fromMainActor_toMainActor()",
+              "concurrentMutations_taskGroup()",
+              "differentThreadMutation()"
+            ]
+          },
+          {
+            "name" : "ThreadSynchronizedPThreadMutex_Tests",
+            "testFunctions" : [
+              "concurrentMutations()",
+              "concurrentMutations_backgroundThread()",
+              "concurrentMutations_taskGroup()",
+              "concurrentMutations_taskGroup_fromMainActor()",
+              "concurrentMutations_taskGroup_fromMainActor_toMainActor()",
+              "differentThreadMutation()"
+            ]
+          },
+          {
+            "name" : "ThreadSynchronizedPThreadMutex_Variable_Tests",
+            "testFunctions" : [
+              "concurrentMutations()",
+              "concurrentMutations_backgroundThread()",
+              "concurrentMutations_fromMainActor()",
+              "concurrentMutations_fromMainActor_toMainActor()",
+              "concurrentMutations_taskGroup()",
+              "differentThreadMutation()"
+            ]
+          },
+          {
+            "name" : "ThreadSynchronizedPThreadMutexValue_Tests",
+            "testFunctions" : [
+              "concurrentMutations()",
+              "concurrentMutations_backgroundThread()",
+              "concurrentMutations_taskGroup()",
+              "concurrentMutations_taskGroup_fromMainActor()",
+              "concurrentMutations_taskGroup_fromMainActor_toMainActor()",
+              "differentThreadMutation()"
+            ]
+          }
+        ]
+      },
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MIDIKitCoreTests",
+        "name" : "MIDIKitCoreTests"
+      }
+    }
+  ],
+  "version" : 1
+}
