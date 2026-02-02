@@ -30,24 +30,22 @@ extension MIDIManager {
         to outputs: MIDIInputConnectionMode,
         tag: String,
         filter: MIDIEndpointFilter = .default(),
-        receiver: MIDIReceiver
+        receiver: sending MIDIReceiver
     ) throws {
-        try managementQueue.sync {
-            let newCD = MIDIInputConnection(
-                mode: outputs,
-                filter: filter,
-                receiver: receiver,
-                midiManager: self,
-                api: preferredAPI
-            )
-            
-            // store the connection object in the manager,
-            // even if subsequent connection fails
-            managedInputConnections[tag] = newCD
-            
-            try newCD.listen(in: self)
-            try newCD.connect(in: self)
-        }
+        let newCD = MIDIInputConnection(
+            mode: outputs,
+            filter: filter,
+            receiver: receiver,
+            midiManager: self,
+            api: preferredAPI
+        )
+        
+        // store the connection object in the manager,
+        // even if subsequent connection fails
+        managedInputConnections[tag] = newCD
+        
+        try newCD.listen(in: self)
+        try newCD.connect(in: self)
     }
 }
 

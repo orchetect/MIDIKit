@@ -56,8 +56,10 @@ public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked r
     public private(set) var coreMIDIInputPortRef: CoreMIDIPortRef?
     
     /// Receive handler for inbound MIDI events.
-    @ThreadSynchronizedPThreadMutex
-    var receiveHandler: MIDIReceiverProtocol
+    private var receiveHandler: (any MIDIReceiverProtocol)!
+    
+    /// I/O queue.
+    nonisolated let queue: DispatchQueue
     
     // init
     
@@ -77,7 +79,7 @@ public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked r
     init(
         name: String,
         uniqueID: MIDIUniqueID? = nil,
-        receiver: MIDIReceiver,
+        receiver: sending MIDIReceiver,
         midiManager: MIDIManager,
         api: CoreMIDIAPIVersion = .bestForPlatform()
     ) {
@@ -85,7 +87,8 @@ public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked r
         self.api = api.isValidOnCurrentPlatform ? api : .bestForPlatform()
         self.name = name
         self.uniqueID = uniqueID
-        receiveHandler = receiver.create()
+        queue = DispatchQueue(label: "MIDIInput-\(name)")
+        queue.sync { receiveHandler = receiver.create() }
     }
     
     deinit {
@@ -98,7 +101,7 @@ public final class MIDIInput: MIDIManaged, @unchecked Sendable { // @unchecked r
 extension MIDIInput {
     /// Sets a new receiver.
     public func setReceiver(_ receiver: MIDIReceiver) {
-        self.receiveHandler = receiver.create()
+        queue.async { self.receiveHandler = receiver.create() }
     }
 }
 
@@ -141,10 +144,11 @@ extension MIDIInput {
                 manager.coreMIDIClientRef,
                 name as CFString,
                 &newPortRef,
-                { [weak self] packetListPtr, srcConnRefCon in
+                { [weak self, weak queue] packetListPtr, srcConnRefCon in
                     let packets = packetListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     
-                    self?.receiveHandler.packetListReceived(packets)
+                    let receiveHandler = queue?.sync { self?.receiveHandler }
+                    receiveHandler?.packetListReceived(packets)
                 }
             )
             .throwIfOSStatusErr()
@@ -161,11 +165,12 @@ extension MIDIInput {
                 name as CFString,
                 api.midiProtocol.coreMIDIProtocol,
                 &newPortRef,
-                { [weak self] eventListPtr, srcConnRefCon in
+                { [weak self, weak queue] eventListPtr, srcConnRefCon in
                     let packets = eventListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    self?.receiveHandler.eventListReceived(
+                    let receiveHandler = queue?.sync { self?.receiveHandler }
+                    receiveHandler?.eventListReceived(
                         packets,
                         protocol: midiProtocol
                     )
