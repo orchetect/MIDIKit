@@ -46,11 +46,11 @@
 
 /* Begin PBXFileReference section */
 		E20CF4B2299C7E2A00F0E003 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E20CF4B8299C7F6200F0E003 /* MIDISystemInfo iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MIDISystemInfo iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E20CF4B8299C7F6200F0E003 /* MIDI System Info.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MIDI System Info.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E20CF4BC299C7F6200F0E003 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E20CF4C6299C7F6300F0E003 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E20CF4C8299C7F6300F0E003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E230C49F25AE7B31005DCB55 /* MIDISystemInfo macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MIDISystemInfo macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E230C49F25AE7B31005DCB55 /* MIDI System Info.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MIDI System Info.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E230C4A225AE7B31005DCB55 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E230C4A425AE7B31005DCB55 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E230C4AC25AE7B33005DCB55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -127,8 +127,8 @@
 		E230C4A025AE7B31005DCB55 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E230C49F25AE7B31005DCB55 /* MIDISystemInfo macOS.app */,
-				E20CF4B8299C7F6200F0E003 /* MIDISystemInfo iOS.app */,
+				E230C49F25AE7B31005DCB55 /* MIDI System Info.app */,
+				E20CF4B8299C7F6200F0E003 /* MIDI System Info.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -192,7 +192,7 @@
 				E20238482CC45FAB00661322 /* MIDIKitIO */,
 			);
 			productName = "MIDISystemInfo iOS";
-			productReference = E20CF4B8299C7F6200F0E003 /* MIDISystemInfo iOS.app */;
+			productReference = E20CF4B8299C7F6200F0E003 /* MIDI System Info.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E230C49E25AE7B31005DCB55 /* MIDISystemInfo macOS */ = {
@@ -213,7 +213,7 @@
 				E20238432CC45FA100661322 /* MIDIKitIO */,
 			);
 			productName = MIDISystemInfo;
-			productReference = E230C49F25AE7B31005DCB55 /* MIDISystemInfo macOS.app */;
+			productReference = E230C49F25AE7B31005DCB55 /* MIDI System Info.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -348,7 +348,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MIDISystemInfo/iOS/Info.plist;
@@ -361,9 +361,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDISystemInfo${DEVELOPMENT_TEAM}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MIDI System Info";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -380,7 +380,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MIDISystemInfo/iOS/Info.plist;
@@ -393,9 +393,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDISystemInfo${DEVELOPMENT_TEAM}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MIDI System Info";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -539,7 +539,7 @@
 				CODE_SIGN_ENTITLEMENTS = MIDISystemInfo/macOS/MIDISystemInfo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -551,9 +551,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDISystemInfo${DEVELOPMENT_TEAM}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MIDI System Info";
 				SUPPORTED_PLATFORMS = macosx;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -568,7 +568,7 @@
 				CODE_SIGN_ENTITLEMENTS = MIDISystemInfo/macOS/MIDISystemInfo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -580,9 +580,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.MIDIKit.MIDISystemInfo${DEVELOPMENT_TEAM}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "MIDI System Info";
 				SUPPORTED_PLATFORMS = macosx;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

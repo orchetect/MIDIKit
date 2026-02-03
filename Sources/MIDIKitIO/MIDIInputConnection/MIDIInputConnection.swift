@@ -214,7 +214,7 @@ extension MIDIInputConnection {
                         refConKnown: true
                     )
                     
-                    queue.async { [self] in
+                    queue.sync { [self] in
                         let receiveHandler = self?.receiveHandler
                         receiveHandler?.packetListReceived(packets)
                     }
@@ -241,7 +241,7 @@ extension MIDIInputConnection {
                     )
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    queue.async { [self] in
+                    queue.sync { [self] in
                         let receiveHandler = self?.receiveHandler
                         receiveHandler?.eventListReceived(
                             packets,
