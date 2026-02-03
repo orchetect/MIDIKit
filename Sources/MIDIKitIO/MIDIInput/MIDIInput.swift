@@ -147,7 +147,7 @@ extension MIDIInput {
                 { [weak self, queue] packetListPtr, srcConnRefCon in
                     let packets = packetListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     
-                    queue.async { [self] in
+                    queue.sync { [self] in
                         let receiveHandler = self?.receiveHandler
                         receiveHandler?.packetListReceived(packets)
                     }
@@ -171,7 +171,7 @@ extension MIDIInput {
                     let packets = eventListPtr.packets(refCon: srcConnRefCon, refConKnown: false)
                     let midiProtocol = MIDIProtocolVersion(eventListPtr.pointee.protocol)
                     
-                    queue.async { [self] in
+                    queue.sync { [self] in
                         let receiveHandler = self?.receiveHandler
                         receiveHandler?.eventListReceived(
                             packets,
