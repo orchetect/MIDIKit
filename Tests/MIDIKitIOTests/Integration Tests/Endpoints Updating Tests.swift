@@ -270,7 +270,7 @@ struct EndpointsUpdating_Threading_Tests {
     
     /// Test reading and writing endpoints from different threads.
     /// - Note: This test requires the Thread Sanitizer to be enabled in the Test Plan.
-    @Test(arguments: testArguments)
+    @Test(.serialized, arguments: testArguments)
     func endpointsUpdating_threading(arg: TestArgument) async throws {
         let isStable = isSystemTimingStable() // test de-flake for slow CI pipelines
         let timeout: TimeInterval = isStable ? 2.0 : 10.0
