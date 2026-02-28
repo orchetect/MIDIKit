@@ -115,7 +115,7 @@ func getString(
 /// Internal:
 /// Get an integer value from a `MIDIObjectRef` property key.
 ///
-/// - Parameter forProperty: a `CoreMIDI.Property` constant
+/// - Parameter property: A `CoreMIDI.Property` constant
 func getInteger(
     forProperty property: CFString,
     of ref: CoreMIDI.MIDIObjectRef
