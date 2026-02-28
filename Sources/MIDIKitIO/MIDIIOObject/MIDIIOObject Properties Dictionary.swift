@@ -13,7 +13,7 @@ extension MIDIIOObject {
     // inline docs provided by the MIDIIOObject protocol
     public func propertyStringValues(
         relevantOnly: Bool = true,
-        defaultValue: (_ property: AnyMIDIIOObject.Property) -> String? = { _ in "-" }
+        defaultValue: (_ property: AnyMIDIIOObject.Property, _ error: MIDIIOError?) -> String? = { _, _ in "-" }
     ) -> [(key: String, value: String)] {
         (
             relevantOnly
@@ -21,7 +21,15 @@ extension MIDIIOObject {
                 : AnyMIDIIOObject.Property.allCases
         )
         .compactMap {
-            guard let value = (try? propertyStringValue(for: $0)) ?? defaultValue($0) else { return nil }
+            let value: String
+            do {
+                value = try propertyStringValue(for: $0)
+            } catch let error as MIDIIOError {
+                guard let defValue = defaultValue($0, error) else { return nil }
+                value = defValue
+            } catch {
+                return nil // TODO: factor this out once property getters all have strongly typed `throws(MIDIIOError)` signatures
+            }
             return (key: $0.name, value: value)
         }
     }
