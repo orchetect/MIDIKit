@@ -230,7 +230,7 @@ func throwIfErr(_ closure: () -> OSStatus) throws(MIDIIOError) {
     let result = closure()
     
     guard result == noErr else {
-        throw MIDIIOError.osStatus(result)
+        throw .osStatus(result)
     }
 }
 
@@ -239,7 +239,7 @@ extension CoreMIDIOSStatus /* aka Int32 */ {
     /// noErr`.
     public func throwIfOSStatusErr() throws(MIDIIOError) {
         guard self == noErr else {
-            throw MIDIIOError.osStatus(self)
+            throw .osStatus(self)
         }
     }
 }

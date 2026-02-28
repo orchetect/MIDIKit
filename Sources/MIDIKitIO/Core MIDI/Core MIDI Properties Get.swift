@@ -26,11 +26,11 @@ func getProperties(
     let result = MIDIObjectGetProperties(ref, &propsPtr, deep)
     
     guard result == noErr else {
-        throw MIDIIOError.osStatus(result)
+        throw .osStatus(result)
     }
     
     guard let properties = propsPtr?.takeRetainedValue() else {
-        throw MIDIIOError.readError(
+        throw .readError(
             "Got nil while reading MIDIEndpointRef property list."
         )
     }
@@ -60,11 +60,11 @@ func getDictionary(
     let result = MIDIObjectGetDictionaryProperty(ref, property, &dictPtr)
     
     guard result == noErr else {
-        throw MIDIIOError.osStatus(result)
+        throw .osStatus(result)
     }
     
     guard let dictionary = dictPtr?.takeRetainedValue() else {
-        throw MIDIIOError.readError(
+        throw .readError(
             "Got nil while reading MIDIEndpointRef property list."
         )
     }
@@ -94,11 +94,11 @@ func getString(
     let result = MIDIObjectGetStringProperty(ref, property, &valPtr)
     
     guard result == noErr else {
-        throw MIDIIOError.osStatus(result)
+        throw .osStatus(result)
     }
     
     guard let value = valPtr?.takeRetainedValue() else {
-        throw MIDIIOError.readError(
+        throw .readError(
             "Got nil while reading MIDIEndpointRef property value \((property as String).quoted)"
         )
     }

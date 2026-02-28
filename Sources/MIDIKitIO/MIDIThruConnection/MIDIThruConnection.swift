@@ -131,7 +131,7 @@ public final class MIDIThruConnection: MIDIManaged, @unchecked Sendable { // @un
 }
 
 extension MIDIThruConnection {
-    func create(in manager: MIDIManager) throws {
+    func create(in manager: MIDIManager) throws(MIDIIOError) {
         var newConnection = MIDIThruConnectionRef()
     
         let paramsData = parameters.coreMIDIThruConnectionParams(
@@ -279,7 +279,7 @@ extension MIDIThruConnection {
     /// Only call when removing the connection from the MIDI manager.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-    func dispose() throws {
+    func dispose() throws(MIDIIOError) {
         // don't dispose if it's a persistent connection
         guard lifecycle == .nonPersistent else { return }
         

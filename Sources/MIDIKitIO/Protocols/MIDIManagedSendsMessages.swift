@@ -19,10 +19,10 @@ public protocol MIDIManagedSendsMessages: MIDIManaged {
     /* public private(set) */ var midiProtocol: MIDIProtocolVersion { get }
     
     /// Send a MIDI Event.
-    func send(event: MIDIEvent) throws
+    func send(event: MIDIEvent) throws(MIDIIOError)
     
     /// Send one or more MIDI Events.
-    func send(events: [MIDIEvent]) throws
+    func send(events: [MIDIEvent]) throws(MIDIIOError)
 }
 
 // MARK: - Internal Protocol
@@ -34,7 +34,7 @@ protocol _MIDIManagedSendsMessages: MIDIManagedSendsMessages {
     /// This method is internal-only and its use is discouraged.
     ///
     /// - Parameter rawMessage: MIDI message.
-    func send(rawMessage: [UInt8]) throws
+    func send(rawMessage: [UInt8]) throws(MIDIIOError)
     
     /// Internal:
     /// Send one or more legacy MIDI 1.0 message(s), automatically assembling it into a
@@ -43,75 +43,85 @@ protocol _MIDIManagedSendsMessages: MIDIManagedSendsMessages {
     /// This method is internal-only and its use is discouraged.
     ///
     /// - Parameter rawMessages: Array of MIDI messages.
-    func send(rawMessages: [[UInt8]]) throws
+    func send(rawMessages: [[UInt8]]) throws(MIDIIOError)
     
     /// Internal:
     /// Send a Core MIDI `MIDIPacketList`. (MIDI 1.0, using old Core MIDI API).
-    func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws
+    func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws(MIDIIOError)
     
     /// Internal:
     /// Send a Core MIDI `MIDIEventList`. (MIDI 1.0 and 2.0, using new Core MIDI API).
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws
+    func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws(MIDIIOError)
     
     /// Internal:
     /// Send a MIDI message inside a Universal MIDI Packet.
     ///
     /// - Parameter rawWords: Array of `UInt32` words
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    func send(rawWords: [UMPWord]) throws
+    func send(rawWords: [UMPWord]) throws(MIDIIOError)
 }
 
 // MARK: - Implementation
 
 extension _MIDIManagedSendsMessages {
-    func send(rawMessage: [UInt8]) throws {
+    func send(rawMessage: [UInt8]) throws(MIDIIOError) {
         switch api {
         case .legacyCoreMIDI:
             var packetList = MIDIPacketList(data: rawMessage)
     
-            try withUnsafeMutablePointer(to: &packetList) { ptr in
+            try withUnsafeMutablePointer(to: &packetList) { (ptr) throws(MIDIIOError) -> Void in
                 try send(packetList: ptr)
             }
     
         case .newCoreMIDI:
-            throw MIDIIOError.internalInconsistency(
+            throw .internalInconsistency(
                 "Raw bytes cannot be sent using new Core MIDI API."
             )
         }
     }
     
-    func send(rawMessages: [[UInt8]]) throws {
+    func send(rawMessages: [[UInt8]]) throws(MIDIIOError) {
         switch api {
         case .legacyCoreMIDI:
-            var packetList = try MIDIPacketList(data: rawMessages)
-    
-            try withUnsafeMutablePointer(to: &packetList) { ptr in
+            var packetList: MIDIPacketList
+            do {
+                packetList = try MIDIPacketList(data: rawMessages)
+            } catch {
+                throw .internalInconsistency(error.localizedDescription)
+            }
+            
+            try withUnsafeMutablePointer(to: &packetList) { ptr throws(MIDIIOError) -> Void in
                 try send(packetList: ptr)
             }
     
         case .newCoreMIDI:
-            throw MIDIIOError.internalInconsistency(
+            throw .internalInconsistency(
                 "Raw bytes cannot be sent using new Core MIDI API."
             )
         }
     }
     
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    func send(rawWords: [UMPWord]) throws {
+    func send(rawWords: [UMPWord]) throws(MIDIIOError) {
         switch api {
         case .legacyCoreMIDI:
-            throw MIDIIOError.internalInconsistency(
+            throw .internalInconsistency(
                 "Universal MIDI Packet words cannot be sent using old Core MIDI API."
             )
     
         case .newCoreMIDI:
-            var eventList = try MIDIEventList(
-                protocol: midiProtocol.coreMIDIProtocol,
-                packetWords: rawWords
-            )
-    
-            try withUnsafeMutablePointer(to: &eventList) { ptr in
+            var eventList: MIDIEventList
+            do {
+                eventList = try MIDIEventList(
+                    protocol: midiProtocol.coreMIDIProtocol,
+                    packetWords: rawWords
+                )
+            } catch {
+                throw .internalInconsistency(error.localizedDescription)
+            }
+            
+            try withUnsafeMutablePointer(to: &eventList) { ptr throws(MIDIIOError) -> Void in
                 try send(eventList: ptr)
             }
         }
@@ -119,14 +129,14 @@ extension _MIDIManagedSendsMessages {
 }
 
 extension _MIDIManagedSendsMessages {
-    public func send(event: MIDIEvent) throws {
+    public func send(event: MIDIEvent) throws(MIDIIOError) {
         switch api {
         case .legacyCoreMIDI:
             try send(rawMessage: event.midi1RawBytes())
     
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
-                throw MIDIIOError.internalInconsistency(
+                throw .internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
             }
@@ -137,13 +147,15 @@ extension _MIDIManagedSendsMessages {
         }
     }
     
-    public func send(events: [MIDIEvent]) throws {
+    public func send(events: [MIDIEvent]) throws(MIDIIOError) {
         switch api {
         case .legacyCoreMIDI:
             if events.contains(where: { $0.isSystemExclusive }) {
                 // System Exclusive events must be the only event in a MIDIPacketList
                 // so force each event to be sent in its own packet
-                try events.forEach { try send(event: $0) }
+                for event in events {
+                    try send(event: event)
+                }
             } else {
                 // combine events into a single MIDIPacketList
                 try send(rawMessages: events.map { $0.midi1RawBytes() })
@@ -151,7 +163,7 @@ extension _MIDIManagedSendsMessages {
     
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
-                throw MIDIIOError.internalInconsistency(
+                throw .internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
             }

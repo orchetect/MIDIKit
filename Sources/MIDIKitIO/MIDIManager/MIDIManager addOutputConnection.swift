@@ -29,7 +29,7 @@ extension MIDIManager {
         to inputs: MIDIOutputConnectionMode,
         tag: String,
         filter: MIDIEndpointFilter = .default()
-    ) throws {
+    ) throws(MIDIIOError) {
         let newCS = MIDIOutputConnection(
             mode: inputs,
             filter: filter,

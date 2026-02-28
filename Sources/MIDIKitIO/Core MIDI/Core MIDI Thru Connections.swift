@@ -31,7 +31,7 @@ func getSystemThruConnectionsPersistentEntries(
         // memory safety: release unmanaged pointer we created
         getConnectionList.release()
     
-        throw MIDIIOError.osStatus(result)
+        throw .osStatus(result)
     }
     
     // cast to NSData so we can use .getBytes(...)

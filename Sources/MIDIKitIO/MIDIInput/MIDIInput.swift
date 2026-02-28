@@ -127,7 +127,7 @@ extension MIDIInput {
 }
 
 extension MIDIInput {
-    func create(in manager: MIDIManager) throws {
+    func create(in manager: MIDIManager) throws(MIDIIOError) {
         if uniqueIDExistsInSystem != nil {
             // if uniqueID is already in use, set it to nil here
             // so MIDIDestinationCreateWithBlock can return a new unused ID;
@@ -157,7 +157,7 @@ extension MIDIInput {
             
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
-                throw MIDIIOError.internalInconsistency(
+                throw .internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
             }
@@ -209,7 +209,7 @@ extension MIDIInput {
     /// Only call when removing the input from the MIDI manager.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-    func dispose() throws {
+    func dispose() throws(MIDIIOError) {
         guard let coreMIDIInputPortRef else { return }
     
         defer { self.coreMIDIInputPortRef = nil }
@@ -221,12 +221,12 @@ extension MIDIInput {
 
 extension MIDIInput {
     /// Makes the virtual endpoint in the system invisible to the user.
-    public func hide() throws {
+    public func hide() throws(MIDIIOError) {
         try endpoint.hide()
     }
     
     /// Makes the virtual endpoint in the system visible to the user.
-    public func show() throws {
+    public func show() throws(MIDIIOError) {
         try endpoint.show()
     }
 }

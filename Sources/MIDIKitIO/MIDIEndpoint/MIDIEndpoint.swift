@@ -60,12 +60,12 @@ extension MIDIEndpoint {
     }
     
     /// Makes a virtual endpoint in the system invisible to the user.
-    func hide() throws {
+    func hide() throws(MIDIIOError) {
         try MIDIKitIO.hide(endpoint: coreMIDIObjectRef)
     }
     
     /// Makes a virtual endpoint in the system visible to the user.
-    func show() throws {
+    func show() throws(MIDIIOError) {
         try MIDIKitIO.show(endpoint: coreMIDIObjectRef)
     }
 }

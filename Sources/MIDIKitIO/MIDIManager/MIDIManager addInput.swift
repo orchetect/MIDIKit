@@ -43,7 +43,7 @@ extension MIDIManager {
         tag: String,
         uniqueID: MIDIIdentifierPersistence,
         receiver: sending MIDIReceiver
-    ) throws {
+    ) throws(MIDIIOError) {
         let newVD = MIDIInput(
             name: name,
             uniqueID: uniqueID.readID(),
@@ -57,7 +57,7 @@ extension MIDIManager {
         try newVD.create(in: self)
         
         guard let successfulID = newVD.uniqueID else {
-            throw MIDIIOError.connectionError(
+            throw .connectionError(
                 "Could not read virtual MIDI endpoint unique ID."
             )
         }

@@ -137,7 +137,7 @@ func getSystemEntity(
         .throwIfOSStatusErr()
     
     guard ent != MIDIEntityRef() else {
-        throw MIDIIOError.internalInconsistency(
+        throw .internalInconsistency(
             "Error getting entity ID for endpoint ref \(endpoint)"
         )
     }

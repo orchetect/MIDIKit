@@ -31,7 +31,7 @@ extension MIDIManager {
         tag: String,
         filter: MIDIEndpointFilter = .default(),
         receiver: sending MIDIReceiver
-    ) throws {
+    ) throws(MIDIIOError) {
         let newCD = MIDIInputConnection(
             mode: outputs,
             filter: filter,

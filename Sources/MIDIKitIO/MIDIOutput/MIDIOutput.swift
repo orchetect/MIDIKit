@@ -111,7 +111,7 @@ extension MIDIOutput {
 }
 
 extension MIDIOutput {
-    func create(in manager: MIDIManager) throws {
+    func create(in manager: MIDIManager) throws(MIDIIOError) {
         if uniqueIDExistsInSystem != nil {
             // if uniqueID is already in use, set it to nil here
             // so MIDISourceCreate can return a new unused ID;
@@ -133,7 +133,7 @@ extension MIDIOutput {
     
         case .newCoreMIDI:
             guard #available(macOS 11, iOS 14, macCatalyst 14, *) else {
-                throw MIDIIOError.internalInconsistency(
+                throw .internalInconsistency(
                     "New Core MIDI API is not accessible on this platform."
                 )
             }
@@ -173,7 +173,7 @@ extension MIDIOutput {
     /// Only call when removing the output from the MIDI manager.
     ///
     /// Errors thrown can be safely ignored and are typically only useful for debugging purposes.
-    func dispose() throws {
+    func dispose() throws(MIDIIOError) {
         guard let coreMIDIOutputPortRef else { return }
     
         defer { self.coreMIDIOutputPortRef = nil }
@@ -185,12 +185,12 @@ extension MIDIOutput {
 
 extension MIDIOutput {
     /// Makes the virtual endpoint in the system invisible to the user.
-    public func hide() throws {
+    public func hide() throws(MIDIIOError) {
         try endpoint.hide()
     }
     
     /// Makes the virtual endpoint in the system visible to the user.
-    public func show() throws {
+    public func show() throws(MIDIIOError) {
         try endpoint.show()
     }
 }
@@ -209,9 +209,9 @@ extension MIDIOutput: CustomStringConvertible {
 extension MIDIOutput: MIDIManagedSendsMessages { }
 
 extension MIDIOutput: _MIDIManagedSendsMessages {
-    func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws {
+    func send(packetList: UnsafeMutablePointer<MIDIPacketList>) throws(MIDIIOError) {
         guard let coreMIDIOutputPortRef else {
-            throw MIDIIOError.internalInconsistency(
+            throw .internalInconsistency(
                 "Port reference is nil."
             )
         }
@@ -221,9 +221,9 @@ extension MIDIOutput: _MIDIManagedSendsMessages {
     }
     
     @available(macOS 11, iOS 14, macCatalyst 14, *)
-    func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws {
+    func send(eventList: UnsafeMutablePointer<MIDIEventList>) throws(MIDIIOError) {
         guard let coreMIDIOutputPortRef else {
-            throw MIDIIOError.internalInconsistency(
+            throw .internalInconsistency(
                 "Port reference is nil."
             )
         }
