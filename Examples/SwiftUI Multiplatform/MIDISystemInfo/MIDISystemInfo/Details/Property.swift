@@ -10,6 +10,7 @@ import SwiftUI
 struct Property: Hashable {
     let key: String
     let value: String
+    let isError: Bool
 }
 
 extension Property: Identifiable {

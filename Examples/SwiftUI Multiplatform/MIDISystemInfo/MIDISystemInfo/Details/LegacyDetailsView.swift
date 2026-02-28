@@ -29,7 +29,7 @@ struct LegacyDetailsView: View, DetailsContent {
                         Row(property: $0).tag($0)
                     }
                 } header: {
-                    Row(property: Property(key: "Property", value: "Value"))
+                    Row(property: Property(key: "Property", value: "Value", isError: false))
                         .font(.headline)
                 } footer: {
                     // empty
@@ -60,8 +60,17 @@ extension LegacyDetailsView {
             HStack(alignment: .top) {
                 Text(property.key)
                     .frame(width: 220, alignment: .leading)
-                Text(property.value)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack {
+                    if property.isError {
+                        if #available(macOS 11.0, iOS 13.0, *) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                        } else {
+                            Text("⚠️")
+                        }
+                    }
+                    Text(property.value)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
         }
     }

@@ -26,13 +26,13 @@ struct ItemIcon<Content: View>: View {
     
     #if os(macOS)
     private var image: Image? {
-        guard let img = item.imageAsNSImage else { return nil }
+        guard let img = try? item.imageAsNSImage else { return nil }
         return Image(nsImage: img).resizable()
     }
 
     #elseif os(iOS)
     private var image: Image? {
-        guard let img = item.imageAsUIImage else { return nil }
+        guard let img = try? item.imageAsUIImage else { return nil }
         return Image(uiImage: img).resizable()
     }
     #endif

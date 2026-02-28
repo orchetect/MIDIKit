@@ -23,7 +23,7 @@ struct FormDetailsView: View, DetailsContent {
     
     var body: some View {
         VStack {
-            if let image = object.image {
+            if let image = try? object.image {
                 image
                     .resizable()
                     .scaledToFit()

@@ -19,8 +19,23 @@ protocol DetailsContent where Self: View {
 
 extension DetailsContent {
     func refreshProperties() {
-        properties = object.propertyStringValues(relevantOnly: isRelevantPropertiesOnlyShown)
-            .map { Property(key: $0.key, value: $0.value) }
+        let errorPrefix = "⚠️ "
+        
+        properties = object.propertyStringValues(relevantOnly: isRelevantPropertiesOnlyShown) { property, error in
+            guard let error else { return "-" }
+            
+            let desc = switch error {
+            case .osStatus(.unknownProperty): "(Property not set.)"
+            default: error.localizedDescription
+            }
+            return "\(errorPrefix)\(desc)"
+        }
+        .map {
+            var value = $0.value
+            let isError = $0.value.starts(with: errorPrefix)
+            if isError { value = String(value.dropFirst(errorPrefix.count))}
+            return Property(key: $0.key, value: $0.value, isError: isError)
+        }
     }
     
     func selectedItemsProviders() -> [NSItemProvider] {

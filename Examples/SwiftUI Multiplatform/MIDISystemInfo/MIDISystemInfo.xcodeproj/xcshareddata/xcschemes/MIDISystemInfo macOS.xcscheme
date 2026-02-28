@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E230C49E25AE7B31005DCB55"
-               BuildableName = "MIDISystemInfo macOS.app"
+               BuildableName = "MIDI System Info.app"
                BlueprintName = "MIDISystemInfo macOS"
                ReferencedContainer = "container:MIDISystemInfo.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E230C49E25AE7B31005DCB55"
-            BuildableName = "MIDISystemInfo macOS.app"
+            BuildableName = "MIDI System Info.app"
             BlueprintName = "MIDISystemInfo macOS"
             ReferencedContainer = "container:MIDISystemInfo.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E230C49E25AE7B31005DCB55"
-            BuildableName = "MIDISystemInfo macOS.app"
+            BuildableName = "MIDI System Info.app"
             BlueprintName = "MIDISystemInfo macOS"
             ReferencedContainer = "container:MIDISystemInfo.xcodeproj">
          </BuildableReference>
