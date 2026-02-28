@@ -12,15 +12,17 @@ internal import MIDIKitInternals
 extension MIDIIOObject {
     // inline docs provided by the MIDIIOObject protocol
     public func propertyStringValues(
-        relevantOnly: Bool = true
+        relevantOnly: Bool = true,
+        defaultValue: (_ property: AnyMIDIIOObject.Property) -> String? = { _ in "-" }
     ) -> [(key: String, value: String)] {
         (
             relevantOnly
                 ? objectType.relevantProperties
                 : AnyMIDIIOObject.Property.allCases
         )
-        .map {
-            (key: $0.name, value: (try? propertyStringValue(for: $0)) ?? "-")
+        .compactMap {
+            guard let value = (try? propertyStringValue(for: $0)) ?? defaultValue($0) else { return nil }
+            return (key: $0.name, value: value)
         }
     }
     

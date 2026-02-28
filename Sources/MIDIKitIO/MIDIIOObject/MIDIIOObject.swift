@@ -476,8 +476,15 @@ public protocol MIDIIOObject: Sendable {
     /// Useful for displaying in a user interface or outputting to console for debugging.
     /// The return value is an array of tuples (not a dictionary) to maintain ordering.
     /// Not recommended for production code. Instead, use strongly-typed properties on this object.
+    ///
+    /// - Parameters:
+    ///   - relevantOnly: Include only relevant properties for the MIDI object.
+    ///   - defaultValue: Provide a default string value for properties that return `nil` or produce an error.
+    ///     If `nil` is passed to this parameter, these property keys will be omitted from the returned array.
+    /// - Returns: Ordered array of key/value pair tuples.
     func propertyStringValues(
-        relevantOnly: Bool
+        relevantOnly: Bool,
+        defaultValue: (_ property: AnyMIDIIOObject.Property) -> String?
     ) -> [(key: String, value: String)]
     
     /// Get a property value formatted as a human-readable string.
