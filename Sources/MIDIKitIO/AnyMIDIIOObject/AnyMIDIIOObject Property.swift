@@ -1,5 +1,5 @@
 //
-//  Property.swift
+//  AnyMIDIIOObject Property.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -491,15 +491,6 @@ extension AnyMIDIIOObject.Property {
         // MARK: Program Changes
         case .receivesProgramChanges: [.device, .entity]
         case .transmitsProgramChanges: [.device, .entity]
-        }
-    }
-}
-
-extension MIDIIOObjectType {
-    /// Internal: returns relevant `MIDIIOObject.Property`s associated with the object type.
-    var relevantProperties: [AnyMIDIIOObject.Property] {
-        AnyMIDIIOObject.Property.allCases.filter {
-            $0.relevantObjects.contains(self)
         }
     }
 }
