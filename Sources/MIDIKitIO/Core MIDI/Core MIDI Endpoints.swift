@@ -51,7 +51,8 @@ func getSystemDestinationEndpoints() -> [MIDIInputEndpoint] {
 /// Internal:
 /// Returns all source `MIDIEndpointRef`s in the system that have a name matching `name`.
 ///
-/// - Parameter name: MIDI port name to search for.
+/// - Parameters:
+///   - name: MIDI port name to search for.
 func getSystemSourceEndpoints(
     matching name: String
 ) -> [CoreMIDI.MIDIEndpointRef] {
@@ -70,14 +71,17 @@ func getSystemSourceEndpoints(
 /// Returns the first source `MIDIEndpointRef` in the system with a unique ID matching `uniqueID`.
 /// If not found, returns `nil`.
 ///
-/// - Parameter uniqueID: MIDI port unique ID to search for.
+/// - Parameters:
+///   - uniqueID: MIDI port unique ID to search for.
 func getSystemSourceEndpoint(
     matching uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIEndpointRef? {
+    guard uniqueID != .invalidMIDIIdentifier else { return nil }
+    
     for i in 0 ..< MIDIGetNumberOfSources() {
         let endpointRef = MIDIGetSource(i)
         guard endpointRef != 0 else { continue }
-        if getUniqueID(of: endpointRef) == uniqueID { return endpointRef }
+        if (try? getUniqueID(of: endpointRef)) == uniqueID { return endpointRef }
     }
     
     return nil
@@ -86,7 +90,8 @@ func getSystemSourceEndpoint(
 /// Internal:
 /// Returns all destination `MIDIEndpointRef`s in the system that have a name matching `name`.
 ///
-/// - Parameter name: MIDI port name to search for.
+/// - Parameters:
+///   - name: MIDI port name to search for.
 func getSystemDestinationEndpoints(
     matching name: String
 ) -> [CoreMIDI.MIDIEndpointRef] {
@@ -105,14 +110,17 @@ func getSystemDestinationEndpoints(
 /// Returns the first destination `MIDIEndpointRef` in the system with a unique ID matching
 /// `uniqueID`. If not found, returns `nil`.
 ///
-/// - Parameter uniqueID: MIDI port unique ID to search for.
+/// - Parameters:
+///   - uniqueID: MIDI port unique ID to search for.
 func getSystemDestinationEndpoint(
     matching uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIEndpointRef? {
+    guard uniqueID != .invalidMIDIIdentifier else { return nil }
+    
     for i in 0 ..< MIDIGetNumberOfDestinations() {
         let endpointRef = MIDIGetDestination(i)
         guard endpointRef != 0 else { continue }
-        if getUniqueID(of: endpointRef) == uniqueID { return endpointRef }
+        if (try? getUniqueID(of: endpointRef)) == uniqueID { return endpointRef }
     }
     
     return nil
