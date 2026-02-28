@@ -11,19 +11,19 @@ import SwiftUI
 @available(macOS 13.0, iOS 16.0, *)
 struct FormDetailsView: View, DetailsContent {
     public var object: AnyMIDIIOObject
-    @Binding public var isRelevantPropertiesOnlyShown: Bool
+    @Binding public var isOnlySetPropertiesShown: Bool
     
     @State var properties: [Property] = []
     @State var selection: Set<Property.ID> = []
     
     init(object: AnyMIDIIOObject, isRelevantPropertiesOnlyShown: Binding<Bool>) {
         self.object = object
-        _isRelevantPropertiesOnlyShown = isRelevantPropertiesOnlyShown
+        _isOnlySetPropertiesShown = isRelevantPropertiesOnlyShown
     }
     
     var body: some View {
         VStack {
-            if let image = try? object.image {
+            if let image = object.image.value {
                 image
                     .resizable()
                     .scaledToFit()
@@ -36,7 +36,7 @@ struct FormDetailsView: View, DetailsContent {
         .onAppear {
             refreshProperties()
         }
-        .onChange(of: isRelevantPropertiesOnlyShown) { _ in
+        .onChange(of: isOnlySetPropertiesShown) { _ in
             withAnimation { refreshProperties() }
         }
         #if os(macOS)

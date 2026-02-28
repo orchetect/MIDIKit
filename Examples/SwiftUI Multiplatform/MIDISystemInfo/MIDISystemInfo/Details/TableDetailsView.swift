@@ -18,14 +18,14 @@ struct TableDetailsView: View, DetailsContent {
     #endif
     
     public var object: AnyMIDIIOObject
-    @Binding public var isRelevantPropertiesOnlyShown: Bool
+    @Binding public var isOnlySetPropertiesShown: Bool
     
     @State var properties: [Property] = []
     @State var selection: Set<Property.ID> = []
     
     init(object: AnyMIDIIOObject, isRelevantPropertiesOnlyShown: Binding<Bool>) {
         self.object = object
-        _isRelevantPropertiesOnlyShown = isRelevantPropertiesOnlyShown
+        _isOnlySetPropertiesShown = isRelevantPropertiesOnlyShown
     }
     
     var body: some View {
@@ -43,7 +43,7 @@ struct TableDetailsView: View, DetailsContent {
         .onAppear {
             refreshProperties()
         }
-        .onChange(of: isRelevantPropertiesOnlyShown) { _ in
+        .onChange(of: isOnlySetPropertiesShown) { _ in
             withAnimation { refreshProperties() }
         }
     }

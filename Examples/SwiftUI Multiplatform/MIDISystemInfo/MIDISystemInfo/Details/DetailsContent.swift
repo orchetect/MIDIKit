@@ -9,7 +9,7 @@ import SwiftUI
 
 protocol DetailsContent where Self: View {
     var object: AnyMIDIIOObject { get set }
-    var isRelevantPropertiesOnlyShown: Bool { get set }
+    var isOnlySetPropertiesShown: Bool { get set }
     
     var properties: [Property] { get nonmutating set }
     var selection: Set<Property.ID> { get set }
@@ -21,14 +21,15 @@ extension DetailsContent {
     func refreshProperties() {
         let errorPrefix = "⚠️ "
         
-        properties = object.propertyStringValues(relevantOnly: isRelevantPropertiesOnlyShown) { property, error in
-            guard let error else { return "-" }
-            
-            let desc = switch error {
-            case .osStatus(.unknownProperty): "(Property not set.)"
-            default: error.localizedDescription
+        properties = object.propertyStringValues(relevantOnly: false) { property, error in
+            return if let error {
+                "\(errorPrefix)\(error.localizedDescription)"
+            } else {
+                // If error is nil, it means property is not set.
+                isOnlySetPropertiesShown 
+                    ? nil
+                    : "\(errorPrefix)Property not set."
             }
-            return "\(errorPrefix)\(desc)"
         }
         .map {
             var value = $0.value
