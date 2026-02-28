@@ -20,7 +20,7 @@ internal import CoreMIDI
 /// - Throws: ``MIDIIOError/osStatus(_:)``
 func getSystemThruConnectionsPersistentEntries(
     matching persistentOwnerID: String
-) throws -> [CoreMIDI.MIDIThruConnectionRef] {
+) throws(MIDIIOError) -> [CoreMIDI.MIDIThruConnectionRef] {
     // set up empty unmanaged data pointer
     var getConnectionList: Unmanaged<CFData> = Unmanaged.passUnretained(Data() as CFData)
     
@@ -66,7 +66,7 @@ func getSystemThruConnectionsPersistentEntries(
 @discardableResult
 func removeAllSystemThruConnectionsPersistentEntries(
     matching persistentOwnerID: String
-) throws -> Int {
+) throws(MIDIIOError) -> Int {
     let getList = try getSystemThruConnectionsPersistentEntries(matching: persistentOwnerID)
     
     var disposeCount = 0
@@ -95,7 +95,7 @@ func removeAllSystemThruConnectionsPersistentEntries(
 /// - Returns: New `MIDIThruConnectionParams` instance.
 func getThruConnectionParameters(
     ref: CoreMIDI.MIDIThruConnectionRef
-) throws -> CoreMIDI.MIDIThruConnectionParams? {
+) throws(MIDIIOError) -> CoreMIDI.MIDIThruConnectionParams? {
     var paramsData: Unmanaged<CFData> = Unmanaged.passUnretained(Data() as CFData)
     
     try MIDIThruConnectionGetParams(ref, &paramsData)

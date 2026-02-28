@@ -130,7 +130,7 @@ func getSystemDestinationEndpoint(
 /// Returns a ``MIDIEntity`` instance of the endpoint's owning entity.
 func getSystemEntity(
     for endpoint: MIDIEndpointRef
-) throws -> MIDIEntity {
+) throws(MIDIIOError) -> MIDIEntity {
     var ent = MIDIEntityRef()
     
     try MIDIEndpointGetEntity(endpoint, &ent)
@@ -147,14 +147,14 @@ func getSystemEntity(
 
 /// Internal:
 /// Makes a virtual endpoint in the system invisible to the user.
-func hide(endpoint: MIDIEndpointRef) throws {
+func hide(endpoint: MIDIEndpointRef) throws(MIDIIOError) {
     try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 1)
         .throwIfOSStatusErr()
 }
 
 /// Internal:
 /// Makes a virtual endpoint in the system visible to the user.
-func show(endpoint: MIDIEndpointRef) throws {
+func show(endpoint: MIDIEndpointRef) throws(MIDIIOError) {
     try MIDIObjectSetIntegerProperty(endpoint, kMIDIPropertyPrivate, 0)
         .throwIfOSStatusErr()
 }

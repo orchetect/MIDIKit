@@ -13,7 +13,7 @@ internal import CoreMIDI
 /// List of MIDI entities in the system (computed property)
 func getSystemDevice(
     for entity: CoreMIDI.MIDIEntityRef
-) throws -> MIDIDevice? {
+) throws(MIDIIOError) -> MIDIDevice? {
     var dev = MIDIDeviceRef()
     
     try MIDIEntityGetDevice(entity, &dev)
