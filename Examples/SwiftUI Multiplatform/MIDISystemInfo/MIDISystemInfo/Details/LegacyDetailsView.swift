@@ -11,14 +11,14 @@ import SwiftUI
 /// Legacy details view for systems prior to macOS 12 / iOS 16.
 struct LegacyDetailsView: View, DetailsContent {
     public var object: AnyMIDIIOObject
-    @Binding public var isRelevantPropertiesOnlyShown: Bool
+    @Binding public var isOnlySetPropertiesShown: Bool
     
     @State var properties: [Property] = []
     @State var selection: Set<Property.ID> = []
     
     init(object: AnyMIDIIOObject, isRelevantPropertiesOnlyShown: Binding<Bool>) {
         self.object = object
-        _isRelevantPropertiesOnlyShown = isRelevantPropertiesOnlyShown
+        _isOnlySetPropertiesShown = isRelevantPropertiesOnlyShown
     }
     
     var body: some View {
@@ -29,7 +29,7 @@ struct LegacyDetailsView: View, DetailsContent {
                         Row(property: $0).tag($0)
                     }
                 } header: {
-                    Row(property: Property(key: "Property", value: "Value"))
+                    Row(property: Property(key: "Property", value: "Value", status: nil))
                         .font(.headline)
                 } footer: {
                     // empty
@@ -44,7 +44,7 @@ struct LegacyDetailsView: View, DetailsContent {
         .onAppear {
             refreshProperties()
         }
-        .onReceive(Just(isRelevantPropertiesOnlyShown)) { _ in // workaround since we can't use `onChange {}` on macOS 10.15
+        .onReceive(Just(isOnlySetPropertiesShown)) { _ in // workaround since we can't use `onChange {}` on macOS 10.15
             withAnimation { refreshProperties() }
         }
     }
@@ -59,8 +59,18 @@ extension LegacyDetailsView {
         var body: some View {
             HStack(alignment: .top) {
                 Text(property.key)
+                    #if os(macOS)
                     .frame(width: 220, alignment: .leading)
+                    #elseif os(iOS)
+                    .frame(width: 150, alignment: .leading)
+                    #endif
+                
+                if let status = property.status {
+                    status.view
+                }
+                
                 Text(property.value)
+                    .foregroundColor(property.color)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }

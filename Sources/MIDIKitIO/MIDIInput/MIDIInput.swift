@@ -198,7 +198,8 @@ extension MIDIInput {
         } else {
             // if managed ID is nil, either it was not supplied or it was already in use
             // so fetch the new ID from the port we just created
-            uniqueID = .init(getUniqueID(of: newPortRef))
+            let uid = try getUniqueID(of: newPortRef)
+            uniqueID = .init(uid)
         }
     }
     

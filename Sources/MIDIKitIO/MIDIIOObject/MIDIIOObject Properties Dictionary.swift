@@ -12,184 +12,235 @@ internal import MIDIKitInternals
 extension MIDIIOObject {
     // inline docs provided by the MIDIIOObject protocol
     public func propertyStringValues(
-        relevantOnly: Bool = true
+        relevantOnly: Bool = false,
+        defaultValue: (_ property: MIDIIOObjectProperty, _ error: MIDIIOError?) -> String? = { _, _ in "-" }
     ) -> [(key: String, value: String)] {
         (
             relevantOnly
                 ? objectType.relevantProperties
-                : AnyMIDIIOObject.Property.allCases
+                : MIDIIOObjectProperty.allCases
         )
-        .map {
-            (key: $0.name, value: propertyStringValue(for: $0))
+        .compactMap { property in
+            let value: String
+            do {
+                switch propertyStringValue(for: property) {
+                case .notSet:
+                    // interpret nil as omission from resulting array, and not "notSet" case
+                    guard let newValue = defaultValue(property, nil) else { return nil }
+                    value = newValue
+                case let .error(error):
+                    // interpret nil as omission from resulting array, and not "notSet" case
+                    guard let newValue = defaultValue(property, error) else { return nil }
+                    value = newValue
+                case let .value(v):
+                    value = v
+                }
+            }
+            return (key: property.name, value: value)
         }
     }
     
     // inline docs provided by the MIDIIOObject protocol
-    public func propertyStringValue(for property: AnyMIDIIOObject.Property) -> String {
+    public func propertyStringValue(
+        for property: MIDIIOObjectProperty
+    ) -> MIDIIOObjectProperty.Value<String> {
         switch property {
         // MARK: Identification
         case .name: // override cache
-            return (try? MIDIKitIO.getName(of: coreMIDIObjectRef)) ?? "-"
+            return wrapValue(try MIDIKitIO.getName(of: coreMIDIObjectRef))
             
         case .model:
-            return model ?? "-"
+            return model
             
         case .manufacturer:
-            return manufacturer ?? "-"
+            return manufacturer
             
         case .uniqueID: // override cache
-            return "\(MIDIKitIO.getUniqueID(of: coreMIDIObjectRef))"
+            return wrapValue(try MIDIKitIO.getUniqueID(of: coreMIDIObjectRef))
+                .convertValue { "\($0)" }
             
         case .deviceID:
-            return "\(deviceManufacturerID)"
+            return deviceManufacturerID
+                .convertValue { "\($0)" }
             
         // MARK: Capabilities
         case .supportsMMC:
-            return supportsMMC ? "Yes" : "No"
+            return supportsMMC
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .supportsGeneralMIDI:
-            return supportsGeneralMIDI ? "Yes" : "No"
+            return supportsGeneralMIDI
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .supportsShowControl:
-            return supportsShowControl ? "Yes" : "No"
+            return supportsShowControl
+                .convertValue { $0 ? "Yes" : "No" }
             
         // MARK: Configuration
         case .nameConfigurationDictionary:
             if #available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *) {
-                return nameConfigurationDictionary?.description ?? "-"
+                return nameConfigurationDictionary
+                    .convertValue { $0.description }
             } else {
-                return "OS not supported. Requires macOS 10.15, macCatalyst 13.0, or iOS 13.0."
+                return .error(.notSupported("OS not supported. Requires macOS 10.15, macCatalyst 13.0, or iOS 13.0."))
             }
             
         case .maxSysExSpeed:
-            return "\(maxSysExSpeed)"
+            return maxSysExSpeed
+                .convertValue { "\($0)" }
             
         case .driverDeviceEditorApp:
-            return driverDeviceEditorApp?.absoluteString ?? "-"
+            return driverDeviceEditorApp
+                .convertValue { $0.absoluteString }
             
         // MARK: Presentation
         case .image:
-            return imageFileURL?.absoluteString ?? "-"
+            return imageFileURL
+                .convertValue { $0.absoluteString }
             
-        case .displayName:
-            return displayName ?? "-"
+        case .displayName: // override cache
+            return wrapValue(try MIDIKitIO.getDisplayName(of: coreMIDIObjectRef))
             
         // MARK: Audio
         case .panDisruptsStereo:
-            return panDisruptsStereo ? "Yes" : "No"
+            return panDisruptsStereo
+                .convertValue { $0 ? "Yes" : "No" }
             
         // MARK: Protocols
         case .protocolID:
-            var valueString = "-"
             if #available(macOS 11, iOS 14, macCatalyst 14, *) {
-                if let protocolID {
-                    valueString = "\(protocolID)"
-                }
+                return protocolID
+                    .convertValue { "\($0)" }
             } else {
-                valueString =
-                    "OS not supported. Requires macOS 11.0, macCatalyst 14.0, or iOS 14.0."
+                return .error(.notSupported("OS not supported. Requires macOS 11.0, macCatalyst 14.0, or iOS 14.0."))
             }
-            
-            return valueString
             
         // MARK: Timing
         case .transmitsMTC:
-            return transmitsMTC ? "Yes" : "No"
+            return transmitsMTC
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .receivesMTC:
-            return receivesMTC ? "Yes" : "No"
+            return receivesMTC
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .transmitsClock:
-            return transmitsClock ? "Yes" : "No"
+            return transmitsClock
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .receivesClock:
-            return receivesClock ? "Yes" : "No"
+            return receivesClock
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .advanceScheduleTimeMuSec:
-            return advanceScheduleTimeMuSec ?? "-"
+            return advanceScheduleTimeMuSec
             
         // MARK: Roles
         case .isMixer:
-            return isMixer ? "Yes" : "No"
+            return isMixer
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .isSampler:
-            return isSampler ? "Yes" : "No"
+            return isSampler
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .isEffectUnit:
-            return isEffectUnit ? "Yes" : "No"
+            return isEffectUnit
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .isDrumMachine:
-            return isDrumMachine ? "Yes" : "No"
+            return isDrumMachine
+                .convertValue { $0 ? "Yes" : "No" }
             
         // MARK: Status
         case .isOffline:
-            return isOffline ? "Yes" : "No"
+            return isOffline
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .isPrivate:
-            return isPrivate ? "Yes" : "No"
+            return isPrivate
+                .convertValue { $0 ? "Yes" : "No" }
             
         // MARK: Drivers
         case .driverOwner:
-            return driverOwner ?? "-"
+            return driverOwner
             
         case .driverVersion:
-            return "\(driverVersion)"
+            return driverVersion
+                .convertValue { "\($0)" }
             
         // MARK: Connections
         case .canRoute:
-            return canRoute ? "Yes" : "No"
+            return canRoute
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .isBroadcast:
-            return isBroadcast ? "Yes" : "No"
+            return isBroadcast
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .connectionUniqueID:
-            return "\(connectionUniqueID)"
+            return connectionUniqueID
+                .convertValue { "\($0)" }
             
         case .isEmbeddedEntity:
-            return isEmbeddedEntity ? "Yes" : "No"
+            return isEmbeddedEntity
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .singleRealtimeEntity:
-            return "\(singleRealtimeEntity)"
+            return singleRealtimeEntity
+                .convertValue { "\($0)" }
             
         // MARK: Channels
         case .receiveChannels:
-            return receiveChannels.binaryString(padTo: 8)
+            return receiveChannels
+                .convertValue { $0.binaryString(padTo: 8) }
             
         case .transmitChannels:
-            return transmitChannels.binaryString(padTo: 8)
+            return transmitChannels
+                .convertValue { $0.binaryString(padTo: 8) }
             
         case .maxReceiveChannels:
-            return "\(maxReceiveChannels)"
+            return maxReceiveChannels
+                .convertValue { "\($0)" }
             
         case .maxTransmitChannels:
-            return "\(maxTransmitChannels)"
+            return maxTransmitChannels
+                .convertValue { "\($0)" }
             
         // MARK: Banks
         case .receivesBankSelectLSB:
-            return receivesBankSelectLSB ? "Yes" : "No"
+            return receivesBankSelectLSB
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .receivesBankSelectMSB:
-            return receivesBankSelectMSB ? "Yes" : "No"
+            return receivesBankSelectMSB
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .transmitsBankSelectLSB:
-            return transmitsBankSelectLSB ? "Yes" : "No"
+            return transmitsBankSelectLSB
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .transmitsBankSelectMSB:
-            return transmitsBankSelectMSB ? "Yes" : "No"
+            return transmitsBankSelectMSB
+                .convertValue { $0 ? "Yes" : "No" }
             
         // MARK: Notes
         case .receivesNotes:
-            return receivesNotes ? "Yes" : "No"
+            return receivesNotes
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .transmitsNotes:
-            return transmitsNotes ? "Yes" : "No"
+            return transmitsNotes
+                .convertValue { $0 ? "Yes" : "No" }
             
         // MARK: Program Changes
         case .receivesProgramChanges:
-            return receivesProgramChanges ? "Yes" : "No"
+            return receivesProgramChanges
+                .convertValue { $0 ? "Yes" : "No" }
             
         case .transmitsProgramChanges:
-            return transmitsProgramChanges ? "Yes" : "No"
+            return transmitsProgramChanges
+                .convertValue { $0 ? "Yes" : "No" }
         }
     }
 }

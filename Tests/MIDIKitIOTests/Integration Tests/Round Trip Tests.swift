@@ -12,7 +12,7 @@ import CoreMIDI
 @testable import MIDIKitIO
 import Testing
 
-@Suite(.serialized) struct RoundTrip_Tests_Base {
+@Suite(.serialized) struct RoundTrip_Tests {
     // swiftformat:options --wrapcollections preserve
     
     private static let outputTag = UUID().uuidString
@@ -68,7 +68,7 @@ import Testing
             // once received, Core MIDI is ready to continue the test.
             try await wait(
                 require: {
-                    print("Sending test event")
+                    print("Sending test event to new connection")
                     try output.send(event: .start())
                     try await Task.sleep(seconds: 0.5)
                     return await events.contains(.start())
@@ -95,7 +95,10 @@ import Testing
     
     // ------------------------------------------------------------
     
-    @Test(arguments: [.legacyCoreMIDI, .newCoreMIDI(.midi1_0), .newCoreMIDI(.midi2_0)] as [CoreMIDIAPIVersion])
+    @Test(
+        .serialized,
+        arguments: [.legacyCoreMIDI, .newCoreMIDI(.midi1_0), .newCoreMIDI(.midi2_0)] as [CoreMIDIAPIVersion]
+    )
     func runRapidMIDIEvents(api: CoreMIDIAPIVersion) async throws {
         print("RoundTrip_Tests runRapidMIDIEvents() starting")
         
@@ -109,6 +112,7 @@ import Testing
         
         try await receiver.createPorts()
         try await Task.sleep(seconds: isStable ? 0.5 : 5.0)
+        await receiver.reset() // ensure internal test events are purged in case createPorts() didn't catch them
         
         let output = try #require(receiver.manager.managedOutputs[Self.outputTag])
         
@@ -288,10 +292,14 @@ import Testing
         // Core MIDI will start dropping events if too many are sent too quickly, as a failsafe against things like feedback loops,
         // so we want to throttle the send frequency.
         var sentEvents: [MIDIEvent] = []
-        for eventGroup in sourceEvents.split(every: 2) {
-            try output.send(events: Array(eventGroup))
-            sentEvents.append(contentsOf: eventGroup)
-            try await Task.sleep(seconds: isStable ? 0.002 : 0.005)
+        for (batchIndex, eventBatch) in sourceEvents.split(every: 100).enumerated() { // batch in 100 event bursts
+            print("Sending 100-event batch \(batchIndex + 1)")
+            for eventBundle in eventBatch.split(every: 2) { // send 2 events at once
+                try output.send(events: Array(eventBundle))
+                sentEvents.append(contentsOf: eventBundle)
+                try await Task.sleep(seconds: isStable ? 0.002 : 0.005)
+            }
+            try await Task.sleep(seconds: isStable ? 0.5 : 2.0) // wait a longer duration between batches
         }
         // sanity check - ensure events were sent in the correct order
         #expect(sentEvents == sourceEvents)

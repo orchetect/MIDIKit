@@ -226,7 +226,7 @@ extension MIDIOSStatus {
 
 /// Throws an error of type ``MIDIIOError/osStatus(_:)-swift.enum.case`` if `OSStatus` return value
 /// `!= noErr`.
-func throwIfErr(_ closure: () -> OSStatus) throws {
+func throwIfErr(_ closure: () -> OSStatus) throws(MIDIIOError) {
     let result = closure()
     
     guard result == noErr else {
@@ -237,7 +237,7 @@ func throwIfErr(_ closure: () -> OSStatus) throws {
 extension CoreMIDIOSStatus /* aka Int32 */ {
     /// Throws an error of type ``MIDIIOError/osStatus(_:)-swift.enum.case`` if `self as OSStatus !=
     /// noErr`.
-    public func throwIfOSStatusErr() throws {
+    public func throwIfOSStatusErr() throws(MIDIIOError) {
         guard self == noErr else {
             throw MIDIIOError.osStatus(self)
         }

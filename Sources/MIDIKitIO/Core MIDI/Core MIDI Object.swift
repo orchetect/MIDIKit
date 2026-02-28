@@ -11,21 +11,24 @@ internal import CoreMIDI
 /// Internal:
 /// Retrieves the object type for the given Core MIDI unique ID.
 /// Returns nil if no object exists with the given ID.
-func getSystemObjectType(
+func getSystemObjectType( // TODO: convert to throwing method instead of Optional
     of uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIObjectType? {
     var obj: CoreMIDI.MIDIObjectRef = .init()
     var objType: CoreMIDI.MIDIObjectType = .other
     
-    let result = MIDIObjectFindByUniqueID(
-        uniqueID,
-        &obj,
-        &objType
-    )
-    
-    guard result != kMIDIObjectNotFound else { return nil }
-    
-    return objType
+    do {
+        try MIDIObjectFindByUniqueID(
+            uniqueID,
+            &obj,
+            &objType
+        )
+        .throwIfOSStatusErr()
+        
+        return objType
+    } catch {
+        return nil
+    }
 }
 
 #endif

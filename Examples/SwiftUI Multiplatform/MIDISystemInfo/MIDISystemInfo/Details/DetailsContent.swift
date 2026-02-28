@@ -9,7 +9,7 @@ import SwiftUI
 
 protocol DetailsContent where Self: View {
     var object: AnyMIDIIOObject { get set }
-    var isRelevantPropertiesOnlyShown: Bool { get set }
+    var isOnlySetPropertiesShown: Bool { get set }
     
     var properties: [Property] { get nonmutating set }
     var selection: Set<Property.ID> { get set }
@@ -19,8 +19,35 @@ protocol DetailsContent where Self: View {
 
 extension DetailsContent {
     func refreshProperties() {
-        properties = object.propertyStringValues(relevantOnly: isRelevantPropertiesOnlyShown)
-            .map { Property(key: $0.key, value: $0.value) }
+        let errorPrefix = "##ERROR##"
+        let notSetPrefix = "##NOTSET##"
+        
+        properties = object.propertyStringValues(relevantOnly: false) { property, error in
+            return if let error {
+                "\(errorPrefix)\(error.localizedDescription)"
+            } else {
+                // If error is nil, it means property is not set.
+                isOnlySetPropertiesShown 
+                    ? nil
+                    : "\(notSetPrefix)Property not set."
+            }
+        }
+        .map {
+            var value = $0.value
+            
+            let status: Property.Status?
+            if $0.value.starts(with: errorPrefix) {
+                status = .error
+                value = String(value.dropFirst(errorPrefix.count))
+            } else if $0.value.starts(with: notSetPrefix) {
+                status = .notSet
+                value = String(value.dropFirst(notSetPrefix.count))
+            } else {
+                status = nil
+            }
+            
+            return Property(key: $0.key, value: value, status: status)
+        }
     }
     
     func selectedItemsProviders() -> [NSItemProvider] {

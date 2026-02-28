@@ -29,242 +29,260 @@ extension MIDIIOObject {
     // MARK: Identification
     
     // NOTE: `name` is a cached property and is managed by the object instance.
-    // public var name: String?
+    // public var name: String
     
-    public var model: String? {
-        try? MIDIKitIO.getModel(of: coreMIDIObjectRef)
+    public var model: MIDIIOObjectProperty.Value<String> {
+        wrapValue(try MIDIKitIO.getModel(of: coreMIDIObjectRef))
     }
     
-    public var manufacturer: String? {
-        try? MIDIKitIO.getManufacturer(of: coreMIDIObjectRef)
+    public var manufacturer: MIDIIOObjectProperty.Value<String> {
+        wrapValue(try MIDIKitIO.getManufacturer(of: coreMIDIObjectRef))
     }
     
     // NOTE: `uniqueID` is a cached property and is managed by the object instance.
     // public var uniqueID: MIDIIdentifier
     
-    public var deviceManufacturerID: Int32 {
-        MIDIKitIO.getDeviceManufacturerID(of: coreMIDIObjectRef)
+    public var deviceManufacturerID: MIDIIOObjectProperty.Value<Int32> {
+        wrapValue(try MIDIKitIO.getDeviceManufacturerID(of: coreMIDIObjectRef))
     }
     
     // MARK: Capabilities
     
-    public var supportsMMC: Bool {
-        MIDIKitIO.getSupportsMMC(of: coreMIDIObjectRef)
+    public var supportsMMC: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getSupportsMMC(of: coreMIDIObjectRef))
     }
     
-    public var supportsGeneralMIDI: Bool {
-        MIDIKitIO.getSupportsGeneralMIDI(of: coreMIDIObjectRef)
+    public var supportsGeneralMIDI: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getSupportsGeneralMIDI(of: coreMIDIObjectRef))
     }
     
-    public var supportsShowControl: Bool {
-        MIDIKitIO.getSupportsShowControl(of: coreMIDIObjectRef)
+    public var supportsShowControl: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getSupportsShowControl(of: coreMIDIObjectRef))
     }
     
     // MARK: Configuration
     
     @available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *)
-    public var nameConfigurationDictionary: NSDictionary? {
-        try? MIDIKitIO.getNameConfigurationDictionary(of: coreMIDIObjectRef)
+    public var nameConfigurationDictionary: MIDIIOObjectProperty.Value<NSDictionary> {
+        wrapValue(try MIDIKitIO.getNameConfigurationDictionary(of: coreMIDIObjectRef))
     }
     
-    public var maxSysExSpeed: Int32 {
-        MIDIKitIO.getMaxSysExSpeed(of: coreMIDIObjectRef)
+    public var maxSysExSpeed: MIDIIOObjectProperty.Value<Int32> {
+        wrapValue(try MIDIKitIO.getMaxSysExSpeed(of: coreMIDIObjectRef))
     }
     
-    public var driverDeviceEditorApp: URL? {
-        try? MIDIKitIO.getDriverDeviceEditorApp(of: coreMIDIObjectRef)
+    public var driverDeviceEditorApp: MIDIIOObjectProperty.Value<URL> {
+        wrapValue(try MIDIKitIO.getDriverDeviceEditorApp(of: coreMIDIObjectRef))
     }
     
     // MARK: Presentation
     
     #if canImport(SwiftUI)
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-    public var image: Image? {
+    public var image: MIDIIOObjectProperty.Value<Image> {
         #if os(macOS)
-        guard let img = imageAsNSImage else { return nil }
-        return Image(nsImage: img)
+        return imageAsNSImage.convertValue { Image(nsImage: $0) }
         #elseif os(iOS)
-        guard let img = imageAsUIImage else { return nil }
-        return Image(uiImage: img)
+        return imageAsUIImage.convertValue { Image(uiImage: $0) }
         #else
-        nil
+        return .error(.notSupported("Not yet supported on this platform."))
         #endif
     }
     #endif
     
-    public var imageFileURL: URL? {
-        try? MIDIKitIO.getImage(of: coreMIDIObjectRef)
+    public var imageFileURL: MIDIIOObjectProperty.Value<URL> {
+        wrapValue(try MIDIKitIO.getImage(of: coreMIDIObjectRef))
     }
     
     #if canImport(AppKit) && os(macOS)
-    public var imageAsNSImage: NSImage? {
-        guard let url = imageFileURL else { return nil }
-        return NSImage(contentsOf: url)
+    public var imageAsNSImage: MIDIIOObjectProperty.Value<NSImage> {
+        imageFileURL.convertValue { NSImage(contentsOf: $0) }
     }
     #endif
     
     #if canImport(UIKit)
-    public var imageAsUIImage: UIImage? {
-        guard let url = imageFileURL,
-              let data = try? Data(contentsOf: url) else { return nil }
-        return UIImage(data: data)
+    public var imageAsUIImage: MIDIIOObjectProperty.Value<UIImage> {
+        imageFileURL.convertValue { url throws(MIDIIOError) in
+            do {
+                let data = try Data(contentsOf: url)
+                return UIImage(data: data)
+            } catch {
+                throw .malformed("Failed to read MIDI object image data.")
+            }
+        }
     }
     #endif
     
-    public var displayName: String? {
-        try? MIDIKitIO.getDisplayName(of: coreMIDIObjectRef)
-    }
+    // NOTE: `displayName` is a cached property and is managed by the object instance.
+    // public var name: String
     
     // MARK: Audio
     
-    public var panDisruptsStereo: Bool {
-        MIDIKitIO.getPanDisruptsStereo(of: coreMIDIObjectRef)
+    public var panDisruptsStereo: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getPanDisruptsStereo(of: coreMIDIObjectRef))
     }
     
     // MARK: Protocol
     
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-    public var protocolID: MIDIProtocolVersion? {
-        guard let proto = MIDIKitIO.getProtocolID(of: coreMIDIObjectRef) else { return nil }
-        return .init(proto)
+    public var protocolID: MIDIIOObjectProperty.Value<MIDIProtocolVersion> {
+        wrapValue(try MIDIKitIO.getProtocolID(of: coreMIDIObjectRef))
+            .convertValue { MIDIProtocolVersion($0) }
     }
     
     // MARK: Timing
     
-    public var transmitsMTC: Bool {
-        MIDIKitIO.getTransmitsMTC(of: coreMIDIObjectRef)
+    public var transmitsMTC: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getTransmitsMTC(of: coreMIDIObjectRef))
     }
     
-    public var receivesMTC: Bool {
-        MIDIKitIO.getReceivesMTC(of: coreMIDIObjectRef)
+    public var receivesMTC: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getReceivesMTC(of: coreMIDIObjectRef))
     }
     
-    public var transmitsClock: Bool {
-        MIDIKitIO.getTransmitsClock(of: coreMIDIObjectRef)
+    public var transmitsClock: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getTransmitsClock(of: coreMIDIObjectRef))
     }
     
-    public var receivesClock: Bool {
-        MIDIKitIO.getReceivesClock(of: coreMIDIObjectRef)
+    public var receivesClock: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getReceivesClock(of: coreMIDIObjectRef))
     }
     
-    public var advanceScheduleTimeMuSec: String? {
-        try? MIDIKitIO.getAdvanceScheduleTimeMuSec(of: coreMIDIObjectRef)
+    public var advanceScheduleTimeMuSec: MIDIIOObjectProperty.Value<String> {
+        wrapValue(try MIDIKitIO.getAdvanceScheduleTimeMuSec(of: coreMIDIObjectRef))
     }
     
     // MARK: Roles
     
-    public var isMixer: Bool {
-        MIDIKitIO.getIsMixer(of: coreMIDIObjectRef)
+    public var isMixer: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getIsMixer(of: coreMIDIObjectRef))
     }
     
-    public var isSampler: Bool {
-        MIDIKitIO.getIsSampler(of: coreMIDIObjectRef)
+    public var isSampler: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getIsSampler(of: coreMIDIObjectRef))
     }
     
-    public var isEffectUnit: Bool {
-        MIDIKitIO.getIsEffectUnit(of: coreMIDIObjectRef)
+    public var isEffectUnit: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getIsEffectUnit(of: coreMIDIObjectRef))
     }
     
-    public var isDrumMachine: Bool {
-        MIDIKitIO.getIsDrumMachine(of: coreMIDIObjectRef)
+    public var isDrumMachine: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getIsDrumMachine(of: coreMIDIObjectRef))
     }
     
     // MARK: Status
     
-    public var isOffline: Bool {
-        MIDIKitIO.getIsOffline(of: coreMIDIObjectRef)
+    public var isOffline: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getIsOffline(of: coreMIDIObjectRef))
     }
     
-    public var isPrivate: Bool {
-        MIDIKitIO.getIsPrivate(of: coreMIDIObjectRef)
+    public var isPrivate: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getIsPrivate(of: coreMIDIObjectRef))
     }
     
     // MARK: Drivers
     
-    public var driverOwner: String? {
-        try? MIDIKitIO.getDriverOwner(of: coreMIDIObjectRef)
+    public var driverOwner: MIDIIOObjectProperty.Value<String> {
+        wrapValue(try MIDIKitIO.getDriverOwner(of: coreMIDIObjectRef))
     }
     
-    public var driverVersion: Int32 {
-        MIDIKitIO.getDriverVersion(of: coreMIDIObjectRef)
+    public var driverVersion: MIDIIOObjectProperty.Value<Int32> {
+        wrapValue(try MIDIKitIO.getDriverVersion(of: coreMIDIObjectRef))
     }
     
     // MARK: Connections
     
-    public var canRoute: Bool {
-        MIDIKitIO.getCanRoute(of: coreMIDIObjectRef)
+    public var canRoute: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getCanRoute(of: coreMIDIObjectRef))
     }
     
-    public var isBroadcast: Bool {
-        MIDIKitIO.getIsBroadcast(of: coreMIDIObjectRef)
+    public var isBroadcast: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getIsBroadcast(of: coreMIDIObjectRef))
     }
     
-    public var connectionUniqueID: MIDIIdentifier {
-        MIDIKitIO.getConnectionUniqueID(of: coreMIDIObjectRef)
+    public var connectionUniqueID: MIDIIOObjectProperty.Value<MIDIIdentifier> {
+        wrapValue(try MIDIKitIO.getConnectionUniqueID(of: coreMIDIObjectRef))
     }
     
-    public var isEmbeddedEntity: Bool {
-        MIDIKitIO.getIsEmbeddedEntity(of: coreMIDIObjectRef)
+    public var isEmbeddedEntity: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getIsEmbeddedEntity(of: coreMIDIObjectRef))
     }
     
-    public var singleRealtimeEntity: Int32 {
-        MIDIKitIO.getSingleRealtimeEntity(of: coreMIDIObjectRef)
+    public var singleRealtimeEntity: MIDIIOObjectProperty.Value<Int32> {
+        wrapValue(try MIDIKitIO.getSingleRealtimeEntity(of: coreMIDIObjectRef))
     }
     
     // MARK: Channels
     
-    public var receiveChannels: Int32 {
-        MIDIKitIO.getReceiveChannels(of: coreMIDIObjectRef)
+    public var receiveChannels: MIDIIOObjectProperty.Value<Int32> {
+        wrapValue(try MIDIKitIO.getReceiveChannels(of: coreMIDIObjectRef))
     }
     
-    public var transmitChannels: Int32 {
-        MIDIKitIO.getTransmitChannels(of: coreMIDIObjectRef)
+    public var transmitChannels: MIDIIOObjectProperty.Value<Int32> {
+        wrapValue(try MIDIKitIO.getTransmitChannels(of: coreMIDIObjectRef))
     }
     
-    public var maxReceiveChannels: Int32 {
-        MIDIKitIO.getMaxReceiveChannels(of: coreMIDIObjectRef)
+    public var maxReceiveChannels: MIDIIOObjectProperty.Value<Int32> {
+        wrapValue(try MIDIKitIO.getMaxReceiveChannels(of: coreMIDIObjectRef))
     }
     
-    public var maxTransmitChannels: Int32 {
-        MIDIKitIO.getMaxTransmitChannels(of: coreMIDIObjectRef)
+    public var maxTransmitChannels: MIDIIOObjectProperty.Value<Int32> {
+        wrapValue(try MIDIKitIO.getMaxTransmitChannels(of: coreMIDIObjectRef))
     }
     
     // MARK: Banks
     
-    public var receivesBankSelectLSB: Bool {
-        MIDIKitIO.getReceivesBankSelectLSB(of: coreMIDIObjectRef)
+    public var receivesBankSelectLSB: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getReceivesBankSelectLSB(of: coreMIDIObjectRef))
     }
     
-    public var receivesBankSelectMSB: Bool {
-        MIDIKitIO.getReceivesBankSelectMSB(of: coreMIDIObjectRef)
+    public var receivesBankSelectMSB: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getReceivesBankSelectMSB(of: coreMIDIObjectRef))
     }
     
-    public var transmitsBankSelectLSB: Bool {
-        MIDIKitIO.getTransmitsBankSelectLSB(of: coreMIDIObjectRef)
+    public var transmitsBankSelectLSB: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getTransmitsBankSelectLSB(of: coreMIDIObjectRef))
     }
     
-    public var transmitsBankSelectMSB: Bool {
-        MIDIKitIO.getTransmitsBankSelectMSB(of: coreMIDIObjectRef)
+    public var transmitsBankSelectMSB: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getTransmitsBankSelectMSB(of: coreMIDIObjectRef))
     }
     
     // MARK: Notes
     
-    public var receivesNotes: Bool {
-        MIDIKitIO.getReceivesNotes(of: coreMIDIObjectRef)
+    public var receivesNotes: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getReceivesNotes(of: coreMIDIObjectRef))
     }
     
-    public var transmitsNotes: Bool {
-        MIDIKitIO.getTransmitsNotes(of: coreMIDIObjectRef)
+    public var transmitsNotes: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getTransmitsNotes(of: coreMIDIObjectRef))
     }
     
     // MARK: Program Changes
     
-    public var receivesProgramChanges: Bool {
-        MIDIKitIO.getReceivesProgramChanges(of: coreMIDIObjectRef)
+    public var receivesProgramChanges: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getReceivesProgramChanges(of: coreMIDIObjectRef))
     }
     
-    public var transmitsProgramChanges: Bool {
-        MIDIKitIO.getTransmitsProgramChanges(of: coreMIDIObjectRef)
+    public var transmitsProgramChanges: MIDIIOObjectProperty.Value<Bool> {
+        wrapValue(try MIDIKitIO.getTransmitsProgramChanges(of: coreMIDIObjectRef))
+    }
+}
+
+// MARK: - Helpers
+
+func wrapValue<T>(_ block: @autoclosure () throws(MIDIIOError) -> T?) -> MIDIIOObjectProperty.Value<T> {
+    do {
+        guard let value = try block() else {
+            // interpret nil as property not being set
+            return .notSet
+        }
+        return .value(value)
+    } catch {
+        switch error {
+        case .osStatus(.unknownProperty): return .notSet
+        default: return .error(error)
+        }
     }
 }
 
