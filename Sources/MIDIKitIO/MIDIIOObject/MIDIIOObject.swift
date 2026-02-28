@@ -484,7 +484,7 @@ public protocol MIDIIOObject: Sendable {
     /// - Returns: Ordered array of key/value pair tuples.
     func propertyStringValues(
         relevantOnly: Bool,
-        defaultValue: (_ property: AnyMIDIIOObject.Property, _ error: MIDIIOError?) -> String?
+        defaultValue: (_ property: MIDIIOObjectProperty, _ error: MIDIIOError?) -> String?
     ) -> [(key: String, value: String)]
     
     /// Get a property value formatted as a human-readable string.
@@ -493,7 +493,7 @@ public protocol MIDIIOObject: Sendable {
     ///
     /// - Throws: ``MIDIIOError``
     func propertyStringValue(
-        for property: AnyMIDIIOObject.Property
+        for property: MIDIIOObjectProperty
     ) throws -> String
 }
 

@@ -28,8 +28,8 @@ extension MIDIIOObjectType: Sendable { }
 
 extension MIDIIOObjectType {
     /// Internal: returns relevant `MIDIIOObject.Property`s associated with the object type.
-    var relevantProperties: [AnyMIDIIOObject.Property] {
-        AnyMIDIIOObject.Property.allCases.filter {
+    var relevantProperties: [MIDIIOObjectProperty] {
+        MIDIIOObjectProperty.allCases.filter {
             $0.relevantObjects.contains(self)
         }
     }

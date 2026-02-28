@@ -13,12 +13,12 @@ extension MIDIIOObject {
     // inline docs provided by the MIDIIOObject protocol
     public func propertyStringValues(
         relevantOnly: Bool = true,
-        defaultValue: (_ property: AnyMIDIIOObject.Property, _ error: MIDIIOError?) -> String? = { _, _ in "-" }
+        defaultValue: (_ property: MIDIIOObjectProperty, _ error: MIDIIOError?) -> String? = { _, _ in "-" }
     ) -> [(key: String, value: String)] {
         (
             relevantOnly
                 ? objectType.relevantProperties
-                : AnyMIDIIOObject.Property.allCases
+                : MIDIIOObjectProperty.allCases
         )
         .compactMap {
             let value: String
@@ -35,7 +35,7 @@ extension MIDIIOObject {
     }
     
     // inline docs provided by the MIDIIOObject protocol
-    public func propertyStringValue(for property: AnyMIDIIOObject.Property) throws -> String {
+    public func propertyStringValue(for property: MIDIIOObjectProperty) throws -> String {
         switch property {
         // MARK: Identification
         case .name: // override cache

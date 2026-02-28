@@ -1,5 +1,5 @@
 //
-//  AnyMIDIIOObject Property.swift
+//  MIDIIOObjectProperty Property.swift
 //  MIDIKit • https://github.com/orchetect/MIDIKit
 //  © 2021-2025 Steffan Andrews • Licensed under MIT License
 //
@@ -11,97 +11,95 @@ internal import CoreMIDI
 
 // MARK: - Property
 
-extension AnyMIDIIOObject {
-    /// MIDI object property keys, analogous to Core MIDI property keys.
-    public enum Property {
-        // MARK: Identification
-        case name
-        case model
-        case manufacturer
-        case uniqueID
-        case deviceID
+/// MIDI object property keys, analogous to Core MIDI property keys.
+public enum MIDIIOObjectProperty {
+    // MARK: Identification
+    case name
+    case model
+    case manufacturer
+    case uniqueID
+    case deviceID
     
-        // MARK: Capabilities
-        case supportsMMC
-        case supportsGeneralMIDI
-        case supportsShowControl
+    // MARK: Capabilities
+    case supportsMMC
+    case supportsGeneralMIDI
+    case supportsShowControl
     
-        // MARK: Configuration
-        case nameConfigurationDictionary
-        case maxSysExSpeed
-        case driverDeviceEditorApp
+    // MARK: Configuration
+    case nameConfigurationDictionary
+    case maxSysExSpeed
+    case driverDeviceEditorApp
     
-        // MARK: Presentation
-        case image
-        case displayName
+    // MARK: Presentation
+    case image
+    case displayName
     
-        // MARK: Audio
-        case panDisruptsStereo
+    // MARK: Audio
+    case panDisruptsStereo
     
-        // MARK: Protocols
-        case protocolID
+    // MARK: Protocols
+    case protocolID
     
-        // MARK: Timing
-        case transmitsMTC
-        case receivesMTC
-        case transmitsClock
-        case receivesClock
-        case advanceScheduleTimeMuSec
+    // MARK: Timing
+    case transmitsMTC
+    case receivesMTC
+    case transmitsClock
+    case receivesClock
+    case advanceScheduleTimeMuSec
     
-        // MARK: Roles
-        case isMixer
-        case isSampler
-        case isEffectUnit
-        case isDrumMachine
+    // MARK: Roles
+    case isMixer
+    case isSampler
+    case isEffectUnit
+    case isDrumMachine
     
-        // MARK: Status
-        case isOffline
-        case isPrivate
+    // MARK: Status
+    case isOffline
+    case isPrivate
     
-        // MARK: Drivers
-        case driverOwner
-        case driverVersion
+    // MARK: Drivers
+    case driverOwner
+    case driverVersion
     
-        // MARK: Connections
-        case canRoute
-        case isBroadcast
-        case connectionUniqueID
-        case isEmbeddedEntity
-        case singleRealtimeEntity
+    // MARK: Connections
+    case canRoute
+    case isBroadcast
+    case connectionUniqueID
+    case isEmbeddedEntity
+    case singleRealtimeEntity
     
-        // MARK: Channels
-        case receiveChannels
-        case transmitChannels
-        case maxReceiveChannels
-        case maxTransmitChannels
+    // MARK: Channels
+    case receiveChannels
+    case transmitChannels
+    case maxReceiveChannels
+    case maxTransmitChannels
     
-        // MARK: Banks
-        case receivesBankSelectLSB
-        case receivesBankSelectMSB
-        case transmitsBankSelectLSB
-        case transmitsBankSelectMSB
+    // MARK: Banks
+    case receivesBankSelectLSB
+    case receivesBankSelectMSB
+    case transmitsBankSelectLSB
+    case transmitsBankSelectMSB
     
-        // MARK: Notes
-        case receivesNotes
-        case transmitsNotes
+    // MARK: Notes
+    case receivesNotes
+    case transmitsNotes
     
-        // MARK: Program Changes
-        case receivesProgramChanges
-        case transmitsProgramChanges
-    }
+    // MARK: Program Changes
+    case receivesProgramChanges
+    case transmitsProgramChanges
 }
 
-extension AnyMIDIIOObject.Property: Equatable { }
+extension MIDIIOObjectProperty: Equatable { }
 
-extension AnyMIDIIOObject.Property: Hashable { }
+extension MIDIIOObjectProperty: Hashable { }
 
-extension AnyMIDIIOObject.Property: CaseIterable { }
+extension MIDIIOObjectProperty: CaseIterable { }
 
-extension AnyMIDIIOObject.Property: Sendable { }
+extension MIDIIOObjectProperty: Sendable { }
 
 // MARK: - Name
 
-extension AnyMIDIIOObject.Property {
+extension MIDIIOObjectProperty {
     /// Returns the human-readable name of the property, suitable for display in UI or debugging.
     public var name: String {
         switch self {
@@ -260,7 +258,7 @@ extension AnyMIDIIOObject.Property {
 
 // MARK: - Property Keys
 
-extension AnyMIDIIOObject.Property {
+extension MIDIIOObjectProperty {
     /// Returns the Core MIDI `CFString` property name constant.
     public var coreMIDICFString: CFString {
         switch self {
@@ -424,7 +422,7 @@ extension AnyMIDIIOObject.Property {
 
 // MARK: - Relevant Objects
 
-extension AnyMIDIIOObject.Property {
+extension MIDIIOObjectProperty {
     /// Internal: returns relevant `MIDIIOObjectType` object types associated with the property.
     var relevantObjects: Set<MIDIIOObjectType> {
         switch self {

@@ -31,7 +31,7 @@ public enum MIDIIONotification {
     
     /// An object’s property value changed.
     case propertyChanged(
-        property: AnyMIDIIOObject.Property,
+        property: MIDIIOObjectProperty,
         forObject: AnyMIDIIOObject
     )
     
@@ -120,7 +120,7 @@ extension MIDIIONotification {
                 coreMIDIObjectRef: forRef,
                 coreMIDIObjectType: forRefType
             ),
-                let property = AnyMIDIIOObject.Property(propertyName as CFString)
+                let property = MIDIIOObjectProperty(propertyName as CFString)
             else { return nil }
     
             self = .propertyChanged(property: property, forObject: obj)
