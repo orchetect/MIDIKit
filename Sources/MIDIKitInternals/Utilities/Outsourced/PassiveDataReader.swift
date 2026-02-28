@@ -56,7 +56,7 @@ package struct PassiveDataReader<D: DataProtocol> {
     
     /// Return the next byte and increment the read offset.
     ///
-    /// If no bytes remain, `nil` will be returned.
+    /// If no bytes remain, an error will be thrown.
     package mutating func readByte() throws -> D.Element {
         let d = try dataByte()
         defer { readOffset += 1 }
@@ -64,7 +64,7 @@ package struct PassiveDataReader<D: DataProtocol> {
     }
     
     /// Read the next byte without advancing the read offset.
-    /// If no bytes remain, `nil` will be returned.
+    /// If no bytes remain, an error will be thrown.
     package func nonAdvancingReadByte() throws -> D.Element {
         try dataByte()
     }
@@ -73,7 +73,7 @@ package struct PassiveDataReader<D: DataProtocol> {
     ///
     /// If `bytes` parameter is nil, the remainder of the data will be returned.
     ///
-    /// If fewer bytes remain than are requested, `nil` will be returned.
+    /// If fewer bytes remain than are requested, an error will be thrown.
     package mutating func read(bytes count: Int? = nil) throws -> D.SubSequence {
         let d = try data(bytes: count)
         defer { readOffset += d.advanceCount }
@@ -82,7 +82,7 @@ package struct PassiveDataReader<D: DataProtocol> {
     
     /// Read _n_ number of bytes from the current read offset, without advancing the read offset.
     /// If `bytes count` passed is `nil`, the remainder of the data will be returned.
-    /// If fewer bytes remain than are requested, `nil` will be returned.
+    /// If fewer bytes remain than are requested, an error will be thrown.
     package func nonAdvancingRead(bytes count: Int? = nil) throws -> D.SubSequence {
         try data(bytes: count).data
     }
