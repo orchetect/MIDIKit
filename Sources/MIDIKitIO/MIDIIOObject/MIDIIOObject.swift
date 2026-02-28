@@ -61,9 +61,7 @@ public protocol MIDIIOObject: Sendable {
     /// - MIDI drivers should set this property on their devices.
     /// - Studio setup editors may allow the user to set this property on external devices.
     /// - Creators of virtual endpoints may set this property on their endpoints.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var model: String { get throws }
+    var model: MIDIIOObjectProperty.Value<String> { get }
     
     /// Manufacturer name.
     /// (`kMIDIPropertyManufacturer`)
@@ -72,9 +70,7 @@ public protocol MIDIIOObject: Sendable {
     /// - MIDI drivers set this property on their devices.
     /// - Studio setup editors may allow the user to set this property on external devices.
     /// - Creators of virtual endpoints may set this property on their endpoints.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var manufacturer: String { get throws }
+    var manufacturer: MIDIIOObjectProperty.Value<String> { get }
     
     /// The unique ID for the Core MIDI object.
     /// (`kMIDIPropertyUniqueID`)
@@ -88,32 +84,24 @@ public protocol MIDIIOObject: Sendable {
     ///
     /// MIDI drivers can set this property on their devices or entities. Studio setup editors can
     /// allow the user to set this property on external devices.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var deviceManufacturerID: Int32 { get throws }
+    var deviceManufacturerID: MIDIIOObjectProperty.Value<Int32> { get }
     
     // MARK: Capabilities
     
     /// Boolean value that indicates whether the device or entity implements the MIDI Machine
     /// Control portion of the MIDI specification.
     /// (`kMIDIPropertySupportsMMC`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var supportsMMC: Bool { get throws }
+    var supportsMMC: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity implements the General MIDI
     /// specification.
     /// (`kMIDIPropertySupportsGeneralMIDI`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var supportsGeneralMIDI: Bool { get throws }
+    var supportsGeneralMIDI: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device implements the MIDI Show Control
     /// specification.
     /// (`kMIDIPropertySupportsShowControl`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var supportsShowControl: Bool { get throws }
+    var supportsShowControl: MIDIIOObjectProperty.Value<Bool> { get }
     
     // MARK: Configuration
     
@@ -122,27 +110,21 @@ public protocol MIDIIOObject: Sendable {
     /// (`kMIDIPropertyNameConfigurationDictionary`)
     ///
     /// - Requires: macOS 10.15, macCatalyst 13.0, iOS 13.0
-    ///
-    /// - Throws: ``MIDIIOError``
     @available(macOS 10.15, macCatalyst 13.0, iOS 13.0, *)
-    var nameConfigurationDictionary: NSDictionary { get throws }
+    var nameConfigurationDictionary: MIDIIOObjectProperty.Value<NSDictionary> { get }
     
     /// The maximum rate, in bytes per second, at which the system may reliably send System
     /// Exclusive (SysEx) messages to this object.
     /// (`kMIDIPropertyMaxSysExSpeed`)
     ///
     /// The owning driver may set an integer value for this property.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var maxSysExSpeed: Int32 { get throws }
+    var maxSysExSpeed: MIDIIOObjectProperty.Value<Int32> { get }
     
     /// Get the full path to an app on the system that configures driver-owned devices.
     /// (`kMIDIPropertyDriverDeviceEditorApp`)
     ///
     /// Only drivers may set this property on their owned devices.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var driverDeviceEditorApp: URL { get throws }
+    var driverDeviceEditorApp: MIDIIOObjectProperty.Value<URL> { get }
     
     // MARK: Presentation
     
@@ -153,33 +135,25 @@ public protocol MIDIIOObject: Sendable {
     /// The maximum size for this image is 128 by 128 pixels.
     ///
     /// A studio setup editor should allow the user to choose icons for external devices.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var imageFileURL: URL { get throws }
+    var imageFileURL: MIDIIOObjectProperty.Value<URL> { get }
     
     #if canImport(SwiftUI)
     /// Calls ``MIDIIOObject/imageFileURL-6ltjy`` and attempts to initialize a new `Image`.
     /// (`kMIDIPropertyImage`)
-    ///
-    /// - Throws: ``MIDIIOError``
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
-    var image: Image? { get throws }
+    var image: MIDIIOObjectProperty.Value<Image> { get }
     #endif
     
     #if canImport(AppKit) && os(macOS)
     /// Calls ``MIDIIOObject/imageFileURL-6ltjy`` and attempts to initialize a new `NSImage`.
     /// (`kMIDIPropertyImage`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var imageAsNSImage: NSImage? { get throws }
+    var imageAsNSImage: MIDIIOObjectProperty.Value<NSImage> { get }
     #endif
     
     #if canImport(UIKit)
     /// Calls ``MIDIIOObject/imageFileURL-6ltjy`` and attempts to initialize a new `UIImage`.
     /// (`kMIDIPropertyImage`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var imageAsUIImage: UIImage? { get throws }
+    var imageAsUIImage: MIDIIOObjectProperty.Value<UIImage> { get }
     #endif
     
     /// The user-visible name for an endpoint that combines the device and endpoint names.
@@ -188,8 +162,6 @@ public protocol MIDIIOObject: Sendable {
     ///
     /// For objects other than endpoints, the display name is the same as its `kMIDIPropertyName`
     /// value.
-    ///
-    /// - Throws: ``MIDIIOError``
     var displayName: String { get } // cached by the concrete object
     
     // MARK: Audio
@@ -197,9 +169,7 @@ public protocol MIDIIOObject: Sendable {
     /// Boolean value that indicates whether the MIDI pan messages sent to the device or
     /// entity cause undesirable effects when playing stereo sounds.
     /// (`kMIDIPropertyPanDisruptsStereo`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var panDisruptsStereo: Bool { get throws }
+    var panDisruptsStereo: MIDIIOObjectProperty.Value<Bool> { get }
     
     // MARK: Protocol
     
@@ -212,40 +182,30 @@ public protocol MIDIIOObject: Sendable {
     /// Clients can observe changes to this property.
     ///
     /// - Requires: macOS 11.0, macCatalyst 14.0, iOS 14.0
-    ///
-    /// - Throws: ``MIDIIOError``
     @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-    var protocolID: MIDIProtocolVersion? { get throws }
+    var protocolID: MIDIIOObjectProperty.Value<MIDIProtocolVersion> { get }
     
     // MARK: Timing
     
     /// Boolean value that indicates whether the device or entity transmits MIDI Time Code
     /// messages.
     /// (`kMIDIPropertyTransmitsMTC`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var transmitsMTC: Bool { get throws }
+    var transmitsMTC: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity responds to MIDI Time Code
     /// messages.
     /// (`kMIDIPropertyReceivesMTC`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var receivesMTC: Bool { get throws }
+    var receivesMTC: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity transmits MIDI beat clock
     /// messages.
     /// (`kMIDIPropertyTransmitsClock`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var transmitsClock: Bool { get throws }
+    var transmitsClock: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity responds to MIDI beat clock
     /// messages.
     /// (`kMIDIPropertyReceivesClock`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var receivesClock: Bool { get throws }
+    var receivesClock: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Recommended number of microseconds in advance that clients should schedule output.
     /// (`kMIDIPropertyAdvanceScheduleTimeMuSec`)
@@ -262,37 +222,29 @@ public protocol MIDIIOObject: Sendable {
     /// receives the messages at the scheduled delivery time. If a virtual destination has a nonzero
     /// advance schedule time, it receives timestamped messages as soon as they’re sent, and must do
     /// its own internal scheduling of events it receives.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var advanceScheduleTimeMuSec: String { get throws }
+    var advanceScheduleTimeMuSec: MIDIIOObjectProperty.Value<String> { get }
     
     // MARK: Roles
     
     /// Boolean value that indicates whether the device or entity mixes external audio
     /// signals.
     /// (`kMIDIPropertyIsMixer`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var isMixer: Bool { get throws }
+    var isMixer: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity plays audio samples in
     /// response to MIDI note messages.
     /// (`kMIDIPropertyIsSampler`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var isSampler: Bool { get throws }
+    var isSampler: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity primarily acts as a
     /// MIDI-controlled audio effect.
     /// (`kMIDIPropertyIsEffectUnit`)
-    var isEffectUnit: Bool { get throws }
+    var isEffectUnit: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity’s samples aren’t
     /// transposable, as with a drum kit.
     /// (`kMIDIPropertyIsDrumMachine`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var isDrumMachine: Bool { get throws }
+    var isDrumMachine: MIDIIOObjectProperty.Value<Bool> { get }
     
     // MARK: Status
     
@@ -301,18 +253,14 @@ public protocol MIDIIOObject: Sendable {
     ///
     /// - `true` indicates the device is temporarily absent and offline.
     /// - `false` indicates the object is present.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var isOffline: Bool { get throws }
+    var isOffline: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the system hides an endpoint from other clients.
     /// (`kMIDIPropertyPrivate`)
     ///
     /// You can set this property on a device or entity, but it still appears in the API; the system
     /// only hides the object’s owned endpoints.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var isPrivate: Bool { get throws }
+    var isPrivate: MIDIIOObjectProperty.Value<Bool> { get }
     
     // MARK: Drivers
     
@@ -321,15 +269,11 @@ public protocol MIDIIOObject: Sendable {
     ///
     /// Set by the owning driver, on the device; should not be touched by other clients. Property is
     /// inherited by entities and endpoints from their owning device.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var driverOwner: String { get throws }
+    var driverOwner: MIDIIOObjectProperty.Value<String> { get }
     
     /// Version of the driver that owns a device, entity, or endpoint.
     /// (`kMIDIPropertyDriverVersion`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var driverVersion: Int32 { get throws }
+    var driverVersion: MIDIIOObjectProperty.Value<Int32> { get }
     
     // MARK: Connections
     
@@ -338,18 +282,14 @@ public protocol MIDIIOObject: Sendable {
     /// (`kMIDIPropertyCanRoute`)
     ///
     /// Don’t set this property value on driver-owned devices.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var canRoute: Bool { get throws }
+    var canRoute: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the endpoint broadcasts messages to all of the
     /// other endpoints in the device.
     /// (`kMIDIPropertyIsBroadcast`)
     ///
     /// Only the owning driver may set this property.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var isBroadcast: Bool { get throws }
+    var isBroadcast: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Unique identifier of an external device attached to this connection.
     /// (`kMIDIPropertyConnectionUniqueID`)
@@ -358,23 +298,17 @@ public protocol MIDIIOObject: Sendable {
     /// external objects, pass the array of big-endian SInt32 values as a CFData object.
     ///
     /// The property is nonexistent or 0 if there’s no connection.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var connectionUniqueID: MIDIIdentifier { get throws }
+    var connectionUniqueID: MIDIIOObjectProperty.Value<MIDIIdentifier> { get }
     
     /// Boolean value that indicates whether this entity or endpoint has external MIDI
     /// connections.
     /// (`kMIDIPropertyIsEmbeddedEntity`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var isEmbeddedEntity: Bool { get throws }
+    var isEmbeddedEntity: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// 0-based index of the entity on which incoming real-time messages from the device
     /// appear to have originated.
     /// (`kMIDIPropertySingleRealtimeEntity`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var singleRealtimeEntity: Int32 { get throws }
+    var singleRealtimeEntity: MIDIIOObjectProperty.Value<Int32> { get }
     
     // MARK: Channels
     
@@ -385,90 +319,66 @@ public protocol MIDIIOObject: Sendable {
     /// - Drivers can set this property on their entities and endpoints.
     /// - Studio setup editors can allow the user to set this property on external endpoints.
     /// - Virtual destinations can set this property on their endpoints.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var receiveChannels: Int32 { get throws }
+    var receiveChannels: MIDIIOObjectProperty.Value<Int32> { get }
     
     /// Bitmap of channels on which the object transmits messages.
     /// (`kMIDIPropertyTransmitChannels`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var transmitChannels: Int32 { get throws }
+    var transmitChannels: MIDIIOObjectProperty.Value<Int32> { get }
     
     /// Bitmap of channels on which the object transmits messages.
     /// (`kMIDIPropertyMaxReceiveChannels`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var maxReceiveChannels: Int32 { get throws }
+    var maxReceiveChannels: MIDIIOObjectProperty.Value<Int32> { get }
     
     /// Maximum number of MIDI channels on which a device may simultaneously transmit
     /// channel messages.
     /// (`kMIDIPropertyMaxTransmitChannels`)
     ///
     /// Common values are 0, 1, or 16.
-    ///
-    /// - Throws: ``MIDIIOError``
-    var maxTransmitChannels: Int32 { get throws }
+    var maxTransmitChannels: MIDIIOObjectProperty.Value<Int32> { get }
     
     // MARK: Banks
     
     /// Boolean value that indicates whether the device or entity responds to MIDI bank select
     /// LSB messages.
     /// (`kMIDIPropertyReceivesBankSelectLSB`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var receivesBankSelectLSB: Bool { get throws }
+    var receivesBankSelectLSB: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity responds to MIDI bank select
     /// MSB messages.
     /// (`kMIDIPropertyReceivesBankSelectMSB`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var receivesBankSelectMSB: Bool { get throws }
+    var receivesBankSelectMSB: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity transmits MIDI bank select
     /// LSB messages.
     /// (`kMIDIPropertyTransmitsBankSelectLSB`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var transmitsBankSelectLSB: Bool { get throws }
+    var transmitsBankSelectLSB: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity transmits MIDI bank select
     /// MSB messages.
     /// (`kMIDIPropertyTransmitsBankSelectMSB`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var transmitsBankSelectMSB: Bool { get throws }
+    var transmitsBankSelectMSB: MIDIIOObjectProperty.Value<Bool> { get }
     
     // MARK: Notes
     
     /// Boolean value that indicates whether the device or entity responds to MIDI Note On
     /// messages.
     /// (`kMIDIPropertyReceivesNotes`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var receivesNotes: Bool { get throws }
+    var receivesNotes: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity transmits MIDI note
     /// messages.
     /// (`kMIDIPropertyTransmitsNotes`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var transmitsNotes: Bool { get throws }
+    var transmitsNotes: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity responds to MIDI Program
     /// Change messages.
     /// (`kMIDIPropertyReceivesProgramChanges`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var receivesProgramChanges: Bool { get throws }
+    var receivesProgramChanges: MIDIIOObjectProperty.Value<Bool> { get }
     
     /// Boolean value that indicates whether the device or entity transmits MIDI Program
     /// Change messages.
     /// (`kMIDIPropertyTransmitsProgramChanges`)
-    ///
-    /// - Throws: ``MIDIIOError``
-    var transmitsProgramChanges: Bool { get throws }
+    var transmitsProgramChanges: MIDIIOObjectProperty.Value<Bool> { get }
     
     // MARK: - MIDIIOObject Properties Dictionary.swift
     
@@ -490,11 +400,9 @@ public protocol MIDIIOObject: Sendable {
     /// Get a property value formatted as a human-readable string.
     /// Useful for displaying in a user interface or outputting to console for debugging.
     /// Not recommended for production code. Instead, use strongly-typed properties on this object.
-    ///
-    /// - Throws: ``MIDIIOError``
     func propertyStringValue(
         for property: MIDIIOObjectProperty
-    ) throws -> String
+    ) -> MIDIIOObjectProperty.Value<String>
 }
 
 #endif

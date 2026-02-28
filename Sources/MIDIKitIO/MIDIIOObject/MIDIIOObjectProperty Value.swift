@@ -44,6 +44,36 @@ extension MIDIIOObjectProperty.Value {
             nil
         }
     }
+    
+    /// Converts the underlying value if it is present.
+    /// If self is `notSet` or `error`, the instance is returned unmodified since no value is present.
+    ///
+    /// > Note:
+    /// >
+    /// > In order to throw a new error from the conversion closure, still as of Swift 6.2 it is required to
+    /// > imperatively annotate the closure signature to indicate that it throws a typed error. For example:
+    /// >
+    /// > ```swift
+    /// > foo.convertValue { value throws(MIDIIOError) in
+    /// >     // ...
+    /// > }
+    /// > ```
+    public func convertValue<V>(_ block: (_ value: T) throws(MIDIIOError) -> V?) -> MIDIIOObjectProperty.Value<V> {
+        switch self {
+        case let .error(error):
+            return .error(error)
+        case .notSet:
+            return .notSet
+        case let .value(value):
+            do {
+                guard let newValue = try block(value) else { return .notSet }
+                return .value(newValue)
+            } catch {
+                // conversion generated an error
+                return .error(error)
+            }
+        }
+    }
 }
 
 #endif

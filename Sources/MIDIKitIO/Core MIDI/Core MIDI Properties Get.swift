@@ -311,9 +311,12 @@ func getPanDisruptsStereo(of ref: CoreMIDI.MIDIObjectRef) throws(MIDIIOError) ->
 ///
 /// - Throws: ``MIDIIOError``
 @available(macOS 11.0, macCatalyst 14.0, iOS 14.0, *)
-func getProtocolID(of ref: CoreMIDI.MIDIObjectRef) throws(MIDIIOError) -> CoreMIDI.MIDIProtocolID? {
+func getProtocolID(of ref: CoreMIDI.MIDIObjectRef) throws(MIDIIOError) -> CoreMIDI.MIDIProtocolID {
     let protocolIDValue = try getInteger(forProperty: kMIDIPropertyProtocolID, of: ref)
-    return CoreMIDI.MIDIProtocolID(rawValue: protocolIDValue)
+    guard let protocolID = CoreMIDI.MIDIProtocolID(rawValue: protocolIDValue) else {
+        throw .internalInconsistency("Unexpected MIDI protocol ID: \(protocolIDValue)")
+    }
+    return protocolID
 }
     
 // MARK: Timing

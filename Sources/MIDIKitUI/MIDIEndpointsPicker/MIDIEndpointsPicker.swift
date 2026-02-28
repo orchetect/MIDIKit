@@ -139,9 +139,9 @@ struct MIDIEndpointsPicker<Endpoint>: View, MIDIEndpointsSelectable
         @ViewBuilder
         private func image(resampled: Bool) -> some View {
             if let endpoint {
-                let img = try? resampled
-                    ? endpoint.image(resizedTo: .init(width: 16, height: 16))
-                    : endpoint.image
+                let img = resampled
+                    ? endpoint.image(resizedTo: .init(width: 16, height: 16)).value
+                    : endpoint.image.value
                 
                 if let img {
                     img
