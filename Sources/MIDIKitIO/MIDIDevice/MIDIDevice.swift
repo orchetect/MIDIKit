@@ -23,6 +23,8 @@ public struct MIDIDevice: MIDIIOObject {
     
     public internal(set) var name: String = ""
     
+    public internal(set) var displayName: String = ""
+    
     /// System-global Unique ID.
     /// (`kMIDIPropertyUniqueID`)
     public internal(set) var uniqueID: MIDIIdentifier = .invalidMIDIIdentifier
@@ -48,6 +50,10 @@ public struct MIDIDevice: MIDIIOObject {
     mutating func updateCachedProperties() {
         if let name = try? MIDIKitIO.getName(of: coreMIDIObjectRef) {
             self.name = name
+        }
+        
+        if let displayName = try? MIDIKitIO.getDisplayName(of: coreMIDIObjectRef) {
+            self.displayName = displayName
         }
     
         if let uniqueID = try? MIDIKitIO.getUniqueID(of: coreMIDIObjectRef),
