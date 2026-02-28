@@ -169,7 +169,7 @@
 			);
 			mainGroup = E26A25A326C586F600FFCF40;
 			packageReferences = (
-				E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */,
+				E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../" */,
 				E28B23262ED685B50089C0E7 /* XCRemoteSwiftPackageReference "swift-radix" */,
 			);
 			productRefGroup = E26A25AD26C586F600FFCF40 /* Products */;
@@ -432,9 +432,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */ = {
+		E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../../MIDIKit;
+			relativePath = ../../../;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -452,17 +452,17 @@
 /* Begin XCSwiftPackageProductDependency section */
 		E20237F72CC4592100661322 /* MIDIKitCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			package = E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../" */;
 			productName = MIDIKitCore;
 		};
 		E20237F92CC4592100661322 /* MIDIKitIO */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			package = E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../" */;
 			productName = MIDIKitIO;
 		};
 		E20237FB2CC4592100661322 /* MIDIKitUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../../MIDIKit" */;
+			package = E20237EE2CC4545100661322 /* XCLocalSwiftPackageReference "../../../" */;
 			productName = MIDIKitUI;
 		};
 		E28B23272ED685B50089C0E7 /* SwiftRadix */ = {
