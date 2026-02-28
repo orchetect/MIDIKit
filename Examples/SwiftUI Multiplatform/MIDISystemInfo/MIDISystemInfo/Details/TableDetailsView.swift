@@ -55,17 +55,37 @@ struct TableDetailsView: View, DetailsContent {
                 TableColumn("Property") { property in
                     HStack {
                         Text(property.key)
+                        
                         Spacer()
+                        
+                        if let status = property.status {
+                            status.view
+                        }
+                        
                         Text(property.value)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(property.color)
                     }
                 }
             }
         } else {
             Table(properties, selection: $selection) {
                 TableColumn("Property", value: \.key)
+                #if os(macOS)
+                    .width(min: 180, ideal: 200, max: 280)
+                #elseif os(iOS)
                     .width(min: 50, ideal: 120, max: 250)
-                TableColumn("Value", value: \.value)
+                #endif
+                
+                TableColumn("Value") { property in
+                    HStack {
+                        if let status = property.status {
+                            status.view
+                        }
+                        
+                        Text(property.value)
+                            .foregroundColor(property.color)
+                    }
+                }
             }
         }
     }

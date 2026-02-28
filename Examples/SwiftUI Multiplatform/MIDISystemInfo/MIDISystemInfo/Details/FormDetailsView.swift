@@ -60,7 +60,15 @@ struct FormDetailsView: View, DetailsContent {
         var property: Property
         
         var body: some View {
-            LabeledContent(property.key, value: property.value)
+            LabeledContent(property.key) {
+                HStack {
+                    if let status = property.status {
+                        status.view
+                    }
+                    Text(property.value)
+                        .foregroundColor(property.color)
+                }
+            }
         }
     }
 }

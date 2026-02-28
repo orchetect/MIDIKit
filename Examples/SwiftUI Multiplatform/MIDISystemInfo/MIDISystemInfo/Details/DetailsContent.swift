@@ -19,7 +19,8 @@ protocol DetailsContent where Self: View {
 
 extension DetailsContent {
     func refreshProperties() {
-        let errorPrefix = "⚠️ "
+        let errorPrefix = "##ERROR##"
+        let notSetPrefix = "##NOTSET##"
         
         properties = object.propertyStringValues(relevantOnly: false) { property, error in
             return if let error {
@@ -28,14 +29,24 @@ extension DetailsContent {
                 // If error is nil, it means property is not set.
                 isOnlySetPropertiesShown 
                     ? nil
-                    : "\(errorPrefix)Property not set."
+                    : "\(notSetPrefix)Property not set."
             }
         }
         .map {
             var value = $0.value
-            let isError = $0.value.starts(with: errorPrefix)
-            if isError { value = String(value.dropFirst(errorPrefix.count))}
-            return Property(key: $0.key, value: $0.value, isError: isError)
+            
+            let status: Property.Status?
+            if $0.value.starts(with: errorPrefix) {
+                status = .error
+                value = String(value.dropFirst(errorPrefix.count))
+            } else if $0.value.starts(with: notSetPrefix) {
+                status = .notSet
+                value = String(value.dropFirst(notSetPrefix.count))
+            } else {
+                status = nil
+            }
+            
+            return Property(key: $0.key, value: value, status: status)
         }
     }
     
