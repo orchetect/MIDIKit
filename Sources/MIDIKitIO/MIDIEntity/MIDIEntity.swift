@@ -18,8 +18,6 @@ public struct MIDIEntity: MIDIIOObject {
     
     public let objectType: MIDIIOObjectType = .entity
     
-    /// User-visible endpoint name.
-    /// (`kMIDIPropertyName`)
     public internal(set) var name: String = ""
     
     /// System-global Unique ID.
@@ -49,8 +47,9 @@ public struct MIDIEntity: MIDIIOObject {
             self.name = name
         }
     
-        let uniqueID = MIDIKitIO.getUniqueID(of: coreMIDIObjectRef)
-        if uniqueID != .invalidMIDIIdentifier {
+        if let uniqueID = try? MIDIKitIO.getUniqueID(of: coreMIDIObjectRef),
+           uniqueID != .invalidMIDIIdentifier
+        {
             self.uniqueID = uniqueID
         }
     }

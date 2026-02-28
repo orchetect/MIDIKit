@@ -125,7 +125,7 @@ struct MIDIEndpointsList<Endpoint>: View, MIDIEndpointsSelectable
         @ViewBuilder
         private var image: some View {
             if let endpoint {
-                if let img = endpoint.image {
+                if let img = try? endpoint.image {
                     img
                         .resizable()
                         .scaledToFit()
