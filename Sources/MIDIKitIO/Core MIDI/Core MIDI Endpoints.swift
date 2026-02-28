@@ -19,9 +19,10 @@ func getSystemSourceEndpoints() -> [MIDIOutputEndpoint] {
     endpoints.reserveCapacity(srcCount)
     
     for i in 0 ..< srcCount {
-        let endpoint = MIDIGetSource(i)
-    
-        endpoints.append(MIDIOutputEndpoint(from: endpoint))
+        let endpointRef = MIDIGetSource(i)
+        let endpoint = MIDIOutputEndpoint(from: endpointRef)
+        guard endpoint.uniqueID != .invalidMIDIIdentifier else { continue }
+        endpoints.append(endpoint)
     }
     
     return endpoints
@@ -38,9 +39,10 @@ func getSystemDestinationEndpoints() -> [MIDIInputEndpoint] {
     endpoints.reserveCapacity(destCount)
     
     for i in 0 ..< destCount {
-        let endpoint = MIDIGetDestination(i)
-    
-        endpoints.append(MIDIInputEndpoint(from: endpoint))
+        let endpointRef = MIDIGetDestination(i)
+        let endpoint = MIDIInputEndpoint(from: endpointRef)
+        guard endpoint.uniqueID != .invalidMIDIIdentifier else { continue }
+        endpoints.append(endpoint)
     }
     
     return endpoints
@@ -56,8 +58,9 @@ func getSystemSourceEndpoints(
     var refs: [MIDIEndpointRef] = []
     
     for i in 0 ..< MIDIGetNumberOfSources() {
-        let endpoint = MIDIGetSource(i)
-        if (try? getName(of: endpoint)) == name { refs.append(endpoint) }
+        let endpointRef = MIDIGetSource(i)
+        guard endpointRef != 0 else { continue }
+        if (try? getName(of: endpointRef)) == name { refs.append(endpointRef) }
     }
     
     return refs
@@ -72,8 +75,9 @@ func getSystemSourceEndpoint(
     matching uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIEndpointRef? {
     for i in 0 ..< MIDIGetNumberOfSources() {
-        let endpoint = MIDIGetSource(i)
-        if getUniqueID(of: endpoint) == uniqueID { return endpoint }
+        let endpointRef = MIDIGetSource(i)
+        guard endpointRef != 0 else { continue }
+        if getUniqueID(of: endpointRef) == uniqueID { return endpointRef }
     }
     
     return nil
@@ -89,8 +93,9 @@ func getSystemDestinationEndpoints(
     var refs: [MIDIEndpointRef] = []
     
     for i in 0 ..< MIDIGetNumberOfDestinations() {
-        let endpoint = MIDIGetDestination(i)
-        if (try? getName(of: endpoint)) == name { refs.append(endpoint) }
+        let endpointRef = MIDIGetDestination(i)
+        guard endpointRef != 0 else { continue }
+        if (try? getName(of: endpointRef)) == name { refs.append(endpointRef) }
     }
     
     return refs
@@ -105,8 +110,9 @@ func getSystemDestinationEndpoint(
     matching uniqueID: CoreMIDI.MIDIUniqueID
 ) -> CoreMIDI.MIDIEndpointRef? {
     for i in 0 ..< MIDIGetNumberOfDestinations() {
-        let endpoint = MIDIGetDestination(i)
-        if getUniqueID(of: endpoint) == uniqueID { return endpoint }
+        let endpointRef = MIDIGetDestination(i)
+        guard endpointRef != 0 else { continue }
+        if getUniqueID(of: endpointRef) == uniqueID { return endpointRef }
     }
     
     return nil

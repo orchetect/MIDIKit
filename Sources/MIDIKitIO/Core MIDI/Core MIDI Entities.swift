@@ -35,9 +35,10 @@ func getSystemSources(
     endpoints.reserveCapacity(srcCount)
     
     for i in 0 ..< srcCount {
-        let endpoint = MIDIEntityGetSource(entity, i)
-    
-        endpoints.append(MIDIOutputEndpoint(from: endpoint))
+        let endpointRef = MIDIEntityGetSource(entity, i)
+        let endpoint = MIDIOutputEndpoint(from: endpointRef)
+        guard endpoint.uniqueID != .invalidMIDIIdentifier else { continue }
+        endpoints.append(endpoint)
     }
     
     return endpoints
@@ -54,9 +55,10 @@ func getSystemDestinations(
     endpoints.reserveCapacity(srcCount)
     
     for i in 0 ..< srcCount {
-        let endpoint = MIDIEntityGetDestination(entity, i)
-    
-        endpoints.append(MIDIInputEndpoint(from: endpoint))
+        let endpointRef = MIDIEntityGetDestination(entity, i)
+        let endpoint = MIDIInputEndpoint(from: endpointRef)
+        guard endpoint.uniqueID != .invalidMIDIIdentifier else { continue }
+        endpoints.append(endpoint)
     }
     
     return endpoints
