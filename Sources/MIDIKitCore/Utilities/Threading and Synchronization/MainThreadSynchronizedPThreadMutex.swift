@@ -74,7 +74,7 @@ extension MainThreadSynchronizedPThreadMutex: Sendable where T: Sendable { }
 
 extension MainThreadSynchronizedPThreadMutex {
     @discardableResult
-    public func withReadLock<Result>(_ block: (T) throws -> Result) rethrows -> Result {
+    public func withReadLock<Result, E>(_ block: (T) throws(E) -> Result) rethrows -> Result {
         lock.readLock()
         defer { lock.unlock() }
         
@@ -86,7 +86,7 @@ extension MainThreadSynchronizedPThreadMutex {
     }
     
     @discardableResult @_disfavoredOverload
-    public func withWriteLock<Result>(_ block: (inout T) throws -> Result) rethrows -> Result {
+    public func withWriteLock<Result, E>(_ block: (inout T) throws(E) -> Result) rethrows -> Result {
         lock.writeLock()
         defer { lock.unlock() }
         
