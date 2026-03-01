@@ -2,7 +2,7 @@
 /// ----------------------------------------------
 /// OTCore/Abstractions/PassiveDataReader.swift
 ///
-/// Borrowed from OTCore 1.4.10 under MIT license.
+/// Borrowed from OTCore 2.0.0 under MIT license.
 /// https://github.com/orchetect/OTCore
 /// Methods herein are unit tested at their source
 /// so no unit tests are necessary.
@@ -16,11 +16,12 @@ import Foundation
 ///
 /// Usage:
 ///
-///     var data = Data( ... )
-///     var dr = PassiveDataReader { $0(&data) }
+/// ```swift
+/// var data = Data( ... )
+/// var dr = PassiveDataReader { $0(&data) }
 ///
-///     if let bytes = dr.read(bytes: 4) { ... }
-///
+/// if let bytes = dr.read(bytes: 4) { ... }
+/// ```
 package struct PassiveDataReader<D: DataProtocol> {
     package typealias DataAccess = (inout D) -> Void
     package typealias Closure = (_ block: DataAccess) -> Void
@@ -96,7 +97,7 @@ package struct PassiveDataReader<D: DataProtocol> {
     }
     
     func dataByte() throws(ReadError) -> D.Element {
-        guard remainingByteCount > 0 else { throw ReadError.pastEndOfStream }
+        guard remainingByteCount > 0 else { throw .pastEndOfStream }
         let readPosIndex = withData { $0.index($0.startIndex, offsetBy: readOffset) }
         return withData { $0[readPosIndex] }
     }
@@ -107,7 +108,7 @@ package struct PassiveDataReader<D: DataProtocol> {
         }
         
         if let count,
-           count < 0 { throw ReadError.invalidByteCount }
+           count < 0 { throw .invalidByteCount }
         
         let readPosStartIndex = withData { $0.index($0.startIndex, offsetBy: readOffset) }
         
@@ -116,7 +117,7 @@ package struct PassiveDataReader<D: DataProtocol> {
         let count = count ?? remainingCount
         
         guard count <= remainingCount else {
-            throw ReadError.pastEndOfStream
+            throw .pastEndOfStream
         }
         
         let endIndex = withData { $0.index(readPosStartIndex, offsetBy: count - 1) }
@@ -124,7 +125,7 @@ package struct PassiveDataReader<D: DataProtocol> {
         guard withData({
             $0.indices.contains(readPosStartIndex) && $0.indices.contains(endIndex)
         }) else {
-            throw ReadError.pastEndOfStream
+            throw .pastEndOfStream
         }
         
         let returnBytes = withData { $0[readPosStartIndex ... endIndex] }
@@ -133,16 +134,39 @@ package struct PassiveDataReader<D: DataProtocol> {
     }
 }
 
+// MARK: - ReadError
+
+#if compiler(>=6.2)
+// this works fine in Xcode 26, which solved the compiler crash bug that Xcode 16.4 had
+
 extension PassiveDataReader {
-    /// Error returned by `PassiveDataReader` methods.
+    /// Error returned by ``PassiveDataReader`` methods.
     package enum ReadError: Error {
         case pastEndOfStream
         case invalidByteCount
     }
 }
 
+#else
+// workaround for Xcode 16.4 which has a compiler crash bug when referencing a type nested
+// under a type that has associated generics in `throws()`
+
+extension PassiveDataReader {
+    /// Error returned by ``PassiveDataReader`` methods.
+    package typealias ReadError = PassiveDataReaderError
+}
+
+/// Error returned by ``PassiveDataReader`` methods.
+package enum PassiveDataReaderError: Error {
+    case pastEndOfStream
+    case invalidByteCount
+}
+#endif
+
+// MARK: - Standard Type Extensions
+
 extension DataProtocol {
-    /// Accesses the data by providing a `PassiveDataReader` instance to a closure.
+    /// Accesses the data by providing a ``PassiveDataReader`` instance to a closure.
     @_disfavoredOverload @discardableResult
     package func withDataReader<Result, E>(
         _ block: (_ dataReader: inout PassiveDataReader<Self>) throws(E) -> Result
