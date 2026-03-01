@@ -107,7 +107,7 @@ extension MIDIIOObject {
                 let data = try Data(contentsOf: url)
                 return UIImage(data: data)
             } catch {
-                throw .malformed("Failed to read MIDI object image data. (\(error.localizedString))")
+                throw .malformed("Failed to read MIDI object image data. (\(error.localizedDescription))")
             }
         }
     }
