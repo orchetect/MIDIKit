@@ -9,15 +9,9 @@ import SwiftTimecodeCore
 
 /// Internal:
 /// Returns `true` if both tuples are considered equal.
-func mtcIsEqual(
-    _ lhs: (
-        mtcComponents: Timecode.Components,
-        mtcFrameRate: MTCFrameRate
-    )?,
-    _ rhs: (
-        mtcComponents: Timecode.Components,
-        mtcFrameRate: MTCFrameRate
-    )?
+func isMTCEqual(
+    _ lhs: (mtcComponents: Timecode.Components, mtcFrameRate: MTCFrameRate)?,
+    _ rhs: (mtcComponents: Timecode.Components, mtcFrameRate: MTCFrameRate)?
 ) -> Bool {
     guard let strongLHS = lhs,
           let strongRHS = rhs
@@ -37,7 +31,7 @@ func mtcIsEqual(
     
     return componentsAreEqual && mtcFrameRatesAreEqual
 }
-    
+
 /// Internal:
 /// Converts MTC components and quarter frames to full-frame components
 func convertToFullFrameComponents(
@@ -46,6 +40,6 @@ func convertToFullFrameComponents(
 ) -> Timecode.Components {
     var newComponents = mtcComponents
     newComponents.frames += ((25 * Int(mtcQuarterFrames)) / 100)
-        
+    
     return newComponents
 }

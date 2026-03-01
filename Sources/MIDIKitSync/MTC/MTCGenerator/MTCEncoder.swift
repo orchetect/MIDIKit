@@ -164,7 +164,7 @@ public final class MTCEncoder: SendsMIDIEvents, @unchecked Sendable { // @unchec
                 mtcComponents: newComponents,
                 mtcFrameRate: mtcFrameRate
             )
-            if !mtcIsEqual(lastTransmitFullFrame, newFullFrame) {
+            if !isMTCEqual(lastTransmitFullFrame, newFullFrame) {
                 sendFullFrameMIDIMessage()
             }
         case .never:
