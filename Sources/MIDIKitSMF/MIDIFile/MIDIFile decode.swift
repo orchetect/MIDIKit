@@ -75,7 +75,7 @@ extension MIDIFile {
                         )
                     }
                     
-                    do {
+                    do throws(MIDIFile.DecodeError) {
                         switch chunkTypeString {
                         case MIDIFile.Chunk.Track.staticIdentifier:
                             tracksEncountered += 1
@@ -90,7 +90,7 @@ extension MIDIFile {
                             let newUnrecognizedChunk = Chunk.UnrecognizedChunk(id: chunkTypeString, rawData: chunkData)
                             newChunk = .other(newUnrecognizedChunk)
                         }
-                    } catch let error as DecodeError {
+                    } catch {
                         // append some context for the error and rethrow it
                         switch error {
                         case let .malformed(verboseError):
@@ -101,8 +101,6 @@ extension MIDIFile {
                         default:
                             throw error
                         }
-                    } catch {
-                        throw .malformed(error.localizedDescription)
                     }
                     
                     newChunks.append(newChunk)

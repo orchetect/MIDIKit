@@ -7,6 +7,7 @@
 #if !os(tvOS) && !os(watchOS)
 
 internal import CoreMIDI
+internal import MIDIKitInternals
 
 // MARK: - Public Protocol
 
@@ -85,7 +86,7 @@ extension _MIDIManagedSendsMessages {
         switch api {
         case .legacyCoreMIDI:
             var packetList: MIDIPacketList
-            do {
+            do throws(MIDIInternalError) {
                 packetList = try MIDIPacketList(data: rawMessages)
             } catch {
                 throw .internalInconsistency(error.localizedDescription)
@@ -112,7 +113,7 @@ extension _MIDIManagedSendsMessages {
     
         case .newCoreMIDI:
             var eventList: MIDIEventList
-            do {
+            do throws(MIDIInternalError) {
                 eventList = try MIDIEventList(
                     protocol: midiProtocol.coreMIDIProtocol,
                     packetWords: rawWords

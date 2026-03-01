@@ -121,11 +121,11 @@ extension MIDIParameterNumberUtils {
                 
                 let result: MIDIFileEvent.CC.StreamDecodeResult
                 do {
+                    let residualBytes = try dataReader.nonAdvancingRead(
+                        bytes: MIDIEvent.CC.midi1SMFFixedRawBytesLength - prefixBytes.count
+                    )
                     result = try MIDIFileEvent.CC.initFrom(
-                        midi1SMFRawBytesStream: prefixBytes
-                            + dataReader.nonAdvancingRead(
-                                bytes: MIDIEvent.CC.midi1SMFFixedRawBytesLength - prefixBytes.count
-                            )
+                        midi1SMFRawBytesStream: prefixBytes + residualBytes
                     )
                 } catch {
                     throw .malformed(

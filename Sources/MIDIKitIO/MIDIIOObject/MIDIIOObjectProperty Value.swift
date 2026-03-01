@@ -65,7 +65,7 @@ extension MIDIIOObjectProperty.Value {
         case .notSet:
             return .notSet
         case let .value(value):
-            do {
+            do throws(MIDIIOError) {
                 guard let newValue = try block(value) else { return .notSet }
                 return .value(newValue)
             } catch {

@@ -331,7 +331,7 @@ extension MIDIInputConnection {
         let refs = endpointRefs ?? coreMIDIOutputEndpointRefs
         
         for outputEndpointRef in refs {
-            do {
+            do throws(MIDIIOError) {
                 try MIDIPortDisconnectSource(
                     coreMIDIInputPortRef,
                     outputEndpointRef

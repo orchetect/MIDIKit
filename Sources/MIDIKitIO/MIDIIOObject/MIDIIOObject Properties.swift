@@ -107,7 +107,7 @@ extension MIDIIOObject {
                 let data = try Data(contentsOf: url)
                 return UIImage(data: data)
             } catch {
-                throw .malformed("Failed to read MIDI object image data.")
+                throw .malformed("Failed to read MIDI object image data. (\(error.localizedString))")
             }
         }
     }
@@ -272,7 +272,7 @@ extension MIDIIOObject {
 // MARK: - Helpers
 
 func wrapValue<T>(_ block: @autoclosure () throws(MIDIIOError) -> T?) -> MIDIIOObjectProperty.Value<T> {
-    do {
+    do throws(MIDIIOError) {
         guard let value = try block() else {
             // interpret nil as property not being set
             return .notSet

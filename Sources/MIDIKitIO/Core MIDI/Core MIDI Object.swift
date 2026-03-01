@@ -17,7 +17,7 @@ func getSystemObjectType( // TODO: convert to throwing method instead of Optiona
     var obj: CoreMIDI.MIDIObjectRef = .init()
     var objType: CoreMIDI.MIDIObjectType = .other
     
-    do {
+    do throws(MIDIIOError) {
         try MIDIObjectFindByUniqueID(
             uniqueID,
             &obj,

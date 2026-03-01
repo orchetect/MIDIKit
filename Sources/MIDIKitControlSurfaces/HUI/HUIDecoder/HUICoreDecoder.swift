@@ -52,8 +52,9 @@ final class HUICoreDecoder: @unchecked Sendable {
 extension HUICoreDecoder: ReceivesMIDIEvents {
     /// Process HUI MIDI message received from host.
     public func midiIn(event: MIDIEvent) {
-        do {
-            for coreEvent in try decode(event: event) {
+        do throws(HUIDecoderError) {
+            let coreEvents = try decode(event: event)
+            for coreEvent in coreEvents {
                 huiEventHandler?(coreEvent)
             }
         } catch {

@@ -23,7 +23,7 @@ extension MIDIManager {
         func block() -> Result<MIDIClientRef, MIDIIOError> {
             var newCoreMIDIClientRef = MIDIClientRef()
             
-            do {
+            do throws(MIDIIOError) {
                 try MIDIClientCreateWithBlock(clientName as CFString, &newCoreMIDIClientRef) { [weak self] notificationPtr in
                     guard let self else { return }
                     let internalNotif = MIDIIOInternalNotification(notificationPtr)
