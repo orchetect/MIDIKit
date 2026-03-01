@@ -149,7 +149,7 @@ extension HUIHostHelper {
                 )
             }
         } catch {
-            logger.debug("Error setting up MIDI: \(error.localizedString)")
+            logger.debug("Error setting up MIDI: \(error.localizedDescription)")
         }
     }
     
