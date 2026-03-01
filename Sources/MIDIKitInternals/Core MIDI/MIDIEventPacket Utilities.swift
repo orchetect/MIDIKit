@@ -70,16 +70,22 @@ extension CoreMIDI.MIDIEventPacket {
         
         words.forEach { packetBuilder.append($0) }
         
-        do {
-            let packet = try packetBuilder
-                .withUnsafePointer { unsafePtr -> Result<CoreMIDI.MIDIEventPacket, Error> in
-                        .success(unsafePtr.pointee)
-                }
-                .get()
-            
-            self = packet
-        } catch {
-            throw .packetBuildError(underlyingError: error)
+        // As per Apple documentation, we cannot pass the pointee out directly.
+        // We need to copy the memory to ensure it persists, so a basic wrapper should suffice.
+        let packetBox: PacketBox = packetBuilder
+            .withUnsafePointer { PacketBox($0.pointee) }
+        
+        self = packetBox.packet
+    }
+    
+    @usableFromInline
+    package struct PacketBox {
+        @inline(__always) @usableFromInline
+        package let packet: CoreMIDI.MIDIEventPacket
+        
+        @inline(__always) @usableFromInline
+        package init(_ packet: CoreMIDI.MIDIEventPacket) {
+            self.packet = packet
         }
     }
 }
