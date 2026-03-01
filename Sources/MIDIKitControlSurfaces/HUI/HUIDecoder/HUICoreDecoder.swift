@@ -68,7 +68,7 @@ extension HUICoreDecoder: ReceivesMIDIEvents {
     ///   state, in which case an empty array will be returned. This is not an error condition.
     ///
     /// - Throws: An error if the MIDI event was malformed or contained unexpected data.
-    func decode(event: MIDIEvent) throws -> [HUICoreEvent] {
+    func decode(event: MIDIEvent) throws(HUIDecoderError) -> [HUICoreEvent] {
         switch event {
         case HUIConstants.kMIDI.kPingReplyToHostMessage where role == .surface:
             // handler should send HUI ping-reply to host
@@ -118,12 +118,12 @@ extension HUICoreDecoder: ReceivesMIDIEvents {
 
 extension HUICoreDecoder {
     /// Internal: handles SysEx content.
-    func parse(sysExPayload payload: MIDIEvent.SysEx7) throws -> [HUICoreEvent] {
+    func parse(sysExPayload payload: MIDIEvent.SysEx7) throws(HUIDecoderError) -> [HUICoreEvent] {
         guard payload.manufacturer == HUIConstants.kMIDI.kSysEx.kManufacturer else {
             // this is not a critical error, it's possible the MIDI port
             // is shared with other hardware/software and we just want to ignore
             // SysEx messages not intended for us
-            throw HUIDecoderError.malformed(
+            throw .malformed(
                 "SysEx manufacturer ID is not Mackie. Ignoring MIDI message."
             )
         }
@@ -131,7 +131,7 @@ extension HUICoreDecoder {
         let data = payload.data
         
         guard data.count >= 2 else {
-            throw HUIDecoderError.malformed(
+            throw .malformed(
                 "Expected more bytes in SysEx."
             )
         }
@@ -140,7 +140,7 @@ extension HUICoreDecoder {
         guard data[0] == HUIConstants.kMIDI.kSysEx.kSubID1,
               data[1] == HUIConstants.kMIDI.kSysEx.kSubID2
         else {
-            throw HUIDecoderError.malformed(
+            throw .malformed(
                 "SysEx sub-IDs (first two bytes) are not recognized. "
                     + "It is possible the IDs belong to hardware other than the Mackie HUI. "
                     + "Raw data: [\(data.hexString(padEachTo: 2, prefixes: false))]"
@@ -155,7 +155,7 @@ extension HUICoreDecoder {
         )
         
         guard !dataAfterHeader.isEmpty else {
-            throw HUIDecoderError.malformed(
+            throw .malformed(
                 "Expected more bytes in SysEx."
             )
         }
@@ -172,14 +172,14 @@ extension HUICoreDecoder {
             let contiguousSlices = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
             
             guard contiguousSlices.count % 5 == 0 else {
-                throw HUIDecoderError.malformed(
+                throw .malformed(
                     "Received Small Display text MIDI message \(data.hexString(padEachTo: 2)) but length was not expected."
                 )
             }
             
             let slices = contiguousSlices.split(every: 5)
             
-            let events: [HUICoreEvent] = try slices.map { slice in
+            let events: [HUICoreEvent] = try slices.map { slice throws(HUIDecoderError) in
                 // channel can be 0-8 (0-7 = channel strips, 8 = Select Assign text display)
                 let channel = slice[atOffset: 0]
                 var newChars: [HUISmallDisplayCharacter] = []
@@ -200,7 +200,7 @@ extension HUICoreDecoder {
                 case 8:
                     return .selectAssignDisplay(text: newString)
                 default:
-                    throw HUIDecoderError.malformed(
+                    throw .malformed(
                         "Small Display text message channel not expected: \(channel)."
                     )
                 }
@@ -215,17 +215,18 @@ extension HUICoreDecoder {
             let contiguousSlices = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
             
             guard contiguousSlices.count % 11 == 0 else {
-                throw HUIDecoderError.malformed(
+                throw .malformed(
                     "Received Large Display text MIDI message \(data.hexString(padEachTo: 2)) but length was not expected."
                 )
             }
             
             let slices = contiguousSlices.split(every: 11)
             
-            let newSlices: HUILargeDisplaySlices = try slices.reduce(into: [:]) { base, slice in
+            var newSlices: HUILargeDisplaySlices = [:]
+            for slice in slices {
                 let rawSliceIndex = Int(slice[atOffset: 0])
                 guard let sliceIndex = UInt4(exactly: rawSliceIndex) else {
-                    throw HUIDecoderError.malformed(
+                    throw .malformed(
                         "Encountered out-of-range HUI large display slice index: \(rawSliceIndex)"
                     )
                 }
@@ -237,20 +238,20 @@ extension HUICoreDecoder {
                     let char = HUILargeDisplayCharacter(rawValue: letter) ?? .unknown()
                     newSlice.append(char)
                 }
-                base[sliceIndex] = newSlice
+                newSlices[sliceIndex] = newSlice
             }
             
             return [.largeDisplay(slices: newSlices)]
             
         case HUIConstants.kMIDI.kDisplayType.timeDisplayByte.uInt8Value:
             guard dataAfterHeader.count > 1 else {
-                throw HUIDecoderError.malformed(
+                throw .malformed(
                     "Received HUI time display message but did not contain enough bytes."
                 )
             }
             let tcData = dataAfterHeader[atOffsets: 1 ... dataAfterHeader.count - 1]
             guard tcData.count <= 8 else {
-                throw HUIDecoderError.malformed(
+                throw .malformed(
                     "Received HUI time display message but it contained too many bytes."
                 )
             }
@@ -264,14 +265,14 @@ extension HUICoreDecoder {
         default:
             let msg = dataAfterHeader.hexString(padEachTo: 2)
             
-            throw HUIDecoderError.malformed(
+            throw .malformed(
                 "SysEx header present but subsequent bytes not recognized: \(msg)"
             )
         }
     }
     
     /// Internal: Handle control status messages.
-    func parse(controlStatusPayload payload: MIDIEvent.CC) throws -> HUICoreEvent? {
+    func parse(controlStatusPayload payload: MIDIEvent.CC) throws(HUIDecoderError) -> HUICoreEvent? {
         // Control Segment
         
         let dataByte1 = payload.controller.number.uInt8Value
@@ -291,7 +292,7 @@ extension HUICoreDecoder {
             
             switch role {
             case .host:
-                throw HUIDecoderError.unhandled(
+                throw .unhandled(
                     "Jog Wheel event decoded but host is not capable of generating Jog Wheel events, only receiving them."
                 )
             case .surface:
@@ -308,7 +309,7 @@ extension HUICoreDecoder {
             let lsb = UInt16(dataByte2)
             
             guard let level = (msb + lsb).toUInt14Exactly else {
-                throw HUIDecoderError.malformed(
+                throw .malformed(
                     "Received channel strip fader level LSB but combined MSB + LSB value is invalid."
                 )
             }
@@ -329,7 +330,7 @@ extension HUICoreDecoder {
             let number = dataByte1 % 0x10
             guard let vPot = HUIVPot(rawValue: number)
             else {
-                throw HUIDecoderError.malformed(
+                throw .malformed(
                     "V-Pot ID is invalid."
                 )
             }
@@ -399,16 +400,16 @@ extension HUICoreDecoder {
                     
                     switch huiSwitch {
                     case .undefined(zone: _, port: _):
-                        throw HUIDecoderError.unhandled(
+                        throw .unhandled(
                             "Received \(cmd) (switch cmd msg 2/2) but has unexpected state nibble \(stateNibble). Additionally, could not guess zone and port pair name. Ignoring message."
                         )
                     default:
-                        throw HUIDecoderError.unhandled(
+                        throw .unhandled(
                             "Received \(cmd) (switch cmd msg 2/2) matching \(huiSwitch) but has unexpected state nibble \(stateNibble). Ignoring message."
                         )
                     }
                 } else {
-                    throw HUIDecoderError.unhandled(
+                    throw .unhandled(
                         "Received \(cmd) (switch cmd msg 2/2) but has unexpected state nibble \(stateNibble). Additionally, could not lookup zone and port name because zone select message was not received prior. Ignoring message."
                     )
                 }
@@ -432,7 +433,7 @@ extension HUICoreDecoder {
             let b1 = dataByte1.hexString(padTo: 2, prefix: true)
             let cmd = payload.midi1RawBytes().hexString(padEachTo: 2, prefixes: true)
             
-            throw HUIDecoderError.malformed(
+            throw .malformed(
                 "Unrecognized HUI MIDI status 0xB0 data byte 1: \(b1) in message: \(cmd)."
             )
         }
